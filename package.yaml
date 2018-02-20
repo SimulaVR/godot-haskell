@@ -1,0 +1,31 @@
+name: godot-haskell
+version: '0.1.0.0'
+category: Web
+author: David Kraeutmann
+maintainer: kane@kane.cx
+copyright: 2018 David Kraeutmann
+license: BSD3
+github: KaneTW/godot-haskell
+extra-source-files:
+- README.md
+
+dependencies:
+- base
+
+build-tools:
+- c2hs
+
+include-dirs:
+- godot_headers
+
+default-extensions:
+- FlexibleContexts
+- FlexibleInstances
+- ScopedTypeVariables
+- TypeApplications
+- StandaloneDeriving
+- DerivingStrategies
+- DefaultSignatures
+
+library:
+  source-dirs: src

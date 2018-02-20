@@ -1,0 +1,43 @@
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: fd1b5613f02fa5a29afae27d44497ab51070e0bb2e00c61ed308c66b93b3825f
+
+name:           godot-haskell
+version:        0.1.0.0
+category:       Web
+homepage:       https://github.com/KaneTW/godot-haskell#readme
+bug-reports:    https://github.com/KaneTW/godot-haskell/issues
+author:         David Kraeutmann
+maintainer:     kane@kane.cx
+copyright:      2018 David Kraeutmann
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/KaneTW/godot-haskell
+
+library
+  hs-source-dirs:
+      src
+  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures
+  include-dirs:
+      godot_headers
+  build-depends:
+      base
+  build-tools:
+      c2hs
+  exposed-modules:
+      Godot.Gdnative
+      Godot.Gdnative.Api
+      Godot.Gdnative.Gdnative
+  other-modules:
+      Paths_godot_haskell
+  default-language: Haskell2010
