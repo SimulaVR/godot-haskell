@@ -32,3 +32,4 @@ library:
   exposed-modules:
   - Godot.Gdnative.Gdnative
   - Godot.Gdnative.Api
+  - Godot.Gdnative
