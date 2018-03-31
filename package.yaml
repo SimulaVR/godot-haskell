@@ -35,7 +35,6 @@ default-extensions:
 library:
   source-dirs: src
   exposed-modules:
-  - Godot.Gdnative.Test
   - Godot.Gdnative.TH
   - Godot.Gdnative.Gdnative
   - Godot.Gdnative.Api
