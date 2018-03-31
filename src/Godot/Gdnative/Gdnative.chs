@@ -1,12 +1,15 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE UnboxedTuples, MagicHash #-}
 module Godot.Gdnative.Gdnative where
 
 import Data.Coerce
+import Data.Void
 import Foreign
 import Foreign.C
 
-#include <gdnative/gdnative.h>
+#include "util.h"
+#include "gdnative_api_struct.gen.h"
 
 {#enum godot_error as GodotError {underscoreToCase}
   deriving (Show, Eq, Ord, Bounded) #}
@@ -19,12 +22,15 @@ import Foreign.C
 
 {#enum godot_vector3_axis as GodotVector3Axis {underscoreToCase}
  deriving (Show, Eq, Ord, Bounded)#}
-
   
 {#typedef godot_bool Bool #}
+type GodotBool = {#type godot_bool#}
 {#typedef godot_int CInt #}
-{#typedef godot_real CFloat#}
-{#typedef godot_char_type CWchar#}
+type GodotInt = {#type godot_int#}
+{#typedef godot_real CFloat #}
+type GodotReal = {#type godot_real#}
+{#typedef godot_char_type CWchar #}
+type GodotCharType = {#type godot_char_type #}
 
 {#pointer *godot_aabb as GodotAabb newtype #}
 deriving newtype instance Eq GodotAabb
@@ -38,9 +44,9 @@ deriving newtype instance Storable GodotArray
 deriving newtype instance Eq GodotBasis
 deriving newtype instance Storable GodotBasis
 
-{#pointer *godot_char_string as GodotChar_string newtype #}
-deriving newtype instance Eq GodotChar_string
-deriving newtype instance Storable GodotChar_string
+{#pointer *godot_char_string as GodotCharString newtype #}
+deriving newtype instance Eq GodotCharString
+deriving newtype instance Storable GodotCharString
 
 {#pointer *godot_color as GodotColor newtype #}
 deriving newtype instance Eq GodotColor
@@ -50,53 +56,69 @@ deriving newtype instance Storable GodotColor
 deriving newtype instance Eq GodotDictionary
 deriving newtype instance Storable GodotDictionary
 
-{#pointer *godot_method_bind as GodotMethod_bind newtype #}
-deriving newtype instance Eq GodotMethod_bind
-deriving newtype instance Storable GodotMethod_bind
+{#pointer *godot_method_bind as GodotMethodBind newtype #}
+deriving newtype instance Eq GodotMethodBind
+deriving newtype instance Storable GodotMethodBind
 
-{#pointer *godot_node_path as GodotNode_path newtype #}
-deriving newtype instance Eq GodotNode_path
-deriving newtype instance Storable GodotNode_path
+{#pointer *godot_node_path as GodotNodePath newtype #}
+deriving newtype instance Eq GodotNodePath
+deriving newtype instance Storable GodotNodePath
 
 {#pointer *godot_plane as GodotPlane newtype #}
 deriving newtype instance Eq GodotPlane
 deriving newtype instance Storable GodotPlane
 
-{#pointer *godot_pool_array_read_access as GodotPool_array_read_access newtype #}
-deriving newtype instance Eq GodotPool_array_read_access
-deriving newtype instance Storable GodotPool_array_read_access
+{#pointer *godot_pool_array_read_access as GodotPoolArrayReadAccess newtype #}
+deriving newtype instance Eq GodotPoolArrayReadAccess
+deriving newtype instance Storable GodotPoolArrayReadAccess
 
-{#pointer *godot_pool_array_write_access as GodotPool_array_write_access newtype #}
-deriving newtype instance Eq GodotPool_array_write_access
-deriving newtype instance Storable GodotPool_array_write_access
+{#pointer *godot_pool_array_write_access as GodotPoolArrayWriteAccess newtype #}
+deriving newtype instance Eq GodotPoolArrayWriteAccess
+deriving newtype instance Storable GodotPoolArrayWriteAccess
 
-{#pointer *godot_pool_byte_array as GodotPool_byte_array newtype #}
-deriving newtype instance Eq GodotPool_byte_array
-deriving newtype instance Storable GodotPool_byte_array
+{#pointer *godot_pool_byte_array as GodotPoolByteArray newtype #}
+deriving newtype instance Eq GodotPoolByteArray
+deriving newtype instance Storable GodotPoolByteArray
 
-{#pointer *godot_pool_color_array as GodotPool_color_array newtype #}
-deriving newtype instance Eq GodotPool_color_array
-deriving newtype instance Storable GodotPool_color_array
+{#pointer *godot_pool_color_array as GodotPoolColorArray newtype #}
+deriving newtype instance Eq GodotPoolColorArray
+deriving newtype instance Storable GodotPoolColorArray
 
-{#pointer *godot_pool_int_array as GodotPool_int_array newtype #}
-deriving newtype instance Eq GodotPool_int_array
-deriving newtype instance Storable GodotPool_int_array
+{#pointer *godot_pool_int_array as GodotPoolIntArray newtype #}
+deriving newtype instance Eq GodotPoolIntArray
+deriving newtype instance Storable GodotPoolIntArray
 
-{#pointer *godot_pool_real_array as GodotPool_real_array newtype #}
-deriving newtype instance Eq GodotPool_real_array
-deriving newtype instance Storable GodotPool_real_array
+{#pointer *godot_pool_real_array as GodotPoolRealArray newtype #}
+deriving newtype instance Eq GodotPoolRealArray
+deriving newtype instance Storable GodotPoolRealArray
 
-{#pointer *godot_pool_string_array as GodotPool_string_array newtype #}
-deriving newtype instance Eq GodotPool_string_array
-deriving newtype instance Storable GodotPool_string_array
+{#pointer *godot_pool_string_array as GodotPoolStringArray newtype #}
+deriving newtype instance Eq GodotPoolStringArray
+deriving newtype instance Storable GodotPoolStringArray
 
-{#pointer *godot_pool_vector2_array as GodotPool_vector2_array newtype #}
-deriving newtype instance Eq GodotPool_vector2_array
-deriving newtype instance Storable GodotPool_vector2_array
+{#pointer *godot_pool_vector2_array as GodotPoolVector2Array newtype #}
+deriving newtype instance Eq GodotPoolVector2Array
+deriving newtype instance Storable GodotPoolVector2Array
 
-{#pointer *godot_pool_vector3_array as GodotPool_vector3_array newtype #}
-deriving newtype instance Eq GodotPool_vector3_array
-deriving newtype instance Storable GodotPool_vector3_array
+{#pointer *godot_pool_vector3_array as GodotPoolVector3Array newtype #}
+deriving newtype instance Eq GodotPoolVector3Array
+deriving newtype instance Storable GodotPoolVector3Array
+
+type GodotPoolByteArrayReadAccess = GodotPoolByteArray
+type GodotPoolByteArrayWriteAccess = GodotPoolByteArray
+type GodotPoolColorArrayReadAccess = GodotPoolColorArray
+type GodotPoolColorArrayWriteAccess = GodotPoolColorArray
+type GodotPoolIntArrayReadAccess = GodotPoolIntArray
+type GodotPoolIntArrayWriteAccess = GodotPoolIntArray
+type GodotPoolRealArrayReadAccess = GodotPoolRealArray
+type GodotPoolRealArrayWriteAccess = GodotPoolRealArray
+type GodotPoolStringArrayReadAccess = GodotPoolStringArray
+type GodotPoolStringArrayWriteAccess = GodotPoolStringArray
+type GodotPoolVector2ArrayReadAccess = GodotPoolVector2Array
+type GodotPoolVector2ArrayWriteAccess = GodotPoolVector2Array
+type GodotPoolVector3ArrayReadAccess = GodotPoolVector3Array
+type GodotPoolVector3ArrayWriteAccess = GodotPoolVector3Array
+
 
 {#pointer *godot_quat as GodotQuat newtype #}
 deriving newtype instance Eq GodotQuat
@@ -114,9 +136,9 @@ deriving newtype instance Storable GodotRid
 deriving newtype instance Eq GodotString
 deriving newtype instance Storable GodotString
 
-{#pointer *godot_string_name as GodotString_name newtype #}
-deriving newtype instance Eq GodotString_name
-deriving newtype instance Storable GodotString_name
+{#pointer *godot_string_name as GodotStringName newtype #}
+deriving newtype instance Eq GodotStringName
+deriving newtype instance Storable GodotStringName
 
 {#pointer *godot_transform as GodotTransform newtype #}
 deriving newtype instance Eq GodotTransform
@@ -151,9 +173,6 @@ class OpaqueStorable a where
 instance OpaqueStorable GodotColor where
   opaqueSizeOf = {#const GODOT_COLOR_SIZE#}
 
-allocaOpaque :: forall a b. OpaqueStorable a => (a -> IO b) -> IO b
-allocaOpaque f = allocaBytes (opaqueSizeOf @a) (f . opaquePtr)
-
 data GodotVariantCallError = GodotVariantCallError
   { variantCallErrorError :: GodotVariantCallErrorError
   , variantCallErrorArgument :: CInt
@@ -177,6 +196,22 @@ instance Storable GodotVariantCallError where
 {#pointer *godot_gdnative_core_api_struct as GodotGdnativeCoreApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeCoreApiStruct
 deriving newtype instance Storable GodotGdnativeCoreApiStruct
+
+{#pointer *godot_gdnative_ext_nativescript_api_struct as GodotGdnativeExtNativescriptApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeExtNativescriptApiStruct
+deriving newtype instance Storable GodotGdnativeExtNativescriptApiStruct
+
+{#pointer *godot_gdnative_ext_nativescript_1_1_api_struct as GodotGdnativeExtNativescript11ApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeExtNativescript11ApiStruct
+deriving newtype instance Storable GodotGdnativeExtNativescript11ApiStruct
+
+{#pointer *godot_gdnative_ext_pluginscript_api_struct as GodotGdnativeExtPluginscriptApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeExtPluginscriptApiStruct
+deriving newtype instance Storable GodotGdnativeExtPluginscriptApiStruct
+
+{#pointer *godot_gdnative_ext_arvr_api_struct as GodotGdnativeExtArvrApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeExtArvrApiStruct
+deriving newtype instance Storable GodotGdnativeExtArvrApiStruct
 
 type ReportVersionMismatchFunc = GodotObject -> CString -> Word64 -> Word64 -> IO ()
 type ReportLoadingErrorFunc = GodotObject -> CString -> IO ()
@@ -229,4 +264,28 @@ instance Storable GodotGdnativeTerminateOptions where
   poke ptr a = {#set godot_gdnative_terminate_options->in_editor#} ptr (_godotGdnativeTerminateOptionsInEditor a)
 
 {#pointer *godot_gdnative_terminate_options as GodotGdnativeTerminateOptionsPtr -> GodotGdnativeTerminateOptions#}
+
+
+-- not the real type but we need something
+type NativeCallCb = FunPtr Void
+-- funptrs
+type GodotClassConstructor = FunPtr (IO GodotObject)
+
+-- stuff that's not opaque (i.e. needs to be Storable'd) but i don't want to deal w/ rn
+
+-- pluginscript
+{#pointer *godot_pluginscript_language_desc as GodotPluginscriptLanguageDesc newtype#}
+
+-- nativescript
+{#pointer *godot_instance_create_func as GodotInstanceCreateFunc newtype#}
+{#pointer *godot_instance_destroy_func as GodotInstanceDestroyFunc newtype#}
+{#pointer *godot_instance_method as GodotInstanceMethod newtype#}
+{#pointer *godot_method_attributes as GodotMethodAttributes newtype#}
+{#pointer *godot_property_get_func as GodotPropertyGetFunc newtype#}
+{#pointer *godot_property_set_func as GodotPropertySetFunc newtype#}
+{#pointer *godot_property_attributes as GodotPropertyAttributes newtype#}
+{#pointer *godot_signal as GodotSignal newtype#}
+
+--arvr
+{#pointer *godot_arvr_interface_gdnative as GodotArvrInterfaceGdnative newtype#}
 

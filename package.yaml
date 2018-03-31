@@ -11,12 +11,17 @@ extra-source-files:
 
 dependencies:
 - base
+- aeson
+- bytestring
+- template-haskell
+- lens
 
 build-tools:
 - c2hs
 
 include-dirs:
 - godot_headers
+- cbits
 
 default-extensions:
 - FlexibleContexts
@@ -30,6 +35,27 @@ default-extensions:
 library:
   source-dirs: src
   exposed-modules:
+  - Godot.Gdnative.Test
+  - Godot.Gdnative.TH
   - Godot.Gdnative.Gdnative
   - Godot.Gdnative.Api
   - Godot.Gdnative
+  dependencies:
+  - generate
+
+internal-libraries:
+  generate:
+    source-dirs: src-generate
+    dependencies:
+    - aeson
+    - bytestring
+    - text
+    - vector
+    - containers
+    - unordered-containers
+    - parsec
+    - parsers
+    - mtl
+    - ansi-wl-pprint
+    - casing
+

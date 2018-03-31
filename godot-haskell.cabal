@@ -1,8 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.20.0.
+-- This file has been generated from package.yaml by hpack version 0.21.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3d8fb77d712ba801847982797534722c0d5387c25998855c404da0aae6da9819
+-- hash: cc391415500d781231a1454bbb36b7fb423460dede193f9ec6911fff237eba93
 
 name:           godot-haskell
 version:        0.1.0.0
@@ -15,7 +15,7 @@ copyright:      2018 David Kraeutmann
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
+cabal-version:  >= 2.0
 
 extra-source-files:
     README.md
@@ -25,19 +25,60 @@ source-repository head
   location: https://github.com/KaneTW/godot-haskell
 
 library
+  exposed-modules:
+      Godot.Gdnative.Test
+      Godot.Gdnative.TH
+      Godot.Gdnative.Gdnative
+      Godot.Gdnative.Api
+      Godot.Gdnative
+  other-modules:
+      Paths_godot_haskell
   hs-source-dirs:
       src
   default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures
   include-dirs:
       godot_headers
+      cbits
   build-depends:
-      base
+      aeson
+    , base
+    , bytestring
+    , generate
+    , lens
+    , template-haskell
   build-tools:
       c2hs
+  default-language: Haskell2010
+
+library generate
   exposed-modules:
-      Godot.Gdnative.Gdnative
-      Godot.Gdnative.Api
+      Generate
+      Spec
+      Types
+      Types.Internal
   other-modules:
-      Godot.Gdnative
       Paths_godot_haskell
+  hs-source-dirs:
+      src-generate
+  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures
+  include-dirs:
+      godot_headers
+      cbits
+  build-depends:
+      aeson
+    , ansi-wl-pprint
+    , base
+    , bytestring
+    , casing
+    , containers
+    , lens
+    , mtl
+    , parsec
+    , parsers
+    , template-haskell
+    , text
+    , unordered-containers
+    , vector
+  build-tools:
+      c2hs
   default-language: Haskell2010
