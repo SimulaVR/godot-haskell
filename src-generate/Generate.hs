@@ -108,7 +108,7 @@ baseTypesTable = M.fromList
   , (C.TypeName "uint16_t", fromThName ''Word16)
   , (C.TypeName "uint32_t", fromThName ''Word32)
   , (C.TypeName "uint64_t", fromThName ''Word64)
-  , (C.TypeName "godot_real", fromThName ''CDouble)
+  , (C.TypeName "godot_real", fromThName ''CFloat)
   , (C.TypeName "godot_int", fromThName ''CInt)
   , (C.TypeName "godot_bool", fromThName ''CBool)
   , (C.TypeName "godot_class_constructor", ConT $ mkName "GodotClassConstructor")
