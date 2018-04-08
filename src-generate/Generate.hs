@@ -1,13 +1,15 @@
-{-# LANGUAGE TemplateHaskell, OverloadedStrings, ViewPatterns, DeriveFunctor #-}
+{-# LANGUAGE TemplateHaskell, OverloadedStrings, ViewPatterns, DeriveFunctor, TypeApplications #-}
 module Generate where
 
-import Control.Arrow
+import Control.Arrow ((***))
 import Control.Lens
 import Control.Lens.TH
 import Control.Monad
 
+import Data.Coerce
 import Data.HashMap.Lazy (HashMap)
 import qualified Data.HashMap.Lazy as HM
+import Data.List
 import Data.Map (Map)
 import qualified Data.Map as M
 import Data.Monoid
@@ -22,6 +24,10 @@ import Foreign
 import Foreign.C
 
 import Language.Haskell.TH
+import Language.Haskell.TH.Syntax
+
+import Text.PrettyPrint.ANSI.Leijen ((</>), (<+>))
+import qualified Text.PrettyPrint.ANSI.Leijen as PP
 
 import qualified Spec as S 
 
@@ -29,18 +35,26 @@ import qualified Types as C
 
 -- a simple type corresponds to a 1:1 haskell type
 -- a c shim type can't be represented by the haskell FFI, so it needs to be shimmed
+-- an opaque type needs to be withForeignPtr'd (modulo newtype)
 data TypeResult a
   = SimpleType a
   | EnumType a
-  | CShimType a
+  | OpaqueType Bool a -- Bool == needs C shim
+  | StorableType Bool a
   deriving (Show, Eq, Ord, Functor)
+
+isCShimType :: TypeResult a -> Bool
+isCShimType (OpaqueType b _) = b
+isCShimType (StorableType b _) = b
+isCShimType _ = False
 
 makePrisms ''TypeResult
 
 unTypeResult :: TypeResult a -> a
 unTypeResult (SimpleType a) = a
 unTypeResult (EnumType a) = a
-unTypeResult (CShimType a) = a
+unTypeResult (OpaqueType _ a) = a
+unTypeResult (StorableType _ a) = a
 
 fromThName :: Name -> Type
 fromThName = ConT
@@ -94,6 +108,11 @@ baseTypesTable = M.fromList
   , (C.TypeName "uint16_t", fromThName ''Word16)
   , (C.TypeName "uint32_t", fromThName ''Word32)
   , (C.TypeName "uint64_t", fromThName ''Word64)
+  , (C.TypeName "godot_real", fromThName ''CDouble)
+  , (C.TypeName "godot_int", fromThName ''CInt)
+  , (C.TypeName "godot_bool", fromThName ''CBool)
+  , (C.TypeName "godot_class_constructor", ConT $ mkName "GodotClassConstructor")
+  , (C.TypeName "native_call_cb", ConT $ mkName "NativeCallCb")
   ]
 
 godotOpaqueStructs :: [C.Identifier]
@@ -109,13 +128,6 @@ godotOpaqueStructs =
   , "godot_plane"
   , "godot_pool_array_read_access"
   , "godot_pool_array_write_access"
-  , "godot_pool_byte_array"
-  , "godot_pool_color_array"
-  , "godot_pool_int_array"
-  , "godot_pool_real_array"
-  , "godot_pool_string_array"
-  , "godot_pool_vector2_array"
-  , "godot_pool_vector3_array"
   , "godot_quat"
   , "godot_rect2"
   , "godot_rid"
@@ -125,8 +137,34 @@ godotOpaqueStructs =
   , "godot_transform2d"
   , "godot_variant"
   , "godot_vector2"
-  , "godot_vector3" ]
+  , "godot_vector3"
+  ] ++ concatMap (\(C.Identifier str) ->
+                    map (\suf -> C.Identifier $ str ++ suf) ["", "_read_access", "_write_access"])
+  [  "godot_pool_byte_array"
+  , "godot_pool_color_array"
+  , "godot_pool_int_array"
+  , "godot_pool_real_array"
+  , "godot_pool_string_array"
+  , "godot_pool_vector2_array"
+  , "godot_pool_vector3_array"
+  ]
 
+-- structs, but not opaque structs
+godotStructs :: [C.Identifier]
+godotStructs =
+  [ "godot_instance_create_func"
+  , "godot_instance_destroy_func"
+  , "godot_instance_method"
+  , "godot_method_attributes"
+  , "godot_property_get_func"
+  , "godot_property_set_func"
+  , "godot_property_attributes"
+  , "godot_signal"
+  , "godot_arvr_interface_gdnative"
+  , "godot_variant_call_error"
+  , "godot_pluginscript_language_desc"
+  ]
+  
 godotEnums :: [C.Identifier]
 godotEnums =
   [ "godot_error"
@@ -134,89 +172,274 @@ godotEnums =
   , "godot_variant_call_error_error"
   , "godot_vector3_axis" ]
 
-enumTypesTable :: Map C.TypeSpecifier Type
-enumTypesTable = M.fromList $ map (\n -> (C.TypeName n, fromThName ''CInt)) godotEnums
+
+-- pipeline:
+-- - shim function, converting a S.GdnativeApiEntry into a foreign decl name, foreign decl, and maybe a piece of C code + updated types
+-- - marshal it
+-- - call it
 
 
--- this is the core C type -> HS mapping
-resolveType :: C.Type -> TypeResult Type
-resolveType (C.TypeSpecifier _ (lookupBase -> Just ty)) = SimpleType $ ty
-resolveType (C.TypeSpecifier _ (lookupEnum -> Just ty)) = EnumType $ ty
-resolveType (C.TypeSpecifier _ (C.TypeName ident)) = con $ ConT $ fromCIdent ident
-  where
-    con | isOpaqueStruct ident = CShimType
-        | otherwise = SimpleType
-resolveType (C.Ptr _ (C.TypeSpecifier _ (C.TypeName ident))) | isOpaqueStruct ident = SimpleType $ ConT $ fromCIdent ident
-resolveType (C.Ptr _ ty) = AppT (ConT ''Ptr) <$> resolveType ty
-resolveType x = error $ "Failed to resolve type " ++ show x
+createFuncTyIO :: (Functor t, Foldable t) => Type -> t Type -> Type
+createFuncTyIO ret args = foldr AppT (AppT (ConT ''IO) ret) $ fmap (AppT ArrowT) args
 
-isOpaqueStruct ident = ident `elem` godotOpaqueStructs
-fromCIdent = mkName . pascal . C.unIdentifier
-lookupBase = flip M.lookup baseTypesTable
-lookupEnum = flip M.lookup enumTypesTable
+shimFunction :: S.GdnativeApiEntry -> ( Name -- function name
+                                      , Name -- foreign decl name
+                                      , Dec -- foreign decl
+                                      , Maybe PP.Doc -- shim C code
+                                      , [(TypeResult Type, Bool)] -- foreign argument types + whether to malloc it
+                                      , TypeResult Type ) -- foreign return type 
+shimFunction entry =
+  ( fname
+  , foreignName
+  , fdecl
+  , cShim
+  , newArgs
+  , newRetTy )
 
--- constructs the haskell and C functions out of the API name, index and entry
--- I was considering doing C via AST, but just going to use Strings.
-constructFunction :: Name -> Int -> S.GdnativeApiEntry -> Q ([Dec], Maybe String)
-constructFunction tyname idx entry | needsCShim = constructShimmedFunction
-                                 | otherwise = constructSimpleFunction
   where
     fname = mkName . T.unpack $ S.name entry
     foreignName = mkName . T.unpack $ S.name entry `T.snoc` '_'
 
-    needsCShim = has _CShimType retTy || any (has _CShimType . fst) args
+    retTy = resolveType $ S.return_type entry
+    args = (resolveType.fst) <$> S.arguments entry
+    isMallocArg arg = T.isPrefixOf "r_" arg || S.name entry == "godot_variant_new_bool" && arg == "p_v"
+    mallocFlags = V.toList $ (isMallocArg.snd) <$> S.arguments entry
+
+    -- now we need to transform the args post-shim:
+    -- we only need to shim opaque structs, so those are easy
+    -- for the return type we append the old return value with malloc=>True, and set return type ()
+
+    flaggedArgs = zip (V.toList args) mallocFlags
+    (newArgs, newRetTy) | shimRet = (flaggedArgs ++ [(retTy, True)], SimpleType (TupleT 0))
+                        | otherwise = (flaggedArgs, retTy)
+
+    foreignTypeResult (EnumType _) = ConT ''CInt
+    foreignTypeResult ty = unTypeResult ty
     
-    retTy = resolveType (S.return_type entry)
-    -- if we have a "r_" name, we need to mallocForeignPtrBytes it
-    -- and return the ForeignPtr, so set the flag
-    args = fmap (resolveType *** T.isPrefixOf "r_") $ S.arguments entry
-    -- (mallocArgs, trueArgs) = fmap fst *** fmap fst $ V.partition snd args
-
-    -- if we have e.g malloc args [GodotString, GodotBool] and return type (),
-    -- we want to return IO (GodotString, GodotBool).
-    -- Otherwise e.g. retTy = Int => IO (Int, GodotString, GodotBool)
-
-    -- TODO: we're not doing this right now
+    foreignRetTy = foreignTypeResult newRetTy
+    foreignArgs = (foreignTypeResult.fst) <$> newArgs
     
-    -- finalRetTy = case unTypeResult retTy of
-    --  TupleT 0 -> foldl AppT (TupleT $ length mallocArgs) mallocArgs
-    --  ty -> foldl AppT (TupleT $ length mallocArgs + 1) $ ty `V.cons` mallocArgs
     
-    -- simpleType = pure $ foldr AppT (AppT (ConT ''IO) finalRetTy) $
-    --  fmap (AppT ArrowT . unTypeResult) trueArgs
-    simpleType = pure $ foldr AppT (AppT (ConT ''IO) (unTypeResult retTy)) $
-      fmap (AppT ArrowT) $ ConT tyname  `V.cons` fmap (unTypeResult . fst) args
-    -- type for the foreign declaration
-    simpleForeignType = pure $ foldr AppT (AppT (ConT ''IO) (unTypeResult retTy)) $
-      fmap (AppT ArrowT . unTypeResult . fst) args
+    cName = if needsCShim then "hs_shim_" ++ nameBase fname else "dynamic"
+    foreignType = createFuncTyIO foreignRetTy foreignArgs
+    --TODO make the FunPtr correctly typed?
+    fdecl = ForeignD $ ImportF CCall Safe cName foreignName $
+                     AppT (AppT ArrowT (AppT (ConT ''FunPtr) foreignType)) foreignType -- FunPtr ty -> ty
 
-    constructSimpleFunction = do
-      -- FunPtr ty -> ty
-      fdecl <- forImpD cCall safe "dynamic" foreignName $
-        appT (appT arrowT (appT (conT ''FunPtr) simpleForeignType)) simpleForeignType
+    shimArgs = V.toList $ fmap isCShimType args
+    shimRet = isCShimType retTy
+    needsCShim = shimRet || or shimArgs
+    
+    -- construct the C shim. we're lazy here and just indicate whether we want to shim some argument or return type or not
+    -- no direct AST (todo?)
+    -- shimArgs = original function params length!!
+    cShim
+      | needsCShim = Just $ PP.vsep
+        [ newRetDecl <+> PP.text cName <+> PP.tupled newArgs <+> "{" -- new declaration
+        , PP.indent 2 $ retWay <+> "func" <+> PP.tupled newInvokeParams <> ";"
+        , "}"]
+      | otherwise = Nothing
+      where
+        nats = [0..] :: [Int]
+        oldRetTy = PP.pretty $ S.return_type entry
+        oldArgTys = map (PP.pretty . fst) $ V.toList $ S.arguments entry
+        
+        newRetDecl = if shimRet then "void" else oldRetTy
+        
+        funPtrDecl = oldRetTy <+> "(*func)" <> PP.tupled oldArgTys
 
-      sig <- sigD fname simpleType
-      nApi <- newName "api"
-      nPtr <- newName "ptr"
-      -- Left -> malloc, Right -> passed
-      -- namedArgs <- mapM (second $ \b -> (if b then Left else Right) <$> newName "x") args
-      -- let passedArgs = namedArgs ^.. traversed . aside _Right . _2
-      passedArgs <- replicateM (V.length args) $ newName "x"
+        shimTy needsShim ty = if needsShim then ty <> "*" else ty
+        
+        newArgs = [funPtrDecl] ++ -- fun ptr is always first
+                  zipWith3 (\idx needsShim ty -> shimTy needsShim ty <+> "x" <> PP.pretty idx)
+                  nats shimArgs oldArgTys ++
+                  [shimTy True oldRetTy <+> "ret" | shimRet] -- apppend ret shim if needed
+        
 
-      -- foreign ptr x_0 ...x_n
-      let invokeE = pure $ foldl AppE (VarE foreignName) $ VarE nPtr : map VarE passedArgs
-      -- peekElemOff api idx
-      let peekE = pure $ foldl AppE (VarE 'peekByteOff) [VarE nApi, LitE (IntegerL $ fromIntegral $ sizeOf (undefined :: FunPtr a) * idx)]
-      -- peekElemOff api idx >>= \ptr -> foreign ptr x_0 ... x_n
-      let body = normalB $ infixE (Just peekE) (varE '(>>=)) (Just $ lamE [varP nPtr] invokeE)
-      -- (Api api) x_0 ... x_n
-      fun <- funD fname [clause (conP tyname [varP nApi] : map varP passedArgs) body []]
-      return ([fdecl, sig, fun], Nothing)
+        retWay = if shimRet then "*ret =" else "return"
 
-    constructShimmedFunction = do
-      runIO $ putStrLn $ "function " ++ show fname ++ " needs a shim, skipping for now"
-      return ([], Nothing)
+        shimParam needsShim = if needsShim then "*" else ""
+        newInvokeParams = zipWith (\idx needsShim -> shimParam needsShim <> "x" <> PP.pretty idx) nats shimArgs
 
+-- this is the core C type -> Foreign mapping. we also encode the type of marshaller to use
+resolveType :: C.Type -> TypeResult Type
+resolveType (C.TypeSpecifier _ (lookupBase -> Just ty)) = SimpleType $ ty
+resolveType (C.TypeSpecifier _ (C.TypeName ident)) = con $ ConT $ fromCIdent ident
+  where
+    con | isOpaqueStruct ident = OpaqueType True . AppT (ConT ''Ptr) -- we need to shim this so types match
+        | isStruct ident = StorableType True . AppT (ConT ''Ptr)
+        | isEnumType ident = EnumType
+        | otherwise = error $ "Unknown type " ++ show ident
+resolveType (C.Ptr _ (C.TypeSpecifier _ (lookupBase -> Just ty)))
+  = SimpleType $ AppT (ConT ''Ptr) ty
+resolveType (C.Ptr _ (C.TypeSpecifier _ (C.TypeName "godot_object")))
+  = SimpleType $ ConT $ mkName "GodotObject"
+resolveType (C.Ptr _ (C.TypeSpecifier _ (C.TypeName ident)))
+  = con  . AppT (ConT ''Ptr) . ConT $ fromCIdent ident
+  where
+    con | isOpaqueStruct ident = OpaqueType False 
+        | isStruct ident = StorableType False
+        | isEnumType ident = EnumType 
+        | otherwise = error $ "Unknown type " ++ show ident
+resolveType (C.Ptr _ ty) = SimpleType $ AppT (ConT ''Ptr) (unTypeResult $ resolveType ty)
+resolveType x = error $ "Failed to resolve type " ++ show x
+
+isOpaqueStruct ident = ident `elem` godotOpaqueStructs
+isStruct ident = ident `elem` godotStructs
+isEnumType ident = ident `elem` godotEnums
+fromCIdent = mkName . pascal . C.unIdentifier
+lookupBase = flip M.lookup baseTypesTable
+
+unPtrT :: Type -> Type
+unPtrT (AppT (ConT ptr) ty) | ptr == ''Ptr = ty
+unPtrT _ = error "Used unPtrT on a non-Ptr type"
+
+-- tuple:
+-- - Either (Name -> Q Exp) (Q Exp) -- left => in marshaller needs argument, right => no argument (e.g. malloc)
+-- - Type => hs type
+-- - Name -> Q Exp => out marshaller
+-- an in argument needs an in marshaller
+-- an out argument needs both
+-- a return value needs an out marshaller
+marshalArg :: (TypeResult Type, Bool)
+           -> Q ( Either (Name -> Q Exp) (Q Exp)
+                , Type
+                , Name -> Q Exp )
+marshalArg (SimpleType ty, isOutPtr)
+  | isOutPtr = pure ( Right [|alloca|]
+                    , unPtrT ty
+                    , \n -> [|peek $(varE n)|])
+  | otherwise = pure ( Left (\n -> [| ($ $(varE n)) |])
+                       -- this syntax sucks a bit, but it's basically a ($ n) section
+                     , ty
+                     , \n -> [|return $(varE n)|] )
+marshalArg (EnumType ty, isOutPtr)
+  | isOutPtr = pure ( Right [|alloca|]
+                    , unPtrT ty
+                    , \n -> [|fmap (toEnum . fromIntegral) (peek $(varE n))|] )
+  | otherwise = pure ( Left (\n -> [|($ fromIntegral (fromEnum $(varE n)))|])
+                     , ty
+                     , \n -> [|return . toEnum $ fromIntegral $(varE n)|] )
+
+
+--TODO: rewrite this to use mallocForeignPtrBytes.
+marshalArg (OpaqueType _ ty, isOutPtr)
+  | isOutPtr = do
+      fptr <- newName "fptr"
+      act <- newName "act"
+      return ( Right [| (mallocBytes (opaqueSizeOf @($(pure $ unPtrT ty))) >>=) |]
+              , unPtrT ty
+              , \n -> [|coerce <$> newForeignPtr finalizerFree $(varE n)|] )
+   | otherwise = pure ( Left (\n -> [| withForeignPtr (coerce $(varE n)) |])
+                , unPtrT ty
+                , \n -> [|coerce <$> newForeignPtr_ $(varE n)|] )
+
+marshalArg (StorableType _ ty, isOutPtr)
+  | isOutPtr = pure ( Right [|alloca|]
+                    , unPtrT ty
+                    , \n -> [|peek $(varE n)|] )
+  | otherwise = pure ( Left (\n -> [| with $(varE n) |] )
+                     , unPtrT ty
+                     , \n -> [|peek $(varE n)|] ) -- not sure about this
+      
+
+marshalRet :: TypeResult Type -> Q ( Type -- hs ret ty
+                                   , Maybe (Name -> Q Exp) ) -- out marshaller
+marshalRet r@(OpaqueType True _) = error "can't marshal unshimmed opaque structs"
+marshalRet r@(StorableType True _) = error "can't marshal unshimmed structs"
+marshalRet r = marshalArg (r, False) >>=
+  \(_, hty, outm) -> case hty of
+    TupleT 0 -> pure (hty, Nothing)
+    _ -> pure (hty, Just outm)
+
+
+-- constructs the haskell and C functions out of the API name, index and entry
+-- I was considering doing C via AST, but just going to use PP.Doc.
+constructFunction :: Name -> Int -> S.GdnativeApiEntry -> Q ([Dec], Maybe PP.Doc)
+constructFunction tyname idx entry = do
+  marshalledArgs <- mapM marshalArg foreignArgs
+  let (hsOuts, hsArgs) = partitionArgs marshalledArgs
+  (retMarshalTy, retOutMarshal) <- marshalRet foreignRetTy
+
+  let hsRets = case retMarshalTy of
+        TupleT 0 -> hsOuts ^.. folded._2
+        _ -> retMarshalTy : (hsOuts ^.. folded._2)
+  let hsTy = createFuncTyIO (foldl AppT (TupleT (length hsRets)) hsRets) (apiTy : (hsArgs ^.. folded._2))
+
+  sig <- sigD fname (pure hsTy) -- the top-level sig
+
+  (argInMarshallers, argNames, argOutMarshallers) <- getMarshallers marshalledArgs
+
+  nApi <- newName "api"
+  nPtr <- newName "ptr"
+
+  -- peekElemOff api idx
+  let peekE = pure $ foldl AppE (VarE 'peekByteOff) [VarE nApi, LitE (IntegerL $ fromIntegral $ sizeOf (undefined :: FunPtr a) * idx + structOffset)]
+
+  let invokeE = appE (varE foreignName) (varE nPtr)
+
+  let callE = generateCall invokeE argInMarshallers argOutMarshallers retOutMarshal
+  fundecl <- funD fname [clause (conP tyname [varP nApi] : map varP argNames)
+                          (normalB $ infixE (Just peekE) (varE '(>>=)) (Just $ lamE [varP nPtr] callE)) []]
+  
+  
+  return ([fdecl, sig, fundecl], cShim)
+  -- marshalling
+  where
+    (fname, foreignName, fdecl, cShim, foreignArgs, foreignRetTy) = shimFunction entry
+
+    partitionArgs [] = ([],[])
+    partitionArgs ((inm, ty, outf) : margs)
+      = let (os, as) = partitionArgs margs
+        in case inm of
+             Left argf -> (os, (argf, ty, outf) : as)
+             Right argm -> ((argm, ty, outf) : os, as)
+    
+  
+    
+    apiTy = ConT tyname
+
+    getMarshallers [] = return ([],[],[])
+    getMarshallers ((inm, _, outm):xs) = do
+      (argInMs, argNs, argOutMs) <- getMarshallers xs
+      case inm of
+        Left argf -> newName "x" >>= \n -> return ((argf n, False) : argInMs, n : argNs, argOutMs)
+        Right argm -> return ( (argm, True) : argInMs, argNs, outm : argOutMs)
+
+    -- TODO: evaluate these properly
+    -- HACK: 64-bit linux only
+    structOffset = 40 -- offsetof(godot_gdnative_core_api_struct,godot_color_new_rgba)
+
+    
+-- an in marshaller has form (a -> IO b) -> IO b
+generateCall :: Q Exp -- ^ the foreign function to call
+             -> [(Q Exp, Bool)] -- ^ in marshallers (len = arguments)
+             -> [Name -> Q Exp] -- ^ out argument marshallers (len = #outputs)
+             -> Maybe (Name -> Q Exp) -- ^ return value marshaller, if non-void
+             -> Q Exp -- ^ the full callee
+generateCall = go []
+  where
+    go ns func [] outm maybeRetm = do
+      case maybeRetm of
+        -- duplication, bleh
+        Just retm -> do
+          r <- newName "r" -- return value
+          let bindCall = [ bindS (varP r) func ] -- bind the result of the call to a name
+          
+          os <- replicateM (length outm + 1) (newName "o")
+          let bindOuts = zipWith (\o f -> bindS (varP o) f) os $ zipWith ($) (retm:outm) (r:ns)
+          let retOuts = [noBindS $ appE [|return|] $ tupE (map varE os)]
+          doE $ bindCall ++ bindOuts ++ retOuts
+        Nothing -> do
+          let bindCall = [ noBindS func ]
+          os <- replicateM (length outm) (newName "o")
+          let bindOuts = zipWith (\o f -> bindS (varP o) f) os $ zipWith ($) outm ns
+          let retOuts = [noBindS $ appE [|return|] $ tupE (map varE os)]
+          doE $ bindCall ++ bindOuts ++ retOuts
+
+    go ns func ((inm, isOutArg):inms) outm maybeRetm = do
+      y <- newName "y"
+      appE inm . lamE [varP y] $ go (ns ++ [y | isOutArg]) (appE func (varE y)) inms outm maybeRetm
 
 apisToHs :: S.GdnativeApis -> Q [Dec]
 apisToHs apis = do
@@ -242,18 +465,14 @@ apiToHs isCore api = generateApiType api
     maybeVer = if S.apiVersion api == S.Ver 1 0 then "" else showVer
     mkApiName api = mkName $ "GodotGdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
 
-    --HACKHACK: ignoring shimmed
-    generateFunctions name entries = fmap (concat . V.toList . fmap fst) $ imapM (constructFunction name) entries
+    generateFunctions name entries = do
+      funcs <- imapM (constructFunction name) entries
+      let hscode = concat $ funcs ^.. folded._1
+      let ccode = PP.vsep $ funcs ^.. folded._2._Just
+      qAddForeignFile LangC . show $ PP.vsep
+        [ "#include <gdnative_api_struct.gen.h>"
+        , ccode ]
+      return hscode
       
       
-                                    
-
--- core idea:
--- disambiguate based on names ("r_x" -> alloca-..., "p_x" -> "Ptr ...")
--- structs are pointers by default (i.e. godot_string* == GodotString)
--- everything else is bare
--- anything else?
-
-
--- we don't have a C2HS AST...
 

@@ -32,77 +32,90 @@ type GodotReal = {#type godot_real#}
 {#typedef godot_char_type CWchar #}
 type GodotCharType = {#type godot_char_type #}
 
-{#pointer *godot_aabb as GodotAabb newtype #}
+{#pointer *godot_aabb as GodotAabb foreign newtype #}
 deriving newtype instance Eq GodotAabb
-deriving newtype instance Storable GodotAabb
 
-{#pointer *godot_array as GodotArray newtype #}
+{#pointer *godot_array as GodotArray foreign newtype #}
 deriving newtype instance Eq GodotArray
-deriving newtype instance Storable GodotArray
 
-{#pointer *godot_basis as GodotBasis newtype #}
+{#pointer *godot_basis as GodotBasis foreign newtype #}
 deriving newtype instance Eq GodotBasis
-deriving newtype instance Storable GodotBasis
 
-{#pointer *godot_char_string as GodotCharString newtype #}
+{#pointer *godot_char_string as GodotCharString foreign newtype #}
 deriving newtype instance Eq GodotCharString
-deriving newtype instance Storable GodotCharString
 
-{#pointer *godot_color as GodotColor newtype #}
+{#pointer *godot_color as GodotColor foreign newtype #}
 deriving newtype instance Eq GodotColor
-deriving newtype instance Storable GodotColor
 
-{#pointer *godot_dictionary as GodotDictionary newtype #}
+{#pointer *godot_dictionary as GodotDictionary foreign newtype #}
 deriving newtype instance Eq GodotDictionary
-deriving newtype instance Storable GodotDictionary
 
-{#pointer *godot_method_bind as GodotMethodBind newtype #}
+{#pointer *godot_method_bind as GodotMethodBind foreign newtype #}
 deriving newtype instance Eq GodotMethodBind
-deriving newtype instance Storable GodotMethodBind
 
-{#pointer *godot_node_path as GodotNodePath newtype #}
+{#pointer *godot_node_path as GodotNodePath foreign newtype #}
 deriving newtype instance Eq GodotNodePath
-deriving newtype instance Storable GodotNodePath
 
-{#pointer *godot_plane as GodotPlane newtype #}
+{#pointer *godot_plane as GodotPlane foreign newtype #}
 deriving newtype instance Eq GodotPlane
-deriving newtype instance Storable GodotPlane
 
-{#pointer *godot_pool_array_read_access as GodotPoolArrayReadAccess newtype #}
+{#pointer *godot_pool_array_read_access as GodotPoolArrayReadAccess foreign newtype #}
 deriving newtype instance Eq GodotPoolArrayReadAccess
-deriving newtype instance Storable GodotPoolArrayReadAccess
 
-{#pointer *godot_pool_array_write_access as GodotPoolArrayWriteAccess newtype #}
+{#pointer *godot_pool_array_write_access as GodotPoolArrayWriteAccess foreign newtype #}
 deriving newtype instance Eq GodotPoolArrayWriteAccess
-deriving newtype instance Storable GodotPoolArrayWriteAccess
 
-{#pointer *godot_pool_byte_array as GodotPoolByteArray newtype #}
+{#pointer *godot_pool_byte_array as GodotPoolByteArray foreign newtype #}
 deriving newtype instance Eq GodotPoolByteArray
-deriving newtype instance Storable GodotPoolByteArray
 
-{#pointer *godot_pool_color_array as GodotPoolColorArray newtype #}
+{#pointer *godot_pool_color_array as GodotPoolColorArray foreign newtype #}
 deriving newtype instance Eq GodotPoolColorArray
-deriving newtype instance Storable GodotPoolColorArray
 
-{#pointer *godot_pool_int_array as GodotPoolIntArray newtype #}
+{#pointer *godot_pool_int_array as GodotPoolIntArray foreign newtype #}
 deriving newtype instance Eq GodotPoolIntArray
-deriving newtype instance Storable GodotPoolIntArray
 
-{#pointer *godot_pool_real_array as GodotPoolRealArray newtype #}
+{#pointer *godot_pool_real_array as GodotPoolRealArray foreign newtype #}
 deriving newtype instance Eq GodotPoolRealArray
-deriving newtype instance Storable GodotPoolRealArray
 
-{#pointer *godot_pool_string_array as GodotPoolStringArray newtype #}
+{#pointer *godot_pool_string_array as GodotPoolStringArray foreign newtype #}
 deriving newtype instance Eq GodotPoolStringArray
-deriving newtype instance Storable GodotPoolStringArray
 
-{#pointer *godot_pool_vector2_array as GodotPoolVector2Array newtype #}
+{#pointer *godot_pool_vector2_array as GodotPoolVector2Array foreign newtype #}
 deriving newtype instance Eq GodotPoolVector2Array
-deriving newtype instance Storable GodotPoolVector2Array
 
-{#pointer *godot_pool_vector3_array as GodotPoolVector3Array newtype #}
+{#pointer *godot_pool_vector3_array as GodotPoolVector3Array foreign newtype #}
 deriving newtype instance Eq GodotPoolVector3Array
-deriving newtype instance Storable GodotPoolVector3Array
+
+{#pointer *godot_quat as GodotQuat foreign newtype #}
+deriving newtype instance Eq GodotQuat
+
+{#pointer *godot_rect2 as GodotRect2 foreign newtype #}
+deriving newtype instance Eq GodotRect2
+
+{#pointer *godot_rid as GodotRid foreign newtype #}
+deriving newtype instance Eq GodotRid
+
+{#pointer *godot_string as GodotString foreign newtype #}
+deriving newtype instance Eq GodotString
+
+{#pointer *godot_string_name as GodotStringName foreign newtype #}
+deriving newtype instance Eq GodotStringName
+
+{#pointer *godot_transform as GodotTransform foreign newtype #}
+deriving newtype instance Eq GodotTransform
+
+{#pointer *godot_transform2d as GodotTransform2d foreign newtype #}
+deriving newtype instance Eq GodotTransform2d
+
+{#pointer *godot_variant as GodotVariant foreign newtype #}
+deriving newtype instance Eq GodotVariant
+
+{#pointer *godot_vector2 as GodotVector2 foreign newtype #}
+deriving newtype instance Eq GodotVector2
+
+{#pointer *godot_vector3 as GodotVector3 foreign newtype #}
+deriving newtype instance Eq GodotVector3
+
 
 type GodotPoolByteArrayReadAccess = GodotPoolByteArray
 type GodotPoolByteArrayWriteAccess = GodotPoolByteArray
@@ -119,59 +132,119 @@ type GodotPoolVector2ArrayWriteAccess = GodotPoolVector2Array
 type GodotPoolVector3ArrayReadAccess = GodotPoolVector3Array
 type GodotPoolVector3ArrayWriteAccess = GodotPoolVector3Array
 
-
-{#pointer *godot_quat as GodotQuat newtype #}
-deriving newtype instance Eq GodotQuat
-deriving newtype instance Storable GodotQuat
-
-{#pointer *godot_rect2 as GodotRect2 newtype #}
-deriving newtype instance Eq GodotRect2
-deriving newtype instance Storable GodotRect2
-
-{#pointer *godot_rid as GodotRid newtype #}
-deriving newtype instance Eq GodotRid
-deriving newtype instance Storable GodotRid
-
-{#pointer *godot_string as GodotString newtype #}
-deriving newtype instance Eq GodotString
-deriving newtype instance Storable GodotString
-
-{#pointer *godot_string_name as GodotStringName newtype #}
-deriving newtype instance Eq GodotStringName
-deriving newtype instance Storable GodotStringName
-
-{#pointer *godot_transform as GodotTransform newtype #}
-deriving newtype instance Eq GodotTransform
-deriving newtype instance Storable GodotTransform
-
-{#pointer *godot_transform2d as GodotTransform2d newtype #}
-deriving newtype instance Eq GodotTransform2d
-deriving newtype instance Storable GodotTransform2d
-
-{#pointer *godot_variant as GodotVariant newtype #}
-deriving newtype instance Eq GodotVariant
-deriving newtype instance Storable GodotVariant
-
-{#pointer *godot_vector2 as GodotVector2 newtype #}
-deriving newtype instance Eq GodotVector2
-deriving newtype instance Storable GodotVector2
-
-{#pointer *godot_vector3 as GodotVector3 newtype #}
-deriving newtype instance Eq GodotVector3
-deriving newtype instance Storable GodotVector3
-
-{#pointer *godot_object as GodotObject newtype #}
-deriving newtype instance Eq GodotObject
-deriving newtype instance Storable GodotObject
-
 class OpaqueStorable a where
   opaqueSizeOf :: Int
-  opaquePtr :: Ptr a -> a
-  default opaquePtr :: Coercible (Ptr a) a => Ptr a -> a
-  opaquePtr = coerce
+instance OpaqueStorable GodotAabb where
+  opaqueSizeOf = {#sizeof godot_aabb#}
+
+
+instance OpaqueStorable GodotArray where
+  opaqueSizeOf = {#sizeof godot_array#}
+
+
+instance OpaqueStorable GodotBasis where
+  opaqueSizeOf = {#sizeof godot_basis#}
+
+
+instance OpaqueStorable GodotCharString where
+  opaqueSizeOf = {#sizeof godot_char_string#}
+
 
 instance OpaqueStorable GodotColor where
-  opaqueSizeOf = {#const GODOT_COLOR_SIZE#}
+  opaqueSizeOf = {#sizeof godot_color#}
+
+
+instance OpaqueStorable GodotDictionary where
+  opaqueSizeOf = {#sizeof godot_dictionary#}
+
+
+instance OpaqueStorable GodotMethodBind where
+  opaqueSizeOf = {#sizeof godot_method_bind#}
+
+
+instance OpaqueStorable GodotNodePath where
+  opaqueSizeOf = {#sizeof godot_node_path#}
+
+
+instance OpaqueStorable GodotPlane where
+  opaqueSizeOf = {#sizeof godot_plane#}
+
+
+instance OpaqueStorable GodotPoolArrayReadAccess where
+  opaqueSizeOf = {#sizeof godot_pool_array_read_access#}
+
+
+instance OpaqueStorable GodotPoolArrayWriteAccess where
+  opaqueSizeOf = {#sizeof godot_pool_array_write_access#}
+
+
+instance OpaqueStorable GodotPoolByteArray where
+  opaqueSizeOf = {#sizeof godot_pool_byte_array#}
+
+
+instance OpaqueStorable GodotPoolColorArray where
+  opaqueSizeOf = {#sizeof godot_pool_color_array#}
+
+
+instance OpaqueStorable GodotPoolIntArray where
+  opaqueSizeOf = {#sizeof godot_pool_int_array#}
+
+
+instance OpaqueStorable GodotPoolRealArray where
+  opaqueSizeOf = {#sizeof godot_pool_real_array#}
+
+
+instance OpaqueStorable GodotPoolStringArray where
+  opaqueSizeOf = {#sizeof godot_pool_string_array#}
+
+
+instance OpaqueStorable GodotPoolVector2Array where
+  opaqueSizeOf = {#sizeof godot_pool_vector2_array#}
+
+
+instance OpaqueStorable GodotPoolVector3Array where
+  opaqueSizeOf = {#sizeof godot_pool_vector3_array#}
+
+
+instance OpaqueStorable GodotQuat where
+  opaqueSizeOf = {#sizeof godot_quat#}
+
+
+instance OpaqueStorable GodotRect2 where
+  opaqueSizeOf = {#sizeof godot_rect2#}
+
+
+instance OpaqueStorable GodotRid where
+  opaqueSizeOf = {#sizeof godot_rid#}
+
+
+instance OpaqueStorable GodotString where
+  opaqueSizeOf = {#sizeof godot_string#}
+
+
+instance OpaqueStorable GodotStringName where
+  opaqueSizeOf = {#sizeof godot_string_name#}
+
+
+instance OpaqueStorable GodotTransform where
+  opaqueSizeOf = {#sizeof godot_transform#}
+
+
+instance OpaqueStorable GodotTransform2d where
+  opaqueSizeOf = {#sizeof godot_transform2d#}
+
+
+instance OpaqueStorable GodotVariant where
+  opaqueSizeOf = {#sizeof godot_variant#}
+
+
+instance OpaqueStorable GodotVector2 where
+  opaqueSizeOf = {#sizeof godot_vector2#}
+
+
+instance OpaqueStorable GodotVector3 where
+  opaqueSizeOf = {#sizeof godot_vector3#}
+
 
 data GodotVariantCallError = GodotVariantCallError
   { variantCallErrorError :: GodotVariantCallErrorError
@@ -216,6 +289,12 @@ deriving newtype instance Storable GodotGdnativeExtArvrApiStruct
 type ReportVersionMismatchFunc = GodotObject -> CString -> Word64 -> Word64 -> IO ()
 type ReportLoadingErrorFunc = GodotObject -> CString -> IO ()
 
+
+{#pointer *godot_object as GodotObject newtype #}
+deriving newtype instance Eq GodotObject
+deriving newtype instance Storable GodotObject
+
+
 data GodotGdnativeInitOptions = GodotGdnativeInitOptions
   { gdnativeInitOptionsInEditor :: Bool
   , gdnativeInitOptionsCoreApiHash :: Word64
@@ -244,7 +323,7 @@ instance Storable GodotGdnativeInitOptions where
              <*> (mkReportLoadingErrorFunc <$> {#get godot_gdnative_init_options->report_loading_error#} ptr)
              <*> {#get godot_gdnative_init_options->gd_native_library#} ptr
              <*> {#get godot_gdnative_init_options->api_struct#} ptr
-             <*> {#get godot_gdnative_init_options->active_library_path#} ptr
+             <*> (GodotString <$> ({#get godot_gdnative_init_options->active_library_path#} ptr >>= newForeignPtr_))
     where
       castFunPtrVersion :: FunPtr (GodotObject -> Ptr CChar -> Ptr () -> Ptr () -> IO ()) -> FunPtr ReportVersionMismatchFunc
       castFunPtrVersion = castFunPtr
@@ -274,18 +353,45 @@ type GodotClassConstructor = FunPtr (IO GodotObject)
 -- stuff that's not opaque (i.e. needs to be Storable'd) but i don't want to deal w/ rn
 
 -- pluginscript
-{#pointer *godot_pluginscript_language_desc as GodotPluginscriptLanguageDesc newtype#}
+data GodotPluginscriptLanguageDesc
+instance Storable GodotPluginscriptLanguageDesc
+{#pointer *godot_pluginscript_language_desc as GodotPluginscriptLanguageDescPtr -> GodotPluginscriptLanguageDesc#}
 
 -- nativescript
-{#pointer *godot_instance_create_func as GodotInstanceCreateFunc newtype#}
-{#pointer *godot_instance_destroy_func as GodotInstanceDestroyFunc newtype#}
-{#pointer *godot_instance_method as GodotInstanceMethod newtype#}
-{#pointer *godot_method_attributes as GodotMethodAttributes newtype#}
-{#pointer *godot_property_get_func as GodotPropertyGetFunc newtype#}
-{#pointer *godot_property_set_func as GodotPropertySetFunc newtype#}
-{#pointer *godot_property_attributes as GodotPropertyAttributes newtype#}
-{#pointer *godot_signal as GodotSignal newtype#}
+data GodotInstanceCreateFunc
+instance Storable GodotInstanceCreateFunc
+{#pointer *godot_instance_create_func as GodotInstanceCreateFuncPtr -> GodotInstanceCreateFunc #}
+
+data GodotInstanceDestroyFunc
+instance Storable GodotInstanceDestroyFunc
+{#pointer *godot_instance_destroy_func as GodotInstanceDestroyFuncPtr -> GodotInstanceDestroyFunc #}
+
+data GodotInstanceMethod
+instance Storable GodotInstanceMethod
+{#pointer *godot_instance_method as GodotInstanceMethodPtr -> GodotInstanceMethod #}
+
+data GodotMethodAttributes
+instance Storable GodotMethodAttributes
+{#pointer *godot_method_attributes as GodotMethodAttributesPtr -> GodotMethodAttributes #}
+
+data GodotPropertyGetFunc
+instance Storable GodotPropertyGetFunc
+{#pointer *godot_property_get_func as GodotPropertyGetFuncPtr -> GodotPropertyGetFunc #}
+
+data GodotPropertySetFunc
+instance Storable GodotPropertySetFunc
+{#pointer *godot_property_set_func as GodotPropertySetFuncPtr -> GodotPropertySetFunc #}
+
+data GodotPropertyAttributes
+instance Storable GodotPropertyAttributes
+{#pointer *godot_property_attributes as GodotPropertyAttributesPtr -> GodotPropertyAttributes #}
+
+data GodotSignal
+instance Storable GodotSignal
+{#pointer *godot_signal as GodotSignalPtr -> GodotSignal#}
 
 --arvr
-{#pointer *godot_arvr_interface_gdnative as GodotArvrInterfaceGdnative newtype#}
 
+data GodotArvrInterfaceGdnative
+instance Storable GodotArvrInterfaceGdnative
+{#pointer *godot_arvr_interface_gdnative as GodotArvrInterfaceGdnativePtr -> GodotArvrInterfaceGdnative #}
