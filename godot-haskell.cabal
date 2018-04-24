@@ -1,8 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.21.2.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bb466f15252e8d306129215be2cea4d7cf5e660fc6fda77f20e519d7dba0a17f
+-- hash: eca64f4e36ffa68a610ef0db9b519077a9580b79a45d5c8026006eca12cde407
 
 name:           godot-haskell
 version:        0.1.0.0
@@ -16,7 +16,6 @@ license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 2.0
-
 extra-source-files:
     README.md
 

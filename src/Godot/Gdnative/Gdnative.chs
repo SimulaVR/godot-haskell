@@ -1,12 +1,15 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE AllowAmbiguousTypes, ScopedTypeVariables, GADTs #-}
 {-# LANGUAGE UnboxedTuples, MagicHash #-}
+{-# LANGUAGE PatternSynonyms, RecordWildCards #-}
 module Godot.Gdnative.Gdnative where
 
+import Data.Bits
 import Data.Coerce
 import Data.Void
 import Foreign
 import Foreign.C
+
 
 #include "util.h"
 #include "gdnative_api_struct.gen.h"
@@ -247,9 +250,9 @@ instance OpaqueStorable GodotVector3 where
 
 
 data GodotVariantCallError = GodotVariantCallError
-  { variantCallErrorError :: GodotVariantCallErrorError
-  , variantCallErrorArgument :: CInt
-  , variantCallErrorExpected :: GodotVariantType
+  { variantCallErrorError :: !GodotVariantCallErrorError
+  , variantCallErrorArgument :: !CInt
+  , variantCallErrorExpected :: !GodotVariantType
   } deriving (Show, Eq, Ord)
 
 {#pointer *godot_variant_call_error as GodotVariantCallErrorPtr -> GodotVariantCallError#}
@@ -296,15 +299,15 @@ deriving newtype instance Storable GodotObject
 
 
 data GodotGdnativeInitOptions = GodotGdnativeInitOptions
-  { gdnativeInitOptionsInEditor :: Bool
-  , gdnativeInitOptionsCoreApiHash :: Word64
-  , gdnativeInitOptionsEditorApiHash :: Word64
-  , gdnativeInitOptionsNoApiHash :: Word64
-  , gdnativeInitOptionsReportVersionMismatch :: ReportVersionMismatchFunc
-  , gdnativeInitOptionsReportLoadingError :: ReportLoadingErrorFunc
-  , gdnativeInitOptionsGdNativeLibrary :: GodotObject
-  , gdnativeInitOptionsApiStruct :: GodotGdnativeCoreApiStruct
-  , gdnativeInitOptionsActiveLibraryPath :: GodotString
+  { gdnativeInitOptionsInEditor :: !Bool
+  , gdnativeInitOptionsCoreApiHash :: !Word64
+  , gdnativeInitOptionsEditorApiHash :: !Word64
+  , gdnativeInitOptionsNoApiHash :: !Word64
+  , gdnativeInitOptionsReportVersionMismatch :: !ReportVersionMismatchFunc
+  , gdnativeInitOptionsReportLoadingError :: !ReportLoadingErrorFunc
+  , gdnativeInitOptionsGdNativeLibrary :: !GodotObject
+  , gdnativeInitOptionsApiStruct :: !GodotGdnativeCoreApiStruct
+  , gdnativeInitOptionsActiveLibraryPath :: !GodotString
   }
 
 foreign import ccall "dynamic" mkReportVersionMismatchFunc :: FunPtr ReportVersionMismatchFunc -> ReportVersionMismatchFunc
@@ -332,7 +335,7 @@ instance Storable GodotGdnativeInitOptions where
 {#pointer *godot_gdnative_init_options as GodotGdnativeInitOptionsPtr -> GodotGdnativeInitOptions#}
 
 data GodotGdnativeTerminateOptions = GodotGdnativeTerminateOptions
-  { _godotGdnativeTerminateOptionsInEditor :: Bool
+  { gdnativeTerminateOptionsInEditor :: Bool
   } deriving (Show, Eq, Ord)
 
 instance Storable GodotGdnativeTerminateOptions where
@@ -340,58 +343,319 @@ instance Storable GodotGdnativeTerminateOptions where
   alignment _ = {#alignof godot_gdnative_terminate_options#}
   peek ptr = GodotGdnativeTerminateOptions
              <$> {#get godot_gdnative_terminate_options->in_editor#} ptr
-  poke ptr a = {#set godot_gdnative_terminate_options->in_editor#} ptr (_godotGdnativeTerminateOptionsInEditor a)
+  poke ptr a = {#set godot_gdnative_terminate_options->in_editor#} ptr (gdnativeTerminateOptionsInEditor a)
 
 {#pointer *godot_gdnative_terminate_options as GodotGdnativeTerminateOptionsPtr -> GodotGdnativeTerminateOptions#}
 
 
 -- not the real type but we need something
-type NativeCallCb = FunPtr Void
+data BareStruct a
+type NativeCallCb = FunPtr (Ptr () -> GodotArray -> IO (BareStruct GodotVariant))
 -- funptrs
 type GodotClassConstructor = FunPtr (IO GodotObject)
 
 -- stuff that's not opaque (i.e. needs to be Storable'd) but i don't want to deal w/ rn
 
 -- pluginscript
+-- TODO: we don't support pluginscript right now
 data GodotPluginscriptLanguageDesc
-instance Storable GodotPluginscriptLanguageDesc
+instance Storable GodotPluginscriptLanguageDesc where
+  sizeOf _ = {#sizeof godot_pluginscript_language_desc#}
+  alignment _ = {#alignof godot_pluginscript_language_desc#}
+  peek = error "GodotPluginscriptLanguageDesc peek not implemented"
+  poke = error "GodotPluginscriptLanguageDesc poke not implemented"
+
 {#pointer *godot_pluginscript_language_desc as GodotPluginscriptLanguageDescPtr -> GodotPluginscriptLanguageDesc#}
 
 -- nativescript
-data GodotInstanceCreateFunc
-instance Storable GodotInstanceCreateFunc
+{#enum godot_property_hint as GodotPropertyHint {underscoreToCase}
+  deriving (Show, Eq, Ord, Bounded) #}
+
+{#enum godot_method_rpc_mode as GodotMethodRpcMode {underscoreToCase}
+  deriving (Show, Eq, Ord, Bounded) #}
+
+newtype GodotPropertyUsageFlags = GodotPropertyUsageFlags { unGodotPropertyUsageFlags :: CInt }
+  deriving newtype (Show, Eq, Ord, Bits, Storable)
+
+pattern GodotPropertyUsageStorage :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageStorage = GodotPropertyUsageFlags 1
+
+pattern GodotPropertyUsageEditor :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageEditor = GodotPropertyUsageFlags 2
+
+pattern GodotPropertyUsageNetwork :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageNetwork = GodotPropertyUsageFlags 4
+
+pattern GodotPropertyUsageEditorHelper :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageEditorHelper = GodotPropertyUsageFlags 8
+
+pattern GodotPropertyUsageCheckable :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageCheckable = GodotPropertyUsageFlags 16
+
+pattern GodotPropertyUsageChecked :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageChecked = GodotPropertyUsageFlags 32
+
+pattern GodotPropertyUsageInternationalized :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageInternationalized = GodotPropertyUsageFlags 64
+
+pattern GodotPropertyUsageGroup :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageGroup = GodotPropertyUsageFlags 128
+
+pattern GodotPropertyUsageCategory :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageCategory = GodotPropertyUsageFlags 256
+
+pattern GodotPropertyUsageStoreIfNonzero :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageStoreIfNonzero = GodotPropertyUsageFlags 512
+
+pattern GodotPropertyUsageStoreIfNonone :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageStoreIfNonone = GodotPropertyUsageFlags 1024
+
+pattern GodotPropertyUsageNoInstanceState :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageNoInstanceState = GodotPropertyUsageFlags 2048
+
+pattern GodotPropertyUsageRestartIfChanged :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageRestartIfChanged = GodotPropertyUsageFlags 4096
+
+pattern GodotPropertyUsageScriptVariable :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageScriptVariable = GodotPropertyUsageFlags 8192
+
+pattern GodotPropertyUsageStoreIfNull :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageStoreIfNull = GodotPropertyUsageFlags 16384
+
+pattern GodotPropertyUsageAnimateAsTrigger :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageAnimateAsTrigger = GodotPropertyUsageFlags 32768
+
+pattern GodotPropertyUsageUpdateAllIfModified :: GodotPropertyUsageFlags
+pattern GodotPropertyUsageUpdateAllIfModified = GodotPropertyUsageFlags 65536
+
+godotPropertyUsageDefault :: GodotPropertyUsageFlags
+godotPropertyUsageDefault = GodotPropertyUsageStorage .|. GodotPropertyUsageEditor .|. GodotPropertyUsageNetwork
+
+godotPropertyUsageDefaultIntl :: GodotPropertyUsageFlags
+godotPropertyUsageDefaultIntl = godotPropertyUsageDefault .|. GodotPropertyUsageInternationalized
+
+godotPropertyUsageNoeditor :: GodotPropertyUsageFlags
+godotPropertyUsageNoeditor = GodotPropertyUsageStorage .|. GodotPropertyUsageNetwork
+
+type InstanceCreateFun = GodotObject -> Ptr () -> IO (Ptr ())
+type InstanceDestroyFun = GodotObject -> Ptr ()  -> Ptr () -> IO ()
+type InstanceFreeFun = Ptr () -> IO ()
+
+data GodotInstanceCreateFunc = GodotInstanceCreateFunc
+  { godotInstanceCreateFunc :: !(FunPtr InstanceCreateFun)
+  , godotInstanceCreateMethodData :: !(Ptr ())
+  , godotInstanceCreateFreeFunc :: !(FunPtr InstanceFreeFun)
+  } deriving (Show, Eq)
+instance Storable GodotInstanceCreateFunc where
+  sizeOf _ = {#sizeof godot_instance_create_func#}
+  alignment _ = {#alignof godot_instance_create_func#}
+  peek ptr = GodotInstanceCreateFunc
+             <$> {#get godot_instance_create_func->create_func#} ptr
+             <*> {#get godot_instance_create_func->method_data#} ptr
+             <*> {#get godot_instance_create_func->free_func#} ptr
+  poke ptr GodotInstanceCreateFunc{..} = do
+    {#set godot_instance_create_func->create_func#} ptr godotInstanceCreateFunc
+    {#set godot_instance_create_func->method_data#} ptr godotInstanceCreateMethodData
+    {#set godot_instance_create_func->free_func#} ptr godotInstanceCreateFreeFunc
+
 {#pointer *godot_instance_create_func as GodotInstanceCreateFuncPtr -> GodotInstanceCreateFunc #}
 
-data GodotInstanceDestroyFunc
-instance Storable GodotInstanceDestroyFunc
+data GodotInstanceDestroyFunc = GodotInstanceDestroyFunc
+  { godotInstanceDestroyFunc :: !(FunPtr InstanceDestroyFun)
+  , godotInstanceDestroyMethodData :: !(Ptr ())
+  , godotInstanceDestroyFreeFunc :: !(FunPtr InstanceFreeFun)
+  } deriving (Show, Eq)
+instance Storable GodotInstanceDestroyFunc where
+  sizeOf _ = {#sizeof godot_instance_destroy_func#}
+  alignment _ = {#alignof godot_instance_destroy_func#}
+  peek ptr = GodotInstanceDestroyFunc
+             <$> {#get godot_instance_destroy_func->destroy_func#} ptr
+             <*> {#get godot_instance_destroy_func->method_data#} ptr
+             <*> {#get godot_instance_destroy_func->free_func#} ptr
+  poke ptr GodotInstanceDestroyFunc{..} = do
+    {#set godot_instance_destroy_func->destroy_func#} ptr godotInstanceDestroyFunc
+    {#set godot_instance_destroy_func->method_data#} ptr godotInstanceDestroyMethodData
+    {#set godot_instance_destroy_func->free_func#} ptr godotInstanceDestroyFreeFunc
+
 {#pointer *godot_instance_destroy_func as GodotInstanceDestroyFuncPtr -> GodotInstanceDestroyFunc #}
 
-data GodotInstanceMethod
-instance Storable GodotInstanceMethod
+type InstanceMethodFun = FunPtr (GodotObject -> Ptr () -> Ptr () -> CInt 
+                      -> Ptr (Ptr GodotVariant) -> IO (BareStruct GodotVariant))
+
+data GodotInstanceMethod = GodotInstanceMethod
+  { godotInstanceMethod :: !InstanceMethodFun
+  , godotInstanceMethodData :: !(Ptr ())
+  , godotInstanceMethodFreeFunc :: !(FunPtr InstanceFreeFun)
+  } deriving (Show, Eq)
+instance Storable GodotInstanceMethod where
+    sizeOf _ = {#sizeof godot_instance_method#}
+    alignment _ = {#alignof godot_instance_method#}
+    peek ptr = GodotInstanceMethod
+               <$> (castFunPtr <$> {#get godot_instance_method->method#} ptr)
+               <*> {#get godot_instance_method->method_data#} ptr
+               <*> {#get godot_instance_method->free_func#} ptr
+    poke ptr GodotInstanceMethod{..} = do
+      {#set godot_instance_method->method#} ptr (castFunPtr godotInstanceMethod)
+      {#set godot_instance_method->method_data#} ptr godotInstanceMethodData
+      {#set godot_instance_method->free_func#} ptr godotInstanceMethodFreeFunc
+
 {#pointer *godot_instance_method as GodotInstanceMethodPtr -> GodotInstanceMethod #}
 
-data GodotMethodAttributes
-instance Storable GodotMethodAttributes
+newtype GodotMethodAttributes = GodotMethodAttributes GodotMethodRpcMode
+  deriving newtype (Show, Eq)
+
+instance Storable GodotMethodAttributes where
+  sizeOf _ = {#sizeof godot_method_attributes#}
+  alignment _ = {#alignof godot_method_attributes#}
+  peek ptr = (GodotMethodAttributes . toEnum . fromIntegral) <$> {#get godot_method_attributes->rpc_type#} ptr
+  poke ptr (GodotMethodAttributes rpcType) = {#set godot_method_attributes->rpc_type#} ptr (fromIntegral $ fromEnum rpcType)
+
 {#pointer *godot_method_attributes as GodotMethodAttributesPtr -> GodotMethodAttributes #}
 
-data GodotPropertyGetFunc
-instance Storable GodotPropertyGetFunc
+type PropertyGetFun = FunPtr (GodotObject -> Ptr () -> Ptr () -> IO (BareStruct GodotVariant))
+data GodotPropertyGetFunc = GodotPropertyGetFunc
+  { godotPropertyGetFunc :: !PropertyGetFun
+  , godotPropertyGetMethodData :: !(Ptr ())
+  , godotPropertyGetFreeFunc :: !(FunPtr InstanceFreeFun)
+  } deriving (Show, Eq)
+instance Storable GodotPropertyGetFunc where
+  sizeOf _ = {#sizeof godot_property_get_func#}
+  alignment _ = {#alignof godot_property_get_func#}
+  peek ptr = GodotPropertyGetFunc
+             <$> (castFunPtr <$> {#get godot_property_get_func->get_func#} ptr)
+             <*> {#get godot_property_get_func->method_data#} ptr
+             <*> {#get godot_property_get_func->free_func#} ptr
+  poke ptr GodotPropertyGetFunc{..} = do
+    {#set godot_property_get_func->get_func#} ptr (castFunPtr godotPropertyGetFunc)
+    {#set godot_property_get_func->method_data#} ptr godotPropertyGetMethodData
+    {#set godot_property_get_func->free_func#} ptr godotPropertyGetFreeFunc
+
 {#pointer *godot_property_get_func as GodotPropertyGetFuncPtr -> GodotPropertyGetFunc #}
 
-data GodotPropertySetFunc
-instance Storable GodotPropertySetFunc
+type PropertySetFun = GodotObject -> Ptr () -> Ptr () -> Ptr GodotVariant -> IO ()
+data GodotPropertySetFunc = GodotPropertySetFunc
+  { godotPropertySetFunc :: !(FunPtr PropertySetFun)
+  , godotPropertySetMethodData :: !(Ptr ())
+  , godotPropertySetFreeFunc :: !(FunPtr InstanceFreeFun)
+  } deriving (Show, Eq)
+instance Storable GodotPropertySetFunc where
+    sizeOf _ = {#sizeof godot_property_set_func#}
+    alignment _ = {#alignof godot_property_set_func#}
+    peek ptr = GodotPropertySetFunc
+               <$> {#get godot_property_set_func->set_func#} ptr
+               <*> {#get godot_property_set_func->method_data#} ptr
+               <*> {#get godot_property_set_func->free_func#} ptr
+    poke ptr GodotPropertySetFunc{..} = do
+      {#set godot_property_set_func->set_func#} ptr godotPropertySetFunc
+      {#set godot_property_set_func->method_data#} ptr godotPropertySetMethodData
+      {#set godot_property_set_func->free_func#} ptr godotPropertySetFreeFunc
+
 {#pointer *godot_property_set_func as GodotPropertySetFuncPtr -> GodotPropertySetFunc #}
 
-data GodotPropertyAttributes
-instance Storable GodotPropertyAttributes
+getOpaqueFromStruct :: forall a b. OpaqueStorable a => (ForeignPtr a -> a) -> Ptr b -> Int -> IO a
+getOpaqueFromStruct con structPtr offset = do
+  let start = structPtr `plusPtr` offset
+  let size = opaqueSizeOf @a
+  (fptr :: ForeignPtr a) <- mallocForeignPtrBytes size
+  withForeignPtr fptr $ \ptr -> copyBytes ptr start size
+  return $ con fptr
+
+setOpaqueFromStruct :: forall a b c. (Coercible a (ForeignPtr a), OpaqueStorable a) => Ptr b -> a -> Int -> IO ()
+setOpaqueFromStruct structPtr fptr offset = do
+    let start = structPtr `plusPtr` offset
+    let size = opaqueSizeOf @a
+    withForeignPtr (coerce fptr :: ForeignPtr a) $ \ptr -> copyBytes start ptr size
+
+data GodotPropertyAttributes = GodotPropertyAttributes
+  { godotPropertyAttributesRsetType :: !GodotMethodRpcMode
+  , godotPropertyAttributesType :: !GodotInt
+  , godotPropertyAttributesHint :: !GodotPropertyHint
+  , godotPropertyAttributesHintString :: !GodotString
+  , godotPropertyAttributesUsage :: !GodotPropertyUsageFlags
+  , godotPropertyAttributesDefaultValue :: !GodotVariant
+  }
+instance Storable GodotPropertyAttributes where
+  sizeOf _ = {#sizeof godot_property_attributes#}
+  alignment _ = {#alignof godot_property_attributes#}
+  peek ptr = do
+    godotPropertyAttributesRsetType <- (toEnum . fromIntegral) <$> {#get godot_property_attributes->rset_type#} ptr
+    godotPropertyAttributesType <- {#get godot_property_attributes->type#} ptr
+    godotPropertyAttributesHint <- (toEnum . fromIntegral) <$> {#get godot_property_attributes->hint#} ptr 
+    godotPropertyAttributesHintString <- getOpaqueFromStruct GodotString ptr {#offsetof godot_property_attributes->hint_string#}
+    godotPropertyAttributesUsage <- GodotPropertyUsageFlags <$> {#get godot_property_attributes->usage#} ptr
+    godotPropertyAttributesDefaultValue <- getOpaqueFromStruct GodotVariant ptr {#offsetof godot_property_attributes->default_value#}
+    return GodotPropertyAttributes{..}
+  poke ptr GodotPropertyAttributes{..} = do
+    {#set godot_property_attributes->rset_type#} ptr (fromIntegral . fromEnum $ godotPropertyAttributesRsetType)
+    {#set godot_property_attributes->type#} ptr godotPropertyAttributesType
+    {#set godot_property_attributes->hint#} ptr (fromIntegral . fromEnum $ godotPropertyAttributesHint)
+    setOpaqueFromStruct ptr godotPropertyAttributesHintString {#offsetof godot_property_attributes->hint_string#}
+    {#set godot_property_attributes->usage#} ptr (unGodotPropertyUsageFlags godotPropertyAttributesUsage)
+    setOpaqueFromStruct ptr godotPropertyAttributesDefaultValue {#offsetof godot_property_attributes->default_value#}
+
 {#pointer *godot_property_attributes as GodotPropertyAttributesPtr -> GodotPropertyAttributes #}
 
-data GodotSignal
-instance Storable GodotSignal
+
+data GodotSignalArgument = GodotSignalArgument
+  { godotSignalArgumentName :: !GodotString
+  , godotSignalArgumentType :: !GodotInt
+  , godotSignalArgumentHint :: !GodotPropertyHint
+  , godotSignalArgumentHintString :: !GodotString
+  , godotSignalArgumentUsage :: !GodotPropertyUsageFlags
+  , godotSignalArgumentDefaultValue :: !GodotVariant
+  }
+instance Storable GodotSignalArgument where
+  sizeOf _ = {#sizeof godot_signal_argument#}
+  alignment _ = {#alignof godot_signal_argument#}
+  peek ptr = do
+    godotSignalArgumentName <- getOpaqueFromStruct GodotString ptr {#offsetof godot_signal_argument->name#} 
+    godotSignalArgumentType <- {#get godot_signal_argument->type#} ptr
+    godotSignalArgumentHint <- (toEnum . fromIntegral) <$> {#get godot_signal_argument->hint#} ptr 
+    godotSignalArgumentHintString <- getOpaqueFromStruct GodotString ptr {#offsetof godot_signal_argument->hint_string#}
+    godotSignalArgumentUsage <- GodotPropertyUsageFlags <$> {#get godot_signal_argument->usage#} ptr
+    godotSignalArgumentDefaultValue <- getOpaqueFromStruct GodotVariant ptr {#offsetof godot_signal_argument->default_value#}
+    return GodotSignalArgument{..}
+  poke ptr GodotSignalArgument{..} = do
+    setOpaqueFromStruct ptr godotSignalArgumentName {#offsetof godot_signal_argument->name#}
+    {#set godot_signal_argument->type#} ptr godotSignalArgumentType
+    {#set godot_signal_argument->hint#} ptr (fromIntegral . fromEnum $ godotSignalArgumentHint)
+    setOpaqueFromStruct ptr godotSignalArgumentHintString {#offsetof godot_signal_argument->hint_string#}
+    {#set godot_signal_argument->usage#} ptr (unGodotPropertyUsageFlags godotSignalArgumentUsage)
+    setOpaqueFromStruct ptr godotSignalArgumentDefaultValue {#offsetof godot_signal_argument->default_value#}
+{#pointer *godot_signal_argument as GodotSignalArgumentPtr -> GodotSignalArgument#}
+
+data GodotSignal = GodotSignal
+  { godotSignalName :: !GodotString
+  , godotSignalNumArgs :: !CInt
+  , godotSignalArgs :: !(Ptr GodotSignalArgument)
+  , godotSignalNumDefaultArgs :: !CInt
+  , godotSignalDefaultArgs :: !(Ptr GodotVariant)
+  }
+instance Storable GodotSignal where
+  sizeOf _ = {#sizeof godot_signal#}
+  alignment _ = {#alignof godot_signal#}
+  peek ptr = do
+    godotSignalName <- getOpaqueFromStruct GodotString ptr {#offsetof godot_signal->name#} 
+    godotSignalNumArgs <- {#get godot_signal->num_args#} ptr
+    godotSignalArgs <- {#get godot_signal->args#} ptr
+    godotSignalNumDefaultArgs <- {#get godot_signal->num_default_args#} ptr
+    godotSignalDefaultArgs <- {#get godot_signal->default_args#} ptr
+    return GodotSignal{..}
+  poke ptr GodotSignal{..} = do
+    setOpaqueFromStruct ptr godotSignalName {#offsetof godot_signal->name#}
+    {#set godot_signal->num_args#} ptr godotSignalNumArgs
+    {#set godot_signal->args#} ptr godotSignalArgs
+    {#set godot_signal->num_default_args#} ptr godotSignalNumDefaultArgs
+    {#set godot_signal->default_args#} ptr godotSignalDefaultArgs
+    
 {#pointer *godot_signal as GodotSignalPtr -> GodotSignal#}
 
 --arvr
 
 data GodotArvrInterfaceGdnative
-instance Storable GodotArvrInterfaceGdnative
+instance Storable GodotArvrInterfaceGdnative where
+  sizeOf _ = {#sizeof godot_arvr_interface_gdnative#}
+  alignment _ = {#sizeof godot_arvr_interface_gdnative#}
+  peek = error "GodotArvrInterfaceGdnative peek not implemented"
+  poke = error "GodotArvrInterfaceGdnative poke not implemented"
 {#pointer *godot_arvr_interface_gdnative as GodotArvrInterfaceGdnativePtr -> GodotArvrInterfaceGdnative #}

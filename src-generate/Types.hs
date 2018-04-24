@@ -57,8 +57,8 @@ import           Control.Arrow (second)
 import           Control.Monad (when, unless, forM_)
 import           Control.Monad.State (execState, modify)
 import           Data.List (partition)
+import           Data.Semigroup
 import           Data.Maybe (fromMaybe)
-import           Data.Monoid ((<>))
 import           Data.Typeable (Typeable)
 import           Text.PrettyPrint.ANSI.Leijen ((</>), (<+>))
 import qualified Text.PrettyPrint.ANSI.Leijen as PP
@@ -96,8 +96,10 @@ data Specifiers = Specifiers
 
 instance Monoid Specifiers where
   mempty = Specifiers [] [] []
+  mappend = (<>)
 
-  mappend (Specifiers x1 y1 z1) (Specifiers x2 y2 z2) =
+instance Semigroup Specifiers where
+  (Specifiers x1 y1 z1) <> (Specifiers x2 y2 z2) =
     Specifiers (x1 ++ x2) (y1 ++ y2) (z1 ++ z2)
 
 data Type
