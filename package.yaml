@@ -35,10 +35,11 @@ default-extensions:
 library:
   source-dirs: src
   exposed-modules:
-  - Godot.Gdnative.TH
-  - Godot.Gdnative.Gdnative
-  - Godot.Gdnative.Api
-  - Godot.Gdnative
+  - Godot.Gdnative.Internal.TH
+  - Godot.Gdnative.Internal.Gdnative
+  - Godot.Gdnative.Internal.Api
+  - Godot.Gdnative.Internal
+  - Godot.Gdnative.Types
   dependencies:
   - generate
 

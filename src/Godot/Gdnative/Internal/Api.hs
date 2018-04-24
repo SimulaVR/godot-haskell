@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Godot.Gdnative.Api where
+module Godot.Gdnative.Internal.Api where
 
 import Data.Aeson
 import qualified Data.ByteString.Lazy as BL
@@ -8,7 +8,7 @@ import Foreign.C
 
 import Language.Haskell.TH
 
-import Godot.Gdnative.Gdnative
+import Godot.Gdnative.Internal.Gdnative
 
 import Generate
 

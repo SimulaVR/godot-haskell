@@ -2,7 +2,7 @@
 {-# LANGUAGE AllowAmbiguousTypes, ScopedTypeVariables, GADTs #-}
 {-# LANGUAGE UnboxedTuples, MagicHash #-}
 {-# LANGUAGE PatternSynonyms, RecordWildCards #-}
-module Godot.Gdnative.Gdnative where
+module Godot.Gdnative.Internal.Gdnative where
 
 import Data.Bits
 import Data.Coerce

@@ -1,5 +1,5 @@
 {-#LANGUAGE TemplateHaskell#-}
-module Godot.Gdnative.TH where
+module Godot.Gdnative.Internal.TH where
 
 import Godot.Gdnative.Gdnative
 import Language.Haskell.TH

@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: eca64f4e36ffa68a610ef0db9b519077a9580b79a45d5c8026006eca12cde407
+-- hash: ed4aaa16c494cb710fbd71965fd56bf89bc6988b0edd25605eb135a6d5f8fe98
 
 name:           godot-haskell
 version:        0.1.0.0
@@ -25,10 +25,11 @@ source-repository head
 
 library
   exposed-modules:
-      Godot.Gdnative.TH
-      Godot.Gdnative.Gdnative
-      Godot.Gdnative.Api
-      Godot.Gdnative
+      Godot.Gdnative.Internal.TH
+      Godot.Gdnative.Internal.Gdnative
+      Godot.Gdnative.Internal.Api
+      Godot.Gdnative.Internal
+      Godot.Gdnative.Types
   other-modules:
       Paths_godot_haskell
   hs-source-dirs:
