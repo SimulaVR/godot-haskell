@@ -1,7 +1,7 @@
 {-#LANGUAGE TemplateHaskell#-}
 module Godot.Gdnative.Internal.TH where
 
-import Godot.Gdnative.Gdnative
+import Godot.Gdnative.Internal.Gdnative
 import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 import Foreign

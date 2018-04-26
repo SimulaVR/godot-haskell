@@ -15,6 +15,7 @@ dependencies:
 - bytestring
 - template-haskell
 - lens
+- text
 
 build-tools:
 - c2hs
@@ -42,6 +43,7 @@ library:
   - Godot.Gdnative.Types
   dependencies:
   - generate
+  - linear
 
 internal-libraries:
   generate:

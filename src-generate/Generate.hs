@@ -364,7 +364,7 @@ constructFunction tyname idx entry = do
   let hsRets = case retMarshalTy of
         TupleT 0 -> hsOuts ^.. folded._2
         _ -> retMarshalTy : (hsOuts ^.. folded._2)
-  let hsTy = createFuncTyIO (foldl AppT (TupleT (length hsRets)) hsRets) (apiTy : (hsArgs ^.. folded._2))
+  let hsTy = createFuncTyIO (foldl AppT (TupleT (length hsRets)) hsRets) (hsArgs ^.. folded._2)
 
   sig <- sigD fname (pure hsTy) -- the top-level sig
 
@@ -374,12 +374,14 @@ constructFunction tyname idx entry = do
   nPtr <- newName "ptr"
 
   -- peekElemOff api idx
-  let peekE = pure $ foldl AppE (VarE 'peekByteOff) [VarE nApi, LitE (IntegerL $ fromIntegral $ sizeOf (undefined :: FunPtr a) * idx + structOffset)]
+  let tyApiName = mkName . camel $ nameBase tyname
+  let apiE = LetE [ValD (ConP tyname [VarP nApi]) (NormalB $ VarE tyApiName) []] (VarE nApi)
+  let peekE = pure $ foldl AppE (VarE 'peekByteOff) [apiE, LitE (IntegerL $ fromIntegral $ sizeOf (undefined :: FunPtr a) * idx + structOffset)]
 
   let invokeE = appE (varE foreignName) (varE nPtr)
 
   let callE = generateCall invokeE argInMarshallers argOutMarshallers retOutMarshal
-  fundecl <- funD fname [clause (conP tyname [varP nApi] : map varP argNames)
+  fundecl <- funD fname [clause (map varP argNames)
                           (normalB $ infixE (Just peekE) (varE '(>>=)) (Just $ lamE [varP nPtr] callE)) []]
   
   

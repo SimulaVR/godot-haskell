@@ -120,20 +120,20 @@ deriving newtype instance Eq GodotVector2
 deriving newtype instance Eq GodotVector3
 
 
-type GodotPoolByteArrayReadAccess = GodotPoolByteArray
-type GodotPoolByteArrayWriteAccess = GodotPoolByteArray
-type GodotPoolColorArrayReadAccess = GodotPoolColorArray
-type GodotPoolColorArrayWriteAccess = GodotPoolColorArray
-type GodotPoolIntArrayReadAccess = GodotPoolIntArray
-type GodotPoolIntArrayWriteAccess = GodotPoolIntArray
-type GodotPoolRealArrayReadAccess = GodotPoolRealArray
-type GodotPoolRealArrayWriteAccess = GodotPoolRealArray
-type GodotPoolStringArrayReadAccess = GodotPoolStringArray
-type GodotPoolStringArrayWriteAccess = GodotPoolStringArray
-type GodotPoolVector2ArrayReadAccess = GodotPoolVector2Array
-type GodotPoolVector2ArrayWriteAccess = GodotPoolVector2Array
-type GodotPoolVector3ArrayReadAccess = GodotPoolVector3Array
-type GodotPoolVector3ArrayWriteAccess = GodotPoolVector3Array
+type GodotPoolByteArrayReadAccess = GodotPoolArrayReadAccess
+type GodotPoolByteArrayWriteAccess = GodotPoolArrayWriteAccess
+type GodotPoolColorArrayReadAccess = GodotPoolArrayReadAccess
+type GodotPoolColorArrayWriteAccess = GodotPoolArrayWriteAccess
+type GodotPoolIntArrayReadAccess = GodotPoolArrayReadAccess
+type GodotPoolIntArrayWriteAccess = GodotPoolArrayWriteAccess
+type GodotPoolRealArrayReadAccess = GodotPoolArrayReadAccess
+type GodotPoolRealArrayWriteAccess = GodotPoolArrayWriteAccess
+type GodotPoolStringArrayReadAccess = GodotPoolArrayReadAccess
+type GodotPoolStringArrayWriteAccess = GodotPoolArrayWriteAccess
+type GodotPoolVector2ArrayReadAccess = GodotPoolArrayReadAccess
+type GodotPoolVector2ArrayWriteAccess = GodotPoolArrayWriteAccess
+type GodotPoolVector3ArrayReadAccess = GodotPoolArrayReadAccess
+type GodotPoolVector3ArrayWriteAccess = GodotPoolArrayWriteAccess
 
 class OpaqueStorable a where
   opaqueSizeOf :: Int
