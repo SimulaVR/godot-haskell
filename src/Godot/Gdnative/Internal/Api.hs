@@ -5,7 +5,6 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy as BL
 import Data.IORef
 
-import Foreign
 import Foreign.C
 
 import Language.Haskell.TH

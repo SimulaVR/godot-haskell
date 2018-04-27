@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 module Spec where
 
 import Data.Aeson
 import Data.Aeson.TH
-import Data.Aeson.Types (Parser)
 import Data.Char
 import Data.Monoid
 import Data.Text (Text)

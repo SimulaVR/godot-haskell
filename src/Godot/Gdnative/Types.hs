@@ -1,12 +1,10 @@
 {-# LANGUAGE FunctionalDependencies, TypeFamilies, TypeInType, LambdaCase #-}
 module Godot.Gdnative.Types where
 
-import Data.ByteString (ByteString)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Unsafe as B
 
 import Data.Text (Text)
-import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 
 import Linear
@@ -17,7 +15,7 @@ data LibType = GodotTy | HaskellTy
 
 type family TypeOf (x :: LibType) a
 -- I'm torn about this instance. Need TH if not using this
-type instance TypeOf GodotTy a = a
+type instance TypeOf 'GodotTy a = a
 
 -- |GodotFFI is a relation between low-level and high-level
 -- |Godot types, and conversions between them.
@@ -25,13 +23,13 @@ class GodotFFI low high | low -> high where
   fromLowLevel :: low -> IO high
   toLowLevel :: high -> IO low
 
-type instance TypeOf HaskellTy GodotString = Text
+type instance TypeOf 'HaskellTy GodotString = Text
 instance GodotFFI GodotString Text where
   fromLowLevel str = godot_string_utf8 str >>= \cstr -> T.decodeUtf8 <$> fromCharString cstr
     where
-      fromCharString str = do
-        len <- godot_char_string_length str
-        sptr <- godot_char_string_get_data str
+      fromCharString cstr = do
+        len <- godot_char_string_length cstr
+        sptr <- godot_char_string_get_data cstr
         B.packCStringLen (sptr, fromIntegral len)
 
   toLowLevel txt = B.unsafeUseAsCStringLen bstr $ \(ptr, len) ->
@@ -39,7 +37,7 @@ instance GodotFFI GodotString Text where
     where
       bstr = T.encodeUtf8 txt
 
-type instance TypeOf HaskellTy GodotVector2 = V2 Float
+type instance TypeOf 'HaskellTy GodotVector2 = V2 Float
 instance GodotFFI GodotVector2 (V2 Float) where
   fromLowLevel v = V2 
                    <$> (realToFrac <$> godot_vector2_get_x v)
@@ -47,7 +45,7 @@ instance GodotFFI GodotVector2 (V2 Float) where
   toLowLevel (V2 x y) = godot_vector2_new (realToFrac x) (realToFrac y)
 
 
-type instance TypeOf HaskellTy GodotVector3 = V3 Float
+type instance TypeOf 'HaskellTy GodotVector3 = V3 Float
 instance GodotFFI GodotVector3 (V3 Float) where
   fromLowLevel v = V3 
                    <$> (realToFrac <$> godot_vector3_get_axis v GodotVector3AxisX)
@@ -55,7 +53,7 @@ instance GodotFFI GodotVector3 (V3 Float) where
                    <*> (realToFrac <$> godot_vector3_get_axis v GodotVector3AxisZ)
   toLowLevel (V3 x y z) = godot_vector3_new (realToFrac x) (realToFrac y) (realToFrac z)
 
-type instance TypeOf HaskellTy GodotQuat = Quaternion Float
+type instance TypeOf 'HaskellTy GodotQuat = Quaternion Float
 instance GodotFFI GodotQuat (Quaternion Float) where
   fromLowLevel q = Quaternion
                    <$> (realToFrac <$> godot_quat_get_w q)
@@ -122,7 +120,7 @@ instance GodotFFI GodotVariant (Variant 'GodotTy) where
       GodotVariantTypePoolByteArray -> VariantPoolByteArray <$> godot_variant_as_pool_byte_array var
       GodotVariantTypePoolIntArray -> VariantPoolIntArray <$> godot_variant_as_pool_int_array var
       GodotVariantTypePoolRealArray -> VariantPoolRealArray <$> godot_variant_as_pool_real_array var
-      GodotVariantTypePoolStringArray -> VariantPoolStringArray <$> godot_variant_as_pool_string_array x
+      GodotVariantTypePoolStringArray -> VariantPoolStringArray <$> godot_variant_as_pool_string_array var
       GodotVariantTypePoolVector2Array -> VariantPoolVector2Array <$> godot_variant_as_pool_vector2_array var
       GodotVariantTypePoolVector3Array -> VariantPoolVector3Array <$> godot_variant_as_pool_vector3_array var
       GodotVariantTypePoolColorArray -> VariantPoolColorArray <$> godot_variant_as_pool_color_array var

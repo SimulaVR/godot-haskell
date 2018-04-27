@@ -2,11 +2,11 @@
 {-# LANGUAGE AllowAmbiguousTypes, ScopedTypeVariables, GADTs #-}
 {-# LANGUAGE UnboxedTuples, MagicHash #-}
 {-# LANGUAGE PatternSynonyms, RecordWildCards #-}
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
 module Godot.Gdnative.Internal.Gdnative where
 
 import Data.Bits
 import Data.Coerce
-import Data.Void
 import Foreign
 import Foreign.C
 
@@ -560,7 +560,7 @@ getOpaqueFromStruct con structPtr offset = do
   withForeignPtr fptr $ \ptr -> copyBytes ptr start size
   return $ con fptr
 
-setOpaqueFromStruct :: forall a b c. (Coercible a (ForeignPtr a), OpaqueStorable a) => Ptr b -> a -> Int -> IO ()
+setOpaqueFromStruct :: forall a b. (Coercible a (ForeignPtr a), OpaqueStorable a) => Ptr b -> a -> Int -> IO ()
 setOpaqueFromStruct structPtr fptr offset = do
     let start = structPtr `plusPtr` offset
     let size = opaqueSizeOf @a

@@ -73,9 +73,7 @@ import           Control.Monad (msum, void, MonadPlus, unless, when)
 import           Control.Monad.Reader (MonadReader, ask, runReaderT, ReaderT)
 import           Data.Functor.Identity (Identity)
 import qualified Data.HashSet as HashSet
-import           Data.Maybe (mapMaybe)
 import           Data.Monoid ((<>))
-import qualified Data.Set as Set
 import           Data.String (IsString(..))
 import           Data.Typeable (Typeable)
 import qualified Text.Parsec as Parsec

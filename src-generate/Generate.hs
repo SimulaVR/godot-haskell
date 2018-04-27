@@ -1,20 +1,15 @@
 {-# LANGUAGE TemplateHaskell, OverloadedStrings, ViewPatterns, DeriveFunctor, TypeApplications #-}
 module Generate where
 
-import Control.Arrow ((***))
 import Control.Lens
-import Control.Lens.TH
 import Control.Monad
 
 import Data.Coerce
-import Data.HashMap.Lazy (HashMap)
 import qualified Data.HashMap.Lazy as HM
-import Data.List
 import Data.Map (Map)
 import qualified Data.Map as M
 import Data.Monoid
-import Data.Set (Set)
-import qualified Data.Set as S
+
 import qualified Data.Vector as V
 import qualified Data.Text as T
 
@@ -26,7 +21,7 @@ import Foreign.C
 import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 
-import Text.PrettyPrint.ANSI.Leijen ((</>), (<+>))
+import Text.PrettyPrint.ANSI.Leijen ((<+>))
 import qualified Text.PrettyPrint.ANSI.Leijen as PP
 
 import qualified Spec as S 
@@ -235,7 +230,7 @@ shimFunction entry =
     -- shimArgs = original function params length!!
     cShim
       | needsCShim = Just $ PP.vsep
-        [ newRetDecl <+> PP.text cName <+> PP.tupled newArgs <+> "{" -- new declaration
+        [ newRetDecl <+> PP.text cName <+> PP.tupled newCArgs <+> "{" -- new declaration
         , PP.indent 2 $ retWay <+> "func" <+> PP.tupled newInvokeParams <> ";"
         , "}"]
       | otherwise = Nothing
@@ -250,7 +245,7 @@ shimFunction entry =
 
         shimTy needsShim ty = if needsShim then ty <> "*" else ty
         
-        newArgs = [funPtrDecl] ++ -- fun ptr is always first
+        newCArgs = [funPtrDecl] ++ -- fun ptr is always first
                   zipWith3 (\idx needsShim ty -> shimTy needsShim ty <+> "x" <> PP.pretty idx)
                   nats shimArgs oldArgTys ++
                   [shimTy True oldRetTy <+> "ret" | shimRet] -- apppend ret shim if needed
@@ -284,10 +279,15 @@ resolveType (C.Ptr _ (C.TypeSpecifier _ (C.TypeName ident)))
 resolveType (C.Ptr _ ty) = SimpleType $ AppT (ConT ''Ptr) (unTypeResult $ resolveType ty)
 resolveType x = error $ "Failed to resolve type " ++ show x
 
+isStruct, isEnumType, isOpaqueStruct :: C.Identifier -> Bool
 isOpaqueStruct ident = ident `elem` godotOpaqueStructs
 isStruct ident = ident `elem` godotStructs
 isEnumType ident = ident `elem` godotEnums
+
+fromCIdent :: C.Identifier -> Name
 fromCIdent = mkName . pascal . C.unIdentifier
+
+lookupBase :: C.TypeSpecifier -> Maybe Type
 lookupBase = flip M.lookup baseTypesTable
 
 unPtrT :: Type -> Type
@@ -324,10 +324,7 @@ marshalArg (EnumType ty, isOutPtr)
 
 --TODO: rewrite this to use mallocForeignPtrBytes.
 marshalArg (OpaqueType _ ty, isOutPtr)
-  | isOutPtr = do
-      fptr <- newName "fptr"
-      act <- newName "act"
-      return ( Right [| (mallocBytes (opaqueSizeOf @($(pure $ unPtrT ty))) >>=) |]
+  | isOutPtr = pure ( Right [| (mallocBytes (opaqueSizeOf @($(pure $ unPtrT ty))) >>=) |]
               , unPtrT ty
               , \n -> [|coerce <$> newForeignPtr finalizerFree $(varE n)|] )
    | otherwise = pure ( Left (\n -> [| withForeignPtr (coerce $(varE n)) |])
@@ -345,8 +342,8 @@ marshalArg (StorableType _ ty, isOutPtr)
 
 marshalRet :: TypeResult Type -> Q ( Type -- hs ret ty
                                    , Maybe (Name -> Q Exp) ) -- out marshaller
-marshalRet r@(OpaqueType True _) = error "can't marshal unshimmed opaque structs"
-marshalRet r@(StorableType True _) = error "can't marshal unshimmed structs"
+marshalRet (OpaqueType True _) = error "can't marshal unshimmed opaque structs"
+marshalRet (StorableType True _) = error "can't marshal unshimmed structs"
 marshalRet r = marshalArg (r, False) >>=
   \(_, hty, outm) -> case hty of
     TupleT 0 -> pure (hty, Nothing)
@@ -396,10 +393,6 @@ constructFunction tyname idx entry = do
         in case inm of
              Left argf -> (os, (argf, ty, outf) : as)
              Right argm -> ((argm, ty, outf) : os, as)
-    
-  
-    
-    apiTy = ConT tyname
 
     getMarshallers [] = return ([],[],[])
     getMarshallers ((inm, _, outm):xs) = do
@@ -451,7 +444,7 @@ apisToHs apis = do
 
 -- bool: is core -> True
 apiToHs :: Bool -> S.GdnativeApi -> Q [Dec]
-apiToHs isCore api = generateApiType api
+apiToHs isCore api = generateApiType
   where
     -- generate the
     -- newtype: newtype Api = Api (Ptr Api)
@@ -459,13 +452,13 @@ apiToHs isCore api = generateApiType api
     -- - simple function: func :: Api -> Blah -> IO Boop, func (Api ptr) blah boop = peekByteOff ptr 0 >>= \fptr -> createFunc fptr blah boop
     -- - c shim function: * return value: create C function with extra argument that writes result to it
     --                    * argument: create C function that dereferences it
-    generateApiType api = let apiName = mkApiName api
-                              apiEntries = S.apiApi api
-                          in generateFunctions apiName apiEntries
+    generateApiType = let apiName = mkApiName
+                          apiEntries = S.apiApi api
+                      in generateFunctions apiName apiEntries
     maybeExt = if isCore then "" else "Ext"
     showVer = let ver = S.apiVersion api in show (S.major ver) ++ show (S.minor ver)
     maybeVer = if S.apiVersion api == S.Ver 1 0 then "" else showVer
-    mkApiName api = mkName $ "GodotGdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
+    mkApiName = mkName $ "GodotGdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
 
     generateFunctions name entries = do
       funcs <- imapM (constructFunction name) entries
