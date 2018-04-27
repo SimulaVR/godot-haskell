@@ -96,7 +96,7 @@ data Variant (ty :: LibType)
   | VariantPoolVector3Array !(TypeOf ty GodotPoolVector3Array)
   | VariantPoolColorArray !(TypeOf ty GodotPoolColorArray)
 
-instance GodotFFI GodotVariant (Variant GodotTy) where
+instance GodotFFI GodotVariant (Variant 'GodotTy) where
   fromLowLevel var = godot_variant_get_type var >>= \x ->
     case x of
       GodotVariantTypeNil -> return VariantNil
@@ -122,6 +122,7 @@ instance GodotFFI GodotVariant (Variant GodotTy) where
       GodotVariantTypePoolByteArray -> VariantPoolByteArray <$> godot_variant_as_pool_byte_array var
       GodotVariantTypePoolIntArray -> VariantPoolIntArray <$> godot_variant_as_pool_int_array var
       GodotVariantTypePoolRealArray -> VariantPoolRealArray <$> godot_variant_as_pool_real_array var
+      GodotVariantTypePoolStringArray -> VariantPoolStringArray <$> godot_variant_as_pool_string_array x
       GodotVariantTypePoolVector2Array -> VariantPoolVector2Array <$> godot_variant_as_pool_vector2_array var
       GodotVariantTypePoolVector3Array -> VariantPoolVector3Array <$> godot_variant_as_pool_vector3_array var
       GodotVariantTypePoolColorArray -> VariantPoolColorArray <$> godot_variant_as_pool_color_array var
