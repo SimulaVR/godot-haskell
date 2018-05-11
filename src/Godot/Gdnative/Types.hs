@@ -95,8 +95,7 @@ data Variant (ty :: LibType)
   | VariantPoolColorArray !(TypeOf ty GodotPoolColorArray)
 
 instance GodotFFI GodotVariant (Variant 'GodotTy) where
-  fromLowLevel var = godot_variant_get_type var >>= \x ->
-    case x of
+  fromLowLevel var = godot_variant_get_type var >>= \case
       GodotVariantTypeNil -> return VariantNil
       GodotVariantTypeBool -> (VariantBool . (/= 0)) <$> godot_variant_as_bool var
       GodotVariantTypeInt -> (VariantInt . fromIntegral) <$> godot_variant_as_int var

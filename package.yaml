@@ -16,6 +16,11 @@ dependencies:
 - template-haskell
 - lens
 - text
+- casing
+- vector
+- containers
+- unordered-containers
+- mtl
 
 build-tools:
 - c2hs
@@ -32,6 +37,12 @@ default-extensions:
 - StandaloneDeriving
 - DerivingStrategies
 - DefaultSignatures
+- MultiParamTypeClasses
+- FunctionalDependencies
+- TypeFamilies
+- TemplateHaskell
+- TypeOperators
+- TypeInType
 
 library:
   source-dirs: src
@@ -49,15 +60,19 @@ internal-libraries:
   generate:
     source-dirs: src-generate
     dependencies:
-    - aeson
-    - bytestring
-    - text
-    - vector
-    - containers
-    - unordered-containers
     - parsec
     - parsers
     - mtl
     - ansi-wl-pprint
-    - casing
 
+  classgen:
+    source-dirs: src-classgen
+    dependencies:
+    - haskell-src-exts
+
+executables:
+  godot-haskell-classgen:
+    main: Main.hs
+    source-dirs: app-classgen
+    dependencies:
+      - classgen

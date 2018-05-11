@@ -348,9 +348,23 @@ instance Storable GodotGdnativeTerminateOptions where
 {#pointer *godot_gdnative_terminate_options as GodotGdnativeTerminateOptionsPtr -> GodotGdnativeTerminateOptions#}
 
 
--- not the real type but we need something
-data BareStruct a
-type NativeCallCb = FunPtr (Ptr () -> GodotArray -> IO (BareStruct GodotVariant))
+-- ok so:
+-- on both SysV x64 and Win64, structs larger than 64bits are passed by pointer
+-- i.e. the following two are equivalent:
+{-
+godot_variant test() {
+    godot_variant var;
+    godot_variant_new_nil(&var);
+    return var;
+}
+
+godot_variant* test2(godot_variant* ret) {
+    godot_variant_new_nil(ret);
+    return ret;
+}
+-}
+-- we're abusing this. remember to return the godotvariant!!
+type NativeCallCb = FunPtr (Ptr GodotVariant -> Ptr () -> GodotArray -> IO (Ptr GodotVariant))
 -- funptrs
 type GodotClassConstructor = FunPtr (IO GodotObject)
 
@@ -441,6 +455,10 @@ type InstanceCreateFun = GodotObject -> Ptr () -> IO (Ptr ())
 type InstanceDestroyFun = GodotObject -> Ptr ()  -> Ptr () -> IO ()
 type InstanceFreeFun = Ptr () -> IO ()
 
+foreign import ccall "wrapper" mkInstanceCreateFunPtr :: InstanceCreateFun -> IO (FunPtr InstanceCreateFun)
+foreign import ccall "wrapper" mkInstanceDestroyFunPtr :: InstanceDestroyFun -> IO (FunPtr InstanceDestroyFun)
+foreign import ccall "wrapper" mkInstanceFreeFunPtr :: InstanceFreeFun -> IO (FunPtr InstanceFreeFun)
+
 data GodotInstanceCreateFunc = GodotInstanceCreateFunc
   { godotInstanceCreateFunc :: !(FunPtr InstanceCreateFun)
   , godotInstanceCreateMethodData :: !(Ptr ())
@@ -479,11 +497,13 @@ instance Storable GodotInstanceDestroyFunc where
 
 {#pointer *godot_instance_destroy_func as GodotInstanceDestroyFuncPtr -> GodotInstanceDestroyFunc #}
 
-type InstanceMethodFun = FunPtr (GodotObject -> Ptr () -> Ptr () -> CInt 
-                      -> Ptr (Ptr GodotVariant) -> IO (BareStruct GodotVariant))
+type InstanceMethodFun = Ptr GodotVariant -> GodotObject -> Ptr () -> Ptr () -> CInt 
+                      -> Ptr (Ptr GodotVariant) -> IO (Ptr GodotVariant)
+
+foreign import ccall "wrapper" mkInstanceMethodFunPtr :: InstanceMethodFun -> IO (FunPtr InstanceMethodFun)
 
 data GodotInstanceMethod = GodotInstanceMethod
-  { godotInstanceMethod :: !InstanceMethodFun
+  { godotInstanceMethod :: !(FunPtr InstanceMethodFun)
   , godotInstanceMethodData :: !(Ptr ())
   , godotInstanceMethodFreeFunc :: !(FunPtr InstanceFreeFun)
   } deriving (Show, Eq)
@@ -512,12 +532,16 @@ instance Storable GodotMethodAttributes where
 
 {#pointer *godot_method_attributes as GodotMethodAttributesPtr -> GodotMethodAttributes #}
 
-type PropertyGetFun = FunPtr (GodotObject -> Ptr () -> Ptr () -> IO (BareStruct GodotVariant))
+type PropertyGetFun = Ptr GodotVariant -> GodotObject -> Ptr () -> Ptr () -> IO (Ptr GodotVariant)
+
+foreign import ccall "wrapper" mkPropertyGetFunPtr :: PropertyGetFun -> IO (FunPtr PropertyGetFun)
+
 data GodotPropertyGetFunc = GodotPropertyGetFunc
-  { godotPropertyGetFunc :: !PropertyGetFun
+  { godotPropertyGetFunc :: !(FunPtr PropertyGetFun)
   , godotPropertyGetMethodData :: !(Ptr ())
   , godotPropertyGetFreeFunc :: !(FunPtr InstanceFreeFun)
   } deriving (Show, Eq)
+
 instance Storable GodotPropertyGetFunc where
   sizeOf _ = {#sizeof godot_property_get_func#}
   alignment _ = {#alignof godot_property_get_func#}
@@ -533,11 +557,15 @@ instance Storable GodotPropertyGetFunc where
 {#pointer *godot_property_get_func as GodotPropertyGetFuncPtr -> GodotPropertyGetFunc #}
 
 type PropertySetFun = GodotObject -> Ptr () -> Ptr () -> Ptr GodotVariant -> IO ()
+
+foreign import ccall "wrapper" mkPropertySetFunPtr :: PropertySetFun -> IO (FunPtr PropertySetFun)
+
 data GodotPropertySetFunc = GodotPropertySetFunc
   { godotPropertySetFunc :: !(FunPtr PropertySetFun)
   , godotPropertySetMethodData :: !(Ptr ())
   , godotPropertySetFreeFunc :: !(FunPtr InstanceFreeFun)
   } deriving (Show, Eq)
+
 instance Storable GodotPropertySetFunc where
     sizeOf _ = {#sizeof godot_property_set_func#}
     alignment _ = {#alignof godot_property_set_func#}
@@ -649,6 +677,8 @@ instance Storable GodotSignal where
     {#set godot_signal->default_args#} ptr godotSignalDefaultArgs
     
 {#pointer *godot_signal as GodotSignalPtr -> GodotSignal#}
+
+
 
 --arvr
 

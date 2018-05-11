@@ -14,6 +14,7 @@ src/**/*.cpp
 src/**/*.c
 *.so
 godot-haskell.cabal
+.ghc*
 
 doc/build/
 

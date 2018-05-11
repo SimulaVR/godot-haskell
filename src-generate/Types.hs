@@ -8,6 +8,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE NoMonoLocalBinds #-}
 
 -- | Views of C datatypes. While "Language.C.Types.Parse" defines datatypes for
 -- representing the concrete syntax tree of C types, this module provides
