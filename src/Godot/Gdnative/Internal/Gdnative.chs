@@ -5,11 +5,13 @@
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 module Godot.Gdnative.Internal.Gdnative where
 
+import Control.Monad
 import Data.Bits
 import Data.Coerce
+import Data.IORef
 import Foreign
 import Foreign.C
-
+import System.IO.Unsafe
 
 #include "util.h"
 #include "gdnative_api_struct.gen.h"
@@ -268,6 +270,10 @@ instance Storable GodotVariantCallError where
     {#set godot_variant_call_error->error #} ptr (fromIntegral . fromEnum $ variantCallErrorError a)
     {#set godot_variant_call_error->argument #} ptr (variantCallErrorArgument a)
     {#set godot_variant_call_error->expected #} ptr (fromIntegral . fromEnum $ variantCallErrorExpected a)
+
+{#pointer *godot_gdnative_api_struct as GodotGdnativeApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeApiStruct
+deriving newtype instance Storable GodotGdnativeApiStruct
 
 {#pointer *godot_gdnative_core_api_struct as GodotGdnativeCoreApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeCoreApiStruct
@@ -689,3 +695,54 @@ instance Storable GodotArvrInterfaceGdnative where
   peek = error "GodotArvrInterfaceGdnative peek not implemented"
   poke = error "GodotArvrInterfaceGdnative poke not implemented"
 {#pointer *godot_arvr_interface_gdnative as GodotArvrInterfaceGdnativePtr -> GodotArvrInterfaceGdnative #}
+
+
+godotGdnativeCoreApiStructRef :: IORef GodotGdnativeCoreApiStruct
+godotGdnativeCoreApiStructRef = unsafePerformIO $ newIORef $ 
+  error "attempted to get godotGdnativeCoreApiStructRef too early"
+{-# NOINLINE godotGdnativeCoreApiStructRef #-}
+
+godotGdnativeExtNativescriptApiStructRef :: IORef GodotGdnativeExtNativescriptApiStruct
+godotGdnativeExtNativescriptApiStructRef = unsafePerformIO $ newIORef $ 
+  error "attempted to get godotGdnativeExtNativescriptApiStructRef too early"
+{-# NOINLINE godotGdnativeExtNativescriptApiStructRef #-}
+
+godotGdnativeExtNativescript11ApiStructRef :: IORef GodotGdnativeExtNativescript11ApiStruct
+godotGdnativeExtNativescript11ApiStructRef = unsafePerformIO $ newIORef $ 
+  error "attempted to get godotGdnativeExtNativescript11ApiStructRef too early"
+{-# NOINLINE godotGdnativeExtNativescript11ApiStructRef #-}
+
+godotGdnativeExtPluginscriptApiStructRef :: IORef GodotGdnativeExtPluginscriptApiStruct
+godotGdnativeExtPluginscriptApiStructRef = unsafePerformIO $ newIORef $ 
+  error "attempted to get godotGdnativeExtPluginscriptApiStructRef too early"
+{-# NOINLINE godotGdnativeExtPluginscriptApiStructRef #-}
+
+godotGdnativeExtArvrApiStructRef :: IORef GodotGdnativeExtArvrApiStruct
+godotGdnativeExtArvrApiStructRef = unsafePerformIO $ newIORef $ 
+  error "attempted to get godotGdnativeExtArvrApiStructRef too early"
+{-# NOINLINE godotGdnativeExtArvrApiStructRef #-}
+
+
+initApiStructs :: GodotGdnativeInitOptions -> IO ()
+initApiStructs opts = do
+  let coreApi = gdnativeInitOptionsApiStruct opts
+  writeIORef godotGdnativeCoreApiStructRef coreApi
+
+  numExt <- {#get godot_gdnative_core_api_struct->num_extensions #} coreApi
+  extsPtr <- {#get godot_gdnative_core_api_struct->extensions #} coreApi
+  exts <- peekArray (fromIntegral numExt) (castPtr extsPtr :: Ptr GodotGdnativeApiStruct)
+  forM_ exts $ \ext -> do
+    ty <- {#get godot_gdnative_api_struct->type #} ext
+    -- HACK
+    case ty of
+      1 -> do -- nativescript
+        writeIORef godotGdnativeExtNativescriptApiStructRef (coerce ext)
+        next <- {#get godot_gdnative_api_struct->next #} ext
+        when (next /= coerce nullPtr) $ writeIORef godotGdnativeExtNativescript11ApiStructRef (coerce next)
+      2 -> do -- pluginscript
+        writeIORef godotGdnativeExtPluginscriptApiStructRef (coerce ext)
+      3 -> do -- arvr
+        writeIORef godotGdnativeExtArvrApiStructRef (coerce ext)
+      _ -> error $ "Unknown API struct type " ++ show ty
+
+
