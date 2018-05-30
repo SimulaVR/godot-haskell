@@ -197,7 +197,9 @@ shimFunction entry =
 
     retTy = resolveType $ S.return_type entry
     args = (resolveType.fst) <$> S.arguments entry
-    isMallocArg arg = T.isPrefixOf "r_" arg || S.name entry == "godot_variant_new_bool" && arg == "p_v"
+    isMallocArg arg = T.isPrefixOf "r_" arg 
+      || S.name entry == "godot_variant_new_bool" && arg == "p_v"
+      || S.name entry == "godot_method_bind_call" && arg == "p_call_error"
     mallocFlags = V.toList $ (isMallocArg.snd) <$> S.arguments entry
 
     -- now we need to transform the args post-shim:
