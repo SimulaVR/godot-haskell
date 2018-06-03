@@ -1,3 +1,6 @@
 [submodule "godot_headers"]
 	path = godot_headers
 	url = https://github.com/GodotNativeTools/godot_headers/
+[submodule "haskell-src-exts-qq"]
+	path = haskell-src-exts-qq
+	url = https://github.com/KaneTW/haskell-src-exts-qq
