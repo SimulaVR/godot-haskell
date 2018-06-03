@@ -15,6 +15,9 @@ import Foreign.C
 import Linear
 
 import Godot.Gdnative.Internal
+import Godot.Gdnative.Internal.TH
+
+import System.IO.Unsafe
 
 data LibType = GodotTy | HaskellTy
 
@@ -170,16 +173,16 @@ class AsVariant a where
   toVariant :: a -> Variant 'GodotTy
   fromVariant :: Variant 'GodotTy -> Maybe a
 
-
-instance AsVariant Bool where
-  toVariant = VariantBool
-  fromVariant (VariantBool x) = Just x
-  fromVariant _ = Nothing
-
 instance AsVariant () where
   toVariant _ = VariantNil
   fromVariant VariantNil = Just ()
   fromVariant _ = Nothing
+
+instance AsVariant GodotVariant where
+  toVariant = unsafePerformIO . fromLowLevel
+  fromVariant = Just . unsafePerformIO . toLowLevel
+
+$(generateAsVariantInstances)
 
 
 fromGodotVariant :: AsVariant a => GodotVariant -> IO a

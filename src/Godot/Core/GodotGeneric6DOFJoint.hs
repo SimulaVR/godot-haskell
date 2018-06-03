@@ -1,0 +1,84 @@
+module Godot.Core.GodotGeneric6DOFJoint where
+import Data.Coerce
+import Foreign.C
+import Godot.Internal.Dispatch
+import System.IO.Unsafe
+import Godot.Gdnative.Internal
+import Godot.Gdnative.Types
+import Godot.Api
+
+pattern PARAM_ANGULAR_LOWER_LIMIT :: Int
+
+pattern PARAM_ANGULAR_LOWER_LIMIT = 5
+
+pattern PARAM_LINEAR_DAMPING :: Int
+
+pattern PARAM_LINEAR_DAMPING = 4
+
+pattern PARAM_ANGULAR_ERP :: Int
+
+pattern PARAM_ANGULAR_ERP = 11
+
+pattern PARAM_ANGULAR_DAMPING :: Int
+
+pattern PARAM_ANGULAR_DAMPING = 8
+
+pattern FLAG_ENABLE_ANGULAR_LIMIT :: Int
+
+pattern FLAG_ENABLE_ANGULAR_LIMIT = 1
+
+pattern PARAM_LINEAR_LIMIT_SOFTNESS :: Int
+
+pattern PARAM_LINEAR_LIMIT_SOFTNESS = 2
+
+pattern PARAM_ANGULAR_MOTOR_TARGET_VELOCITY :: Int
+
+pattern PARAM_ANGULAR_MOTOR_TARGET_VELOCITY = 12
+
+pattern PARAM_LINEAR_LOWER_LIMIT :: Int
+
+pattern PARAM_LINEAR_LOWER_LIMIT = 0
+
+pattern PARAM_ANGULAR_MOTOR_FORCE_LIMIT :: Int
+
+pattern PARAM_ANGULAR_MOTOR_FORCE_LIMIT = 13
+
+pattern PARAM_LINEAR_RESTITUTION :: Int
+
+pattern PARAM_LINEAR_RESTITUTION = 3
+
+pattern PARAM_MAX :: Int
+
+pattern PARAM_MAX = 14
+
+pattern FLAG_MAX :: Int
+
+pattern FLAG_MAX = 3
+
+pattern PARAM_ANGULAR_LIMIT_SOFTNESS :: Int
+
+pattern PARAM_ANGULAR_LIMIT_SOFTNESS = 7
+
+pattern PARAM_LINEAR_UPPER_LIMIT :: Int
+
+pattern PARAM_LINEAR_UPPER_LIMIT = 1
+
+pattern PARAM_ANGULAR_FORCE_LIMIT :: Int
+
+pattern PARAM_ANGULAR_FORCE_LIMIT = 10
+
+pattern FLAG_ENABLE_LINEAR_LIMIT :: Int
+
+pattern FLAG_ENABLE_LINEAR_LIMIT = 0
+
+pattern PARAM_ANGULAR_UPPER_LIMIT :: Int
+
+pattern PARAM_ANGULAR_UPPER_LIMIT = 6
+
+pattern FLAG_ENABLE_MOTOR :: Int
+
+pattern FLAG_ENABLE_MOTOR = 2
+
+pattern PARAM_ANGULAR_RESTITUTION :: Int
+
+pattern PARAM_ANGULAR_RESTITUTION = 9

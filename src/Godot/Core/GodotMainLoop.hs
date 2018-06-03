@@ -1,0 +1,48 @@
+module Godot.Core.GodotMainLoop where
+import Data.Coerce
+import Foreign.C
+import Godot.Internal.Dispatch
+import System.IO.Unsafe
+import Godot.Gdnative.Internal
+import Godot.Gdnative.Types
+import Godot.Api
+
+pattern NOTIFICATION_WM_ABOUT :: Int
+
+pattern NOTIFICATION_WM_ABOUT = 91
+
+pattern NOTIFICATION_WM_GO_BACK_REQUEST :: Int
+
+pattern NOTIFICATION_WM_GO_BACK_REQUEST = 7
+
+pattern NOTIFICATION_WM_QUIT_REQUEST :: Int
+
+pattern NOTIFICATION_WM_QUIT_REQUEST = 6
+
+pattern NOTIFICATION_WM_FOCUS_IN :: Int
+
+pattern NOTIFICATION_WM_FOCUS_IN = 4
+
+pattern NOTIFICATION_WM_MOUSE_EXIT :: Int
+
+pattern NOTIFICATION_WM_MOUSE_EXIT = 3
+
+pattern NOTIFICATION_TRANSLATION_CHANGED :: Int
+
+pattern NOTIFICATION_TRANSLATION_CHANGED = 90
+
+pattern NOTIFICATION_WM_FOCUS_OUT :: Int
+
+pattern NOTIFICATION_WM_FOCUS_OUT = 5
+
+pattern NOTIFICATION_OS_MEMORY_WARNING :: Int
+
+pattern NOTIFICATION_OS_MEMORY_WARNING = 9
+
+pattern NOTIFICATION_WM_UNFOCUS_REQUEST :: Int
+
+pattern NOTIFICATION_WM_UNFOCUS_REQUEST = 8
+
+pattern NOTIFICATION_WM_MOUSE_ENTER :: Int
+
+pattern NOTIFICATION_WM_MOUSE_ENTER = 2

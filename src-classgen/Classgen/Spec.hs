@@ -38,16 +38,10 @@ data GType
   = PrimitiveType !GPrimType
   | CoreType !Text
   | CustomType !Text
+  | EnumType !Text
   deriving (Show, Eq)
 
-instance FromJSON GType where
-  parseJSON v = PrimitiveType <$> parseJSON v
-                <|> withText "type" (\t ->
-                  if isCoreType t
-                    then pure $ CoreType t
-                    else pure $ CustomType t) v
-   where
-    isCoreType t = t `S.member` S.fromList 
+isCoreType t = t `S.member` S.fromList 
       [ "AABB",
         "Array",
         "Basis",
@@ -63,6 +57,7 @@ instance FromJSON GType where
         "PoolVector2Array",
         "PoolVector3Array",
         "PoolColorArray",
+        "Object",
         "Quat",
         "Rect2",
         "RID",
@@ -72,6 +67,15 @@ instance FromJSON GType where
         "Variant",
         "Vector2",
         "Vector3" ]
+
+instance FromJSON GType where
+  parseJSON v = PrimitiveType <$> parseJSON v
+                <|> withText "type" (\t ->
+                  if isCoreType t
+                    then pure $ CoreType t
+                    else if "enum." `T.isPrefixOf` t
+                         then pure $ EnumType t
+                         else pure $ CustomType t) v
 
 data GodotClass = GodotClass
   { _gcName :: !Text

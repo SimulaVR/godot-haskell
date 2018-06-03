@@ -45,6 +45,8 @@ default-extensions:
 - TypeInType
 - QuasiQuotes
 - OverloadedStrings
+- PatternSynonyms
+- GeneralizedNewtypeDeriving
 
 library:
   source-dirs: src

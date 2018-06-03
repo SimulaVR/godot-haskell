@@ -19,6 +19,7 @@ import Classgen.Spec
 
 data ClassgenState = ClassgenState
   { _csModules :: !(HashMap Text (HS.Module ()))
+  , _csMainDecls :: !([HS.Decl ()])
   , _csMethods :: !(Set Text)
   } deriving (Show, Eq) 
 
@@ -28,26 +29,32 @@ addClass :: MonadState ClassgenState m => GodotClass -> m ()
 addClass cls = do
   methods <- mkMethods cls
   properties <- mkProperties cls
-  signals <- mkSignals cls 
-  modules %= HM.insert (cls ^. name) (HS.Module () (Just classModuleHead) [] classImports ([mkDataType cls] ++ properties ++ signals ++ methods ++ classDecls))
-  return ()
+  signals <- mkSignals cls
+  let dataType = if isCoreType (cls ^. name) then [] else mkDataType cls
+  mainDecls %= (++ ( dataType ++ properties ++ methods))
+  modules %= HM.insert (cls ^. name) (HS.Module () (Just classModuleHead) [] classImports (classDecls ++ signals))
+
   where
-    classDecls = mkConstants cls ++ mkEnums cls 
+    classDecls = mkConstants cls ++ mkEnums cls
     classImports = map (\n -> HS.ImportDecl () (HS.ModuleName () n) False False False Nothing Nothing Nothing)
       [ "Data.Coerce", "Foreign.C", "Godot.Internal.Dispatch"
-      , "System.IO.Unsafe", "Godot.Gdnative.Internal", "Godot.Gdnative.Types"]
+      , "System.IO.Unsafe", "Godot.Gdnative.Internal", "Godot.Gdnative.Types", "Godot.Api"]
     classModuleHead = HS.ModuleHead () classModuleName Nothing Nothing
-    classModuleName = HS.ModuleName () $ "Godot." ++ pascal (T.unpack (cls ^. apiType)) 
-                                      ++ "." ++ pascal (T.unpack (cls ^. name))
+    classModuleName = HS.ModuleName () $ "Godot." ++ (pascal $ T.unpack (cls ^. apiType))
+      ++ "." ++ ("Godot" ++ T.unpack (cls ^. name))
 
 resolveMethods :: MonadState ClassgenState m => m ()
 resolveMethods = do
   mtds <- use methods
   let decls = concatMap resolveMethod (S.toList mtds)
-  let moduleHead = HS.ModuleHead () (HS.ModuleName () "Godot.Core.Methods") Nothing Nothing
-  let imports = [HS.ImportDecl () (HS.ModuleName () "Godot.Internal.Dispatch") False False False Nothing Nothing Nothing ]
+  let moduleHead = HS.ModuleHead () (HS.ModuleName () "Godot.Methods") Nothing Nothing
+  let imports = map (\n -> HS.ImportDecl () (HS.ModuleName () n) False False False Nothing Nothing Nothing ) ["Godot.Internal.Dispatch", "Godot.Api"]
   modules %= HM.insert "Methods" (HS.Module () (Just moduleHead) [] imports decls)
   where
+    escapeName "import" = "import'"
+    escapeName "instance" = "instance'"
+    escapeName n = n
+    
     resolveMethod method =
       let methodName = T.unpack method
           methodNameVar = HS.Var () $ HS.UnQual () $ HS.Ident () methodName
@@ -57,9 +64,10 @@ resolveMethods = do
            , [ty|cls|]
            , [ty|sig|] ]
       in 
-        [ HS.TypeSig () [HS.Ident () methodName] $ HS.TyForall () Nothing (Just methodCtx) [ty|cls -> sig|]
-        , HS.PatBind () (HS.PVar () $ HS.Ident () methodName)
+        [ HS.TypeSig () [HS.Ident () $ escapeName methodName] $ HS.TyForall () Nothing (Just methodCtx) [ty|cls -> sig|]
+        , HS.PatBind () (HS.PVar () $ HS.Ident () $ escapeName methodName)
             (HS.UnGuardedRhs () (HS.App () [hs|runMethod|] (HS.TypeApp () methodNamePromoted))) Nothing ]
+
 
 mkProperties :: MonadState ClassgenState m => GodotClass -> m [HS.Decl ()]
 mkProperties cls = concat <$> mapM mkProperty (V.toList $ cls ^. properties)
@@ -82,16 +90,19 @@ sigTy :: HS.Type ()
 sigTy = HS.TyCon () $ HS.UnQual () $ HS.Ident () "Signal"
 
 clsAsName :: GodotClass -> HS.Name ()
-clsAsName cls = HS.Ident () (T.unpack $ cls ^. name)
+clsAsName cls = HS.Ident () ("Godot" ++ T.unpack (cls ^. name))
 
-clsTy cls = HS.TyCon () . HS.UnQual () $ HS.Ident () (T.unpack $ cls ^. name)
+clsTy :: GodotClass -> HS.Type ()
+clsTy = HS.TyCon () . HS.UnQual ()  . clsAsName
 
 intTy = HS.TyCon () . HS.UnQual () $ HS.name "Int"
 
-mkDataType cls = HS.DataDecl () (HS.NewType ()) Nothing 
+mkDataType cls = [HS.DataDecl () (HS.NewType ()) Nothing 
   (HS.DHead () $ clsAsName cls)
   [HS.QualConDecl () Nothing Nothing $ HS.ConDecl () (clsAsName cls) [godotObjectTy]]
-  []
+  [HS.Deriving () (Just $ HS.DerivNewtype ()) [asVariantRule]]]
+  where
+    asVariantRule = HS.IRule () Nothing Nothing $ HS.IHCon () (HS.UnQual () $ HS.Ident () "AsVariant")
 
 mkSignals :: MonadState ClassgenState m => GodotClass -> m [HS.Decl ()]
 mkSignals cls = return $ concatMap mkSignal (V.toList $ cls ^. signals)
@@ -165,9 +176,10 @@ mkMethod cls method = do
     methodSig = foldr (HS.TyFun ()) (HS.TyApp () [ty|IO|] (toHsType $ method ^. returnType)) $
       fmap (argToHsType) (method ^. arguments)
 
-    argToHsType (GodotArgument _ ty Nothing) = toHsType ty
-    argToHsType (GodotArgument _ ty (Just _))
-      = HS.TyApp () (HS.TyCon () $ HS.UnQual () $ HS.Ident () "Maybe") $ toHsType ty
+    argToHsType (GodotArgument _ ty _) = toHsType ty
+    -- TODO: default values
+--    argToHsType (GodotArgument _ ty (Just _))
+--      = HS.TyApp () (HS.TyCon () $ HS.UnQual () $ HS.Ident () "Maybe") $ toHsType ty
 
     methodName = T.unpack (method ^. name)
     runMethodName = HS.Ident () "runMethod"
@@ -184,5 +196,11 @@ toHsType (PrimitiveType VoidType) = [ty| () |]
 toHsType (PrimitiveType BoolType) = [ty| Bool |]
 toHsType (PrimitiveType IntType) = [ty| Int |]
 toHsType (PrimitiveType FloatType) = [ty| Float |]
-toHsType (CoreType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ (T.unpack ty)
-toHsType (CustomType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ T.unpack ty
+toHsType (CoreType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ unfuckType (T.unpack ty)
+  where
+    unfuckType "RID" = "Rid"
+    unfuckType "Transform2D" = "Transform2d"
+    unfuckType "AABB" = "Aabb"
+    unfuckType x = x
+toHsType (CustomType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ T.unpack ty
+toHsType (EnumType _) = [ty| Int |]
