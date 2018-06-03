@@ -43,6 +43,8 @@ default-extensions:
 - TemplateHaskell
 - TypeOperators
 - TypeInType
+- QuasiQuotes
+- OverloadedStrings
 
 library:
   source-dirs: src
@@ -69,6 +71,7 @@ internal-libraries:
     source-dirs: src-classgen
     dependencies:
     - haskell-src-exts
+    - haskell-src-exts-qq
 
 executables:
   godot-haskell-classgen:
@@ -76,3 +79,6 @@ executables:
     source-dirs: app-classgen
     dependencies:
       - classgen
+      - haskell-src-exts
+      - directory
+      - filepath

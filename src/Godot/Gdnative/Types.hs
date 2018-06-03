@@ -1,11 +1,16 @@
 {-# LANGUAGE FunctionalDependencies, TypeFamilies, TypeInType, LambdaCase #-}
 module Godot.Gdnative.Types where
 
+import Control.Exception
+
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Unsafe as B
 
 import Data.Text (Text)
 import qualified Data.Text.Encoding as T
+
+import Foreign
+import Foreign.C
 
 import Linear
 
@@ -151,3 +156,35 @@ instance GodotFFI GodotVariant (Variant 'GodotTy) where
   toLowLevel (VariantPoolVector2Array x) = godot_variant_new_pool_vector2_array x
   toLowLevel (VariantPoolVector3Array x) = godot_variant_new_pool_vector3_array x
   toLowLevel (VariantPoolColorArray x) = godot_variant_new_pool_color_array x
+
+withVariantArray :: [Variant 'GodotTy] -> ((Ptr (Ptr GodotVariant), CInt) -> IO a) -> IO a
+withVariantArray = undefined
+
+throwIfErr :: GodotVariantCallError -> IO ()
+throwIfErr err = case variantCallErrorError err of
+  GodotCallErrorCallOk -> return ()
+  _ -> throwIO err
+  
+
+class AsVariant a where
+  toVariant :: a -> Variant 'GodotTy
+  fromVariant :: Variant 'GodotTy -> Maybe a
+
+
+instance AsVariant Bool where
+  toVariant = VariantBool
+  fromVariant (VariantBool x) = Just x
+  fromVariant _ = Nothing
+
+instance AsVariant () where
+  toVariant _ = VariantNil
+  fromVariant VariantNil = Just ()
+  fromVariant _ = Nothing
+
+
+fromGodotVariant :: AsVariant a => GodotVariant -> IO a
+fromGodotVariant var = do
+  res <- fromVariant <$> fromLowLevel var
+  case res of
+    Just x -> return x
+    Nothing -> error "Error in API: couldn't fromVariant"

@@ -5,6 +5,7 @@
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 module Godot.Gdnative.Internal.Gdnative where
 
+import Control.Exception
 import Control.Monad
 import Data.Bits
 import Data.Coerce
@@ -256,6 +257,8 @@ data GodotVariantCallError = GodotVariantCallError
   , variantCallErrorArgument :: !CInt
   , variantCallErrorExpected :: !GodotVariantType
   } deriving (Show, Eq, Ord)
+
+instance Exception GodotVariantCallError
 
 {#pointer *godot_variant_call_error as GodotVariantCallErrorPtr -> GodotVariantCallError#}
 
