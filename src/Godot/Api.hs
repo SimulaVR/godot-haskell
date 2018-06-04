@@ -784,6 +784,10 @@ instance Method "is_queued_for_deletion" GodotObject (IO Bool)
 
 newtype GodotReference = GodotReference GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotReference where
+        type BaseClass GodotReference = GodotObject
+        super = coerce
 bindReference_init_ref
   = unsafePerformIO $
       withCString "Reference" $
@@ -839,6 +843,10 @@ instance Method "unreference" GodotReference (IO Bool) where
 
 newtype GodotResource = GodotResource GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotResource where
+        type BaseClass GodotResource = GodotReference
+        super = coerce
 bindResource__setup_local_to_scene
   = unsafePerformIO $
       withCString "Resource" $
@@ -1061,6 +1069,10 @@ instance Method "duplicate" GodotResource
 
 newtype GodotScript = GodotScript GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotScript where
+        type BaseClass GodotScript = GodotResource
+        super = coerce
 bindScript_can_instance
   = unsafePerformIO $
       withCString "Script" $
@@ -1248,6 +1260,10 @@ instance Method "is_tool" GodotScript (IO Bool) where
 
 newtype GodotWeakRef = GodotWeakRef GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotWeakRef where
+        type BaseClass GodotWeakRef = GodotReference
+        super = coerce
 bindWeakRef_get_ref
   = unsafePerformIO $
       withCString "WeakRef" $
@@ -1267,6 +1283,10 @@ instance Method "get_ref" GodotWeakRef (IO GodotVariant) where
 
 newtype GodotImage = GodotImage GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotImage where
+        type BaseClass GodotImage = GodotResource
+        super = coerce
 bindImage_get_width
   = unsafePerformIO $
       withCString "Image" $
@@ -2081,6 +2101,10 @@ instance Method "load_jpg_from_buffer" GodotImage
 
 newtype GodotInputEvent = GodotInputEvent GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEvent where
+        type BaseClass GodotInputEvent = GodotResource
+        super = coerce
 bindInputEvent_set_device
   = unsafePerformIO $
       withCString "InputEvent" $
@@ -2311,6 +2335,10 @@ instance Method "xformed_by" GodotInputEvent
 
 newtype GodotInputEventWithModifiers = GodotInputEventWithModifiers GodotObject
                                          deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventWithModifiers where
+        type BaseClass GodotInputEventWithModifiers = GodotInputEvent
+        super = coerce
 bindInputEventWithModifiers_set_alt
   = unsafePerformIO $
       withCString "InputEventWithModifiers" $
@@ -2522,6 +2550,10 @@ instance Method "get_command" GodotInputEventWithModifiers
 
 newtype GodotInputEventKey = GodotInputEventKey GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventKey where
+        type BaseClass GodotInputEventKey = GodotInputEventWithModifiers
+        super = coerce
 bindInputEventKey_set_pressed
   = unsafePerformIO $
       withCString "InputEventKey" $
@@ -2658,6 +2690,10 @@ instance Method "get_scancode_with_modifiers" GodotInputEventKey
 
 newtype GodotInputEventMouse = GodotInputEventMouse GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventMouse where
+        type BaseClass GodotInputEventMouse = GodotInputEventWithModifiers
+        super = coerce
 bindInputEventMouse_set_button_mask
   = unsafePerformIO $
       withCString "InputEventMouse" $
@@ -2786,6 +2822,10 @@ instance Method "get_global_position" GodotInputEventMouse
 
 newtype GodotInputEventMouseButton = GodotInputEventMouseButton GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventMouseButton where
+        type BaseClass GodotInputEventMouseButton = GodotInputEventMouse
+        super = coerce
 bindInputEventMouseButton_set_factor
   = unsafePerformIO $
       withCString "InputEventMouseButton" $
@@ -2914,6 +2954,10 @@ instance Method "is_doubleclick" GodotInputEventMouseButton
 
 newtype GodotInputEventMouseMotion = GodotInputEventMouseMotion GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventMouseMotion where
+        type BaseClass GodotInputEventMouseMotion = GodotInputEventMouse
+        super = coerce
 bindInputEventMouseMotion_set_relative
   = unsafePerformIO $
       withCString "InputEventMouseMotion" $
@@ -3001,6 +3045,10 @@ instance Method "get_speed" GodotInputEventMouseMotion
 
 newtype GodotInputEventJoypadButton = GodotInputEventJoypadButton GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventJoypadButton where
+        type BaseClass GodotInputEventJoypadButton = GodotInputEvent
+        super = coerce
 bindInputEventJoypadButton_set_pressure
   = unsafePerformIO $
       withCString "InputEventJoypadButton" $
@@ -3046,6 +3094,10 @@ instance Method "get_pressure" GodotInputEventJoypadButton
 
 newtype GodotInputEventJoypadMotion = GodotInputEventJoypadMotion GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventJoypadMotion where
+        type BaseClass GodotInputEventJoypadMotion = GodotInputEvent
+        super = coerce
 bindInputEventJoypadMotion_set_axis
   = unsafePerformIO $
       withCString "InputEventJoypadMotion" $
@@ -3132,6 +3184,10 @@ instance Method "get_axis_value" GodotInputEventJoypadMotion
 
 newtype GodotInputEventScreenDrag = GodotInputEventScreenDrag GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventScreenDrag where
+        type BaseClass GodotInputEventScreenDrag = GodotInputEvent
+        super = coerce
 bindInputEventScreenDrag_set_index
   = unsafePerformIO $
       withCString "InputEventScreenDrag" $
@@ -3177,8 +3233,16 @@ instance Method "get_index" GodotInputEventScreenDrag (IO Int)
 newtype GodotInputEventScreenTouch = GodotInputEventScreenTouch GodotObject
                                        deriving newtype AsVariant
 
+instance HasBaseClass GodotInputEventScreenTouch where
+        type BaseClass GodotInputEventScreenTouch = GodotInputEvent
+        super = coerce
+
 newtype GodotInputEventAction = GodotInputEventAction GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventAction where
+        type BaseClass GodotInputEventAction = GodotInputEvent
+        super = coerce
 bindInputEventAction_set_action
   = unsafePerformIO $
       withCString "InputEventAction" $
@@ -3222,11 +3286,25 @@ instance Method "get_action" GodotInputEventAction (IO GodotString)
 newtype GodotInputEventGesture = GodotInputEventGesture GodotObject
                                    deriving newtype AsVariant
 
+instance HasBaseClass GodotInputEventGesture where
+        type BaseClass GodotInputEventGesture =
+             GodotInputEventWithModifiers
+        super = coerce
+
 newtype GodotInputEventMagnifyGesture = GodotInputEventMagnifyGesture GodotObject
                                           deriving newtype AsVariant
 
+instance HasBaseClass GodotInputEventMagnifyGesture where
+        type BaseClass GodotInputEventMagnifyGesture =
+             GodotInputEventGesture
+        super = coerce
+
 newtype GodotInputEventPanGesture = GodotInputEventPanGesture GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotInputEventPanGesture where
+        type BaseClass GodotInputEventPanGesture = GodotInputEventGesture
+        super = coerce
 bindInputEventPanGesture_set_delta
   = unsafePerformIO $
       withCString "InputEventPanGesture" $
@@ -3272,6 +3350,10 @@ instance Method "get_delta" GodotInputEventPanGesture
 
 newtype GodotFuncRef = GodotFuncRef GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotFuncRef where
+        type BaseClass GodotFuncRef = GodotReference
+        super = coerce
 bindFuncRef_call_func
   = unsafePerformIO $
       withCString "FuncRef" $
@@ -3328,6 +3410,10 @@ instance Method "set_function" GodotFuncRef (GodotString -> IO ())
 
 newtype GodotStreamPeer = GodotStreamPeer GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotStreamPeer where
+        type BaseClass GodotStreamPeer = GodotReference
+        super = coerce
 bindStreamPeer_put_data
   = unsafePerformIO $
       withCString "StreamPeer" $
@@ -3884,6 +3970,10 @@ instance Method "get_var" GodotStreamPeer (IO GodotVariant) where
 
 newtype GodotStreamPeerBuffer = GodotStreamPeerBuffer GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotStreamPeerBuffer where
+        type BaseClass GodotStreamPeerBuffer = GodotStreamPeer
+        super = coerce
 bindStreamPeerBuffer_seek
   = unsafePerformIO $
       withCString "StreamPeerBuffer" $
@@ -3965,6 +4055,10 @@ instance Method "clear" GodotStreamPeerBuffer (IO ()) where
 
 newtype GodotStreamPeerTCP = GodotStreamPeerTCP GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotStreamPeerTCP where
+        type BaseClass GodotStreamPeerTCP = GodotStreamPeer
+        super = coerce
 bindStreamPeerTCP_connect_to_host
   = unsafePerformIO $
       withCString "StreamPeerTCP" $
@@ -4107,6 +4201,10 @@ instance Method "set_no_delay" GodotStreamPeerTCP (Bool -> IO ())
 
 newtype GodotTCP_Server = GodotTCP_Server GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotTCP_Server where
+        type BaseClass GodotTCP_Server = GodotReference
+        super = coerce
 bindTCP_Server_listen
   = unsafePerformIO $
       withCString "TCP_Server" $
@@ -4185,6 +4283,10 @@ instance Method "stop" GodotTCP_Server (IO ()) where
 
 newtype GodotPacketPeer = GodotPacketPeer GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotPacketPeer where
+        type BaseClass GodotPacketPeer = GodotReference
+        super = coerce
 bindPacketPeer_get_packet
   = unsafePerformIO $
       withCString "PacketPeer" $
@@ -4309,6 +4411,10 @@ instance Method "is_object_decoding_allowed" GodotPacketPeer
 
 newtype GodotPacketPeerUDP = GodotPacketPeerUDP GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotPacketPeerUDP where
+        type BaseClass GodotPacketPeerUDP = GodotPacketPeer
+        super = coerce
 bindPacketPeerUDP_close
   = unsafePerformIO $
       withCString "PacketPeerUDP" $
@@ -4423,6 +4529,10 @@ instance Method "set_dest_address" GodotPacketPeerUDP
 
 newtype GodotStreamPeerSSL = GodotStreamPeerSSL GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotStreamPeerSSL where
+        type BaseClass GodotStreamPeerSSL = GodotStreamPeer
+        super = coerce
 bindStreamPeerSSL_accept_stream
   = unsafePerformIO $
       withCString "StreamPeerSSL" $
@@ -4487,6 +4597,10 @@ instance Method "disconnect_from_stream" GodotStreamPeerSSL (IO ())
 
 newtype GodotIP = GodotIP GodotObject
                     deriving newtype AsVariant
+
+instance HasBaseClass GodotIP where
+        type BaseClass GodotIP = GodotObject
+        super = coerce
 bindIP_resolve_hostname
   = unsafePerformIO $
       withCString "IP" $
@@ -4621,6 +4735,10 @@ instance Method "clear_cache" GodotIP (GodotString -> IO ()) where
 
 newtype GodotPacketPeerStream = GodotPacketPeerStream GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotPacketPeerStream where
+        type BaseClass GodotPacketPeerStream = GodotPacketPeer
+        super = coerce
 bindPacketPeerStream_set_stream_peer
   = unsafePerformIO $
       withCString "PacketPeerStream" $
@@ -4754,6 +4872,10 @@ instance Method "get_output_buffer_max_size" GodotPacketPeerStream
 
 newtype GodotNetworkedMultiplayerPeer = GodotNetworkedMultiplayerPeer GodotObject
                                           deriving newtype AsVariant
+
+instance HasBaseClass GodotNetworkedMultiplayerPeer where
+        type BaseClass GodotNetworkedMultiplayerPeer = GodotPacketPeer
+        super = coerce
 bindNetworkedMultiplayerPeer_set_transfer_mode
   = unsafePerformIO $
       withCString "NetworkedMultiplayerPeer" $
@@ -4954,6 +5076,10 @@ instance Method "is_refusing_new_connections"
 
 newtype GodotMainLoop = GodotMainLoop GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotMainLoop where
+        type BaseClass GodotMainLoop = GodotObject
+        super = coerce
 bindMainLoop__input_event
   = unsafePerformIO $
       withCString "MainLoop" $
@@ -5183,6 +5309,10 @@ instance Method "finish" GodotMainLoop (IO ()) where
 
 newtype GodotTranslation = GodotTranslation GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotTranslation where
+        type BaseClass GodotTranslation = GodotResource
+        super = coerce
 bindTranslation_set_locale
   = unsafePerformIO $
       withCString "Translation" $
@@ -5365,6 +5495,10 @@ instance Method "_get_messages" GodotTranslation
 
 newtype GodotPHashTranslation = GodotPHashTranslation GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotPHashTranslation where
+        type BaseClass GodotPHashTranslation = GodotTranslation
+        super = coerce
 bindPHashTranslation_generate
   = unsafePerformIO $
       withCString "PHashTranslation" $
@@ -5388,6 +5522,10 @@ instance Method "generate" GodotPHashTranslation
 
 newtype GodotUndoRedo = GodotUndoRedo GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotUndoRedo where
+        type BaseClass GodotUndoRedo = GodotObject
+        super = coerce
 bindUndoRedo_create_action
   = unsafePerformIO $
       withCString "UndoRedo" $
@@ -5637,6 +5775,10 @@ instance Method "undo" GodotUndoRedo (IO ()) where
 
 newtype GodotHTTPClient = GodotHTTPClient GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotHTTPClient where
+        type BaseClass GodotHTTPClient = GodotReference
+        super = coerce
 bindHTTPClient_set_connection
   = unsafePerformIO $
       withCString "HTTPClient" $
@@ -5950,8 +6092,16 @@ instance Method "query_string_from_dict" GodotHTTPClient
 newtype GodotTriangleMesh = GodotTriangleMesh GodotObject
                               deriving newtype AsVariant
 
+instance HasBaseClass GodotTriangleMesh where
+        type BaseClass GodotTriangleMesh = GodotReference
+        super = coerce
+
 newtype GodotResourceInteractiveLoader = GodotResourceInteractiveLoader GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotResourceInteractiveLoader where
+        type BaseClass GodotResourceInteractiveLoader = GodotReference
+        super = coerce
 bindResourceInteractiveLoader_get_resource
   = unsafePerformIO $
       withCString "ResourceInteractiveLoader" $
@@ -6018,6 +6168,10 @@ instance Method "get_stage_count" GodotResourceInteractiveLoader
 
 newtype Godot_File = Godot_File GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass Godot_File where
+        type BaseClass Godot_File = GodotReference
+        super = coerce
 bind_File_open_encrypted
   = unsafePerformIO $
       withCString "_File" $
@@ -6599,6 +6753,10 @@ instance Method "get_modified_time" Godot_File
 
 newtype Godot_Directory = Godot_Directory GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass Godot_Directory where
+        type BaseClass Godot_Directory = GodotReference
+        super = coerce
 bind_Directory_list_dir_begin
   = unsafePerformIO $
       withCString "_Directory" $
@@ -6901,6 +7059,10 @@ instance Method "remove" Godot_Directory (GodotString -> IO Int)
 
 newtype Godot_Thread = Godot_Thread GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass Godot_Thread where
+        type BaseClass Godot_Thread = GodotReference
+        super = coerce
 bind_Thread_start
   = unsafePerformIO $
       withCString "_Thread" $
@@ -6975,6 +7137,10 @@ instance Method "wait_to_finish" Godot_Thread (IO GodotVariant)
 
 newtype Godot_Mutex = Godot_Mutex GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass Godot_Mutex where
+        type BaseClass Godot_Mutex = GodotReference
+        super = coerce
 bind_Mutex_try_lock
   = unsafePerformIO $
       withCString "_Mutex" $
@@ -6994,6 +7160,10 @@ instance Method "try_lock" Godot_Mutex (IO Int) where
 
 newtype Godot_Semaphore = Godot_Semaphore GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass Godot_Semaphore where
+        type BaseClass Godot_Semaphore = GodotReference
+        super = coerce
 bind_Semaphore_post
   = unsafePerformIO $
       withCString "_Semaphore" $
@@ -7013,6 +7183,10 @@ instance Method "post" Godot_Semaphore (IO Int) where
 
 newtype GodotXMLParser = GodotXMLParser GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotXMLParser where
+        type BaseClass GodotXMLParser = GodotReference
+        super = coerce
 bindXMLParser_read
   = unsafePerformIO $
       withCString "XMLParser" $
@@ -7285,6 +7459,10 @@ instance Method "open_buffer" GodotXMLParser
 
 newtype GodotConfigFile = GodotConfigFile GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotConfigFile where
+        type BaseClass GodotConfigFile = GodotReference
+        super = coerce
 bindConfigFile_set_value
   = unsafePerformIO $
       withCString "ConfigFile" $
@@ -7443,6 +7621,10 @@ instance Method "save" GodotConfigFile (GodotString -> IO Int)
 
 newtype GodotPCKPacker = GodotPCKPacker GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotPCKPacker where
+        type BaseClass GodotPCKPacker = GodotReference
+        super = coerce
 bindPCKPacker_pck_start
   = unsafePerformIO $
       withCString "PCKPacker" $
@@ -7500,6 +7682,10 @@ instance Method "flush" GodotPCKPacker (Bool -> IO Int) where
 
 newtype GodotPackedDataContainer = GodotPackedDataContainer GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotPackedDataContainer where
+        type BaseClass GodotPackedDataContainer = GodotResource
+        super = coerce
 bindPackedDataContainer__iter_init
   = unsafePerformIO $
       withCString "PackedDataContainer" $
@@ -7604,6 +7790,10 @@ instance Method "size" GodotPackedDataContainer (IO Int) where
 
 newtype GodotPackedDataContainerRef = GodotPackedDataContainerRef GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotPackedDataContainerRef where
+        type BaseClass GodotPackedDataContainerRef = GodotReference
+        super = coerce
 bindPackedDataContainerRef__is_dictionary
   = unsafePerformIO $
       withCString "PackedDataContainerRef" $
@@ -7628,6 +7818,10 @@ instance Method "_is_dictionary" GodotPackedDataContainerRef
 
 newtype GodotAStar = GodotAStar GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotAStar where
+        type BaseClass GodotAStar = GodotReference
+        super = coerce
 bindAStar__estimate_cost
   = unsafePerformIO $
       withCString "AStar" $
@@ -7994,6 +8188,10 @@ instance Method "get_id_path" GodotAStar
 
 newtype GodotEncodedObjectAsID = GodotEncodedObjectAsID GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotEncodedObjectAsID where
+        type BaseClass GodotEncodedObjectAsID = GodotReference
+        super = coerce
 bindEncodedObjectAsID_set_object_id
   = unsafePerformIO $
       withCString "EncodedObjectAsID" $
@@ -8038,6 +8236,10 @@ instance Method "get_object_id" GodotEncodedObjectAsID (IO Int)
 
 newtype GodotJSONParseResult = GodotJSONParseResult GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotJSONParseResult where
+        type BaseClass GodotJSONParseResult = GodotReference
+        super = coerce
 bindJSONParseResult_get_error_string
   = unsafePerformIO $
       withCString "JSONParseResult" $
@@ -8183,8 +8385,16 @@ instance Method "set_result" GodotJSONParseResult
 newtype GodotIP_Unix = GodotIP_Unix GodotObject
                          deriving newtype AsVariant
 
+instance HasBaseClass GodotIP_Unix where
+        type BaseClass GodotIP_Unix = GodotIP
+        super = coerce
+
 newtype Godot_Geometry = Godot_Geometry GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass Godot_Geometry where
+        type BaseClass Godot_Geometry = GodotObject
+        super = coerce
 bind_Geometry_build_box_planes
   = unsafePerformIO $
       withCString "_Geometry" $
@@ -8684,6 +8894,10 @@ instance Method "make_atlas" Godot_Geometry
 
 newtype Godot_ResourceLoader = Godot_ResourceLoader GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass Godot_ResourceLoader where
+        type BaseClass Godot_ResourceLoader = GodotObject
+        super = coerce
 bind_ResourceLoader_load_interactive
   = unsafePerformIO $
       withCString "_ResourceLoader" $
@@ -8794,6 +9008,10 @@ instance Method "has" Godot_ResourceLoader (GodotString -> IO Bool)
 
 newtype Godot_ResourceSaver = Godot_ResourceSaver GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass Godot_ResourceSaver where
+        type BaseClass Godot_ResourceSaver = GodotObject
+        super = coerce
 bind_ResourceSaver_get_recognized_extensions
   = unsafePerformIO $
       withCString "_ResourceSaver" $
@@ -8818,6 +9036,10 @@ instance Method "get_recognized_extensions" Godot_ResourceSaver
 
 newtype Godot_OS = Godot_OS GodotObject
                      deriving newtype AsVariant
+
+instance HasBaseClass Godot_OS where
+        type BaseClass Godot_OS = GodotObject
+        super = coerce
 bind_OS_set_clipboard
   = unsafePerformIO $
       withCString "_OS" $
@@ -10617,6 +10839,10 @@ instance Method "get_power_percent_left" Godot_OS (IO Int) where
 
 newtype Godot_Engine = Godot_Engine GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass Godot_Engine where
+        type BaseClass Godot_Engine = GodotObject
+        super = coerce
 bind_Engine_set_iterations_per_second
   = unsafePerformIO $
       withCString "_Engine" $
@@ -10906,6 +11132,10 @@ instance Method "is_editor_hint" Godot_Engine (IO Bool) where
 
 newtype Godot_ClassDB = Godot_ClassDB GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass Godot_ClassDB where
+        type BaseClass Godot_ClassDB = GodotObject
+        super = coerce
 bind_ClassDB_get_class_list
   = unsafePerformIO $
       withCString "_ClassDB" $
@@ -11295,6 +11525,10 @@ instance Method "is_class_enabled" Godot_ClassDB
 
 newtype Godot_Marshalls = Godot_Marshalls GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass Godot_Marshalls where
+        type BaseClass Godot_Marshalls = GodotReference
+        super = coerce
 bind_Marshalls_variant_to_base64
   = unsafePerformIO $
       withCString "_Marshalls" $
@@ -11420,6 +11654,10 @@ instance Method "base64_to_utf8" Godot_Marshalls
 
 newtype Godot_JSON = Godot_JSON GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass Godot_JSON where
+        type BaseClass Godot_JSON = GodotObject
+        super = coerce
 bind_JSON_print
   = unsafePerformIO $
       withCString "_JSON" $
@@ -11459,6 +11697,10 @@ instance Method "parse" Godot_JSON
 
 newtype GodotProjectSettings = GodotProjectSettings GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotProjectSettings where
+        type BaseClass GodotProjectSettings = GodotObject
+        super = coerce
 bindProjectSettings_has_setting
   = unsafePerformIO $
       withCString "ProjectSettings" $
@@ -11729,6 +11971,10 @@ instance Method "save_custom" GodotProjectSettings
 
 newtype GodotInputMap = GodotInputMap GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotInputMap where
+        type BaseClass GodotInputMap = GodotObject
+        super = coerce
 bindInputMap_has_action
   = unsafePerformIO $
       withCString "InputMap" $
@@ -11922,6 +12168,10 @@ instance Method "load_from_globals" GodotInputMap (IO ()) where
 
 newtype GodotTranslationServer = GodotTranslationServer GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotTranslationServer where
+        type BaseClass GodotTranslationServer = GodotObject
+        super = coerce
 bindTranslationServer_get_locale_name
   = unsafePerformIO $
       withCString "TranslationServer" $
@@ -12008,6 +12258,10 @@ instance Method "remove_translation" GodotTranslationServer
 
 newtype GodotPerformance = GodotPerformance GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotPerformance where
+        type BaseClass GodotPerformance = GodotObject
+        super = coerce
 bindPerformance_get_monitor
   = unsafePerformIO $
       withCString "Performance" $
@@ -12030,6 +12284,10 @@ instance Method "get_monitor" GodotPerformance (Int -> IO Float)
 
 newtype GodotVisualServer = GodotVisualServer GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualServer where
+        type BaseClass GodotVisualServer = GodotObject
+        super = coerce
 bindVisualServer_force_sync
   = unsafePerformIO $
       withCString "VisualServer" $
@@ -19469,8 +19727,16 @@ instance Method "set_debug_generate_wireframes" GodotVisualServer
 newtype GodotInputDefault = GodotInputDefault GodotObject
                               deriving newtype AsVariant
 
+instance HasBaseClass GodotInputDefault where
+        type BaseClass GodotInputDefault = GodotInput
+        super = coerce
+
 newtype GodotInput = GodotInput GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotInput where
+        type BaseClass GodotInput = GodotObject
+        super = coerce
 bindInput_is_key_pressed
   = unsafePerformIO $
       withCString "Input" $
@@ -20130,6 +20396,10 @@ instance Method "parse_input_event" GodotInput
 
 newtype GodotAudioServer = GodotAudioServer GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioServer where
+        type BaseClass GodotAudioServer = GodotObject
+        super = coerce
 bindAudioServer_set_bus_count
   = unsafePerformIO $
       withCString "AudioServer" $
@@ -20750,6 +21020,10 @@ instance Method "generate_bus_layout" GodotAudioServer
 
 newtype GodotARVRServer = GodotARVRServer GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotARVRServer where
+        type BaseClass GodotARVRServer = GodotObject
+        super = coerce
 bindARVRServer_get_world_scale
   = unsafePerformIO $
       withCString "ARVRServer" $
@@ -20970,6 +21244,10 @@ instance Method "set_primary_interface" GodotARVRServer
 
 newtype GodotPhysicsServer = GodotPhysicsServer GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysicsServer where
+        type BaseClass GodotPhysicsServer = GodotObject
+        super = coerce
 bindPhysicsServer_shape_create
   = unsafePerformIO $
       withCString "PhysicsServer" $
@@ -23191,6 +23469,10 @@ instance Method "get_process_info" GodotPhysicsServer
 
 newtype GodotPhysics2DServer = GodotPhysics2DServer GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysics2DServer where
+        type BaseClass GodotPhysics2DServer = GodotObject
+        super = coerce
 bindPhysics2DServer_line_shape_create
   = unsafePerformIO $
       withCString "Physics2DServer" $
@@ -23724,6 +24006,10 @@ instance Method "damped_string_joint_get_param"
 
 newtype GodotARVRInterface = GodotARVRInterface GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotARVRInterface where
+        type BaseClass GodotARVRInterface = GodotReference
+        super = coerce
 bindARVRInterface_get_capabilities
   = unsafePerformIO $
       withCString "ARVRInterface" $
@@ -23966,6 +24252,10 @@ instance Method "set_anchor_detection_is_enabled"
 
 newtype GodotARVRPositionalTracker = GodotARVRPositionalTracker GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotARVRPositionalTracker where
+        type BaseClass GodotARVRPositionalTracker = GodotObject
+        super = coerce
 bindARVRPositionalTracker_get_type
   = unsafePerformIO $
       withCString "ARVRPositionalTracker" $
@@ -24261,6 +24551,10 @@ instance Method "set_rumble" GodotARVRPositionalTracker
 
 newtype GodotAudioStream = GodotAudioStream GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioStream where
+        type BaseClass GodotAudioStream = GodotResource
+        super = coerce
 bindAudioStream_get_length
   = unsafePerformIO $
       withCString "AudioStream" $
@@ -24283,8 +24577,16 @@ instance Method "get_length" GodotAudioStream (IO Float) where
 newtype GodotAudioStreamPlayback = GodotAudioStreamPlayback GodotObject
                                      deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioStreamPlayback where
+        type BaseClass GodotAudioStreamPlayback = GodotReference
+        super = coerce
+
 newtype GodotAudioStreamRandomPitch = GodotAudioStreamRandomPitch GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioStreamRandomPitch where
+        type BaseClass GodotAudioStreamRandomPitch = GodotAudioStream
+        super = coerce
 bindAudioStreamRandomPitch_set_audio_stream
   = unsafePerformIO $
       withCString "AudioStreamRandomPitch" $
@@ -24373,8 +24675,16 @@ instance Method "get_random_pitch" GodotAudioStreamRandomPitch
 newtype GodotAudioEffect = GodotAudioEffect GodotObject
                              deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioEffect where
+        type BaseClass GodotAudioEffect = GodotResource
+        super = coerce
+
 newtype GodotAudioEffectEQ = GodotAudioEffectEQ GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectEQ where
+        type BaseClass GodotAudioEffectEQ = GodotAudioEffect
+        super = coerce
 bindAudioEffectEQ_set_band_gain_db
   = unsafePerformIO $
       withCString "AudioEffectEQ" $
@@ -24439,6 +24749,10 @@ instance Method "get_band_count" GodotAudioEffectEQ (IO Int) where
 
 newtype GodotAudioEffectFilter = GodotAudioEffectFilter GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectFilter where
+        type BaseClass GodotAudioEffectFilter = GodotAudioEffect
+        super = coerce
 bindAudioEffectFilter_set_cutoff
   = unsafePerformIO $
       withCString "AudioEffectFilter" $
@@ -24599,8 +24913,16 @@ instance Method "get_db" GodotAudioEffectFilter (IO Int) where
 newtype GodotAudioBusLayout = GodotAudioBusLayout GodotObject
                                 deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioBusLayout where
+        type BaseClass GodotAudioBusLayout = GodotResource
+        super = coerce
+
 newtype GodotAudioEffectAmplify = GodotAudioEffectAmplify GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectAmplify where
+        type BaseClass GodotAudioEffectAmplify = GodotAudioEffect
+        super = coerce
 bindAudioEffectAmplify_set_volume_db
   = unsafePerformIO $
       withCString "AudioEffectAmplify" $
@@ -24645,6 +24967,10 @@ instance Method "get_volume_db" GodotAudioEffectAmplify (IO Float)
 
 newtype GodotAudioEffectReverb = GodotAudioEffectReverb GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectReverb where
+        type BaseClass GodotAudioEffectReverb = GodotAudioEffect
+        super = coerce
 bindAudioEffectReverb_set_predelay_msec
   = unsafePerformIO $
       withCString "AudioEffectReverb" $
@@ -24967,35 +25293,85 @@ instance Method "get_hpf" GodotAudioEffectReverb (IO Float) where
 newtype GodotAudioEffectLowPassFilter = GodotAudioEffectLowPassFilter GodotObject
                                           deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioEffectLowPassFilter where
+        type BaseClass GodotAudioEffectLowPassFilter =
+             GodotAudioEffectFilter
+        super = coerce
+
 newtype GodotAudioEffectHighPassFilter = GodotAudioEffectHighPassFilter GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectHighPassFilter where
+        type BaseClass GodotAudioEffectHighPassFilter =
+             GodotAudioEffectFilter
+        super = coerce
 
 newtype GodotAudioEffectBandPassFilter = GodotAudioEffectBandPassFilter GodotObject
                                            deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioEffectBandPassFilter where
+        type BaseClass GodotAudioEffectBandPassFilter =
+             GodotAudioEffectFilter
+        super = coerce
+
 newtype GodotAudioEffectNotchFilter = GodotAudioEffectNotchFilter GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectNotchFilter where
+        type BaseClass GodotAudioEffectNotchFilter = GodotAudioEffectFilter
+        super = coerce
 
 newtype GodotAudioEffectBandLimitFilter = GodotAudioEffectBandLimitFilter GodotObject
                                             deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioEffectBandLimitFilter where
+        type BaseClass GodotAudioEffectBandLimitFilter =
+             GodotAudioEffectFilter
+        super = coerce
+
 newtype GodotAudioEffectLowShelfFilter = GodotAudioEffectLowShelfFilter GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectLowShelfFilter where
+        type BaseClass GodotAudioEffectLowShelfFilter =
+             GodotAudioEffectFilter
+        super = coerce
 
 newtype GodotAudioEffectHighShelfFilter = GodotAudioEffectHighShelfFilter GodotObject
                                             deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioEffectHighShelfFilter where
+        type BaseClass GodotAudioEffectHighShelfFilter =
+             GodotAudioEffectFilter
+        super = coerce
+
 newtype GodotAudioEffectEQ6 = GodotAudioEffectEQ6 GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectEQ6 where
+        type BaseClass GodotAudioEffectEQ6 = GodotAudioEffectEQ
+        super = coerce
 
 newtype GodotAudioEffectEQ10 = GodotAudioEffectEQ10 GodotObject
                                  deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioEffectEQ10 where
+        type BaseClass GodotAudioEffectEQ10 = GodotAudioEffectEQ
+        super = coerce
+
 newtype GodotAudioEffectEQ21 = GodotAudioEffectEQ21 GodotObject
                                  deriving newtype AsVariant
 
+instance HasBaseClass GodotAudioEffectEQ21 where
+        type BaseClass GodotAudioEffectEQ21 = GodotAudioEffectEQ
+        super = coerce
+
 newtype GodotAudioEffectDistortion = GodotAudioEffectDistortion GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectDistortion where
+        type BaseClass GodotAudioEffectDistortion = GodotAudioEffect
+        super = coerce
 bindAudioEffectDistortion_set_mode
   = unsafePerformIO $
       withCString "AudioEffectDistortion" $
@@ -25187,6 +25563,10 @@ instance Method "get_post_gain" GodotAudioEffectDistortion
 
 newtype GodotAudioEffectStereoEnhance = GodotAudioEffectStereoEnhance GodotObject
                                           deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectStereoEnhance where
+        type BaseClass GodotAudioEffectStereoEnhance = GodotAudioEffect
+        super = coerce
 bindAudioEffectStereoEnhance_set_pan_pullout
   = unsafePerformIO $
       withCString "AudioEffectStereoEnhance" $
@@ -25318,6 +25698,10 @@ instance Method "get_surround" GodotAudioEffectStereoEnhance
 
 newtype GodotAudioEffectPanner = GodotAudioEffectPanner GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectPanner where
+        type BaseClass GodotAudioEffectPanner = GodotAudioEffect
+        super = coerce
 bindAudioEffectPanner_set_pan
   = unsafePerformIO $
       withCString "AudioEffectPanner" $
@@ -25358,6 +25742,10 @@ instance Method "get_pan" GodotAudioEffectPanner (IO Float) where
 
 newtype GodotAudioEffectChorus = GodotAudioEffectChorus GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectChorus where
+        type BaseClass GodotAudioEffectChorus = GodotAudioEffect
+        super = coerce
 bindAudioEffectChorus_set_voice_count
   = unsafePerformIO $
       withCString "AudioEffectChorus" $
@@ -25654,6 +26042,10 @@ instance Method "get_voice_pan" GodotAudioEffectChorus
 
 newtype GodotAudioEffectDelay = GodotAudioEffectDelay GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectDelay where
+        type BaseClass GodotAudioEffectDelay = GodotAudioEffect
+        super = coerce
 bindAudioEffectDelay_set_tap1_active
   = unsafePerformIO $
       withCString "AudioEffectDelay" $
@@ -26157,6 +26549,10 @@ instance Method "get_feedback_lowpass" GodotAudioEffectDelay
 
 newtype GodotAudioEffectCompressor = GodotAudioEffectCompressor GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectCompressor where
+        type BaseClass GodotAudioEffectCompressor = GodotAudioEffect
+        super = coerce
 bindAudioEffectCompressor_set_threshold
   = unsafePerformIO $
       withCString "AudioEffectCompressor" $
@@ -26410,6 +26806,10 @@ instance Method "get_sidechain" GodotAudioEffectCompressor
 
 newtype GodotAudioEffectLimiter = GodotAudioEffectLimiter GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectLimiter where
+        type BaseClass GodotAudioEffectLimiter = GodotAudioEffect
+        super = coerce
 bindAudioEffectLimiter_set_ceiling_db
   = unsafePerformIO $
       withCString "AudioEffectLimiter" $
@@ -26580,6 +26980,10 @@ instance Method "get_soft_clip_ratio" GodotAudioEffectLimiter
 
 newtype GodotAudioEffectPitchShift = GodotAudioEffectPitchShift GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectPitchShift where
+        type BaseClass GodotAudioEffectPitchShift = GodotAudioEffect
+        super = coerce
 bindAudioEffectPitchShift_set_pitch_scale
   = unsafePerformIO $
       withCString "AudioEffectPitchShift" $
@@ -26625,6 +27029,10 @@ instance Method "get_pitch_scale" GodotAudioEffectPitchShift
 
 newtype GodotAudioEffectPhaser = GodotAudioEffectPhaser GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioEffectPhaser where
+        type BaseClass GodotAudioEffectPhaser = GodotAudioEffect
+        super = coerce
 bindAudioEffectPhaser_set_range_min_hz
   = unsafePerformIO $
       withCString "AudioEffectPhaser" $
@@ -26831,6 +27239,10 @@ instance Method "get_depth" GodotAudioEffectPhaser (IO Float) where
 
 newtype GodotPhysics2DDirectBodyState = GodotPhysics2DDirectBodyState GodotObject
                                           deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysics2DDirectBodyState where
+        type BaseClass GodotPhysics2DDirectBodyState = GodotObject
+        super = coerce
 bindPhysics2DDirectBodyState_get_total_gravity
   = unsafePerformIO $
       withCString "Physics2DDirectBodyState" $
@@ -27424,6 +27836,10 @@ instance Method "get_space_state" GodotPhysics2DDirectBodyState
 
 newtype GodotPhysics2DDirectSpaceState = GodotPhysics2DDirectSpaceState GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysics2DDirectSpaceState where
+        type BaseClass GodotPhysics2DDirectSpaceState = GodotObject
+        super = coerce
 bindPhysics2DDirectSpaceState_intersect_point
   = unsafePerformIO $
       withCString "Physics2DDirectSpaceState" $
@@ -27558,6 +27974,10 @@ instance Method "get_rest_info" GodotPhysics2DDirectSpaceState
 
 newtype GodotPhysics2DShapeQueryResult = GodotPhysics2DShapeQueryResult GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysics2DShapeQueryResult where
+        type BaseClass GodotPhysics2DShapeQueryResult = GodotReference
+        super = coerce
 bindPhysics2DShapeQueryResult_get_result_count
   = unsafePerformIO $
       withCString "Physics2DShapeQueryResult" $
@@ -27673,6 +28093,10 @@ instance Method "get_result_object_shape"
 
 newtype GodotPhysics2DTestMotionResult = GodotPhysics2DTestMotionResult GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysics2DTestMotionResult where
+        type BaseClass GodotPhysics2DTestMotionResult = GodotReference
+        super = coerce
 bindPhysics2DTestMotionResult_get_motion
   = unsafePerformIO $
       withCString "Physics2DTestMotionResult" $
@@ -27877,6 +28301,10 @@ instance Method "get_collider_shape" GodotPhysics2DTestMotionResult
 
 newtype GodotPhysics2DShapeQueryParameters = GodotPhysics2DShapeQueryParameters GodotObject
                                                deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysics2DShapeQueryParameters where
+        type BaseClass GodotPhysics2DShapeQueryParameters = GodotReference
+        super = coerce
 bindPhysics2DShapeQueryParameters_set_shape
   = unsafePerformIO $
       withCString "Physics2DShapeQueryParameters" $
@@ -28100,6 +28528,10 @@ instance Method "get_exclude" GodotPhysics2DShapeQueryParameters
 
 newtype GodotPhysicsShapeQueryParameters = GodotPhysicsShapeQueryParameters GodotObject
                                              deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysicsShapeQueryParameters where
+        type BaseClass GodotPhysicsShapeQueryParameters = GodotReference
+        super = coerce
 bindPhysicsShapeQueryParameters_set_collision_mask
   = unsafePerformIO $
       withCString "PhysicsShapeQueryParameters" $
@@ -28149,6 +28581,10 @@ instance Method "get_collision_mask"
 
 newtype GodotPhysicsDirectBodyState = GodotPhysicsDirectBodyState GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysicsDirectBodyState where
+        type BaseClass GodotPhysicsDirectBodyState = GodotObject
+        super = coerce
 bindPhysicsDirectBodyState_get_center_of_mass
   = unsafePerformIO $
       withCString "PhysicsDirectBodyState" $
@@ -28285,11 +28721,23 @@ instance Method "apply_torque_impulse" GodotPhysicsDirectBodyState
 newtype GodotPhysicsDirectSpaceState = GodotPhysicsDirectSpaceState GodotObject
                                          deriving newtype AsVariant
 
+instance HasBaseClass GodotPhysicsDirectSpaceState where
+        type BaseClass GodotPhysicsDirectSpaceState = GodotObject
+        super = coerce
+
 newtype GodotPhysicsShapeQueryResult = GodotPhysicsShapeQueryResult GodotObject
                                          deriving newtype AsVariant
 
+instance HasBaseClass GodotPhysicsShapeQueryResult where
+        type BaseClass GodotPhysicsShapeQueryResult = GodotReference
+        super = coerce
+
 newtype GodotNode = GodotNode GodotObject
                       deriving newtype AsVariant
+
+instance HasBaseClass GodotNode where
+        type BaseClass GodotNode = GodotObject
+        super = coerce
 bindNode__process
   = unsafePerformIO $
       withCString "Node" $
@@ -29798,6 +30246,10 @@ instance Method "rset_unreliable_id" GodotNode
 
 newtype GodotInstancePlaceholder = GodotInstancePlaceholder GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotInstancePlaceholder where
+        type BaseClass GodotInstancePlaceholder = GodotNode
+        super = coerce
 bindInstancePlaceholder_get_stored_values
   = unsafePerformIO $
       withCString "InstancePlaceholder" $
@@ -29864,6 +30316,10 @@ instance Method "get_instance_path" GodotInstancePlaceholder
 
 newtype GodotViewport = GodotViewport GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotViewport where
+        type BaseClass GodotViewport = GodotNode
+        super = coerce
 bindViewport_set_use_arvr
   = unsafePerformIO $
       withCString "Viewport" $
@@ -31205,6 +31661,10 @@ instance Method "get_shadow_atlas_quadrant_subdiv" GodotViewport
 
 newtype GodotWorld = GodotWorld GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotWorld where
+        type BaseClass GodotWorld = GodotResource
+        super = coerce
 bindWorld_get_space
   = unsafePerformIO $
       withCString "World" $
@@ -31324,6 +31784,10 @@ instance Method "get_direct_space_state" GodotWorld
 
 newtype GodotWorld2D = GodotWorld2D GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotWorld2D where
+        type BaseClass GodotWorld2D = GodotResource
+        super = coerce
 bindWorld2D_get_canvas
   = unsafePerformIO $
       withCString "World2D" $
@@ -31344,6 +31808,10 @@ instance Method "get_canvas" GodotWorld2D (IO GodotRid) where
 
 newtype GodotTexture = GodotTexture GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotTexture where
+        type BaseClass GodotTexture = GodotResource
+        super = coerce
 bindTexture_has_alpha
   = unsafePerformIO $
       withCString "Texture" $
@@ -31444,6 +31912,10 @@ instance Method "draw_rect_region" GodotTexture
 
 newtype GodotViewportTexture = GodotViewportTexture GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotViewportTexture where
+        type BaseClass GodotViewportTexture = GodotTexture
+        super = coerce
 bindViewportTexture_set_viewport_path_in_scene
   = unsafePerformIO $
       withCString "ViewportTexture" $
@@ -31491,6 +31963,10 @@ instance Method "get_viewport_path_in_scene" GodotViewportTexture
 
 newtype GodotHTTPRequest = GodotHTTPRequest GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotHTTPRequest where
+        type BaseClass GodotHTTPRequest = GodotNode
+        super = coerce
 bindHTTPRequest_cancel_request
   = unsafePerformIO $
       withCString "HTTPRequest" $
@@ -31772,6 +32248,10 @@ instance Method "_request_done" GodotHTTPRequest
 
 newtype GodotTimer = GodotTimer GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotTimer where
+        type BaseClass GodotTimer = GodotNode
+        super = coerce
 bindTimer_set_wait_time
   = unsafePerformIO $
       withCString "Timer" $
@@ -31981,6 +32461,10 @@ instance Method "get_timer_process_mode" GodotTimer (IO Int) where
 
 newtype GodotCanvasLayer = GodotCanvasLayer GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotCanvasLayer where
+        type BaseClass GodotCanvasLayer = GodotNode
+        super = coerce
 bindCanvasLayer_set_layer
   = unsafePerformIO $
       withCString "CanvasLayer" $
@@ -32218,6 +32702,10 @@ instance Method "get_custom_viewport" GodotCanvasLayer
 
 newtype GodotCanvasItem = GodotCanvasItem GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotCanvasItem where
+        type BaseClass GodotCanvasItem = GodotNode
+        super = coerce
 bindCanvasItem__draw
   = unsafePerformIO $
       withCString "CanvasItem" $
@@ -33652,6 +34140,10 @@ instance Method "make_input_local" GodotCanvasItem
 
 newtype GodotNode2D = GodotNode2D GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotNode2D where
+        type BaseClass GodotNode2D = GodotCanvasItem
+        super = coerce
 bindNode2D_rotate
   = unsafePerformIO $
       withCString "Node2D" $
@@ -34045,6 +34537,10 @@ instance Method "get_relative_transform_to_parent" GodotNode2D
 
 newtype GodotCanvasModulate = GodotCanvasModulate GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotCanvasModulate where
+        type BaseClass GodotCanvasModulate = GodotNode2D
+        super = coerce
 bindCanvasModulate_set_color
   = unsafePerformIO $
       withCString "CanvasModulate" $
@@ -34087,6 +34583,10 @@ instance Method "get_color" GodotCanvasModulate (IO GodotColor)
 
 newtype GodotResourcePreloader = GodotResourcePreloader GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotResourcePreloader where
+        type BaseClass GodotResourcePreloader = GodotNode
+        super = coerce
 bindResourcePreloader__set_resources
   = unsafePerformIO $
       withCString "ResourcePreloader" $
@@ -34237,6 +34737,10 @@ instance Method "get_resource_list" GodotResourcePreloader
 
 newtype GodotButtonGroup = GodotButtonGroup GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotButtonGroup where
+        type BaseClass GodotButtonGroup = GodotResource
+        super = coerce
 bindButtonGroup_get_pressed_button
   = unsafePerformIO $
       withCString "ButtonGroup" $
@@ -34261,6 +34765,10 @@ instance Method "get_pressed_button" GodotButtonGroup
 
 newtype GodotControl = GodotControl GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotControl where
+        type BaseClass GodotControl = GodotCanvasItem
+        super = coerce
 bindControl__gui_input
   = unsafePerformIO $
       withCString "Control" $
@@ -36001,6 +36509,10 @@ instance Method "_font_changed" GodotControl (IO ()) where
 
 newtype GodotTheme = GodotTheme GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotTheme where
+        type BaseClass GodotTheme = GodotResource
+        super = coerce
 bindTheme_clear_icon
   = unsafePerformIO $
       withCString "Theme" $
@@ -36362,6 +36874,10 @@ instance Method "copy_default_theme" GodotTheme (IO ()) where
 
 newtype GodotBaseButton = GodotBaseButton GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotBaseButton where
+        type BaseClass GodotBaseButton = GodotControl
+        super = coerce
 bindBaseButton__pressed
   = unsafePerformIO $
       withCString "BaseButton" $
@@ -36666,6 +37182,10 @@ instance Method "get_button_group" GodotBaseButton
 
 newtype GodotShortCut = GodotShortCut GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotShortCut where
+        type BaseClass GodotShortCut = GodotResource
+        super = coerce
 bindShortCut_is_valid
   = unsafePerformIO $
       withCString "ShortCut" $
@@ -36705,6 +37225,10 @@ instance Method "is_shortcut" GodotShortCut
 
 newtype GodotButton = GodotButton GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotButton where
+        type BaseClass GodotButton = GodotBaseButton
+        super = coerce
 bindButton_set_text
   = unsafePerformIO $
       withCString "Button" $
@@ -36881,6 +37405,10 @@ instance Method "is_flat" GodotButton (IO Bool) where
 
 newtype GodotLabel = GodotLabel GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotLabel where
+        type BaseClass GodotLabel = GodotControl
+        super = coerce
 bindLabel_set_align
   = unsafePerformIO $
       withCString "Label" $
@@ -37257,6 +37785,10 @@ instance Method "get_max_lines_visible" GodotLabel (IO Int) where
 
 newtype GodotRange = GodotRange GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotRange where
+        type BaseClass GodotRange = GodotControl
+        super = coerce
 bindRange_get_min
   = unsafePerformIO $
       withCString "Range" $
@@ -37512,6 +38044,10 @@ instance Method "unshare" GodotRange (IO ()) where
 
 newtype GodotScrollBar = GodotScrollBar GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotScrollBar where
+        type BaseClass GodotScrollBar = GodotRange
+        super = coerce
 bindScrollBar_set_custom_step
   = unsafePerformIO $
       withCString "ScrollBar" $
@@ -37591,11 +38127,23 @@ instance Method "_drag_slave_exit" GodotScrollBar (IO ()) where
 newtype GodotHScrollBar = GodotHScrollBar GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotHScrollBar where
+        type BaseClass GodotHScrollBar = GodotScrollBar
+        super = coerce
+
 newtype GodotVScrollBar = GodotVScrollBar GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotVScrollBar where
+        type BaseClass GodotVScrollBar = GodotScrollBar
+        super = coerce
+
 newtype GodotProgressBar = GodotProgressBar GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotProgressBar where
+        type BaseClass GodotProgressBar = GodotRange
+        super = coerce
 bindProgressBar_is_percent_visible
   = unsafePerformIO $
       withCString "ProgressBar" $
@@ -37619,6 +38167,10 @@ instance Method "is_percent_visible" GodotProgressBar (IO Bool)
 
 newtype GodotSlider = GodotSlider GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotSlider where
+        type BaseClass GodotSlider = GodotRange
+        super = coerce
 bindSlider_set_ticks
   = unsafePerformIO $
       withCString "Slider" $
@@ -37726,11 +38278,23 @@ instance Method "is_editable" GodotSlider (IO Bool) where
 newtype GodotHSlider = GodotHSlider GodotObject
                          deriving newtype AsVariant
 
+instance HasBaseClass GodotHSlider where
+        type BaseClass GodotHSlider = GodotSlider
+        super = coerce
+
 newtype GodotVSlider = GodotVSlider GodotObject
                          deriving newtype AsVariant
 
+instance HasBaseClass GodotVSlider where
+        type BaseClass GodotVSlider = GodotSlider
+        super = coerce
+
 newtype GodotPopup = GodotPopup GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotPopup where
+        type BaseClass GodotPopup = GodotControl
+        super = coerce
 bindPopup_popup_centered
   = unsafePerformIO $
       withCString "Popup" $
@@ -37843,8 +38407,16 @@ instance Method "is_exclusive" GodotPopup (IO Bool) where
 newtype GodotPopupPanel = GodotPopupPanel GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotPopupPanel where
+        type BaseClass GodotPopupPanel = GodotPopup
+        super = coerce
+
 newtype GodotMenuButton = GodotMenuButton GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotMenuButton where
+        type BaseClass GodotMenuButton = GodotButton
+        super = coerce
 bindMenuButton_get_popup
   = unsafePerformIO $
       withCString "MenuButton" $
@@ -37925,14 +38497,30 @@ instance Method "set_disable_shortcuts" GodotMenuButton
 newtype GodotCheckBox = GodotCheckBox GodotObject
                           deriving newtype AsVariant
 
+instance HasBaseClass GodotCheckBox where
+        type BaseClass GodotCheckBox = GodotButton
+        super = coerce
+
 newtype GodotCheckButton = GodotCheckButton GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotCheckButton where
+        type BaseClass GodotCheckButton = GodotButton
+        super = coerce
 
 newtype GodotToolButton = GodotToolButton GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotToolButton where
+        type BaseClass GodotToolButton = GodotButton
+        super = coerce
+
 newtype GodotLinkButton = GodotLinkButton GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotLinkButton where
+        type BaseClass GodotLinkButton = GodotBaseButton
+        super = coerce
 bindLinkButton_set_underline_mode
   = unsafePerformIO $
       withCString "LinkButton" $
@@ -37976,8 +38564,16 @@ instance Method "get_underline_mode" GodotLinkButton (IO Int) where
 newtype GodotPanel = GodotPanel GodotObject
                        deriving newtype AsVariant
 
+instance HasBaseClass GodotPanel where
+        type BaseClass GodotPanel = GodotControl
+        super = coerce
+
 newtype GodotTextureRect = GodotTextureRect GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotTextureRect where
+        type BaseClass GodotTextureRect = GodotControl
+        super = coerce
 bindTextureRect_set_texture
   = unsafePerformIO $
       withCString "TextureRect" $
@@ -38076,6 +38672,10 @@ instance Method "get_stretch_mode" GodotTextureRect (IO Int) where
 
 newtype GodotColorRect = GodotColorRect GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotColorRect where
+        type BaseClass GodotColorRect = GodotControl
+        super = coerce
 bindColorRect_set_frame_color
   = unsafePerformIO $
       withCString "ColorRect" $
@@ -38118,6 +38718,10 @@ instance Method "get_frame_color" GodotColorRect (IO GodotColor)
 
 newtype GodotNinePatchRect = GodotNinePatchRect GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotNinePatchRect where
+        type BaseClass GodotNinePatchRect = GodotControl
+        super = coerce
 bindNinePatchRect_set_patch_margin
   = unsafePerformIO $
       withCString "NinePatchRect" $
@@ -38331,6 +38935,10 @@ instance Method "get_v_axis_stretch_mode" GodotNinePatchRect
 
 newtype GodotTabContainer = GodotTabContainer GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotTabContainer where
+        type BaseClass GodotTabContainer = GodotControl
+        super = coerce
 bindTabContainer_get_tab_count
   = unsafePerformIO $
       withCString "TabContainer" $
@@ -38731,6 +39339,10 @@ instance Method "_update_current_tab" GodotTabContainer (IO ())
 
 newtype GodotTabs = GodotTabs GodotObject
                       deriving newtype AsVariant
+
+instance HasBaseClass GodotTabs where
+        type BaseClass GodotTabs = GodotControl
+        super = coerce
 bindTabs_remove_tab
   = unsafePerformIO $
       withCString "Tabs" $
@@ -38936,14 +39548,30 @@ instance Method "get_scrolling_enabled" GodotTabs (IO Bool) where
 newtype GodotSeparator = GodotSeparator GodotObject
                            deriving newtype AsVariant
 
+instance HasBaseClass GodotSeparator where
+        type BaseClass GodotSeparator = GodotControl
+        super = coerce
+
 newtype GodotHSeparator = GodotHSeparator GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotHSeparator where
+        type BaseClass GodotHSeparator = GodotSeparator
+        super = coerce
 
 newtype GodotVSeparator = GodotVSeparator GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotVSeparator where
+        type BaseClass GodotVSeparator = GodotSeparator
+        super = coerce
+
 newtype GodotTextureButton = GodotTextureButton GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotTextureButton where
+        type BaseClass GodotTextureButton = GodotBaseButton
+        super = coerce
 bindTextureButton_set_normal_texture
   = unsafePerformIO $
       withCString "TextureButton" $
@@ -39217,6 +39845,10 @@ instance Method "get_expand" GodotTextureButton (IO Bool) where
 
 newtype GodotBitMap = GodotBitMap GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotBitMap where
+        type BaseClass GodotBitMap = GodotResource
+        super = coerce
 bindBitMap_create_from_image_alpha
   = unsafePerformIO $
       withCString "BitMap" $
@@ -39313,6 +39945,10 @@ instance Method "get_true_bit_count" GodotBitMap (IO Int) where
 
 newtype GodotContainer = GodotContainer GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotContainer where
+        type BaseClass GodotContainer = GodotControl
+        super = coerce
 bindContainer__sort_children
   = unsafePerformIO $
       withCString "Container" $
@@ -39391,6 +40027,10 @@ instance Method "fit_child_in_rect" GodotContainer
 
 newtype GodotBoxContainer = GodotBoxContainer GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotBoxContainer where
+        type BaseClass GodotBoxContainer = GodotContainer
+        super = coerce
 bindBoxContainer_add_spacer
   = unsafePerformIO $
       withCString "BoxContainer" $
@@ -39451,11 +40091,23 @@ instance Method "set_alignment" GodotBoxContainer (Int -> IO ())
 newtype GodotHBoxContainer = GodotHBoxContainer GodotObject
                                deriving newtype AsVariant
 
+instance HasBaseClass GodotHBoxContainer where
+        type BaseClass GodotHBoxContainer = GodotBoxContainer
+        super = coerce
+
 newtype GodotVBoxContainer = GodotVBoxContainer GodotObject
                                deriving newtype AsVariant
 
+instance HasBaseClass GodotVBoxContainer where
+        type BaseClass GodotVBoxContainer = GodotBoxContainer
+        super = coerce
+
 newtype GodotGridContainer = GodotGridContainer GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotGridContainer where
+        type BaseClass GodotGridContainer = GodotContainer
+        super = coerce
 bindGridContainer_set_columns
   = unsafePerformIO $
       withCString "GridContainer" $
@@ -39496,6 +40148,10 @@ instance Method "get_columns" GodotGridContainer (IO Int) where
 
 newtype GodotCenterContainer = GodotCenterContainer GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotCenterContainer where
+        type BaseClass GodotCenterContainer = GodotContainer
+        super = coerce
 bindCenterContainer_set_use_top_left
   = unsafePerformIO $
       withCString "CenterContainer" $
@@ -39540,6 +40196,10 @@ instance Method "is_using_top_left" GodotCenterContainer (IO Bool)
 
 newtype GodotScrollContainer = GodotScrollContainer GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotScrollContainer where
+        type BaseClass GodotScrollContainer = GodotContainer
+        super = coerce
 bindScrollContainer__scroll_moved
   = unsafePerformIO $
       withCString "ScrollContainer" $
@@ -39749,8 +40409,16 @@ instance Method "get_v_scroll" GodotScrollContainer (IO Int) where
 newtype GodotPanelContainer = GodotPanelContainer GodotObject
                                 deriving newtype AsVariant
 
+instance HasBaseClass GodotPanelContainer where
+        type BaseClass GodotPanelContainer = GodotContainer
+        super = coerce
+
 newtype GodotSplitContainer = GodotSplitContainer GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotSplitContainer where
+        type BaseClass GodotSplitContainer = GodotContainer
+        super = coerce
 bindSplitContainer_set_split_offset
   = unsafePerformIO $
       withCString "SplitContainer" $
@@ -39876,11 +40544,23 @@ instance Method "get_dragger_visibility" GodotSplitContainer
 newtype GodotHSplitContainer = GodotHSplitContainer GodotObject
                                  deriving newtype AsVariant
 
+instance HasBaseClass GodotHSplitContainer where
+        type BaseClass GodotHSplitContainer = GodotSplitContainer
+        super = coerce
+
 newtype GodotVSplitContainer = GodotVSplitContainer GodotObject
                                  deriving newtype AsVariant
 
+instance HasBaseClass GodotVSplitContainer where
+        type BaseClass GodotVSplitContainer = GodotSplitContainer
+        super = coerce
+
 newtype GodotGraphNode = GodotGraphNode GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotGraphNode where
+        type BaseClass GodotGraphNode = GodotContainer
+        super = coerce
 bindGraphNode_set_title
   = unsafePerformIO $
       withCString "GraphNode" $
@@ -40458,6 +41138,10 @@ instance Method "get_overlay" GodotGraphNode (IO Int) where
 
 newtype GodotGraphEdit = GodotGraphEdit GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotGraphEdit where
+        type BaseClass GodotGraphEdit = GodotControl
+        super = coerce
 bindGraphEdit_connect_node
   = unsafePerformIO $
       withCString "GraphEdit" $
@@ -41109,6 +41793,10 @@ instance Method "_connections_layer_draw" GodotGraphEdit (IO ())
 
 newtype GodotTextureProgress = GodotTextureProgress GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotTextureProgress where
+        type BaseClass GodotTextureProgress = GodotRange
+        super = coerce
 bindTextureProgress_set_under_texture
   = unsafePerformIO $
       withCString "TextureProgress" $
@@ -41486,6 +42174,10 @@ instance Method "get_nine_patch_stretch" GodotTextureProgress
 
 newtype GodotItemList = GodotItemList GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotItemList where
+        type BaseClass GodotItemList = GodotControl
+        super = coerce
 bindItemList_add_item
   = unsafePerformIO $
       withCString "ItemList" $
@@ -42482,6 +43174,10 @@ instance Method "_scroll_changed" GodotItemList (Float -> IO ())
 
 newtype GodotWindowDialog = GodotWindowDialog GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotWindowDialog where
+        type BaseClass GodotWindowDialog = GodotPopup
+        super = coerce
 bindWindowDialog_get_resizable
   = unsafePerformIO $
       withCString "WindowDialog" $
@@ -42541,6 +43237,10 @@ instance Method "get_close_button" GodotWindowDialog
 
 newtype GodotAcceptDialog = GodotAcceptDialog GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotAcceptDialog where
+        type BaseClass GodotAcceptDialog = GodotWindowDialog
+        super = coerce
 bindAcceptDialog__ok
   = unsafePerformIO $
       withCString "AcceptDialog" $
@@ -42734,6 +43434,10 @@ instance Method "_custom_action" GodotAcceptDialog
 
 newtype GodotConfirmationDialog = GodotConfirmationDialog GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotConfirmationDialog where
+        type BaseClass GodotConfirmationDialog = GodotAcceptDialog
+        super = coerce
 bindConfirmationDialog_get_cancel
   = unsafePerformIO $
       withCString "ConfirmationDialog" $
@@ -42758,6 +43462,10 @@ instance Method "get_cancel" GodotConfirmationDialog
 
 newtype GodotFileDialog = GodotFileDialog GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotFileDialog where
+        type BaseClass GodotFileDialog = GodotConfirmationDialog
+        super = coerce
 bindFileDialog__tree_selected
   = unsafePerformIO $
       withCString "FileDialog" $
@@ -43370,6 +44078,10 @@ instance Method "invalidate" GodotFileDialog (IO ()) where
 
 newtype GodotLineEdit = GodotLineEdit GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotLineEdit where
+        type BaseClass GodotLineEdit = GodotControl
+        super = coerce
 bindLineEdit__text_changed
   = unsafePerformIO $
       withCString "LineEdit" $
@@ -43870,6 +44582,10 @@ instance Method "is_context_menu_enabled" GodotLineEdit (IO Bool)
 
 newtype GodotPopupMenu = GodotPopupMenu GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotPopupMenu where
+        type BaseClass GodotPopupMenu = GodotPopup
+        super = coerce
 bindPopupMenu_add_icon_check_item
   = unsafePerformIO $
       withCString "PopupMenu" $
@@ -44546,6 +45262,10 @@ instance Method "_submenu_timeout" GodotPopupMenu (IO ()) where
 
 newtype GodotTree = GodotTree GodotObject
                       deriving newtype AsVariant
+
+instance HasBaseClass GodotTree where
+        type BaseClass GodotTree = GodotControl
+        super = coerce
 bindTree__range_click_timeout
   = unsafePerformIO $
       withCString "Tree" $
@@ -45126,6 +45846,10 @@ instance Method "get_drop_mode_flags" GodotTree (IO Int) where
 
 newtype GodotTextEdit = GodotTextEdit GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotTextEdit where
+        type BaseClass GodotTextEdit = GodotControl
+        super = coerce
 bindTextEdit__cursor_changed_emit
   = unsafePerformIO $
       withCString "TextEdit" $
@@ -46228,6 +46952,10 @@ instance Method "clear_colors" GodotTextEdit (IO ()) where
 
 newtype GodotTreeItem = GodotTreeItem GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotTreeItem where
+        type BaseClass GodotTreeItem = GodotObject
+        super = coerce
 bindTreeItem_set_cell_mode
   = unsafePerformIO $
       withCString "TreeItem" $
@@ -47007,6 +47735,10 @@ instance Method "is_folding_disabled" GodotTreeItem (IO Bool) where
 
 newtype GodotOptionButton = GodotOptionButton GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotOptionButton where
+        type BaseClass GodotOptionButton = GodotButton
+        super = coerce
 bindOptionButton__selected
   = unsafePerformIO $
       withCString "OptionButton" $
@@ -47087,6 +47819,10 @@ instance Method "_select_int" GodotOptionButton (Int -> IO ())
 
 newtype GodotSpinBox = GodotSpinBox GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotSpinBox where
+        type BaseClass GodotSpinBox = GodotRange
+        super = coerce
 bindSpinBox__text_entered
   = unsafePerformIO $
       withCString "SpinBox" $
@@ -47238,8 +47974,16 @@ instance Method "_line_edit_input" GodotSpinBox
 newtype GodotReferenceRect = GodotReferenceRect GodotObject
                                deriving newtype AsVariant
 
+instance HasBaseClass GodotReferenceRect where
+        type BaseClass GodotReferenceRect = GodotControl
+        super = coerce
+
 newtype GodotColorPicker = GodotColorPicker GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotColorPicker where
+        type BaseClass GodotColorPicker = GodotBoxContainer
+        super = coerce
 bindColorPicker_set_pick_color
   = unsafePerformIO $
       withCString "ColorPicker" $
@@ -47609,6 +48353,10 @@ instance Method "_screen_input" GodotColorPicker
 
 newtype GodotColorPickerButton = GodotColorPickerButton GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotColorPickerButton where
+        type BaseClass GodotColorPickerButton = GodotButton
+        super = coerce
 bindColorPickerButton_get_picker
   = unsafePerformIO $
       withCString "ColorPickerButton" $
@@ -47654,6 +48402,10 @@ instance Method "_color_changed" GodotColorPickerButton
 
 newtype GodotRichTextLabel = GodotRichTextLabel GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotRichTextLabel where
+        type BaseClass GodotRichTextLabel = GodotControl
+        super = coerce
 bindRichTextLabel_add_text
   = unsafePerformIO $
       withCString "RichTextLabel" $
@@ -48283,6 +49035,10 @@ instance Method "is_using_bbcode" GodotRichTextLabel (IO Bool)
 
 newtype GodotVideoPlayer = GodotVideoPlayer GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotVideoPlayer where
+        type BaseClass GodotVideoPlayer = GodotControl
+        super = coerce
 bindVideoPlayer_set_stream
   = unsafePerformIO $
       withCString "VideoPlayer" $
@@ -48628,14 +49384,30 @@ instance Method "get_video_texture" GodotVideoPlayer
 newtype GodotPopupDialog = GodotPopupDialog GodotObject
                              deriving newtype AsVariant
 
+instance HasBaseClass GodotPopupDialog where
+        type BaseClass GodotPopupDialog = GodotPopup
+        super = coerce
+
 newtype GodotVideoStream = GodotVideoStream GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotVideoStream where
+        type BaseClass GodotVideoStream = GodotResource
+        super = coerce
 
 newtype GodotMarginContainer = GodotMarginContainer GodotObject
                                  deriving newtype AsVariant
 
+instance HasBaseClass GodotMarginContainer where
+        type BaseClass GodotMarginContainer = GodotContainer
+        super = coerce
+
 newtype GodotViewportContainer = GodotViewportContainer GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotViewportContainer where
+        type BaseClass GodotViewportContainer = GodotContainer
+        super = coerce
 bindViewportContainer_set_stretch
   = unsafePerformIO $
       withCString "ViewportContainer" $
@@ -48723,6 +49495,10 @@ instance Method "get_stretch_shrink" GodotViewportContainer
 
 newtype GodotSpatial = GodotSpatial GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotSpatial where
+        type BaseClass GodotSpatial = GodotNode
+        super = coerce
 bindSpatial_set_translation
   = unsafePerformIO $
       withCString "Spatial" $
@@ -49082,8 +49858,16 @@ instance Method "look_at_from_position" GodotSpatial
 newtype GodotSpatialGizmo = GodotSpatialGizmo GodotObject
                               deriving newtype AsVariant
 
+instance HasBaseClass GodotSpatialGizmo where
+        type BaseClass GodotSpatialGizmo = GodotReference
+        super = coerce
+
 newtype GodotSkeleton = GodotSkeleton GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotSkeleton where
+        type BaseClass GodotSkeleton = GodotSpatial
+        super = coerce
 bindSkeleton_add_bone
   = unsafePerformIO $
       withCString "Skeleton" $
@@ -49527,6 +50311,10 @@ instance Method "get_bone_transform" GodotSkeleton
 
 newtype GodotAnimationPlayer = GodotAnimationPlayer GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotAnimationPlayer where
+        type BaseClass GodotAnimationPlayer = GodotNode
+        super = coerce
 bindAnimationPlayer__node_removed
   = unsafePerformIO $
       withCString "AnimationPlayer" $
@@ -50195,6 +50983,10 @@ instance Method "advance" GodotAnimationPlayer (Float -> IO ())
 
 newtype GodotTween = GodotTween GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotTween where
+        type BaseClass GodotTween = GodotNode
+        super = coerce
 bindTween_is_repeat
   = unsafePerformIO $
       withCString "Tween" $
@@ -50632,6 +51424,10 @@ instance Method "targeting_method" GodotTween
 
 newtype GodotBoneAttachment = GodotBoneAttachment GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotBoneAttachment where
+        type BaseClass GodotBoneAttachment = GodotSpatial
+        super = coerce
 bindBoneAttachment_set_bone_name
   = unsafePerformIO $
       withCString "BoneAttachment" $
@@ -50656,6 +51452,10 @@ instance Method "set_bone_name" GodotBoneAttachment
 
 newtype GodotVisualInstance = GodotVisualInstance GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualInstance where
+        type BaseClass GodotVisualInstance = GodotSpatial
+        super = coerce
 bindVisualInstance__get_visual_instance_rid
   = unsafePerformIO $
       withCString "VisualInstance" $
@@ -50777,6 +51577,10 @@ instance Method "get_aabb" GodotVisualInstance (IO GodotAabb) where
 
 newtype GodotGeometryInstance = GodotGeometryInstance GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotGeometryInstance where
+        type BaseClass GodotGeometryInstance = GodotVisualInstance
+        super = coerce
 bindGeometryInstance_set_material_override
   = unsafePerformIO $
       withCString "GeometryInstance" $
@@ -51115,6 +51919,10 @@ instance Method "get_extra_cull_margin" GodotGeometryInstance
 
 newtype GodotCamera = GodotCamera GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotCamera where
+        type BaseClass GodotCamera = GodotSpatial
+        super = coerce
 bindCamera_project_ray_normal
   = unsafePerformIO $
       withCString "Camera" $
@@ -51675,6 +52483,10 @@ instance Method "get_doppler_tracking" GodotCamera (IO Int) where
 
 newtype GodotEnvironment = GodotEnvironment GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotEnvironment where
+        type BaseClass GodotEnvironment = GodotResource
+        super = coerce
 bindEnvironment_set_background
   = unsafePerformIO $
       withCString "Environment" $
@@ -54569,6 +55381,10 @@ instance Method "get_adjustment_color_correction" GodotEnvironment
 
 newtype GodotListener = GodotListener GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotListener where
+        type BaseClass GodotListener = GodotSpatial
+        super = coerce
 bindListener_get_listener_transform
   = unsafePerformIO $
       withCString "Listener" $
@@ -54594,8 +55410,16 @@ instance Method "get_listener_transform" GodotListener
 newtype GodotARVRCamera = GodotARVRCamera GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotARVRCamera where
+        type BaseClass GodotARVRCamera = GodotCamera
+        super = coerce
+
 newtype GodotARVRController = GodotARVRController GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotARVRController where
+        type BaseClass GodotARVRController = GodotSpatial
+        super = coerce
 bindARVRController_set_controller_id
   = unsafePerformIO $
       withCString "ARVRController" $
@@ -54742,6 +55566,10 @@ instance Method "get_is_active" GodotARVRController (IO Bool) where
 
 newtype GodotARVRAnchor = GodotARVRAnchor GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotARVRAnchor where
+        type BaseClass GodotARVRAnchor = GodotSpatial
+        super = coerce
 bindARVRAnchor_set_anchor_id
   = unsafePerformIO $
       withCString "ARVRAnchor" $
@@ -54819,8 +55647,16 @@ instance Method "get_plane" GodotARVRAnchor (IO GodotPlane) where
 newtype GodotARVROrigin = GodotARVROrigin GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotARVROrigin where
+        type BaseClass GodotARVROrigin = GodotSpatial
+        super = coerce
+
 newtype GodotInterpolatedCamera = GodotInterpolatedCamera GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotInterpolatedCamera where
+        type BaseClass GodotInterpolatedCamera = GodotCamera
+        super = coerce
 bindInterpolatedCamera_set_target_path
   = unsafePerformIO $
       withCString "InterpolatedCamera" $
@@ -54931,6 +55767,10 @@ instance Method "is_interpolation_enabled" GodotInterpolatedCamera
 
 newtype GodotMeshInstance = GodotMeshInstance GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotMeshInstance where
+        type BaseClass GodotMeshInstance = GodotGeometryInstance
+        super = coerce
 bindMeshInstance_set_mesh
   = unsafePerformIO $
       withCString "MeshInstance" $
@@ -55134,6 +55974,10 @@ instance Method "create_debug_tangents" GodotMeshInstance (IO ())
 
 newtype GodotMesh = GodotMesh GodotObject
                       deriving newtype AsVariant
+
+instance HasBaseClass GodotMesh where
+        type BaseClass GodotMesh = GodotResource
+        super = coerce
 bindMesh_set_lightmap_size_hint
   = unsafePerformIO $
       withCString "Mesh" $
@@ -55270,6 +56114,10 @@ instance Method "generate_triangle_mesh" GodotMesh
 
 newtype GodotImmediateGeometry = GodotImmediateGeometry GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotImmediateGeometry where
+        type BaseClass GodotImmediateGeometry = GodotGeometryInstance
+        super = coerce
 bindImmediateGeometry_begin
   = unsafePerformIO $
       withCString "ImmediateGeometry" $
@@ -55436,6 +56284,10 @@ instance Method "end" GodotImmediateGeometry (IO ()) where
 
 newtype GodotSpriteBase3D = GodotSpriteBase3D GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotSpriteBase3D where
+        type BaseClass GodotSpriteBase3D = GodotGeometryInstance
+        super = coerce
 bindSpriteBase3D_set_centered
   = unsafePerformIO $
       withCString "SpriteBase3D" $
@@ -55759,6 +56611,10 @@ instance Method "_im_update" GodotSpriteBase3D (IO ()) where
 
 newtype GodotSprite3D = GodotSprite3D GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotSprite3D where
+        type BaseClass GodotSprite3D = GodotSpriteBase3D
+        super = coerce
 bindSprite3D_set_region
   = unsafePerformIO $
       withCString "Sprite3D" $
@@ -55898,6 +56754,10 @@ instance Method "get_hframes" GodotSprite3D (IO Int) where
 
 newtype GodotAnimatedSprite3D = GodotAnimatedSprite3D GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotAnimatedSprite3D where
+        type BaseClass GodotAnimatedSprite3D = GodotSpriteBase3D
+        super = coerce
 bindAnimatedSprite3D_set_sprite_frames
   = unsafePerformIO $
       withCString "AnimatedSprite3D" $
@@ -56023,6 +56883,10 @@ instance Method "_res_changed" GodotAnimatedSprite3D (IO ()) where
 
 newtype GodotSpriteFrames = GodotSpriteFrames GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotSpriteFrames where
+        type BaseClass GodotSpriteFrames = GodotResource
+        super = coerce
 bindSpriteFrames_set_animation_speed
   = unsafePerformIO $
       withCString "SpriteFrames" $
@@ -56269,6 +57133,10 @@ instance Method "_get_animations" GodotSpriteFrames (IO GodotArray)
 
 newtype GodotLight = GodotLight GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotLight where
+        type BaseClass GodotLight = GodotVisualInstance
+        super = coerce
 bindLight_set_editor_only
   = unsafePerformIO $
       withCString "Light" $
@@ -56518,6 +57386,10 @@ instance Method "get_bake_mode" GodotLight (IO Int) where
 
 newtype GodotDirectionalLight = GodotDirectionalLight GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotDirectionalLight where
+        type BaseClass GodotDirectionalLight = GodotLight
+        super = coerce
 bindDirectionalLight_set_shadow_mode
   = unsafePerformIO $
       withCString "DirectionalLight" $
@@ -56646,6 +57518,10 @@ instance Method "is_blend_splits_enabled" GodotDirectionalLight
 
 newtype GodotOmniLight = GodotOmniLight GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotOmniLight where
+        type BaseClass GodotOmniLight = GodotLight
+        super = coerce
 bindOmniLight_set_shadow_detail
   = unsafePerformIO $
       withCString "OmniLight" $
@@ -56687,8 +57563,16 @@ instance Method "get_shadow_detail" GodotOmniLight (IO Int) where
 newtype GodotSpotLight = GodotSpotLight GodotObject
                            deriving newtype AsVariant
 
+instance HasBaseClass GodotSpotLight where
+        type BaseClass GodotSpotLight = GodotLight
+        super = coerce
+
 newtype GodotReflectionProbe = GodotReflectionProbe GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotReflectionProbe where
+        type BaseClass GodotReflectionProbe = GodotVisualInstance
+        super = coerce
 bindReflectionProbe_set_intensity
   = unsafePerformIO $
       withCString "ReflectionProbe" $
@@ -57117,6 +58001,10 @@ instance Method "are_shadows_enabled" GodotReflectionProbe
 
 newtype GodotGIProbe = GodotGIProbe GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotGIProbe where
+        type BaseClass GodotGIProbe = GodotVisualInstance
+        super = coerce
 bindGIProbe_set_probe_data
   = unsafePerformIO $
       withCString "GIProbe" $
@@ -57455,6 +58343,10 @@ instance Method "debug_bake" GodotGIProbe (IO ()) where
 
 newtype GodotGIProbeData = GodotGIProbeData GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotGIProbeData where
+        type BaseClass GodotGIProbeData = GodotResource
+        super = coerce
 bindGIProbeData_set_bounds
   = unsafePerformIO $
       withCString "GIProbeData" $
@@ -57616,6 +58508,10 @@ instance Method "get_dynamic_data" GodotGIProbeData
 
 newtype GodotBakedLightmap = GodotBakedLightmap GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotBakedLightmap where
+        type BaseClass GodotBakedLightmap = GodotVisualInstance
+        super = coerce
 bindBakedLightmap_set_light_data
   = unsafePerformIO $
       withCString "BakedLightmap" $
@@ -57844,6 +58740,10 @@ instance Method "get_image_path" GodotBakedLightmap
 
 newtype GodotBakedLightmapData = GodotBakedLightmapData GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotBakedLightmapData where
+        type BaseClass GodotBakedLightmapData = GodotResource
+        super = coerce
 bindBakedLightmapData__set_user_data
   = unsafePerformIO $
       withCString "BakedLightmapData" $
@@ -58117,6 +59017,10 @@ instance Method "clear_users" GodotBakedLightmapData (IO ()) where
 
 newtype GodotAnimationTreePlayer = GodotAnimationTreePlayer GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotAnimationTreePlayer where
+        type BaseClass GodotAnimationTreePlayer = GodotNode
+        super = coerce
 bindAnimationTreePlayer_add_node
   = unsafePerformIO $
       withCString "AnimationTreePlayer" $
@@ -59425,6 +60329,10 @@ instance Method "recompute_caches" GodotAnimationTreePlayer (IO ())
 
 newtype GodotParticles = GodotParticles GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotParticles where
+        type BaseClass GodotParticles = GodotGeometryInstance
+        super = coerce
 bindParticles_set_emitting
   = unsafePerformIO $
       withCString "Particles" $
@@ -60030,8 +60938,16 @@ instance Method "capture_aabb" GodotParticles (IO GodotAabb) where
 newtype GodotPosition3D = GodotPosition3D GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotPosition3D where
+        type BaseClass GodotPosition3D = GodotSpatial
+        super = coerce
+
 newtype GodotNavigationMeshInstance = GodotNavigationMeshInstance GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotNavigationMeshInstance where
+        type BaseClass GodotNavigationMeshInstance = GodotSpatial
+        super = coerce
 bindNavigationMeshInstance_set_navigation_mesh
   = unsafePerformIO $
       withCString "NavigationMeshInstance" $
@@ -60120,6 +61036,10 @@ instance Method "is_enabled" GodotNavigationMeshInstance (IO Bool)
 
 newtype GodotNavigationMesh = GodotNavigationMesh GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotNavigationMesh where
+        type BaseClass GodotNavigationMesh = GodotResource
+        super = coerce
 bindNavigationMesh_set_sample_partition_type
   = unsafePerformIO $
       withCString "NavigationMesh" $
@@ -60987,6 +61907,10 @@ instance Method "_get_polygons" GodotNavigationMesh (IO GodotArray)
 
 newtype GodotNavigation = GodotNavigation GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotNavigation where
+        type BaseClass GodotNavigation = GodotSpatial
+        super = coerce
 bindNavigation_navmesh_add
   = unsafePerformIO $
       withCString "Navigation" $
@@ -61151,6 +62075,10 @@ instance Method "get_up_vector" GodotNavigation (IO GodotVector3)
 
 newtype GodotCollisionObject = GodotCollisionObject GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotCollisionObject where
+        type BaseClass GodotCollisionObject = GodotSpatial
+        super = coerce
 bindCollisionObject_set_ray_pickable
   = unsafePerformIO $
       withCString "CollisionObject" $
@@ -61558,6 +62486,10 @@ instance Method "shape_find_owner" GodotCollisionObject
 
 newtype GodotPhysicsBody = GodotPhysicsBody GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysicsBody where
+        type BaseClass GodotPhysicsBody = GodotCollisionObject
+        super = coerce
 bindPhysicsBody_set_collision_mask_bit
   = unsafePerformIO $
       withCString "PhysicsBody" $
@@ -61724,6 +62656,10 @@ instance Method "remove_collision_exception_with" GodotPhysicsBody
 
 newtype GodotStaticBody = GodotStaticBody GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotStaticBody where
+        type BaseClass GodotStaticBody = GodotPhysicsBody
+        super = coerce
 bindStaticBody_set_constant_linear_velocity
   = unsafePerformIO $
       withCString "StaticBody" $
@@ -61884,6 +62820,10 @@ instance Method "get_bounce" GodotStaticBody (IO Float) where
 
 newtype GodotRigidBody = GodotRigidBody GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotRigidBody where
+        type BaseClass GodotRigidBody = GodotPhysicsBody
+        super = coerce
 bindRigidBody__integrate_forces
   = unsafePerformIO $
       withCString "RigidBody" $
@@ -62453,6 +63393,10 @@ instance Method "get_colliding_bodies" GodotRigidBody
 
 newtype GodotKinematicCollision = GodotKinematicCollision GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotKinematicCollision where
+        type BaseClass GodotKinematicCollision = GodotReference
+        super = coerce
 bindKinematicCollision_get_normal
   = unsafePerformIO $
       withCString "KinematicCollision" $
@@ -62583,6 +63527,10 @@ instance Method "get_collider_metadata" GodotKinematicCollision
 
 newtype GodotKinematicBody = GodotKinematicBody GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotKinematicBody where
+        type BaseClass GodotKinematicBody = GodotPhysicsBody
+        super = coerce
 bindKinematicBody_move_and_collide
   = unsafePerformIO $
       withCString "KinematicBody" $
@@ -62807,6 +63755,10 @@ instance Method "get_slide_collision" GodotKinematicBody
 
 newtype GodotVehicleBody = GodotVehicleBody GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotVehicleBody where
+        type BaseClass GodotVehicleBody = GodotRigidBody
+        super = coerce
 bindVehicleBody_set_engine_force
   = unsafePerformIO $
       withCString "VehicleBody" $
@@ -62924,6 +63876,10 @@ instance Method "get_steering" GodotVehicleBody (IO Float) where
 
 newtype GodotVehicleWheel = GodotVehicleWheel GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotVehicleWheel where
+        type BaseClass GodotVehicleWheel = GodotSpatial
+        super = coerce
 bindVehicleWheel_set_radius
   = unsafePerformIO $
       withCString "VehicleWheel" $
@@ -63416,6 +64372,10 @@ instance Method "get_skidinfo" GodotVehicleWheel (IO Float) where
 
 newtype GodotArea = GodotArea GodotObject
                       deriving newtype AsVariant
+
+instance HasBaseClass GodotArea where
+        type BaseClass GodotArea = GodotCollisionObject
+        super = coerce
 bindArea__area_enter_tree
   = unsafePerformIO $
       withCString "Area" $
@@ -64061,6 +65021,10 @@ instance Method "get_reverb_uniformity" GodotArea (IO Float) where
 
 newtype GodotProximityGroup = GodotProximityGroup GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotProximityGroup where
+        type BaseClass GodotProximityGroup = GodotSpatial
+        super = coerce
 bindProximityGroup_set_group_name
   = unsafePerformIO $
       withCString "ProximityGroup" $
@@ -64231,6 +65195,10 @@ instance Method "_proximity_group_broadcast" GodotProximityGroup
 
 newtype GodotCollisionShape = GodotCollisionShape GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotCollisionShape where
+        type BaseClass GodotCollisionShape = GodotSpatial
+        super = coerce
 bindCollisionShape_resource_changed
   = unsafePerformIO $
       withCString "CollisionShape" $
@@ -64296,8 +65264,16 @@ instance Method "make_convex_from_brothers" GodotCollisionShape
 newtype GodotShape = GodotShape GodotObject
                        deriving newtype AsVariant
 
+instance HasBaseClass GodotShape where
+        type BaseClass GodotShape = GodotResource
+        super = coerce
+
 newtype GodotCollisionPolygon = GodotCollisionPolygon GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotCollisionPolygon where
+        type BaseClass GodotCollisionPolygon = GodotSpatial
+        super = coerce
 bindCollisionPolygon_set_polygon
   = unsafePerformIO $
       withCString "CollisionPolygon" $
@@ -64322,6 +65298,10 @@ instance Method "set_polygon" GodotCollisionPolygon
 
 newtype GodotRayCast = GodotRayCast GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotRayCast where
+        type BaseClass GodotRayCast = GodotSpatial
+        super = coerce
 bindRayCast_set_cast_to
   = unsafePerformIO $
       withCString "RayCast" $
@@ -64535,6 +65515,10 @@ instance Method "get_exclude_parent_body" GodotRayCast (IO Bool)
 
 newtype GodotMultiMeshInstance = GodotMultiMeshInstance GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotMultiMeshInstance where
+        type BaseClass GodotMultiMeshInstance = GodotGeometryInstance
+        super = coerce
 bindMultiMeshInstance_set_multimesh
   = unsafePerformIO $
       withCString "MultiMeshInstance" $
@@ -64580,6 +65564,10 @@ instance Method "get_multimesh" GodotMultiMeshInstance
 
 newtype GodotMultiMesh = GodotMultiMesh GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotMultiMesh where
+        type BaseClass GodotMultiMesh = GodotResource
+        super = coerce
 bindMultiMesh_set_color_format
   = unsafePerformIO $
       withCString "MultiMesh" $
@@ -64866,6 +65854,10 @@ instance Method "_get_color_array" GodotMultiMesh
 
 newtype GodotCurve3D = GodotCurve3D GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotCurve3D where
+        type BaseClass GodotCurve3D = GodotResource
+        super = coerce
 bindCurve3D_get_point_count
   = unsafePerformIO $
       withCString "Curve3D" $
@@ -65193,6 +66185,10 @@ instance Method "tessellate" GodotCurve3D
 
 newtype GodotPath = GodotPath GodotObject
                       deriving newtype AsVariant
+
+instance HasBaseClass GodotPath where
+        type BaseClass GodotPath = GodotSpatial
+        super = coerce
 bindPath_set_curve
   = unsafePerformIO $
       withCString "Path" $
@@ -65245,6 +66241,10 @@ instance Method "_curve_changed" GodotPath (IO ()) where
 
 newtype GodotPathFollow = GodotPathFollow GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotPathFollow where
+        type BaseClass GodotPathFollow = GodotSpatial
+        super = coerce
 bindPathFollow_set_unit_offset
   = unsafePerformIO $
       withCString "PathFollow" $
@@ -65399,6 +66399,10 @@ instance Method "has_loop" GodotPathFollow (IO Bool) where
 
 newtype GodotVisibilityNotifier = GodotVisibilityNotifier GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotVisibilityNotifier where
+        type BaseClass GodotVisibilityNotifier = GodotSpatial
+        super = coerce
 bindVisibilityNotifier_set_aabb
   = unsafePerformIO $
       withCString "VisibilityNotifier" $
@@ -65442,6 +66446,10 @@ instance Method "is_on_screen" GodotVisibilityNotifier (IO Bool)
 
 newtype GodotVisibilityEnabler = GodotVisibilityEnabler GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotVisibilityEnabler where
+        type BaseClass GodotVisibilityEnabler = GodotVisibilityNotifier
+        super = coerce
 bindVisibilityEnabler_set_enabler
   = unsafePerformIO $
       withCString "VisibilityEnabler" $
@@ -65488,8 +66496,16 @@ instance Method "is_enabler_enabled" GodotVisibilityEnabler
 newtype GodotWorldEnvironment = GodotWorldEnvironment GodotObject
                                   deriving newtype AsVariant
 
+instance HasBaseClass GodotWorldEnvironment where
+        type BaseClass GodotWorldEnvironment = GodotNode
+        super = coerce
+
 newtype GodotRemoteTransform = GodotRemoteTransform GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotRemoteTransform where
+        type BaseClass GodotRemoteTransform = GodotSpatial
+        super = coerce
 bindRemoteTransform_set_remote_node
   = unsafePerformIO $
       withCString "RemoteTransform" $
@@ -65704,6 +66720,10 @@ instance Method "get_update_scale" GodotRemoteTransform (IO Bool)
 
 newtype GodotJoint = GodotJoint GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotJoint where
+        type BaseClass GodotJoint = GodotSpatial
+        super = coerce
 bindJoint_set_node_a
   = unsafePerformIO $
       withCString "Joint" $
@@ -65853,8 +66873,16 @@ instance Method "get_exclude_nodes_from_collision" GodotJoint
 newtype GodotPinJoint = GodotPinJoint GodotObject
                           deriving newtype AsVariant
 
+instance HasBaseClass GodotPinJoint where
+        type BaseClass GodotPinJoint = GodotJoint
+        super = coerce
+
 newtype GodotHingeJoint = GodotHingeJoint GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotHingeJoint where
+        type BaseClass GodotHingeJoint = GodotJoint
+        super = coerce
 bindHingeJoint__set_upper_limit
   = unsafePerformIO $
       withCString "HingeJoint" $
@@ -65932,6 +66960,10 @@ instance Method "_get_lower_limit" GodotHingeJoint (IO Float) where
 
 newtype GodotSliderJoint = GodotSliderJoint GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotSliderJoint where
+        type BaseClass GodotSliderJoint = GodotJoint
+        super = coerce
 bindSliderJoint__set_upper_limit_angular
   = unsafePerformIO $
       withCString "SliderJoint" $
@@ -66019,6 +67051,10 @@ instance Method "_get_lower_limit_angular" GodotSliderJoint
 
 newtype GodotConeTwistJoint = GodotConeTwistJoint GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotConeTwistJoint where
+        type BaseClass GodotConeTwistJoint = GodotJoint
+        super = coerce
 bindConeTwistJoint__set_swing_span
   = unsafePerformIO $
       withCString "ConeTwistJoint" $
@@ -66104,6 +67140,10 @@ instance Method "_get_twist_span" GodotConeTwistJoint (IO Float)
 
 newtype GodotGeneric6DOFJoint = GodotGeneric6DOFJoint GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotGeneric6DOFJoint where
+        type BaseClass GodotGeneric6DOFJoint = GodotJoint
+        super = coerce
 bindGeneric6DOFJoint__set_angular_hi_limit_x
   = unsafePerformIO $
       withCString "Generic6DOFJoint" $
@@ -66602,6 +67642,10 @@ instance Method "get_flag_z" GodotGeneric6DOFJoint (Int -> IO Bool)
 
 newtype GodotMeshLibrary = GodotMeshLibrary GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotMeshLibrary where
+        type BaseClass GodotMeshLibrary = GodotResource
+        super = coerce
 bindMeshLibrary_set_item_name
   = unsafePerformIO $
       withCString "MeshLibrary" $
@@ -66870,6 +67914,10 @@ instance Method "get_last_unused_item_id" GodotMeshLibrary (IO Int)
 
 newtype GodotShader = GodotShader GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotShader where
+        type BaseClass GodotShader = GodotResource
+        super = coerce
 bindShader_set_code
   = unsafePerformIO $
       withCString "Shader" $
@@ -66964,6 +68012,10 @@ instance Method "has_param" GodotShader (GodotString -> IO Bool)
 
 newtype GodotMaterial = GodotMaterial GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotMaterial where
+        type BaseClass GodotMaterial = GodotResource
+        super = coerce
 bindMaterial_set_next_pass
   = unsafePerformIO $
       withCString "Material" $
@@ -67045,6 +68097,10 @@ instance Method "get_render_priority" GodotMaterial (IO Int) where
 
 newtype GodotShaderMaterial = GodotShaderMaterial GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotShaderMaterial where
+        type BaseClass GodotShaderMaterial = GodotMaterial
+        super = coerce
 bindShaderMaterial_set_shader
   = unsafePerformIO $
       withCString "ShaderMaterial" $
@@ -67129,6 +68185,10 @@ instance Method "get_shader_param" GodotShaderMaterial
 
 newtype GodotCanvasItemMaterial = GodotCanvasItemMaterial GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotCanvasItemMaterial where
+        type BaseClass GodotCanvasItemMaterial = GodotMaterial
+        super = coerce
 bindCanvasItemMaterial_set_blend_mode
   = unsafePerformIO $
       withCString "CanvasItemMaterial" $
@@ -67214,6 +68274,10 @@ instance Method "get_light_mode" GodotCanvasItemMaterial (IO Int)
 
 newtype GodotParticles2D = GodotParticles2D GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotParticles2D where
+        type BaseClass GodotParticles2D = GodotNode2D
+        super = coerce
 bindParticles2D_set_visibility_rect
   = unsafePerformIO $
       withCString "Particles2D" $
@@ -67391,6 +68455,10 @@ instance Method "get_h_frames" GodotParticles2D (IO Int) where
 
 newtype GodotSprite = GodotSprite GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotSprite where
+        type BaseClass GodotSprite = GodotNode2D
+        super = coerce
 bindSprite_set_region_filter_clip
   = unsafePerformIO $
       withCString "Sprite" $
@@ -67437,11 +68505,23 @@ instance Method "is_region_filter_clip_enabled" GodotSprite
 newtype GodotAnimatedSprite = GodotAnimatedSprite GodotObject
                                 deriving newtype AsVariant
 
+instance HasBaseClass GodotAnimatedSprite where
+        type BaseClass GodotAnimatedSprite = GodotNode2D
+        super = coerce
+
 newtype GodotPosition2D = GodotPosition2D GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotPosition2D where
+        type BaseClass GodotPosition2D = GodotNode2D
+        super = coerce
+
 newtype GodotLine2D = GodotLine2D GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotLine2D where
+        type BaseClass GodotLine2D = GodotNode2D
+        super = coerce
 bindLine2D_set_points
   = unsafePerformIO $
       withCString "Line2D" $
@@ -67791,6 +68871,10 @@ instance Method "_gradient_changed" GodotLine2D (IO ()) where
 
 newtype GodotGradient = GodotGradient GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotGradient where
+        type BaseClass GodotGradient = GodotResource
+        super = coerce
 bindGradient_set_offsets
   = unsafePerformIO $
       withCString "Gradient" $
@@ -67868,6 +68952,10 @@ instance Method "get_colors" GodotGradient (IO GodotPoolColorArray)
 
 newtype GodotCollisionObject2D = GodotCollisionObject2D GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotCollisionObject2D where
+        type BaseClass GodotCollisionObject2D = GodotNode2D
+        super = coerce
 bindCollisionObject2D_set_pickable
   = unsafePerformIO $
       withCString "CollisionObject2D" $
@@ -67961,11 +69049,23 @@ instance Method "is_shape_owner_one_way_collision_enabled"
 newtype GodotPhysicsBody2D = GodotPhysicsBody2D GodotObject
                                deriving newtype AsVariant
 
+instance HasBaseClass GodotPhysicsBody2D where
+        type BaseClass GodotPhysicsBody2D = GodotCollisionObject2D
+        super = coerce
+
 newtype GodotStaticBody2D = GodotStaticBody2D GodotObject
                               deriving newtype AsVariant
 
+instance HasBaseClass GodotStaticBody2D where
+        type BaseClass GodotStaticBody2D = GodotPhysicsBody2D
+        super = coerce
+
 newtype GodotRigidBody2D = GodotRigidBody2D GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotRigidBody2D where
+        type BaseClass GodotRigidBody2D = GodotPhysicsBody2D
+        super = coerce
 bindRigidBody2D_get_inertia
   = unsafePerformIO $
       withCString "RigidBody2D" $
@@ -68159,11 +69259,23 @@ instance Method "test_motion" GodotRigidBody2D
 newtype GodotKinematicBody2D = GodotKinematicBody2D GodotObject
                                  deriving newtype AsVariant
 
+instance HasBaseClass GodotKinematicBody2D where
+        type BaseClass GodotKinematicBody2D = GodotPhysicsBody2D
+        super = coerce
+
 newtype GodotKinematicCollision2D = GodotKinematicCollision2D GodotObject
                                       deriving newtype AsVariant
 
+instance HasBaseClass GodotKinematicCollision2D where
+        type BaseClass GodotKinematicCollision2D = GodotReference
+        super = coerce
+
 newtype GodotArea2D = GodotArea2D GodotObject
                         deriving newtype AsVariant
+
+instance HasBaseClass GodotArea2D where
+        type BaseClass GodotArea2D = GodotCollisionObject2D
+        super = coerce
 bindArea2D_set_audio_bus_name
   = unsafePerformIO $
       withCString "Area2D" $
@@ -68206,6 +69318,10 @@ instance Method "get_audio_bus_name" GodotArea2D (IO GodotString)
 
 newtype GodotCollisionShape2D = GodotCollisionShape2D GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotCollisionShape2D where
+        type BaseClass GodotCollisionShape2D = GodotNode2D
+        super = coerce
 bindCollisionShape2D_set_one_way_collision
   = unsafePerformIO $
       withCString "CollisionShape2D" $
@@ -68273,6 +69389,10 @@ instance Method "_shape_changed" GodotCollisionShape2D (IO ())
 
 newtype GodotShape2D = GodotShape2D GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotShape2D where
+        type BaseClass GodotShape2D = GodotResource
+        super = coerce
 bindShape2D_set_custom_solver_bias
   = unsafePerformIO $
       withCString "Shape2D" $
@@ -68408,6 +69528,10 @@ instance Method "collide_with_motion_and_get_contacts" GodotShape2D
 
 newtype GodotCollisionPolygon2D = GodotCollisionPolygon2D GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotCollisionPolygon2D where
+        type BaseClass GodotCollisionPolygon2D = GodotNode2D
+        super = coerce
 bindCollisionPolygon2D_set_build_mode
   = unsafePerformIO $
       withCString "CollisionPolygon2D" $
@@ -68453,8 +69577,16 @@ instance Method "get_build_mode" GodotCollisionPolygon2D (IO Int)
 newtype GodotRayCast2D = GodotRayCast2D GodotObject
                            deriving newtype AsVariant
 
+instance HasBaseClass GodotRayCast2D where
+        type BaseClass GodotRayCast2D = GodotNode2D
+        super = coerce
+
 newtype GodotVisibilityNotifier2D = GodotVisibilityNotifier2D GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotVisibilityNotifier2D where
+        type BaseClass GodotVisibilityNotifier2D = GodotNode2D
+        super = coerce
 bindVisibilityNotifier2D_set_rect
   = unsafePerformIO $
       withCString "VisibilityNotifier2D" $
@@ -68480,8 +69612,16 @@ instance Method "set_rect" GodotVisibilityNotifier2D
 newtype GodotVisibilityEnabler2D = GodotVisibilityEnabler2D GodotObject
                                      deriving newtype AsVariant
 
+instance HasBaseClass GodotVisibilityEnabler2D where
+        type BaseClass GodotVisibilityEnabler2D = GodotVisibilityNotifier2D
+        super = coerce
+
 newtype GodotPolygon2D = GodotPolygon2D GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotPolygon2D where
+        type BaseClass GodotPolygon2D = GodotNode2D
+        super = coerce
 bindPolygon2D_get_uv
   = unsafePerformIO $
       withCString "Polygon2D" $
@@ -68815,6 +69955,10 @@ instance Method "get_invert_border" GodotPolygon2D (IO Float) where
 
 newtype GodotLight2D = GodotLight2D GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotLight2D where
+        type BaseClass GodotLight2D = GodotNode2D
+        super = coerce
 bindLight2D_set_height
   = unsafePerformIO $
       withCString "Light2D" $
@@ -69253,6 +70397,10 @@ instance Method "get_shadow_filter" GodotLight2D (IO Int) where
 
 newtype GodotLightOccluder2D = GodotLightOccluder2D GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotLightOccluder2D where
+        type BaseClass GodotLightOccluder2D = GodotNode2D
+        super = coerce
 bindLightOccluder2D_set_occluder_polygon
   = unsafePerformIO $
       withCString "LightOccluder2D" $
@@ -69359,6 +70507,10 @@ instance Method "_poly_changed" GodotLightOccluder2D (IO ()) where
 
 newtype GodotOccluderPolygon2D = GodotOccluderPolygon2D GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotOccluderPolygon2D where
+        type BaseClass GodotOccluderPolygon2D = GodotResource
+        super = coerce
 bindOccluderPolygon2D_set_closed
   = unsafePerformIO $
       withCString "OccluderPolygon2D" $
@@ -69441,6 +70593,10 @@ instance Method "get_cull_mode" GodotOccluderPolygon2D (IO Int)
 
 newtype GodotYSort = GodotYSort GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotYSort where
+        type BaseClass GodotYSort = GodotNode2D
+        super = coerce
 bindYSort_set_sort_enabled
   = unsafePerformIO $
       withCString "YSort" $
@@ -69480,6 +70636,10 @@ instance Method "is_sort_enabled" GodotYSort (IO Bool) where
 
 newtype GodotBackBufferCopy = GodotBackBufferCopy GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotBackBufferCopy where
+        type BaseClass GodotBackBufferCopy = GodotNode2D
+        super = coerce
 bindBackBufferCopy_set_copy_mode
   = unsafePerformIO $
       withCString "BackBufferCopy" $
@@ -69522,6 +70682,10 @@ instance Method "get_copy_mode" GodotBackBufferCopy (IO Int) where
 
 newtype GodotCamera2D = GodotCamera2D GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotCamera2D where
+        type BaseClass GodotCamera2D = GodotNode2D
+        super = coerce
 bindCamera2D_set_anchor_mode
   = unsafePerformIO $
       withCString "Camera2D" $
@@ -70164,8 +71328,16 @@ instance Method "is_margin_drawing_enabled" GodotCamera2D (IO Bool)
 newtype GodotJoint2D = GodotJoint2D GodotObject
                          deriving newtype AsVariant
 
+instance HasBaseClass GodotJoint2D where
+        type BaseClass GodotJoint2D = GodotNode2D
+        super = coerce
+
 newtype GodotPinJoint2D = GodotPinJoint2D GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotPinJoint2D where
+        type BaseClass GodotPinJoint2D = GodotJoint2D
+        super = coerce
 bindPinJoint2D_set_softness
   = unsafePerformIO $
       withCString "PinJoint2D" $
@@ -70206,6 +71378,10 @@ instance Method "get_softness" GodotPinJoint2D (IO Float) where
 
 newtype GodotGrooveJoint2D = GodotGrooveJoint2D GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotGrooveJoint2D where
+        type BaseClass GodotGrooveJoint2D = GodotJoint2D
+        super = coerce
 bindGrooveJoint2D_set_length
   = unsafePerformIO $
       withCString "GrooveJoint2D" $
@@ -70269,6 +71445,10 @@ instance Method "get_initial_offset" GodotGrooveJoint2D (IO Float)
 
 newtype GodotDampedSpringJoint2D = GodotDampedSpringJoint2D GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotDampedSpringJoint2D where
+        type BaseClass GodotDampedSpringJoint2D = GodotJoint2D
+        super = coerce
 bindDampedSpringJoint2D_set_rest_length
   = unsafePerformIO $
       withCString "DampedSpringJoint2D" $
@@ -70355,6 +71535,10 @@ instance Method "get_stiffness" GodotDampedSpringJoint2D (IO Float)
 
 newtype GodotTileSet = GodotTileSet GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotTileSet where
+        type BaseClass GodotTileSet = GodotResource
+        super = coerce
 bindTileSet__is_tile_bound
   = unsafePerformIO $
       withCString "TileSet" $
@@ -71153,6 +72337,10 @@ instance Method "get_tiles_ids" GodotTileSet (IO GodotArray) where
 
 newtype GodotTileMap = GodotTileMap GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotTileMap where
+        type BaseClass GodotTileMap = GodotNode2D
+        super = coerce
 bindTileMap_set_tileset
   = unsafePerformIO $
       withCString "TileMap" $
@@ -71927,6 +73115,10 @@ instance Method "_get_tile_data" GodotTileMap
 
 newtype GodotParallaxBackground = GodotParallaxBackground GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotParallaxBackground where
+        type BaseClass GodotParallaxBackground = GodotCanvasLayer
+        super = coerce
 bindParallaxBackground__camera_moved
   = unsafePerformIO $
       withCString "ParallaxBackground" $
@@ -72206,6 +73398,10 @@ instance Method "is_ignore_camera_zoom" GodotParallaxBackground
 
 newtype GodotParallaxLayer = GodotParallaxLayer GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotParallaxLayer where
+        type BaseClass GodotParallaxLayer = GodotNode2D
+        super = coerce
 bindParallaxLayer_set_motion_scale
   = unsafePerformIO $
       withCString "ParallaxLayer" $
@@ -72333,6 +73529,10 @@ instance Method "get_mirroring" GodotParallaxLayer
 
 newtype GodotTouchScreenButton = GodotTouchScreenButton GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotTouchScreenButton where
+        type BaseClass GodotTouchScreenButton = GodotNode2D
+        super = coerce
 bindTouchScreenButton_set_texture_pressed
   = unsafePerformIO $
       withCString "TouchScreenButton" $
@@ -72589,8 +73789,16 @@ instance Method "is_passby_press_enabled" GodotTouchScreenButton
 newtype GodotRemoteTransform2D = GodotRemoteTransform2D GodotObject
                                    deriving newtype AsVariant
 
+instance HasBaseClass GodotRemoteTransform2D where
+        type BaseClass GodotRemoteTransform2D = GodotNode2D
+        super = coerce
+
 newtype GodotArrayMesh = GodotArrayMesh GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotArrayMesh where
+        type BaseClass GodotArrayMesh = GodotMesh
+        super = coerce
 bindArrayMesh_add_blend_shape
   = unsafePerformIO $
       withCString "ArrayMesh" $
@@ -73097,6 +74305,10 @@ instance Method "get_custom_aabb" GodotArrayMesh (IO GodotAabb)
 
 newtype GodotPrimitiveMesh = GodotPrimitiveMesh GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotPrimitiveMesh where
+        type BaseClass GodotPrimitiveMesh = GodotMesh
+        super = coerce
 bindPrimitiveMesh__update
   = unsafePerformIO $
       withCString "PrimitiveMesh" $
@@ -73139,6 +74351,10 @@ instance Method "get_mesh_arrays" GodotPrimitiveMesh
 
 newtype GodotCapsuleMesh = GodotCapsuleMesh GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotCapsuleMesh where
+        type BaseClass GodotCapsuleMesh = GodotPrimitiveMesh
+        super = coerce
 bindCapsuleMesh_set_mid_height
   = unsafePerformIO $
       withCString "CapsuleMesh" $
@@ -73256,6 +74472,10 @@ instance Method "get_rings" GodotCapsuleMesh (IO Int) where
 
 newtype GodotCubeMesh = GodotCubeMesh GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotCubeMesh where
+        type BaseClass GodotCubeMesh = GodotPrimitiveMesh
+        super = coerce
 bindCubeMesh_set_subdivide_width
   = unsafePerformIO $
       withCString "CubeMesh" $
@@ -73376,6 +74596,10 @@ instance Method "get_subdivide_depth" GodotCubeMesh (IO Int) where
 
 newtype GodotCylinderMesh = GodotCylinderMesh GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotCylinderMesh where
+        type BaseClass GodotCylinderMesh = GodotPrimitiveMesh
+        super = coerce
 bindCylinderMesh_set_top_radius
   = unsafePerformIO $
       withCString "CylinderMesh" $
@@ -73458,8 +74682,16 @@ instance Method "get_bottom_radius" GodotCylinderMesh (IO Float)
 newtype GodotPlaneMesh = GodotPlaneMesh GodotObject
                            deriving newtype AsVariant
 
+instance HasBaseClass GodotPlaneMesh where
+        type BaseClass GodotPlaneMesh = GodotPrimitiveMesh
+        super = coerce
+
 newtype GodotPrismMesh = GodotPrismMesh GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotPrismMesh where
+        type BaseClass GodotPrismMesh = GodotPrimitiveMesh
+        super = coerce
 bindPrismMesh_set_left_to_right
   = unsafePerformIO $
       withCString "PrismMesh" $
@@ -73501,8 +74733,16 @@ instance Method "get_left_to_right" GodotPrismMesh (IO Float) where
 newtype GodotQuadMesh = GodotQuadMesh GodotObject
                           deriving newtype AsVariant
 
+instance HasBaseClass GodotQuadMesh where
+        type BaseClass GodotQuadMesh = GodotPrimitiveMesh
+        super = coerce
+
 newtype GodotSphereMesh = GodotSphereMesh GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotSphereMesh where
+        type BaseClass GodotSphereMesh = GodotPrimitiveMesh
+        super = coerce
 bindSphereMesh_set_is_hemisphere
   = unsafePerformIO $
       withCString "SphereMesh" $
@@ -73545,6 +74785,10 @@ instance Method "get_is_hemisphere" GodotSphereMesh (IO Bool) where
 
 newtype GodotSpatialMaterial = GodotSpatialMaterial GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotSpatialMaterial where
+        type BaseClass GodotSpatialMaterial = GodotMaterial
+        super = coerce
 bindSpatialMaterial_set_albedo
   = unsafePerformIO $
       withCString "SpatialMaterial" $
@@ -75713,6 +76957,10 @@ instance Method "get_distance_fade_min_distance"
 
 newtype GodotParticlesMaterial = GodotParticlesMaterial GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotParticlesMaterial where
+        type BaseClass GodotParticlesMaterial = GodotMaterial
+        super = coerce
 bindParticlesMaterial_set_flatness
   = unsafePerformIO $
       withCString "ParticlesMaterial" $
@@ -76321,23 +77569,51 @@ instance Method "get_trail_color_modifier" GodotParticlesMaterial
 newtype GodotCurveTexture = GodotCurveTexture GodotObject
                               deriving newtype AsVariant
 
+instance HasBaseClass GodotCurveTexture where
+        type BaseClass GodotCurveTexture = GodotTexture
+        super = coerce
+
 newtype GodotGradientTexture = GodotGradientTexture GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotGradientTexture where
+        type BaseClass GodotGradientTexture = GodotTexture
+        super = coerce
 
 newtype GodotRayShape = GodotRayShape GodotObject
                           deriving newtype AsVariant
 
+instance HasBaseClass GodotRayShape where
+        type BaseClass GodotRayShape = GodotShape
+        super = coerce
+
 newtype GodotSphereShape = GodotSphereShape GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotSphereShape where
+        type BaseClass GodotSphereShape = GodotShape
+        super = coerce
 
 newtype GodotBoxShape = GodotBoxShape GodotObject
                           deriving newtype AsVariant
 
+instance HasBaseClass GodotBoxShape where
+        type BaseClass GodotBoxShape = GodotShape
+        super = coerce
+
 newtype GodotCapsuleShape = GodotCapsuleShape GodotObject
                               deriving newtype AsVariant
 
+instance HasBaseClass GodotCapsuleShape where
+        type BaseClass GodotCapsuleShape = GodotShape
+        super = coerce
+
 newtype GodotPlaneShape = GodotPlaneShape GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotPlaneShape where
+        type BaseClass GodotPlaneShape = GodotShape
+        super = coerce
 bindPlaneShape_set_plane
   = unsafePerformIO $
       withCString "PlaneShape" $
@@ -76360,8 +77636,16 @@ instance Method "set_plane" GodotPlaneShape (GodotPlane -> IO ())
 newtype GodotConvexPolygonShape = GodotConvexPolygonShape GodotObject
                                     deriving newtype AsVariant
 
+instance HasBaseClass GodotConvexPolygonShape where
+        type BaseClass GodotConvexPolygonShape = GodotShape
+        super = coerce
+
 newtype GodotConcavePolygonShape = GodotConcavePolygonShape GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotConcavePolygonShape where
+        type BaseClass GodotConcavePolygonShape = GodotShape
+        super = coerce
 bindConcavePolygonShape_set_faces
   = unsafePerformIO $
       withCString "ConcavePolygonShape" $
@@ -76386,6 +77670,10 @@ instance Method "set_faces" GodotConcavePolygonShape
 
 newtype GodotSurfaceTool = GodotSurfaceTool GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotSurfaceTool where
+        type BaseClass GodotSurfaceTool = GodotReference
+        super = coerce
 bindSurfaceTool_add_color
   = unsafePerformIO $
       withCString "SurfaceTool" $
@@ -76739,6 +78027,10 @@ instance Method "commit" GodotSurfaceTool
 
 newtype GodotMeshDataTool = GodotMeshDataTool GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotMeshDataTool where
+        type BaseClass GodotMeshDataTool = GodotReference
+        super = coerce
 bindMeshDataTool_create_from_surface
   = unsafePerformIO $
       withCString "MeshDataTool" $
@@ -77436,6 +78728,10 @@ instance Method "get_face_normal" GodotMeshDataTool
 
 newtype GodotSpatialVelocityTracker = GodotSpatialVelocityTracker GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotSpatialVelocityTracker where
+        type BaseClass GodotSpatialVelocityTracker = GodotReference
+        super = coerce
 bindSpatialVelocityTracker_set_track_physics_step
   = unsafePerformIO $
       withCString "SpatialVelocityTracker" $
@@ -77531,6 +78827,10 @@ instance Method "get_tracked_linear_velocity"
 
 newtype GodotSky = GodotSky GodotObject
                      deriving newtype AsVariant
+
+instance HasBaseClass GodotSky where
+        type BaseClass GodotSky = GodotResource
+        super = coerce
 bindSky_set_radiance_size
   = unsafePerformIO $
       withCString "Sky" $
@@ -77570,6 +78870,10 @@ instance Method "get_radiance_size" GodotSky (IO Int) where
 
 newtype GodotPanoramaSky = GodotPanoramaSky GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotPanoramaSky where
+        type BaseClass GodotPanoramaSky = GodotSky
+        super = coerce
 bindPanoramaSky_set_panorama
   = unsafePerformIO $
       withCString "PanoramaSky" $
@@ -77612,6 +78916,10 @@ instance Method "get_panorama" GodotPanoramaSky (IO GodotTexture)
 
 newtype GodotProceduralSky = GodotProceduralSky GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotProceduralSky where
+        type BaseClass GodotProceduralSky = GodotSky
+        super = coerce
 bindProceduralSky__update_sky
   = unsafePerformIO $
       withCString "ProceduralSky" $
@@ -78303,6 +79611,10 @@ instance Method "_thread_done" GodotProceduralSky
 
 newtype GodotStreamTexture = GodotStreamTexture GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotStreamTexture where
+        type BaseClass GodotStreamTexture = GodotTexture
+        super = coerce
 bindStreamTexture_get_load_path
   = unsafePerformIO $
       withCString "StreamTexture" $
@@ -78325,6 +79637,10 @@ instance Method "get_load_path" GodotStreamTexture (IO GodotString)
 
 newtype GodotImageTexture = GodotImageTexture GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotImageTexture where
+        type BaseClass GodotImageTexture = GodotTexture
+        super = coerce
 bindImageTexture_create_from_image
   = unsafePerformIO $
       withCString "ImageTexture" $
@@ -78467,6 +79783,10 @@ instance Method "_reload_hook" GodotImageTexture
 
 newtype GodotAtlasTexture = GodotAtlasTexture GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotAtlasTexture where
+        type BaseClass GodotAtlasTexture = GodotTexture
+        super = coerce
 bindAtlasTexture_set_atlas
   = unsafePerformIO $
       withCString "AtlasTexture" $
@@ -78567,6 +79887,10 @@ instance Method "has_filter_clip" GodotAtlasTexture (IO Bool) where
 
 newtype GodotLargeTexture = GodotLargeTexture GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotLargeTexture where
+        type BaseClass GodotLargeTexture = GodotTexture
+        super = coerce
 bindLargeTexture_add_piece
   = unsafePerformIO $
       withCString "LargeTexture" $
@@ -78693,6 +80017,10 @@ instance Method "get_piece_texture" GodotLargeTexture
 
 newtype GodotCurve = GodotCurve GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotCurve where
+        type BaseClass GodotCurve = GodotResource
+        super = coerce
 bindCurve_set_point_value
   = unsafePerformIO $
       withCString "Curve" $
@@ -79020,6 +80348,10 @@ instance Method "set_bake_resolution" GodotCurve (Int -> IO ())
 
 newtype GodotProxyTexture = GodotProxyTexture GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotProxyTexture where
+        type BaseClass GodotProxyTexture = GodotTexture
+        super = coerce
 bindProxyTexture_get_base
   = unsafePerformIO $
       withCString "ProxyTexture" $
@@ -79042,6 +80374,10 @@ instance Method "get_base" GodotProxyTexture (IO GodotTexture)
 
 newtype GodotCubeMap = GodotCubeMap GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotCubeMap where
+        type BaseClass GodotCubeMap = GodotResource
+        super = coerce
 bindCubeMap_set_side
   = unsafePerformIO $
       withCString "CubeMap" $
@@ -79080,6 +80416,10 @@ instance Method "get_side" GodotCubeMap (Int -> IO GodotImage)
 
 newtype GodotAnimation = GodotAnimation GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotAnimation where
+        type BaseClass GodotAnimation = GodotResource
+        super = coerce
 bindAnimation_add_track
   = unsafePerformIO $
       withCString "Animation" $
@@ -79815,6 +81155,10 @@ instance Method "copy_track" GodotAnimation
 
 newtype GodotFont = GodotFont GodotObject
                       deriving newtype AsVariant
+
+instance HasBaseClass GodotFont where
+        type BaseClass GodotFont = GodotResource
+        super = coerce
 bindFont_get_ascent
   = unsafePerformIO $
       withCString "Font" $
@@ -79904,6 +81248,10 @@ instance Method "update_changes" GodotFont (IO ()) where
 
 newtype GodotBitmapFont = GodotBitmapFont GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotBitmapFont where
+        type BaseClass GodotBitmapFont = GodotFont
+        super = coerce
 bindBitmapFont_create_from_fnt
   = unsafePerformIO $
       withCString "BitmapFont" $
@@ -80243,6 +81591,10 @@ instance Method "get_fallback" GodotBitmapFont (IO GodotBitmapFont)
 
 newtype GodotDynamicFontData = GodotDynamicFontData GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotDynamicFontData where
+        type BaseClass GodotDynamicFontData = GodotResource
+        super = coerce
 bindDynamicFontData_set_font_path
   = unsafePerformIO $
       withCString "DynamicFontData" $
@@ -80288,6 +81640,10 @@ instance Method "get_font_path" GodotDynamicFontData
 
 newtype GodotDynamicFont = GodotDynamicFont GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotDynamicFont where
+        type BaseClass GodotDynamicFont = GodotFont
+        super = coerce
 bindDynamicFont_set_font_data
   = unsafePerformIO $
       withCString "DynamicFont" $
@@ -80503,6 +81859,10 @@ instance Method "get_fallback_count" GodotDynamicFont (IO Int)
 
 newtype GodotStyleBox = GodotStyleBox GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotStyleBox where
+        type BaseClass GodotStyleBox = GodotResource
+        super = coerce
 bindStyleBox_test_mask
   = unsafePerformIO $
       withCString "StyleBox" $
@@ -80585,8 +81945,16 @@ instance Method "get_center_size" GodotStyleBox (IO GodotVector2)
 newtype GodotStyleBoxEmpty = GodotStyleBoxEmpty GodotObject
                                deriving newtype AsVariant
 
+instance HasBaseClass GodotStyleBoxEmpty where
+        type BaseClass GodotStyleBoxEmpty = GodotStyleBox
+        super = coerce
+
 newtype GodotStyleBoxTexture = GodotStyleBoxTexture GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotStyleBoxTexture where
+        type BaseClass GodotStyleBoxTexture = GodotStyleBox
+        super = coerce
 bindStyleBoxTexture_set_margin_size
   = unsafePerformIO $
       withCString "StyleBoxTexture" $
@@ -80718,6 +82086,10 @@ instance Method "get_expand_margin_size" GodotStyleBoxTexture
 
 newtype GodotStyleBoxFlat = GodotStyleBoxFlat GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotStyleBoxFlat where
+        type BaseClass GodotStyleBoxFlat = GodotStyleBox
+        super = coerce
 bindStyleBoxFlat_set_border_color
   = unsafePerformIO $
       withCString "StyleBoxFlat" $
@@ -81172,6 +82544,10 @@ instance Method "get_corner_detail" GodotStyleBoxFlat (IO Int)
 
 newtype GodotStyleBoxLine = GodotStyleBoxLine GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotStyleBoxLine where
+        type BaseClass GodotStyleBoxLine = GodotStyleBox
+        super = coerce
 bindStyleBoxLine_set_thickness
   = unsafePerformIO $
       withCString "StyleBoxLine" $
@@ -81249,6 +82625,10 @@ instance Method "is_vertical" GodotStyleBoxLine (IO Bool) where
 
 newtype GodotPolygonPathFinder = GodotPolygonPathFinder GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotPolygonPathFinder where
+        type BaseClass GodotPolygonPathFinder = GodotResource
+        super = coerce
 bindPolygonPathFinder_setup
   = unsafePerformIO $
       withCString "PolygonPathFinder" $
@@ -81376,6 +82756,10 @@ instance Method "get_point_penalty" GodotPolygonPathFinder
 
 newtype GodotAudioStreamPlayer = GodotAudioStreamPlayer GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioStreamPlayer where
+        type BaseClass GodotAudioStreamPlayer = GodotNode
+        super = coerce
 bindAudioStreamPlayer_get_playback_position
   = unsafePerformIO $
       withCString "AudioStreamPlayer" $
@@ -81502,6 +82886,10 @@ instance Method "_bus_layout_changed" GodotAudioStreamPlayer
 
 newtype GodotAudioStreamPlayer2D = GodotAudioStreamPlayer2D GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioStreamPlayer2D where
+        type BaseClass GodotAudioStreamPlayer2D = GodotNode2D
+        super = coerce
 bindAudioStreamPlayer2D_set_attenuation
   = unsafePerformIO $
       withCString "AudioStreamPlayer2D" $
@@ -81588,6 +82976,10 @@ instance Method "get_area_mask" GodotAudioStreamPlayer2D (IO Int)
 
 newtype GodotAudioStreamPlayer3D = GodotAudioStreamPlayer3D GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioStreamPlayer3D where
+        type BaseClass GodotAudioStreamPlayer3D = GodotSpatial
+        super = coerce
 bindAudioStreamPlayer3D_set_unit_db
   = unsafePerformIO $
       withCString "AudioStreamPlayer3D" $
@@ -82032,6 +83424,10 @@ instance Method "get_out_of_range_mode" GodotAudioStreamPlayer3D
 
 newtype GodotAudioStreamSample = GodotAudioStreamSample GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioStreamSample where
+        type BaseClass GodotAudioStreamSample = GodotAudioStream
+        super = coerce
 bindAudioStreamSample_set_format
   = unsafePerformIO $
       withCString "AudioStreamSample" $
@@ -82219,6 +83615,10 @@ instance Method "set_stereo" GodotAudioStreamSample (Bool -> IO ())
 
 newtype GodotLineShape2D = GodotLineShape2D GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotLineShape2D where
+        type BaseClass GodotLineShape2D = GodotShape2D
+        super = coerce
 bindLineShape2D_set_d
   = unsafePerformIO $
       withCString "LineShape2D" $
@@ -82256,6 +83656,10 @@ instance Method "get_d" GodotLineShape2D (IO Float) where
 
 newtype GodotSegmentShape2D = GodotSegmentShape2D GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotSegmentShape2D where
+        type BaseClass GodotSegmentShape2D = GodotShape2D
+        super = coerce
 bindSegmentShape2D_set_a
   = unsafePerformIO $
       withCString "SegmentShape2D" $
@@ -82330,17 +83734,37 @@ instance Method "get_b" GodotSegmentShape2D (IO GodotVector2) where
 newtype GodotRayShape2D = GodotRayShape2D GodotObject
                             deriving newtype AsVariant
 
+instance HasBaseClass GodotRayShape2D where
+        type BaseClass GodotRayShape2D = GodotShape2D
+        super = coerce
+
 newtype GodotCircleShape2D = GodotCircleShape2D GodotObject
                                deriving newtype AsVariant
+
+instance HasBaseClass GodotCircleShape2D where
+        type BaseClass GodotCircleShape2D = GodotShape2D
+        super = coerce
 
 newtype GodotRectangleShape2D = GodotRectangleShape2D GodotObject
                                   deriving newtype AsVariant
 
+instance HasBaseClass GodotRectangleShape2D where
+        type BaseClass GodotRectangleShape2D = GodotShape2D
+        super = coerce
+
 newtype GodotCapsuleShape2D = GodotCapsuleShape2D GodotObject
                                 deriving newtype AsVariant
 
+instance HasBaseClass GodotCapsuleShape2D where
+        type BaseClass GodotCapsuleShape2D = GodotShape2D
+        super = coerce
+
 newtype GodotConvexPolygonShape2D = GodotConvexPolygonShape2D GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotConvexPolygonShape2D where
+        type BaseClass GodotConvexPolygonShape2D = GodotShape2D
+        super = coerce
 bindConvexPolygonShape2D_set_point_cloud
   = unsafePerformIO $
       withCString "ConvexPolygonShape2D" $
@@ -82365,6 +83789,10 @@ instance Method "set_point_cloud" GodotConvexPolygonShape2D
 
 newtype GodotConcavePolygonShape2D = GodotConcavePolygonShape2D GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotConcavePolygonShape2D where
+        type BaseClass GodotConcavePolygonShape2D = GodotShape2D
+        super = coerce
 bindConcavePolygonShape2D_set_segments
   = unsafePerformIO $
       withCString "ConcavePolygonShape2D" $
@@ -82411,11 +83839,23 @@ instance Method "get_segments" GodotConcavePolygonShape2D
 newtype GodotCurve2D = GodotCurve2D GodotObject
                          deriving newtype AsVariant
 
+instance HasBaseClass GodotCurve2D where
+        type BaseClass GodotCurve2D = GodotResource
+        super = coerce
+
 newtype GodotPath2D = GodotPath2D GodotObject
                         deriving newtype AsVariant
 
+instance HasBaseClass GodotPath2D where
+        type BaseClass GodotPath2D = GodotNode2D
+        super = coerce
+
 newtype GodotPathFollow2D = GodotPathFollow2D GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotPathFollow2D where
+        type BaseClass GodotPathFollow2D = GodotNode2D
+        super = coerce
 bindPathFollow2D_set_rotate
   = unsafePerformIO $
       withCString "PathFollow2D" $
@@ -82475,6 +83915,10 @@ instance Method "get_lookahead" GodotPathFollow2D (IO Float) where
 
 newtype GodotNavigation2D = GodotNavigation2D GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotNavigation2D where
+        type BaseClass GodotNavigation2D = GodotNode2D
+        super = coerce
 bindNavigation2D_navpoly_add
   = unsafePerformIO $
       withCString "Navigation2D" $
@@ -82539,6 +83983,10 @@ instance Method "navpoly_remove" GodotNavigation2D (Int -> IO ())
 
 newtype GodotNavigationPolygon = GodotNavigationPolygon GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotNavigationPolygon where
+        type BaseClass GodotNavigationPolygon = GodotResource
+        super = coerce
 bindNavigationPolygon_add_outline
   = unsafePerformIO $
       withCString "NavigationPolygon" $
@@ -82752,6 +84200,10 @@ instance Method "_get_outlines" GodotNavigationPolygon
 
 newtype GodotNavigationPolygonInstance = GodotNavigationPolygonInstance GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotNavigationPolygonInstance where
+        type BaseClass GodotNavigationPolygonInstance = GodotNode2D
+        super = coerce
 bindNavigationPolygonInstance_set_navigation_polygon
   = unsafePerformIO $
       withCString "NavigationPolygonInstance" $
@@ -82825,6 +84277,10 @@ instance Method "_navpoly_changed" GodotNavigationPolygonInstance
 
 newtype GodotSceneState = GodotSceneState GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotSceneState where
+        type BaseClass GodotSceneState = GodotReference
+        super = coerce
 bindSceneState_get_node_count
   = unsafePerformIO $
       withCString "SceneState" $
@@ -83198,6 +84654,10 @@ instance Method "get_connection_binds" GodotSceneState
 
 newtype GodotPackedScene = GodotPackedScene GodotObject
                              deriving newtype AsVariant
+
+instance HasBaseClass GodotPackedScene where
+        type BaseClass GodotPackedScene = GodotResource
+        super = coerce
 bindPackedScene__set_bundled_scene
   = unsafePerformIO $
       withCString "PackedScene" $
@@ -83262,6 +84722,10 @@ instance Method "get_state" GodotPackedScene (IO GodotSceneState)
 
 newtype GodotSceneTree = GodotSceneTree GodotObject
                            deriving newtype AsVariant
+
+instance HasBaseClass GodotSceneTree where
+        type BaseClass GodotSceneTree = GodotMainLoop
+        super = coerce
 bindSceneTree_has_group
   = unsafePerformIO $
       withCString "SceneTree" $
@@ -84164,6 +85628,10 @@ instance Method "is_using_font_oversampling" GodotSceneTree
 
 newtype GodotSceneTreeTimer = GodotSceneTreeTimer GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotSceneTreeTimer where
+        type BaseClass GodotSceneTreeTimer = GodotReference
+        super = coerce
 bindSceneTreeTimer_set_time_left
   = unsafePerformIO $
       withCString "SceneTreeTimer" $
@@ -84188,6 +85656,10 @@ instance Method "set_time_left" GodotSceneTreeTimer
 
 newtype GodotEditorPlugin = GodotEditorPlugin GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorPlugin where
+        type BaseClass GodotEditorPlugin = GodotNode
+        super = coerce
 bindEditorPlugin_forward_canvas_gui_input
   = unsafePerformIO $
       withCString "EditorPlugin" $
@@ -85024,6 +86496,10 @@ instance Method "get_editor_interface" GodotEditorPlugin
 
 newtype GodotEditorImportPlugin = GodotEditorImportPlugin GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorImportPlugin where
+        type BaseClass GodotEditorImportPlugin = GodotReference
+        super = coerce
 bindEditorImportPlugin_get_importer_name
   = unsafePerformIO $
       withCString "EditorImportPlugin" $
@@ -85238,6 +86714,10 @@ instance Method "import" GodotEditorImportPlugin
 
 newtype GodotEditorScript = GodotEditorScript GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorScript where
+        type BaseClass GodotEditorScript = GodotReference
+        super = coerce
 bindEditorScript__run
   = unsafePerformIO $
       withCString "EditorScript" $
@@ -85296,6 +86776,10 @@ instance Method "get_scene" GodotEditorScript (IO GodotNode) where
 
 newtype GodotEditorSelection = GodotEditorSelection GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorSelection where
+        type BaseClass GodotEditorSelection = GodotObject
+        super = coerce
 bindEditorSelection_get_selected_nodes
   = unsafePerformIO $
       withCString "EditorSelection" $
@@ -85363,6 +86847,10 @@ instance Method "_emit_change" GodotEditorSelection (IO ()) where
 
 newtype GodotEditorFileDialog = GodotEditorFileDialog GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorFileDialog where
+        type BaseClass GodotEditorFileDialog = GodotConfirmationDialog
+        super = coerce
 bindEditorFileDialog__item_selected
   = unsafePerformIO $
       withCString "EditorFileDialog" $
@@ -85784,6 +87272,10 @@ instance Method "_favorite_move_down" GodotEditorFileDialog (IO ())
 
 newtype GodotEditorSettings = GodotEditorSettings GodotObject
                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorSettings where
+        type BaseClass GodotEditorSettings = GodotResource
+        super = coerce
 bindEditorSettings_erase
   = unsafePerformIO $
       withCString "EditorSettings" $
@@ -85931,6 +87423,10 @@ instance Method "get_recent_dirs" GodotEditorSettings
 
 newtype GodotEditorSpatialGizmo = GodotEditorSpatialGizmo GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorSpatialGizmo where
+        type BaseClass GodotEditorSpatialGizmo = GodotSpatialGizmo
+        super = coerce
 bindEditorSpatialGizmo_redraw
   = unsafePerformIO $
       withCString "EditorSpatialGizmo" $
@@ -86185,6 +87681,10 @@ instance Method "set_spatial_node" GodotEditorSpatialGizmo
 
 newtype GodotEditorResourcePreview = GodotEditorResourcePreview GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorResourcePreview where
+        type BaseClass GodotEditorResourcePreview = GodotNode
+        super = coerce
 bindEditorResourcePreview__preview_ready
   = unsafePerformIO $
       withCString "EditorResourcePreview" $
@@ -86329,6 +87829,10 @@ instance Method "check_for_invalidation" GodotEditorResourcePreview
 
 newtype GodotEditorResourcePreviewGenerator = GodotEditorResourcePreviewGenerator GodotObject
                                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorResourcePreviewGenerator where
+        type BaseClass GodotEditorResourcePreviewGenerator = GodotReference
+        super = coerce
 bindEditorResourcePreviewGenerator_generate_from_path
   = unsafePerformIO $
       withCString "EditorResourcePreviewGenerator" $
@@ -86356,6 +87860,10 @@ instance Method "generate_from_path"
 
 newtype GodotEditorFileSystem = GodotEditorFileSystem GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorFileSystem where
+        type BaseClass GodotEditorFileSystem = GodotNode
+        super = coerce
 bindEditorFileSystem_get_filesystem
   = unsafePerformIO $
       withCString "EditorFileSystem" $
@@ -86520,6 +88028,10 @@ instance Method "get_file_type" GodotEditorFileSystem
 
 newtype GodotEditorFileSystemDirectory = GodotEditorFileSystemDirectory GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorFileSystemDirectory where
+        type BaseClass GodotEditorFileSystemDirectory = GodotObject
+        super = coerce
 bindEditorFileSystemDirectory_get_subdir_count
   = unsafePerformIO $
       withCString "EditorFileSystemDirectory" $
@@ -86696,6 +88208,10 @@ instance Method "find_dir_index" GodotEditorFileSystemDirectory
 
 newtype GodotScriptEditor = GodotScriptEditor GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotScriptEditor where
+        type BaseClass GodotScriptEditor = GodotPanelContainer
+        super = coerce
 bindScriptEditor__file_dialog_action
   = unsafePerformIO $
       withCString "ScriptEditor" $
@@ -87659,6 +89175,10 @@ instance Method "open_script_create_dialog" GodotScriptEditor
 
 newtype GodotEditorInterface = GodotEditorInterface GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorInterface where
+        type BaseClass GodotEditorInterface = GodotNode
+        super = coerce
 bindEditorInterface_inspect_object
   = unsafePerformIO $
       withCString "EditorInterface" $
@@ -88057,6 +89577,10 @@ instance Method "save_scene_as" GodotEditorInterface
 
 newtype GodotEditorExportPlugin = GodotEditorExportPlugin GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorExportPlugin where
+        type BaseClass GodotEditorExportPlugin = GodotReference
+        super = coerce
 bindEditorExportPlugin__export_file
   = unsafePerformIO $
       withCString "EditorExportPlugin" $
@@ -88247,6 +89771,10 @@ instance Method "skip" GodotEditorExportPlugin (IO ()) where
 
 newtype GodotEditorResourceConversionPlugin = GodotEditorResourceConversionPlugin GodotObject
                                                 deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorResourceConversionPlugin where
+        type BaseClass GodotEditorResourceConversionPlugin = GodotReference
+        super = coerce
 bindEditorResourceConversionPlugin__convert
   = unsafePerformIO $
       withCString "EditorResourceConversionPlugin" $
@@ -88293,6 +89821,10 @@ instance Method "_converts_to" GodotEditorResourceConversionPlugin
 
 newtype GodotEditorSceneImporter = GodotEditorSceneImporter GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorSceneImporter where
+        type BaseClass GodotEditorSceneImporter = GodotReference
+        super = coerce
 bindEditorSceneImporter__get_import_flags
   = unsafePerformIO $
       withCString "EditorSceneImporter" $
@@ -88428,6 +89960,10 @@ instance Method "import_animation_from_other_importer"
 
 newtype GodotEditorScenePostImport = GodotEditorScenePostImport GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotEditorScenePostImport where
+        type BaseClass GodotEditorScenePostImport = GodotReference
+        super = coerce
 bindEditorScenePostImport_post_import
   = unsafePerformIO $
       withCString "EditorScenePostImport" $
@@ -88452,6 +89988,10 @@ instance Method "post_import" GodotEditorScenePostImport
 
 newtype GodotJavaScript = GodotJavaScript GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotJavaScript where
+        type BaseClass GodotJavaScript = GodotObject
+        super = coerce
 bindJavaScript_eval
   = unsafePerformIO $
       withCString "JavaScript" $
@@ -88473,6 +90013,11 @@ instance Method "eval" GodotJavaScript
 
 newtype GodotNetworkedMultiplayerENet = GodotNetworkedMultiplayerENet GodotObject
                                           deriving newtype AsVariant
+
+instance HasBaseClass GodotNetworkedMultiplayerENet where
+        type BaseClass GodotNetworkedMultiplayerENet =
+             GodotNetworkedMultiplayerPeer
+        super = coerce
 bindNetworkedMultiplayerENet_create_server
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
@@ -88609,6 +90154,10 @@ instance Method "set_bind_ip" GodotNetworkedMultiplayerENet
 
 newtype GodotGDNativeLibrary = GodotGDNativeLibrary GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotGDNativeLibrary where
+        type BaseClass GodotGDNativeLibrary = GodotResource
+        super = coerce
 bindGDNativeLibrary_get_config_file
   = unsafePerformIO $
       withCString "GDNativeLibrary" $
@@ -88839,6 +90388,10 @@ instance Method "set_reloadable" GodotGDNativeLibrary
 
 newtype GodotGDNative = GodotGDNative GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotGDNative where
+        type BaseClass GodotGDNative = GodotReference
+        super = coerce
 bindGDNative_set_library
   = unsafePerformIO $
       withCString "GDNative" $
@@ -88917,8 +90470,16 @@ instance Method "call_native" GodotGDNative
 newtype GodotARVRInterfaceGDNative = GodotARVRInterfaceGDNative GodotObject
                                        deriving newtype AsVariant
 
+instance HasBaseClass GodotARVRInterfaceGDNative where
+        type BaseClass GodotARVRInterfaceGDNative = GodotARVRInterface
+        super = coerce
+
 newtype GodotNativeScript = GodotNativeScript GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotNativeScript where
+        type BaseClass GodotNativeScript = GodotScript
+        super = coerce
 bindNativeScript_set_class_name
   = unsafePerformIO $
       withCString "NativeScript" $
@@ -88978,8 +90539,16 @@ instance Method "new" GodotNativeScript (IO GodotObject) where
 newtype GodotPluginScript = GodotPluginScript GodotObject
                               deriving newtype AsVariant
 
+instance HasBaseClass GodotPluginScript where
+        type BaseClass GodotPluginScript = GodotScript
+        super = coerce
+
 newtype GodotGDScript = GodotGDScript GodotObject
                           deriving newtype AsVariant
+
+instance HasBaseClass GodotGDScript where
+        type BaseClass GodotGDScript = GodotScript
+        super = coerce
 bindGDScript_get_as_byte_code
   = unsafePerformIO $
       withCString "GDScript" $
@@ -89003,6 +90572,10 @@ instance Method "get_as_byte_code" GodotGDScript
 
 newtype GodotGDScriptFunctionState = GodotGDScriptFunctionState GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotGDScriptFunctionState where
+        type BaseClass GodotGDScriptFunctionState = GodotReference
+        super = coerce
 bindGDScriptFunctionState__signal_callback
   = unsafePerformIO $
       withCString "GDScriptFunctionState" $
@@ -89027,6 +90600,10 @@ instance Method "_signal_callback" GodotGDScriptFunctionState
 
 newtype GodotGridMap = GodotGridMap GodotObject
                          deriving newtype AsVariant
+
+instance HasBaseClass GodotGridMap where
+        type BaseClass GodotGridMap = GodotSpatial
+        super = coerce
 bindGridMap_set_cell_scale
   = unsafePerformIO $
       withCString "GridMap" $
@@ -89402,6 +90979,10 @@ instance Method "make_baked_meshes" GodotGridMap
 
 newtype GodotMobileVRInterface = GodotMobileVRInterface GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotMobileVRInterface where
+        type BaseClass GodotMobileVRInterface = GodotARVRInterface
+        super = coerce
 bindMobileVRInterface_set_iod
   = unsafePerformIO $
       withCString "MobileVRInterface" $
@@ -89641,6 +91222,10 @@ instance Method "get_k2" GodotMobileVRInterface (IO Float) where
 
 newtype GodotRegExMatch = GodotRegExMatch GodotObject
                             deriving newtype AsVariant
+
+instance HasBaseClass GodotRegExMatch where
+        type BaseClass GodotRegExMatch = GodotReference
+        super = coerce
 bindRegExMatch_get_subject
   = unsafePerformIO $
       withCString "RegExMatch" $
@@ -89736,6 +91321,10 @@ instance Method "get_start" GodotRegExMatch
 
 newtype GodotRegEx = GodotRegEx GodotObject
                        deriving newtype AsVariant
+
+instance HasBaseClass GodotRegEx where
+        type BaseClass GodotRegEx = GodotReference
+        super = coerce
 bindRegEx_compile
   = unsafePerformIO $
       withCString "RegEx" $
@@ -89812,11 +91401,24 @@ instance Method "get_pattern" GodotRegEx (IO GodotString) where
 newtype GodotResourceImporterOGGVorbis = GodotResourceImporterOGGVorbis GodotObject
                                            deriving newtype AsVariant
 
+instance HasBaseClass GodotResourceImporterOGGVorbis where
+        type BaseClass GodotResourceImporterOGGVorbis =
+             GodotResourceImporter
+        super = coerce
+
 newtype GodotResourceImporter = GodotResourceImporter GodotObject
                                   deriving newtype AsVariant
 
+instance HasBaseClass GodotResourceImporter where
+        type BaseClass GodotResourceImporter = GodotReference
+        super = coerce
+
 newtype GodotAudioStreamOGGVorbis = GodotAudioStreamOGGVorbis GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotAudioStreamOGGVorbis where
+        type BaseClass GodotAudioStreamOGGVorbis = GodotAudioStream
+        super = coerce
 bindAudioStreamOGGVorbis_set_loop_offset
   = unsafePerformIO $
       withCString "AudioStreamOGGVorbis" $
@@ -89863,8 +91465,16 @@ instance Method "get_loop_offset" GodotAudioStreamOGGVorbis
 newtype GodotResourceImporterTheora = GodotResourceImporterTheora GodotObject
                                         deriving newtype AsVariant
 
+instance HasBaseClass GodotResourceImporterTheora where
+        type BaseClass GodotResourceImporterTheora = GodotResourceImporter
+        super = coerce
+
 newtype GodotVideoStreamTheora = GodotVideoStreamTheora GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotVideoStreamTheora where
+        type BaseClass GodotVideoStreamTheora = GodotVideoStream
+        super = coerce
 bindVideoStreamTheora_set_file
   = unsafePerformIO $
       withCString "VideoStreamTheora" $
@@ -89888,6 +91498,10 @@ instance Method "set_file" GodotVideoStreamTheora
 
 newtype GodotVisualScript = GodotVisualScript GodotObject
                               deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScript where
+        type BaseClass GodotVisualScript = GodotScript
+        super = coerce
 bindVisualScript__node_ports_changed
   = unsafePerformIO $
       withCString "VisualScript" $
@@ -90722,6 +92336,10 @@ instance Method "set_instance_base_type" GodotVisualScript
 
 newtype GodotVisualScriptNode = GodotVisualScriptNode GodotObject
                                   deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptNode where
+        type BaseClass GodotVisualScriptNode = GodotResource
+        super = coerce
 bindVisualScriptNode_get_visual_script
   = unsafePerformIO $
       withCString "VisualScriptNode" $
@@ -90853,6 +92471,10 @@ instance Method "_get_default_input_values" GodotVisualScriptNode
 
 newtype GodotVisualScriptFunctionState = GodotVisualScriptFunctionState GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptFunctionState where
+        type BaseClass GodotVisualScriptFunctionState = GodotReference
+        super = coerce
 bindVisualScriptFunctionState_connect_to_signal
   = unsafePerformIO $
       withCString "VisualScriptFunctionState" $
@@ -90879,8 +92501,16 @@ instance Method "connect_to_signal" GodotVisualScriptFunctionState
 newtype GodotVisualScriptFunction = GodotVisualScriptFunction GodotObject
                                       deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptFunction where
+        type BaseClass GodotVisualScriptFunction = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptOperator = GodotVisualScriptOperator GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptOperator where
+        type BaseClass GodotVisualScriptOperator = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptOperator_set_operator
   = unsafePerformIO $
       withCString "VisualScriptOperator" $
@@ -90966,6 +92596,10 @@ instance Method "get_typed" GodotVisualScriptOperator (IO Int)
 
 newtype GodotVisualScriptVariableSet = GodotVisualScriptVariableSet GodotObject
                                          deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptVariableSet where
+        type BaseClass GodotVisualScriptVariableSet = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptVariableSet_set_variable
   = unsafePerformIO $
       withCString "VisualScriptVariableSet" $
@@ -91012,8 +92646,16 @@ instance Method "get_variable" GodotVisualScriptVariableSet
 newtype GodotVisualScriptVariableGet = GodotVisualScriptVariableGet GodotObject
                                          deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptVariableGet where
+        type BaseClass GodotVisualScriptVariableGet = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptConstant = GodotVisualScriptConstant GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptConstant where
+        type BaseClass GodotVisualScriptConstant = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptConstant_set_constant_type
   = unsafePerformIO $
       withCString "VisualScriptConstant" $
@@ -91102,11 +92744,24 @@ instance Method "get_constant_value" GodotVisualScriptConstant
 newtype GodotVisualScriptIndexGet = GodotVisualScriptIndexGet GodotObject
                                       deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptIndexGet where
+        type BaseClass GodotVisualScriptIndexGet = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptIndexSet = GodotVisualScriptIndexSet GodotObject
                                       deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptIndexSet where
+        type BaseClass GodotVisualScriptIndexSet = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptGlobalConstant = GodotVisualScriptGlobalConstant GodotObject
                                             deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptGlobalConstant where
+        type BaseClass GodotVisualScriptGlobalConstant =
+             GodotVisualScriptNode
+        super = coerce
 bindVisualScriptGlobalConstant_set_global_constant
   = unsafePerformIO $
       withCString "VisualScriptGlobalConstant" $
@@ -91156,6 +92811,11 @@ instance Method "get_global_constant"
 
 newtype GodotVisualScriptClassConstant = GodotVisualScriptClassConstant GodotObject
                                            deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptClassConstant where
+        type BaseClass GodotVisualScriptClassConstant =
+             GodotVisualScriptNode
+        super = coerce
 bindVisualScriptClassConstant_set_class_constant
   = unsafePerformIO $
       withCString "VisualScriptClassConstant" $
@@ -91245,6 +92905,11 @@ instance Method "get_base_type" GodotVisualScriptClassConstant
 
 newtype GodotVisualScriptMathConstant = GodotVisualScriptMathConstant GodotObject
                                           deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptMathConstant where
+        type BaseClass GodotVisualScriptMathConstant =
+             GodotVisualScriptNode
+        super = coerce
 bindVisualScriptMathConstant_set_math_constant
   = unsafePerformIO $
       withCString "VisualScriptMathConstant" $
@@ -91292,6 +92957,11 @@ instance Method "get_math_constant" GodotVisualScriptMathConstant
 
 newtype GodotVisualScriptBasicTypeConstant = GodotVisualScriptBasicTypeConstant GodotObject
                                                deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptBasicTypeConstant where
+        type BaseClass GodotVisualScriptBasicTypeConstant =
+             GodotVisualScriptNode
+        super = coerce
 bindVisualScriptBasicTypeConstant_set_basic_type
   = unsafePerformIO $
       withCString "VisualScriptBasicTypeConstant" $
@@ -91388,8 +93058,17 @@ instance Method "get_basic_type_constant"
 newtype GodotVisualScriptEngineSingleton = GodotVisualScriptEngineSingleton GodotObject
                                              deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptEngineSingleton where
+        type BaseClass GodotVisualScriptEngineSingleton =
+             GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptSceneNode = GodotVisualScriptSceneNode GodotObject
                                        deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptSceneNode where
+        type BaseClass GodotVisualScriptSceneNode = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptSceneNode_set_node_path
   = unsafePerformIO $
       withCString "VisualScriptSceneNode" $
@@ -91415,8 +93094,17 @@ instance Method "set_node_path" GodotVisualScriptSceneNode
 newtype GodotVisualScriptSceneTree = GodotVisualScriptSceneTree GodotObject
                                        deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptSceneTree where
+        type BaseClass GodotVisualScriptSceneTree = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptResourcePath = GodotVisualScriptResourcePath GodotObject
                                           deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptResourcePath where
+        type BaseClass GodotVisualScriptResourcePath =
+             GodotVisualScriptNode
+        super = coerce
 bindVisualScriptResourcePath_set_resource_path
   = unsafePerformIO $
       withCString "VisualScriptResourcePath" $
@@ -91465,8 +93153,16 @@ instance Method "get_resource_path" GodotVisualScriptResourcePath
 newtype GodotVisualScriptSelf = GodotVisualScriptSelf GodotObject
                                   deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptSelf where
+        type BaseClass GodotVisualScriptSelf = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptCustomNode = GodotVisualScriptCustomNode GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptCustomNode where
+        type BaseClass GodotVisualScriptCustomNode = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptCustomNode__get_output_sequence_port_count
   = unsafePerformIO $
       withCString "VisualScriptCustomNode" $
@@ -91795,6 +93491,10 @@ instance Method "_step" GodotVisualScriptCustomNode
 
 newtype GodotVisualScriptSubCall = GodotVisualScriptSubCall GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptSubCall where
+        type BaseClass GodotVisualScriptSubCall = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptSubCall__subcall
   = unsafePerformIO $
       withCString "VisualScriptSubCall" $
@@ -91819,6 +93519,10 @@ instance Method "_subcall" GodotVisualScriptSubCall
 
 newtype GodotVisualScriptComment = GodotVisualScriptComment GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptComment where
+        type BaseClass GodotVisualScriptComment = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptComment_set_description
   = unsafePerformIO $
       withCString "VisualScriptComment" $
@@ -91864,6 +93568,10 @@ instance Method "get_description" GodotVisualScriptComment
 
 newtype GodotVisualScriptConstructor = GodotVisualScriptConstructor GodotObject
                                          deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptConstructor where
+        type BaseClass GodotVisualScriptConstructor = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptConstructor_set_constructor_type
   = unsafePerformIO $
       withCString "VisualScriptConstructor" $
@@ -91953,6 +93661,10 @@ instance Method "get_constructor" GodotVisualScriptConstructor
 
 newtype GodotVisualScriptLocalVar = GodotVisualScriptLocalVar GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptLocalVar where
+        type BaseClass GodotVisualScriptLocalVar = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptLocalVar_set_var_name
   = unsafePerformIO $
       withCString "VisualScriptLocalVar" $
@@ -92040,8 +93752,16 @@ instance Method "get_var_type" GodotVisualScriptLocalVar (IO Int)
 newtype GodotVisualScriptLocalVarSet = GodotVisualScriptLocalVarSet GodotObject
                                          deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptLocalVarSet where
+        type BaseClass GodotVisualScriptLocalVarSet = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptInputAction = GodotVisualScriptInputAction GodotObject
                                          deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptInputAction where
+        type BaseClass GodotVisualScriptInputAction = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptInputAction_set_action_name
   = unsafePerformIO $
       withCString "VisualScriptInputAction" $
@@ -92087,6 +93807,10 @@ instance Method "get_action_name" GodotVisualScriptInputAction
 
 newtype GodotVisualScriptDeconstruct = GodotVisualScriptDeconstruct GodotObject
                                          deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptDeconstruct where
+        type BaseClass GodotVisualScriptDeconstruct = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptDeconstruct_set_deconstruct_type
   = unsafePerformIO $
       withCString "VisualScriptDeconstruct" $
@@ -92176,6 +93900,10 @@ instance Method "_get_elem_cache" GodotVisualScriptDeconstruct
 
 newtype GodotVisualScriptPreload = GodotVisualScriptPreload GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptPreload where
+        type BaseClass GodotVisualScriptPreload = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptPreload_set_preload
   = unsafePerformIO $
       withCString "VisualScriptPreload" $
@@ -92221,6 +93949,10 @@ instance Method "get_preload" GodotVisualScriptPreload
 
 newtype GodotVisualScriptTypeCast = GodotVisualScriptTypeCast GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptTypeCast where
+        type BaseClass GodotVisualScriptTypeCast = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptTypeCast_set_base_script
   = unsafePerformIO $
       withCString "VisualScriptTypeCast" $
@@ -92245,6 +93977,11 @@ instance Method "set_base_script" GodotVisualScriptTypeCast
 
 newtype GodotVisualScriptFunctionCall = GodotVisualScriptFunctionCall GodotObject
                                           deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptFunctionCall where
+        type BaseClass GodotVisualScriptFunctionCall =
+             GodotVisualScriptNode
+        super = coerce
 bindVisualScriptFunctionCall_get_function
   = unsafePerformIO $
       withCString "VisualScriptFunctionCall" $
@@ -92487,6 +94224,10 @@ instance Method "get_validate" GodotVisualScriptFunctionCall
 
 newtype GodotVisualScriptPropertySet = GodotVisualScriptPropertySet GodotObject
                                          deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptPropertySet where
+        type BaseClass GodotVisualScriptPropertySet = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptPropertySet__set_type_cache
   = unsafePerformIO $
       withCString "VisualScriptPropertySet" $
@@ -92617,8 +94358,16 @@ instance Method "get_assign_op" GodotVisualScriptPropertySet
 newtype GodotVisualScriptPropertyGet = GodotVisualScriptPropertyGet GodotObject
                                          deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptPropertyGet where
+        type BaseClass GodotVisualScriptPropertyGet = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptEmitSignal = GodotVisualScriptEmitSignal GodotObject
                                         deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptEmitSignal where
+        type BaseClass GodotVisualScriptEmitSignal = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptEmitSignal_set_signal
   = unsafePerformIO $
       withCString "VisualScriptEmitSignal" $
@@ -92664,6 +94413,10 @@ instance Method "get_signal" GodotVisualScriptEmitSignal
 
 newtype GodotVisualScriptReturn = GodotVisualScriptReturn GodotObject
                                     deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptReturn where
+        type BaseClass GodotVisualScriptReturn = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptReturn_set_return_type
   = unsafePerformIO $
       withCString "VisualScriptReturn" $
@@ -92753,14 +94506,30 @@ instance Method "is_return_value_enabled" GodotVisualScriptReturn
 newtype GodotVisualScriptCondition = GodotVisualScriptCondition GodotObject
                                        deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptCondition where
+        type BaseClass GodotVisualScriptCondition = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptWhile = GodotVisualScriptWhile GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptWhile where
+        type BaseClass GodotVisualScriptWhile = GodotVisualScriptNode
+        super = coerce
 
 newtype GodotVisualScriptIterator = GodotVisualScriptIterator GodotObject
                                       deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptIterator where
+        type BaseClass GodotVisualScriptIterator = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptSequence = GodotVisualScriptSequence GodotObject
                                       deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptSequence where
+        type BaseClass GodotVisualScriptSequence = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptSequence_set_steps
   = unsafePerformIO $
       withCString "VisualScriptSequence" $
@@ -92806,11 +94575,23 @@ instance Method "get_steps" GodotVisualScriptSequence (IO Int)
 newtype GodotVisualScriptSwitch = GodotVisualScriptSwitch GodotObject
                                     deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptSwitch where
+        type BaseClass GodotVisualScriptSwitch = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptSelect = GodotVisualScriptSelect GodotObject
                                     deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptSelect where
+        type BaseClass GodotVisualScriptSelect = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptYield = GodotVisualScriptYield GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptYield where
+        type BaseClass GodotVisualScriptYield = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptYield_set_yield_mode
   = unsafePerformIO $
       withCString "VisualScriptYield" $
@@ -92856,8 +94637,16 @@ instance Method "get_yield_mode" GodotVisualScriptYield (IO Int)
 newtype GodotVisualScriptYieldSignal = GodotVisualScriptYieldSignal GodotObject
                                          deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptYieldSignal where
+        type BaseClass GodotVisualScriptYieldSignal = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotVisualScriptBuiltinFunc = GodotVisualScriptBuiltinFunc GodotObject
                                          deriving newtype AsVariant
+
+instance HasBaseClass GodotVisualScriptBuiltinFunc where
+        type BaseClass GodotVisualScriptBuiltinFunc = GodotVisualScriptNode
+        super = coerce
 bindVisualScriptBuiltinFunc_set_func
   = unsafePerformIO $
       withCString "VisualScriptBuiltinFunc" $
@@ -92903,11 +94692,24 @@ instance Method "get_func" GodotVisualScriptBuiltinFunc (IO Int)
 newtype GodotVisualScriptExpression = GodotVisualScriptExpression GodotObject
                                         deriving newtype AsVariant
 
+instance HasBaseClass GodotVisualScriptExpression where
+        type BaseClass GodotVisualScriptExpression = GodotVisualScriptNode
+        super = coerce
+
 newtype GodotPhysics2DDirectBodyStateSW = GodotPhysics2DDirectBodyStateSW GodotObject
                                             deriving newtype AsVariant
 
+instance HasBaseClass GodotPhysics2DDirectBodyStateSW where
+        type BaseClass GodotPhysics2DDirectBodyStateSW =
+             GodotPhysics2DDirectBodyState
+        super = coerce
+
 newtype Godot_VisualScriptEditor = Godot_VisualScriptEditor GodotObject
                                      deriving newtype AsVariant
+
+instance HasBaseClass Godot_VisualScriptEditor where
+        type BaseClass Godot_VisualScriptEditor = GodotObject
+        super = coerce
 bind_VisualScriptEditor_add_custom_node
   = unsafePerformIO $
       withCString "_VisualScriptEditor" $
@@ -92954,14 +94756,35 @@ instance Method "remove_custom_node" Godot_VisualScriptEditor
 newtype GodotResourceImporterWebm = GodotResourceImporterWebm GodotObject
                                       deriving newtype AsVariant
 
+instance HasBaseClass GodotResourceImporterWebm where
+        type BaseClass GodotResourceImporterWebm = GodotResourceImporter
+        super = coerce
+
 newtype GodotVideoStreamWebm = GodotVideoStreamWebm GodotObject
                                  deriving newtype AsVariant
+
+instance HasBaseClass GodotVideoStreamWebm where
+        type BaseClass GodotVideoStreamWebm = GodotVideoStream
+        super = coerce
 
 newtype GodotBulletPhysicsServer = GodotBulletPhysicsServer GodotObject
                                      deriving newtype AsVariant
 
+instance HasBaseClass GodotBulletPhysicsServer where
+        type BaseClass GodotBulletPhysicsServer = GodotPhysicsServer
+        super = coerce
+
 newtype GodotBulletPhysicsDirectBodyState = GodotBulletPhysicsDirectBodyState GodotObject
                                               deriving newtype AsVariant
 
+instance HasBaseClass GodotBulletPhysicsDirectBodyState where
+        type BaseClass GodotBulletPhysicsDirectBodyState =
+             GodotPhysicsDirectBodyState
+        super = coerce
+
 newtype GodotPhysics2DServerSW = GodotPhysics2DServerSW GodotObject
                                    deriving newtype AsVariant
+
+instance HasBaseClass GodotPhysics2DServerSW where
+        type BaseClass GodotPhysics2DServerSW = GodotPhysics2DServer
+        super = coerce

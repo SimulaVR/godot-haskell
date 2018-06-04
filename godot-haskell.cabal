@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7886e41eb5d65dafe50aed643a811687d0a91c92f036ddd02a5b22efc7705600
+-- hash: c1a28df6c79f143e5f72d6fdc706f267bf2968c30bb1f904984b14854719dc66
 
 name:           godot-haskell
 version:        0.1.0.0
@@ -468,6 +468,7 @@ library
       Godot.Core.GodotWorldEnvironment
       Godot.Core.GodotXMLParser
       Godot.Core.GodotYSort
+      Godot.Gdnative.Create
       Godot.Internal.Dispatch
       Godot.Methods
       Godot.Tools.GodotEditorExportPlugin

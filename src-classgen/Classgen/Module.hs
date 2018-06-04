@@ -95,12 +95,28 @@ clsAsName cls = HS.Ident () ("Godot" ++ T.unpack (cls ^. name))
 clsTy :: GodotClass -> HS.Type ()
 clsTy = HS.TyCon () . HS.UnQual ()  . clsAsName
 
+baseClsTy :: GodotClass -> HS.Type ()
+baseClsTy cls = HS.TyCon () . HS.UnQual () $ HS.Ident () ("Godot" ++ T.unpack (cls ^. baseClass))
+
+
 intTy = HS.TyCon () . HS.UnQual () $ HS.name "Int"
 
-mkDataType cls = [HS.DataDecl () (HS.NewType ()) Nothing 
-  (HS.DHead () $ clsAsName cls)
-  [HS.QualConDecl () Nothing Nothing $ HS.ConDecl () (clsAsName cls) [godotObjectTy]]
-  [HS.Deriving () (Just $ HS.DerivNewtype ()) [asVariantRule]]]
+mkDataType cls =
+  [ HS.DataDecl () (HS.NewType ()) Nothing 
+    (HS.DHead () $ clsAsName cls)
+    [HS.QualConDecl () Nothing Nothing $ HS.ConDecl () (clsAsName cls) [godotObjectTy]]
+    [HS.Deriving () (Just $ HS.DerivNewtype ()) [asVariantRule]]
+  ] ++ if T.null (cls ^. baseClass) then [] else
+  [ HS.InstDecl () Nothing
+    (HS.IRule () Nothing Nothing
+     (HS.IHApp () (HS.IHCon () (HS.UnQual () (HS.Ident () "HasBaseClass")))
+       (clsTy cls)))
+    (Just
+     [ HS.InsType () (HS.TyApp () (HS.TyCon () (HS.UnQual () (HS.Ident () "BaseClass"))) (clsTy cls))
+       (baseClsTy cls)
+     , HS.InsDecl () (HS.PatBind () (HS.PVar () (HS.Ident () "super"))
+                      (HS.UnGuardedRhs () (HS.Var () (HS.UnQual () (HS.Ident () "coerce")))) Nothing)
+     ] ) ]
   where
     asVariantRule = HS.IRule () Nothing Nothing $ HS.IHCon () (HS.UnQual () $ HS.Ident () "AsVariant")
 
