@@ -69,7 +69,63 @@ instance GodotFFI GodotQuat (Quaternion Float) where
                         <$> (realToFrac <$> godot_quat_get_x q)
                         <*> (realToFrac <$> godot_quat_get_y q)
                         <*> (realToFrac <$> godot_quat_get_z q))
-  toLowLevel (Quaternion w (V3 x y z)) = godot_quat_new (realToFrac x) (realToFrac y) (realToFrac z) (realToFrac w)
+  toLowLevel (Quaternion w (V3 x y z)) = godot_quat_new (realToFrac x)
+                                                        (realToFrac y)
+                                                        (realToFrac z)
+                                                        (realToFrac w)
+
+type Rect2 = M22 Float
+type instance TypeOf 'HaskellTy GodotRect2 = Rect2
+instance GodotFFI GodotRect2 Rect2 where
+  fromLowLevel r = V2
+                   <$> (fromLowLevel =<< godot_rect2_get_position r)
+                   <*> (fromLowLevel =<< godot_rect2_get_size r)
+  toLowLevel (V2 pos size) = do pos' <- toLowLevel pos
+                                size' <- toLowLevel size
+                                godot_rect2_new_with_position_and_size pos' size'
+
+type AABB = M23 Float
+type instance TypeOf 'HaskellTy GodotAabb = AABB
+instance GodotFFI GodotAabb AABB where
+  fromLowLevel aabb = V2
+                      <$> (fromLowLevel =<< godot_aabb_get_position aabb)
+                      <*> (fromLowLevel =<< godot_aabb_get_size aabb)
+  toLowLevel (V2 pos size) = do pos'  <- toLowLevel pos
+                                size' <- toLowLevel size
+                                godot_aabb_new pos' size'
+
+-- Axes X, Y and Z are represented by the int constants 0, 1 and 2 respectively (at least for Vector3):
+-- https://godot.readthedocs.io/en/latest/classes/class_vector3.html?highlight=axis#numeric-constants
+type Basis = M33 Float
+type instance TypeOf 'HaskellTy GodotBasis = Basis
+instance GodotFFI GodotBasis Basis where
+  fromLowLevel b = V3
+                   <$> (llAxis 0)
+                   <*> (llAxis 1)
+                   <*> (llAxis 2)
+                 where llAxis axis = fromLowLevel =<< godot_basis_get_axis b axis
+  toLowLevel (V3 x y z) = do x' <- toLowLevel x
+                             y' <- toLowLevel y
+                             z' <- toLowLevel z
+                             godot_basis_new_with_rows x' y' z'
+
+data Transform = TF { _tfBasis :: Basis, _tfPosition :: V3 Float }
+type instance TypeOf 'HaskellTy GodotTransform = Transform
+instance GodotFFI GodotTransform Transform where
+  fromLowLevel tf = TF
+                    <$> (fromLowLevel =<< godot_transform_get_basis tf)
+                    <*> (fromLowLevel =<< godot_transform_get_origin tf)
+  toLowLevel (TF basis orig) = do basis' <- toLowLevel basis
+                                  orig'  <- toLowLevel orig
+                                  godot_transform_new basis' orig'
+
+-- This should perhaps be better modeled - FilePath?
+type NodePath = Text
+type instance TypeOf 'HaskellTy GodotNodePath = NodePath
+instance GodotFFI GodotNodePath NodePath where
+  fromLowLevel np = fromLowLevel =<< godot_node_path_get_name np 0
+  toLowLevel np = godot_node_path_new =<< toLowLevel np
+
 
 -- Variants
 
