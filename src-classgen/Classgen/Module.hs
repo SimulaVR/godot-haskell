@@ -16,6 +16,7 @@ import Text.Casing
 import Classgen.Spec
 
 
+--TODO add singleton functions
 
 data ClassgenState = ClassgenState
   { _csModules :: !(HashMap Text (HS.Module ()))
