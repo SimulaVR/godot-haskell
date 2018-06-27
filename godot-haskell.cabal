@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1908923a1d627f108c4bcccb69d483bb40d9437848cf40e5ab365c7b6cb379be
+-- hash: 48d79a874520f631512e8612236cb17b34c1bc234024b61e1c1b5f2fe35f3a4a
 
 name:           godot-haskell
 version:        0.1.0.0
@@ -25,12 +25,6 @@ source-repository head
 
 library
   exposed-modules:
-      Godot.Gdnative.Internal.TH
-      Godot.Gdnative.Internal.Gdnative
-      Godot.Gdnative.Internal.Api
-      Godot.Gdnative.Internal
-      Godot.Gdnative.Types
-  other-modules:
       Godot.Api
       Godot.Core.Godot_ClassDB
       Godot.Core.Godot_Directory
@@ -468,6 +462,11 @@ library
       Godot.Core.GodotWorldEnvironment
       Godot.Core.GodotXMLParser
       Godot.Core.GodotYSort
+      Godot.Gdnative.Internal
+      Godot.Gdnative.Internal.Api
+      Godot.Gdnative.Internal.Gdnative
+      Godot.Gdnative.Internal.TH
+      Godot.Gdnative.Types
       Godot.Internal.Dispatch
       Godot.Methods
       Godot.Nativescript
@@ -488,6 +487,7 @@ library
       Godot.Tools.GodotEditorSettings
       Godot.Tools.GodotEditorSpatialGizmo
       Godot.Tools.GodotScriptEditor
+  other-modules:
       Paths_godot_haskell
   hs-source-dirs:
       src

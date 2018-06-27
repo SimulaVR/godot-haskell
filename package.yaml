@@ -50,12 +50,6 @@ default-extensions:
 
 library:
   source-dirs: src
-  exposed-modules:
-  - Godot.Gdnative.Internal.TH
-  - Godot.Gdnative.Internal.Gdnative
-  - Godot.Gdnative.Internal.Api
-  - Godot.Gdnative.Internal
-  - Godot.Gdnative.Types
   dependencies:
   - generate
   - linear

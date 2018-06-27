@@ -354,8 +354,8 @@ marshalRet r = marshalArg (r, False) >>=
 
 -- constructs the haskell and C functions out of the API name, index and entry
 -- I was considering doing C via AST, but just going to use PP.Doc.
-constructFunction :: Name -> Int -> S.GdnativeApiEntry -> Q ([Dec], Maybe PP.Doc)
-constructFunction tyname idx entry = do
+constructFunction :: Bool -> Name -> Int -> S.GdnativeApiEntry -> Q ([Dec], Maybe PP.Doc)
+constructFunction isCore tyname idx entry = do
   marshalledArgs <- mapM marshalArg foreignArgs
   let (hsOuts, hsArgs) = partitionArgs marshalledArgs
   (retMarshalTy, retOutMarshal) <- marshalRet foreignRetTy
@@ -405,7 +405,10 @@ constructFunction tyname idx entry = do
 
     -- TODO: evaluate these properly
     -- HACK: 64-bit linux only
-    structOffset = 40 -- offsetof(godot_gdnative_core_api_struct,godot_color_new_rgba)
+    structOffset = if isCore
+      then 40 -- offsetof(godot_gdnative_core_api_struct,godot_color_new_rgba)
+      else 24 -- 
+      
 
     
 -- an in marshaller has form (a -> IO b) -> IO b
@@ -463,7 +466,7 @@ apiToHs isCore api = generateApiType
     mkApiName = mkName $ "GodotGdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
 
     generateFunctions name entries = do
-      funcs <- imapM (constructFunction name) entries
+      funcs <- imapM (constructFunction isCore name) entries
       let hscode = concat $ funcs ^.. folded._1
       let ccode = PP.vsep $ funcs ^.. folded._2._Just
       qAddForeignFile LangC . show $ PP.vsep

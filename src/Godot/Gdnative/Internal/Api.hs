@@ -15,7 +15,6 @@ import Godot.Gdnative.Internal.Gdnative
 
 import Generate
 
-
 godotGdnativeCoreApiStruct :: GodotGdnativeCoreApiStruct
 godotGdnativeCoreApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCoreApiStructRef
 
@@ -30,7 +29,6 @@ godotGdnativeExtPluginscriptApiStruct = accursedUnutterablePerformIO $ readIORef
 
 godotGdnativeExtArvrApiStruct :: GodotGdnativeExtArvrApiStruct
 godotGdnativeExtArvrApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtArvrApiStructRef
-
 
 
 $(do

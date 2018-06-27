@@ -161,7 +161,15 @@ instance GodotFFI GodotVariant (Variant 'GodotTy) where
   toLowLevel (VariantPoolColorArray x) = godot_variant_new_pool_color_array x
 
 withVariantArray :: [Variant 'GodotTy] -> ((Ptr (Ptr GodotVariant), CInt) -> IO a) -> IO a
-withVariantArray = undefined
+withVariantArray vars mtd =  allocaArray (length vars) $
+  \arrPtr ->  withVars vars 0 arrPtr mtd
+  where
+    withVars (x:xs) n arrPtr mtd = do
+      vt <- toLowLevel x
+      withGodotVariant vt $ \vtPtr -> do
+        poke (advancePtr arrPtr n) vtPtr 
+        withVars xs (n+1) arrPtr mtd
+    withVars [] n arrPtr mtd = mtd (arrPtr, fromIntegral n)
 
 throwIfErr :: GodotVariantCallError -> IO ()
 throwIfErr err = case variantCallErrorError err of
@@ -179,8 +187,8 @@ instance AsVariant () where
   fromVariant _ = Nothing
 
 instance AsVariant GodotVariant where
-  toVariant = unsafePerformIO . fromLowLevel
-  fromVariant = Just . unsafePerformIO . toLowLevel
+  toVariant v = let !res = unsafePerformIO $ fromLowLevel v in res
+  fromVariant v = let !res = unsafePerformIO $ toLowLevel v in Just res
 
 $(generateAsVariantInstances)
 
@@ -189,5 +197,5 @@ fromGodotVariant :: AsVariant a => GodotVariant -> IO a
 fromGodotVariant var = do
   res <- fromVariant <$> fromLowLevel var
   case res of
-    Just x -> return x
+    Just x -> x `seq` return x
     Nothing -> error "Error in API: couldn't fromVariant"

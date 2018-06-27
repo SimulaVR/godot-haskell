@@ -36,8 +36,9 @@ registerClass pHandle name base create destroy = do
       
   let createFunObj = GodotInstanceCreateFunc createFun nullPtr createFreeFun
   let destroyFunObj = GodotInstanceDestroyFunc destroyFun nullPtr destroyFreeFun
-  withCString name $ \namePtr -> withCString base $
-    \basePtr -> godot_nativescript_register_class pHandle namePtr basePtr createFunObj destroyFunObj
+
+  withCString name $ \namePtr -> withCString base $ \basePtr ->
+    godot_nativescript_register_class pHandle namePtr basePtr createFunObj destroyFunObj
  
 registerMethod :: Typeable a
                => GdnativeHandle

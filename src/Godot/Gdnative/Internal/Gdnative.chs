@@ -254,8 +254,8 @@ instance OpaqueStorable GodotVector3 where
 
 data GodotVariantCallError = GodotVariantCallError
   { variantCallErrorError :: !GodotVariantCallErrorError
-  , variantCallErrorArgument :: !CInt
-  , variantCallErrorExpected :: !GodotVariantType
+  , variantCallErrorArgument :: !(Maybe CInt)
+  , variantCallErrorExpected :: !(Maybe GodotVariantType)
   } deriving (Show, Eq, Ord)
 
 instance Exception GodotVariantCallError
@@ -265,14 +265,14 @@ instance Exception GodotVariantCallError
 instance Storable GodotVariantCallError where
   sizeOf _ = {#sizeof godot_variant_call_error#}
   alignment _ = {#alignof godot_variant_call_error#}
-  peek ptr = GodotVariantCallError
-             <$> ((toEnum . fromIntegral) <$> {#get godot_variant_call_error->error #} ptr)
-             <*> {#get godot_variant_call_error->argument #} ptr
-             <*> ((toEnum . fromIntegral) <$> {#get godot_variant_call_error->expected #} ptr)
-  poke ptr a = do
-    {#set godot_variant_call_error->error #} ptr (fromIntegral . fromEnum $ variantCallErrorError a)
-    {#set godot_variant_call_error->argument #} ptr (variantCallErrorArgument a)
-    {#set godot_variant_call_error->expected #} ptr (fromIntegral . fromEnum $ variantCallErrorExpected a)
+  peek ptr = do
+    err <- (toEnum . fromIntegral) <$> {#get godot_variant_call_error->error #} ptr
+    case err of
+      GodotCallErrorCallOk -> return $ GodotVariantCallError err Nothing Nothing
+      _ -> GodotVariantCallError err 
+             <$> (Just <$> {#get godot_variant_call_error->argument #} ptr)
+             <*> ((Just . toEnum . fromIntegral) <$> {#get godot_variant_call_error->expected #} ptr)
+  poke ptr a = error "can't poke GodotVariantCallError"
 
 {#pointer *godot_gdnative_api_struct as GodotGdnativeApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeApiStruct
@@ -303,6 +303,7 @@ type ReportLoadingErrorFunc = GodotObject -> CString -> IO ()
 
 
 {#pointer *godot_object as GodotObject newtype #}
+deriving newtype instance Show  GodotObject
 deriving newtype instance Eq GodotObject
 deriving newtype instance Storable GodotObject
 
