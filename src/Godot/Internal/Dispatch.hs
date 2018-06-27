@@ -3,7 +3,8 @@ module Godot.Internal.Dispatch where
 import Data.Kind
 import Data.Proxy
 import Data.Text (Text)
-import GHC.TypeLits
+import GHC.TypeLits as T
+import Godot.Gdnative.Internal.Gdnative
 
 class HasBaseClass child where
   type BaseClass child
@@ -23,9 +24,21 @@ instance {-# OVERLAPPABLE #-} (HasBaseClass c, pp :< BaseClass c) => pp :< c whe
 class Method (name :: Symbol) cls sig | cls name -> sig where
   runMethod :: cls -> sig
 
+  
+
 instance {-# OVERLAPPABLE #-} (Method name (BaseClass child) sig, HasBaseClass child) 
     => Method name child sig where
   runMethod = runMethod @name . super
+
+-- this ensures termination for type errors
+-- fixes #4
+instance {-# OVERLAPPABLE #-} ( TypeError (T.Text "Couldn't find method " :<>: ShowType name
+                                          :<>: T.Text " with signature `" :<>: ShowType sig
+                                          :<>: T.Text "'.")
+                              , Method name GodotObject sig ) -- for fundeps
+    => Method name GodotObject sig where
+  runMethod = error "unreachable"
+
 
 {-
 type family RemArgs sig where
