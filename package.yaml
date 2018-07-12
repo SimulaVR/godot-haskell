@@ -53,6 +53,7 @@ library:
   dependencies:
   - generate
   - linear
+  - colour
 
 internal-libraries:
   generate:

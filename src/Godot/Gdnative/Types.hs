@@ -8,6 +8,9 @@ import qualified Data.ByteString.Unsafe as B
 
 import Data.Text (Text)
 import qualified Data.Text.Encoding as T
+import Data.Colour
+import Data.Colour.SRGB
+import Data.Function ((&))
 
 import Foreign
 import Foreign.C
@@ -125,6 +128,22 @@ type instance TypeOf 'HaskellTy GodotNodePath = NodePath
 instance GodotFFI GodotNodePath NodePath where
   fromLowLevel np = fromLowLevel =<< godot_node_path_get_name np 0
   toLowLevel np = godot_node_path_new =<< toLowLevel np
+
+type instance TypeOf 'HaskellTy GodotColor = AlphaColour Double
+instance GodotFFI GodotColor (AlphaColour Double) where
+  fromLowLevel c = withOpacity
+                   <$> (sRGB
+                        <$> (realToFrac <$> godot_color_get_r c)
+                        <*> (realToFrac <$> godot_color_get_g c)
+                        <*> (realToFrac <$> godot_color_get_b c))
+                   <*> (realToFrac <$> godot_color_get_a c)
+  toLowLevel rgba = toSRGB (rgba `over` black)
+                    & \(RGB r g b) ->
+                        godot_color_new_rgba
+                          (realToFrac r)
+                          (realToFrac g)
+                          (realToFrac b)
+                          (realToFrac $ alphaChannel rgba)
 
 
 -- Variants
