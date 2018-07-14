@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 48d79a874520f631512e8612236cb17b34c1bc234024b61e1c1b5f2fe35f3a4a
+-- hash: e6691b6355d5ea887b6ee6dcfe8bed0b58bab9a5c7ad8cb696e35bdd2a6bcb45
 
 name:           godot-haskell
 version:        0.1.0.0
@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Godot.Api
+      Godot.Api.VarArgs
       Godot.Core.Godot_ClassDB
       Godot.Core.Godot_Directory
       Godot.Core.Godot_Engine
