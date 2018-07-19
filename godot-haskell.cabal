@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 48d79a874520f631512e8612236cb17b34c1bc234024b61e1c1b5f2fe35f3a4a
+-- hash: 0ea00ed9f9555ca23819babdea17c34dea5709377e4d9a2604d5aa84eba90b81
 
 name:           godot-haskell
 version:        0.1.0.0
@@ -513,37 +513,6 @@ library
       c2hs
   default-language: Haskell2010
 
-library classgen
-  exposed-modules:
-      Classgen.Module
-      Classgen.Spec
-      Classgen.Utils
-  other-modules:
-      Paths_godot_haskell
-  hs-source-dirs:
-      src-classgen
-  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
-  include-dirs:
-      godot_headers
-      cbits
-  build-depends:
-      aeson
-    , base
-    , bytestring
-    , casing
-    , containers
-    , haskell-src-exts
-    , haskell-src-exts-qq
-    , lens
-    , mtl
-    , template-haskell
-    , text
-    , unordered-containers
-    , vector
-  build-tools:
-      c2hs
-  default-language: Haskell2010
-
 library generate
   exposed-modules:
       Generate
@@ -569,36 +538,6 @@ library generate
     , mtl
     , parsec
     , parsers
-    , template-haskell
-    , text
-    , unordered-containers
-    , vector
-  build-tools:
-      c2hs
-  default-language: Haskell2010
-
-executable godot-haskell-classgen
-  main-is: Main.hs
-  other-modules:
-      Paths_godot_haskell
-  hs-source-dirs:
-      app-classgen
-  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
-  include-dirs:
-      godot_headers
-      cbits
-  build-depends:
-      aeson
-    , base
-    , bytestring
-    , casing
-    , classgen
-    , containers
-    , directory
-    , filepath
-    , haskell-src-exts
-    , lens
-    , mtl
     , template-haskell
     , text
     , unordered-containers

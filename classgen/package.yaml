@@ -1,0 +1,65 @@
+name: godot-haskell-classgen
+version: '0.1.0.0'
+category: Web
+author: David Kraeutmann
+maintainer: kane@kane.cx
+copyright: 2018 David Kraeutmann
+license: BSD3
+github: KaneTW/godot-haskell
+extra-source-files:
+- README.md
+
+dependencies:
+- base
+- aeson
+- bytestring
+- template-haskell
+- lens
+- text
+- casing
+- vector
+- containers
+- unordered-containers
+- mtl
+
+build-tools:
+- c2hs
+
+include-dirs:
+- godot_headers
+- cbits
+
+default-extensions:
+- FlexibleContexts
+- FlexibleInstances
+- ScopedTypeVariables
+- TypeApplications
+- StandaloneDeriving
+- DerivingStrategies
+- DefaultSignatures
+- MultiParamTypeClasses
+- FunctionalDependencies
+- TypeFamilies
+- TemplateHaskell
+- TypeOperators
+- TypeInType
+- QuasiQuotes
+- OverloadedStrings
+- PatternSynonyms
+- GeneralizedNewtypeDeriving
+
+library:
+  source-dirs: src-classgen
+  dependencies:
+  - haskell-src-exts
+  - haskell-src-exts-qq
+
+executables:
+  godot-haskell-classgen:
+    main: Main.hs
+    source-dirs: app-classgen
+    dependencies:
+      - godot-haskell-classgen
+      - haskell-src-exts
+      - directory
+      - filepath

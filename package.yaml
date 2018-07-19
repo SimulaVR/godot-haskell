@@ -63,18 +63,3 @@ internal-libraries:
     - mtl
     - ansi-wl-pprint
 
-  classgen:
-    source-dirs: src-classgen
-    dependencies:
-    - haskell-src-exts
-    - haskell-src-exts-qq
-
-executables:
-  godot-haskell-classgen:
-    main: Main.hs
-    source-dirs: app-classgen
-    dependencies:
-      - classgen
-      - haskell-src-exts
-      - directory
-      - filepath

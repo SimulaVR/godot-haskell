@@ -77,10 +77,26 @@ registerMethod pHandle mtdName rpc method  = do
   withCString clsName $ \clsNamePtr -> withCString mtdName $
     \mtdNamePtr -> godot_nativescript_register_method pHandle clsNamePtr mtdNamePtr (GodotMethodAttributes rpc) methodObj
 
+data PropertyAttributes = PropertyAttributes
+  { propertySetType :: !GodotMethodRpcMode
+  , propertyType :: !GodotVariantType
+  , propertyHint :: !GodotPropertyHint
+  , propertyHintString :: !Text
+  , propertyUsage :: !GodotPropertyUsageFlags
+  , propertyDefaultValue :: !(Variant 'GodotTy)
+  }
+
+asGodotPropertyAttributes :: PropertyAttributes -> IO GodotPropertyAttributes
+asGodotPropertyAttributes PropertyAttributes {..} = do
+  hintStr <- toLowLevel propertyHintString
+  def <- toLowLevel propertyDefaultValue
+  let ty = fromIntegral $ fromEnum propertyType
+  return $ GodotPropertyAttributes propertySetType ty propertyHint hintStr propertyUsage def
+
 registerProperty :: forall a. GodotClass a
                  => GdnativeHandle
                  -> String -- ^ property path
-                 -> GodotPropertyAttributes
+                 -> PropertyAttributes
                  -> (GodotObject -> a -> GodotVariant -> IO ()) -- ^ set func. godot variants destroyed at end of call
                  -> (GodotObject -> a -> IO GodotVariant) -- ^ get func
                  -> IO ()
@@ -101,9 +117,10 @@ registerProperty pHandle path attr setter getter = do
       freeHaskellFunPtr getFun >> freeHaskellFunPtr getFreeFun
 
   let clsName = godotClassName @a
-  
+
+  godotAttr <- asGodotPropertyAttributes attr
   withCString clsName $ \clsNamePtr -> withCString path $ \pathPtr ->
-    godot_nativescript_register_property pHandle clsNamePtr pathPtr attr
+    godot_nativescript_register_property pHandle clsNamePtr pathPtr godotAttr
       (GodotPropertySetFunc setFun nullPtr setFreeFun)
       (GodotPropertyGetFunc getFun nullPtr getFreeFun)
 
@@ -113,7 +130,8 @@ data SignalArgument = SignalArgument
   , signalArgumentHint :: !GodotPropertyHint
   , signalArgumentHintString :: !Text
   , signalArgumentUsage :: !GodotPropertyUsageFlags
-  , signalArgumentDefaultValue :: !(Variant 'GodotTy) }
+  , signalArgumentDefaultValue :: !(Variant 'GodotTy)
+  }
 
 asGodotSignalArgument :: SignalArgument -> IO GodotSignalArgument
 asGodotSignalArgument SignalArgument{..} = do
