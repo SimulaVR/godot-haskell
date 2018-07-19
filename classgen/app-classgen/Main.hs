@@ -27,7 +27,7 @@ main = do
 
   where
     classModuleHead = ModuleHead () classModuleName Nothing Nothing
-    classModuleName = ModuleName () $ "Godot.Api"
+    classModuleName = ModuleName () $ "Godot.Api.Auto"
     
     classImports = map (\n -> ImportDecl () (ModuleName () n) False False False Nothing Nothing Nothing)
       [ "Data.Coerce", "Foreign.C", "Godot.Internal.Dispatch"

@@ -995,9 +995,6 @@ _shape_changed = runMethod @"_shape_changed"
 _show_debugger :: Method "_show_debugger" cls sig => cls -> sig
 _show_debugger = runMethod @"_show_debugger"
 
-_signal_callback :: Method "_signal_callback" cls sig => cls -> sig
-_signal_callback = runMethod @"_signal_callback"
-
 _size_changed :: Method "_size_changed" cls sig => cls -> sig
 _size_changed = runMethod @"_size_changed"
 
@@ -1304,9 +1301,6 @@ add_custom_signal = runMethod @"add_custom_signal"
 add_custom_type :: Method "add_custom_type" cls sig => cls -> sig
 add_custom_type = runMethod @"add_custom_type"
 
-add_do_method :: Method "add_do_method" cls sig => cls -> sig
-add_do_method = runMethod @"add_do_method"
-
 add_do_property :: Method "add_do_property" cls sig => cls -> sig
 add_do_property = runMethod @"add_do_property"
 
@@ -1526,9 +1520,6 @@ add_translation = runMethod @"add_translation"
 
 add_triangle_fan :: Method "add_triangle_fan" cls sig => cls -> sig
 add_triangle_fan = runMethod @"add_triangle_fan"
-
-add_undo_method :: Method "add_undo_method" cls sig => cls -> sig
-add_undo_method = runMethod @"add_undo_method"
 
 add_undo_property ::
                     Method "add_undo_property" cls sig => cls -> sig
@@ -2070,21 +2061,6 @@ build_capsule_planes = runMethod @"build_capsule_planes"
 build_cylinder_planes ::
                         Method "build_cylinder_planes" cls sig => cls -> sig
 build_cylinder_planes = runMethod @"build_cylinder_planes"
-
-call :: Method "call" cls sig => cls -> sig
-call = runMethod @"call"
-
-call_deferred :: Method "call_deferred" cls sig => cls -> sig
-call_deferred = runMethod @"call_deferred"
-
-call_func :: Method "call_func" cls sig => cls -> sig
-call_func = runMethod @"call_func"
-
-call_group :: Method "call_group" cls sig => cls -> sig
-call_group = runMethod @"call_group"
-
-call_group_flags :: Method "call_group_flags" cls sig => cls -> sig
-call_group_flags = runMethod @"call_group_flags"
 
 call_native :: Method "call_native" cls sig => cls -> sig
 call_native = runMethod @"call_native"
@@ -3096,9 +3072,6 @@ edit = runMethod @"edit"
 
 edit_resource :: Method "edit_resource" cls sig => cls -> sig
 edit_resource = runMethod @"edit_resource"
-
-emit_signal :: Method "emit_signal" cls sig => cls -> sig
-emit_signal = runMethod @"emit_signal"
 
 end :: Method "end" cls sig => cls -> sig
 end = runMethod @"end"
@@ -10442,9 +10415,6 @@ navpoly_set_transform ::
                         Method "navpoly_set_transform" cls sig => cls -> sig
 navpoly_set_transform = runMethod @"navpoly_set_transform"
 
-new :: Method "new" cls sig => cls -> sig
-new = runMethod @"new"
-
 newline :: Method "newline" cls sig => cls -> sig
 newline = runMethod @"newline"
 
@@ -11320,21 +11290,8 @@ rotate_y = runMethod @"rotate_y"
 rotate_z :: Method "rotate_z" cls sig => cls -> sig
 rotate_z = runMethod @"rotate_z"
 
-rpc :: Method "rpc" cls sig => cls -> sig
-rpc = runMethod @"rpc"
-
 rpc_config :: Method "rpc_config" cls sig => cls -> sig
 rpc_config = runMethod @"rpc_config"
-
-rpc_id :: Method "rpc_id" cls sig => cls -> sig
-rpc_id = runMethod @"rpc_id"
-
-rpc_unreliable :: Method "rpc_unreliable" cls sig => cls -> sig
-rpc_unreliable = runMethod @"rpc_unreliable"
-
-rpc_unreliable_id ::
-                    Method "rpc_unreliable_id" cls sig => cls -> sig
-rpc_unreliable_id = runMethod @"rpc_unreliable_id"
 
 rset :: Method "rset" cls sig => cls -> sig
 rset = runMethod @"rset"

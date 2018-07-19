@@ -153,7 +153,10 @@ mkMethods cls = concat <$> mapM (mkMethod cls) (V.toList $ cls ^. methods)
 mkMethod :: MonadState ClassgenState m => GodotClass -> GodotMethod -> m [HS.Decl ()]
 mkMethod cls method = do
   mtds <- use methods
-  if (method ^. name) `S.member` (HM.lookupDefault mempty (cls ^. name) mtds) then return [] else do
+  if (method ^. name) `S.member` (HM.lookupDefault mempty (cls ^. name) mtds)
+     || method ^. hasVarargs
+    then return []
+    else do
     methods %= HM.insertWith S.union (cls ^. name) (S.singleton $ method ^. name)
     when (T.null $ method ^. name) $ error (show cls ++ "\n" ++ show method)
     return $ 
