@@ -56,13 +56,16 @@ registerMethod :: forall a. GodotClass a
                => GdnativeHandle
                -> String -- ^ method name
                -> GodotMethodRpcMode
-               -> (GodotObject -> a -> Vector GodotVariant -> IO GodotVariant) -- ^ the godot variants are destroyed at the end of the call
+               -> (GodotObject -> a -> Vector GodotVariant -> IO GodotVariant)
                -> IO ()
 registerMethod pHandle mtdName rpc method  = do
   methodFun <- mkInstanceMethodFunPtr $ \outPtr ins _ objPtr numArgs argsPtr -> do
     obj <- deRefStablePtr $ castPtrToStablePtr objPtr
-    args <- V.generateM (fromIntegral numArgs) $
-      \idx -> GodotVariant <$> newForeignPtr_ (argsPtr `plusPtr` (opaqueSizeOf @GodotVariant * idx))
+    ptrs <- V.fromList <$> peekArray (fromIntegral numArgs) argsPtr
+    args <- V.forM ptrs $
+      \ptr -> do
+        oldVar <- GodotVariant <$> newForeignPtr_ ptr
+        godot_variant_new_copy oldVar
     res <- method ins obj args
     withGodotVariant res $ copyVariant outPtr
     return outPtr
