@@ -38,7 +38,7 @@ addClass cls = do
     classDecls = mkConstants cls ++ mkEnums cls
     classImports = map (\n -> HS.ImportDecl () (HS.ModuleName () n) False False False Nothing Nothing Nothing)
       [ "Data.Coerce", "Foreign.C", "Godot.Internal.Dispatch"
-      , "System.IO.Unsafe", "Godot.Gdnative.Internal", "Godot.Gdnative.Types", "Godot.Api"]
+      , "System.IO.Unsafe", "Godot.Gdnative.Internal", "Godot.Gdnative.Types", "Godot.Api.Auto"]
     classModuleHead = HS.ModuleHead () classModuleName Nothing Nothing
     classModuleName = HS.ModuleName () $ "Godot." ++ (pascal $ T.unpack (cls ^. apiType))
       ++ "." ++ ("Godot" ++ T.unpack (cls ^. name))
@@ -48,7 +48,7 @@ resolveMethods = do
   mtds <- use methods
   let decls = concatMap resolveMethod (S.toList $ S.unions $ HM.elems mtds)
   let moduleHead = HS.ModuleHead () (HS.ModuleName () "Godot.Methods") Nothing Nothing
-  let imports = map (\n -> HS.ImportDecl () (HS.ModuleName () n) False False False Nothing Nothing Nothing ) ["Godot.Internal.Dispatch", "Godot.Api"]
+  let imports = map (\n -> HS.ImportDecl () (HS.ModuleName () n) False False False Nothing Nothing Nothing ) ["Godot.Internal.Dispatch", "Godot.Api.Auto"]
   modules %= HM.insert "Methods" (HS.Module () (Just moduleHead) [] imports decls)
   where
     escapeName "import" = "import'"

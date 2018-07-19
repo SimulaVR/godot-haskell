@@ -5,7 +5,7 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
-import Godot.Api
+import Godot.Api.Auto
 
 pattern NOTIFICATION_WM_ABOUT :: Int
 

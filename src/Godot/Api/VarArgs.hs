@@ -6,7 +6,7 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe (unsafePerformIO)
 import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
-import Godot.Api
+import Godot.Api.Auto
 
 bindObject_emit_signal
   = unsafePerformIO $

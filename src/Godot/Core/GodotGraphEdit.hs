@@ -5,7 +5,7 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
-import Godot.Api
+import Godot.Api.Auto
 
 delete_nodes_request :: Signal GodotGraphEdit
 delete_nodes_request = Signal "delete_nodes_request"

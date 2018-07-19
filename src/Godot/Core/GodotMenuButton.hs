@@ -5,7 +5,7 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
-import Godot.Api
+import Godot.Api.Auto
 
 about_to_show :: Signal GodotMenuButton
 about_to_show = Signal "about_to_show"
