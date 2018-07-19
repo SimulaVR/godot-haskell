@@ -218,11 +218,11 @@ toHsType (PrimitiveType VoidType) = [ty| () |]
 toHsType (PrimitiveType BoolType) = [ty| Bool |]
 toHsType (PrimitiveType IntType) = [ty| Int |]
 toHsType (PrimitiveType FloatType) = [ty| Float |]
-toHsType (CoreType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ unfuckType (T.unpack ty)
+toHsType (CoreType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ renameType (T.unpack ty)
   where
-    unfuckType "RID" = "Rid"
-    unfuckType "Transform2D" = "Transform2d"
-    unfuckType "AABB" = "Aabb"
-    unfuckType x = x
+    renameType "RID" = "Rid"
+    renameType "Transform2D" = "Transform2d"
+    renameType "AABB" = "Aabb"
+    renameType x = x
 toHsType (CustomType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ T.unpack ty
 toHsType (EnumType _) = [ty| Int |]
