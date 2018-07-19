@@ -17,6 +17,7 @@ godot-haskell.cabal
 .ghc*
 #*
 .#*
+godot-haskell.cabal
 
 doc/build/
 
