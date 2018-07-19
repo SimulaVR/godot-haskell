@@ -268,10 +268,11 @@ instance Storable GodotVariantCallError where
   peek ptr = do
     err <- (toEnum . fromIntegral) <$> {#get godot_variant_call_error->error #} ptr
     case err of
-      GodotCallErrorCallOk -> return $ GodotVariantCallError err Nothing Nothing
-      _ -> GodotVariantCallError err 
+      GodotCallErrorCallErrorInvalidArgument ->
+        GodotVariantCallError err 
              <$> (Just <$> {#get godot_variant_call_error->argument #} ptr)
              <*> ((Just . toEnum . fromIntegral) <$> {#get godot_variant_call_error->expected #} ptr)
+      _ -> return $ GodotVariantCallError err Nothing Nothing
   poke ptr a = error "can't poke GodotVariantCallError"
 
 {#pointer *godot_gdnative_api_struct as GodotGdnativeApiStruct newtype#}
