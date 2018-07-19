@@ -154,15 +154,15 @@ mkMethod :: MonadState ClassgenState m => GodotClass -> GodotMethod -> m [HS.Dec
 mkMethod cls method = do
   mtds <- use methods
   if (method ^. name) `S.member` (HM.lookupDefault mempty (cls ^. name) mtds)
-     || method ^. hasVarargs
     then return []
     else do
     methods %= HM.insertWith S.union (cls ^. name) (S.singleton $ method ^. name)
-    when (T.null $ method ^. name) $ error (show cls ++ "\n" ++ show method)
-    return $ 
-      [ HS.PatBind () (HS.PVar () clsMethodBindName)  clsMethodBindRhs Nothing
-      , HS.InlineSig () False Nothing (HS.UnQual () clsMethodBindName)
-      , HS.InstDecl () Nothing instRule (Just instDecls) ]
+    if (method ^. hasVarargs) then return [] else do
+      when (T.null $ method ^. name) $ error (show cls ++ "\n" ++ show method)
+      return $ 
+        [ HS.PatBind () (HS.PVar () clsMethodBindName)  clsMethodBindRhs Nothing
+        , HS.InlineSig () False Nothing (HS.UnQual () clsMethodBindName)
+        , HS.InstDecl () Nothing instRule (Just instDecls) ]
   where
     instRule = HS.IRule () Nothing Nothing instHead
     instHead = foldl (HS.IHApp ()) methodClsTy
