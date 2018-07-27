@@ -12,6 +12,8 @@ import Data.Colour
 import Data.Colour.SRGB
 import Data.Function ((&))
 
+import Data.Typeable
+
 import Foreign
 import Foreign.C
 
@@ -268,9 +270,12 @@ instance AsVariant GodotVariant where
 $(generateAsVariantInstances)
 
 
-fromGodotVariant :: AsVariant a => GodotVariant -> IO a
+fromGodotVariant :: forall a. (Typeable a, AsVariant a) => GodotVariant -> IO a
 fromGodotVariant var = do
   res <- fromVariant <$> fromLowLevel var
   case res of
     Just x -> x `seq` return x
-    Nothing -> error "Error in API: couldn't fromVariant"
+    Nothing -> do
+      haveTy <-  godot_variant_get_type var 
+      let expTy = typeOf (undefined :: a)
+      error $ "Error in API: couldn't fromVariant. have: " ++ show haveTy ++ ", expected: " ++ show expTy
