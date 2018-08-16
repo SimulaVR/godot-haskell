@@ -243,9 +243,11 @@ withVariantArray vars mtd =  allocaArray (length vars) $
   where
     withVars (x:xs) n arrPtr mtd = do
       vt <- toLowLevel x
-      withGodotVariant vt $ \vtPtr -> do
+      res <- withGodotVariant vt $ \vtPtr -> do
         poke (advancePtr arrPtr n) vtPtr 
         withVars xs (n+1) arrPtr mtd
+      godot_variant_destroy vt
+      return res
     withVars [] n arrPtr mtd = mtd (arrPtr, fromIntegral n)
 
 throwIfErr :: GodotVariantCallError -> IO ()
