@@ -771,10 +771,11 @@ initApiStructs opts = do
   where
     findExt ext = do
       next <- {#get godot_gdnative_api_struct->next #} ext
+      when (next /= coerce nullPtr) $ do
 
-      major <- {#get godot_gdnative_api_struct->version.major #} next
-      minor <- {#get godot_gdnative_api_struct->version.minor #} next
-      if major == 1 && minor == 1 then writeIORef godotGdnativeExtNativescript11ApiStructRef (coerce next)
-      else findExt next
+        major <- {#get godot_gdnative_api_struct->version.major #} next
+        minor <- {#get godot_gdnative_api_struct->version.minor #} next
+        if major == 1 && minor == 1 then writeIORef godotGdnativeExtNativescript11ApiStructRef (coerce next)
+        else findExt next
 
 
