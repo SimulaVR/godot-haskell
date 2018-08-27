@@ -761,13 +761,20 @@ initApiStructs opts = do
     case ty of
       1 -> do -- nativescript
         writeIORef godotGdnativeExtNativescriptApiStructRef (coerce ext)
-        next <- {#get godot_gdnative_api_struct->next #} ext
-        when (next /= coerce nullPtr) $ writeIORef godotGdnativeExtNativescript11ApiStructRef (coerce next)
+        findExt ext
       2 -> do -- pluginscript
         writeIORef godotGdnativeExtPluginscriptApiStructRef (coerce ext)
       3 -> return () -- android
       4 -> do -- arvr
         writeIORef godotGdnativeExtArvrApiStructRef (coerce ext)
       _ -> error $ "Unknown API struct type " ++ show ty
+  where
+    findExt ext = do
+      next <- {#get godot_gdnative_api_struct->next #} ext
+
+      major <- {#get godot_gdnative_api_struct->version.major #} next
+      minor <- {#get godot_gdnative_api_struct->version.minor #} next
+      if major == 1 && minor == 1 then writeIORef godotGdnativeExtNativescript11ApiStructRef (coerce next)
+      else findExt next
 
 
