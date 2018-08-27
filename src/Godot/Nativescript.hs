@@ -18,7 +18,7 @@ type GdnativeHandle = Ptr ()
 class GodotClass a where
   godotClassName :: String
 
-registerClass :: forall a. GodotClass a
+registerClass :: forall a. (GodotClass a, Typeable a)
               => GdnativeHandle
               -> String -- ^ base class
               -> (GodotObject -> IO a) -- ^ create action
@@ -42,9 +42,27 @@ registerClass pHandle base create destroy = do
   let createFunObj = GodotInstanceCreateFunc createFun nullPtr createFreeFun
   let destroyFunObj = GodotInstanceDestroyFunc destroyFun nullPtr destroyFreeFun
 
+  let tyr = typeRep (Proxy :: Proxy a)
+  tyPtr <- newStablePtr tyr
+
   let name = godotClassName @a
-  withCString name $ \namePtr -> withCString base $ \basePtr ->
+  withCString name $ \namePtr -> withCString base $ \basePtr -> do
     godot_nativescript_register_class pHandle namePtr basePtr createFunObj destroyFunObj
+    godot_nativescript_set_type_tag pHandle namePtr (castStablePtrToPtr tyPtr)
+  
+tryObjectCast :: forall a. (GodotClass a, Typeable a) => GodotObject -> IO (Maybe a)
+tryObjectCast obj = do
+  tyPtr <- godot_nativescript_get_type_tag obj
+  when (tyPtr == nullPtr) $ error $ "Expected non-null type tag for nativescript class " ++ godotClassName @a
+
+  let tySPtr = castPtrToStablePtr tyPtr
+  tyrep <- deRefStablePtr tySPtr
+
+  if tyrep == typeRep (Proxy :: Proxy a) then
+    Just <$> (godot_nativescript_get_userdata obj >>= (deRefStablePtr.castPtrToStablePtr))
+  else
+    return Nothing
+
 
 copyVariant :: Ptr GodotVariant -- ^ destination
             -> Ptr GodotVariant -- ^ source

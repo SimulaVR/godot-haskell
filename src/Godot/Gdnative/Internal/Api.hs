@@ -32,5 +32,7 @@ godotGdnativeExtArvrApiStruct = accursedUnutterablePerformIO $ readIORef godotGd
 
 
 $(do
-     Just apis <- decode <$> runIO (BL.readFile "godot_headers/gdnative_api.json")
-     apisToHs apis)
+    maybeApis <- eitherDecode <$> runIO (BL.readFile "godot_headers/gdnative_api.json")
+    case maybeApis of
+      Right apis -> apisToHs apis
+      Left err -> error err)

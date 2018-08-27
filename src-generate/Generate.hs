@@ -158,6 +158,8 @@ godotStructs =
   , "godot_arvr_interface_gdnative"
   , "godot_variant_call_error"
   , "godot_pluginscript_language_desc"
+  , "godot_method_arg"
+  , "godot_instance_binding_functions"
   ]
   
 godotEnums :: [C.Identifier]
@@ -444,12 +446,19 @@ generateCall = go []
 apisToHs :: S.GdnativeApis -> Q [Dec]
 apisToHs apis = do
   coreDecs <- apiToHs True (S.core apis) 
-  extDecs <- concat <$> mapM (apiToHs False) (HM.elems $ S.extensions apis)
+  extDecs <- concat <$> mapM (apiToHs False) (V.filter (\api -> S.apiType api `notElem` excluded) $ S.extensions apis)
   return $ coreDecs ++ extDecs
+
+  where
+    excluded = ["ANDROID"]
 
 -- bool: is core -> True
 apiToHs :: Bool -> S.GdnativeApi -> Q [Dec]
-apiToHs isCore api = generateApiType
+apiToHs isCore api = do
+  nxts <- case S.apiNext api of
+    Just next -> apiToHs isCore next
+    Nothing -> return []
+  (++ nxts) <$> generateApiType
   where
     -- generate the
     -- newtype: newtype Api = Api (Ptr Api)
@@ -462,7 +471,7 @@ apiToHs isCore api = generateApiType
                       in generateFunctions apiName apiEntries
     maybeExt = if isCore then "" else "Ext"
     showVer = let ver = S.apiVersion api in show (S.major ver) ++ show (S.minor ver)
-    maybeVer = if S.apiVersion api == S.Ver 1 0 then "" else showVer
+    maybeVer = if S.apiVersion api == S.Ver 1 0 || S.apiType api == "ARVR" then "" else showVer
     mkApiName = mkName $ "GodotGdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
 
     generateFunctions name entries = do

@@ -691,6 +691,24 @@ instance Storable GodotSignal where
 
 
 
+data GodotInstanceBindingFunctions
+instance Storable GodotInstanceBindingFunctions where
+  sizeOf _ = {#sizeof godot_instance_binding_functions#}
+  alignment _ = {#sizeof godot_instance_binding_functions#}
+  peek = error "GodotInstanceBindingFunctions peek not implemented"
+  poke = error "GodotInstanceBindingFunctions poke not implemented"
+{#pointer *godot_instance_binding_functions as GodotInstanceBindingFunctionsPtr -> GodotInstanceBindingFunctions #}
+
+
+data GodotMethodArg
+instance Storable GodotMethodArg where
+  sizeOf _ = {#sizeof godot_method_arg#}
+  alignment _ = {#sizeof godot_method_arg#}
+  peek = error "GodotMethodArg peek not implemented"
+  poke = error "GodotMethodArg poke not implemented"
+{#pointer *godot_method_arg as GodotMethodArgPtr -> GodotMethodArg #}
+
+
 --arvr
 
 data GodotArvrInterfaceGdnative
@@ -700,6 +718,8 @@ instance Storable GodotArvrInterfaceGdnative where
   peek = error "GodotArvrInterfaceGdnative peek not implemented"
   poke = error "GodotArvrInterfaceGdnative poke not implemented"
 {#pointer *godot_arvr_interface_gdnative as GodotArvrInterfaceGdnativePtr -> GodotArvrInterfaceGdnative #}
+
+
 
 
 godotGdnativeCoreApiStructRef :: IORef GodotGdnativeCoreApiStruct
@@ -727,7 +747,6 @@ godotGdnativeExtArvrApiStructRef = unsafePerformIO $ newIORef $
   error "attempted to get godotGdnativeExtArvrApiStructRef too early"
 {-# NOINLINE godotGdnativeExtArvrApiStructRef #-}
 
-
 initApiStructs :: GodotGdnativeInitOptions -> IO ()
 initApiStructs opts = do
   let coreApi = gdnativeInitOptionsApiStruct opts
@@ -746,7 +765,8 @@ initApiStructs opts = do
         when (next /= coerce nullPtr) $ writeIORef godotGdnativeExtNativescript11ApiStructRef (coerce next)
       2 -> do -- pluginscript
         writeIORef godotGdnativeExtPluginscriptApiStructRef (coerce ext)
-      3 -> do -- arvr
+      3 -> return () -- android
+      4 -> do -- arvr
         writeIORef godotGdnativeExtArvrApiStructRef (coerce ext)
       _ -> error $ "Unknown API struct type " ++ show ty
 

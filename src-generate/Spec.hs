@@ -25,7 +25,7 @@ instance FromJSON Type where
 
 data GdnativeApis = GdnativeApis
   { core :: !GdnativeApi
-  , extensions :: !(HashMap Text GdnativeApi)
+  , extensions :: !(Vector GdnativeApi)
   } deriving (Show, Eq)
 
 data Ver = Ver { major :: !Int, minor :: !Int}
@@ -34,6 +34,7 @@ data Ver = Ver { major :: !Int, minor :: !Int}
 data GdnativeApi = GdnativeApi
   { apiType :: !Text
   , apiVersion :: !Ver
+  , apiNext :: !(Maybe GdnativeApi)
   , apiApi :: !(Vector GdnativeApiEntry)
   } deriving (Show, Eq)
 
@@ -50,13 +51,13 @@ deriveFromJSON defaultOptions ''GdnativeApis
 
 
 collectTypes :: GdnativeApis -> Set Type
-collectTypes apis = collectFromApi (core apis) <> mconcat (HM.elems $ fmap collectFromApi $ extensions apis)
+collectTypes apis = collectFromApi (core apis) <> mconcat (V.toList $ fmap collectFromApi $ extensions apis)
   where
     collectFromApi api = mconcat $ V.toList $ fmap collectFromEntry (apiApi api)
     collectFromEntry entry = S.singleton (return_type entry) <> (S.fromList $ V.toList $ fmap fst $ arguments entry)
 
 collectNames :: GdnativeApis -> Set Text
-collectNames apis = collectFromApi (core apis) <> mconcat (HM.elems $ fmap collectFromApi $ extensions apis)
+collectNames apis = collectFromApi (core apis) <> mconcat (V.toList $ fmap collectFromApi $ extensions apis)
   where
     collectFromApi api = mconcat $ V.toList $ fmap collectFromEntry (apiApi api)
     collectFromEntry entry = S.fromList $ V.toList $ fmap snd $ arguments entry
