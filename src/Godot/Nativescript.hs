@@ -1,12 +1,14 @@
 {-# LANGUAGE RecursiveDo, RecordWildCards, AllowAmbiguousTypes #-}
 module Godot.Nativescript where
 
+import Control.Monad
+
 import Data.Typeable
 import Data.Text (Text)
 import Data.Vector (Vector)
 import qualified Data.Vector as V
 
-import Foreign
+import Foreign hiding (void)
 import Foreign.C
 
 import Godot.Gdnative.Internal
