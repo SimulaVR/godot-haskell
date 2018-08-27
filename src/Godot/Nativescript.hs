@@ -55,15 +55,15 @@ registerClass pHandle base create destroy = do
 tryObjectCast :: forall a. (GodotClass a, Typeable a) => GodotObject -> IO (Maybe a)
 tryObjectCast obj = do
   tyPtr <- godot_nativescript_get_type_tag obj
-  when (tyPtr == nullPtr) $ error $ "Expected non-null type tag for nativescript class " ++ godotClassName @a
+  if tyPtr == nullPtr then return Nothing else do
 
-  let tySPtr = castPtrToStablePtr tyPtr
-  tyrep <- deRefStablePtr tySPtr
+    let tySPtr = castPtrToStablePtr tyPtr
+    tyrep <- deRefStablePtr tySPtr
 
-  if tyrep == typeRep (Proxy :: Proxy a) then
-    Just <$> (godot_nativescript_get_userdata obj >>= (deRefStablePtr.castPtrToStablePtr))
-  else
-    return Nothing
+    if tyrep == typeRep (Proxy :: Proxy a) then
+      Just <$> (godot_nativescript_get_userdata obj >>= (deRefStablePtr.castPtrToStablePtr))
+    else
+      return Nothing
 
 
 copyVariant :: Ptr GodotVariant -- ^ destination
