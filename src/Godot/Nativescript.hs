@@ -8,8 +8,14 @@ import Data.Text (Text)
 import Data.Vector (Vector)
 import qualified Data.Vector as V
 
+import qualified Data.Set as S
+import Control.Concurrent.STM.TVar
+import Control.Monad.STM
+
 import Foreign hiding (void)
 import Foreign.C
+
+import System.IO.Unsafe
 
 import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
@@ -47,15 +53,23 @@ registerClass pHandle base create destroy = do
   let tyr = typeRep (Proxy :: Proxy a)
   tyPtr <- newStablePtr tyr
 
+  atomically $ modifyTVar' typeTags (S.insert $ castStablePtrToPtr tyPtr) 
+
   let name = godotClassName @a
   withCString name $ \namePtr -> withCString base $ \basePtr -> do
     godot_nativescript_register_class pHandle namePtr basePtr createFunObj destroyFunObj
     godot_nativescript_set_type_tag pHandle namePtr (castStablePtrToPtr tyPtr)
   
+
+typeTags :: TVar (S.Set (Ptr ()))
+typeTags = unsafePerformIO $ newTVarIO mempty
+{-# NOINLINE typeTags #-}
+
 tryObjectCast :: forall a. (GodotClass a, Typeable a) => GodotObject -> IO (Maybe a)
 tryObjectCast obj = do
   tyPtr <- godot_nativescript_get_type_tag obj
-  if tyPtr == nullPtr then return Nothing else do
+  ttags <- atomically $ readTVar typeTags
+  if tyPtr == nullPtr || tyPtr `S.notMember` ttags then return Nothing else do
 
     let tySPtr = castPtrToStablePtr tyPtr
     tyrep <- deRefStablePtr tySPtr

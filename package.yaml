@@ -21,6 +21,7 @@ dependencies:
 - containers
 - unordered-containers
 - mtl
+- stm
 
 build-tools:
 - c2hs
