@@ -35,6 +35,10 @@ pattern CURSOR_IBEAM :: Int
 
 pattern CURSOR_IBEAM = 1
 
+pattern NOTIFICATION_SCROLL_END :: Int
+
+pattern NOTIFICATION_SCROLL_END = 48
+
 pattern CURSOR_HSPLIT :: Int
 
 pattern CURSOR_HSPLIT = 15
@@ -95,6 +99,10 @@ pattern PRESET_HCENTER_WIDE :: Int
 
 pattern PRESET_HCENTER_WIDE = 14
 
+pattern GROW_DIRECTION_BOTH :: Int
+
+pattern GROW_DIRECTION_BOTH = 2
+
 pattern ANCHOR_BEGIN :: Int
 
 pattern ANCHOR_BEGIN = 0
@@ -134,6 +142,10 @@ pattern SIZE_EXPAND = 2
 pattern CURSOR_CAN_DROP :: Int
 
 pattern CURSOR_CAN_DROP = 7
+
+pattern NOTIFICATION_SCROLL_BEGIN :: Int
+
+pattern NOTIFICATION_SCROLL_BEGIN = 47
 
 pattern PRESET_MODE_KEEP_SIZE :: Int
 

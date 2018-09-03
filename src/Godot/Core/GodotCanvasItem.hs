@@ -7,6 +7,10 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+pattern BLEND_MODE_DISABLED :: Int
+
+pattern BLEND_MODE_DISABLED = 5
+
 pattern NOTIFICATION_EXIT_CANVAS :: Int
 
 pattern NOTIFICATION_EXIT_CANVAS = 33

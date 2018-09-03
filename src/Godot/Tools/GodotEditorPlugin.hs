@@ -7,17 +7,21 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+pattern CONTAINER_SPATIAL_EDITOR_SIDE_LEFT :: Int
+
+pattern CONTAINER_SPATIAL_EDITOR_SIDE_LEFT = 2
+
 pattern CONTAINER_SPATIAL_EDITOR_BOTTOM :: Int
 
-pattern CONTAINER_SPATIAL_EDITOR_BOTTOM = 3
+pattern CONTAINER_SPATIAL_EDITOR_BOTTOM = 4
 
 pattern DOCK_SLOT_LEFT_UR :: Int
 
 pattern DOCK_SLOT_LEFT_UR = 2
 
-pattern CONTAINER_CANVAS_EDITOR_SIDE :: Int
+pattern CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT :: Int
 
-pattern CONTAINER_CANVAS_EDITOR_SIDE = 5
+pattern CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT = 3
 
 pattern DOCK_SLOT_LEFT_BL :: Int
 
@@ -37,11 +41,15 @@ pattern DOCK_SLOT_RIGHT_BL = 5
 
 pattern CONTAINER_CANVAS_EDITOR_BOTTOM :: Int
 
-pattern CONTAINER_CANVAS_EDITOR_BOTTOM = 6
+pattern CONTAINER_CANVAS_EDITOR_BOTTOM = 8
+
+pattern CONTAINER_CANVAS_EDITOR_SIDE_LEFT :: Int
+
+pattern CONTAINER_CANVAS_EDITOR_SIDE_LEFT = 6
 
 pattern CONTAINER_PROPERTY_EDITOR_BOTTOM :: Int
 
-pattern CONTAINER_PROPERTY_EDITOR_BOTTOM = 7
+pattern CONTAINER_PROPERTY_EDITOR_BOTTOM = 9
 
 pattern CONTAINER_TOOLBAR :: Int
 
@@ -61,11 +69,11 @@ pattern DOCK_SLOT_LEFT_UL = 0
 
 pattern CONTAINER_CANVAS_EDITOR_MENU :: Int
 
-pattern CONTAINER_CANVAS_EDITOR_MENU = 4
+pattern CONTAINER_CANVAS_EDITOR_MENU = 5
 
-pattern CONTAINER_SPATIAL_EDITOR_SIDE :: Int
+pattern CONTAINER_CANVAS_EDITOR_SIDE_RIGHT :: Int
 
-pattern CONTAINER_SPATIAL_EDITOR_SIDE = 2
+pattern CONTAINER_CANVAS_EDITOR_SIDE_RIGHT = 7
 
 pattern DOCK_SLOT_LEFT_BR :: Int
 
@@ -83,3 +91,6 @@ scene_closed = Signal "scene_closed"
 
 scene_changed :: Signal GodotEditorPlugin
 scene_changed = Signal "scene_changed"
+
+resource_saved :: Signal GodotEditorPlugin
+resource_saved = Signal "resource_saved"

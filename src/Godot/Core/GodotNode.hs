@@ -27,17 +27,9 @@ pattern NOTIFICATION_UNPARENTED :: Int
 
 pattern NOTIFICATION_UNPARENTED = 19
 
-pattern RPC_MODE_SLAVE :: Int
-
-pattern RPC_MODE_SLAVE = 4
-
 pattern PAUSE_MODE_PROCESS :: Int
 
 pattern PAUSE_MODE_PROCESS = 2
-
-pattern RPC_MODE_DISABLED :: Int
-
-pattern RPC_MODE_DISABLED = 0
 
 pattern NOTIFICATION_DRAG_END :: Int
 
@@ -66,10 +58,6 @@ pattern NOTIFICATION_ENTER_TREE = 10
 pattern NOTIFICATION_EXIT_TREE :: Int
 
 pattern NOTIFICATION_EXIT_TREE = 11
-
-pattern RPC_MODE_MASTER :: Int
-
-pattern RPC_MODE_MASTER = 3
 
 pattern NOTIFICATION_PROCESS :: Int
 
@@ -111,20 +99,15 @@ pattern DUPLICATE_SIGNALS :: Int
 
 pattern DUPLICATE_SIGNALS = 1
 
-pattern RPC_MODE_SYNC :: Int
-
-pattern RPC_MODE_SYNC = 2
-
-pattern RPC_MODE_REMOTE :: Int
-
-pattern RPC_MODE_REMOTE = 1
-
 pattern NOTIFICATION_READY :: Int
 
 pattern NOTIFICATION_READY = 13
 
 renamed :: Signal GodotNode
 renamed = Signal "renamed"
+
+ready :: Signal GodotNode
+ready = Signal "ready"
 
 tree_entered :: Signal GodotNode
 tree_entered = Signal "tree_entered"

@@ -67,6 +67,10 @@ pattern VIEWPORT_CLEAR_NEVER :: Int
 
 pattern VIEWPORT_CLEAR_NEVER = 1
 
+pattern TEXTURE_TYPE_2D_ARRAY :: Int
+
+pattern TEXTURE_TYPE_2D_ARRAY = 2
+
 pattern INSTANCE_GEOMETRY_MASK :: Int
 
 pattern INSTANCE_GEOMETRY_MASK = 30
@@ -150,6 +154,10 @@ pattern MAX_GLOW_LEVELS = 7
 pattern LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL :: Int
 
 pattern LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL = 1
+
+pattern TEXTURE_TYPE_CUBEMAP :: Int
+
+pattern TEXTURE_TYPE_CUBEMAP = 1
 
 pattern VIEWPORT_RENDER_INFO_SURFACE_CHANGES_IN_FRAME :: Int
 
@@ -349,7 +357,7 @@ pattern LIGHT_OMNI_SHADOW_DETAIL_VERTICAL = 0
 
 pattern INSTANCE_FLAG_MAX :: Int
 
-pattern INSTANCE_FLAG_MAX = 1
+pattern INSTANCE_FLAG_MAX = 2
 
 pattern MULTIMESH_TRANSFORM_3D :: Int
 
@@ -370,6 +378,10 @@ pattern ARRAY_TEX_UV2 = 5
 pattern ENV_DOF_BLUR_QUALITY_MEDIUM :: Int
 
 pattern ENV_DOF_BLUR_QUALITY_MEDIUM = 1
+
+pattern TEXTURE_TYPE_2D :: Int
+
+pattern TEXTURE_TYPE_2D = 0
 
 pattern ENV_BG_SKY :: Int
 
@@ -417,7 +429,7 @@ pattern REFLECTION_PROBE_UPDATE_ONCE = 0
 
 pattern ARRAY_COMPRESS_DEFAULT :: Int
 
-pattern ARRAY_COMPRESS_DEFAULT = 97792
+pattern ARRAY_COMPRESS_DEFAULT = 97280
 
 pattern CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE :: Int
 
@@ -659,6 +671,10 @@ pattern INSTANCE_LIGHT :: Int
 
 pattern INSTANCE_LIGHT = 5
 
+pattern TEXTURE_TYPE_3D :: Int
+
+pattern TEXTURE_TYPE_3D = 3
+
 pattern TEXTURE_FLAG_MIPMAPS :: Int
 
 pattern TEXTURE_FLAG_MIPMAPS = 1
@@ -685,7 +701,7 @@ pattern CUBEMAP_FRONT = 4
 
 pattern TEXTURE_FLAG_USED_FOR_STREAMING :: Int
 
-pattern TEXTURE_FLAG_USED_FOR_STREAMING = 4096
+pattern TEXTURE_FLAG_USED_FOR_STREAMING = 2048
 
 pattern INFO_VERTEX_MEM_USED :: Int
 
@@ -751,6 +767,10 @@ pattern VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME :: Int
 
 pattern VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME = 3
 
+pattern INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE :: Int
+
+pattern INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE = 1
+
 pattern CANVAS_LIGHT_MODE_MASK :: Int
 
 pattern CANVAS_LIGHT_MODE_MASK = 3
@@ -770,10 +790,6 @@ pattern VIEWPORT_MSAA_4X = 2
 pattern LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET :: Int
 
 pattern LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET = 9
-
-pattern TEXTURE_FLAG_CUBEMAP :: Int
-
-pattern TEXTURE_FLAG_CUBEMAP = 2048
 
 pattern CANVAS_LIGHT_FILTER_PCF13 :: Int
 
@@ -831,5 +847,8 @@ pattern PRIMITIVE_POINTS :: Int
 
 pattern PRIMITIVE_POINTS = 0
 
-frame_drawn_in_thread :: Signal GodotVisualServer
-frame_drawn_in_thread = Signal "frame_drawn_in_thread"
+frame_post_draw :: Signal GodotVisualServer
+frame_post_draw = Signal "frame_post_draw"
+
+frame_pre_draw :: Signal GodotVisualServer
+frame_pre_draw = Signal "frame_pre_draw"

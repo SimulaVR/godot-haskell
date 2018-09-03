@@ -17,7 +17,7 @@ pattern FLAG_USE_BAKED_LIGHT = 0
 
 pattern FLAG_MAX :: Int
 
-pattern FLAG_MAX = 1
+pattern FLAG_MAX = 2
 
 pattern SHADOW_CASTING_SETTING_DOUBLE_SIDED :: Int
 

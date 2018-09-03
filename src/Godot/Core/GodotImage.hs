@@ -147,6 +147,10 @@ pattern FORMAT_BPTC_RGBFU :: Int
 
 pattern FORMAT_BPTC_RGBFU = 24
 
+pattern INTERPOLATE_TRILINEAR :: Int
+
+pattern INTERPOLATE_TRILINEAR = 3
+
 pattern ALPHA_BLEND :: Int
 
 pattern ALPHA_BLEND = 2

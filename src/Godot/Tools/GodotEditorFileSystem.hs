@@ -15,3 +15,6 @@ sources_changed = Signal "sources_changed"
 
 filesystem_changed :: Signal GodotEditorFileSystem
 filesystem_changed = Signal "filesystem_changed"
+
+script_classes_updated :: Signal GodotEditorFileSystem
+script_classes_updated = Signal "script_classes_updated"

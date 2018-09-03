@@ -35,6 +35,10 @@ pattern LINE_JOINT_SHARP :: Int
 
 pattern LINE_JOINT_SHARP = 0
 
+pattern LINE_TEXTURE_STRETCH :: Int
+
+pattern LINE_TEXTURE_STRETCH = 2
+
 pattern LINE_CAP_BOX :: Int
 
 pattern LINE_CAP_BOX = 1

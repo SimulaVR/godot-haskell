@@ -7,6 +7,10 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+pattern CONNECT_REFERENCE_COUNTED :: Int
+
+pattern CONNECT_REFERENCE_COUNTED = 8
+
 pattern CONNECT_DEFERRED :: Int
 
 pattern CONNECT_DEFERRED = 1

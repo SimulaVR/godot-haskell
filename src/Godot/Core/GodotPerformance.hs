@@ -55,6 +55,10 @@ pattern OBJECT_NODE_COUNT :: Int
 
 pattern OBJECT_NODE_COUNT = 10
 
+pattern AUDIO_OUTPUT_LATENCY :: Int
+
+pattern AUDIO_OUTPUT_LATENCY = 27
+
 pattern RENDER_OBJECTS_IN_FRAME :: Int
 
 pattern RENDER_OBJECTS_IN_FRAME = 11
@@ -81,7 +85,7 @@ pattern RENDER_SHADER_CHANGES_IN_FRAME = 14
 
 pattern MONITOR_MAX :: Int
 
-pattern MONITOR_MAX = 27
+pattern MONITOR_MAX = 28
 
 pattern TIME_FPS :: Int
 

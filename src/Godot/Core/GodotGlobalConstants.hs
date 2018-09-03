@@ -75,6 +75,10 @@ pattern PROPERTY_HINT_KEY_ACCEL :: Int
 
 pattern PROPERTY_HINT_KEY_ACCEL = 7
 
+pattern MIDI_MESSAGE_CONTROL_CHANGE :: Int
+
+pattern MIDI_MESSAGE_CONTROL_CHANGE = 11
+
 pattern KEY_D :: Int
 
 pattern KEY_D = 68
@@ -141,7 +145,7 @@ pattern KEY_CURRENCY = 164
 
 pattern PROPERTY_HINT_IMAGE_COMPRESS_LOSSLESS :: Int
 
-pattern PROPERTY_HINT_IMAGE_COMPRESS_LOSSLESS = 21
+pattern PROPERTY_HINT_IMAGE_COMPRESS_LOSSLESS = 22
 
 pattern BUTTON_WHEEL_DOWN :: Int
 
@@ -170,6 +174,10 @@ pattern KEY_IACUTE = 205
 pattern KEY_F9 :: Int
 
 pattern KEY_F9 = 16777252
+
+pattern MIDI_MESSAGE_PROGRAM_CHANGE :: Int
+
+pattern MIDI_MESSAGE_PROGRAM_CHANGE = 12
 
 pattern JOY_SONY_X :: Int
 
@@ -286,6 +294,10 @@ pattern PROPERTY_HINT_FILE = 13
 pattern JOY_ANALOG_LX :: Int
 
 pattern JOY_ANALOG_LX = 0
+
+pattern MIDI_MESSAGE_NOTE_OFF :: Int
+
+pattern MIDI_MESSAGE_NOTE_OFF = 8
 
 pattern TYPE_VECTOR2_ARRAY :: Int
 
@@ -547,6 +559,10 @@ pattern KEY_F5 :: Int
 
 pattern KEY_F5 = 16777248
 
+pattern MIDI_MESSAGE_AFTERTOUCH :: Int
+
+pattern MIDI_MESSAGE_AFTERTOUCH = 10
+
 pattern KEY_UACUTE :: Int
 
 pattern KEY_UACUTE = 218
@@ -590,6 +606,10 @@ pattern KEY_S = 83
 pattern KEY_SEMICOLON :: Int
 
 pattern KEY_SEMICOLON = 59
+
+pattern MIDI_MESSAGE_CHANNEL_PRESSURE :: Int
+
+pattern MIDI_MESSAGE_CHANNEL_PRESSURE = 13
 
 pattern KEY_BRACKETLEFT :: Int
 
@@ -959,6 +979,10 @@ pattern KEY_MEDIASTOP :: Int
 
 pattern KEY_MEDIASTOP = 16777293
 
+pattern MIDI_MESSAGE_NOTE_ON :: Int
+
+pattern MIDI_MESSAGE_NOTE_ON = 9
+
 pattern KEY_MULTIPLY :: Int
 
 pattern KEY_MULTIPLY = 215
@@ -977,7 +1001,7 @@ pattern JOY_BUTTON_6 = 6
 
 pattern PROPERTY_HINT_COLOR_NO_ALPHA :: Int
 
-pattern PROPERTY_HINT_COLOR_NO_ALPHA = 19
+pattern PROPERTY_HINT_COLOR_NO_ALPHA = 20
 
 pattern KEY_AE :: Int
 
@@ -1097,7 +1121,7 @@ pattern KEY_DIAERESIS = 168
 
 pattern PROPERTY_HINT_IMAGE_COMPRESS_LOSSY :: Int
 
-pattern PROPERTY_HINT_IMAGE_COMPRESS_LOSSY = 20
+pattern PROPERTY_HINT_IMAGE_COMPRESS_LOSSY = 21
 
 pattern KEY_ONEHALF :: Int
 
@@ -1299,6 +1323,10 @@ pattern KEY_SLASH :: Int
 
 pattern KEY_SLASH = 47
 
+pattern PROPERTY_HINT_PLACEHOLDER_TEXT :: Int
+
+pattern PROPERTY_HINT_PLACEHOLDER_TEXT = 19
+
 pattern KEY_F12 :: Int
 
 pattern KEY_F12 = 16777255
@@ -1410,6 +1438,14 @@ pattern KEY_TREBLEUP = 16777290
 pattern JOY_BUTTON_7 :: Int
 
 pattern JOY_BUTTON_7 = 7
+
+pattern BUTTON_MASK_XBUTTON1 :: Int
+
+pattern BUTTON_MASK_XBUTTON1 = 128
+
+pattern BUTTON_XBUTTON2 :: Int
+
+pattern BUTTON_XBUTTON2 = 9
 
 pattern KEY_0 :: Int
 
@@ -1695,6 +1731,10 @@ pattern BUTTON_WHEEL_LEFT :: Int
 
 pattern BUTTON_WHEEL_LEFT = 6
 
+pattern BUTTON_MASK_XBUTTON2 :: Int
+
+pattern BUTTON_MASK_XBUTTON2 = 256
+
 pattern KEY_PLUSMINUS :: Int
 
 pattern KEY_PLUSMINUS = 177
@@ -1707,6 +1747,10 @@ pattern ERR_FILE_CORRUPT :: Int
 
 pattern ERR_FILE_CORRUPT = 16
 
+pattern BUTTON_XBUTTON1 :: Int
+
+pattern BUTTON_XBUTTON1 = 8
+
 pattern KEY_F11 :: Int
 
 pattern KEY_F11 = 16777254
@@ -1718,6 +1762,10 @@ pattern OP_NOT_EQUAL = 1
 pattern KEY_OOBLIQUE :: Int
 
 pattern KEY_OOBLIQUE = 216
+
+pattern MIDI_MESSAGE_PITCH_BEND :: Int
+
+pattern MIDI_MESSAGE_PITCH_BEND = 14
 
 pattern HORIZONTAL :: Int
 

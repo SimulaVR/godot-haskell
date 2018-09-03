@@ -9,7 +9,7 @@ import Godot.Api.Auto
 
 pattern FLAG_VIDEO_SURFACE :: Int
 
-pattern FLAG_VIDEO_SURFACE = 4096
+pattern FLAG_VIDEO_SURFACE = 2048
 
 pattern FLAGS_DEFAULT :: Int
 
