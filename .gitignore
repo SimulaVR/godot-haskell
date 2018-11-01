@@ -13,11 +13,9 @@ app/*.cpp
 src/**/*.cpp
 src/**/*.c
 *.so
-godot-haskell.cabal
 .ghc*
 #*
 .#*
-godot-haskell.cabal
 
 doc/build/
 

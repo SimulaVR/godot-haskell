@@ -6,10 +6,12 @@ import Data.Text (Text)
 import GHC.TypeLits as T
 import Godot.Gdnative.Internal.Gdnative
 
+-- | Establishes 'child` as a child of BaseClass child`
 class HasBaseClass child where
   type BaseClass child
   super :: child -> BaseClass child
 
+-- | Transitive subclass relation. You shouldn't need to define instances of this.
 class parent :< child where
   safeCast :: child -> parent
 
@@ -38,33 +40,6 @@ instance {-# OVERLAPPABLE #-} ( TypeError (T.Text "Couldn't find method " :<>: S
                               , Method name GodotObject sig ) -- for fundeps
     => Method name GodotObject sig where
   runMethod = error "unreachable"
-
-
-{-
-type family RemArgs sig where
-  RemArgs (x -> res) = x : RemArgs res
-  RemArgs a = '[]
-
--- |A small utility typeclass to determine whether 
--- | * a method signature is compatible with the signal arguments
--- | * ensuring that all other arguments are passed, too,
--- |   by calculating the remaining args
-type family SignalCompatibleSig (varargs :: Bool) (args :: [Type]) sig :: [Type] where
-  SignalCompatibleSig [] sig = RemArgs sig
-  SignalCompatibleSig (x:xs) (x -> sig) = SignalCompatibleSig xs sig
-
-class AsVariant x where
-  toVariant :: x -> Variant 'GodotTy
-  fromVariant :: Variant 'GodotTy -> Maybe x
-
-data VariantList (xs :: '[Type]) where
-  VNil :: VariantList '[]
-  VCons :: AsVariant x => x -> VariantList xs -> VariantList (x:xs)
-
--- |A signal. You can connect a signal iff the class has a compatible method.
-class Signal (name :: Symbol) source (args :: '[Type]) | source name -> args where
-  connectSignal :: (Method mtdName cls sig, (SignalCompatibleSig args sig) ~ remArgs) => 
--}
 
 newtype Signal a = Signal Text
   deriving (Show, Eq)

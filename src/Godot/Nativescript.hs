@@ -22,7 +22,7 @@ import Godot.Gdnative.Types
 
 type GdnativeHandle = Ptr ()
 
--- | typeclass for types that are bound to godot
+-- | Typeclass for types that are bound to godot
 class GodotClass a where
   godotClassName :: String
 
