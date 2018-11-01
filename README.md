@@ -7,3 +7,6 @@ Haskell bindings for the Godot game engine.
 For an example project by lboklin, see addons/godot-haskell-plugin at https://gitlab.com/lboklin/godot-haskell-test/tree/godot-project
 
 Questions, etc are best asked in the Gitter chatroom for SimulaVR: [![Gitter](https://badges.gitter.im/SimulaVR/Simula.svg)](https://gitter.im/SimulaVR/Simula?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+# Docs
+The Haskell specific stuff is documented, but I'm not importing the docstrings from the Godot API yet. Refer to the Godot docs for that

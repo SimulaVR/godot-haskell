@@ -7,6 +7,10 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+pattern FLAG_REPLACE_SUBRESOURCE_PATHS :: Int
+
+pattern FLAG_REPLACE_SUBRESOURCE_PATHS = 64
+
 pattern FLAG_RELATIVE_PATHS :: Int
 
 pattern FLAG_RELATIVE_PATHS = 1

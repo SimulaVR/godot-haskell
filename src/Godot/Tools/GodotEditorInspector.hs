@@ -24,3 +24,6 @@ property_keyed = Signal "property_keyed"
 
 resource_selected :: Signal GodotEditorInspector
 resource_selected = Signal "resource_selected"
+
+property_toggled :: Signal GodotEditorInspector
+property_toggled = Signal "property_toggled"

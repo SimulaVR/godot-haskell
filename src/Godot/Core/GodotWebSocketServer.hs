@@ -7,6 +7,9 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+client_close_request :: Signal GodotWebSocketServer
+client_close_request = Signal "client_close_request"
+
 data_received :: Signal GodotWebSocketServer
 data_received = Signal "data_received"
 

@@ -11,6 +11,10 @@ pattern SPEAKER_SURROUND_71 :: Int
 
 pattern SPEAKER_SURROUND_71 = 3
 
+pattern SPEAKER_SURROUND_31 :: Int
+
+pattern SPEAKER_SURROUND_31 = 1
+
 pattern SPEAKER_MODE_STEREO :: Int
 
 pattern SPEAKER_MODE_STEREO = 0

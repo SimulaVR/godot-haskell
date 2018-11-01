@@ -9,7 +9,7 @@ import Godot.Api.Auto
 
 pattern RPC_MODE_SLAVE :: Int
 
-pattern RPC_MODE_SLAVE = 4
+pattern RPC_MODE_SLAVE = 3
 
 pattern RPC_MODE_DISABLED :: Int
 
@@ -17,27 +17,31 @@ pattern RPC_MODE_DISABLED = 0
 
 pattern RPC_MODE_MASTER :: Int
 
-pattern RPC_MODE_MASTER = 3
+pattern RPC_MODE_MASTER = 2
 
 pattern RPC_MODE_MASTERSYNC :: Int
 
-pattern RPC_MODE_MASTERSYNC = 6
+pattern RPC_MODE_MASTERSYNC = 5
 
 pattern RPC_MODE_SYNC :: Int
 
-pattern RPC_MODE_SYNC = 2
-
-pattern RPC_MODE_SLAVESYNC :: Int
-
-pattern RPC_MODE_SLAVESYNC = 7
+pattern RPC_MODE_SYNC = 4
 
 pattern RPC_MODE_REMOTE :: Int
 
 pattern RPC_MODE_REMOTE = 1
 
+pattern RPC_MODE_PUPPET :: Int
+
+pattern RPC_MODE_PUPPET = 3
+
+pattern RPC_MODE_PUPPETSYNC :: Int
+
+pattern RPC_MODE_PUPPETSYNC = 6
+
 pattern RPC_MODE_REMOTESYNC :: Int
 
-pattern RPC_MODE_REMOTESYNC = 5
+pattern RPC_MODE_REMOTESYNC = 4
 
 connected_to_server :: Signal GodotMultiplayerAPI
 connected_to_server = Signal "connected_to_server"

@@ -7,6 +7,9 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+server_close_request :: Signal GodotWebSocketClient
+server_close_request = Signal "server_close_request"
+
 connection_established :: Signal GodotWebSocketClient
 connection_established = Signal "connection_established"
 

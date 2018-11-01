@@ -13,11 +13,11 @@ pattern ITEM_UNDERLINE = 6
 
 pattern ITEM_META :: Int
 
-pattern ITEM_META = 11
+pattern ITEM_META = 12
 
 pattern ITEM_ALIGN :: Int
 
-pattern ITEM_ALIGN = 7
+pattern ITEM_ALIGN = 8
 
 pattern ITEM_FRAME :: Int
 
@@ -31,13 +31,17 @@ pattern ALIGN_FILL :: Int
 
 pattern ALIGN_FILL = 3
 
+pattern ITEM_STRIKETHROUGH :: Int
+
+pattern ITEM_STRIKETHROUGH = 7
+
 pattern ITEM_FONT :: Int
 
 pattern ITEM_FONT = 4
 
 pattern ITEM_TABLE :: Int
 
-pattern ITEM_TABLE = 10
+pattern ITEM_TABLE = 11
 
 pattern ITEM_COLOR :: Int
 
@@ -61,7 +65,7 @@ pattern LIST_LETTERS = 1
 
 pattern ITEM_LIST :: Int
 
-pattern ITEM_LIST = 9
+pattern ITEM_LIST = 10
 
 pattern ITEM_NEWLINE :: Int
 
@@ -69,7 +73,7 @@ pattern ITEM_NEWLINE = 3
 
 pattern ITEM_INDENT :: Int
 
-pattern ITEM_INDENT = 8
+pattern ITEM_INDENT = 9
 
 pattern LIST_DOTS :: Int
 

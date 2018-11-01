@@ -13,15 +13,11 @@ pattern ALIGN_RIGHT = 2
 
 pattern CELL_MODE_CUSTOM :: Int
 
-pattern CELL_MODE_CUSTOM = 5
+pattern CELL_MODE_CUSTOM = 4
 
 pattern CELL_MODE_ICON :: Int
 
-pattern CELL_MODE_ICON = 4
-
-pattern CELL_MODE_RANGE_EXPRESSION :: Int
-
-pattern CELL_MODE_RANGE_EXPRESSION = 3
+pattern CELL_MODE_ICON = 3
 
 pattern CELL_MODE_RANGE :: Int
 
