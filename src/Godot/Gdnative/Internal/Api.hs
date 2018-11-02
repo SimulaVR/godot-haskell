@@ -18,6 +18,9 @@ import Generate
 godotGdnativeCoreApiStruct :: GodotGdnativeCoreApiStruct
 godotGdnativeCoreApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCoreApiStructRef
 
+godotGdnativeCore11ApiStruct :: GodotGdnativeCore11ApiStruct
+godotGdnativeCore11ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCore11ApiStructRef
+
 godotGdnativeExtNativescriptApiStruct :: GodotGdnativeExtNativescriptApiStruct
 godotGdnativeExtNativescriptApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNativescriptApiStructRef
 

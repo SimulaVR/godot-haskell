@@ -1,5 +1,7 @@
 name: godot-haskell
-version: '0.1.0.0'
+synopsis: Haskell bindings for the Godot game engine API
+description: This package contains Haskell bindings for GDNative and the Godot API. For details and examples, see README.md
+version: '3.1.0.0'
 category: Web
 author: David Kraeutmann
 maintainer: kane@kane.cx
@@ -8,6 +10,9 @@ license: BSD3
 github: KaneTW/godot-haskell
 extra-source-files:
 - README.md
+- cbits/*
+- godot_headers/**/*.h
+- godot_headers/**/*.json
 
 dependencies:
 - base
@@ -22,13 +27,6 @@ dependencies:
 - unordered-containers
 - mtl
 - stm
-
-build-tools:
-- c2hs
-
-include-dirs:
-- godot_headers
-- cbits
 
 default-extensions:
 - FlexibleContexts
@@ -51,6 +49,12 @@ default-extensions:
 
 library:
   source-dirs: src
+  generated-other-modules: Paths_godot_haskell
+  build-tools:
+  - c2hs
+  include-dirs:
+  - godot_headers
+  - cbits
   dependencies:
   - generate
   - linear

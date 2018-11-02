@@ -108,6 +108,7 @@ baseTypesTable = M.fromList
   , (C.TypeName "godot_bool", fromThName ''CBool)
   , (C.TypeName "godot_class_constructor", ConT $ mkName "GodotClassConstructor")
   , (C.TypeName "native_call_cb", ConT $ mkName "NativeCallCb")
+  , (C.TypeName "bool", fromThName ''CInt)
   ]
 
 godotOpaqueStructs :: [C.Identifier]
@@ -167,7 +168,8 @@ godotEnums =
   [ "godot_error"
   , "godot_variant_type"
   , "godot_variant_call_error_error"
-  , "godot_vector3_axis" ]
+  , "godot_vector3_axis"
+  , "godot_variant_operator" ]
 
 
 -- pipeline:

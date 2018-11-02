@@ -1,13 +1,15 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.30.0.
+-- This file has been generated from package.yaml by hpack version 0.31.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7e264b08d1c524e9b68c65cf5a2bbe50c341611d6d1eb1b6a62dfc5417b2cfe2
+-- hash: ce2f814ef8bc25f45ed4e4dfa664af5ec97391256de06054a66bf69a19fe08c4
 
 name:           godot-haskell
-version:        0.1.0.0
+version:        3.1.0.0
+synopsis:       Haskell bindings for the Godot game engine API
+description:    This package contains Haskell bindings for GDNative and the Godot API. For details and examples, see README.md
 category:       Web
 homepage:       https://github.com/KaneTW/godot-haskell#readme
 bug-reports:    https://github.com/KaneTW/godot-haskell/issues
@@ -19,6 +21,34 @@ license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
+    cbits/util.h
+    godot_headers/android/godot_android.h
+    godot_headers/arvr/godot_arvr.h
+    godot_headers/gdnative/aabb.h
+    godot_headers/gdnative/array.h
+    godot_headers/gdnative/basis.h
+    godot_headers/gdnative/color.h
+    godot_headers/gdnative/dictionary.h
+    godot_headers/gdnative/gdnative.h
+    godot_headers/gdnative/node_path.h
+    godot_headers/gdnative/plane.h
+    godot_headers/gdnative/pool_arrays.h
+    godot_headers/gdnative/quat.h
+    godot_headers/gdnative/rect2.h
+    godot_headers/gdnative/rid.h
+    godot_headers/gdnative/string.h
+    godot_headers/gdnative/string_name.h
+    godot_headers/gdnative/transform.h
+    godot_headers/gdnative/transform2d.h
+    godot_headers/gdnative/variant.h
+    godot_headers/gdnative/vector2.h
+    godot_headers/gdnative/vector3.h
+    godot_headers/gdnative_api_struct.gen.h
+    godot_headers/nativescript/godot_nativescript.h
+    godot_headers/net/godot_net.h
+    godot_headers/pluginscript/godot_pluginscript.h
+    godot_headers/api.json
+    godot_headers/gdnative_api.json
 
 source-repository head
   type: git
@@ -286,9 +316,11 @@ library
       Godot.Core.GodotNinePatchRect
       Godot.Core.GodotNode
       Godot.Core.GodotNode2D
+      Godot.Core.GodotNoiseTexture
       Godot.Core.GodotObject
       Godot.Core.GodotOccluderPolygon2D
       Godot.Core.GodotOmniLight
+      Godot.Core.GodotOpenSimplexNoise
       Godot.Core.GodotOptionButton
       Godot.Core.GodotOrientedPathFollow
       Godot.Core.GodotPackedDataContainer
@@ -590,6 +622,8 @@ library
       Godot.Tools.GodotScriptEditor
   other-modules:
       Paths_godot_haskell
+  autogen-modules:
+      Paths_godot_haskell
   hs-source-dirs:
       src
   default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
@@ -627,9 +661,6 @@ library generate
   hs-source-dirs:
       src-generate
   default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
-  include-dirs:
-      godot_headers
-      cbits
   build-depends:
       aeson
     , ansi-wl-pprint
@@ -646,6 +677,4 @@ library generate
     , text
     , unordered-containers
     , vector
-  build-tools:
-      c2hs
   default-language: Haskell2010

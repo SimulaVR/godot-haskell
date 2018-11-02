@@ -28,6 +28,9 @@ import System.IO.Unsafe
 
 {#enum godot_vector3_axis as GodotVector3Axis {underscoreToCase}
  deriving (Show, Eq, Ord, Bounded)#}
+
+{#enum godot_variant_operator as GodotVariantOperator {underscoreToCase} 
+ deriving (Show, Eq, Ord, Bounded)#}
   
 {#typedef godot_bool Bool #}
 type GodotBool = {#type godot_bool#}
@@ -282,6 +285,10 @@ deriving newtype instance Storable GodotGdnativeApiStruct
 {#pointer *godot_gdnative_core_api_struct as GodotGdnativeCoreApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeCoreApiStruct
 deriving newtype instance Storable GodotGdnativeCoreApiStruct
+
+{#pointer *godot_gdnative_core_1_1_api_struct as GodotGdnativeCore11ApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeCore11ApiStruct
+deriving newtype instance Storable GodotGdnativeCore11ApiStruct
 
 {#pointer *godot_gdnative_ext_nativescript_api_struct as GodotGdnativeExtNativescriptApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeExtNativescriptApiStruct
@@ -727,6 +734,11 @@ godotGdnativeCoreApiStructRef = unsafePerformIO $ newIORef $
   error "attempted to get godotGdnativeCoreApiStructRef too early"
 {-# NOINLINE godotGdnativeCoreApiStructRef #-}
 
+godotGdnativeCore11ApiStructRef :: IORef GodotGdnativeCore11ApiStruct
+godotGdnativeCore11ApiStructRef = unsafePerformIO $ newIORef $ 
+  error "attempted to get godotGdnativeCore11ApiStructRef too early"
+{-# NOINLINE godotGdnativeCore11ApiStructRef #-}
+
 godotGdnativeExtNativescriptApiStructRef :: IORef GodotGdnativeExtNativescriptApiStruct
 godotGdnativeExtNativescriptApiStructRef = unsafePerformIO $ newIORef $ 
   error "attempted to get godotGdnativeExtNativescriptApiStructRef too early"
@@ -751,6 +763,7 @@ initApiStructs :: GodotGdnativeInitOptions -> IO ()
 initApiStructs opts = do
   let coreApi = gdnativeInitOptionsApiStruct opts
   writeIORef godotGdnativeCoreApiStructRef coreApi
+  findCoreExt (coerce coreApi)
 
   numExt <- {#get godot_gdnative_core_api_struct->num_extensions #} coreApi
   extsPtr <- {#get godot_gdnative_core_api_struct->extensions #} coreApi
@@ -761,7 +774,7 @@ initApiStructs opts = do
     case ty of
       1 -> do -- nativescript
         writeIORef godotGdnativeExtNativescriptApiStructRef (coerce ext)
-        findExt ext
+        findNativescriptExt ext
       2 -> do -- pluginscript
         writeIORef godotGdnativeExtPluginscriptApiStructRef (coerce ext)
       3 -> return () -- android
@@ -769,13 +782,15 @@ initApiStructs opts = do
         writeIORef godotGdnativeExtArvrApiStructRef (coerce ext)
       _ -> error $ "Unknown API struct type " ++ show ty
   where
-    findExt ext = do
+    findCoreExt = findExt GodotGdnativeCore11ApiStruct godotGdnativeCore11ApiStructRef
+    findNativescriptExt = findExt GodotGdnativeExtNativescript11ApiStruct godotGdnativeExtNativescript11ApiStructRef
+    findExt con ref ext = do
       next <- {#get godot_gdnative_api_struct->next #} ext
       when (next /= coerce nullPtr) $ do
 
         major <- {#get godot_gdnative_api_struct->version.major #} next
         minor <- {#get godot_gdnative_api_struct->version.minor #} next
-        if major == 1 && minor == 1 then writeIORef godotGdnativeExtNativescript11ApiStructRef (coerce next)
-        else findExt next
+        if major == 1 && minor == 1 then writeIORef ref (con $ coerce next)
+        else findExt con ref next
 
 
