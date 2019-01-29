@@ -480,7 +480,7 @@ apiToHs isCore api = do
       funcs <- imapM (constructFunction isCore name) entries
       let hscode = concat $ funcs ^.. folded._1
       let ccode = PP.vsep $ funcs ^.. folded._2._Just
-      qAddForeignFile LangC . show $ PP.vsep
+      addForeignSource LangC . show $ PP.vsep
         [ "#include <gdnative_api_struct.gen.h>"
         , ccode ]
       return hscode
