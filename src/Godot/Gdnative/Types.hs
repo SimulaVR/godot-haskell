@@ -1,4 +1,4 @@
-{-# LANGUAGE FunctionalDependencies, TypeFamilies, TypeInType, LambdaCase #-}
+{-# LANGUAGE BangPatterns, FunctionalDependencies, TypeFamilies, TypeInType, LambdaCase #-}
 module Godot.Gdnative.Types where
 
 import Control.Exception
