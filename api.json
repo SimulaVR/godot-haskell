@@ -426,8 +426,6 @@
 			"PROPERTY_USAGE_INTERNATIONALIZED": 64,
 			"PROPERTY_USAGE_GROUP": 128,
 			"PROPERTY_USAGE_CATEGORY": 256,
-			"PROPERTY_USAGE_STORE_IF_NONZERO": 512,
-			"PROPERTY_USAGE_STORE_IF_NONONE": 1024,
 			"PROPERTY_USAGE_NO_INSTANCE_STATE": 2048,
 			"PROPERTY_USAGE_RESTART_IF_CHANGED": 4096,
 			"PROPERTY_USAGE_SCRIPT_VARIABLE": 8192,
@@ -496,6 +494,24 @@
 			"OP_NOT": 23,
 			"OP_IN": 24,
 			"OP_MAX": 25
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "TranslationLoaderPO",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
 		},
 		"properties": [
 		],
@@ -1027,6 +1043,31 @@
 				]
 			},
 			{
+				"name": "set_deferred",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "property",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "value",
+						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
 				"name": "callv",
 				"return_type": "Variant",
 				"is_editor": false,
@@ -1400,6 +1441,255 @@
 		]
 	},
 	{
+		"name": "ResourceFormatLoader",
+		"base_class": "Reference",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "load",
+				"return_type": "Variant",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "path",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "original_path",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_recognized_extensions",
+				"return_type": "PoolStringArray",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "handles_type",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "typename",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_resource_type",
+				"return_type": "String",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "path",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_dependencies",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "path",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "add_types",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "rename_dependencies",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "path",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "renames",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatSaverBinary",
+		"base_class": "ResourceFormatSaver",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatSaver",
+		"base_class": "Reference",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "save",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "path",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "resource",
+						"type": "Resource",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "flags",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_recognized_extensions",
+				"return_type": "PoolStringArray",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "resource",
+						"type": "Resource",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "recognize",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "resource",
+						"type": "Resource",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "Resource",
 		"base_class": "Reference",
 		"api_type": "core",
@@ -1625,6 +1915,60 @@
 					}
 				]
 			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderBinary",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatImporter",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderImage",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
 		],
 		"enums": [
 		]
@@ -3463,6 +3807,13 @@
 				"index": -1
 			},
 			{
+				"name": "raw_keycode",
+				"type": "int",
+				"getter": "get_raw_keycode",
+				"setter": "set_raw_keycode",
+				"index": -1
+			},
+			{
 				"name": "echo",
 				"type": "int",
 				"getter": "is_echo",
@@ -3545,6 +3896,38 @@
 			},
 			{
 				"name": "get_unicode",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_raw_keycode",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "raw_keycode",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_raw_keycode",
 				"return_type": "int",
 				"is_editor": false,
 				"is_noscript": false,
@@ -7162,7 +7545,8 @@
 			"NOTIFICATION_OS_MEMORY_WARNING": 9,
 			"NOTIFICATION_TRANSLATION_CHANGED": 90,
 			"NOTIFICATION_WM_ABOUT": 91,
-			"NOTIFICATION_CRASH": 92
+			"NOTIFICATION_CRASH": 92,
+			"NOTIFICATION_OS_IME_UPDATE": 93
 		},
 		"properties": [
 		],
@@ -7840,6 +8224,12 @@
 				"has_varargs": false,
 				"is_from_script": false,
 				"arguments": [
+					{
+						"name": "increase_version",
+						"type": "bool",
+						"has_default_value": true,
+						"default_value": "True"
+					}
 				]
 			},
 			{
@@ -8959,6 +9349,25 @@
 				]
 			},
 			{
+				"name": "get_csv_line",
+				"return_type": "PoolStringArray",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "delim",
+						"type": "String",
+						"has_default_value": true,
+						"default_value": ","
+					}
+				]
+			},
+			{
 				"name": "get_as_text",
 				"return_type": "String",
 				"is_editor": false,
@@ -9065,25 +9474,6 @@
 				"has_varargs": false,
 				"is_from_script": false,
 				"arguments": [
-				]
-			},
-			{
-				"name": "get_csv_line",
-				"return_type": "PoolStringArray",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "delim",
-						"type": "String",
-						"has_default_value": true,
-						"default_value": ","
-					}
 				]
 			},
 			{
@@ -9254,6 +9644,31 @@
 						"type": "String",
 						"has_default_value": false,
 						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "store_csv_line",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "values",
+						"type": "PoolStringArray",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "delim",
+						"type": "String",
+						"has_default_value": true,
+						"default_value": ","
 					}
 				]
 			},
@@ -11285,6 +11700,152 @@
 		]
 	},
 	{
+		"name": "RandomNumberGenerator",
+		"base_class": "Reference",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+			{
+				"name": "seed",
+				"type": "int",
+				"getter": "get_seed",
+				"setter": "set_seed",
+				"index": -1
+			}
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "set_seed",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "seed",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_seed",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "randi",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "randf",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "randf_range",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "from",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "to",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "randi_range",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "from",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "to",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "randomize",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "JSONParseResult",
 		"base_class": "Reference",
 		"api_type": "core",
@@ -13184,6 +13745,19 @@
 				]
 			},
 			{
+				"name": "move_window_to_foreground",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
 				"name": "set_borderless_window",
 				"return_type": "void",
 				"is_editor": false,
@@ -13248,6 +13822,25 @@
 				]
 			},
 			{
+				"name": "set_ime_active",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "active",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
 				"name": "set_ime_position",
 				"return_type": "void",
 				"is_editor": false,
@@ -13264,6 +13857,32 @@
 						"has_default_value": false,
 						"default_value": ""
 					}
+				]
+			},
+			{
+				"name": "get_ime_selection",
+				"return_type": "Vector2",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_ime_text",
+				"return_type": "String",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
 				]
 			},
 			{
@@ -13695,6 +14314,19 @@
 			},
 			{
 				"name": "get_system_time_secs",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_system_time_msecs",
 				"return_type": "int",
 				"is_editor": false,
 				"is_noscript": false,
@@ -15621,6 +16253,24 @@
 					}
 				]
 			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceSaverPNG",
+		"base_class": "ResourceFormatSaver",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
 		],
 		"enums": [
 		]
@@ -22168,6 +22818,31 @@
 				]
 			},
 			{
+				"name": "environment_set_sky_orientation",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "env",
+						"type": "RID",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "orientation",
+						"type": "Basis",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
 				"name": "environment_set_bg_color",
 				"return_type": "void",
 				"is_editor": false,
@@ -22438,6 +23113,12 @@
 					},
 					{
 						"name": "hdr_bleed_scale",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "hdr_luminance_cap",
 						"type": "float",
 						"has_default_value": false,
 						"default_value": ""
@@ -22780,6 +23461,12 @@
 					},
 					{
 						"name": "depth_begin",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "depth_end",
 						"type": "float",
 						"has_default_value": false,
 						"default_value": ""
@@ -24561,18 +25248,6 @@
 						"type": "RID",
 						"has_default_value": false,
 						"default_value": ""
-					},
-					{
-						"name": "h_frames",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					},
-					{
-						"name": "v_frames",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
 					}
 				]
 			},
@@ -26349,6 +27024,24 @@
 		]
 	},
 	{
+		"name": "InputDefault",
+		"base_class": "Input",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "Input",
 		"base_class": "Object",
 		"api_type": "core",
@@ -27028,6 +27721,12 @@
 						"type": "String",
 						"has_default_value": false,
 						"default_value": ""
+					},
+					{
+						"name": "strength",
+						"type": "float",
+						"has_default_value": true,
+						"default_value": "1"
 					}
 				]
 			},
@@ -27152,24 +27851,6 @@
 					"CURSOR_HELP": 16
 				}
 			}
-		]
-	},
-	{
-		"name": "InputDefault",
-		"base_class": "Input",
-		"api_type": "core",
-		"singleton": false,
-		"instanciable": false,
-		"is_reference": false,
-		"constants": {
-		},
-		"properties": [
-		],
-		"signals": [
-		],
-		"methods": [
-		],
-		"enums": [
 		]
 	},
 	{
@@ -27348,6 +28029,25 @@
 					{
 						"name": "bus_name",
 						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_bus_channels",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "bus_idx",
+						"type": "int",
 						"has_default_value": false,
 						"default_value": ""
 					}
@@ -28528,19 +29228,19 @@
 			"G6DOF_JOINT_LINEAR_DAMPING": 4,
 			"G6DOF_JOINT_LINEAR_MOTOR_TARGET_VELOCITY": 5,
 			"G6DOF_JOINT_LINEAR_MOTOR_FORCE_LIMIT": 6,
-			"G6DOF_JOINT_ANGULAR_LOWER_LIMIT": 7,
-			"G6DOF_JOINT_ANGULAR_UPPER_LIMIT": 8,
-			"G6DOF_JOINT_ANGULAR_LIMIT_SOFTNESS": 9,
-			"G6DOF_JOINT_ANGULAR_DAMPING": 10,
-			"G6DOF_JOINT_ANGULAR_RESTITUTION": 11,
-			"G6DOF_JOINT_ANGULAR_FORCE_LIMIT": 12,
-			"G6DOF_JOINT_ANGULAR_ERP": 13,
-			"G6DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY": 14,
-			"G6DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT": 15,
+			"G6DOF_JOINT_ANGULAR_LOWER_LIMIT": 10,
+			"G6DOF_JOINT_ANGULAR_UPPER_LIMIT": 11,
+			"G6DOF_JOINT_ANGULAR_LIMIT_SOFTNESS": 12,
+			"G6DOF_JOINT_ANGULAR_DAMPING": 13,
+			"G6DOF_JOINT_ANGULAR_RESTITUTION": 14,
+			"G6DOF_JOINT_ANGULAR_FORCE_LIMIT": 15,
+			"G6DOF_JOINT_ANGULAR_ERP": 16,
+			"G6DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY": 17,
+			"G6DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT": 18,
 			"G6DOF_JOINT_FLAG_ENABLE_LINEAR_LIMIT": 0,
 			"G6DOF_JOINT_FLAG_ENABLE_ANGULAR_LIMIT": 1,
-			"G6DOF_JOINT_FLAG_ENABLE_MOTOR": 2,
-			"G6DOF_JOINT_FLAG_ENABLE_LINEAR_MOTOR": 3,
+			"G6DOF_JOINT_FLAG_ENABLE_MOTOR": 4,
+			"G6DOF_JOINT_FLAG_ENABLE_LINEAR_MOTOR": 5,
 			"SHAPE_PLANE": 0,
 			"SHAPE_RAY": 1,
 			"SHAPE_SPHERE": 2,
@@ -31517,15 +32217,15 @@
 					"G6DOF_JOINT_LINEAR_DAMPING": 4,
 					"G6DOF_JOINT_LINEAR_MOTOR_TARGET_VELOCITY": 5,
 					"G6DOF_JOINT_LINEAR_MOTOR_FORCE_LIMIT": 6,
-					"G6DOF_JOINT_ANGULAR_LOWER_LIMIT": 7,
-					"G6DOF_JOINT_ANGULAR_UPPER_LIMIT": 8,
-					"G6DOF_JOINT_ANGULAR_LIMIT_SOFTNESS": 9,
-					"G6DOF_JOINT_ANGULAR_DAMPING": 10,
-					"G6DOF_JOINT_ANGULAR_RESTITUTION": 11,
-					"G6DOF_JOINT_ANGULAR_FORCE_LIMIT": 12,
-					"G6DOF_JOINT_ANGULAR_ERP": 13,
-					"G6DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY": 14,
-					"G6DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT": 15
+					"G6DOF_JOINT_ANGULAR_LOWER_LIMIT": 10,
+					"G6DOF_JOINT_ANGULAR_UPPER_LIMIT": 11,
+					"G6DOF_JOINT_ANGULAR_LIMIT_SOFTNESS": 12,
+					"G6DOF_JOINT_ANGULAR_DAMPING": 13,
+					"G6DOF_JOINT_ANGULAR_RESTITUTION": 14,
+					"G6DOF_JOINT_ANGULAR_FORCE_LIMIT": 15,
+					"G6DOF_JOINT_ANGULAR_ERP": 16,
+					"G6DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY": 17,
+					"G6DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT": 18
 				}
 			},
 			{
@@ -31574,8 +32274,8 @@
 				"values": {
 					"G6DOF_JOINT_FLAG_ENABLE_LINEAR_LIMIT": 0,
 					"G6DOF_JOINT_FLAG_ENABLE_ANGULAR_LIMIT": 1,
-					"G6DOF_JOINT_FLAG_ENABLE_MOTOR": 2,
-					"G6DOF_JOINT_FLAG_ENABLE_LINEAR_MOTOR": 3
+					"G6DOF_JOINT_FLAG_ENABLE_MOTOR": 4,
+					"G6DOF_JOINT_FLAG_ENABLE_LINEAR_MOTOR": 5
 				}
 			},
 			{
@@ -32519,6 +33219,50 @@
 				]
 			},
 			{
+				"name": "area_attach_canvas_instance_id",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "area",
+						"type": "RID",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "id",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "area_get_canvas_instance_id",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "area",
+						"type": "RID",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
 				"name": "area_set_monitor_callback",
 				"return_type": "void",
 				"is_editor": false,
@@ -33057,6 +33801,50 @@
 			},
 			{
 				"name": "body_get_object_instance_id",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "body",
+						"type": "RID",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "body_attach_canvas_instance_id",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "body",
+						"type": "RID",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "id",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "body_get_canvas_instance_id",
 				"return_type": "int",
 				"is_editor": false,
 				"is_noscript": false,
@@ -38822,6 +39610,61 @@
 				]
 			},
 			{
+				"name": "intersect_point_on_canvas",
+				"return_type": "Array",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "point",
+						"type": "Vector2",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "canvas_instance_id",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "max_results",
+						"type": "int",
+						"has_default_value": true,
+						"default_value": "32"
+					},
+					{
+						"name": "exclude",
+						"type": "Array",
+						"has_default_value": true,
+						"default_value": "[]"
+					},
+					{
+						"name": "collision_layer",
+						"type": "int",
+						"has_default_value": true,
+						"default_value": "2147483647"
+					},
+					{
+						"name": "collide_with_bodies",
+						"type": "bool",
+						"has_default_value": true,
+						"default_value": "True"
+					},
+					{
+						"name": "collide_with_areas",
+						"type": "bool",
+						"has_default_value": true,
+						"default_value": "False"
+					}
+				]
+			},
+			{
 				"name": "intersect_ray",
 				"return_type": "Dictionary",
 				"is_editor": false,
@@ -40884,6 +41727,150 @@
 		]
 	},
 	{
+		"name": "ResourceFormatLoaderDynamicFont",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderStreamTexture",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderTextureLayered",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatSaverText",
+		"base_class": "ResourceFormatSaver",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderText",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatSaverShader",
+		"base_class": "ResourceFormatSaver",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderShader",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderBMFont",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "Node",
 		"base_class": "Object",
 		"api_type": "core",
@@ -42884,6 +43871,13 @@
 				"index": -1
 			},
 			{
+				"name": "handle_input_locally",
+				"type": "bool",
+				"getter": "is_handling_input_locally",
+				"setter": "set_handle_input_locally",
+				"index": -1
+			},
+			{
 				"name": "msaa",
 				"type": "int",
 				"getter": "get_msaa",
@@ -44266,6 +45260,64 @@
 						"has_default_value": false,
 						"default_value": ""
 					}
+				]
+			},
+			{
+				"name": "set_input_as_handled",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "is_input_handled",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_handle_input_locally",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "enable",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "is_handling_input_locally",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
 				]
 			},
 			{
@@ -47266,8 +48318,8 @@
 				"is_from_script": false,
 				"arguments": [
 					{
-						"name": "mesh",
-						"type": "Mesh",
+						"name": "multimesh",
+						"type": "MultiMesh",
 						"has_default_value": false,
 						"default_value": ""
 					},
@@ -48591,6 +49643,19 @@
 			{
 				"name": "get_pressed_button",
 				"return_type": "BaseButton",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_buttons",
+				"return_type": "Array",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": false,
@@ -51767,6 +52832,19 @@
 				]
 			},
 			{
+				"name": "clear",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
 				"name": "set_default_font",
 				"return_type": "void",
 				"is_editor": false,
@@ -51876,6 +52954,13 @@
 				"type": "bool",
 				"getter": "is_toggle_mode",
 				"setter": "set_toggle_mode",
+				"index": -1
+			},
+			{
+				"name": "shortcut_in_tooltip",
+				"type": "bool",
+				"getter": "is_shortcut_in_tooltip_enabled",
+				"setter": "set_shortcut_in_tooltip",
 				"index": -1
 			},
 			{
@@ -52085,6 +53170,38 @@
 			},
 			{
 				"name": "is_toggle_mode",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_shortcut_in_tooltip",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "enabled",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "is_shortcut_in_tooltip_enabled",
 				"return_type": "bool",
 				"is_editor": false,
 				"is_noscript": false,
@@ -54210,6 +55327,13 @@
 				"getter": "_get_items",
 				"setter": "_set_items",
 				"index": -1
+			},
+			{
+				"name": "switch_on_hover",
+				"type": "bool",
+				"getter": "is_switch_on_hover",
+				"setter": "set_switch_on_hover",
+				"index": -1
 			}
 		],
 		"signals": [
@@ -54279,6 +55403,38 @@
 				"is_const": true,
 				"is_reverse": false,
 				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_switch_on_hover",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "enable",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "is_switch_on_hover",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
 				"has_varargs": false,
 				"is_from_script": false,
 				"arguments": [
@@ -58324,6 +59480,50 @@
 			{
 				"name": "get_item_icon",
 				"return_type": "Texture",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "idx",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_item_icon_transposed",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "idx",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "rect",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "is_item_icon_transposed",
+				"return_type": "bool",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -65614,7 +66814,8 @@
 			"MENU_CLEAR": 3,
 			"MENU_SELECT_ALL": 4,
 			"MENU_UNDO": 5,
-			"MENU_MAX": 6
+			"MENU_REDO": 6,
+			"MENU_MAX": 7
 		},
 		"properties": [
 			{
@@ -67208,7 +68409,8 @@
 					"MENU_CLEAR": 3,
 					"MENU_SELECT_ALL": 4,
 					"MENU_UNDO": 5,
-					"MENU_MAX": 6
+					"MENU_REDO": 6,
+					"MENU_MAX": 7
 				}
 			}
 		]
@@ -68127,6 +69329,26 @@
 		],
 		"signals": [
 			{
+				"name": "preset_removed",
+				"arguments": [
+					{
+						"name": "color",
+						"type": "Color",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "preset_added",
+				"arguments": [
+					{
+						"name": "color",
+						"type": "Color",
+						"default_value": ""
+					}
+				]
+			},
+			{
 				"name": "color_changed",
 				"arguments": [
 					{
@@ -68283,6 +69505,38 @@
 						"has_default_value": false,
 						"default_value": ""
 					}
+				]
+			},
+			{
+				"name": "erase_preset",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "color",
+						"type": "Color",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_presets",
+				"return_type": "PoolColorArray",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
 				]
 			},
 			{
@@ -69757,6 +71011,25 @@
 		],
 		"methods": [
 			{
+				"name": "_unhandled_input",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "event",
+						"type": "InputEvent",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
 				"name": "_input",
 				"return_type": "void",
 				"is_editor": false,
@@ -69935,6 +71208,19 @@
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "clamp_split_offset",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
 				"is_reverse": false,
 				"is_virtual": false,
 				"has_varargs": false,
@@ -73781,6 +75067,19 @@
 				]
 			},
 			{
+				"name": "get_queue",
+				"return_type": "PoolStringArray",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
 				"name": "clear_queue",
 				"return_type": "void",
 				"is_editor": false,
@@ -76452,6 +77751,27 @@
 				"index": -1
 			},
 			{
+				"name": "background_sky_orientation",
+				"type": "Basis",
+				"getter": "get_sky_orientation",
+				"setter": "set_sky_orientation",
+				"index": -1
+			},
+			{
+				"name": "background_sky_rotation",
+				"type": "Vector3",
+				"getter": "get_sky_rotation",
+				"setter": "set_sky_rotation",
+				"index": -1
+			},
+			{
+				"name": "background_sky_rotation_degrees",
+				"type": "Vector3",
+				"getter": "get_sky_rotation_degrees",
+				"setter": "set_sky_rotation_degrees",
+				"index": -1
+			},
+			{
 				"name": "background_color",
 				"type": "Color",
 				"getter": "get_bg_color",
@@ -76533,6 +77853,13 @@
 				"type": "float",
 				"getter": "get_fog_depth_begin",
 				"setter": "set_fog_depth_begin",
+				"index": -1
+			},
+			{
+				"name": "fog_depth_end",
+				"type": "float",
+				"getter": "get_fog_depth_end",
+				"setter": "set_fog_depth_end",
 				"index": -1
 			},
 			{
@@ -76928,6 +78255,13 @@
 				"index": -1
 			},
 			{
+				"name": "glow_hdr_luminance_cap",
+				"type": "float",
+				"getter": "get_glow_hdr_luminance_cap",
+				"setter": "set_glow_hdr_luminance_cap",
+				"index": -1
+			},
+			{
 				"name": "glow_hdr_scale",
 				"type": "float",
 				"getter": "get_glow_hdr_bleed_scale",
@@ -77032,6 +78366,63 @@
 					{
 						"name": "scale",
 						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_sky_orientation",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "orientation",
+						"type": "Basis",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_sky_rotation",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "euler_radians",
+						"type": "Vector3",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_sky_rotation_degrees",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "euler_degrees",
+						"type": "Vector3",
 						"has_default_value": false,
 						"default_value": ""
 					}
@@ -77180,6 +78571,45 @@
 			{
 				"name": "get_sky_custom_fov",
 				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_sky_orientation",
+				"return_type": "Basis",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_sky_rotation",
+				"return_type": "Vector3",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_sky_rotation_degrees",
+				"return_type": "Vector3",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -77449,6 +78879,38 @@
 			},
 			{
 				"name": "get_fog_depth_begin",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_fog_depth_end",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "distance",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_fog_depth_end",
 				"return_type": "float",
 				"is_editor": false,
 				"is_noscript": false,
@@ -79061,6 +80523,38 @@
 			},
 			{
 				"name": "get_glow_hdr_bleed_threshold",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_glow_hdr_luminance_cap",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "amount",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_glow_hdr_luminance_cap",
 				"return_type": "float",
 				"is_editor": false,
 				"is_noscript": false,
@@ -87775,7 +89269,7 @@
 			"PARAM_MAX": 11,
 			"FLAG_ALIGN_Y_TO_VELOCITY": 0,
 			"FLAG_ROTATE_Y": 1,
-			"FLAG_MAX": 4,
+			"FLAG_MAX": 3,
 			"EMISSION_SHAPE_POINT": 0,
 			"EMISSION_SHAPE_SPHERE": 1,
 			"EMISSION_SHAPE_BOX": 2,
@@ -88099,21 +89593,21 @@
 				"index": 6
 			},
 			{
-				"name": "scale",
+				"name": "scale_amount",
 				"type": "float",
 				"getter": "get_param",
 				"setter": "set_param",
 				"index": 7
 			},
 			{
-				"name": "scale_random",
+				"name": "scale_amount_random",
 				"type": "float",
 				"getter": "get_param_randomness",
 				"setter": "set_param_randomness",
 				"index": 7
 			},
 			{
-				"name": "scale_curve",
+				"name": "scale_amount_curve",
 				"type": "Curve",
 				"getter": "get_param_curve",
 				"setter": "set_param_curve",
@@ -88128,7 +89622,7 @@
 			},
 			{
 				"name": "color_ramp",
-				"type": "GradientTexture",
+				"type": "Gradient",
 				"getter": "get_color_ramp",
 				"setter": "set_color_ramp",
 				"index": -1
@@ -88195,13 +89689,6 @@
 				"getter": "get_param_curve",
 				"setter": "set_param_curve",
 				"index": 10
-			},
-			{
-				"name": "anim_loop",
-				"type": "bool",
-				"getter": "get_particle_flag",
-				"setter": "set_particle_flag",
-				"index": 3
 			}
 		],
 		"signals": [
@@ -89203,7 +90690,7 @@
 				"values": {
 					"FLAG_ALIGN_Y_TO_VELOCITY": 0,
 					"FLAG_ROTATE_Y": 1,
-					"FLAG_MAX": 4
+					"FLAG_MAX": 3
 				}
 			},
 			{
@@ -89831,8 +91318,8 @@
 		]
 	},
 	{
-		"name": "GradientTexture",
-		"base_class": "Texture",
+		"name": "Gradient",
+		"base_class": "Resource",
 		"api_type": "core",
 		"singleton": false,
 		"instanciable": true,
@@ -89841,17 +91328,17 @@
 		},
 		"properties": [
 			{
-				"name": "gradient",
-				"type": "Gradient",
-				"getter": "get_gradient",
-				"setter": "set_gradient",
+				"name": "offsets",
+				"type": "PoolRealArray",
+				"getter": "get_offsets",
+				"setter": "set_offsets",
 				"index": -1
 			},
 			{
-				"name": "width",
-				"type": "int",
-				"getter": "get_width",
-				"setter": "set_width",
+				"name": "colors",
+				"type": "PoolColorArray",
+				"getter": "get_colors",
+				"setter": "set_colors",
 				"index": -1
 			}
 		],
@@ -89859,7 +91346,7 @@
 		],
 		"methods": [
 			{
-				"name": "set_gradient",
+				"name": "add_point",
 				"return_type": "void",
 				"is_editor": false,
 				"is_noscript": false,
@@ -89870,16 +91357,148 @@
 				"is_from_script": false,
 				"arguments": [
 					{
-						"name": "gradient",
-						"type": "Gradient",
+						"name": "offset",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "color",
+						"type": "Color",
 						"has_default_value": false,
 						"default_value": ""
 					}
 				]
 			},
 			{
-				"name": "get_gradient",
-				"return_type": "Gradient",
+				"name": "remove_point",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "offset",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_offset",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "point",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "offset",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_offset",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "point",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_color",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "point",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "color",
+						"type": "Color",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_color",
+				"return_type": "Color",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "point",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "interpolate",
+				"return_type": "Color",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "offset",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_point_count",
+				"return_type": "int",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -89891,7 +91510,7 @@
 				]
 			},
 			{
-				"name": "set_width",
+				"name": "set_offsets",
 				"return_type": "void",
 				"is_editor": false,
 				"is_noscript": false,
@@ -89902,21 +91521,53 @@
 				"is_from_script": false,
 				"arguments": [
 					{
-						"name": "width",
-						"type": "int",
+						"name": "offsets",
+						"type": "PoolRealArray",
 						"has_default_value": false,
 						"default_value": ""
 					}
 				]
 			},
 			{
-				"name": "_update",
+				"name": "get_offsets",
+				"return_type": "PoolRealArray",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_colors",
 				"return_type": "void",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": false,
 				"is_reverse": false,
-				"is_virtual": true,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "colors",
+						"type": "PoolColorArray",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_colors",
+				"return_type": "PoolColorArray",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
 				"has_varargs": false,
 				"is_from_script": false,
 				"arguments": [
@@ -91588,6 +93239,70 @@
 			}
 		],
 		"methods": [
+			{
+				"name": "get_child_nodes",
+				"return_type": "Dictionary",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_parameter_list",
+				"return_type": "Array",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_child_by_name",
+				"return_type": "Object",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "name",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_parameter_default_value",
+				"return_type": "Variant",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "name",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
 			{
 				"name": "process",
 				"return_type": "void",
@@ -93596,6 +95311,9 @@
 		"instanciable": true,
 		"is_reference": true,
 		"constants": {
+			"BLEND_MODE_INTERPOLATED": 0,
+			"BLEND_MODE_DISCRETE": 1,
+			"BLEND_MODE_DISCRETE_CARRY": 2
 		},
 		"properties": [
 			{
@@ -94542,6 +96260,13 @@
 				"getter": "get_y_label",
 				"setter": "set_y_label",
 				"index": -1
+			},
+			{
+				"name": "blend_mode",
+				"type": "int",
+				"getter": "get_blend_mode",
+				"setter": "set_blend_mode",
+				"index": -1
 			}
 		],
 		"signals": [
@@ -95042,6 +96767,38 @@
 				]
 			},
 			{
+				"name": "set_blend_mode",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "mode",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_blend_mode",
+				"return_type": "enum.AnimationNodeBlendSpace2D::BlendMode",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
 				"name": "_tree_changed",
 				"return_type": "void",
 				"is_editor": false,
@@ -95056,6 +96813,14 @@
 			}
 		],
 		"enums": [
+			{
+				"name": "BlendMode",
+				"values": {
+					"BLEND_MODE_INTERPOLATED": 0,
+					"BLEND_MODE_DISCRETE": 1,
+					"BLEND_MODE_DISCRETE_CARRY": 2
+				}
+			}
 		]
 	},
 	{
@@ -96261,19 +98026,6 @@
 			{
 				"name": "get_animation",
 				"return_type": "String",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-				]
-			},
-			{
-				"name": "get_playback_time",
-				"return_type": "float",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -99850,19 +101602,13 @@
 						"default_value": "(0, 0, 0)"
 					},
 					{
-						"name": "infinite_inertia",
-						"type": "bool",
-						"has_default_value": true,
-						"default_value": "True"
-					},
-					{
 						"name": "stop_on_slope",
 						"type": "bool",
 						"has_default_value": true,
 						"default_value": "False"
 					},
 					{
-						"name": "max_bounces",
+						"name": "max_slides",
 						"type": "int",
 						"has_default_value": true,
 						"default_value": "4"
@@ -99872,6 +101618,12 @@
 						"type": "float",
 						"has_default_value": true,
 						"default_value": "0.785398"
+					},
+					{
+						"name": "infinite_inertia",
+						"type": "bool",
+						"has_default_value": true,
+						"default_value": "True"
 					}
 				]
 			},
@@ -99901,8 +101653,8 @@
 					{
 						"name": "infinite_inertia",
 						"type": "bool",
-						"has_default_value": false,
-						"default_value": ""
+						"has_default_value": true,
+						"default_value": "True"
 					}
 				]
 			},
@@ -101492,6 +103244,13 @@
 				"index": -1
 			},
 			{
+				"name": "override_tip_basis",
+				"type": "bool",
+				"getter": "is_override_tip_basis",
+				"setter": "set_override_tip_basis",
+				"index": -1
+			},
+			{
 				"name": "use_magnet",
 				"type": "bool",
 				"getter": "is_using_magnet",
@@ -101683,6 +103442,38 @@
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_override_tip_basis",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "override",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "is_override_tip_basis",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
 				"is_reverse": false,
 				"is_virtual": false,
 				"has_varargs": false,
@@ -108020,21 +109811,23 @@
 			"PARAM_LINEAR_DAMPING": 4,
 			"PARAM_LINEAR_MOTOR_TARGET_VELOCITY": 5,
 			"PARAM_LINEAR_MOTOR_FORCE_LIMIT": 6,
-			"PARAM_ANGULAR_LOWER_LIMIT": 7,
-			"PARAM_ANGULAR_UPPER_LIMIT": 8,
-			"PARAM_ANGULAR_LIMIT_SOFTNESS": 9,
-			"PARAM_ANGULAR_DAMPING": 10,
-			"PARAM_ANGULAR_RESTITUTION": 11,
-			"PARAM_ANGULAR_FORCE_LIMIT": 12,
-			"PARAM_ANGULAR_ERP": 13,
-			"PARAM_ANGULAR_MOTOR_TARGET_VELOCITY": 14,
-			"PARAM_ANGULAR_MOTOR_FORCE_LIMIT": 15,
-			"PARAM_MAX": 16,
+			"PARAM_ANGULAR_LOWER_LIMIT": 10,
+			"PARAM_ANGULAR_UPPER_LIMIT": 11,
+			"PARAM_ANGULAR_LIMIT_SOFTNESS": 12,
+			"PARAM_ANGULAR_DAMPING": 13,
+			"PARAM_ANGULAR_RESTITUTION": 14,
+			"PARAM_ANGULAR_FORCE_LIMIT": 15,
+			"PARAM_ANGULAR_ERP": 16,
+			"PARAM_ANGULAR_MOTOR_TARGET_VELOCITY": 17,
+			"PARAM_ANGULAR_MOTOR_FORCE_LIMIT": 18,
+			"PARAM_MAX": 22,
 			"FLAG_ENABLE_LINEAR_LIMIT": 0,
 			"FLAG_ENABLE_ANGULAR_LIMIT": 1,
-			"FLAG_ENABLE_MOTOR": 2,
-			"FLAG_ENABLE_LINEAR_MOTOR": 3,
-			"FLAG_MAX": 4
+			"FLAG_ENABLE_LINEAR_SPRING": 3,
+			"FLAG_ENABLE_ANGULAR_SPRING": 2,
+			"FLAG_ENABLE_MOTOR": 4,
+			"FLAG_ENABLE_LINEAR_MOTOR": 5,
+			"FLAG_MAX": 6
 		},
 		"properties": [
 			{
@@ -108084,7 +109877,7 @@
 				"type": "bool",
 				"getter": "get_flag_x",
 				"setter": "set_flag_x",
-				"index": 3
+				"index": 5
 			},
 			{
 				"name": "linear_motor_x/target_velocity",
@@ -108099,6 +109892,34 @@
 				"getter": "get_param_x",
 				"setter": "set_param_x",
 				"index": 6
+			},
+			{
+				"name": "linear_spring_x/enabled",
+				"type": "bool",
+				"getter": "get_flag_x",
+				"setter": "set_flag_x",
+				"index": 3
+			},
+			{
+				"name": "linear_spring_x/stiffness",
+				"type": "float",
+				"getter": "get_param_x",
+				"setter": "set_param_x",
+				"index": 7
+			},
+			{
+				"name": "linear_spring_x/damping",
+				"type": "float",
+				"getter": "get_param_x",
+				"setter": "set_param_x",
+				"index": 8
+			},
+			{
+				"name": "linear_spring_x/equilibrium_point",
+				"type": "float",
+				"getter": "get_param_x",
+				"setter": "set_param_x",
+				"index": 9
 			},
 			{
 				"name": "angular_limit_x/enabled",
@@ -108126,56 +109947,84 @@
 				"type": "float",
 				"getter": "get_param_x",
 				"setter": "set_param_x",
-				"index": 9
+				"index": 12
 			},
 			{
 				"name": "angular_limit_x/restitution",
 				"type": "float",
 				"getter": "get_param_x",
 				"setter": "set_param_x",
-				"index": 11
+				"index": 14
 			},
 			{
 				"name": "angular_limit_x/damping",
 				"type": "float",
 				"getter": "get_param_x",
 				"setter": "set_param_x",
-				"index": 10
+				"index": 13
 			},
 			{
 				"name": "angular_limit_x/force_limit",
 				"type": "float",
 				"getter": "get_param_x",
 				"setter": "set_param_x",
-				"index": 12
+				"index": 15
 			},
 			{
 				"name": "angular_limit_x/erp",
 				"type": "float",
 				"getter": "get_param_x",
 				"setter": "set_param_x",
-				"index": 13
+				"index": 16
 			},
 			{
 				"name": "angular_motor_x/enabled",
 				"type": "bool",
 				"getter": "get_flag_x",
 				"setter": "set_flag_x",
-				"index": 2
+				"index": 4
 			},
 			{
 				"name": "angular_motor_x/target_velocity",
 				"type": "float",
 				"getter": "get_param_x",
 				"setter": "set_param_x",
-				"index": 14
+				"index": 17
 			},
 			{
 				"name": "angular_motor_x/force_limit",
 				"type": "float",
 				"getter": "get_param_x",
 				"setter": "set_param_x",
-				"index": 15
+				"index": 18
+			},
+			{
+				"name": "angular_spring_x/enabled",
+				"type": "bool",
+				"getter": "get_flag_x",
+				"setter": "set_flag_x",
+				"index": 2
+			},
+			{
+				"name": "angular_spring_x/stiffness",
+				"type": "float",
+				"getter": "get_param_x",
+				"setter": "set_param_x",
+				"index": 19
+			},
+			{
+				"name": "angular_spring_x/damping",
+				"type": "float",
+				"getter": "get_param_x",
+				"setter": "set_param_x",
+				"index": 20
+			},
+			{
+				"name": "angular_spring_x/equilibrium_point",
+				"type": "float",
+				"getter": "get_param_x",
+				"setter": "set_param_x",
+				"index": 21
 			},
 			{
 				"name": "linear_limit_y/enabled",
@@ -108224,7 +110073,7 @@
 				"type": "bool",
 				"getter": "get_flag_y",
 				"setter": "set_flag_y",
-				"index": 3
+				"index": 5
 			},
 			{
 				"name": "linear_motor_y/target_velocity",
@@ -108239,6 +110088,34 @@
 				"getter": "get_param_y",
 				"setter": "set_param_y",
 				"index": 6
+			},
+			{
+				"name": "linear_spring_y/enabled",
+				"type": "bool",
+				"getter": "get_flag_y",
+				"setter": "set_flag_y",
+				"index": 3
+			},
+			{
+				"name": "linear_spring_y/stiffness",
+				"type": "float",
+				"getter": "get_param_y",
+				"setter": "set_param_y",
+				"index": 7
+			},
+			{
+				"name": "linear_spring_y/damping",
+				"type": "float",
+				"getter": "get_param_y",
+				"setter": "set_param_y",
+				"index": 8
+			},
+			{
+				"name": "linear_spring_y/equilibrium_point",
+				"type": "float",
+				"getter": "get_param_y",
+				"setter": "set_param_y",
+				"index": 9
 			},
 			{
 				"name": "angular_limit_y/enabled",
@@ -108266,56 +110143,84 @@
 				"type": "float",
 				"getter": "get_param_y",
 				"setter": "set_param_y",
-				"index": 9
+				"index": 12
 			},
 			{
 				"name": "angular_limit_y/restitution",
 				"type": "float",
 				"getter": "get_param_y",
 				"setter": "set_param_y",
-				"index": 11
+				"index": 14
 			},
 			{
 				"name": "angular_limit_y/damping",
 				"type": "float",
 				"getter": "get_param_y",
 				"setter": "set_param_y",
-				"index": 10
+				"index": 13
 			},
 			{
 				"name": "angular_limit_y/force_limit",
 				"type": "float",
 				"getter": "get_param_y",
 				"setter": "set_param_y",
-				"index": 12
+				"index": 15
 			},
 			{
 				"name": "angular_limit_y/erp",
 				"type": "float",
 				"getter": "get_param_y",
 				"setter": "set_param_y",
-				"index": 13
+				"index": 16
 			},
 			{
 				"name": "angular_motor_y/enabled",
 				"type": "bool",
 				"getter": "get_flag_y",
 				"setter": "set_flag_y",
-				"index": 2
+				"index": 4
 			},
 			{
 				"name": "angular_motor_y/target_velocity",
 				"type": "float",
 				"getter": "get_param_y",
 				"setter": "set_param_y",
-				"index": 14
+				"index": 17
 			},
 			{
 				"name": "angular_motor_y/force_limit",
 				"type": "float",
 				"getter": "get_param_y",
 				"setter": "set_param_y",
-				"index": 15
+				"index": 18
+			},
+			{
+				"name": "angular_spring_y/enabled",
+				"type": "bool",
+				"getter": "get_flag_y",
+				"setter": "set_flag_y",
+				"index": 2
+			},
+			{
+				"name": "angular_spring_y/stiffness",
+				"type": "float",
+				"getter": "get_param_y",
+				"setter": "set_param_y",
+				"index": 19
+			},
+			{
+				"name": "angular_spring_y/damping",
+				"type": "float",
+				"getter": "get_param_y",
+				"setter": "set_param_y",
+				"index": 20
+			},
+			{
+				"name": "angular_spring_y/equilibrium_point",
+				"type": "float",
+				"getter": "get_param_y",
+				"setter": "set_param_y",
+				"index": 21
 			},
 			{
 				"name": "linear_limit_z/enabled",
@@ -108364,7 +110269,7 @@
 				"type": "bool",
 				"getter": "get_flag_z",
 				"setter": "set_flag_z",
-				"index": 3
+				"index": 5
 			},
 			{
 				"name": "linear_motor_z/target_velocity",
@@ -108379,6 +110284,34 @@
 				"getter": "get_param_z",
 				"setter": "set_param_z",
 				"index": 6
+			},
+			{
+				"name": "linear_spring_z/enabled",
+				"type": "bool",
+				"getter": "get_flag_z",
+				"setter": "set_flag_z",
+				"index": 3
+			},
+			{
+				"name": "linear_spring_z/stiffness",
+				"type": "float",
+				"getter": "get_param_z",
+				"setter": "set_param_z",
+				"index": 7
+			},
+			{
+				"name": "linear_spring_z/damping",
+				"type": "float",
+				"getter": "get_param_z",
+				"setter": "set_param_z",
+				"index": 8
+			},
+			{
+				"name": "linear_spring_z/equilibrium_point",
+				"type": "float",
+				"getter": "get_param_z",
+				"setter": "set_param_z",
+				"index": 9
 			},
 			{
 				"name": "angular_limit_z/enabled",
@@ -108406,56 +110339,91 @@
 				"type": "float",
 				"getter": "get_param_z",
 				"setter": "set_param_z",
-				"index": 9
+				"index": 12
 			},
 			{
 				"name": "angular_limit_z/restitution",
 				"type": "float",
 				"getter": "get_param_z",
 				"setter": "set_param_z",
-				"index": 11
+				"index": 14
 			},
 			{
 				"name": "angular_limit_z/damping",
 				"type": "float",
 				"getter": "get_param_z",
 				"setter": "set_param_z",
-				"index": 10
+				"index": 13
 			},
 			{
 				"name": "angular_limit_z/force_limit",
 				"type": "float",
 				"getter": "get_param_z",
 				"setter": "set_param_z",
-				"index": 12
+				"index": 15
 			},
 			{
 				"name": "angular_limit_z/erp",
 				"type": "float",
 				"getter": "get_param_z",
 				"setter": "set_param_z",
-				"index": 13
+				"index": 16
 			},
 			{
 				"name": "angular_motor_z/enabled",
 				"type": "bool",
 				"getter": "get_flag_z",
 				"setter": "set_flag_z",
-				"index": 2
+				"index": 4
 			},
 			{
 				"name": "angular_motor_z/target_velocity",
 				"type": "float",
 				"getter": "get_param_z",
 				"setter": "set_param_z",
-				"index": 14
+				"index": 17
 			},
 			{
 				"name": "angular_motor_z/force_limit",
 				"type": "float",
 				"getter": "get_param_z",
 				"setter": "set_param_z",
-				"index": 15
+				"index": 18
+			},
+			{
+				"name": "angular_spring_z/enabled",
+				"type": "bool",
+				"getter": "get_flag_z",
+				"setter": "set_flag_z",
+				"index": 2
+			},
+			{
+				"name": "angular_spring_z/stiffness",
+				"type": "float",
+				"getter": "get_param_z",
+				"setter": "set_param_z",
+				"index": 19
+			},
+			{
+				"name": "angular_spring_z/damping",
+				"type": "float",
+				"getter": "get_param_z",
+				"setter": "set_param_z",
+				"index": 20
+			},
+			{
+				"name": "angular_spring_z/equilibrium_point",
+				"type": "float",
+				"getter": "get_param_z",
+				"setter": "set_param_z",
+				"index": 21
+			},
+			{
+				"name": "precision",
+				"type": "int",
+				"getter": "get_precision",
+				"setter": "set_precision",
+				"index": -1
 			}
 		],
 		"signals": [
@@ -108916,6 +110884,38 @@
 						"default_value": ""
 					}
 				]
+			},
+			{
+				"name": "set_precision",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "precision",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_precision",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
 			}
 		],
 		"enums": [
@@ -108929,16 +110929,16 @@
 					"PARAM_LINEAR_DAMPING": 4,
 					"PARAM_LINEAR_MOTOR_TARGET_VELOCITY": 5,
 					"PARAM_LINEAR_MOTOR_FORCE_LIMIT": 6,
-					"PARAM_ANGULAR_LOWER_LIMIT": 7,
-					"PARAM_ANGULAR_UPPER_LIMIT": 8,
-					"PARAM_ANGULAR_LIMIT_SOFTNESS": 9,
-					"PARAM_ANGULAR_DAMPING": 10,
-					"PARAM_ANGULAR_RESTITUTION": 11,
-					"PARAM_ANGULAR_FORCE_LIMIT": 12,
-					"PARAM_ANGULAR_ERP": 13,
-					"PARAM_ANGULAR_MOTOR_TARGET_VELOCITY": 14,
-					"PARAM_ANGULAR_MOTOR_FORCE_LIMIT": 15,
-					"PARAM_MAX": 16
+					"PARAM_ANGULAR_LOWER_LIMIT": 10,
+					"PARAM_ANGULAR_UPPER_LIMIT": 11,
+					"PARAM_ANGULAR_LIMIT_SOFTNESS": 12,
+					"PARAM_ANGULAR_DAMPING": 13,
+					"PARAM_ANGULAR_RESTITUTION": 14,
+					"PARAM_ANGULAR_FORCE_LIMIT": 15,
+					"PARAM_ANGULAR_ERP": 16,
+					"PARAM_ANGULAR_MOTOR_TARGET_VELOCITY": 17,
+					"PARAM_ANGULAR_MOTOR_FORCE_LIMIT": 18,
+					"PARAM_MAX": 22
 				}
 			},
 			{
@@ -108946,9 +110946,11 @@
 				"values": {
 					"FLAG_ENABLE_LINEAR_LIMIT": 0,
 					"FLAG_ENABLE_ANGULAR_LIMIT": 1,
-					"FLAG_ENABLE_MOTOR": 2,
-					"FLAG_ENABLE_LINEAR_MOTOR": 3,
-					"FLAG_MAX": 4
+					"FLAG_ENABLE_ANGULAR_SPRING": 2,
+					"FLAG_ENABLE_LINEAR_SPRING": 3,
+					"FLAG_ENABLE_MOTOR": 4,
+					"FLAG_ENABLE_LINEAR_MOTOR": 5,
+					"FLAG_MAX": 6
 				}
 			}
 		]
@@ -112152,6 +114154,34 @@
 				"getter": "get_light_mode",
 				"setter": "set_light_mode",
 				"index": -1
+			},
+			{
+				"name": "particles_animation",
+				"type": "bool",
+				"getter": "get_particles_animation",
+				"setter": "set_particles_animation",
+				"index": -1
+			},
+			{
+				"name": "particles_anim_h_frames",
+				"type": "int",
+				"getter": "get_particles_anim_h_frames",
+				"setter": "set_particles_anim_h_frames",
+				"index": -1
+			},
+			{
+				"name": "particles_anim_v_frames",
+				"type": "int",
+				"getter": "get_particles_anim_v_frames",
+				"setter": "set_particles_anim_v_frames",
+				"index": -1
+			},
+			{
+				"name": "particles_anim_loop",
+				"type": "bool",
+				"getter": "get_particles_anim_loop",
+				"setter": "set_particles_anim_loop",
+				"index": -1
 			}
 		],
 		"signals": [
@@ -112220,6 +114250,134 @@
 				"is_from_script": false,
 				"arguments": [
 				]
+			},
+			{
+				"name": "set_particles_animation",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "particles_anim",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_particles_animation",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_particles_anim_h_frames",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "frames",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_particles_anim_h_frames",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_particles_anim_v_frames",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "frames",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_particles_anim_v_frames",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_particles_anim_loop",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "loop",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_particles_anim_loop",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
 			}
 		],
 		"enums": [
@@ -112267,7 +114425,7 @@
 			"PARAM_ANIM_OFFSET": 11,
 			"PARAM_MAX": 12,
 			"FLAG_ALIGN_Y_TO_VELOCITY": 0,
-			"FLAG_MAX": 2,
+			"FLAG_MAX": 1,
 			"EMISSION_SHAPE_POINT": 0,
 			"EMISSION_SHAPE_CIRCLE": 1,
 			"EMISSION_SHAPE_RECTANGLE": 2,
@@ -112584,21 +114742,21 @@
 				"index": 7
 			},
 			{
-				"name": "scale",
+				"name": "scale_amount",
 				"type": "float",
 				"getter": "get_param",
 				"setter": "set_param",
 				"index": 8
 			},
 			{
-				"name": "scale_random",
+				"name": "scale_amount_random",
 				"type": "float",
 				"getter": "get_param_randomness",
 				"setter": "set_param_randomness",
 				"index": 8
 			},
 			{
-				"name": "scale_curve",
+				"name": "scale_amount_curve",
 				"type": "Curve",
 				"getter": "get_param_curve",
 				"setter": "set_param_curve",
@@ -112613,7 +114771,7 @@
 			},
 			{
 				"name": "color_ramp",
-				"type": "GradientTexture",
+				"type": "Gradient",
 				"getter": "get_color_ramp",
 				"setter": "set_color_ramp",
 				"index": -1
@@ -112680,13 +114838,6 @@
 				"getter": "get_param_curve",
 				"setter": "set_param_curve",
 				"index": 11
-			},
-			{
-				"name": "anim_loop",
-				"type": "bool",
-				"getter": "get_particle_flag",
-				"setter": "set_particle_flag",
-				"index": 1
 			}
 		],
 		"signals": [
@@ -113719,7 +115870,7 @@
 				"name": "Flags",
 				"values": {
 					"FLAG_ALIGN_Y_TO_VELOCITY": 0,
-					"FLAG_MAX": 2
+					"FLAG_MAX": 1
 				}
 			},
 			{
@@ -113881,20 +116032,6 @@
 				"type": "Texture",
 				"getter": "get_normal_map",
 				"setter": "set_normal_map",
-				"index": -1
-			},
-			{
-				"name": "h_frames",
-				"type": "int",
-				"getter": "get_h_frames",
-				"setter": "set_h_frames",
-				"index": -1
-			},
-			{
-				"name": "v_frames",
-				"type": "int",
-				"getter": "get_v_frames",
-				"setter": "set_v_frames",
 				"index": -1
 			}
 		],
@@ -114416,70 +116553,6 @@
 			{
 				"name": "capture_rect",
 				"return_type": "Rect2",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-				]
-			},
-			{
-				"name": "set_v_frames",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "frames",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_v_frames",
-				"return_type": "int",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-				]
-			},
-			{
-				"name": "set_h_frames",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "frames",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_h_frames",
-				"return_type": "int",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -116083,266 +118156,6 @@
 					"LINE_JOINT_ROUND": 2
 				}
 			}
-		]
-	},
-	{
-		"name": "Gradient",
-		"base_class": "Resource",
-		"api_type": "core",
-		"singleton": false,
-		"instanciable": true,
-		"is_reference": true,
-		"constants": {
-		},
-		"properties": [
-			{
-				"name": "offsets",
-				"type": "PoolRealArray",
-				"getter": "get_offsets",
-				"setter": "set_offsets",
-				"index": -1
-			},
-			{
-				"name": "colors",
-				"type": "PoolColorArray",
-				"getter": "get_colors",
-				"setter": "set_colors",
-				"index": -1
-			}
-		],
-		"signals": [
-		],
-		"methods": [
-			{
-				"name": "add_point",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "offset",
-						"type": "float",
-						"has_default_value": false,
-						"default_value": ""
-					},
-					{
-						"name": "color",
-						"type": "Color",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "remove_point",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "offset",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "set_offset",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "point",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					},
-					{
-						"name": "offset",
-						"type": "float",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_offset",
-				"return_type": "float",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "point",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "set_color",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "point",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					},
-					{
-						"name": "color",
-						"type": "Color",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_color",
-				"return_type": "Color",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "point",
-						"type": "int",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "interpolate",
-				"return_type": "Color",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "offset",
-						"type": "float",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_point_count",
-				"return_type": "int",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-				]
-			},
-			{
-				"name": "set_offsets",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "offsets",
-						"type": "PoolRealArray",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_offsets",
-				"return_type": "PoolRealArray",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-				]
-			},
-			{
-				"name": "set_colors",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "colors",
-						"type": "PoolColorArray",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_colors",
-				"return_type": "PoolColorArray",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-				]
-			}
-		],
-		"enums": [
 		]
 	},
 	{
@@ -118740,19 +120553,13 @@
 						"default_value": "(0, 0)"
 					},
 					{
-						"name": "infinite_inertia",
-						"type": "bool",
-						"has_default_value": true,
-						"default_value": "True"
-					},
-					{
 						"name": "stop_on_slope",
 						"type": "bool",
 						"has_default_value": true,
 						"default_value": "False"
 					},
 					{
-						"name": "max_bounces",
+						"name": "max_slides",
 						"type": "int",
 						"has_default_value": true,
 						"default_value": "4"
@@ -118762,6 +120569,12 @@
 						"type": "float",
 						"has_default_value": true,
 						"default_value": "0.785398"
+					},
+					{
+						"name": "infinite_inertia",
+						"type": "bool",
+						"has_default_value": true,
+						"default_value": "True"
 					}
 				]
 			},
@@ -118795,19 +120608,13 @@
 						"default_value": "(0, 0)"
 					},
 					{
-						"name": "infinite_inertia",
-						"type": "bool",
-						"has_default_value": true,
-						"default_value": "True"
-					},
-					{
 						"name": "stop_on_slope",
 						"type": "bool",
 						"has_default_value": true,
 						"default_value": "False"
 					},
 					{
-						"name": "max_bounces",
+						"name": "max_slides",
 						"type": "int",
 						"has_default_value": true,
 						"default_value": "4"
@@ -118817,6 +120624,12 @@
 						"type": "float",
 						"has_default_value": true,
 						"default_value": "0.785398"
+					},
+					{
+						"name": "infinite_inertia",
+						"type": "bool",
+						"has_default_value": true,
+						"default_value": "True"
 					}
 				]
 			},
@@ -118846,8 +120659,8 @@
 					{
 						"name": "infinite_inertia",
 						"type": "bool",
-						"has_default_value": false,
-						"default_value": ""
+						"has_default_value": true,
+						"default_value": "True"
 					}
 				]
 			},
@@ -127468,6 +129281,31 @@
 				]
 			},
 			{
+				"name": "get_cell_autotile_coord",
+				"return_type": "Vector2",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "x",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "y",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
 				"name": "fix_invalid_tiles",
 				"return_type": "void",
 				"is_editor": false,
@@ -128793,7 +130631,7 @@
 			"PARAM_MAX": 12,
 			"FLAG_ALIGN_Y_TO_VELOCITY": 0,
 			"FLAG_ROTATE_Y": 1,
-			"FLAG_MAX": 4,
+			"FLAG_MAX": 3,
 			"EMISSION_SHAPE_POINT": 0,
 			"EMISSION_SHAPE_SPHERE": 1,
 			"EMISSION_SHAPE_BOX": 2,
@@ -129171,13 +131009,6 @@
 				"getter": "get_param_texture",
 				"setter": "set_param_texture",
 				"index": 11
-			},
-			{
-				"name": "anim_loop",
-				"type": "bool",
-				"getter": "get_flag",
-				"setter": "set_flag",
-				"index": 3
 			}
 		],
 		"signals": [
@@ -129846,7 +131677,7 @@
 				"values": {
 					"FLAG_ALIGN_Y_TO_VELOCITY": 0,
 					"FLAG_ROTATE_Y": 1,
-					"FLAG_MAX": 4
+					"FLAG_MAX": 3
 				}
 			},
 			{
@@ -129956,6 +131787,102 @@
 				"has_varargs": false,
 				"is_from_script": false,
 				"arguments": [
+				]
+			},
+			{
+				"name": "_update",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "GradientTexture",
+		"base_class": "Texture",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+			{
+				"name": "gradient",
+				"type": "Gradient",
+				"getter": "get_gradient",
+				"setter": "set_gradient",
+				"index": -1
+			},
+			{
+				"name": "width",
+				"type": "int",
+				"getter": "get_width",
+				"setter": "set_width",
+				"index": -1
+			}
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "set_gradient",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "gradient",
+						"type": "Gradient",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_gradient",
+				"return_type": "Gradient",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_width",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "width",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
 				]
 			},
 			{
@@ -131363,7 +133290,7 @@
 			},
 			{
 				"name": "size",
-				"type": "Vector2",
+				"type": "Vector3",
 				"getter": "get_size",
 				"setter": "set_size",
 				"index": -1
@@ -132398,6 +134325,20 @@
 				"type": "int",
 				"getter": "get_depth_deep_parallax_max_layers",
 				"setter": "set_depth_deep_parallax_max_layers",
+				"index": -1
+			},
+			{
+				"name": "depth_flip_tangent",
+				"type": "bool",
+				"getter": "get_depth_deep_parallax_flip_tangent",
+				"setter": "set_depth_deep_parallax_flip_tangent",
+				"index": -1
+			},
+			{
+				"name": "depth_flip_binormal",
+				"type": "bool",
+				"getter": "get_depth_deep_parallax_flip_binormal",
+				"setter": "set_depth_deep_parallax_flip_binormal",
 				"index": -1
 			},
 			{
@@ -133846,8 +135787,8 @@
 				"is_from_script": false,
 				"arguments": [
 					{
-						"name": "frames",
-						"type": "int",
+						"name": "loop",
+						"type": "bool",
 						"has_default_value": false,
 						"default_value": ""
 					}
@@ -133855,7 +135796,7 @@
 			},
 			{
 				"name": "get_particles_anim_loop",
-				"return_type": "int",
+				"return_type": "bool",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -133952,6 +135893,70 @@
 			{
 				"name": "get_depth_deep_parallax_max_layers",
 				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_depth_deep_parallax_flip_tangent",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "flip",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_depth_deep_parallax_flip_tangent",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_depth_deep_parallax_flip_binormal",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "flip",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_depth_deep_parallax_flip_binormal",
+				"return_type": "bool",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -144530,6 +146535,13 @@
 		},
 		"properties": [
 			{
+				"name": "antialiased",
+				"type": "bool",
+				"getter": "is_antialiased",
+				"setter": "set_antialiased",
+				"index": -1
+			},
+			{
 				"name": "hinting",
 				"type": "int",
 				"getter": "get_hinting",
@@ -144547,6 +146559,38 @@
 		"signals": [
 		],
 		"methods": [
+			{
+				"name": "set_antialiased",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "antialiased",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "is_antialiased",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
 			{
 				"name": "set_font_path",
 				"return_type": "void",
@@ -148784,7 +150828,8 @@
 			"FORMAT_IMA_ADPCM": 2,
 			"LOOP_DISABLED": 0,
 			"LOOP_FORWARD": 1,
-			"LOOP_PING_PONG": 2
+			"LOOP_PING_PONG": 2,
+			"LOOP_BACKWARD": 3
 		},
 		"properties": [
 			{
@@ -149090,7 +151135,8 @@
 				"values": {
 					"LOOP_DISABLED": 0,
 					"LOOP_FORWARD": 1,
-					"LOOP_PING_PONG": 2
+					"LOOP_PING_PONG": 2,
+					"LOOP_BACKWARD": 3
 				}
 			},
 			{
@@ -153395,6 +155441,32 @@
 				]
 			},
 			{
+				"name": "enable_plugin",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "disable_plugin",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
 				"name": "add_control_to_container",
 				"return_type": "void",
 				"is_editor": false,
@@ -156451,6 +158523,16 @@
 				"name": "filesystem_changed",
 				"arguments": [
 				]
+			},
+			{
+				"name": "resources_reload",
+				"arguments": [
+					{
+						"name": "resources",
+						"type": "PoolStringArray",
+						"default_value": ""
+					}
+				]
 			}
 		],
 		"methods": [
@@ -157214,25 +159296,6 @@
 			},
 			{
 				"name": "_help_search",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": true,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "arg0",
-						"type": "String",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "_help_index",
 				"return_type": "void",
 				"is_editor": false,
 				"is_noscript": false,
@@ -159003,6 +161066,12 @@
 						"type": "String",
 						"has_default_value": false,
 						"default_value": ""
+					},
+					{
+						"name": "arg1",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
 					}
 				]
 			},
@@ -159026,6 +161095,12 @@
 					{
 						"name": "arg1",
 						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "arg2",
+						"type": "bool",
 						"has_default_value": false,
 						"default_value": ""
 					}
@@ -160217,6 +162292,20 @@
 				"index": -1
 			},
 			{
+				"name": "snap",
+				"type": "float",
+				"getter": "get_snap",
+				"setter": "set_snap",
+				"index": -1
+			},
+			{
+				"name": "calculate_tangents",
+				"type": "bool",
+				"getter": "is_calculating_tangents",
+				"setter": "set_calculate_tangents",
+				"index": -1
+			},
+			{
 				"name": "use_collision",
 				"type": "bool",
 				"getter": "is_using_collision",
@@ -160224,10 +162313,17 @@
 				"index": -1
 			},
 			{
-				"name": "snap",
-				"type": "float",
-				"getter": "get_snap",
-				"setter": "set_snap",
+				"name": "collision_layer",
+				"type": "int",
+				"getter": "get_collision_layer",
+				"setter": "set_collision_layer",
+				"index": -1
+			},
+			{
+				"name": "collision_mask",
+				"type": "int",
+				"getter": "get_collision_mask",
+				"setter": "set_collision_mask",
 				"index": -1
 			}
 		],
@@ -160293,6 +162389,38 @@
 				]
 			},
 			{
+				"name": "set_snap",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "snap",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_snap",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
 				"name": "set_use_collision",
 				"return_type": "void",
 				"is_editor": false,
@@ -160325,7 +162453,7 @@
 				]
 			},
 			{
-				"name": "set_snap",
+				"name": "set_collision_layer",
 				"return_type": "void",
 				"is_editor": false,
 				"is_noscript": false,
@@ -160336,16 +162464,168 @@
 				"is_from_script": false,
 				"arguments": [
 					{
-						"name": "snap",
-						"type": "float",
+						"name": "layer",
+						"type": "int",
 						"has_default_value": false,
 						"default_value": ""
 					}
 				]
 			},
 			{
-				"name": "get_snap",
-				"return_type": "float",
+				"name": "get_collision_layer",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_collision_mask",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "mask",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_collision_mask",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_collision_mask_bit",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "bit",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "value",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_collision_mask_bit",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "bit",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_collision_layer_bit",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "bit",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "value",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_collision_layer_bit",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "bit",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_calculate_tangents",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "enabled",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "is_calculating_tangents",
+				"return_type": "bool",
 				"is_editor": false,
 				"is_noscript": false,
 				"is_const": true,
@@ -162004,6 +164284,24 @@
 		]
 	},
 	{
+		"name": "ResourceFormatDDS",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "NetworkedMultiplayerENet",
 		"base_class": "NetworkedMultiplayerPeer",
 		"api_type": "core",
@@ -162400,6 +164698,24 @@
 		]
 	},
 	{
+		"name": "ResourceFormatPKM",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "GDNativeLibrary",
 		"base_class": "Resource",
 		"api_type": "core",
@@ -162753,6 +165069,42 @@
 		]
 	},
 	{
+		"name": "GDNativeLibraryResourceLoader",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "GDNativeLibraryResourceSaver",
+		"base_class": "ResourceFormatSaver",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "MultiplayerPeerGDNative",
 		"base_class": "NetworkedMultiplayerPeer",
 		"api_type": "core",
@@ -163082,6 +165434,42 @@
 		]
 	},
 	{
+		"name": "ResourceFormatSaverNativeScript",
+		"base_class": "ResourceFormatSaver",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderNativeScript",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "PluginScript",
 		"base_class": "Script",
 		"api_type": "core",
@@ -163095,6 +165483,19 @@
 		"signals": [
 		],
 		"methods": [
+			{
+				"name": "new",
+				"return_type": "Object",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": true,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
 		],
 		"enums": [
 		]
@@ -163218,6 +165619,1466 @@
 				"arguments": [
 				]
 			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderGDScript",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatSaverGDScript",
+		"base_class": "ResourceFormatSaver",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WaylandDisplay",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+			{
+				"name": "socket_name",
+				"type": "String",
+				"getter": "get_socket_name",
+				"setter": "set_socket_name",
+				"index": -1
+			}
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "run",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_socket_name",
+				"return_type": "String",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_socket_name",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "name",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrBackend",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrCompositor",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+			{
+				"name": "new_surface",
+				"arguments": [
+					{
+						"name": "surface",
+						"type": "WlrSurface",
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrSurface",
+		"base_class": "Resource",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "get_sx",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_sy",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_current_state",
+				"return_type": "WlrSurfaceState",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_pending_state",
+				"return_type": "WlrSurfaceState",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_previous_state",
+				"return_type": "WlrSurfaceState",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_texture",
+				"return_type": "Texture",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "send_frame_done",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrDataDeviceManager",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrKeyboard",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+			{
+				"name": "key",
+				"arguments": [
+					{
+						"name": "keyboard",
+						"type": "WlrKeyboard",
+						"default_value": ""
+					},
+					{
+						"name": "key_event",
+						"type": "WlrEventKeyboardKey",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "modifiers",
+				"arguments": [
+					{
+						"name": "keyboard",
+						"type": "WlrKeyboard",
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"methods": [
+			{
+				"name": "_input",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "event",
+						"type": "InputEvent",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrOutput",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "_size_changed",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": true,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrSeat",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+			"SEAT_CAPABILITY_POINTER": 1,
+			"SEAT_CAPABILITY_KEYBOARD": 2,
+			"SEAT_CAPABILITY_TOUCH": 4
+		},
+		"properties": [
+			{
+				"name": "capabilities",
+				"type": "int",
+				"getter": "get_capabilities",
+				"setter": "set_capabilities",
+				"index": -1
+			}
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "set_capabilities",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "capabilities",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_capabilities",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "pointer_notify_enter",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "surface",
+						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "sx",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "sy",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "pointer_clear_focus",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "pointer_notify_motion",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "sx",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "sy",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "pointer_notify_button",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "button",
+						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "pressed",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "pointer_notify_frame",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_keyboard",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "arg0",
+						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "keyboard_notify_enter",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "surface",
+						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "keyboard_notify_key",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "key_event",
+						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "keyboard_notify_modifiers",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "validate_grab_serial",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "serial",
+						"type": "int",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"enums": [
+			{
+				"name": "WlrSeatCapability",
+				"values": {
+					"SEAT_CAPABILITY_POINTER": 1,
+					"SEAT_CAPABILITY_KEYBOARD": 2,
+					"SEAT_CAPABILITY_TOUCH": 4
+				}
+			}
+		]
+	},
+	{
+		"name": "WlrSurfaceAtResult",
+		"base_class": "Reference",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "get_sub_x",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_sub_y",
+				"return_type": "float",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_surface",
+				"return_type": "WlrSurface",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrSurfaceState",
+		"base_class": "Resource",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "get_width",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_height",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_buffer_width",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_buffer_height",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_scale",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrXdgShell",
+		"base_class": "Node",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+			{
+				"name": "new_surface",
+				"arguments": [
+					{
+						"name": "surface",
+						"type": "WlrXdgSurface",
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrXdgSurface",
+		"base_class": "Resource",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+			"XDG_SURFACE_ROLE_NONE": 0,
+			"XDG_SURFACE_ROLE_TOPLEVEL": 1,
+			"XDG_SURFACE_ROLE_POPUP": 2
+		},
+		"properties": [
+		],
+		"signals": [
+			{
+				"name": "map",
+				"arguments": [
+					{
+						"name": "xdg_surface",
+						"type": "WlrXdgSurface",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "unmap",
+				"arguments": [
+					{
+						"name": "xdg_surface",
+						"type": "WlrXdgSurface",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "destroy",
+				"arguments": [
+					{
+						"name": "xdg_surface",
+						"type": "WlrXdgSurface",
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"methods": [
+			{
+				"name": "get_role",
+				"return_type": "enum.WlrXdgSurface::XdgSurfaceRole",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_xdg_toplevel",
+				"return_type": "WlrXdgToplevel",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_xdg_popup",
+				"return_type": "WlrXdgPopup",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_geometry",
+				"return_type": "Rect2",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_wlr_surface",
+				"return_type": "WlrSurface",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "for_each_surface",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "func",
+						"type": "Variant",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "surface_at",
+				"return_type": "WlrSurfaceAtResult",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "sx",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					},
+					{
+						"name": "sy",
+						"type": "float",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"enums": [
+			{
+				"name": "XdgSurfaceRole",
+				"values": {
+					"XDG_SURFACE_ROLE_NONE": 0,
+					"XDG_SURFACE_ROLE_TOPLEVEL": 1,
+					"XDG_SURFACE_ROLE_POPUP": 2
+				}
+			}
+		]
+	},
+	{
+		"name": "WlrXdgToplevel",
+		"base_class": "Object",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+			{
+				"name": "request_fullscreen",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					},
+					{
+						"name": "fullscreen",
+						"type": "bool",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "request_show_window_menu",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					},
+					{
+						"name": "serial",
+						"type": "int",
+						"default_value": ""
+					},
+					{
+						"name": "x",
+						"type": "int",
+						"default_value": ""
+					},
+					{
+						"name": "y",
+						"type": "int",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "request_maximize",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_parent",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_title",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "request_move",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					},
+					{
+						"name": "serial",
+						"type": "int",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_app_id",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "request_resize",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					},
+					{
+						"name": "serial",
+						"type": "int",
+						"default_value": ""
+					},
+					{
+						"name": "edges",
+						"type": "int",
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "request_minimize",
+				"arguments": [
+					{
+						"name": "xdg_toplevel",
+						"type": "WlrXdgToplevel",
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"methods": [
+			{
+				"name": "get_parent",
+				"return_type": "WlrXdgToplevel",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_title",
+				"return_type": "String",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_app_id",
+				"return_type": "String",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "set_size",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "size",
+						"type": "Vector2",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_activated",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "activated",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_maximized",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "maximized",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_fullscreen",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "fullscreen",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_resizing",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "resizing",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "set_tiled",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "tiled",
+						"type": "bool",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "send_close",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrXdgToplevelState",
+		"base_class": "Object",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "get_maximized",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_fullscreen",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_resizing",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_activated",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_tiled",
+				"return_type": "bool",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_width",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_height",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_min_width",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_min_height",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_max_width",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			},
+			{
+				"name": "get_max_height",
+				"return_type": "int",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WlrXdgPopup",
+		"base_class": "Object",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": false,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
 		],
 		"enums": [
 		]
@@ -164925,6 +168786,24 @@
 		]
 	},
 	{
+		"name": "ResourceFormatPVR",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
 		"name": "RegExMatch",
 		"base_class": "Reference",
 		"api_type": "core",
@@ -165446,6 +169325,24 @@
 				"arguments": [
 				]
 			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderTheora",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
 		],
 		"enums": [
 		]
@@ -171794,63 +175691,6 @@
 		]
 	},
 	{
-		"name": "VideoStreamWebm",
-		"base_class": "VideoStream",
-		"api_type": "core",
-		"singleton": false,
-		"instanciable": true,
-		"is_reference": true,
-		"constants": {
-		},
-		"properties": [
-			{
-				"name": "file",
-				"type": "String",
-				"getter": "get_file",
-				"setter": "set_file",
-				"index": -1
-			}
-		],
-		"signals": [
-		],
-		"methods": [
-			{
-				"name": "set_file",
-				"return_type": "void",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "file",
-						"type": "String",
-						"has_default_value": false,
-						"default_value": ""
-					}
-				]
-			},
-			{
-				"name": "get_file",
-				"return_type": "String",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": false,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-				]
-			}
-		],
-		"enums": [
-		]
-	},
-	{
 		"name": "_VisualScriptEditor",
 		"base_class": "Object",
 		"api_type": "tools",
@@ -171920,6 +175760,128 @@
 					{
 						"name": "category",
 						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "ResourceFormatLoaderWebm",
+		"base_class": "ResourceFormatLoader",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+		],
+		"methods": [
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "VideoStreamWebm",
+		"base_class": "VideoStream",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": true,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+			{
+				"name": "file",
+				"type": "String",
+				"getter": "get_file",
+				"setter": "set_file",
+				"index": -1
+			}
+		],
+		"signals": [
+		],
+		"methods": [
+			{
+				"name": "set_file",
+				"return_type": "void",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "file",
+						"type": "String",
+						"has_default_value": false,
+						"default_value": ""
+					}
+				]
+			},
+			{
+				"name": "get_file",
+				"return_type": "String",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": false,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+				]
+			}
+		],
+		"enums": [
+		]
+	},
+	{
+		"name": "WebSocketMultiplayerPeer",
+		"base_class": "NetworkedMultiplayerPeer",
+		"api_type": "core",
+		"singleton": false,
+		"instanciable": false,
+		"is_reference": true,
+		"constants": {
+		},
+		"properties": [
+		],
+		"signals": [
+			{
+				"name": "peer_packet",
+				"arguments": [
+					{
+						"name": "peer_source",
+						"type": "int",
+						"default_value": ""
+					}
+				]
+			}
+		],
+		"methods": [
+			{
+				"name": "get_peer",
+				"return_type": "WebSocketPeer",
+				"is_editor": false,
+				"is_noscript": false,
+				"is_const": true,
+				"is_reverse": false,
+				"is_virtual": false,
+				"has_varargs": false,
+				"is_from_script": false,
+				"arguments": [
+					{
+						"name": "peer_id",
+						"type": "int",
 						"has_default_value": false,
 						"default_value": ""
 					}
@@ -172144,53 +176106,6 @@
 						"name": "reason",
 						"type": "String",
 						"has_default_value": true,
-						"default_value": ""
-					}
-				]
-			}
-		],
-		"enums": [
-		]
-	},
-	{
-		"name": "WebSocketMultiplayerPeer",
-		"base_class": "NetworkedMultiplayerPeer",
-		"api_type": "core",
-		"singleton": false,
-		"instanciable": false,
-		"is_reference": true,
-		"constants": {
-		},
-		"properties": [
-		],
-		"signals": [
-			{
-				"name": "peer_packet",
-				"arguments": [
-					{
-						"name": "peer_source",
-						"type": "int",
-						"default_value": ""
-					}
-				]
-			}
-		],
-		"methods": [
-			{
-				"name": "get_peer",
-				"return_type": "WebSocketPeer",
-				"is_editor": false,
-				"is_noscript": false,
-				"is_const": true,
-				"is_reverse": false,
-				"is_virtual": false,
-				"has_varargs": false,
-				"is_from_script": false,
-				"arguments": [
-					{
-						"name": "peer_id",
-						"type": "int",
-						"has_default_value": false,
 						"default_value": ""
 					}
 				]
