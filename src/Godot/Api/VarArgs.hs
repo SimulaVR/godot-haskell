@@ -1,6 +1,5 @@
 module Godot.Api.VarArgs where
 
-import Data.Coerce (coerce)
 import Foreign.C (withCString)
 import Godot.Internal.Dispatch
 import System.IO.Unsafe (unsafePerformIO)
@@ -23,7 +22,7 @@ instance Method "emit_signal" GodotObject (GodotString -> [Variant 'GodotTy] -> 
     withVariantArray
       ([toVariant arg1] ++ varargs)
       (\(arrPtr, len) ->
-         godot_method_bind_call bindObject_emit_signal (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindObject_emit_signal (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindObject_call
@@ -41,7 +40,7 @@ instance Method "call" GodotObject (GodotString -> [Variant 'GodotTy] -> IO Godo
     withVariantArray
       ([toVariant arg1] ++ varargs)
       (\(arrPtr, len) ->
-         godot_method_bind_call bindObject_call (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindObject_call (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindObject_call_deferred
@@ -59,7 +58,7 @@ instance Method "call_deferred" GodotObject (GodotString -> [Variant 'GodotTy] -
     withVariantArray
       ([toVariant arg1] ++ varargs)
       (\(arrPtr, len) ->
-         godot_method_bind_call bindObject_call_deferred (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindObject_call_deferred (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindFuncRef_call_func
@@ -77,7 +76,7 @@ instance Method "call_func" GodotFuncRef ([Variant 'GodotTy] -> IO GodotVariant)
     withVariantArray
       varargs
       (\(arrPtr, len) ->
-         godot_method_bind_call bindFuncRef_call_func (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindFuncRef_call_func (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindUndoRedo_add_do_method
@@ -97,7 +96,7 @@ instance Method "add_do_method" GodotUndoRedo (GodotObject -> GodotString -> [Va
       (\(arrPtr, len) ->
          godot_method_bind_call
            bindUndoRedo_add_do_method
-           (coerce cls)
+           (safeCast cls)
            arrPtr
            len >>= \(err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -118,7 +117,7 @@ instance Method "add_undo_method" GodotUndoRedo (GodotObject -> GodotString -> [
       (\(arrPtr, len) ->
          godot_method_bind_call
            bindUndoRedo_add_undo_method
-           (coerce cls)
+           (safeCast cls)
            arrPtr
            len >>= \(err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -137,7 +136,7 @@ instance Method "rpc" GodotNode (GodotString -> [Variant 'GodotTy] -> IO GodotVa
     withVariantArray
       ([toVariant arg1] ++ varargs)
       (\(arrPtr, len) ->
-         godot_method_bind_call bindNode_rpc (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindNode_rpc (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindNode_rpc_unreliable
@@ -155,7 +154,7 @@ instance Method "rpc_unreliable" GodotNode (GodotString -> [Variant 'GodotTy] ->
     withVariantArray
       ([toVariant arg1] ++ varargs)
       (\(arrPtr, len) ->
-         godot_method_bind_call bindNode_rpc_unreliable (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindNode_rpc_unreliable (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindNode_rpc_id
@@ -173,7 +172,7 @@ instance Method "rpc_id" GodotNode (Int -> GodotString -> [Variant 'GodotTy] -> 
     withVariantArray
       ([toVariant arg1, toVariant arg2] ++ varargs)
       (\(arrPtr, len) ->
-         godot_method_bind_call bindNode_rpc_id (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindNode_rpc_id (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindNode_rpc_unreliable_id
@@ -193,7 +192,7 @@ instance Method "rpc_unreliable_id" GodotNode (Int -> GodotString -> [Variant 'G
       (\(arrPtr, len) ->
          godot_method_bind_call
            bindNode_rpc_unreliable_id
-           (coerce cls)
+           (safeCast cls)
            arrPtr
            len >>= \(err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -214,7 +213,7 @@ instance Method "call_group_flags" GodotSceneTree (Int -> GodotString -> GodotSt
       (\(arrPtr, len) ->
          godot_method_bind_call
            bindSceneTree_call_group_flags
-           (coerce cls)
+           (safeCast cls)
            arrPtr
            len >>= \(err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -233,7 +232,7 @@ instance Method "call_group" GodotSceneTree (GodotString -> GodotString -> [Vari
     withVariantArray
       ([toVariant arg1, toVariant arg2] ++ varargs)
       (\(arrPtr, len) ->
-         godot_method_bind_call bindSceneTree_call_group (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindSceneTree_call_group (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindNativeScript_new
@@ -251,7 +250,7 @@ instance Method "new" GodotNativeScript ([Variant 'GodotTy] -> IO GodotObject) w
     withVariantArray
       varargs
       (\(arrPtr, len) ->
-         godot_method_bind_call bindNativeScript_new (coerce cls) arrPtr len >>= \(err, res) ->
+         godot_method_bind_call bindNativeScript_new (safeCast cls) arrPtr len >>= \(err, res) ->
            throwIfErr err >> fromGodotVariant res)
 
 bindGDScriptFunctionState__signal_callback
@@ -271,6 +270,6 @@ instance Method "_signal_callback" GodotGDScriptFunctionState ([Variant 'GodotTy
       (\(arrPtr, len) ->
          godot_method_bind_call
            bindGDScriptFunctionState__signal_callback
-           (coerce cls)
+           (safeCast cls)
            arrPtr
            len >>= \(err, res) -> throwIfErr err >> fromGodotVariant res)
