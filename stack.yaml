@@ -15,7 +15,7 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-13.5
+resolver: nightly-2019-04-09
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -65,3 +65,39 @@ require-stack-version: ">=1.8"
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+nix:
+  enable: false
+  # false by default. Must be present and set to `true` to enable Nix, except on
+  # NixOS where it is enabled by default (see #3938).  You can set set it in your
+  # `$HOME/.stack/config.yaml` to enable Nix for all your projects without having
+  # to repeat it
+  # enable: true
+
+  # true by default. Tells Nix whether to run in a pure shell or not.
+  pure: true
+
+  # Empty by default. The list of packages you want to be
+  # available in the nix-shell at build time (with `stack
+  # build`) and run time (with `stack exec`).
+  packages: []
+
+  # Unset by default. You cannot set this option if `packages:`
+  # is already present and not empty.
+  shell-file: stack-shell.nix
+
+  # A list of strings, empty by default. Additional options that
+  # will be passed verbatim to the `nix-shell` command.
+  nix-shell-options: []
+
+  # A list of strings, empty by default, such as
+  # `[nixpkgs=/my/local/nixpkgs/clone]` that will be used to override
+  # NIX_PATH.
+  path: []
+
+  # false by default. Whether to add your nix dependencies as nix garbage
+  # collection roots. This way, calling nix-collect-garbage will not remove
+  # those packages from the nix store, saving you some time when running
+  # stack build again with nix support activated.
+  # This creates a `nix-gc-symlinks` directory in the project `.stack-work`.
+  # To revert that, just delete this `nix-gc-symlinks` directory.
+  add-gc-roots: false
