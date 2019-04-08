@@ -1,10 +1,10 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.31.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0348cb1417ca67e2fe622f8f2731807b1c980d2f235077ccabad19620698ac60
+-- hash: 8e5ea1241407dcb469d347c25c9d685be871143f2e16518eb3bb0db56a3368ac
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -57,6 +57,7 @@ source-repository head
 
 library
   exposed-modules:
+      Godot
       Godot.Api
       Godot.Api.Auto
       Godot.Api.VarArgs
@@ -659,6 +660,8 @@ library
   include-dirs:
       godot_headers
       cbits
+  build-tools:
+      c2hs
   build-depends:
       aeson
     , base
@@ -675,8 +678,6 @@ library
     , text
     , unordered-containers
     , vector
-  build-tools:
-      c2hs
   default-language: Haskell2010
 
 library generate
