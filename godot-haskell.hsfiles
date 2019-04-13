@@ -1,0 +1,399 @@
+{-# START_FILE .gitignore #-}
+dist*
+*.hi
+*.o
+.stack-work/
+.stack-work-devel/
+*~
+\#*
+*.import
+result
+
+
+
+{-# START_FILE README.md #-}
+# {{name}}
+
+
+
+{-# START_FILE ChangeLog.md #-}
+# Empty
+
+
+
+{-# START_FILE stack.yaml #-}
+resolver: nightly-2019-04-09
+
+packages:
+- .
+
+extra-deps:
+- git: https://github.com/lboklin/godot-haskell
+  commit: 4dc4defd8f8b5279a9e838f66c129ad5762cce65
+
+require-stack-version: ">=1.8"
+
+nix:
+  enable: false
+  pure: true
+  packages: []
+  shell-file: stack-shell.nix
+  nix-shell-options: []
+  path: []
+  add-gc-roots: false
+
+
+
+{-# START_FILE {{name}}.cabal #-}
+cabal-version: 1.12
+
+name:           {{name}}
+version:        0.0.0.0
+description:    Please see the README on Github at <https://github.com/{{github-username}}/{{name}}#readme>
+homepage:       https://github.com/{{github-username}}/{{name}}#readme
+bug-reports:    https://github.com/{{github-username}}/{{name}}/issues
+author:         {{author-name}}
+maintainer:     {{author-email}}
+copyright:      {{copyright}}
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/{{github-username}}/{{name}}
+
+library
+  exposed-modules: Lib
+  hs-source-dirs: src
+  ghc-options:
+    -Wall
+    -fwarn-unused-do-bind
+    -fwarn-tabs
+    -fwarn-incomplete-uni-patterns
+    -fwarn-incomplete-record-updates
+    -O2
+  build-depends:
+      base >=4.12 && <5
+    , godot-haskell
+    , linear
+    , stm
+    , text
+    , vector
+  default-language: Haskell2010
+
+foreign-library {{name}}
+  type: native-shared
+  other-modules: FLib
+  hs-source-dirs: ffi/flib
+  c-sources: ffi/cbits/flib.c
+  build-depends:
+      base >= 4.12 && <5
+    , godot-haskell
+    , {{name}}
+  default-language: Haskell2010
+
+
+
+{-# START_FILE godot-haskell.nix #-}
+{ fetchFromGitHub, mkDerivation, aeson, ansi-wl-pprint, base, bytestring, c2hs
+, casing, colour, containers, hpack, lens, linear, mtl, parsec
+, parsers, stdenv, stm, template-haskell, text
+, unordered-containers, vector
+}:
+mkDerivation {
+  pname = "godot-haskell";
+  version = "3.1.0.0";
+  src = fetchFromGitHub {
+    owner = "lboklin";
+    repo = "godot-haskell";
+    rev = "4dc4defd8f8b5279a9e838f66c129ad5762cce65";
+    sha256 = "1n3jzg7giq0b5nsv1ff9xdpywsg4426fjis498da4rkmwqanc555";
+    fetchSubmodules = true;
+  };
+  libraryHaskellDepends = [
+    aeson ansi-wl-pprint base bytestring casing colour containers lens
+    linear mtl parsec parsers stm template-haskell text
+    unordered-containers vector
+  ];
+  libraryToolDepends = [ c2hs hpack ];
+  doHaddock = false;
+  preConfigure = "hpack";
+  homepage = "https://github.com/KaneTW/godot-haskell#readme";
+  description = "Haskell bindings for the Godot game engine API";
+  license = stdenv.lib.licenses.bsd3;
+}
+
+
+
+{-# START_FILE pinned-nixpkgs.nix #-}
+{}:
+
+let
+  # 19.03-beta (25 feb)
+  rev = "7f35ed9df40f12a79a242e6ea79b8a472cf74d42";
+  pkgs = import (builtins.fetchTarball {
+      url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
+    }) {};
+in
+  pkgs
+
+
+
+{-# START_FILE shell.nix #-}
+{ nixpkgs ? import ./pinned-nixpkgs.nix {}
+, compiler ? "default"
+, doBenchmark ? false }:
+
+
+let
+
+  inherit (nixpkgs) pkgs;
+
+  haskellPackages = if compiler == "default"
+                       then pkgs.haskellPackages
+                       else pkgs.haskell.packages.${compiler};
+
+  f = { mkDerivation, stdenv, base, godot-haskell, linear, text , vector, stm }:
+    mkDerivation {
+      pname = "{{name}}";
+      version = "3.1.0.0";
+      src = ./.;
+      libraryHaskellDepends = [
+        base godot-haskell linear text vector stm
+      ];
+      libraryToolDepends = [];
+      homepage = "https://github.com/{{github-username}}/{{name}}#readme";
+      license = stdenv.lib.licenses.bsd3;
+    };
+
+  variant = if doBenchmark then pkgs.haskell.lib.doBenchmark else pkgs.lib.id;
+
+  drv = variant (haskellPackages.callPackage f {
+      godot-haskell = haskellPackages.callPackage ./godot-haskell.nix {
+        fetchFromGitHub = pkgs.fetchFromGitHub;};});
+
+in
+
+  if pkgs.lib.inNixShell then drv.env else drv
+
+
+
+{-# START_FILE stack-shell.nix #-}
+{ nixpkgs ? import ./pinned-nixpkgs.nix {}
+, ghc
+}:
+
+with nixpkgs;
+
+haskell.lib.buildStackProject {
+  inherit ghc;
+  name = "{{name}}";
+  buildInputs = [];
+}
+
+
+
+{-# START_FILE src/Lib.hs #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE TypeFamilies #-}
+module Lib
+  ( exports
+  )
+where
+
+import           Godot
+import qualified Godot.Gdnative.Internal.Api   as Api
+import qualified Data.Text                     as T
+import           Control.Monad
+import           Data.Function                            ( (&) )
+
+exports :: GdnativeHandle -> IO ()
+exports desc = do
+  registerClass $ RegClass desc $ classInit @Main
+  -- registerClass $ RegClass desc $ classInit @MyOtherClass
+
+data Main = Main
+  { _mBase :: GodotNode
+  , _mTime :: TVar Float
+  }
+
+instance HasBaseClass Main where
+  type BaseClass Main = GodotNode
+  super = _mBase
+instance GodotClass Main where
+  classInit base = Main base <$> newTVarIO 0
+  classMethods =
+    [ func NoRPC "_process" $
+        \self [deltaVt] -> do
+          delta <- fromGodotVariant deltaVt
+          (sec, sec') <- atomically $ do
+            t <- readTVar (_mTime self)
+            let t' = t + delta
+            writeTVar (_mTime self) t'
+            return (floor t, floor t') :: STM (Int, Int)
+          when (sec < sec') $
+            "Seconds passed: " ++ Prelude.show sec'
+              & T.pack
+              & (toLowLevel :: Text -> IO GodotString)
+              >>= Api.godot_print
+    ]
+
+
+
+{-# START_FILE ffi/flib/FLib.hs #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
+module FLib where
+
+import qualified Foreign
+import qualified Godot.Gdnative.Internal       as FFI
+import           Godot.Nativescript
+import           Lib
+
+
+
+godot_nativescript_init :: GdnativeHandle -> IO ()
+godot_nativescript_init desc = do
+  exports desc
+  putStrLn "Haskell NativeScript lib initialized"
+
+foreign export ccall godot_nativescript_init :: GdnativeHandle -> IO ()
+
+
+godot_gdnative_init :: FFI.GodotGdnativeInitOptionsPtr -> IO ()
+godot_gdnative_init opts = Foreign.peek opts >>= FFI.initApiStructs
+
+foreign export ccall godot_gdnative_init :: FFI.GodotGdnativeInitOptionsPtr -> IO ()
+
+
+godot_gdnative_terminate :: FFI.GodotGdnativeTerminateOptionsPtr -> IO ()
+godot_gdnative_terminate _ = return ()
+
+foreign export ccall godot_gdnative_terminate :: FFI.GodotGdnativeTerminateOptionsPtr -> IO ()
+
+
+
+{-# START_FILE ffi/cbits/flib.c #-}
+#include "HsFFI.h"
+
+static void flib_init() __attribute__((constructor));
+static void flib_init() {
+  static char *argv[] = { "libGodotHaskellPlugin.so", 0 }, **argv_ = argv;
+  static int argc = 1;
+  hs_init(&argc, &argv_);
+}
+
+static void flib_fini() __attribute__((destructor));
+static void flib_fini() {
+  hs_exit();
+}
+
+
+
+{-# START_FILE LICENSE #-}
+BSD 3-Clause License
+
+Copyright (c) {{copyright}}
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+{-# START_FILE game/project.godot #-}
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[  ]
+_global_script_class_icons={
+
+}
+
+[application]
+
+config/name="{{name}}"
+
+[gdnative]
+
+singletons=[  ]
+
+
+{-# START_FILE game/Main.gdns #-}
+[gd_resource type="NativeScript" load_steps=2 format=2]
+
+[ext_resource path="res://lib/lib{{name}}.gdnlib" type="GDNativeLibrary" id=1]
+
+[resource]
+
+class_name = "Main"
+library = ExtResource( 1 )
+_sections_unfolded = [ "Script Class", "library" ]
+
+
+{-# START_FILE game/lib/lib{{name}}.gdnlib #-}
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix="godot_"
+
+[entry]
+
+X11.64="res://lib/lib{{name}}.so"
+
+
+{-# START_FILE Makefile #-}
+NAME = {{name}}
+STACKLIBFILE = $(shell stack path --local-install-root)/lib/lib$(NAME).so
+GODOTPROJECT = $(shell stack path --project-root)/game
+all: stack
+nix:
+	nix-build shell.nix
+	cp result/lib/ghc-*/lib$(NAME).so $(GODOTPROJECT)/lib
+stack:
+	stack clean $(NAME)
+	stack build
+	cp $(STACKLIBFILE) $(GODOTPROJECT)/lib
+stack-nix:
+	stack --nix clean $(NAME)
+	stack --nix build
+	cp $(shell stack --nix path --local-install-root)/lib/lib$(NAME).so $(GODOTPROJECT)/lib
+stack-run:
+	nix-build shell.nix
+	cp $(STACKLIBFILE) $(GODOTPROJECT)/lib
+	godot --path ./game
+stack-watch:
+	stack build --file-watch --exec "cp $(STACKLIBFILE) $(GODOTPROJECT)/lib"
