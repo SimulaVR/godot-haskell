@@ -863,10 +863,6 @@ pattern TYPE_BOOL :: Int
 
 pattern TYPE_BOOL = 1
 
-pattern PROPERTY_USAGE_STORE_IF_NONONE :: Int
-
-pattern PROPERTY_USAGE_STORE_IF_NONONE = 1024
-
 pattern KEY_F16 :: Int
 
 pattern KEY_F16 = 16777259
@@ -1058,10 +1054,6 @@ pattern OP_SHIFT_LEFT = 14
 pattern KEY_SPACE :: Int
 
 pattern KEY_SPACE = 32
-
-pattern PROPERTY_USAGE_STORE_IF_NONZERO :: Int
-
-pattern PROPERTY_USAGE_STORE_IF_NONZERO = 512
 
 pattern CORNER_TOP_LEFT :: Int
 

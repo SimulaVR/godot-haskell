@@ -21,7 +21,11 @@ pattern MENU_CLEAR = 3
 
 pattern MENU_MAX :: Int
 
-pattern MENU_MAX = 6
+pattern MENU_MAX = 7
+
+pattern MENU_REDO :: Int
+
+pattern MENU_REDO = 6
 
 pattern SEARCH_BACKWARDS :: Int
 

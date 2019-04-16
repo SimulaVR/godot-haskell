@@ -1,10 +1,10 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.31.1.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ce2f814ef8bc25f45ed4e4dfa664af5ec97391256de06054a66bf69a19fe08c4
+-- hash: 0348cb1417ca67e2fe622f8f2731807b1c980d2f235077ccabad19620698ac60
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -47,6 +47,7 @@ extra-source-files:
     godot_headers/nativescript/godot_nativescript.h
     godot_headers/net/godot_net.h
     godot_headers/pluginscript/godot_pluginscript.h
+    godot_headers/videodecoder/godot_videodecoder.h
     godot_headers/api.json
     godot_headers/gdnative_api.json
 
@@ -72,7 +73,6 @@ library
       Godot.Core.Godot_ResourceSaver
       Godot.Core.Godot_Semaphore
       Godot.Core.Godot_Thread
-      Godot.Core.Godot_VisualScriptEditor
       Godot.Core.GodotAcceptDialog
       Godot.Core.GodotAnimatedSprite
       Godot.Core.GodotAnimatedSprite3D
@@ -225,6 +225,8 @@ library
       Godot.Core.GodotFuncRef
       Godot.Core.GodotGDNative
       Godot.Core.GodotGDNativeLibrary
+      Godot.Core.GodotGDNativeLibraryResourceLoader
+      Godot.Core.GodotGDNativeLibraryResourceSaver
       Godot.Core.GodotGDScript
       Godot.Core.GodotGDScriptFunctionState
       Godot.Core.GodotGeneric6DOFJoint
@@ -259,6 +261,7 @@ library
       Godot.Core.GodotInputEventJoypadMotion
       Godot.Core.GodotInputEventKey
       Godot.Core.GodotInputEventMagnifyGesture
+      Godot.Core.GodotInputEventMIDI
       Godot.Core.GodotInputEventMouse
       Godot.Core.GodotInputEventMouseButton
       Godot.Core.GodotInputEventMouseMotion
@@ -322,7 +325,6 @@ library
       Godot.Core.GodotOmniLight
       Godot.Core.GodotOpenSimplexNoise
       Godot.Core.GodotOptionButton
-      Godot.Core.GodotOrientedPathFollow
       Godot.Core.GodotPackedDataContainer
       Godot.Core.GodotPackedDataContainerRef
       Godot.Core.GodotPackedScene
@@ -383,6 +385,7 @@ library
       Godot.Core.GodotProximityGroup
       Godot.Core.GodotProxyTexture
       Godot.Core.GodotQuadMesh
+      Godot.Core.GodotRandomNumberGenerator
       Godot.Core.GodotRange
       Godot.Core.GodotRayCast
       Godot.Core.GodotRayCast2D
@@ -397,12 +400,35 @@ library
       Godot.Core.GodotRemoteTransform
       Godot.Core.GodotRemoteTransform2D
       Godot.Core.GodotResource
+      Godot.Core.GodotResourceFormatDDS
+      Godot.Core.GodotResourceFormatImporter
+      Godot.Core.GodotResourceFormatLoader
+      Godot.Core.GodotResourceFormatLoaderBinary
+      Godot.Core.GodotResourceFormatLoaderBMFont
+      Godot.Core.GodotResourceFormatLoaderDynamicFont
+      Godot.Core.GodotResourceFormatLoaderGDScript
+      Godot.Core.GodotResourceFormatLoaderImage
+      Godot.Core.GodotResourceFormatLoaderNativeScript
+      Godot.Core.GodotResourceFormatLoaderShader
+      Godot.Core.GodotResourceFormatLoaderStreamTexture
+      Godot.Core.GodotResourceFormatLoaderText
+      Godot.Core.GodotResourceFormatLoaderTextureLayered
+      Godot.Core.GodotResourceFormatLoaderTheora
+      Godot.Core.GodotResourceFormatLoaderVideoStreamGDNative
+      Godot.Core.GodotResourceFormatLoaderWebm
+      Godot.Core.GodotResourceFormatPKM
+      Godot.Core.GodotResourceFormatPVR
+      Godot.Core.GodotResourceFormatSaver
+      Godot.Core.GodotResourceFormatSaverBinary
+      Godot.Core.GodotResourceFormatSaverGDScript
+      Godot.Core.GodotResourceFormatSaverNativeScript
+      Godot.Core.GodotResourceFormatSaverShader
+      Godot.Core.GodotResourceFormatSaverText
       Godot.Core.GodotResourceImporter
       Godot.Core.GodotResourceImporterOGGVorbis
-      Godot.Core.GodotResourceImporterTheora
-      Godot.Core.GodotResourceImporterWebm
       Godot.Core.GodotResourceInteractiveLoader
       Godot.Core.GodotResourcePreloader
+      Godot.Core.GodotResourceSaverPNG
       Godot.Core.GodotRichTextLabel
       Godot.Core.GodotRigidBody
       Godot.Core.GodotRigidBody2D
@@ -474,6 +500,7 @@ library
       Godot.Core.GodotToolButton
       Godot.Core.GodotTouchScreenButton
       Godot.Core.GodotTranslation
+      Godot.Core.GodotTranslationLoaderPO
       Godot.Core.GodotTranslationServer
       Godot.Core.GodotTree
       Godot.Core.GodotTreeItem
@@ -487,6 +514,7 @@ library
       Godot.Core.GodotVehicleWheel
       Godot.Core.GodotVideoPlayer
       Godot.Core.GodotVideoStream
+      Godot.Core.GodotVideoStreamGDNative
       Godot.Core.GodotVideoStreamTheora
       Godot.Core.GodotVideoStreamWebm
       Godot.Core.GodotViewport
@@ -618,6 +646,7 @@ library
       Godot.Tools.GodotEditorSelection
       Godot.Tools.GodotEditorSettings
       Godot.Tools.GodotEditorSpatialGizmo
+      Godot.Tools.GodotEditorSpatialGizmoPlugin
       Godot.Tools.GodotScriptCreateDialog
       Godot.Tools.GodotScriptEditor
   other-modules:

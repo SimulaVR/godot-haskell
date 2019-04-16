@@ -306,6 +306,15 @@ deriving newtype instance Storable GodotGdnativeExtPluginscriptApiStruct
 deriving newtype instance Eq GodotGdnativeExtArvrApiStruct
 deriving newtype instance Storable GodotGdnativeExtArvrApiStruct
 
+{#pointer *godot_gdnative_ext_videodecoder_api_struct as GodotGdnativeExtVideodecoderApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeExtVideodecoderApiStruct
+deriving newtype instance Storable GodotGdnativeExtVideodecoderApiStruct
+
+{#pointer *godot_gdnative_ext_net_api_struct as GodotGdnativeExtNetApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeExtNetApiStruct
+deriving newtype instance Storable GodotGdnativeExtNetApiStruct
+
+
 type ReportVersionMismatchFunc = GodotObject -> CString -> Word64 -> Word64 -> IO ()
 type ReportLoadingErrorFunc = GodotObject -> CString -> IO ()
 
@@ -716,6 +725,44 @@ instance Storable GodotMethodArg where
 {#pointer *godot_method_arg as GodotMethodArgPtr -> GodotMethodArg #}
 
 
+--net
+
+data GodotNetStreamPeer
+instance Storable GodotNetStreamPeer where
+  sizeOf _ = {#sizeof godot_net_stream_peer#}
+  alignment _ = {#sizeof godot_net_stream_peer#}
+  peek = error "GodotNetStreamPeer peek not implemented"
+  poke = error "GodotNetStreamPeer poke not implemented"
+{#pointer *godot_net_stream_peer as GodotNetStreamPeerPtr -> GodotNetStreamPeer #}
+
+data GodotNetPacketPeer
+instance Storable GodotNetPacketPeer where
+  sizeOf _ = {#sizeof godot_net_packet_peer#}
+  alignment _ = {#sizeof godot_net_packet_peer#}
+  peek = error "GodotNetPacketPeer peek not implemented"
+  poke = error "GodotNetPacketPeer poke not implemented"
+{#pointer *godot_net_packet_peer as GodotNetPacketPeerPtr -> GodotNetPacketPeer #}
+
+data GodotNetMultiplayerPeer
+instance Storable GodotNetMultiplayerPeer where
+  sizeOf _ = {#sizeof godot_net_multiplayer_peer#}
+  alignment _ = {#sizeof godot_net_multiplayer_peer#}
+  peek = error "GodotNetMultiplayerPeer peek not implemented"
+  poke = error "GodotNetMultiplayerPeer poke not implemented"
+{#pointer *godot_net_multiplayer_peer as GodotNetMultiplayerPeerPtr -> GodotNetMultiplayerPeer #}
+
+
+--videodecoder
+
+data GodotVideodecoderInterfaceGdnative
+instance Storable GodotVideodecoderInterfaceGdnative where
+  sizeOf _ = {#sizeof godot_videodecoder_interface_gdnative#}
+  alignment _ = {#sizeof godot_videodecoder_interface_gdnative#}
+  peek = error "GodotVideodecoderInterfaceGdnative peek not implemented"
+  poke = error "GodotVideodecoderInterfaceGdnative poke not implemented"
+{#pointer *godot_videodecoder_interface_gdnative as GodotVideodecoderInterfaceGdnativePtr -> GodotVideodecoderInterfaceGdnative #}
+
+
 --arvr
 
 data GodotArvrInterfaceGdnative
@@ -759,6 +806,17 @@ godotGdnativeExtArvrApiStructRef = unsafePerformIO $ newIORef $
   error "attempted to get godotGdnativeExtArvrApiStructRef too early"
 {-# NOINLINE godotGdnativeExtArvrApiStructRef #-}
 
+godotGdnativeExtVideodecoderApiStructRef :: IORef GodotGdnativeExtVideodecoderApiStruct
+godotGdnativeExtVideodecoderApiStructRef = unsafePerformIO $ newIORef $
+  error "attempted to get godotGdnativeExtVideodecoderApiStructRef too early"
+{-# NOINLINE godotGdnativeExtVideodecoderApiStructRef #-}
+
+godotGdnativeExtNetApiStructRef :: IORef GodotGdnativeExtNetApiStruct
+godotGdnativeExtNetApiStructRef = unsafePerformIO $ newIORef $
+  error "attempted to get godotGdnativeExtNetApiStructRef too early"
+{-# NOINLINE godotGdnativeExtNetApiStructRef #-}
+
+
 initApiStructs :: GodotGdnativeInitOptions -> IO ()
 initApiStructs opts = do
   let coreApi = gdnativeInitOptionsApiStruct opts
@@ -780,6 +838,10 @@ initApiStructs opts = do
       3 -> return () -- android
       4 -> do -- arvr
         writeIORef godotGdnativeExtArvrApiStructRef (coerce ext)
+      5 -> do -- videodecoder
+        writeIORef godotGdnativeExtVideodecoderApiStructRef (coerce ext)
+      6 -> do -- net
+        writeIORef godotGdnativeExtNetApiStructRef (coerce ext)
       _ -> error $ "Unknown API struct type " ++ show ty
   where
     findCoreExt = findExt GodotGdnativeCore11ApiStruct godotGdnativeCore11ApiStructRef

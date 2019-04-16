@@ -53,7 +53,7 @@ pattern PARAM_INITIAL_LINEAR_VELOCITY = 0
 
 pattern FLAG_MAX :: Int
 
-pattern FLAG_MAX = 4
+pattern FLAG_MAX = 3
 
 pattern PARAM_LINEAR_ACCEL :: Int
 

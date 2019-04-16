@@ -135,6 +135,10 @@ pattern MONTH_SEPTEMBER :: Int
 
 pattern MONTH_SEPTEMBER = 9
 
+pattern VIDEO_DRIVER_GLES2 :: Int
+
+pattern VIDEO_DRIVER_GLES2 = 1
+
 pattern POWERSTATE_CHARGING :: Int
 
 pattern POWERSTATE_CHARGING = 3
@@ -162,3 +166,7 @@ pattern SCREEN_ORIENTATION_LANDSCAPE = 0
 pattern DAY_WEDNESDAY :: Int
 
 pattern DAY_WEDNESDAY = 3
+
+pattern VIDEO_DRIVER_GLES3 :: Int
+
+pattern VIDEO_DRIVER_GLES3 = 0
