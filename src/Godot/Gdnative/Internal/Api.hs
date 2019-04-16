@@ -33,6 +33,12 @@ godotGdnativeExtPluginscriptApiStruct = accursedUnutterablePerformIO $ readIORef
 godotGdnativeExtArvrApiStruct :: GodotGdnativeExtArvrApiStruct
 godotGdnativeExtArvrApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtArvrApiStructRef
 
+godotGdnativeExtVideodecoderApiStruct :: GodotGdnativeExtVideodecoderApiStruct
+godotGdnativeExtVideodecoderApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtVideodecoderApiStructRef
+
+godotGdnativeExtNetApiStruct :: GodotGdnativeExtNetApiStruct
+godotGdnativeExtNetApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNetApiStructRef
+
 
 $(do
     maybeApis <- eitherDecode <$> runIO (BL.readFile "godot_headers/gdnative_api.json")

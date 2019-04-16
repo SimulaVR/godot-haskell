@@ -1,4 +1,4 @@
-module Godot.Core.GodotOrientedPathFollow where
+module Godot.Core.GodotResourceFormatSaverShader where
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch

@@ -107,6 +107,10 @@ pattern ALPHA_NONE :: Int
 
 pattern ALPHA_NONE = 0
 
+pattern MAX_HEIGHT :: Int
+
+pattern MAX_HEIGHT = 16384
+
 pattern ALPHA_BIT :: Int
 
 pattern ALPHA_BIT = 1
@@ -162,6 +166,10 @@ pattern FORMAT_PVRTC2 = 25
 pattern FORMAT_DXT1 :: Int
 
 pattern FORMAT_DXT1 = 17
+
+pattern MAX_WIDTH :: Int
+
+pattern MAX_WIDTH = 16384
 
 pattern FORMAT_ETC2_RGBA8 :: Int
 

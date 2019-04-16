@@ -15,3 +15,6 @@ sources_changed = Signal "sources_changed"
 
 filesystem_changed :: Signal GodotEditorFileSystem
 filesystem_changed = Signal "filesystem_changed"
+
+resources_reload :: Signal GodotEditorFileSystem
+resources_reload = Signal "resources_reload"

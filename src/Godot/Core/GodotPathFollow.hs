@@ -7,6 +7,10 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+pattern ROTATION_ORIENTED :: Int
+
+pattern ROTATION_ORIENTED = 4
+
 pattern ROTATION_XY :: Int
 
 pattern ROTATION_XY = 2

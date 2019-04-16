@@ -58,3 +58,6 @@ pattern TYPE_AUDIO = 4
 pattern TYPE_ANIMATION :: Int
 
 pattern TYPE_ANIMATION = 5
+
+tracks_changed :: Signal GodotAnimation
+tracks_changed = Signal "tracks_changed"

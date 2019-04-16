@@ -1,4 +1,4 @@
-module Godot.Core.GodotResourceImporterTheora where
+module Godot.Core.GodotResourceFormatPVR where
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch

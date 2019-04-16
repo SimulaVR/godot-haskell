@@ -45,7 +45,7 @@ pattern PARAM_INITIAL_LINEAR_VELOCITY = 0
 
 pattern FLAG_MAX :: Int
 
-pattern FLAG_MAX = 2
+pattern FLAG_MAX = 1
 
 pattern EMISSION_SHAPE_RECTANGLE :: Int
 

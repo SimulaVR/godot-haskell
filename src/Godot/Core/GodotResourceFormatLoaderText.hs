@@ -1,4 +1,4 @@
-module Godot.Core.GodotResourceImporterWebm where
+module Godot.Core.GodotResourceFormatLoaderText where
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch

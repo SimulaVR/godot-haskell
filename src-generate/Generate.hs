@@ -156,6 +156,10 @@ godotStructs =
   , "godot_property_set_func"
   , "godot_property_attributes"
   , "godot_signal"
+  , "godot_net_stream_peer"
+  , "godot_net_packet_peer"
+  , "godot_net_multiplayer_peer"
+  , "godot_videodecoder_interface_gdnative"
   , "godot_arvr_interface_gdnative"
   , "godot_variant_call_error"
   , "godot_pluginscript_language_desc"
@@ -473,7 +477,12 @@ apiToHs isCore api = do
                       in generateFunctions apiName apiEntries
     maybeExt = if isCore then "" else "Ext"
     showVer = let ver = S.apiVersion api in show (S.major ver) ++ show (S.minor ver)
-    maybeVer = if S.apiVersion api == S.Ver 1 0 || S.apiType api == "ARVR" then "" else showVer
+    maybeVer =
+      if S.apiVersion api == S.Ver 1 0
+         || S.apiType api == "ARVR"
+         || S.apiType api == "VIDEODECODER"
+         || S.apiType api == "NET"
+      then "" else showVer
     mkApiName = mkName $ "GodotGdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
 
     generateFunctions name entries = do

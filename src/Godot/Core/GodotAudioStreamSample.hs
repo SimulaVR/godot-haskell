@@ -15,6 +15,10 @@ pattern LOOP_PING_PONG :: Int
 
 pattern LOOP_PING_PONG = 2
 
+pattern LOOP_BACKWARD :: Int
+
+pattern LOOP_BACKWARD = 3
+
 pattern LOOP_DISABLED :: Int
 
 pattern LOOP_DISABLED = 0
