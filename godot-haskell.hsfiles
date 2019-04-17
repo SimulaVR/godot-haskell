@@ -356,10 +356,21 @@ _global_script_class_icons={
 [application]
 
 config/name="{{name}}"
+run/main_scene="res://Main.tscn"
 
 [gdnative]
 
 singletons=[  ]
+
+
+{-# START_FILE game/Main.tscn #-}
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Main.gdns" type="Script" id=1]
+
+[node name="Main" type="Spatial"]
+script = ExtResource( 1 )
+
 
 
 {-# START_FILE game/Main.gdns #-}
