@@ -27,13 +27,7 @@ let
   variant = if doBenchmark then pkgs.haskell.lib.doBenchmark else pkgs.lib.id;
 
   drv = variant (haskellPackages.callPackage f {
-      # To use a specific revision of godot-haskell, set the rev in
-      # godot-haskell.nix and then use:
-      # godot-haskell = haskellPackages.callPackage ./godot-haskell.nix {
-      #   fetchFromGitHub = pkgs.fetchFromGitHub;
-      # };
-
-      godot-haskell = haskellPackages.callPackage ../. {};
+      godot-haskell = haskellPackages.callPackage ../../. {};
     });
 
 in

@@ -4,11 +4,8 @@ packages:
 - .
 
 # Using a specific revision:
-# extra-deps:
-# - git: https://github.com/lboklin/godot-haskell
-#   commit: 4dc4defd8f8b5279a9e838f66c129ad5762cce65
 extra-deps:
-- ../
+- ../../
 
 require-stack-version: ">=1.8"
 

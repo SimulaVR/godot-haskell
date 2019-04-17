@@ -2,7 +2,7 @@
 
 let
   # 19.03-beta (25 feb)
-  rev = "0c0954781e257b8b0dc49341795a2fe7d96945a3";
+  rev = "d9fae601b04f73945848cdc3b32b830971b6c978";
   pkgs = import (builtins.fetchTarball {
       url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
     }) {};

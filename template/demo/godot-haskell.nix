@@ -7,12 +7,11 @@ mkDerivation {
   pname = "godot-haskell";
   version = "3.1.0.0";
   src = fetchFromGitHub {
-    owner = "lboklin";
+    owner = "SimulaVR";
     repo = "godot-haskell";
-    rev = "4dc4defd8f8b5279a9e838f66c129ad5762cce65";
-    # Getting the sha256 for above rev:
-    # nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/lboklin/godot-haskell 4dc4defd8f8b5279a9e838f66c129ad5762cce65 --fetch-submodules'
-    sha256 = "1n3jzg7giq0b5nsv1ff9xdpywsg4426fjis498da4rkmwqanc555";
+    rev = "d9fae601b04f73945848cdc3b32b830971b6c978";
+    # Use nix-prefetch-git to get the hash
+    sha256 = "1zafvc7zdpqfg6ldzx7ifa50pgxq09rbxk78fwvlvp9ml7mhxa45";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
