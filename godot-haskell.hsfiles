@@ -27,9 +27,12 @@ resolver: nightly-2019-04-09
 packages:
 - .
 
+# Using a specific revision:
+# extra-deps:
+# - git: https://github.com/lboklin/godot-haskell
+#   commit: 4dc4defd8f8b5279a9e838f66c129ad5762cce65
 extra-deps:
-- git: https://github.com/lboklin/godot-haskell
-  commit: 4dc4defd8f8b5279a9e838f66c129ad5762cce65
+- ../
 
 require-stack-version: ">=1.8"
 
@@ -111,6 +114,8 @@ mkDerivation {
     owner = "lboklin";
     repo = "godot-haskell";
     rev = "4dc4defd8f8b5279a9e838f66c129ad5762cce65";
+    # Getting the sha256 for above rev:
+    # nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/lboklin/godot-haskell 4dc4defd8f8b5279a9e838f66c129ad5762cce65 --fetch-submodules'
     sha256 = "1n3jzg7giq0b5nsv1ff9xdpywsg4426fjis498da4rkmwqanc555";
     fetchSubmodules = true;
   };
@@ -134,7 +139,7 @@ mkDerivation {
 
 let
   # 19.03-beta (25 feb)
-  rev = "7f35ed9df40f12a79a242e6ea79b8a472cf74d42";
+  rev = "0c0954781e257b8b0dc49341795a2fe7d96945a3";
   pkgs = import (builtins.fetchTarball {
       url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
     }) {};
@@ -173,8 +178,14 @@ let
   variant = if doBenchmark then pkgs.haskell.lib.doBenchmark else pkgs.lib.id;
 
   drv = variant (haskellPackages.callPackage f {
-      godot-haskell = haskellPackages.callPackage ./godot-haskell.nix {
-        fetchFromGitHub = pkgs.fetchFromGitHub;};});
+      # To use a specific revision of godot-haskell, set the rev in
+      # godot-haskell.nix and then use:
+      # godot-haskell = haskellPackages.callPackage ./godot-haskell.nix {
+      #   fetchFromGitHub = pkgs.fetchFromGitHub;
+      # };
+
+      godot-haskell = haskellPackages.callPackage ../. {};
+    });
 
 in
 
