@@ -381,6 +381,7 @@ _sections_unfolded = [ "Script Class", "library" ]
 singleton=false
 load_once=true
 symbol_prefix="godot_"
+reloadable=false
 
 [entry]
 
