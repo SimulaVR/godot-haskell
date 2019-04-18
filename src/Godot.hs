@@ -62,8 +62,9 @@ import           Godot.Gdnative.Internal.Gdnative
 -- These will always be needed when writing Godot class methods
 import           Godot.Gdnative.Types          as M
                                                           ( fromGodotVariant
-                                                          , toVariant
+                                                          , fromLowLevel
                                                           , toLowLevel
+                                                          , toVariant
                                                           )
 
 -- These are needed in order to keep data between callbacks since we don't pass

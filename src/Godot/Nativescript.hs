@@ -5,13 +5,15 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE GADTs #-}
 module Godot.Nativescript
-  ( GFunc
+  ( ClassName
+  , GFunc
   , GdnativeHandle
   , GodotClass(..)
   , GodotMethod
   , RPC(..)
   , Registerer(..)
   , func
+  , nameOf
   , registerClass
   , signal
   , tryCast
@@ -85,7 +87,7 @@ instance GodotClass MyClass1 where
 class (HasBaseClass cls, Typeable cls, Typeable (BaseClass cls), GodotObject :< cls)
   => GodotClass cls where
   classInit :: BaseClass cls -> IO cls
-  className :: Text
+  className :: ClassName cls
   className = nameOf @cls
   classMethods :: [GodotMethod cls]
   classSignals :: [(Text, [SignalArgument])]
