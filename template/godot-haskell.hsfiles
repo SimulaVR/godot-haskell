@@ -358,7 +358,7 @@ singletons=[  ]
 
 [ext_resource path="res://Main.gdns" type="Script" id=1]
 
-[node name="Main" type="Spatial"]
+[node name="Main" type="Node"]
 script = ExtResource( 1 )
 
 
