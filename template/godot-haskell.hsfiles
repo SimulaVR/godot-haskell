@@ -29,7 +29,7 @@ packages:
 
 extra-deps:
 - git: https://github.com/SimulaVR/godot-haskell
-  commit: f6b7cd9107ca06273960bb33e2f9aa2f609ef067
+  commit: 0eabdf13d5b6339696ed50a3c10b26e9ff2cbc2d # godot-haskell rev
 
 require-stack-version: ">=1.8"
 
@@ -110,9 +110,9 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "SimulaVR";
     repo = "godot-haskell";
-    rev = "f6b7cd9107ca06273960bb33e2f9aa2f609ef067";
+    rev = "0eabdf13d5b6339696ed50a3c10b26e9ff2cbc2d"; # godot-haskell rev
     # Use nix-prefetch-git to get the hash
-    sha256 = "1a0pdr19w2m1ym861xkzg23j551w6fcjiv6bi24m79i4yk0icr9w";
+    sha256 = "0wjnmhr2g9l8r0fhb2kvmnxdqqjy7r0kmlvy4ka0mcly8wvj18y0";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
@@ -135,7 +135,7 @@ mkDerivation {
 
 let
   # 19.03-beta (25 feb)
-  rev = "f6b7cd9107ca06273960bb33e2f9aa2f609ef067";
+  rev = "0c0954781e257b8b0dc49341795a2fe7d96945a3"; # pinned-nixpkgs rev
   pkgs = import (builtins.fetchTarball {
       url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
     }) {};

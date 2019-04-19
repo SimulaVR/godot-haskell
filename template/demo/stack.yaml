@@ -3,7 +3,6 @@ resolver: nightly-2019-04-09
 packages:
 - .
 
-# Using a specific revision:
 extra-deps:
 - ../../
 

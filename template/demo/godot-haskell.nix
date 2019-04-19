@@ -9,9 +9,9 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "SimulaVR";
     repo = "godot-haskell";
-    rev = "d9fae601b04f73945848cdc3b32b830971b6c978";
+    rev = "0eabdf13d5b6339696ed50a3c10b26e9ff2cbc2d"; # godot-haskell rev
     # Use nix-prefetch-git to get the hash
-    sha256 = "1zafvc7zdpqfg6ldzx7ifa50pgxq09rbxk78fwvlvp9ml7mhxa45";
+    sha256 = "0wjnmhr2g9l8r0fhb2kvmnxdqqjy7r0kmlvy4ka0mcly8wvj18y0";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [

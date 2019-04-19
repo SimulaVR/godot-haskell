@@ -8,3 +8,4 @@ reloadable=false
 [entry]
 
 X11.64="res://lib/libdemo.so"
+
