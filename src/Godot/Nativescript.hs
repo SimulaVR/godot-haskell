@@ -8,7 +8,7 @@ module Godot.Nativescript
   ( ClassName
   , GFunc
   , GdnativeHandle
-  , GodotClass(..)
+  , NativeScript(..)
   , GodotMethod
   , RPC(..)
   , Registerer(..)
@@ -18,8 +18,7 @@ module Godot.Nativescript
   , signal
   , tryCast
   , tryObjectCast
-  , unsafeCast
-  , unsafeObjectCast
+  , asNativeScript
   )
 where
 
@@ -44,6 +43,7 @@ import           System.IO.Unsafe
 import           Godot.Gdnative.Internal
 import           Godot.Gdnative.Types
 import           Godot.Internal.Dispatch
+import           Godot.Methods                            ( is_class )
 import           Data.Maybe                               ( fromMaybe )
 
 type GdnativeHandle = Ptr ()
@@ -66,7 +66,7 @@ data MyClass1 = MyClass1
 instance HasBaseClass MyClass1 where
   type BaseClass MyClass1 = GodotNode
   super (MyClass1 p _) = p
-instance GodotClass MyClass1 where
+instance NativeScript MyClass1 where
   classInit p = MyClass1 p <$> newTVarIO 0
   classMethods =
     [ func NoRPC "_ready" $ \self [] -> do
@@ -85,7 +85,7 @@ instance GodotClass MyClass1 where
 @
 -}
 class (HasBaseClass cls, Typeable cls, Typeable (BaseClass cls), GodotObject :< cls)
-  => GodotClass cls where
+  => NativeScript cls where
   classInit :: BaseClass cls -> IO cls
   className :: ClassName cls
   className = nameOf @cls
@@ -99,8 +99,7 @@ class (HasBaseClass cls, Typeable cls, Typeable (BaseClass cls), GodotObject :< 
 type ClassName a = Text
 nameOf :: forall a . Typeable a => ClassName a
 nameOf =
-  T.dropWhile (== '_')
-    . (\txt -> fromMaybe txt $ T.stripPrefix "Godot" txt)
+  (\txt -> fromMaybe txt $ T.stripPrefix "Godot" txt)
     . T.pack
     $ show
     $ typeRep
@@ -133,17 +132,17 @@ data RegTy
 
 data family Registerer (x :: RegTy) cls
 
-data instance Registerer 'GClass cls = GodotClass cls =>
+data instance Registerer 'GClass cls = NativeScript cls =>
   RegClass
     GdnativeHandle
     (BaseClass cls -> IO cls)
 
-data instance Registerer 'GMethod cls = GodotClass cls =>
+data instance Registerer 'GMethod cls = NativeScript cls =>
   RegMethod
     GdnativeHandle
     (GodotMethod cls)
 
-data instance Registerer 'GSig cls = GodotClass cls =>
+data instance Registerer 'GSig cls = NativeScript cls =>
   RegSignal
     GdnativeHandle
     ((Text, [SignalArgument]))
@@ -152,13 +151,17 @@ data instance Registerer 'GSig cls = GodotClass cls =>
 -- | Convenient way of registering a class with all its methods.
 -- Used like: @registerClass $ RegClass desc $ classInit \\@MyClass@
 registerClass
-  :: forall a . (Typeable a, GodotClass a) => Registerer 'GClass a -> IO ()
+  :: forall a
+   . (NativeScript a, Typeable (BaseClass a), AsVariant (BaseClass a))
+  => Registerer 'GClass a
+  -> IO ()
 registerClass (RegClass desc constr) = do
-  regClass desc (nameOf @(BaseClass a)) (unsafeCast >=> constr)
-    $ \_ _ -> return ()
+  regClass desc (nameOf @(BaseClass a)) clsInit $ \_ _ -> return ()
   forM_ (classMethods @a) regMtd
   forM_ (classSignals @a) regSignal
  where
+  clsInit :: GodotObject -> IO a
+  clsInit obj = tryObjectCast obj >>= \(Just a) -> constr (a :: BaseClass a)
   clsName = className @a
 
   regMtd mtd@GodotMethod {..} = do
@@ -213,13 +216,27 @@ typeTags = unsafePerformIO $ newTVarIO mempty
 {-# NOINLINE typeTags #-}
 
 
--- | Try casting any object to any other object. Returns Nothing if wrong class.
-tryCast :: (GodotObject :< a, a :< b, Typeable b) => a -> IO (Maybe b)
+tryCast
+  :: (GodotObject :< a, a :< b, Typeable b, AsVariant b) => a -> IO (Maybe b)
 tryCast = tryObjectCast . safeCast
 
+-- unsafeCast :: (GodotObject :< a, a :< b, Typeable b, AsVariant b) => a -> b
+-- unsafeCast a = unsafePerformIO $ tryCast a >>= \(Just b) -> return b
+-- {-# NOINLINE unsafeCast #-}
 
-tryObjectCast :: forall a . Typeable a => GodotObject -> IO (Maybe a)
+tryObjectCast
+  :: forall a . (Typeable a, AsVariant a) => GodotObject -> IO (Maybe a)
 tryObjectCast obj = do
+  isCls <- is_class obj =<< toLowLevel (nameOf @a)
+  if isCls
+    then do
+      asGVt <- toLowLevel $ toVariant obj :: IO GodotVariant
+      Just <$> fromGodotVariant asGVt
+    else return Nothing
+
+
+asNativeScript :: forall a . NativeScript a => GodotObject -> IO (Maybe a)
+asNativeScript obj = do
   tyPtr <- godot_nativescript_get_type_tag obj
   ttags <- atomically $ readTVar typeTags
   if tyPtr == nullPtr || tyPtr `S.notMember` ttags
@@ -237,16 +254,13 @@ tryObjectCast obj = do
                 )
         else return Nothing
 
-
-unsafeCast :: (GodotObject :< child) => child -> b
-unsafeCast a = unsafeObjectCast $ safeCast a
-
-unsafeObjectCast :: GodotObject -> b
-unsafeObjectCast obj =
-  unsafePerformIO
-    $   godot_nativescript_get_userdata obj
-    >>= deRefStablePtr
-    .   castPtrToStablePtr
+-- unsafeObjectCastNS :: NativeScript a => GodotObject -> a
+-- unsafeObjectCastNS obj =
+--   unsafePerformIO
+--     $   godot_nativescript_get_userdata obj
+--     >>= deRefStablePtr
+--     .   castPtrToStablePtr
+-- {-# NOINLINE unsafeObjectCastNS #-}
 
 copyVariant
   :: Ptr GodotVariant -- ^ destination
@@ -268,7 +282,7 @@ func NoRPC "_unhandled_input" $ \self [evObj] ->
 @
 -}
 func
-  :: (GodotClass cls, AsVariant a)
+  :: (NativeScript cls, AsVariant a)
   => RPC
   -> Text
   -> (cls -> [GodotVariant] -> IO a)
@@ -277,7 +291,7 @@ func rpc mthdName fn = GodotMethod rpc mthdName
   $ \self args -> toLowLevel . toVariant =<< fn self (Vec.toList args)
 
 
-registerMethod :: forall a . GodotClass a => Registerer 'GMethod a -> IO ()
+registerMethod :: forall a . NativeScript a => Registerer 'GMethod a -> IO ()
 registerMethod (RegMethod desc GodotMethod {..}) = do
   methodFun <-
     mkInstanceMethodFunPtr $ \outPtr _ins _ objPtr numArgs argsPtr -> do
@@ -335,7 +349,7 @@ asGodotPropertyAttributes PropertyAttributes {..} = do
 
 registerProperty
   :: forall a
-   . GodotClass a
+   . NativeScript a
   => GdnativeHandle
   -> String -- ^ property path
   -> PropertyAttributes
@@ -406,7 +420,7 @@ signal sigName sigArgs = (sigName, uncurry toSigArg <$> sigArgs)
       }
 
 -- TODO: Also allow hints and default args?
-registerSignal :: forall a . GodotClass a => Registerer 'GSig a -> IO ()
+registerSignal :: forall a . NativeScript a => Registerer 'GSig a -> IO ()
 registerSignal (RegSignal desc (signalName, signalArgs)) = do
   gdArgs <- mapM asGodotSignalArgument signalArgs
   let clsName     = show $ Proxy @(BaseClass a)
