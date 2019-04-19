@@ -1,0 +1,52 @@
+cabal-version: 1.12
+
+name:           demo
+version:        0.0.0.0
+description:    Please see the README on Github at <https://github.com/lboklin/demo#readme>
+homepage:       https://github.com/lboklin/demo#readme
+bug-reports:    https://github.com/lboklin/demo/issues
+author:         Ludvig Böklin
+maintainer:     ludvig.boklin@protonmail.com
+copyright:      2019 Ludvig Böklin
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/lboklin/demo
+
+library
+  exposed-modules: Lib
+  hs-source-dirs: src
+  ghc-options:
+    -Wall
+    -fwarn-unused-do-bind
+    -fwarn-tabs
+    -fwarn-incomplete-uni-patterns
+    -fwarn-incomplete-record-updates
+    -O2
+  build-depends:
+      base >=4.12 && <5
+    , godot-haskell
+    , linear
+    , stm
+    , text
+    , vector
+  default-language: Haskell2010
+
+foreign-library demo
+  type: native-shared
+  other-modules: FLib
+  hs-source-dirs: ffi/flib
+  c-sources: ffi/cbits/flib.c
+  build-depends:
+      base >= 4.12 && <5
+    , godot-haskell
+    , demo
+  default-language: Haskell2010
+
+
