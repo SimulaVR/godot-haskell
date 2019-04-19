@@ -25,7 +25,7 @@ data Main = Main
 instance HasBaseClass Main where
   type BaseClass Main = GodotNode
   super = _mBase
-instance GodotClass Main where
+instance NativeScript Main where
   classInit base = Main base <$> newTVarIO 0
   classMethods =
     [ func NoRPC "_process" $

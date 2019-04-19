@@ -51,7 +51,7 @@ type GdnativeHandle = Ptr ()
 -- TODO: Add property registering
 
 
-{-| 'GodotClass' defines a new Godot class.
+{-| 'NativeScript' defines a new Godot class.
 First you must create an instance of 'HasBaseClass' for inheritance and
 downcasting to parent class.
 
