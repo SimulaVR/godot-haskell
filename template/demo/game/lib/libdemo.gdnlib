@@ -8,4 +8,5 @@ reloadable=false
 [entry]
 
 X11.64="res://lib/libdemo.so"
+OSX.64="res://lib/libdemo.dylib"
 
