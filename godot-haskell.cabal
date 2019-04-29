@@ -1,10 +1,10 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.31.0.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8e5ea1241407dcb469d347c25c9d685be871143f2e16518eb3bb0db56a3368ac
+-- hash: cb0f2d69265083c241a28cde09407d9a480afdbbe47029d14b6335ccd951779d
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -607,12 +607,27 @@ library
       Godot.Core.GodotVSeparator
       Godot.Core.GodotVSlider
       Godot.Core.GodotVSplitContainer
+      Godot.Core.GodotWaylandDisplay
       Godot.Core.GodotWeakRef
       Godot.Core.GodotWebSocketClient
       Godot.Core.GodotWebSocketMultiplayerPeer
       Godot.Core.GodotWebSocketPeer
       Godot.Core.GodotWebSocketServer
       Godot.Core.GodotWindowDialog
+      Godot.Core.GodotWlrBackend
+      Godot.Core.GodotWlrCompositor
+      Godot.Core.GodotWlrDataDeviceManager
+      Godot.Core.GodotWlrKeyboard
+      Godot.Core.GodotWlrOutput
+      Godot.Core.GodotWlrSeat
+      Godot.Core.GodotWlrSurface
+      Godot.Core.GodotWlrSurfaceAtResult
+      Godot.Core.GodotWlrSurfaceState
+      Godot.Core.GodotWlrXdgPopup
+      Godot.Core.GodotWlrXdgShell
+      Godot.Core.GodotWlrXdgSurface
+      Godot.Core.GodotWlrXdgToplevel
+      Godot.Core.GodotWlrXdgToplevelState
       Godot.Core.GodotWorld
       Godot.Core.GodotWorld2D
       Godot.Core.GodotWorldEnvironment

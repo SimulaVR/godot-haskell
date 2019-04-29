@@ -3983,6 +3983,9 @@ follow_method = runMethod @"follow_method"
 follow_property :: Method "follow_property" cls sig => cls -> sig
 follow_property = runMethod @"follow_property"
 
+for_each_surface :: Method "for_each_surface" cls sig => cls -> sig
+for_each_surface = runMethod @"for_each_surface"
+
 force_drag :: Method "force_drag" cls sig => cls -> sig
 force_drag = runMethod @"force_drag"
 
@@ -4124,6 +4127,9 @@ get_action_strength = runMethod @"get_action_strength"
 
 get_actions :: Method "get_actions" cls sig => cls -> sig
 get_actions = runMethod @"get_actions"
+
+get_activated :: Method "get_activated" cls sig => cls -> sig
+get_activated = runMethod @"get_activated"
 
 get_adjustment_brightness ::
                             Method "get_adjustment_brightness" cls sig => cls -> sig
@@ -4278,6 +4284,9 @@ get_ao_light_affect = runMethod @"get_ao_light_affect"
 get_ao_texture_channel ::
                          Method "get_ao_texture_channel" cls sig => cls -> sig
 get_ao_texture_channel = runMethod @"get_ao_texture_channel"
+
+get_app_id :: Method "get_app_id" cls sig => cls -> sig
+get_app_id = runMethod @"get_app_id"
 
 get_applied_force ::
                     Method "get_applied_force" cls sig => cls -> sig
@@ -4629,6 +4638,13 @@ get_breakpoints = runMethod @"get_breakpoints"
 
 get_buffer :: Method "get_buffer" cls sig => cls -> sig
 get_buffer = runMethod @"get_buffer"
+
+get_buffer_height ::
+                    Method "get_buffer_height" cls sig => cls -> sig
+get_buffer_height = runMethod @"get_buffer_height"
+
+get_buffer_width :: Method "get_buffer_width" cls sig => cls -> sig
+get_buffer_width = runMethod @"get_buffer_width"
 
 get_buffering_msec ::
                      Method "get_buffering_msec" cls sig => cls -> sig
@@ -5370,6 +5386,10 @@ get_current_screen = runMethod @"get_current_screen"
 get_current_script ::
                      Method "get_current_script" cls sig => cls -> sig
 get_current_script = runMethod @"get_current_script"
+
+get_current_state ::
+                    Method "get_current_state" cls sig => cls -> sig
+get_current_state = runMethod @"get_current_state"
 
 get_current_tab :: Method "get_current_tab" cls sig => cls -> sig
 get_current_tab = runMethod @"get_current_tab"
@@ -6257,6 +6277,9 @@ get_friction_slip = runMethod @"get_friction_slip"
 get_frustum :: Method "get_frustum" cls sig => cls -> sig
 get_frustum = runMethod @"get_frustum"
 
+get_fullscreen :: Method "get_fullscreen" cls sig => cls -> sig
+get_fullscreen = runMethod @"get_fullscreen"
+
 get_func :: Method "get_func" cls sig => cls -> sig
 get_func = runMethod @"get_func"
 
@@ -6276,6 +6299,9 @@ get_gain = runMethod @"get_gain"
 
 get_gateway :: Method "get_gateway" cls sig => cls -> sig
 get_gateway = runMethod @"get_gateway"
+
+get_geometry :: Method "get_geometry" cls sig => cls -> sig
+get_geometry = runMethod @"get_geometry"
 
 get_gizmo :: Method "get_gizmo" cls sig => cls -> sig
 get_gizmo = runMethod @"get_gizmo"
@@ -7101,6 +7127,9 @@ get_max_db = runMethod @"get_max_db"
 get_max_distance :: Method "get_max_distance" cls sig => cls -> sig
 get_max_distance = runMethod @"get_max_distance"
 
+get_max_height :: Method "get_max_height" cls sig => cls -> sig
+get_max_height = runMethod @"get_max_height"
+
 get_max_iterations ::
                      Method "get_max_iterations" cls sig => cls -> sig
 get_max_iterations = runMethod @"get_max_iterations"
@@ -7125,6 +7154,12 @@ get_max_text_lines = runMethod @"get_max_text_lines"
 
 get_max_value :: Method "get_max_value" cls sig => cls -> sig
 get_max_value = runMethod @"get_max_value"
+
+get_max_width :: Method "get_max_width" cls sig => cls -> sig
+get_max_width = runMethod @"get_max_width"
+
+get_maximized :: Method "get_maximized" cls sig => cls -> sig
+get_maximized = runMethod @"get_maximized"
 
 get_md5 :: Method "get_md5" cls sig => cls -> sig
 get_md5 = runMethod @"get_md5"
@@ -7190,11 +7225,17 @@ get_min = runMethod @"get_min"
 get_min_distance :: Method "get_min_distance" cls sig => cls -> sig
 get_min_distance = runMethod @"get_min_distance"
 
+get_min_height :: Method "get_min_height" cls sig => cls -> sig
+get_min_height = runMethod @"get_min_height"
+
 get_min_space :: Method "get_min_space" cls sig => cls -> sig
 get_min_space = runMethod @"get_min_space"
 
 get_min_value :: Method "get_min_value" cls sig => cls -> sig
 get_min_value = runMethod @"get_min_value"
+
+get_min_width :: Method "get_min_width" cls sig => cls -> sig
+get_min_width = runMethod @"get_min_width"
 
 get_minimum_size :: Method "get_minimum_size" cls sig => cls -> sig
 get_minimum_size = runMethod @"get_minimum_size"
@@ -7731,6 +7772,10 @@ get_peer_address = runMethod @"get_peer_address"
 get_peer_port :: Method "get_peer_port" cls sig => cls -> sig
 get_peer_port = runMethod @"get_peer_port"
 
+get_pending_state ::
+                    Method "get_pending_state" cls sig => cls -> sig
+get_pending_state = runMethod @"get_pending_state"
+
 get_percent_visible ::
                       Method "get_percent_visible" cls sig => cls -> sig
 get_percent_visible = runMethod @"get_percent_visible"
@@ -7967,6 +8012,10 @@ get_prev = runMethod @"get_prev"
 get_prev_visible :: Method "get_prev_visible" cls sig => cls -> sig
 get_prev_visible = runMethod @"get_prev_visible"
 
+get_previous_state ::
+                     Method "get_previous_state" cls sig => cls -> sig
+get_previous_state = runMethod @"get_previous_state"
+
 get_previous_tab :: Method "get_previous_tab" cls sig => cls -> sig
 get_previous_tab = runMethod @"get_previous_tab"
 
@@ -8178,6 +8227,9 @@ get_render_targetsize = runMethod @"get_render_targetsize"
 get_resizable :: Method "get_resizable" cls sig => cls -> sig
 get_resizable = runMethod @"get_resizable"
 
+get_resizing :: Method "get_resizing" cls sig => cls -> sig
+get_resizing = runMethod @"get_resizing"
+
 get_resolve_item_address ::
                            Method "get_resolve_item_address" cls sig => cls -> sig
 get_resolve_item_address = runMethod @"get_resolve_item_address"
@@ -8288,6 +8340,9 @@ get_ring_sides = runMethod @"get_ring_sides"
 
 get_rings :: Method "get_rings" cls sig => cls -> sig
 get_rings = runMethod @"get_rings"
+
+get_role :: Method "get_role" cls sig => cls -> sig
+get_role = runMethod @"get_role"
 
 get_roll_influence ::
                      Method "get_roll_influence" cls sig => cls -> sig
@@ -8746,6 +8801,9 @@ get_smooth_faces = runMethod @"get_smooth_faces"
 get_snap :: Method "get_snap" cls sig => cls -> sig
 get_snap = runMethod @"get_snap"
 
+get_socket_name :: Method "get_socket_name" cls sig => cls -> sig
+get_socket_name = runMethod @"get_socket_name"
+
 get_soft_clip_db :: Method "get_soft_clip_db" cls sig => cls -> sig
 get_soft_clip_db = runMethod @"get_soft_clip_db"
 
@@ -8980,6 +9038,12 @@ get_stylebox_types ::
                      Method "get_stylebox_types" cls sig => cls -> sig
 get_stylebox_types = runMethod @"get_stylebox_types"
 
+get_sub_x :: Method "get_sub_x" cls sig => cls -> sig
+get_sub_x = runMethod @"get_sub_x"
+
+get_sub_y :: Method "get_sub_y" cls sig => cls -> sig
+get_sub_y = runMethod @"get_sub_y"
+
 get_subdir :: Method "get_subdir" cls sig => cls -> sig
 get_subdir = runMethod @"get_subdir"
 
@@ -9041,6 +9105,9 @@ get_sun_longitude ::
                     Method "get_sun_longitude" cls sig => cls -> sig
 get_sun_longitude = runMethod @"get_sun_longitude"
 
+get_surface :: Method "get_surface" cls sig => cls -> sig
+get_surface = runMethod @"get_surface"
+
 get_surface_count ::
                     Method "get_surface_count" cls sig => cls -> sig
 get_surface_count = runMethod @"get_surface_count"
@@ -9076,6 +9143,12 @@ get_suspension_travel = runMethod @"get_suspension_travel"
 
 get_switch_mode :: Method "get_switch_mode" cls sig => cls -> sig
 get_switch_mode = runMethod @"get_switch_mode"
+
+get_sx :: Method "get_sx" cls sig => cls -> sig
+get_sx = runMethod @"get_sx"
+
+get_sy :: Method "get_sy" cls sig => cls -> sig
+get_sy = runMethod @"get_sy"
 
 get_symbol_prefix ::
                     Method "get_symbol_prefix" cls sig => cls -> sig
@@ -9239,6 +9312,9 @@ get_ticks_usec = runMethod @"get_ticks_usec"
 
 get_tile_origin :: Method "get_tile_origin" cls sig => cls -> sig
 get_tile_origin = runMethod @"get_tile_origin"
+
+get_tiled :: Method "get_tiled" cls sig => cls -> sig
+get_tiled = runMethod @"get_tiled"
 
 get_tiles_ids :: Method "get_tiles_ids" cls sig => cls -> sig
 get_tiles_ids = runMethod @"get_tiles_ids"
@@ -9891,6 +9967,9 @@ get_window_safe_area = runMethod @"get_window_safe_area"
 get_window_size :: Method "get_window_size" cls sig => cls -> sig
 get_window_size = runMethod @"get_window_size"
 
+get_wlr_surface :: Method "get_wlr_surface" cls sig => cls -> sig
+get_wlr_surface = runMethod @"get_wlr_surface"
+
 get_word_under_cursor ::
                         Method "get_word_under_cursor" cls sig => cls -> sig
 get_word_under_cursor = runMethod @"get_word_under_cursor"
@@ -9909,6 +9988,12 @@ get_write_mode = runMethod @"get_write_mode"
 
 get_x_label :: Method "get_x_label" cls sig => cls -> sig
 get_x_label = runMethod @"get_x_label"
+
+get_xdg_popup :: Method "get_xdg_popup" cls sig => cls -> sig
+get_xdg_popup = runMethod @"get_xdg_popup"
+
+get_xdg_toplevel :: Method "get_xdg_toplevel" cls sig => cls -> sig
+get_xdg_toplevel = runMethod @"get_xdg_toplevel"
 
 get_xfade_time :: Method "get_xfade_time" cls sig => cls -> sig
 get_xfade_time = runMethod @"get_xfade_time"
@@ -11823,6 +11908,18 @@ joy_connection_changed ::
                          Method "joy_connection_changed" cls sig => cls -> sig
 joy_connection_changed = runMethod @"joy_connection_changed"
 
+keyboard_notify_enter ::
+                        Method "keyboard_notify_enter" cls sig => cls -> sig
+keyboard_notify_enter = runMethod @"keyboard_notify_enter"
+
+keyboard_notify_key ::
+                      Method "keyboard_notify_key" cls sig => cls -> sig
+keyboard_notify_key = runMethod @"keyboard_notify_key"
+
+keyboard_notify_modifiers ::
+                            Method "keyboard_notify_modifiers" cls sig => cls -> sig
+keyboard_notify_modifiers = runMethod @"keyboard_notify_modifiers"
+
 kill :: Method "kill" cls sig => cls -> sig
 kill = runMethod @"kill"
 
@@ -12741,6 +12838,26 @@ point_is_inside_triangle ::
                            Method "point_is_inside_triangle" cls sig => cls -> sig
 point_is_inside_triangle = runMethod @"point_is_inside_triangle"
 
+pointer_clear_focus ::
+                      Method "pointer_clear_focus" cls sig => cls -> sig
+pointer_clear_focus = runMethod @"pointer_clear_focus"
+
+pointer_notify_button ::
+                        Method "pointer_notify_button" cls sig => cls -> sig
+pointer_notify_button = runMethod @"pointer_notify_button"
+
+pointer_notify_enter ::
+                       Method "pointer_notify_enter" cls sig => cls -> sig
+pointer_notify_enter = runMethod @"pointer_notify_enter"
+
+pointer_notify_frame ::
+                       Method "pointer_notify_frame" cls sig => cls -> sig
+pointer_notify_frame = runMethod @"pointer_notify_frame"
+
+pointer_notify_motion ::
+                        Method "pointer_notify_motion" cls sig => cls -> sig
+pointer_notify_motion = runMethod @"pointer_notify_motion"
+
 poll :: Method "poll" cls sig => cls -> sig
 poll = runMethod @"poll"
 
@@ -13451,6 +13568,9 @@ rset_unreliable_id ::
                      Method "rset_unreliable_id" cls sig => cls -> sig
 rset_unreliable_id = runMethod @"rset_unreliable_id"
 
+run :: Method "run" cls sig => cls -> sig
+run = runMethod @"run"
+
 save :: Method "save" cls sig => cls -> sig
 save = runMethod @"save"
 
@@ -13563,6 +13683,12 @@ select_file = runMethod @"select_file"
 send_bytes :: Method "send_bytes" cls sig => cls -> sig
 send_bytes = runMethod @"send_bytes"
 
+send_close :: Method "send_close" cls sig => cls -> sig
+send_close = runMethod @"send_close"
+
+send_frame_done :: Method "send_frame_done" cls sig => cls -> sig
+send_frame_done = runMethod @"send_frame_done"
+
 sequence_connect :: Method "sequence_connect" cls sig => cls -> sig
 sequence_connect = runMethod @"sequence_connect"
 
@@ -13601,6 +13727,9 @@ set_action_mode = runMethod @"set_action_mode"
 
 set_action_name :: Method "set_action_name" cls sig => cls -> sig
 set_action_name = runMethod @"set_action_name"
+
+set_activated :: Method "set_activated" cls sig => cls -> sig
+set_activated = runMethod @"set_activated"
 
 set_active :: Method "set_active" cls sig => cls -> sig
 set_active = runMethod @"set_active"
@@ -14189,6 +14318,9 @@ set_canvas_max_layer = runMethod @"set_canvas_max_layer"
 set_canvas_transform ::
                        Method "set_canvas_transform" cls sig => cls -> sig
 set_canvas_transform = runMethod @"set_canvas_transform"
+
+set_capabilities :: Method "set_capabilities" cls sig => cls -> sig
+set_capabilities = runMethod @"set_capabilities"
 
 set_capture_cell_size ::
                         Method "set_capture_cell_size" cls sig => cls -> sig
@@ -15460,6 +15592,9 @@ set_friction_slip ::
                     Method "set_friction_slip" cls sig => cls -> sig
 set_friction_slip = runMethod @"set_friction_slip"
 
+set_fullscreen :: Method "set_fullscreen" cls sig => cls -> sig
+set_fullscreen = runMethod @"set_fullscreen"
+
 set_func :: Method "set_func" cls sig => cls -> sig
 set_func = runMethod @"set_func"
 
@@ -16037,6 +16172,9 @@ set_keep_screen_on ::
                      Method "set_keep_screen_on" cls sig => cls -> sig
 set_keep_screen_on = runMethod @"set_keep_screen_on"
 
+set_keyboard :: Method "set_keyboard" cls sig => cls -> sig
+set_keyboard = runMethod @"set_keyboard"
+
 set_keying :: Method "set_keying" cls sig => cls -> sig
 set_keying = runMethod @"set_keying"
 
@@ -16263,6 +16401,9 @@ set_max_text_lines = runMethod @"set_max_text_lines"
 
 set_max_value :: Method "set_max_value" cls sig => cls -> sig
 set_max_value = runMethod @"set_max_value"
+
+set_maximized :: Method "set_maximized" cls sig => cls -> sig
+set_maximized = runMethod @"set_maximized"
 
 set_mesh :: Method "set_mesh" cls sig => cls -> sig
 set_mesh = runMethod @"set_mesh"
@@ -17054,6 +17195,9 @@ set_repeat = runMethod @"set_repeat"
 set_resizable :: Method "set_resizable" cls sig => cls -> sig
 set_resizable = runMethod @"set_resizable"
 
+set_resizing :: Method "set_resizing" cls sig => cls -> sig
+set_resizing = runMethod @"set_resizing"
+
 set_resonance :: Method "set_resonance" cls sig => cls -> sig
 set_resonance = runMethod @"set_resonance"
 
@@ -17482,6 +17626,9 @@ set_snap_controls_to_pixels ::
 set_snap_controls_to_pixels
   = runMethod @"set_snap_controls_to_pixels"
 
+set_socket_name :: Method "set_socket_name" cls sig => cls -> sig
+set_socket_name = runMethod @"set_socket_name"
+
 set_soft_clip_db :: Method "set_soft_clip_db" cls sig => cls -> sig
 set_soft_clip_db = runMethod @"set_soft_clip_db"
 
@@ -17905,6 +18052,9 @@ set_ticks_on_borders = runMethod @"set_ticks_on_borders"
 
 set_tile_origin :: Method "set_tile_origin" cls sig => cls -> sig
 set_tile_origin = runMethod @"set_tile_origin"
+
+set_tiled :: Method "set_tiled" cls sig => cls -> sig
+set_tiled = runMethod @"set_tiled"
 
 set_tileset :: Method "set_tileset" cls sig => cls -> sig
 set_tileset = runMethod @"set_tileset"
@@ -18770,6 +18920,9 @@ store_var = runMethod @"store_var"
 sub :: Method "sub" cls sig => cls -> sig
 sub = runMethod @"sub"
 
+surface_at :: Method "surface_at" cls sig => cls -> sig
+surface_at = runMethod @"surface_at"
+
 surface_find_by_name ::
                        Method "surface_find_by_name" cls sig => cls -> sig
 surface_find_by_name = runMethod @"surface_find_by_name"
@@ -19374,6 +19527,10 @@ use_arvr = runMethod @"use_arvr"
 
 utf8_to_base64 :: Method "utf8_to_base64" cls sig => cls -> sig
 utf8_to_base64 = runMethod @"utf8_to_base64"
+
+validate_grab_serial ::
+                       Method "validate_grab_serial" cls sig => cls -> sig
+validate_grab_serial = runMethod @"validate_grab_serial"
 
 value_track_get_key_indices ::
                               Method "value_track_get_key_indices" cls sig => cls -> sig
