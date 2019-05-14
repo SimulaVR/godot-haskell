@@ -1,0 +1,11 @@
+dist*
+*.hi
+*.o
+.stack-work/
+.stack-work-devel/
+*~
+\#*
+*.import
+result
+
+

@@ -12,7 +12,7 @@ Haskell bindings for the Godot game engine.
 ## Getting started (demo game)
 
 The easiest way to get started is to have a look at the demo game included in
-this repo in the 'demo' directory. This is "Dodge the Creeps!", your first game
+the 'demo' directory. This is "Dodge the Creeps!", your first game
 from the [Godot
 documentation](https://docs.godotengine.org/en/3.1/getting_started/step_by_step/your_first_game.html). Following
 along with the documentation and the code should make everything understandable.
