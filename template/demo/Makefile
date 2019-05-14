@@ -6,8 +6,7 @@ nix:
 	nix-build shell.nix
 	cp result/lib/ghc-*/lib$(NAME).so $(GODOTPROJECT)/lib
 stack:
-	stack clean $(NAME)
-	stack build
+	stack build --fast
 	cp $(STACKLIBFILE) $(GODOTPROJECT)/lib
 stack-nix:
 	stack --nix clean $(NAME)

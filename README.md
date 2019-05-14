@@ -41,14 +41,13 @@ F8.
 
 ## Setting up your own project.
 
-You can either modify the mode, or set up a new demo project in `template/demo/`
-for an example of how to use this library. You can use the stack template
-(`template/godot-haskell.hsroots`) to set up a basis for your own project.
+You can either modify the demo described above, or set up a new project from a
+stack template found in the template directory. The easiest way to get started
+is to head over to `template/demo` and run `make stack`.
 
-To use the template:
-```
-stack new myproject https://raw.githubusercontent.com/SimulaVR/godot-haskell/stack-template/template/godot-haskell.hsfiles
-```
+If you want to start another project use the stack template `template/godot-haskell.hsroots`
+Alternatively, fetch it directly from git:
+stack new myproject https://raw.githubusercontent.com/SimulaVR/godot-haskell/master/template/godot-haskell.hsfiles
 
 ## Changing Godot versions
 

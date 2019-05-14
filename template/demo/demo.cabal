@@ -2,12 +2,12 @@ cabal-version: 1.12
 
 name:           demo
 version:        0.0.0.0
-description:    Please see the README on Github at <https://github.com/lboklin/demo#readme>
-homepage:       https://github.com/lboklin/demo#readme
-bug-reports:    https://github.com/lboklin/demo/issues
-author:         Ludvig Böklin
-maintainer:     ludvig.boklin@protonmail.com
-copyright:      2019 Ludvig Böklin
+description:    Please see the README on Github at <https://github.com//demo#readme>
+homepage:       https://github.com//demo#readme
+bug-reports:    https://github.com//demo/issues
+author:         
+maintainer:     
+copyright:      
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -17,7 +17,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/lboklin/demo
+  location: https://github.com//demo
 
 library
   exposed-modules: Lib

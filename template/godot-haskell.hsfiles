@@ -29,7 +29,7 @@ packages:
 
 extra-deps:
 - git: https://github.com/SimulaVR/godot-haskell
-  commit: 0eabdf13d5b6339696ed50a3c10b26e9ff2cbc2d # godot-haskell rev
+  commit: 32dae6bc26b88c5e6e16727a9ea9682a195df96e # godot-haskell rev
 
 require-stack-version: ">=1.8"
 
@@ -110,9 +110,9 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "SimulaVR";
     repo = "godot-haskell";
-    rev = "0eabdf13d5b6339696ed50a3c10b26e9ff2cbc2d"; # godot-haskell rev
+    rev = "32dae6bc26b88c5e6e16727a9ea9682a195df96e"; # godot-haskell rev
     # Use nix-prefetch-git to get the hash
-    sha256 = "0wjnmhr2g9l8r0fhb2kvmnxdqqjy7r0kmlvy4ka0mcly8wvj18y0";
+    sha256 = "";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
@@ -199,7 +199,7 @@ haskell.lib.buildStackProject {
 
 
 {-# START_FILE src/Lib.hs #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, TemplateHaskell, MultiParamTypeClasses #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeFamilies #-}
 module Lib
@@ -216,33 +216,36 @@ import           Data.Function                            ( (&) )
 exports :: GdnativeHandle -> IO ()
 exports desc = do
   registerClass $ RegClass desc $ classInit @Main
-  -- registerClass $ RegClass desc $ classInit @MyOtherClass
 
 data Main = Main
-  { _mBase :: GodotNode
-  , _mTime :: TVar Float
+  { _mBase :: Node
+  , _mTime :: MVar Float
   }
 
 instance HasBaseClass Main where
-  type BaseClass Main = GodotNode
+  type BaseClass Main = Node
   super = _mBase
 instance NativeScript Main where
-  classInit base = Main base <$> newTVarIO 0
+  classInit base = Main base <$> newMVar 0
   classMethods =
-    [ func NoRPC "_process" $
-        \self [deltaVt] -> do
-          delta <- fromGodotVariant deltaVt
-          (sec, sec') <- atomically $ do
-            t <- readTVar (_mTime self)
-            let t' = t + delta
-            writeTVar (_mTime self) t'
-            return (floor t, floor t') :: STM (Int, Int)
-          when (sec < sec') $
-            "Seconds passed: " ++ Prelude.show sec'
-              & T.pack
-              & (toLowLevel :: Text -> IO GodotString)
-              >>= Api.godot_print
+    [ method1 "_process" $ main_process
     ]
+
+main_process :: Main -> GodotVariant -> IO ()
+main_process self deltaVt = do
+  delta <- fromGodotVariant deltaVt
+  (sec, sec') <- do
+    t <- readMVar (_mTime self)
+    let t' = t + delta
+    _ <- swapMVar (_mTime self) t'
+    return (floor t, floor t')
+  when (sec < sec') $
+    "Seconds passed: " ++ Prelude.show sec'
+    & T.pack
+    & (toLowLevel :: Text -> IO GodotString)
+    >>= Api.godot_print
+
+deriveBase ''Main
 
 
 
@@ -252,6 +255,7 @@ module FLib where
 
 import qualified Foreign
 import qualified Godot.Gdnative.Internal       as FFI
+import           Godot.Gdnative
 import           Godot.Nativescript
 import           Lib
 
@@ -259,22 +263,23 @@ import           Lib
 
 godot_nativescript_init :: GdnativeHandle -> IO ()
 godot_nativescript_init desc = do
+  defaultExports desc
   exports desc
   putStrLn "Haskell NativeScript lib initialized"
 
 foreign export ccall godot_nativescript_init :: GdnativeHandle -> IO ()
 
 
-godot_gdnative_init :: FFI.GodotGdnativeInitOptionsPtr -> IO ()
+godot_gdnative_init :: FFI.GdnativeInitOptionsPtr -> IO ()
 godot_gdnative_init opts = Foreign.peek opts >>= FFI.initApiStructs
 
-foreign export ccall godot_gdnative_init :: FFI.GodotGdnativeInitOptionsPtr -> IO ()
+foreign export ccall godot_gdnative_init :: FFI.GdnativeInitOptionsPtr -> IO ()
 
 
-godot_gdnative_terminate :: FFI.GodotGdnativeTerminateOptionsPtr -> IO ()
+godot_gdnative_terminate :: FFI.GdnativeTerminateOptionsPtr -> IO ()
 godot_gdnative_terminate _ = return ()
 
-foreign export ccall godot_gdnative_terminate :: FFI.GodotGdnativeTerminateOptionsPtr -> IO ()
+foreign export ccall godot_gdnative_terminate :: FFI.GdnativeTerminateOptionsPtr -> IO ()
 
 
 
