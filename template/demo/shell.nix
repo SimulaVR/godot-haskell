@@ -20,7 +20,7 @@ let
         base godot-haskell linear text vector stm
       ];
       libraryToolDepends = [];
-      homepage = "https://github.com/lboklin/demo#readme";
+      homepage = "https://github.com//demo#readme";
       license = stdenv.lib.licenses.bsd3;
     };
 

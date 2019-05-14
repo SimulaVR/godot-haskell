@@ -26,4 +26,3 @@ run/main_scene="res://Main.tscn"
 [gdnative]
 
 singletons=[  ]
-
