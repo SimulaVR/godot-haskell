@@ -42,6 +42,7 @@ module Godot.Nativescript
   , await
   , WrapperStablePtr(..)
   , emptyObject
+  , createMVarProperty
   )
 where
 
