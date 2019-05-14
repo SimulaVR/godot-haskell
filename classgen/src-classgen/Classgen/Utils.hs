@@ -12,4 +12,5 @@ fixedTypeFields = defaultFieldRules & lensField .~ (\tyn fs f -> map fixDefName 
       fixName n = mkName $ case nameBase n of
         "type" -> "type'"
         "id" -> "id'"
+        "class" -> "class'"
         s -> s

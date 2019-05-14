@@ -19,6 +19,7 @@ dependencies:
 - aeson
 - bytestring
 - template-haskell
+- th-abstraction
 - lens
 - text
 - casing
@@ -27,6 +28,7 @@ dependencies:
 - unordered-containers
 - mtl
 - stm
+- extra
 
 default-extensions:
 - FlexibleContexts
@@ -68,4 +70,3 @@ internal-libraries:
     - parsers
     - mtl
     - ansi-wl-pprint
-

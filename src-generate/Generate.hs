@@ -106,7 +106,7 @@ baseTypesTable = M.fromList
   , (C.TypeName "godot_real", fromThName ''CFloat)
   , (C.TypeName "godot_int", fromThName ''CInt)
   , (C.TypeName "godot_bool", fromThName ''CBool)
-  , (C.TypeName "godot_class_constructor", ConT $ mkName "GodotClassConstructor")
+  , (C.TypeName "godot_class_constructor", ConT $ mkName "ClassConstructor")
   , (C.TypeName "native_call_cb", ConT $ mkName "NativeCallCb")
   , (C.TypeName "bool", fromThName ''CInt)
   ]
@@ -278,7 +278,7 @@ resolveType (C.TypeSpecifier _ (C.TypeName ident)) = con $ ConT $ fromCIdent ide
 resolveType (C.Ptr _ (C.TypeSpecifier _ (lookupBase -> Just ty)))
   = SimpleType $ AppT (ConT ''Ptr) ty
 resolveType (C.Ptr _ (C.TypeSpecifier _ (C.TypeName "godot_object")))
-  = SimpleType $ ConT $ mkName "GodotObject"
+  = SimpleType $ ConT $ mkName "Object"
 resolveType (C.Ptr _ (C.TypeSpecifier _ (C.TypeName ident)))
   = con  . AppT (ConT ''Ptr) . ConT $ fromCIdent ident
   where
@@ -295,7 +295,11 @@ isStruct ident = ident `elem` godotStructs
 isEnumType ident = ident `elem` godotEnums
 
 fromCIdent :: C.Identifier -> Name
-fromCIdent = mkName . pascal . C.unIdentifier
+fromCIdent = mkName . pascal . (\x -> case T.stripPrefix "godot_" (T.pack x) of
+                                       Just "string" -> "GodotString"
+                                       Just "variant" -> "GodotVariant"
+                                       Just y -> T.unpack y
+                                       Nothing -> x) . C.unIdentifier
 
 lookupBase :: C.TypeSpecifier -> Maybe Type
 lookupBase = flip M.lookup baseTypesTable
@@ -451,10 +455,9 @@ generateCall = go []
 
 apisToHs :: S.GdnativeApis -> Q [Dec]
 apisToHs apis = do
-  coreDecs <- apiToHs True (S.core apis) 
+  coreDecs <- apiToHs True (S.core apis)
   extDecs <- concat <$> mapM (apiToHs False) (V.filter (\api -> S.apiType api `notElem` excluded) $ S.extensions apis)
   return $ coreDecs ++ extDecs
-
   where
     excluded = ["ANDROID"]
 
@@ -483,7 +486,7 @@ apiToHs isCore api = do
          || S.apiType api == "VIDEODECODER"
          || S.apiType api == "NET"
       then "" else showVer
-    mkApiName = mkName $ "GodotGdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
+    mkApiName = mkName $ "Gdnative" ++ maybeExt ++ pascal (T.unpack $ S.apiType api) ++ maybeVer ++ "ApiStruct"
 
     generateFunctions name entries = do
       funcs <- imapM (constructFunction isCore name) entries
