@@ -13,6 +13,7 @@ module Godot.Nativescript
   , RPC(..)
   , Registerer(..)
   , PropertyAttributes(..)
+  , deriveBase
   , func
   , method
   , method0
