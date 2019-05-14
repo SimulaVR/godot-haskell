@@ -1,0 +1,66 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 6dc83f2ebc3898a549ab98f8b715c3991fc8f41829b025dc87794aee9461b8e1
+
+name:           myproject
+version:        0.0.0.0
+description:    Please see the README on Github at <https://github.com/abarbu/myproject#readme>
+homepage:       https://github.com/abarbu/myproject#readme
+bug-reports:    https://github.com/abarbu/myproject/issues
+author:         Andrei Barbu
+maintainer:     andrei@0xab.com
+copyright:      Andrei Barbu 2019
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    ChangeLog.md
+    README.md
+foreign-library myproject
+  type: native-shared
+  other-modules: FLib
+  hs-source-dirs: ffi/flib
+  c-sources: ffi/cbits/flib.c
+  include-dirs:
+      /home/andrei/Dropbox/work/godot/godot/modules/gdnative/include/
+    , /home/andrei/Dropbox/work/godot/godot/
+    , /home/andrei/Dropbox/work/godot/godot/platform/x11/
+  build-depends:
+      base >= 4.12 && <5
+    , godot-haskell
+    , myproject
+    , text
+  default-language: Haskell2010
+
+source-repository head
+  type: git
+  location: https://github.com/abarbu/myproject
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Util
+      Paths_myproject
+  hs-source-dirs:
+      src
+      game
+  build-depends:
+      base >=4.12 && <5
+    , containers
+    , deepseq
+    , extra
+    , godot-haskell
+    , lens
+    , linear
+    , random
+    , strict-concurrency
+    , template-haskell
+    , text
+    , th-abstraction
+    , vector
+  default-language: Haskell2010
