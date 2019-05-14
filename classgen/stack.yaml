@@ -39,6 +39,7 @@ resolver: lts-15.4
 packages:
 - .
 - ../haskell-src-exts-qq
+- ../haskell-src-exts-sc
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

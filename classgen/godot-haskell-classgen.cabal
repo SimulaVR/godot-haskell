@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.31.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 39c6363ed12c4c2bf3311112a9af73e574fcbd0beafb3a0096da2db102225f27
+-- hash: 35a149339951f4c097aab1ae9ef0e3952109a1273b725ce775c4483b80c67fb6
 
 name:           godot-haskell-classgen
 version:        0.1.0.0
@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Classgen.Docs
       Classgen.Module
       Classgen.Spec
       Classgen.Utils
@@ -36,6 +37,8 @@ library
   include-dirs:
       godot_headers
       cbits
+  build-tools:
+      c2hs
   build-depends:
       aeson
     , base
@@ -44,14 +47,13 @@ library
     , containers
     , haskell-src-exts
     , haskell-src-exts-qq
+    , haskell-src-exts-sc
     , lens
     , mtl
     , template-haskell
     , text
     , unordered-containers
     , vector
-  build-tools:
-      c2hs
   default-language: Haskell2010
 
 executable godot-haskell-classgen
@@ -64,6 +66,8 @@ executable godot-haskell-classgen
   include-dirs:
       godot_headers
       cbits
+  build-tools:
+      c2hs
   build-depends:
       aeson
     , base
@@ -74,12 +78,11 @@ executable godot-haskell-classgen
     , filepath
     , godot-haskell-classgen
     , haskell-src-exts
+    , haskell-src-exts-sc
     , lens
     , mtl
     , template-haskell
     , text
     , unordered-containers
     , vector
-  build-tools:
-      c2hs
   default-language: Haskell2010

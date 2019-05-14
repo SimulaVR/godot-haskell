@@ -4,3 +4,6 @@
 [submodule "haskell-src-exts-qq"]
 	path = haskell-src-exts-qq
 	url = https://github.com/KaneTW/haskell-src-exts-qq
+[submodule "haskell-src-exts-sc"]
+	path = haskell-src-exts-sc
+	url = https://github.com/achirkin/haskell-src-exts-sc

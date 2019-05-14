@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Godot.Gdnative.Internal.Api where
 
-import Data.Aeson
+import Data.Aeson hiding (Array,Object)
 import qualified Data.ByteString.Lazy as BL
 import Data.IORef
 
@@ -15,32 +15,29 @@ import Godot.Gdnative.Internal.Gdnative
 
 import Generate
 
-godotGdnativeCoreApiStruct :: GodotGdnativeCoreApiStruct
-godotGdnativeCoreApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCoreApiStructRef
+gdnativeCoreApiStruct :: GdnativeCoreApiStruct
+gdnativeCoreApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeCoreApiStructRef
 
-godotGdnativeCore11ApiStruct :: GodotGdnativeCore11ApiStruct
-godotGdnativeCore11ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCore11ApiStructRef
+gdnativeCore11ApiStruct :: GdnativeCore11ApiStruct
+gdnativeCore11ApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeCore11ApiStructRef
 
-godotGdnativeCore12ApiStruct :: GodotGdnativeCore12ApiStruct
-godotGdnativeCore12ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCore12ApiStructRef
+gdnativeExtNativescriptApiStruct :: GdnativeExtNativescriptApiStruct
+gdnativeExtNativescriptApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtNativescriptApiStructRef
 
-godotGdnativeExtNativescriptApiStruct :: GodotGdnativeExtNativescriptApiStruct
-godotGdnativeExtNativescriptApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNativescriptApiStructRef
+gdnativeExtNativescript11ApiStruct :: GdnativeExtNativescript11ApiStruct
+gdnativeExtNativescript11ApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtNativescript11ApiStructRef
 
-godotGdnativeExtNativescript11ApiStruct :: GodotGdnativeExtNativescript11ApiStruct
-godotGdnativeExtNativescript11ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNativescript11ApiStructRef
+gdnativeExtPluginscriptApiStruct :: GdnativeExtPluginscriptApiStruct
+gdnativeExtPluginscriptApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtPluginscriptApiStructRef
 
-godotGdnativeExtPluginscriptApiStruct :: GodotGdnativeExtPluginscriptApiStruct
-godotGdnativeExtPluginscriptApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtPluginscriptApiStructRef
+gdnativeExtArvrApiStruct :: GdnativeExtArvrApiStruct
+gdnativeExtArvrApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtArvrApiStructRef
 
-godotGdnativeExtArvrApiStruct :: GodotGdnativeExtArvrApiStruct
-godotGdnativeExtArvrApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtArvrApiStructRef
+gdnativeExtVideodecoderApiStruct :: GdnativeExtVideodecoderApiStruct
+gdnativeExtVideodecoderApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtVideodecoderApiStructRef
 
-godotGdnativeExtVideodecoderApiStruct :: GodotGdnativeExtVideodecoderApiStruct
-godotGdnativeExtVideodecoderApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtVideodecoderApiStructRef
-
-godotGdnativeExtNetApiStruct :: GodotGdnativeExtNetApiStruct
-godotGdnativeExtNetApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNetApiStructRef
+gdnativeExtNetApiStruct :: GdnativeExtNetApiStruct
+gdnativeExtNetApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtNetApiStructRef
 
 godotGdnativeExtNet32ApiStruct :: GodotGdnativeExtNet32ApiStruct
 godotGdnativeExtNet32ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNet32ApiStructRef

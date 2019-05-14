@@ -53,6 +53,7 @@ library:
   dependencies:
   - haskell-src-exts
   - haskell-src-exts-qq
+  - haskell-src-exts-sc
 
 executables:
   godot-haskell-classgen:
@@ -61,5 +62,7 @@ executables:
     dependencies:
       - godot-haskell-classgen
       - haskell-src-exts
+      - haskell-src-exts-sc
       - directory
       - filepath
+

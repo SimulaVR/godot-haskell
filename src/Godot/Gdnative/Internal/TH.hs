@@ -6,6 +6,7 @@ import Godot.Gdnative.Internal.Gdnative
 import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 import Foreign
+import qualified Data.Text as T
 
 generateAsVariantInstances :: Q [Dec]
 generateAsVariantInstances = do
@@ -23,6 +24,6 @@ generateAsVariantInstances = do
           , valD (varP $ mkName "fromVariant") (normalB
               [| \var -> case var of
                    $(conP (mkName $ nameBase name) [varP $ mkName "x"]) -> Just x
-                   _ -> Nothing |]) [] ]
-      
-
+                   _ -> Nothing |]) []
+          , valD (varP $ mkName "variantType") (normalB
+              [| \_ -> $(conE $ mkName $ T.unpack $ T.replace "Variant" "VariantType" $ T.pack $ nameBase name) |]) [] ]
