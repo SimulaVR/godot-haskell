@@ -3,64 +3,63 @@ module Godot
   )
 where
 
-import           Godot.Api                     as M -- Has all Godot classes
-import           Godot.Methods                 as M -- Has all Godot methods
+import           Godot.Api                     as M hiding (NativeScript) -- Has all Godot classes
 import           Godot.Nativescript            as M
 import           Godot.Internal.Dispatch       as M
                                                           ( (:<) -- For generic functions
                                                           -- Required for creating Godot classes
                                                           , HasBaseClass(..)
-                                                          -- Needed for down-casting objects
-                                                          , safeCast
+                                                          -- Needed for up-casting objects
+                                                          , upcast
                                                           )
 
 -- Better to export these now than to inevitably have the user dig through the
 -- whole library in search of them.
 import           Godot.Gdnative.Internal.Gdnative
                                                as M
-                                                          ( GodotObject
-                                                          , GodotAabb
-                                                          , GodotArray
-                                                          , GodotBasis
+                                                          ( Object
+                                                          , Aabb
+                                                          , Array
+                                                          , Basis
                                                           , GodotBool
-                                                          , GodotCharString
-                                                          , GodotCharType
-                                                          , GodotColor
-                                                          , GodotDictionary
-                                                          , GodotError(..)
+                                                          , CharString
+                                                          , CharType
+                                                          , Color
+                                                          , Dictionary
+                                                          , Error(..)
                                                           , GodotInt
-                                                          , GodotMethodBind
-                                                          , GodotNodePath
-                                                          , GodotPlane
-                                                          , GodotPoolArrayReadAccess
-                                                          , GodotPoolArrayWriteAccess
-                                                          , GodotPoolByteArray
-                                                          , GodotPoolColorArray
-                                                          , GodotPoolIntArray
-                                                          , GodotPoolRealArray
-                                                          , GodotPoolStringArray
-                                                          , GodotPoolVector2Array
-                                                          , GodotPoolVector3Array
-                                                          , GodotQuat
+                                                          , MethodBind
+                                                          , NodePath
+                                                          , Plane
+                                                          , PoolArrayReadAccess
+                                                          , PoolArrayWriteAccess
+                                                          , PoolByteArray
+                                                          , PoolColorArray
+                                                          , PoolIntArray
+                                                          , PoolRealArray
+                                                          , PoolStringArray
+                                                          , PoolVector2Array
+                                                          , PoolVector3Array
+                                                          , Quat
                                                           , GodotReal
-                                                          , GodotRect2
-                                                          , GodotRid
+                                                          , Rect2
+                                                          , Rid
                                                           , GodotString
-                                                          , GodotStringName
-                                                          , GodotTransform
-                                                          , GodotTransform2d
+                                                          , StringName
+                                                          , Transform
+                                                          , Transform2d
                                                           , GodotVariant
-                                                          , GodotVariantCallErrorError(..)
-                                                          , GodotVariantOperator(..)
-                                                          , GodotVariantType(..)
-                                                          , GodotVector2
-                                                          , GodotVector3
-                                                          , GodotVector3Axis(..)
+                                                          , VariantCallErrorError(..)
+                                                          , VariantOperator(..)
+                                                          , VariantType(..)
+                                                          , Vector2
+                                                          , Vector3
+                                                          , Vector3Axis(..)
                                                           )
 
 
 -- These will always be needed when writing Godot class methods
-import           Godot.Gdnative.Types          as M
+import           Godot.Gdnative.Internal.Types          as M
                                                           ( fromGodotVariant
                                                           , fromLowLevel
                                                           , toLowLevel
@@ -69,9 +68,7 @@ import           Godot.Gdnative.Types          as M
 
 -- These are needed in order to keep data between callbacks since we don't pass
 -- state back and forth between Haskell and Godot.
-import           Control.Concurrent.STM.TVar   as M
-import           Control.Monad.STM             as M
+import           Control.Concurrent.MVar       as M
 
 -- We use Text as the Haskell equivalent of GodotString
-import           Data.Text                     as M
-                                                          ( Text )
+import           Data.Text                     as M ( Text )
