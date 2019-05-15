@@ -525,10 +525,10 @@ createMVarProperty name fieldName propDefault =
         obj <- fromGodotVariant var
         o' <- swapMVar (fieldName c) obj
         case toVariant o' of
-          VariantObject o@(Object ptr) ->
+          VariantObject oldObj@(Object ptr) ->
             unlessM (pure $ nullPtr == ptr) $
-              whenM (unreference (coerce o :: GApi.Reference)) $
-                Godot.Core.Object.free o
+              whenM (unreference (coerce oldObj :: GApi.Reference)) $
+                Godot.Core.Object.free oldObj
           _ -> pure ()
         pure ()),
     (\_ c -> do
