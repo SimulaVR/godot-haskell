@@ -430,8 +430,6 @@ registerMethod (RegMethod desc Method {..}) = do
         $ \_ -> freeHaskellFunPtr methodFun >> freeHaskellFunPtr methodFreeFun
 
   let methodObj = InstanceMethod methodFun nullPtr methodFreeFun
-  print "Registering method"
-  print (nameOf @a, methodName)
   withCString (T.unpack $ nameOf @a) $ \clsNamePtr ->
     withCString (T.unpack methodName)
       $ \mtdNamePtr -> godot_nativescript_register_method
@@ -514,15 +512,26 @@ createMVarProperty name fieldName propDefault =
     (toVariant propDefault),
     (\_ c (var :: GodotVariant) -> do
         variant <- fromLowLevel var
+        -- TODO This is required to avoid memory corruption. Haskell cannot hold
+        -- pointers to Godot objects unless the runtime already has a live
+        -- reference to that object. It will otherwise be freed at some point!
+        --
+        -- This solution works, but only for most Godot Objects. We could add
+        -- more cases here, but a much better way would be to implement a Ref
+        -- type to hold such objects. Coming soon to stores near you.
         case variant of
-          -- TODO This is a memory leak! We need to get rid of this reference when we're done
           VariantObject o -> reference (coerce o :: GApi.Reference)
           _ -> pure False
         obj <- fromGodotVariant var
-        (swapMVar (fieldName c) obj) >> pure ()),
+        o' <- swapMVar (fieldName c) obj
+        case toVariant o' of
+          VariantObject o@(Object ptr) ->
+            unlessM (pure $ nullPtr == ptr) $
+              whenM (unreference (coerce o :: GApi.Reference)) $
+                Godot.Core.Object.free o
+          _ -> pure ()
+        pure ()),
     (\_ c -> do
-        print name
-        print "Getting property!"
         toLowLevel =<< toVariant <$> readMVar (fieldName c)))
 
 data SignalArgument = SignalArgument
