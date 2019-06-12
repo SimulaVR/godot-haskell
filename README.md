@@ -8,7 +8,7 @@ Haskell bindings for the Godot game engine.
 ## Using the library
 
 See the demo project in `template/demo/` for an example of how to use this
-library. You can use the stack template (`template/godot-haskell.hsroots`) to
+library. You can use the stack template (`template/godot-haskell.hsfiles`) to
 set up a basis for your own project.
 
 To use the template:
