@@ -13,7 +13,7 @@ set up a basis for your own project.
 
 To use the template:
 ```
-stack new myproject https://raw.githubusercontent.com/SimulaVR/godot-haskell/stack-template/template/godot-haskell.hsfiles
+stack new myproject https://raw.githubusercontent.com/SimulaVR/godot-haskell/master/template/godot-haskell.hsfiles
 ```
 
 ## Questions
