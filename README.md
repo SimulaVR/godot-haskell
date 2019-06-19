@@ -45,7 +45,7 @@ You can either modify the demo described above, or set up a new project from a
 stack template found in the template directory. The easiest way to get started
 is to head over to `template/demo` and run `make stack`.
 
-If you want to start another project use the stack template `template/godot-haskell.hsroots`
+If you want to start another project use the stack template `template/godot-haskell.hsfiles`
 Alternatively, fetch it directly from git:
 stack new myproject https://raw.githubusercontent.com/SimulaVR/godot-haskell/master/template/godot-haskell.hsfiles
 
@@ -74,7 +74,6 @@ stack exec godot-haskell-classgen ../godot_headers/api.json ../godot_doc_classes
 
 That's it! The rest of the bindings are fairly lightweight with few
 dependencies, so you shouldn't see much breakage in the rest of the package.
-
 
 ## Questions
 
