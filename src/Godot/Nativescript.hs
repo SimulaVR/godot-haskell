@@ -4,12 +4,15 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE LambdaCase #-}
 module Godot.Nativescript
   ( ClassName
   , GFunc
   , GdnativeHandle
   , NativeScript(..)
-  , Method
+  , ClassMethod
+  , ClassProperty
+  , ClassSignal
   , RPC(..)
   , Registerer(..)
   , PropertyAttributes(..)
@@ -41,7 +44,6 @@ module Godot.Nativescript
   , defaultExports
   , await
   , WrapperStablePtr(..)
-  , emptyObject
   , createMVarProperty
   )
 where
@@ -72,15 +74,14 @@ import qualified Foreign.Marshal as F
 import qualified Foreign.Marshal.Utils as F
 import qualified Foreign.C                     as Foreign
 
-import qualified Godot.Api                     as GApi
-import qualified Godot.Core.Object as GO
+import qualified Godot.Api                     as Api
 import qualified Data.Map.Strict as M
 import           Data.Coerce
-import qualified Godot.Core.NativeScript as GN
+import qualified Godot.Core.NativeScript as NativeScript
 import           Godot.Core.ClassDB
 import           Godot.Core.Engine
 import           Godot.Core.Node
-import           Godot.Core.Object
+import           Godot.Core.Object as Object
 import           Godot.Core.Reference
 import           Data.IORef
 import           Foreign.StablePtr
@@ -131,17 +132,21 @@ class (HasBaseClass cls, Typeable cls, Typeable (BaseClass cls), Object :< cls)
   classInit :: BaseClass cls -> IO cls
   className :: ClassName cls
   className = nameOf @cls
-  classMethods :: [Method cls]
-  classSignals :: [(Text, [SignalArgument])]
+  classMethods :: [ClassMethod cls]
+  classSignals :: [ClassSignal]
   classSignals = []
-  classProperties :: [(Text
-                     , PropertyAttributes
-                     , (Object -> cls -> GodotVariant -> IO ())
-                     , (Object -> cls -> IO GodotVariant))]
+  classProperties :: [ClassProperty cls]
   classProperties = []
   asObj :: cls -> Object
   asObj = upcast
 
+type ClassSignal = (Text, [SignalArgument])
+data ClassProperty cls = ClassProperty
+  { propertyName :: Text
+  , propertyAttrs :: PropertyAttributes
+  , propertySetter :: Object -> cls -> GodotVariant -> IO ()
+  , propertyGetter :: Object -> cls -> IO GodotVariant
+  }
 
 type ClassName a = Text
 nameOf :: forall a . Typeable a => ClassName a
@@ -154,13 +159,13 @@ nameOf = T.pack
 
 type GFunc cls = cls -> Vector GodotVariant -> IO GodotVariant
 
-data Method cls where
-  Method
+data ClassMethod cls where
+  ClassMethod
     :: { methodRPCMode :: RPC
        , methodName :: Text
        , methodFunc :: GFunc cls
        }
-    -> Method cls
+    -> ClassMethod cls
 
 
 data RPC
@@ -187,7 +192,7 @@ data instance Registerer 'GClass cls = NativeScript cls =>
 data instance Registerer 'GMethod cls = NativeScript cls =>
   RegMethod
     GdnativeHandle
-    (Method cls)
+    (ClassMethod cls)
 
 data instance Registerer 'GSignal cls = NativeScript cls =>
   RegSignal
@@ -197,10 +202,7 @@ data instance Registerer 'GSignal cls = NativeScript cls =>
 data instance Registerer 'GProperty cls = NativeScript cls =>
   RegProperty
     GdnativeHandle
-    (Text
-    , PropertyAttributes
-    , (Object -> cls -> GodotVariant -> IO ())
-    , (Object -> cls -> IO GodotVariant))
+    (ClassProperty cls)
 
 
 -- | Convenient way of registering a class with all its methods.
@@ -220,7 +222,7 @@ registerClass (RegClass desc constr) = do
   clsInit obj = tryObjectCast obj >>= \(Just a) -> constr (a :: BaseClass a)
   clsName = className @a
 
-  regMtd mtd@Method {..} = do
+  regMtd mtd@ClassMethod {..} = do
     registerMethod (RegMethod desc mtd :: Registerer 'GMethod a)
     putStrLn $ T.unpack $ T.unwords
       ["Registering method", methodName, "to class", clsName]
@@ -230,10 +232,10 @@ registerClass (RegClass desc constr) = do
     putStrLn $ T.unpack $ T.unwords
       ["Registering signal", signalName, "to class", clsName]
 
-  regProperty prp@(propertyName, _, _, _) = do
+  regProperty prp = do
     registerProperty (RegProperty desc prp :: Registerer 'GProperty a)
     putStrLn $ T.unpack $ T.unwords
-      ["Registering property", propertyName, "to class", clsName]
+      ["Registering property", propertyName prp, "to class", clsName]
 
   regClass pHandle base create destroy = do
     createFun <- mkInstanceCreateFunPtr
@@ -307,27 +309,23 @@ singletonTable = unsafePerformIO $ newMVar M.empty
 -- | Godot exposes some functionality through singletons. You'll often need to
 -- talk to the GodotInput singeton for example. Use this as 'getSingleton @GodotInput'.
 getSingleton
-  :: forall a . (Typeable a, AsVariant a, Object :< a, Coercible a (Ptr  ())) => IO (Maybe a)
+  :: forall a . (Typeable a, AsVariant a, Object :< a) => IO (Maybe a)
 getSingleton = do
   let name = unConvertClassName $ nameOf @a
   table <- readMVar singletonTable
   case M.lookup name table of
-    Just o -> pure $ Just $ coerce o
+    Just o -> tryCast o
     Nothing -> do
       ge <- getEngine
-      nameLL <- toLowLevel (convertClassName name)
-      o <- get_singleton ge nameLL
-      r <- tryCast o
-      case r of
-        Nothing -> pure ()
-        Just x -> modifyMVar_ singletonTable (\m -> pure (M.insert name o m))
-      pure r
+      o <- get_singleton ge =<< toLowLevel (convertClassName name)
+      modifyMVar_ singletonTable (\m -> pure (M.insert name o m))
+      tryCast o
 
-getEngine :: IO GApi.Engine
+getEngine :: IO Api.Engine
 getEngine =
   GNI.godot_global_get_singleton
     &   Foreign.withCString "Engine"
-    >>= \o -> tryCast o >>= \mGE -> case mGE of
+    >>= \o -> tryCast o >>= \case
           Just ge -> return ge
           Nothing ->
             (get_class o :: IO GodotString)
@@ -338,7 +336,7 @@ getEngine =
   
 tryObjectCast :: forall a . (Typeable a, AsVariant a) => Object -> IO (Maybe a)
 tryObjectCast obj = do
-  isCls <- GO.is_class obj =<< toLowLevel (nameOf @a)
+  isCls <- Object.is_class obj =<< toLowLevel (nameOf @a)
   if isCls
     then do
       asGVt <- toLowLevel $ toVariant obj :: IO GodotVariant
@@ -380,25 +378,25 @@ func
   => RPC
   -> Text
   -> (cls -> [GodotVariant] -> IO a)
-  -> Method cls
-func rpc mthdName fn = Method rpc mthdName
+  -> ClassMethod cls
+func rpc mthdName fn = ClassMethod rpc mthdName
   $ \self args -> toLowLevel . toVariant =<< fn self (Vec.toList args)
 
 -- | Quick shortcut to make a new local method with arguments passed as
 -- 'Variant's in a list.
 method :: (NativeScript cls, AsVariant a)
-       => Text -> (cls -> [GodotVariant] -> IO a) -> Method cls
+       => Text -> (cls -> [GodotVariant] -> IO a) -> ClassMethod cls
 method = func NoRPC
 
 -- | Quick shortcut to make a new local method with no argumnets.
 method0 :: (NativeScript cls, AsVariant a)
-       => Text -> (cls -> IO a) -> Method cls
+       => Text -> (cls -> IO a) -> ClassMethod cls
 method0 name fn = func NoRPC name (\s [] -> fn s)
 
 -- | Quick shortcut to make a new local method that takes 1 argument, 'Variant's
 -- are unwrapped into their types before being passed in.
 method1 :: (NativeScript cls, AsVariant a, AsVariant o1, Typeable o1)
-        => Text -> (cls -> o1 -> IO a) -> Method cls
+        => Text -> (cls -> o1 -> IO a) -> ClassMethod cls
 method1 name fn = func NoRPC name (\s [o1] -> do
                                       a1 <- fromGodotVariant o1
                                       fn s a1)
@@ -406,7 +404,7 @@ method1 name fn = func NoRPC name (\s [o1] -> do
 -- | Quick shortcut to make a new local method that takes 2 arguments, 'Variant's
 -- are unwrapped into their types before being passed in.
 method2 :: (NativeScript cls, AsVariant a, AsVariant o1, Typeable o1, AsVariant o2, Typeable o2)
-        => Text -> (cls -> o1 -> o2 -> IO a) -> Method cls
+        => Text -> (cls -> o1 -> o2 -> IO a) -> ClassMethod cls
 method2 name fn = func NoRPC name (\s [o1,o2] -> do
                                       a1 <- fromGodotVariant o1
                                       a2 <- fromGodotVariant o2
@@ -414,7 +412,7 @@ method2 name fn = func NoRPC name (\s [o1,o2] -> do
 
 
 registerMethod :: forall a . NativeScript a => Registerer 'GMethod a -> IO ()
-registerMethod (RegMethod desc Method {..}) = do
+registerMethod (RegMethod desc ClassMethod {..}) = do
   methodFun <-
     mkInstanceMethodFunPtr $ \outPtr _ins _ objPtr numArgs argsPtr -> do
       obj  <- deRefStablePtr $ castPtrToStablePtr objPtr
@@ -469,7 +467,7 @@ asPropertyAttributes PropertyAttributes {..} = do
     }
 
 registerProperty :: forall a . NativeScript a => Registerer 'GProperty a -> IO ()
-registerProperty (RegProperty desc (path, attr, setter, getter)) = do
+registerProperty (RegProperty desc (ClassProperty path attr setter getter)) = do
   setFun <- mkPropertySetFunPtr $ \ins _ objPtr valPtr -> do
     obj <- deRefStablePtr $ castPtrToStablePtr objPtr
     val <- newForeignPtr_ valPtr
@@ -496,21 +494,20 @@ registerProperty (RegProperty desc (path, attr, setter, getter)) = do
 createMVarProperty :: (Typeable v, AsVariant v) =>
      Text
      -> (t -> MVar v)
-     -> v
-     -> (Text
-       ,PropertyAttributes
-       ,Object -> t -> GodotVariant -> IO ()
-       ,Object -> t -> IO GodotVariant)
-createMVarProperty name fieldName propDefault =
-  (name,
-    PropertyAttributes
-    MethodRpcModeDisabled
-    (variantType propDefault)
-    PropertyHintNone
-    ""
-    godotPropertyUsageDefault
-    (toVariant propDefault),
-    (\_ c (var :: GodotVariant) -> do
+     -- | We typically can't do IO (for initialisation) when calling this, in
+     -- which case we need to annotate the type without providing a value.
+     -> Either VariantType v
+     -> ClassProperty t
+createMVarProperty name fieldName tyOrVal = ClassProperty
+  { propertyName = name
+  , propertyAttrs = PropertyAttributes
+      MethodRpcModeDisabled
+      (fst vTyVt)
+      PropertyHintNone
+      ""
+      godotPropertyUsageDefault
+      (snd vTyVt)
+  , propertySetter = \_ c (var :: GodotVariant) -> do
         variant <- fromLowLevel var
         -- TODO This is required to avoid memory corruption. Haskell cannot hold
         -- pointers to Godot objects unless the runtime already has a live
@@ -520,19 +517,31 @@ createMVarProperty name fieldName propDefault =
         -- more cases here, but a much better way would be to implement a Ref
         -- type to hold such objects. Coming soon to stores near you.
         case variant of
-          VariantObject o -> reference (coerce o :: GApi.Reference)
+          VariantObject o -> onRefObj reference o
           _ -> pure False
         obj <- fromGodotVariant var
-        o' <- swapMVar (fieldName c) obj
-        case toVariant o' of
-          VariantObject oldObj@(Object ptr) ->
-            unlessM (pure $ nullPtr == ptr) $
-              whenM (unreference (coerce oldObj :: GApi.Reference)) $
-                Godot.Core.Object.free oldObj
-          _ -> pure ()
-        pure ()),
-    (\_ c -> do
-        toLowLevel =<< toVariant <$> readMVar (fieldName c)))
+        let mvar = fieldName c
+        isEmpty <- isEmptyMVar mvar
+        if isEmpty
+          then putMVar mvar obj
+          else toVariant <$> swapMVar mvar obj >>= \case
+            VariantObject oldObj@(Object ptr) -> do
+              unreffed <- onRefObj unreference oldObj -- lazy evaluation ftw
+              when (nullPtr /= ptr && unreffed) $
+                Object.free oldObj
+            _ -> pure ()
+  , propertyGetter = \_ c -> toLowLevel . toVariant =<< readMVar (fieldName c)
+  }
+ where
+   onRefObj :: (Api.Reference -> IO a) -> Object -> IO a
+   onRefObj f o = tryObjectCast @Api.Reference o >>= \case
+      Just ref -> f ref
+      Nothing -> error "Variant object not a reference"
+   vTyVt :: (VariantType, Variant 'GodotTy)
+   vTyVt = case tyOrVal of
+     Left VariantTypeObject -> (VariantTypeObject, VariantObject (Object nullPtr))
+     Left vTy -> (vTy, VariantNil)
+     Right val -> (variantType val, toVariant val)
 
 data SignalArgument = SignalArgument
   { signalArgumentName :: !Text
@@ -617,30 +626,28 @@ new = do
 newNativeScript :: forall a. NativeScript a => IO (Maybe a)
 newNativeScript = do
   let name = nameOf @a
-  Just nativescript <- new @GApi.NativeScript
-  Just gdnlib <- tryCast @GApi.GDNativeLibrary =<< readIORef gdNativeLibraryRef
-  GN.set_library nativescript gdnlib
-  GN.set_class_name nativescript =<< toLowLevel name
-  no <- GN.new nativescript []
+  Just nativescript <- new @Api.NativeScript
+  Just gdnlib <- tryCast @Api.GDNativeLibrary =<< readIORef gdNativeLibraryRef
+  NativeScript.set_library nativescript gdnlib
+  NativeScript.set_class_name nativescript =<< toLowLevel name
+  no <- NativeScript.new nativescript []
   asNativeScript no
 
-emptyObject = Object nullPtr
-
-getNode :: forall b cls. (Object :< cls, GApi.Node :< cls,
-                    GApi.Node :< b, Typeable b, AsVariant b)
+getNode :: forall b cls. (Object :< cls, Api.Node :< cls,
+                    Api.Node :< b, Typeable b, AsVariant b)
         => cls -> Text -> IO b
 getNode self name = do
-  n :: GApi.Node <- get_node_or_null self =<< toLowLevel name
+  n :: Api.Node <- get_node_or_null self =<< toLowLevel name
   x <- tryCast n
   case x of
     Just r -> pure r
     _ -> error "Error, getNode failed"
 
-getNodeNativeScript :: forall b child. (NativeScript b, GApi.Node :< child, Object :< child)
+getNodeNativeScript :: forall b child. (NativeScript b, Api.Node :< child, Object :< child)
          => child -> Text -> IO b
 getNodeNativeScript self name = do
-  (GApi.Node n) <- get_node self =<< toLowLevel name
-  x <- asNativeScript n
+  n <- get_node self =<< toLowLevel name
+  x <- asNativeScript $ upcast @Object n
   case x of
     Just r -> pure r
     _ -> error "Error, getNode' failed"
