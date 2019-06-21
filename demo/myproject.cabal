@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.1.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 168260256409358b99da1f68a8e57bedf71d4b9500d60f8fa26edd8a40af252c
+-- hash: 5e2529a87e5611de5cb2eb9d08f5e46b4d9cbc039f18332b75ab8ff76837a832
 
 name:           myproject
 version:        0.0.0.0
@@ -25,10 +25,6 @@ foreign-library myproject
   other-modules: FLib
   hs-source-dirs: ffi/flib
   c-sources: ffi/cbits/flib.c
-  include-dirs:
-      /home/andrei/Dropbox/work/godot/godot/modules/gdnative/include/
-    , /home/andrei/Dropbox/work/godot/godot/
-    , /home/andrei/Dropbox/work/godot/godot/platform/x11/
   build-depends:
       base >= 4.12 && <5
     , godot-haskell

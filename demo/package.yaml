@@ -36,10 +36,6 @@ verbatim: |
     other-modules: FLib
     hs-source-dirs: ffi/flib
     c-sources: ffi/cbits/flib.c
-    include-dirs:
-        /home/andrei/Dropbox/work/godot/godot/modules/gdnative/include/
-      , /home/andrei/Dropbox/work/godot/godot/
-      , /home/andrei/Dropbox/work/godot/godot/platform/x11/
     build-depends:
         base >= 4.12 && <5
       , godot-haskell
