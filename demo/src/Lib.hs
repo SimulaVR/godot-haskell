@@ -75,20 +75,19 @@ instance NativeScript Main where
 
 game_over :: Main -> IO ()
 game_over self = do
-  getNode @Timer self "ScoreTimer" >>= Timer.stop
-  getNode @Timer self "MobTimer" >>= Timer.stop
-  _ <- show_game_over =<< getNodeNativeScript @HUD self "HUD"
-  pure ()
+  getNode @Timer           self "ScoreTimer" >>= Timer.stop
+  getNode @Timer           self "MobTimer" >>= Timer.stop
+  getNodeNativeScript @HUD self "HUD" >>= show_game_over & void
 
 new_game :: Main -> IO ()
 new_game self = do
   _        <- swapMVar (_mainScore self) 0
   position <- getNode @Position2D self "StartPosition" >>= get_position
-  join
-    $   call
+  call
     <$> getNodeNativeScript @Player self "Player"
     <*> toLowLevel "start"
     <*> pure [toVariant position]
+    &   join
   getNode @Timer self "StartTimer" >>= start `flip` (-1)
   hud <- getNodeNativeScript @HUD self "HUD"
   update_score hud 0
@@ -102,8 +101,10 @@ on_StartTimer_timeout self = do
 on_ScoreTimer_timeout :: Main -> IO ()
 on_ScoreTimer_timeout self = do
   modifyMVar_ (_mainScore self) (pure . (+) 1)
-  join $ update_score <$> getNodeNativeScript @HUD self "HUD" <*> readMVar
-    (_mainScore self)
+  update_score
+    <$> getNodeNativeScript @HUD self "HUD"
+    <*> readMVar (_mainScore self)
+    &   join
 
 on_MobTimer_timeout :: Main -> IO ()
 on_MobTimer_timeout self@(Main _ _ mobScene) = do
@@ -117,14 +118,14 @@ on_MobTimer_timeout self@(Main _ _ mobScene) = do
     >>= (asNativeScript . upcast)
     >>= maybe (error "Couldn't cast mob to NativeScript") pure
   add_child self (upcast mob) False
-  -- -- Set the mob's direction perpendicular to the path direction.
+  -- Set the mob's direction perpendicular to the path direction.
   direction <- get_rotation mobSpawnLoc <&> (+ pi / 2)
-  -- -- Set the mob's position to a random location.
-  get_position mobSpawnLoc >>= Node2D.set_position (upcast @Node2D mob)
-  -- -- Add some randomness to the direction.
+  -- Set the mob's position to a random location.
+  Node2D.set_position (upcast @Node2D mob) =<< get_position mobSpawnLoc
+  -- Add some randomness to the direction.
   direction' <- (direction +) <$> randomRIO ((-pi) / 4, pi / 4)
   set_rotation mob direction'
-  -- -- Set the velocity' (speed & direction).
+  -- Set the velocity' (speed & direction).
   liftM2 (,) (readMVar $ _mMinSpeed mob) (readMVar $ _mMaxSpeed mob)
     >>= randomRIO
     >>= (\x -> toLowLevel (V2 x 0))
@@ -135,28 +136,38 @@ on_MobTimer_timeout self@(Main _ _ mobScene) = do
 --- Player
 
 
-data Player = Player { _pBase :: Area2D, _pSpeed :: MVar Float }
+data Player = Player
+  { _pBase :: Area2D
+  , _pSpeed :: MVar Float
+  , _pScreenSize :: MVar (V2 Float)
+  }
 instance HasBaseClass Player where
   type BaseClass Player = Area2D
   super = _pBase
 instance NativeScript Player where
-  classInit base = Player base <$> newMVar 400
+  classInit base = Player base <$> newMVar 400 <*> newMVar zero
   classMethods =
     [ method0 "_ready" player_ready
     , method1 "_process" player_process
-    , method "_on_Player_body_entered" on_Player_body_entered
+    , method1 "_on_Player_body_entered" on_Player_body_entered
     , method1 "start" player_start
     ]
   classProperties = [createMVarProperty "speed" _pSpeed (Right 400)]
   classSignals = [signal "hit" []]
 
-player_ready self = hide self
+player_ready :: Player -> IO ()
+player_ready self = do
+  screenRect <- get_viewport_rect self >>= fromLowLevel
+  void $ swapMVar (_pScreenSize self) (screenRect ^. _y)
+  hide self
 
+player_start :: Player -> Vector2 -> IO ()
 player_start self pos = do
   set_position self pos
   CanvasItem.show self
   getNode @CollisionShape2D self "CollisionShape2D" >>= (`set_disabled` False)
 
+player_process :: Player -> Float -> IO ()
 player_process self delta = do
   animSprite              <- getNode @AnimatedSprite self "AnimatedSprite"
   screenSize              <- get_viewport_rect self >>= fromLowLevel <&> (^. _y)
@@ -184,19 +195,25 @@ player_process self delta = do
       if velocity' ^. _x /= 0
         then do
           set_animation animSprite =<< toLowLevel "right"
-          set_flip_v animSprite False
+          -- official demo sets flip_v to false but this is better
+          set_flip_v animSprite (velocity' ^. _y > 0)
           set_flip_h animSprite (velocity' ^. _x < 0)
         else when (velocity' ^. _y /= 0) $ do
           set_animation animSprite =<< toLowLevel "up"
           set_flip_v animSprite (velocity' ^. _y > 0)
     else AnimatedSprite.stop animSprite
 
-on_Player_body_entered self [body] = do
+on_Player_body_entered :: Player -> PhysicsBody2D -> IO GodotVariant
+on_Player_body_entered self _body = do
   hide self -- Player disappears after being hit.
-  _ <- (emit_signal self) `flip` [] =<< toLowLevel "hit"
+  void $ emit_signal self `flip` [] =<< toLowLevel "hit"
   getNode @CollisionShape2D self "CollisionShape2D" >>= \cSh -> do
     disable <- toLowLevel "set_disabled"
     call_deferred cSh disable [VariantBool True]
+
+
+--- Mob
+
 
 data Mob = Mob
   { _mBase :: RigidBody2D
@@ -220,6 +237,10 @@ instance NativeScript Mob where
     , method0 "_on_VisibilityNotifier2D_screen_exited" $ \self -> do
         queue_free self
     ]
+
+
+--- HUD
+
 
 data HUD = HUD { _hBase :: CanvasLayer }
 instance HasBaseClass HUD where
@@ -255,13 +276,15 @@ show_game_over self = do
 
 update_score :: HUD -> Int -> IO ()
 update_score self score = do
-  l <- getNode @Label self "ScoreLabel"
-  set_text l =<< toLowLevel (T.pack $ Prelude.show score)
+  set_text
+    <$> getNode @Label self "ScoreLabel"
+    <*> toLowLevel (T.pack $ Prelude.show score)
+    &   join
 
 _on_StartButton_pressed :: HUD -> IO GodotVariant
 _on_StartButton_pressed self = do
   getNode @Button self "StartButton" >>= CanvasItem.hide
-  (emit_signal self) `flip` [] =<< toLowLevel "start_game"
+  emit_signal self `flip` [] =<< toLowLevel "start_game"
 
 _on_MessageTimer_timeout :: HUD -> IO ()
 _on_MessageTimer_timeout self = do
