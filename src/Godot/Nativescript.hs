@@ -371,7 +371,7 @@ registerProperty pHandle path attr setter getter = do
       getFreeFun <- mkInstanceFreeFunPtr
         $ \_ -> freeHaskellFunPtr getFun >> freeHaskellFunPtr getFreeFun
   godotAttr <- asGodotPropertyAttributes attr
-  let clsName  = show $ typeRep $ Proxy @a
+  let clsName  = (T.unpack $ nameOf @a)
   withCString clsName $ \clsNamePtr ->
     withCString path $ \pathPtr -> godot_nativescript_register_property
       pHandle
@@ -424,7 +424,7 @@ signal sigName sigArgs = (sigName, uncurry toSigArg <$> sigArgs)
 registerSignal :: forall a . NativeScript a => Registerer 'GSig a -> IO ()
 registerSignal (RegSignal desc (signalName, signalArgs)) = do
   gdArgs <- mapM asGodotSignalArgument signalArgs
-  let clsName     = show $ typeRep $ Proxy @a
+  let clsName     = (T.unpack $ nameOf @a)
   let defaultArgs = []
   withArrayLen gdArgs $ \gdArgsLen gdArgsPtr ->
     withVariantArray' defaultArgs $ \(defArgsPtr, defArgsLen) ->
