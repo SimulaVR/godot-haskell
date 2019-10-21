@@ -165,15 +165,15 @@ registerClass (RegClass desc constr) = do
   clsName = className @a
 
   regMtd mtd@GodotMethod {..} = do
-    registerMethod (RegMethod desc mtd :: Registerer 'GMethod a)
     putStrLn $ T.unpack $ T.unwords
       ["Registering method", methodName, "to class", clsName]
+    registerMethod (RegMethod desc mtd :: Registerer 'GMethod a)
     return methodName
 
   regSignal sgn@(signalName, _) = do
-    registerSignal (RegSignal desc sgn :: Registerer 'GSig a)
     putStrLn $ T.unpack $ T.unwords
       ["Registering signal", signalName, "to class", clsName]
+    registerSignal (RegSignal desc sgn :: Registerer 'GSig a)
     return signalName
 
   regClass pHandle base create destroy = do
@@ -371,7 +371,8 @@ registerProperty pHandle path attr setter getter = do
       getFreeFun <- mkInstanceFreeFunPtr
         $ \_ -> freeHaskellFunPtr getFun >> freeHaskellFunPtr getFreeFun
   godotAttr <- asGodotPropertyAttributes attr
-  withCString (show $ Proxy @(BaseClass a)) $ \clsNamePtr ->
+  let clsName  = show $ typeRep $ Proxy @a
+  withCString clsName $ \clsNamePtr ->
     withCString path $ \pathPtr -> godot_nativescript_register_property
       pHandle
       clsNamePtr
@@ -423,7 +424,7 @@ signal sigName sigArgs = (sigName, uncurry toSigArg <$> sigArgs)
 registerSignal :: forall a . NativeScript a => Registerer 'GSig a -> IO ()
 registerSignal (RegSignal desc (signalName, signalArgs)) = do
   gdArgs <- mapM asGodotSignalArgument signalArgs
-  let clsName     = show $ Proxy @(BaseClass a)
+  let clsName     = show $ typeRep $ Proxy @a
   let defaultArgs = []
   withArrayLen gdArgs $ \gdArgsLen gdArgsPtr ->
     withVariantArray' defaultArgs $ \(defArgsPtr, defArgsLen) ->
