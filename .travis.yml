@@ -1,0 +1,23 @@
+# https://docs.haskellstack.org/en/stable/travis_ci/
+
+sudo: false
+dist: bionic
+language: generic
+addons:
+  apt:
+    update: true
+
+cache:
+  directories:
+  - $HOME/.stack
+  - $HOME/.stack-work
+
+before_install:
+  - mkdir -p ~/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
+  - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+
+install:
+  - git submodule update --init --recursive
+  - stack build
+  - stack test
