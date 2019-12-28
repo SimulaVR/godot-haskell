@@ -97,7 +97,7 @@ type IsTypeName = Identifier -> Bool
 --
 -- The 'MonadReader' with 'IsTypeName' is required for parsing C, see
 -- <http://en.wikipedia.org/wiki/The_lexer_hack>.
-type CParser m = (Monad m, Functor m, Applicative m, MonadPlus m, Parsing m, CharParsing m, TokenParsing m, LookAheadParsing m, MonadReader IsTypeName m)
+type CParser m = (Monad m, Functor m, Applicative m, MonadPlus m, Parsing m, CharParsing m, TokenParsing m, LookAheadParsing m, MonadReader IsTypeName m, MonadFail m)
 
 -- | Runs a @'CParser'@ using @parsec@.
 runCParser
