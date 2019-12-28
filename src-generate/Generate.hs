@@ -371,7 +371,12 @@ constructFunction isCore tyname idx entry = do
   let hsRets = case retMarshalTy of
         TupleT 0 -> hsOuts ^.. folded._2
         _ -> retMarshalTy : (hsOuts ^.. folded._2)
-  let hsTy = createFuncTyIO (foldl AppT (TupleT (length hsRets)) hsRets) (hsArgs ^.. folded._2)
+
+  let foldedRetTy = case hsRets of
+        [hsRet] -> hsRet
+        _ -> foldl AppT (TupleT (length hsRets)) hsRets
+
+  let hsTy = createFuncTyIO foldedRetTy (hsArgs ^.. folded._2)
 
   sig <- sigD fname (pure hsTy) -- the top-level sig
 
@@ -436,18 +441,21 @@ generateCall = go []
           
           os <- replicateM (length outm + 1) (newName "o")
           let bindOuts = zipWith (\o f -> bindS (varP o) f) os $ zipWith ($) (retm:outm) (r:ns)
-          let retOuts = [noBindS $ appE [|return|] $ tupE (map varE os)]
+          let retOuts = [noBindS $ appE [|return|] $ maybeTupE (map varE os)]
           doE $ bindCall ++ bindOuts ++ retOuts
         Nothing -> do
           let bindCall = [ noBindS func ]
           os <- replicateM (length outm) (newName "o")
           let bindOuts = zipWith (\o f -> bindS (varP o) f) os $ zipWith ($) outm ns
-          let retOuts = [noBindS $ appE [|return|] $ tupE (map varE os)]
+          let retOuts = [noBindS $ appE [|return|] $ maybeTupE (map varE os)]
           doE $ bindCall ++ bindOuts ++ retOuts
 
     go ns func ((inm, isOutArg):inms) outm maybeRetm = do
       y <- newName "y"
       appE inm . lamE [varP y] $ go (ns ++ [y | isOutArg]) (appE func (varE y)) inms outm maybeRetm
+
+    maybeTupE [x] = x
+    maybeTupE xs = tupE xs
 
 apisToHs :: S.GdnativeApis -> Q [Dec]
 apisToHs apis = do
