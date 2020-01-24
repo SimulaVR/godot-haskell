@@ -1,5 +1,7 @@
 # godot-haskell
 
+[![Build Status](https://travis-ci.org/SimulaVR/godot-haskell.svg?branch=master)](https://travis-ci.org/SimulaVR/godot-haskell)
+
 Haskell bindings for the Godot game engine.
 * Low-level stuff (GDNative) resides in Godot.Gdnative
 * Nativescript stuff (binding classes/methods/etc) is in Godot.Nativescript

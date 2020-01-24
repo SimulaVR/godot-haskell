@@ -223,16 +223,19 @@ registerClass (RegClass desc constr) = do
   clsName = className @a
 
   regMtd mtd@ClassMethod {..} = do
-    registerMethod (RegMethod desc mtd :: Registerer 'GMethod a)
     putStrLn $ T.unpack $ T.unwords
       ["Registering method", methodName, "to class", clsName]
+    registerMethod (RegMethod desc mtd :: Registerer 'GMethod a)
+    return methodName
 
   regSignal sgn@(signalName, _) = do
-    registerSignal (RegSignal desc sgn :: Registerer 'GSignal a)
     putStrLn $ T.unpack $ T.unwords
       ["Registering signal", signalName, "to class", clsName]
+    registerSignal (RegSignal desc sgn :: Registerer 'GSignal a)
+    return signalName
 
   regProperty prp = do
+    -- TODO fix registration like the others above
     registerProperty (RegProperty desc prp :: Registerer 'GProperty a)
     putStrLn $ T.unpack $ T.unwords
       ["Registering property", propertyName prp, "to class", clsName]
@@ -333,7 +336,7 @@ getEngine =
               >>= error
               .   ("Couldn't get Engine singleton :( got: " ++)
               .   T.unpack
-  
+
 tryObjectCast :: forall a . (Typeable a, AsVariant a) => Object -> IO (Maybe a)
 tryObjectCast obj = do
   isCls <- Object.is_class obj =<< toLowLevel (nameOf @a)
@@ -482,7 +485,8 @@ registerProperty (RegProperty desc (ClassProperty path attr setter getter)) = do
       getFreeFun <- mkInstanceFreeFunPtr
         $ \_ -> freeHaskellFunPtr getFun >> freeHaskellFunPtr getFreeFun
   godotAttr <- asPropertyAttributes attr
-  withCString (T.unpack $ nameOf @a) $ \clsNamePtr ->
+  let clsName  = (T.unpack $ nameOf @a)
+  withCString clsName $ \clsNamePtr ->
     withCString (T.unpack path) $ \pathPtr -> godot_nativescript_register_property
       desc
       clsNamePtr
@@ -491,13 +495,14 @@ registerProperty (RegProperty desc (ClassProperty path attr setter getter)) = do
       (PropertySetFunc setFun nullPtr setFreeFun)
       (PropertyGetFunc getFun nullPtr getFreeFun)
 
-createMVarProperty :: (Typeable v, AsVariant v) =>
-     Text
-     -> (t -> MVar v)
-     -- | We typically can't do IO (for initialisation) when calling this, in
-     -- which case we need to annotate the type without providing a value.
-     -> Either VariantType v
-     -> ClassProperty t
+createMVarProperty
+  :: (Typeable v, AsVariant v)
+  => Text
+  -> (t -> MVar v)
+  -- | We typically can't do IO (for initialisation) when calling this, in
+  -- which case we need to annotate the type without providing a value.
+  -> Either VariantType v
+  -> ClassProperty t
 createMVarProperty name fieldName tyOrVal = ClassProperty
   { propertyName = name
   , propertyAttrs = PropertyAttributes
@@ -586,7 +591,9 @@ signal sigName sigArgs = (sigName, uncurry toSigArg <$> sigArgs)
 registerSignal :: forall a . NativeScript a => Registerer 'GSignal a -> IO ()
 registerSignal (RegSignal desc (signalName, signalArgs)) = do
   gdArgs <- mapM asSignalArgument signalArgs
-  let defaultArgs = []
+  let
+    clsName     = (T.unpack $ nameOf @a)
+    defaultArgs = []
   withArrayLen gdArgs $ \gdArgsLen gdArgsPtr ->
     withVariantArray' defaultArgs $ \(defArgsPtr, defArgsLen) ->
       withCString (T.unpack $ nameOf @a) $ \clsNamePtr -> do
