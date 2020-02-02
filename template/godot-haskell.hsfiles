@@ -29,7 +29,7 @@ packages:
 
 extra-deps:
 - git: https://github.com/SimulaVR/godot-haskell
-  commit: b423d4f2fa5a6a3dcfffb82bb36be571adb29d34 # godot-haskell rev
+  commit: ee7abbe442275843a106a3e1fd7d4da7ad5b941f # godot-haskell rev
 
 require-stack-version: ">=1.8"
 
@@ -110,9 +110,9 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "SimulaVR";
     repo = "godot-haskell";
-    rev = "b423d4f2fa5a6a3dcfffb82bb36be571adb29d34"; # godot-haskell rev
+    rev = "ee7abbe442275843a106a3e1fd7d4da7ad5b941f"; # godot-haskell rev
     # Use nix-prefetch-git to get the hash
-    sha256 = "0jh2j5rr90dqdxvcipygwnhhj7j2dj4zvm6gbdpg106ll60pyqrp";
+    sha256 = "1zdwxcxzqrb0lxm3qs3xdrlsfclinbz8kqhfh86kf5m65s1k3kxf";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
