@@ -1,10 +1,11 @@
 {}:
+  # nixpkgs master 2020-02-02
+let hostPkgs = import <nixpkgs> {};
+    pinnedVersion = hostPkgs.lib.importJSON ./nixpkgs-version.json;
+    pinnedPkgs = hostPkgs.fetchFromGitHub {
+        owner = "NixOS";
+        repo = "nixpkgs-channels";
+        inherit (pinnedVersion) rev sha256;
+    };
 
-let
-  # 19.03-beta (25 feb)
-  rev = "0c0954781e257b8b0dc49341795a2fe7d96945a3";
-  pkgs = import (builtins.fetchTarball {
-      url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
-    }) {};
-in
-  pkgs
+in import pinnedPkgs {}
