@@ -29,7 +29,7 @@ packages:
 
 extra-deps:
 - git: https://github.com/SimulaVR/godot-haskell
-  commit: 0eabdf13d5b6339696ed50a3c10b26e9ff2cbc2d # godot-haskell rev
+  commit: ee7abbe442275843a106a3e1fd7d4da7ad5b941f # godot-haskell rev
 
 require-stack-version: ">=1.8"
 
@@ -110,9 +110,9 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "SimulaVR";
     repo = "godot-haskell";
-    rev = "0eabdf13d5b6339696ed50a3c10b26e9ff2cbc2d"; # godot-haskell rev
+    rev = "ee7abbe442275843a106a3e1fd7d4da7ad5b941f"; # godot-haskell rev
     # Use nix-prefetch-git to get the hash
-    sha256 = "0wjnmhr2g9l8r0fhb2kvmnxdqqjy7r0kmlvy4ka0mcly8wvj18y0";
+    sha256 = "1zdwxcxzqrb0lxm3qs3xdrlsfclinbz8kqhfh86kf5m65s1k3kxf";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
@@ -283,7 +283,7 @@ foreign export ccall godot_gdnative_terminate :: FFI.GodotGdnativeTerminateOptio
 
 static void flib_init() __attribute__((constructor));
 static void flib_init() {
-  static char *argv[] = { "libGodotHaskellPlugin.so", 0 }, **argv_ = argv;
+  static char *argv[] = { "lib{{name}}", 0 }, **argv_ = argv;
   static int argc = 1;
   hs_init(&argc, &argv_);
 }
@@ -338,9 +338,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "Main",
+"language": "NativeScript",
+"path": "res://Main.gdns"
+} ]
 _global_script_class_icons={
-
+"Main": ""
 }
 
 [application]
@@ -372,7 +377,7 @@ script = ExtResource( 1 )
 
 class_name = "Main"
 library = ExtResource( 1 )
-_sections_unfolded = [ "Script Class", "library" ]
+script_class_name = "Main"
 
 
 {-# START_FILE game/lib/lib{{name}}.gdnlib #-}
@@ -386,16 +391,26 @@ reloadable=false
 [entry]
 
 X11.64="res://lib/lib{{name}}.so"
+OSX.64="res://lib/lib{{name}}.dylib"
 
 
 {-# START_FILE Makefile #-}
 NAME = {{name}}
-STACKLIBFILE = $(shell stack path --local-install-root)/lib/lib$(NAME).so
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+    LIBNAME = lib$(NAME).so
+endif
+ifeq ($(UNAME_S),Darwin)
+    LIBNAME = lib$(NAME).dylib
+endif
+
+STACKLIBFILE = $(shell stack path --local-install-root)/lib/$(LIBNAME)
 GODOTPROJECT = $(shell stack path --project-root)/game
 all: stack
 nix:
 	nix-build shell.nix
-	cp result/lib/ghc-*/lib$(NAME).so $(GODOTPROJECT)/lib
+	cp result/lib/ghc-*/$(LIBNAME) $(GODOTPROJECT)/lib
 stack:
 	stack clean $(NAME)
 	stack build
@@ -403,7 +418,7 @@ stack:
 stack-nix:
 	stack --nix clean $(NAME)
 	stack --nix build
-	cp $(shell stack --nix path --local-install-root)/lib/lib$(NAME).so $(GODOTPROJECT)/lib
+	cp $(shell stack --nix path --local-install-root)/lib/$(LIBNAME) $(GODOTPROJECT)/lib
 stack-run:
 	nix-build shell.nix
 	cp $(STACKLIBFILE) $(GODOTPROJECT)/lib

@@ -65,25 +65,39 @@ module Types.Internal
 
     -- * YACC grammar
     -- $yacc
-
-  ) where
+  )
+where
 
 import           Control.Applicative
-import           Control.Monad (msum, void, MonadPlus, unless, when)
-import           Control.Monad.Reader (MonadReader, ask, runReaderT, ReaderT)
-import           Data.Functor.Identity (Identity)
-import qualified Data.HashSet as HashSet
-import           Data.Monoid ((<>))
-import           Data.String (IsString(..))
-import           Data.Typeable (Typeable)
-import qualified Text.Parsec as Parsec
+import           Control.Monad                            ( msum
+                                                          , void
+                                                          , MonadPlus
+                                                          , unless
+                                                          , when
+                                                          )
+import           Control.Monad.Reader                     ( MonadReader
+                                                          , ask
+                                                          , runReaderT
+                                                          , ReaderT
+                                                          )
+import           Control.Monad.Fail                       ( MonadFail )
+import           Data.Functor.Identity                    ( Identity )
+import qualified Data.HashSet                  as HashSet
+import           Data.Monoid                              ( (<>) )
+import           Data.String                              ( IsString(..) )
+import           Data.Typeable                            ( Typeable )
+import qualified Text.Parsec                   as Parsec
 import           Text.Parser.Char
 import           Text.Parser.Combinators
 import           Text.Parser.LookAhead
 import           Text.Parser.Token
-import qualified Text.Parser.Token.Highlight as Highlight
-import           Text.PrettyPrint.ANSI.Leijen (Pretty(..), (<+>), Doc, hsep)
-import qualified Text.PrettyPrint.ANSI.Leijen as PP
+import qualified Text.Parser.Token.Highlight   as Highlight
+import           Text.PrettyPrint.ANSI.Leijen             ( Pretty(..)
+                                                          , (<+>)
+                                                          , Doc
+                                                          , hsep
+                                                          )
+import qualified Text.PrettyPrint.ANSI.Leijen  as PP
 
 ------------------------------------------------------------------------
 -- Parser
@@ -97,7 +111,18 @@ type IsTypeName = Identifier -> Bool
 --
 -- The 'MonadReader' with 'IsTypeName' is required for parsing C, see
 -- <http://en.wikipedia.org/wiki/The_lexer_hack>.
-type CParser m = (Monad m, Functor m, Applicative m, MonadPlus m, Parsing m, CharParsing m, TokenParsing m, LookAheadParsing m, MonadReader IsTypeName m, MonadFail m)
+type CParser m
+  = ( Monad m
+    , Functor m
+    , Applicative m
+    , MonadPlus m
+    , Parsing m
+    , CharParsing m
+    , TokenParsing m
+    , LookAheadParsing m
+    , MonadReader IsTypeName m
+    , MonadFail m
+    )
 
 -- | Runs a @'CParser'@ using @parsec@.
 runCParser
@@ -126,8 +151,8 @@ quickCParser
   -- valid argument.
   -> a
 quickCParser isTypeName s p = case runCParser isTypeName "quickCParser" s p of
-  Left err -> error $ "quickCParser: " ++ show err
-  Right x -> x
+  Left  err -> error $ "quickCParser: " ++ show err
+  Right x   -> x
 
 -- | Like 'quickCParser', but uses @'const' 'False'@ as 'IsTypeName'.
 quickCParser_
@@ -145,31 +170,55 @@ newtype Identifier = Identifier {unIdentifier :: String}
 instance IsString Identifier where
   fromString s =
     case runCParser (const False) "fromString" s (identifier_no_lex <* eof) of
-      Left _err -> error $ "Identifier fromString: invalid string " ++ show s
-      Right x -> x
+      Left  _err -> error $ "Identifier fromString: invalid string " ++ show s
+      Right x    -> x
 
 identLetter :: CParser m => m Char
-identLetter = oneOf $ ['a'..'z'] ++ ['A'..'Z'] ++ ['_']
+identLetter = oneOf $ ['a' .. 'z'] ++ ['A' .. 'Z'] ++ ['_']
 
 reservedWords :: HashSet.HashSet String
 reservedWords = HashSet.fromList
-  [ "auto", "else", "long", "switch"
-  , "break", "enum", "register", "typedef"
-  , "case", "extern", "return", "union"
-  , "char", "float", "short", "unsigned"
-  , "const", "for", "signed", "void"
-  , "continue", "goto", "sizeof", "volatile"
-  , "default", "if", "static", "while"
-  , "do", "int", "struct", "double"
+  [ "auto"
+  , "else"
+  , "long"
+  , "switch"
+  , "break"
+  , "enum"
+  , "register"
+  , "typedef"
+  , "case"
+  , "extern"
+  , "return"
+  , "union"
+  , "char"
+  , "float"
+  , "short"
+  , "unsigned"
+  , "const"
+  , "for"
+  , "signed"
+  , "void"
+  , "continue"
+  , "goto"
+  , "sizeof"
+  , "volatile"
+  , "default"
+  , "if"
+  , "static"
+  , "while"
+  , "do"
+  , "int"
+  , "struct"
+  , "double"
   ]
 
 identStyle :: CParser m => IdentifierStyle m
 identStyle = IdentifierStyle
-  { _styleName = "C identifier"
-  , _styleStart = identLetter
-  , _styleLetter = identLetter <|> digit
-  , _styleReserved = reservedWords
-  , _styleHighlight = Highlight.Identifier
+  { _styleName              = "C identifier"
+  , _styleStart             = identLetter
+  , _styleLetter            = identLetter <|> digit
+  , _styleReserved          = reservedWords
+  , _styleHighlight         = Highlight.Identifier
   , _styleReservedHighlight = Highlight.ReservedIdentifier
   }
 
@@ -180,7 +229,7 @@ data DeclarationSpecifier
   | FunctionSpecifier FunctionSpecifier
   deriving (Typeable, Eq, Show, Ord)
 
-declaration_specifiers :: forall m. CParser m => m [DeclarationSpecifier]
+declaration_specifiers :: forall m . CParser m => m [DeclarationSpecifier]
 declaration_specifiers = many1 $ msum
   [ StorageClassSpecifier <$> storage_class_specifier
   , TypeSpecifier <$> type_specifier
@@ -238,21 +287,25 @@ type_specifier = msum
 
 identifier :: CParser m => m Identifier
 identifier =
-  try (do s <- ident identStyle
-          isTypeName <- ask
-          when (isTypeName s) $
-            fail "expecting identifier, got type name"
-          return s)
-  <?> "identifier"
+  try
+      (do
+        s          <- ident identStyle
+        isTypeName <- ask
+        when (isTypeName s) $ fail "expecting identifier, got type name"
+        return s
+      )
+    <?> "identifier"
 
 type_name :: CParser m => m Identifier
 type_name =
-  try (do s <- ident identStyle
-          isTypeName <- ask
-          unless (isTypeName s) $
-            fail "expecting type name, got identifier"
-          return s)
-  <?> "type name"
+  try
+      (do
+        s          <- ident identStyle
+        isTypeName <- ask
+        unless (isTypeName s) $ fail "expecting type name, got identifier"
+        return s
+      )
+    <?> "type name"
 
 data TypeQualifier
   = CONST
@@ -272,9 +325,7 @@ data FunctionSpecifier
   deriving (Typeable, Eq, Show, Ord)
 
 function_specifier :: CParser m => m FunctionSpecifier
-function_specifier = msum
-  [ INLINE <$ reserve identStyle "inline"
-  ]
+function_specifier = msum [INLINE <$ reserve identStyle "inline"]
 
 data Declarator = Declarator
   { declaratorPointers :: [Pointer]
@@ -282,7 +333,8 @@ data Declarator = Declarator
   } deriving (Typeable, Eq, Show, Ord)
 
 declarator :: CParser m => m Declarator
-declarator = (Declarator <$> many pointer <*> direct_declarator) <?> "declarator"
+declarator =
+  (Declarator <$> many pointer <*> direct_declarator) <?> "declarator"
 
 data DirectDeclarator
   = DeclaratorRoot Identifier
@@ -296,10 +348,8 @@ data ArrayOrProto
   deriving (Typeable, Eq, Show, Ord)
 
 array_or_proto :: CParser m => m ArrayOrProto
-array_or_proto = msum
-  [ Array <$> brackets array_type
-  , Proto <$> parens parameter_list
-  ]
+array_or_proto =
+  msum [Array <$> brackets array_type, Proto <$> parens parameter_list]
 
 -- TODO handle more stuff in array brackets
 data ArrayType
@@ -319,12 +369,12 @@ array_type = msum
 
 direct_declarator :: CParser m => m DirectDeclarator
 direct_declarator =
-  (do ddecltor <- msum
-        [ DeclaratorRoot <$> identifier
-        , DeclaratorParens <$> parens declarator
-        ]
-      aops <- many array_or_proto
-      return $ foldl ArrayOrProto ddecltor aops)
+  (do
+    ddecltor <- msum
+      [DeclaratorRoot <$> identifier, DeclaratorParens <$> parens declarator]
+    aops <- many array_or_proto
+    return $ foldl ArrayOrProto ddecltor aops
+  )
 
 data Pointer
   = Pointer [TypeQualifier]
@@ -336,8 +386,7 @@ pointer = do
   Pointer <$> many type_qualifier
 
 parameter_list :: CParser m => m [ParameterDeclaration]
-parameter_list =
-  sepBy parameter_declaration $ symbolic ','
+parameter_list = sepBy parameter_declaration $ symbolic ','
 
 data ParameterDeclaration = ParameterDeclaration
   { parameterDeclarationSpecifiers :: [DeclarationSpecifier]
@@ -346,14 +395,11 @@ data ParameterDeclaration = ParameterDeclaration
 
 parameter_declaration :: CParser m => m ParameterDeclaration
 parameter_declaration =
-  ParameterDeclaration
-    <$> declaration_specifiers
-    <*> mbabstract
-  where
-   mbabstract =
-     Left <$> try declarator <|>
-     Right <$> try abstract_declarator <|>
-     return (Right (AbstractDeclarator [] Nothing))
+  ParameterDeclaration <$> declaration_specifiers <*> mbabstract
+ where
+  mbabstract =
+    Left <$> try declarator <|> Right <$> try abstract_declarator <|> return
+      (Right (AbstractDeclarator [] Nothing))
 
 data AbstractDeclarator = AbstractDeclarator
   { abstractDeclaratorPointers :: [Pointer]
@@ -377,23 +423,30 @@ data DirectAbstractDeclarator
 
 direct_abstract_declarator :: CParser m => m DirectAbstractDeclarator
 direct_abstract_declarator =
-  (do ddecltor <- msum
-        [ try (ArrayOrProtoHere <$> array_or_proto)
-        , AbstractDeclaratorParens <$> parens abstract_declarator
-        ] <?> "array, prototype, or parenthesised abstract declarator"
-      aops <- many array_or_proto
-      return $ foldl ArrayOrProtoThere ddecltor aops)
+  (do
+    ddecltor <-
+      msum
+          [ try (ArrayOrProtoHere <$> array_or_proto)
+          , AbstractDeclaratorParens <$> parens abstract_declarator
+          ]
+        <?> "array, prototype, or parenthesised abstract declarator"
+    aops <- many array_or_proto
+    return $ foldl ArrayOrProtoThere ddecltor aops
+  )
 
 -- | This parser parses an 'Id' and nothing else -- it does not consume
 -- trailing spaces and the like.
 identifier_no_lex :: CParser m => m Identifier
 identifier_no_lex =
-  try (do s <- Identifier <$> ((:) <$> identLetter <*> many (identLetter <|> digit))
-          isTypeName <- ask
-          when (isTypeName s) $
-            fail "expecting identifier, got type name"
-          return s)
-  <?> "identifier"
+  try
+      (do
+        s <-
+          Identifier <$> ((:) <$> identLetter <*> many (identLetter <|> digit))
+        isTypeName <- ask
+        when (isTypeName s) $ fail "expecting identifier, got type name"
+        return s
+      )
+    <?> "identifier"
 
 ------------------------------------------------------------------------
 -- Pretty printing
@@ -404,36 +457,36 @@ instance Pretty Identifier where
 instance Pretty DeclarationSpecifier where
   pretty dspec = case dspec of
     StorageClassSpecifier x -> pretty x
-    TypeSpecifier x -> pretty x
-    TypeQualifier x -> pretty x
-    FunctionSpecifier x -> pretty x
+    TypeSpecifier         x -> pretty x
+    TypeQualifier         x -> pretty x
+    FunctionSpecifier     x -> pretty x
 
 instance Pretty StorageClassSpecifier where
   pretty storage = case storage of
-    TYPEDEF -> "typedef"
-    EXTERN -> "extern"
-    STATIC -> "static"
-    AUTO -> "auto"
+    TYPEDEF  -> "typedef"
+    EXTERN   -> "extern"
+    STATIC   -> "static"
+    AUTO     -> "auto"
     REGISTER -> "register"
 
 instance Pretty TypeSpecifier where
   pretty tySpec = case tySpec of
-   VOID -> "void"
-   CHAR -> "char"
-   SHORT -> "short"
-   INT -> "int"
-   LONG -> "long"
-   FLOAT -> "float"
-   DOUBLE -> "double"
-   SIGNED -> "signed"
-   UNSIGNED -> "unsigned"
-   Struct x -> "struct" <+> pretty x
-   Enum x -> "enum" <+> pretty x
-   TypeName x -> pretty x
+    VOID       -> "void"
+    CHAR       -> "char"
+    SHORT      -> "short"
+    INT        -> "int"
+    LONG       -> "long"
+    FLOAT      -> "float"
+    DOUBLE     -> "double"
+    SIGNED     -> "signed"
+    UNSIGNED   -> "unsigned"
+    Struct   x -> "struct" <+> pretty x
+    Enum     x -> "enum" <+> pretty x
+    TypeName x -> pretty x
 
 instance Pretty TypeQualifier where
   pretty tyQual = case tyQual of
-    CONST -> "const"
+    CONST    -> "const"
     RESTRICT -> "restrict"
     VOLATILE -> "volatile"
 
@@ -443,11 +496,11 @@ instance Pretty FunctionSpecifier where
 
 instance Pretty Declarator where
   pretty (Declarator ptrs ddecltor) = case ptrs of
-    [] -> pretty ddecltor
-    _:_ -> prettyPointers ptrs <+> pretty ddecltor
+    []    -> pretty ddecltor
+    _ : _ -> prettyPointers ptrs <+> pretty ddecltor
 
 prettyPointers :: [Pointer] -> Doc
-prettyPointers [] = ""
+prettyPointers []       = ""
 prettyPointers (x : xs) = pretty x <> prettyPointers xs
 
 instance Pretty Pointer where
@@ -455,8 +508,8 @@ instance Pretty Pointer where
 
 instance Pretty DirectDeclarator where
   pretty decltor = case decltor of
-    DeclaratorRoot x -> pretty x
-    DeclaratorParens x -> "(" <> pretty x <> ")"
+    DeclaratorRoot   x         -> pretty x
+    DeclaratorParens x         -> "(" <> pretty x <> ")"
     ArrayOrProto ddecltor aorp -> pretty ddecltor <> pretty aorp
 
 instance Pretty ArrayOrProto where
@@ -466,36 +519,36 @@ instance Pretty ArrayOrProto where
 
 prettyParams :: (Pretty a) => [a] -> Doc
 prettyParams xs = case xs of
-  [] -> ""
-  [x] -> pretty x
-  x : xs'@(_:_) -> pretty x <> "," <+> prettyParams xs'
+  []              -> ""
+  [ x ]           -> pretty x
+  x : xs'@(_ : _) -> pretty x <> "," <+> prettyParams xs'
 
 instance Pretty ArrayType where
   pretty at = case at of
-    VariablySized -> "*"
-    SizedByInteger n -> pretty n
+    VariablySized       -> "*"
+    SizedByInteger    n -> pretty n
     SizedByIdentifier s -> pretty s
-    Unsized -> ""
+    Unsized             -> ""
 
 instance Pretty ParameterDeclaration where
   pretty (ParameterDeclaration declSpecs decltor) = case declSpecs of
-    [] -> decltorDoc
-    _:_ -> hsep (map pretty declSpecs) <+> decltorDoc
-    where
-      decltorDoc = case decltor of
-        Left x -> pretty x
-        Right x -> pretty x
+    []    -> decltorDoc
+    _ : _ -> hsep (map pretty declSpecs) <+> decltorDoc
+   where
+    decltorDoc = case decltor of
+      Left  x -> pretty x
+      Right x -> pretty x
 
 instance Pretty AbstractDeclarator where
   pretty (AbstractDeclarator ptrs mbDecltor) = case (ptrs, mbDecltor) of
-    (_, Nothing) -> prettyPointers ptrs
-    ([], Just x) -> pretty x
-    (_:_, Just x) -> prettyPointers ptrs <+> pretty x
+    (_    , Nothing) -> prettyPointers ptrs
+    ([]   , Just x ) -> pretty x
+    (_ : _, Just x ) -> prettyPointers ptrs <+> pretty x
 
 instance Pretty DirectAbstractDeclarator where
   pretty ddecltor = case ddecltor of
-    AbstractDeclaratorParens x -> "(" <> pretty x <> ")"
-    ArrayOrProtoHere aop -> pretty aop
+    AbstractDeclaratorParens x      -> "(" <> pretty x <> ")"
+    ArrayOrProtoHere         aop    -> pretty aop
     ArrayOrProtoThere ddecltor' aop -> pretty ddecltor' <> pretty aop
 
 ------------------------------------------------------------------------

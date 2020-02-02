@@ -6,5 +6,5 @@
 
 class_name = "Main"
 library = ExtResource( 1 )
-_sections_unfolded = [ "Script Class", "library" ]
+script_class_name = "Main"
 
