@@ -1,5 +1,4 @@
 {}:
-  # nixpkgs master 2020-02-02
 let hostPkgs = import <nixpkgs> {};
     pinnedVersion = hostPkgs.lib.importJSON ./nixpkgs-version.json;
     pinnedPkgs = hostPkgs.fetchFromGitHub {
