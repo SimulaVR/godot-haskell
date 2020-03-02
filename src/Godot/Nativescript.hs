@@ -238,8 +238,13 @@ tryObjectCast obj = do
     else return Nothing
 
 
-asNativeScript :: forall a . NativeScript a => GodotObject -> IO (Maybe a)
-asNativeScript obj = do
+asNativeScript
+  :: forall b a
+   . (Typeable a, GodotObject :< a, a :< b, NativeScript b)
+  => a
+  -> IO (Maybe b)
+asNativeScript cls = do
+  let obj = safeCast @GodotObject cls
   tyPtr <- godot_nativescript_get_type_tag obj
   ttags <- atomically $ readTVar typeTags
   if tyPtr == nullPtr || tyPtr `S.notMember` ttags
