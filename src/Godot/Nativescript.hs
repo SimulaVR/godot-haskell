@@ -217,7 +217,10 @@ typeTags = unsafePerformIO $ newTVarIO mempty
 
 
 tryCast
-  :: (GodotObject :< a, a :< b, Typeable b, AsVariant b) => a -> IO (Maybe b)
+  :: forall b a
+   . (GodotObject :< a, a :< b, Typeable b, AsVariant b)
+  => a
+  -> IO (Maybe b)
 tryCast = tryObjectCast . safeCast
 
 -- unsafeCast :: (GodotObject :< a, a :< b, Typeable b, AsVariant b) => a -> b
