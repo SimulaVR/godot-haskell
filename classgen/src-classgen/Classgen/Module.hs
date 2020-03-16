@@ -59,7 +59,7 @@ resolveMethods = do
       let methodName = T.unpack method
           methodNameVar = HS.Var () $ HS.UnQual () $ HS.Ident () methodName
           methodNamePromoted = HS.TyPromoted () $ HS.PromotedString () methodName methodName
-          methodCtx = HS.CxSingle () $ HS.ClassA () (HS.UnQual () $ HS.Ident () "Method")
+          methodCtx = HS.CxSingle () $ HS.TypeA () $ foldl (HS.TyApp ()) (HS.TyCon () $ HS.UnQual () $ HS.Ident () "Method")
            [ methodNamePromoted
            , [ty|cls|]
            , [ty|sig|] ]
@@ -141,7 +141,7 @@ mkConstants cls = concatMap mkConstant (HM.toList $ cls ^. constants)
   where
     mkConstant (cname, cval) 
       = let constName = HS.Ident () $ T.unpack cname
-        in [ HS.PatSynSig ()  [constName] Nothing Nothing Nothing intTy
+        in [ HS.PatSynSig ()  [constName] Nothing Nothing Nothing Nothing intTy
            , HS.PatSyn () (HS.PVar () constName) (HS.intP $ fromIntegral cval) HS.ImplicitBidirectional
            ]
 

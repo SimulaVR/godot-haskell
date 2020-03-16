@@ -10,10 +10,8 @@
         }:
         mkDerivation {
           pname = "haskell-src-exts";
-          version = "1.20.3";
-          sha256 = "433e68a731fb6a1435e86d3eb3b2878db9c5d51dc1f7499d85bbf5ac3ed1e4a8";
-          revision = "1";
-          editedCabalFile = "1v42lbm80vnfn5xz12l97dy4wmf1yjxzbq9x0hna81y9pqxm5bl3";
+          version = "1.23.0";
+          sha256 = "09048bhv7ajfsnjlzaz445yb65n2pc4l3yn7nmmrnkdy1f0gn2cm";
           libraryHaskellDepends = [ array base ghc-prim pretty ];
           libraryToolDepends = [ happy ];
           testHaskellDepends = [
@@ -21,10 +19,10 @@
             tasty-golden tasty-smallcheck
           ];
           doCheck = false;
-          homepage = "https://github.com/haskell-suite/haskell-src-exts";
           description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";
           license = stdenv.lib.licenses.bsd3;
-          }) {});
+          hydraPlatforms = stdenv.lib.platforms.none;
+       }) {});
 
       haskell-src-exts-qq = haskellPackages.callPackage (
         { mkDerivation, base, hspec, stdenv, syb, template-haskell
@@ -53,20 +51,16 @@
         }:
         mkDerivation {
           pname = "haskell-src-meta";
-          version = "0.8.0.3";
-          sha256 = "8473e3555080860c2043581b398dbab67319584a568463b074a092fd4d095822";
-          revision = "2";
-          editedCabalFile = "0dp5v0yd0wgijzaggr22glgjswpa65hy84h8awdzd9d78g2fjz6c";
+          version = "0.8.5";
+          sha256 = "1csqp3n7330rhia9msyw34z7qwwj64gdy5qlv8w4jbm49dap24ik";
+          revision = "1";
+          editedCabalFile = "00znr8mrlbyn0n1bw4c82rv82pq5ngkk7kw9cgk13pghf93hwwv7";
           libraryHaskellDepends = [
             base haskell-src-exts-custom pretty syb template-haskell th-orphans
           ];
-          testHaskellDepends = [
-            base haskell-src-exts-custom HUnit pretty template-haskell test-framework
-            test-framework-hunit
-          ];
           description = "Parse source to template-haskell abstract syntax";
           license = stdenv.lib.licenses.bsd3;
-          }) {});
+        }) {});
 in 
 mkDerivation {
   pname = "godot-haskell-classgen";
