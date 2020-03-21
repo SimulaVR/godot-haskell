@@ -1,10 +1,10 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.31.0.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8e5ea1241407dcb469d347c25c9d685be871143f2e16518eb3bb0db56a3368ac
+-- hash: 6d95794719295589c5381d1a7340fecba74c15e8a29ce07e11c9dffd92ccd066
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -46,6 +46,7 @@ extra-source-files:
     godot_headers/gdnative_api_struct.gen.h
     godot_headers/nativescript/godot_nativescript.h
     godot_headers/net/godot_net.h
+    godot_headers/net/godot_webrtc.h
     godot_headers/pluginscript/godot_pluginscript.h
     godot_headers/videodecoder/godot_videodecoder.h
     godot_headers/api.json

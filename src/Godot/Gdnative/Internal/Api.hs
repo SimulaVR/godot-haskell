@@ -21,6 +21,9 @@ godotGdnativeCoreApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnat
 godotGdnativeCore11ApiStruct :: GodotGdnativeCore11ApiStruct
 godotGdnativeCore11ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCore11ApiStructRef
 
+godotGdnativeCore12ApiStruct :: GodotGdnativeCore12ApiStruct
+godotGdnativeCore12ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeCore12ApiStructRef
+
 godotGdnativeExtNativescriptApiStruct :: GodotGdnativeExtNativescriptApiStruct
 godotGdnativeExtNativescriptApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNativescriptApiStructRef
 
@@ -38,6 +41,9 @@ godotGdnativeExtVideodecoderApiStruct = accursedUnutterablePerformIO $ readIORef
 
 godotGdnativeExtNetApiStruct :: GodotGdnativeExtNetApiStruct
 godotGdnativeExtNetApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNetApiStructRef
+
+godotGdnativeExtNet32ApiStruct :: GodotGdnativeExtNet32ApiStruct
+godotGdnativeExtNet32ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNet32ApiStructRef
 
 
 $(do

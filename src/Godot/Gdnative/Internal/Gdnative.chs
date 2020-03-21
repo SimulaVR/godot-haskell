@@ -290,6 +290,10 @@ deriving newtype instance Storable GodotGdnativeCoreApiStruct
 deriving newtype instance Eq GodotGdnativeCore11ApiStruct
 deriving newtype instance Storable GodotGdnativeCore11ApiStruct
 
+{#pointer *godot_gdnative_core_1_2_api_struct as GodotGdnativeCore12ApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeCore12ApiStruct
+deriving newtype instance Storable GodotGdnativeCore12ApiStruct
+
 {#pointer *godot_gdnative_ext_nativescript_api_struct as GodotGdnativeExtNativescriptApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeExtNativescriptApiStruct
 deriving newtype instance Storable GodotGdnativeExtNativescriptApiStruct
@@ -313,6 +317,10 @@ deriving newtype instance Storable GodotGdnativeExtVideodecoderApiStruct
 {#pointer *godot_gdnative_ext_net_api_struct as GodotGdnativeExtNetApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeExtNetApiStruct
 deriving newtype instance Storable GodotGdnativeExtNetApiStruct
+
+{#pointer *godot_gdnative_ext_net_3_2_api_struct as GodotGdnativeExtNet32ApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeExtNet32ApiStruct
+deriving newtype instance Storable GodotGdnativeExtNet32ApiStruct
 
 
 type ReportVersionMismatchFunc = GodotObject -> CString -> Word64 -> Word64 -> IO ()
@@ -751,6 +759,31 @@ instance Storable GodotNetMultiplayerPeer where
   poke = error "GodotNetMultiplayerPeer poke not implemented"
 {#pointer *godot_net_multiplayer_peer as GodotNetMultiplayerPeerPtr -> GodotNetMultiplayerPeer #}
 
+-- net webrtc
+
+data GodotNetWebrtcLibrary
+instance Storable GodotNetWebrtcLibrary where
+  sizeOf _ = {#sizeof godot_net_webrtc_library#}
+  alignment _ = {#sizeof godot_net_webrtc_library#}
+  peek = error "GodotNetWebrtcLibrary peek not implemented"
+  poke = error "GodotNetWebrtcLibrary poke not implemented"
+{#pointer *godot_net_webrtc_library as GodotNetWebrtcLibraryPtr -> GodotNetWebrtcLibrary #}
+
+data GodotNetWebrtcPeerConnection
+instance Storable GodotNetWebrtcPeerConnection where
+  sizeOf _ = {#sizeof godot_net_webrtc_peer_connection#}
+  alignment _ = {#sizeof godot_net_webrtc_peer_connection#}
+  peek = error "GodotNetWebrtcPeerConnection peek not implemented"
+  poke = error "GodotNetWebrtcPeerConnection poke not implemented"
+{#pointer *godot_net_webrtc_peer_connection as GodotNetWebrtcPeerConnectionPtr -> GodotNetWebrtcPeerConnection #}
+
+data GodotNetWebrtcDataChannel
+instance Storable GodotNetWebrtcDataChannel where
+  sizeOf _ = {#sizeof godot_net_webrtc_data_channel#}
+  alignment _ = {#sizeof godot_net_webrtc_data_channel#}
+  peek = error "GodotNetWebrtcDataChannel peek not implemented"
+  poke = error "GodotNetWebrtcDataChannel poke not implemented"
+{#pointer *godot_net_webrtc_data_channel as GodotNetWebrtcDataChannelPtr -> GodotNetWebrtcDataChannel #}
 
 --videodecoder
 
@@ -786,6 +819,11 @@ godotGdnativeCore11ApiStructRef = unsafePerformIO $ newIORef $
   error "attempted to get godotGdnativeCore11ApiStructRef too early"
 {-# NOINLINE godotGdnativeCore11ApiStructRef #-}
 
+godotGdnativeCore12ApiStructRef :: IORef GodotGdnativeCore12ApiStruct
+godotGdnativeCore12ApiStructRef = unsafePerformIO $ newIORef $ 
+  error "attempted to get godotGdnativeCore12ApiStructRef too early"
+{-# NOINLINE godotGdnativeCore12ApiStructRef #-}
+
 godotGdnativeExtNativescriptApiStructRef :: IORef GodotGdnativeExtNativescriptApiStruct
 godotGdnativeExtNativescriptApiStructRef = unsafePerformIO $ newIORef $ 
   error "attempted to get godotGdnativeExtNativescriptApiStructRef too early"
@@ -816,12 +854,18 @@ godotGdnativeExtNetApiStructRef = unsafePerformIO $ newIORef $
   error "attempted to get godotGdnativeExtNetApiStructRef too early"
 {-# NOINLINE godotGdnativeExtNetApiStructRef #-}
 
+godotGdnativeExtNet32ApiStructRef :: IORef GodotGdnativeExtNet32ApiStruct
+godotGdnativeExtNet32ApiStructRef = unsafePerformIO $ newIORef $
+  error "attempted to get godotGdnativeExtNet32ApiStructRef too early"
+{-# NOINLINE godotGdnativeExtNet32ApiStructRef #-}
 
 initApiStructs :: GodotGdnativeInitOptions -> IO ()
 initApiStructs opts = do
   let coreApi = gdnativeInitOptionsApiStruct opts
   writeIORef godotGdnativeCoreApiStructRef coreApi
-  findCoreExt (coerce coreApi)
+  
+  findExt GodotGdnativeCore11ApiStruct godotGdnativeCore11ApiStructRef (coerce coreApi) 1 1
+  findExt GodotGdnativeCore12ApiStruct godotGdnativeCore12ApiStructRef (coerce coreApi) 1 2
 
   numExt <- {#get godot_gdnative_core_api_struct->num_extensions #} coreApi
   extsPtr <- {#get godot_gdnative_core_api_struct->extensions #} coreApi
@@ -832,7 +876,7 @@ initApiStructs opts = do
     case ty of
       1 -> do -- nativescript
         writeIORef godotGdnativeExtNativescriptApiStructRef (coerce ext)
-        findNativescriptExt ext
+        findExt GodotGdnativeExtNativescript11ApiStruct godotGdnativeExtNativescript11ApiStructRef (coerce ext) 1 1
       2 -> do -- pluginscript
         writeIORef godotGdnativeExtPluginscriptApiStructRef (coerce ext)
       3 -> return () -- android
@@ -842,17 +886,15 @@ initApiStructs opts = do
         writeIORef godotGdnativeExtVideodecoderApiStructRef (coerce ext)
       6 -> do -- net
         writeIORef godotGdnativeExtNetApiStructRef (coerce ext)
+        findExt GodotGdnativeExtNet32ApiStruct godotGdnativeExtNet32ApiStructRef (coerce ext) 3 2
       _ -> error $ "Unknown API struct type " ++ show ty
   where
-    findCoreExt = findExt GodotGdnativeCore11ApiStruct godotGdnativeCore11ApiStructRef
-    findNativescriptExt = findExt GodotGdnativeExtNativescript11ApiStruct godotGdnativeExtNativescript11ApiStructRef
-    findExt con ref ext = do
+    findExt con ref ext reqMajor reqMinor = do
       next <- {#get godot_gdnative_api_struct->next #} ext
       when (next /= coerce nullPtr) $ do
-
         major <- {#get godot_gdnative_api_struct->version.major #} next
         minor <- {#get godot_gdnative_api_struct->version.minor #} next
-        if major == 1 && minor == 1 then writeIORef ref (con $ coerce next)
-        else findExt con ref next
+        if major == reqMajor && minor == reqMinor then writeIORef ref (con $ coerce next)
+        else findExt con ref next reqMajor reqMinor
 
 

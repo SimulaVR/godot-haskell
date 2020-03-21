@@ -165,6 +165,9 @@ godotStructs =
   , "godot_pluginscript_language_desc"
   , "godot_method_arg"
   , "godot_instance_binding_functions"
+  , "godot_net_webrtc_library"
+  , "godot_net_webrtc_peer_connection"
+  , "godot_net_webrtc_data_channel"
   ]
   
 godotEnums :: [C.Identifier]
