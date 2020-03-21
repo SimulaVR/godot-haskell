@@ -1,10 +1,10 @@
-cabal-version: >= 1.10
+cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.29.0.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b5c13bb066418730e223946e34211a4b20511ea677350763e7925079030f0eb6
+-- hash: 39c6363ed12c4c2bf3311112a9af73e574fcbd0beafb3a0096da2db102225f27
 
 name:           godot-haskell-classgen
 version:        0.1.0.0
