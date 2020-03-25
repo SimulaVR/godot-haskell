@@ -3,7 +3,7 @@
 , parsers, stdenv, stm, template-haskell, text
 , unordered-containers, vector, rsync, api-json ? null, lib, haskellPackages
 }:
-let godot-haskell-classgen = haskellPackages.callPackage ./classgen/default.nix { };
+let godot-haskell-classgen = haskellPackages.callPackage ./classgen/classgen.nix { };
     modifyGodotApi = lib.optionalString (api-json != null) ''
 cd classgen
 echo "Running godot-haskell-classgen on path " ${api-json}
