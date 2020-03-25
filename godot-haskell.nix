@@ -24,7 +24,6 @@ mkDerivation {
     unordered-containers vector
   ];
   libraryToolDepends = [ c2hs hpack rsync godot-haskell-classgen];
-  doHaddock = false;
   preConfigure = ''
   hpack
   ${modifyGodotApi}
@@ -32,4 +31,8 @@ mkDerivation {
   homepage = "https://github.com/KaneTW/godot-haskell#readme";
   description = "Haskell bindings for the Godot game engine API";
   license = stdenv.lib.licenses.bsd3;
+
+  doCheck = false;
+  doHaddock = false;
+  enableLibraryProfiling = false;
 }

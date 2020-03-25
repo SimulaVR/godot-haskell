@@ -1,4 +1,4 @@
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import ../../pinned-nixpkgs.nix { };
 in
-  pkgs.haskellPackages.callPackage ./default.nix { api-json = null; }
+  pkgs.haskellPackages.callPackage ./godot-haskell.nix { api-json = ../godot/api.json; }

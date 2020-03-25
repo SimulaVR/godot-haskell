@@ -22,6 +22,10 @@
           description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";
           license = stdenv.lib.licenses.bsd3;
           hydraPlatforms = stdenv.lib.platforms.none;
+
+          doHaddock = false;
+          # doCheck = false;
+          enableLibraryProfiling = false;
        }) {});
 
       haskell-src-exts-qq = haskellPackages.callPackage (
@@ -42,6 +46,10 @@
           testHaskellDepends = [ base haskell-src-exts-custom hspec ];
           description = "A quasiquoter for haskell-src-exts";
           license = stdenv.lib.licenses.bsd3;
+
+          doHaddock = false;
+          doCheck = false;
+          enableLibraryProfiling = false;
           }) { };
 
   haskell-src-meta-custom = haskell.lib.dontCheck (haskellPackages.callPackage
@@ -60,6 +68,10 @@
           ];
           description = "Parse source to template-haskell abstract syntax";
           license = stdenv.lib.licenses.bsd3;
+
+          doHaddock = false;
+          doCheck = false;
+          enableLibraryProfiling = false;
         }) {});
 in 
 mkDerivation {
@@ -83,4 +95,8 @@ mkDerivation {
   prePatch = "hpack";
   homepage = "https://github.com/KaneTW/godot-haskell#readme";
   license = stdenv.lib.licenses.bsd3;
+
+  doHaddock = false;
+  doCheck = false;
+  enableLibraryProfiling = false;
 }
