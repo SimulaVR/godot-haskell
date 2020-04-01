@@ -1,0 +1,9 @@
+{
+  "url": "https://github.com/Infinisil/all-hies.git",
+  "rev": "d98bdbff3ebdab408a12a9b7890d4cf400180839",
+  "date": "2020-02-17T18:53:14+01:00",
+  "sha256": "1lr4dw10f37fp68b6ig065dgrl8h1v4xmigy5ncljdz74k0jvhg4",
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
