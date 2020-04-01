@@ -9,9 +9,6 @@ let
 in
   hsPkgs.developPackage {
     root = ./.;
-    overrides = self: super: {
-      godot-haskell = self.callPackage pinned.godot-haskell {};
-    };
     modifier = drv: pinned.nixpkgs.haskell.lib.addBuildTools drv
        (import ./nix/spacemacs-hie.nix {
          pkgs = pinned.nixpkgs;
