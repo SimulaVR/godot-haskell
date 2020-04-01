@@ -13,10 +13,8 @@ in
       godot-haskell = self.callPackage pinned.godot-haskell {};
     };
     modifier = drv: pinned.nixpkgs.haskell.lib.addBuildTools drv
-      (if pinned.nixpkgs.lib.inNixShell
-       then (import ./nix/devTools.nix {
+       (import ./nix/spacemacs-hie.nix {
          pkgs = pinned.nixpkgs;
          inherit hsPkgs;
-       })
-       else []);
+       });
   }
