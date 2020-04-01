@@ -1,9 +1,0 @@
-{
-  "url": "https://github.com/simulavr/godot-haskell",
-  "rev": "5ef3cbda519d43a082f72823b5e54a2b9e3b2b6e",
-  "date": "2020-03-02T21:47:26+01:00",
-  "sha256": "1lpf39lhxxld50hcrlqgrkw4c22anvz8prr907vrs0ilhd1n5pl5",
-  "fetchSubmodules": true,
-  "deepClone": false,
-  "leaveDotGit": false
-}
