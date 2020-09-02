@@ -22,8 +22,8 @@ stack new myproject https://raw.githubusercontent.com/SimulaVR/godot-haskell/mas
 
 ## Questions
 
-Questions, etc are best asked in the Gitter chatroom for SimulaVR: [![Gitter](https://badges.gitter.im/SimulaVR/Simula.svg)](https://gitter.im/SimulaVR/Simula?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-And in the SimulaVR channel at Matrix.
+The primary method of contact is the SimulaVR [Discord server](https://discord.gg/V2NgzZt).
+Mirrors are available at [![Gitter](https://badges.gitter.im/SimulaVR/Simula.svg)](https://gitter.im/SimulaVR/Simula?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) and in the SimulaVR channel at Matrix.
 
 ## Docs
 
