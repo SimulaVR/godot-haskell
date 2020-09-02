@@ -7,6 +7,8 @@ Haskell bindings for the Godot game engine.
 * Nativescript stuff (binding classes/methods/etc) is in Godot.Nativescript
 * High-level stuff (classes generated from the API description) is in Godot.Api, whereas methods are in Godot.Methods
 
+This is feature complete and actively maintained.
+
 ## Using the library
 
 See the demo project in `template/demo/` for an example of how to use this
@@ -21,6 +23,7 @@ stack new myproject https://raw.githubusercontent.com/SimulaVR/godot-haskell/mas
 ## Questions
 
 Questions, etc are best asked in the Gitter chatroom for SimulaVR: [![Gitter](https://badges.gitter.im/SimulaVR/Simula.svg)](https://gitter.im/SimulaVR/Simula?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+And in the SimulaVR channel at Matrix.
 
 ## Docs
 
