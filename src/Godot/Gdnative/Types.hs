@@ -129,7 +129,11 @@ type NodePath = Text
 type instance TypeOf 'HaskellTy GodotNodePath = NodePath
 instance GodotFFI GodotNodePath NodePath where
   fromLowLevel np = fromLowLevel =<< godot_node_path_get_name np 0
-  toLowLevel np = godot_node_path_new =<< toLowLevel np
+  toLowLevel np = do
+    nps <- toLowLevel np
+    ret <- godot_node_path_new nps
+    godot_string_destroy nps
+    return ret
 
 type instance TypeOf 'HaskellTy GodotColor = AlphaColour Double
 instance GodotFFI GodotColor (AlphaColour Double) where
