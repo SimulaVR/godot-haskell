@@ -18,14 +18,19 @@ class HasBaseClass child where
 deriveBase :: Name -> Q [Dec]
 deriveBase ty = do
   rdt <- reifyDatatype ty
-  let appliedTy = appsT (ConT ty) (datatypeVars rdt)
+  let appliedTy = appsT (ConT ty)
+        [ case typeBinder of
+            PlainTV n -> VarT n
+            KindedTV n _ -> VarT n
+        | typeBinder <- datatypeVars rdt
+        ]
   r <- reify ''BaseClass
   case r of
     FamilyI _ instDecs -> do
       liftM nub $ concatQ (\(child,parent) -> do
                  liftM2 (++) [d|instance $(pure appliedTy) :< $(pure appliedTy) where upcast = id|]
                             (parentInstaces instDecs child child))
-          $ relevantTySynEqns (map (\(TySynInstD _ eqn) -> eqn) instDecs) (ConT ty)
+          $ relevantTySynEqns (map (\(TySynInstD eqn) -> eqn) instDecs) (ConT ty)
 
 -- | Subclass relation. Instances should be automatically derived with
 -- 'deriveBase'. You can define instances yourself, but you should ensure that
@@ -46,8 +51,9 @@ appsT t (x:xs) = appsT (AppT t x) xs
 
 relevantTySynEqns :: [TySynEqn] -> Type -> [(Type,Type)]
 relevantTySynEqns [] _ = []
-relevantTySynEqns (TySynEqn [child] parent:ts) ty | isRelevant child ty = (child,parent):relevantTySynEqns ts ty
-                                                | otherwise = relevantTySynEqns ts ty
+relevantTySynEqns (TySynEqn Nothing (AppT _ child) parent:ts) ty
+  | isRelevant child ty = (child,parent):relevantTySynEqns ts ty
+  | otherwise = relevantTySynEqns ts ty
   where isRelevant (AppT t _) ty = isRelevant t ty
         isRelevant t@(ConT _) ty = t == ty
         isRelevant t ty = error $ "Unhandled type family member "
@@ -71,6 +77,6 @@ parentInstaces instDecs superType targetType =
                                                        pure [] else
                                                        (parentInstaces instDecs parent targetType))))
                           $ filter (\(child,parent) -> compatible superType child)
-                          $ map (\(TySynInstD _ (TySynEqn [child] parent)) -> (child,parent)) instDecs)
+                          $ map (\(TySynInstD (TySynEqn Nothing (AppT _ child) parent)) -> (child,parent)) instDecs)
 
 concatQ f l = concat <$> (sequence $ map f l)

@@ -627,10 +627,10 @@ newNativeScript :: forall a. NativeScript a => IO (Maybe a)
 newNativeScript = do
   let name = nameOf @a
   Just nativescript <- new @Api.NativeScript
-  Just gdnlib <- tryCast @Api.GDNativeLibrary =<< readIORef gdNativeLibraryRef
+  Just gdnlib <- tryCast @Api.GDNativeLibrary =<< readIORef gdnativeLibraryRef
   NativeScript.set_library nativescript gdnlib
   NativeScript.set_class_name nativescript =<< toLowLevel name
-  no <- NativeScript.new nativescript []
+  no <- fromGodotVariant =<< NativeScript.new nativescript []
   asNativeScript no
 
 getNode :: forall b cls. (Object :< cls, Api.Node :< cls,
