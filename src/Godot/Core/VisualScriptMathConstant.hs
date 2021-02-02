@@ -10,8 +10,8 @@ module Godot.Core.VisualScriptMathConstant
         Godot.Core.VisualScriptMathConstant._MATH_CONSTANT_ONE,
         Godot.Core.VisualScriptMathConstant._MATH_CONSTANT_SQRT2,
         Godot.Core.VisualScriptMathConstant._MATH_CONSTANT_E,
-        Godot.Core.VisualScriptMathConstant.set_math_constant,
-        Godot.Core.VisualScriptMathConstant.get_math_constant)
+        Godot.Core.VisualScriptMathConstant.get_math_constant,
+        Godot.Core.VisualScriptMathConstant.set_math_constant)
        where
 import Data.Coerce
 import Foreign.C
@@ -47,6 +47,29 @@ _MATH_CONSTANT_SQRT2 = 5
 _MATH_CONSTANT_E :: Int
 _MATH_CONSTANT_E = 4
 
+{-# NOINLINE bindVisualScriptMathConstant_get_math_constant #-}
+
+bindVisualScriptMathConstant_get_math_constant :: MethodBind
+bindVisualScriptMathConstant_get_math_constant
+  = unsafePerformIO $
+      withCString "VisualScriptMathConstant" $
+        \ clsNamePtr ->
+          withCString "get_math_constant" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_math_constant ::
+                    (VisualScriptMathConstant :< cls, Object :< cls) => cls -> IO Int
+get_math_constant cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindVisualScriptMathConstant_get_math_constant
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindVisualScriptMathConstant_set_math_constant #-}
 
 bindVisualScriptMathConstant_set_math_constant :: MethodBind
@@ -66,29 +89,6 @@ set_math_constant cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindVisualScriptMathConstant_set_math_constant
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindVisualScriptMathConstant_get_math_constant #-}
-
-bindVisualScriptMathConstant_get_math_constant :: MethodBind
-bindVisualScriptMathConstant_get_math_constant
-  = unsafePerformIO $
-      withCString "VisualScriptMathConstant" $
-        \ clsNamePtr ->
-          withCString "get_math_constant" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_math_constant ::
-                    (VisualScriptMathConstant :< cls, Object :< cls) => cls -> IO Int
-get_math_constant cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindVisualScriptMathConstant_get_math_constant
            (upcast cls)
            arrPtr
            len

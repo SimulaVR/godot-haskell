@@ -7,12 +7,12 @@ module Godot.Core.ConeTwistJoint
         Godot.Core.ConeTwistJoint._PARAM_MAX,
         Godot.Core.ConeTwistJoint._PARAM_RELAXATION,
         Godot.Core.ConeTwistJoint._PARAM_BIAS,
-        Godot.Core.ConeTwistJoint.set_param,
-        Godot.Core.ConeTwistJoint.get_param,
-        Godot.Core.ConeTwistJoint._set_swing_span,
         Godot.Core.ConeTwistJoint._get_swing_span,
+        Godot.Core.ConeTwistJoint._get_twist_span,
+        Godot.Core.ConeTwistJoint._set_swing_span,
         Godot.Core.ConeTwistJoint._set_twist_span,
-        Godot.Core.ConeTwistJoint._get_twist_span)
+        Godot.Core.ConeTwistJoint.get_param,
+        Godot.Core.ConeTwistJoint.set_param)
        where
 import Data.Coerce
 import Foreign.C
@@ -39,93 +39,12 @@ _PARAM_RELAXATION = 4
 _PARAM_BIAS :: Int
 _PARAM_BIAS = 2
 
-{-# NOINLINE bindConeTwistJoint_set_param #-}
-
--- | The speed with which the swing or twist will take place.
---   			The higher, the faster.
-bindConeTwistJoint_set_param :: MethodBind
-bindConeTwistJoint_set_param
-  = unsafePerformIO $
-      withCString "ConeTwistJoint" $
-        \ clsNamePtr ->
-          withCString "set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The speed with which the swing or twist will take place.
---   			The higher, the faster.
-set_param ::
-            (ConeTwistJoint :< cls, Object :< cls) =>
-            cls -> Int -> Float -> IO ()
-set_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindConeTwistJoint_set_param (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindConeTwistJoint_get_param #-}
-
--- | The speed with which the swing or twist will take place.
---   			The higher, the faster.
-bindConeTwistJoint_get_param :: MethodBind
-bindConeTwistJoint_get_param
-  = unsafePerformIO $
-      withCString "ConeTwistJoint" $
-        \ clsNamePtr ->
-          withCString "get_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The speed with which the swing or twist will take place.
---   			The higher, the faster.
-get_param ::
-            (ConeTwistJoint :< cls, Object :< cls) => cls -> Int -> IO Float
-get_param cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindConeTwistJoint_get_param (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindConeTwistJoint__set_swing_span #-}
-
--- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
---   			The swing span defines, how much rotation will not get corrected allong the swing axis.
---   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behaviour is locked. Default value: [code]PI/4[/code].
-bindConeTwistJoint__set_swing_span :: MethodBind
-bindConeTwistJoint__set_swing_span
-  = unsafePerformIO $
-      withCString "ConeTwistJoint" $
-        \ clsNamePtr ->
-          withCString "_set_swing_span" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
---   			The swing span defines, how much rotation will not get corrected allong the swing axis.
---   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behaviour is locked. Default value: [code]PI/4[/code].
-_set_swing_span ::
-                  (ConeTwistJoint :< cls, Object :< cls) => cls -> Float -> IO ()
-_set_swing_span cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindConeTwistJoint__set_swing_span
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindConeTwistJoint__get_swing_span #-}
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
---   			The swing span defines, how much rotation will not get corrected allong the swing axis.
+--   			The swing span defines, how much rotation will not get corrected along the swing axis.
 --   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behaviour is locked. Default value: [code]PI/4[/code].
+--   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
 bindConeTwistJoint__get_swing_span :: MethodBind
 bindConeTwistJoint__get_swing_span
   = unsafePerformIO $
@@ -136,15 +55,71 @@ bindConeTwistJoint__get_swing_span
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
---   			The swing span defines, how much rotation will not get corrected allong the swing axis.
+--   			The swing span defines, how much rotation will not get corrected along the swing axis.
 --   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behaviour is locked. Default value: [code]PI/4[/code].
+--   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
 _get_swing_span ::
                   (ConeTwistJoint :< cls, Object :< cls) => cls -> IO Float
 _get_swing_span cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindConeTwistJoint__get_swing_span
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConeTwistJoint__get_twist_span #-}
+
+-- | Twist is the rotation around the twist axis, this value defined how far the joint can twist.
+--   			Twist is locked if below 0.05.
+bindConeTwistJoint__get_twist_span :: MethodBind
+bindConeTwistJoint__get_twist_span
+  = unsafePerformIO $
+      withCString "ConeTwistJoint" $
+        \ clsNamePtr ->
+          withCString "_get_twist_span" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Twist is the rotation around the twist axis, this value defined how far the joint can twist.
+--   			Twist is locked if below 0.05.
+_get_twist_span ::
+                  (ConeTwistJoint :< cls, Object :< cls) => cls -> IO Float
+_get_twist_span cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConeTwistJoint__get_twist_span
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConeTwistJoint__set_swing_span #-}
+
+-- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
+--   			The swing span defines, how much rotation will not get corrected along the swing axis.
+--   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
+--   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
+bindConeTwistJoint__set_swing_span :: MethodBind
+bindConeTwistJoint__set_swing_span
+  = unsafePerformIO $
+      withCString "ConeTwistJoint" $
+        \ clsNamePtr ->
+          withCString "_set_swing_span" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
+--   			The swing span defines, how much rotation will not get corrected along the swing axis.
+--   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
+--   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
+_set_swing_span ::
+                  (ConeTwistJoint :< cls, Object :< cls) => cls -> Float -> IO ()
+_set_swing_span cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConeTwistJoint__set_swing_span
            (upcast cls)
            arrPtr
            len
@@ -176,28 +151,53 @@ _set_twist_span cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindConeTwistJoint__get_twist_span #-}
+{-# NOINLINE bindConeTwistJoint_get_param #-}
 
--- | Twist is the rotation around the twist axis, this value defined how far the joint can twist.
---   			Twist is locked if below 0.05.
-bindConeTwistJoint__get_twist_span :: MethodBind
-bindConeTwistJoint__get_twist_span
+-- | The speed with which the swing or twist will take place.
+--   			The higher, the faster.
+bindConeTwistJoint_get_param :: MethodBind
+bindConeTwistJoint_get_param
   = unsafePerformIO $
       withCString "ConeTwistJoint" $
         \ clsNamePtr ->
-          withCString "_get_twist_span" $
+          withCString "get_param" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Twist is the rotation around the twist axis, this value defined how far the joint can twist.
---   			Twist is locked if below 0.05.
-_get_twist_span ::
-                  (ConeTwistJoint :< cls, Object :< cls) => cls -> IO Float
-_get_twist_span cls
-  = withVariantArray []
+-- | The speed with which the swing or twist will take place.
+--   			The higher, the faster.
+get_param ::
+            (ConeTwistJoint :< cls, Object :< cls) => cls -> Int -> IO Float
+get_param cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindConeTwistJoint__get_twist_span
-           (upcast cls)
+         godot_method_bind_call bindConeTwistJoint_get_param (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConeTwistJoint_set_param #-}
+
+-- | The speed with which the swing or twist will take place.
+--   			The higher, the faster.
+bindConeTwistJoint_set_param :: MethodBind
+bindConeTwistJoint_set_param
+  = unsafePerformIO $
+      withCString "ConeTwistJoint" $
+        \ clsNamePtr ->
+          withCString "set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The speed with which the swing or twist will take place.
+--   			The higher, the faster.
+set_param ::
+            (ConeTwistJoint :< cls, Object :< cls) =>
+            cls -> Int -> Float -> IO ()
+set_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConeTwistJoint_set_param (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

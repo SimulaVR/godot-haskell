@@ -4,10 +4,10 @@ module Godot.Core.VisualScriptYield
        (Godot.Core.VisualScriptYield._YIELD_FRAME,
         Godot.Core.VisualScriptYield._YIELD_PHYSICS_FRAME,
         Godot.Core.VisualScriptYield._YIELD_WAIT,
-        Godot.Core.VisualScriptYield.set_yield_mode,
+        Godot.Core.VisualScriptYield.get_wait_time,
         Godot.Core.VisualScriptYield.get_yield_mode,
         Godot.Core.VisualScriptYield.set_wait_time,
-        Godot.Core.VisualScriptYield.get_wait_time)
+        Godot.Core.VisualScriptYield.set_yield_mode)
        where
 import Data.Coerce
 import Foreign.C
@@ -25,23 +25,23 @@ _YIELD_PHYSICS_FRAME = 2
 _YIELD_WAIT :: Int
 _YIELD_WAIT = 3
 
-{-# NOINLINE bindVisualScriptYield_set_yield_mode #-}
+{-# NOINLINE bindVisualScriptYield_get_wait_time #-}
 
-bindVisualScriptYield_set_yield_mode :: MethodBind
-bindVisualScriptYield_set_yield_mode
+bindVisualScriptYield_get_wait_time :: MethodBind
+bindVisualScriptYield_get_wait_time
   = unsafePerformIO $
       withCString "VisualScriptYield" $
         \ clsNamePtr ->
-          withCString "set_yield_mode" $
+          withCString "get_wait_time" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_yield_mode ::
-                 (VisualScriptYield :< cls, Object :< cls) => cls -> Int -> IO ()
-set_yield_mode cls arg1
-  = withVariantArray [toVariant arg1]
+get_wait_time ::
+                (VisualScriptYield :< cls, Object :< cls) => cls -> IO Float
+get_wait_time cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisualScriptYield_set_yield_mode
+         godot_method_bind_call bindVisualScriptYield_get_wait_time
            (upcast cls)
            arrPtr
            len
@@ -91,23 +91,23 @@ set_wait_time cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindVisualScriptYield_get_wait_time #-}
+{-# NOINLINE bindVisualScriptYield_set_yield_mode #-}
 
-bindVisualScriptYield_get_wait_time :: MethodBind
-bindVisualScriptYield_get_wait_time
+bindVisualScriptYield_set_yield_mode :: MethodBind
+bindVisualScriptYield_set_yield_mode
   = unsafePerformIO $
       withCString "VisualScriptYield" $
         \ clsNamePtr ->
-          withCString "get_wait_time" $
+          withCString "set_yield_mode" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_wait_time ::
-                (VisualScriptYield :< cls, Object :< cls) => cls -> IO Float
-get_wait_time cls
-  = withVariantArray []
+set_yield_mode ::
+                 (VisualScriptYield :< cls, Object :< cls) => cls -> Int -> IO ()
+set_yield_mode cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisualScriptYield_get_wait_time
+         godot_method_bind_call bindVisualScriptYield_set_yield_mode
            (upcast cls)
            arrPtr
            len

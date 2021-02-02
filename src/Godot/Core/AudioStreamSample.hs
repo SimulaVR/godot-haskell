@@ -8,21 +8,21 @@ module Godot.Core.AudioStreamSample
         Godot.Core.AudioStreamSample._FORMAT_IMA_ADPCM,
         Godot.Core.AudioStreamSample._LOOP_FORWARD,
         Godot.Core.AudioStreamSample._FORMAT_16_BITS,
-        Godot.Core.AudioStreamSample.set_data,
         Godot.Core.AudioStreamSample.get_data,
-        Godot.Core.AudioStreamSample.set_format,
         Godot.Core.AudioStreamSample.get_format,
-        Godot.Core.AudioStreamSample.set_loop_mode,
-        Godot.Core.AudioStreamSample.get_loop_mode,
-        Godot.Core.AudioStreamSample.set_loop_begin,
         Godot.Core.AudioStreamSample.get_loop_begin,
-        Godot.Core.AudioStreamSample.set_loop_end,
         Godot.Core.AudioStreamSample.get_loop_end,
-        Godot.Core.AudioStreamSample.set_mix_rate,
+        Godot.Core.AudioStreamSample.get_loop_mode,
         Godot.Core.AudioStreamSample.get_mix_rate,
-        Godot.Core.AudioStreamSample.set_stereo,
         Godot.Core.AudioStreamSample.is_stereo,
-        Godot.Core.AudioStreamSample.save_to_wav)
+        Godot.Core.AudioStreamSample.save_to_wav,
+        Godot.Core.AudioStreamSample.set_data,
+        Godot.Core.AudioStreamSample.set_format,
+        Godot.Core.AudioStreamSample.set_loop_begin,
+        Godot.Core.AudioStreamSample.set_loop_end,
+        Godot.Core.AudioStreamSample.set_loop_mode,
+        Godot.Core.AudioStreamSample.set_mix_rate,
+        Godot.Core.AudioStreamSample.set_stereo)
        where
 import Data.Coerce
 import Foreign.C
@@ -52,30 +52,6 @@ _LOOP_FORWARD = 1
 _FORMAT_16_BITS :: Int
 _FORMAT_16_BITS = 1
 
-{-# NOINLINE bindAudioStreamSample_set_data #-}
-
--- | Contains the audio data in bytes.
-bindAudioStreamSample_set_data :: MethodBind
-bindAudioStreamSample_set_data
-  = unsafePerformIO $
-      withCString "AudioStreamSample" $
-        \ clsNamePtr ->
-          withCString "set_data" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Contains the audio data in bytes.
-set_data ::
-           (AudioStreamSample :< cls, Object :< cls) =>
-           cls -> PoolByteArray -> IO ()
-set_data cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_set_data (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindAudioStreamSample_get_data #-}
 
 -- | Contains the audio data in bytes.
@@ -100,30 +76,6 @@ get_data cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindAudioStreamSample_set_format #-}
-
--- | Audio format. See FORMAT_* constants for values.
-bindAudioStreamSample_set_format :: MethodBind
-bindAudioStreamSample_set_format
-  = unsafePerformIO $
-      withCString "AudioStreamSample" $
-        \ clsNamePtr ->
-          withCString "set_format" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Audio format. See FORMAT_* constants for values.
-set_format ::
-             (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
-set_format cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_set_format
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindAudioStreamSample_get_format #-}
 
 -- | Audio format. See FORMAT_* constants for values.
@@ -143,78 +95,6 @@ get_format cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAudioStreamSample_get_format
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindAudioStreamSample_set_loop_mode #-}
-
--- | Loop mode. See LOOP_* constants for values.
-bindAudioStreamSample_set_loop_mode :: MethodBind
-bindAudioStreamSample_set_loop_mode
-  = unsafePerformIO $
-      withCString "AudioStreamSample" $
-        \ clsNamePtr ->
-          withCString "set_loop_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Loop mode. See LOOP_* constants for values.
-set_loop_mode ::
-                (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
-set_loop_mode cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_set_loop_mode
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindAudioStreamSample_get_loop_mode #-}
-
--- | Loop mode. See LOOP_* constants for values.
-bindAudioStreamSample_get_loop_mode :: MethodBind
-bindAudioStreamSample_get_loop_mode
-  = unsafePerformIO $
-      withCString "AudioStreamSample" $
-        \ clsNamePtr ->
-          withCString "get_loop_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Loop mode. See LOOP_* constants for values.
-get_loop_mode ::
-                (AudioStreamSample :< cls, Object :< cls) => cls -> IO Int
-get_loop_mode cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_get_loop_mode
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindAudioStreamSample_set_loop_begin #-}
-
--- | Loop start in bytes.
-bindAudioStreamSample_set_loop_begin :: MethodBind
-bindAudioStreamSample_set_loop_begin
-  = unsafePerformIO $
-      withCString "AudioStreamSample" $
-        \ clsNamePtr ->
-          withCString "set_loop_begin" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Loop start in bytes.
-set_loop_begin ::
-                 (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
-set_loop_begin cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_set_loop_begin
            (upcast cls)
            arrPtr
            len
@@ -244,30 +124,6 @@ get_loop_begin cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindAudioStreamSample_set_loop_end #-}
-
--- | Loop end in bytes.
-bindAudioStreamSample_set_loop_end :: MethodBind
-bindAudioStreamSample_set_loop_end
-  = unsafePerformIO $
-      withCString "AudioStreamSample" $
-        \ clsNamePtr ->
-          withCString "set_loop_end" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Loop end in bytes.
-set_loop_end ::
-               (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
-set_loop_end cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_set_loop_end
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindAudioStreamSample_get_loop_end #-}
 
 -- | Loop end in bytes.
@@ -292,25 +148,25 @@ get_loop_end cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindAudioStreamSample_set_mix_rate #-}
+{-# NOINLINE bindAudioStreamSample_get_loop_mode #-}
 
--- | The sample rate for mixing this audio.
-bindAudioStreamSample_set_mix_rate :: MethodBind
-bindAudioStreamSample_set_mix_rate
+-- | Loop mode. See LOOP_* constants for values.
+bindAudioStreamSample_get_loop_mode :: MethodBind
+bindAudioStreamSample_get_loop_mode
   = unsafePerformIO $
       withCString "AudioStreamSample" $
         \ clsNamePtr ->
-          withCString "set_mix_rate" $
+          withCString "get_loop_mode" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The sample rate for mixing this audio.
-set_mix_rate ::
-               (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
-set_mix_rate cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Loop mode. See LOOP_* constants for values.
+get_loop_mode ::
+                (AudioStreamSample :< cls, Object :< cls) => cls -> IO Int
+get_loop_mode cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_set_mix_rate
+         godot_method_bind_call bindAudioStreamSample_get_loop_mode
            (upcast cls)
            arrPtr
            len
@@ -335,30 +191,6 @@ get_mix_rate cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAudioStreamSample_get_mix_rate
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindAudioStreamSample_set_stereo #-}
-
--- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
-bindAudioStreamSample_set_stereo :: MethodBind
-bindAudioStreamSample_set_stereo
-  = unsafePerformIO $
-      withCString "AudioStreamSample" $
-        \ clsNamePtr ->
-          withCString "set_stereo" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
-set_stereo ::
-             (AudioStreamSample :< cls, Object :< cls) => cls -> Bool -> IO ()
-set_stereo cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioStreamSample_set_stereo
            (upcast cls)
            arrPtr
            len
@@ -409,6 +241,174 @@ save_to_wav cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAudioStreamSample_save_to_wav
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioStreamSample_set_data #-}
+
+-- | Contains the audio data in bytes.
+bindAudioStreamSample_set_data :: MethodBind
+bindAudioStreamSample_set_data
+  = unsafePerformIO $
+      withCString "AudioStreamSample" $
+        \ clsNamePtr ->
+          withCString "set_data" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Contains the audio data in bytes.
+set_data ::
+           (AudioStreamSample :< cls, Object :< cls) =>
+           cls -> PoolByteArray -> IO ()
+set_data cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioStreamSample_set_data (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioStreamSample_set_format #-}
+
+-- | Audio format. See FORMAT_* constants for values.
+bindAudioStreamSample_set_format :: MethodBind
+bindAudioStreamSample_set_format
+  = unsafePerformIO $
+      withCString "AudioStreamSample" $
+        \ clsNamePtr ->
+          withCString "set_format" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Audio format. See FORMAT_* constants for values.
+set_format ::
+             (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
+set_format cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioStreamSample_set_format
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioStreamSample_set_loop_begin #-}
+
+-- | Loop start in bytes.
+bindAudioStreamSample_set_loop_begin :: MethodBind
+bindAudioStreamSample_set_loop_begin
+  = unsafePerformIO $
+      withCString "AudioStreamSample" $
+        \ clsNamePtr ->
+          withCString "set_loop_begin" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Loop start in bytes.
+set_loop_begin ::
+                 (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
+set_loop_begin cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioStreamSample_set_loop_begin
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioStreamSample_set_loop_end #-}
+
+-- | Loop end in bytes.
+bindAudioStreamSample_set_loop_end :: MethodBind
+bindAudioStreamSample_set_loop_end
+  = unsafePerformIO $
+      withCString "AudioStreamSample" $
+        \ clsNamePtr ->
+          withCString "set_loop_end" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Loop end in bytes.
+set_loop_end ::
+               (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
+set_loop_end cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioStreamSample_set_loop_end
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioStreamSample_set_loop_mode #-}
+
+-- | Loop mode. See LOOP_* constants for values.
+bindAudioStreamSample_set_loop_mode :: MethodBind
+bindAudioStreamSample_set_loop_mode
+  = unsafePerformIO $
+      withCString "AudioStreamSample" $
+        \ clsNamePtr ->
+          withCString "set_loop_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Loop mode. See LOOP_* constants for values.
+set_loop_mode ::
+                (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
+set_loop_mode cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioStreamSample_set_loop_mode
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioStreamSample_set_mix_rate #-}
+
+-- | The sample rate for mixing this audio.
+bindAudioStreamSample_set_mix_rate :: MethodBind
+bindAudioStreamSample_set_mix_rate
+  = unsafePerformIO $
+      withCString "AudioStreamSample" $
+        \ clsNamePtr ->
+          withCString "set_mix_rate" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The sample rate for mixing this audio.
+set_mix_rate ::
+               (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
+set_mix_rate cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioStreamSample_set_mix_rate
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioStreamSample_set_stereo #-}
+
+-- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
+bindAudioStreamSample_set_stereo :: MethodBind
+bindAudioStreamSample_set_stereo
+  = unsafePerformIO $
+      withCString "AudioStreamSample" $
+        \ clsNamePtr ->
+          withCString "set_stereo" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
+set_stereo ::
+             (AudioStreamSample :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_stereo cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioStreamSample_set_stereo
            (upcast cls)
            arrPtr
            len

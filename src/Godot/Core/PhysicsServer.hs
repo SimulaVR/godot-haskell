@@ -126,117 +126,119 @@ module Godot.Core.PhysicsServer
         Godot.Core.PhysicsServer._SHAPE_SPHERE,
         Godot.Core.PhysicsServer._AREA_SPACE_OVERRIDE_COMBINE,
         Godot.Core.PhysicsServer._SPACE_PARAM_BODY_LINEAR_VELOCITY_SLEEP_THRESHOLD,
-        Godot.Core.PhysicsServer.shape_create,
-        Godot.Core.PhysicsServer.shape_set_data,
-        Godot.Core.PhysicsServer.shape_get_type,
-        Godot.Core.PhysicsServer.shape_get_data,
-        Godot.Core.PhysicsServer.space_create,
-        Godot.Core.PhysicsServer.space_set_active,
-        Godot.Core.PhysicsServer.space_is_active,
-        Godot.Core.PhysicsServer.space_set_param,
-        Godot.Core.PhysicsServer.space_get_param,
-        Godot.Core.PhysicsServer.space_get_direct_state,
-        Godot.Core.PhysicsServer.area_create,
-        Godot.Core.PhysicsServer.area_set_space,
-        Godot.Core.PhysicsServer.area_get_space,
-        Godot.Core.PhysicsServer.area_set_space_override_mode,
-        Godot.Core.PhysicsServer.area_get_space_override_mode,
         Godot.Core.PhysicsServer.area_add_shape,
-        Godot.Core.PhysicsServer.area_set_shape,
-        Godot.Core.PhysicsServer.area_set_shape_transform,
-        Godot.Core.PhysicsServer.area_get_shape_count,
-        Godot.Core.PhysicsServer.area_get_shape,
-        Godot.Core.PhysicsServer.area_get_shape_transform,
-        Godot.Core.PhysicsServer.area_remove_shape,
+        Godot.Core.PhysicsServer.area_attach_object_instance_id,
         Godot.Core.PhysicsServer.area_clear_shapes,
+        Godot.Core.PhysicsServer.area_create,
+        Godot.Core.PhysicsServer.area_get_object_instance_id,
+        Godot.Core.PhysicsServer.area_get_param,
+        Godot.Core.PhysicsServer.area_get_shape,
+        Godot.Core.PhysicsServer.area_get_shape_count,
+        Godot.Core.PhysicsServer.area_get_shape_transform,
+        Godot.Core.PhysicsServer.area_get_space,
+        Godot.Core.PhysicsServer.area_get_space_override_mode,
+        Godot.Core.PhysicsServer.area_get_transform,
+        Godot.Core.PhysicsServer.area_is_ray_pickable,
+        Godot.Core.PhysicsServer.area_remove_shape,
+        Godot.Core.PhysicsServer.area_set_area_monitor_callback,
         Godot.Core.PhysicsServer.area_set_collision_layer,
         Godot.Core.PhysicsServer.area_set_collision_mask,
-        Godot.Core.PhysicsServer.area_set_param,
-        Godot.Core.PhysicsServer.area_set_transform,
-        Godot.Core.PhysicsServer.area_get_param,
-        Godot.Core.PhysicsServer.area_get_transform,
-        Godot.Core.PhysicsServer.area_attach_object_instance_id,
-        Godot.Core.PhysicsServer.area_get_object_instance_id,
         Godot.Core.PhysicsServer.area_set_monitor_callback,
-        Godot.Core.PhysicsServer.area_set_area_monitor_callback,
         Godot.Core.PhysicsServer.area_set_monitorable,
+        Godot.Core.PhysicsServer.area_set_param,
         Godot.Core.PhysicsServer.area_set_ray_pickable,
-        Godot.Core.PhysicsServer.area_is_ray_pickable,
-        Godot.Core.PhysicsServer.body_create,
-        Godot.Core.PhysicsServer.body_set_space,
-        Godot.Core.PhysicsServer.body_get_space,
-        Godot.Core.PhysicsServer.body_set_mode,
-        Godot.Core.PhysicsServer.body_get_mode,
-        Godot.Core.PhysicsServer.body_set_collision_layer,
-        Godot.Core.PhysicsServer.body_get_collision_layer,
-        Godot.Core.PhysicsServer.body_set_collision_mask,
-        Godot.Core.PhysicsServer.body_get_collision_mask,
-        Godot.Core.PhysicsServer.body_add_shape,
-        Godot.Core.PhysicsServer.body_set_shape,
-        Godot.Core.PhysicsServer.body_set_shape_transform,
-        Godot.Core.PhysicsServer.body_get_shape_count,
-        Godot.Core.PhysicsServer.body_get_shape,
-        Godot.Core.PhysicsServer.body_get_shape_transform,
-        Godot.Core.PhysicsServer.body_remove_shape,
-        Godot.Core.PhysicsServer.body_clear_shapes,
-        Godot.Core.PhysicsServer.body_attach_object_instance_id,
-        Godot.Core.PhysicsServer.body_get_object_instance_id,
-        Godot.Core.PhysicsServer.body_set_enable_continuous_collision_detection,
-        Godot.Core.PhysicsServer.body_is_continuous_collision_detection_enabled,
-        Godot.Core.PhysicsServer.body_set_param,
-        Godot.Core.PhysicsServer.body_get_param,
-        Godot.Core.PhysicsServer.body_set_kinematic_safe_margin,
-        Godot.Core.PhysicsServer.body_get_kinematic_safe_margin,
-        Godot.Core.PhysicsServer.body_set_state,
-        Godot.Core.PhysicsServer.body_get_state,
+        Godot.Core.PhysicsServer.area_set_shape,
+        Godot.Core.PhysicsServer.area_set_shape_disabled,
+        Godot.Core.PhysicsServer.area_set_shape_transform,
+        Godot.Core.PhysicsServer.area_set_space,
+        Godot.Core.PhysicsServer.area_set_space_override_mode,
+        Godot.Core.PhysicsServer.area_set_transform,
         Godot.Core.PhysicsServer.body_add_central_force,
+        Godot.Core.PhysicsServer.body_add_collision_exception,
         Godot.Core.PhysicsServer.body_add_force,
+        Godot.Core.PhysicsServer.body_add_shape,
         Godot.Core.PhysicsServer.body_add_torque,
         Godot.Core.PhysicsServer.body_apply_central_impulse,
         Godot.Core.PhysicsServer.body_apply_impulse,
         Godot.Core.PhysicsServer.body_apply_torque_impulse,
-        Godot.Core.PhysicsServer.body_set_axis_velocity,
-        Godot.Core.PhysicsServer.body_set_axis_lock,
-        Godot.Core.PhysicsServer.body_is_axis_locked,
-        Godot.Core.PhysicsServer.body_add_collision_exception,
-        Godot.Core.PhysicsServer.body_remove_collision_exception,
-        Godot.Core.PhysicsServer.body_set_max_contacts_reported,
-        Godot.Core.PhysicsServer.body_get_max_contacts_reported,
-        Godot.Core.PhysicsServer.body_set_omit_force_integration,
-        Godot.Core.PhysicsServer.body_is_omitting_force_integration,
-        Godot.Core.PhysicsServer.body_set_force_integration_callback,
-        Godot.Core.PhysicsServer.body_set_ray_pickable,
-        Godot.Core.PhysicsServer.body_is_ray_pickable,
+        Godot.Core.PhysicsServer.body_attach_object_instance_id,
+        Godot.Core.PhysicsServer.body_clear_shapes,
+        Godot.Core.PhysicsServer.body_create,
+        Godot.Core.PhysicsServer.body_get_collision_layer,
+        Godot.Core.PhysicsServer.body_get_collision_mask,
         Godot.Core.PhysicsServer.body_get_direct_state,
-        Godot.Core.PhysicsServer.joint_create_pin,
-        Godot.Core.PhysicsServer.pin_joint_set_param,
-        Godot.Core.PhysicsServer.pin_joint_get_param,
-        Godot.Core.PhysicsServer.pin_joint_set_local_a,
-        Godot.Core.PhysicsServer.pin_joint_get_local_a,
-        Godot.Core.PhysicsServer.pin_joint_set_local_b,
-        Godot.Core.PhysicsServer.pin_joint_get_local_b,
-        Godot.Core.PhysicsServer.joint_create_hinge,
-        Godot.Core.PhysicsServer.hinge_joint_set_param,
-        Godot.Core.PhysicsServer.hinge_joint_get_param,
-        Godot.Core.PhysicsServer.hinge_joint_set_flag,
-        Godot.Core.PhysicsServer.hinge_joint_get_flag,
-        Godot.Core.PhysicsServer.joint_create_slider,
-        Godot.Core.PhysicsServer.slider_joint_set_param,
-        Godot.Core.PhysicsServer.slider_joint_get_param,
-        Godot.Core.PhysicsServer.joint_create_cone_twist,
-        Godot.Core.PhysicsServer.cone_twist_joint_set_param,
+        Godot.Core.PhysicsServer.body_get_kinematic_safe_margin,
+        Godot.Core.PhysicsServer.body_get_max_contacts_reported,
+        Godot.Core.PhysicsServer.body_get_mode,
+        Godot.Core.PhysicsServer.body_get_object_instance_id,
+        Godot.Core.PhysicsServer.body_get_param,
+        Godot.Core.PhysicsServer.body_get_shape,
+        Godot.Core.PhysicsServer.body_get_shape_count,
+        Godot.Core.PhysicsServer.body_get_shape_transform,
+        Godot.Core.PhysicsServer.body_get_space,
+        Godot.Core.PhysicsServer.body_get_state,
+        Godot.Core.PhysicsServer.body_is_axis_locked,
+        Godot.Core.PhysicsServer.body_is_continuous_collision_detection_enabled,
+        Godot.Core.PhysicsServer.body_is_omitting_force_integration,
+        Godot.Core.PhysicsServer.body_is_ray_pickable,
+        Godot.Core.PhysicsServer.body_remove_collision_exception,
+        Godot.Core.PhysicsServer.body_remove_shape,
+        Godot.Core.PhysicsServer.body_set_axis_lock,
+        Godot.Core.PhysicsServer.body_set_axis_velocity,
+        Godot.Core.PhysicsServer.body_set_collision_layer,
+        Godot.Core.PhysicsServer.body_set_collision_mask,
+        Godot.Core.PhysicsServer.body_set_enable_continuous_collision_detection,
+        Godot.Core.PhysicsServer.body_set_force_integration_callback,
+        Godot.Core.PhysicsServer.body_set_kinematic_safe_margin,
+        Godot.Core.PhysicsServer.body_set_max_contacts_reported,
+        Godot.Core.PhysicsServer.body_set_mode,
+        Godot.Core.PhysicsServer.body_set_omit_force_integration,
+        Godot.Core.PhysicsServer.body_set_param,
+        Godot.Core.PhysicsServer.body_set_ray_pickable,
+        Godot.Core.PhysicsServer.body_set_shape,
+        Godot.Core.PhysicsServer.body_set_shape_disabled,
+        Godot.Core.PhysicsServer.body_set_shape_transform,
+        Godot.Core.PhysicsServer.body_set_space,
+        Godot.Core.PhysicsServer.body_set_state,
         Godot.Core.PhysicsServer.cone_twist_joint_get_param,
-        Godot.Core.PhysicsServer.joint_get_type,
-        Godot.Core.PhysicsServer.joint_set_solver_priority,
-        Godot.Core.PhysicsServer.joint_get_solver_priority,
-        Godot.Core.PhysicsServer.joint_create_generic_6dof,
-        Godot.Core.PhysicsServer.generic_6dof_joint_set_param,
+        Godot.Core.PhysicsServer.cone_twist_joint_set_param,
+        Godot.Core.PhysicsServer.free_rid,
+        Godot.Core.PhysicsServer.generic_6dof_joint_get_flag,
         Godot.Core.PhysicsServer.generic_6dof_joint_get_param,
         Godot.Core.PhysicsServer.generic_6dof_joint_set_flag,
-        Godot.Core.PhysicsServer.generic_6dof_joint_get_flag,
-        Godot.Core.PhysicsServer.free_rid,
+        Godot.Core.PhysicsServer.generic_6dof_joint_set_param,
+        Godot.Core.PhysicsServer.get_process_info,
+        Godot.Core.PhysicsServer.hinge_joint_get_flag,
+        Godot.Core.PhysicsServer.hinge_joint_get_param,
+        Godot.Core.PhysicsServer.hinge_joint_set_flag,
+        Godot.Core.PhysicsServer.hinge_joint_set_param,
+        Godot.Core.PhysicsServer.joint_create_cone_twist,
+        Godot.Core.PhysicsServer.joint_create_generic_6dof,
+        Godot.Core.PhysicsServer.joint_create_hinge,
+        Godot.Core.PhysicsServer.joint_create_pin,
+        Godot.Core.PhysicsServer.joint_create_slider,
+        Godot.Core.PhysicsServer.joint_get_solver_priority,
+        Godot.Core.PhysicsServer.joint_get_type,
+        Godot.Core.PhysicsServer.joint_set_solver_priority,
+        Godot.Core.PhysicsServer.pin_joint_get_local_a,
+        Godot.Core.PhysicsServer.pin_joint_get_local_b,
+        Godot.Core.PhysicsServer.pin_joint_get_param,
+        Godot.Core.PhysicsServer.pin_joint_set_local_a,
+        Godot.Core.PhysicsServer.pin_joint_set_local_b,
+        Godot.Core.PhysicsServer.pin_joint_set_param,
         Godot.Core.PhysicsServer.set_active,
-        Godot.Core.PhysicsServer.get_process_info)
+        Godot.Core.PhysicsServer.shape_create,
+        Godot.Core.PhysicsServer.shape_get_data,
+        Godot.Core.PhysicsServer.shape_get_type,
+        Godot.Core.PhysicsServer.shape_set_data,
+        Godot.Core.PhysicsServer.slider_joint_get_param,
+        Godot.Core.PhysicsServer.slider_joint_set_param,
+        Godot.Core.PhysicsServer.space_create,
+        Godot.Core.PhysicsServer.space_get_direct_state,
+        Godot.Core.PhysicsServer.space_get_param,
+        Godot.Core.PhysicsServer.space_is_active,
+        Godot.Core.PhysicsServer.space_set_active,
+        Godot.Core.PhysicsServer.space_set_param)
        where
 import Data.Coerce
 import Foreign.C
@@ -620,245 +622,76 @@ _AREA_SPACE_OVERRIDE_COMBINE = 1
 _SPACE_PARAM_BODY_LINEAR_VELOCITY_SLEEP_THRESHOLD :: Int
 _SPACE_PARAM_BODY_LINEAR_VELOCITY_SLEEP_THRESHOLD = 3
 
-{-# NOINLINE bindPhysicsServer_shape_create #-}
+{-# NOINLINE bindPhysicsServer_area_add_shape #-}
 
--- | Creates a shape of type SHAPE_*. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
-bindPhysicsServer_shape_create :: MethodBind
-bindPhysicsServer_shape_create
+-- | Adds a shape to the area, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
+bindPhysicsServer_area_add_shape :: MethodBind
+bindPhysicsServer_area_add_shape
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "shape_create" $
+          withCString "area_add_shape" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a shape of type SHAPE_*. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
-shape_create ::
-               (PhysicsServer :< cls, Object :< cls) => cls -> Int -> IO Rid
-shape_create cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_shape_create (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_shape_set_data #-}
-
--- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created [method shape_get_type].
-bindPhysicsServer_shape_set_data :: MethodBind
-bindPhysicsServer_shape_set_data
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "shape_set_data" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created [method shape_get_type].
-shape_set_data ::
+-- | Adds a shape to the area, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
+area_add_shape ::
                  (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> GodotVariant -> IO ()
-shape_set_data cls arg1 arg2
+                 cls -> Rid -> Rid -> Transform -> Bool -> IO ()
+area_add_shape cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_area_add_shape
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_area_attach_object_instance_id #-}
+
+-- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+bindPhysicsServer_area_attach_object_instance_id :: MethodBind
+bindPhysicsServer_area_attach_object_instance_id
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_attach_object_instance_id" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+area_attach_object_instance_id ::
+                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+area_attach_object_instance_id cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_shape_set_data
+         godot_method_bind_call
+           bindPhysicsServer_area_attach_object_instance_id
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_shape_get_type #-}
+{-# NOINLINE bindPhysicsServer_area_clear_shapes #-}
 
--- | Returns the type of shape (see SHAPE_* constants).
-bindPhysicsServer_shape_get_type :: MethodBind
-bindPhysicsServer_shape_get_type
+-- | Removes all shapes from an area. It does not delete the shapes, so they can be reassigned later.
+bindPhysicsServer_area_clear_shapes :: MethodBind
+bindPhysicsServer_area_clear_shapes
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "shape_get_type" $
+          withCString "area_clear_shapes" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the type of shape (see SHAPE_* constants).
-shape_get_type ::
-                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-shape_get_type cls arg1
+-- | Removes all shapes from an area. It does not delete the shapes, so they can be reassigned later.
+area_clear_shapes ::
+                    (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO ()
+area_clear_shapes cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_shape_get_type
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_shape_get_data #-}
-
--- | Returns the shape data.
-bindPhysicsServer_shape_get_data :: MethodBind
-bindPhysicsServer_shape_get_data
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "shape_get_data" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the shape data.
-shape_get_data ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> IO GodotVariant
-shape_get_data cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_shape_get_data
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_space_create #-}
-
--- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with [method area_set_space], or to a body with [method body_set_space].
-bindPhysicsServer_space_create :: MethodBind
-bindPhysicsServer_space_create
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "space_create" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with [method area_set_space], or to a body with [method body_set_space].
-space_create ::
-               (PhysicsServer :< cls, Object :< cls) => cls -> IO Rid
-space_create cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_space_create (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_space_set_active #-}
-
--- | Marks a space as active. It will not have an effect, unless it is assigned to an area or body.
-bindPhysicsServer_space_set_active :: MethodBind
-bindPhysicsServer_space_set_active
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "space_set_active" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Marks a space as active. It will not have an effect, unless it is assigned to an area or body.
-space_set_active ::
-                   (PhysicsServer :< cls, Object :< cls) =>
-                   cls -> Rid -> Bool -> IO ()
-space_set_active cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_space_set_active
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_space_is_active #-}
-
--- | Returns whether the space is active.
-bindPhysicsServer_space_is_active :: MethodBind
-bindPhysicsServer_space_is_active
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "space_is_active" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns whether the space is active.
-space_is_active ::
-                  (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
-space_is_active cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_space_is_active
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_space_set_param #-}
-
--- | Sets the value for a space parameter. A list of available parameters is on the SPACE_PARAM_* constants.
-bindPhysicsServer_space_set_param :: MethodBind
-bindPhysicsServer_space_set_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "space_set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the value for a space parameter. A list of available parameters is on the SPACE_PARAM_* constants.
-space_set_param ::
-                  (PhysicsServer :< cls, Object :< cls) =>
-                  cls -> Rid -> Int -> Float -> IO ()
-space_set_param cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_space_set_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_space_get_param #-}
-
--- | Returns the value of a space parameter.
-bindPhysicsServer_space_get_param :: MethodBind
-bindPhysicsServer_space_get_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "space_get_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the value of a space parameter.
-space_get_param ::
-                  (PhysicsServer :< cls, Object :< cls) =>
-                  cls -> Rid -> Int -> IO Float
-space_get_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_space_get_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_space_get_direct_state #-}
-
--- | Returns the state of a space, a [PhysicsDirectSpaceState]. This object can be used to make collision/intersection queries.
-bindPhysicsServer_space_get_direct_state :: MethodBind
-bindPhysicsServer_space_get_direct_state
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "space_get_direct_state" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the state of a space, a [PhysicsDirectSpaceState]. This object can be used to make collision/intersection queries.
-space_get_direct_state ::
-                         (PhysicsServer :< cls, Object :< cls) =>
-                         cls -> Rid -> IO PhysicsDirectSpaceState
-space_get_direct_state cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_space_get_direct_state
+         godot_method_bind_call bindPhysicsServer_area_clear_shapes
            (upcast cls)
            arrPtr
            len
@@ -887,198 +720,51 @@ area_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_area_set_space #-}
+{-# NOINLINE bindPhysicsServer_area_get_object_instance_id #-}
 
--- | Assigns a space to the area.
-bindPhysicsServer_area_set_space :: MethodBind
-bindPhysicsServer_area_set_space
+-- | Gets the instance ID of the object the area is assigned to.
+bindPhysicsServer_area_get_object_instance_id :: MethodBind
+bindPhysicsServer_area_get_object_instance_id
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "area_set_space" $
+          withCString "area_get_object_instance_id" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns a space to the area.
-area_set_space ::
-                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
-area_set_space cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_set_space
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_get_space #-}
-
--- | Returns the space assigned to the area.
-bindPhysicsServer_area_get_space :: MethodBind
-bindPhysicsServer_area_get_space
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_get_space" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the space assigned to the area.
-area_get_space ::
-                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Rid
-area_get_space cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_get_space
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_set_space_override_mode #-}
-
--- | Sets the space override mode for the area. The modes are described in the constants AREA_SPACE_OVERRIDE_*.
-bindPhysicsServer_area_set_space_override_mode :: MethodBind
-bindPhysicsServer_area_set_space_override_mode
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_set_space_override_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the space override mode for the area. The modes are described in the constants AREA_SPACE_OVERRIDE_*.
-area_set_space_override_mode ::
-                               (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-area_set_space_override_mode cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_area_set_space_override_mode
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_get_space_override_mode #-}
-
--- | Returns the space override mode for the area.
-bindPhysicsServer_area_get_space_override_mode :: MethodBind
-bindPhysicsServer_area_get_space_override_mode
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_get_space_override_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the space override mode for the area.
-area_get_space_override_mode ::
-                               (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-area_get_space_override_mode cls arg1
+-- | Gets the instance ID of the object the area is assigned to.
+area_get_object_instance_id ::
+                              (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+area_get_object_instance_id cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindPhysicsServer_area_get_space_override_mode
+           bindPhysicsServer_area_get_object_instance_id
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_area_add_shape #-}
+{-# NOINLINE bindPhysicsServer_area_get_param #-}
 
--- | Adds a shape to the area, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
-bindPhysicsServer_area_add_shape :: MethodBind
-bindPhysicsServer_area_add_shape
+-- | Returns an area parameter value. A list of available parameters is on the AREA_PARAM_* constants.
+bindPhysicsServer_area_get_param :: MethodBind
+bindPhysicsServer_area_get_param
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "area_add_shape" $
+          withCString "area_get_param" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a shape to the area, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
-area_add_shape ::
+-- | Returns an area parameter value. A list of available parameters is on the AREA_PARAM_* constants.
+area_get_param ::
                  (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Rid -> Transform -> IO ()
-area_add_shape cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+                 cls -> Rid -> Int -> IO GodotVariant
+area_get_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_add_shape
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_set_shape #-}
-
--- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its [RID].
-bindPhysicsServer_area_set_shape :: MethodBind
-bindPhysicsServer_area_set_shape
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_set_shape" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its [RID].
-area_set_shape ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> Rid -> IO ()
-area_set_shape cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_set_shape
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_set_shape_transform #-}
-
--- | Sets the transform matrix for an area shape.
-bindPhysicsServer_area_set_shape_transform :: MethodBind
-bindPhysicsServer_area_set_shape_transform
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_set_shape_transform" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the transform matrix for an area shape.
-area_set_shape_transform ::
-                           (PhysicsServer :< cls, Object :< cls) =>
-                           cls -> Rid -> Int -> Transform -> IO ()
-area_set_shape_transform cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_set_shape_transform
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_get_shape_count #-}
-
--- | Returns the number of shapes assigned to an area.
-bindPhysicsServer_area_get_shape_count :: MethodBind
-bindPhysicsServer_area_get_shape_count
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_get_shape_count" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the number of shapes assigned to an area.
-area_get_shape_count ::
-                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-area_get_shape_count cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_get_shape_count
+         godot_method_bind_call bindPhysicsServer_area_get_param
            (upcast cls)
            arrPtr
            len
@@ -1109,6 +795,30 @@ area_get_shape cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindPhysicsServer_area_get_shape_count #-}
+
+-- | Returns the number of shapes assigned to an area.
+bindPhysicsServer_area_get_shape_count :: MethodBind
+bindPhysicsServer_area_get_shape_count
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_get_shape_count" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the number of shapes assigned to an area.
+area_get_shape_count ::
+                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+area_get_shape_count cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_area_get_shape_count
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindPhysicsServer_area_get_shape_transform #-}
 
 -- | Returns the transform matrix of a shape within an area.
@@ -1129,6 +839,103 @@ area_get_shape_transform cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysicsServer_area_get_shape_transform
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_area_get_space #-}
+
+-- | Returns the space assigned to the area.
+bindPhysicsServer_area_get_space :: MethodBind
+bindPhysicsServer_area_get_space
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_get_space" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the space assigned to the area.
+area_get_space ::
+                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Rid
+area_get_space cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_area_get_space
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_area_get_space_override_mode #-}
+
+-- | Returns the space override mode for the area.
+bindPhysicsServer_area_get_space_override_mode :: MethodBind
+bindPhysicsServer_area_get_space_override_mode
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_get_space_override_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the space override mode for the area.
+area_get_space_override_mode ::
+                               (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+area_get_space_override_mode cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_area_get_space_override_mode
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_area_get_transform #-}
+
+-- | Returns the transform matrix for an area.
+bindPhysicsServer_area_get_transform :: MethodBind
+bindPhysicsServer_area_get_transform
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_get_transform" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the transform matrix for an area.
+area_get_transform ::
+                     (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Transform
+area_get_transform cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_area_get_transform
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_area_is_ray_pickable #-}
+
+-- | If [code]true[/code], area collides with rays.
+bindPhysicsServer_area_is_ray_pickable :: MethodBind
+bindPhysicsServer_area_is_ray_pickable
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_is_ray_pickable" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If [code]true[/code], area collides with rays.
+area_is_ray_pickable ::
+                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
+area_is_ray_pickable cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_area_is_ray_pickable
            (upcast cls)
            arrPtr
            len
@@ -1158,25 +965,25 @@ area_remove_shape cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_area_clear_shapes #-}
+{-# NOINLINE bindPhysicsServer_area_set_area_monitor_callback #-}
 
--- | Removes all shapes from an area. It does not delete the shapes, so they can be reassigned later.
-bindPhysicsServer_area_clear_shapes :: MethodBind
-bindPhysicsServer_area_clear_shapes
+bindPhysicsServer_area_set_area_monitor_callback :: MethodBind
+bindPhysicsServer_area_set_area_monitor_callback
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "area_clear_shapes" $
+          withCString "area_set_area_monitor_callback" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes all shapes from an area. It does not delete the shapes, so they can be reassigned later.
-area_clear_shapes ::
-                    (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO ()
-area_clear_shapes cls arg1
-  = withVariantArray [toVariant arg1]
+area_set_area_monitor_callback ::
+                                 (PhysicsServer :< cls, Object :< cls) =>
+                                 cls -> Rid -> Object -> GodotString -> IO ()
+area_set_area_monitor_callback cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_clear_shapes
+         godot_method_bind_call
+           bindPhysicsServer_area_set_area_monitor_callback
            (upcast cls)
            arrPtr
            len
@@ -1230,155 +1037,6 @@ area_set_collision_mask cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_area_set_param #-}
-
--- | Sets the value for an area parameter. A list of available parameters is on the AREA_PARAM_* constants.
-bindPhysicsServer_area_set_param :: MethodBind
-bindPhysicsServer_area_set_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the value for an area parameter. A list of available parameters is on the AREA_PARAM_* constants.
-area_set_param ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> GodotVariant -> IO ()
-area_set_param cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_set_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_set_transform #-}
-
--- | Sets the transform matrix for an area.
-bindPhysicsServer_area_set_transform :: MethodBind
-bindPhysicsServer_area_set_transform
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_set_transform" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the transform matrix for an area.
-area_set_transform ::
-                     (PhysicsServer :< cls, Object :< cls) =>
-                     cls -> Rid -> Transform -> IO ()
-area_set_transform cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_set_transform
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_get_param #-}
-
--- | Returns an area parameter value. A list of available parameters is on the AREA_PARAM_* constants.
-bindPhysicsServer_area_get_param :: MethodBind
-bindPhysicsServer_area_get_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_get_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns an area parameter value. A list of available parameters is on the AREA_PARAM_* constants.
-area_get_param ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> IO GodotVariant
-area_get_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_get_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_get_transform #-}
-
--- | Returns the transform matrix for an area.
-bindPhysicsServer_area_get_transform :: MethodBind
-bindPhysicsServer_area_get_transform
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_get_transform" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the transform matrix for an area.
-area_get_transform ::
-                     (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Transform
-area_get_transform cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_get_transform
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_attach_object_instance_id #-}
-
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
-bindPhysicsServer_area_attach_object_instance_id :: MethodBind
-bindPhysicsServer_area_attach_object_instance_id
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_attach_object_instance_id" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
-area_attach_object_instance_id ::
-                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-area_attach_object_instance_id cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_area_attach_object_instance_id
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_area_get_object_instance_id #-}
-
--- | Gets the instance ID of the object the area is assigned to.
-bindPhysicsServer_area_get_object_instance_id :: MethodBind
-bindPhysicsServer_area_get_object_instance_id
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_get_object_instance_id" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Gets the instance ID of the object the area is assigned to.
-area_get_object_instance_id ::
-                              (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-area_get_object_instance_id cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_area_get_object_instance_id
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindPhysicsServer_area_set_monitor_callback #-}
 
 -- | Sets the function to call when any body/area enters or exits the area. This callback will be called for any object interacting with the area, and takes five parameters:
@@ -1414,30 +1072,6 @@ area_set_monitor_callback cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_area_set_area_monitor_callback #-}
-
-bindPhysicsServer_area_set_area_monitor_callback :: MethodBind
-bindPhysicsServer_area_set_area_monitor_callback
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "area_set_area_monitor_callback" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-area_set_area_monitor_callback ::
-                                 (PhysicsServer :< cls, Object :< cls) =>
-                                 cls -> Rid -> Object -> GodotString -> IO ()
-area_set_area_monitor_callback cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_area_set_area_monitor_callback
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindPhysicsServer_area_set_monitorable #-}
 
 bindPhysicsServer_area_set_monitorable :: MethodBind
@@ -1456,6 +1090,31 @@ area_set_monitorable cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysicsServer_area_set_monitorable
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_area_set_param #-}
+
+-- | Sets the value for an area parameter. A list of available parameters is on the AREA_PARAM_* constants.
+bindPhysicsServer_area_set_param :: MethodBind
+bindPhysicsServer_area_set_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the value for an area parameter. A list of available parameters is on the AREA_PARAM_* constants.
+area_set_param ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Int -> GodotVariant -> IO ()
+area_set_param cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_area_set_param
            (upcast cls)
            arrPtr
            len
@@ -1486,693 +1145,148 @@ area_set_ray_pickable cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_area_is_ray_pickable #-}
+{-# NOINLINE bindPhysicsServer_area_set_shape #-}
 
--- | If [code]true[/code], area collides with rays.
-bindPhysicsServer_area_is_ray_pickable :: MethodBind
-bindPhysicsServer_area_is_ray_pickable
+-- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its [RID].
+bindPhysicsServer_area_set_shape :: MethodBind
+bindPhysicsServer_area_set_shape
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "area_is_ray_pickable" $
+          withCString "area_set_shape" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], area collides with rays.
-area_is_ray_pickable ::
-                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
-area_is_ray_pickable cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_area_is_ray_pickable
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_create #-}
-
--- | Creates a physics body. The first parameter can be any value from constants BODY_MODE*, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
-bindPhysicsServer_body_create :: MethodBind
-bindPhysicsServer_body_create
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_create" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Creates a physics body. The first parameter can be any value from constants BODY_MODE*, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
-body_create ::
-              (PhysicsServer :< cls, Object :< cls) =>
-              cls -> Int -> Bool -> IO Rid
-body_create cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_create (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_space #-}
-
--- | Assigns a space to the body (see [method space_create]).
-bindPhysicsServer_body_set_space :: MethodBind
-bindPhysicsServer_body_set_space
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_space" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Assigns a space to the body (see [method space_create]).
-body_set_space ::
-                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
-body_set_space cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_space
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_space #-}
-
--- | Returns the [RID] of the space assigned to a body.
-bindPhysicsServer_body_get_space :: MethodBind
-bindPhysicsServer_body_get_space
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_space" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the [RID] of the space assigned to a body.
-body_get_space ::
-                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Rid
-body_get_space cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_space
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_mode #-}
-
--- | Sets the body mode, from one of the constants BODY_MODE*.
-bindPhysicsServer_body_set_mode :: MethodBind
-bindPhysicsServer_body_set_mode
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the body mode, from one of the constants BODY_MODE*.
-body_set_mode ::
-                (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-body_set_mode cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_mode (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_mode #-}
-
--- | Returns the body mode.
-bindPhysicsServer_body_get_mode :: MethodBind
-bindPhysicsServer_body_get_mode
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the body mode.
-body_get_mode ::
-                (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-body_get_mode cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_mode (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_collision_layer #-}
-
--- | Sets the physics layer or layers a body belongs to.
-bindPhysicsServer_body_set_collision_layer :: MethodBind
-bindPhysicsServer_body_set_collision_layer
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_collision_layer" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the physics layer or layers a body belongs to.
-body_set_collision_layer ::
-                           (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-body_set_collision_layer cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_collision_layer
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_collision_layer #-}
-
--- | Returns the physics layer or layers a body belongs to.
-bindPhysicsServer_body_get_collision_layer :: MethodBind
-bindPhysicsServer_body_get_collision_layer
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_collision_layer" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the physics layer or layers a body belongs to.
-body_get_collision_layer ::
-                           (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-body_get_collision_layer cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_collision_layer
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_collision_mask #-}
-
--- | Sets the physics layer or layers a body can collide with.
-bindPhysicsServer_body_set_collision_mask :: MethodBind
-bindPhysicsServer_body_set_collision_mask
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_collision_mask" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the physics layer or layers a body can collide with.
-body_set_collision_mask ::
-                          (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-body_set_collision_mask cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_collision_mask
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_collision_mask #-}
-
--- | Returns the physics layer or layers a body can collide with.
---   -
-bindPhysicsServer_body_get_collision_mask :: MethodBind
-bindPhysicsServer_body_get_collision_mask
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_collision_mask" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the physics layer or layers a body can collide with.
---   -
-body_get_collision_mask ::
-                          (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-body_get_collision_mask cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_collision_mask
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_add_shape #-}
-
--- | Adds a shape to the body, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
-bindPhysicsServer_body_add_shape :: MethodBind
-bindPhysicsServer_body_add_shape
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_add_shape" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Adds a shape to the body, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
-body_add_shape ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Rid -> Transform -> IO ()
-body_add_shape cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_add_shape
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_shape #-}
-
--- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its [RID].
-bindPhysicsServer_body_set_shape :: MethodBind
-bindPhysicsServer_body_set_shape
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_shape" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its [RID].
-body_set_shape ::
+-- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its [RID].
+area_set_shape ::
                  (PhysicsServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> Rid -> IO ()
-body_set_shape cls arg1 arg2 arg3
+area_set_shape cls arg1 arg2 arg3
   = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_shape
+         godot_method_bind_call bindPhysicsServer_area_set_shape
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_set_shape_transform #-}
+{-# NOINLINE bindPhysicsServer_area_set_shape_disabled #-}
 
--- | Sets the transform matrix for a body shape.
-bindPhysicsServer_body_set_shape_transform :: MethodBind
-bindPhysicsServer_body_set_shape_transform
+bindPhysicsServer_area_set_shape_disabled :: MethodBind
+bindPhysicsServer_area_set_shape_disabled
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_set_shape_transform" $
+          withCString "area_set_shape_disabled" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the transform matrix for a body shape.
-body_set_shape_transform ::
+area_set_shape_disabled ::
+                          (PhysicsServer :< cls, Object :< cls) =>
+                          cls -> Rid -> Int -> Bool -> IO ()
+area_set_shape_disabled cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_area_set_shape_disabled
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_area_set_shape_transform #-}
+
+-- | Sets the transform matrix for an area shape.
+bindPhysicsServer_area_set_shape_transform :: MethodBind
+bindPhysicsServer_area_set_shape_transform
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "area_set_shape_transform" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the transform matrix for an area shape.
+area_set_shape_transform ::
                            (PhysicsServer :< cls, Object :< cls) =>
                            cls -> Rid -> Int -> Transform -> IO ()
-body_set_shape_transform cls arg1 arg2 arg3
+area_set_shape_transform cls arg1 arg2 arg3
   = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_shape_transform
+         godot_method_bind_call bindPhysicsServer_area_set_shape_transform
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_get_shape_count #-}
+{-# NOINLINE bindPhysicsServer_area_set_space #-}
 
--- | Returns the number of shapes assigned to a body.
-bindPhysicsServer_body_get_shape_count :: MethodBind
-bindPhysicsServer_body_get_shape_count
+-- | Assigns a space to the area.
+bindPhysicsServer_area_set_space :: MethodBind
+bindPhysicsServer_area_set_space
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_get_shape_count" $
+          withCString "area_set_space" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of shapes assigned to a body.
-body_get_shape_count ::
-                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-body_get_shape_count cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_shape_count
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_shape #-}
-
--- | Returns the [RID] of the nth shape of a body.
-bindPhysicsServer_body_get_shape :: MethodBind
-bindPhysicsServer_body_get_shape
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_shape" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the [RID] of the nth shape of a body.
-body_get_shape ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> IO Rid
-body_get_shape cls arg1 arg2
+-- | Assigns a space to the area.
+area_set_space ::
+                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
+area_set_space cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_shape
+         godot_method_bind_call bindPhysicsServer_area_set_space
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_get_shape_transform #-}
+{-# NOINLINE bindPhysicsServer_area_set_space_override_mode #-}
 
--- | Returns the transform matrix of a body shape.
-bindPhysicsServer_body_get_shape_transform :: MethodBind
-bindPhysicsServer_body_get_shape_transform
+-- | Sets the space override mode for the area. The modes are described in the constants AREA_SPACE_OVERRIDE_*.
+bindPhysicsServer_area_set_space_override_mode :: MethodBind
+bindPhysicsServer_area_set_space_override_mode
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_get_shape_transform" $
+          withCString "area_set_space_override_mode" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the transform matrix of a body shape.
-body_get_shape_transform ::
-                           (PhysicsServer :< cls, Object :< cls) =>
-                           cls -> Rid -> Int -> IO Transform
-body_get_shape_transform cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_shape_transform
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_remove_shape #-}
-
--- | Removes a shape from a body. The shape is not deleted, so it can be reused afterwards.
-bindPhysicsServer_body_remove_shape :: MethodBind
-bindPhysicsServer_body_remove_shape
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_remove_shape" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Removes a shape from a body. The shape is not deleted, so it can be reused afterwards.
-body_remove_shape ::
-                    (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-body_remove_shape cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_remove_shape
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_clear_shapes #-}
-
--- | Removes all shapes from a body.
-bindPhysicsServer_body_clear_shapes :: MethodBind
-bindPhysicsServer_body_clear_shapes
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_clear_shapes" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Removes all shapes from a body.
-body_clear_shapes ::
-                    (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO ()
-body_clear_shapes cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_clear_shapes
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_attach_object_instance_id #-}
-
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
-bindPhysicsServer_body_attach_object_instance_id :: MethodBind
-bindPhysicsServer_body_attach_object_instance_id
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_attach_object_instance_id" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
-body_attach_object_instance_id ::
-                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-body_attach_object_instance_id cls arg1 arg2
+-- | Sets the space override mode for the area. The modes are described in the constants AREA_SPACE_OVERRIDE_*.
+area_set_space_override_mode ::
+                               (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+area_set_space_override_mode cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindPhysicsServer_body_attach_object_instance_id
+           bindPhysicsServer_area_set_space_override_mode
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_get_object_instance_id #-}
+{-# NOINLINE bindPhysicsServer_area_set_transform #-}
 
--- | Gets the instance ID of the object the area is assigned to.
-bindPhysicsServer_body_get_object_instance_id :: MethodBind
-bindPhysicsServer_body_get_object_instance_id
+-- | Sets the transform matrix for an area.
+bindPhysicsServer_area_set_transform :: MethodBind
+bindPhysicsServer_area_set_transform
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_get_object_instance_id" $
+          withCString "area_set_transform" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the instance ID of the object the area is assigned to.
-body_get_object_instance_id ::
-                              (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-body_get_object_instance_id cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_get_object_instance_id
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_enable_continuous_collision_detection
-             #-}
-
--- | If [code]true[/code], the continuous collision detection mode is enabled.
---   				Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided.
-bindPhysicsServer_body_set_enable_continuous_collision_detection ::
-                                                                 MethodBind
-bindPhysicsServer_body_set_enable_continuous_collision_detection
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_enable_continuous_collision_detection" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | If [code]true[/code], the continuous collision detection mode is enabled.
---   				Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided.
-body_set_enable_continuous_collision_detection ::
-                                                 (PhysicsServer :< cls, Object :< cls) =>
-                                                 cls -> Rid -> Bool -> IO ()
-body_set_enable_continuous_collision_detection cls arg1 arg2
+-- | Sets the transform matrix for an area.
+area_set_transform ::
+                     (PhysicsServer :< cls, Object :< cls) =>
+                     cls -> Rid -> Transform -> IO ()
+area_set_transform cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_set_enable_continuous_collision_detection
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_is_continuous_collision_detection_enabled
-             #-}
-
--- | If [code]true[/code], the continuous collision detection mode is enabled.
-bindPhysicsServer_body_is_continuous_collision_detection_enabled ::
-                                                                 MethodBind
-bindPhysicsServer_body_is_continuous_collision_detection_enabled
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_is_continuous_collision_detection_enabled" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | If [code]true[/code], the continuous collision detection mode is enabled.
-body_is_continuous_collision_detection_enabled ::
-                                                 (PhysicsServer :< cls, Object :< cls) =>
-                                                 cls -> Rid -> IO Bool
-body_is_continuous_collision_detection_enabled cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_is_continuous_collision_detection_enabled
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_param #-}
-
--- | Sets a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
-bindPhysicsServer_body_set_param :: MethodBind
-bindPhysicsServer_body_set_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
-body_set_param ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> Float -> IO ()
-body_set_param cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_param #-}
-
--- | Returns the value of a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
-bindPhysicsServer_body_get_param :: MethodBind
-bindPhysicsServer_body_get_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the value of a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
-body_get_param ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> IO Float
-body_get_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_kinematic_safe_margin #-}
-
-bindPhysicsServer_body_set_kinematic_safe_margin :: MethodBind
-bindPhysicsServer_body_set_kinematic_safe_margin
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_kinematic_safe_margin" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-body_set_kinematic_safe_margin ::
-                                 (PhysicsServer :< cls, Object :< cls) =>
-                                 cls -> Rid -> Float -> IO ()
-body_set_kinematic_safe_margin cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_set_kinematic_safe_margin
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_kinematic_safe_margin #-}
-
-bindPhysicsServer_body_get_kinematic_safe_margin :: MethodBind
-bindPhysicsServer_body_get_kinematic_safe_margin
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_kinematic_safe_margin" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-body_get_kinematic_safe_margin ::
-                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Float
-body_get_kinematic_safe_margin cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_get_kinematic_safe_margin
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_set_state #-}
-
--- | Sets a body state (see BODY_STATE* constants).
-bindPhysicsServer_body_set_state :: MethodBind
-bindPhysicsServer_body_set_state
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_set_state" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets a body state (see BODY_STATE* constants).
-body_set_state ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> GodotVariant -> IO ()
-body_set_state cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_state
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_state #-}
-
--- | Returns a body state.
-bindPhysicsServer_body_get_state :: MethodBind
-bindPhysicsServer_body_get_state
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_state" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns a body state.
-body_get_state ::
-                 (PhysicsServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Int -> IO GodotVariant
-body_get_state cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_state
+         godot_method_bind_call bindPhysicsServer_area_set_transform
            (upcast cls)
            arrPtr
            len
@@ -2201,6 +1315,31 @@ body_add_central_force cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindPhysicsServer_body_add_collision_exception #-}
+
+-- | Adds a body to the list of bodies exempt from collisions.
+bindPhysicsServer_body_add_collision_exception :: MethodBind
+bindPhysicsServer_body_add_collision_exception
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_add_collision_exception" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Adds a body to the list of bodies exempt from collisions.
+body_add_collision_exception ::
+                               (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
+body_add_collision_exception cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_add_collision_exception
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindPhysicsServer_body_add_force #-}
 
 bindPhysicsServer_body_add_force :: MethodBind
@@ -2219,6 +1358,32 @@ body_add_force cls arg1 arg2 arg3
   = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysicsServer_body_add_force
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_add_shape #-}
+
+-- | Adds a shape to the body, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
+bindPhysicsServer_body_add_shape :: MethodBind
+bindPhysicsServer_body_add_shape
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_add_shape" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Adds a shape to the body, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
+body_add_shape ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Rid -> Transform -> Bool -> IO ()
+body_add_shape cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_add_shape
            (upcast cls)
            arrPtr
            len
@@ -2320,49 +1485,393 @@ body_apply_torque_impulse cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_set_axis_velocity #-}
+{-# NOINLINE bindPhysicsServer_body_attach_object_instance_id #-}
 
--- | Sets an axis velocity. The velocity in the given vector axis will be set as the given vector length. This is useful for jumping behavior.
-bindPhysicsServer_body_set_axis_velocity :: MethodBind
-bindPhysicsServer_body_set_axis_velocity
+-- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+bindPhysicsServer_body_attach_object_instance_id :: MethodBind
+bindPhysicsServer_body_attach_object_instance_id
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_set_axis_velocity" $
+          withCString "body_attach_object_instance_id" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets an axis velocity. The velocity in the given vector axis will be set as the given vector length. This is useful for jumping behavior.
-body_set_axis_velocity ::
-                         (PhysicsServer :< cls, Object :< cls) =>
-                         cls -> Rid -> Vector3 -> IO ()
-body_set_axis_velocity cls arg1 arg2
+-- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+body_attach_object_instance_id ::
+                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+body_attach_object_instance_id cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_axis_velocity
+         godot_method_bind_call
+           bindPhysicsServer_body_attach_object_instance_id
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_set_axis_lock #-}
+{-# NOINLINE bindPhysicsServer_body_clear_shapes #-}
 
-bindPhysicsServer_body_set_axis_lock :: MethodBind
-bindPhysicsServer_body_set_axis_lock
+-- | Removes all shapes from a body.
+bindPhysicsServer_body_clear_shapes :: MethodBind
+bindPhysicsServer_body_clear_shapes
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_set_axis_lock" $
+          withCString "body_clear_shapes" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-body_set_axis_lock ::
-                     (PhysicsServer :< cls, Object :< cls) =>
-                     cls -> Rid -> Int -> Bool -> IO ()
-body_set_axis_lock cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+-- | Removes all shapes from a body.
+body_clear_shapes ::
+                    (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO ()
+body_clear_shapes cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_set_axis_lock
+         godot_method_bind_call bindPhysicsServer_body_clear_shapes
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_create #-}
+
+-- | Creates a physics body. The first parameter can be any value from constants BODY_MODE*, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
+bindPhysicsServer_body_create :: MethodBind
+bindPhysicsServer_body_create
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_create" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Creates a physics body. The first parameter can be any value from constants BODY_MODE*, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
+body_create ::
+              (PhysicsServer :< cls, Object :< cls) =>
+              cls -> Int -> Bool -> IO Rid
+body_create cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_create (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_collision_layer #-}
+
+-- | Returns the physics layer or layers a body belongs to.
+bindPhysicsServer_body_get_collision_layer :: MethodBind
+bindPhysicsServer_body_get_collision_layer
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_collision_layer" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the physics layer or layers a body belongs to.
+body_get_collision_layer ::
+                           (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+body_get_collision_layer cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_collision_layer
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_collision_mask #-}
+
+-- | Returns the physics layer or layers a body can collide with.
+--   -
+bindPhysicsServer_body_get_collision_mask :: MethodBind
+bindPhysicsServer_body_get_collision_mask
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_collision_mask" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the physics layer or layers a body can collide with.
+--   -
+body_get_collision_mask ::
+                          (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+body_get_collision_mask cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_collision_mask
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_direct_state #-}
+
+-- | Returns the [PhysicsDirectBodyState] of the body.
+bindPhysicsServer_body_get_direct_state :: MethodBind
+bindPhysicsServer_body_get_direct_state
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_direct_state" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the [PhysicsDirectBodyState] of the body.
+body_get_direct_state ::
+                        (PhysicsServer :< cls, Object :< cls) =>
+                        cls -> Rid -> IO PhysicsDirectBodyState
+body_get_direct_state cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_direct_state
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_kinematic_safe_margin #-}
+
+bindPhysicsServer_body_get_kinematic_safe_margin :: MethodBind
+bindPhysicsServer_body_get_kinematic_safe_margin
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_kinematic_safe_margin" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+body_get_kinematic_safe_margin ::
+                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Float
+body_get_kinematic_safe_margin cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_get_kinematic_safe_margin
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_max_contacts_reported #-}
+
+-- | Returns the maximum contacts that can be reported. See [method body_set_max_contacts_reported].
+bindPhysicsServer_body_get_max_contacts_reported :: MethodBind
+bindPhysicsServer_body_get_max_contacts_reported
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_max_contacts_reported" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the maximum contacts that can be reported. See [method body_set_max_contacts_reported].
+body_get_max_contacts_reported ::
+                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+body_get_max_contacts_reported cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_get_max_contacts_reported
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_mode #-}
+
+-- | Returns the body mode.
+bindPhysicsServer_body_get_mode :: MethodBind
+bindPhysicsServer_body_get_mode
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the body mode.
+body_get_mode ::
+                (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+body_get_mode cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_mode (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_object_instance_id #-}
+
+-- | Gets the instance ID of the object the area is assigned to.
+bindPhysicsServer_body_get_object_instance_id :: MethodBind
+bindPhysicsServer_body_get_object_instance_id
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_object_instance_id" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gets the instance ID of the object the area is assigned to.
+body_get_object_instance_id ::
+                              (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+body_get_object_instance_id cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_get_object_instance_id
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_param #-}
+
+-- | Returns the value of a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+bindPhysicsServer_body_get_param :: MethodBind
+bindPhysicsServer_body_get_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the value of a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+body_get_param ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Int -> IO Float
+body_get_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_shape #-}
+
+-- | Returns the [RID] of the nth shape of a body.
+bindPhysicsServer_body_get_shape :: MethodBind
+bindPhysicsServer_body_get_shape
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_shape" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the [RID] of the nth shape of a body.
+body_get_shape ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Int -> IO Rid
+body_get_shape cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_shape
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_shape_count #-}
+
+-- | Returns the number of shapes assigned to a body.
+bindPhysicsServer_body_get_shape_count :: MethodBind
+bindPhysicsServer_body_get_shape_count
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_shape_count" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the number of shapes assigned to a body.
+body_get_shape_count ::
+                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+body_get_shape_count cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_shape_count
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_shape_transform #-}
+
+-- | Returns the transform matrix of a body shape.
+bindPhysicsServer_body_get_shape_transform :: MethodBind
+bindPhysicsServer_body_get_shape_transform
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_shape_transform" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the transform matrix of a body shape.
+body_get_shape_transform ::
+                           (PhysicsServer :< cls, Object :< cls) =>
+                           cls -> Rid -> Int -> IO Transform
+body_get_shape_transform cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_shape_transform
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_space #-}
+
+-- | Returns the [RID] of the space assigned to a body.
+bindPhysicsServer_body_get_space :: MethodBind
+bindPhysicsServer_body_get_space
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_space" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the [RID] of the space assigned to a body.
+body_get_space ::
+                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Rid
+body_get_space cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_space
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_get_state #-}
+
+-- | Returns a body state.
+bindPhysicsServer_body_get_state :: MethodBind
+bindPhysicsServer_body_get_state
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_get_state" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns a body state.
+body_get_state ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Int -> IO GodotVariant
+body_get_state cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_get_state
            (upcast cls)
            arrPtr
            len
@@ -2391,26 +1900,79 @@ body_is_axis_locked cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_add_collision_exception #-}
+{-# NOINLINE bindPhysicsServer_body_is_continuous_collision_detection_enabled
+             #-}
 
--- | Adds a body to the list of bodies exempt from collisions.
-bindPhysicsServer_body_add_collision_exception :: MethodBind
-bindPhysicsServer_body_add_collision_exception
+-- | If [code]true[/code], the continuous collision detection mode is enabled.
+bindPhysicsServer_body_is_continuous_collision_detection_enabled ::
+                                                                 MethodBind
+bindPhysicsServer_body_is_continuous_collision_detection_enabled
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_add_collision_exception" $
+          withCString "body_is_continuous_collision_detection_enabled" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a body to the list of bodies exempt from collisions.
-body_add_collision_exception ::
-                               (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
-body_add_collision_exception cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+-- | If [code]true[/code], the continuous collision detection mode is enabled.
+body_is_continuous_collision_detection_enabled ::
+                                                 (PhysicsServer :< cls, Object :< cls) =>
+                                                 cls -> Rid -> IO Bool
+body_is_continuous_collision_detection_enabled cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindPhysicsServer_body_add_collision_exception
+           bindPhysicsServer_body_is_continuous_collision_detection_enabled
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_is_omitting_force_integration
+             #-}
+
+-- | Returns whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+bindPhysicsServer_body_is_omitting_force_integration :: MethodBind
+bindPhysicsServer_body_is_omitting_force_integration
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_is_omitting_force_integration" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+body_is_omitting_force_integration ::
+                                     (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
+body_is_omitting_force_integration cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_is_omitting_force_integration
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_is_ray_pickable #-}
+
+-- | If [code]true[/code], the body can be detected by rays
+bindPhysicsServer_body_is_ray_pickable :: MethodBind
+bindPhysicsServer_body_is_ray_pickable
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_is_ray_pickable" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If [code]true[/code], the body can be detected by rays
+body_is_ray_pickable ::
+                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
+body_is_ray_pickable cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_is_ray_pickable
            (upcast cls)
            arrPtr
            len
@@ -2444,103 +2006,151 @@ body_remove_collision_exception cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_set_max_contacts_reported #-}
+{-# NOINLINE bindPhysicsServer_body_remove_shape #-}
 
--- | Sets the maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
-bindPhysicsServer_body_set_max_contacts_reported :: MethodBind
-bindPhysicsServer_body_set_max_contacts_reported
+-- | Removes a shape from a body. The shape is not deleted, so it can be reused afterwards.
+bindPhysicsServer_body_remove_shape :: MethodBind
+bindPhysicsServer_body_remove_shape
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_set_max_contacts_reported" $
+          withCString "body_remove_shape" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
-body_set_max_contacts_reported ::
-                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-body_set_max_contacts_reported cls arg1 arg2
+-- | Removes a shape from a body. The shape is not deleted, so it can be reused afterwards.
+body_remove_shape ::
+                    (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+body_remove_shape cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_set_max_contacts_reported
+         godot_method_bind_call bindPhysicsServer_body_remove_shape
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_get_max_contacts_reported #-}
+{-# NOINLINE bindPhysicsServer_body_set_axis_lock #-}
 
--- | Returns the maximum contacts that can be reported. See [method body_set_max_contacts_reported].
-bindPhysicsServer_body_get_max_contacts_reported :: MethodBind
-bindPhysicsServer_body_get_max_contacts_reported
+bindPhysicsServer_body_set_axis_lock :: MethodBind
+bindPhysicsServer_body_set_axis_lock
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_get_max_contacts_reported" $
+          withCString "body_set_axis_lock" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the maximum contacts that can be reported. See [method body_set_max_contacts_reported].
-body_get_max_contacts_reported ::
-                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-body_get_max_contacts_reported cls arg1
-  = withVariantArray [toVariant arg1]
+body_set_axis_lock ::
+                     (PhysicsServer :< cls, Object :< cls) =>
+                     cls -> Rid -> Int -> Bool -> IO ()
+body_set_axis_lock cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_get_max_contacts_reported
+         godot_method_bind_call bindPhysicsServer_body_set_axis_lock
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_set_omit_force_integration #-}
+{-# NOINLINE bindPhysicsServer_body_set_axis_velocity #-}
 
--- | Sets whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
-bindPhysicsServer_body_set_omit_force_integration :: MethodBind
-bindPhysicsServer_body_set_omit_force_integration
+-- | Sets an axis velocity. The velocity in the given vector axis will be set as the given vector length. This is useful for jumping behavior.
+bindPhysicsServer_body_set_axis_velocity :: MethodBind
+bindPhysicsServer_body_set_axis_velocity
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_set_omit_force_integration" $
+          withCString "body_set_axis_velocity" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
-body_set_omit_force_integration ::
-                                  (PhysicsServer :< cls, Object :< cls) =>
-                                  cls -> Rid -> Bool -> IO ()
-body_set_omit_force_integration cls arg1 arg2
+-- | Sets an axis velocity. The velocity in the given vector axis will be set as the given vector length. This is useful for jumping behavior.
+body_set_axis_velocity ::
+                         (PhysicsServer :< cls, Object :< cls) =>
+                         cls -> Rid -> Vector3 -> IO ()
+body_set_axis_velocity cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsServer_body_set_omit_force_integration
+         godot_method_bind_call bindPhysicsServer_body_set_axis_velocity
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_is_omitting_force_integration
+{-# NOINLINE bindPhysicsServer_body_set_collision_layer #-}
+
+-- | Sets the physics layer or layers a body belongs to.
+bindPhysicsServer_body_set_collision_layer :: MethodBind
+bindPhysicsServer_body_set_collision_layer
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_collision_layer" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the physics layer or layers a body belongs to.
+body_set_collision_layer ::
+                           (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+body_set_collision_layer cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_set_collision_layer
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_collision_mask #-}
+
+-- | Sets the physics layer or layers a body can collide with.
+bindPhysicsServer_body_set_collision_mask :: MethodBind
+bindPhysicsServer_body_set_collision_mask
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_collision_mask" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the physics layer or layers a body can collide with.
+body_set_collision_mask ::
+                          (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+body_set_collision_mask cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_set_collision_mask
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_enable_continuous_collision_detection
              #-}
 
--- | Returns whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
-bindPhysicsServer_body_is_omitting_force_integration :: MethodBind
-bindPhysicsServer_body_is_omitting_force_integration
+-- | If [code]true[/code], the continuous collision detection mode is enabled.
+--   				Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided.
+bindPhysicsServer_body_set_enable_continuous_collision_detection ::
+                                                                 MethodBind
+bindPhysicsServer_body_set_enable_continuous_collision_detection
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_is_omitting_force_integration" $
+          withCString "body_set_enable_continuous_collision_detection" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
-body_is_omitting_force_integration ::
-                                     (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
-body_is_omitting_force_integration cls arg1
-  = withVariantArray [toVariant arg1]
+-- | If [code]true[/code], the continuous collision detection mode is enabled.
+--   				Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided.
+body_set_enable_continuous_collision_detection ::
+                                                 (PhysicsServer :< cls, Object :< cls) =>
+                                                 cls -> Rid -> Bool -> IO ()
+body_set_enable_continuous_collision_detection cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindPhysicsServer_body_is_omitting_force_integration
+           bindPhysicsServer_body_set_enable_continuous_collision_detection
            (upcast cls)
            arrPtr
            len
@@ -2574,6 +2184,129 @@ body_set_force_integration_callback cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindPhysicsServer_body_set_kinematic_safe_margin #-}
+
+bindPhysicsServer_body_set_kinematic_safe_margin :: MethodBind
+bindPhysicsServer_body_set_kinematic_safe_margin
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_kinematic_safe_margin" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+body_set_kinematic_safe_margin ::
+                                 (PhysicsServer :< cls, Object :< cls) =>
+                                 cls -> Rid -> Float -> IO ()
+body_set_kinematic_safe_margin cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_set_kinematic_safe_margin
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_max_contacts_reported #-}
+
+-- | Sets the maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
+bindPhysicsServer_body_set_max_contacts_reported :: MethodBind
+bindPhysicsServer_body_set_max_contacts_reported
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_max_contacts_reported" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
+body_set_max_contacts_reported ::
+                                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+body_set_max_contacts_reported cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_set_max_contacts_reported
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_mode #-}
+
+-- | Sets the body mode, from one of the constants BODY_MODE*.
+bindPhysicsServer_body_set_mode :: MethodBind
+bindPhysicsServer_body_set_mode
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the body mode, from one of the constants BODY_MODE*.
+body_set_mode ::
+                (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+body_set_mode cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_set_mode (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_omit_force_integration #-}
+
+-- | Sets whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+bindPhysicsServer_body_set_omit_force_integration :: MethodBind
+bindPhysicsServer_body_set_omit_force_integration
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_omit_force_integration" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+body_set_omit_force_integration ::
+                                  (PhysicsServer :< cls, Object :< cls) =>
+                                  cls -> Rid -> Bool -> IO ()
+body_set_omit_force_integration cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindPhysicsServer_body_set_omit_force_integration
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_param #-}
+
+-- | Sets a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+bindPhysicsServer_body_set_param :: MethodBind
+bindPhysicsServer_body_set_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+body_set_param ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Int -> Float -> IO ()
+body_set_param cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_set_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindPhysicsServer_body_set_ray_pickable #-}
 
 -- | Sets the body pickable with rays if [code]enabled[/code] is set.
@@ -2599,477 +2332,123 @@ body_set_ray_pickable cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_body_is_ray_pickable #-}
+{-# NOINLINE bindPhysicsServer_body_set_shape #-}
 
--- | If [code]true[/code], the body can be detected by rays
-bindPhysicsServer_body_is_ray_pickable :: MethodBind
-bindPhysicsServer_body_is_ray_pickable
+-- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its [RID].
+bindPhysicsServer_body_set_shape :: MethodBind
+bindPhysicsServer_body_set_shape
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "body_is_ray_pickable" $
+          withCString "body_set_shape" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body can be detected by rays
-body_is_ray_pickable ::
-                       (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
-body_is_ray_pickable cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_is_ray_pickable
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_body_get_direct_state #-}
-
--- | Returns the [PhysicsDirectBodyState] of the body.
-bindPhysicsServer_body_get_direct_state :: MethodBind
-bindPhysicsServer_body_get_direct_state
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "body_get_direct_state" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the [PhysicsDirectBodyState] of the body.
-body_get_direct_state ::
-                        (PhysicsServer :< cls, Object :< cls) =>
-                        cls -> Rid -> IO PhysicsDirectBodyState
-body_get_direct_state cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_body_get_direct_state
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_joint_create_pin #-}
-
--- | Creates a [PinJoint].
-bindPhysicsServer_joint_create_pin :: MethodBind
-bindPhysicsServer_joint_create_pin
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "joint_create_pin" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Creates a [PinJoint].
-joint_create_pin ::
-                   (PhysicsServer :< cls, Object :< cls) =>
-                   cls -> Rid -> Vector3 -> Rid -> Vector3 -> IO Rid
-joint_create_pin cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_create_pin
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_pin_joint_set_param #-}
-
--- | Sets a pin_joint parameter (see PIN_JOINT* constants).
-bindPhysicsServer_pin_joint_set_param :: MethodBind
-bindPhysicsServer_pin_joint_set_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "pin_joint_set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets a pin_joint parameter (see PIN_JOINT* constants).
-pin_joint_set_param ::
-                      (PhysicsServer :< cls, Object :< cls) =>
-                      cls -> Rid -> Int -> Float -> IO ()
-pin_joint_set_param cls arg1 arg2 arg3
+-- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its [RID].
+body_set_shape ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Int -> Rid -> IO ()
+body_set_shape cls arg1 arg2 arg3
   = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_pin_joint_set_param
+         godot_method_bind_call bindPhysicsServer_body_set_shape
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_pin_joint_get_param #-}
+{-# NOINLINE bindPhysicsServer_body_set_shape_disabled #-}
 
--- | Gets a pin_joint parameter (see PIN_JOINT* constants).
-bindPhysicsServer_pin_joint_get_param :: MethodBind
-bindPhysicsServer_pin_joint_get_param
+bindPhysicsServer_body_set_shape_disabled :: MethodBind
+bindPhysicsServer_body_set_shape_disabled
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "pin_joint_get_param" $
+          withCString "body_set_shape_disabled" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a pin_joint parameter (see PIN_JOINT* constants).
-pin_joint_get_param ::
-                      (PhysicsServer :< cls, Object :< cls) =>
-                      cls -> Rid -> Int -> IO Float
-pin_joint_get_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_pin_joint_get_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_pin_joint_set_local_a #-}
-
--- | Sets position of the joint in the local space of body a of the joint.
-bindPhysicsServer_pin_joint_set_local_a :: MethodBind
-bindPhysicsServer_pin_joint_set_local_a
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "pin_joint_set_local_a" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets position of the joint in the local space of body a of the joint.
-pin_joint_set_local_a ::
-                        (PhysicsServer :< cls, Object :< cls) =>
-                        cls -> Rid -> Vector3 -> IO ()
-pin_joint_set_local_a cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_pin_joint_set_local_a
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_pin_joint_get_local_a #-}
-
--- | Returns position of the joint in the local space of body a of the joint.
-bindPhysicsServer_pin_joint_get_local_a :: MethodBind
-bindPhysicsServer_pin_joint_get_local_a
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "pin_joint_get_local_a" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns position of the joint in the local space of body a of the joint.
-pin_joint_get_local_a ::
-                        (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Vector3
-pin_joint_get_local_a cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_pin_joint_get_local_a
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_pin_joint_set_local_b #-}
-
--- | Sets position of the joint in the local space of body b of the joint.
-bindPhysicsServer_pin_joint_set_local_b :: MethodBind
-bindPhysicsServer_pin_joint_set_local_b
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "pin_joint_set_local_b" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets position of the joint in the local space of body b of the joint.
-pin_joint_set_local_b ::
-                        (PhysicsServer :< cls, Object :< cls) =>
-                        cls -> Rid -> Vector3 -> IO ()
-pin_joint_set_local_b cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_pin_joint_set_local_b
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_pin_joint_get_local_b #-}
-
--- | Returns position of the joint in the local space of body b of the joint.
-bindPhysicsServer_pin_joint_get_local_b :: MethodBind
-bindPhysicsServer_pin_joint_get_local_b
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "pin_joint_get_local_b" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns position of the joint in the local space of body b of the joint.
-pin_joint_get_local_b ::
-                        (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Vector3
-pin_joint_get_local_b cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_pin_joint_get_local_b
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_joint_create_hinge #-}
-
--- | Creates a [HingeJoint].
-bindPhysicsServer_joint_create_hinge :: MethodBind
-bindPhysicsServer_joint_create_hinge
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "joint_create_hinge" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Creates a [HingeJoint].
-joint_create_hinge ::
-                     (PhysicsServer :< cls, Object :< cls) =>
-                     cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
-joint_create_hinge cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_create_hinge
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_hinge_joint_set_param #-}
-
--- | Sets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
-bindPhysicsServer_hinge_joint_set_param :: MethodBind
-bindPhysicsServer_hinge_joint_set_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "hinge_joint_set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
-hinge_joint_set_param ::
-                        (PhysicsServer :< cls, Object :< cls) =>
-                        cls -> Rid -> Int -> Float -> IO ()
-hinge_joint_set_param cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_hinge_joint_set_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_hinge_joint_get_param #-}
-
--- | Gets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
-bindPhysicsServer_hinge_joint_get_param :: MethodBind
-bindPhysicsServer_hinge_joint_get_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "hinge_joint_get_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Gets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
-hinge_joint_get_param ::
-                        (PhysicsServer :< cls, Object :< cls) =>
-                        cls -> Rid -> Int -> IO Float
-hinge_joint_get_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_hinge_joint_get_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_hinge_joint_set_flag #-}
-
--- | Sets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
-bindPhysicsServer_hinge_joint_set_flag :: MethodBind
-bindPhysicsServer_hinge_joint_set_flag
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "hinge_joint_set_flag" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
-hinge_joint_set_flag ::
-                       (PhysicsServer :< cls, Object :< cls) =>
-                       cls -> Rid -> Int -> Bool -> IO ()
-hinge_joint_set_flag cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_hinge_joint_set_flag
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_hinge_joint_get_flag #-}
-
--- | Gets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
-bindPhysicsServer_hinge_joint_get_flag :: MethodBind
-bindPhysicsServer_hinge_joint_get_flag
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "hinge_joint_get_flag" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Gets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
-hinge_joint_get_flag ::
-                       (PhysicsServer :< cls, Object :< cls) =>
-                       cls -> Rid -> Int -> IO Bool
-hinge_joint_get_flag cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_hinge_joint_get_flag
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_joint_create_slider #-}
-
--- | Creates a [SliderJoint].
-bindPhysicsServer_joint_create_slider :: MethodBind
-bindPhysicsServer_joint_create_slider
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "joint_create_slider" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Creates a [SliderJoint].
-joint_create_slider ::
-                      (PhysicsServer :< cls, Object :< cls) =>
-                      cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
-joint_create_slider cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_create_slider
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_slider_joint_set_param #-}
-
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
-bindPhysicsServer_slider_joint_set_param :: MethodBind
-bindPhysicsServer_slider_joint_set_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "slider_joint_set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
-slider_joint_set_param ::
-                         (PhysicsServer :< cls, Object :< cls) =>
-                         cls -> Rid -> Int -> Float -> IO ()
-slider_joint_set_param cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_slider_joint_set_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_slider_joint_get_param #-}
-
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
-bindPhysicsServer_slider_joint_get_param :: MethodBind
-bindPhysicsServer_slider_joint_get_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "slider_joint_get_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
-slider_joint_get_param ::
-                         (PhysicsServer :< cls, Object :< cls) =>
-                         cls -> Rid -> Int -> IO Float
-slider_joint_get_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_slider_joint_get_param
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_joint_create_cone_twist #-}
-
--- | Creates a [ConeTwistJoint].
-bindPhysicsServer_joint_create_cone_twist :: MethodBind
-bindPhysicsServer_joint_create_cone_twist
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "joint_create_cone_twist" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Creates a [ConeTwistJoint].
-joint_create_cone_twist ::
+body_set_shape_disabled ::
                           (PhysicsServer :< cls, Object :< cls) =>
-                          cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
-joint_create_cone_twist cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+                          cls -> Rid -> Int -> Bool -> IO ()
+body_set_shape_disabled cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_create_cone_twist
+         godot_method_bind_call bindPhysicsServer_body_set_shape_disabled
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_cone_twist_joint_set_param #-}
+{-# NOINLINE bindPhysicsServer_body_set_shape_transform #-}
 
--- | Sets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
-bindPhysicsServer_cone_twist_joint_set_param :: MethodBind
-bindPhysicsServer_cone_twist_joint_set_param
+-- | Sets the transform matrix for a body shape.
+bindPhysicsServer_body_set_shape_transform :: MethodBind
+bindPhysicsServer_body_set_shape_transform
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "cone_twist_joint_set_param" $
+          withCString "body_set_shape_transform" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
-cone_twist_joint_set_param ::
-                             (PhysicsServer :< cls, Object :< cls) =>
-                             cls -> Rid -> Int -> Float -> IO ()
-cone_twist_joint_set_param cls arg1 arg2 arg3
+-- | Sets the transform matrix for a body shape.
+body_set_shape_transform ::
+                           (PhysicsServer :< cls, Object :< cls) =>
+                           cls -> Rid -> Int -> Transform -> IO ()
+body_set_shape_transform cls arg1 arg2 arg3
   = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_cone_twist_joint_set_param
+         godot_method_bind_call bindPhysicsServer_body_set_shape_transform
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_space #-}
+
+-- | Assigns a space to the body (see [method space_create]).
+bindPhysicsServer_body_set_space :: MethodBind
+bindPhysicsServer_body_set_space
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_space" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Assigns a space to the body (see [method space_create]).
+body_set_space ::
+                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
+body_set_space cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_set_space
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_body_set_state #-}
+
+-- | Sets a body state (see BODY_STATE* constants).
+bindPhysicsServer_body_set_state :: MethodBind
+bindPhysicsServer_body_set_state
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "body_set_state" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets a body state (see BODY_STATE* constants).
+body_set_state ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> Int -> GodotVariant -> IO ()
+body_set_state cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_body_set_state
            (upcast cls)
            arrPtr
            len
@@ -3100,126 +2479,75 @@ cone_twist_joint_get_param cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_joint_get_type #-}
+{-# NOINLINE bindPhysicsServer_cone_twist_joint_set_param #-}
 
--- | Returns the type of the Joint.
-bindPhysicsServer_joint_get_type :: MethodBind
-bindPhysicsServer_joint_get_type
+-- | Sets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
+bindPhysicsServer_cone_twist_joint_set_param :: MethodBind
+bindPhysicsServer_cone_twist_joint_set_param
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "joint_get_type" $
+          withCString "cone_twist_joint_set_param" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the type of the Joint.
-joint_get_type ::
-                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-joint_get_type cls arg1
+-- | Sets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
+cone_twist_joint_set_param ::
+                             (PhysicsServer :< cls, Object :< cls) =>
+                             cls -> Rid -> Int -> Float -> IO ()
+cone_twist_joint_set_param cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_cone_twist_joint_set_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_free_rid #-}
+
+-- | Destroys any of the objects created by PhysicsServer. If the [RID] passed is not one of the objects that can be created by PhysicsServer, an error will be sent to the console.
+bindPhysicsServer_free_rid :: MethodBind
+bindPhysicsServer_free_rid
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "free_rid" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Destroys any of the objects created by PhysicsServer. If the [RID] passed is not one of the objects that can be created by PhysicsServer, an error will be sent to the console.
+free_rid ::
+           (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO ()
+free_rid cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_get_type
-           (upcast cls)
+         godot_method_bind_call bindPhysicsServer_free_rid (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_joint_set_solver_priority #-}
+{-# NOINLINE bindPhysicsServer_generic_6dof_joint_get_flag #-}
 
--- | Sets the priority value of the Joint.
-bindPhysicsServer_joint_set_solver_priority :: MethodBind
-bindPhysicsServer_joint_set_solver_priority
+-- | Gets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
+bindPhysicsServer_generic_6dof_joint_get_flag :: MethodBind
+bindPhysicsServer_generic_6dof_joint_get_flag
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "joint_set_solver_priority" $
+          withCString "generic_6dof_joint_get_flag" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the priority value of the Joint.
-joint_set_solver_priority ::
-                            (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
-joint_set_solver_priority cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_set_solver_priority
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_joint_get_solver_priority #-}
-
--- | Gets the priority value of the Joint.
-bindPhysicsServer_joint_get_solver_priority :: MethodBind
-bindPhysicsServer_joint_get_solver_priority
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "joint_get_solver_priority" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Gets the priority value of the Joint.
-joint_get_solver_priority ::
-                            (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
-joint_get_solver_priority cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_get_solver_priority
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_joint_create_generic_6dof #-}
-
--- | Creates a [Generic6DOFJoint].
-bindPhysicsServer_joint_create_generic_6dof :: MethodBind
-bindPhysicsServer_joint_create_generic_6dof
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "joint_create_generic_6dof" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Creates a [Generic6DOFJoint].
-joint_create_generic_6dof ::
-                            (PhysicsServer :< cls, Object :< cls) =>
-                            cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
-joint_create_generic_6dof cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_joint_create_generic_6dof
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysicsServer_generic_6dof_joint_set_param #-}
-
--- | Sets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
-bindPhysicsServer_generic_6dof_joint_set_param :: MethodBind
-bindPhysicsServer_generic_6dof_joint_set_param
-  = unsafePerformIO $
-      withCString "PhysicsServer" $
-        \ clsNamePtr ->
-          withCString "generic_6dof_joint_set_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
-generic_6dof_joint_set_param ::
-                               (PhysicsServer :< cls, Object :< cls) =>
-                               cls -> Rid -> Int -> Int -> Float -> IO ()
-generic_6dof_joint_set_param cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+-- | Gets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
+generic_6dof_joint_get_flag ::
+                              (PhysicsServer :< cls, Object :< cls) =>
+                              cls -> Rid -> Int -> Int -> IO Bool
+generic_6dof_joint_get_flag cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindPhysicsServer_generic_6dof_joint_set_param
+           bindPhysicsServer_generic_6dof_joint_get_flag
            (upcast cls)
            arrPtr
            len
@@ -3278,51 +2606,503 @@ generic_6dof_joint_set_flag cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_generic_6dof_joint_get_flag #-}
+{-# NOINLINE bindPhysicsServer_generic_6dof_joint_set_param #-}
 
--- | Gets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
-bindPhysicsServer_generic_6dof_joint_get_flag :: MethodBind
-bindPhysicsServer_generic_6dof_joint_get_flag
+-- | Sets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
+bindPhysicsServer_generic_6dof_joint_set_param :: MethodBind
+bindPhysicsServer_generic_6dof_joint_set_param
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "generic_6dof_joint_get_flag" $
+          withCString "generic_6dof_joint_set_param" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
-generic_6dof_joint_get_flag ::
-                              (PhysicsServer :< cls, Object :< cls) =>
-                              cls -> Rid -> Int -> Int -> IO Bool
-generic_6dof_joint_get_flag cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+-- | Sets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
+generic_6dof_joint_set_param ::
+                               (PhysicsServer :< cls, Object :< cls) =>
+                               cls -> Rid -> Int -> Int -> Float -> IO ()
+generic_6dof_joint_set_param cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindPhysicsServer_generic_6dof_joint_get_flag
+           bindPhysicsServer_generic_6dof_joint_set_param
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_free_rid #-}
+{-# NOINLINE bindPhysicsServer_get_process_info #-}
 
--- | Destroys any of the objects created by PhysicsServer. If the [RID] passed is not one of the objects that can be created by PhysicsServer, an error will be sent to the console.
-bindPhysicsServer_free_rid :: MethodBind
-bindPhysicsServer_free_rid
+-- | Returns an Info defined by the [enum PhysicsServer.ProcessInfo] input given.
+bindPhysicsServer_get_process_info :: MethodBind
+bindPhysicsServer_get_process_info
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "free_rid" $
+          withCString "get_process_info" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Destroys any of the objects created by PhysicsServer. If the [RID] passed is not one of the objects that can be created by PhysicsServer, an error will be sent to the console.
-free_rid ::
-           (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO ()
-free_rid cls arg1
+-- | Returns an Info defined by the [enum PhysicsServer.ProcessInfo] input given.
+get_process_info ::
+                   (PhysicsServer :< cls, Object :< cls) => cls -> Int -> IO Int
+get_process_info cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_free_rid (upcast cls)
+         godot_method_bind_call bindPhysicsServer_get_process_info
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_hinge_joint_get_flag #-}
+
+-- | Gets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+bindPhysicsServer_hinge_joint_get_flag :: MethodBind
+bindPhysicsServer_hinge_joint_get_flag
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "hinge_joint_get_flag" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+hinge_joint_get_flag ::
+                       (PhysicsServer :< cls, Object :< cls) =>
+                       cls -> Rid -> Int -> IO Bool
+hinge_joint_get_flag cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_hinge_joint_get_flag
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_hinge_joint_get_param #-}
+
+-- | Gets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+bindPhysicsServer_hinge_joint_get_param :: MethodBind
+bindPhysicsServer_hinge_joint_get_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "hinge_joint_get_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+hinge_joint_get_param ::
+                        (PhysicsServer :< cls, Object :< cls) =>
+                        cls -> Rid -> Int -> IO Float
+hinge_joint_get_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_hinge_joint_get_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_hinge_joint_set_flag #-}
+
+-- | Sets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+bindPhysicsServer_hinge_joint_set_flag :: MethodBind
+bindPhysicsServer_hinge_joint_set_flag
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "hinge_joint_set_flag" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+hinge_joint_set_flag ::
+                       (PhysicsServer :< cls, Object :< cls) =>
+                       cls -> Rid -> Int -> Bool -> IO ()
+hinge_joint_set_flag cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_hinge_joint_set_flag
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_hinge_joint_set_param #-}
+
+-- | Sets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+bindPhysicsServer_hinge_joint_set_param :: MethodBind
+bindPhysicsServer_hinge_joint_set_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "hinge_joint_set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+hinge_joint_set_param ::
+                        (PhysicsServer :< cls, Object :< cls) =>
+                        cls -> Rid -> Int -> Float -> IO ()
+hinge_joint_set_param cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_hinge_joint_set_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_create_cone_twist #-}
+
+-- | Creates a [ConeTwistJoint].
+bindPhysicsServer_joint_create_cone_twist :: MethodBind
+bindPhysicsServer_joint_create_cone_twist
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_create_cone_twist" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Creates a [ConeTwistJoint].
+joint_create_cone_twist ::
+                          (PhysicsServer :< cls, Object :< cls) =>
+                          cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
+joint_create_cone_twist cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_create_cone_twist
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_create_generic_6dof #-}
+
+-- | Creates a [Generic6DOFJoint].
+bindPhysicsServer_joint_create_generic_6dof :: MethodBind
+bindPhysicsServer_joint_create_generic_6dof
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_create_generic_6dof" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Creates a [Generic6DOFJoint].
+joint_create_generic_6dof ::
+                            (PhysicsServer :< cls, Object :< cls) =>
+                            cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
+joint_create_generic_6dof cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_create_generic_6dof
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_create_hinge #-}
+
+-- | Creates a [HingeJoint].
+bindPhysicsServer_joint_create_hinge :: MethodBind
+bindPhysicsServer_joint_create_hinge
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_create_hinge" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Creates a [HingeJoint].
+joint_create_hinge ::
+                     (PhysicsServer :< cls, Object :< cls) =>
+                     cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
+joint_create_hinge cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_create_hinge
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_create_pin #-}
+
+-- | Creates a [PinJoint].
+bindPhysicsServer_joint_create_pin :: MethodBind
+bindPhysicsServer_joint_create_pin
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_create_pin" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Creates a [PinJoint].
+joint_create_pin ::
+                   (PhysicsServer :< cls, Object :< cls) =>
+                   cls -> Rid -> Vector3 -> Rid -> Vector3 -> IO Rid
+joint_create_pin cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_create_pin
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_create_slider #-}
+
+-- | Creates a [SliderJoint].
+bindPhysicsServer_joint_create_slider :: MethodBind
+bindPhysicsServer_joint_create_slider
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_create_slider" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Creates a [SliderJoint].
+joint_create_slider ::
+                      (PhysicsServer :< cls, Object :< cls) =>
+                      cls -> Rid -> Transform -> Rid -> Transform -> IO Rid
+joint_create_slider cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_create_slider
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_get_solver_priority #-}
+
+-- | Gets the priority value of the Joint.
+bindPhysicsServer_joint_get_solver_priority :: MethodBind
+bindPhysicsServer_joint_get_solver_priority
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_get_solver_priority" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gets the priority value of the Joint.
+joint_get_solver_priority ::
+                            (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+joint_get_solver_priority cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_get_solver_priority
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_get_type #-}
+
+-- | Returns the type of the Joint.
+bindPhysicsServer_joint_get_type :: MethodBind
+bindPhysicsServer_joint_get_type
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_get_type" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the type of the Joint.
+joint_get_type ::
+                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+joint_get_type cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_get_type
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_joint_set_solver_priority #-}
+
+-- | Sets the priority value of the Joint.
+bindPhysicsServer_joint_set_solver_priority :: MethodBind
+bindPhysicsServer_joint_set_solver_priority
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "joint_set_solver_priority" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the priority value of the Joint.
+joint_set_solver_priority ::
+                            (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
+joint_set_solver_priority cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_joint_set_solver_priority
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_pin_joint_get_local_a #-}
+
+-- | Returns position of the joint in the local space of body a of the joint.
+bindPhysicsServer_pin_joint_get_local_a :: MethodBind
+bindPhysicsServer_pin_joint_get_local_a
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "pin_joint_get_local_a" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns position of the joint in the local space of body a of the joint.
+pin_joint_get_local_a ::
+                        (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Vector3
+pin_joint_get_local_a cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_pin_joint_get_local_a
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_pin_joint_get_local_b #-}
+
+-- | Returns position of the joint in the local space of body b of the joint.
+bindPhysicsServer_pin_joint_get_local_b :: MethodBind
+bindPhysicsServer_pin_joint_get_local_b
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "pin_joint_get_local_b" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns position of the joint in the local space of body b of the joint.
+pin_joint_get_local_b ::
+                        (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Vector3
+pin_joint_get_local_b cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_pin_joint_get_local_b
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_pin_joint_get_param #-}
+
+-- | Gets a pin_joint parameter (see PIN_JOINT* constants).
+bindPhysicsServer_pin_joint_get_param :: MethodBind
+bindPhysicsServer_pin_joint_get_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "pin_joint_get_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gets a pin_joint parameter (see PIN_JOINT* constants).
+pin_joint_get_param ::
+                      (PhysicsServer :< cls, Object :< cls) =>
+                      cls -> Rid -> Int -> IO Float
+pin_joint_get_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_pin_joint_get_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_pin_joint_set_local_a #-}
+
+-- | Sets position of the joint in the local space of body a of the joint.
+bindPhysicsServer_pin_joint_set_local_a :: MethodBind
+bindPhysicsServer_pin_joint_set_local_a
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "pin_joint_set_local_a" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets position of the joint in the local space of body a of the joint.
+pin_joint_set_local_a ::
+                        (PhysicsServer :< cls, Object :< cls) =>
+                        cls -> Rid -> Vector3 -> IO ()
+pin_joint_set_local_a cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_pin_joint_set_local_a
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_pin_joint_set_local_b #-}
+
+-- | Sets position of the joint in the local space of body b of the joint.
+bindPhysicsServer_pin_joint_set_local_b :: MethodBind
+bindPhysicsServer_pin_joint_set_local_b
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "pin_joint_set_local_b" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets position of the joint in the local space of body b of the joint.
+pin_joint_set_local_b ::
+                        (PhysicsServer :< cls, Object :< cls) =>
+                        cls -> Rid -> Vector3 -> IO ()
+pin_joint_set_local_b cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_pin_joint_set_local_b
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_pin_joint_set_param #-}
+
+-- | Sets a pin_joint parameter (see PIN_JOINT* constants).
+bindPhysicsServer_pin_joint_set_param :: MethodBind
+bindPhysicsServer_pin_joint_set_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "pin_joint_set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets a pin_joint parameter (see PIN_JOINT* constants).
+pin_joint_set_param ::
+                      (PhysicsServer :< cls, Object :< cls) =>
+                      cls -> Rid -> Int -> Float -> IO ()
+pin_joint_set_param cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_pin_joint_set_param
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -3350,25 +3130,295 @@ set_active cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsServer_get_process_info #-}
+{-# NOINLINE bindPhysicsServer_shape_create #-}
 
--- | Returns an Info defined by the [enum PhysicsServer.ProcessInfo] input given.
-bindPhysicsServer_get_process_info :: MethodBind
-bindPhysicsServer_get_process_info
+-- | Creates a shape of type SHAPE_*. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
+bindPhysicsServer_shape_create :: MethodBind
+bindPhysicsServer_shape_create
   = unsafePerformIO $
       withCString "PhysicsServer" $
         \ clsNamePtr ->
-          withCString "get_process_info" $
+          withCString "shape_create" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an Info defined by the [enum PhysicsServer.ProcessInfo] input given.
-get_process_info ::
-                   (PhysicsServer :< cls, Object :< cls) => cls -> Int -> IO Int
-get_process_info cls arg1
+-- | Creates a shape of type SHAPE_*. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
+shape_create ::
+               (PhysicsServer :< cls, Object :< cls) => cls -> Int -> IO Rid
+shape_create cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsServer_get_process_info
+         godot_method_bind_call bindPhysicsServer_shape_create (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_shape_get_data #-}
+
+-- | Returns the shape data.
+bindPhysicsServer_shape_get_data :: MethodBind
+bindPhysicsServer_shape_get_data
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "shape_get_data" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the shape data.
+shape_get_data ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> IO GodotVariant
+shape_get_data cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_shape_get_data
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_shape_get_type #-}
+
+-- | Returns the type of shape (see SHAPE_* constants).
+bindPhysicsServer_shape_get_type :: MethodBind
+bindPhysicsServer_shape_get_type
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "shape_get_type" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the type of shape (see SHAPE_* constants).
+shape_get_type ::
+                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
+shape_get_type cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_shape_get_type
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_shape_set_data #-}
+
+-- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created [method shape_get_type].
+bindPhysicsServer_shape_set_data :: MethodBind
+bindPhysicsServer_shape_set_data
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "shape_set_data" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created [method shape_get_type].
+shape_set_data ::
+                 (PhysicsServer :< cls, Object :< cls) =>
+                 cls -> Rid -> GodotVariant -> IO ()
+shape_set_data cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_shape_set_data
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_slider_joint_get_param #-}
+
+-- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+bindPhysicsServer_slider_joint_get_param :: MethodBind
+bindPhysicsServer_slider_joint_get_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "slider_joint_get_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+slider_joint_get_param ::
+                         (PhysicsServer :< cls, Object :< cls) =>
+                         cls -> Rid -> Int -> IO Float
+slider_joint_get_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_slider_joint_get_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_slider_joint_set_param #-}
+
+-- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+bindPhysicsServer_slider_joint_set_param :: MethodBind
+bindPhysicsServer_slider_joint_set_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "slider_joint_set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+slider_joint_set_param ::
+                         (PhysicsServer :< cls, Object :< cls) =>
+                         cls -> Rid -> Int -> Float -> IO ()
+slider_joint_set_param cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_slider_joint_set_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_space_create #-}
+
+-- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with [method area_set_space], or to a body with [method body_set_space].
+bindPhysicsServer_space_create :: MethodBind
+bindPhysicsServer_space_create
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "space_create" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with [method area_set_space], or to a body with [method body_set_space].
+space_create ::
+               (PhysicsServer :< cls, Object :< cls) => cls -> IO Rid
+space_create cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_space_create (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_space_get_direct_state #-}
+
+-- | Returns the state of a space, a [PhysicsDirectSpaceState]. This object can be used to make collision/intersection queries.
+bindPhysicsServer_space_get_direct_state :: MethodBind
+bindPhysicsServer_space_get_direct_state
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "space_get_direct_state" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the state of a space, a [PhysicsDirectSpaceState]. This object can be used to make collision/intersection queries.
+space_get_direct_state ::
+                         (PhysicsServer :< cls, Object :< cls) =>
+                         cls -> Rid -> IO PhysicsDirectSpaceState
+space_get_direct_state cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_space_get_direct_state
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_space_get_param #-}
+
+-- | Returns the value of a space parameter.
+bindPhysicsServer_space_get_param :: MethodBind
+bindPhysicsServer_space_get_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "space_get_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the value of a space parameter.
+space_get_param ::
+                  (PhysicsServer :< cls, Object :< cls) =>
+                  cls -> Rid -> Int -> IO Float
+space_get_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_space_get_param
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_space_is_active #-}
+
+-- | Returns whether the space is active.
+bindPhysicsServer_space_is_active :: MethodBind
+bindPhysicsServer_space_is_active
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "space_is_active" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns whether the space is active.
+space_is_active ::
+                  (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
+space_is_active cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_space_is_active
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_space_set_active #-}
+
+-- | Marks a space as active. It will not have an effect, unless it is assigned to an area or body.
+bindPhysicsServer_space_set_active :: MethodBind
+bindPhysicsServer_space_set_active
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "space_set_active" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Marks a space as active. It will not have an effect, unless it is assigned to an area or body.
+space_set_active ::
+                   (PhysicsServer :< cls, Object :< cls) =>
+                   cls -> Rid -> Bool -> IO ()
+space_set_active cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_space_set_active
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsServer_space_set_param #-}
+
+-- | Sets the value for a space parameter. A list of available parameters is on the SPACE_PARAM_* constants.
+bindPhysicsServer_space_set_param :: MethodBind
+bindPhysicsServer_space_set_param
+  = unsafePerformIO $
+      withCString "PhysicsServer" $
+        \ clsNamePtr ->
+          withCString "space_set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the value for a space parameter. A list of available parameters is on the SPACE_PARAM_* constants.
+space_set_param ::
+                  (PhysicsServer :< cls, Object :< cls) =>
+                  cls -> Rid -> Int -> Float -> IO ()
+space_set_param cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsServer_space_set_param
            (upcast cls)
            arrPtr
            len

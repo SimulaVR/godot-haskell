@@ -21,7 +21,7 @@ bindPluginScript_new
 
 new ::
       (PluginScript :< cls, Object :< cls) =>
-      cls -> [Variant 'GodotTy] -> IO Object
+      cls -> [Variant 'GodotTy] -> IO GodotVariant
 new cls varargs
   = withVariantArray ([] ++ varargs)
       (\ (arrPtr, len) ->

@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.GradientTexture
        (Godot.Core.GradientTexture.get_width,
-        Godot.Core.GradientTexture.set_gradient,
+        Godot.Core.GradientTexture._update,
         Godot.Core.GradientTexture.get_gradient,
-        Godot.Core.GradientTexture.set_width,
-        Godot.Core.GradientTexture._update)
+        Godot.Core.GradientTexture.set_gradient,
+        Godot.Core.GradientTexture.set_width)
        where
 import Data.Coerce
 import Foreign.C
@@ -37,26 +37,22 @@ get_width cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindGradientTexture_set_gradient #-}
+{-# NOINLINE bindGradientTexture__update #-}
 
--- | The [Gradient] that will be used to fill the texture.
-bindGradientTexture_set_gradient :: MethodBind
-bindGradientTexture_set_gradient
+bindGradientTexture__update :: MethodBind
+bindGradientTexture__update
   = unsafePerformIO $
       withCString "GradientTexture" $
         \ clsNamePtr ->
-          withCString "set_gradient" $
+          withCString "_update" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Gradient] that will be used to fill the texture.
-set_gradient ::
-               (GradientTexture :< cls, Object :< cls) => cls -> Gradient -> IO ()
-set_gradient cls arg1
-  = withVariantArray [toVariant arg1]
+_update :: (GradientTexture :< cls, Object :< cls) => cls -> IO ()
+_update cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindGradientTexture_set_gradient
-           (upcast cls)
+         godot_method_bind_call bindGradientTexture__update (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -85,6 +81,30 @@ get_gradient cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindGradientTexture_set_gradient #-}
+
+-- | The [Gradient] that will be used to fill the texture.
+bindGradientTexture_set_gradient :: MethodBind
+bindGradientTexture_set_gradient
+  = unsafePerformIO $
+      withCString "GradientTexture" $
+        \ clsNamePtr ->
+          withCString "set_gradient" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The [Gradient] that will be used to fill the texture.
+set_gradient ::
+               (GradientTexture :< cls, Object :< cls) => cls -> Gradient -> IO ()
+set_gradient cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindGradientTexture_set_gradient
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindGradientTexture_set_width #-}
 
 -- | The number of color samples that will be obtained from the [Gradient].
@@ -104,26 +124,6 @@ set_width cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGradientTexture_set_width (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindGradientTexture__update #-}
-
-bindGradientTexture__update :: MethodBind
-bindGradientTexture__update
-  = unsafePerformIO $
-      withCString "GradientTexture" $
-        \ clsNamePtr ->
-          withCString "_update" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-_update :: (GradientTexture :< cls, Object :< cls) => cls -> IO ()
-_update cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindGradientTexture__update (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

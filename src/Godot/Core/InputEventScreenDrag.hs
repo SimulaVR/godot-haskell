@@ -1,14 +1,14 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.InputEventScreenDrag
-       (Godot.Core.InputEventScreenDrag.set_index,
-        Godot.Core.InputEventScreenDrag.get_index,
-        Godot.Core.InputEventScreenDrag.set_position,
+       (Godot.Core.InputEventScreenDrag.get_index,
         Godot.Core.InputEventScreenDrag.get_position,
-        Godot.Core.InputEventScreenDrag.set_relative,
         Godot.Core.InputEventScreenDrag.get_relative,
-        Godot.Core.InputEventScreenDrag.set_speed,
-        Godot.Core.InputEventScreenDrag.get_speed)
+        Godot.Core.InputEventScreenDrag.get_speed,
+        Godot.Core.InputEventScreenDrag.set_index,
+        Godot.Core.InputEventScreenDrag.set_position,
+        Godot.Core.InputEventScreenDrag.set_relative,
+        Godot.Core.InputEventScreenDrag.set_speed)
        where
 import Data.Coerce
 import Foreign.C
@@ -16,30 +16,6 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
-
-{-# NOINLINE bindInputEventScreenDrag_set_index #-}
-
--- | Drag event index in the case of a multi-drag event.
-bindInputEventScreenDrag_set_index :: MethodBind
-bindInputEventScreenDrag_set_index
-  = unsafePerformIO $
-      withCString "InputEventScreenDrag" $
-        \ clsNamePtr ->
-          withCString "set_index" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Drag event index in the case of a multi-drag event.
-set_index ::
-            (InputEventScreenDrag :< cls, Object :< cls) => cls -> Int -> IO ()
-set_index cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindInputEventScreenDrag_set_index
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindInputEventScreenDrag_get_index #-}
 
@@ -60,6 +36,102 @@ get_index cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindInputEventScreenDrag_get_index
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindInputEventScreenDrag_get_position #-}
+
+-- | Drag position.
+bindInputEventScreenDrag_get_position :: MethodBind
+bindInputEventScreenDrag_get_position
+  = unsafePerformIO $
+      withCString "InputEventScreenDrag" $
+        \ clsNamePtr ->
+          withCString "get_position" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Drag position.
+get_position ::
+               (InputEventScreenDrag :< cls, Object :< cls) => cls -> IO Vector2
+get_position cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventScreenDrag_get_position
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindInputEventScreenDrag_get_relative #-}
+
+-- | Drag position relative to its start position.
+bindInputEventScreenDrag_get_relative :: MethodBind
+bindInputEventScreenDrag_get_relative
+  = unsafePerformIO $
+      withCString "InputEventScreenDrag" $
+        \ clsNamePtr ->
+          withCString "get_relative" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Drag position relative to its start position.
+get_relative ::
+               (InputEventScreenDrag :< cls, Object :< cls) => cls -> IO Vector2
+get_relative cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventScreenDrag_get_relative
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindInputEventScreenDrag_get_speed #-}
+
+-- | Drag speed.
+bindInputEventScreenDrag_get_speed :: MethodBind
+bindInputEventScreenDrag_get_speed
+  = unsafePerformIO $
+      withCString "InputEventScreenDrag" $
+        \ clsNamePtr ->
+          withCString "get_speed" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Drag speed.
+get_speed ::
+            (InputEventScreenDrag :< cls, Object :< cls) => cls -> IO Vector2
+get_speed cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventScreenDrag_get_speed
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindInputEventScreenDrag_set_index #-}
+
+-- | Drag event index in the case of a multi-drag event.
+bindInputEventScreenDrag_set_index :: MethodBind
+bindInputEventScreenDrag_set_index
+  = unsafePerformIO $
+      withCString "InputEventScreenDrag" $
+        \ clsNamePtr ->
+          withCString "set_index" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Drag event index in the case of a multi-drag event.
+set_index ::
+            (InputEventScreenDrag :< cls, Object :< cls) => cls -> Int -> IO ()
+set_index cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventScreenDrag_set_index
            (upcast cls)
            arrPtr
            len
@@ -90,30 +162,6 @@ set_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindInputEventScreenDrag_get_position #-}
-
--- | Drag position.
-bindInputEventScreenDrag_get_position :: MethodBind
-bindInputEventScreenDrag_get_position
-  = unsafePerformIO $
-      withCString "InputEventScreenDrag" $
-        \ clsNamePtr ->
-          withCString "get_position" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Drag position.
-get_position ::
-               (InputEventScreenDrag :< cls, Object :< cls) => cls -> IO Vector2
-get_position cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindInputEventScreenDrag_get_position
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindInputEventScreenDrag_set_relative #-}
 
 -- | Drag position relative to its start position.
@@ -139,30 +187,6 @@ set_relative cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindInputEventScreenDrag_get_relative #-}
-
--- | Drag position relative to its start position.
-bindInputEventScreenDrag_get_relative :: MethodBind
-bindInputEventScreenDrag_get_relative
-  = unsafePerformIO $
-      withCString "InputEventScreenDrag" $
-        \ clsNamePtr ->
-          withCString "get_relative" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Drag position relative to its start position.
-get_relative ::
-               (InputEventScreenDrag :< cls, Object :< cls) => cls -> IO Vector2
-get_relative cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindInputEventScreenDrag_get_relative
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindInputEventScreenDrag_set_speed #-}
 
 -- | Drag speed.
@@ -183,30 +207,6 @@ set_speed cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindInputEventScreenDrag_set_speed
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindInputEventScreenDrag_get_speed #-}
-
--- | Drag speed.
-bindInputEventScreenDrag_get_speed :: MethodBind
-bindInputEventScreenDrag_get_speed
-  = unsafePerformIO $
-      withCString "InputEventScreenDrag" $
-        \ clsNamePtr ->
-          withCString "get_speed" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Drag speed.
-get_speed ::
-            (InputEventScreenDrag :< cls, Object :< cls) => cls -> IO Vector2
-get_speed cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindInputEventScreenDrag_get_speed
            (upcast cls)
            arrPtr
            len

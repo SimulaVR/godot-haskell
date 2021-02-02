@@ -1,13 +1,14 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.CubeMesh
-       (Godot.Core.CubeMesh.set_size, Godot.Core.CubeMesh.get_size,
-        Godot.Core.CubeMesh.set_subdivide_width,
-        Godot.Core.CubeMesh.get_subdivide_width,
-        Godot.Core.CubeMesh.set_subdivide_height,
+       (Godot.Core.CubeMesh.get_size,
+        Godot.Core.CubeMesh.get_subdivide_depth,
         Godot.Core.CubeMesh.get_subdivide_height,
+        Godot.Core.CubeMesh.get_subdivide_width,
+        Godot.Core.CubeMesh.set_size,
         Godot.Core.CubeMesh.set_subdivide_depth,
-        Godot.Core.CubeMesh.get_subdivide_depth)
+        Godot.Core.CubeMesh.set_subdivide_height,
+        Godot.Core.CubeMesh.set_subdivide_width)
        where
 import Data.Coerce
 import Foreign.C
@@ -15,28 +16,6 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
-
-{-# NOINLINE bindCubeMesh_set_size #-}
-
--- | Size of the cuboid mesh. Defaults to (2, 2, 2).
-bindCubeMesh_set_size :: MethodBind
-bindCubeMesh_set_size
-  = unsafePerformIO $
-      withCString "CubeMesh" $
-        \ clsNamePtr ->
-          withCString "set_size" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Size of the cuboid mesh. Defaults to (2, 2, 2).
-set_size ::
-           (CubeMesh :< cls, Object :< cls) => cls -> Vector3 -> IO ()
-set_size cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMesh_set_size (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindCubeMesh_get_size #-}
 
@@ -59,73 +38,25 @@ get_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCubeMesh_set_subdivide_width #-}
+{-# NOINLINE bindCubeMesh_get_subdivide_depth #-}
 
--- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
-bindCubeMesh_set_subdivide_width :: MethodBind
-bindCubeMesh_set_subdivide_width
+-- | Number of extra edge loops inserted along the z-axis. Defaults to 0.
+bindCubeMesh_get_subdivide_depth :: MethodBind
+bindCubeMesh_get_subdivide_depth
   = unsafePerformIO $
       withCString "CubeMesh" $
         \ clsNamePtr ->
-          withCString "set_subdivide_width" $
+          withCString "get_subdivide_depth" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
-set_subdivide_width ::
-                      (CubeMesh :< cls, Object :< cls) => cls -> Int -> IO ()
-set_subdivide_width cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMesh_set_subdivide_width
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCubeMesh_get_subdivide_width #-}
-
--- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
-bindCubeMesh_get_subdivide_width :: MethodBind
-bindCubeMesh_get_subdivide_width
-  = unsafePerformIO $
-      withCString "CubeMesh" $
-        \ clsNamePtr ->
-          withCString "get_subdivide_width" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
-get_subdivide_width ::
+-- | Number of extra edge loops inserted along the z-axis. Defaults to 0.
+get_subdivide_depth ::
                       (CubeMesh :< cls, Object :< cls) => cls -> IO Int
-get_subdivide_width cls
+get_subdivide_depth cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMesh_get_subdivide_width
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCubeMesh_set_subdivide_height #-}
-
--- | Number of extra edge loops inserted along the y-axis. Defaults to 0.
-bindCubeMesh_set_subdivide_height :: MethodBind
-bindCubeMesh_set_subdivide_height
-  = unsafePerformIO $
-      withCString "CubeMesh" $
-        \ clsNamePtr ->
-          withCString "set_subdivide_height" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Number of extra edge loops inserted along the y-axis. Defaults to 0.
-set_subdivide_height ::
-                       (CubeMesh :< cls, Object :< cls) => cls -> Int -> IO ()
-set_subdivide_height cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMesh_set_subdivide_height
+         godot_method_bind_call bindCubeMesh_get_subdivide_depth
            (upcast cls)
            arrPtr
            len
@@ -155,6 +86,52 @@ get_subdivide_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindCubeMesh_get_subdivide_width #-}
+
+-- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
+bindCubeMesh_get_subdivide_width :: MethodBind
+bindCubeMesh_get_subdivide_width
+  = unsafePerformIO $
+      withCString "CubeMesh" $
+        \ clsNamePtr ->
+          withCString "get_subdivide_width" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
+get_subdivide_width ::
+                      (CubeMesh :< cls, Object :< cls) => cls -> IO Int
+get_subdivide_width cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCubeMesh_get_subdivide_width
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCubeMesh_set_size #-}
+
+-- | Size of the cuboid mesh. Defaults to (2, 2, 2).
+bindCubeMesh_set_size :: MethodBind
+bindCubeMesh_set_size
+  = unsafePerformIO $
+      withCString "CubeMesh" $
+        \ clsNamePtr ->
+          withCString "set_size" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Size of the cuboid mesh. Defaults to (2, 2, 2).
+set_size ::
+           (CubeMesh :< cls, Object :< cls) => cls -> Vector3 -> IO ()
+set_size cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCubeMesh_set_size (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindCubeMesh_set_subdivide_depth #-}
 
 -- | Number of extra edge loops inserted along the z-axis. Defaults to 0.
@@ -179,25 +156,49 @@ set_subdivide_depth cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCubeMesh_get_subdivide_depth #-}
+{-# NOINLINE bindCubeMesh_set_subdivide_height #-}
 
--- | Number of extra edge loops inserted along the z-axis. Defaults to 0.
-bindCubeMesh_get_subdivide_depth :: MethodBind
-bindCubeMesh_get_subdivide_depth
+-- | Number of extra edge loops inserted along the y-axis. Defaults to 0.
+bindCubeMesh_set_subdivide_height :: MethodBind
+bindCubeMesh_set_subdivide_height
   = unsafePerformIO $
       withCString "CubeMesh" $
         \ clsNamePtr ->
-          withCString "get_subdivide_depth" $
+          withCString "set_subdivide_height" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of extra edge loops inserted along the z-axis. Defaults to 0.
-get_subdivide_depth ::
-                      (CubeMesh :< cls, Object :< cls) => cls -> IO Int
-get_subdivide_depth cls
-  = withVariantArray []
+-- | Number of extra edge loops inserted along the y-axis. Defaults to 0.
+set_subdivide_height ::
+                       (CubeMesh :< cls, Object :< cls) => cls -> Int -> IO ()
+set_subdivide_height cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMesh_get_subdivide_depth
+         godot_method_bind_call bindCubeMesh_set_subdivide_height
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCubeMesh_set_subdivide_width #-}
+
+-- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
+bindCubeMesh_set_subdivide_width :: MethodBind
+bindCubeMesh_set_subdivide_width
+  = unsafePerformIO $
+      withCString "CubeMesh" $
+        \ clsNamePtr ->
+          withCString "set_subdivide_width" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Number of extra edge loops inserted along the x-axis. Defaults to 0.
+set_subdivide_width ::
+                      (CubeMesh :< cls, Object :< cls) => cls -> Int -> IO ()
+set_subdivide_width cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCubeMesh_set_subdivide_width
            (upcast cls)
            arrPtr
            len

@@ -8,13 +8,13 @@ module Godot.Core.CubeMap
         Godot.Core.CubeMap._SIDE_LEFT, Godot.Core.CubeMap._SIDE_FRONT,
         Godot.Core.CubeMap._STORAGE_COMPRESS_LOSSY,
         Godot.Core.CubeMap._FLAG_MIPMAPS, Godot.Core.CubeMap._SIDE_BOTTOM,
-        Godot.Core.CubeMap._FLAG_FILTER, Godot.Core.CubeMap.get_width,
-        Godot.Core.CubeMap.get_height, Godot.Core.CubeMap.set_flags,
-        Godot.Core.CubeMap.get_flags, Godot.Core.CubeMap.set_side,
-        Godot.Core.CubeMap.get_side, Godot.Core.CubeMap.set_storage,
-        Godot.Core.CubeMap.get_storage,
+        Godot.Core.CubeMap._FLAG_FILTER, Godot.Core.CubeMap.get_flags,
+        Godot.Core.CubeMap.get_height,
+        Godot.Core.CubeMap.get_lossy_storage_quality,
+        Godot.Core.CubeMap.get_side, Godot.Core.CubeMap.get_storage,
+        Godot.Core.CubeMap.get_width, Godot.Core.CubeMap.set_flags,
         Godot.Core.CubeMap.set_lossy_storage_quality,
-        Godot.Core.CubeMap.get_lossy_storage_quality)
+        Godot.Core.CubeMap.set_side, Godot.Core.CubeMap.set_storage)
        where
 import Data.Coerce
 import Foreign.C
@@ -62,24 +62,24 @@ _SIDE_BOTTOM = 2
 _FLAG_FILTER :: Int
 _FLAG_FILTER = 4
 
-{-# NOINLINE bindCubeMap_get_width #-}
+{-# NOINLINE bindCubeMap_get_flags #-}
 
--- | Returns the [code]CubeMap[/code]'s width.
-bindCubeMap_get_width :: MethodBind
-bindCubeMap_get_width
+-- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+bindCubeMap_get_flags :: MethodBind
+bindCubeMap_get_flags
   = unsafePerformIO $
       withCString "CubeMap" $
         \ clsNamePtr ->
-          withCString "get_width" $
+          withCString "get_flags" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]CubeMap[/code]'s width.
-get_width :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
-get_width cls
+-- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+get_flags :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
+get_flags cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMap_get_width (upcast cls) arrPtr
+         godot_method_bind_call bindCubeMap_get_flags (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -104,67 +104,28 @@ get_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCubeMap_set_flags #-}
+{-# NOINLINE bindCubeMap_get_lossy_storage_quality #-}
 
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
-bindCubeMap_set_flags :: MethodBind
-bindCubeMap_set_flags
+-- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
+bindCubeMap_get_lossy_storage_quality :: MethodBind
+bindCubeMap_get_lossy_storage_quality
   = unsafePerformIO $
       withCString "CubeMap" $
         \ clsNamePtr ->
-          withCString "set_flags" $
+          withCString "get_lossy_storage_quality" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
-set_flags :: (CubeMap :< cls, Object :< cls) => cls -> Int -> IO ()
-set_flags cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMap_set_flags (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCubeMap_get_flags #-}
-
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
-bindCubeMap_get_flags :: MethodBind
-bindCubeMap_get_flags
-  = unsafePerformIO $
-      withCString "CubeMap" $
-        \ clsNamePtr ->
-          withCString "get_flags" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
-get_flags :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
-get_flags cls
+-- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
+get_lossy_storage_quality ::
+                            (CubeMap :< cls, Object :< cls) => cls -> IO Float
+get_lossy_storage_quality cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMap_get_flags (upcast cls) arrPtr
+         godot_method_bind_call bindCubeMap_get_lossy_storage_quality
+           (upcast cls)
+           arrPtr
            len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCubeMap_set_side #-}
-
--- | Sets an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
-bindCubeMap_set_side :: MethodBind
-bindCubeMap_set_side
-  = unsafePerformIO $
-      withCString "CubeMap" $
-        \ clsNamePtr ->
-          withCString "set_side" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
-set_side ::
-           (CubeMap :< cls, Object :< cls) => cls -> Int -> Image -> IO ()
-set_side cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMap_set_side (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindCubeMap_get_side #-}
@@ -188,28 +149,6 @@ get_side cls arg1
          godot_method_bind_call bindCubeMap_get_side (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCubeMap_set_storage #-}
-
--- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
-bindCubeMap_set_storage :: MethodBind
-bindCubeMap_set_storage
-  = unsafePerformIO $
-      withCString "CubeMap" $
-        \ clsNamePtr ->
-          withCString "set_storage" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
-set_storage ::
-              (CubeMap :< cls, Object :< cls) => cls -> Int -> IO ()
-set_storage cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMap_set_storage (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindCubeMap_get_storage #-}
 
 -- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
@@ -228,6 +167,48 @@ get_storage cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCubeMap_get_storage (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCubeMap_get_width #-}
+
+-- | Returns the [code]CubeMap[/code]'s width.
+bindCubeMap_get_width :: MethodBind
+bindCubeMap_get_width
+  = unsafePerformIO $
+      withCString "CubeMap" $
+        \ clsNamePtr ->
+          withCString "get_width" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the [code]CubeMap[/code]'s width.
+get_width :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
+get_width cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCubeMap_get_width (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCubeMap_set_flags #-}
+
+-- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+bindCubeMap_set_flags :: MethodBind
+bindCubeMap_set_flags
+  = unsafePerformIO $
+      withCString "CubeMap" $
+        \ clsNamePtr ->
+          withCString "set_flags" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+set_flags :: (CubeMap :< cls, Object :< cls) => cls -> Int -> IO ()
+set_flags cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCubeMap_set_flags (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -255,26 +236,45 @@ set_lossy_storage_quality cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCubeMap_get_lossy_storage_quality #-}
+{-# NOINLINE bindCubeMap_set_side #-}
 
--- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
-bindCubeMap_get_lossy_storage_quality :: MethodBind
-bindCubeMap_get_lossy_storage_quality
+-- | Sets an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
+bindCubeMap_set_side :: MethodBind
+bindCubeMap_set_side
   = unsafePerformIO $
       withCString "CubeMap" $
         \ clsNamePtr ->
-          withCString "get_lossy_storage_quality" $
+          withCString "set_side" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
-get_lossy_storage_quality ::
-                            (CubeMap :< cls, Object :< cls) => cls -> IO Float
-get_lossy_storage_quality cls
-  = withVariantArray []
+-- | Sets an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
+set_side ::
+           (CubeMap :< cls, Object :< cls) => cls -> Int -> Image -> IO ()
+set_side cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCubeMap_get_lossy_storage_quality
-           (upcast cls)
-           arrPtr
+         godot_method_bind_call bindCubeMap_set_side (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCubeMap_set_storage #-}
+
+-- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
+bindCubeMap_set_storage :: MethodBind
+bindCubeMap_set_storage
+  = unsafePerformIO $
+      withCString "CubeMap" $
+        \ clsNamePtr ->
+          withCString "set_storage" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
+set_storage ::
+              (CubeMap :< cls, Object :< cls) => cls -> Int -> IO ()
+set_storage cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCubeMap_set_storage (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

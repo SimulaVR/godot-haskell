@@ -1,9 +1,9 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.TCP_Server
-       (Godot.Core.TCP_Server.listen,
-        Godot.Core.TCP_Server.is_connection_available,
-        Godot.Core.TCP_Server.take_connection, Godot.Core.TCP_Server.stop)
+       (Godot.Core.TCP_Server.is_connection_available,
+        Godot.Core.TCP_Server.is_listening, Godot.Core.TCP_Server.listen,
+        Godot.Core.TCP_Server.stop, Godot.Core.TCP_Server.take_connection)
        where
 import Data.Coerce
 import Foreign.C
@@ -11,6 +11,51 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+
+{-# NOINLINE bindTCP_Server_is_connection_available #-}
+
+-- | Returns [code]true[/code] if a connection is available for taking.
+bindTCP_Server_is_connection_available :: MethodBind
+bindTCP_Server_is_connection_available
+  = unsafePerformIO $
+      withCString "TCP_Server" $
+        \ clsNamePtr ->
+          withCString "is_connection_available" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns [code]true[/code] if a connection is available for taking.
+is_connection_available ::
+                          (TCP_Server :< cls, Object :< cls) => cls -> IO Bool
+is_connection_available cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTCP_Server_is_connection_available
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindTCP_Server_is_listening #-}
+
+bindTCP_Server_is_listening :: MethodBind
+bindTCP_Server_is_listening
+  = unsafePerformIO $
+      withCString "TCP_Server" $
+        \ clsNamePtr ->
+          withCString "is_listening" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_listening ::
+               (TCP_Server :< cls, Object :< cls) => cls -> IO Bool
+is_listening cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTCP_Server_is_listening (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindTCP_Server_listen #-}
 
@@ -41,28 +86,24 @@ listen cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTCP_Server_is_connection_available #-}
+{-# NOINLINE bindTCP_Server_stop #-}
 
--- | Return true if a connection is available for taking.
-bindTCP_Server_is_connection_available :: MethodBind
-bindTCP_Server_is_connection_available
+-- | Stop listening.
+bindTCP_Server_stop :: MethodBind
+bindTCP_Server_stop
   = unsafePerformIO $
       withCString "TCP_Server" $
         \ clsNamePtr ->
-          withCString "is_connection_available" $
+          withCString "stop" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return true if a connection is available for taking.
-is_connection_available ::
-                          (TCP_Server :< cls, Object :< cls) => cls -> IO Bool
-is_connection_available cls
+-- | Stop listening.
+stop :: (TCP_Server :< cls, Object :< cls) => cls -> IO ()
+stop cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTCP_Server_is_connection_available
-           (upcast cls)
-           arrPtr
-           len
+         godot_method_bind_call bindTCP_Server_stop (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindTCP_Server_take_connection #-}
@@ -86,24 +127,4 @@ take_connection cls
          godot_method_bind_call bindTCP_Server_take_connection (upcast cls)
            arrPtr
            len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindTCP_Server_stop #-}
-
--- | Stop listening.
-bindTCP_Server_stop :: MethodBind
-bindTCP_Server_stop
-  = unsafePerformIO $
-      withCString "TCP_Server" $
-        \ clsNamePtr ->
-          withCString "stop" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Stop listening.
-stop :: (TCP_Server :< cls, Object :< cls) => cls -> IO ()
-stop cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindTCP_Server_stop (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

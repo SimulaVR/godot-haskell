@@ -1,12 +1,14 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.CollisionShape
-       (Godot.Core.CollisionShape.resource_changed,
-        Godot.Core.CollisionShape.set_shape,
+       (Godot.Core.CollisionShape._shape_changed,
+        Godot.Core.CollisionShape._update_debug_shape,
         Godot.Core.CollisionShape.get_shape,
-        Godot.Core.CollisionShape.set_disabled,
         Godot.Core.CollisionShape.is_disabled,
-        Godot.Core.CollisionShape.make_convex_from_brothers)
+        Godot.Core.CollisionShape.make_convex_from_brothers,
+        Godot.Core.CollisionShape.resource_changed,
+        Godot.Core.CollisionShape.set_disabled,
+        Godot.Core.CollisionShape.set_shape)
        where
 import Data.Coerce
 import Foreign.C
@@ -15,49 +17,46 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindCollisionShape_resource_changed #-}
+{-# NOINLINE bindCollisionShape__shape_changed #-}
 
--- | If this method exists within a script it will be called whenever the shape resource has been modified.
-bindCollisionShape_resource_changed :: MethodBind
-bindCollisionShape_resource_changed
+bindCollisionShape__shape_changed :: MethodBind
+bindCollisionShape__shape_changed
   = unsafePerformIO $
       withCString "CollisionShape" $
         \ clsNamePtr ->
-          withCString "resource_changed" $
+          withCString "_shape_changed" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If this method exists within a script it will be called whenever the shape resource has been modified.
-resource_changed ::
-                   (CollisionShape :< cls, Object :< cls) => cls -> Resource -> IO ()
-resource_changed cls arg1
-  = withVariantArray [toVariant arg1]
+_shape_changed ::
+                 (CollisionShape :< cls, Object :< cls) => cls -> IO ()
+_shape_changed cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCollisionShape_resource_changed
+         godot_method_bind_call bindCollisionShape__shape_changed
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCollisionShape_set_shape #-}
+{-# NOINLINE bindCollisionShape__update_debug_shape #-}
 
--- | The actual shape owned by this collision shape.
-bindCollisionShape_set_shape :: MethodBind
-bindCollisionShape_set_shape
+bindCollisionShape__update_debug_shape :: MethodBind
+bindCollisionShape__update_debug_shape
   = unsafePerformIO $
       withCString "CollisionShape" $
         \ clsNamePtr ->
-          withCString "set_shape" $
+          withCString "_update_debug_shape" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The actual shape owned by this collision shape.
-set_shape ::
-            (CollisionShape :< cls, Object :< cls) => cls -> Shape -> IO ()
-set_shape cls arg1
-  = withVariantArray [toVariant arg1]
+_update_debug_shape ::
+                      (CollisionShape :< cls, Object :< cls) => cls -> IO ()
+_update_debug_shape cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCollisionShape_set_shape (upcast cls)
+         godot_method_bind_call bindCollisionShape__update_debug_shape
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -81,29 +80,6 @@ get_shape cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCollisionShape_get_shape (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCollisionShape_set_disabled #-}
-
--- | A disabled collision shape has no effect in the world.
-bindCollisionShape_set_disabled :: MethodBind
-bindCollisionShape_set_disabled
-  = unsafePerformIO $
-      withCString "CollisionShape" $
-        \ clsNamePtr ->
-          withCString "set_disabled" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | A disabled collision shape has no effect in the world.
-set_disabled ::
-               (CollisionShape :< cls, Object :< cls) => cls -> Bool -> IO ()
-set_disabled cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCollisionShape_set_disabled (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -151,6 +127,76 @@ make_convex_from_brothers cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCollisionShape_make_convex_from_brothers
            (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCollisionShape_resource_changed #-}
+
+-- | If this method exists within a script it will be called whenever the shape resource has been modified.
+bindCollisionShape_resource_changed :: MethodBind
+bindCollisionShape_resource_changed
+  = unsafePerformIO $
+      withCString "CollisionShape" $
+        \ clsNamePtr ->
+          withCString "resource_changed" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If this method exists within a script it will be called whenever the shape resource has been modified.
+resource_changed ::
+                   (CollisionShape :< cls, Object :< cls) => cls -> Resource -> IO ()
+resource_changed cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCollisionShape_resource_changed
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCollisionShape_set_disabled #-}
+
+-- | A disabled collision shape has no effect in the world.
+bindCollisionShape_set_disabled :: MethodBind
+bindCollisionShape_set_disabled
+  = unsafePerformIO $
+      withCString "CollisionShape" $
+        \ clsNamePtr ->
+          withCString "set_disabled" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | A disabled collision shape has no effect in the world.
+set_disabled ::
+               (CollisionShape :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_disabled cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCollisionShape_set_disabled (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCollisionShape_set_shape #-}
+
+-- | The actual shape owned by this collision shape.
+bindCollisionShape_set_shape :: MethodBind
+bindCollisionShape_set_shape
+  = unsafePerformIO $
+      withCString "CollisionShape" $
+        \ clsNamePtr ->
+          withCString "set_shape" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The actual shape owned by this collision shape.
+set_shape ::
+            (CollisionShape :< cls, Object :< cls) => cls -> Shape -> IO ()
+set_shape cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCollisionShape_set_shape (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

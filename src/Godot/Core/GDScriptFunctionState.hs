@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.GDScriptFunctionState
        (Godot.Core.GDScriptFunctionState.sig_completed,
-        Godot.Core.GDScriptFunctionState.resume,
+        Godot.Core.GDScriptFunctionState._signal_callback,
         Godot.Core.GDScriptFunctionState.is_valid,
-        Godot.Core.GDScriptFunctionState._signal_callback)
+        Godot.Core.GDScriptFunctionState.resume)
        where
 import Data.Coerce
 import Foreign.C
@@ -17,24 +17,24 @@ sig_completed ::
               Godot.Internal.Dispatch.Signal GDScriptFunctionState
 sig_completed = Godot.Internal.Dispatch.Signal "completed"
 
-{-# NOINLINE bindGDScriptFunctionState_resume #-}
+{-# NOINLINE bindGDScriptFunctionState__signal_callback #-}
 
-bindGDScriptFunctionState_resume :: MethodBind
-bindGDScriptFunctionState_resume
+bindGDScriptFunctionState__signal_callback :: MethodBind
+bindGDScriptFunctionState__signal_callback
   = unsafePerformIO $
       withCString "GDScriptFunctionState" $
         \ clsNamePtr ->
-          withCString "resume" $
+          withCString "_signal_callback" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-resume ::
-         (GDScriptFunctionState :< cls, Object :< cls) =>
-         cls -> GodotVariant -> IO GodotVariant
-resume cls arg1
-  = withVariantArray [toVariant arg1]
+_signal_callback ::
+                   (GDScriptFunctionState :< cls, Object :< cls) =>
+                   cls -> [Variant 'GodotTy] -> IO GodotVariant
+_signal_callback cls varargs
+  = withVariantArray ([] ++ varargs)
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDScriptFunctionState_resume
+         godot_method_bind_call bindGDScriptFunctionState__signal_callback
            (upcast cls)
            arrPtr
            len
@@ -63,24 +63,24 @@ is_valid cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindGDScriptFunctionState__signal_callback #-}
+{-# NOINLINE bindGDScriptFunctionState_resume #-}
 
-bindGDScriptFunctionState__signal_callback :: MethodBind
-bindGDScriptFunctionState__signal_callback
+bindGDScriptFunctionState_resume :: MethodBind
+bindGDScriptFunctionState_resume
   = unsafePerformIO $
       withCString "GDScriptFunctionState" $
         \ clsNamePtr ->
-          withCString "_signal_callback" $
+          withCString "resume" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_signal_callback ::
-                   (GDScriptFunctionState :< cls, Object :< cls) =>
-                   cls -> [Variant 'GodotTy] -> IO GodotVariant
-_signal_callback cls varargs
-  = withVariantArray ([] ++ varargs)
+resume ::
+         (GDScriptFunctionState :< cls, Object :< cls) =>
+         cls -> GodotVariant -> IO GodotVariant
+resume cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDScriptFunctionState__signal_callback
+         godot_method_bind_call bindGDScriptFunctionState_resume
            (upcast cls)
            arrPtr
            len

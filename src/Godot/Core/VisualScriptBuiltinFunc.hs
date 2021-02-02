@@ -8,8 +8,11 @@ module Godot.Core.VisualScriptBuiltinFunc
         Godot.Core.VisualScriptBuiltinFunc._MATH_ISINF,
         Godot.Core.VisualScriptBuiltinFunc._MATH_ATAN2,
         Godot.Core.VisualScriptBuiltinFunc._TYPE_EXISTS,
+        Godot.Core.VisualScriptBuiltinFunc._MATH_SMOOTHSTEP,
+        Godot.Core.VisualScriptBuiltinFunc._MATH_LERP_ANGLE,
         Godot.Core.VisualScriptBuiltinFunc._MATH_WRAPF,
         Godot.Core.VisualScriptBuiltinFunc._MATH_ATAN,
+        Godot.Core.VisualScriptBuiltinFunc._MATH_POSMOD,
         Godot.Core.VisualScriptBuiltinFunc._MATH_COSH,
         Godot.Core.VisualScriptBuiltinFunc._MATH_SEED,
         Godot.Core.VisualScriptBuiltinFunc._TYPE_CONVERT,
@@ -41,6 +44,7 @@ module Godot.Core.VisualScriptBuiltinFunc
         Godot.Core.VisualScriptBuiltinFunc._TEXT_PRINTRAW,
         Godot.Core.VisualScriptBuiltinFunc._MATH_POW,
         Godot.Core.VisualScriptBuiltinFunc._LOGIC_CLAMP,
+        Godot.Core.VisualScriptBuiltinFunc._MATH_MOVE_TOWARD,
         Godot.Core.VisualScriptBuiltinFunc._MATH_EXP,
         Godot.Core.VisualScriptBuiltinFunc._TEXT_CHAR,
         Godot.Core.VisualScriptBuiltinFunc._MATH_RANDOMIZE,
@@ -55,6 +59,7 @@ module Godot.Core.VisualScriptBuiltinFunc
         Godot.Core.VisualScriptBuiltinFunc._MATH_SIN,
         Godot.Core.VisualScriptBuiltinFunc._VAR_TO_STR,
         Godot.Core.VisualScriptBuiltinFunc._MATH_SINH,
+        Godot.Core.VisualScriptBuiltinFunc._TEXT_ORD,
         Godot.Core.VisualScriptBuiltinFunc._STR_TO_VAR,
         Godot.Core.VisualScriptBuiltinFunc._MATH_INVERSE_LERP,
         Godot.Core.VisualScriptBuiltinFunc._MATH_FPOSMOD,
@@ -65,8 +70,8 @@ module Godot.Core.VisualScriptBuiltinFunc
         Godot.Core.VisualScriptBuiltinFunc._MATH_LINEAR2DB,
         Godot.Core.VisualScriptBuiltinFunc._MATH_ACOS,
         Godot.Core.VisualScriptBuiltinFunc._MATH_RANDSEED,
-        Godot.Core.VisualScriptBuiltinFunc.set_func,
-        Godot.Core.VisualScriptBuiltinFunc.get_func)
+        Godot.Core.VisualScriptBuiltinFunc.get_func,
+        Godot.Core.VisualScriptBuiltinFunc.set_func)
        where
 import Data.Coerce
 import Foreign.C
@@ -76,13 +81,13 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 
 _MATH_RAD2DEG :: Int
-_MATH_RAD2DEG = 37
+_MATH_RAD2DEG = 38
 
 _MATH_TAN :: Int
 _MATH_TAN = 2
 
 _MATH_DEG2RAD :: Int
-_MATH_DEG2RAD = 36
+_MATH_DEG2RAD = 37
 
 _MATH_LERP :: Int
 _MATH_LERP = 26
@@ -94,58 +99,67 @@ _MATH_ATAN2 :: Int
 _MATH_ATAN2 = 9
 
 _TYPE_EXISTS :: Int
-_TYPE_EXISTS = 52
+_TYPE_EXISTS = 53
+
+_MATH_SMOOTHSTEP :: Int
+_MATH_SMOOTHSTEP = 64
+
+_MATH_LERP_ANGLE :: Int
+_MATH_LERP_ANGLE = 66
 
 _MATH_WRAPF :: Int
-_MATH_WRAPF = 43
+_MATH_WRAPF = 44
 
 _MATH_ATAN :: Int
 _MATH_ATAN = 8
+
+_MATH_POSMOD :: Int
+_MATH_POSMOD = 65
 
 _MATH_COSH :: Int
 _MATH_COSH = 4
 
 _MATH_SEED :: Int
-_MATH_SEED = 34
+_MATH_SEED = 35
 
 _TYPE_CONVERT :: Int
-_TYPE_CONVERT = 50
+_TYPE_CONVERT = 51
 
 _LOGIC_MIN :: Int
-_LOGIC_MIN = 45
+_LOGIC_MIN = 46
 
 _MATH_STEPIFY :: Int
 _MATH_STEPIFY = 25
 
 _COLORN :: Int
-_COLORN = 62
+_COLORN = 63
 
 _MATH_SQRT :: Int
 _MATH_SQRT = 10
 
 _TEXT_PRINT :: Int
-_TEXT_PRINT = 55
+_TEXT_PRINT = 56
 
 _MATH_DB2LINEAR :: Int
-_MATH_DB2LINEAR = 39
+_MATH_DB2LINEAR = 40
 
 _MATH_RAND :: Int
-_MATH_RAND = 31
+_MATH_RAND = 32
 
 _FUNC_FUNCREF :: Int
-_FUNC_FUNCREF = 49
+_FUNC_FUNCREF = 50
 
 _LOGIC_NEAREST_PO2 :: Int
-_LOGIC_NEAREST_PO2 = 47
+_LOGIC_NEAREST_PO2 = 48
 
 _OBJ_WEAKREF :: Int
-_OBJ_WEAKREF = 48
+_OBJ_WEAKREF = 49
 
 _MATH_CARTESIAN2POLAR :: Int
-_MATH_CARTESIAN2POLAR = 41
+_MATH_CARTESIAN2POLAR = 42
 
 _MATH_POLAR2CARTESIAN :: Int
-_MATH_POLAR2CARTESIAN = 40
+_MATH_POLAR2CARTESIAN = 41
 
 _MATH_ISNAN :: Int
 _MATH_ISNAN = 21
@@ -160,7 +174,7 @@ _MATH_TANH :: Int
 _MATH_TANH = 5
 
 _MATH_RANDOM :: Int
-_MATH_RANDOM = 33
+_MATH_RANDOM = 34
 
 _MATH_RANGE_LERP :: Int
 _MATH_RANGE_LERP = 28
@@ -172,46 +186,49 @@ _MATH_DECIMALS :: Int
 _MATH_DECIMALS = 24
 
 _VAR_TO_BYTES :: Int
-_VAR_TO_BYTES = 60
+_VAR_TO_BYTES = 61
 
 _MATH_ABS :: Int
 _MATH_ABS = 16
 
 _TEXT_STR :: Int
-_TEXT_STR = 54
+_TEXT_STR = 55
 
 _BYTES_TO_VAR :: Int
-_BYTES_TO_VAR = 61
+_BYTES_TO_VAR = 62
 
 _MATH_FLOOR :: Int
 _MATH_FLOOR = 13
 
 _TEXT_PRINTRAW :: Int
-_TEXT_PRINTRAW = 57
+_TEXT_PRINTRAW = 58
 
 _MATH_POW :: Int
 _MATH_POW = 18
 
 _LOGIC_CLAMP :: Int
-_LOGIC_CLAMP = 46
+_LOGIC_CLAMP = 47
+
+_MATH_MOVE_TOWARD :: Int
+_MATH_MOVE_TOWARD = 29
 
 _MATH_EXP :: Int
 _MATH_EXP = 20
 
 _TEXT_CHAR :: Int
-_TEXT_CHAR = 53
+_TEXT_CHAR = 54
 
 _MATH_RANDOMIZE :: Int
-_MATH_RANDOMIZE = 30
+_MATH_RANDOMIZE = 31
 
 _MATH_ASIN :: Int
 _MATH_ASIN = 6
 
 _FUNC_MAX :: Int
-_FUNC_MAX = 63
+_FUNC_MAX = 68
 
 _LOGIC_MAX :: Int
-_LOGIC_MAX = 44
+_LOGIC_MAX = 45
 
 _MATH_EASE :: Int
 _MATH_EASE = 23
@@ -220,10 +237,10 @@ _MATH_ROUND :: Int
 _MATH_ROUND = 15
 
 _MATH_RANDF :: Int
-_MATH_RANDF = 32
+_MATH_RANDF = 33
 
 _MATH_DECTIME :: Int
-_MATH_DECTIME = 29
+_MATH_DECTIME = 30
 
 _MATH_COS :: Int
 _MATH_COS = 1
@@ -232,13 +249,16 @@ _MATH_SIN :: Int
 _MATH_SIN = 0
 
 _VAR_TO_STR :: Int
-_VAR_TO_STR = 58
+_VAR_TO_STR = 59
 
 _MATH_SINH :: Int
 _MATH_SINH = 3
 
+_TEXT_ORD :: Int
+_TEXT_ORD = 67
+
 _STR_TO_VAR :: Int
-_STR_TO_VAR = 59
+_STR_TO_VAR = 60
 
 _MATH_INVERSE_LERP :: Int
 _MATH_INVERSE_LERP = 27
@@ -247,25 +267,47 @@ _MATH_FPOSMOD :: Int
 _MATH_FPOSMOD = 12
 
 _MATH_WRAP :: Int
-_MATH_WRAP = 42
+_MATH_WRAP = 43
 
 _MATH_LOG :: Int
 _MATH_LOG = 19
 
 _TYPE_OF :: Int
-_TYPE_OF = 51
+_TYPE_OF = 52
 
 _TEXT_PRINTERR :: Int
-_TEXT_PRINTERR = 56
+_TEXT_PRINTERR = 57
 
 _MATH_LINEAR2DB :: Int
-_MATH_LINEAR2DB = 38
+_MATH_LINEAR2DB = 39
 
 _MATH_ACOS :: Int
 _MATH_ACOS = 7
 
 _MATH_RANDSEED :: Int
-_MATH_RANDSEED = 35
+_MATH_RANDSEED = 36
+
+{-# NOINLINE bindVisualScriptBuiltinFunc_get_func #-}
+
+bindVisualScriptBuiltinFunc_get_func :: MethodBind
+bindVisualScriptBuiltinFunc_get_func
+  = unsafePerformIO $
+      withCString "VisualScriptBuiltinFunc" $
+        \ clsNamePtr ->
+          withCString "get_func" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_func ::
+           (VisualScriptBuiltinFunc :< cls, Object :< cls) => cls -> IO Int
+get_func cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindVisualScriptBuiltinFunc_get_func
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindVisualScriptBuiltinFunc_set_func #-}
 
@@ -285,28 +327,6 @@ set_func cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisualScriptBuiltinFunc_set_func
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindVisualScriptBuiltinFunc_get_func #-}
-
-bindVisualScriptBuiltinFunc_get_func :: MethodBind
-bindVisualScriptBuiltinFunc_get_func
-  = unsafePerformIO $
-      withCString "VisualScriptBuiltinFunc" $
-        \ clsNamePtr ->
-          withCString "get_func" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_func ::
-           (VisualScriptBuiltinFunc :< cls, Object :< cls) => cls -> IO Int
-get_func cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisualScriptBuiltinFunc_get_func
            (upcast cls)
            arrPtr
            len

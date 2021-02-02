@@ -11,7 +11,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindConfirmationDialog_get_cancel #-}
 
--- | Return the cancel button.
+-- | Returns the cancel button.
 bindConfirmationDialog_get_cancel :: MethodBind
 bindConfirmationDialog_get_cancel
   = unsafePerformIO $
@@ -21,7 +21,7 @@ bindConfirmationDialog_get_cancel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return the cancel button.
+-- | Returns the cancel button.
 get_cancel ::
              (ConfirmationDialog :< cls, Object :< cls) => cls -> IO Button
 get_cancel cls

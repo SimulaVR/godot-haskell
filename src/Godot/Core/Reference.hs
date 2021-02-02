@@ -13,6 +13,8 @@ import Godot.Api.Types
 
 {-# NOINLINE bindReference_init_ref #-}
 
+-- | Initializes the internal reference counter. Use this only if you really know what you are doing.
+--   				Returns whether the initialization was successful.
 bindReference_init_ref :: MethodBind
 bindReference_init_ref
   = unsafePerformIO $
@@ -22,6 +24,8 @@ bindReference_init_ref
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Initializes the internal reference counter. Use this only if you really know what you are doing.
+--   				Returns whether the initialization was successful.
 init_ref :: (Reference :< cls, Object :< cls) => cls -> IO Bool
 init_ref cls
   = withVariantArray []
@@ -32,7 +36,8 @@ init_ref cls
 
 {-# NOINLINE bindReference_reference #-}
 
--- | Increase the internal reference counter. Use this only if you really know what you are doing.
+-- | Increments the internal reference counter. Use this only if you really know what you are doing.
+--   				Returns whether the increment was successful.
 bindReference_reference :: MethodBind
 bindReference_reference
   = unsafePerformIO $
@@ -42,7 +47,8 @@ bindReference_reference
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Increase the internal reference counter. Use this only if you really know what you are doing.
+-- | Increments the internal reference counter. Use this only if you really know what you are doing.
+--   				Returns whether the increment was successful.
 reference :: (Reference :< cls, Object :< cls) => cls -> IO Bool
 reference cls
   = withVariantArray []
@@ -53,7 +59,8 @@ reference cls
 
 {-# NOINLINE bindReference_unreference #-}
 
--- | Decrease the internal reference counter. Use this only if you really know what you are doing.
+-- | Decrements the internal reference counter. Use this only if you really know what you are doing.
+--   				Returns whether the decrement was successful.
 bindReference_unreference :: MethodBind
 bindReference_unreference
   = unsafePerformIO $
@@ -63,7 +70,8 @@ bindReference_unreference
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Decrease the internal reference counter. Use this only if you really know what you are doing.
+-- | Decrements the internal reference counter. Use this only if you really know what you are doing.
+--   				Returns whether the decrement was successful.
 unreference :: (Reference :< cls, Object :< cls) => cls -> IO Bool
 unreference cls
   = withVariantArray []

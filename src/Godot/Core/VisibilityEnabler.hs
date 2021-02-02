@@ -4,9 +4,9 @@ module Godot.Core.VisibilityEnabler
        (Godot.Core.VisibilityEnabler._ENABLER_MAX,
         Godot.Core.VisibilityEnabler._ENABLER_PAUSE_ANIMATIONS,
         Godot.Core.VisibilityEnabler._ENABLER_FREEZE_BODIES,
-        Godot.Core.VisibilityEnabler.set_enabler,
+        Godot.Core.VisibilityEnabler._node_removed,
         Godot.Core.VisibilityEnabler.is_enabler_enabled,
-        Godot.Core.VisibilityEnabler._node_removed)
+        Godot.Core.VisibilityEnabler.set_enabler)
        where
 import Data.Coerce
 import Foreign.C
@@ -24,26 +24,23 @@ _ENABLER_PAUSE_ANIMATIONS = 0
 _ENABLER_FREEZE_BODIES :: Int
 _ENABLER_FREEZE_BODIES = 1
 
-{-# NOINLINE bindVisibilityEnabler_set_enabler #-}
+{-# NOINLINE bindVisibilityEnabler__node_removed #-}
 
--- | If [code]true[/code], [RigidBody] nodes will be paused.
-bindVisibilityEnabler_set_enabler :: MethodBind
-bindVisibilityEnabler_set_enabler
+bindVisibilityEnabler__node_removed :: MethodBind
+bindVisibilityEnabler__node_removed
   = unsafePerformIO $
       withCString "VisibilityEnabler" $
         \ clsNamePtr ->
-          withCString "set_enabler" $
+          withCString "_node_removed" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [RigidBody] nodes will be paused.
-set_enabler ::
-              (VisibilityEnabler :< cls, Object :< cls) =>
-              cls -> Int -> Bool -> IO ()
-set_enabler cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+_node_removed ::
+                (VisibilityEnabler :< cls, Object :< cls) => cls -> Node -> IO ()
+_node_removed cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisibilityEnabler_set_enabler
+         godot_method_bind_call bindVisibilityEnabler__node_removed
            (upcast cls)
            arrPtr
            len
@@ -73,23 +70,26 @@ is_enabler_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindVisibilityEnabler__node_removed #-}
+{-# NOINLINE bindVisibilityEnabler_set_enabler #-}
 
-bindVisibilityEnabler__node_removed :: MethodBind
-bindVisibilityEnabler__node_removed
+-- | If [code]true[/code], [RigidBody] nodes will be paused.
+bindVisibilityEnabler_set_enabler :: MethodBind
+bindVisibilityEnabler_set_enabler
   = unsafePerformIO $
       withCString "VisibilityEnabler" $
         \ clsNamePtr ->
-          withCString "_node_removed" $
+          withCString "set_enabler" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_node_removed ::
-                (VisibilityEnabler :< cls, Object :< cls) => cls -> Node -> IO ()
-_node_removed cls arg1
-  = withVariantArray [toVariant arg1]
+-- | If [code]true[/code], [RigidBody] nodes will be paused.
+set_enabler ::
+              (VisibilityEnabler :< cls, Object :< cls) =>
+              cls -> Int -> Bool -> IO ()
+set_enabler cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisibilityEnabler__node_removed
+         godot_method_bind_call bindVisibilityEnabler_set_enabler
            (upcast cls)
            arrPtr
            len

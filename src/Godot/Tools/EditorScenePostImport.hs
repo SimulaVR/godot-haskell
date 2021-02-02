@@ -1,9 +1,9 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Tools.EditorScenePostImport
-       (Godot.Tools.EditorScenePostImport.post_import,
+       (Godot.Tools.EditorScenePostImport.get_source_file,
         Godot.Tools.EditorScenePostImport.get_source_folder,
-        Godot.Tools.EditorScenePostImport.get_source_file)
+        Godot.Tools.EditorScenePostImport.post_import)
        where
 import Data.Coerce
 import Foreign.C
@@ -12,26 +12,26 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindEditorScenePostImport_post_import #-}
+{-# NOINLINE bindEditorScenePostImport_get_source_file #-}
 
--- | Gets called after the scene got imported and has to return the modified version of the scene.
-bindEditorScenePostImport_post_import :: MethodBind
-bindEditorScenePostImport_post_import
+-- | Returns the source file path which got imported (e.g. [code]res://scene.dae[/code]).
+bindEditorScenePostImport_get_source_file :: MethodBind
+bindEditorScenePostImport_get_source_file
   = unsafePerformIO $
       withCString "EditorScenePostImport" $
         \ clsNamePtr ->
-          withCString "post_import" $
+          withCString "get_source_file" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets called after the scene got imported and has to return the modified version of the scene.
-post_import ::
-              (EditorScenePostImport :< cls, Object :< cls) =>
-              cls -> Object -> IO Object
-post_import cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Returns the source file path which got imported (e.g. [code]res://scene.dae[/code]).
+get_source_file ::
+                  (EditorScenePostImport :< cls, Object :< cls) =>
+                  cls -> IO GodotString
+get_source_file cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorScenePostImport_post_import
+         godot_method_bind_call bindEditorScenePostImport_get_source_file
            (upcast cls)
            arrPtr
            len
@@ -62,26 +62,26 @@ get_source_folder cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorScenePostImport_get_source_file #-}
+{-# NOINLINE bindEditorScenePostImport_post_import #-}
 
--- | Returns the source file path which got imported (e.g. [code]res://scene.dae[/code]).
-bindEditorScenePostImport_get_source_file :: MethodBind
-bindEditorScenePostImport_get_source_file
+-- | Gets called after the scene got imported and has to return the modified version of the scene.
+bindEditorScenePostImport_post_import :: MethodBind
+bindEditorScenePostImport_post_import
   = unsafePerformIO $
       withCString "EditorScenePostImport" $
         \ clsNamePtr ->
-          withCString "get_source_file" $
+          withCString "post_import" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the source file path which got imported (e.g. [code]res://scene.dae[/code]).
-get_source_file ::
-                  (EditorScenePostImport :< cls, Object :< cls) =>
-                  cls -> IO GodotString
-get_source_file cls
-  = withVariantArray []
+-- | Gets called after the scene got imported and has to return the modified version of the scene.
+post_import ::
+              (EditorScenePostImport :< cls, Object :< cls) =>
+              cls -> Object -> IO Object
+post_import cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorScenePostImport_get_source_file
+         godot_method_bind_call bindEditorScenePostImport_post_import
            (upcast cls)
            arrPtr
            len

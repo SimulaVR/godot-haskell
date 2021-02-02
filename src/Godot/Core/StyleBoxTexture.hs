@@ -5,26 +5,26 @@ module Godot.Core.StyleBoxTexture
         Godot.Core.StyleBoxTexture._AXIS_STRETCH_MODE_TILE,
         Godot.Core.StyleBoxTexture._AXIS_STRETCH_MODE_STRETCH,
         Godot.Core.StyleBoxTexture.sig_texture_changed,
-        Godot.Core.StyleBoxTexture.set_texture,
-        Godot.Core.StyleBoxTexture.get_texture,
-        Godot.Core.StyleBoxTexture.set_normal_map,
-        Godot.Core.StyleBoxTexture.get_normal_map,
-        Godot.Core.StyleBoxTexture.set_margin_size,
+        Godot.Core.StyleBoxTexture.get_expand_margin_size,
+        Godot.Core.StyleBoxTexture.get_h_axis_stretch_mode,
         Godot.Core.StyleBoxTexture.get_margin_size,
-        Godot.Core.StyleBoxTexture.set_expand_margin_size,
+        Godot.Core.StyleBoxTexture.get_modulate,
+        Godot.Core.StyleBoxTexture.get_normal_map,
+        Godot.Core.StyleBoxTexture.get_region_rect,
+        Godot.Core.StyleBoxTexture.get_texture,
+        Godot.Core.StyleBoxTexture.get_v_axis_stretch_mode,
+        Godot.Core.StyleBoxTexture.is_draw_center_enabled,
+        Godot.Core.StyleBoxTexture.set_draw_center,
         Godot.Core.StyleBoxTexture.set_expand_margin_all,
         Godot.Core.StyleBoxTexture.set_expand_margin_individual,
-        Godot.Core.StyleBoxTexture.get_expand_margin_size,
-        Godot.Core.StyleBoxTexture.set_region_rect,
-        Godot.Core.StyleBoxTexture.get_region_rect,
-        Godot.Core.StyleBoxTexture.set_draw_center,
-        Godot.Core.StyleBoxTexture.is_draw_center_enabled,
-        Godot.Core.StyleBoxTexture.set_modulate,
-        Godot.Core.StyleBoxTexture.get_modulate,
+        Godot.Core.StyleBoxTexture.set_expand_margin_size,
         Godot.Core.StyleBoxTexture.set_h_axis_stretch_mode,
-        Godot.Core.StyleBoxTexture.get_h_axis_stretch_mode,
-        Godot.Core.StyleBoxTexture.set_v_axis_stretch_mode,
-        Godot.Core.StyleBoxTexture.get_v_axis_stretch_mode)
+        Godot.Core.StyleBoxTexture.set_margin_size,
+        Godot.Core.StyleBoxTexture.set_modulate,
+        Godot.Core.StyleBoxTexture.set_normal_map,
+        Godot.Core.StyleBoxTexture.set_region_rect,
+        Godot.Core.StyleBoxTexture.set_texture,
+        Godot.Core.StyleBoxTexture.set_v_axis_stretch_mode)
        where
 import Data.Coerce
 import Foreign.C
@@ -47,124 +47,47 @@ sig_texture_changed ::
 sig_texture_changed
   = Godot.Internal.Dispatch.Signal "texture_changed"
 
-{-# NOINLINE bindStyleBoxTexture_set_texture #-}
+{-# NOINLINE bindStyleBoxTexture_get_expand_margin_size #-}
 
--- | The texture to use when drawing this style box.
-bindStyleBoxTexture_set_texture :: MethodBind
-bindStyleBoxTexture_set_texture
+-- | Expands the bottom margin of this style box when drawing, causing it be drawn larger than requested.
+bindStyleBoxTexture_get_expand_margin_size :: MethodBind
+bindStyleBoxTexture_get_expand_margin_size
   = unsafePerformIO $
       withCString "StyleBoxTexture" $
         \ clsNamePtr ->
-          withCString "set_texture" $
+          withCString "get_expand_margin_size" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The texture to use when drawing this style box.
-set_texture ::
-              (StyleBoxTexture :< cls, Object :< cls) => cls -> Texture -> IO ()
-set_texture cls arg1
+-- | Expands the bottom margin of this style box when drawing, causing it be drawn larger than requested.
+get_expand_margin_size ::
+                         (StyleBoxTexture :< cls, Object :< cls) => cls -> Int -> IO Float
+get_expand_margin_size cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_set_texture (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_get_texture #-}
-
--- | The texture to use when drawing this style box.
-bindStyleBoxTexture_get_texture :: MethodBind
-bindStyleBoxTexture_get_texture
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "get_texture" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The texture to use when drawing this style box.
-get_texture ::
-              (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Texture
-get_texture cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_get_texture (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_set_normal_map #-}
-
--- | The normal map to use when drawing this style box.
-bindStyleBoxTexture_set_normal_map :: MethodBind
-bindStyleBoxTexture_set_normal_map
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "set_normal_map" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The normal map to use when drawing this style box.
-set_normal_map ::
-                 (StyleBoxTexture :< cls, Object :< cls) => cls -> Texture -> IO ()
-set_normal_map cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_set_normal_map
+         godot_method_bind_call bindStyleBoxTexture_get_expand_margin_size
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindStyleBoxTexture_get_normal_map #-}
+{-# NOINLINE bindStyleBoxTexture_get_h_axis_stretch_mode #-}
 
--- | The normal map to use when drawing this style box.
-bindStyleBoxTexture_get_normal_map :: MethodBind
-bindStyleBoxTexture_get_normal_map
+bindStyleBoxTexture_get_h_axis_stretch_mode :: MethodBind
+bindStyleBoxTexture_get_h_axis_stretch_mode
   = unsafePerformIO $
       withCString "StyleBoxTexture" $
         \ clsNamePtr ->
-          withCString "get_normal_map" $
+          withCString "get_h_axis_stretch_mode" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The normal map to use when drawing this style box.
-get_normal_map ::
-                 (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Texture
-get_normal_map cls
+get_h_axis_stretch_mode ::
+                          (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Int
+get_h_axis_stretch_mode cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_get_normal_map
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_set_margin_size #-}
-
--- | Increases the bottom margin of the 3x3 texture box.
---   			A higher value means more of the source texture is considered to be part of the bottom border of the 3x3 box.
---   			This is also the value used as fallback for [member StyleBox.content_margin_bottom] if it is negative.
-bindStyleBoxTexture_set_margin_size :: MethodBind
-bindStyleBoxTexture_set_margin_size
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "set_margin_size" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Increases the bottom margin of the 3x3 texture box.
---   			A higher value means more of the source texture is considered to be part of the bottom border of the 3x3 box.
---   			This is also the value used as fallback for [member StyleBox.content_margin_bottom] if it is negative.
-set_margin_size ::
-                  (StyleBoxTexture :< cls, Object :< cls) =>
-                  cls -> Int -> Float -> IO ()
-set_margin_size cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_set_margin_size
+         godot_method_bind_call bindStyleBoxTexture_get_h_axis_stretch_mode
            (upcast cls)
            arrPtr
            len
@@ -198,26 +121,164 @@ get_margin_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindStyleBoxTexture_set_expand_margin_size #-}
+{-# NOINLINE bindStyleBoxTexture_get_modulate #-}
 
--- | Expands the bottom margin of this style box when drawing, causing it be drawn larger than requested.
-bindStyleBoxTexture_set_expand_margin_size :: MethodBind
-bindStyleBoxTexture_set_expand_margin_size
+-- | Modulates the color of the texture when this style box is drawn.
+bindStyleBoxTexture_get_modulate :: MethodBind
+bindStyleBoxTexture_get_modulate
   = unsafePerformIO $
       withCString "StyleBoxTexture" $
         \ clsNamePtr ->
-          withCString "set_expand_margin_size" $
+          withCString "get_modulate" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Expands the bottom margin of this style box when drawing, causing it be drawn larger than requested.
-set_expand_margin_size ::
-                         (StyleBoxTexture :< cls, Object :< cls) =>
-                         cls -> Int -> Float -> IO ()
-set_expand_margin_size cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+-- | Modulates the color of the texture when this style box is drawn.
+get_modulate ::
+               (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Color
+get_modulate cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_set_expand_margin_size
+         godot_method_bind_call bindStyleBoxTexture_get_modulate
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_get_normal_map #-}
+
+-- | The normal map to use when drawing this style box.
+bindStyleBoxTexture_get_normal_map :: MethodBind
+bindStyleBoxTexture_get_normal_map
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "get_normal_map" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The normal map to use when drawing this style box.
+get_normal_map ::
+                 (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Texture
+get_normal_map cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_get_normal_map
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_get_region_rect #-}
+
+-- | Species a sub region of the texture to use.
+--   			This is equivalent to first wrapping the texture in an [AtlasTexture] with the same region.
+bindStyleBoxTexture_get_region_rect :: MethodBind
+bindStyleBoxTexture_get_region_rect
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "get_region_rect" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Species a sub region of the texture to use.
+--   			This is equivalent to first wrapping the texture in an [AtlasTexture] with the same region.
+get_region_rect ::
+                  (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Rect2
+get_region_rect cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_get_region_rect
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_get_texture #-}
+
+-- | The texture to use when drawing this style box.
+bindStyleBoxTexture_get_texture :: MethodBind
+bindStyleBoxTexture_get_texture
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "get_texture" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The texture to use when drawing this style box.
+get_texture ::
+              (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Texture
+get_texture cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_get_texture (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_get_v_axis_stretch_mode #-}
+
+bindStyleBoxTexture_get_v_axis_stretch_mode :: MethodBind
+bindStyleBoxTexture_get_v_axis_stretch_mode
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "get_v_axis_stretch_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_v_axis_stretch_mode ::
+                          (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Int
+get_v_axis_stretch_mode cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_get_v_axis_stretch_mode
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_is_draw_center_enabled #-}
+
+bindStyleBoxTexture_is_draw_center_enabled :: MethodBind
+bindStyleBoxTexture_is_draw_center_enabled
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "is_draw_center_enabled" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_draw_center_enabled ::
+                         (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Bool
+is_draw_center_enabled cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_is_draw_center_enabled
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_set_draw_center #-}
+
+bindStyleBoxTexture_set_draw_center :: MethodBind
+bindStyleBoxTexture_set_draw_center
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "set_draw_center" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_draw_center ::
+                  (StyleBoxTexture :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_draw_center cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_set_draw_center
            (upcast cls)
            arrPtr
            len
@@ -270,25 +331,125 @@ set_expand_margin_individual cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindStyleBoxTexture_get_expand_margin_size #-}
+{-# NOINLINE bindStyleBoxTexture_set_expand_margin_size #-}
 
 -- | Expands the bottom margin of this style box when drawing, causing it be drawn larger than requested.
-bindStyleBoxTexture_get_expand_margin_size :: MethodBind
-bindStyleBoxTexture_get_expand_margin_size
+bindStyleBoxTexture_set_expand_margin_size :: MethodBind
+bindStyleBoxTexture_set_expand_margin_size
   = unsafePerformIO $
       withCString "StyleBoxTexture" $
         \ clsNamePtr ->
-          withCString "get_expand_margin_size" $
+          withCString "set_expand_margin_size" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Expands the bottom margin of this style box when drawing, causing it be drawn larger than requested.
-get_expand_margin_size ::
-                         (StyleBoxTexture :< cls, Object :< cls) => cls -> Int -> IO Float
-get_expand_margin_size cls arg1
+set_expand_margin_size ::
+                         (StyleBoxTexture :< cls, Object :< cls) =>
+                         cls -> Int -> Float -> IO ()
+set_expand_margin_size cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_set_expand_margin_size
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_set_h_axis_stretch_mode #-}
+
+bindStyleBoxTexture_set_h_axis_stretch_mode :: MethodBind
+bindStyleBoxTexture_set_h_axis_stretch_mode
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "set_h_axis_stretch_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_h_axis_stretch_mode ::
+                          (StyleBoxTexture :< cls, Object :< cls) => cls -> Int -> IO ()
+set_h_axis_stretch_mode cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_get_expand_margin_size
+         godot_method_bind_call bindStyleBoxTexture_set_h_axis_stretch_mode
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_set_margin_size #-}
+
+-- | Increases the bottom margin of the 3x3 texture box.
+--   			A higher value means more of the source texture is considered to be part of the bottom border of the 3x3 box.
+--   			This is also the value used as fallback for [member StyleBox.content_margin_bottom] if it is negative.
+bindStyleBoxTexture_set_margin_size :: MethodBind
+bindStyleBoxTexture_set_margin_size
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "set_margin_size" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Increases the bottom margin of the 3x3 texture box.
+--   			A higher value means more of the source texture is considered to be part of the bottom border of the 3x3 box.
+--   			This is also the value used as fallback for [member StyleBox.content_margin_bottom] if it is negative.
+set_margin_size ::
+                  (StyleBoxTexture :< cls, Object :< cls) =>
+                  cls -> Int -> Float -> IO ()
+set_margin_size cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_set_margin_size
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_set_modulate #-}
+
+-- | Modulates the color of the texture when this style box is drawn.
+bindStyleBoxTexture_set_modulate :: MethodBind
+bindStyleBoxTexture_set_modulate
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "set_modulate" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Modulates the color of the texture when this style box is drawn.
+set_modulate ::
+               (StyleBoxTexture :< cls, Object :< cls) => cls -> Color -> IO ()
+set_modulate cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_set_modulate
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindStyleBoxTexture_set_normal_map #-}
+
+-- | The normal map to use when drawing this style box.
+bindStyleBoxTexture_set_normal_map :: MethodBind
+bindStyleBoxTexture_set_normal_map
+  = unsafePerformIO $
+      withCString "StyleBoxTexture" $
+        \ clsNamePtr ->
+          withCString "set_normal_map" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The normal map to use when drawing this style box.
+set_normal_map ::
+                 (StyleBoxTexture :< cls, Object :< cls) => cls -> Texture -> IO ()
+set_normal_map cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindStyleBoxTexture_set_normal_map
            (upcast cls)
            arrPtr
            len
@@ -320,164 +481,25 @@ set_region_rect cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindStyleBoxTexture_get_region_rect #-}
+{-# NOINLINE bindStyleBoxTexture_set_texture #-}
 
--- | Species a sub region of the texture to use.
---   			This is equivalent to first wrapping the texture in an [AtlasTexture] with the same region.
-bindStyleBoxTexture_get_region_rect :: MethodBind
-bindStyleBoxTexture_get_region_rect
+-- | The texture to use when drawing this style box.
+bindStyleBoxTexture_set_texture :: MethodBind
+bindStyleBoxTexture_set_texture
   = unsafePerformIO $
       withCString "StyleBoxTexture" $
         \ clsNamePtr ->
-          withCString "get_region_rect" $
+          withCString "set_texture" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Species a sub region of the texture to use.
---   			This is equivalent to first wrapping the texture in an [AtlasTexture] with the same region.
-get_region_rect ::
-                  (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Rect2
-get_region_rect cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_get_region_rect
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_set_draw_center #-}
-
-bindStyleBoxTexture_set_draw_center :: MethodBind
-bindStyleBoxTexture_set_draw_center
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "set_draw_center" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_draw_center ::
-                  (StyleBoxTexture :< cls, Object :< cls) => cls -> Bool -> IO ()
-set_draw_center cls arg1
+-- | The texture to use when drawing this style box.
+set_texture ::
+              (StyleBoxTexture :< cls, Object :< cls) => cls -> Texture -> IO ()
+set_texture cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_set_draw_center
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_is_draw_center_enabled #-}
-
-bindStyleBoxTexture_is_draw_center_enabled :: MethodBind
-bindStyleBoxTexture_is_draw_center_enabled
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "is_draw_center_enabled" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-is_draw_center_enabled ::
-                         (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Bool
-is_draw_center_enabled cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_is_draw_center_enabled
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_set_modulate #-}
-
--- | Modulates the color of the texture when this style box is drawn.
-bindStyleBoxTexture_set_modulate :: MethodBind
-bindStyleBoxTexture_set_modulate
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "set_modulate" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Modulates the color of the texture when this style box is drawn.
-set_modulate ::
-               (StyleBoxTexture :< cls, Object :< cls) => cls -> Color -> IO ()
-set_modulate cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_set_modulate
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_get_modulate #-}
-
--- | Modulates the color of the texture when this style box is drawn.
-bindStyleBoxTexture_get_modulate :: MethodBind
-bindStyleBoxTexture_get_modulate
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "get_modulate" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Modulates the color of the texture when this style box is drawn.
-get_modulate ::
-               (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Color
-get_modulate cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_get_modulate
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_set_h_axis_stretch_mode #-}
-
-bindStyleBoxTexture_set_h_axis_stretch_mode :: MethodBind
-bindStyleBoxTexture_set_h_axis_stretch_mode
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "set_h_axis_stretch_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_h_axis_stretch_mode ::
-                          (StyleBoxTexture :< cls, Object :< cls) => cls -> Int -> IO ()
-set_h_axis_stretch_mode cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_set_h_axis_stretch_mode
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_get_h_axis_stretch_mode #-}
-
-bindStyleBoxTexture_get_h_axis_stretch_mode :: MethodBind
-bindStyleBoxTexture_get_h_axis_stretch_mode
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "get_h_axis_stretch_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_h_axis_stretch_mode ::
-                          (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Int
-get_h_axis_stretch_mode cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_get_h_axis_stretch_mode
-           (upcast cls)
+         godot_method_bind_call bindStyleBoxTexture_set_texture (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -499,28 +521,6 @@ set_v_axis_stretch_mode cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindStyleBoxTexture_set_v_axis_stretch_mode
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindStyleBoxTexture_get_v_axis_stretch_mode #-}
-
-bindStyleBoxTexture_get_v_axis_stretch_mode :: MethodBind
-bindStyleBoxTexture_get_v_axis_stretch_mode
-  = unsafePerformIO $
-      withCString "StyleBoxTexture" $
-        \ clsNamePtr ->
-          withCString "get_v_axis_stretch_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_v_axis_stretch_mode ::
-                          (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Int
-get_v_axis_stretch_mode cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindStyleBoxTexture_get_v_axis_stretch_mode
            (upcast cls)
            arrPtr
            len

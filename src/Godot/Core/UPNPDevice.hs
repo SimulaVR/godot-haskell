@@ -11,22 +11,22 @@ module Godot.Core.UPNPDevice
         Godot.Core.UPNPDevice._IGD_STATUS_NO_IGD,
         Godot.Core.UPNPDevice._IGD_STATUS_UNKNOWN_DEVICE,
         Godot.Core.UPNPDevice._IGD_STATUS_HTTP_ERROR,
-        Godot.Core.UPNPDevice.is_valid_gateway,
-        Godot.Core.UPNPDevice.query_external_address,
         Godot.Core.UPNPDevice.add_port_mapping,
         Godot.Core.UPNPDevice.delete_port_mapping,
-        Godot.Core.UPNPDevice.set_description_url,
         Godot.Core.UPNPDevice.get_description_url,
-        Godot.Core.UPNPDevice.set_service_type,
-        Godot.Core.UPNPDevice.get_service_type,
-        Godot.Core.UPNPDevice.set_igd_control_url,
         Godot.Core.UPNPDevice.get_igd_control_url,
-        Godot.Core.UPNPDevice.set_igd_service_type,
-        Godot.Core.UPNPDevice.get_igd_service_type,
-        Godot.Core.UPNPDevice.set_igd_our_addr,
         Godot.Core.UPNPDevice.get_igd_our_addr,
+        Godot.Core.UPNPDevice.get_igd_service_type,
+        Godot.Core.UPNPDevice.get_igd_status,
+        Godot.Core.UPNPDevice.get_service_type,
+        Godot.Core.UPNPDevice.is_valid_gateway,
+        Godot.Core.UPNPDevice.query_external_address,
+        Godot.Core.UPNPDevice.set_description_url,
+        Godot.Core.UPNPDevice.set_igd_control_url,
+        Godot.Core.UPNPDevice.set_igd_our_addr,
+        Godot.Core.UPNPDevice.set_igd_service_type,
         Godot.Core.UPNPDevice.set_igd_status,
-        Godot.Core.UPNPDevice.get_igd_status)
+        Godot.Core.UPNPDevice.set_service_type)
        where
 import Data.Coerce
 import Foreign.C
@@ -64,49 +64,6 @@ _IGD_STATUS_UNKNOWN_DEVICE = 6
 
 _IGD_STATUS_HTTP_ERROR :: Int
 _IGD_STATUS_HTTP_ERROR = 1
-
-{-# NOINLINE bindUPNPDevice_is_valid_gateway #-}
-
-bindUPNPDevice_is_valid_gateway :: MethodBind
-bindUPNPDevice_is_valid_gateway
-  = unsafePerformIO $
-      withCString "UPNPDevice" $
-        \ clsNamePtr ->
-          withCString "is_valid_gateway" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-is_valid_gateway ::
-                   (UPNPDevice :< cls, Object :< cls) => cls -> IO Bool
-is_valid_gateway cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_is_valid_gateway (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUPNPDevice_query_external_address #-}
-
-bindUPNPDevice_query_external_address :: MethodBind
-bindUPNPDevice_query_external_address
-  = unsafePerformIO $
-      withCString "UPNPDevice" $
-        \ clsNamePtr ->
-          withCString "query_external_address" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-query_external_address ::
-                         (UPNPDevice :< cls, Object :< cls) => cls -> IO GodotString
-query_external_address cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_query_external_address
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindUPNPDevice_add_port_mapping #-}
 
@@ -155,28 +112,6 @@ delete_port_mapping cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindUPNPDevice_set_description_url #-}
-
-bindUPNPDevice_set_description_url :: MethodBind
-bindUPNPDevice_set_description_url
-  = unsafePerformIO $
-      withCString "UPNPDevice" $
-        \ clsNamePtr ->
-          withCString "set_description_url" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_description_url ::
-                      (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
-set_description_url cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_set_description_url
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindUPNPDevice_get_description_url #-}
 
 bindUPNPDevice_get_description_url :: MethodBind
@@ -194,70 +129,6 @@ get_description_url cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindUPNPDevice_get_description_url
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUPNPDevice_set_service_type #-}
-
-bindUPNPDevice_set_service_type :: MethodBind
-bindUPNPDevice_set_service_type
-  = unsafePerformIO $
-      withCString "UPNPDevice" $
-        \ clsNamePtr ->
-          withCString "set_service_type" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_service_type ::
-                   (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
-set_service_type cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_set_service_type (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUPNPDevice_get_service_type #-}
-
-bindUPNPDevice_get_service_type :: MethodBind
-bindUPNPDevice_get_service_type
-  = unsafePerformIO $
-      withCString "UPNPDevice" $
-        \ clsNamePtr ->
-          withCString "get_service_type" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_service_type ::
-                   (UPNPDevice :< cls, Object :< cls) => cls -> IO GodotString
-get_service_type cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_get_service_type (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUPNPDevice_set_igd_control_url #-}
-
-bindUPNPDevice_set_igd_control_url :: MethodBind
-bindUPNPDevice_set_igd_control_url
-  = unsafePerformIO $
-      withCString "UPNPDevice" $
-        \ clsNamePtr ->
-          withCString "set_igd_control_url" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_igd_control_url ::
-                      (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
-set_igd_control_url cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_set_igd_control_url
            (upcast cls)
            arrPtr
            len
@@ -285,24 +156,23 @@ get_igd_control_url cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindUPNPDevice_set_igd_service_type #-}
+{-# NOINLINE bindUPNPDevice_get_igd_our_addr #-}
 
-bindUPNPDevice_set_igd_service_type :: MethodBind
-bindUPNPDevice_set_igd_service_type
+bindUPNPDevice_get_igd_our_addr :: MethodBind
+bindUPNPDevice_get_igd_our_addr
   = unsafePerformIO $
       withCString "UPNPDevice" $
         \ clsNamePtr ->
-          withCString "set_igd_service_type" $
+          withCString "get_igd_our_addr" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_igd_service_type ::
-                       (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
-set_igd_service_type cls arg1
-  = withVariantArray [toVariant arg1]
+get_igd_our_addr ::
+                   (UPNPDevice :< cls, Object :< cls) => cls -> IO GodotString
+get_igd_our_addr cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_set_igd_service_type
-           (upcast cls)
+         godot_method_bind_call bindUPNPDevice_get_igd_our_addr (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -329,6 +199,135 @@ get_igd_service_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindUPNPDevice_get_igd_status #-}
+
+bindUPNPDevice_get_igd_status :: MethodBind
+bindUPNPDevice_get_igd_status
+  = unsafePerformIO $
+      withCString "UPNPDevice" $
+        \ clsNamePtr ->
+          withCString "get_igd_status" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_igd_status ::
+                 (UPNPDevice :< cls, Object :< cls) => cls -> IO Int
+get_igd_status cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUPNPDevice_get_igd_status (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUPNPDevice_get_service_type #-}
+
+bindUPNPDevice_get_service_type :: MethodBind
+bindUPNPDevice_get_service_type
+  = unsafePerformIO $
+      withCString "UPNPDevice" $
+        \ clsNamePtr ->
+          withCString "get_service_type" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_service_type ::
+                   (UPNPDevice :< cls, Object :< cls) => cls -> IO GodotString
+get_service_type cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUPNPDevice_get_service_type (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUPNPDevice_is_valid_gateway #-}
+
+bindUPNPDevice_is_valid_gateway :: MethodBind
+bindUPNPDevice_is_valid_gateway
+  = unsafePerformIO $
+      withCString "UPNPDevice" $
+        \ clsNamePtr ->
+          withCString "is_valid_gateway" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_valid_gateway ::
+                   (UPNPDevice :< cls, Object :< cls) => cls -> IO Bool
+is_valid_gateway cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUPNPDevice_is_valid_gateway (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUPNPDevice_query_external_address #-}
+
+bindUPNPDevice_query_external_address :: MethodBind
+bindUPNPDevice_query_external_address
+  = unsafePerformIO $
+      withCString "UPNPDevice" $
+        \ clsNamePtr ->
+          withCString "query_external_address" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+query_external_address ::
+                         (UPNPDevice :< cls, Object :< cls) => cls -> IO GodotString
+query_external_address cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUPNPDevice_query_external_address
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUPNPDevice_set_description_url #-}
+
+bindUPNPDevice_set_description_url :: MethodBind
+bindUPNPDevice_set_description_url
+  = unsafePerformIO $
+      withCString "UPNPDevice" $
+        \ clsNamePtr ->
+          withCString "set_description_url" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_description_url ::
+                      (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
+set_description_url cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUPNPDevice_set_description_url
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUPNPDevice_set_igd_control_url #-}
+
+bindUPNPDevice_set_igd_control_url :: MethodBind
+bindUPNPDevice_set_igd_control_url
+  = unsafePerformIO $
+      withCString "UPNPDevice" $
+        \ clsNamePtr ->
+          withCString "set_igd_control_url" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_igd_control_url ::
+                      (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
+set_igd_control_url cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUPNPDevice_set_igd_control_url
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindUPNPDevice_set_igd_our_addr #-}
 
 bindUPNPDevice_set_igd_our_addr :: MethodBind
@@ -350,23 +349,24 @@ set_igd_our_addr cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindUPNPDevice_get_igd_our_addr #-}
+{-# NOINLINE bindUPNPDevice_set_igd_service_type #-}
 
-bindUPNPDevice_get_igd_our_addr :: MethodBind
-bindUPNPDevice_get_igd_our_addr
+bindUPNPDevice_set_igd_service_type :: MethodBind
+bindUPNPDevice_set_igd_service_type
   = unsafePerformIO $
       withCString "UPNPDevice" $
         \ clsNamePtr ->
-          withCString "get_igd_our_addr" $
+          withCString "set_igd_service_type" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_igd_our_addr ::
-                   (UPNPDevice :< cls, Object :< cls) => cls -> IO GodotString
-get_igd_our_addr cls
-  = withVariantArray []
+set_igd_service_type ::
+                       (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
+set_igd_service_type cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_get_igd_our_addr (upcast cls)
+         godot_method_bind_call bindUPNPDevice_set_igd_service_type
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -392,23 +392,23 @@ set_igd_status cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindUPNPDevice_get_igd_status #-}
+{-# NOINLINE bindUPNPDevice_set_service_type #-}
 
-bindUPNPDevice_get_igd_status :: MethodBind
-bindUPNPDevice_get_igd_status
+bindUPNPDevice_set_service_type :: MethodBind
+bindUPNPDevice_set_service_type
   = unsafePerformIO $
       withCString "UPNPDevice" $
         \ clsNamePtr ->
-          withCString "get_igd_status" $
+          withCString "set_service_type" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_igd_status ::
-                 (UPNPDevice :< cls, Object :< cls) => cls -> IO Int
-get_igd_status cls
-  = withVariantArray []
+set_service_type ::
+                   (UPNPDevice :< cls, Object :< cls) => cls -> GodotString -> IO ()
+set_service_type cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindUPNPDevice_get_igd_status (upcast cls)
+         godot_method_bind_call bindUPNPDevice_set_service_type (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

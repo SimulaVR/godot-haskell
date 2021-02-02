@@ -1,11 +1,13 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.Font
-       (Godot.Core.Font.draw, Godot.Core.Font.get_ascent,
-        Godot.Core.Font.get_descent, Godot.Core.Font.get_height,
+       (Godot.Core.Font.draw, Godot.Core.Font.draw_char,
+        Godot.Core.Font.get_ascent, Godot.Core.Font.get_descent,
+        Godot.Core.Font.get_height, Godot.Core.Font.get_string_size,
+        Godot.Core.Font.get_wordwrap_string_size,
+        Godot.Core.Font.has_outline,
         Godot.Core.Font.is_distance_field_hint,
-        Godot.Core.Font.get_string_size, Godot.Core.Font.has_outline,
-        Godot.Core.Font.draw_char, Godot.Core.Font.update_changes)
+        Godot.Core.Font.update_changes)
        where
 import Data.Coerce
 import Foreign.C
@@ -39,127 +41,6 @@ draw cls arg1 arg2 arg3 arg4 arg5 arg6
          godot_method_bind_call bindFont_draw (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindFont_get_ascent #-}
-
--- | Return the font ascent (number of pixels above the baseline).
-bindFont_get_ascent :: MethodBind
-bindFont_get_ascent
-  = unsafePerformIO $
-      withCString "Font" $
-        \ clsNamePtr ->
-          withCString "get_ascent" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the font ascent (number of pixels above the baseline).
-get_ascent :: (Font :< cls, Object :< cls) => cls -> IO Float
-get_ascent cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindFont_get_ascent (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindFont_get_descent #-}
-
--- | Return the font descent (number of pixels below the baseline).
-bindFont_get_descent :: MethodBind
-bindFont_get_descent
-  = unsafePerformIO $
-      withCString "Font" $
-        \ clsNamePtr ->
-          withCString "get_descent" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the font descent (number of pixels below the baseline).
-get_descent :: (Font :< cls, Object :< cls) => cls -> IO Float
-get_descent cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindFont_get_descent (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindFont_get_height #-}
-
--- | Return the total font height (ascent plus descent) in pixels.
-bindFont_get_height :: MethodBind
-bindFont_get_height
-  = unsafePerformIO $
-      withCString "Font" $
-        \ clsNamePtr ->
-          withCString "get_height" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the total font height (ascent plus descent) in pixels.
-get_height :: (Font :< cls, Object :< cls) => cls -> IO Float
-get_height cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindFont_get_height (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindFont_is_distance_field_hint #-}
-
-bindFont_is_distance_field_hint :: MethodBind
-bindFont_is_distance_field_hint
-  = unsafePerformIO $
-      withCString "Font" $
-        \ clsNamePtr ->
-          withCString "is_distance_field_hint" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-is_distance_field_hint ::
-                         (Font :< cls, Object :< cls) => cls -> IO Bool
-is_distance_field_hint cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindFont_is_distance_field_hint (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindFont_get_string_size #-}
-
--- | Return the size of a string, taking kerning and advance into account.
-bindFont_get_string_size :: MethodBind
-bindFont_get_string_size
-  = unsafePerformIO $
-      withCString "Font" $
-        \ clsNamePtr ->
-          withCString "get_string_size" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the size of a string, taking kerning and advance into account.
-get_string_size ::
-                  (Font :< cls, Object :< cls) => cls -> GodotString -> IO Vector2
-get_string_size cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindFont_get_string_size (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindFont_has_outline #-}
-
-bindFont_has_outline :: MethodBind
-bindFont_has_outline
-  = unsafePerformIO $
-      withCString "Font" $
-        \ clsNamePtr ->
-          withCString "has_outline" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-has_outline :: (Font :< cls, Object :< cls) => cls -> IO Bool
-has_outline cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindFont_has_outline (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindFont_draw_char #-}
 
 -- | Draw character "char" into a canvas item using the font at a given position, with "modulate" color, and optionally kerning if "next" is passed. clipping the width. "position" specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
@@ -182,6 +63,150 @@ draw_char cls arg1 arg2 arg3 arg4 arg5 arg6
        toVariant arg5, toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindFont_draw_char (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFont_get_ascent #-}
+
+-- | Returns the font ascent (number of pixels above the baseline).
+bindFont_get_ascent :: MethodBind
+bindFont_get_ascent
+  = unsafePerformIO $
+      withCString "Font" $
+        \ clsNamePtr ->
+          withCString "get_ascent" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the font ascent (number of pixels above the baseline).
+get_ascent :: (Font :< cls, Object :< cls) => cls -> IO Float
+get_ascent cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFont_get_ascent (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFont_get_descent #-}
+
+-- | Returns the font descent (number of pixels below the baseline).
+bindFont_get_descent :: MethodBind
+bindFont_get_descent
+  = unsafePerformIO $
+      withCString "Font" $
+        \ clsNamePtr ->
+          withCString "get_descent" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the font descent (number of pixels below the baseline).
+get_descent :: (Font :< cls, Object :< cls) => cls -> IO Float
+get_descent cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFont_get_descent (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFont_get_height #-}
+
+-- | Returns the total font height (ascent plus descent) in pixels.
+bindFont_get_height :: MethodBind
+bindFont_get_height
+  = unsafePerformIO $
+      withCString "Font" $
+        \ clsNamePtr ->
+          withCString "get_height" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the total font height (ascent plus descent) in pixels.
+get_height :: (Font :< cls, Object :< cls) => cls -> IO Float
+get_height cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFont_get_height (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFont_get_string_size #-}
+
+-- | Returns the size of a string, taking kerning and advance into account.
+bindFont_get_string_size :: MethodBind
+bindFont_get_string_size
+  = unsafePerformIO $
+      withCString "Font" $
+        \ clsNamePtr ->
+          withCString "get_string_size" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the size of a string, taking kerning and advance into account.
+get_string_size ::
+                  (Font :< cls, Object :< cls) => cls -> GodotString -> IO Vector2
+get_string_size cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFont_get_string_size (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFont_get_wordwrap_string_size #-}
+
+bindFont_get_wordwrap_string_size :: MethodBind
+bindFont_get_wordwrap_string_size
+  = unsafePerformIO $
+      withCString "Font" $
+        \ clsNamePtr ->
+          withCString "get_wordwrap_string_size" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_wordwrap_string_size ::
+                           (Font :< cls, Object :< cls) =>
+                           cls -> GodotString -> Float -> IO Vector2
+get_wordwrap_string_size cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFont_get_wordwrap_string_size
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFont_has_outline #-}
+
+bindFont_has_outline :: MethodBind
+bindFont_has_outline
+  = unsafePerformIO $
+      withCString "Font" $
+        \ clsNamePtr ->
+          withCString "has_outline" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+has_outline :: (Font :< cls, Object :< cls) => cls -> IO Bool
+has_outline cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFont_has_outline (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFont_is_distance_field_hint #-}
+
+bindFont_is_distance_field_hint :: MethodBind
+bindFont_is_distance_field_hint
+  = unsafePerformIO $
+      withCString "Font" $
+        \ clsNamePtr ->
+          withCString "is_distance_field_hint" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_distance_field_hint ::
+                         (Font :< cls, Object :< cls) => cls -> IO Bool
+is_distance_field_hint cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFont_is_distance_field_hint (upcast cls)
+           arrPtr
+           len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindFont_update_changes #-}

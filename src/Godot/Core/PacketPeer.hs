@@ -1,12 +1,15 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.PacketPeer
-       (Godot.Core.PacketPeer.get_var, Godot.Core.PacketPeer.put_var,
-        Godot.Core.PacketPeer.get_packet, Godot.Core.PacketPeer.put_packet,
+       (Godot.Core.PacketPeer.get_available_packet_count,
+        Godot.Core.PacketPeer.get_encode_buffer_max_size,
+        Godot.Core.PacketPeer.get_packet,
         Godot.Core.PacketPeer.get_packet_error,
-        Godot.Core.PacketPeer.get_available_packet_count,
+        Godot.Core.PacketPeer.get_var,
+        Godot.Core.PacketPeer.is_object_decoding_allowed,
+        Godot.Core.PacketPeer.put_packet, Godot.Core.PacketPeer.put_var,
         Godot.Core.PacketPeer.set_allow_object_decoding,
-        Godot.Core.PacketPeer.is_object_decoding_allowed)
+        Godot.Core.PacketPeer.set_encode_buffer_max_size)
        where
 import Data.Coerce
 import Foreign.C
@@ -15,49 +18,49 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindPacketPeer_get_var #-}
+{-# NOINLINE bindPacketPeer_get_available_packet_count #-}
 
--- | Get a Variant. When [code]allow_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
-bindPacketPeer_get_var :: MethodBind
-bindPacketPeer_get_var
+-- | Returns the number of packets currently available in the ring-buffer.
+bindPacketPeer_get_available_packet_count :: MethodBind
+bindPacketPeer_get_available_packet_count
   = unsafePerformIO $
       withCString "PacketPeer" $
         \ clsNamePtr ->
-          withCString "get_var" $
+          withCString "get_available_packet_count" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a Variant. When [code]allow_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
-get_var ::
-          (PacketPeer :< cls, Object :< cls) => cls -> IO GodotVariant
-get_var cls
+-- | Returns the number of packets currently available in the ring-buffer.
+get_available_packet_count ::
+                             (PacketPeer :< cls, Object :< cls) => cls -> IO Int
+get_available_packet_count cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPacketPeer_get_var (upcast cls) arrPtr
+         godot_method_bind_call bindPacketPeer_get_available_packet_count
+           (upcast cls)
+           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPacketPeer_put_var #-}
+{-# NOINLINE bindPacketPeer_get_encode_buffer_max_size #-}
 
--- | Send a Variant as a packet. When [code]full_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] encoding objects is allowed (and can potentially include code).
-bindPacketPeer_put_var :: MethodBind
-bindPacketPeer_put_var
+bindPacketPeer_get_encode_buffer_max_size :: MethodBind
+bindPacketPeer_get_encode_buffer_max_size
   = unsafePerformIO $
       withCString "PacketPeer" $
         \ clsNamePtr ->
-          withCString "put_var" $
+          withCString "get_encode_buffer_max_size" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Send a Variant as a packet. When [code]full_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] encoding objects is allowed (and can potentially include code).
-put_var ::
-          (PacketPeer :< cls, Object :< cls) => cls -> GodotVariant -> IO Int
-put_var cls arg1
-  = withVariantArray [toVariant arg1]
+get_encode_buffer_max_size ::
+                             (PacketPeer :< cls, Object :< cls) => cls -> IO Int
+get_encode_buffer_max_size cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPacketPeer_put_var (upcast cls) arrPtr
+         godot_method_bind_call bindPacketPeer_get_encode_buffer_max_size
+           (upcast cls)
+           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -80,6 +83,82 @@ get_packet cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPacketPeer_get_packet (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPacketPeer_get_packet_error #-}
+
+-- | Returns the error state of the last packet received (via [method get_packet] and [method get_var]).
+bindPacketPeer_get_packet_error :: MethodBind
+bindPacketPeer_get_packet_error
+  = unsafePerformIO $
+      withCString "PacketPeer" $
+        \ clsNamePtr ->
+          withCString "get_packet_error" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the error state of the last packet received (via [method get_packet] and [method get_var]).
+get_packet_error ::
+                   (PacketPeer :< cls, Object :< cls) => cls -> IO Int
+get_packet_error cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPacketPeer_get_packet_error (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPacketPeer_get_var #-}
+
+-- | Get a Variant. When [code]allow_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] decoding objects is allowed.
+--   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+bindPacketPeer_get_var :: MethodBind
+bindPacketPeer_get_var
+  = unsafePerformIO $
+      withCString "PacketPeer" $
+        \ clsNamePtr ->
+          withCString "get_var" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get a Variant. When [code]allow_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] decoding objects is allowed.
+--   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+get_var ::
+          (PacketPeer :< cls, Object :< cls) =>
+          cls -> Bool -> IO GodotVariant
+get_var cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPacketPeer_get_var (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPacketPeer_is_object_decoding_allowed #-}
+
+-- | Deprecated. Use [code]get_var[/code] and [code]put_var[/code] parameters instead.
+--   			If [code]true[/code] the PacketPeer will allow encoding and decoding of object via [method get_var] and [method put_var].
+--   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+bindPacketPeer_is_object_decoding_allowed :: MethodBind
+bindPacketPeer_is_object_decoding_allowed
+  = unsafePerformIO $
+      withCString "PacketPeer" $
+        \ clsNamePtr ->
+          withCString "is_object_decoding_allowed" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Deprecated. Use [code]get_var[/code] and [code]put_var[/code] parameters instead.
+--   			If [code]true[/code] the PacketPeer will allow encoding and decoding of object via [method get_var] and [method put_var].
+--   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+is_object_decoding_allowed ::
+                             (PacketPeer :< cls, Object :< cls) => cls -> IO Bool
+is_object_decoding_allowed cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPacketPeer_is_object_decoding_allowed
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -108,50 +187,26 @@ put_packet cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPacketPeer_get_packet_error #-}
+{-# NOINLINE bindPacketPeer_put_var #-}
 
--- | Return the error state of the last packet received (via [method get_packet] and [method get_var]).
-bindPacketPeer_get_packet_error :: MethodBind
-bindPacketPeer_get_packet_error
+-- | Send a Variant as a packet. When [code]full_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] encoding objects is allowed (and can potentially include code).
+bindPacketPeer_put_var :: MethodBind
+bindPacketPeer_put_var
   = unsafePerformIO $
       withCString "PacketPeer" $
         \ clsNamePtr ->
-          withCString "get_packet_error" $
+          withCString "put_var" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return the error state of the last packet received (via [method get_packet] and [method get_var]).
-get_packet_error ::
-                   (PacketPeer :< cls, Object :< cls) => cls -> IO Int
-get_packet_error cls
-  = withVariantArray []
+-- | Send a Variant as a packet. When [code]full_objects[/code] (or [member allow_object_decoding]) is [code]true[/code] encoding objects is allowed (and can potentially include code).
+put_var ::
+          (PacketPeer :< cls, Object :< cls) =>
+          cls -> GodotVariant -> Bool -> IO Int
+put_var cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPacketPeer_get_packet_error (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPacketPeer_get_available_packet_count #-}
-
--- | Return the number of packets currently available in the ring-buffer.
-bindPacketPeer_get_available_packet_count :: MethodBind
-bindPacketPeer_get_available_packet_count
-  = unsafePerformIO $
-      withCString "PacketPeer" $
-        \ clsNamePtr ->
-          withCString "get_available_packet_count" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the number of packets currently available in the ring-buffer.
-get_available_packet_count ::
-                             (PacketPeer :< cls, Object :< cls) => cls -> IO Int
-get_available_packet_count cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPacketPeer_get_available_packet_count
-           (upcast cls)
-           arrPtr
+         godot_method_bind_call bindPacketPeer_put_var (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -183,29 +238,23 @@ set_allow_object_decoding cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPacketPeer_is_object_decoding_allowed #-}
+{-# NOINLINE bindPacketPeer_set_encode_buffer_max_size #-}
 
--- | Deprecated. Use [code]get_var[/code] and [code]put_var[/code] parameters instead.
---   			If [code]true[/code] the PacketPeer will allow encoding and decoding of object via [method get_var] and [method put_var].
---   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
-bindPacketPeer_is_object_decoding_allowed :: MethodBind
-bindPacketPeer_is_object_decoding_allowed
+bindPacketPeer_set_encode_buffer_max_size :: MethodBind
+bindPacketPeer_set_encode_buffer_max_size
   = unsafePerformIO $
       withCString "PacketPeer" $
         \ clsNamePtr ->
-          withCString "is_object_decoding_allowed" $
+          withCString "set_encode_buffer_max_size" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deprecated. Use [code]get_var[/code] and [code]put_var[/code] parameters instead.
---   			If [code]true[/code] the PacketPeer will allow encoding and decoding of object via [method get_var] and [method put_var].
---   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
-is_object_decoding_allowed ::
-                             (PacketPeer :< cls, Object :< cls) => cls -> IO Bool
-is_object_decoding_allowed cls
-  = withVariantArray []
+set_encode_buffer_max_size ::
+                             (PacketPeer :< cls, Object :< cls) => cls -> Int -> IO ()
+set_encode_buffer_max_size cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPacketPeer_is_object_decoding_allowed
+         godot_method_bind_call bindPacketPeer_set_encode_buffer_max_size
            (upcast cls)
            arrPtr
            len

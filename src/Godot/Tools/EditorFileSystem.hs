@@ -1,18 +1,18 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Tools.EditorFileSystem
-       (Godot.Tools.EditorFileSystem.sig_resources_reimported,
-        Godot.Tools.EditorFileSystem.sig_sources_changed,
-        Godot.Tools.EditorFileSystem.sig_filesystem_changed,
+       (Godot.Tools.EditorFileSystem.sig_filesystem_changed,
+        Godot.Tools.EditorFileSystem.sig_resources_reimported,
         Godot.Tools.EditorFileSystem.sig_resources_reload,
+        Godot.Tools.EditorFileSystem.sig_sources_changed,
+        Godot.Tools.EditorFileSystem.get_file_type,
         Godot.Tools.EditorFileSystem.get_filesystem,
-        Godot.Tools.EditorFileSystem.is_scanning,
+        Godot.Tools.EditorFileSystem.get_filesystem_path,
         Godot.Tools.EditorFileSystem.get_scanning_progress,
+        Godot.Tools.EditorFileSystem.is_scanning,
         Godot.Tools.EditorFileSystem.scan,
         Godot.Tools.EditorFileSystem.scan_sources,
         Godot.Tools.EditorFileSystem.update_file,
-        Godot.Tools.EditorFileSystem.get_filesystem_path,
-        Godot.Tools.EditorFileSystem.get_file_type,
         Godot.Tools.EditorFileSystem.update_script_classes)
        where
 import Data.Coerce
@@ -22,11 +22,22 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
+-- | Emitted if the filesystem changed.
+sig_filesystem_changed ::
+                       Godot.Internal.Dispatch.Signal EditorFileSystem
+sig_filesystem_changed
+  = Godot.Internal.Dispatch.Signal "filesystem_changed"
+
 -- | Remitted if a resource is reimported.
 sig_resources_reimported ::
                          Godot.Internal.Dispatch.Signal EditorFileSystem
 sig_resources_reimported
   = Godot.Internal.Dispatch.Signal "resources_reimported"
+
+sig_resources_reload ::
+                     Godot.Internal.Dispatch.Signal EditorFileSystem
+sig_resources_reload
+  = Godot.Internal.Dispatch.Signal "resources_reload"
 
 -- | Emitted if the source of any imported file changed.
 sig_sources_changed ::
@@ -34,16 +45,30 @@ sig_sources_changed ::
 sig_sources_changed
   = Godot.Internal.Dispatch.Signal "sources_changed"
 
--- | Emitted if the filesystem changed.
-sig_filesystem_changed ::
-                       Godot.Internal.Dispatch.Signal EditorFileSystem
-sig_filesystem_changed
-  = Godot.Internal.Dispatch.Signal "filesystem_changed"
+{-# NOINLINE bindEditorFileSystem_get_file_type #-}
 
-sig_resources_reload ::
-                     Godot.Internal.Dispatch.Signal EditorFileSystem
-sig_resources_reload
-  = Godot.Internal.Dispatch.Signal "resources_reload"
+-- | Get the type of the file, given the full path.
+bindEditorFileSystem_get_file_type :: MethodBind
+bindEditorFileSystem_get_file_type
+  = unsafePerformIO $
+      withCString "EditorFileSystem" $
+        \ clsNamePtr ->
+          withCString "get_file_type" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the type of the file, given the full path.
+get_file_type ::
+                (EditorFileSystem :< cls, Object :< cls) =>
+                cls -> GodotString -> IO GodotString
+get_file_type cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorFileSystem_get_file_type
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindEditorFileSystem_get_filesystem #-}
 
@@ -70,25 +95,26 @@ get_filesystem cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorFileSystem_is_scanning #-}
+{-# NOINLINE bindEditorFileSystem_get_filesystem_path #-}
 
--- | Return true of the filesystem is being scanned.
-bindEditorFileSystem_is_scanning :: MethodBind
-bindEditorFileSystem_is_scanning
+-- | Returns a view into the filesystem at [code]path[/code].
+bindEditorFileSystem_get_filesystem_path :: MethodBind
+bindEditorFileSystem_get_filesystem_path
   = unsafePerformIO $
       withCString "EditorFileSystem" $
         \ clsNamePtr ->
-          withCString "is_scanning" $
+          withCString "get_filesystem_path" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return true of the filesystem is being scanned.
-is_scanning ::
-              (EditorFileSystem :< cls, Object :< cls) => cls -> IO Bool
-is_scanning cls
-  = withVariantArray []
+-- | Returns a view into the filesystem at [code]path[/code].
+get_filesystem_path ::
+                      (EditorFileSystem :< cls, Object :< cls) =>
+                      cls -> GodotString -> IO EditorFileSystemDirectory
+get_filesystem_path cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorFileSystem_is_scanning
+         godot_method_bind_call bindEditorFileSystem_get_filesystem_path
            (upcast cls)
            arrPtr
            len
@@ -96,7 +122,7 @@ is_scanning cls
 
 {-# NOINLINE bindEditorFileSystem_get_scanning_progress #-}
 
--- | Return the scan progress for 0 to 1 if the FS is being scanned.
+-- | Returns the scan progress for 0 to 1 if the FS is being scanned.
 bindEditorFileSystem_get_scanning_progress :: MethodBind
 bindEditorFileSystem_get_scanning_progress
   = unsafePerformIO $
@@ -106,13 +132,37 @@ bindEditorFileSystem_get_scanning_progress
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return the scan progress for 0 to 1 if the FS is being scanned.
+-- | Returns the scan progress for 0 to 1 if the FS is being scanned.
 get_scanning_progress ::
                         (EditorFileSystem :< cls, Object :< cls) => cls -> IO Float
 get_scanning_progress cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindEditorFileSystem_get_scanning_progress
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEditorFileSystem_is_scanning #-}
+
+-- | Returns [code]true[/code] of the filesystem is being scanned.
+bindEditorFileSystem_is_scanning :: MethodBind
+bindEditorFileSystem_is_scanning
+  = unsafePerformIO $
+      withCString "EditorFileSystem" $
+        \ clsNamePtr ->
+          withCString "is_scanning" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns [code]true[/code] of the filesystem is being scanned.
+is_scanning ::
+              (EditorFileSystem :< cls, Object :< cls) => cls -> IO Bool
+is_scanning cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorFileSystem_is_scanning
            (upcast cls)
            arrPtr
            len
@@ -184,56 +234,6 @@ update_file cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindEditorFileSystem_update_file
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEditorFileSystem_get_filesystem_path #-}
-
--- | Returns a view into the filesystem at [code]path[/code].
-bindEditorFileSystem_get_filesystem_path :: MethodBind
-bindEditorFileSystem_get_filesystem_path
-  = unsafePerformIO $
-      withCString "EditorFileSystem" $
-        \ clsNamePtr ->
-          withCString "get_filesystem_path" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns a view into the filesystem at [code]path[/code].
-get_filesystem_path ::
-                      (EditorFileSystem :< cls, Object :< cls) =>
-                      cls -> GodotString -> IO EditorFileSystemDirectory
-get_filesystem_path cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorFileSystem_get_filesystem_path
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEditorFileSystem_get_file_type #-}
-
--- | Get the type of the file, given the full path.
-bindEditorFileSystem_get_file_type :: MethodBind
-bindEditorFileSystem_get_file_type
-  = unsafePerformIO $
-      withCString "EditorFileSystem" $
-        \ clsNamePtr ->
-          withCString "get_file_type" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the type of the file, given the full path.
-get_file_type ::
-                (EditorFileSystem :< cls, Object :< cls) =>
-                cls -> GodotString -> IO GodotString
-get_file_type cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorFileSystem_get_file_type
            (upcast cls)
            arrPtr
            len

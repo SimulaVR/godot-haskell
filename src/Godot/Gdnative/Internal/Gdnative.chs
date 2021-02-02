@@ -315,10 +315,6 @@ deriving newtype instance Storable GdnativeExtVideodecoderApiStruct
 deriving newtype instance Eq GdnativeExtNetApiStruct
 deriving newtype instance Storable GdnativeExtNetApiStruct
 
-{#pointer *godot_gdnative_ext_net_3_2_api_struct as GodotGdnativeExtNet32ApiStruct newtype#}
-deriving newtype instance Eq GodotGdnativeExtNet32ApiStruct
-deriving newtype instance Storable GodotGdnativeExtNet32ApiStruct
-
 
 type ReportVersionMismatchFunc = Object -> CString -> Word64 -> Word64 -> IO ()
 type ReportLoadingErrorFunc = Object -> CString -> IO ()
@@ -756,31 +752,6 @@ instance Storable NetMultiplayerPeer where
   poke = error "NetMultiplayerPeer poke not implemented"
 {#pointer *godot_net_multiplayer_peer as NetMultiplayerPeerPtr -> NetMultiplayerPeer #}
 
--- net webrtc
-
-data GodotNetWebrtcLibrary
-instance Storable GodotNetWebrtcLibrary where
-  sizeOf _ = {#sizeof godot_net_webrtc_library#}
-  alignment _ = {#sizeof godot_net_webrtc_library#}
-  peek = error "GodotNetWebrtcLibrary peek not implemented"
-  poke = error "GodotNetWebrtcLibrary poke not implemented"
-{#pointer *godot_net_webrtc_library as GodotNetWebrtcLibraryPtr -> GodotNetWebrtcLibrary #}
-
-data GodotNetWebrtcPeerConnection
-instance Storable GodotNetWebrtcPeerConnection where
-  sizeOf _ = {#sizeof godot_net_webrtc_peer_connection#}
-  alignment _ = {#sizeof godot_net_webrtc_peer_connection#}
-  peek = error "GodotNetWebrtcPeerConnection peek not implemented"
-  poke = error "GodotNetWebrtcPeerConnection poke not implemented"
-{#pointer *godot_net_webrtc_peer_connection as GodotNetWebrtcPeerConnectionPtr -> GodotNetWebrtcPeerConnection #}
-
-data GodotNetWebrtcDataChannel
-instance Storable GodotNetWebrtcDataChannel where
-  sizeOf _ = {#sizeof godot_net_webrtc_data_channel#}
-  alignment _ = {#sizeof godot_net_webrtc_data_channel#}
-  peek = error "GodotNetWebrtcDataChannel peek not implemented"
-  poke = error "GodotNetWebrtcDataChannel poke not implemented"
-{#pointer *godot_net_webrtc_data_channel as GodotNetWebrtcDataChannelPtr -> GodotNetWebrtcDataChannel #}
 
 --videodecoder
 
@@ -850,10 +821,6 @@ gdnativeExtNetApiStructRef = unsafePerformIO $ newIORef $
   error "attempted to get gdnativeExtNetApiStructRef too early"
 {-# NOINLINE gdnativeExtNetApiStructRef #-}
 
-godotGdnativeExtNet32ApiStructRef :: IORef GodotGdnativeExtNet32ApiStruct
-godotGdnativeExtNet32ApiStructRef = unsafePerformIO $ newIORef $
-  error "attempted to get godotGdnativeExtNet32ApiStructRef too early"
-{-# NOINLINE godotGdnativeExtNet32ApiStructRef #-}
 
 initApiStructs :: GdnativeInitOptions -> IO ()
 initApiStructs opts = do
@@ -889,9 +856,10 @@ initApiStructs opts = do
     findExt con ref ext = do
       next <- {#get godot_gdnative_api_struct->next #} ext
       when (next /= coerce nullPtr) $ do
+
         major <- {#get godot_gdnative_api_struct->version.major #} next
         minor <- {#get godot_gdnative_api_struct->version.minor #} next
-        if major == reqMajor && minor == reqMinor then writeIORef ref (con $ coerce next)
-        else findExt con ref next reqMajor reqMinor
+        if major == 1 && minor == 1 then writeIORef ref (con $ coerce next)
+        else findExt con ref next
 
 

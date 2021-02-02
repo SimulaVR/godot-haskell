@@ -7,11 +7,14 @@ module Godot.Core.VisualShaderNodeVectorOp
         Godot.Core.VisualShaderNodeVectorOp._OP_POW,
         Godot.Core.VisualShaderNodeVectorOp._OP_MOD,
         Godot.Core.VisualShaderNodeVectorOp._OP_ADD,
+        Godot.Core.VisualShaderNodeVectorOp._OP_REFLECT,
+        Godot.Core.VisualShaderNodeVectorOp._OP_STEP,
         Godot.Core.VisualShaderNodeVectorOp._OP_MIN,
+        Godot.Core.VisualShaderNodeVectorOp._OP_ATAN2,
         Godot.Core.VisualShaderNodeVectorOp._OP_DIV,
         Godot.Core.VisualShaderNodeVectorOp._OP_CROSS,
-        Godot.Core.VisualShaderNodeVectorOp.set_operator,
-        Godot.Core.VisualShaderNodeVectorOp.get_operator)
+        Godot.Core.VisualShaderNodeVectorOp.get_operator,
+        Godot.Core.VisualShaderNodeVectorOp.set_operator)
        where
 import Data.Coerce
 import Foreign.C
@@ -38,14 +41,45 @@ _OP_MOD = 4
 _OP_ADD :: Int
 _OP_ADD = 0
 
+_OP_REFLECT :: Int
+_OP_REFLECT = 10
+
+_OP_STEP :: Int
+_OP_STEP = 11
+
 _OP_MIN :: Int
 _OP_MIN = 7
+
+_OP_ATAN2 :: Int
+_OP_ATAN2 = 9
 
 _OP_DIV :: Int
 _OP_DIV = 3
 
 _OP_CROSS :: Int
 _OP_CROSS = 8
+
+{-# NOINLINE bindVisualShaderNodeVectorOp_get_operator #-}
+
+bindVisualShaderNodeVectorOp_get_operator :: MethodBind
+bindVisualShaderNodeVectorOp_get_operator
+  = unsafePerformIO $
+      withCString "VisualShaderNodeVectorOp" $
+        \ clsNamePtr ->
+          withCString "get_operator" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_operator ::
+               (VisualShaderNodeVectorOp :< cls, Object :< cls) => cls -> IO Int
+get_operator cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindVisualShaderNodeVectorOp_get_operator
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindVisualShaderNodeVectorOp_set_operator #-}
 
@@ -65,28 +99,6 @@ set_operator cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisualShaderNodeVectorOp_set_operator
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindVisualShaderNodeVectorOp_get_operator #-}
-
-bindVisualShaderNodeVectorOp_get_operator :: MethodBind
-bindVisualShaderNodeVectorOp_get_operator
-  = unsafePerformIO $
-      withCString "VisualShaderNodeVectorOp" $
-        \ clsNamePtr ->
-          withCString "get_operator" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_operator ::
-               (VisualShaderNodeVectorOp :< cls, Object :< cls) => cls -> IO Int
-get_operator cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisualShaderNodeVectorOp_get_operator
            (upcast cls)
            arrPtr
            len

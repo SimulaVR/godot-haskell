@@ -1,10 +1,10 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.VisualScriptClassConstant
-       (Godot.Core.VisualScriptClassConstant.set_class_constant,
+       (Godot.Core.VisualScriptClassConstant.get_base_type,
         Godot.Core.VisualScriptClassConstant.get_class_constant,
         Godot.Core.VisualScriptClassConstant.set_base_type,
-        Godot.Core.VisualScriptClassConstant.get_base_type)
+        Godot.Core.VisualScriptClassConstant.set_class_constant)
        where
 import Data.Coerce
 import Foreign.C
@@ -13,25 +13,24 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindVisualScriptClassConstant_set_class_constant #-}
+{-# NOINLINE bindVisualScriptClassConstant_get_base_type #-}
 
-bindVisualScriptClassConstant_set_class_constant :: MethodBind
-bindVisualScriptClassConstant_set_class_constant
+bindVisualScriptClassConstant_get_base_type :: MethodBind
+bindVisualScriptClassConstant_get_base_type
   = unsafePerformIO $
       withCString "VisualScriptClassConstant" $
         \ clsNamePtr ->
-          withCString "set_class_constant" $
+          withCString "get_base_type" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_class_constant ::
-                     (VisualScriptClassConstant :< cls, Object :< cls) =>
-                     cls -> GodotString -> IO ()
-set_class_constant cls arg1
-  = withVariantArray [toVariant arg1]
+get_base_type ::
+                (VisualScriptClassConstant :< cls, Object :< cls) =>
+                cls -> IO GodotString
+get_base_type cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindVisualScriptClassConstant_set_class_constant
+         godot_method_bind_call bindVisualScriptClassConstant_get_base_type
            (upcast cls)
            arrPtr
            len
@@ -84,24 +83,25 @@ set_base_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindVisualScriptClassConstant_get_base_type #-}
+{-# NOINLINE bindVisualScriptClassConstant_set_class_constant #-}
 
-bindVisualScriptClassConstant_get_base_type :: MethodBind
-bindVisualScriptClassConstant_get_base_type
+bindVisualScriptClassConstant_set_class_constant :: MethodBind
+bindVisualScriptClassConstant_set_class_constant
   = unsafePerformIO $
       withCString "VisualScriptClassConstant" $
         \ clsNamePtr ->
-          withCString "get_base_type" $
+          withCString "set_class_constant" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_base_type ::
-                (VisualScriptClassConstant :< cls, Object :< cls) =>
-                cls -> IO GodotString
-get_base_type cls
-  = withVariantArray []
+set_class_constant ::
+                     (VisualScriptClassConstant :< cls, Object :< cls) =>
+                     cls -> GodotString -> IO ()
+set_class_constant cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisualScriptClassConstant_get_base_type
+         godot_method_bind_call
+           bindVisualScriptClassConstant_set_class_constant
            (upcast cls)
            arrPtr
            len

@@ -5,21 +5,25 @@ module Godot.Core.Engine
         Godot.Core.Engine.set_editor_hint,
         Godot.Core.Engine.get_iterations_per_second,
         Godot.Core.Engine.set_iterations_per_second,
-        Godot.Core.Engine.get_target_fps, Godot.Core.Engine.set_target_fps,
-        Godot.Core.Engine.get_time_scale, Godot.Core.Engine.set_time_scale,
         Godot.Core.Engine.get_physics_jitter_fix,
         Godot.Core.Engine.set_physics_jitter_fix,
-        Godot.Core.Engine.get_frames_drawn,
-        Godot.Core.Engine.get_frames_per_second,
-        Godot.Core.Engine.get_main_loop,
-        Godot.Core.Engine.get_version_info,
+        Godot.Core.Engine.get_target_fps, Godot.Core.Engine.set_target_fps,
+        Godot.Core.Engine.get_time_scale, Godot.Core.Engine.set_time_scale,
         Godot.Core.Engine.get_author_info,
         Godot.Core.Engine.get_copyright_info,
         Godot.Core.Engine.get_donor_info,
+        Godot.Core.Engine.get_frames_drawn,
+        Godot.Core.Engine.get_frames_per_second,
+        Godot.Core.Engine.get_idle_frames,
         Godot.Core.Engine.get_license_info,
         Godot.Core.Engine.get_license_text,
-        Godot.Core.Engine.is_in_physics_frame,
-        Godot.Core.Engine.has_singleton, Godot.Core.Engine.get_singleton)
+        Godot.Core.Engine.get_main_loop,
+        Godot.Core.Engine.get_physics_frames,
+        Godot.Core.Engine.get_physics_interpolation_fraction,
+        Godot.Core.Engine.get_singleton,
+        Godot.Core.Engine.get_version_info,
+        Godot.Core.Engine.has_singleton,
+        Godot.Core.Engine.is_in_physics_frame)
        where
 import Data.Coerce
 import Foreign.C
@@ -121,6 +125,50 @@ set_iterations_per_second cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindEngine_get_physics_jitter_fix #-}
+
+bindEngine_get_physics_jitter_fix :: MethodBind
+bindEngine_get_physics_jitter_fix
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_physics_jitter_fix" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_physics_jitter_fix ::
+                         (Engine :< cls, Object :< cls) => cls -> IO Float
+get_physics_jitter_fix cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_get_physics_jitter_fix
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEngine_set_physics_jitter_fix #-}
+
+bindEngine_set_physics_jitter_fix :: MethodBind
+bindEngine_set_physics_jitter_fix
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "set_physics_jitter_fix" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_physics_jitter_fix ::
+                         (Engine :< cls, Object :< cls) => cls -> Float -> IO ()
+set_physics_jitter_fix cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_set_physics_jitter_fix
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindEngine_get_target_fps #-}
 
 -- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. Defaults to 0, which indicates no limit.
@@ -211,169 +259,6 @@ set_time_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEngine_get_physics_jitter_fix #-}
-
-bindEngine_get_physics_jitter_fix :: MethodBind
-bindEngine_get_physics_jitter_fix
-  = unsafePerformIO $
-      withCString "_Engine" $
-        \ clsNamePtr ->
-          withCString "get_physics_jitter_fix" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_physics_jitter_fix ::
-                         (Engine :< cls, Object :< cls) => cls -> IO Float
-get_physics_jitter_fix cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_get_physics_jitter_fix
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEngine_set_physics_jitter_fix #-}
-
-bindEngine_set_physics_jitter_fix :: MethodBind
-bindEngine_set_physics_jitter_fix
-  = unsafePerformIO $
-      withCString "_Engine" $
-        \ clsNamePtr ->
-          withCString "set_physics_jitter_fix" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_physics_jitter_fix ::
-                         (Engine :< cls, Object :< cls) => cls -> Float -> IO ()
-set_physics_jitter_fix cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_set_physics_jitter_fix
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEngine_get_frames_drawn #-}
-
--- | Returns the total number of frames drawn.
-bindEngine_get_frames_drawn :: MethodBind
-bindEngine_get_frames_drawn
-  = unsafePerformIO $
-      withCString "_Engine" $
-        \ clsNamePtr ->
-          withCString "get_frames_drawn" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the total number of frames drawn.
-get_frames_drawn :: (Engine :< cls, Object :< cls) => cls -> IO Int
-get_frames_drawn cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_get_frames_drawn (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEngine_get_frames_per_second #-}
-
--- | Returns the frames per second of the running game.
-bindEngine_get_frames_per_second :: MethodBind
-bindEngine_get_frames_per_second
-  = unsafePerformIO $
-      withCString "_Engine" $
-        \ clsNamePtr ->
-          withCString "get_frames_per_second" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the frames per second of the running game.
-get_frames_per_second ::
-                        (Engine :< cls, Object :< cls) => cls -> IO Float
-get_frames_per_second cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_get_frames_per_second
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEngine_get_main_loop #-}
-
--- | Returns the main loop object (see [MainLoop] and [SceneTree]).
-bindEngine_get_main_loop :: MethodBind
-bindEngine_get_main_loop
-  = unsafePerformIO $
-      withCString "_Engine" $
-        \ clsNamePtr ->
-          withCString "get_main_loop" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the main loop object (see [MainLoop] and [SceneTree]).
-get_main_loop ::
-                (Engine :< cls, Object :< cls) => cls -> IO MainLoop
-get_main_loop cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_get_main_loop (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEngine_get_version_info #-}
-
--- | Returns the current engine version information in a Dictionary.
---   				"major"    - Holds the major version number as an int
---   				"minor"    - Holds the minor version number as an int
---   				"patch"    - Holds the patch version number as an int
---   				"hex"      - Holds the full version number encoded as an hexadecimal int with one byte (2 places) per number (see example below)
---   				"status"   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
---   				"build"    - Holds the build name (e.g. "custom-build") as a String
---   				"string"   - major + minor + patch + status + build in a single String
---   				The "hex" value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. Note that it's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
---   				[codeblock]
---   				if Engine.get_version_info().hex >= 0x030200:
---   				    # do things specific to version 3.2 or later
---   				else:
---   				    # do things specific to versions before 3.2
---   				[/codeblock]
-bindEngine_get_version_info :: MethodBind
-bindEngine_get_version_info
-  = unsafePerformIO $
-      withCString "_Engine" $
-        \ clsNamePtr ->
-          withCString "get_version_info" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the current engine version information in a Dictionary.
---   				"major"    - Holds the major version number as an int
---   				"minor"    - Holds the minor version number as an int
---   				"patch"    - Holds the patch version number as an int
---   				"hex"      - Holds the full version number encoded as an hexadecimal int with one byte (2 places) per number (see example below)
---   				"status"   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
---   				"build"    - Holds the build name (e.g. "custom-build") as a String
---   				"string"   - major + minor + patch + status + build in a single String
---   				The "hex" value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. Note that it's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
---   				[codeblock]
---   				if Engine.get_version_info().hex >= 0x030200:
---   				    # do things specific to version 3.2 or later
---   				else:
---   				    # do things specific to versions before 3.2
---   				[/codeblock]
-get_version_info ::
-                   (Engine :< cls, Object :< cls) => cls -> IO Dictionary
-get_version_info cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_get_version_info (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindEngine_get_author_info #-}
 
 -- | Returns engine author information in a Dictionary.
@@ -457,6 +342,72 @@ get_donor_info cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindEngine_get_frames_drawn #-}
+
+-- | Returns the total number of frames drawn.
+bindEngine_get_frames_drawn :: MethodBind
+bindEngine_get_frames_drawn
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_frames_drawn" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the total number of frames drawn.
+get_frames_drawn :: (Engine :< cls, Object :< cls) => cls -> IO Int
+get_frames_drawn cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_get_frames_drawn (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEngine_get_frames_per_second #-}
+
+-- | Returns the frames per second of the running game.
+bindEngine_get_frames_per_second :: MethodBind
+bindEngine_get_frames_per_second
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_frames_per_second" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the frames per second of the running game.
+get_frames_per_second ::
+                        (Engine :< cls, Object :< cls) => cls -> IO Float
+get_frames_per_second cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_get_frames_per_second
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEngine_get_idle_frames #-}
+
+bindEngine_get_idle_frames :: MethodBind
+bindEngine_get_idle_frames
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_idle_frames" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_idle_frames :: (Engine :< cls, Object :< cls) => cls -> IO Int
+get_idle_frames cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_get_idle_frames (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindEngine_get_license_info #-}
 
 -- | Returns Dictionary of licenses used by Godot and included third party components.
@@ -503,25 +454,143 @@ get_license_text cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEngine_is_in_physics_frame #-}
+{-# NOINLINE bindEngine_get_main_loop #-}
 
--- | Returns [code]true[/code] if the game is inside the fixed process and physics phase of the game loop.
-bindEngine_is_in_physics_frame :: MethodBind
-bindEngine_is_in_physics_frame
+-- | Returns the main loop object (see [MainLoop] and [SceneTree]).
+bindEngine_get_main_loop :: MethodBind
+bindEngine_get_main_loop
   = unsafePerformIO $
       withCString "_Engine" $
         \ clsNamePtr ->
-          withCString "is_in_physics_frame" $
+          withCString "get_main_loop" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the game is inside the fixed process and physics phase of the game loop.
-is_in_physics_frame ::
-                      (Engine :< cls, Object :< cls) => cls -> IO Bool
-is_in_physics_frame cls
+-- | Returns the main loop object (see [MainLoop] and [SceneTree]).
+get_main_loop ::
+                (Engine :< cls, Object :< cls) => cls -> IO MainLoop
+get_main_loop cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_is_in_physics_frame (upcast cls)
+         godot_method_bind_call bindEngine_get_main_loop (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEngine_get_physics_frames #-}
+
+bindEngine_get_physics_frames :: MethodBind
+bindEngine_get_physics_frames
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_physics_frames" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_physics_frames ::
+                     (Engine :< cls, Object :< cls) => cls -> IO Int
+get_physics_frames cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_get_physics_frames (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEngine_get_physics_interpolation_fraction #-}
+
+bindEngine_get_physics_interpolation_fraction :: MethodBind
+bindEngine_get_physics_interpolation_fraction
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_physics_interpolation_fraction" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_physics_interpolation_fraction ::
+                                     (Engine :< cls, Object :< cls) => cls -> IO Float
+get_physics_interpolation_fraction cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindEngine_get_physics_interpolation_fraction
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEngine_get_singleton #-}
+
+bindEngine_get_singleton :: MethodBind
+bindEngine_get_singleton
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_singleton" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_singleton ::
+                (Engine :< cls, Object :< cls) => cls -> GodotString -> IO Object
+get_singleton cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_get_singleton (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEngine_get_version_info #-}
+
+-- | Returns the current engine version information in a Dictionary.
+--   				[code]major[/code]    - Holds the major version number as an int
+--   				[code]minor[/code]    - Holds the minor version number as an int
+--   				[code]patch[/code]    - Holds the patch version number as an int
+--   				[code]hex[/code]      - Holds the full version number encoded as an hexadecimal int with one byte (2 places) per number (see example below)
+--   				[code]status[/code]   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
+--   				[code]build[/code]    - Holds the build name (e.g. "custom_build") as a String
+--   				[code]hash[/code]     - Holds the full Git commit hash as a String
+--   				[code]year[/code]     - Holds the year the version was released in as an int
+--   				[code]string[/code]   - [code]major[/code] + [code]minor[/code] + [code]patch[/code] + [code]status[/code] + [code]build[/code] in a single String
+--   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. Note that it's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
+--   				[codeblock]
+--   				if Engine.get_version_info().hex >= 0x030200:
+--   				    # do things specific to version 3.2 or later
+--   				else:
+--   				    # do things specific to versions before 3.2
+--   				[/codeblock]
+bindEngine_get_version_info :: MethodBind
+bindEngine_get_version_info
+  = unsafePerformIO $
+      withCString "_Engine" $
+        \ clsNamePtr ->
+          withCString "get_version_info" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the current engine version information in a Dictionary.
+--   				[code]major[/code]    - Holds the major version number as an int
+--   				[code]minor[/code]    - Holds the minor version number as an int
+--   				[code]patch[/code]    - Holds the patch version number as an int
+--   				[code]hex[/code]      - Holds the full version number encoded as an hexadecimal int with one byte (2 places) per number (see example below)
+--   				[code]status[/code]   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
+--   				[code]build[/code]    - Holds the build name (e.g. "custom_build") as a String
+--   				[code]hash[/code]     - Holds the full Git commit hash as a String
+--   				[code]year[/code]     - Holds the year the version was released in as an int
+--   				[code]string[/code]   - [code]major[/code] + [code]minor[/code] + [code]patch[/code] + [code]status[/code] + [code]build[/code] in a single String
+--   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. Note that it's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
+--   				[codeblock]
+--   				if Engine.get_version_info().hex >= 0x030200:
+--   				    # do things specific to version 3.2 or later
+--   				else:
+--   				    # do things specific to versions before 3.2
+--   				[/codeblock]
+get_version_info ::
+                   (Engine :< cls, Object :< cls) => cls -> IO Dictionary
+get_version_info cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEngine_get_version_info (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -546,22 +615,25 @@ has_singleton cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEngine_get_singleton #-}
+{-# NOINLINE bindEngine_is_in_physics_frame #-}
 
-bindEngine_get_singleton :: MethodBind
-bindEngine_get_singleton
+-- | Returns [code]true[/code] if the game is inside the fixed process and physics phase of the game loop.
+bindEngine_is_in_physics_frame :: MethodBind
+bindEngine_is_in_physics_frame
   = unsafePerformIO $
       withCString "_Engine" $
         \ clsNamePtr ->
-          withCString "get_singleton" $
+          withCString "is_in_physics_frame" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_singleton ::
-                (Engine :< cls, Object :< cls) => cls -> GodotString -> IO Object
-get_singleton cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Returns [code]true[/code] if the game is inside the fixed process and physics phase of the game loop.
+is_in_physics_frame ::
+                      (Engine :< cls, Object :< cls) => cls -> IO Bool
+is_in_physics_frame cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEngine_get_singleton (upcast cls) arrPtr
+         godot_method_bind_call bindEngine_is_in_physics_frame (upcast cls)
+           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

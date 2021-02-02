@@ -1,9 +1,9 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.GDNative
-       (Godot.Core.GDNative.set_library, Godot.Core.GDNative.get_library,
-        Godot.Core.GDNative.initialize, Godot.Core.GDNative.terminate,
-        Godot.Core.GDNative.call_native)
+       (Godot.Core.GDNative.call_native, Godot.Core.GDNative.get_library,
+        Godot.Core.GDNative.initialize, Godot.Core.GDNative.set_library,
+        Godot.Core.GDNative.terminate)
        where
 import Data.Coerce
 import Foreign.C
@@ -12,23 +12,24 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindGDNative_set_library #-}
+{-# NOINLINE bindGDNative_call_native #-}
 
-bindGDNative_set_library :: MethodBind
-bindGDNative_set_library
+bindGDNative_call_native :: MethodBind
+bindGDNative_call_native
   = unsafePerformIO $
       withCString "GDNative" $
         \ clsNamePtr ->
-          withCString "set_library" $
+          withCString "call_native" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_library ::
-              (GDNative :< cls, Object :< cls) => cls -> GDNativeLibrary -> IO ()
-set_library cls arg1
-  = withVariantArray [toVariant arg1]
+call_native ::
+              (GDNative :< cls, Object :< cls) =>
+              cls -> GodotString -> GodotString -> Array -> IO GodotVariant
+call_native cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDNative_set_library (upcast cls) arrPtr
+         godot_method_bind_call bindGDNative_call_native (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -71,6 +72,26 @@ initialize cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindGDNative_set_library #-}
+
+bindGDNative_set_library :: MethodBind
+bindGDNative_set_library
+  = unsafePerformIO $
+      withCString "GDNative" $
+        \ clsNamePtr ->
+          withCString "set_library" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_library ::
+              (GDNative :< cls, Object :< cls) => cls -> GDNativeLibrary -> IO ()
+set_library cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindGDNative_set_library (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindGDNative_terminate #-}
 
 bindGDNative_terminate :: MethodBind
@@ -87,26 +108,5 @@ terminate cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGDNative_terminate (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindGDNative_call_native #-}
-
-bindGDNative_call_native :: MethodBind
-bindGDNative_call_native
-  = unsafePerformIO $
-      withCString "GDNative" $
-        \ clsNamePtr ->
-          withCString "call_native" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-call_native ::
-              (GDNative :< cls, Object :< cls) =>
-              cls -> GodotString -> GodotString -> Array -> IO GodotVariant
-call_native cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDNative_call_native (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

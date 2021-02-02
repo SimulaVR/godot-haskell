@@ -2,9 +2,11 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.InputEventAction
        (Godot.Core.InputEventAction.is_pressed,
-        Godot.Core.InputEventAction.set_action,
         Godot.Core.InputEventAction.get_action,
-        Godot.Core.InputEventAction.set_pressed)
+        Godot.Core.InputEventAction.get_strength,
+        Godot.Core.InputEventAction.set_action,
+        Godot.Core.InputEventAction.set_pressed,
+        Godot.Core.InputEventAction.set_strength)
        where
 import Data.Coerce
 import Foreign.C
@@ -36,6 +38,51 @@ is_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindInputEventAction_get_action #-}
+
+-- | The action's name. Actions are accessed via this [String].
+bindInputEventAction_get_action :: MethodBind
+bindInputEventAction_get_action
+  = unsafePerformIO $
+      withCString "InputEventAction" $
+        \ clsNamePtr ->
+          withCString "get_action" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The action's name. Actions are accessed via this [String].
+get_action ::
+             (InputEventAction :< cls, Object :< cls) => cls -> IO GodotString
+get_action cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventAction_get_action (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindInputEventAction_get_strength #-}
+
+bindInputEventAction_get_strength :: MethodBind
+bindInputEventAction_get_strength
+  = unsafePerformIO $
+      withCString "InputEventAction" $
+        \ clsNamePtr ->
+          withCString "get_strength" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_strength ::
+               (InputEventAction :< cls, Object :< cls) => cls -> IO Float
+get_strength cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventAction_get_strength
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindInputEventAction_set_action #-}
 
 -- | The action's name. Actions are accessed via this [String].
@@ -60,29 +107,6 @@ set_action cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindInputEventAction_get_action #-}
-
--- | The action's name. Actions are accessed via this [String].
-bindInputEventAction_get_action :: MethodBind
-bindInputEventAction_get_action
-  = unsafePerformIO $
-      withCString "InputEventAction" $
-        \ clsNamePtr ->
-          withCString "get_action" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The action's name. Actions are accessed via this [String].
-get_action ::
-             (InputEventAction :< cls, Object :< cls) => cls -> IO GodotString
-get_action cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindInputEventAction_get_action (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindInputEventAction_set_pressed #-}
 
 -- | If [code]true[/code], the action's state is pressed. If [code]false[/code], the action's state is released.
@@ -102,6 +126,28 @@ set_pressed cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindInputEventAction_set_pressed
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindInputEventAction_set_strength #-}
+
+bindInputEventAction_set_strength :: MethodBind
+bindInputEventAction_set_strength
+  = unsafePerformIO $
+      withCString "InputEventAction" $
+        \ clsNamePtr ->
+          withCString "set_strength" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_strength ::
+               (InputEventAction :< cls, Object :< cls) => cls -> Float -> IO ()
+set_strength cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventAction_set_strength
            (upcast cls)
            arrPtr
            len

@@ -6,21 +6,21 @@ module Godot.Core.XMLParser
         Godot.Core.XMLParser._NODE_CDATA,
         Godot.Core.XMLParser._NODE_COMMENT,
         Godot.Core.XMLParser._NODE_TEXT, Godot.Core.XMLParser._NODE_NONE,
-        Godot.Core.XMLParser._NODE_ELEMENT_END, Godot.Core.XMLParser.read,
-        Godot.Core.XMLParser.get_node_type,
-        Godot.Core.XMLParser.get_node_name,
-        Godot.Core.XMLParser.get_node_data,
-        Godot.Core.XMLParser.get_node_offset,
+        Godot.Core.XMLParser._NODE_ELEMENT_END,
         Godot.Core.XMLParser.get_attribute_count,
         Godot.Core.XMLParser.get_attribute_name,
         Godot.Core.XMLParser.get_attribute_value,
-        Godot.Core.XMLParser.has_attribute,
+        Godot.Core.XMLParser.get_current_line,
         Godot.Core.XMLParser.get_named_attribute_value,
         Godot.Core.XMLParser.get_named_attribute_value_safe,
-        Godot.Core.XMLParser.is_empty,
-        Godot.Core.XMLParser.get_current_line,
-        Godot.Core.XMLParser.skip_section, Godot.Core.XMLParser.seek,
-        Godot.Core.XMLParser.open, Godot.Core.XMLParser.open_buffer)
+        Godot.Core.XMLParser.get_node_data,
+        Godot.Core.XMLParser.get_node_name,
+        Godot.Core.XMLParser.get_node_offset,
+        Godot.Core.XMLParser.get_node_type,
+        Godot.Core.XMLParser.has_attribute, Godot.Core.XMLParser.is_empty,
+        Godot.Core.XMLParser.open, Godot.Core.XMLParser.open_buffer,
+        Godot.Core.XMLParser.read, Godot.Core.XMLParser.seek,
+        Godot.Core.XMLParser.skip_section)
        where
 import Data.Coerce
 import Foreign.C
@@ -49,117 +49,6 @@ _NODE_NONE = 0
 
 _NODE_ELEMENT_END :: Int
 _NODE_ELEMENT_END = 2
-
-{-# NOINLINE bindXMLParser_read #-}
-
--- | Read the next node of the file. This returns an error code.
-bindXMLParser_read :: MethodBind
-bindXMLParser_read
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "read" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Read the next node of the file. This returns an error code.
-read :: (XMLParser :< cls, Object :< cls) => cls -> IO Int
-read cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_read (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindXMLParser_get_node_type #-}
-
--- | Get the type of the current node. Compare with [code]NODE_*[/code] constants.
-bindXMLParser_get_node_type :: MethodBind
-bindXMLParser_get_node_type
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "get_node_type" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the type of the current node. Compare with [code]NODE_*[/code] constants.
-get_node_type :: (XMLParser :< cls, Object :< cls) => cls -> IO Int
-get_node_type cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_get_node_type (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindXMLParser_get_node_name #-}
-
--- | Get the name of the current element node. This will raise an error if the current node type is not [code]NODE_ELEMENT[/code] nor [code]NODE_ELEMENT_END[/code]
-bindXMLParser_get_node_name :: MethodBind
-bindXMLParser_get_node_name
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "get_node_name" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the name of the current element node. This will raise an error if the current node type is not [code]NODE_ELEMENT[/code] nor [code]NODE_ELEMENT_END[/code]
-get_node_name ::
-                (XMLParser :< cls, Object :< cls) => cls -> IO GodotString
-get_node_name cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_get_node_name (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindXMLParser_get_node_data #-}
-
--- | Get the contents of a text node. This will raise an error in any other type of node.
-bindXMLParser_get_node_data :: MethodBind
-bindXMLParser_get_node_data
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "get_node_data" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the contents of a text node. This will raise an error in any other type of node.
-get_node_data ::
-                (XMLParser :< cls, Object :< cls) => cls -> IO GodotString
-get_node_data cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_get_node_data (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindXMLParser_get_node_offset #-}
-
--- | Get the byte offset of the current node since the beginning of the file or buffer.
-bindXMLParser_get_node_offset :: MethodBind
-bindXMLParser_get_node_offset
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "get_node_offset" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the byte offset of the current node since the beginning of the file or buffer.
-get_node_offset ::
-                  (XMLParser :< cls, Object :< cls) => cls -> IO Int
-get_node_offset cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_get_node_offset (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindXMLParser_get_attribute_count #-}
 
@@ -233,25 +122,25 @@ get_attribute_value cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindXMLParser_has_attribute #-}
+{-# NOINLINE bindXMLParser_get_current_line #-}
 
--- | Check whether or not the current element has a certain attribute.
-bindXMLParser_has_attribute :: MethodBind
-bindXMLParser_has_attribute
+-- | Get the current line in the parsed file (currently not implemented).
+bindXMLParser_get_current_line :: MethodBind
+bindXMLParser_get_current_line
   = unsafePerformIO $
       withCString "XMLParser" $
         \ clsNamePtr ->
-          withCString "has_attribute" $
+          withCString "get_current_line" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Check whether or not the current element has a certain attribute.
-has_attribute ::
-                (XMLParser :< cls, Object :< cls) => cls -> GodotString -> IO Bool
-has_attribute cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Get the current line in the parsed file (currently not implemented).
+get_current_line ::
+                   (XMLParser :< cls, Object :< cls) => cls -> IO Int
+get_current_line cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_has_attribute (upcast cls)
+         godot_method_bind_call bindXMLParser_get_current_line (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -306,6 +195,120 @@ get_named_attribute_value_safe cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindXMLParser_get_node_data #-}
+
+-- | Get the contents of a text node. This will raise an error in any other type of node.
+bindXMLParser_get_node_data :: MethodBind
+bindXMLParser_get_node_data
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "get_node_data" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the contents of a text node. This will raise an error in any other type of node.
+get_node_data ::
+                (XMLParser :< cls, Object :< cls) => cls -> IO GodotString
+get_node_data cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_get_node_data (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindXMLParser_get_node_name #-}
+
+-- | Get the name of the current element node. This will raise an error if the current node type is not [constant NODE_ELEMENT] nor [constant NODE_ELEMENT_END]
+bindXMLParser_get_node_name :: MethodBind
+bindXMLParser_get_node_name
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "get_node_name" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the name of the current element node. This will raise an error if the current node type is not [constant NODE_ELEMENT] nor [constant NODE_ELEMENT_END]
+get_node_name ::
+                (XMLParser :< cls, Object :< cls) => cls -> IO GodotString
+get_node_name cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_get_node_name (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindXMLParser_get_node_offset #-}
+
+-- | Get the byte offset of the current node since the beginning of the file or buffer.
+bindXMLParser_get_node_offset :: MethodBind
+bindXMLParser_get_node_offset
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "get_node_offset" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the byte offset of the current node since the beginning of the file or buffer.
+get_node_offset ::
+                  (XMLParser :< cls, Object :< cls) => cls -> IO Int
+get_node_offset cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_get_node_offset (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindXMLParser_get_node_type #-}
+
+-- | Get the type of the current node. Compare with [code]NODE_*[/code] constants.
+bindXMLParser_get_node_type :: MethodBind
+bindXMLParser_get_node_type
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "get_node_type" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the type of the current node. Compare with [code]NODE_*[/code] constants.
+get_node_type :: (XMLParser :< cls, Object :< cls) => cls -> IO Int
+get_node_type cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_get_node_type (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindXMLParser_has_attribute #-}
+
+-- | Check whether or not the current element has a certain attribute.
+bindXMLParser_has_attribute :: MethodBind
+bindXMLParser_has_attribute
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "has_attribute" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Check whether or not the current element has a certain attribute.
+has_attribute ::
+                (XMLParser :< cls, Object :< cls) => cls -> GodotString -> IO Bool
+has_attribute cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_has_attribute (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindXMLParser_is_empty #-}
 
 -- | Check whether the current element is empty (this only works for completely empty tags, e.g. <element \>).
@@ -325,71 +328,6 @@ is_empty cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindXMLParser_is_empty (upcast cls) arrPtr
            len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindXMLParser_get_current_line #-}
-
--- | Get the current line in the parsed file (currently not implemented).
-bindXMLParser_get_current_line :: MethodBind
-bindXMLParser_get_current_line
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "get_current_line" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the current line in the parsed file (currently not implemented).
-get_current_line ::
-                   (XMLParser :< cls, Object :< cls) => cls -> IO Int
-get_current_line cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_get_current_line (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindXMLParser_skip_section #-}
-
--- | Skips the current section. If the node contains other elements, they will be ignored and the cursor will go to the closing of the current element.
-bindXMLParser_skip_section :: MethodBind
-bindXMLParser_skip_section
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "skip_section" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Skips the current section. If the node contains other elements, they will be ignored and the cursor will go to the closing of the current element.
-skip_section :: (XMLParser :< cls, Object :< cls) => cls -> IO ()
-skip_section cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_skip_section (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindXMLParser_seek #-}
-
--- | Move the buffer cursor to a certain offset (since the beginning) and read the next node there. This returns an error code.
-bindXMLParser_seek :: MethodBind
-bindXMLParser_seek
-  = unsafePerformIO $
-      withCString "XMLParser" $
-        \ clsNamePtr ->
-          withCString "seek" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Move the buffer cursor to a certain offset (since the beginning) and read the next node there. This returns an error code.
-seek :: (XMLParser :< cls, Object :< cls) => cls -> Int -> IO Int
-seek cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindXMLParser_seek (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindXMLParser_open #-}
@@ -432,6 +370,68 @@ open_buffer cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindXMLParser_open_buffer (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindXMLParser_read #-}
+
+-- | Read the next node of the file. This returns an error code.
+bindXMLParser_read :: MethodBind
+bindXMLParser_read
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "read" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Read the next node of the file. This returns an error code.
+read :: (XMLParser :< cls, Object :< cls) => cls -> IO Int
+read cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_read (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindXMLParser_seek #-}
+
+-- | Move the buffer cursor to a certain offset (since the beginning) and read the next node there. This returns an error code.
+bindXMLParser_seek :: MethodBind
+bindXMLParser_seek
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "seek" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Move the buffer cursor to a certain offset (since the beginning) and read the next node there. This returns an error code.
+seek :: (XMLParser :< cls, Object :< cls) => cls -> Int -> IO Int
+seek cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_seek (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindXMLParser_skip_section #-}
+
+-- | Skips the current section. If the node contains other elements, they will be ignored and the cursor will go to the closing of the current element.
+bindXMLParser_skip_section :: MethodBind
+bindXMLParser_skip_section
+  = unsafePerformIO $
+      withCString "XMLParser" $
+        \ clsNamePtr ->
+          withCString "skip_section" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Skips the current section. If the node contains other elements, they will be ignored and the cursor will go to the closing of the current element.
+skip_section :: (XMLParser :< cls, Object :< cls) => cls -> IO ()
+skip_section cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindXMLParser_skip_section (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

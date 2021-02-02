@@ -9,6 +9,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._TYPE_NIL,
         Godot.Core.GlobalConstants._PROPERTY_USAGE_SCRIPT_VARIABLE,
         Godot.Core.GlobalConstants._KEY_KP_ENTER,
+        Godot.Core.GlobalConstants._ERR_DUPLICATE_SYMBOL,
         Godot.Core.GlobalConstants._KEY_LAUNCHA,
         Godot.Core.GlobalConstants._OP_EQUAL,
         Godot.Core.GlobalConstants._TYPE_INT,
@@ -43,6 +44,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._ERR_FILE_NOT_FOUND,
         Godot.Core.GlobalConstants._KEY_IACUTE,
         Godot.Core.GlobalConstants._KEY_F9,
+        Godot.Core.GlobalConstants._JOY_OPENVR_MENU,
         Godot.Core.GlobalConstants._MIDI_MESSAGE_PROGRAM_CHANGE,
         Godot.Core.GlobalConstants._JOY_SONY_X,
         Godot.Core.GlobalConstants._ERR_BUSY,
@@ -98,9 +100,11 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._JOY_AXIS_2,
         Godot.Core.GlobalConstants._KEY_E,
         Godot.Core.GlobalConstants._KEY_KP_1,
+        Godot.Core.GlobalConstants._ERR_CANT_FORK,
         Godot.Core.GlobalConstants._PROPERTY_USAGE_NO_INSTANCE_STATE,
         Godot.Core.GlobalConstants._KEY_5,
         Godot.Core.GlobalConstants._OP_NOT,
+        Godot.Core.GlobalConstants._ERR_PRINTER_ON_FIRE,
         Godot.Core.GlobalConstants._KEY_MASK_KPAD,
         Godot.Core.GlobalConstants._OP_XOR,
         Godot.Core.GlobalConstants._KEY_META,
@@ -125,6 +129,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_REGISTERED,
         Godot.Core.GlobalConstants._KEY_H,
         Godot.Core.GlobalConstants._KEY_DIRECTION_R,
+        Godot.Core.GlobalConstants._JOY_VR_TRIGGER,
         Godot.Core.GlobalConstants._KEY_RIGHT,
         Godot.Core.GlobalConstants._JOY_ANALOG_L2,
         Godot.Core.GlobalConstants._JOY_BUTTON_2,
@@ -159,8 +164,10 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._PROPERTY_USAGE_EDITOR,
         Godot.Core.GlobalConstants._KEY_KP_7,
         Godot.Core.GlobalConstants._JOY_AXIS_4,
+        Godot.Core.GlobalConstants._ERR_CANT_CONNECT,
         Godot.Core.GlobalConstants._KEY_HYPER_R,
         Godot.Core.GlobalConstants._KEY_C,
+        Godot.Core.GlobalConstants._ERR_CONNECTION_ERROR,
         Godot.Core.GlobalConstants._OP_BIT_AND,
         Godot.Core.GlobalConstants._JOY_R2,
         Godot.Core.GlobalConstants._KEY_MEDIANEXT,
@@ -170,6 +177,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_3,
         Godot.Core.GlobalConstants._KEY_SSHARP,
         Godot.Core.GlobalConstants._JOY_ANALOG_LY,
+        Godot.Core.GlobalConstants._JOY_OCULUS_AX,
         Godot.Core.GlobalConstants._KEY_SCROLLLOCK,
         Godot.Core.GlobalConstants._PROPERTY_HINT_GLOBAL_FILE,
         Godot.Core.GlobalConstants._KEY_CODE_MASK,
@@ -221,6 +229,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_DELETE,
         Godot.Core.GlobalConstants._JOY_XBOX_X,
         Godot.Core.GlobalConstants._KEY_BAR,
+        Godot.Core.GlobalConstants._ERR_CANT_RESOLVE,
         Godot.Core.GlobalConstants._HALIGN_LEFT,
         Godot.Core.GlobalConstants._JOY_SONY_TRIANGLE,
         Godot.Core.GlobalConstants._KEY_OACUTE,
@@ -236,6 +245,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_UCIRCUMFLEX,
         Godot.Core.GlobalConstants._OP_LESS,
         Godot.Core.GlobalConstants._ERR_INVALID_DATA,
+        Godot.Core.GlobalConstants._JOY_OCULUS_MENU,
         Godot.Core.GlobalConstants._ERR_OUT_OF_MEMORY,
         Godot.Core.GlobalConstants._KEY_HOMEPAGE,
         Godot.Core.GlobalConstants._OP_SUBTRACT,
@@ -243,6 +253,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._JOY_ANALOG_RX,
         Godot.Core.GlobalConstants._KEY_L,
         Godot.Core.GlobalConstants._KEY_MEDIASTOP,
+        Godot.Core.GlobalConstants._JOY_VR_GRIP,
         Godot.Core.GlobalConstants._MIDI_MESSAGE_NOTE_ON,
         Godot.Core.GlobalConstants._KEY_MULTIPLY,
         Godot.Core.GlobalConstants._KEY_STERLING,
@@ -257,8 +268,11 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_EXCLAMDOWN,
         Godot.Core.GlobalConstants._ERR_PARAMETER_RANGE_ERROR,
         Godot.Core.GlobalConstants._KEY_QUESTIONDOWN,
+        Godot.Core.GlobalConstants._ERR_INVALID_DECLARATION,
         Godot.Core.GlobalConstants._TYPE_COLOR_ARRAY,
         Godot.Core.GlobalConstants._KEY_EQUAL,
+        Godot.Core.GlobalConstants._JOY_OPENVR_TOUCHPADX,
+        Godot.Core.GlobalConstants._JOY_OCULUS_BY,
         Godot.Core.GlobalConstants._OP_BIT_NEGATE,
         Godot.Core.GlobalConstants._JOY_L3,
         Godot.Core.GlobalConstants._OP_SHIFT_LEFT,
@@ -338,6 +352,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._OP_BIT_OR,
         Godot.Core.GlobalConstants._KEY_COMMA,
         Godot.Core.GlobalConstants._TYPE_BASIS,
+        Godot.Core.GlobalConstants._JOY_OPENVR_TOUCHPADY,
         Godot.Core.GlobalConstants._KEY_NUMLOCK,
         Godot.Core.GlobalConstants._KEY_VOLUMEUP,
         Godot.Core.GlobalConstants._METHOD_FLAG_NOSCRIPT,
@@ -346,6 +361,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._TYPE_TRANSFORM2D,
         Godot.Core.GlobalConstants._KEY_HYPER_L,
         Godot.Core.GlobalConstants._KEY_UP,
+        Godot.Core.GlobalConstants._JOY_VR_PAD,
         Godot.Core.GlobalConstants._TYPE_RAW_ARRAY,
         Godot.Core.GlobalConstants._KEY_PERIOD,
         Godot.Core.GlobalConstants._KEY_ACIRCUMFLEX,
@@ -355,6 +371,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_M,
         Godot.Core.GlobalConstants._KEY_MEDIAPREVIOUS,
         Godot.Core.GlobalConstants._KEY_AT,
+        Godot.Core.GlobalConstants._JOY_VR_ANALOG_TRIGGER,
         Godot.Core.GlobalConstants._KEY_TREBLEUP,
         Godot.Core.GlobalConstants._JOY_BUTTON_7,
         Godot.Core.GlobalConstants._BUTTON_MASK_XBUTTON1,
@@ -410,6 +427,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_GUILLEMOTLEFT,
         Godot.Core.GlobalConstants._TYPE_TRANSFORM,
         Godot.Core.GlobalConstants._JOY_DS_X,
+        Godot.Core.GlobalConstants._ERR_SKIP,
         Godot.Core.GlobalConstants._OP_POSITIVE,
         Godot.Core.GlobalConstants._KEY_FORWARD,
         Godot.Core.GlobalConstants._KEY_AMPERSAND,
@@ -470,6 +488,7 @@ module Godot.Core.GlobalConstants
         Godot.Core.GlobalConstants._KEY_THREEQUARTERS,
         Godot.Core.GlobalConstants._PROPERTY_USAGE_DEFAULT,
         Godot.Core.GlobalConstants._KEY_LESS,
+        Godot.Core.GlobalConstants._JOY_VR_ANALOG_GRIP,
         Godot.Core.GlobalConstants._KEY_CLEAR,
         Godot.Core.GlobalConstants._PROPERTY_HINT_RESOURCE_TYPE,
         Godot.Core.GlobalConstants._KEY_ESCAPE,
@@ -519,6 +538,9 @@ _PROPERTY_USAGE_SCRIPT_VARIABLE = 8192
 
 _KEY_KP_ENTER :: Int
 _KEY_KP_ENTER = 16777222
+
+_ERR_DUPLICATE_SYMBOL :: Int
+_ERR_DUPLICATE_SYMBOL = 42
 
 _KEY_LAUNCHA :: Int
 _KEY_LAUNCHA = 16777314
@@ -621,6 +643,9 @@ _KEY_IACUTE = 205
 
 _KEY_F9 :: Int
 _KEY_F9 = 16777252
+
+_JOY_OPENVR_MENU :: Int
+_JOY_OPENVR_MENU = 1
 
 _MIDI_MESSAGE_PROGRAM_CHANGE :: Int
 _MIDI_MESSAGE_PROGRAM_CHANGE = 12
@@ -787,6 +812,9 @@ _KEY_E = 69
 _KEY_KP_1 :: Int
 _KEY_KP_1 = 16777351
 
+_ERR_CANT_FORK :: Int
+_ERR_CANT_FORK = 29
+
 _PROPERTY_USAGE_NO_INSTANCE_STATE :: Int
 _PROPERTY_USAGE_NO_INSTANCE_STATE = 2048
 
@@ -795,6 +823,9 @@ _KEY_5 = 53
 
 _OP_NOT :: Int
 _OP_NOT = 23
+
+_ERR_PRINTER_ON_FIRE :: Int
+_ERR_PRINTER_ON_FIRE = 48
 
 _KEY_MASK_KPAD :: Int
 _KEY_MASK_KPAD = 536870912
@@ -867,6 +898,9 @@ _KEY_H = 72
 
 _KEY_DIRECTION_R :: Int
 _KEY_DIRECTION_R = 16777267
+
+_JOY_VR_TRIGGER :: Int
+_JOY_VR_TRIGGER = 15
 
 _KEY_RIGHT :: Int
 _KEY_RIGHT = 16777233
@@ -970,11 +1004,17 @@ _KEY_KP_7 = 16777357
 _JOY_AXIS_4 :: Int
 _JOY_AXIS_4 = 4
 
+_ERR_CANT_CONNECT :: Int
+_ERR_CANT_CONNECT = 25
+
 _KEY_HYPER_R :: Int
 _KEY_HYPER_R = 16777264
 
 _KEY_C :: Int
 _KEY_C = 67
+
+_ERR_CONNECTION_ERROR :: Int
+_ERR_CONNECTION_ERROR = 27
 
 _OP_BIT_AND :: Int
 _OP_BIT_AND = 16
@@ -1002,6 +1042,9 @@ _KEY_SSHARP = 223
 
 _JOY_ANALOG_LY :: Int
 _JOY_ANALOG_LY = 1
+
+_JOY_OCULUS_AX :: Int
+_JOY_OCULUS_AX = 7
 
 _KEY_SCROLLLOCK :: Int
 _KEY_SCROLLLOCK = 16777243
@@ -1156,6 +1199,9 @@ _JOY_XBOX_X = 2
 _KEY_BAR :: Int
 _KEY_BAR = 124
 
+_ERR_CANT_RESOLVE :: Int
+_ERR_CANT_RESOLVE = 26
+
 _HALIGN_LEFT :: Int
 _HALIGN_LEFT = 0
 
@@ -1201,6 +1247,9 @@ _OP_LESS = 2
 _ERR_INVALID_DATA :: Int
 _ERR_INVALID_DATA = 30
 
+_JOY_OCULUS_MENU :: Int
+_JOY_OCULUS_MENU = 3
+
 _ERR_OUT_OF_MEMORY :: Int
 _ERR_OUT_OF_MEMORY = 6
 
@@ -1221,6 +1270,9 @@ _KEY_L = 76
 
 _KEY_MEDIASTOP :: Int
 _KEY_MEDIASTOP = 16777293
+
+_JOY_VR_GRIP :: Int
+_JOY_VR_GRIP = 2
 
 _MIDI_MESSAGE_NOTE_ON :: Int
 _MIDI_MESSAGE_NOTE_ON = 9
@@ -1264,11 +1316,20 @@ _ERR_PARAMETER_RANGE_ERROR = 5
 _KEY_QUESTIONDOWN :: Int
 _KEY_QUESTIONDOWN = 191
 
+_ERR_INVALID_DECLARATION :: Int
+_ERR_INVALID_DECLARATION = 41
+
 _TYPE_COLOR_ARRAY :: Int
 _TYPE_COLOR_ARRAY = 26
 
 _KEY_EQUAL :: Int
 _KEY_EQUAL = 61
+
+_JOY_OPENVR_TOUCHPADX :: Int
+_JOY_OPENVR_TOUCHPADX = 0
+
+_JOY_OCULUS_BY :: Int
+_JOY_OCULUS_BY = 1
 
 _OP_BIT_NEGATE :: Int
 _OP_BIT_NEGATE = 19
@@ -1507,6 +1568,9 @@ _KEY_COMMA = 44
 _TYPE_BASIS :: Int
 _TYPE_BASIS = 12
 
+_JOY_OPENVR_TOUCHPADY :: Int
+_JOY_OPENVR_TOUCHPADY = 1
+
 _KEY_NUMLOCK :: Int
 _KEY_NUMLOCK = 16777242
 
@@ -1530,6 +1594,9 @@ _KEY_HYPER_L = 16777263
 
 _KEY_UP :: Int
 _KEY_UP = 16777232
+
+_JOY_VR_PAD :: Int
+_JOY_VR_PAD = 14
 
 _TYPE_RAW_ARRAY :: Int
 _TYPE_RAW_ARRAY = 20
@@ -1557,6 +1624,9 @@ _KEY_MEDIAPREVIOUS = 16777294
 
 _KEY_AT :: Int
 _KEY_AT = 64
+
+_JOY_VR_ANALOG_TRIGGER :: Int
+_JOY_VR_ANALOG_TRIGGER = 2
 
 _KEY_TREBLEUP :: Int
 _KEY_TREBLEUP = 16777290
@@ -1722,6 +1792,9 @@ _TYPE_TRANSFORM = 13
 
 _JOY_DS_X :: Int
 _JOY_DS_X = 3
+
+_ERR_SKIP :: Int
+_ERR_SKIP = 45
 
 _OP_POSITIVE :: Int
 _OP_POSITIVE = 11
@@ -1902,6 +1975,9 @@ _PROPERTY_USAGE_DEFAULT = 7
 
 _KEY_LESS :: Int
 _KEY_LESS = 60
+
+_JOY_VR_ANALOG_GRIP :: Int
+_JOY_VR_ANALOG_GRIP = 4
 
 _KEY_CLEAR :: Int
 _KEY_CLEAR = 16777228

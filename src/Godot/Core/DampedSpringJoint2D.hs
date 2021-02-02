@@ -1,14 +1,14 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.DampedSpringJoint2D
-       (Godot.Core.DampedSpringJoint2D.set_length,
+       (Godot.Core.DampedSpringJoint2D.get_damping,
         Godot.Core.DampedSpringJoint2D.get_length,
-        Godot.Core.DampedSpringJoint2D.set_rest_length,
         Godot.Core.DampedSpringJoint2D.get_rest_length,
-        Godot.Core.DampedSpringJoint2D.set_stiffness,
         Godot.Core.DampedSpringJoint2D.get_stiffness,
         Godot.Core.DampedSpringJoint2D.set_damping,
-        Godot.Core.DampedSpringJoint2D.get_damping)
+        Godot.Core.DampedSpringJoint2D.set_length,
+        Godot.Core.DampedSpringJoint2D.set_rest_length,
+        Godot.Core.DampedSpringJoint2D.set_stiffness)
        where
 import Data.Coerce
 import Foreign.C
@@ -17,26 +17,25 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindDampedSpringJoint2D_set_length #-}
+{-# NOINLINE bindDampedSpringJoint2D_get_damping #-}
 
--- | The spring joint's maximum length. The two attached bodies cannot stretch it past this value. Default value: [code]50[/code]
-bindDampedSpringJoint2D_set_length :: MethodBind
-bindDampedSpringJoint2D_set_length
+-- | The spring joint's damping ratio. A value between [code]0[/code] and [code]1[/code]. When the two bodies move into different directions the system tries to align them to the spring axis again. A high [code]damping[/code] value forces the attached bodies to align faster. Default value: [code]1[/code]
+bindDampedSpringJoint2D_get_damping :: MethodBind
+bindDampedSpringJoint2D_get_damping
   = unsafePerformIO $
       withCString "DampedSpringJoint2D" $
         \ clsNamePtr ->
-          withCString "set_length" $
+          withCString "get_damping" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The spring joint's maximum length. The two attached bodies cannot stretch it past this value. Default value: [code]50[/code]
-set_length ::
-             (DampedSpringJoint2D :< cls, Object :< cls) =>
-             cls -> Float -> IO ()
-set_length cls arg1
-  = withVariantArray [toVariant arg1]
+-- | The spring joint's damping ratio. A value between [code]0[/code] and [code]1[/code]. When the two bodies move into different directions the system tries to align them to the spring axis again. A high [code]damping[/code] value forces the attached bodies to align faster. Default value: [code]1[/code]
+get_damping ::
+              (DampedSpringJoint2D :< cls, Object :< cls) => cls -> IO Float
+get_damping cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindDampedSpringJoint2D_set_length
+         godot_method_bind_call bindDampedSpringJoint2D_get_damping
            (upcast cls)
            arrPtr
            len
@@ -66,31 +65,6 @@ get_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindDampedSpringJoint2D_set_rest_length #-}
-
--- | When the bodies attached to the spring joint move they stretch or squash it. The joint always tries to resize towards this length. Default value: [code]0[/code]
-bindDampedSpringJoint2D_set_rest_length :: MethodBind
-bindDampedSpringJoint2D_set_rest_length
-  = unsafePerformIO $
-      withCString "DampedSpringJoint2D" $
-        \ clsNamePtr ->
-          withCString "set_rest_length" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | When the bodies attached to the spring joint move they stretch or squash it. The joint always tries to resize towards this length. Default value: [code]0[/code]
-set_rest_length ::
-                  (DampedSpringJoint2D :< cls, Object :< cls) =>
-                  cls -> Float -> IO ()
-set_rest_length cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindDampedSpringJoint2D_set_rest_length
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindDampedSpringJoint2D_get_rest_length #-}
 
 -- | When the bodies attached to the spring joint move they stretch or squash it. The joint always tries to resize towards this length. Default value: [code]0[/code]
@@ -110,31 +84,6 @@ get_rest_length cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindDampedSpringJoint2D_get_rest_length
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindDampedSpringJoint2D_set_stiffness #-}
-
--- | The higher the value, the less the bodies attached to the joint will deform it. The joint applies an opposing force to the bodies, the product of the stiffness multiplied by the size difference from its resting length. Default value: [code]20[/code]
-bindDampedSpringJoint2D_set_stiffness :: MethodBind
-bindDampedSpringJoint2D_set_stiffness
-  = unsafePerformIO $
-      withCString "DampedSpringJoint2D" $
-        \ clsNamePtr ->
-          withCString "set_stiffness" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The higher the value, the less the bodies attached to the joint will deform it. The joint applies an opposing force to the bodies, the product of the stiffness multiplied by the size difference from its resting length. Default value: [code]20[/code]
-set_stiffness ::
-                (DampedSpringJoint2D :< cls, Object :< cls) =>
-                cls -> Float -> IO ()
-set_stiffness cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindDampedSpringJoint2D_set_stiffness
            (upcast cls)
            arrPtr
            len
@@ -189,25 +138,76 @@ set_damping cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindDampedSpringJoint2D_get_damping #-}
+{-# NOINLINE bindDampedSpringJoint2D_set_length #-}
 
--- | The spring joint's damping ratio. A value between [code]0[/code] and [code]1[/code]. When the two bodies move into different directions the system tries to align them to the spring axis again. A high [code]damping[/code] value forces the attached bodies to align faster. Default value: [code]1[/code]
-bindDampedSpringJoint2D_get_damping :: MethodBind
-bindDampedSpringJoint2D_get_damping
+-- | The spring joint's maximum length. The two attached bodies cannot stretch it past this value. Default value: [code]50[/code]
+bindDampedSpringJoint2D_set_length :: MethodBind
+bindDampedSpringJoint2D_set_length
   = unsafePerformIO $
       withCString "DampedSpringJoint2D" $
         \ clsNamePtr ->
-          withCString "get_damping" $
+          withCString "set_length" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The spring joint's damping ratio. A value between [code]0[/code] and [code]1[/code]. When the two bodies move into different directions the system tries to align them to the spring axis again. A high [code]damping[/code] value forces the attached bodies to align faster. Default value: [code]1[/code]
-get_damping ::
-              (DampedSpringJoint2D :< cls, Object :< cls) => cls -> IO Float
-get_damping cls
-  = withVariantArray []
+-- | The spring joint's maximum length. The two attached bodies cannot stretch it past this value. Default value: [code]50[/code]
+set_length ::
+             (DampedSpringJoint2D :< cls, Object :< cls) =>
+             cls -> Float -> IO ()
+set_length cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindDampedSpringJoint2D_get_damping
+         godot_method_bind_call bindDampedSpringJoint2D_set_length
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindDampedSpringJoint2D_set_rest_length #-}
+
+-- | When the bodies attached to the spring joint move they stretch or squash it. The joint always tries to resize towards this length. Default value: [code]0[/code]
+bindDampedSpringJoint2D_set_rest_length :: MethodBind
+bindDampedSpringJoint2D_set_rest_length
+  = unsafePerformIO $
+      withCString "DampedSpringJoint2D" $
+        \ clsNamePtr ->
+          withCString "set_rest_length" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | When the bodies attached to the spring joint move they stretch or squash it. The joint always tries to resize towards this length. Default value: [code]0[/code]
+set_rest_length ::
+                  (DampedSpringJoint2D :< cls, Object :< cls) =>
+                  cls -> Float -> IO ()
+set_rest_length cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindDampedSpringJoint2D_set_rest_length
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindDampedSpringJoint2D_set_stiffness #-}
+
+-- | The higher the value, the less the bodies attached to the joint will deform it. The joint applies an opposing force to the bodies, the product of the stiffness multiplied by the size difference from its resting length. Default value: [code]20[/code]
+bindDampedSpringJoint2D_set_stiffness :: MethodBind
+bindDampedSpringJoint2D_set_stiffness
+  = unsafePerformIO $
+      withCString "DampedSpringJoint2D" $
+        \ clsNamePtr ->
+          withCString "set_stiffness" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The higher the value, the less the bodies attached to the joint will deform it. The joint applies an opposing force to the bodies, the product of the stiffness multiplied by the size difference from its resting length. Default value: [code]20[/code]
+set_stiffness ::
+                (DampedSpringJoint2D :< cls, Object :< cls) =>
+                cls -> Float -> IO ()
+set_stiffness cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindDampedSpringJoint2D_set_stiffness
            (upcast cls)
            arrPtr
            len

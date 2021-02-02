@@ -5,8 +5,8 @@ module Godot.Core.VisualShaderNodeTransformVecMult
         Godot.Core.VisualShaderNodeTransformVecMult._OP_BxA,
         Godot.Core.VisualShaderNodeTransformVecMult._OP_3x3_BxA,
         Godot.Core.VisualShaderNodeTransformVecMult._OP_3x3_AxB,
-        Godot.Core.VisualShaderNodeTransformVecMult.set_operator,
-        Godot.Core.VisualShaderNodeTransformVecMult.get_operator)
+        Godot.Core.VisualShaderNodeTransformVecMult.get_operator,
+        Godot.Core.VisualShaderNodeTransformVecMult.set_operator)
        where
 import Data.Coerce
 import Foreign.C
@@ -27,30 +27,6 @@ _OP_3x3_BxA = 3
 _OP_3x3_AxB :: Int
 _OP_3x3_AxB = 2
 
-{-# NOINLINE bindVisualShaderNodeTransformVecMult_set_operator #-}
-
-bindVisualShaderNodeTransformVecMult_set_operator :: MethodBind
-bindVisualShaderNodeTransformVecMult_set_operator
-  = unsafePerformIO $
-      withCString "VisualShaderNodeTransformVecMult" $
-        \ clsNamePtr ->
-          withCString "set_operator" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_operator ::
-               (VisualShaderNodeTransformVecMult :< cls, Object :< cls) =>
-               cls -> Int -> IO ()
-set_operator cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindVisualShaderNodeTransformVecMult_set_operator
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindVisualShaderNodeTransformVecMult_get_operator #-}
 
 bindVisualShaderNodeTransformVecMult_get_operator :: MethodBind
@@ -70,6 +46,30 @@ get_operator cls
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindVisualShaderNodeTransformVecMult_get_operator
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindVisualShaderNodeTransformVecMult_set_operator #-}
+
+bindVisualShaderNodeTransformVecMult_set_operator :: MethodBind
+bindVisualShaderNodeTransformVecMult_set_operator
+  = unsafePerformIO $
+      withCString "VisualShaderNodeTransformVecMult" $
+        \ clsNamePtr ->
+          withCString "set_operator" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_operator ::
+               (VisualShaderNodeTransformVecMult :< cls, Object :< cls) =>
+               cls -> Int -> IO ()
+set_operator cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindVisualShaderNodeTransformVecMult_set_operator
            (upcast cls)
            arrPtr
            len

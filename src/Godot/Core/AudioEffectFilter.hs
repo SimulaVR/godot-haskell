@@ -5,14 +5,14 @@ module Godot.Core.AudioEffectFilter
         Godot.Core.AudioEffectFilter._FILTER_12DB,
         Godot.Core.AudioEffectFilter._FILTER_18DB,
         Godot.Core.AudioEffectFilter._FILTER_6DB,
-        Godot.Core.AudioEffectFilter.set_cutoff,
         Godot.Core.AudioEffectFilter.get_cutoff,
-        Godot.Core.AudioEffectFilter.set_resonance,
-        Godot.Core.AudioEffectFilter.get_resonance,
-        Godot.Core.AudioEffectFilter.set_gain,
+        Godot.Core.AudioEffectFilter.get_db,
         Godot.Core.AudioEffectFilter.get_gain,
+        Godot.Core.AudioEffectFilter.get_resonance,
+        Godot.Core.AudioEffectFilter.set_cutoff,
         Godot.Core.AudioEffectFilter.set_db,
-        Godot.Core.AudioEffectFilter.get_db)
+        Godot.Core.AudioEffectFilter.set_gain,
+        Godot.Core.AudioEffectFilter.set_resonance)
        where
 import Data.Coerce
 import Foreign.C
@@ -32,30 +32,6 @@ _FILTER_18DB = 2
 
 _FILTER_6DB :: Int
 _FILTER_6DB = 0
-
-{-# NOINLINE bindAudioEffectFilter_set_cutoff #-}
-
--- | Threshold frequency for the filter.
-bindAudioEffectFilter_set_cutoff :: MethodBind
-bindAudioEffectFilter_set_cutoff
-  = unsafePerformIO $
-      withCString "AudioEffectFilter" $
-        \ clsNamePtr ->
-          withCString "set_cutoff" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Threshold frequency for the filter.
-set_cutoff ::
-             (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
-set_cutoff cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioEffectFilter_set_cutoff
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindAudioEffectFilter_get_cutoff #-}
 
@@ -81,26 +57,46 @@ get_cutoff cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindAudioEffectFilter_set_resonance #-}
+{-# NOINLINE bindAudioEffectFilter_get_db #-}
 
--- | Amount of boost in the overtones near the cutoff frequency.
-bindAudioEffectFilter_set_resonance :: MethodBind
-bindAudioEffectFilter_set_resonance
+bindAudioEffectFilter_get_db :: MethodBind
+bindAudioEffectFilter_get_db
   = unsafePerformIO $
       withCString "AudioEffectFilter" $
         \ clsNamePtr ->
-          withCString "set_resonance" $
+          withCString "get_db" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of boost in the overtones near the cutoff frequency.
-set_resonance ::
-                (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
-set_resonance cls arg1
-  = withVariantArray [toVariant arg1]
+get_db ::
+         (AudioEffectFilter :< cls, Object :< cls) => cls -> IO Int
+get_db cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioEffectFilter_set_resonance
-           (upcast cls)
+         godot_method_bind_call bindAudioEffectFilter_get_db (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioEffectFilter_get_gain #-}
+
+-- | Gain amount of the frequencies after the filter.
+bindAudioEffectFilter_get_gain :: MethodBind
+bindAudioEffectFilter_get_gain
+  = unsafePerformIO $
+      withCString "AudioEffectFilter" $
+        \ clsNamePtr ->
+          withCString "get_gain" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Gain amount of the frequencies after the filter.
+get_gain ::
+           (AudioEffectFilter :< cls, Object :< cls) => cls -> IO Float
+get_gain cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioEffectFilter_get_gain (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -129,48 +125,26 @@ get_resonance cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindAudioEffectFilter_set_gain #-}
+{-# NOINLINE bindAudioEffectFilter_set_cutoff #-}
 
--- | Gain amount of the frequencies after the filter.
-bindAudioEffectFilter_set_gain :: MethodBind
-bindAudioEffectFilter_set_gain
+-- | Threshold frequency for the filter.
+bindAudioEffectFilter_set_cutoff :: MethodBind
+bindAudioEffectFilter_set_cutoff
   = unsafePerformIO $
       withCString "AudioEffectFilter" $
         \ clsNamePtr ->
-          withCString "set_gain" $
+          withCString "set_cutoff" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gain amount of the frequencies after the filter.
-set_gain ::
-           (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
-set_gain cls arg1
+-- | Threshold frequency for the filter.
+set_cutoff ::
+             (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
+set_cutoff cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioEffectFilter_set_gain (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindAudioEffectFilter_get_gain #-}
-
--- | Gain amount of the frequencies after the filter.
-bindAudioEffectFilter_get_gain :: MethodBind
-bindAudioEffectFilter_get_gain
-  = unsafePerformIO $
-      withCString "AudioEffectFilter" $
-        \ clsNamePtr ->
-          withCString "get_gain" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Gain amount of the frequencies after the filter.
-get_gain ::
-           (AudioEffectFilter :< cls, Object :< cls) => cls -> IO Float
-get_gain cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioEffectFilter_get_gain (upcast cls)
+         godot_method_bind_call bindAudioEffectFilter_set_cutoff
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -196,23 +170,49 @@ set_db cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindAudioEffectFilter_get_db #-}
+{-# NOINLINE bindAudioEffectFilter_set_gain #-}
 
-bindAudioEffectFilter_get_db :: MethodBind
-bindAudioEffectFilter_get_db
+-- | Gain amount of the frequencies after the filter.
+bindAudioEffectFilter_set_gain :: MethodBind
+bindAudioEffectFilter_set_gain
   = unsafePerformIO $
       withCString "AudioEffectFilter" $
         \ clsNamePtr ->
-          withCString "get_db" $
+          withCString "set_gain" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_db ::
-         (AudioEffectFilter :< cls, Object :< cls) => cls -> IO Int
-get_db cls
-  = withVariantArray []
+-- | Gain amount of the frequencies after the filter.
+set_gain ::
+           (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
+set_gain cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindAudioEffectFilter_get_db (upcast cls)
+         godot_method_bind_call bindAudioEffectFilter_set_gain (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindAudioEffectFilter_set_resonance #-}
+
+-- | Amount of boost in the overtones near the cutoff frequency.
+bindAudioEffectFilter_set_resonance :: MethodBind
+bindAudioEffectFilter_set_resonance
+  = unsafePerformIO $
+      withCString "AudioEffectFilter" $
+        \ clsNamePtr ->
+          withCString "set_resonance" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Amount of boost in the overtones near the cutoff frequency.
+set_resonance ::
+                (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
+set_resonance cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindAudioEffectFilter_set_resonance
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

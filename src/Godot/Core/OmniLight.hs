@@ -6,10 +6,10 @@ module Godot.Core.OmniLight
         Godot.Core.OmniLight._SHADOW_DETAIL_VERTICAL,
         Godot.Core.OmniLight._SHADOW_CUBE, Godot.Core.OmniLight.get_param,
         Godot.Core.OmniLight.set_param,
-        Godot.Core.OmniLight.set_shadow_mode,
+        Godot.Core.OmniLight.get_shadow_detail,
         Godot.Core.OmniLight.get_shadow_mode,
         Godot.Core.OmniLight.set_shadow_detail,
-        Godot.Core.OmniLight.get_shadow_detail)
+        Godot.Core.OmniLight.set_shadow_mode)
        where
 import Data.Coerce
 import Foreign.C
@@ -73,25 +73,25 @@ set_param cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindOmniLight_set_shadow_mode #-}
+{-# NOINLINE bindOmniLight_get_shadow_detail #-}
 
--- | See [enum ShadowMode].
-bindOmniLight_set_shadow_mode :: MethodBind
-bindOmniLight_set_shadow_mode
+-- | See [enum ShadowDetail].
+bindOmniLight_get_shadow_detail :: MethodBind
+bindOmniLight_get_shadow_detail
   = unsafePerformIO $
       withCString "OmniLight" $
         \ clsNamePtr ->
-          withCString "set_shadow_mode" $
+          withCString "get_shadow_detail" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | See [enum ShadowMode].
-set_shadow_mode ::
-                  (OmniLight :< cls, Object :< cls) => cls -> Int -> IO ()
-set_shadow_mode cls arg1
-  = withVariantArray [toVariant arg1]
+-- | See [enum ShadowDetail].
+get_shadow_detail ::
+                    (OmniLight :< cls, Object :< cls) => cls -> IO Int
+get_shadow_detail cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindOmniLight_set_shadow_mode (upcast cls)
+         godot_method_bind_call bindOmniLight_get_shadow_detail (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -142,25 +142,25 @@ set_shadow_detail cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindOmniLight_get_shadow_detail #-}
+{-# NOINLINE bindOmniLight_set_shadow_mode #-}
 
--- | See [enum ShadowDetail].
-bindOmniLight_get_shadow_detail :: MethodBind
-bindOmniLight_get_shadow_detail
+-- | See [enum ShadowMode].
+bindOmniLight_set_shadow_mode :: MethodBind
+bindOmniLight_set_shadow_mode
   = unsafePerformIO $
       withCString "OmniLight" $
         \ clsNamePtr ->
-          withCString "get_shadow_detail" $
+          withCString "set_shadow_mode" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | See [enum ShadowDetail].
-get_shadow_detail ::
-                    (OmniLight :< cls, Object :< cls) => cls -> IO Int
-get_shadow_detail cls
-  = withVariantArray []
+-- | See [enum ShadowMode].
+set_shadow_mode ::
+                  (OmniLight :< cls, Object :< cls) => cls -> Int -> IO ()
+set_shadow_mode cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindOmniLight_get_shadow_detail (upcast cls)
+         godot_method_bind_call bindOmniLight_set_shadow_mode (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

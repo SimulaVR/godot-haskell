@@ -3,8 +3,8 @@
 module Godot.Core.Thread
        (Godot.Core.Thread._PRIORITY_NORMAL,
         Godot.Core.Thread._PRIORITY_LOW, Godot.Core.Thread._PRIORITY_HIGH,
-        Godot.Core.Thread.start, Godot.Core.Thread.get_id,
-        Godot.Core.Thread.is_active, Godot.Core.Thread.wait_to_finish)
+        Godot.Core.Thread.get_id, Godot.Core.Thread.is_active,
+        Godot.Core.Thread.start, Godot.Core.Thread.wait_to_finish)
        where
 import Data.Coerce
 import Foreign.C
@@ -21,6 +21,46 @@ _PRIORITY_LOW = 0
 
 _PRIORITY_HIGH :: Int
 _PRIORITY_HIGH = 2
+
+{-# NOINLINE bindThread_get_id #-}
+
+-- | Returns the current [code]Thread[/code]s id, uniquely identifying it among all threads.
+bindThread_get_id :: MethodBind
+bindThread_get_id
+  = unsafePerformIO $
+      withCString "_Thread" $
+        \ clsNamePtr ->
+          withCString "get_id" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the current [code]Thread[/code]s id, uniquely identifying it among all threads.
+get_id :: (Thread :< cls, Object :< cls) => cls -> IO GodotString
+get_id cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindThread_get_id (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindThread_is_active #-}
+
+-- | Returns [code]true[/code] if this [code]Thread[/code] is currently active. An active [code]Thread[/code] cannot start work on a new method but can be joined with [method wait_to_finish].
+bindThread_is_active :: MethodBind
+bindThread_is_active
+  = unsafePerformIO $
+      withCString "_Thread" $
+        \ clsNamePtr ->
+          withCString "is_active" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns [code]true[/code] if this [code]Thread[/code] is currently active. An active [code]Thread[/code] cannot start work on a new method but can be joined with [method wait_to_finish].
+is_active :: (Thread :< cls, Object :< cls) => cls -> IO Bool
+is_active cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindThread_is_active (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindThread_start #-}
 
@@ -46,46 +86,6 @@ start cls arg1 arg2 arg3 arg4
       (\ (arrPtr, len) ->
          godot_method_bind_call bindThread_start (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindThread_get_id #-}
-
--- | Returns the current [code]Thread[/code]s id, uniquely identifying it among all threads.
-bindThread_get_id :: MethodBind
-bindThread_get_id
-  = unsafePerformIO $
-      withCString "_Thread" $
-        \ clsNamePtr ->
-          withCString "get_id" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the current [code]Thread[/code]s id, uniquely identifying it among all threads.
-get_id :: (Thread :< cls, Object :< cls) => cls -> IO GodotString
-get_id cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindThread_get_id (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindThread_is_active #-}
-
--- | Returns true if this [code]Thread[/code] is currently active. An active [code]Thread[/code] cannot start work on a new method but can be joined with [method wait_to_finish].
-bindThread_is_active :: MethodBind
-bindThread_is_active
-  = unsafePerformIO $
-      withCString "_Thread" $
-        \ clsNamePtr ->
-          withCString "is_active" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns true if this [code]Thread[/code] is currently active. An active [code]Thread[/code] cannot start work on a new method but can be joined with [method wait_to_finish].
-is_active :: (Thread :< cls, Object :< cls) => cls -> IO Bool
-is_active cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindThread_is_active (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindThread_wait_to_finish #-}
 

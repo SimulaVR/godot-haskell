@@ -6,23 +6,25 @@ module Godot.Core.NetworkedMultiplayerENet
         Godot.Core.NetworkedMultiplayerENet._COMPRESS_ZLIB,
         Godot.Core.NetworkedMultiplayerENet._COMPRESS_FASTLZ,
         Godot.Core.NetworkedMultiplayerENet._COMPRESS_ZSTD,
-        Godot.Core.NetworkedMultiplayerENet.create_server,
-        Godot.Core.NetworkedMultiplayerENet.create_client,
         Godot.Core.NetworkedMultiplayerENet.close_connection,
+        Godot.Core.NetworkedMultiplayerENet.create_client,
+        Godot.Core.NetworkedMultiplayerENet.create_server,
         Godot.Core.NetworkedMultiplayerENet.disconnect_peer,
-        Godot.Core.NetworkedMultiplayerENet.set_compression_mode,
+        Godot.Core.NetworkedMultiplayerENet.get_channel_count,
         Godot.Core.NetworkedMultiplayerENet.get_compression_mode,
-        Godot.Core.NetworkedMultiplayerENet.set_bind_ip,
+        Godot.Core.NetworkedMultiplayerENet.get_last_packet_channel,
+        Godot.Core.NetworkedMultiplayerENet.get_packet_channel,
         Godot.Core.NetworkedMultiplayerENet.get_peer_address,
         Godot.Core.NetworkedMultiplayerENet.get_peer_port,
-        Godot.Core.NetworkedMultiplayerENet.get_packet_channel,
-        Godot.Core.NetworkedMultiplayerENet.get_last_packet_channel,
-        Godot.Core.NetworkedMultiplayerENet.set_transfer_channel,
         Godot.Core.NetworkedMultiplayerENet.get_transfer_channel,
-        Godot.Core.NetworkedMultiplayerENet.set_channel_count,
-        Godot.Core.NetworkedMultiplayerENet.get_channel_count,
+        Godot.Core.NetworkedMultiplayerENet.is_always_ordered,
+        Godot.Core.NetworkedMultiplayerENet.is_server_relay_enabled,
         Godot.Core.NetworkedMultiplayerENet.set_always_ordered,
-        Godot.Core.NetworkedMultiplayerENet.is_always_ordered)
+        Godot.Core.NetworkedMultiplayerENet.set_bind_ip,
+        Godot.Core.NetworkedMultiplayerENet.set_channel_count,
+        Godot.Core.NetworkedMultiplayerENet.set_compression_mode,
+        Godot.Core.NetworkedMultiplayerENet.set_server_relay_enabled,
+        Godot.Core.NetworkedMultiplayerENet.set_transfer_channel)
        where
 import Data.Coerce
 import Foreign.C
@@ -46,25 +48,25 @@ _COMPRESS_FASTLZ = 2
 _COMPRESS_ZSTD :: Int
 _COMPRESS_ZSTD = 4
 
-{-# NOINLINE bindNetworkedMultiplayerENet_create_server #-}
+{-# NOINLINE bindNetworkedMultiplayerENet_close_connection #-}
 
-bindNetworkedMultiplayerENet_create_server :: MethodBind
-bindNetworkedMultiplayerENet_create_server
+bindNetworkedMultiplayerENet_close_connection :: MethodBind
+bindNetworkedMultiplayerENet_close_connection
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
         \ clsNamePtr ->
-          withCString "create_server" $
+          withCString "close_connection" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-create_server ::
-                (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                cls -> Int -> Int -> Int -> Int -> IO Int
-create_server cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+close_connection ::
+                   (NetworkedMultiplayerENet :< cls, Object :< cls) =>
+                   cls -> Int -> IO ()
+close_connection cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindNetworkedMultiplayerENet_create_server
+         godot_method_bind_call
+           bindNetworkedMultiplayerENet_close_connection
            (upcast cls)
            arrPtr
            len
@@ -95,25 +97,25 @@ create_client cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindNetworkedMultiplayerENet_close_connection #-}
+{-# NOINLINE bindNetworkedMultiplayerENet_create_server #-}
 
-bindNetworkedMultiplayerENet_close_connection :: MethodBind
-bindNetworkedMultiplayerENet_close_connection
+bindNetworkedMultiplayerENet_create_server :: MethodBind
+bindNetworkedMultiplayerENet_create_server
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
         \ clsNamePtr ->
-          withCString "close_connection" $
+          withCString "create_server" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-close_connection ::
-                   (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                   cls -> Int -> IO ()
-close_connection cls arg1
-  = withVariantArray [toVariant arg1]
+create_server ::
+                (NetworkedMultiplayerENet :< cls, Object :< cls) =>
+                cls -> Int -> Int -> Int -> Int -> IO Int
+create_server cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindNetworkedMultiplayerENet_close_connection
+         godot_method_bind_call bindNetworkedMultiplayerENet_create_server
            (upcast cls)
            arrPtr
            len
@@ -142,25 +144,24 @@ disconnect_peer cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindNetworkedMultiplayerENet_set_compression_mode #-}
+{-# NOINLINE bindNetworkedMultiplayerENet_get_channel_count #-}
 
-bindNetworkedMultiplayerENet_set_compression_mode :: MethodBind
-bindNetworkedMultiplayerENet_set_compression_mode
+bindNetworkedMultiplayerENet_get_channel_count :: MethodBind
+bindNetworkedMultiplayerENet_get_channel_count
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
         \ clsNamePtr ->
-          withCString "set_compression_mode" $
+          withCString "get_channel_count" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_compression_mode ::
-                       (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                       cls -> Int -> IO ()
-set_compression_mode cls arg1
-  = withVariantArray [toVariant arg1]
+get_channel_count ::
+                    (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Int
+get_channel_count cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindNetworkedMultiplayerENet_set_compression_mode
+           bindNetworkedMultiplayerENet_get_channel_count
            (upcast cls)
            arrPtr
            len
@@ -189,24 +190,48 @@ get_compression_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindNetworkedMultiplayerENet_set_bind_ip #-}
+{-# NOINLINE bindNetworkedMultiplayerENet_get_last_packet_channel
+             #-}
 
-bindNetworkedMultiplayerENet_set_bind_ip :: MethodBind
-bindNetworkedMultiplayerENet_set_bind_ip
+bindNetworkedMultiplayerENet_get_last_packet_channel :: MethodBind
+bindNetworkedMultiplayerENet_get_last_packet_channel
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
         \ clsNamePtr ->
-          withCString "set_bind_ip" $
+          withCString "get_last_packet_channel" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_bind_ip ::
-              (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-              cls -> GodotString -> IO ()
-set_bind_ip cls arg1
-  = withVariantArray [toVariant arg1]
+get_last_packet_channel ::
+                          (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Int
+get_last_packet_channel cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindNetworkedMultiplayerENet_set_bind_ip
+         godot_method_bind_call
+           bindNetworkedMultiplayerENet_get_last_packet_channel
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindNetworkedMultiplayerENet_get_packet_channel #-}
+
+bindNetworkedMultiplayerENet_get_packet_channel :: MethodBind
+bindNetworkedMultiplayerENet_get_packet_channel
+  = unsafePerformIO $
+      withCString "NetworkedMultiplayerENet" $
+        \ clsNamePtr ->
+          withCString "get_packet_channel" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_packet_channel ::
+                     (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Int
+get_packet_channel cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindNetworkedMultiplayerENet_get_packet_channel
            (upcast cls)
            arrPtr
            len
@@ -259,77 +284,6 @@ get_peer_port cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindNetworkedMultiplayerENet_get_packet_channel #-}
-
-bindNetworkedMultiplayerENet_get_packet_channel :: MethodBind
-bindNetworkedMultiplayerENet_get_packet_channel
-  = unsafePerformIO $
-      withCString "NetworkedMultiplayerENet" $
-        \ clsNamePtr ->
-          withCString "get_packet_channel" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_packet_channel ::
-                     (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Int
-get_packet_channel cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindNetworkedMultiplayerENet_get_packet_channel
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindNetworkedMultiplayerENet_get_last_packet_channel
-             #-}
-
-bindNetworkedMultiplayerENet_get_last_packet_channel :: MethodBind
-bindNetworkedMultiplayerENet_get_last_packet_channel
-  = unsafePerformIO $
-      withCString "NetworkedMultiplayerENet" $
-        \ clsNamePtr ->
-          withCString "get_last_packet_channel" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_last_packet_channel ::
-                          (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Int
-get_last_packet_channel cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindNetworkedMultiplayerENet_get_last_packet_channel
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindNetworkedMultiplayerENet_set_transfer_channel #-}
-
-bindNetworkedMultiplayerENet_set_transfer_channel :: MethodBind
-bindNetworkedMultiplayerENet_set_transfer_channel
-  = unsafePerformIO $
-      withCString "NetworkedMultiplayerENet" $
-        \ clsNamePtr ->
-          withCString "set_transfer_channel" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_transfer_channel ::
-                       (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                       cls -> Int -> IO ()
-set_transfer_channel cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindNetworkedMultiplayerENet_set_transfer_channel
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindNetworkedMultiplayerENet_get_transfer_channel #-}
 
 bindNetworkedMultiplayerENet_get_transfer_channel :: MethodBind
@@ -353,48 +307,48 @@ get_transfer_channel cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindNetworkedMultiplayerENet_set_channel_count #-}
+{-# NOINLINE bindNetworkedMultiplayerENet_is_always_ordered #-}
 
-bindNetworkedMultiplayerENet_set_channel_count :: MethodBind
-bindNetworkedMultiplayerENet_set_channel_count
+bindNetworkedMultiplayerENet_is_always_ordered :: MethodBind
+bindNetworkedMultiplayerENet_is_always_ordered
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
         \ clsNamePtr ->
-          withCString "set_channel_count" $
+          withCString "is_always_ordered" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_channel_count ::
-                    (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                    cls -> Int -> IO ()
-set_channel_count cls arg1
-  = withVariantArray [toVariant arg1]
+is_always_ordered ::
+                    (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Bool
+is_always_ordered cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindNetworkedMultiplayerENet_set_channel_count
+           bindNetworkedMultiplayerENet_is_always_ordered
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindNetworkedMultiplayerENet_get_channel_count #-}
+{-# NOINLINE bindNetworkedMultiplayerENet_is_server_relay_enabled
+             #-}
 
-bindNetworkedMultiplayerENet_get_channel_count :: MethodBind
-bindNetworkedMultiplayerENet_get_channel_count
+bindNetworkedMultiplayerENet_is_server_relay_enabled :: MethodBind
+bindNetworkedMultiplayerENet_is_server_relay_enabled
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
         \ clsNamePtr ->
-          withCString "get_channel_count" $
+          withCString "is_server_relay_enabled" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_channel_count ::
-                    (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Int
-get_channel_count cls
+is_server_relay_enabled ::
+                          (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Bool
+is_server_relay_enabled cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindNetworkedMultiplayerENet_get_channel_count
+           bindNetworkedMultiplayerENet_is_server_relay_enabled
            (upcast cls)
            arrPtr
            len
@@ -424,24 +378,121 @@ set_always_ordered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindNetworkedMultiplayerENet_is_always_ordered #-}
+{-# NOINLINE bindNetworkedMultiplayerENet_set_bind_ip #-}
 
-bindNetworkedMultiplayerENet_is_always_ordered :: MethodBind
-bindNetworkedMultiplayerENet_is_always_ordered
+bindNetworkedMultiplayerENet_set_bind_ip :: MethodBind
+bindNetworkedMultiplayerENet_set_bind_ip
   = unsafePerformIO $
       withCString "NetworkedMultiplayerENet" $
         \ clsNamePtr ->
-          withCString "is_always_ordered" $
+          withCString "set_bind_ip" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-is_always_ordered ::
-                    (NetworkedMultiplayerENet :< cls, Object :< cls) => cls -> IO Bool
-is_always_ordered cls
-  = withVariantArray []
+set_bind_ip ::
+              (NetworkedMultiplayerENet :< cls, Object :< cls) =>
+              cls -> GodotString -> IO ()
+set_bind_ip cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindNetworkedMultiplayerENet_set_bind_ip
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindNetworkedMultiplayerENet_set_channel_count #-}
+
+bindNetworkedMultiplayerENet_set_channel_count :: MethodBind
+bindNetworkedMultiplayerENet_set_channel_count
+  = unsafePerformIO $
+      withCString "NetworkedMultiplayerENet" $
+        \ clsNamePtr ->
+          withCString "set_channel_count" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_channel_count ::
+                    (NetworkedMultiplayerENet :< cls, Object :< cls) =>
+                    cls -> Int -> IO ()
+set_channel_count cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindNetworkedMultiplayerENet_is_always_ordered
+           bindNetworkedMultiplayerENet_set_channel_count
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindNetworkedMultiplayerENet_set_compression_mode #-}
+
+bindNetworkedMultiplayerENet_set_compression_mode :: MethodBind
+bindNetworkedMultiplayerENet_set_compression_mode
+  = unsafePerformIO $
+      withCString "NetworkedMultiplayerENet" $
+        \ clsNamePtr ->
+          withCString "set_compression_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_compression_mode ::
+                       (NetworkedMultiplayerENet :< cls, Object :< cls) =>
+                       cls -> Int -> IO ()
+set_compression_mode cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindNetworkedMultiplayerENet_set_compression_mode
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindNetworkedMultiplayerENet_set_server_relay_enabled
+             #-}
+
+bindNetworkedMultiplayerENet_set_server_relay_enabled :: MethodBind
+bindNetworkedMultiplayerENet_set_server_relay_enabled
+  = unsafePerformIO $
+      withCString "NetworkedMultiplayerENet" $
+        \ clsNamePtr ->
+          withCString "set_server_relay_enabled" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_server_relay_enabled ::
+                           (NetworkedMultiplayerENet :< cls, Object :< cls) =>
+                           cls -> Bool -> IO ()
+set_server_relay_enabled cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindNetworkedMultiplayerENet_set_server_relay_enabled
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindNetworkedMultiplayerENet_set_transfer_channel #-}
+
+bindNetworkedMultiplayerENet_set_transfer_channel :: MethodBind
+bindNetworkedMultiplayerENet_set_transfer_channel
+  = unsafePerformIO $
+      withCString "NetworkedMultiplayerENet" $
+        \ clsNamePtr ->
+          withCString "set_transfer_channel" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_transfer_channel ::
+                       (NetworkedMultiplayerENet :< cls, Object :< cls) =>
+                       cls -> Int -> IO ()
+set_transfer_channel cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindNetworkedMultiplayerENet_set_transfer_channel
            (upcast cls)
            arrPtr
            len

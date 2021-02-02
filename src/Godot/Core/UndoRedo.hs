@@ -3,18 +3,20 @@
 module Godot.Core.UndoRedo
        (Godot.Core.UndoRedo._MERGE_DISABLE,
         Godot.Core.UndoRedo._MERGE_ALL, Godot.Core.UndoRedo._MERGE_ENDS,
-        Godot.Core.UndoRedo.create_action,
-        Godot.Core.UndoRedo.commit_action,
-        Godot.Core.UndoRedo.is_commiting_action,
+        Godot.Core.UndoRedo.sig_version_changed,
         Godot.Core.UndoRedo.add_do_method,
-        Godot.Core.UndoRedo.add_undo_method,
         Godot.Core.UndoRedo.add_do_property,
-        Godot.Core.UndoRedo.add_undo_property,
         Godot.Core.UndoRedo.add_do_reference,
+        Godot.Core.UndoRedo.add_undo_method,
+        Godot.Core.UndoRedo.add_undo_property,
         Godot.Core.UndoRedo.add_undo_reference,
         Godot.Core.UndoRedo.clear_history,
+        Godot.Core.UndoRedo.commit_action,
+        Godot.Core.UndoRedo.create_action,
         Godot.Core.UndoRedo.get_current_action_name,
-        Godot.Core.UndoRedo.get_version, Godot.Core.UndoRedo.redo,
+        Godot.Core.UndoRedo.get_version, Godot.Core.UndoRedo.has_redo,
+        Godot.Core.UndoRedo.has_undo,
+        Godot.Core.UndoRedo.is_commiting_action, Godot.Core.UndoRedo.redo,
         Godot.Core.UndoRedo.undo)
        where
 import Data.Coerce
@@ -33,75 +35,9 @@ _MERGE_ALL = 2
 _MERGE_ENDS :: Int
 _MERGE_ENDS = 1
 
-{-# NOINLINE bindUndoRedo_create_action #-}
-
--- | Create a new action. After this is called, do all your calls to [method add_do_method], [method add_undo_method], [method add_do_property], and [method add_undo_property], then commit the action with [method commit_action].
---   				The way actions are merged is dictated by the [code]merge_mode[/code] argument. See [enum MergeMode] for details.
-bindUndoRedo_create_action :: MethodBind
-bindUndoRedo_create_action
-  = unsafePerformIO $
-      withCString "UndoRedo" $
-        \ clsNamePtr ->
-          withCString "create_action" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Create a new action. After this is called, do all your calls to [method add_do_method], [method add_undo_method], [method add_do_property], and [method add_undo_property], then commit the action with [method commit_action].
---   				The way actions are merged is dictated by the [code]merge_mode[/code] argument. See [enum MergeMode] for details.
-create_action ::
-                (UndoRedo :< cls, Object :< cls) =>
-                cls -> GodotString -> Int -> IO ()
-create_action cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUndoRedo_create_action (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUndoRedo_commit_action #-}
-
--- | Commit the action. All 'do' methods/properties are called/set when this function is called.
-bindUndoRedo_commit_action :: MethodBind
-bindUndoRedo_commit_action
-  = unsafePerformIO $
-      withCString "UndoRedo" $
-        \ clsNamePtr ->
-          withCString "commit_action" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Commit the action. All 'do' methods/properties are called/set when this function is called.
-commit_action :: (UndoRedo :< cls, Object :< cls) => cls -> IO ()
-commit_action cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUndoRedo_commit_action (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUndoRedo_is_commiting_action #-}
-
-bindUndoRedo_is_commiting_action :: MethodBind
-bindUndoRedo_is_commiting_action
-  = unsafePerformIO $
-      withCString "UndoRedo" $
-        \ clsNamePtr ->
-          withCString "is_commiting_action" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-is_commiting_action ::
-                      (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
-is_commiting_action cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUndoRedo_is_commiting_action
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+sig_version_changed :: Godot.Internal.Dispatch.Signal UndoRedo
+sig_version_changed
+  = Godot.Internal.Dispatch.Signal "version_changed"
 
 {-# NOINLINE bindUndoRedo_add_do_method #-}
 
@@ -118,37 +54,11 @@ bindUndoRedo_add_do_method
 -- | Register a method that will be called when the action is committed.
 add_do_method ::
                 (UndoRedo :< cls, Object :< cls) =>
-                cls ->
-                  Object -> GodotString -> [Variant 'GodotTy] -> IO GodotVariant
+                cls -> Object -> GodotString -> [Variant 'GodotTy] -> IO ()
 add_do_method cls arg1 arg2 varargs
   = withVariantArray ([toVariant arg1, toVariant arg2] ++ varargs)
       (\ (arrPtr, len) ->
          godot_method_bind_call bindUndoRedo_add_do_method (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUndoRedo_add_undo_method #-}
-
--- | Register a method that will be called when the action is undone.
-bindUndoRedo_add_undo_method :: MethodBind
-bindUndoRedo_add_undo_method
-  = unsafePerformIO $
-      withCString "UndoRedo" $
-        \ clsNamePtr ->
-          withCString "add_undo_method" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Register a method that will be called when the action is undone.
-add_undo_method ::
-                  (UndoRedo :< cls, Object :< cls) =>
-                  cls ->
-                    Object -> GodotString -> [Variant 'GodotTy] -> IO GodotVariant
-add_undo_method cls arg1 arg2 varargs
-  = withVariantArray ([toVariant arg1, toVariant arg2] ++ varargs)
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUndoRedo_add_undo_method (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -177,6 +87,53 @@ add_do_property cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindUndoRedo_add_do_reference #-}
+
+-- | Register a reference for 'do' that will be erased if the 'do' history is lost. This is useful mostly for new nodes created for the 'do' call. Do not use for resources.
+bindUndoRedo_add_do_reference :: MethodBind
+bindUndoRedo_add_do_reference
+  = unsafePerformIO $
+      withCString "UndoRedo" $
+        \ clsNamePtr ->
+          withCString "add_do_reference" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Register a reference for 'do' that will be erased if the 'do' history is lost. This is useful mostly for new nodes created for the 'do' call. Do not use for resources.
+add_do_reference ::
+                   (UndoRedo :< cls, Object :< cls) => cls -> Object -> IO ()
+add_do_reference cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUndoRedo_add_do_reference (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUndoRedo_add_undo_method #-}
+
+-- | Register a method that will be called when the action is undone.
+bindUndoRedo_add_undo_method :: MethodBind
+bindUndoRedo_add_undo_method
+  = unsafePerformIO $
+      withCString "UndoRedo" $
+        \ clsNamePtr ->
+          withCString "add_undo_method" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Register a method that will be called when the action is undone.
+add_undo_method ::
+                  (UndoRedo :< cls, Object :< cls) =>
+                  cls -> Object -> GodotString -> [Variant 'GodotTy] -> IO ()
+add_undo_method cls arg1 arg2 varargs
+  = withVariantArray ([toVariant arg1, toVariant arg2] ++ varargs)
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUndoRedo_add_undo_method (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindUndoRedo_add_undo_property #-}
 
 -- | Register a property value change for 'undo'.
@@ -197,29 +154,6 @@ add_undo_property cls arg1 arg2 arg3
   = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindUndoRedo_add_undo_property (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindUndoRedo_add_do_reference #-}
-
--- | Register a reference for 'do' that will be erased if the 'do' history is lost. This is useful mostly for new nodes created for the 'do' call. Do not use for resources.
-bindUndoRedo_add_do_reference :: MethodBind
-bindUndoRedo_add_do_reference
-  = unsafePerformIO $
-      withCString "UndoRedo" $
-        \ clsNamePtr ->
-          withCString "add_do_reference" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Register a reference for 'do' that will be erased if the 'do' history is lost. This is useful mostly for new nodes created for the 'do' call. Do not use for resources.
-add_do_reference ::
-                   (UndoRedo :< cls, Object :< cls) => cls -> Object -> IO ()
-add_do_reference cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindUndoRedo_add_do_reference (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -272,6 +206,54 @@ clear_history cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindUndoRedo_commit_action #-}
+
+-- | Commit the action. All 'do' methods/properties are called/set when this function is called.
+bindUndoRedo_commit_action :: MethodBind
+bindUndoRedo_commit_action
+  = unsafePerformIO $
+      withCString "UndoRedo" $
+        \ clsNamePtr ->
+          withCString "commit_action" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Commit the action. All 'do' methods/properties are called/set when this function is called.
+commit_action :: (UndoRedo :< cls, Object :< cls) => cls -> IO ()
+commit_action cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUndoRedo_commit_action (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUndoRedo_create_action #-}
+
+-- | Create a new action. After this is called, do all your calls to [method add_do_method], [method add_undo_method], [method add_do_property], and [method add_undo_property], then commit the action with [method commit_action].
+--   				The way actions are merged is dictated by the [code]merge_mode[/code] argument. See [enum MergeMode] for details.
+bindUndoRedo_create_action :: MethodBind
+bindUndoRedo_create_action
+  = unsafePerformIO $
+      withCString "UndoRedo" $
+        \ clsNamePtr ->
+          withCString "create_action" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Create a new action. After this is called, do all your calls to [method add_do_method], [method add_undo_method], [method add_do_property], and [method add_undo_property], then commit the action with [method commit_action].
+--   				The way actions are merged is dictated by the [code]merge_mode[/code] argument. See [enum MergeMode] for details.
+create_action ::
+                (UndoRedo :< cls, Object :< cls) =>
+                cls -> GodotString -> Int -> IO ()
+create_action cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUndoRedo_create_action (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindUndoRedo_get_current_action_name #-}
 
 -- | Get the name of the current action.
@@ -298,7 +280,7 @@ get_current_action_name cls
 
 {-# NOINLINE bindUndoRedo_get_version #-}
 
--- | Get the version, each time a new action is committed, the version number of the UndoRedo is increased automatically.
+-- | Get the version, each time a new action is committed, the version number of the [UndoRedo] is increased automatically.
 --   				This is useful mostly to check if something changed from a saved version.
 bindUndoRedo_get_version :: MethodBind
 bindUndoRedo_get_version
@@ -309,7 +291,7 @@ bindUndoRedo_get_version
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the version, each time a new action is committed, the version number of the UndoRedo is increased automatically.
+-- | Get the version, each time a new action is committed, the version number of the [UndoRedo] is increased automatically.
 --   				This is useful mostly to check if something changed from a saved version.
 get_version :: (UndoRedo :< cls, Object :< cls) => cls -> IO Int
 get_version cls
@@ -319,9 +301,71 @@ get_version cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindUndoRedo_has_redo #-}
+
+bindUndoRedo_has_redo :: MethodBind
+bindUndoRedo_has_redo
+  = unsafePerformIO $
+      withCString "UndoRedo" $
+        \ clsNamePtr ->
+          withCString "has_redo" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+has_redo :: (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
+has_redo cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUndoRedo_has_redo (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUndoRedo_has_undo #-}
+
+bindUndoRedo_has_undo :: MethodBind
+bindUndoRedo_has_undo
+  = unsafePerformIO $
+      withCString "UndoRedo" $
+        \ clsNamePtr ->
+          withCString "has_undo" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+has_undo :: (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
+has_undo cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUndoRedo_has_undo (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindUndoRedo_is_commiting_action #-}
+
+-- | Returns [code]true[/code] if the [UndoRedo] is currently committing the action, i.e. running its 'do' method or property change (see [method commit_action]).
+bindUndoRedo_is_commiting_action :: MethodBind
+bindUndoRedo_is_commiting_action
+  = unsafePerformIO $
+      withCString "UndoRedo" $
+        \ clsNamePtr ->
+          withCString "is_commiting_action" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns [code]true[/code] if the [UndoRedo] is currently committing the action, i.e. running its 'do' method or property change (see [method commit_action]).
+is_commiting_action ::
+                      (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
+is_commiting_action cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindUndoRedo_is_commiting_action
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindUndoRedo_redo #-}
 
--- | Redo last action.
+-- | Redo the last action.
 bindUndoRedo_redo :: MethodBind
 bindUndoRedo_redo
   = unsafePerformIO $
@@ -331,7 +375,7 @@ bindUndoRedo_redo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Redo last action.
+-- | Redo the last action.
 redo :: (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
 redo cls
   = withVariantArray []
@@ -341,7 +385,7 @@ redo cls
 
 {-# NOINLINE bindUndoRedo_undo #-}
 
--- | Undo last action.
+-- | Undo the last action.
 bindUndoRedo_undo :: MethodBind
 bindUndoRedo_undo
   = unsafePerformIO $
@@ -351,7 +395,7 @@ bindUndoRedo_undo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Undo last action.
+-- | Undo the last action.
 undo :: (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
 undo cls
   = withVariantArray []

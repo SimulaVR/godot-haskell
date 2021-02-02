@@ -1,14 +1,14 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.CSGSphere
-       (Godot.Core.CSGSphere.set_radius, Godot.Core.CSGSphere.get_radius,
-        Godot.Core.CSGSphere.set_radial_segments,
+       (Godot.Core.CSGSphere.get_material,
         Godot.Core.CSGSphere.get_radial_segments,
-        Godot.Core.CSGSphere.set_rings, Godot.Core.CSGSphere.get_rings,
-        Godot.Core.CSGSphere.set_smooth_faces,
+        Godot.Core.CSGSphere.get_radius, Godot.Core.CSGSphere.get_rings,
         Godot.Core.CSGSphere.get_smooth_faces,
         Godot.Core.CSGSphere.set_material,
-        Godot.Core.CSGSphere.get_material)
+        Godot.Core.CSGSphere.set_radial_segments,
+        Godot.Core.CSGSphere.set_radius, Godot.Core.CSGSphere.set_rings,
+        Godot.Core.CSGSphere.set_smooth_faces)
        where
 import Data.Coerce
 import Foreign.C
@@ -17,63 +17,23 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindCSGSphere_set_radius #-}
+{-# NOINLINE bindCSGSphere_get_material #-}
 
-bindCSGSphere_set_radius :: MethodBind
-bindCSGSphere_set_radius
+bindCSGSphere_get_material :: MethodBind
+bindCSGSphere_get_material
   = unsafePerformIO $
       withCString "CSGSphere" $
         \ clsNamePtr ->
-          withCString "set_radius" $
+          withCString "get_material" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_radius ::
-             (CSGSphere :< cls, Object :< cls) => cls -> Float -> IO ()
-set_radius cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCSGSphere_set_radius (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCSGSphere_get_radius #-}
-
-bindCSGSphere_get_radius :: MethodBind
-bindCSGSphere_get_radius
-  = unsafePerformIO $
-      withCString "CSGSphere" $
-        \ clsNamePtr ->
-          withCString "get_radius" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_radius :: (CSGSphere :< cls, Object :< cls) => cls -> IO Float
-get_radius cls
+get_material ::
+               (CSGSphere :< cls, Object :< cls) => cls -> IO Material
+get_material cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCSGSphere_get_radius (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCSGSphere_set_radial_segments #-}
-
-bindCSGSphere_set_radial_segments :: MethodBind
-bindCSGSphere_set_radial_segments
-  = unsafePerformIO $
-      withCString "CSGSphere" $
-        \ clsNamePtr ->
-          withCString "set_radial_segments" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_radial_segments ::
-                      (CSGSphere :< cls, Object :< cls) => cls -> Int -> IO ()
-set_radial_segments cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCSGSphere_set_radial_segments
-           (upcast cls)
+         godot_method_bind_call bindCSGSphere_get_material (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -100,23 +60,22 @@ get_radial_segments cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCSGSphere_set_rings #-}
+{-# NOINLINE bindCSGSphere_get_radius #-}
 
-bindCSGSphere_set_rings :: MethodBind
-bindCSGSphere_set_rings
+bindCSGSphere_get_radius :: MethodBind
+bindCSGSphere_get_radius
   = unsafePerformIO $
       withCString "CSGSphere" $
         \ clsNamePtr ->
-          withCString "set_rings" $
+          withCString "get_radius" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_rings ::
-            (CSGSphere :< cls, Object :< cls) => cls -> Int -> IO ()
-set_rings cls arg1
-  = withVariantArray [toVariant arg1]
+get_radius :: (CSGSphere :< cls, Object :< cls) => cls -> IO Float
+get_radius cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCSGSphere_set_rings (upcast cls) arrPtr
+         godot_method_bind_call bindCSGSphere_get_radius (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -136,27 +95,6 @@ get_rings cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCSGSphere_get_rings (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindCSGSphere_set_smooth_faces #-}
-
-bindCSGSphere_set_smooth_faces :: MethodBind
-bindCSGSphere_set_smooth_faces
-  = unsafePerformIO $
-      withCString "CSGSphere" $
-        \ clsNamePtr ->
-          withCString "set_smooth_faces" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_smooth_faces ::
-                   (CSGSphere :< cls, Object :< cls) => cls -> Bool -> IO ()
-set_smooth_faces cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindCSGSphere_set_smooth_faces (upcast cls)
-           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -202,23 +140,85 @@ set_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindCSGSphere_get_material #-}
+{-# NOINLINE bindCSGSphere_set_radial_segments #-}
 
-bindCSGSphere_get_material :: MethodBind
-bindCSGSphere_get_material
+bindCSGSphere_set_radial_segments :: MethodBind
+bindCSGSphere_set_radial_segments
   = unsafePerformIO $
       withCString "CSGSphere" $
         \ clsNamePtr ->
-          withCString "get_material" $
+          withCString "set_radial_segments" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_material ::
-               (CSGSphere :< cls, Object :< cls) => cls -> IO Material
-get_material cls
-  = withVariantArray []
+set_radial_segments ::
+                      (CSGSphere :< cls, Object :< cls) => cls -> Int -> IO ()
+set_radial_segments cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindCSGSphere_get_material (upcast cls)
+         godot_method_bind_call bindCSGSphere_set_radial_segments
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCSGSphere_set_radius #-}
+
+bindCSGSphere_set_radius :: MethodBind
+bindCSGSphere_set_radius
+  = unsafePerformIO $
+      withCString "CSGSphere" $
+        \ clsNamePtr ->
+          withCString "set_radius" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_radius ::
+             (CSGSphere :< cls, Object :< cls) => cls -> Float -> IO ()
+set_radius cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCSGSphere_set_radius (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCSGSphere_set_rings #-}
+
+bindCSGSphere_set_rings :: MethodBind
+bindCSGSphere_set_rings
+  = unsafePerformIO $
+      withCString "CSGSphere" $
+        \ clsNamePtr ->
+          withCString "set_rings" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_rings ::
+            (CSGSphere :< cls, Object :< cls) => cls -> Int -> IO ()
+set_rings cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCSGSphere_set_rings (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindCSGSphere_set_smooth_faces #-}
+
+bindCSGSphere_set_smooth_faces :: MethodBind
+bindCSGSphere_set_smooth_faces
+  = unsafePerformIO $
+      withCString "CSGSphere" $
+        \ clsNamePtr ->
+          withCString "set_smooth_faces" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_smooth_faces ::
+                   (CSGSphere :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_smooth_faces cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindCSGSphere_set_smooth_faces (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

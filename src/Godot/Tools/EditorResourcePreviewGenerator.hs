@@ -1,9 +1,11 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Tools.EditorResourcePreviewGenerator
-       (Godot.Tools.EditorResourcePreviewGenerator.handles,
+       (Godot.Tools.EditorResourcePreviewGenerator.can_generate_small_preview,
         Godot.Tools.EditorResourcePreviewGenerator.generate,
-        Godot.Tools.EditorResourcePreviewGenerator.generate_from_path)
+        Godot.Tools.EditorResourcePreviewGenerator.generate_from_path,
+        Godot.Tools.EditorResourcePreviewGenerator.generate_small_preview_automatically,
+        Godot.Tools.EditorResourcePreviewGenerator.handles)
        where
 import Data.Coerce
 import Foreign.C
@@ -12,26 +14,27 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindEditorResourcePreviewGenerator_handles #-}
+{-# NOINLINE bindEditorResourcePreviewGenerator_can_generate_small_preview
+             #-}
 
--- | Return if your generator supports this resource type.
-bindEditorResourcePreviewGenerator_handles :: MethodBind
-bindEditorResourcePreviewGenerator_handles
+bindEditorResourcePreviewGenerator_can_generate_small_preview ::
+                                                              MethodBind
+bindEditorResourcePreviewGenerator_can_generate_small_preview
   = unsafePerformIO $
       withCString "EditorResourcePreviewGenerator" $
         \ clsNamePtr ->
-          withCString "handles" $
+          withCString "can_generate_small_preview" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return if your generator supports this resource type.
-handles ::
-          (EditorResourcePreviewGenerator :< cls, Object :< cls) =>
-          cls -> GodotString -> IO Bool
-handles cls arg1
-  = withVariantArray [toVariant arg1]
+can_generate_small_preview ::
+                             (EditorResourcePreviewGenerator :< cls, Object :< cls) =>
+                             cls -> IO Bool
+can_generate_small_preview cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorResourcePreviewGenerator_handles
+         godot_method_bind_call
+           bindEditorResourcePreviewGenerator_can_generate_small_preview
            (upcast cls)
            arrPtr
            len
@@ -92,6 +95,57 @@ generate_from_path cls arg1 arg2
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindEditorResourcePreviewGenerator_generate_from_path
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEditorResourcePreviewGenerator_generate_small_preview_automatically
+             #-}
+
+bindEditorResourcePreviewGenerator_generate_small_preview_automatically ::
+                                                                        MethodBind
+bindEditorResourcePreviewGenerator_generate_small_preview_automatically
+  = unsafePerformIO $
+      withCString "EditorResourcePreviewGenerator" $
+        \ clsNamePtr ->
+          withCString "generate_small_preview_automatically" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+generate_small_preview_automatically ::
+                                       (EditorResourcePreviewGenerator :< cls, Object :< cls) =>
+                                       cls -> IO Bool
+generate_small_preview_automatically cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindEditorResourcePreviewGenerator_generate_small_preview_automatically
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEditorResourcePreviewGenerator_handles #-}
+
+-- | Returns if your generator supports this resource type.
+bindEditorResourcePreviewGenerator_handles :: MethodBind
+bindEditorResourcePreviewGenerator_handles
+  = unsafePerformIO $
+      withCString "EditorResourcePreviewGenerator" $
+        \ clsNamePtr ->
+          withCString "handles" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns if your generator supports this resource type.
+handles ::
+          (EditorResourcePreviewGenerator :< cls, Object :< cls) =>
+          cls -> GodotString -> IO Bool
+handles cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorResourcePreviewGenerator_handles
            (upcast cls)
            arrPtr
            len

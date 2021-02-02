@@ -1,9 +1,9 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.Listener
-       (Godot.Core.Listener.make_current,
-        Godot.Core.Listener.clear_current, Godot.Core.Listener.is_current,
-        Godot.Core.Listener.get_listener_transform)
+       (Godot.Core.Listener.clear_current,
+        Godot.Core.Listener.get_listener_transform,
+        Godot.Core.Listener.is_current, Godot.Core.Listener.make_current)
        where
 import Data.Coerce
 import Foreign.C
@@ -11,26 +11,6 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
-
-{-# NOINLINE bindListener_make_current #-}
-
-bindListener_make_current :: MethodBind
-bindListener_make_current
-  = unsafePerformIO $
-      withCString "Listener" $
-        \ clsNamePtr ->
-          withCString "make_current" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-make_current :: (Listener :< cls, Object :< cls) => cls -> IO ()
-make_current cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindListener_make_current (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindListener_clear_current #-}
 
@@ -48,6 +28,28 @@ clear_current cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindListener_clear_current (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindListener_get_listener_transform #-}
+
+bindListener_get_listener_transform :: MethodBind
+bindListener_get_listener_transform
+  = unsafePerformIO $
+      withCString "Listener" $
+        \ clsNamePtr ->
+          withCString "get_listener_transform" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_listener_transform ::
+                         (Listener :< cls, Object :< cls) => cls -> IO Transform
+get_listener_transform cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindListener_get_listener_transform
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -71,24 +73,22 @@ is_current cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindListener_get_listener_transform #-}
+{-# NOINLINE bindListener_make_current #-}
 
-bindListener_get_listener_transform :: MethodBind
-bindListener_get_listener_transform
+bindListener_make_current :: MethodBind
+bindListener_make_current
   = unsafePerformIO $
       withCString "Listener" $
         \ clsNamePtr ->
-          withCString "get_listener_transform" $
+          withCString "make_current" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_listener_transform ::
-                         (Listener :< cls, Object :< cls) => cls -> IO Transform
-get_listener_transform cls
+make_current :: (Listener :< cls, Object :< cls) => cls -> IO ()
+make_current cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindListener_get_listener_transform
-           (upcast cls)
+         godot_method_bind_call bindListener_make_current (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

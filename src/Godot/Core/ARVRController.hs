@@ -1,17 +1,19 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.ARVRController
-       (Godot.Core.ARVRController.sig_button_release,
-        Godot.Core.ARVRController.sig_button_pressed,
-        Godot.Core.ARVRController.set_controller_id,
+       (Godot.Core.ARVRController.sig_button_pressed,
+        Godot.Core.ARVRController.sig_button_release,
+        Godot.Core.ARVRController.sig_mesh_updated,
         Godot.Core.ARVRController.get_controller_id,
         Godot.Core.ARVRController.get_controller_name,
-        Godot.Core.ARVRController.get_joystick_id,
-        Godot.Core.ARVRController.is_button_pressed,
-        Godot.Core.ARVRController.get_joystick_axis,
-        Godot.Core.ARVRController.get_is_active,
         Godot.Core.ARVRController.get_hand,
+        Godot.Core.ARVRController.get_is_active,
+        Godot.Core.ARVRController.get_joystick_axis,
+        Godot.Core.ARVRController.get_joystick_id,
+        Godot.Core.ARVRController.get_mesh,
         Godot.Core.ARVRController.get_rumble,
+        Godot.Core.ARVRController.is_button_pressed,
+        Godot.Core.ARVRController.set_controller_id,
         Godot.Core.ARVRController.set_rumble)
        where
 import Data.Coerce
@@ -21,45 +23,18 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
--- | Emitted when a button on this controller is released.
-sig_button_release :: Godot.Internal.Dispatch.Signal ARVRController
-sig_button_release
-  = Godot.Internal.Dispatch.Signal "button_release"
-
 -- | Emitted when a button on this controller is pressed.
 sig_button_pressed :: Godot.Internal.Dispatch.Signal ARVRController
 sig_button_pressed
   = Godot.Internal.Dispatch.Signal "button_pressed"
 
-{-# NOINLINE bindARVRController_set_controller_id #-}
+-- | Emitted when a button on this controller is released.
+sig_button_release :: Godot.Internal.Dispatch.Signal ARVRController
+sig_button_release
+  = Godot.Internal.Dispatch.Signal "button_release"
 
--- | The controller's id.
---   			A controller id of 0 is unbound and will always result in an inactive node. Controller id 1 is reserved for the first controller that identifies itself as the left hand controller and id 2 is reserved for the first controller that identifies itself as the right hand controller.
---   			For any other controller that the [ARVRServer] detects, we continue with controller id 3.
---   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same id even when controllers with lower ids are turned off.
-bindARVRController_set_controller_id :: MethodBind
-bindARVRController_set_controller_id
-  = unsafePerformIO $
-      withCString "ARVRController" $
-        \ clsNamePtr ->
-          withCString "set_controller_id" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The controller's id.
---   			A controller id of 0 is unbound and will always result in an inactive node. Controller id 1 is reserved for the first controller that identifies itself as the left hand controller and id 2 is reserved for the first controller that identifies itself as the right hand controller.
---   			For any other controller that the [ARVRServer] detects, we continue with controller id 3.
---   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same id even when controllers with lower ids are turned off.
-set_controller_id ::
-                    (ARVRController :< cls, Object :< cls) => cls -> Int -> IO ()
-set_controller_id cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindARVRController_set_controller_id
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+sig_mesh_updated :: Godot.Internal.Dispatch.Signal ARVRController
+sig_mesh_updated = Godot.Internal.Dispatch.Signal "mesh_updated"
 
 {-# NOINLINE bindARVRController_get_controller_id #-}
 
@@ -115,49 +90,47 @@ get_controller_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindARVRController_get_joystick_id #-}
+{-# NOINLINE bindARVRController_get_hand #-}
 
--- | Returns the ID of the joystick object bound to this. Every controller tracked by the ARVR Server that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
-bindARVRController_get_joystick_id :: MethodBind
-bindARVRController_get_joystick_id
+-- | Returns the hand holding this controller, if known. See TRACKER_* constants in [ARVRPositionalTracker].
+bindARVRController_get_hand :: MethodBind
+bindARVRController_get_hand
   = unsafePerformIO $
       withCString "ARVRController" $
         \ clsNamePtr ->
-          withCString "get_joystick_id" $
+          withCString "get_hand" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the ID of the joystick object bound to this. Every controller tracked by the ARVR Server that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
-get_joystick_id ::
-                  (ARVRController :< cls, Object :< cls) => cls -> IO Int
-get_joystick_id cls
+-- | Returns the hand holding this controller, if known. See TRACKER_* constants in [ARVRPositionalTracker].
+get_hand :: (ARVRController :< cls, Object :< cls) => cls -> IO Int
+get_hand cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindARVRController_get_joystick_id
-           (upcast cls)
+         godot_method_bind_call bindARVRController_get_hand (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindARVRController_is_button_pressed #-}
+{-# NOINLINE bindARVRController_get_is_active #-}
 
--- | Returns [code]true[/code] if the button at index [code]button[/code] is pressed.
-bindARVRController_is_button_pressed :: MethodBind
-bindARVRController_is_button_pressed
+-- | Returns [code]true[/code] if the bound controller is active. ARVR systems attempt to track active controllers.
+bindARVRController_get_is_active :: MethodBind
+bindARVRController_get_is_active
   = unsafePerformIO $
       withCString "ARVRController" $
         \ clsNamePtr ->
-          withCString "is_button_pressed" $
+          withCString "get_is_active" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the button at index [code]button[/code] is pressed.
-is_button_pressed ::
-                    (ARVRController :< cls, Object :< cls) => cls -> Int -> IO Int
-is_button_pressed cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Returns [code]true[/code] if the bound controller is active. ARVR systems attempt to track active controllers.
+get_is_active ::
+                (ARVRController :< cls, Object :< cls) => cls -> IO Bool
+get_is_active cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindARVRController_is_button_pressed
+         godot_method_bind_call bindARVRController_get_is_active
            (upcast cls)
            arrPtr
            len
@@ -187,48 +160,47 @@ get_joystick_axis cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindARVRController_get_is_active #-}
+{-# NOINLINE bindARVRController_get_joystick_id #-}
 
--- | Returns [code]true[/code] if the bound controller is active. ARVR systems attempt to track active controllers.
-bindARVRController_get_is_active :: MethodBind
-bindARVRController_get_is_active
+-- | Returns the ID of the joystick object bound to this. Every controller tracked by the ARVR Server that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
+bindARVRController_get_joystick_id :: MethodBind
+bindARVRController_get_joystick_id
   = unsafePerformIO $
       withCString "ARVRController" $
         \ clsNamePtr ->
-          withCString "get_is_active" $
+          withCString "get_joystick_id" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the bound controller is active. ARVR systems attempt to track active controllers.
-get_is_active ::
-                (ARVRController :< cls, Object :< cls) => cls -> IO Bool
-get_is_active cls
+-- | Returns the ID of the joystick object bound to this. Every controller tracked by the ARVR Server that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
+get_joystick_id ::
+                  (ARVRController :< cls, Object :< cls) => cls -> IO Int
+get_joystick_id cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindARVRController_get_is_active
+         godot_method_bind_call bindARVRController_get_joystick_id
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindARVRController_get_hand #-}
+{-# NOINLINE bindARVRController_get_mesh #-}
 
--- | Returns the hand holding this controller, if known. See TRACKER_* constants in [ARVRPositionalTracker].
-bindARVRController_get_hand :: MethodBind
-bindARVRController_get_hand
+bindARVRController_get_mesh :: MethodBind
+bindARVRController_get_mesh
   = unsafePerformIO $
       withCString "ARVRController" $
         \ clsNamePtr ->
-          withCString "get_hand" $
+          withCString "get_mesh" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the hand holding this controller, if known. See TRACKER_* constants in [ARVRPositionalTracker].
-get_hand :: (ARVRController :< cls, Object :< cls) => cls -> IO Int
-get_hand cls
+get_mesh ::
+           (ARVRController :< cls, Object :< cls) => cls -> IO Mesh
+get_mesh cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindARVRController_get_hand (upcast cls)
+         godot_method_bind_call bindARVRController_get_mesh (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -252,6 +224,60 @@ get_rumble cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindARVRController_get_rumble (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindARVRController_is_button_pressed #-}
+
+-- | Returns [code]true[/code] if the button at index [code]button[/code] is pressed.
+bindARVRController_is_button_pressed :: MethodBind
+bindARVRController_is_button_pressed
+  = unsafePerformIO $
+      withCString "ARVRController" $
+        \ clsNamePtr ->
+          withCString "is_button_pressed" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns [code]true[/code] if the button at index [code]button[/code] is pressed.
+is_button_pressed ::
+                    (ARVRController :< cls, Object :< cls) => cls -> Int -> IO Int
+is_button_pressed cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindARVRController_is_button_pressed
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindARVRController_set_controller_id #-}
+
+-- | The controller's id.
+--   			A controller id of 0 is unbound and will always result in an inactive node. Controller id 1 is reserved for the first controller that identifies itself as the left hand controller and id 2 is reserved for the first controller that identifies itself as the right hand controller.
+--   			For any other controller that the [ARVRServer] detects, we continue with controller id 3.
+--   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same id even when controllers with lower ids are turned off.
+bindARVRController_set_controller_id :: MethodBind
+bindARVRController_set_controller_id
+  = unsafePerformIO $
+      withCString "ARVRController" $
+        \ clsNamePtr ->
+          withCString "set_controller_id" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The controller's id.
+--   			A controller id of 0 is unbound and will always result in an inactive node. Controller id 1 is reserved for the first controller that identifies itself as the left hand controller and id 2 is reserved for the first controller that identifies itself as the right hand controller.
+--   			For any other controller that the [ARVRServer] detects, we continue with controller id 3.
+--   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same id even when controllers with lower ids are turned off.
+set_controller_id ::
+                    (ARVRController :< cls, Object :< cls) => cls -> Int -> IO ()
+set_controller_id cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindARVRController_set_controller_id
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
