@@ -11,12 +11,12 @@ module Godot.Tools.EditorSceneImporter
         Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_DETECT_LOOP,
         Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_OPTIMIZE,
         Godot.Tools.EditorSceneImporter._IMPORT_GENERATE_TANGENT_ARRAYS,
-        Godot.Tools.EditorSceneImporter._get_import_flags,
         Godot.Tools.EditorSceneImporter._get_extensions,
-        Godot.Tools.EditorSceneImporter._import_scene,
+        Godot.Tools.EditorSceneImporter._get_import_flags,
         Godot.Tools.EditorSceneImporter._import_animation,
-        Godot.Tools.EditorSceneImporter.import_scene_from_other_importer,
-        Godot.Tools.EditorSceneImporter.import_animation_from_other_importer)
+        Godot.Tools.EditorSceneImporter._import_scene,
+        Godot.Tools.EditorSceneImporter.import_animation_from_other_importer,
+        Godot.Tools.EditorSceneImporter.import_scene_from_other_importer)
        where
 import Data.Coerce
 import Foreign.C
@@ -55,28 +55,6 @@ _IMPORT_ANIMATION_OPTIMIZE = 8
 _IMPORT_GENERATE_TANGENT_ARRAYS :: Int
 _IMPORT_GENERATE_TANGENT_ARRAYS = 256
 
-{-# NOINLINE bindEditorSceneImporter__get_import_flags #-}
-
-bindEditorSceneImporter__get_import_flags :: MethodBind
-bindEditorSceneImporter__get_import_flags
-  = unsafePerformIO $
-      withCString "EditorSceneImporter" $
-        \ clsNamePtr ->
-          withCString "_get_import_flags" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-_get_import_flags ::
-                    (EditorSceneImporter :< cls, Object :< cls) => cls -> IO Int
-_get_import_flags cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorSceneImporter__get_import_flags
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindEditorSceneImporter__get_extensions #-}
 
 bindEditorSceneImporter__get_extensions :: MethodBind
@@ -99,24 +77,23 @@ _get_extensions cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorSceneImporter__import_scene #-}
+{-# NOINLINE bindEditorSceneImporter__get_import_flags #-}
 
-bindEditorSceneImporter__import_scene :: MethodBind
-bindEditorSceneImporter__import_scene
+bindEditorSceneImporter__get_import_flags :: MethodBind
+bindEditorSceneImporter__get_import_flags
   = unsafePerformIO $
       withCString "EditorSceneImporter" $
         \ clsNamePtr ->
-          withCString "_import_scene" $
+          withCString "_get_import_flags" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_import_scene ::
-                (EditorSceneImporter :< cls, Object :< cls) =>
-                cls -> GodotString -> Int -> Int -> IO Node
-_import_scene cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+_get_import_flags ::
+                    (EditorSceneImporter :< cls, Object :< cls) => cls -> IO Int
+_get_import_flags cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorSceneImporter__import_scene
+         godot_method_bind_call bindEditorSceneImporter__get_import_flags
            (upcast cls)
            arrPtr
            len
@@ -145,27 +122,24 @@ _import_animation cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorSceneImporter_import_scene_from_other_importer
-             #-}
+{-# NOINLINE bindEditorSceneImporter__import_scene #-}
 
-bindEditorSceneImporter_import_scene_from_other_importer ::
-                                                         MethodBind
-bindEditorSceneImporter_import_scene_from_other_importer
+bindEditorSceneImporter__import_scene :: MethodBind
+bindEditorSceneImporter__import_scene
   = unsafePerformIO $
       withCString "EditorSceneImporter" $
         \ clsNamePtr ->
-          withCString "import_scene_from_other_importer" $
+          withCString "_import_scene" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-import_scene_from_other_importer ::
-                                   (EditorSceneImporter :< cls, Object :< cls) =>
-                                   cls -> GodotString -> Int -> Int -> IO Node
-import_scene_from_other_importer cls arg1 arg2 arg3
+_import_scene ::
+                (EditorSceneImporter :< cls, Object :< cls) =>
+                cls -> GodotString -> Int -> Int -> IO Node
+_import_scene cls arg1 arg2 arg3
   = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindEditorSceneImporter_import_scene_from_other_importer
+         godot_method_bind_call bindEditorSceneImporter__import_scene
            (upcast cls)
            arrPtr
            len
@@ -192,6 +166,32 @@ import_animation_from_other_importer cls arg1 arg2 arg3
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindEditorSceneImporter_import_animation_from_other_importer
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEditorSceneImporter_import_scene_from_other_importer
+             #-}
+
+bindEditorSceneImporter_import_scene_from_other_importer ::
+                                                         MethodBind
+bindEditorSceneImporter_import_scene_from_other_importer
+  = unsafePerformIO $
+      withCString "EditorSceneImporter" $
+        \ clsNamePtr ->
+          withCString "import_scene_from_other_importer" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+import_scene_from_other_importer ::
+                                   (EditorSceneImporter :< cls, Object :< cls) =>
+                                   cls -> GodotString -> Int -> Int -> IO Node
+import_scene_from_other_importer cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindEditorSceneImporter_import_scene_from_other_importer
            (upcast cls)
            arrPtr
            len

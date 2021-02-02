@@ -1,17 +1,17 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Tools.EditorImportPlugin
-       (Godot.Tools.EditorImportPlugin.get_importer_name,
-        Godot.Tools.EditorImportPlugin.get_visible_name,
+       (Godot.Tools.EditorImportPlugin.get_import_options,
+        Godot.Tools.EditorImportPlugin.get_import_order,
+        Godot.Tools.EditorImportPlugin.get_importer_name,
+        Godot.Tools.EditorImportPlugin.get_option_visibility,
         Godot.Tools.EditorImportPlugin.get_preset_count,
         Godot.Tools.EditorImportPlugin.get_preset_name,
-        Godot.Tools.EditorImportPlugin.get_recognized_extensions,
-        Godot.Tools.EditorImportPlugin.get_import_options,
-        Godot.Tools.EditorImportPlugin.get_save_extension,
-        Godot.Tools.EditorImportPlugin.get_resource_type,
         Godot.Tools.EditorImportPlugin.get_priority,
-        Godot.Tools.EditorImportPlugin.get_import_order,
-        Godot.Tools.EditorImportPlugin.get_option_visibility,
+        Godot.Tools.EditorImportPlugin.get_recognized_extensions,
+        Godot.Tools.EditorImportPlugin.get_resource_type,
+        Godot.Tools.EditorImportPlugin.get_save_extension,
+        Godot.Tools.EditorImportPlugin.get_visible_name,
         Godot.Tools.EditorImportPlugin.import')
        where
 import Data.Coerce
@@ -20,6 +20,55 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+
+{-# NOINLINE bindEditorImportPlugin_get_import_options #-}
+
+-- | Get the options and default values for the preset at this index. Returns an Array of Dictionaries with the following keys: [code]name[/code], [code]default_value[/code], [code]property_hint[/code] (optional), [code]hint_string[/code] (optional), [code]usage[/code] (optional).
+bindEditorImportPlugin_get_import_options :: MethodBind
+bindEditorImportPlugin_get_import_options
+  = unsafePerformIO $
+      withCString "EditorImportPlugin" $
+        \ clsNamePtr ->
+          withCString "get_import_options" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the options and default values for the preset at this index. Returns an Array of Dictionaries with the following keys: [code]name[/code], [code]default_value[/code], [code]property_hint[/code] (optional), [code]hint_string[/code] (optional), [code]usage[/code] (optional).
+get_import_options ::
+                     (EditorImportPlugin :< cls, Object :< cls) =>
+                     cls -> Int -> IO Array
+get_import_options cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorImportPlugin_get_import_options
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEditorImportPlugin_get_import_order #-}
+
+-- | Get the order of this importer to be run when importing resources. Higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported.
+bindEditorImportPlugin_get_import_order :: MethodBind
+bindEditorImportPlugin_get_import_order
+  = unsafePerformIO $
+      withCString "EditorImportPlugin" $
+        \ clsNamePtr ->
+          withCString "get_import_order" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the order of this importer to be run when importing resources. Higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported.
+get_import_order ::
+                   (EditorImportPlugin :< cls, Object :< cls) => cls -> IO Int
+get_import_order cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorImportPlugin_get_import_order
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindEditorImportPlugin_get_importer_name #-}
 
@@ -45,25 +94,24 @@ get_importer_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorImportPlugin_get_visible_name #-}
+{-# NOINLINE bindEditorImportPlugin_get_option_visibility #-}
 
--- | Get the name to display in the import window.
-bindEditorImportPlugin_get_visible_name :: MethodBind
-bindEditorImportPlugin_get_visible_name
+bindEditorImportPlugin_get_option_visibility :: MethodBind
+bindEditorImportPlugin_get_option_visibility
   = unsafePerformIO $
       withCString "EditorImportPlugin" $
         \ clsNamePtr ->
-          withCString "get_visible_name" $
+          withCString "get_option_visibility" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the name to display in the import window.
-get_visible_name ::
-                   (EditorImportPlugin :< cls, Object :< cls) => cls -> IO GodotString
-get_visible_name cls
-  = withVariantArray []
+get_option_visibility ::
+                        (EditorImportPlugin :< cls, Object :< cls) =>
+                        cls -> GodotString -> Dictionary -> IO Bool
+get_option_visibility cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorImportPlugin_get_visible_name
+         godot_method_bind_call bindEditorImportPlugin_get_option_visibility
            (upcast cls)
            arrPtr
            len
@@ -118,6 +166,30 @@ get_preset_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindEditorImportPlugin_get_priority #-}
+
+-- | Get the priority of this plugin for the recognized extension. Higher priority plugins will be preferred. Default value is 1.0.
+bindEditorImportPlugin_get_priority :: MethodBind
+bindEditorImportPlugin_get_priority
+  = unsafePerformIO $
+      withCString "EditorImportPlugin" $
+        \ clsNamePtr ->
+          withCString "get_priority" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the priority of this plugin for the recognized extension. Higher priority plugins will be preferred. Default value is 1.0.
+get_priority ::
+               (EditorImportPlugin :< cls, Object :< cls) => cls -> IO Float
+get_priority cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorImportPlugin_get_priority
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindEditorImportPlugin_get_recognized_extensions #-}
 
 -- | Get the list of file extensions to associate with this loader (case insensitive). e.g. [code]["obj"][/code].
@@ -138,55 +210,6 @@ get_recognized_extensions cls
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindEditorImportPlugin_get_recognized_extensions
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEditorImportPlugin_get_import_options #-}
-
--- | Get the options and default values for the preset at this index. Returns an Array of Dictionaries with the following keys: [code]name[/code], [code]default_value[/code], [code]property_hint[/code] (optional), [code]hint_string[/code] (optional), [code]usage[/code] (optional).
-bindEditorImportPlugin_get_import_options :: MethodBind
-bindEditorImportPlugin_get_import_options
-  = unsafePerformIO $
-      withCString "EditorImportPlugin" $
-        \ clsNamePtr ->
-          withCString "get_import_options" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the options and default values for the preset at this index. Returns an Array of Dictionaries with the following keys: [code]name[/code], [code]default_value[/code], [code]property_hint[/code] (optional), [code]hint_string[/code] (optional), [code]usage[/code] (optional).
-get_import_options ::
-                     (EditorImportPlugin :< cls, Object :< cls) =>
-                     cls -> Int -> IO Array
-get_import_options cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorImportPlugin_get_import_options
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEditorImportPlugin_get_save_extension #-}
-
--- | Get the extension used to save this resource in the [code].import[/code] directory.
-bindEditorImportPlugin_get_save_extension :: MethodBind
-bindEditorImportPlugin_get_save_extension
-  = unsafePerformIO $
-      withCString "EditorImportPlugin" $
-        \ clsNamePtr ->
-          withCString "get_save_extension" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the extension used to save this resource in the [code].import[/code] directory.
-get_save_extension ::
-                     (EditorImportPlugin :< cls, Object :< cls) => cls -> IO GodotString
-get_save_extension cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorImportPlugin_get_save_extension
            (upcast cls)
            arrPtr
            len
@@ -216,72 +239,49 @@ get_resource_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorImportPlugin_get_priority #-}
+{-# NOINLINE bindEditorImportPlugin_get_save_extension #-}
 
--- | Get the priority of this plugin for the recognized extension. Higher priority plugins will be preferred. Default value is 1.0.
-bindEditorImportPlugin_get_priority :: MethodBind
-bindEditorImportPlugin_get_priority
+-- | Get the extension used to save this resource in the [code].import[/code] directory.
+bindEditorImportPlugin_get_save_extension :: MethodBind
+bindEditorImportPlugin_get_save_extension
   = unsafePerformIO $
       withCString "EditorImportPlugin" $
         \ clsNamePtr ->
-          withCString "get_priority" $
+          withCString "get_save_extension" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the priority of this plugin for the recognized extension. Higher priority plugins will be preferred. Default value is 1.0.
-get_priority ::
-               (EditorImportPlugin :< cls, Object :< cls) => cls -> IO Float
-get_priority cls
+-- | Get the extension used to save this resource in the [code].import[/code] directory.
+get_save_extension ::
+                     (EditorImportPlugin :< cls, Object :< cls) => cls -> IO GodotString
+get_save_extension cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorImportPlugin_get_priority
+         godot_method_bind_call bindEditorImportPlugin_get_save_extension
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorImportPlugin_get_import_order #-}
+{-# NOINLINE bindEditorImportPlugin_get_visible_name #-}
 
--- | Get the order of this importer to be run when importing resources. Higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported.
-bindEditorImportPlugin_get_import_order :: MethodBind
-bindEditorImportPlugin_get_import_order
+-- | Get the name to display in the import window.
+bindEditorImportPlugin_get_visible_name :: MethodBind
+bindEditorImportPlugin_get_visible_name
   = unsafePerformIO $
       withCString "EditorImportPlugin" $
         \ clsNamePtr ->
-          withCString "get_import_order" $
+          withCString "get_visible_name" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the order of this importer to be run when importing resources. Higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported.
-get_import_order ::
-                   (EditorImportPlugin :< cls, Object :< cls) => cls -> IO Int
-get_import_order cls
+-- | Get the name to display in the import window.
+get_visible_name ::
+                   (EditorImportPlugin :< cls, Object :< cls) => cls -> IO GodotString
+get_visible_name cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorImportPlugin_get_import_order
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEditorImportPlugin_get_option_visibility #-}
-
-bindEditorImportPlugin_get_option_visibility :: MethodBind
-bindEditorImportPlugin_get_option_visibility
-  = unsafePerformIO $
-      withCString "EditorImportPlugin" $
-        \ clsNamePtr ->
-          withCString "get_option_visibility" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_option_visibility ::
-                        (EditorImportPlugin :< cls, Object :< cls) =>
-                        cls -> GodotString -> Dictionary -> IO Bool
-get_option_visibility cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorImportPlugin_get_option_visibility
+         godot_method_bind_call bindEditorImportPlugin_get_visible_name
            (upcast cls)
            arrPtr
            len

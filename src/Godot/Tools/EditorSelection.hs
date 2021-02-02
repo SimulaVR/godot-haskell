@@ -2,13 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Tools.EditorSelection
        (Godot.Tools.EditorSelection.sig_selection_changed,
+        Godot.Tools.EditorSelection._emit_change,
         Godot.Tools.EditorSelection._node_removed,
-        Godot.Tools.EditorSelection.clear,
         Godot.Tools.EditorSelection.add_node,
-        Godot.Tools.EditorSelection.remove_node,
+        Godot.Tools.EditorSelection.clear,
         Godot.Tools.EditorSelection.get_selected_nodes,
         Godot.Tools.EditorSelection.get_transformable_selected_nodes,
-        Godot.Tools.EditorSelection._emit_change)
+        Godot.Tools.EditorSelection.remove_node)
        where
 import Data.Coerce
 import Foreign.C
@@ -22,6 +22,28 @@ sig_selection_changed ::
                       Godot.Internal.Dispatch.Signal EditorSelection
 sig_selection_changed
   = Godot.Internal.Dispatch.Signal "selection_changed"
+
+{-# NOINLINE bindEditorSelection__emit_change #-}
+
+bindEditorSelection__emit_change :: MethodBind
+bindEditorSelection__emit_change
+  = unsafePerformIO $
+      withCString "EditorSelection" $
+        \ clsNamePtr ->
+          withCString "_emit_change" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+_emit_change ::
+               (EditorSelection :< cls, Object :< cls) => cls -> IO ()
+_emit_change cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorSelection__emit_change
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindEditorSelection__node_removed #-}
 
@@ -41,28 +63,6 @@ _node_removed cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindEditorSelection__node_removed
            (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindEditorSelection_clear #-}
-
--- | Clear the selection.
-bindEditorSelection_clear :: MethodBind
-bindEditorSelection_clear
-  = unsafePerformIO $
-      withCString "EditorSelection" $
-        \ clsNamePtr ->
-          withCString "clear" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Clear the selection.
-clear :: (EditorSelection :< cls, Object :< cls) => cls -> IO ()
-clear cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorSelection_clear (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -90,25 +90,24 @@ add_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorSelection_remove_node #-}
+{-# NOINLINE bindEditorSelection_clear #-}
 
--- | Remove a node from the selection.
-bindEditorSelection_remove_node :: MethodBind
-bindEditorSelection_remove_node
+-- | Clear the selection.
+bindEditorSelection_clear :: MethodBind
+bindEditorSelection_clear
   = unsafePerformIO $
       withCString "EditorSelection" $
         \ clsNamePtr ->
-          withCString "remove_node" $
+          withCString "clear" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove a node from the selection.
-remove_node ::
-              (EditorSelection :< cls, Object :< cls) => cls -> Node -> IO ()
-remove_node cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Clear the selection.
+clear :: (EditorSelection :< cls, Object :< cls) => cls -> IO ()
+clear cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorSelection_remove_node (upcast cls)
+         godot_method_bind_call bindEditorSelection_clear (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -163,24 +162,25 @@ get_transformable_selected_nodes cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorSelection__emit_change #-}
+{-# NOINLINE bindEditorSelection_remove_node #-}
 
-bindEditorSelection__emit_change :: MethodBind
-bindEditorSelection__emit_change
+-- | Remove a node from the selection.
+bindEditorSelection_remove_node :: MethodBind
+bindEditorSelection_remove_node
   = unsafePerformIO $
       withCString "EditorSelection" $
         \ clsNamePtr ->
-          withCString "_emit_change" $
+          withCString "remove_node" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_emit_change ::
-               (EditorSelection :< cls, Object :< cls) => cls -> IO ()
-_emit_change cls
-  = withVariantArray []
+-- | Remove a node from the selection.
+remove_node ::
+              (EditorSelection :< cls, Object :< cls) => cls -> Node -> IO ()
+remove_node cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorSelection__emit_change
-           (upcast cls)
+         godot_method_bind_call bindEditorSelection_remove_node (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

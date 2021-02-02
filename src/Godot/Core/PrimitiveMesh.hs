@@ -2,13 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.PrimitiveMesh
        (Godot.Core.PrimitiveMesh._update,
-        Godot.Core.PrimitiveMesh.set_material,
+        Godot.Core.PrimitiveMesh.get_custom_aabb,
+        Godot.Core.PrimitiveMesh.get_flip_faces,
         Godot.Core.PrimitiveMesh.get_material,
         Godot.Core.PrimitiveMesh.get_mesh_arrays,
         Godot.Core.PrimitiveMesh.set_custom_aabb,
-        Godot.Core.PrimitiveMesh.get_custom_aabb,
         Godot.Core.PrimitiveMesh.set_flip_faces,
-        Godot.Core.PrimitiveMesh.get_flip_faces)
+        Godot.Core.PrimitiveMesh.set_material)
        where
 import Data.Coerce
 import Foreign.C
@@ -37,25 +37,50 @@ _update cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPrimitiveMesh_set_material #-}
+{-# NOINLINE bindPrimitiveMesh_get_custom_aabb #-}
 
--- | The current [Material] of the primitive mesh.
-bindPrimitiveMesh_set_material :: MethodBind
-bindPrimitiveMesh_set_material
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+bindPrimitiveMesh_get_custom_aabb :: MethodBind
+bindPrimitiveMesh_get_custom_aabb
   = unsafePerformIO $
       withCString "PrimitiveMesh" $
         \ clsNamePtr ->
-          withCString "set_material" $
+          withCString "get_custom_aabb" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The current [Material] of the primitive mesh.
-set_material ::
-               (PrimitiveMesh :< cls, Object :< cls) => cls -> Material -> IO ()
-set_material cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+get_custom_aabb ::
+                  (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Aabb
+get_custom_aabb cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPrimitiveMesh_set_material (upcast cls)
+         godot_method_bind_call bindPrimitiveMesh_get_custom_aabb
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPrimitiveMesh_get_flip_faces #-}
+
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
+bindPrimitiveMesh_get_flip_faces :: MethodBind
+bindPrimitiveMesh_get_flip_faces
+  = unsafePerformIO $
+      withCString "PrimitiveMesh" $
+        \ clsNamePtr ->
+          withCString "get_flip_faces" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
+get_flip_faces ::
+                 (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Bool
+get_flip_faces cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPrimitiveMesh_get_flip_faces
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -85,6 +110,7 @@ get_material cls
 
 {-# NOINLINE bindPrimitiveMesh_get_mesh_arrays #-}
 
+-- | Returns mesh arrays used to constitute surface of [Mesh]. Mesh array can be used with [ArrayMesh] to create new surface.
 bindPrimitiveMesh_get_mesh_arrays :: MethodBind
 bindPrimitiveMesh_get_mesh_arrays
   = unsafePerformIO $
@@ -94,6 +120,7 @@ bindPrimitiveMesh_get_mesh_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns mesh arrays used to constitute surface of [Mesh]. Mesh array can be used with [ArrayMesh] to create new surface.
 get_mesh_arrays ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Array
 get_mesh_arrays cls
@@ -107,6 +134,7 @@ get_mesh_arrays cls
 
 {-# NOINLINE bindPrimitiveMesh_set_custom_aabb #-}
 
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
 bindPrimitiveMesh_set_custom_aabb :: MethodBind
 bindPrimitiveMesh_set_custom_aabb
   = unsafePerformIO $
@@ -116,6 +144,7 @@ bindPrimitiveMesh_set_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
 set_custom_aabb ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> Aabb -> IO ()
 set_custom_aabb cls arg1
@@ -127,30 +156,9 @@ set_custom_aabb cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPrimitiveMesh_get_custom_aabb #-}
-
-bindPrimitiveMesh_get_custom_aabb :: MethodBind
-bindPrimitiveMesh_get_custom_aabb
-  = unsafePerformIO $
-      withCString "PrimitiveMesh" $
-        \ clsNamePtr ->
-          withCString "get_custom_aabb" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_custom_aabb ::
-                  (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Aabb
-get_custom_aabb cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPrimitiveMesh_get_custom_aabb
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindPrimitiveMesh_set_flip_faces #-}
 
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
 bindPrimitiveMesh_set_flip_faces :: MethodBind
 bindPrimitiveMesh_set_flip_faces
   = unsafePerformIO $
@@ -160,6 +168,7 @@ bindPrimitiveMesh_set_flip_faces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
 set_flip_faces ::
                  (PrimitiveMesh :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_faces cls arg1
@@ -171,24 +180,25 @@ set_flip_faces cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPrimitiveMesh_get_flip_faces #-}
+{-# NOINLINE bindPrimitiveMesh_set_material #-}
 
-bindPrimitiveMesh_get_flip_faces :: MethodBind
-bindPrimitiveMesh_get_flip_faces
+-- | The current [Material] of the primitive mesh.
+bindPrimitiveMesh_set_material :: MethodBind
+bindPrimitiveMesh_set_material
   = unsafePerformIO $
       withCString "PrimitiveMesh" $
         \ clsNamePtr ->
-          withCString "get_flip_faces" $
+          withCString "set_material" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_flip_faces ::
-                 (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Bool
-get_flip_faces cls
-  = withVariantArray []
+-- | The current [Material] of the primitive mesh.
+set_material ::
+               (PrimitiveMesh :< cls, Object :< cls) => cls -> Material -> IO ()
+set_material cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPrimitiveMesh_get_flip_faces
-           (upcast cls)
+         godot_method_bind_call bindPrimitiveMesh_set_material (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

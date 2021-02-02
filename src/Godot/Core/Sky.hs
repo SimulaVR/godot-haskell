@@ -8,7 +8,7 @@ module Godot.Core.Sky
         Godot.Core.Sky._RADIANCE_SIZE_64, Godot.Core.Sky._RADIANCE_SIZE_32,
         Godot.Core.Sky._RADIANCE_SIZE_256,
         Godot.Core.Sky._RADIANCE_SIZE_MAX,
-        Godot.Core.Sky.set_radiance_size, Godot.Core.Sky.get_radiance_size)
+        Godot.Core.Sky.get_radiance_size, Godot.Core.Sky.set_radiance_size)
        where
 import Data.Coerce
 import Foreign.C
@@ -41,38 +41,11 @@ _RADIANCE_SIZE_256 = 3
 _RADIANCE_SIZE_MAX :: Int
 _RADIANCE_SIZE_MAX = 7
 
-{-# NOINLINE bindSky_set_radiance_size #-}
-
--- | The Sky's radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the Sky will be.
---   			See RADIANCE_SIZE_* constants for values. Default size is RADIANCE_SIZE_512.
-bindSky_set_radiance_size :: MethodBind
-bindSky_set_radiance_size
-  = unsafePerformIO $
-      withCString "Sky" $
-        \ clsNamePtr ->
-          withCString "set_radiance_size" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The Sky's radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the Sky will be.
---   			See RADIANCE_SIZE_* constants for values. Default size is RADIANCE_SIZE_512.
-set_radiance_size ::
-                    (Sky :< cls, Object :< cls) => cls -> Int -> IO ()
-set_radiance_size cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindSky_set_radiance_size (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindSky_get_radiance_size #-}
 
--- | The Sky's radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the Sky will be.
---   			See RADIANCE_SIZE_* constants for values. Default size is RADIANCE_SIZE_512.
+-- | The [Sky]'s radiance map size.
+--   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
 bindSky_get_radiance_size :: MethodBind
 bindSky_get_radiance_size
   = unsafePerformIO $
@@ -82,14 +55,41 @@ bindSky_get_radiance_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The Sky's radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the Sky will be.
---   			See RADIANCE_SIZE_* constants for values. Default size is RADIANCE_SIZE_512.
+-- | The [Sky]'s radiance map size.
+--   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
 get_radiance_size :: (Sky :< cls, Object :< cls) => cls -> IO Int
 get_radiance_size cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSky_get_radiance_size (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindSky_set_radiance_size #-}
+
+-- | The [Sky]'s radiance map size.
+--   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
+bindSky_set_radiance_size :: MethodBind
+bindSky_set_radiance_size
+  = unsafePerformIO $
+      withCString "Sky" $
+        \ clsNamePtr ->
+          withCString "set_radiance_size" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The [Sky]'s radiance map size.
+--   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
+set_radiance_size ::
+                    (Sky :< cls, Object :< cls) => cls -> Int -> IO ()
+set_radiance_size cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindSky_set_radiance_size (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

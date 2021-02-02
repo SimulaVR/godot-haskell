@@ -9,12 +9,17 @@ module Godot.Core.TextureRect
         Godot.Core.TextureRect._STRETCH_KEEP,
         Godot.Core.TextureRect._STRETCH_KEEP_CENTERED,
         Godot.Core.TextureRect._STRETCH_KEEP_ASPECT_CENTERED,
-        Godot.Core.TextureRect.set_texture,
+        Godot.Core.TextureRect._texture_changed,
+        Godot.Core.TextureRect.get_stretch_mode,
         Godot.Core.TextureRect.get_texture,
-        Godot.Core.TextureRect.set_expand,
         Godot.Core.TextureRect.has_expand,
+        Godot.Core.TextureRect.is_flipped_h,
+        Godot.Core.TextureRect.is_flipped_v,
+        Godot.Core.TextureRect.set_expand,
+        Godot.Core.TextureRect.set_flip_h,
+        Godot.Core.TextureRect.set_flip_v,
         Godot.Core.TextureRect.set_stretch_mode,
-        Godot.Core.TextureRect.get_stretch_mode)
+        Godot.Core.TextureRect.set_texture)
        where
 import Data.Coerce
 import Foreign.C
@@ -47,25 +52,48 @@ _STRETCH_KEEP_CENTERED = 4
 _STRETCH_KEEP_ASPECT_CENTERED :: Int
 _STRETCH_KEEP_ASPECT_CENTERED = 6
 
-{-# NOINLINE bindTextureRect_set_texture #-}
+{-# NOINLINE bindTextureRect__texture_changed #-}
 
--- | The node's [Texture] resource.
-bindTextureRect_set_texture :: MethodBind
-bindTextureRect_set_texture
+bindTextureRect__texture_changed :: MethodBind
+bindTextureRect__texture_changed
   = unsafePerformIO $
       withCString "TextureRect" $
         \ clsNamePtr ->
-          withCString "set_texture" $
+          withCString "_texture_changed" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node's [Texture] resource.
-set_texture ::
-              (TextureRect :< cls, Object :< cls) => cls -> Texture -> IO ()
-set_texture cls arg1
-  = withVariantArray [toVariant arg1]
+_texture_changed ::
+                   (TextureRect :< cls, Object :< cls) => cls -> IO ()
+_texture_changed cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTextureRect_set_texture (upcast cls)
+         godot_method_bind_call bindTextureRect__texture_changed
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindTextureRect_get_stretch_mode #-}
+
+-- | Controls the texture's behavior when resizing the node's bounding rectangle. See [enum StretchMode].
+bindTextureRect_get_stretch_mode :: MethodBind
+bindTextureRect_get_stretch_mode
+  = unsafePerformIO $
+      withCString "TextureRect" $
+        \ clsNamePtr ->
+          withCString "get_stretch_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Controls the texture's behavior when resizing the node's bounding rectangle. See [enum StretchMode].
+get_stretch_mode ::
+                   (TextureRect :< cls, Object :< cls) => cls -> IO Int
+get_stretch_mode cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTextureRect_get_stretch_mode
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -93,6 +121,70 @@ get_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindTextureRect_has_expand #-}
+
+-- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
+bindTextureRect_has_expand :: MethodBind
+bindTextureRect_has_expand
+  = unsafePerformIO $
+      withCString "TextureRect" $
+        \ clsNamePtr ->
+          withCString "has_expand" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
+has_expand :: (TextureRect :< cls, Object :< cls) => cls -> IO Bool
+has_expand cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTextureRect_has_expand (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindTextureRect_is_flipped_h #-}
+
+bindTextureRect_is_flipped_h :: MethodBind
+bindTextureRect_is_flipped_h
+  = unsafePerformIO $
+      withCString "TextureRect" $
+        \ clsNamePtr ->
+          withCString "is_flipped_h" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_flipped_h ::
+               (TextureRect :< cls, Object :< cls) => cls -> IO Bool
+is_flipped_h cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTextureRect_is_flipped_h (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindTextureRect_is_flipped_v #-}
+
+bindTextureRect_is_flipped_v :: MethodBind
+bindTextureRect_is_flipped_v
+  = unsafePerformIO $
+      withCString "TextureRect" $
+        \ clsNamePtr ->
+          withCString "is_flipped_v" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_flipped_v ::
+               (TextureRect :< cls, Object :< cls) => cls -> IO Bool
+is_flipped_v cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTextureRect_is_flipped_v (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindTextureRect_set_expand #-}
 
 -- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
@@ -116,24 +208,44 @@ set_expand cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTextureRect_has_expand #-}
+{-# NOINLINE bindTextureRect_set_flip_h #-}
 
--- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
-bindTextureRect_has_expand :: MethodBind
-bindTextureRect_has_expand
+bindTextureRect_set_flip_h :: MethodBind
+bindTextureRect_set_flip_h
   = unsafePerformIO $
       withCString "TextureRect" $
         \ clsNamePtr ->
-          withCString "has_expand" $
+          withCString "set_flip_h" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
-has_expand :: (TextureRect :< cls, Object :< cls) => cls -> IO Bool
-has_expand cls
-  = withVariantArray []
+set_flip_h ::
+             (TextureRect :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_flip_h cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTextureRect_has_expand (upcast cls)
+         godot_method_bind_call bindTextureRect_set_flip_h (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindTextureRect_set_flip_v #-}
+
+bindTextureRect_set_flip_v :: MethodBind
+bindTextureRect_set_flip_v
+  = unsafePerformIO $
+      withCString "TextureRect" $
+        \ clsNamePtr ->
+          withCString "set_flip_v" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_flip_v ::
+             (TextureRect :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_flip_v cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTextureRect_set_flip_v (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -162,26 +274,25 @@ set_stretch_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTextureRect_get_stretch_mode #-}
+{-# NOINLINE bindTextureRect_set_texture #-}
 
--- | Controls the texture's behavior when resizing the node's bounding rectangle. See [enum StretchMode].
-bindTextureRect_get_stretch_mode :: MethodBind
-bindTextureRect_get_stretch_mode
+-- | The node's [Texture] resource.
+bindTextureRect_set_texture :: MethodBind
+bindTextureRect_set_texture
   = unsafePerformIO $
       withCString "TextureRect" $
         \ clsNamePtr ->
-          withCString "get_stretch_mode" $
+          withCString "set_texture" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the texture's behavior when resizing the node's bounding rectangle. See [enum StretchMode].
-get_stretch_mode ::
-                   (TextureRect :< cls, Object :< cls) => cls -> IO Int
-get_stretch_mode cls
-  = withVariantArray []
+-- | The node's [Texture] resource.
+set_texture ::
+              (TextureRect :< cls, Object :< cls) => cls -> Texture -> IO ()
+set_texture cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTextureRect_get_stretch_mode
-           (upcast cls)
+         godot_method_bind_call bindTextureRect_set_texture (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

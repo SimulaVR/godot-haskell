@@ -8,12 +8,12 @@ module Godot.Core.DirectionalLight
         Godot.Core.DirectionalLight._SHADOW_PARALLEL_2_SPLITS,
         Godot.Core.DirectionalLight.get_param,
         Godot.Core.DirectionalLight.set_param,
-        Godot.Core.DirectionalLight.set_shadow_mode,
-        Godot.Core.DirectionalLight.get_shadow_mode,
-        Godot.Core.DirectionalLight.set_shadow_depth_range,
         Godot.Core.DirectionalLight.get_shadow_depth_range,
+        Godot.Core.DirectionalLight.get_shadow_mode,
+        Godot.Core.DirectionalLight.is_blend_splits_enabled,
         Godot.Core.DirectionalLight.set_blend_splits,
-        Godot.Core.DirectionalLight.is_blend_splits_enabled)
+        Godot.Core.DirectionalLight.set_shadow_depth_range,
+        Godot.Core.DirectionalLight.set_shadow_mode)
        where
 import Data.Coerce
 import Foreign.C
@@ -83,25 +83,25 @@ set_param cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindDirectionalLight_set_shadow_mode #-}
+{-# NOINLINE bindDirectionalLight_get_shadow_depth_range #-}
 
--- | The light's shadow rendering algorithm. See [enum ShadowMode].
-bindDirectionalLight_set_shadow_mode :: MethodBind
-bindDirectionalLight_set_shadow_mode
+-- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
+bindDirectionalLight_get_shadow_depth_range :: MethodBind
+bindDirectionalLight_get_shadow_depth_range
   = unsafePerformIO $
       withCString "DirectionalLight" $
         \ clsNamePtr ->
-          withCString "set_shadow_mode" $
+          withCString "get_shadow_depth_range" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's shadow rendering algorithm. See [enum ShadowMode].
-set_shadow_mode ::
-                  (DirectionalLight :< cls, Object :< cls) => cls -> Int -> IO ()
-set_shadow_mode cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
+get_shadow_depth_range ::
+                         (DirectionalLight :< cls, Object :< cls) => cls -> IO Int
+get_shadow_depth_range cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindDirectionalLight_set_shadow_mode
+         godot_method_bind_call bindDirectionalLight_get_shadow_depth_range
            (upcast cls)
            arrPtr
            len
@@ -131,49 +131,25 @@ get_shadow_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindDirectionalLight_set_shadow_depth_range #-}
+{-# NOINLINE bindDirectionalLight_is_blend_splits_enabled #-}
 
--- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
-bindDirectionalLight_set_shadow_depth_range :: MethodBind
-bindDirectionalLight_set_shadow_depth_range
+-- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
+bindDirectionalLight_is_blend_splits_enabled :: MethodBind
+bindDirectionalLight_is_blend_splits_enabled
   = unsafePerformIO $
       withCString "DirectionalLight" $
         \ clsNamePtr ->
-          withCString "set_shadow_depth_range" $
+          withCString "is_blend_splits_enabled" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
-set_shadow_depth_range ::
-                         (DirectionalLight :< cls, Object :< cls) => cls -> Int -> IO ()
-set_shadow_depth_range cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindDirectionalLight_set_shadow_depth_range
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindDirectionalLight_get_shadow_depth_range #-}
-
--- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
-bindDirectionalLight_get_shadow_depth_range :: MethodBind
-bindDirectionalLight_get_shadow_depth_range
-  = unsafePerformIO $
-      withCString "DirectionalLight" $
-        \ clsNamePtr ->
-          withCString "get_shadow_depth_range" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
-get_shadow_depth_range ::
-                         (DirectionalLight :< cls, Object :< cls) => cls -> IO Int
-get_shadow_depth_range cls
+-- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
+is_blend_splits_enabled ::
+                          (DirectionalLight :< cls, Object :< cls) => cls -> IO Bool
+is_blend_splits_enabled cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindDirectionalLight_get_shadow_depth_range
+         godot_method_bind_call bindDirectionalLight_is_blend_splits_enabled
            (upcast cls)
            arrPtr
            len
@@ -203,25 +179,49 @@ set_blend_splits cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindDirectionalLight_is_blend_splits_enabled #-}
+{-# NOINLINE bindDirectionalLight_set_shadow_depth_range #-}
 
--- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
-bindDirectionalLight_is_blend_splits_enabled :: MethodBind
-bindDirectionalLight_is_blend_splits_enabled
+-- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
+bindDirectionalLight_set_shadow_depth_range :: MethodBind
+bindDirectionalLight_set_shadow_depth_range
   = unsafePerformIO $
       withCString "DirectionalLight" $
         \ clsNamePtr ->
-          withCString "is_blend_splits_enabled" $
+          withCString "set_shadow_depth_range" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
-is_blend_splits_enabled ::
-                          (DirectionalLight :< cls, Object :< cls) => cls -> IO Bool
-is_blend_splits_enabled cls
-  = withVariantArray []
+-- | Optimizes shadow rendering for detail versus movement. See [enum ShadowDepthRange].
+set_shadow_depth_range ::
+                         (DirectionalLight :< cls, Object :< cls) => cls -> Int -> IO ()
+set_shadow_depth_range cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindDirectionalLight_is_blend_splits_enabled
+         godot_method_bind_call bindDirectionalLight_set_shadow_depth_range
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindDirectionalLight_set_shadow_mode #-}
+
+-- | The light's shadow rendering algorithm. See [enum ShadowMode].
+bindDirectionalLight_set_shadow_mode :: MethodBind
+bindDirectionalLight_set_shadow_mode
+  = unsafePerformIO $
+      withCString "DirectionalLight" $
+        \ clsNamePtr ->
+          withCString "set_shadow_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The light's shadow rendering algorithm. See [enum ShadowMode].
+set_shadow_mode ::
+                  (DirectionalLight :< cls, Object :< cls) => cls -> Int -> IO ()
+set_shadow_mode cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindDirectionalLight_set_shadow_mode
            (upcast cls)
            arrPtr
            len

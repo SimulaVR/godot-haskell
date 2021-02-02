@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.JSONParseResult
        (Godot.Core.JSONParseResult.get_error,
-        Godot.Core.JSONParseResult.get_error_string,
         Godot.Core.JSONParseResult.get_error_line,
+        Godot.Core.JSONParseResult.get_error_string,
         Godot.Core.JSONParseResult.get_result,
         Godot.Core.JSONParseResult.set_error,
-        Godot.Core.JSONParseResult.set_error_string,
         Godot.Core.JSONParseResult.set_error_line,
+        Godot.Core.JSONParseResult.set_error_string,
         Godot.Core.JSONParseResult.set_result)
        where
 import Data.Coerce
@@ -40,30 +40,6 @@ get_error cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindJSONParseResult_get_error_string #-}
-
--- | The error message if JSON source was not successfully parsed. See [@GlobalScope] ERR_* constants.
-bindJSONParseResult_get_error_string :: MethodBind
-bindJSONParseResult_get_error_string
-  = unsafePerformIO $
-      withCString "JSONParseResult" $
-        \ clsNamePtr ->
-          withCString "get_error_string" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The error message if JSON source was not successfully parsed. See [@GlobalScope] ERR_* constants.
-get_error_string ::
-                   (JSONParseResult :< cls, Object :< cls) => cls -> IO GodotString
-get_error_string cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindJSONParseResult_get_error_string
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindJSONParseResult_get_error_line #-}
 
 -- | The line number where the error occurred if JSON source was not successfully parsed.
@@ -83,6 +59,30 @@ get_error_line cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindJSONParseResult_get_error_line
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindJSONParseResult_get_error_string #-}
+
+-- | The error message if JSON source was not successfully parsed. See [@GlobalScope] ERR_* constants.
+bindJSONParseResult_get_error_string :: MethodBind
+bindJSONParseResult_get_error_string
+  = unsafePerformIO $
+      withCString "JSONParseResult" $
+        \ clsNamePtr ->
+          withCString "get_error_string" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The error message if JSON source was not successfully parsed. See [@GlobalScope] ERR_* constants.
+get_error_string ::
+                   (JSONParseResult :< cls, Object :< cls) => cls -> IO GodotString
+get_error_string cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindJSONParseResult_get_error_string
            (upcast cls)
            arrPtr
            len
@@ -152,6 +152,30 @@ set_error cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindJSONParseResult_set_error_line #-}
+
+-- | The line number where the error occurred if JSON source was not successfully parsed.
+bindJSONParseResult_set_error_line :: MethodBind
+bindJSONParseResult_set_error_line
+  = unsafePerformIO $
+      withCString "JSONParseResult" $
+        \ clsNamePtr ->
+          withCString "set_error_line" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The line number where the error occurred if JSON source was not successfully parsed.
+set_error_line ::
+                 (JSONParseResult :< cls, Object :< cls) => cls -> Int -> IO ()
+set_error_line cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindJSONParseResult_set_error_line
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindJSONParseResult_set_error_string #-}
 
 -- | The error message if JSON source was not successfully parsed. See [@GlobalScope] ERR_* constants.
@@ -172,30 +196,6 @@ set_error_string cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindJSONParseResult_set_error_string
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindJSONParseResult_set_error_line #-}
-
--- | The line number where the error occurred if JSON source was not successfully parsed.
-bindJSONParseResult_set_error_line :: MethodBind
-bindJSONParseResult_set_error_line
-  = unsafePerformIO $
-      withCString "JSONParseResult" $
-        \ clsNamePtr ->
-          withCString "set_error_line" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The line number where the error occurred if JSON source was not successfully parsed.
-set_error_line ::
-                 (JSONParseResult :< cls, Object :< cls) => cls -> Int -> IO ()
-set_error_line cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindJSONParseResult_set_error_line
            (upcast cls)
            arrPtr
            len

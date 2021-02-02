@@ -3,10 +3,10 @@
 module Godot.Core.RootMotionView
        (Godot.Core.RootMotionView.get_animation_path,
         Godot.Core.RootMotionView.set_animation_path,
-        Godot.Core.RootMotionView.get_color,
-        Godot.Core.RootMotionView.set_color,
         Godot.Core.RootMotionView.get_cell_size,
         Godot.Core.RootMotionView.set_cell_size,
+        Godot.Core.RootMotionView.get_color,
+        Godot.Core.RootMotionView.set_color,
         Godot.Core.RootMotionView.get_radius,
         Godot.Core.RootMotionView.set_radius,
         Godot.Core.RootMotionView.get_zero_y,
@@ -63,48 +63,6 @@ set_animation_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindRootMotionView_get_color #-}
-
-bindRootMotionView_get_color :: MethodBind
-bindRootMotionView_get_color
-  = unsafePerformIO $
-      withCString "RootMotionView" $
-        \ clsNamePtr ->
-          withCString "get_color" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_color ::
-            (RootMotionView :< cls, Object :< cls) => cls -> IO Color
-get_color cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindRootMotionView_get_color (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindRootMotionView_set_color #-}
-
-bindRootMotionView_set_color :: MethodBind
-bindRootMotionView_set_color
-  = unsafePerformIO $
-      withCString "RootMotionView" $
-        \ clsNamePtr ->
-          withCString "set_color" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_color ::
-            (RootMotionView :< cls, Object :< cls) => cls -> Color -> IO ()
-set_color cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindRootMotionView_set_color (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindRootMotionView_get_cell_size #-}
 
 bindRootMotionView_get_cell_size :: MethodBind
@@ -145,6 +103,48 @@ set_cell_size cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRootMotionView_set_cell_size
            (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindRootMotionView_get_color #-}
+
+bindRootMotionView_get_color :: MethodBind
+bindRootMotionView_get_color
+  = unsafePerformIO $
+      withCString "RootMotionView" $
+        \ clsNamePtr ->
+          withCString "get_color" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_color ::
+            (RootMotionView :< cls, Object :< cls) => cls -> IO Color
+get_color cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindRootMotionView_get_color (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindRootMotionView_set_color #-}
+
+bindRootMotionView_set_color :: MethodBind
+bindRootMotionView_set_color
+  = unsafePerformIO $
+      withCString "RootMotionView" $
+        \ clsNamePtr ->
+          withCString "set_color" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_color ::
+            (RootMotionView :< cls, Object :< cls) => cls -> Color -> IO ()
+set_color cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindRootMotionView_set_color (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

@@ -7,10 +7,10 @@ module Godot.Core.VisualShaderNodeTextureUniform
         Godot.Core.VisualShaderNodeTextureUniform._TYPE_COLOR,
         Godot.Core.VisualShaderNodeTextureUniform._TYPE_NORMALMAP,
         Godot.Core.VisualShaderNodeTextureUniform._COLOR_DEFAULT_BLACK,
-        Godot.Core.VisualShaderNodeTextureUniform.set_texture_type,
+        Godot.Core.VisualShaderNodeTextureUniform.get_color_default,
         Godot.Core.VisualShaderNodeTextureUniform.get_texture_type,
         Godot.Core.VisualShaderNodeTextureUniform.set_color_default,
-        Godot.Core.VisualShaderNodeTextureUniform.get_color_default)
+        Godot.Core.VisualShaderNodeTextureUniform.set_texture_type)
        where
 import Data.Coerce
 import Foreign.C
@@ -37,26 +37,26 @@ _TYPE_NORMALMAP = 2
 _COLOR_DEFAULT_BLACK :: Int
 _COLOR_DEFAULT_BLACK = 1
 
-{-# NOINLINE bindVisualShaderNodeTextureUniform_set_texture_type
+{-# NOINLINE bindVisualShaderNodeTextureUniform_get_color_default
              #-}
 
-bindVisualShaderNodeTextureUniform_set_texture_type :: MethodBind
-bindVisualShaderNodeTextureUniform_set_texture_type
+bindVisualShaderNodeTextureUniform_get_color_default :: MethodBind
+bindVisualShaderNodeTextureUniform_get_color_default
   = unsafePerformIO $
       withCString "VisualShaderNodeTextureUniform" $
         \ clsNamePtr ->
-          withCString "set_texture_type" $
+          withCString "get_color_default" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_texture_type ::
-                   (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
-                   cls -> Int -> IO ()
-set_texture_type cls arg1
-  = withVariantArray [toVariant arg1]
+get_color_default ::
+                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
+                    cls -> IO Int
+get_color_default cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindVisualShaderNodeTextureUniform_set_texture_type
+           bindVisualShaderNodeTextureUniform_get_color_default
            (upcast cls)
            arrPtr
            len
@@ -112,26 +112,26 @@ set_color_default cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindVisualShaderNodeTextureUniform_get_color_default
+{-# NOINLINE bindVisualShaderNodeTextureUniform_set_texture_type
              #-}
 
-bindVisualShaderNodeTextureUniform_get_color_default :: MethodBind
-bindVisualShaderNodeTextureUniform_get_color_default
+bindVisualShaderNodeTextureUniform_set_texture_type :: MethodBind
+bindVisualShaderNodeTextureUniform_set_texture_type
   = unsafePerformIO $
       withCString "VisualShaderNodeTextureUniform" $
         \ clsNamePtr ->
-          withCString "get_color_default" $
+          withCString "set_texture_type" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_color_default ::
-                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
-                    cls -> IO Int
-get_color_default cls
-  = withVariantArray []
+set_texture_type ::
+                   (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
+                   cls -> Int -> IO ()
+set_texture_type cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call
-           bindVisualShaderNodeTextureUniform_get_color_default
+           bindVisualShaderNodeTextureUniform_set_texture_type
            (upcast cls)
            arrPtr
            len

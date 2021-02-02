@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.InputEventScreenTouch
        (Godot.Core.InputEventScreenTouch.is_pressed,
-        Godot.Core.InputEventScreenTouch.set_index,
         Godot.Core.InputEventScreenTouch.get_index,
-        Godot.Core.InputEventScreenTouch.set_position,
         Godot.Core.InputEventScreenTouch.get_position,
+        Godot.Core.InputEventScreenTouch.set_index,
+        Godot.Core.InputEventScreenTouch.set_position,
         Godot.Core.InputEventScreenTouch.set_pressed)
        where
 import Data.Coerce
@@ -39,6 +39,54 @@ is_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindInputEventScreenTouch_get_index #-}
+
+-- | Touch index in the case of a multi-touch event. One index = one finger.
+bindInputEventScreenTouch_get_index :: MethodBind
+bindInputEventScreenTouch_get_index
+  = unsafePerformIO $
+      withCString "InputEventScreenTouch" $
+        \ clsNamePtr ->
+          withCString "get_index" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Touch index in the case of a multi-touch event. One index = one finger.
+get_index ::
+            (InputEventScreenTouch :< cls, Object :< cls) => cls -> IO Int
+get_index cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventScreenTouch_get_index
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindInputEventScreenTouch_get_position #-}
+
+-- | Touch position.
+bindInputEventScreenTouch_get_position :: MethodBind
+bindInputEventScreenTouch_get_position
+  = unsafePerformIO $
+      withCString "InputEventScreenTouch" $
+        \ clsNamePtr ->
+          withCString "get_position" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Touch position.
+get_position ::
+               (InputEventScreenTouch :< cls, Object :< cls) => cls -> IO Vector2
+get_position cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindInputEventScreenTouch_get_position
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindInputEventScreenTouch_set_index #-}
 
 -- | Touch index in the case of a multi-touch event. One index = one finger.
@@ -64,30 +112,6 @@ set_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindInputEventScreenTouch_get_index #-}
-
--- | Touch index in the case of a multi-touch event. One index = one finger.
-bindInputEventScreenTouch_get_index :: MethodBind
-bindInputEventScreenTouch_get_index
-  = unsafePerformIO $
-      withCString "InputEventScreenTouch" $
-        \ clsNamePtr ->
-          withCString "get_index" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Touch index in the case of a multi-touch event. One index = one finger.
-get_index ::
-            (InputEventScreenTouch :< cls, Object :< cls) => cls -> IO Int
-get_index cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindInputEventScreenTouch_get_index
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindInputEventScreenTouch_set_position #-}
 
 -- | Touch position.
@@ -108,30 +132,6 @@ set_position cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindInputEventScreenTouch_set_position
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindInputEventScreenTouch_get_position #-}
-
--- | Touch position.
-bindInputEventScreenTouch_get_position :: MethodBind
-bindInputEventScreenTouch_get_position
-  = unsafePerformIO $
-      withCString "InputEventScreenTouch" $
-        \ clsNamePtr ->
-          withCString "get_position" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Touch position.
-get_position ::
-               (InputEventScreenTouch :< cls, Object :< cls) => cls -> IO Vector2
-get_position cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindInputEventScreenTouch_get_position
            (upcast cls)
            arrPtr
            len

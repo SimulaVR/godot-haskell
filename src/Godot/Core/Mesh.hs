@@ -38,16 +38,17 @@ module Godot.Core.Mesh
         Godot.Core.Mesh._ARRAY_FORMAT_WEIGHTS,
         Godot.Core.Mesh._ARRAY_FORMAT_TANGENT,
         Godot.Core.Mesh._PRIMITIVE_POINTS,
-        Godot.Core.Mesh.set_lightmap_size_hint,
-        Godot.Core.Mesh.get_lightmap_size_hint,
+        Godot.Core.Mesh.create_convex_shape,
+        Godot.Core.Mesh.create_outline,
+        Godot.Core.Mesh.create_trimesh_shape,
+        Godot.Core.Mesh.generate_triangle_mesh, Godot.Core.Mesh.get_aabb,
+        Godot.Core.Mesh.get_faces, Godot.Core.Mesh.get_lightmap_size_hint,
         Godot.Core.Mesh.get_surface_count,
+        Godot.Core.Mesh.set_lightmap_size_hint,
         Godot.Core.Mesh.surface_get_arrays,
         Godot.Core.Mesh.surface_get_blend_shape_arrays,
         Godot.Core.Mesh.surface_get_material,
-        Godot.Core.Mesh.create_trimesh_shape,
-        Godot.Core.Mesh.create_convex_shape,
-        Godot.Core.Mesh.create_outline, Godot.Core.Mesh.get_faces,
-        Godot.Core.Mesh.generate_triangle_mesh)
+        Godot.Core.Mesh.surface_set_material)
        where
 import Data.Coerce
 import Foreign.C
@@ -179,25 +180,134 @@ _ARRAY_FORMAT_TANGENT = 4
 _PRIMITIVE_POINTS :: Int
 _PRIMITIVE_POINTS = 0
 
-{-# NOINLINE bindMesh_set_lightmap_size_hint #-}
+{-# NOINLINE bindMesh_create_convex_shape #-}
 
-bindMesh_set_lightmap_size_hint :: MethodBind
-bindMesh_set_lightmap_size_hint
+-- | Calculate a [ConvexPolygonShape] from the mesh.
+bindMesh_create_convex_shape :: MethodBind
+bindMesh_create_convex_shape
   = unsafePerformIO $
       withCString "Mesh" $
         \ clsNamePtr ->
-          withCString "set_lightmap_size_hint" $
+          withCString "create_convex_shape" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_lightmap_size_hint ::
-                         (Mesh :< cls, Object :< cls) => cls -> Vector2 -> IO ()
-set_lightmap_size_hint cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Calculate a [ConvexPolygonShape] from the mesh.
+create_convex_shape ::
+                      (Mesh :< cls, Object :< cls) => cls -> IO Shape
+create_convex_shape cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMesh_set_lightmap_size_hint (upcast cls)
+         godot_method_bind_call bindMesh_create_convex_shape (upcast cls)
            arrPtr
            len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMesh_create_outline #-}
+
+-- | Calculate an outline mesh at a defined offset (margin) from the original mesh. Note: Typically returns the vertices in reverse order (e.g. clockwise to anti-clockwise).
+bindMesh_create_outline :: MethodBind
+bindMesh_create_outline
+  = unsafePerformIO $
+      withCString "Mesh" $
+        \ clsNamePtr ->
+          withCString "create_outline" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Calculate an outline mesh at a defined offset (margin) from the original mesh. Note: Typically returns the vertices in reverse order (e.g. clockwise to anti-clockwise).
+create_outline ::
+                 (Mesh :< cls, Object :< cls) => cls -> Float -> IO Mesh
+create_outline cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMesh_create_outline (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMesh_create_trimesh_shape #-}
+
+-- | Calculate a [ConcavePolygonShape] from the mesh.
+bindMesh_create_trimesh_shape :: MethodBind
+bindMesh_create_trimesh_shape
+  = unsafePerformIO $
+      withCString "Mesh" $
+        \ clsNamePtr ->
+          withCString "create_trimesh_shape" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Calculate a [ConcavePolygonShape] from the mesh.
+create_trimesh_shape ::
+                       (Mesh :< cls, Object :< cls) => cls -> IO Shape
+create_trimesh_shape cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMesh_create_trimesh_shape (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMesh_generate_triangle_mesh #-}
+
+-- | Generate a [TriangleMesh] from the mesh.
+bindMesh_generate_triangle_mesh :: MethodBind
+bindMesh_generate_triangle_mesh
+  = unsafePerformIO $
+      withCString "Mesh" $
+        \ clsNamePtr ->
+          withCString "generate_triangle_mesh" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Generate a [TriangleMesh] from the mesh.
+generate_triangle_mesh ::
+                         (Mesh :< cls, Object :< cls) => cls -> IO TriangleMesh
+generate_triangle_mesh cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMesh_generate_triangle_mesh (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMesh_get_aabb #-}
+
+bindMesh_get_aabb :: MethodBind
+bindMesh_get_aabb
+  = unsafePerformIO $
+      withCString "Mesh" $
+        \ clsNamePtr ->
+          withCString "get_aabb" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_aabb :: (Mesh :< cls, Object :< cls) => cls -> IO Aabb
+get_aabb cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMesh_get_aabb (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMesh_get_faces #-}
+
+-- | Returns all the vertices that make up the faces of the mesh. Each three vertices represent one triangle.
+bindMesh_get_faces :: MethodBind
+bindMesh_get_faces
+  = unsafePerformIO $
+      withCString "Mesh" $
+        \ clsNamePtr ->
+          withCString "get_faces" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns all the vertices that make up the faces of the mesh. Each three vertices represent one triangle.
+get_faces ::
+            (Mesh :< cls, Object :< cls) => cls -> IO PoolVector3Array
+get_faces cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMesh_get_faces (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindMesh_get_lightmap_size_hint #-}
@@ -223,7 +333,7 @@ get_lightmap_size_hint cls
 
 {-# NOINLINE bindMesh_get_surface_count #-}
 
--- | Return the amount of surfaces that the [code]Mesh[/code] holds.
+-- | Returns the amount of surfaces that the [code]Mesh[/code] holds.
 bindMesh_get_surface_count :: MethodBind
 bindMesh_get_surface_count
   = unsafePerformIO $
@@ -233,12 +343,33 @@ bindMesh_get_surface_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return the amount of surfaces that the [code]Mesh[/code] holds.
+-- | Returns the amount of surfaces that the [code]Mesh[/code] holds.
 get_surface_count :: (Mesh :< cls, Object :< cls) => cls -> IO Int
 get_surface_count cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindMesh_get_surface_count (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMesh_set_lightmap_size_hint #-}
+
+bindMesh_set_lightmap_size_hint :: MethodBind
+bindMesh_set_lightmap_size_hint
+  = unsafePerformIO $
+      withCString "Mesh" $
+        \ clsNamePtr ->
+          withCString "set_lightmap_size_hint" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_lightmap_size_hint ::
+                         (Mesh :< cls, Object :< cls) => cls -> Vector2 -> IO ()
+set_lightmap_size_hint cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMesh_set_lightmap_size_hint (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -292,7 +423,7 @@ surface_get_blend_shape_arrays cls arg1
 
 {-# NOINLINE bindMesh_surface_get_material #-}
 
--- | Return a [Material] in a given surface. Surface is rendered using this material.
+-- | Returns a [Material] in a given surface. Surface is rendered using this material.
 bindMesh_surface_get_material :: MethodBind
 bindMesh_surface_get_material
   = unsafePerformIO $
@@ -302,7 +433,7 @@ bindMesh_surface_get_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return a [Material] in a given surface. Surface is rendered using this material.
+-- | Returns a [Material] in a given surface. Surface is rendered using this material.
 surface_get_material ::
                        (Mesh :< cls, Object :< cls) => cls -> Int -> IO Material
 surface_get_material cls arg1
@@ -313,114 +444,23 @@ surface_get_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMesh_create_trimesh_shape #-}
+{-# NOINLINE bindMesh_surface_set_material #-}
 
--- | Calculate a [ConcavePolygonShape] from the mesh.
-bindMesh_create_trimesh_shape :: MethodBind
-bindMesh_create_trimesh_shape
+bindMesh_surface_set_material :: MethodBind
+bindMesh_surface_set_material
   = unsafePerformIO $
       withCString "Mesh" $
         \ clsNamePtr ->
-          withCString "create_trimesh_shape" $
+          withCString "surface_set_material" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calculate a [ConcavePolygonShape] from the mesh.
-create_trimesh_shape ::
-                       (Mesh :< cls, Object :< cls) => cls -> IO Shape
-create_trimesh_shape cls
-  = withVariantArray []
+surface_set_material ::
+                       (Mesh :< cls, Object :< cls) => cls -> Int -> Material -> IO ()
+surface_set_material cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMesh_create_trimesh_shape (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindMesh_create_convex_shape #-}
-
--- | Calculate a [ConvexPolygonShape] from the mesh.
-bindMesh_create_convex_shape :: MethodBind
-bindMesh_create_convex_shape
-  = unsafePerformIO $
-      withCString "Mesh" $
-        \ clsNamePtr ->
-          withCString "create_convex_shape" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Calculate a [ConvexPolygonShape] from the mesh.
-create_convex_shape ::
-                      (Mesh :< cls, Object :< cls) => cls -> IO Shape
-create_convex_shape cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindMesh_create_convex_shape (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindMesh_create_outline #-}
-
--- | Calculate an outline mesh at a defined offset (margin) from the original mesh. Note: Typically returns the vertices in reverse order (e.g. clockwise to anti-clockwise).
-bindMesh_create_outline :: MethodBind
-bindMesh_create_outline
-  = unsafePerformIO $
-      withCString "Mesh" $
-        \ clsNamePtr ->
-          withCString "create_outline" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Calculate an outline mesh at a defined offset (margin) from the original mesh. Note: Typically returns the vertices in reverse order (e.g. clockwise to anti-clockwise).
-create_outline ::
-                 (Mesh :< cls, Object :< cls) => cls -> Float -> IO Mesh
-create_outline cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindMesh_create_outline (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindMesh_get_faces #-}
-
--- | Returns all the vertices that make up the faces of the mesh. Each three vertices represent one triangle.
-bindMesh_get_faces :: MethodBind
-bindMesh_get_faces
-  = unsafePerformIO $
-      withCString "Mesh" $
-        \ clsNamePtr ->
-          withCString "get_faces" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns all the vertices that make up the faces of the mesh. Each three vertices represent one triangle.
-get_faces ::
-            (Mesh :< cls, Object :< cls) => cls -> IO PoolVector3Array
-get_faces cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindMesh_get_faces (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindMesh_generate_triangle_mesh #-}
-
--- | Generate a [TriangleMesh] from the mesh.
-bindMesh_generate_triangle_mesh :: MethodBind
-bindMesh_generate_triangle_mesh
-  = unsafePerformIO $
-      withCString "Mesh" $
-        \ clsNamePtr ->
-          withCString "generate_triangle_mesh" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Generate a [TriangleMesh] from the mesh.
-generate_triangle_mesh ::
-                         (Mesh :< cls, Object :< cls) => cls -> IO TriangleMesh
-generate_triangle_mesh cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindMesh_generate_triangle_mesh (upcast cls)
+         godot_method_bind_call bindMesh_surface_set_material (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

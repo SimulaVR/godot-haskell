@@ -82,22 +82,24 @@ module Godot.Core.HTTPClient
         Godot.Core.HTTPClient._METHOD_GET,
         Godot.Core.HTTPClient._RESPONSE_PROXY_AUTHENTICATION_REQUIRED,
         Godot.Core.HTTPClient._RESPONSE_PARTIAL_CONTENT,
-        Godot.Core.HTTPClient.connect_to_host,
-        Godot.Core.HTTPClient.set_connection,
+        Godot.Core.HTTPClient.close, Godot.Core.HTTPClient.connect_to_host,
         Godot.Core.HTTPClient.get_connection,
-        Godot.Core.HTTPClient.request_raw, Godot.Core.HTTPClient.request,
-        Godot.Core.HTTPClient.close, Godot.Core.HTTPClient.has_response,
-        Godot.Core.HTTPClient.is_response_chunked,
+        Godot.Core.HTTPClient.get_read_chunk_size,
+        Godot.Core.HTTPClient.get_response_body_length,
         Godot.Core.HTTPClient.get_response_code,
         Godot.Core.HTTPClient.get_response_headers,
         Godot.Core.HTTPClient.get_response_headers_as_dictionary,
-        Godot.Core.HTTPClient.get_response_body_length,
-        Godot.Core.HTTPClient.read_response_body_chunk,
-        Godot.Core.HTTPClient.set_read_chunk_size,
-        Godot.Core.HTTPClient.set_blocking_mode,
+        Godot.Core.HTTPClient.get_status,
+        Godot.Core.HTTPClient.has_response,
         Godot.Core.HTTPClient.is_blocking_mode_enabled,
-        Godot.Core.HTTPClient.get_status, Godot.Core.HTTPClient.poll,
-        Godot.Core.HTTPClient.query_string_from_dict)
+        Godot.Core.HTTPClient.is_response_chunked,
+        Godot.Core.HTTPClient.poll,
+        Godot.Core.HTTPClient.query_string_from_dict,
+        Godot.Core.HTTPClient.read_response_body_chunk,
+        Godot.Core.HTTPClient.request, Godot.Core.HTTPClient.request_raw,
+        Godot.Core.HTTPClient.set_blocking_mode,
+        Godot.Core.HTTPClient.set_connection,
+        Godot.Core.HTTPClient.set_read_chunk_size)
        where
 import Data.Coerce
 import Foreign.C
@@ -349,6 +351,26 @@ _RESPONSE_PROXY_AUTHENTICATION_REQUIRED = 407
 _RESPONSE_PARTIAL_CONTENT :: Int
 _RESPONSE_PARTIAL_CONTENT = 206
 
+{-# NOINLINE bindHTTPClient_close #-}
+
+-- | Closes the current connection, allowing reuse of this [code]HTTPClient[/code].
+bindHTTPClient_close :: MethodBind
+bindHTTPClient_close
+  = unsafePerformIO $
+      withCString "HTTPClient" $
+        \ clsNamePtr ->
+          withCString "close" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Closes the current connection, allowing reuse of this [code]HTTPClient[/code].
+close :: (HTTPClient :< cls, Object :< cls) => cls -> IO ()
+close cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindHTTPClient_close (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindHTTPClient_connect_to_host #-}
 
 -- | Connect to a host. This needs to be done before any requests are sent.
@@ -380,29 +402,6 @@ connect_to_host cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindHTTPClient_set_connection #-}
-
--- | The connection to use for this client.
-bindHTTPClient_set_connection :: MethodBind
-bindHTTPClient_set_connection
-  = unsafePerformIO $
-      withCString "HTTPClient" $
-        \ clsNamePtr ->
-          withCString "set_connection" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The connection to use for this client.
-set_connection ::
-                 (HTTPClient :< cls, Object :< cls) => cls -> StreamPeer -> IO ()
-set_connection cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_set_connection (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindHTTPClient_get_connection #-}
 
 -- | The connection to use for this client.
@@ -426,139 +425,47 @@ get_connection cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindHTTPClient_request_raw #-}
+{-# NOINLINE bindHTTPClient_get_read_chunk_size #-}
 
--- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
---   				Sends the body data raw, as a byte array and does not encode it in any way.
-bindHTTPClient_request_raw :: MethodBind
-bindHTTPClient_request_raw
+bindHTTPClient_get_read_chunk_size :: MethodBind
+bindHTTPClient_get_read_chunk_size
   = unsafePerformIO $
       withCString "HTTPClient" $
         \ clsNamePtr ->
-          withCString "request_raw" $
+          withCString "get_read_chunk_size" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
---   				Sends the body data raw, as a byte array and does not encode it in any way.
-request_raw ::
-              (HTTPClient :< cls, Object :< cls) =>
-              cls ->
-                Int -> GodotString -> PoolStringArray -> PoolByteArray -> IO Int
-request_raw cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+get_read_chunk_size ::
+                      (HTTPClient :< cls, Object :< cls) => cls -> IO Int
+get_read_chunk_size cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_request_raw (upcast cls)
+         godot_method_bind_call bindHTTPClient_get_read_chunk_size
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindHTTPClient_request #-}
+{-# NOINLINE bindHTTPClient_get_response_body_length #-}
 
--- | Sends a request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
---   				To create a POST request with query strings to push to the server, do:
---   				[codeblock]
---   				var fields = {"username" : "user", "password" : "pass"}
---   				var query_string = http_client.query_string_from_dict(fields)
---   				var headers = ["Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())]
---   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
---   				[/codeblock]
-bindHTTPClient_request :: MethodBind
-bindHTTPClient_request
+-- | Returns the response's body length.
+bindHTTPClient_get_response_body_length :: MethodBind
+bindHTTPClient_get_response_body_length
   = unsafePerformIO $
       withCString "HTTPClient" $
         \ clsNamePtr ->
-          withCString "request" $
+          withCString "get_response_body_length" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends a request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
---   				To create a POST request with query strings to push to the server, do:
---   				[codeblock]
---   				var fields = {"username" : "user", "password" : "pass"}
---   				var query_string = http_client.query_string_from_dict(fields)
---   				var headers = ["Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())]
---   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
---   				[/codeblock]
-request ::
-          (HTTPClient :< cls, Object :< cls) =>
-          cls ->
-            Int -> GodotString -> PoolStringArray -> GodotString -> IO Int
-request cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_request (upcast cls) arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindHTTPClient_close #-}
-
--- | Closes the current connection, allowing reuse of this [code]HTTPClient[/code].
-bindHTTPClient_close :: MethodBind
-bindHTTPClient_close
-  = unsafePerformIO $
-      withCString "HTTPClient" $
-        \ clsNamePtr ->
-          withCString "close" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Closes the current connection, allowing reuse of this [code]HTTPClient[/code].
-close :: (HTTPClient :< cls, Object :< cls) => cls -> IO ()
-close cls
+-- | Returns the response's body length.
+get_response_body_length ::
+                           (HTTPClient :< cls, Object :< cls) => cls -> IO Int
+get_response_body_length cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_close (upcast cls) arrPtr len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindHTTPClient_has_response #-}
-
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response available.
-bindHTTPClient_has_response :: MethodBind
-bindHTTPClient_has_response
-  = unsafePerformIO $
-      withCString "HTTPClient" $
-        \ clsNamePtr ->
-          withCString "has_response" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response available.
-has_response ::
-               (HTTPClient :< cls, Object :< cls) => cls -> IO Bool
-has_response cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_has_response (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindHTTPClient_is_response_chunked #-}
-
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response that is chunked.
-bindHTTPClient_is_response_chunked :: MethodBind
-bindHTTPClient_is_response_chunked
-  = unsafePerformIO $
-      withCString "HTTPClient" $
-        \ clsNamePtr ->
-          withCString "is_response_chunked" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response that is chunked.
-is_response_chunked ::
-                      (HTTPClient :< cls, Object :< cls) => cls -> IO Bool
-is_response_chunked cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_is_response_chunked
+         godot_method_bind_call bindHTTPClient_get_response_body_length
            (upcast cls)
            arrPtr
            len
@@ -641,98 +548,47 @@ get_response_headers_as_dictionary cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindHTTPClient_get_response_body_length #-}
+{-# NOINLINE bindHTTPClient_get_status #-}
 
--- | Returns the response's body length.
-bindHTTPClient_get_response_body_length :: MethodBind
-bindHTTPClient_get_response_body_length
+-- | Returns a STATUS_* enum constant. Need to call [method poll] in order to get status updates.
+bindHTTPClient_get_status :: MethodBind
+bindHTTPClient_get_status
   = unsafePerformIO $
       withCString "HTTPClient" $
         \ clsNamePtr ->
-          withCString "get_response_body_length" $
+          withCString "get_status" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the response's body length.
-get_response_body_length ::
-                           (HTTPClient :< cls, Object :< cls) => cls -> IO Int
-get_response_body_length cls
+-- | Returns a STATUS_* enum constant. Need to call [method poll] in order to get status updates.
+get_status :: (HTTPClient :< cls, Object :< cls) => cls -> IO Int
+get_status cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_get_response_body_length
-           (upcast cls)
+         godot_method_bind_call bindHTTPClient_get_status (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindHTTPClient_read_response_body_chunk #-}
+{-# NOINLINE bindHTTPClient_has_response #-}
 
--- | Reads one chunk from the response.
-bindHTTPClient_read_response_body_chunk :: MethodBind
-bindHTTPClient_read_response_body_chunk
+-- | If [code]true[/code], this [code]HTTPClient[/code] has a response available.
+bindHTTPClient_has_response :: MethodBind
+bindHTTPClient_has_response
   = unsafePerformIO $
       withCString "HTTPClient" $
         \ clsNamePtr ->
-          withCString "read_response_body_chunk" $
+          withCString "has_response" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Reads one chunk from the response.
-read_response_body_chunk ::
-                           (HTTPClient :< cls, Object :< cls) => cls -> IO PoolByteArray
-read_response_body_chunk cls
+-- | If [code]true[/code], this [code]HTTPClient[/code] has a response available.
+has_response ::
+               (HTTPClient :< cls, Object :< cls) => cls -> IO Bool
+has_response cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_read_response_body_chunk
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindHTTPClient_set_read_chunk_size #-}
-
--- | Sets the size of the buffer used and maximum bytes to read per iteration. see [method read_response_body_chunk]
-bindHTTPClient_set_read_chunk_size :: MethodBind
-bindHTTPClient_set_read_chunk_size
-  = unsafePerformIO $
-      withCString "HTTPClient" $
-        \ clsNamePtr ->
-          withCString "set_read_chunk_size" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Sets the size of the buffer used and maximum bytes to read per iteration. see [method read_response_body_chunk]
-set_read_chunk_size ::
-                      (HTTPClient :< cls, Object :< cls) => cls -> Int -> IO ()
-set_read_chunk_size cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_set_read_chunk_size
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindHTTPClient_set_blocking_mode #-}
-
--- | If [code]true[/code], execution will block until all data is read from the response.
-bindHTTPClient_set_blocking_mode :: MethodBind
-bindHTTPClient_set_blocking_mode
-  = unsafePerformIO $
-      withCString "HTTPClient" $
-        \ clsNamePtr ->
-          withCString "set_blocking_mode" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | If [code]true[/code], execution will block until all data is read from the response.
-set_blocking_mode ::
-                    (HTTPClient :< cls, Object :< cls) => cls -> Bool -> IO ()
-set_blocking_mode cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_set_blocking_mode
-           (upcast cls)
+         godot_method_bind_call bindHTTPClient_has_response (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -761,24 +617,26 @@ is_blocking_mode_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindHTTPClient_get_status #-}
+{-# NOINLINE bindHTTPClient_is_response_chunked #-}
 
--- | Returns a STATUS_* enum constant. Need to call [method poll] in order to get status updates.
-bindHTTPClient_get_status :: MethodBind
-bindHTTPClient_get_status
+-- | If [code]true[/code], this [code]HTTPClient[/code] has a response that is chunked.
+bindHTTPClient_is_response_chunked :: MethodBind
+bindHTTPClient_is_response_chunked
   = unsafePerformIO $
       withCString "HTTPClient" $
         \ clsNamePtr ->
-          withCString "get_status" $
+          withCString "is_response_chunked" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a STATUS_* enum constant. Need to call [method poll] in order to get status updates.
-get_status :: (HTTPClient :< cls, Object :< cls) => cls -> IO Int
-get_status cls
+-- | If [code]true[/code], this [code]HTTPClient[/code] has a response that is chunked.
+is_response_chunked ::
+                      (HTTPClient :< cls, Object :< cls) => cls -> IO Bool
+is_response_chunked cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindHTTPClient_get_status (upcast cls)
+         godot_method_bind_call bindHTTPClient_is_response_chunked
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -845,6 +703,172 @@ query_string_from_dict cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindHTTPClient_query_string_from_dict
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindHTTPClient_read_response_body_chunk #-}
+
+-- | Reads one chunk from the response.
+bindHTTPClient_read_response_body_chunk :: MethodBind
+bindHTTPClient_read_response_body_chunk
+  = unsafePerformIO $
+      withCString "HTTPClient" $
+        \ clsNamePtr ->
+          withCString "read_response_body_chunk" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Reads one chunk from the response.
+read_response_body_chunk ::
+                           (HTTPClient :< cls, Object :< cls) => cls -> IO PoolByteArray
+read_response_body_chunk cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindHTTPClient_read_response_body_chunk
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindHTTPClient_request #-}
+
+-- | Sends a request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				To create a POST request with query strings to push to the server, do:
+--   				[codeblock]
+--   				var fields = {"username" : "user", "password" : "pass"}
+--   				var query_string = http_client.query_string_from_dict(fields)
+--   				var headers = ["Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())]
+--   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
+--   				[/codeblock]
+bindHTTPClient_request :: MethodBind
+bindHTTPClient_request
+  = unsafePerformIO $
+      withCString "HTTPClient" $
+        \ clsNamePtr ->
+          withCString "request" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sends a request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				To create a POST request with query strings to push to the server, do:
+--   				[codeblock]
+--   				var fields = {"username" : "user", "password" : "pass"}
+--   				var query_string = http_client.query_string_from_dict(fields)
+--   				var headers = ["Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())]
+--   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
+--   				[/codeblock]
+request ::
+          (HTTPClient :< cls, Object :< cls) =>
+          cls ->
+            Int -> GodotString -> PoolStringArray -> GodotString -> IO Int
+request cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindHTTPClient_request (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindHTTPClient_request_raw #-}
+
+-- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				Sends the body data raw, as a byte array and does not encode it in any way.
+bindHTTPClient_request_raw :: MethodBind
+bindHTTPClient_request_raw
+  = unsafePerformIO $
+      withCString "HTTPClient" $
+        \ clsNamePtr ->
+          withCString "request_raw" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				Sends the body data raw, as a byte array and does not encode it in any way.
+request_raw ::
+              (HTTPClient :< cls, Object :< cls) =>
+              cls ->
+                Int -> GodotString -> PoolStringArray -> PoolByteArray -> IO Int
+request_raw cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindHTTPClient_request_raw (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindHTTPClient_set_blocking_mode #-}
+
+-- | If [code]true[/code], execution will block until all data is read from the response.
+bindHTTPClient_set_blocking_mode :: MethodBind
+bindHTTPClient_set_blocking_mode
+  = unsafePerformIO $
+      withCString "HTTPClient" $
+        \ clsNamePtr ->
+          withCString "set_blocking_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If [code]true[/code], execution will block until all data is read from the response.
+set_blocking_mode ::
+                    (HTTPClient :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_blocking_mode cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindHTTPClient_set_blocking_mode
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindHTTPClient_set_connection #-}
+
+-- | The connection to use for this client.
+bindHTTPClient_set_connection :: MethodBind
+bindHTTPClient_set_connection
+  = unsafePerformIO $
+      withCString "HTTPClient" $
+        \ clsNamePtr ->
+          withCString "set_connection" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The connection to use for this client.
+set_connection ::
+                 (HTTPClient :< cls, Object :< cls) => cls -> StreamPeer -> IO ()
+set_connection cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindHTTPClient_set_connection (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindHTTPClient_set_read_chunk_size #-}
+
+-- | Sets the size of the buffer used and maximum bytes to read per iteration. see [method read_response_body_chunk]
+bindHTTPClient_set_read_chunk_size :: MethodBind
+bindHTTPClient_set_read_chunk_size
+  = unsafePerformIO $
+      withCString "HTTPClient" $
+        \ clsNamePtr ->
+          withCString "set_read_chunk_size" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Sets the size of the buffer used and maximum bytes to read per iteration. see [method read_response_body_chunk]
+set_read_chunk_size ::
+                      (HTTPClient :< cls, Object :< cls) => cls -> Int -> IO ()
+set_read_chunk_size cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindHTTPClient_set_read_chunk_size
            (upcast cls)
            arrPtr
            len

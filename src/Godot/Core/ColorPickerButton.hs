@@ -1,16 +1,17 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.ColorPickerButton
-       (Godot.Core.ColorPickerButton.sig_popup_closed,
-        Godot.Core.ColorPickerButton.sig_color_changed,
-        Godot.Core.ColorPickerButton.set_pick_color,
+       (Godot.Core.ColorPickerButton.sig_color_changed,
+        Godot.Core.ColorPickerButton.sig_picker_created,
+        Godot.Core.ColorPickerButton.sig_popup_closed,
+        Godot.Core.ColorPickerButton._color_changed,
+        Godot.Core.ColorPickerButton._modal_closed,
         Godot.Core.ColorPickerButton.get_pick_color,
         Godot.Core.ColorPickerButton.get_picker,
         Godot.Core.ColorPickerButton.get_popup,
-        Godot.Core.ColorPickerButton.set_edit_alpha,
         Godot.Core.ColorPickerButton.is_editing_alpha,
-        Godot.Core.ColorPickerButton._color_changed,
-        Godot.Core.ColorPickerButton._modal_closed)
+        Godot.Core.ColorPickerButton.set_edit_alpha,
+        Godot.Core.ColorPickerButton.set_pick_color)
        where
 import Data.Coerce
 import Foreign.C
@@ -19,34 +20,59 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-sig_popup_closed ::
-                 Godot.Internal.Dispatch.Signal ColorPickerButton
-sig_popup_closed = Godot.Internal.Dispatch.Signal "popup_closed"
-
 -- | Emitted when the color changes.
 sig_color_changed ::
                   Godot.Internal.Dispatch.Signal ColorPickerButton
 sig_color_changed = Godot.Internal.Dispatch.Signal "color_changed"
 
-{-# NOINLINE bindColorPickerButton_set_pick_color #-}
+sig_picker_created ::
+                   Godot.Internal.Dispatch.Signal ColorPickerButton
+sig_picker_created
+  = Godot.Internal.Dispatch.Signal "picker_created"
 
--- | The currently selected color.
-bindColorPickerButton_set_pick_color :: MethodBind
-bindColorPickerButton_set_pick_color
+sig_popup_closed ::
+                 Godot.Internal.Dispatch.Signal ColorPickerButton
+sig_popup_closed = Godot.Internal.Dispatch.Signal "popup_closed"
+
+{-# NOINLINE bindColorPickerButton__color_changed #-}
+
+bindColorPickerButton__color_changed :: MethodBind
+bindColorPickerButton__color_changed
   = unsafePerformIO $
       withCString "ColorPickerButton" $
         \ clsNamePtr ->
-          withCString "set_pick_color" $
+          withCString "_color_changed" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The currently selected color.
-set_pick_color ::
+_color_changed ::
                  (ColorPickerButton :< cls, Object :< cls) => cls -> Color -> IO ()
-set_pick_color cls arg1
+_color_changed cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindColorPickerButton_set_pick_color
+         godot_method_bind_call bindColorPickerButton__color_changed
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindColorPickerButton__modal_closed #-}
+
+bindColorPickerButton__modal_closed :: MethodBind
+bindColorPickerButton__modal_closed
+  = unsafePerformIO $
+      withCString "ColorPickerButton" $
+        \ clsNamePtr ->
+          withCString "_modal_closed" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+_modal_closed ::
+                (ColorPickerButton :< cls, Object :< cls) => cls -> IO ()
+_modal_closed cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindColorPickerButton__modal_closed
            (upcast cls)
            arrPtr
            len
@@ -123,30 +149,6 @@ get_popup cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindColorPickerButton_set_edit_alpha #-}
-
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
-bindColorPickerButton_set_edit_alpha :: MethodBind
-bindColorPickerButton_set_edit_alpha
-  = unsafePerformIO $
-      withCString "ColorPickerButton" $
-        \ clsNamePtr ->
-          withCString "set_edit_alpha" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
-set_edit_alpha ::
-                 (ColorPickerButton :< cls, Object :< cls) => cls -> Bool -> IO ()
-set_edit_alpha cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindColorPickerButton_set_edit_alpha
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindColorPickerButton_is_editing_alpha #-}
 
 -- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
@@ -171,45 +173,49 @@ is_editing_alpha cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindColorPickerButton__color_changed #-}
+{-# NOINLINE bindColorPickerButton_set_edit_alpha #-}
 
-bindColorPickerButton__color_changed :: MethodBind
-bindColorPickerButton__color_changed
+-- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
+bindColorPickerButton_set_edit_alpha :: MethodBind
+bindColorPickerButton_set_edit_alpha
   = unsafePerformIO $
       withCString "ColorPickerButton" $
         \ clsNamePtr ->
-          withCString "_color_changed" $
+          withCString "set_edit_alpha" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_color_changed ::
-                 (ColorPickerButton :< cls, Object :< cls) => cls -> Color -> IO ()
-_color_changed cls arg1
+-- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
+set_edit_alpha ::
+                 (ColorPickerButton :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_edit_alpha cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindColorPickerButton__color_changed
+         godot_method_bind_call bindColorPickerButton_set_edit_alpha
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindColorPickerButton__modal_closed #-}
+{-# NOINLINE bindColorPickerButton_set_pick_color #-}
 
-bindColorPickerButton__modal_closed :: MethodBind
-bindColorPickerButton__modal_closed
+-- | The currently selected color.
+bindColorPickerButton_set_pick_color :: MethodBind
+bindColorPickerButton_set_pick_color
   = unsafePerformIO $
       withCString "ColorPickerButton" $
         \ clsNamePtr ->
-          withCString "_modal_closed" $
+          withCString "set_pick_color" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_modal_closed ::
-                (ColorPickerButton :< cls, Object :< cls) => cls -> IO ()
-_modal_closed cls
-  = withVariantArray []
+-- | The currently selected color.
+set_pick_color ::
+                 (ColorPickerButton :< cls, Object :< cls) => cls -> Color -> IO ()
+set_pick_color cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindColorPickerButton__modal_closed
+         godot_method_bind_call bindColorPickerButton_set_pick_color
            (upcast cls)
            arrPtr
            len

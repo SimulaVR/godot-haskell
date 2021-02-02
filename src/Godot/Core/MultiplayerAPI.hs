@@ -12,27 +12,30 @@ module Godot.Core.MultiplayerAPI
         Godot.Core.MultiplayerAPI._RPC_MODE_REMOTESYNC,
         Godot.Core.MultiplayerAPI.sig_connected_to_server,
         Godot.Core.MultiplayerAPI.sig_connection_failed,
-        Godot.Core.MultiplayerAPI.sig_network_peer_packet,
-        Godot.Core.MultiplayerAPI.sig_network_peer_disconnected,
         Godot.Core.MultiplayerAPI.sig_network_peer_connected,
+        Godot.Core.MultiplayerAPI.sig_network_peer_disconnected,
+        Godot.Core.MultiplayerAPI.sig_network_peer_packet,
         Godot.Core.MultiplayerAPI.sig_server_disconnected,
-        Godot.Core.MultiplayerAPI.set_root_node,
-        Godot.Core.MultiplayerAPI.send_bytes,
-        Godot.Core.MultiplayerAPI.has_network_peer,
-        Godot.Core.MultiplayerAPI.get_network_peer,
-        Godot.Core.MultiplayerAPI.get_network_unique_id,
-        Godot.Core.MultiplayerAPI.is_network_server,
-        Godot.Core.MultiplayerAPI.get_rpc_sender_id,
         Godot.Core.MultiplayerAPI._add_peer,
-        Godot.Core.MultiplayerAPI._del_peer,
-        Godot.Core.MultiplayerAPI.set_network_peer,
-        Godot.Core.MultiplayerAPI.poll, Godot.Core.MultiplayerAPI.clear,
         Godot.Core.MultiplayerAPI._connected_to_server,
         Godot.Core.MultiplayerAPI._connection_failed,
+        Godot.Core.MultiplayerAPI._del_peer,
         Godot.Core.MultiplayerAPI._server_disconnected,
+        Godot.Core.MultiplayerAPI.clear,
         Godot.Core.MultiplayerAPI.get_network_connected_peers,
+        Godot.Core.MultiplayerAPI.get_network_peer,
+        Godot.Core.MultiplayerAPI.get_network_unique_id,
+        Godot.Core.MultiplayerAPI.get_rpc_sender_id,
+        Godot.Core.MultiplayerAPI.has_network_peer,
+        Godot.Core.MultiplayerAPI.is_network_server,
+        Godot.Core.MultiplayerAPI.is_object_decoding_allowed,
+        Godot.Core.MultiplayerAPI.is_refusing_new_network_connections,
+        Godot.Core.MultiplayerAPI.poll,
+        Godot.Core.MultiplayerAPI.send_bytes,
+        Godot.Core.MultiplayerAPI.set_allow_object_decoding,
+        Godot.Core.MultiplayerAPI.set_network_peer,
         Godot.Core.MultiplayerAPI.set_refuse_new_network_connections,
-        Godot.Core.MultiplayerAPI.is_refusing_new_network_connections)
+        Godot.Core.MultiplayerAPI.set_root_node)
        where
 import Data.Coerce
 import Foreign.C
@@ -80,11 +83,11 @@ sig_connection_failed ::
 sig_connection_failed
   = Godot.Internal.Dispatch.Signal "connection_failed"
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] receive a [code]packet[/code] with custom data (see [method send_bytes]). ID is the peer ID of the peer that sent the packet.
-sig_network_peer_packet ::
-                        Godot.Internal.Dispatch.Signal MultiplayerAPI
-sig_network_peer_packet
-  = Godot.Internal.Dispatch.Signal "network_peer_packet"
+-- | Emitted whenever this MultiplayerAPI's [member network_peer] connects with a new peer. ID is the peer ID of the new peer. Clients get notified when other clients connect to the same server. Upon connecting to a server, a client also receives this signal for the server (with ID being 1).
+sig_network_peer_connected ::
+                           Godot.Internal.Dispatch.Signal MultiplayerAPI
+sig_network_peer_connected
+  = Godot.Internal.Dispatch.Signal "network_peer_connected"
 
 -- | Emitted whenever this MultiplayerAPI's [member network_peer] disconnects from a peer. Clients get notified when other clients disconnect from the same server.
 sig_network_peer_disconnected ::
@@ -92,11 +95,11 @@ sig_network_peer_disconnected ::
 sig_network_peer_disconnected
   = Godot.Internal.Dispatch.Signal "network_peer_disconnected"
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] connects with a new peer. ID is the peer ID of the new peer. Clients get notified when other clients connect to the same server. Upon connecting to a server, a client also receives this signal for the server (with ID being 1).
-sig_network_peer_connected ::
-                           Godot.Internal.Dispatch.Signal MultiplayerAPI
-sig_network_peer_connected
-  = Godot.Internal.Dispatch.Signal "network_peer_connected"
+-- | Emitted whenever this MultiplayerAPI's [member network_peer] receive a [code]packet[/code] with custom data (see [method send_bytes]). ID is the peer ID of the peer that sent the packet.
+sig_network_peer_packet ::
+                        Godot.Internal.Dispatch.Signal MultiplayerAPI
+sig_network_peer_packet
+  = Godot.Internal.Dispatch.Signal "network_peer_packet"
 
 -- | Emitted whenever this MultiplayerAPI's [member network_peer] disconnects from server. Only emitted on clients.
 sig_server_disconnected ::
@@ -104,75 +107,155 @@ sig_server_disconnected ::
 sig_server_disconnected
   = Godot.Internal.Dispatch.Signal "server_disconnected"
 
-{-# NOINLINE bindMultiplayerAPI_set_root_node #-}
+{-# NOINLINE bindMultiplayerAPI__add_peer #-}
 
--- | Sets the base root node to use for RPCs. Instead of an absolute path, a relative path will be used to find the node upon which the RPC should be executed.
---   				This effectively allows to have different branches of the scene tree to be managed by different MultiplayerAPI, allowing for example to run both client and server in the same scene.
-bindMultiplayerAPI_set_root_node :: MethodBind
-bindMultiplayerAPI_set_root_node
+bindMultiplayerAPI__add_peer :: MethodBind
+bindMultiplayerAPI__add_peer
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "set_root_node" $
+          withCString "_add_peer" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the base root node to use for RPCs. Instead of an absolute path, a relative path will be used to find the node upon which the RPC should be executed.
---   				This effectively allows to have different branches of the scene tree to be managed by different MultiplayerAPI, allowing for example to run both client and server in the same scene.
-set_root_node ::
-                (MultiplayerAPI :< cls, Object :< cls) => cls -> Node -> IO ()
-set_root_node cls arg1
+_add_peer ::
+            (MultiplayerAPI :< cls, Object :< cls) => cls -> Int -> IO ()
+_add_peer cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI_set_root_node
+         godot_method_bind_call bindMultiplayerAPI__add_peer (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMultiplayerAPI__connected_to_server #-}
+
+bindMultiplayerAPI__connected_to_server :: MethodBind
+bindMultiplayerAPI__connected_to_server
+  = unsafePerformIO $
+      withCString "MultiplayerAPI" $
+        \ clsNamePtr ->
+          withCString "_connected_to_server" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+_connected_to_server ::
+                       (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
+_connected_to_server cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMultiplayerAPI__connected_to_server
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI_send_bytes #-}
+{-# NOINLINE bindMultiplayerAPI__connection_failed #-}
 
--- | Sends the given raw [code]bytes[/code] to a specific peer identified by [code]id[/code] (see [method NetworkedMultiplayerPeer.set_target_peer]). Default ID is [code]0[/code], i.e. broadcast to all peers.
-bindMultiplayerAPI_send_bytes :: MethodBind
-bindMultiplayerAPI_send_bytes
+bindMultiplayerAPI__connection_failed :: MethodBind
+bindMultiplayerAPI__connection_failed
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "send_bytes" $
+          withCString "_connection_failed" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends the given raw [code]bytes[/code] to a specific peer identified by [code]id[/code] (see [method NetworkedMultiplayerPeer.set_target_peer]). Default ID is [code]0[/code], i.e. broadcast to all peers.
-send_bytes ::
-             (MultiplayerAPI :< cls, Object :< cls) =>
-             cls -> PoolByteArray -> Int -> Int -> IO Int
-send_bytes cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+_connection_failed ::
+                     (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
+_connection_failed cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI_send_bytes (upcast cls)
+         godot_method_bind_call bindMultiplayerAPI__connection_failed
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI_has_network_peer #-}
+{-# NOINLINE bindMultiplayerAPI__del_peer #-}
 
--- | Returns [code]true[/code] if there is a [member network_peer] set.
-bindMultiplayerAPI_has_network_peer :: MethodBind
-bindMultiplayerAPI_has_network_peer
+bindMultiplayerAPI__del_peer :: MethodBind
+bindMultiplayerAPI__del_peer
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "has_network_peer" $
+          withCString "_del_peer" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if there is a [member network_peer] set.
-has_network_peer ::
-                   (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
-has_network_peer cls
+_del_peer ::
+            (MultiplayerAPI :< cls, Object :< cls) => cls -> Int -> IO ()
+_del_peer cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMultiplayerAPI__del_peer (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMultiplayerAPI__server_disconnected #-}
+
+bindMultiplayerAPI__server_disconnected :: MethodBind
+bindMultiplayerAPI__server_disconnected
+  = unsafePerformIO $
+      withCString "MultiplayerAPI" $
+        \ clsNamePtr ->
+          withCString "_server_disconnected" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+_server_disconnected ::
+                       (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
+_server_disconnected cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI_has_network_peer
+         godot_method_bind_call bindMultiplayerAPI__server_disconnected
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMultiplayerAPI_clear #-}
+
+-- | Clears the current MultiplayerAPI network state (you shouldn't call this unless you know what you are doing).
+bindMultiplayerAPI_clear :: MethodBind
+bindMultiplayerAPI_clear
+  = unsafePerformIO $
+      withCString "MultiplayerAPI" $
+        \ clsNamePtr ->
+          withCString "clear" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Clears the current MultiplayerAPI network state (you shouldn't call this unless you know what you are doing).
+clear :: (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
+clear cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMultiplayerAPI_clear (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMultiplayerAPI_get_network_connected_peers #-}
+
+-- | Returns the peer IDs of all connected peers of this MultiplayerAPI's [member network_peer].
+bindMultiplayerAPI_get_network_connected_peers :: MethodBind
+bindMultiplayerAPI_get_network_connected_peers
+  = unsafePerformIO $
+      withCString "MultiplayerAPI" $
+        \ clsNamePtr ->
+          withCString "get_network_connected_peers" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the peer IDs of all connected peers of this MultiplayerAPI's [member network_peer].
+get_network_connected_peers ::
+                              (MultiplayerAPI :< cls, Object :< cls) => cls -> IO PoolIntArray
+get_network_connected_peers cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindMultiplayerAPI_get_network_connected_peers
            (upcast cls)
            arrPtr
            len
@@ -227,30 +310,6 @@ get_network_unique_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI_is_network_server #-}
-
--- | Returns [code]true[/code] if this MultiplayerAPI's [member network_peer] is in server mode (listening for connections).
-bindMultiplayerAPI_is_network_server :: MethodBind
-bindMultiplayerAPI_is_network_server
-  = unsafePerformIO $
-      withCString "MultiplayerAPI" $
-        \ clsNamePtr ->
-          withCString "is_network_server" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns [code]true[/code] if this MultiplayerAPI's [member network_peer] is in server mode (listening for connections).
-is_network_server ::
-                    (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
-is_network_server cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI_is_network_server
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindMultiplayerAPI_get_rpc_sender_id #-}
 
 -- | Returns the sender's peer ID for the RPC currently being executed.
@@ -277,68 +336,103 @@ get_rpc_sender_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI__add_peer #-}
+{-# NOINLINE bindMultiplayerAPI_has_network_peer #-}
 
-bindMultiplayerAPI__add_peer :: MethodBind
-bindMultiplayerAPI__add_peer
+-- | Returns [code]true[/code] if there is a [member network_peer] set.
+bindMultiplayerAPI_has_network_peer :: MethodBind
+bindMultiplayerAPI_has_network_peer
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "_add_peer" $
+          withCString "has_network_peer" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_add_peer ::
-            (MultiplayerAPI :< cls, Object :< cls) => cls -> Int -> IO ()
-_add_peer cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Returns [code]true[/code] if there is a [member network_peer] set.
+has_network_peer ::
+                   (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
+has_network_peer cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI__add_peer (upcast cls)
+         godot_method_bind_call bindMultiplayerAPI_has_network_peer
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI__del_peer #-}
+{-# NOINLINE bindMultiplayerAPI_is_network_server #-}
 
-bindMultiplayerAPI__del_peer :: MethodBind
-bindMultiplayerAPI__del_peer
+-- | Returns [code]true[/code] if this MultiplayerAPI's [member network_peer] is in server mode (listening for connections).
+bindMultiplayerAPI_is_network_server :: MethodBind
+bindMultiplayerAPI_is_network_server
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "_del_peer" $
+          withCString "is_network_server" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_del_peer ::
-            (MultiplayerAPI :< cls, Object :< cls) => cls -> Int -> IO ()
-_del_peer cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Returns [code]true[/code] if this MultiplayerAPI's [member network_peer] is in server mode (listening for connections).
+is_network_server ::
+                    (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
+is_network_server cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI__del_peer (upcast cls)
+         godot_method_bind_call bindMultiplayerAPI_is_network_server
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI_set_network_peer #-}
+{-# NOINLINE bindMultiplayerAPI_is_object_decoding_allowed #-}
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
-bindMultiplayerAPI_set_network_peer :: MethodBind
-bindMultiplayerAPI_set_network_peer
+-- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+bindMultiplayerAPI_is_object_decoding_allowed :: MethodBind
+bindMultiplayerAPI_is_object_decoding_allowed
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "set_network_peer" $
+          withCString "is_object_decoding_allowed" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
-set_network_peer ::
-                   (MultiplayerAPI :< cls, Object :< cls) =>
-                   cls -> NetworkedMultiplayerPeer -> IO ()
-set_network_peer cls arg1
-  = withVariantArray [toVariant arg1]
+-- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+is_object_decoding_allowed ::
+                             (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
+is_object_decoding_allowed cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI_set_network_peer
+         godot_method_bind_call
+           bindMultiplayerAPI_is_object_decoding_allowed
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindMultiplayerAPI_is_refusing_new_network_connections
+             #-}
+
+-- | If [code]true[/code], the MultiplayerAPI's [member network_peer] refuses new incoming connections.
+bindMultiplayerAPI_is_refusing_new_network_connections ::
+                                                       MethodBind
+bindMultiplayerAPI_is_refusing_new_network_connections
+  = unsafePerformIO $
+      withCString "MultiplayerAPI" $
+        \ clsNamePtr ->
+          withCString "is_refusing_new_network_connections" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | If [code]true[/code], the MultiplayerAPI's [member network_peer] refuses new incoming connections.
+is_refusing_new_network_connections ::
+                                      (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
+is_refusing_new_network_connections cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindMultiplayerAPI_is_refusing_new_network_connections
            (upcast cls)
            arrPtr
            len
@@ -367,113 +461,76 @@ poll cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI_clear #-}
+{-# NOINLINE bindMultiplayerAPI_send_bytes #-}
 
--- | Clears the current MultiplayerAPI network state (you shouldn't call this unless you know what you are doing).
-bindMultiplayerAPI_clear :: MethodBind
-bindMultiplayerAPI_clear
+-- | Sends the given raw [code]bytes[/code] to a specific peer identified by [code]id[/code] (see [method NetworkedMultiplayerPeer.set_target_peer]). Default ID is [code]0[/code], i.e. broadcast to all peers.
+bindMultiplayerAPI_send_bytes :: MethodBind
+bindMultiplayerAPI_send_bytes
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "clear" $
+          withCString "send_bytes" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears the current MultiplayerAPI network state (you shouldn't call this unless you know what you are doing).
-clear :: (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
-clear cls
-  = withVariantArray []
+-- | Sends the given raw [code]bytes[/code] to a specific peer identified by [code]id[/code] (see [method NetworkedMultiplayerPeer.set_target_peer]). Default ID is [code]0[/code], i.e. broadcast to all peers.
+send_bytes ::
+             (MultiplayerAPI :< cls, Object :< cls) =>
+             cls -> PoolByteArray -> Int -> Int -> IO Int
+send_bytes cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI_clear (upcast cls) arrPtr
+         godot_method_bind_call bindMultiplayerAPI_send_bytes (upcast cls)
+           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI__connected_to_server #-}
+{-# NOINLINE bindMultiplayerAPI_set_allow_object_decoding #-}
 
-bindMultiplayerAPI__connected_to_server :: MethodBind
-bindMultiplayerAPI__connected_to_server
+-- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+bindMultiplayerAPI_set_allow_object_decoding :: MethodBind
+bindMultiplayerAPI_set_allow_object_decoding
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "_connected_to_server" $
+          withCString "set_allow_object_decoding" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_connected_to_server ::
-                       (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
-_connected_to_server cls
-  = withVariantArray []
+-- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+set_allow_object_decoding ::
+                            (MultiplayerAPI :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_allow_object_decoding cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI__connected_to_server
+         godot_method_bind_call bindMultiplayerAPI_set_allow_object_decoding
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI__connection_failed #-}
+{-# NOINLINE bindMultiplayerAPI_set_network_peer #-}
 
-bindMultiplayerAPI__connection_failed :: MethodBind
-bindMultiplayerAPI__connection_failed
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
+bindMultiplayerAPI_set_network_peer :: MethodBind
+bindMultiplayerAPI_set_network_peer
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "_connection_failed" $
+          withCString "set_network_peer" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_connection_failed ::
-                     (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
-_connection_failed cls
-  = withVariantArray []
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
+set_network_peer ::
+                   (MultiplayerAPI :< cls, Object :< cls) =>
+                   cls -> NetworkedMultiplayerPeer -> IO ()
+set_network_peer cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI__connection_failed
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindMultiplayerAPI__server_disconnected #-}
-
-bindMultiplayerAPI__server_disconnected :: MethodBind
-bindMultiplayerAPI__server_disconnected
-  = unsafePerformIO $
-      withCString "MultiplayerAPI" $
-        \ clsNamePtr ->
-          withCString "_server_disconnected" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-_server_disconnected ::
-                       (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
-_server_disconnected cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindMultiplayerAPI__server_disconnected
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindMultiplayerAPI_get_network_connected_peers #-}
-
--- | Returns the peer IDs of all connected peers of this MultiplayerAPI's [member network_peer].
-bindMultiplayerAPI_get_network_connected_peers :: MethodBind
-bindMultiplayerAPI_get_network_connected_peers
-  = unsafePerformIO $
-      withCString "MultiplayerAPI" $
-        \ clsNamePtr ->
-          withCString "get_network_connected_peers" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the peer IDs of all connected peers of this MultiplayerAPI's [member network_peer].
-get_network_connected_peers ::
-                              (MultiplayerAPI :< cls, Object :< cls) => cls -> IO PoolIntArray
-get_network_connected_peers cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindMultiplayerAPI_get_network_connected_peers
+         godot_method_bind_call bindMultiplayerAPI_set_network_peer
            (upcast cls)
            arrPtr
            len
@@ -505,28 +562,27 @@ set_refuse_new_network_connections cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMultiplayerAPI_is_refusing_new_network_connections
-             #-}
+{-# NOINLINE bindMultiplayerAPI_set_root_node #-}
 
--- | If [code]true[/code], the MultiplayerAPI's [member network_peer] refuses new incoming connections.
-bindMultiplayerAPI_is_refusing_new_network_connections ::
-                                                       MethodBind
-bindMultiplayerAPI_is_refusing_new_network_connections
+-- | Sets the base root node to use for RPCs. Instead of an absolute path, a relative path will be used to find the node upon which the RPC should be executed.
+--   				This effectively allows to have different branches of the scene tree to be managed by different MultiplayerAPI, allowing for example to run both client and server in the same scene.
+bindMultiplayerAPI_set_root_node :: MethodBind
+bindMultiplayerAPI_set_root_node
   = unsafePerformIO $
       withCString "MultiplayerAPI" $
         \ clsNamePtr ->
-          withCString "is_refusing_new_network_connections" $
+          withCString "set_root_node" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the MultiplayerAPI's [member network_peer] refuses new incoming connections.
-is_refusing_new_network_connections ::
-                                      (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
-is_refusing_new_network_connections cls
-  = withVariantArray []
+-- | Sets the base root node to use for RPCs. Instead of an absolute path, a relative path will be used to find the node upon which the RPC should be executed.
+--   				This effectively allows to have different branches of the scene tree to be managed by different MultiplayerAPI, allowing for example to run both client and server in the same scene.
+set_root_node ::
+                (MultiplayerAPI :< cls, Object :< cls) => cls -> Node -> IO ()
+set_root_node cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindMultiplayerAPI_is_refusing_new_network_connections
+         godot_method_bind_call bindMultiplayerAPI_set_root_node
            (upcast cls)
            arrPtr
            len

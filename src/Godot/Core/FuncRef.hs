@@ -1,8 +1,9 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.FuncRef
-       (Godot.Core.FuncRef.call_func, Godot.Core.FuncRef.set_instance,
-        Godot.Core.FuncRef.set_function)
+       (Godot.Core.FuncRef.call_func, Godot.Core.FuncRef.call_funcv,
+        Godot.Core.FuncRef.is_valid, Godot.Core.FuncRef.set_function,
+        Godot.Core.FuncRef.set_instance)
        where
 import Data.Coerce
 import Foreign.C
@@ -34,26 +35,42 @@ call_func cls varargs
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindFuncRef_set_instance #-}
+{-# NOINLINE bindFuncRef_call_funcv #-}
 
--- | The object containing the referenced function. This object must be of a type actually inheriting from [Object], not a built-in type such as [int], [Vector2] or [Dictionary].
-bindFuncRef_set_instance :: MethodBind
-bindFuncRef_set_instance
+bindFuncRef_call_funcv :: MethodBind
+bindFuncRef_call_funcv
   = unsafePerformIO $
       withCString "FuncRef" $
         \ clsNamePtr ->
-          withCString "set_instance" $
+          withCString "call_funcv" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The object containing the referenced function. This object must be of a type actually inheriting from [Object], not a built-in type such as [int], [Vector2] or [Dictionary].
-set_instance ::
-               (FuncRef :< cls, Object :< cls) => cls -> Object -> IO ()
-set_instance cls arg1
+call_funcv ::
+             (FuncRef :< cls, Object :< cls) => cls -> Array -> IO GodotVariant
+call_funcv cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindFuncRef_set_instance (upcast cls) arrPtr
+         godot_method_bind_call bindFuncRef_call_funcv (upcast cls) arrPtr
            len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFuncRef_is_valid #-}
+
+bindFuncRef_is_valid :: MethodBind
+bindFuncRef_is_valid
+  = unsafePerformIO $
+      withCString "FuncRef" $
+        \ clsNamePtr ->
+          withCString "is_valid" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_valid :: (FuncRef :< cls, Object :< cls) => cls -> IO Bool
+is_valid cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFuncRef_is_valid (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindFuncRef_set_function #-}
@@ -75,5 +92,27 @@ set_function cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindFuncRef_set_function (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindFuncRef_set_instance #-}
+
+-- | The object containing the referenced function. This object must be of a type actually inheriting from [Object], not a built-in type such as [int], [Vector2] or [Dictionary].
+bindFuncRef_set_instance :: MethodBind
+bindFuncRef_set_instance
+  = unsafePerformIO $
+      withCString "FuncRef" $
+        \ clsNamePtr ->
+          withCString "set_instance" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The object containing the referenced function. This object must be of a type actually inheriting from [Object], not a built-in type such as [int], [Vector2] or [Dictionary].
+set_instance ::
+               (FuncRef :< cls, Object :< cls) => cls -> Object -> IO ()
+set_instance cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindFuncRef_set_instance (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

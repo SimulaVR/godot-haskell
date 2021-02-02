@@ -1,13 +1,14 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.RandomNumberGenerator
-       (Godot.Core.RandomNumberGenerator.set_seed,
-        Godot.Core.RandomNumberGenerator.get_seed,
-        Godot.Core.RandomNumberGenerator.randi,
+       (Godot.Core.RandomNumberGenerator.get_seed,
         Godot.Core.RandomNumberGenerator.randf,
         Godot.Core.RandomNumberGenerator.randf_range,
+        Godot.Core.RandomNumberGenerator.randfn,
+        Godot.Core.RandomNumberGenerator.randi,
         Godot.Core.RandomNumberGenerator.randi_range,
-        Godot.Core.RandomNumberGenerator.randomize)
+        Godot.Core.RandomNumberGenerator.randomize,
+        Godot.Core.RandomNumberGenerator.set_seed)
        where
 import Data.Coerce
 import Foreign.C
@@ -15,33 +16,6 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
-
-{-# NOINLINE bindRandomNumberGenerator_set_seed #-}
-
--- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
---   			[b]Note:[/b] The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
-bindRandomNumberGenerator_set_seed :: MethodBind
-bindRandomNumberGenerator_set_seed
-  = unsafePerformIO $
-      withCString "RandomNumberGenerator" $
-        \ clsNamePtr ->
-          withCString "set_seed" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
---   			[b]Note:[/b] The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
-set_seed ::
-           (RandomNumberGenerator :< cls, Object :< cls) =>
-           cls -> Int -> IO ()
-set_seed cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindRandomNumberGenerator_set_seed
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindRandomNumberGenerator_get_seed #-}
 
@@ -65,29 +39,6 @@ get_seed cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRandomNumberGenerator_get_seed
            (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindRandomNumberGenerator_randi #-}
-
--- | Generates pseudo-random 32-bit unsigned integer between '0' and '4294967295', inclusive.
-bindRandomNumberGenerator_randi :: MethodBind
-bindRandomNumberGenerator_randi
-  = unsafePerformIO $
-      withCString "RandomNumberGenerator" $
-        \ clsNamePtr ->
-          withCString "randi" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Generates pseudo-random 32-bit unsigned integer between '0' and '4294967295', inclusive.
-randi ::
-        (RandomNumberGenerator :< cls, Object :< cls) => cls -> IO Int
-randi cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindRandomNumberGenerator_randi (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -140,6 +91,54 @@ randf_range cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindRandomNumberGenerator_randfn #-}
+
+-- | Generates normally(gaussian) distributed pseudo-random number, using Box-Muller transform with the specified [code]mean[/code] and a standard [code]deviation[/code].
+bindRandomNumberGenerator_randfn :: MethodBind
+bindRandomNumberGenerator_randfn
+  = unsafePerformIO $
+      withCString "RandomNumberGenerator" $
+        \ clsNamePtr ->
+          withCString "randfn" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Generates normally(gaussian) distributed pseudo-random number, using Box-Muller transform with the specified [code]mean[/code] and a standard [code]deviation[/code].
+randfn ::
+         (RandomNumberGenerator :< cls, Object :< cls) =>
+         cls -> Float -> Float -> IO Float
+randfn cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindRandomNumberGenerator_randfn
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindRandomNumberGenerator_randi #-}
+
+-- | Generates pseudo-random 32-bit unsigned integer between '0' and '4294967295', inclusive.
+bindRandomNumberGenerator_randi :: MethodBind
+bindRandomNumberGenerator_randi
+  = unsafePerformIO $
+      withCString "RandomNumberGenerator" $
+        \ clsNamePtr ->
+          withCString "randi" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Generates pseudo-random 32-bit unsigned integer between '0' and '4294967295', inclusive.
+randi ::
+        (RandomNumberGenerator :< cls, Object :< cls) => cls -> IO Int
+randi cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindRandomNumberGenerator_randi (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindRandomNumberGenerator_randi_range #-}
 
 -- | Generates pseudo-random 32-bit signed integer between [code]from[/code] and [code]to[/code] (inclusive).
@@ -184,6 +183,33 @@ randomize cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRandomNumberGenerator_randomize
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindRandomNumberGenerator_set_seed #-}
+
+-- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
+--   			[b]Note:[/b] The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
+bindRandomNumberGenerator_set_seed :: MethodBind
+bindRandomNumberGenerator_set_seed
+  = unsafePerformIO $
+      withCString "RandomNumberGenerator" $
+        \ clsNamePtr ->
+          withCString "set_seed" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
+--   			[b]Note:[/b] The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
+set_seed ::
+           (RandomNumberGenerator :< cls, Object :< cls) =>
+           cls -> Int -> IO ()
+set_seed cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindRandomNumberGenerator_set_seed
            (upcast cls)
            arrPtr
            len

@@ -3,10 +3,10 @@
 module Godot.Core.Container
        (Godot.Core.Container._NOTIFICATION_SORT_CHILDREN,
         Godot.Core.Container.sig_sort_children,
-        Godot.Core.Container._sort_children,
         Godot.Core.Container._child_minsize_changed,
-        Godot.Core.Container.queue_sort,
-        Godot.Core.Container.fit_child_in_rect)
+        Godot.Core.Container._sort_children,
+        Godot.Core.Container.fit_child_in_rect,
+        Godot.Core.Container.queue_sort)
        where
 import Data.Coerce
 import Foreign.C
@@ -21,26 +21,6 @@ _NOTIFICATION_SORT_CHILDREN = 50
 -- | Emitted when sorting the children is needed.
 sig_sort_children :: Godot.Internal.Dispatch.Signal Container
 sig_sort_children = Godot.Internal.Dispatch.Signal "sort_children"
-
-{-# NOINLINE bindContainer__sort_children #-}
-
-bindContainer__sort_children :: MethodBind
-bindContainer__sort_children
-  = unsafePerformIO $
-      withCString "Container" $
-        \ clsNamePtr ->
-          withCString "_sort_children" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-_sort_children :: (Container :< cls, Object :< cls) => cls -> IO ()
-_sort_children cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindContainer__sort_children (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindContainer__child_minsize_changed #-}
 
@@ -64,24 +44,23 @@ _child_minsize_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindContainer_queue_sort #-}
+{-# NOINLINE bindContainer__sort_children #-}
 
--- | Queue resort of the contained children. This is called automatically anyway, but can be called upon request.
-bindContainer_queue_sort :: MethodBind
-bindContainer_queue_sort
+bindContainer__sort_children :: MethodBind
+bindContainer__sort_children
   = unsafePerformIO $
       withCString "Container" $
         \ clsNamePtr ->
-          withCString "queue_sort" $
+          withCString "_sort_children" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Queue resort of the contained children. This is called automatically anyway, but can be called upon request.
-queue_sort :: (Container :< cls, Object :< cls) => cls -> IO ()
-queue_sort cls
+_sort_children :: (Container :< cls, Object :< cls) => cls -> IO ()
+_sort_children cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindContainer_queue_sort (upcast cls) arrPtr
+         godot_method_bind_call bindContainer__sort_children (upcast cls)
+           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -106,5 +85,26 @@ fit_child_in_rect cls arg1 arg2
       (\ (arrPtr, len) ->
          godot_method_bind_call bindContainer_fit_child_in_rect (upcast cls)
            arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindContainer_queue_sort #-}
+
+-- | Queue resort of the contained children. This is called automatically anyway, but can be called upon request.
+bindContainer_queue_sort :: MethodBind
+bindContainer_queue_sort
+  = unsafePerformIO $
+      withCString "Container" $
+        \ clsNamePtr ->
+          withCString "queue_sort" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Queue resort of the contained children. This is called automatically anyway, but can be called upon request.
+queue_sort :: (Container :< cls, Object :< cls) => cls -> IO ()
+queue_sort cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindContainer_queue_sort (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

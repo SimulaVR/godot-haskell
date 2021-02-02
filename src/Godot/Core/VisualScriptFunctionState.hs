@@ -1,10 +1,10 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.VisualScriptFunctionState
-       (Godot.Core.VisualScriptFunctionState.connect_to_signal,
-        Godot.Core.VisualScriptFunctionState.resume,
+       (Godot.Core.VisualScriptFunctionState._signal_callback,
+        Godot.Core.VisualScriptFunctionState.connect_to_signal,
         Godot.Core.VisualScriptFunctionState.is_valid,
-        Godot.Core.VisualScriptFunctionState._signal_callback)
+        Godot.Core.VisualScriptFunctionState.resume)
        where
 import Data.Coerce
 import Foreign.C
@@ -12,6 +12,30 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+
+{-# NOINLINE bindVisualScriptFunctionState__signal_callback #-}
+
+bindVisualScriptFunctionState__signal_callback :: MethodBind
+bindVisualScriptFunctionState__signal_callback
+  = unsafePerformIO $
+      withCString "VisualScriptFunctionState" $
+        \ clsNamePtr ->
+          withCString "_signal_callback" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+_signal_callback ::
+                   (VisualScriptFunctionState :< cls, Object :< cls) =>
+                   cls -> [Variant 'GodotTy] -> IO GodotVariant
+_signal_callback cls varargs
+  = withVariantArray ([] ++ varargs)
+      (\ (arrPtr, len) ->
+         godot_method_bind_call
+           bindVisualScriptFunctionState__signal_callback
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindVisualScriptFunctionState_connect_to_signal #-}
 
@@ -32,29 +56,6 @@ connect_to_signal cls arg1 arg2 arg3
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindVisualScriptFunctionState_connect_to_signal
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindVisualScriptFunctionState_resume #-}
-
-bindVisualScriptFunctionState_resume :: MethodBind
-bindVisualScriptFunctionState_resume
-  = unsafePerformIO $
-      withCString "VisualScriptFunctionState" $
-        \ clsNamePtr ->
-          withCString "resume" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-resume ::
-         (VisualScriptFunctionState :< cls, Object :< cls) =>
-         cls -> Array -> IO GodotVariant
-resume cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisualScriptFunctionState_resume
            (upcast cls)
            arrPtr
            len
@@ -82,25 +83,24 @@ is_valid cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindVisualScriptFunctionState__signal_callback #-}
+{-# NOINLINE bindVisualScriptFunctionState_resume #-}
 
-bindVisualScriptFunctionState__signal_callback :: MethodBind
-bindVisualScriptFunctionState__signal_callback
+bindVisualScriptFunctionState_resume :: MethodBind
+bindVisualScriptFunctionState_resume
   = unsafePerformIO $
       withCString "VisualScriptFunctionState" $
         \ clsNamePtr ->
-          withCString "_signal_callback" $
+          withCString "resume" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_signal_callback ::
-                   (VisualScriptFunctionState :< cls, Object :< cls) =>
-                   cls -> [Variant 'GodotTy] -> IO GodotVariant
-_signal_callback cls varargs
-  = withVariantArray ([] ++ varargs)
+resume ::
+         (VisualScriptFunctionState :< cls, Object :< cls) =>
+         cls -> Array -> IO GodotVariant
+resume cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindVisualScriptFunctionState__signal_callback
+         godot_method_bind_call bindVisualScriptFunctionState_resume
            (upcast cls)
            arrPtr
            len

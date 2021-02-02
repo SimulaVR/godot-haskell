@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.PhysicsShapeQueryResult
        (Godot.Core.PhysicsShapeQueryResult.get_result_count,
-        Godot.Core.PhysicsShapeQueryResult.get_result_rid,
-        Godot.Core.PhysicsShapeQueryResult.get_result_object_id,
         Godot.Core.PhysicsShapeQueryResult.get_result_object,
-        Godot.Core.PhysicsShapeQueryResult.get_result_object_shape)
+        Godot.Core.PhysicsShapeQueryResult.get_result_object_id,
+        Godot.Core.PhysicsShapeQueryResult.get_result_object_shape,
+        Godot.Core.PhysicsShapeQueryResult.get_result_rid)
        where
 import Data.Coerce
 import Foreign.C
@@ -36,24 +36,25 @@ get_result_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsShapeQueryResult_get_result_rid #-}
+{-# NOINLINE bindPhysicsShapeQueryResult_get_result_object #-}
 
-bindPhysicsShapeQueryResult_get_result_rid :: MethodBind
-bindPhysicsShapeQueryResult_get_result_rid
+bindPhysicsShapeQueryResult_get_result_object :: MethodBind
+bindPhysicsShapeQueryResult_get_result_object
   = unsafePerformIO $
       withCString "PhysicsShapeQueryResult" $
         \ clsNamePtr ->
-          withCString "get_result_rid" $
+          withCString "get_result_object" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_result_rid ::
-                 (PhysicsShapeQueryResult :< cls, Object :< cls) =>
-                 cls -> Int -> IO Rid
-get_result_rid cls arg1
+get_result_object ::
+                    (PhysicsShapeQueryResult :< cls, Object :< cls) =>
+                    cls -> Int -> IO Object
+get_result_object cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysicsShapeQueryResult_get_result_rid
+         godot_method_bind_call
+           bindPhysicsShapeQueryResult_get_result_object
            (upcast cls)
            arrPtr
            len
@@ -83,30 +84,6 @@ get_result_object_id cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindPhysicsShapeQueryResult_get_result_object #-}
-
-bindPhysicsShapeQueryResult_get_result_object :: MethodBind
-bindPhysicsShapeQueryResult_get_result_object
-  = unsafePerformIO $
-      withCString "PhysicsShapeQueryResult" $
-        \ clsNamePtr ->
-          withCString "get_result_object" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_result_object ::
-                    (PhysicsShapeQueryResult :< cls, Object :< cls) =>
-                    cls -> Int -> IO Object
-get_result_object cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call
-           bindPhysicsShapeQueryResult_get_result_object
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_object_shape
              #-}
 
@@ -127,6 +104,29 @@ get_result_object_shape cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindPhysicsShapeQueryResult_get_result_object_shape
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysicsShapeQueryResult_get_result_rid #-}
+
+bindPhysicsShapeQueryResult_get_result_rid :: MethodBind
+bindPhysicsShapeQueryResult_get_result_rid
+  = unsafePerformIO $
+      withCString "PhysicsShapeQueryResult" $
+        \ clsNamePtr ->
+          withCString "get_result_rid" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_result_rid ::
+                 (PhysicsShapeQueryResult :< cls, Object :< cls) =>
+                 cls -> Int -> IO Rid
+get_result_rid cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysicsShapeQueryResult_get_result_rid
            (upcast cls)
            arrPtr
            len

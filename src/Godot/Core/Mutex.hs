@@ -33,7 +33,7 @@ lock cls
 
 {-# NOINLINE bindMutex_try_lock #-}
 
--- | Try locking this [code]Mutex[/code], does not block. Returns [code]OK[/code] on success, [code]ERR_BUSY[/code] otherwise.
+-- | Try locking this [code]Mutex[/code], does not block. Returns [constant @GlobalScope.OK] on success, [constant @GlobalScope.ERR_BUSY] otherwise.
 bindMutex_try_lock :: MethodBind
 bindMutex_try_lock
   = unsafePerformIO $
@@ -43,7 +43,7 @@ bindMutex_try_lock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Try locking this [code]Mutex[/code], does not block. Returns [code]OK[/code] on success, [code]ERR_BUSY[/code] otherwise.
+-- | Try locking this [code]Mutex[/code], does not block. Returns [constant @GlobalScope.OK] on success, [constant @GlobalScope.ERR_BUSY] otherwise.
 try_lock :: (Mutex :< cls, Object :< cls) => cls -> IO Int
 try_lock cls
   = withVariantArray []

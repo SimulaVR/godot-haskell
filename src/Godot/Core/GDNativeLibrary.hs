@@ -2,17 +2,17 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.GDNativeLibrary
        (Godot.Core.GDNativeLibrary.get_config_file,
-        Godot.Core.GDNativeLibrary.set_config_file,
-        Godot.Core.GDNativeLibrary.get_current_library_path,
         Godot.Core.GDNativeLibrary.get_current_dependencies,
-        Godot.Core.GDNativeLibrary.should_load_once,
-        Godot.Core.GDNativeLibrary.is_singleton,
+        Godot.Core.GDNativeLibrary.get_current_library_path,
         Godot.Core.GDNativeLibrary.get_symbol_prefix,
         Godot.Core.GDNativeLibrary.is_reloadable,
+        Godot.Core.GDNativeLibrary.is_singleton,
+        Godot.Core.GDNativeLibrary.set_config_file,
         Godot.Core.GDNativeLibrary.set_load_once,
+        Godot.Core.GDNativeLibrary.set_reloadable,
         Godot.Core.GDNativeLibrary.set_singleton,
         Godot.Core.GDNativeLibrary.set_symbol_prefix,
-        Godot.Core.GDNativeLibrary.set_reloadable)
+        Godot.Core.GDNativeLibrary.should_load_once)
        where
 import Data.Coerce
 import Foreign.C
@@ -43,51 +43,6 @@ get_config_file cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindGDNativeLibrary_set_config_file #-}
-
-bindGDNativeLibrary_set_config_file :: MethodBind
-bindGDNativeLibrary_set_config_file
-  = unsafePerformIO $
-      withCString "GDNativeLibrary" $
-        \ clsNamePtr ->
-          withCString "set_config_file" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_config_file ::
-                  (GDNativeLibrary :< cls, Object :< cls) =>
-                  cls -> ConfigFile -> IO ()
-set_config_file cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDNativeLibrary_set_config_file
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindGDNativeLibrary_get_current_library_path #-}
-
-bindGDNativeLibrary_get_current_library_path :: MethodBind
-bindGDNativeLibrary_get_current_library_path
-  = unsafePerformIO $
-      withCString "GDNativeLibrary" $
-        \ clsNamePtr ->
-          withCString "get_current_library_path" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_current_library_path ::
-                           (GDNativeLibrary :< cls, Object :< cls) => cls -> IO GodotString
-get_current_library_path cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDNativeLibrary_get_current_library_path
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindGDNativeLibrary_get_current_dependencies #-}
 
 bindGDNativeLibrary_get_current_dependencies :: MethodBind
@@ -111,45 +66,23 @@ get_current_dependencies cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindGDNativeLibrary_should_load_once #-}
+{-# NOINLINE bindGDNativeLibrary_get_current_library_path #-}
 
-bindGDNativeLibrary_should_load_once :: MethodBind
-bindGDNativeLibrary_should_load_once
+bindGDNativeLibrary_get_current_library_path :: MethodBind
+bindGDNativeLibrary_get_current_library_path
   = unsafePerformIO $
       withCString "GDNativeLibrary" $
         \ clsNamePtr ->
-          withCString "should_load_once" $
+          withCString "get_current_library_path" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-should_load_once ::
-                   (GDNativeLibrary :< cls, Object :< cls) => cls -> IO Bool
-should_load_once cls
+get_current_library_path ::
+                           (GDNativeLibrary :< cls, Object :< cls) => cls -> IO GodotString
+get_current_library_path cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDNativeLibrary_should_load_once
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindGDNativeLibrary_is_singleton #-}
-
-bindGDNativeLibrary_is_singleton :: MethodBind
-bindGDNativeLibrary_is_singleton
-  = unsafePerformIO $
-      withCString "GDNativeLibrary" $
-        \ clsNamePtr ->
-          withCString "is_singleton" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-is_singleton ::
-               (GDNativeLibrary :< cls, Object :< cls) => cls -> IO Bool
-is_singleton cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDNativeLibrary_is_singleton
+         godot_method_bind_call bindGDNativeLibrary_get_current_library_path
            (upcast cls)
            arrPtr
            len
@@ -199,6 +132,51 @@ is_reloadable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindGDNativeLibrary_is_singleton #-}
+
+bindGDNativeLibrary_is_singleton :: MethodBind
+bindGDNativeLibrary_is_singleton
+  = unsafePerformIO $
+      withCString "GDNativeLibrary" $
+        \ clsNamePtr ->
+          withCString "is_singleton" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+is_singleton ::
+               (GDNativeLibrary :< cls, Object :< cls) => cls -> IO Bool
+is_singleton cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindGDNativeLibrary_is_singleton
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindGDNativeLibrary_set_config_file #-}
+
+bindGDNativeLibrary_set_config_file :: MethodBind
+bindGDNativeLibrary_set_config_file
+  = unsafePerformIO $
+      withCString "GDNativeLibrary" $
+        \ clsNamePtr ->
+          withCString "set_config_file" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_config_file ::
+                  (GDNativeLibrary :< cls, Object :< cls) =>
+                  cls -> ConfigFile -> IO ()
+set_config_file cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindGDNativeLibrary_set_config_file
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindGDNativeLibrary_set_load_once #-}
 
 bindGDNativeLibrary_set_load_once :: MethodBind
@@ -216,6 +194,28 @@ set_load_once cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGDNativeLibrary_set_load_once
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindGDNativeLibrary_set_reloadable #-}
+
+bindGDNativeLibrary_set_reloadable :: MethodBind
+bindGDNativeLibrary_set_reloadable
+  = unsafePerformIO $
+      withCString "GDNativeLibrary" $
+        \ clsNamePtr ->
+          withCString "set_reloadable" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_reloadable ::
+                 (GDNativeLibrary :< cls, Object :< cls) => cls -> Bool -> IO ()
+set_reloadable cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindGDNativeLibrary_set_reloadable
            (upcast cls)
            arrPtr
            len
@@ -266,23 +266,23 @@ set_symbol_prefix cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindGDNativeLibrary_set_reloadable #-}
+{-# NOINLINE bindGDNativeLibrary_should_load_once #-}
 
-bindGDNativeLibrary_set_reloadable :: MethodBind
-bindGDNativeLibrary_set_reloadable
+bindGDNativeLibrary_should_load_once :: MethodBind
+bindGDNativeLibrary_should_load_once
   = unsafePerformIO $
       withCString "GDNativeLibrary" $
         \ clsNamePtr ->
-          withCString "set_reloadable" $
+          withCString "should_load_once" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_reloadable ::
-                 (GDNativeLibrary :< cls, Object :< cls) => cls -> Bool -> IO ()
-set_reloadable cls arg1
-  = withVariantArray [toVariant arg1]
+should_load_once ::
+                   (GDNativeLibrary :< cls, Object :< cls) => cls -> IO Bool
+should_load_once cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindGDNativeLibrary_set_reloadable
+         godot_method_bind_call bindGDNativeLibrary_should_load_once
            (upcast cls)
            arrPtr
            len

@@ -1,13 +1,13 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.VisibilityNotifier
-       (Godot.Core.VisibilityNotifier.sig_camera_exited,
+       (Godot.Core.VisibilityNotifier.sig_camera_entered,
+        Godot.Core.VisibilityNotifier.sig_camera_exited,
         Godot.Core.VisibilityNotifier.sig_screen_entered,
-        Godot.Core.VisibilityNotifier.sig_camera_entered,
         Godot.Core.VisibilityNotifier.sig_screen_exited,
-        Godot.Core.VisibilityNotifier.set_aabb,
         Godot.Core.VisibilityNotifier.get_aabb,
-        Godot.Core.VisibilityNotifier.is_on_screen)
+        Godot.Core.VisibilityNotifier.is_on_screen,
+        Godot.Core.VisibilityNotifier.set_aabb)
        where
 import Data.Coerce
 import Foreign.C
@@ -15,6 +15,12 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+
+-- | Emitted when the VisibilityNotifier enters a [Camera]'s view.
+sig_camera_entered ::
+                   Godot.Internal.Dispatch.Signal VisibilityNotifier
+sig_camera_entered
+  = Godot.Internal.Dispatch.Signal "camera_entered"
 
 -- | Emitted when the VisibilityNotifier exits a [Camera]'s view.
 sig_camera_exited ::
@@ -27,39 +33,10 @@ sig_screen_entered ::
 sig_screen_entered
   = Godot.Internal.Dispatch.Signal "screen_entered"
 
--- | Emitted when the VisibilityNotifier enters a [Camera]'s view.
-sig_camera_entered ::
-                   Godot.Internal.Dispatch.Signal VisibilityNotifier
-sig_camera_entered
-  = Godot.Internal.Dispatch.Signal "camera_entered"
-
 -- | Emitted when the VisibilityNotifier exits the screen.
 sig_screen_exited ::
                   Godot.Internal.Dispatch.Signal VisibilityNotifier
 sig_screen_exited = Godot.Internal.Dispatch.Signal "screen_exited"
-
-{-# NOINLINE bindVisibilityNotifier_set_aabb #-}
-
--- | The VisibilityNotifier's bounding box.
-bindVisibilityNotifier_set_aabb :: MethodBind
-bindVisibilityNotifier_set_aabb
-  = unsafePerformIO $
-      withCString "VisibilityNotifier" $
-        \ clsNamePtr ->
-          withCString "set_aabb" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The VisibilityNotifier's bounding box.
-set_aabb ::
-           (VisibilityNotifier :< cls, Object :< cls) => cls -> Aabb -> IO ()
-set_aabb cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisibilityNotifier_set_aabb (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindVisibilityNotifier_get_aabb #-}
 
@@ -106,6 +83,29 @@ is_on_screen cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisibilityNotifier_is_on_screen
            (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindVisibilityNotifier_set_aabb #-}
+
+-- | The VisibilityNotifier's bounding box.
+bindVisibilityNotifier_set_aabb :: MethodBind
+bindVisibilityNotifier_set_aabb
+  = unsafePerformIO $
+      withCString "VisibilityNotifier" $
+        \ clsNamePtr ->
+          withCString "set_aabb" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The VisibilityNotifier's bounding box.
+set_aabb ::
+           (VisibilityNotifier :< cls, Object :< cls) => cls -> Aabb -> IO ()
+set_aabb cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindVisibilityNotifier_set_aabb (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

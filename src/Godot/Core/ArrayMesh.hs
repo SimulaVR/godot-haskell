@@ -23,26 +23,25 @@ module Godot.Core.ArrayMesh
         Godot.Core.ArrayMesh._ARRAY_FORMAT_WEIGHTS,
         Godot.Core.ArrayMesh._ARRAY_FORMAT_TANGENT,
         Godot.Core.ArrayMesh.add_blend_shape,
-        Godot.Core.ArrayMesh.get_blend_shape_count,
-        Godot.Core.ArrayMesh.get_blend_shape_name,
-        Godot.Core.ArrayMesh.clear_blend_shapes,
-        Godot.Core.ArrayMesh.set_blend_shape_mode,
-        Godot.Core.ArrayMesh.get_blend_shape_mode,
         Godot.Core.ArrayMesh.add_surface_from_arrays,
-        Godot.Core.ArrayMesh.surface_remove,
-        Godot.Core.ArrayMesh.surface_update_region,
-        Godot.Core.ArrayMesh.surface_get_array_len,
-        Godot.Core.ArrayMesh.surface_get_array_index_len,
-        Godot.Core.ArrayMesh.surface_get_format,
-        Godot.Core.ArrayMesh.surface_get_primitive_type,
-        Godot.Core.ArrayMesh.surface_set_material,
-        Godot.Core.ArrayMesh.surface_find_by_name,
-        Godot.Core.ArrayMesh.surface_set_name,
-        Godot.Core.ArrayMesh.surface_get_name,
-        Godot.Core.ArrayMesh.regen_normalmaps,
+        Godot.Core.ArrayMesh.clear_blend_shapes,
+        Godot.Core.ArrayMesh.get_blend_shape_count,
+        Godot.Core.ArrayMesh.get_blend_shape_mode,
+        Godot.Core.ArrayMesh.get_blend_shape_name,
+        Godot.Core.ArrayMesh.get_custom_aabb,
         Godot.Core.ArrayMesh.lightmap_unwrap,
+        Godot.Core.ArrayMesh.regen_normalmaps,
+        Godot.Core.ArrayMesh.set_blend_shape_mode,
         Godot.Core.ArrayMesh.set_custom_aabb,
-        Godot.Core.ArrayMesh.get_custom_aabb)
+        Godot.Core.ArrayMesh.surface_find_by_name,
+        Godot.Core.ArrayMesh.surface_get_array_index_len,
+        Godot.Core.ArrayMesh.surface_get_array_len,
+        Godot.Core.ArrayMesh.surface_get_format,
+        Godot.Core.ArrayMesh.surface_get_name,
+        Godot.Core.ArrayMesh.surface_get_primitive_type,
+        Godot.Core.ArrayMesh.surface_remove,
+        Godot.Core.ArrayMesh.surface_set_name,
+        Godot.Core.ArrayMesh.surface_update_region)
        where
 import Data.Coerce
 import Foreign.C
@@ -116,6 +115,7 @@ _ARRAY_FORMAT_TANGENT = 4
 
 {-# NOINLINE bindArrayMesh_add_blend_shape #-}
 
+-- | Add name for a blend shape that will be added with [method add_surface_from_arrays]. Must be called before surface is added.
 bindArrayMesh_add_blend_shape :: MethodBind
 bindArrayMesh_add_blend_shape
   = unsafePerformIO $
@@ -125,6 +125,7 @@ bindArrayMesh_add_blend_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Add name for a blend shape that will be added with [method add_surface_from_arrays]. Must be called before surface is added.
 add_blend_shape ::
                   (ArrayMesh :< cls, Object :< cls) => cls -> GodotString -> IO ()
 add_blend_shape cls arg1
@@ -135,49 +136,35 @@ add_blend_shape cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindArrayMesh_get_blend_shape_count #-}
+{-# NOINLINE bindArrayMesh_add_surface_from_arrays #-}
 
--- | Returns the number of blend shapes that the [code]ArrayMesh[/code] holds.
-bindArrayMesh_get_blend_shape_count :: MethodBind
-bindArrayMesh_get_blend_shape_count
+-- | Creates a new surface.
+--   				Surfaces are created to be rendered using a "primitive", which may be PRIMITIVE_POINTS, PRIMITIVE_LINES, PRIMITIVE_LINE_STRIP, PRIMITIVE_LINE_LOOP, PRIMITIVE_TRIANGLES, PRIMITIVE_TRIANGLE_STRIP, PRIMITIVE_TRIANGLE_FAN. See [Mesh] for details. (As a note, when using indices, it is recommended to only use points, lines or triangles). [method Mesh.get_surface_count] will become the [code]surf_idx[/code] for this new surface.
+--   				The [code]arrays[/code] argument is an array of arrays. See [enum ArrayType] for the values used in this array. For example, [code]arrays[0][/code] is the array of vertices. That first vertex sub-array is always required; the others are optional. Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data and the index array defines the vertex order. All sub-arrays must have the same length as the vertex array or be empty, except for [constant ARRAY_INDEX] if it is used.
+--   				Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data, and the index array defines the order of the vertices.
+--   				Godot uses clockwise winding order for front faces of triangle primitive modes.
+bindArrayMesh_add_surface_from_arrays :: MethodBind
+bindArrayMesh_add_surface_from_arrays
   = unsafePerformIO $
       withCString "ArrayMesh" $
         \ clsNamePtr ->
-          withCString "get_blend_shape_count" $
+          withCString "add_surface_from_arrays" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of blend shapes that the [code]ArrayMesh[/code] holds.
-get_blend_shape_count ::
-                        (ArrayMesh :< cls, Object :< cls) => cls -> IO Int
-get_blend_shape_count cls
-  = withVariantArray []
+-- | Creates a new surface.
+--   				Surfaces are created to be rendered using a "primitive", which may be PRIMITIVE_POINTS, PRIMITIVE_LINES, PRIMITIVE_LINE_STRIP, PRIMITIVE_LINE_LOOP, PRIMITIVE_TRIANGLES, PRIMITIVE_TRIANGLE_STRIP, PRIMITIVE_TRIANGLE_FAN. See [Mesh] for details. (As a note, when using indices, it is recommended to only use points, lines or triangles). [method Mesh.get_surface_count] will become the [code]surf_idx[/code] for this new surface.
+--   				The [code]arrays[/code] argument is an array of arrays. See [enum ArrayType] for the values used in this array. For example, [code]arrays[0][/code] is the array of vertices. That first vertex sub-array is always required; the others are optional. Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data and the index array defines the vertex order. All sub-arrays must have the same length as the vertex array or be empty, except for [constant ARRAY_INDEX] if it is used.
+--   				Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data, and the index array defines the order of the vertices.
+--   				Godot uses clockwise winding order for front faces of triangle primitive modes.
+add_surface_from_arrays ::
+                          (ArrayMesh :< cls, Object :< cls) =>
+                          cls -> Int -> Array -> Array -> Int -> IO ()
+add_surface_from_arrays cls arg1 arg2 arg3 arg4
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_get_blend_shape_count
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_get_blend_shape_name #-}
-
--- | Returns the name of the blend shape at this index.
-bindArrayMesh_get_blend_shape_name :: MethodBind
-bindArrayMesh_get_blend_shape_name
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "get_blend_shape_name" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the name of the blend shape at this index.
-get_blend_shape_name ::
-                       (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO GodotString
-get_blend_shape_name cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_get_blend_shape_name
+         godot_method_bind_call bindArrayMesh_add_surface_from_arrays
            (upcast cls)
            arrPtr
            len
@@ -207,23 +194,25 @@ clear_blend_shapes cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindArrayMesh_set_blend_shape_mode #-}
+{-# NOINLINE bindArrayMesh_get_blend_shape_count #-}
 
-bindArrayMesh_set_blend_shape_mode :: MethodBind
-bindArrayMesh_set_blend_shape_mode
+-- | Returns the number of blend shapes that the [code]ArrayMesh[/code] holds.
+bindArrayMesh_get_blend_shape_count :: MethodBind
+bindArrayMesh_get_blend_shape_count
   = unsafePerformIO $
       withCString "ArrayMesh" $
         \ clsNamePtr ->
-          withCString "set_blend_shape_mode" $
+          withCString "get_blend_shape_count" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_blend_shape_mode ::
-                       (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO ()
-set_blend_shape_mode cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Returns the number of blend shapes that the [code]ArrayMesh[/code] holds.
+get_blend_shape_count ::
+                        (ArrayMesh :< cls, Object :< cls) => cls -> IO Int
+get_blend_shape_count cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_set_blend_shape_mode
+         godot_method_bind_call bindArrayMesh_get_blend_shape_count
            (upcast cls)
            arrPtr
            len
@@ -251,297 +240,49 @@ get_blend_shape_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindArrayMesh_add_surface_from_arrays #-}
+{-# NOINLINE bindArrayMesh_get_blend_shape_name #-}
 
--- | Creates a new surface.
---   				Surfaces are created to be rendered using a "primitive", which may be PRIMITIVE_POINTS, PRIMITIVE_LINES, PRIMITIVE_LINE_STRIP, PRIMITIVE_LINE_LOOP, PRIMITIVE_TRIANGLES, PRIMITIVE_TRIANGLE_STRIP, PRIMITIVE_TRIANGLE_FAN. See [Mesh] for details. (As a note, when using indices, it is recommended to only use points, lines or triangles). [method Mesh.get_surface_count] will become the [code]surf_idx[/code] for this new surface.
---   				The [code]arrays[/code] argument is an array of arrays. See [enum ArrayType] for the values used in this array. For example, [code]arrays[0][/code] is the array of vertices. That first vertex sub-array is always required; the others are optional. Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data and the index array defines the vertex order. All sub-arrays must have the same length as the vertex array or be empty, except for [code]ARRAY_INDEX[/code] if it is used.
---   				Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data, and the index array defines the order of the vertices.
---   				Godot uses clockwise winding order for front faces of triangle primitive modes.
-bindArrayMesh_add_surface_from_arrays :: MethodBind
-bindArrayMesh_add_surface_from_arrays
+-- | Returns the name of the blend shape at this index.
+bindArrayMesh_get_blend_shape_name :: MethodBind
+bindArrayMesh_get_blend_shape_name
   = unsafePerformIO $
       withCString "ArrayMesh" $
         \ clsNamePtr ->
-          withCString "add_surface_from_arrays" $
+          withCString "get_blend_shape_name" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new surface.
---   				Surfaces are created to be rendered using a "primitive", which may be PRIMITIVE_POINTS, PRIMITIVE_LINES, PRIMITIVE_LINE_STRIP, PRIMITIVE_LINE_LOOP, PRIMITIVE_TRIANGLES, PRIMITIVE_TRIANGLE_STRIP, PRIMITIVE_TRIANGLE_FAN. See [Mesh] for details. (As a note, when using indices, it is recommended to only use points, lines or triangles). [method Mesh.get_surface_count] will become the [code]surf_idx[/code] for this new surface.
---   				The [code]arrays[/code] argument is an array of arrays. See [enum ArrayType] for the values used in this array. For example, [code]arrays[0][/code] is the array of vertices. That first vertex sub-array is always required; the others are optional. Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data and the index array defines the vertex order. All sub-arrays must have the same length as the vertex array or be empty, except for [code]ARRAY_INDEX[/code] if it is used.
---   				Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data, and the index array defines the order of the vertices.
---   				Godot uses clockwise winding order for front faces of triangle primitive modes.
-add_surface_from_arrays ::
-                          (ArrayMesh :< cls, Object :< cls) =>
-                          cls -> Int -> Array -> Array -> Int -> IO ()
-add_surface_from_arrays cls arg1 arg2 arg3 arg4
-  = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_add_surface_from_arrays
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_remove #-}
-
--- | Remove a surface at position surf_idx, shifting greater surfaces one surf_idx slot down.
-bindArrayMesh_surface_remove :: MethodBind
-bindArrayMesh_surface_remove
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_remove" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Remove a surface at position surf_idx, shifting greater surfaces one surf_idx slot down.
-surface_remove ::
-                 (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO ()
-surface_remove cls arg1
+-- | Returns the name of the blend shape at this index.
+get_blend_shape_name ::
+                       (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO GodotString
+get_blend_shape_name cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_remove (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_update_region #-}
-
-bindArrayMesh_surface_update_region :: MethodBind
-bindArrayMesh_surface_update_region
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_update_region" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-surface_update_region ::
-                        (ArrayMesh :< cls, Object :< cls) =>
-                        cls -> Int -> Int -> PoolByteArray -> IO ()
-surface_update_region cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_update_region
+         godot_method_bind_call bindArrayMesh_get_blend_shape_name
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindArrayMesh_surface_get_array_len #-}
+{-# NOINLINE bindArrayMesh_get_custom_aabb #-}
 
--- | Return the length in vertices of the vertex array in the requested surface (see [method add_surface_from_arrays]).
-bindArrayMesh_surface_get_array_len :: MethodBind
-bindArrayMesh_surface_get_array_len
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when using a shader to offset vertices.
+bindArrayMesh_get_custom_aabb :: MethodBind
+bindArrayMesh_get_custom_aabb
   = unsafePerformIO $
       withCString "ArrayMesh" $
         \ clsNamePtr ->
-          withCString "surface_get_array_len" $
+          withCString "get_custom_aabb" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Return the length in vertices of the vertex array in the requested surface (see [method add_surface_from_arrays]).
-surface_get_array_len ::
-                        (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
-surface_get_array_len cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_get_array_len
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_get_array_index_len #-}
-
--- | Return the length in indices of the index array in the requested surface (see [method add_surface_from_arrays]).
-bindArrayMesh_surface_get_array_index_len :: MethodBind
-bindArrayMesh_surface_get_array_index_len
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_get_array_index_len" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the length in indices of the index array in the requested surface (see [method add_surface_from_arrays]).
-surface_get_array_index_len ::
-                              (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
-surface_get_array_index_len cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_get_array_index_len
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_get_format #-}
-
--- | Return the format mask of the requested surface (see [method add_surface_from_arrays]).
-bindArrayMesh_surface_get_format :: MethodBind
-bindArrayMesh_surface_get_format
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_get_format" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the format mask of the requested surface (see [method add_surface_from_arrays]).
-surface_get_format ::
-                     (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
-surface_get_format cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_get_format
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_get_primitive_type #-}
-
--- | Return the primitive type of the requested surface (see [method add_surface_from_arrays]).
-bindArrayMesh_surface_get_primitive_type :: MethodBind
-bindArrayMesh_surface_get_primitive_type
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_get_primitive_type" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the primitive type of the requested surface (see [method add_surface_from_arrays]).
-surface_get_primitive_type ::
-                             (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
-surface_get_primitive_type cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_get_primitive_type
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_set_material #-}
-
--- | Set a [Material] for a given surface. Surface will be rendered using this material.
-bindArrayMesh_surface_set_material :: MethodBind
-bindArrayMesh_surface_set_material
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_set_material" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Set a [Material] for a given surface. Surface will be rendered using this material.
-surface_set_material ::
-                       (ArrayMesh :< cls, Object :< cls) =>
-                       cls -> Int -> Material -> IO ()
-surface_set_material cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_set_material
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_find_by_name #-}
-
--- | Return the index of the first surface with this name held within this [code]ArrayMesh[/code]. If none are found -1 is returned.
-bindArrayMesh_surface_find_by_name :: MethodBind
-bindArrayMesh_surface_find_by_name
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_find_by_name" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Return the index of the first surface with this name held within this [code]ArrayMesh[/code]. If none are found -1 is returned.
-surface_find_by_name ::
-                       (ArrayMesh :< cls, Object :< cls) => cls -> GodotString -> IO Int
-surface_find_by_name cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_find_by_name
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_set_name #-}
-
--- | Set a name for a given surface.
-bindArrayMesh_surface_set_name :: MethodBind
-bindArrayMesh_surface_set_name
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_set_name" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Set a name for a given surface.
-surface_set_name ::
-                   (ArrayMesh :< cls, Object :< cls) =>
-                   cls -> Int -> GodotString -> IO ()
-surface_set_name cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_set_name (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_surface_get_name #-}
-
--- | Get the name assigned to this surface.
-bindArrayMesh_surface_get_name :: MethodBind
-bindArrayMesh_surface_get_name
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "surface_get_name" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Get the name assigned to this surface.
-surface_get_name ::
-                   (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO GodotString
-surface_get_name cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_surface_get_name (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindArrayMesh_regen_normalmaps #-}
-
--- | Will regenerate normal maps for the [code]ArrayMesh[/code].
-bindArrayMesh_regen_normalmaps :: MethodBind
-bindArrayMesh_regen_normalmaps
-  = unsafePerformIO $
-      withCString "ArrayMesh" $
-        \ clsNamePtr ->
-          withCString "regen_normalmaps" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Will regenerate normal maps for the [code]ArrayMesh[/code].
-regen_normalmaps ::
-                   (ArrayMesh :< cls, Object :< cls) => cls -> IO ()
-regen_normalmaps cls
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when using a shader to offset vertices.
+get_custom_aabb ::
+                  (ArrayMesh :< cls, Object :< cls) => cls -> IO Aabb
+get_custom_aabb cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_regen_normalmaps (upcast cls)
+         godot_method_bind_call bindArrayMesh_get_custom_aabb (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -570,9 +311,54 @@ lightmap_unwrap cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindArrayMesh_regen_normalmaps #-}
+
+-- | Will regenerate normal maps for the [code]ArrayMesh[/code].
+bindArrayMesh_regen_normalmaps :: MethodBind
+bindArrayMesh_regen_normalmaps
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "regen_normalmaps" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Will regenerate normal maps for the [code]ArrayMesh[/code].
+regen_normalmaps ::
+                   (ArrayMesh :< cls, Object :< cls) => cls -> IO ()
+regen_normalmaps cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_regen_normalmaps (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_set_blend_shape_mode #-}
+
+bindArrayMesh_set_blend_shape_mode :: MethodBind
+bindArrayMesh_set_blend_shape_mode
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "set_blend_shape_mode" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+set_blend_shape_mode ::
+                       (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO ()
+set_blend_shape_mode cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_set_blend_shape_mode
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindArrayMesh_set_custom_aabb #-}
 
--- | An overriding bounding box for this mesh.
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when using a shader to offset vertices.
 bindArrayMesh_set_custom_aabb :: MethodBind
 bindArrayMesh_set_custom_aabb
   = unsafePerformIO $
@@ -582,7 +368,7 @@ bindArrayMesh_set_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | An overriding bounding box for this mesh.
+-- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when using a shader to offset vertices.
 set_custom_aabb ::
                   (ArrayMesh :< cls, Object :< cls) => cls -> Aabb -> IO ()
 set_custom_aabb cls arg1
@@ -593,25 +379,217 @@ set_custom_aabb cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindArrayMesh_get_custom_aabb #-}
+{-# NOINLINE bindArrayMesh_surface_find_by_name #-}
 
--- | An overriding bounding box for this mesh.
-bindArrayMesh_get_custom_aabb :: MethodBind
-bindArrayMesh_get_custom_aabb
+-- | Returns the index of the first surface with this name held within this [code]ArrayMesh[/code]. If none are found -1 is returned.
+bindArrayMesh_surface_find_by_name :: MethodBind
+bindArrayMesh_surface_find_by_name
   = unsafePerformIO $
       withCString "ArrayMesh" $
         \ clsNamePtr ->
-          withCString "get_custom_aabb" $
+          withCString "surface_find_by_name" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | An overriding bounding box for this mesh.
-get_custom_aabb ::
-                  (ArrayMesh :< cls, Object :< cls) => cls -> IO Aabb
-get_custom_aabb cls
-  = withVariantArray []
+-- | Returns the index of the first surface with this name held within this [code]ArrayMesh[/code]. If none are found -1 is returned.
+surface_find_by_name ::
+                       (ArrayMesh :< cls, Object :< cls) => cls -> GodotString -> IO Int
+surface_find_by_name cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindArrayMesh_get_custom_aabb (upcast cls)
+         godot_method_bind_call bindArrayMesh_surface_find_by_name
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_get_array_index_len #-}
+
+-- | Returns the length in indices of the index array in the requested surface (see [method add_surface_from_arrays]).
+bindArrayMesh_surface_get_array_index_len :: MethodBind
+bindArrayMesh_surface_get_array_index_len
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_get_array_index_len" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the length in indices of the index array in the requested surface (see [method add_surface_from_arrays]).
+surface_get_array_index_len ::
+                              (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
+surface_get_array_index_len cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_get_array_index_len
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_get_array_len #-}
+
+-- | Returns the length in vertices of the vertex array in the requested surface (see [method add_surface_from_arrays]).
+bindArrayMesh_surface_get_array_len :: MethodBind
+bindArrayMesh_surface_get_array_len
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_get_array_len" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the length in vertices of the vertex array in the requested surface (see [method add_surface_from_arrays]).
+surface_get_array_len ::
+                        (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
+surface_get_array_len cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_get_array_len
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_get_format #-}
+
+-- | Returns the format mask of the requested surface (see [method add_surface_from_arrays]).
+bindArrayMesh_surface_get_format :: MethodBind
+bindArrayMesh_surface_get_format
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_get_format" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the format mask of the requested surface (see [method add_surface_from_arrays]).
+surface_get_format ::
+                     (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
+surface_get_format cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_get_format
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_get_name #-}
+
+-- | Get the name assigned to this surface.
+bindArrayMesh_surface_get_name :: MethodBind
+bindArrayMesh_surface_get_name
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_get_name" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Get the name assigned to this surface.
+surface_get_name ::
+                   (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO GodotString
+surface_get_name cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_get_name (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_get_primitive_type #-}
+
+-- | Returns the primitive type of the requested surface (see [method add_surface_from_arrays]).
+bindArrayMesh_surface_get_primitive_type :: MethodBind
+bindArrayMesh_surface_get_primitive_type
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_get_primitive_type" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the primitive type of the requested surface (see [method add_surface_from_arrays]).
+surface_get_primitive_type ::
+                             (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO Int
+surface_get_primitive_type cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_get_primitive_type
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_remove #-}
+
+-- | Remove a surface at position surf_idx, shifting greater surfaces one surf_idx slot down.
+bindArrayMesh_surface_remove :: MethodBind
+bindArrayMesh_surface_remove
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_remove" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Remove a surface at position surf_idx, shifting greater surfaces one surf_idx slot down.
+surface_remove ::
+                 (ArrayMesh :< cls, Object :< cls) => cls -> Int -> IO ()
+surface_remove cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_remove (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_set_name #-}
+
+-- | Set a name for a given surface.
+bindArrayMesh_surface_set_name :: MethodBind
+bindArrayMesh_surface_set_name
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_set_name" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Set a name for a given surface.
+surface_set_name ::
+                   (ArrayMesh :< cls, Object :< cls) =>
+                   cls -> Int -> GodotString -> IO ()
+surface_set_name cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_set_name (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindArrayMesh_surface_update_region #-}
+
+-- | Updates a specified region of mesh arrays on GPU. Warning: only use if you know what you are doing. You can easily cause crashes by calling this function with improper arguments.
+bindArrayMesh_surface_update_region :: MethodBind
+bindArrayMesh_surface_update_region
+  = unsafePerformIO $
+      withCString "ArrayMesh" $
+        \ clsNamePtr ->
+          withCString "surface_update_region" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Updates a specified region of mesh arrays on GPU. Warning: only use if you know what you are doing. You can easily cause crashes by calling this function with improper arguments.
+surface_update_region ::
+                        (ArrayMesh :< cls, Object :< cls) =>
+                        cls -> Int -> Int -> PoolByteArray -> IO ()
+surface_update_region cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindArrayMesh_surface_update_region
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

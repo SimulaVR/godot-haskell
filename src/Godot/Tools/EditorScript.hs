@@ -3,8 +3,8 @@
 module Godot.Tools.EditorScript
        (Godot.Tools.EditorScript._run,
         Godot.Tools.EditorScript.add_root_node,
-        Godot.Tools.EditorScript.get_scene,
-        Godot.Tools.EditorScript.get_editor_interface)
+        Godot.Tools.EditorScript.get_editor_interface,
+        Godot.Tools.EditorScript.get_scene)
        where
 import Data.Coerce
 import Foreign.C
@@ -59,28 +59,6 @@ add_root_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindEditorScript_get_scene #-}
-
--- | Returns the Editor's currently active scene.
-bindEditorScript_get_scene :: MethodBind
-bindEditorScript_get_scene
-  = unsafePerformIO $
-      withCString "EditorScript" $
-        \ clsNamePtr ->
-          withCString "get_scene" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns the Editor's currently active scene.
-get_scene :: (EditorScript :< cls, Object :< cls) => cls -> IO Node
-get_scene cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindEditorScript_get_scene (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindEditorScript_get_editor_interface #-}
 
 -- | Returns the [EditorInterface] singleton instance.
@@ -101,6 +79,28 @@ get_editor_interface cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindEditorScript_get_editor_interface
            (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindEditorScript_get_scene #-}
+
+-- | Returns the Editor's currently active scene.
+bindEditorScript_get_scene :: MethodBind
+bindEditorScript_get_scene
+  = unsafePerformIO $
+      withCString "EditorScript" $
+        \ clsNamePtr ->
+          withCString "get_scene" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns the Editor's currently active scene.
+get_scene :: (EditorScript :< cls, Object :< cls) => cls -> IO Node
+get_scene cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindEditorScript_get_scene (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

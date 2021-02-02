@@ -1,14 +1,14 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.ResourcePreloader
-       (Godot.Core.ResourcePreloader._set_resources,
-        Godot.Core.ResourcePreloader._get_resources,
+       (Godot.Core.ResourcePreloader._get_resources,
+        Godot.Core.ResourcePreloader._set_resources,
         Godot.Core.ResourcePreloader.add_resource,
-        Godot.Core.ResourcePreloader.remove_resource,
-        Godot.Core.ResourcePreloader.rename_resource,
-        Godot.Core.ResourcePreloader.has_resource,
         Godot.Core.ResourcePreloader.get_resource,
-        Godot.Core.ResourcePreloader.get_resource_list)
+        Godot.Core.ResourcePreloader.get_resource_list,
+        Godot.Core.ResourcePreloader.has_resource,
+        Godot.Core.ResourcePreloader.remove_resource,
+        Godot.Core.ResourcePreloader.rename_resource)
        where
 import Data.Coerce
 import Foreign.C
@@ -16,28 +16,6 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
-
-{-# NOINLINE bindResourcePreloader__set_resources #-}
-
-bindResourcePreloader__set_resources :: MethodBind
-bindResourcePreloader__set_resources
-  = unsafePerformIO $
-      withCString "ResourcePreloader" $
-        \ clsNamePtr ->
-          withCString "_set_resources" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-_set_resources ::
-                 (ResourcePreloader :< cls, Object :< cls) => cls -> Array -> IO ()
-_set_resources cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindResourcePreloader__set_resources
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindResourcePreloader__get_resources #-}
 
@@ -56,6 +34,28 @@ _get_resources cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindResourcePreloader__get_resources
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindResourcePreloader__set_resources #-}
+
+bindResourcePreloader__set_resources :: MethodBind
+bindResourcePreloader__set_resources
+  = unsafePerformIO $
+      withCString "ResourcePreloader" $
+        \ clsNamePtr ->
+          withCString "_set_resources" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+_set_resources ::
+                 (ResourcePreloader :< cls, Object :< cls) => cls -> Array -> IO ()
+_set_resources cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindResourcePreloader__set_resources
            (upcast cls)
            arrPtr
            len
@@ -81,81 +81,6 @@ add_resource cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindResourcePreloader_add_resource
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindResourcePreloader_remove_resource #-}
-
--- | Removes the resource associated to [code]name[/code] from the preloader.
-bindResourcePreloader_remove_resource :: MethodBind
-bindResourcePreloader_remove_resource
-  = unsafePerformIO $
-      withCString "ResourcePreloader" $
-        \ clsNamePtr ->
-          withCString "remove_resource" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Removes the resource associated to [code]name[/code] from the preloader.
-remove_resource ::
-                  (ResourcePreloader :< cls, Object :< cls) =>
-                  cls -> GodotString -> IO ()
-remove_resource cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindResourcePreloader_remove_resource
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindResourcePreloader_rename_resource #-}
-
--- | Renames a resource inside the preloader from [code]name[/code] to [code]newname[/code].
-bindResourcePreloader_rename_resource :: MethodBind
-bindResourcePreloader_rename_resource
-  = unsafePerformIO $
-      withCString "ResourcePreloader" $
-        \ clsNamePtr ->
-          withCString "rename_resource" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Renames a resource inside the preloader from [code]name[/code] to [code]newname[/code].
-rename_resource ::
-                  (ResourcePreloader :< cls, Object :< cls) =>
-                  cls -> GodotString -> GodotString -> IO ()
-rename_resource cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindResourcePreloader_rename_resource
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindResourcePreloader_has_resource #-}
-
--- | Returns true if the preloader contains a resource associated to [code]name[/code].
-bindResourcePreloader_has_resource :: MethodBind
-bindResourcePreloader_has_resource
-  = unsafePerformIO $
-      withCString "ResourcePreloader" $
-        \ clsNamePtr ->
-          withCString "has_resource" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns true if the preloader contains a resource associated to [code]name[/code].
-has_resource ::
-               (ResourcePreloader :< cls, Object :< cls) =>
-               cls -> GodotString -> IO Bool
-has_resource cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindResourcePreloader_has_resource
            (upcast cls)
            arrPtr
            len
@@ -206,6 +131,81 @@ get_resource_list cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindResourcePreloader_get_resource_list
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindResourcePreloader_has_resource #-}
+
+-- | Returns [code]true[/code] if the preloader contains a resource associated to [code]name[/code].
+bindResourcePreloader_has_resource :: MethodBind
+bindResourcePreloader_has_resource
+  = unsafePerformIO $
+      withCString "ResourcePreloader" $
+        \ clsNamePtr ->
+          withCString "has_resource" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns [code]true[/code] if the preloader contains a resource associated to [code]name[/code].
+has_resource ::
+               (ResourcePreloader :< cls, Object :< cls) =>
+               cls -> GodotString -> IO Bool
+has_resource cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindResourcePreloader_has_resource
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindResourcePreloader_remove_resource #-}
+
+-- | Removes the resource associated to [code]name[/code] from the preloader.
+bindResourcePreloader_remove_resource :: MethodBind
+bindResourcePreloader_remove_resource
+  = unsafePerformIO $
+      withCString "ResourcePreloader" $
+        \ clsNamePtr ->
+          withCString "remove_resource" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Removes the resource associated to [code]name[/code] from the preloader.
+remove_resource ::
+                  (ResourcePreloader :< cls, Object :< cls) =>
+                  cls -> GodotString -> IO ()
+remove_resource cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindResourcePreloader_remove_resource
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindResourcePreloader_rename_resource #-}
+
+-- | Renames a resource inside the preloader from [code]name[/code] to [code]newname[/code].
+bindResourcePreloader_rename_resource :: MethodBind
+bindResourcePreloader_rename_resource
+  = unsafePerformIO $
+      withCString "ResourcePreloader" $
+        \ clsNamePtr ->
+          withCString "rename_resource" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Renames a resource inside the preloader from [code]name[/code] to [code]newname[/code].
+rename_resource ::
+                  (ResourcePreloader :< cls, Object :< cls) =>
+                  cls -> GodotString -> GodotString -> IO ()
+rename_resource cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindResourcePreloader_rename_resource
            (upcast cls)
            arrPtr
            len

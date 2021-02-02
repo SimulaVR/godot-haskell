@@ -10,8 +10,8 @@ module Godot.Core.VisualShaderNodeColorOp
         Godot.Core.VisualShaderNodeColorOp._OP_DIFFERENCE,
         Godot.Core.VisualShaderNodeColorOp._OP_OVERLAY,
         Godot.Core.VisualShaderNodeColorOp._OP_LIGHTEN,
-        Godot.Core.VisualShaderNodeColorOp.set_operator,
-        Godot.Core.VisualShaderNodeColorOp.get_operator)
+        Godot.Core.VisualShaderNodeColorOp.get_operator,
+        Godot.Core.VisualShaderNodeColorOp.set_operator)
        where
 import Data.Coerce
 import Foreign.C
@@ -47,6 +47,28 @@ _OP_OVERLAY = 4
 _OP_LIGHTEN :: Int
 _OP_LIGHTEN = 3
 
+{-# NOINLINE bindVisualShaderNodeColorOp_get_operator #-}
+
+bindVisualShaderNodeColorOp_get_operator :: MethodBind
+bindVisualShaderNodeColorOp_get_operator
+  = unsafePerformIO $
+      withCString "VisualShaderNodeColorOp" $
+        \ clsNamePtr ->
+          withCString "get_operator" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_operator ::
+               (VisualShaderNodeColorOp :< cls, Object :< cls) => cls -> IO Int
+get_operator cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindVisualShaderNodeColorOp_get_operator
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindVisualShaderNodeColorOp_set_operator #-}
 
 bindVisualShaderNodeColorOp_set_operator :: MethodBind
@@ -65,28 +87,6 @@ set_operator cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisualShaderNodeColorOp_set_operator
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindVisualShaderNodeColorOp_get_operator #-}
-
-bindVisualShaderNodeColorOp_get_operator :: MethodBind
-bindVisualShaderNodeColorOp_get_operator
-  = unsafePerformIO $
-      withCString "VisualShaderNodeColorOp" $
-        \ clsNamePtr ->
-          withCString "get_operator" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-get_operator ::
-               (VisualShaderNodeColorOp :< cls, Object :< cls) => cls -> IO Int
-get_operator cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindVisualShaderNodeColorOp_get_operator
            (upcast cls)
            arrPtr
            len

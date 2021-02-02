@@ -1,12 +1,13 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.MeshInstance2D
-       (Godot.Core.MeshInstance2D.set_mesh,
+       (Godot.Core.MeshInstance2D.sig_texture_changed,
         Godot.Core.MeshInstance2D.get_mesh,
-        Godot.Core.MeshInstance2D.set_texture,
+        Godot.Core.MeshInstance2D.get_normal_map,
         Godot.Core.MeshInstance2D.get_texture,
+        Godot.Core.MeshInstance2D.set_mesh,
         Godot.Core.MeshInstance2D.set_normal_map,
-        Godot.Core.MeshInstance2D.get_normal_map)
+        Godot.Core.MeshInstance2D.set_texture)
        where
 import Data.Coerce
 import Foreign.C
@@ -15,29 +16,14 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindMeshInstance2D_set_mesh #-}
-
-bindMeshInstance2D_set_mesh :: MethodBind
-bindMeshInstance2D_set_mesh
-  = unsafePerformIO $
-      withCString "MeshInstance2D" $
-        \ clsNamePtr ->
-          withCString "set_mesh" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
-set_mesh ::
-           (MeshInstance2D :< cls, Object :< cls) => cls -> Mesh -> IO ()
-set_mesh cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindMeshInstance2D_set_mesh (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+sig_texture_changed ::
+                    Godot.Internal.Dispatch.Signal MeshInstance2D
+sig_texture_changed
+  = Godot.Internal.Dispatch.Signal "texture_changed"
 
 {-# NOINLINE bindMeshInstance2D_get_mesh #-}
 
+-- | The [Mesh] that will be drawn by the [MeshInstance2D].
 bindMeshInstance2D_get_mesh :: MethodBind
 bindMeshInstance2D_get_mesh
   = unsafePerformIO $
@@ -47,6 +33,7 @@ bindMeshInstance2D_get_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The [Mesh] that will be drawn by the [MeshInstance2D].
 get_mesh ::
            (MeshInstance2D :< cls, Object :< cls) => cls -> IO Mesh
 get_mesh cls
@@ -57,29 +44,33 @@ get_mesh cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMeshInstance2D_set_texture #-}
+{-# NOINLINE bindMeshInstance2D_get_normal_map #-}
 
-bindMeshInstance2D_set_texture :: MethodBind
-bindMeshInstance2D_set_texture
+-- | The normal map that will be used if using the default [CanvasItemMaterial].
+bindMeshInstance2D_get_normal_map :: MethodBind
+bindMeshInstance2D_get_normal_map
   = unsafePerformIO $
       withCString "MeshInstance2D" $
         \ clsNamePtr ->
-          withCString "set_texture" $
+          withCString "get_normal_map" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-set_texture ::
-              (MeshInstance2D :< cls, Object :< cls) => cls -> Texture -> IO ()
-set_texture cls arg1
-  = withVariantArray [toVariant arg1]
+-- | The normal map that will be used if using the default [CanvasItemMaterial].
+get_normal_map ::
+                 (MeshInstance2D :< cls, Object :< cls) => cls -> IO Texture
+get_normal_map cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMeshInstance2D_set_texture (upcast cls)
+         godot_method_bind_call bindMeshInstance2D_get_normal_map
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindMeshInstance2D_get_texture #-}
 
+-- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
 bindMeshInstance2D_get_texture :: MethodBind
 bindMeshInstance2D_get_texture
   = unsafePerformIO $
@@ -89,6 +80,7 @@ bindMeshInstance2D_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
 get_texture ::
               (MeshInstance2D :< cls, Object :< cls) => cls -> IO Texture
 get_texture cls
@@ -99,8 +91,32 @@ get_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindMeshInstance2D_set_mesh #-}
+
+-- | The [Mesh] that will be drawn by the [MeshInstance2D].
+bindMeshInstance2D_set_mesh :: MethodBind
+bindMeshInstance2D_set_mesh
+  = unsafePerformIO $
+      withCString "MeshInstance2D" $
+        \ clsNamePtr ->
+          withCString "set_mesh" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The [Mesh] that will be drawn by the [MeshInstance2D].
+set_mesh ::
+           (MeshInstance2D :< cls, Object :< cls) => cls -> Mesh -> IO ()
+set_mesh cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindMeshInstance2D_set_mesh (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindMeshInstance2D_set_normal_map #-}
 
+-- | The normal map that will be used if using the default [CanvasItemMaterial].
 bindMeshInstance2D_set_normal_map :: MethodBind
 bindMeshInstance2D_set_normal_map
   = unsafePerformIO $
@@ -110,6 +126,7 @@ bindMeshInstance2D_set_normal_map
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The normal map that will be used if using the default [CanvasItemMaterial].
 set_normal_map ::
                  (MeshInstance2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1
@@ -121,24 +138,25 @@ set_normal_map cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindMeshInstance2D_get_normal_map #-}
+{-# NOINLINE bindMeshInstance2D_set_texture #-}
 
-bindMeshInstance2D_get_normal_map :: MethodBind
-bindMeshInstance2D_get_normal_map
+-- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
+bindMeshInstance2D_set_texture :: MethodBind
+bindMeshInstance2D_set_texture
   = unsafePerformIO $
       withCString "MeshInstance2D" $
         \ clsNamePtr ->
-          withCString "get_normal_map" $
+          withCString "set_texture" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-get_normal_map ::
-                 (MeshInstance2D :< cls, Object :< cls) => cls -> IO Texture
-get_normal_map cls
-  = withVariantArray []
+-- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
+set_texture ::
+              (MeshInstance2D :< cls, Object :< cls) => cls -> Texture -> IO ()
+set_texture cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindMeshInstance2D_get_normal_map
-           (upcast cls)
+         godot_method_bind_call bindMeshInstance2D_set_texture (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

@@ -1,13 +1,17 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.ConfigFile
-       (Godot.Core.ConfigFile.set_value, Godot.Core.ConfigFile.get_value,
-        Godot.Core.ConfigFile.has_section,
-        Godot.Core.ConfigFile.has_section_key,
-        Godot.Core.ConfigFile.get_sections,
+       (Godot.Core.ConfigFile.erase_section,
+        Godot.Core.ConfigFile.erase_section_key,
         Godot.Core.ConfigFile.get_section_keys,
-        Godot.Core.ConfigFile.erase_section, Godot.Core.ConfigFile.load,
-        Godot.Core.ConfigFile.save)
+        Godot.Core.ConfigFile.get_sections,
+        Godot.Core.ConfigFile.get_value, Godot.Core.ConfigFile.has_section,
+        Godot.Core.ConfigFile.has_section_key, Godot.Core.ConfigFile.load,
+        Godot.Core.ConfigFile.load_encrypted,
+        Godot.Core.ConfigFile.load_encrypted_pass,
+        Godot.Core.ConfigFile.save, Godot.Core.ConfigFile.save_encrypted,
+        Godot.Core.ConfigFile.save_encrypted_pass,
+        Godot.Core.ConfigFile.set_value)
        where
 import Data.Coerce
 import Foreign.C
@@ -16,26 +20,96 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindConfigFile_set_value #-}
+{-# NOINLINE bindConfigFile_erase_section #-}
 
--- | Assigns a value to the specified key of the specified section. If the section and/or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
-bindConfigFile_set_value :: MethodBind
-bindConfigFile_set_value
+-- | Deletes the specified section along with all the key-value pairs inside.
+bindConfigFile_erase_section :: MethodBind
+bindConfigFile_erase_section
   = unsafePerformIO $
       withCString "ConfigFile" $
         \ clsNamePtr ->
-          withCString "set_value" $
+          withCString "erase_section" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns a value to the specified key of the specified section. If the section and/or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
-set_value ::
-            (ConfigFile :< cls, Object :< cls) =>
-            cls -> GodotString -> GodotString -> GodotVariant -> IO ()
-set_value cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+-- | Deletes the specified section along with all the key-value pairs inside.
+erase_section ::
+                (ConfigFile :< cls, Object :< cls) => cls -> GodotString -> IO ()
+erase_section cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindConfigFile_set_value (upcast cls) arrPtr
+         godot_method_bind_call bindConfigFile_erase_section (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConfigFile_erase_section_key #-}
+
+bindConfigFile_erase_section_key :: MethodBind
+bindConfigFile_erase_section_key
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "erase_section_key" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+erase_section_key ::
+                    (ConfigFile :< cls, Object :< cls) =>
+                    cls -> GodotString -> GodotString -> IO ()
+erase_section_key cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_erase_section_key
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConfigFile_get_section_keys #-}
+
+-- | Returns an array of all defined key identifiers in the specified section.
+bindConfigFile_get_section_keys :: MethodBind
+bindConfigFile_get_section_keys
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "get_section_keys" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns an array of all defined key identifiers in the specified section.
+get_section_keys ::
+                   (ConfigFile :< cls, Object :< cls) =>
+                   cls -> GodotString -> IO PoolStringArray
+get_section_keys cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_get_section_keys (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConfigFile_get_sections #-}
+
+-- | Returns an array of all defined section identifiers.
+bindConfigFile_get_sections :: MethodBind
+bindConfigFile_get_sections
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "get_sections" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns an array of all defined section identifiers.
+get_sections ::
+               (ConfigFile :< cls, Object :< cls) => cls -> IO PoolStringArray
+get_sections cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_get_sections (upcast cls)
+           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -110,79 +184,9 @@ has_section_key cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindConfigFile_get_sections #-}
-
--- | Returns an array of all defined section identifiers.
-bindConfigFile_get_sections :: MethodBind
-bindConfigFile_get_sections
-  = unsafePerformIO $
-      withCString "ConfigFile" $
-        \ clsNamePtr ->
-          withCString "get_sections" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns an array of all defined section identifiers.
-get_sections ::
-               (ConfigFile :< cls, Object :< cls) => cls -> IO PoolStringArray
-get_sections cls
-  = withVariantArray []
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindConfigFile_get_sections (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindConfigFile_get_section_keys #-}
-
--- | Returns an array of all defined key identifiers in the specified section.
-bindConfigFile_get_section_keys :: MethodBind
-bindConfigFile_get_section_keys
-  = unsafePerformIO $
-      withCString "ConfigFile" $
-        \ clsNamePtr ->
-          withCString "get_section_keys" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns an array of all defined key identifiers in the specified section.
-get_section_keys ::
-                   (ConfigFile :< cls, Object :< cls) =>
-                   cls -> GodotString -> IO PoolStringArray
-get_section_keys cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindConfigFile_get_section_keys (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindConfigFile_erase_section #-}
-
--- | Deletes the specified section along with all the key-value pairs inside.
-bindConfigFile_erase_section :: MethodBind
-bindConfigFile_erase_section
-  = unsafePerformIO $
-      withCString "ConfigFile" $
-        \ clsNamePtr ->
-          withCString "erase_section" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Deletes the specified section along with all the key-value pairs inside.
-erase_section ::
-                (ConfigFile :< cls, Object :< cls) => cls -> GodotString -> IO ()
-erase_section cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindConfigFile_erase_section (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindConfigFile_load #-}
 
--- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the ConfigFile object which the method was called on. Returns one of the [code]OK[/code], [code]FAILED[/code] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [code]OK[/code].
+-- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the ConfigFile object which the method was called on. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
 bindConfigFile_load :: MethodBind
 bindConfigFile_load
   = unsafePerformIO $
@@ -192,7 +196,7 @@ bindConfigFile_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the ConfigFile object which the method was called on. Returns one of the [code]OK[/code], [code]FAILED[/code] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [code]OK[/code].
+-- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the ConfigFile object which the method was called on. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
 load ::
        (ConfigFile :< cls, Object :< cls) => cls -> GodotString -> IO Int
 load cls arg1
@@ -201,9 +205,54 @@ load cls arg1
          godot_method_bind_call bindConfigFile_load (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+{-# NOINLINE bindConfigFile_load_encrypted #-}
+
+bindConfigFile_load_encrypted :: MethodBind
+bindConfigFile_load_encrypted
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "load_encrypted" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+load_encrypted ::
+                 (ConfigFile :< cls, Object :< cls) =>
+                 cls -> GodotString -> PoolByteArray -> IO Int
+load_encrypted cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_load_encrypted (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConfigFile_load_encrypted_pass #-}
+
+bindConfigFile_load_encrypted_pass :: MethodBind
+bindConfigFile_load_encrypted_pass
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "load_encrypted_pass" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+load_encrypted_pass ::
+                      (ConfigFile :< cls, Object :< cls) =>
+                      cls -> GodotString -> GodotString -> IO Int
+load_encrypted_pass cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_load_encrypted_pass
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
 {-# NOINLINE bindConfigFile_save #-}
 
--- | Saves the contents of the ConfigFile object to the file specified as a parameter. The output file uses an INI-style structure. Returns one of the [code]OK[/code], [code]FAILED[/code] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [code]OK[/code].
+-- | Saves the contents of the ConfigFile object to the file specified as a parameter. The output file uses an INI-style structure. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
 bindConfigFile_save :: MethodBind
 bindConfigFile_save
   = unsafePerformIO $
@@ -213,11 +262,79 @@ bindConfigFile_save
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the contents of the ConfigFile object to the file specified as a parameter. The output file uses an INI-style structure. Returns one of the [code]OK[/code], [code]FAILED[/code] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [code]OK[/code].
+-- | Saves the contents of the ConfigFile object to the file specified as a parameter. The output file uses an INI-style structure. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
 save ::
        (ConfigFile :< cls, Object :< cls) => cls -> GodotString -> IO Int
 save cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindConfigFile_save (upcast cls) arrPtr len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConfigFile_save_encrypted #-}
+
+bindConfigFile_save_encrypted :: MethodBind
+bindConfigFile_save_encrypted
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "save_encrypted" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+save_encrypted ::
+                 (ConfigFile :< cls, Object :< cls) =>
+                 cls -> GodotString -> PoolByteArray -> IO Int
+save_encrypted cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_save_encrypted (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConfigFile_save_encrypted_pass #-}
+
+bindConfigFile_save_encrypted_pass :: MethodBind
+bindConfigFile_save_encrypted_pass
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "save_encrypted_pass" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+save_encrypted_pass ::
+                      (ConfigFile :< cls, Object :< cls) =>
+                      cls -> GodotString -> GodotString -> IO Int
+save_encrypted_pass cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_save_encrypted_pass
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindConfigFile_set_value #-}
+
+-- | Assigns a value to the specified key of the specified section. If the section and/or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
+bindConfigFile_set_value :: MethodBind
+bindConfigFile_set_value
+  = unsafePerformIO $
+      withCString "ConfigFile" $
+        \ clsNamePtr ->
+          withCString "set_value" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Assigns a value to the specified key of the specified section. If the section and/or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
+set_value ::
+            (ConfigFile :< cls, Object :< cls) =>
+            cls -> GodotString -> GodotString -> GodotVariant -> IO ()
+set_value cls arg1 arg2 arg3
+  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindConfigFile_set_value (upcast cls) arrPtr
+           len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

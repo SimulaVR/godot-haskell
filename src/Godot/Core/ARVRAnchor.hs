@@ -1,11 +1,13 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.ARVRAnchor
-       (Godot.Core.ARVRAnchor.set_anchor_id,
+       (Godot.Core.ARVRAnchor.sig_mesh_updated,
         Godot.Core.ARVRAnchor.get_anchor_id,
         Godot.Core.ARVRAnchor.get_anchor_name,
         Godot.Core.ARVRAnchor.get_is_active,
-        Godot.Core.ARVRAnchor.get_size, Godot.Core.ARVRAnchor.get_plane)
+        Godot.Core.ARVRAnchor.get_mesh, Godot.Core.ARVRAnchor.get_plane,
+        Godot.Core.ARVRAnchor.get_size,
+        Godot.Core.ARVRAnchor.set_anchor_id)
        where
 import Data.Coerce
 import Foreign.C
@@ -14,28 +16,8 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindARVRAnchor_set_anchor_id #-}
-
--- | The anchor's id. You can set this before the anchor itself exists. The first anchor gets an id of [code]1[/code], the second an id of [code]2[/code], etc. When anchors get removed, the engine can then assign the corresponding id to new anchors. The most common situation where anchors 'disappear' is when the AR server identifies that two anchors represent different parts of the same plane and merges them.
-bindARVRAnchor_set_anchor_id :: MethodBind
-bindARVRAnchor_set_anchor_id
-  = unsafePerformIO $
-      withCString "ARVRAnchor" $
-        \ clsNamePtr ->
-          withCString "set_anchor_id" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The anchor's id. You can set this before the anchor itself exists. The first anchor gets an id of [code]1[/code], the second an id of [code]2[/code], etc. When anchors get removed, the engine can then assign the corresponding id to new anchors. The most common situation where anchors 'disappear' is when the AR server identifies that two anchors represent different parts of the same plane and merges them.
-set_anchor_id ::
-                (ARVRAnchor :< cls, Object :< cls) => cls -> Int -> IO ()
-set_anchor_id cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindARVRAnchor_set_anchor_id (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+sig_mesh_updated :: Godot.Internal.Dispatch.Signal ARVRAnchor
+sig_mesh_updated = Godot.Internal.Dispatch.Signal "mesh_updated"
 
 {-# NOINLINE bindARVRAnchor_get_anchor_id #-}
 
@@ -85,7 +67,7 @@ get_anchor_name cls
 
 {-# NOINLINE bindARVRAnchor_get_is_active #-}
 
--- | Returns true if the anchor is being tracked and false if no anchor with this id is currently known.
+-- | Returns [code]true[/code] if the anchor is being tracked and [code]false[/code] if no anchor with this id is currently known.
 bindARVRAnchor_get_is_active :: MethodBind
 bindARVRAnchor_get_is_active
   = unsafePerformIO $
@@ -95,7 +77,7 @@ bindARVRAnchor_get_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns true if the anchor is being tracked and false if no anchor with this id is currently known.
+-- | Returns [code]true[/code] if the anchor is being tracked and [code]false[/code] if no anchor with this id is currently known.
 get_is_active ::
                 (ARVRAnchor :< cls, Object :< cls) => cls -> IO Bool
 get_is_active cls
@@ -103,6 +85,46 @@ get_is_active cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindARVRAnchor_get_is_active (upcast cls)
            arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindARVRAnchor_get_mesh #-}
+
+bindARVRAnchor_get_mesh :: MethodBind
+bindARVRAnchor_get_mesh
+  = unsafePerformIO $
+      withCString "ARVRAnchor" $
+        \ clsNamePtr ->
+          withCString "get_mesh" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+get_mesh :: (ARVRAnchor :< cls, Object :< cls) => cls -> IO Mesh
+get_mesh cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindARVRAnchor_get_mesh (upcast cls) arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindARVRAnchor_get_plane #-}
+
+-- | Returns a plane aligned with our anchor; handy for intersection testing.
+bindARVRAnchor_get_plane :: MethodBind
+bindARVRAnchor_get_plane
+  = unsafePerformIO $
+      withCString "ARVRAnchor" $
+        \ clsNamePtr ->
+          withCString "get_plane" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns a plane aligned with our anchor; handy for intersection testing.
+get_plane :: (ARVRAnchor :< cls, Object :< cls) => cls -> IO Plane
+get_plane cls
+  = withVariantArray []
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindARVRAnchor_get_plane (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
@@ -127,23 +149,25 @@ get_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindARVRAnchor_get_plane #-}
+{-# NOINLINE bindARVRAnchor_set_anchor_id #-}
 
--- | Returns a plane aligned with our anchor; handy for intersection testing.
-bindARVRAnchor_get_plane :: MethodBind
-bindARVRAnchor_get_plane
+-- | The anchor's id. You can set this before the anchor itself exists. The first anchor gets an id of [code]1[/code], the second an id of [code]2[/code], etc. When anchors get removed, the engine can then assign the corresponding id to new anchors. The most common situation where anchors 'disappear' is when the AR server identifies that two anchors represent different parts of the same plane and merges them.
+bindARVRAnchor_set_anchor_id :: MethodBind
+bindARVRAnchor_set_anchor_id
   = unsafePerformIO $
       withCString "ARVRAnchor" $
         \ clsNamePtr ->
-          withCString "get_plane" $
+          withCString "set_anchor_id" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a plane aligned with our anchor; handy for intersection testing.
-get_plane :: (ARVRAnchor :< cls, Object :< cls) => cls -> IO Plane
-get_plane cls
-  = withVariantArray []
+-- | The anchor's id. You can set this before the anchor itself exists. The first anchor gets an id of [code]1[/code], the second an id of [code]2[/code], etc. When anchors get removed, the engine can then assign the corresponding id to new anchors. The most common situation where anchors 'disappear' is when the AR server identifies that two anchors represent different parts of the same plane and merges them.
+set_anchor_id ::
+                (ARVRAnchor :< cls, Object :< cls) => cls -> Int -> IO ()
+set_anchor_id cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindARVRAnchor_get_plane (upcast cls) arrPtr
+         godot_method_bind_call bindARVRAnchor_set_anchor_id (upcast cls)
+           arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

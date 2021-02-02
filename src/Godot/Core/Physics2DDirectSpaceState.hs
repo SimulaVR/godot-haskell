@@ -1,13 +1,13 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.Physics2DDirectSpaceState
-       (Godot.Core.Physics2DDirectSpaceState.intersect_point,
+       (Godot.Core.Physics2DDirectSpaceState.cast_motion,
+        Godot.Core.Physics2DDirectSpaceState.collide_shape,
+        Godot.Core.Physics2DDirectSpaceState.get_rest_info,
+        Godot.Core.Physics2DDirectSpaceState.intersect_point,
         Godot.Core.Physics2DDirectSpaceState.intersect_point_on_canvas,
         Godot.Core.Physics2DDirectSpaceState.intersect_ray,
-        Godot.Core.Physics2DDirectSpaceState.intersect_shape,
-        Godot.Core.Physics2DDirectSpaceState.cast_motion,
-        Godot.Core.Physics2DDirectSpaceState.collide_shape,
-        Godot.Core.Physics2DDirectSpaceState.get_rest_info)
+        Godot.Core.Physics2DDirectSpaceState.intersect_shape)
        where
 import Data.Coerce
 import Foreign.C
@@ -15,6 +15,99 @@ import Godot.Internal.Dispatch
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+
+{-# NOINLINE bindPhysics2DDirectSpaceState_cast_motion #-}
+
+-- | Checks how far the shape can travel toward a point. Note that both the shape and the motion are supplied through a [Physics2DShapeQueryParameters] object. The method will return an array with two floats between 0 and 1, both representing a fraction of [code]motion[/code]. The first is how far the shape can move without triggering a collision, and the second is the point at which a collision will occur. If no collision is detected, the returned array will be [code][1, 1][/code].
+--   				If the shape can not move, the array will be empty.
+bindPhysics2DDirectSpaceState_cast_motion :: MethodBind
+bindPhysics2DDirectSpaceState_cast_motion
+  = unsafePerformIO $
+      withCString "Physics2DDirectSpaceState" $
+        \ clsNamePtr ->
+          withCString "cast_motion" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Checks how far the shape can travel toward a point. Note that both the shape and the motion are supplied through a [Physics2DShapeQueryParameters] object. The method will return an array with two floats between 0 and 1, both representing a fraction of [code]motion[/code]. The first is how far the shape can move without triggering a collision, and the second is the point at which a collision will occur. If no collision is detected, the returned array will be [code][1, 1][/code].
+--   				If the shape can not move, the array will be empty.
+cast_motion ::
+              (Physics2DDirectSpaceState :< cls, Object :< cls) =>
+              cls -> Physics2DShapeQueryParameters -> IO Array
+cast_motion cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysics2DDirectSpaceState_cast_motion
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysics2DDirectSpaceState_collide_shape #-}
+
+-- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. The resulting array contains a list of points where the shape intersects another. Like with [method intersect_shape], the number of returned results can be limited to save processing time.
+bindPhysics2DDirectSpaceState_collide_shape :: MethodBind
+bindPhysics2DDirectSpaceState_collide_shape
+  = unsafePerformIO $
+      withCString "Physics2DDirectSpaceState" $
+        \ clsNamePtr ->
+          withCString "collide_shape" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. The resulting array contains a list of points where the shape intersects another. Like with [method intersect_shape], the number of returned results can be limited to save processing time.
+collide_shape ::
+                (Physics2DDirectSpaceState :< cls, Object :< cls) =>
+                cls -> Physics2DShapeQueryParameters -> Int -> IO Array
+collide_shape cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysics2DDirectSpaceState_collide_shape
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindPhysics2DDirectSpaceState_get_rest_info #-}
+
+-- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. If it collides with more than one shape, the nearest one is selected. Note that this method does not take into account the [code]motion[/code] property of the object. The returned object is a dictionary containing the following fields:
+--   				[code]collider_id[/code]: The colliding object's ID.
+--   				[code]linear_velocity[/code]: The colliding object's velocity [Vector2]. If the object is an [Area2D], the result is [code](0, 0)[/code].
+--   				[code]metadata[/code]: The intersecting shape's metadata. This metadata is different from [method Object.get_meta], and is set with [method Physics2DServer.shape_set_data].
+--   				[code]normal[/code]: The object's surface normal at the intersection point.
+--   				[code]point[/code]: The intersection point.
+--   				[code]rid[/code]: The intersecting object's [RID].
+--   				[code]shape[/code]: The shape index of the colliding shape.
+--   				If the shape did not intersect anything, then an empty dictionary is returned instead.
+bindPhysics2DDirectSpaceState_get_rest_info :: MethodBind
+bindPhysics2DDirectSpaceState_get_rest_info
+  = unsafePerformIO $
+      withCString "Physics2DDirectSpaceState" $
+        \ clsNamePtr ->
+          withCString "get_rest_info" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. If it collides with more than one shape, the nearest one is selected. Note that this method does not take into account the [code]motion[/code] property of the object. The returned object is a dictionary containing the following fields:
+--   				[code]collider_id[/code]: The colliding object's ID.
+--   				[code]linear_velocity[/code]: The colliding object's velocity [Vector2]. If the object is an [Area2D], the result is [code](0, 0)[/code].
+--   				[code]metadata[/code]: The intersecting shape's metadata. This metadata is different from [method Object.get_meta], and is set with [method Physics2DServer.shape_set_data].
+--   				[code]normal[/code]: The object's surface normal at the intersection point.
+--   				[code]point[/code]: The intersection point.
+--   				[code]rid[/code]: The intersecting object's [RID].
+--   				[code]shape[/code]: The shape index of the colliding shape.
+--   				If the shape did not intersect anything, then an empty dictionary is returned instead.
+get_rest_info ::
+                (Physics2DDirectSpaceState :< cls, Object :< cls) =>
+                cls -> Physics2DShapeQueryParameters -> IO Dictionary
+get_rest_info cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindPhysics2DDirectSpaceState_get_rest_info
+           (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
 {-# NOINLINE bindPhysics2DDirectSpaceState_intersect_point #-}
 
@@ -164,99 +257,6 @@ intersect_shape cls arg1 arg2
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindPhysics2DDirectSpaceState_intersect_shape
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysics2DDirectSpaceState_cast_motion #-}
-
--- | Checks how far the shape can travel toward a point. Note that both the shape and the motion are supplied through a [Physics2DShapeQueryParameters] object. The method will return an array with two floats between 0 and 1, both representing a fraction of [code]motion[/code]. The first is how far the shape can move without triggering a collision, and the second is the point at which a collision will occur. If no collision is detected, the returned array will be [code][1, 1][/code].
---   				If the shape can not move, the array will be empty.
-bindPhysics2DDirectSpaceState_cast_motion :: MethodBind
-bindPhysics2DDirectSpaceState_cast_motion
-  = unsafePerformIO $
-      withCString "Physics2DDirectSpaceState" $
-        \ clsNamePtr ->
-          withCString "cast_motion" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Checks how far the shape can travel toward a point. Note that both the shape and the motion are supplied through a [Physics2DShapeQueryParameters] object. The method will return an array with two floats between 0 and 1, both representing a fraction of [code]motion[/code]. The first is how far the shape can move without triggering a collision, and the second is the point at which a collision will occur. If no collision is detected, the returned array will be [code][1, 1][/code].
---   				If the shape can not move, the array will be empty.
-cast_motion ::
-              (Physics2DDirectSpaceState :< cls, Object :< cls) =>
-              cls -> Physics2DShapeQueryParameters -> IO Array
-cast_motion cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysics2DDirectSpaceState_cast_motion
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysics2DDirectSpaceState_collide_shape #-}
-
--- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. The resulting array contains a list of points where the shape intersects another. Like with [method intersect_shape], the number of returned results can be limited to save processing time.
-bindPhysics2DDirectSpaceState_collide_shape :: MethodBind
-bindPhysics2DDirectSpaceState_collide_shape
-  = unsafePerformIO $
-      withCString "Physics2DDirectSpaceState" $
-        \ clsNamePtr ->
-          withCString "collide_shape" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. The resulting array contains a list of points where the shape intersects another. Like with [method intersect_shape], the number of returned results can be limited to save processing time.
-collide_shape ::
-                (Physics2DDirectSpaceState :< cls, Object :< cls) =>
-                cls -> Physics2DShapeQueryParameters -> Int -> IO Array
-collide_shape cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysics2DDirectSpaceState_collide_shape
-           (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindPhysics2DDirectSpaceState_get_rest_info #-}
-
--- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. If it collides with more than one shape, the nearest one is selected. Note that this method does not take into account the [code]motion[/code] property of the object. The returned object is a dictionary containing the following fields:
---   				[code]collider_id[/code]: The colliding object's ID.
---   				[code]linear_velocity[/code]: The colliding object's velocity [Vector2]. If the object is an [Area2D], the result is [code](0, 0)[/code].
---   				[code]metadata[/code]: The intersecting shape's metadata. This metadata is different from [method Object.get_meta], and is set with [method Physics2DServer.shape_set_data].
---   				[code]normal[/code]: The object's surface normal at the intersection point.
---   				[code]point[/code]: The intersection point.
---   				[code]rid[/code]: The intersecting object's [RID].
---   				[code]shape[/code]: The shape index of the colliding shape.
---   				If the shape did not intersect anything, then an empty dictionary is returned instead.
-bindPhysics2DDirectSpaceState_get_rest_info :: MethodBind
-bindPhysics2DDirectSpaceState_get_rest_info
-  = unsafePerformIO $
-      withCString "Physics2DDirectSpaceState" $
-        \ clsNamePtr ->
-          withCString "get_rest_info" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Checks the intersections of a shape, given through a [Physics2DShapeQueryParameters] object, against the space. If it collides with more than one shape, the nearest one is selected. Note that this method does not take into account the [code]motion[/code] property of the object. The returned object is a dictionary containing the following fields:
---   				[code]collider_id[/code]: The colliding object's ID.
---   				[code]linear_velocity[/code]: The colliding object's velocity [Vector2]. If the object is an [Area2D], the result is [code](0, 0)[/code].
---   				[code]metadata[/code]: The intersecting shape's metadata. This metadata is different from [method Object.get_meta], and is set with [method Physics2DServer.shape_set_data].
---   				[code]normal[/code]: The object's surface normal at the intersection point.
---   				[code]point[/code]: The intersection point.
---   				[code]rid[/code]: The intersecting object's [RID].
---   				[code]shape[/code]: The shape index of the colliding shape.
---   				If the shape did not intersect anything, then an empty dictionary is returned instead.
-get_rest_info ::
-                (Physics2DDirectSpaceState :< cls, Object :< cls) =>
-                cls -> Physics2DShapeQueryParameters -> IO Dictionary
-get_rest_info cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindPhysics2DDirectSpaceState_get_rest_info
            (upcast cls)
            arrPtr
            len

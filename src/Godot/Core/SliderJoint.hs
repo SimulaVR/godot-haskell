@@ -24,11 +24,11 @@ module Godot.Core.SliderJoint
         Godot.Core.SliderJoint._PARAM_ANGULAR_ORTHOGONAL_RESTITUTION,
         Godot.Core.SliderJoint._PARAM_LINEAR_MOTION_DAMPING,
         Godot.Core.SliderJoint._PARAM_ANGULAR_MOTION_SOFTNESS,
-        Godot.Core.SliderJoint.set_param, Godot.Core.SliderJoint.get_param,
-        Godot.Core.SliderJoint._set_upper_limit_angular,
+        Godot.Core.SliderJoint._get_lower_limit_angular,
         Godot.Core.SliderJoint._get_upper_limit_angular,
         Godot.Core.SliderJoint._set_lower_limit_angular,
-        Godot.Core.SliderJoint._get_lower_limit_angular)
+        Godot.Core.SliderJoint._set_upper_limit_angular,
+        Godot.Core.SliderJoint.get_param, Godot.Core.SliderJoint.set_param)
        where
 import Data.Coerce
 import Foreign.C
@@ -106,75 +106,25 @@ _PARAM_LINEAR_MOTION_DAMPING = 7
 _PARAM_ANGULAR_MOTION_SOFTNESS :: Int
 _PARAM_ANGULAR_MOTION_SOFTNESS = 16
 
-{-# NOINLINE bindSliderJoint_set_param #-}
+{-# NOINLINE bindSliderJoint__get_lower_limit_angular #-}
 
--- | The amount of damping of the rotation when the limit is surpassed.
---   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
-bindSliderJoint_set_param :: MethodBind
-bindSliderJoint_set_param
+-- | The lower limit of rotation in the slider.
+bindSliderJoint__get_lower_limit_angular :: MethodBind
+bindSliderJoint__get_lower_limit_angular
   = unsafePerformIO $
       withCString "SliderJoint" $
         \ clsNamePtr ->
-          withCString "set_param" $
+          withCString "_get_lower_limit_angular" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of damping of the rotation when the limit is surpassed.
---   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
-set_param ::
-            (SliderJoint :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
-set_param cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+-- | The lower limit of rotation in the slider.
+_get_lower_limit_angular ::
+                           (SliderJoint :< cls, Object :< cls) => cls -> IO Float
+_get_lower_limit_angular cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindSliderJoint_set_param (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindSliderJoint_get_param #-}
-
--- | The amount of damping of the rotation when the limit is surpassed.
---   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
-bindSliderJoint_get_param :: MethodBind
-bindSliderJoint_get_param
-  = unsafePerformIO $
-      withCString "SliderJoint" $
-        \ clsNamePtr ->
-          withCString "get_param" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The amount of damping of the rotation when the limit is surpassed.
---   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
-get_param ::
-            (SliderJoint :< cls, Object :< cls) => cls -> Int -> IO Float
-get_param cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindSliderJoint_get_param (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
-{-# NOINLINE bindSliderJoint__set_upper_limit_angular #-}
-
--- | The upper limit of rotation in the slider.
-bindSliderJoint__set_upper_limit_angular :: MethodBind
-bindSliderJoint__set_upper_limit_angular
-  = unsafePerformIO $
-      withCString "SliderJoint" $
-        \ clsNamePtr ->
-          withCString "_set_upper_limit_angular" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | The upper limit of rotation in the slider.
-_set_upper_limit_angular ::
-                           (SliderJoint :< cls, Object :< cls) => cls -> Float -> IO ()
-_set_upper_limit_angular cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindSliderJoint__set_upper_limit_angular
+         godot_method_bind_call bindSliderJoint__get_lower_limit_angular
            (upcast cls)
            arrPtr
            len
@@ -228,26 +178,76 @@ _set_lower_limit_angular cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindSliderJoint__get_lower_limit_angular #-}
+{-# NOINLINE bindSliderJoint__set_upper_limit_angular #-}
 
--- | The lower limit of rotation in the slider.
-bindSliderJoint__get_lower_limit_angular :: MethodBind
-bindSliderJoint__get_lower_limit_angular
+-- | The upper limit of rotation in the slider.
+bindSliderJoint__set_upper_limit_angular :: MethodBind
+bindSliderJoint__set_upper_limit_angular
   = unsafePerformIO $
       withCString "SliderJoint" $
         \ clsNamePtr ->
-          withCString "_get_lower_limit_angular" $
+          withCString "_set_upper_limit_angular" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The lower limit of rotation in the slider.
-_get_lower_limit_angular ::
-                           (SliderJoint :< cls, Object :< cls) => cls -> IO Float
-_get_lower_limit_angular cls
-  = withVariantArray []
+-- | The upper limit of rotation in the slider.
+_set_upper_limit_angular ::
+                           (SliderJoint :< cls, Object :< cls) => cls -> Float -> IO ()
+_set_upper_limit_angular cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindSliderJoint__get_lower_limit_angular
+         godot_method_bind_call bindSliderJoint__set_upper_limit_angular
            (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindSliderJoint_get_param #-}
+
+-- | The amount of damping of the rotation when the limit is surpassed.
+--   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
+bindSliderJoint_get_param :: MethodBind
+bindSliderJoint_get_param
+  = unsafePerformIO $
+      withCString "SliderJoint" $
+        \ clsNamePtr ->
+          withCString "get_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The amount of damping of the rotation when the limit is surpassed.
+--   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
+get_param ::
+            (SliderJoint :< cls, Object :< cls) => cls -> Int -> IO Float
+get_param cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindSliderJoint_get_param (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindSliderJoint_set_param #-}
+
+-- | The amount of damping of the rotation when the limit is surpassed.
+--   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
+bindSliderJoint_set_param :: MethodBind
+bindSliderJoint_set_param
+  = unsafePerformIO $
+      withCString "SliderJoint" $
+        \ clsNamePtr ->
+          withCString "set_param" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | The amount of damping of the rotation when the limit is surpassed.
+--   			A lower damping value allows a rotation initiated by body A to travel to body B slower.
+set_param ::
+            (SliderJoint :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
+set_param cls arg1 arg2
+  = withVariantArray [toVariant arg1, toVariant arg2]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindSliderJoint_set_param (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)

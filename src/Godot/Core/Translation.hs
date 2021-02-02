@@ -1,15 +1,15 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
 module Godot.Core.Translation
-       (Godot.Core.Translation.set_locale,
-        Godot.Core.Translation.get_locale,
-        Godot.Core.Translation.add_message,
-        Godot.Core.Translation.get_message,
-        Godot.Core.Translation.erase_message,
-        Godot.Core.Translation.get_message_list,
-        Godot.Core.Translation.get_message_count,
+       (Godot.Core.Translation._get_messages,
         Godot.Core.Translation._set_messages,
-        Godot.Core.Translation._get_messages)
+        Godot.Core.Translation.add_message,
+        Godot.Core.Translation.erase_message,
+        Godot.Core.Translation.get_locale,
+        Godot.Core.Translation.get_message,
+        Godot.Core.Translation.get_message_count,
+        Godot.Core.Translation.get_message_list,
+        Godot.Core.Translation.set_locale)
        where
 import Data.Coerce
 import Foreign.C
@@ -18,48 +18,45 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-{-# NOINLINE bindTranslation_set_locale #-}
+{-# NOINLINE bindTranslation__get_messages #-}
 
--- | The locale of the translation.
-bindTranslation_set_locale :: MethodBind
-bindTranslation_set_locale
+bindTranslation__get_messages :: MethodBind
+bindTranslation__get_messages
   = unsafePerformIO $
       withCString "Translation" $
         \ clsNamePtr ->
-          withCString "set_locale" $
+          withCString "_get_messages" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The locale of the translation.
-set_locale ::
-             (Translation :< cls, Object :< cls) => cls -> GodotString -> IO ()
-set_locale cls arg1
-  = withVariantArray [toVariant arg1]
+_get_messages ::
+                (Translation :< cls, Object :< cls) => cls -> IO PoolStringArray
+_get_messages cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTranslation_set_locale (upcast cls)
+         godot_method_bind_call bindTranslation__get_messages (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTranslation_get_locale #-}
+{-# NOINLINE bindTranslation__set_messages #-}
 
--- | The locale of the translation.
-bindTranslation_get_locale :: MethodBind
-bindTranslation_get_locale
+bindTranslation__set_messages :: MethodBind
+bindTranslation__set_messages
   = unsafePerformIO $
       withCString "Translation" $
         \ clsNamePtr ->
-          withCString "get_locale" $
+          withCString "_set_messages" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The locale of the translation.
-get_locale ::
-             (Translation :< cls, Object :< cls) => cls -> IO GodotString
-get_locale cls
-  = withVariantArray []
+_set_messages ::
+                (Translation :< cls, Object :< cls) =>
+                cls -> PoolStringArray -> IO ()
+_set_messages cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTranslation_get_locale (upcast cls)
+         godot_method_bind_call bindTranslation__set_messages (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -88,30 +85,6 @@ add_message cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTranslation_get_message #-}
-
--- | Returns a message's translation.
-bindTranslation_get_message :: MethodBind
-bindTranslation_get_message
-  = unsafePerformIO $
-      withCString "Translation" $
-        \ clsNamePtr ->
-          withCString "get_message" $
-            \ methodNamePtr ->
-              godot_method_bind_get_method clsNamePtr methodNamePtr
-
--- | Returns a message's translation.
-get_message ::
-              (Translation :< cls, Object :< cls) =>
-              cls -> GodotString -> IO GodotString
-get_message cls arg1
-  = withVariantArray [toVariant arg1]
-      (\ (arrPtr, len) ->
-         godot_method_bind_call bindTranslation_get_message (upcast cls)
-           arrPtr
-           len
-           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
-
 {-# NOINLINE bindTranslation_erase_message #-}
 
 -- | Erases a message.
@@ -135,26 +108,49 @@ erase_message cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTranslation_get_message_list #-}
+{-# NOINLINE bindTranslation_get_locale #-}
 
--- | Returns all the messages (keys).
-bindTranslation_get_message_list :: MethodBind
-bindTranslation_get_message_list
+-- | The locale of the translation.
+bindTranslation_get_locale :: MethodBind
+bindTranslation_get_locale
   = unsafePerformIO $
       withCString "Translation" $
         \ clsNamePtr ->
-          withCString "get_message_list" $
+          withCString "get_locale" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all the messages (keys).
-get_message_list ::
-                   (Translation :< cls, Object :< cls) => cls -> IO PoolStringArray
-get_message_list cls
+-- | The locale of the translation.
+get_locale ::
+             (Translation :< cls, Object :< cls) => cls -> IO GodotString
+get_locale cls
   = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTranslation_get_message_list
-           (upcast cls)
+         godot_method_bind_call bindTranslation_get_locale (upcast cls)
+           arrPtr
+           len
+           >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+{-# NOINLINE bindTranslation_get_message #-}
+
+-- | Returns a message's translation.
+bindTranslation_get_message :: MethodBind
+bindTranslation_get_message
+  = unsafePerformIO $
+      withCString "Translation" $
+        \ clsNamePtr ->
+          withCString "get_message" $
+            \ methodNamePtr ->
+              godot_method_bind_get_method clsNamePtr methodNamePtr
+
+-- | Returns a message's translation.
+get_message ::
+              (Translation :< cls, Object :< cls) =>
+              cls -> GodotString -> IO GodotString
+get_message cls arg1
+  = withVariantArray [toVariant arg1]
+      (\ (arrPtr, len) ->
+         godot_method_bind_call bindTranslation_get_message (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
@@ -183,45 +179,49 @@ get_message_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTranslation__set_messages #-}
+{-# NOINLINE bindTranslation_get_message_list #-}
 
-bindTranslation__set_messages :: MethodBind
-bindTranslation__set_messages
+-- | Returns all the messages (keys).
+bindTranslation_get_message_list :: MethodBind
+bindTranslation_get_message_list
   = unsafePerformIO $
       withCString "Translation" $
         \ clsNamePtr ->
-          withCString "_set_messages" $
+          withCString "get_message_list" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_set_messages ::
-                (Translation :< cls, Object :< cls) =>
-                cls -> PoolStringArray -> IO ()
-_set_messages cls arg1
-  = withVariantArray [toVariant arg1]
+-- | Returns all the messages (keys).
+get_message_list ::
+                   (Translation :< cls, Object :< cls) => cls -> IO PoolStringArray
+get_message_list cls
+  = withVariantArray []
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTranslation__set_messages (upcast cls)
+         godot_method_bind_call bindTranslation_get_message_list
+           (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
-{-# NOINLINE bindTranslation__get_messages #-}
+{-# NOINLINE bindTranslation_set_locale #-}
 
-bindTranslation__get_messages :: MethodBind
-bindTranslation__get_messages
+-- | The locale of the translation.
+bindTranslation_set_locale :: MethodBind
+bindTranslation_set_locale
   = unsafePerformIO $
       withCString "Translation" $
         \ clsNamePtr ->
-          withCString "_get_messages" $
+          withCString "set_locale" $
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-_get_messages ::
-                (Translation :< cls, Object :< cls) => cls -> IO PoolStringArray
-_get_messages cls
-  = withVariantArray []
+-- | The locale of the translation.
+set_locale ::
+             (Translation :< cls, Object :< cls) => cls -> GodotString -> IO ()
+set_locale cls arg1
+  = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
-         godot_method_bind_call bindTranslation__get_messages (upcast cls)
+         godot_method_bind_call bindTranslation_set_locale (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
