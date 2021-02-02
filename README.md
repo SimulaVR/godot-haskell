@@ -66,17 +66,29 @@ To regenerate bindings:
 * Replace godot_headers with a version that corresponds to your
   install. Instructions are included there, but that generally means either
   checking out the corresponding files or rebuilding Godot.
-* Check out a copy of the godot repo. You don't need to build this, but you
-  probably will anyway. We need it because documentation files are not 
-  included in the api.json file found in godot_headers.
+* Check out a copy of the godot repo and make sure you're on the commit
+  corresponding to your version of godot. You don't need to build this, but you
+  probably will anyway. We need it because documentation files are not included
+  in the api.json file found in godot_headers.
 * Summarize the documentation xml files into a json file:
+
+```bash
+# Prerequisite
+sudo apt-get install jq libcurl4-gnutls-dev # Or equivalent on you OS/Distro
+cabal install xml-to-json
+
+# Generate the JSON
 xml-to-json godot-install-directory/doc/classes/*.xml | jq -n '[inputs]' &> godot_doc_classes.json
+```
+
 * Build the bindings themselves:
+
+```bash
 cd classgen
 stack build
-cd ..
-rm src/Godot/Core/* src/Godot/Tools/*
-stack exec godot-haskell-classgen ../godot_headers/api.json ../godot_doc_classes.json
+rm ../src/Godot/Core/* ../src/Godot/Tools/*
+stack exec godot-haskell-classgen -- ../godot_headers/api.json ../godot_doc_classes.json ../
+```
 
 That's it! The rest of the bindings are fairly lightweight with few
 dependencies, so you shouldn't see much breakage in the rest of the package.
