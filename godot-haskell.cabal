@@ -1,10 +1,10 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.31.1.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bf49eaa4519302246599b8db915586310e121b27be65f8d6c67f6d51bf1c1f26
+-- hash: fd967698bfd9d9ccd2e79004baaa53ec943399bd7183259308c4623f7600d246
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -99,6 +99,7 @@ library
       Godot.Core.ARVRPositionalTracker
       Godot.Core.ARVRServer
       Godot.Core.AStar
+      Godot.Core.AStar2D
       Godot.Core.AtlasTexture
       Godot.Core.AudioBusLayout
       Godot.Core.AudioEffect
@@ -116,6 +117,7 @@ library
       Godot.Core.AudioEffectFilter
       Godot.Core.AudioEffectHighPassFilter
       Godot.Core.AudioEffectHighShelfFilter
+      Godot.Core.AudioEffectInstance
       Godot.Core.AudioEffectLimiter
       Godot.Core.AudioEffectLowPassFilter
       Godot.Core.AudioEffectLowShelfFilter
@@ -125,12 +127,17 @@ library
       Godot.Core.AudioEffectPitchShift
       Godot.Core.AudioEffectRecord
       Godot.Core.AudioEffectReverb
+      Godot.Core.AudioEffectSpectrumAnalyzer
+      Godot.Core.AudioEffectSpectrumAnalyzerInstance
       Godot.Core.AudioEffectStereoEnhance
       Godot.Core.AudioServer
       Godot.Core.AudioStream
+      Godot.Core.AudioStreamGenerator
+      Godot.Core.AudioStreamGeneratorPlayback
       Godot.Core.AudioStreamMicrophone
       Godot.Core.AudioStreamOGGVorbis
       Godot.Core.AudioStreamPlayback
+      Godot.Core.AudioStreamPlaybackResampled
       Godot.Core.AudioStreamPlayer
       Godot.Core.AudioStreamPlayer2D
       Godot.Core.AudioStreamPlayer3D
@@ -152,6 +159,9 @@ library
       Godot.Core.ButtonGroup
       Godot.Core.Camera
       Godot.Core.Camera2D
+      Godot.Core.CameraFeed
+      Godot.Core.CameraServer
+      Godot.Core.CameraTexture
       Godot.Core.CanvasItem
       Godot.Core.CanvasItemMaterial
       Godot.Core.CanvasLayer
@@ -160,6 +170,7 @@ library
       Godot.Core.CapsuleShape
       Godot.Core.CapsuleShape2D
       Godot.Core.CenterContainer
+      Godot.Core.CharFXTransform
       Godot.Core.CheckBox
       Godot.Core.CheckButton
       Godot.Core.CircleShape2D
@@ -185,6 +196,8 @@ library
       Godot.Core.ConvexPolygonShape2D
       Godot.Core.CPUParticles
       Godot.Core.CPUParticles2D
+      Godot.Core.Crypto
+      Godot.Core.CryptoKey
       Godot.Core.CSGBox
       Godot.Core.CSGCombiner
       Godot.Core.CSGCylinder
@@ -217,8 +230,6 @@ library
       Godot.Core.FuncRef
       Godot.Core.GDNative
       Godot.Core.GDNativeLibrary
-      Godot.Core.GDNativeLibraryResourceLoader
-      Godot.Core.GDNativeLibraryResourceSaver
       Godot.Core.GDScript
       Godot.Core.GDScriptFunctionState
       Godot.Core.Generic6DOFJoint
@@ -234,7 +245,9 @@ library
       Godot.Core.GridContainer
       Godot.Core.GridMap
       Godot.Core.GrooveJoint2D
+      Godot.Core.HashingContext
       Godot.Core.HBoxContainer
+      Godot.Core.HeightMapShape
       Godot.Core.HingeJoint
       Godot.Core.HScrollBar
       Godot.Core.HSeparator
@@ -268,11 +281,14 @@ library
       Godot.Core.IP
       Godot.Core.IP_Unix
       Godot.Core.ItemList
+      Godot.Core.JavaClass
+      Godot.Core.JavaClassWrapper
       Godot.Core.JavaScript
       Godot.Core.Joint
       Godot.Core.Joint2D
       Godot.Core.JSON
       Godot.Core.JSONParseResult
+      Godot.Core.JSONRPC
       Godot.Core.KinematicBody
       Godot.Core.KinematicBody2D
       Godot.Core.KinematicCollision
@@ -297,9 +313,11 @@ library
       Godot.Core.MeshInstance
       Godot.Core.MeshInstance2D
       Godot.Core.MeshLibrary
+      Godot.Core.MeshTexture
       Godot.Core.MobileVRInterface
       Godot.Core.MultiMesh
       Godot.Core.MultiMeshInstance
+      Godot.Core.MultiMeshInstance2D
       Godot.Core.MultiplayerAPI
       Godot.Core.MultiplayerPeerGDNative
       Godot.Core.Mutex
@@ -366,6 +384,7 @@ library
       Godot.Core.PlaneMesh
       Godot.Core.PlaneShape
       Godot.Core.PluginScript
+      Godot.Core.PointMesh
       Godot.Core.Polygon2D
       Godot.Core.PolygonPathFinder
       Godot.Core.Popup
@@ -397,37 +416,16 @@ library
       Godot.Core.RemoteTransform
       Godot.Core.RemoteTransform2D
       Godot.Core.Resource
-      Godot.Core.ResourceFormatDDS
-      Godot.Core.ResourceFormatImporter
       Godot.Core.ResourceFormatLoader
-      Godot.Core.ResourceFormatLoaderBinary
-      Godot.Core.ResourceFormatLoaderBMFont
-      Godot.Core.ResourceFormatLoaderDynamicFont
-      Godot.Core.ResourceFormatLoaderGDScript
-      Godot.Core.ResourceFormatLoaderImage
-      Godot.Core.ResourceFormatLoaderNativeScript
-      Godot.Core.ResourceFormatLoaderShader
-      Godot.Core.ResourceFormatLoaderStreamTexture
-      Godot.Core.ResourceFormatLoaderText
-      Godot.Core.ResourceFormatLoaderTextureLayered
-      Godot.Core.ResourceFormatLoaderTheora
-      Godot.Core.ResourceFormatLoaderVideoStreamGDNative
-      Godot.Core.ResourceFormatLoaderWebm
-      Godot.Core.ResourceFormatPKM
-      Godot.Core.ResourceFormatPVR
+      Godot.Core.ResourceFormatLoaderCrypto
       Godot.Core.ResourceFormatSaver
-      Godot.Core.ResourceFormatSaverBinary
-      Godot.Core.ResourceFormatSaverGDScript
-      Godot.Core.ResourceFormatSaverNativeScript
-      Godot.Core.ResourceFormatSaverShader
-      Godot.Core.ResourceFormatSaverText
+      Godot.Core.ResourceFormatSaverCrypto
       Godot.Core.ResourceImporter
-      Godot.Core.ResourceImporterOGGVorbis
       Godot.Core.ResourceInteractiveLoader
       Godot.Core.ResourceLoader
       Godot.Core.ResourcePreloader
       Godot.Core.ResourceSaver
-      Godot.Core.ResourceSaverPNG
+      Godot.Core.RichTextEffect
       Godot.Core.RichTextLabel
       Godot.Core.RigidBody
       Godot.Core.RigidBody2D
@@ -449,6 +447,8 @@ library
       Godot.Core.Skeleton
       Godot.Core.Skeleton2D
       Godot.Core.SkeletonIK
+      Godot.Core.Skin
+      Godot.Core.SkinReference
       Godot.Core.Sky
       Godot.Core.Slider
       Godot.Core.SliderJoint
@@ -501,7 +501,6 @@ library
       Godot.Core.ToolButton
       Godot.Core.TouchScreenButton
       Godot.Core.Translation
-      Godot.Core.TranslationLoaderPO
       Godot.Core.TranslationServer
       Godot.Core.Tree
       Godot.Core.TreeItem
@@ -531,6 +530,7 @@ library
       Godot.Core.VisualScriptBuiltinFunc
       Godot.Core.VisualScriptClassConstant
       Godot.Core.VisualScriptComment
+      Godot.Core.VisualScriptComposeArray
       Godot.Core.VisualScriptCondition
       Godot.Core.VisualScriptConstant
       Godot.Core.VisualScriptConstructor
@@ -547,6 +547,7 @@ library
       Godot.Core.VisualScriptIndexSet
       Godot.Core.VisualScriptInputAction
       Godot.Core.VisualScriptIterator
+      Godot.Core.VisualScriptLists
       Godot.Core.VisualScriptLocalVar
       Godot.Core.VisualScriptLocalVarSet
       Godot.Core.VisualScriptMathConstant
@@ -573,41 +574,75 @@ library
       Godot.Core.VisualServer
       Godot.Core.VisualShader
       Godot.Core.VisualShaderNode
+      Godot.Core.VisualShaderNodeBooleanConstant
+      Godot.Core.VisualShaderNodeBooleanUniform
       Godot.Core.VisualShaderNodeColorConstant
+      Godot.Core.VisualShaderNodeColorFunc
       Godot.Core.VisualShaderNodeColorOp
       Godot.Core.VisualShaderNodeColorUniform
+      Godot.Core.VisualShaderNodeCompare
       Godot.Core.VisualShaderNodeCubeMap
       Godot.Core.VisualShaderNodeCubeMapUniform
+      Godot.Core.VisualShaderNodeCustom
+      Godot.Core.VisualShaderNodeDeterminant
       Godot.Core.VisualShaderNodeDotProduct
+      Godot.Core.VisualShaderNodeExpression
+      Godot.Core.VisualShaderNodeFaceForward
+      Godot.Core.VisualShaderNodeFresnel
+      Godot.Core.VisualShaderNodeGlobalExpression
+      Godot.Core.VisualShaderNodeGroupBase
+      Godot.Core.VisualShaderNodeIf
       Godot.Core.VisualShaderNodeInput
+      Godot.Core.VisualShaderNodeIs
+      Godot.Core.VisualShaderNodeOuterProduct
       Godot.Core.VisualShaderNodeOutput
+      Godot.Core.VisualShaderNodeScalarClamp
       Godot.Core.VisualShaderNodeScalarConstant
+      Godot.Core.VisualShaderNodeScalarDerivativeFunc
       Godot.Core.VisualShaderNodeScalarFunc
       Godot.Core.VisualShaderNodeScalarInterp
       Godot.Core.VisualShaderNodeScalarOp
+      Godot.Core.VisualShaderNodeScalarSmoothStep
+      Godot.Core.VisualShaderNodeScalarSwitch
       Godot.Core.VisualShaderNodeScalarUniform
+      Godot.Core.VisualShaderNodeSwitch
       Godot.Core.VisualShaderNodeTexture
       Godot.Core.VisualShaderNodeTextureUniform
+      Godot.Core.VisualShaderNodeTextureUniformTriplanar
       Godot.Core.VisualShaderNodeTransformCompose
       Godot.Core.VisualShaderNodeTransformConstant
       Godot.Core.VisualShaderNodeTransformDecompose
+      Godot.Core.VisualShaderNodeTransformFunc
       Godot.Core.VisualShaderNodeTransformMult
       Godot.Core.VisualShaderNodeTransformUniform
       Godot.Core.VisualShaderNodeTransformVecMult
       Godot.Core.VisualShaderNodeUniform
       Godot.Core.VisualShaderNodeVec3Constant
       Godot.Core.VisualShaderNodeVec3Uniform
+      Godot.Core.VisualShaderNodeVectorClamp
       Godot.Core.VisualShaderNodeVectorCompose
       Godot.Core.VisualShaderNodeVectorDecompose
+      Godot.Core.VisualShaderNodeVectorDerivativeFunc
+      Godot.Core.VisualShaderNodeVectorDistance
       Godot.Core.VisualShaderNodeVectorFunc
       Godot.Core.VisualShaderNodeVectorInterp
       Godot.Core.VisualShaderNodeVectorLen
       Godot.Core.VisualShaderNodeVectorOp
+      Godot.Core.VisualShaderNodeVectorRefract
+      Godot.Core.VisualShaderNodeVectorScalarMix
+      Godot.Core.VisualShaderNodeVectorScalarSmoothStep
+      Godot.Core.VisualShaderNodeVectorScalarStep
+      Godot.Core.VisualShaderNodeVectorSmoothStep
       Godot.Core.VScrollBar
       Godot.Core.VSeparator
       Godot.Core.VSlider
       Godot.Core.VSplitContainer
       Godot.Core.WeakRef
+      Godot.Core.WebRTCDataChannel
+      Godot.Core.WebRTCDataChannelGDNative
+      Godot.Core.WebRTCMultiplayer
+      Godot.Core.WebRTCPeerConnection
+      Godot.Core.WebRTCPeerConnectionGDNative
       Godot.Core.WebSocketClient
       Godot.Core.WebSocketMultiplayerPeer
       Godot.Core.WebSocketPeer
@@ -616,6 +651,7 @@ library
       Godot.Core.World
       Godot.Core.World2D
       Godot.Core.WorldEnvironment
+      Godot.Core.X509Certificate
       Godot.Core.XMLParser
       Godot.Core.YSort
       Godot.Gdnative
@@ -628,6 +664,7 @@ library
       Godot.Nativescript
       Godot.Tools.AnimationTrackEditPlugin
       Godot.Tools.EditorExportPlugin
+      Godot.Tools.EditorFeatureProfile
       Godot.Tools.EditorFileDialog
       Godot.Tools.EditorFileSystem
       Godot.Tools.EditorFileSystemDirectory
@@ -635,18 +672,22 @@ library
       Godot.Tools.EditorInspector
       Godot.Tools.EditorInspectorPlugin
       Godot.Tools.EditorInterface
+      Godot.Tools.EditorNavigationMeshGenerator
       Godot.Tools.EditorPlugin
       Godot.Tools.EditorProperty
       Godot.Tools.EditorResourceConversionPlugin
       Godot.Tools.EditorResourcePreview
       Godot.Tools.EditorResourcePreviewGenerator
       Godot.Tools.EditorSceneImporter
+      Godot.Tools.EditorSceneImporterAssimp
       Godot.Tools.EditorScenePostImport
       Godot.Tools.EditorScript
       Godot.Tools.EditorSelection
       Godot.Tools.EditorSettings
       Godot.Tools.EditorSpatialGizmo
       Godot.Tools.EditorSpatialGizmoPlugin
+      Godot.Tools.EditorSpinSlider
+      Godot.Tools.EditorVCSInterface
       Godot.Tools.ScriptCreateDialog
       Godot.Tools.ScriptEditor
       Godot.Tools.VisualScriptEditor

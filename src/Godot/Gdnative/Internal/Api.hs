@@ -21,6 +21,9 @@ gdnativeCoreApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeCoreApi
 gdnativeCore11ApiStruct :: GdnativeCore11ApiStruct
 gdnativeCore11ApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeCore11ApiStructRef
 
+gdnativeCore12ApiStruct :: GdnativeCore12ApiStruct
+gdnativeCore12ApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeCore12ApiStructRef
+
 gdnativeExtNativescriptApiStruct :: GdnativeExtNativescriptApiStruct
 gdnativeExtNativescriptApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtNativescriptApiStructRef
 
@@ -39,9 +42,8 @@ gdnativeExtVideodecoderApiStruct = accursedUnutterablePerformIO $ readIORef gdna
 gdnativeExtNetApiStruct :: GdnativeExtNetApiStruct
 gdnativeExtNetApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtNetApiStructRef
 
-godotGdnativeExtNet32ApiStruct :: GodotGdnativeExtNet32ApiStruct
-godotGdnativeExtNet32ApiStruct = accursedUnutterablePerformIO $ readIORef godotGdnativeExtNet32ApiStructRef
-
+gdnativeExtNet32ApiStruct :: GdnativeExtNet32ApiStruct
+gdnativeExtNet32ApiStruct = accursedUnutterablePerformIO $ readIORef gdnativeExtNet32ApiStructRef
 
 $(do
     maybeApis <- eitherDecode <$> runIO (BL.readFile "godot_headers/gdnative_api.json")
