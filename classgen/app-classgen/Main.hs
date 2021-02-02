@@ -20,13 +20,16 @@ import qualified Data.Text as T
 main :: IO ()
 main = do
   args <- getArgs
-  when (length args /= 2) $ do
-    putStrLn "godot-haskell-classgen <api.json> <godot_doc_classes.json>"
+  when (length args /= 3) $ do
+    putStrLn "See the godot-haskell README.md for instructions"
+    putStrLn "godot-haskell-classgen <api.json> <godot_doc_classes.json> <godot-haskell-root>"
     exitFailure
   api <- BL.readFile (args !! 0)
-  let (Just classes) = decode api :: Maybe GodotClasses
+  let decodeErr x = either error id (eitherDecode x)
+  let (Just classes) = decodeErr api :: Maybe GodotClasses
   doc <- BL.readFile (args !! 1)
-  let (Just docs) = decode doc :: Maybe D.GodotDocs
+  let (Just docs) = decodeErr doc :: Maybe D.GodotDocs
+  let godotHaskellRootDir = args !! 2
   let docTable = D.toTable docs
   let state = execState (mapM_ (\cls -> addClass cls (H.lookup (cls ^. Classgen.Spec.name) docTable
                                                      <|> (T.stripPrefix "Godot_" (cls ^. Classgen.Spec.name)
@@ -38,8 +41,8 @@ main = do
                                                      <|> (H.lookup  ("_" <> (cls ^. Classgen.Spec.name)) docTable)
                                                     )) classes)
                         (ClassgenState mempty mempty mempty)
-  writeModule $ godotApiTypes (state ^. tyDecls)
-  mapM_ writeModule (HM.elems (state ^. modules))
+  writeModule godotHaskellRootDir $ godotApiTypes (state ^. tyDecls)
+  mapM_ (writeModule godotHaskellRootDir) (HM.elems (state ^. modules))
   where
     godotApiTypes decls   = Module Nothing (Just
                                             $ ModuleHead Nothing (ModuleName Nothing "Godot.Api.Types") Nothing
@@ -66,9 +69,9 @@ main = do
     classImports = map (\n -> ImportDecl Nothing (ModuleName Nothing n) False False False Nothing Nothing Nothing)
       [ "Data.Coerce", "Foreign.C", "Godot.Internal.Dispatch", "Godot.Gdnative.Internal"]
 
-writeModule :: Module (Maybe CodeComment) -> IO ()
-writeModule mdl@(Module _ (Just (ModuleHead _ (ModuleName Nothing name) _ _)) _ _ _) = do
-  let filepath = "src/" ++ map replaceDot name ++ ".hs"
+writeModule :: FilePath -> Module (Maybe CodeComment) -> IO ()
+writeModule godotHaskellRootDir mdl@(Module _ (Just (ModuleHead _ (ModuleName Nothing name) _ _)) _ _ _) = do
+  let filepath = godotHaskellRootDir </> "src/" ++ map replaceDot name ++ ".hs"
   -- let out = prettyPrint mdl
   let out = uncurry exactPrint (ppWithComments mdl)
   createDirectoryIfMissing True (takeDirectory filepath)
