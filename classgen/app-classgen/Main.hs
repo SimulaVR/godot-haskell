@@ -52,12 +52,18 @@ main = do
                                                     ,Ident Nothing "TypeFamilies"
                                                     ,Ident Nothing "TemplateHaskell"]]
                             classImports
-                            decls
+                            (decls ++ mapMaybe fromNewtypeDerivingBase decls)
     classExports decls   = ExportSpecList Nothing $ tcHasBaseClass : mapMaybe fromNewtypeOnly decls
     tcHasBaseClass       = fmap (\_ -> Nothing) $ EThingWith () (EWildcard () 0) (UnQual () (Ident () "HasBaseClass")) []
     fromNewtypeOnly decl = case decl of
        DataDecl _ (NewType _) _ (DHead _ (Ident Nothing ntName)) _ _ ->
          Just $ EThingWith Nothing (EWildcard Nothing 0) (UnQual Nothing (Ident Nothing ntName)) []
+       _ ->
+         Nothing
+    fromNewtypeDerivingBase decl = case decl of
+       DataDecl _ (NewType _) _ (DHead _ (Ident Nothing ntName)) _ _ ->
+         Just $ SpliceDecl Nothing (App Nothing (Var Nothing (UnQual Nothing (Ident Nothing "deriveBase")))
+                                                 (TypQuote Nothing (UnQual Nothing (Ident Nothing ntName))))
        _ ->
          Nothing
     classImports = map (\n -> ImportDecl Nothing (ModuleName Nothing n) False False False Nothing Nothing Nothing)

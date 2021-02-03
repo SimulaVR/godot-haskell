@@ -5962,3 +5962,1245 @@ newtype VisualScriptEditor = VisualScriptEditor Object
 instance HasBaseClass VisualScriptEditor where
         type BaseClass VisualScriptEditor = Object
         super = coerce
+
+deriveBase ''GlobalConstants
+
+deriveBase ''ARVRAnchor
+
+deriveBase ''ARVRCamera
+
+deriveBase ''ARVRController
+
+deriveBase ''ARVRInterface
+
+deriveBase ''ARVRInterfaceGDNative
+
+deriveBase ''ARVROrigin
+
+deriveBase ''ARVRPositionalTracker
+
+deriveBase ''ARVRServer
+
+deriveBase ''AStar
+
+deriveBase ''AStar2D
+
+deriveBase ''AcceptDialog
+
+deriveBase ''AnimatedSprite
+
+deriveBase ''AnimatedSprite3D
+
+deriveBase ''AnimatedTexture
+
+deriveBase ''Animation
+
+deriveBase ''AnimationNode
+
+deriveBase ''AnimationNodeAdd2
+
+deriveBase ''AnimationNodeAdd3
+
+deriveBase ''AnimationNodeAnimation
+
+deriveBase ''AnimationNodeBlend2
+
+deriveBase ''AnimationNodeBlend3
+
+deriveBase ''AnimationNodeBlendSpace1D
+
+deriveBase ''AnimationNodeBlendSpace2D
+
+deriveBase ''AnimationNodeBlendTree
+
+deriveBase ''AnimationNodeOneShot
+
+deriveBase ''AnimationNodeOutput
+
+deriveBase ''AnimationNodeStateMachine
+
+deriveBase ''AnimationNodeStateMachinePlayback
+
+deriveBase ''AnimationNodeStateMachineTransition
+
+deriveBase ''AnimationNodeTimeScale
+
+deriveBase ''AnimationNodeTimeSeek
+
+deriveBase ''AnimationNodeTransition
+
+deriveBase ''AnimationPlayer
+
+deriveBase ''AnimationRootNode
+
+deriveBase ''AnimationTrackEditPlugin
+
+deriveBase ''AnimationTree
+
+deriveBase ''AnimationTreePlayer
+
+deriveBase ''Area
+
+deriveBase ''Area2D
+
+deriveBase ''ArrayMesh
+
+deriveBase ''AtlasTexture
+
+deriveBase ''AudioBusLayout
+
+deriveBase ''AudioEffect
+
+deriveBase ''AudioEffectAmplify
+
+deriveBase ''AudioEffectBandLimitFilter
+
+deriveBase ''AudioEffectBandPassFilter
+
+deriveBase ''AudioEffectChorus
+
+deriveBase ''AudioEffectCompressor
+
+deriveBase ''AudioEffectDelay
+
+deriveBase ''AudioEffectDistortion
+
+deriveBase ''AudioEffectEQ
+
+deriveBase ''AudioEffectEQ10
+
+deriveBase ''AudioEffectEQ21
+
+deriveBase ''AudioEffectEQ6
+
+deriveBase ''AudioEffectFilter
+
+deriveBase ''AudioEffectHighPassFilter
+
+deriveBase ''AudioEffectHighShelfFilter
+
+deriveBase ''AudioEffectInstance
+
+deriveBase ''AudioEffectLimiter
+
+deriveBase ''AudioEffectLowPassFilter
+
+deriveBase ''AudioEffectLowShelfFilter
+
+deriveBase ''AudioEffectNotchFilter
+
+deriveBase ''AudioEffectPanner
+
+deriveBase ''AudioEffectPhaser
+
+deriveBase ''AudioEffectPitchShift
+
+deriveBase ''AudioEffectRecord
+
+deriveBase ''AudioEffectReverb
+
+deriveBase ''AudioEffectSpectrumAnalyzer
+
+deriveBase ''AudioEffectSpectrumAnalyzerInstance
+
+deriveBase ''AudioEffectStereoEnhance
+
+deriveBase ''AudioServer
+
+deriveBase ''AudioStream
+
+deriveBase ''AudioStreamGenerator
+
+deriveBase ''AudioStreamGeneratorPlayback
+
+deriveBase ''AudioStreamMicrophone
+
+deriveBase ''AudioStreamOGGVorbis
+
+deriveBase ''AudioStreamPlayback
+
+deriveBase ''AudioStreamPlaybackResampled
+
+deriveBase ''AudioStreamPlayer
+
+deriveBase ''AudioStreamPlayer2D
+
+deriveBase ''AudioStreamPlayer3D
+
+deriveBase ''AudioStreamRandomPitch
+
+deriveBase ''AudioStreamSample
+
+deriveBase ''BackBufferCopy
+
+deriveBase ''BakedLightmap
+
+deriveBase ''BakedLightmapData
+
+deriveBase ''BaseButton
+
+deriveBase ''BitMap
+
+deriveBase ''BitmapFont
+
+deriveBase ''Bone2D
+
+deriveBase ''BoneAttachment
+
+deriveBase ''BoxContainer
+
+deriveBase ''BoxShape
+
+deriveBase ''BulletPhysicsDirectBodyState
+
+deriveBase ''BulletPhysicsServer
+
+deriveBase ''Button
+
+deriveBase ''ButtonGroup
+
+deriveBase ''CPUParticles
+
+deriveBase ''CPUParticles2D
+
+deriveBase ''CSGBox
+
+deriveBase ''CSGCombiner
+
+deriveBase ''CSGCylinder
+
+deriveBase ''CSGMesh
+
+deriveBase ''CSGPolygon
+
+deriveBase ''CSGPrimitive
+
+deriveBase ''CSGShape
+
+deriveBase ''CSGSphere
+
+deriveBase ''CSGTorus
+
+deriveBase ''Camera
+
+deriveBase ''Camera2D
+
+deriveBase ''CameraFeed
+
+deriveBase ''CameraServer
+
+deriveBase ''CameraTexture
+
+deriveBase ''CanvasItem
+
+deriveBase ''CanvasItemMaterial
+
+deriveBase ''CanvasLayer
+
+deriveBase ''CanvasModulate
+
+deriveBase ''CapsuleMesh
+
+deriveBase ''CapsuleShape
+
+deriveBase ''CapsuleShape2D
+
+deriveBase ''CenterContainer
+
+deriveBase ''CharFXTransform
+
+deriveBase ''CheckBox
+
+deriveBase ''CheckButton
+
+deriveBase ''CircleShape2D
+
+deriveBase ''ClippedCamera
+
+deriveBase ''CollisionObject
+
+deriveBase ''CollisionObject2D
+
+deriveBase ''CollisionPolygon
+
+deriveBase ''CollisionPolygon2D
+
+deriveBase ''CollisionShape
+
+deriveBase ''CollisionShape2D
+
+deriveBase ''ColorPicker
+
+deriveBase ''ColorPickerButton
+
+deriveBase ''ColorRect
+
+deriveBase ''ConcavePolygonShape
+
+deriveBase ''ConcavePolygonShape2D
+
+deriveBase ''ConeTwistJoint
+
+deriveBase ''ConfigFile
+
+deriveBase ''ConfirmationDialog
+
+deriveBase ''Container
+
+deriveBase ''Control
+
+deriveBase ''ConvexPolygonShape
+
+deriveBase ''ConvexPolygonShape2D
+
+deriveBase ''Crypto
+
+deriveBase ''CryptoKey
+
+deriveBase ''CubeMap
+
+deriveBase ''CubeMesh
+
+deriveBase ''Curve
+
+deriveBase ''Curve2D
+
+deriveBase ''Curve3D
+
+deriveBase ''CurveTexture
+
+deriveBase ''CylinderMesh
+
+deriveBase ''CylinderShape
+
+deriveBase ''DampedSpringJoint2D
+
+deriveBase ''DirectionalLight
+
+deriveBase ''DynamicFont
+
+deriveBase ''DynamicFontData
+
+deriveBase ''EditorExportPlugin
+
+deriveBase ''EditorFeatureProfile
+
+deriveBase ''EditorFileDialog
+
+deriveBase ''EditorFileSystem
+
+deriveBase ''EditorFileSystemDirectory
+
+deriveBase ''EditorImportPlugin
+
+deriveBase ''EditorInspector
+
+deriveBase ''EditorInspectorPlugin
+
+deriveBase ''EditorInterface
+
+deriveBase ''EditorNavigationMeshGenerator
+
+deriveBase ''EditorPlugin
+
+deriveBase ''EditorProperty
+
+deriveBase ''EditorResourceConversionPlugin
+
+deriveBase ''EditorResourcePreview
+
+deriveBase ''EditorResourcePreviewGenerator
+
+deriveBase ''EditorSceneImporter
+
+deriveBase ''EditorSceneImporterAssimp
+
+deriveBase ''EditorScenePostImport
+
+deriveBase ''EditorScript
+
+deriveBase ''EditorSelection
+
+deriveBase ''EditorSettings
+
+deriveBase ''EditorSpatialGizmo
+
+deriveBase ''EditorSpatialGizmoPlugin
+
+deriveBase ''EditorSpinSlider
+
+deriveBase ''EditorVCSInterface
+
+deriveBase ''EncodedObjectAsID
+
+deriveBase ''Environment
+
+deriveBase ''Expression
+
+deriveBase ''FileDialog
+
+deriveBase ''Font
+
+deriveBase ''FuncRef
+
+deriveBase ''GDNative
+
+deriveBase ''GDNativeLibrary
+
+deriveBase ''GDScript
+
+deriveBase ''GDScriptFunctionState
+
+deriveBase ''GIProbe
+
+deriveBase ''GIProbeData
+
+deriveBase ''Generic6DOFJoint
+
+deriveBase ''GeometryInstance
+
+deriveBase ''Gradient
+
+deriveBase ''GradientTexture
+
+deriveBase ''GraphEdit
+
+deriveBase ''GraphNode
+
+deriveBase ''GridContainer
+
+deriveBase ''GridMap
+
+deriveBase ''GrooveJoint2D
+
+deriveBase ''HBoxContainer
+
+deriveBase ''HScrollBar
+
+deriveBase ''HSeparator
+
+deriveBase ''HSlider
+
+deriveBase ''HSplitContainer
+
+deriveBase ''HTTPClient
+
+deriveBase ''HTTPRequest
+
+deriveBase ''HashingContext
+
+deriveBase ''HeightMapShape
+
+deriveBase ''HingeJoint
+
+deriveBase ''IP
+
+deriveBase ''IP_Unix
+
+deriveBase ''Image
+
+deriveBase ''ImageTexture
+
+deriveBase ''ImmediateGeometry
+
+deriveBase ''Input
+
+deriveBase ''InputDefault
+
+deriveBase ''InputEvent
+
+deriveBase ''InputEventAction
+
+deriveBase ''InputEventGesture
+
+deriveBase ''InputEventJoypadButton
+
+deriveBase ''InputEventJoypadMotion
+
+deriveBase ''InputEventKey
+
+deriveBase ''InputEventMIDI
+
+deriveBase ''InputEventMagnifyGesture
+
+deriveBase ''InputEventMouse
+
+deriveBase ''InputEventMouseButton
+
+deriveBase ''InputEventMouseMotion
+
+deriveBase ''InputEventPanGesture
+
+deriveBase ''InputEventScreenDrag
+
+deriveBase ''InputEventScreenTouch
+
+deriveBase ''InputEventWithModifiers
+
+deriveBase ''InputMap
+
+deriveBase ''InstancePlaceholder
+
+deriveBase ''InterpolatedCamera
+
+deriveBase ''ItemList
+
+deriveBase ''JSONParseResult
+
+deriveBase ''JSONRPC
+
+deriveBase ''JavaClass
+
+deriveBase ''JavaClassWrapper
+
+deriveBase ''JavaScript
+
+deriveBase ''Joint
+
+deriveBase ''Joint2D
+
+deriveBase ''KinematicBody
+
+deriveBase ''KinematicBody2D
+
+deriveBase ''KinematicCollision
+
+deriveBase ''KinematicCollision2D
+
+deriveBase ''Label
+
+deriveBase ''LargeTexture
+
+deriveBase ''Light
+
+deriveBase ''Light2D
+
+deriveBase ''LightOccluder2D
+
+deriveBase ''Line2D
+
+deriveBase ''LineEdit
+
+deriveBase ''LineShape2D
+
+deriveBase ''LinkButton
+
+deriveBase ''Listener
+
+deriveBase ''MainLoop
+
+deriveBase ''MarginContainer
+
+deriveBase ''Material
+
+deriveBase ''MenuButton
+
+deriveBase ''Mesh
+
+deriveBase ''MeshDataTool
+
+deriveBase ''MeshInstance
+
+deriveBase ''MeshInstance2D
+
+deriveBase ''MeshLibrary
+
+deriveBase ''MeshTexture
+
+deriveBase ''MobileVRInterface
+
+deriveBase ''MultiMesh
+
+deriveBase ''MultiMeshInstance
+
+deriveBase ''MultiMeshInstance2D
+
+deriveBase ''MultiplayerAPI
+
+deriveBase ''MultiplayerPeerGDNative
+
+deriveBase ''NativeScript
+
+deriveBase ''Navigation
+
+deriveBase ''Navigation2D
+
+deriveBase ''NavigationMesh
+
+deriveBase ''NavigationMeshInstance
+
+deriveBase ''NavigationPolygon
+
+deriveBase ''NavigationPolygonInstance
+
+deriveBase ''NetworkedMultiplayerENet
+
+deriveBase ''NetworkedMultiplayerPeer
+
+deriveBase ''NinePatchRect
+
+deriveBase ''Node
+
+deriveBase ''Node2D
+
+deriveBase ''NoiseTexture
+
+deriveBase ''OccluderPolygon2D
+
+deriveBase ''OmniLight
+
+deriveBase ''OpenSimplexNoise
+
+deriveBase ''OptionButton
+
+deriveBase ''PCKPacker
+
+deriveBase ''PHashTranslation
+
+deriveBase ''PackedDataContainer
+
+deriveBase ''PackedDataContainerRef
+
+deriveBase ''PackedScene
+
+deriveBase ''PacketPeer
+
+deriveBase ''PacketPeerGDNative
+
+deriveBase ''PacketPeerStream
+
+deriveBase ''PacketPeerUDP
+
+deriveBase ''Panel
+
+deriveBase ''PanelContainer
+
+deriveBase ''PanoramaSky
+
+deriveBase ''ParallaxBackground
+
+deriveBase ''ParallaxLayer
+
+deriveBase ''Particles
+
+deriveBase ''Particles2D
+
+deriveBase ''ParticlesMaterial
+
+deriveBase ''Path
+
+deriveBase ''Path2D
+
+deriveBase ''PathFollow
+
+deriveBase ''PathFollow2D
+
+deriveBase ''Performance
+
+deriveBase ''PhysicalBone
+
+deriveBase ''Physics2DDirectBodyState
+
+deriveBase ''Physics2DDirectBodyStateSW
+
+deriveBase ''Physics2DDirectSpaceState
+
+deriveBase ''Physics2DServer
+
+deriveBase ''Physics2DServerSW
+
+deriveBase ''Physics2DShapeQueryParameters
+
+deriveBase ''Physics2DShapeQueryResult
+
+deriveBase ''Physics2DTestMotionResult
+
+deriveBase ''PhysicsBody
+
+deriveBase ''PhysicsBody2D
+
+deriveBase ''PhysicsDirectBodyState
+
+deriveBase ''PhysicsDirectSpaceState
+
+deriveBase ''PhysicsMaterial
+
+deriveBase ''PhysicsServer
+
+deriveBase ''PhysicsShapeQueryParameters
+
+deriveBase ''PhysicsShapeQueryResult
+
+deriveBase ''PinJoint
+
+deriveBase ''PinJoint2D
+
+deriveBase ''PlaneMesh
+
+deriveBase ''PlaneShape
+
+deriveBase ''PluginScript
+
+deriveBase ''PointMesh
+
+deriveBase ''Polygon2D
+
+deriveBase ''PolygonPathFinder
+
+deriveBase ''Popup
+
+deriveBase ''PopupDialog
+
+deriveBase ''PopupMenu
+
+deriveBase ''PopupPanel
+
+deriveBase ''Position2D
+
+deriveBase ''Position3D
+
+deriveBase ''PrimitiveMesh
+
+deriveBase ''PrismMesh
+
+deriveBase ''ProceduralSky
+
+deriveBase ''ProgressBar
+
+deriveBase ''ProjectSettings
+
+deriveBase ''ProximityGroup
+
+deriveBase ''ProxyTexture
+
+deriveBase ''QuadMesh
+
+deriveBase ''RandomNumberGenerator
+
+deriveBase ''Range
+
+deriveBase ''RayCast
+
+deriveBase ''RayCast2D
+
+deriveBase ''RayShape
+
+deriveBase ''RayShape2D
+
+deriveBase ''RectangleShape2D
+
+deriveBase ''Reference
+
+deriveBase ''ReferenceRect
+
+deriveBase ''ReflectionProbe
+
+deriveBase ''RegEx
+
+deriveBase ''RegExMatch
+
+deriveBase ''RemoteTransform
+
+deriveBase ''RemoteTransform2D
+
+deriveBase ''Resource
+
+deriveBase ''ResourceFormatLoader
+
+deriveBase ''ResourceFormatLoaderCrypto
+
+deriveBase ''ResourceFormatSaver
+
+deriveBase ''ResourceFormatSaverCrypto
+
+deriveBase ''ResourceImporter
+
+deriveBase ''ResourceInteractiveLoader
+
+deriveBase ''ResourcePreloader
+
+deriveBase ''RichTextEffect
+
+deriveBase ''RichTextLabel
+
+deriveBase ''RigidBody
+
+deriveBase ''RigidBody2D
+
+deriveBase ''RootMotionView
+
+deriveBase ''SceneState
+
+deriveBase ''SceneTree
+
+deriveBase ''SceneTreeTimer
+
+deriveBase ''Script
+
+deriveBase ''ScriptCreateDialog
+
+deriveBase ''ScriptEditor
+
+deriveBase ''ScrollBar
+
+deriveBase ''ScrollContainer
+
+deriveBase ''SegmentShape2D
+
+deriveBase ''Separator
+
+deriveBase ''Shader
+
+deriveBase ''ShaderMaterial
+
+deriveBase ''Shape
+
+deriveBase ''Shape2D
+
+deriveBase ''ShortCut
+
+deriveBase ''Skeleton
+
+deriveBase ''Skeleton2D
+
+deriveBase ''SkeletonIK
+
+deriveBase ''Skin
+
+deriveBase ''SkinReference
+
+deriveBase ''Sky
+
+deriveBase ''Slider
+
+deriveBase ''SliderJoint
+
+deriveBase ''SoftBody
+
+deriveBase ''Spatial
+
+deriveBase ''SpatialGizmo
+
+deriveBase ''SpatialMaterial
+
+deriveBase ''SpatialVelocityTracker
+
+deriveBase ''SphereMesh
+
+deriveBase ''SphereShape
+
+deriveBase ''SpinBox
+
+deriveBase ''SplitContainer
+
+deriveBase ''SpotLight
+
+deriveBase ''SpringArm
+
+deriveBase ''Sprite
+
+deriveBase ''Sprite3D
+
+deriveBase ''SpriteBase3D
+
+deriveBase ''SpriteFrames
+
+deriveBase ''StaticBody
+
+deriveBase ''StaticBody2D
+
+deriveBase ''StreamPeer
+
+deriveBase ''StreamPeerBuffer
+
+deriveBase ''StreamPeerGDNative
+
+deriveBase ''StreamPeerSSL
+
+deriveBase ''StreamPeerTCP
+
+deriveBase ''StreamTexture
+
+deriveBase ''StyleBox
+
+deriveBase ''StyleBoxEmpty
+
+deriveBase ''StyleBoxFlat
+
+deriveBase ''StyleBoxLine
+
+deriveBase ''StyleBoxTexture
+
+deriveBase ''SurfaceTool
+
+deriveBase ''TCP_Server
+
+deriveBase ''TabContainer
+
+deriveBase ''Tabs
+
+deriveBase ''TextEdit
+
+deriveBase ''TextFile
+
+deriveBase ''Texture
+
+deriveBase ''Texture3D
+
+deriveBase ''TextureArray
+
+deriveBase ''TextureButton
+
+deriveBase ''TextureLayered
+
+deriveBase ''TextureProgress
+
+deriveBase ''TextureRect
+
+deriveBase ''Theme
+
+deriveBase ''TileMap
+
+deriveBase ''TileSet
+
+deriveBase ''Timer
+
+deriveBase ''ToolButton
+
+deriveBase ''TouchScreenButton
+
+deriveBase ''Translation
+
+deriveBase ''TranslationServer
+
+deriveBase ''Tree
+
+deriveBase ''TreeItem
+
+deriveBase ''TriangleMesh
+
+deriveBase ''Tween
+
+deriveBase ''UPNP
+
+deriveBase ''UPNPDevice
+
+deriveBase ''UndoRedo
+
+deriveBase ''VBoxContainer
+
+deriveBase ''VScrollBar
+
+deriveBase ''VSeparator
+
+deriveBase ''VSlider
+
+deriveBase ''VSplitContainer
+
+deriveBase ''VehicleBody
+
+deriveBase ''VehicleWheel
+
+deriveBase ''VideoPlayer
+
+deriveBase ''VideoStream
+
+deriveBase ''VideoStreamGDNative
+
+deriveBase ''VideoStreamTheora
+
+deriveBase ''VideoStreamWebm
+
+deriveBase ''Viewport
+
+deriveBase ''ViewportContainer
+
+deriveBase ''ViewportTexture
+
+deriveBase ''VisibilityEnabler
+
+deriveBase ''VisibilityEnabler2D
+
+deriveBase ''VisibilityNotifier
+
+deriveBase ''VisibilityNotifier2D
+
+deriveBase ''VisualInstance
+
+deriveBase ''VisualScript
+
+deriveBase ''VisualScriptBasicTypeConstant
+
+deriveBase ''VisualScriptBuiltinFunc
+
+deriveBase ''VisualScriptClassConstant
+
+deriveBase ''VisualScriptComment
+
+deriveBase ''VisualScriptComposeArray
+
+deriveBase ''VisualScriptCondition
+
+deriveBase ''VisualScriptConstant
+
+deriveBase ''VisualScriptConstructor
+
+deriveBase ''VisualScriptCustomNode
+
+deriveBase ''VisualScriptDeconstruct
+
+deriveBase ''VisualScriptEmitSignal
+
+deriveBase ''VisualScriptEngineSingleton
+
+deriveBase ''VisualScriptExpression
+
+deriveBase ''VisualScriptFunction
+
+deriveBase ''VisualScriptFunctionCall
+
+deriveBase ''VisualScriptFunctionState
+
+deriveBase ''VisualScriptGlobalConstant
+
+deriveBase ''VisualScriptIndexGet
+
+deriveBase ''VisualScriptIndexSet
+
+deriveBase ''VisualScriptInputAction
+
+deriveBase ''VisualScriptIterator
+
+deriveBase ''VisualScriptLists
+
+deriveBase ''VisualScriptLocalVar
+
+deriveBase ''VisualScriptLocalVarSet
+
+deriveBase ''VisualScriptMathConstant
+
+deriveBase ''VisualScriptNode
+
+deriveBase ''VisualScriptOperator
+
+deriveBase ''VisualScriptPreload
+
+deriveBase ''VisualScriptPropertyGet
+
+deriveBase ''VisualScriptPropertySet
+
+deriveBase ''VisualScriptResourcePath
+
+deriveBase ''VisualScriptReturn
+
+deriveBase ''VisualScriptSceneNode
+
+deriveBase ''VisualScriptSceneTree
+
+deriveBase ''VisualScriptSelect
+
+deriveBase ''VisualScriptSelf
+
+deriveBase ''VisualScriptSequence
+
+deriveBase ''VisualScriptSubCall
+
+deriveBase ''VisualScriptSwitch
+
+deriveBase ''VisualScriptTypeCast
+
+deriveBase ''VisualScriptVariableGet
+
+deriveBase ''VisualScriptVariableSet
+
+deriveBase ''VisualScriptWhile
+
+deriveBase ''VisualScriptYield
+
+deriveBase ''VisualScriptYieldSignal
+
+deriveBase ''VisualServer
+
+deriveBase ''VisualShader
+
+deriveBase ''VisualShaderNode
+
+deriveBase ''VisualShaderNodeBooleanConstant
+
+deriveBase ''VisualShaderNodeBooleanUniform
+
+deriveBase ''VisualShaderNodeColorConstant
+
+deriveBase ''VisualShaderNodeColorFunc
+
+deriveBase ''VisualShaderNodeColorOp
+
+deriveBase ''VisualShaderNodeColorUniform
+
+deriveBase ''VisualShaderNodeCompare
+
+deriveBase ''VisualShaderNodeCubeMap
+
+deriveBase ''VisualShaderNodeCubeMapUniform
+
+deriveBase ''VisualShaderNodeCustom
+
+deriveBase ''VisualShaderNodeDeterminant
+
+deriveBase ''VisualShaderNodeDotProduct
+
+deriveBase ''VisualShaderNodeExpression
+
+deriveBase ''VisualShaderNodeFaceForward
+
+deriveBase ''VisualShaderNodeFresnel
+
+deriveBase ''VisualShaderNodeGlobalExpression
+
+deriveBase ''VisualShaderNodeGroupBase
+
+deriveBase ''VisualShaderNodeIf
+
+deriveBase ''VisualShaderNodeInput
+
+deriveBase ''VisualShaderNodeIs
+
+deriveBase ''VisualShaderNodeOuterProduct
+
+deriveBase ''VisualShaderNodeOutput
+
+deriveBase ''VisualShaderNodeScalarClamp
+
+deriveBase ''VisualShaderNodeScalarConstant
+
+deriveBase ''VisualShaderNodeScalarDerivativeFunc
+
+deriveBase ''VisualShaderNodeScalarFunc
+
+deriveBase ''VisualShaderNodeScalarInterp
+
+deriveBase ''VisualShaderNodeScalarOp
+
+deriveBase ''VisualShaderNodeScalarSmoothStep
+
+deriveBase ''VisualShaderNodeScalarSwitch
+
+deriveBase ''VisualShaderNodeScalarUniform
+
+deriveBase ''VisualShaderNodeSwitch
+
+deriveBase ''VisualShaderNodeTexture
+
+deriveBase ''VisualShaderNodeTextureUniform
+
+deriveBase ''VisualShaderNodeTextureUniformTriplanar
+
+deriveBase ''VisualShaderNodeTransformCompose
+
+deriveBase ''VisualShaderNodeTransformConstant
+
+deriveBase ''VisualShaderNodeTransformDecompose
+
+deriveBase ''VisualShaderNodeTransformFunc
+
+deriveBase ''VisualShaderNodeTransformMult
+
+deriveBase ''VisualShaderNodeTransformUniform
+
+deriveBase ''VisualShaderNodeTransformVecMult
+
+deriveBase ''VisualShaderNodeUniform
+
+deriveBase ''VisualShaderNodeVec3Constant
+
+deriveBase ''VisualShaderNodeVec3Uniform
+
+deriveBase ''VisualShaderNodeVectorClamp
+
+deriveBase ''VisualShaderNodeVectorCompose
+
+deriveBase ''VisualShaderNodeVectorDecompose
+
+deriveBase ''VisualShaderNodeVectorDerivativeFunc
+
+deriveBase ''VisualShaderNodeVectorDistance
+
+deriveBase ''VisualShaderNodeVectorFunc
+
+deriveBase ''VisualShaderNodeVectorInterp
+
+deriveBase ''VisualShaderNodeVectorLen
+
+deriveBase ''VisualShaderNodeVectorOp
+
+deriveBase ''VisualShaderNodeVectorRefract
+
+deriveBase ''VisualShaderNodeVectorScalarMix
+
+deriveBase ''VisualShaderNodeVectorScalarSmoothStep
+
+deriveBase ''VisualShaderNodeVectorScalarStep
+
+deriveBase ''VisualShaderNodeVectorSmoothStep
+
+deriveBase ''WeakRef
+
+deriveBase ''WebRTCDataChannel
+
+deriveBase ''WebRTCDataChannelGDNative
+
+deriveBase ''WebRTCMultiplayer
+
+deriveBase ''WebRTCPeerConnection
+
+deriveBase ''WebRTCPeerConnectionGDNative
+
+deriveBase ''WebSocketClient
+
+deriveBase ''WebSocketMultiplayerPeer
+
+deriveBase ''WebSocketPeer
+
+deriveBase ''WebSocketServer
+
+deriveBase ''WindowDialog
+
+deriveBase ''World
+
+deriveBase ''World2D
+
+deriveBase ''WorldEnvironment
+
+deriveBase ''X509Certificate
+
+deriveBase ''XMLParser
+
+deriveBase ''YSort
+
+deriveBase ''ClassDB
+
+deriveBase ''Directory
+
+deriveBase ''Engine
+
+deriveBase ''File
+
+deriveBase ''Geometry
+
+deriveBase ''JSON
+
+deriveBase ''Marshalls
+
+deriveBase ''Mutex
+
+deriveBase ''OS
+
+deriveBase ''ResourceLoader
+
+deriveBase ''ResourceSaver
+
+deriveBase ''Semaphore
+
+deriveBase ''Thread
+
+deriveBase ''VisualScriptEditor
