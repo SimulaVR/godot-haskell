@@ -16,7 +16,6 @@ module Godot.Nativescript
   , RPC(..)
   , Registerer(..)
   , PropertyAttributes(..)
-  , deriveBase
   , func
   , method
   , method0
@@ -92,9 +91,7 @@ type GdnativeHandle = Ptr ()
 {-| 'NativeScript' defines a new Godot class.
 First you must create an instance of 'HasBaseClass' for inheritance and
 upcasting to parent class. Then you'll need an instance of 'NativeScript'.
-Finally, the splice 'deriveBase' handles creating all the parent-child
-relationships. To actually use your class, you'll need to register it with
-'registerClass'.
+To actually use your class, you'll need to register it with 'registerClass'.
 
 TODO Check that this example still works
 
@@ -124,7 +121,6 @@ instance NativeScript MyClass1 where
   classSignals =
     [ signal "on_MyClass1_ready" [("msg", VariantTypeString)]
     ]
-deriveBase ''Myclass1
 @
 -}
 class (HasBaseClass cls, Typeable cls, Typeable (BaseClass cls), Object :< cls)
@@ -707,4 +703,3 @@ instance HasBaseClass WrapperStablePtr where
 instance NativeScript WrapperStablePtr where
   classInit base = WrapperStablePtr base <$> newEmptyMVar
   classMethods = []
-deriveBase ''WrapperStablePtr

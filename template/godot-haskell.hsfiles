@@ -245,8 +245,6 @@ main_process self deltaVt = do
     & (toLowLevel :: Text -> IO GodotString)
     >>= Api.godot_print
 
-deriveBase ''Main
-
 
 
 {-# START_FILE ffi/flib/FLib.hs #-}
