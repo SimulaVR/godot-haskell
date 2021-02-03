@@ -190,7 +190,8 @@ player_process self delta = do
                 posY = clamp (pos' ^. _y) 0 (screenSize ^. _y)
             in  V2 posX posY
       set_position self =<< toLowLevel newPos
-      play animSprite =<< toLowLevel ""
+      animationName <- toLowLevel ""
+      play animSprite animationName False
 
       if velocity' ^. _x /= 0
         then do
@@ -203,7 +204,7 @@ player_process self delta = do
           set_flip_v animSprite (velocity' ^. _y > 0)
     else AnimatedSprite.stop animSprite
 
-on_Player_body_entered :: Player -> PhysicsBody2D -> IO GodotVariant
+on_Player_body_entered :: Player -> PhysicsBody2D -> IO ()
 on_Player_body_entered self _body = do
   hide self -- Player disappears after being hit.
   void $ emit_signal self `flip` [] =<< toLowLevel "hit"
@@ -281,7 +282,7 @@ update_score self score = do
     <*> toLowLevel (T.pack $ Prelude.show score)
     &   join
 
-_on_StartButton_pressed :: HUD -> IO GodotVariant
+_on_StartButton_pressed :: HUD -> IO ()
 _on_StartButton_pressed self = do
   getNode @Button self "StartButton" >>= CanvasItem.hide
   emit_signal self `flip` [] =<< toLowLevel "start_game"
@@ -289,8 +290,3 @@ _on_StartButton_pressed self = do
 _on_MessageTimer_timeout :: HUD -> IO ()
 _on_MessageTimer_timeout self = do
   getNode @Label self "MessageLabel" >>= CanvasItem.hide
-
-deriveBase ''Main
-deriveBase ''Player
-deriveBase ''Mob
-deriveBase ''HUD
