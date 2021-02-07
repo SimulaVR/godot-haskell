@@ -823,7 +823,7 @@ gdnativeCore11ApiStructRef = unsafePerformIO $ newIORef $
 
 gdnativeLibraryRef :: IORef Object
 gdnativeLibraryRef = unsafePerformIO $ newIORef $ 
-  error "attempted to get gdnativeCoreApiStructRef too early"
+  error "attempted to get gdnativeLibraryRef too early"
 {-# NOINLINE gdnativeLibraryRef #-}
 
 gdnativeCore12ApiStructRef :: IORef GdnativeCore12ApiStruct
@@ -870,6 +870,7 @@ initApiStructs :: GdnativeInitOptions -> IO ()
 initApiStructs opts = do
   let coreApi = gdnativeInitOptionsApiStruct opts
   writeIORef gdnativeCoreApiStructRef coreApi
+  writeIORef gdnativeLibraryRef $ gdnativeInitOptionsGdNativeLibrary opts
 
   findExt GdnativeCore11ApiStruct gdnativeCore11ApiStructRef (coerce coreApi) 1 1
   findExt GdnativeCore12ApiStruct gdnativeCore12ApiStructRef (coerce coreApi) 1 2
