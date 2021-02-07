@@ -11,17 +11,11 @@ module Lib
 where
 
 import           Control.Lens
-import           Control.Arrow --((>>>))
 import           Control.Monad
-import           Control.Monad.Extra (whenJust, whenJustM)
-import           Data.Coerce
-import qualified Data.Map.Strict as M
 import qualified Data.Text as T
-import           Data.Typeable
 import           Foreign.C.Types
 import           Godot
 import           Godot.Core.AnimatedSprite as AnimatedSprite
-import           Godot.Core.Area2D as Area2D
 import           Godot.Core.CanvasItem as CanvasItem
 import           Godot.Core.CollisionShape2D as CollisionShape2D
 import           Godot.Core.Input as Input
@@ -31,7 +25,6 @@ import           Godot.Core.Node2D as Node2D
 import           Godot.Core.Object as Object
 import           Godot.Core.PackedScene as PackedScene
 import           Godot.Core.PathFollow2D as PathFollow2D
-import           Godot.Core.Reference as Reference
 import           Godot.Core.RigidBody2D as RigidBody2D
 import           Godot.Core.Timer as Timer
 import           Godot.Gdnative
@@ -83,7 +76,7 @@ new_game :: Main -> IO ()
 new_game self = do
   _        <- swapMVar (_mainScore self) 0
   position <- getNode @Position2D self "StartPosition" >>= get_position
-  call
+  void $ call
     <$> getNodeNativeScript @Player self "Player"
     <*> toLowLevel "start"
     <*> pure [toVariant position]
@@ -110,11 +103,11 @@ on_MobTimer_timeout :: Main -> IO ()
 on_MobTimer_timeout self@(Main _ _ mobScene) = do
   -- Choose a random location on Path2D.
   mobSpawnLoc <- getNode @PathFollow2D self "MobPath/MobSpawnLocation"
-  PathFollow2D.set_offset mobSpawnLoc =<< fromInteger <$> randomIO
+  PathFollow2D.set_offset mobSpawnLoc . fromInteger =<< randomIO
   -- Create a Mob instance and add it to the scene.
   mob <-
     readMVar mobScene
-    >>= (PackedScene.instance' `flip` 0)
+    >>= (`PackedScene.instance'` 0)
     >>= (asNativeScript . upcast)
     >>= maybe (error "Couldn't cast mob to NativeScript") pure
   add_child self (upcast mob) False
@@ -129,7 +122,7 @@ on_MobTimer_timeout self@(Main _ _ mobScene) = do
   liftM2 (,) (readMVar $ _mMinSpeed mob) (readMVar $ _mMaxSpeed mob)
     >>= randomRIO
     >>= (\x -> toLowLevel (V2 x 0))
-    >>= (godot_vector2_rotated `flip` (CFloat direction'))
+    >>= (`godot_vector2_rotated` CFloat direction')
     >>= set_linear_velocity mob
 
 
@@ -190,8 +183,8 @@ player_process self delta = do
                 posY = clamp (pos' ^. _y) 0 (screenSize ^. _y)
             in  V2 posX posY
       set_position self =<< toLowLevel newPos
-      play animSprite =<< toLowLevel ""
-
+      animationName <- toLowLevel ""
+      play animSprite animationName False
       if velocity' ^. _x /= 0
         then do
           set_animation animSprite =<< toLowLevel "right"
@@ -203,7 +196,7 @@ player_process self delta = do
           set_flip_v animSprite (velocity' ^. _y > 0)
     else AnimatedSprite.stop animSprite
 
-on_Player_body_entered :: Player -> PhysicsBody2D -> IO GodotVariant
+on_Player_body_entered :: Player -> PhysicsBody2D -> IO ()
 on_Player_body_entered self _body = do
   hide self -- Player disappears after being hit.
   void $ emit_signal self `flip` [] =<< toLowLevel "hit"
@@ -268,11 +261,11 @@ show_game_over :: HUD -> IO Int
 show_game_over self = do
   show_message self =<< toLowLevel "Game Over"
   timer <- getNode @Timer self "MessageTimer"
-  await self timer "timeout" $ \self -> do
-    messageLabel <- getNode @Label self "MessageLabel"
+  await self timer "timeout" $ \self' -> do
+    messageLabel <- getNode @Label self' "MessageLabel"
     set_text messageLabel =<< toLowLevel "Dodge the\nCreeps!"
     CanvasItem.show messageLabel
-    getNode @Button self "StartButton" >>= CanvasItem.show
+    getNode @Button self' "StartButton" >>= CanvasItem.show
 
 update_score :: HUD -> Int -> IO ()
 update_score self score = do
@@ -281,7 +274,7 @@ update_score self score = do
     <*> toLowLevel (T.pack $ Prelude.show score)
     &   join
 
-_on_StartButton_pressed :: HUD -> IO GodotVariant
+_on_StartButton_pressed :: HUD -> IO ()
 _on_StartButton_pressed self = do
   getNode @Button self "StartButton" >>= CanvasItem.hide
   emit_signal self `flip` [] =<< toLowLevel "start_game"
