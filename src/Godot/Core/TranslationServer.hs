@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TranslationServer
        (Godot.Core.TranslationServer.add_translation,
         Godot.Core.TranslationServer.clear,
@@ -66,6 +67,7 @@ clear cls
 
 {-# NOINLINE bindTranslationServer_get_loaded_locales #-}
 
+-- | Returns an Array of all loaded locales of the game.
 bindTranslationServer_get_loaded_locales :: MethodBind
 bindTranslationServer_get_loaded_locales
   = unsafePerformIO $
@@ -75,6 +77,7 @@ bindTranslationServer_get_loaded_locales
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns an Array of all loaded locales of the game.
 get_loaded_locales ::
                      (TranslationServer :< cls, Object :< cls) => cls -> IO Array
 get_loaded_locales cls
@@ -112,7 +115,7 @@ get_locale cls
 
 {-# NOINLINE bindTranslationServer_get_locale_name #-}
 
--- | Returns a locale's language and its variant (e.g. "en_US" would return "English (United States)").
+-- | Returns a locale's language and its variant (e.g. [code]"en_US"[/code] would return [code]"English (United States)"[/code]).
 bindTranslationServer_get_locale_name :: MethodBind
 bindTranslationServer_get_locale_name
   = unsafePerformIO $
@@ -122,7 +125,7 @@ bindTranslationServer_get_locale_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a locale's language and its variant (e.g. "en_US" would return "English (United States)").
+-- | Returns a locale's language and its variant (e.g. [code]"en_US"[/code] would return [code]"English (United States)"[/code]).
 get_locale_name ::
                   (TranslationServer :< cls, Object :< cls) =>
                   cls -> GodotString -> IO GodotString

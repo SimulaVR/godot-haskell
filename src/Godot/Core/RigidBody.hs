@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RigidBody
        (Godot.Core.RigidBody._MODE_STATIC,
         Godot.Core.RigidBody._MODE_KINEMATIC,
@@ -78,31 +79,44 @@ _MODE_RIGID = 0
 _MODE_CHARACTER :: Int
 _MODE_CHARACTER = 2
 
--- | Emitted when a body enters into contact with this one. Contact monitor and contacts reported must be enabled for this to work.
+-- | Emitted when a body enters into contact with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
 sig_body_entered :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_entered = Godot.Internal.Dispatch.Signal "body_entered"
 
--- | Emitted when a body shape exits contact with this one. Contact monitor and contacts reported must be enabled for this to work.
+instance NodeSignal RigidBody "body_entered" '[Node]
+
+-- | Emitted when a body shape exits contact with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
 sig_body_exited :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_exited = Godot.Internal.Dispatch.Signal "body_exited"
 
--- | Emitted when a body enters into contact with this one. Contact monitor and contacts reported must be enabled for this to work.
---   				This signal not only receives the body that collided with this one, but also its [RID] (body_id), the shape index from the colliding body (body_shape), and the shape index from this body (local_shape) the other body collided with.
+instance NodeSignal RigidBody "body_exited" '[Node]
+
+-- | Emitted when a body enters into contact with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
+--   				This signal not only receives the body that collided with this one, but also its [RID] ([code]body_id[/code]), the shape index from the colliding body ([code]body_shape[/code]), and the shape index from this body ([code]local_shape[/code]) the other body collided with.
 sig_body_shape_entered :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_shape_entered
   = Godot.Internal.Dispatch.Signal "body_shape_entered"
 
--- | Emitted when a body shape exits contact with this one. Contact monitor and contacts reported must be enabled for this to work.
---   				This signal not only receives the body that stopped colliding with this one, but also its [RID] (body_id), the shape index from the colliding body (body_shape), and the shape index from this body (local_shape) the other body stopped colliding with.
+instance NodeSignal RigidBody "body_shape_entered"
+           '[Int, Node, Int, Int]
+
+-- | Emitted when a body shape exits contact with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
+--   				This signal not only receives the body that stopped colliding with this one, but also its [RID] ([code]body_id[/code]), the shape index from the colliding body ([code]body_shape[/code]), and the shape index from this body ([code]local_shape[/code]) the other body stopped colliding with.
 sig_body_shape_exited :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_shape_exited
   = Godot.Internal.Dispatch.Signal "body_shape_exited"
 
--- | Emitted when the body changes its sleeping state. Either by sleeping or waking up.
+instance NodeSignal RigidBody "body_shape_exited"
+           '[Int, Node, Int, Int]
+
+-- | Emitted when the physics engine changes the body's sleeping state.
+--   				[b]Note:[/b] Changing the value [member sleeping] will not trigger this signal. It is only emitted if the sleeping state is changed by the physics engine or [code]emit_signal("sleeping_state_changed")[/code] is used.
 sig_sleeping_state_changed ::
                            Godot.Internal.Dispatch.Signal RigidBody
 sig_sleeping_state_changed
   = Godot.Internal.Dispatch.Signal "sleeping_state_changed"
+
+instance NodeSignal RigidBody "sleeping_state_changed" '[]
 
 {-# NOINLINE bindRigidBody__body_enter_tree #-}
 
@@ -217,7 +231,7 @@ _reload_physics_characteristics cls
 
 {-# NOINLINE bindRigidBody_add_central_force #-}
 
--- | Adds a constant directional force without affecting rotation.
+-- | Adds a constant directional force (i.e. acceleration) without affecting rotation.
 --   				This is equivalent to [code]add_force(force, Vector3(0,0,0))[/code].
 bindRigidBody_add_central_force :: MethodBind
 bindRigidBody_add_central_force
@@ -228,7 +242,7 @@ bindRigidBody_add_central_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a constant directional force without affecting rotation.
+-- | Adds a constant directional force (i.e. acceleration) without affecting rotation.
 --   				This is equivalent to [code]add_force(force, Vector3(0,0,0))[/code].
 add_central_force ::
                     (RigidBody :< cls, Object :< cls) => cls -> Vector3 -> IO ()
@@ -242,7 +256,8 @@ add_central_force cls arg1
 
 {-# NOINLINE bindRigidBody_add_force #-}
 
--- | Adds a constant force (i.e. acceleration).
+-- | Adds a constant directional force (i.e. acceleration).
+--   				The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 bindRigidBody_add_force :: MethodBind
 bindRigidBody_add_force
   = unsafePerformIO $
@@ -252,7 +267,8 @@ bindRigidBody_add_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a constant force (i.e. acceleration).
+-- | Adds a constant directional force (i.e. acceleration).
+--   				The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 add_force ::
             (RigidBody :< cls, Object :< cls) =>
             cls -> Vector3 -> Vector3 -> IO ()
@@ -313,7 +329,7 @@ apply_central_impulse cls arg1
 
 {-# NOINLINE bindRigidBody_apply_impulse #-}
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 bindRigidBody_apply_impulse :: MethodBind
 bindRigidBody_apply_impulse
   = unsafePerformIO $
@@ -323,7 +339,7 @@ bindRigidBody_apply_impulse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 apply_impulse ::
                 (RigidBody :< cls, Object :< cls) =>
                 cls -> Vector3 -> Vector3 -> IO ()
@@ -337,7 +353,7 @@ apply_impulse cls arg1 arg2
 
 {-# NOINLINE bindRigidBody_apply_torque_impulse #-}
 
--- | Applies a torque impulse which will be affected by the body mass and shape. This will rotate the body around the passed in vector.
+-- | Applies a torque impulse which will be affected by the body mass and shape. This will rotate the body around the [code]impulse[/code] vector passed.
 bindRigidBody_apply_torque_impulse :: MethodBind
 bindRigidBody_apply_torque_impulse
   = unsafePerformIO $
@@ -347,7 +363,7 @@ bindRigidBody_apply_torque_impulse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies a torque impulse which will be affected by the body mass and shape. This will rotate the body around the passed in vector.
+-- | Applies a torque impulse which will be affected by the body mass and shape. This will rotate the body around the [code]impulse[/code] vector passed.
 apply_torque_impulse ::
                        (RigidBody :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 apply_torque_impulse cls arg1
@@ -408,7 +424,7 @@ get_angular_velocity cls
 
 {-# NOINLINE bindRigidBody_get_axis_lock #-}
 
--- | Lock the body's rotation in the x-axis.
+-- | Returns [code]true[/code] if the specified linear or rotational axis is locked.
 bindRigidBody_get_axis_lock :: MethodBind
 bindRigidBody_get_axis_lock
   = unsafePerformIO $
@@ -418,7 +434,7 @@ bindRigidBody_get_axis_lock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Lock the body's rotation in the x-axis.
+-- | Returns [code]true[/code] if the specified linear or rotational axis is locked.
 get_axis_lock ::
                 (RigidBody :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_axis_lock cls arg1
@@ -431,7 +447,8 @@ get_axis_lock cls arg1
 
 {-# NOINLINE bindRigidBody_get_bounce #-}
 
--- | RigidBody's bounciness.
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 bindRigidBody_get_bounce :: MethodBind
 bindRigidBody_get_bounce
   = unsafePerformIO $
@@ -441,7 +458,8 @@ bindRigidBody_get_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | RigidBody's bounciness.
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 get_bounce :: (RigidBody :< cls, Object :< cls) => cls -> IO Float
 get_bounce cls
   = withVariantArray []
@@ -452,7 +470,8 @@ get_bounce cls
 
 {-# NOINLINE bindRigidBody_get_colliding_bodies #-}
 
--- | Returns a list of the bodies colliding with this one. By default, number of max contacts reported is at 0, see the [member contacts_reported] property to increase it. Note that the result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
+-- | Returns a list of the bodies colliding with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
 bindRigidBody_get_colliding_bodies :: MethodBind
 bindRigidBody_get_colliding_bodies
   = unsafePerformIO $
@@ -462,7 +481,8 @@ bindRigidBody_get_colliding_bodies
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a list of the bodies colliding with this one. By default, number of max contacts reported is at 0, see the [member contacts_reported] property to increase it. Note that the result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
+-- | Returns a list of the bodies colliding with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
 get_colliding_bodies ::
                        (RigidBody :< cls, Object :< cls) => cls -> IO Array
 get_colliding_bodies cls
@@ -477,6 +497,7 @@ get_colliding_bodies cls
 {-# NOINLINE bindRigidBody_get_friction #-}
 
 -- | The body's friction, from 0 (frictionless) to 1 (max friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 bindRigidBody_get_friction :: MethodBind
 bindRigidBody_get_friction
   = unsafePerformIO $
@@ -487,6 +508,7 @@ bindRigidBody_get_friction
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The body's friction, from 0 (frictionless) to 1 (max friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 get_friction ::
                (RigidBody :< cls, Object :< cls) => cls -> IO Float
 get_friction cls
@@ -499,7 +521,7 @@ get_friction cls
 
 {-# NOINLINE bindRigidBody_get_gravity_scale #-}
 
--- | This is multiplied by the global 3D gravity setting found in "Project > Project Settings > Physics > 3d" to produce RigidBody's gravity. E.g. a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
+-- | This is multiplied by the global 3D gravity setting found in [b]Project > Project Settings > Physics > 3d[/b] to produce RigidBody's gravity. For example, a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
 bindRigidBody_get_gravity_scale :: MethodBind
 bindRigidBody_get_gravity_scale
   = unsafePerformIO $
@@ -509,7 +531,7 @@ bindRigidBody_get_gravity_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This is multiplied by the global 3D gravity setting found in "Project > Project Settings > Physics > 3d" to produce RigidBody's gravity. E.g. a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
+-- | This is multiplied by the global 3D gravity setting found in [b]Project > Project Settings > Physics > 3d[/b] to produce RigidBody's gravity. For example, a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
 get_gravity_scale ::
                     (RigidBody :< cls, Object :< cls) => cls -> IO Float
 get_gravity_scale cls
@@ -522,7 +544,7 @@ get_gravity_scale cls
 
 {-# NOINLINE bindRigidBody_get_linear_damp #-}
 
--- | The body's linear damp. Default value: -1, cannot be less than -1. If this value is different from -1, any linear damp derived from the world or areas will be overridden.
+-- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
 bindRigidBody_get_linear_damp :: MethodBind
 bindRigidBody_get_linear_damp
   = unsafePerformIO $
@@ -532,7 +554,7 @@ bindRigidBody_get_linear_damp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear damp. Default value: -1, cannot be less than -1. If this value is different from -1, any linear damp derived from the world or areas will be overridden.
+-- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
 get_linear_damp ::
                   (RigidBody :< cls, Object :< cls) => cls -> IO Float
 get_linear_damp cls
@@ -545,7 +567,7 @@ get_linear_damp cls
 
 {-# NOINLINE bindRigidBody_get_linear_velocity #-}
 
--- | The body's linear velocity. Can be used sporadically, but [b]DON'T SET THIS IN EVERY FRAME[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
+-- | The body's linear velocity. Can be used sporadically, but [b]don't set this every frame[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
 bindRigidBody_get_linear_velocity :: MethodBind
 bindRigidBody_get_linear_velocity
   = unsafePerformIO $
@@ -555,7 +577,7 @@ bindRigidBody_get_linear_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear velocity. Can be used sporadically, but [b]DON'T SET THIS IN EVERY FRAME[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
+-- | The body's linear velocity. Can be used sporadically, but [b]don't set this every frame[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
 get_linear_velocity ::
                       (RigidBody :< cls, Object :< cls) => cls -> IO Vector3
 get_linear_velocity cls
@@ -590,7 +612,8 @@ get_mass cls
 
 {-# NOINLINE bindRigidBody_get_max_contacts_reported #-}
 
--- | The maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 bindRigidBody_get_max_contacts_reported :: MethodBind
 bindRigidBody_get_max_contacts_reported
   = unsafePerformIO $
@@ -600,7 +623,8 @@ bindRigidBody_get_max_contacts_reported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 get_max_contacts_reported ::
                             (RigidBody :< cls, Object :< cls) => cls -> IO Int
 get_max_contacts_reported cls
@@ -614,7 +638,7 @@ get_max_contacts_reported cls
 
 {-# NOINLINE bindRigidBody_get_mode #-}
 
--- | The body mode from the MODE_* enum. Modes include: MODE_STATIC, MODE_KINEMATIC, MODE_RIGID, and MODE_CHARACTER.
+-- | The body mode. See [enum Mode] for possible values.
 bindRigidBody_get_mode :: MethodBind
 bindRigidBody_get_mode
   = unsafePerformIO $
@@ -624,7 +648,7 @@ bindRigidBody_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body mode from the MODE_* enum. Modes include: MODE_STATIC, MODE_KINEMATIC, MODE_RIGID, and MODE_CHARACTER.
+-- | The body mode. See [enum Mode] for possible values.
 get_mode :: (RigidBody :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
@@ -635,6 +659,8 @@ get_mode cls
 
 {-# NOINLINE bindRigidBody_get_physics_material_override #-}
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 bindRigidBody_get_physics_material_override :: MethodBind
 bindRigidBody_get_physics_material_override
   = unsafePerformIO $
@@ -644,6 +670,8 @@ bindRigidBody_get_physics_material_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 get_physics_material_override ::
                                 (RigidBody :< cls, Object :< cls) => cls -> IO PhysicsMaterial
 get_physics_material_override cls
@@ -657,7 +685,7 @@ get_physics_material_override cls
 
 {-# NOINLINE bindRigidBody_get_weight #-}
 
--- | The body's weight based on its mass and the global 3D gravity. Global values are set in "Project > Project Settings > Physics > 3d".
+-- | The body's weight based on its mass and the global 3D gravity. Global values are set in [b]Project > Project Settings > Physics > 3d[/b].
 bindRigidBody_get_weight :: MethodBind
 bindRigidBody_get_weight
   = unsafePerformIO $
@@ -667,7 +695,7 @@ bindRigidBody_get_weight
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's weight based on its mass and the global 3D gravity. Global values are set in "Project > Project Settings > Physics > 3d".
+-- | The body's weight based on its mass and the global 3D gravity. Global values are set in [b]Project > Project Settings > Physics > 3d[/b].
 get_weight :: (RigidBody :< cls, Object :< cls) => cls -> IO Float
 get_weight cls
   = withVariantArray []
@@ -678,7 +706,8 @@ get_weight cls
 
 {-# NOINLINE bindRigidBody_is_able_to_sleep #-}
 
--- | If [code]true[/code], the RigidBody will not calculate forces and will act as a static body while there is no movement. It will wake up when forces are applied through other collisions or when the [code]apply_impulse[/code] method is used.
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody3D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 bindRigidBody_is_able_to_sleep :: MethodBind
 bindRigidBody_is_able_to_sleep
   = unsafePerformIO $
@@ -688,7 +717,8 @@ bindRigidBody_is_able_to_sleep
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the RigidBody will not calculate forces and will act as a static body while there is no movement. It will wake up when forces are applied through other collisions or when the [code]apply_impulse[/code] method is used.
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody3D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 is_able_to_sleep ::
                    (RigidBody :< cls, Object :< cls) => cls -> IO Bool
 is_able_to_sleep cls
@@ -701,7 +731,7 @@ is_able_to_sleep cls
 
 {-# NOINLINE bindRigidBody_is_contact_monitor_enabled #-}
 
--- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody.
+-- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody. See also [member contacts_reported].
 bindRigidBody_is_contact_monitor_enabled :: MethodBind
 bindRigidBody_is_contact_monitor_enabled
   = unsafePerformIO $
@@ -711,7 +741,7 @@ bindRigidBody_is_contact_monitor_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody.
+-- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody. See also [member contacts_reported].
 is_contact_monitor_enabled ::
                              (RigidBody :< cls, Object :< cls) => cls -> IO Bool
 is_contact_monitor_enabled cls
@@ -725,7 +755,7 @@ is_contact_monitor_enabled cls
 
 {-# NOINLINE bindRigidBody_is_sleeping #-}
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or the [code]apply_impulse[/code] method.
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 bindRigidBody_is_sleeping :: MethodBind
 bindRigidBody_is_sleeping
   = unsafePerformIO $
@@ -735,7 +765,7 @@ bindRigidBody_is_sleeping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or the [code]apply_impulse[/code] method.
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 is_sleeping :: (RigidBody :< cls, Object :< cls) => cls -> IO Bool
 is_sleeping cls
   = withVariantArray []
@@ -749,7 +779,7 @@ is_sleeping cls
              #-}
 
 -- | If [code]true[/code], continuous collision detection is used.
---   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses less impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
+--   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses fewer impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
 bindRigidBody_is_using_continuous_collision_detection :: MethodBind
 bindRigidBody_is_using_continuous_collision_detection
   = unsafePerformIO $
@@ -760,7 +790,7 @@ bindRigidBody_is_using_continuous_collision_detection
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If [code]true[/code], continuous collision detection is used.
---   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses less impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
+--   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses fewer impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
 is_using_continuous_collision_detection ::
                                           (RigidBody :< cls, Object :< cls) => cls -> IO Bool
 is_using_continuous_collision_detection cls
@@ -846,7 +876,7 @@ set_angular_velocity cls arg1
 
 {-# NOINLINE bindRigidBody_set_axis_lock #-}
 
--- | Lock the body's rotation in the x-axis.
+-- | Locks the specified linear or rotational axis.
 bindRigidBody_set_axis_lock :: MethodBind
 bindRigidBody_set_axis_lock
   = unsafePerformIO $
@@ -856,7 +886,7 @@ bindRigidBody_set_axis_lock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Lock the body's rotation in the x-axis.
+-- | Locks the specified linear or rotational axis.
 set_axis_lock ::
                 (RigidBody :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_axis_lock cls arg1 arg2
@@ -892,7 +922,8 @@ set_axis_velocity cls arg1
 
 {-# NOINLINE bindRigidBody_set_bounce #-}
 
--- | RigidBody's bounciness.
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 bindRigidBody_set_bounce :: MethodBind
 bindRigidBody_set_bounce
   = unsafePerformIO $
@@ -902,7 +933,8 @@ bindRigidBody_set_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | RigidBody's bounciness.
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 set_bounce ::
              (RigidBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bounce cls arg1
@@ -914,7 +946,8 @@ set_bounce cls arg1
 
 {-# NOINLINE bindRigidBody_set_can_sleep #-}
 
--- | If [code]true[/code], the RigidBody will not calculate forces and will act as a static body while there is no movement. It will wake up when forces are applied through other collisions or when the [code]apply_impulse[/code] method is used.
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody3D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 bindRigidBody_set_can_sleep :: MethodBind
 bindRigidBody_set_can_sleep
   = unsafePerformIO $
@@ -924,7 +957,8 @@ bindRigidBody_set_can_sleep
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the RigidBody will not calculate forces and will act as a static body while there is no movement. It will wake up when forces are applied through other collisions or when the [code]apply_impulse[/code] method is used.
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody3D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 set_can_sleep ::
                 (RigidBody :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_can_sleep cls arg1
@@ -937,7 +971,7 @@ set_can_sleep cls arg1
 
 {-# NOINLINE bindRigidBody_set_contact_monitor #-}
 
--- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody.
+-- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody. See also [member contacts_reported].
 bindRigidBody_set_contact_monitor :: MethodBind
 bindRigidBody_set_contact_monitor
   = unsafePerformIO $
@@ -947,7 +981,7 @@ bindRigidBody_set_contact_monitor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody.
+-- | If [code]true[/code], the RigidBody will emit signals when it collides with another RigidBody. See also [member contacts_reported].
 set_contact_monitor ::
                       (RigidBody :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_contact_monitor cls arg1
@@ -962,6 +996,7 @@ set_contact_monitor cls arg1
 {-# NOINLINE bindRigidBody_set_friction #-}
 
 -- | The body's friction, from 0 (frictionless) to 1 (max friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 bindRigidBody_set_friction :: MethodBind
 bindRigidBody_set_friction
   = unsafePerformIO $
@@ -972,6 +1007,7 @@ bindRigidBody_set_friction
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The body's friction, from 0 (frictionless) to 1 (max friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 set_friction ::
                (RigidBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_friction cls arg1
@@ -984,7 +1020,7 @@ set_friction cls arg1
 
 {-# NOINLINE bindRigidBody_set_gravity_scale #-}
 
--- | This is multiplied by the global 3D gravity setting found in "Project > Project Settings > Physics > 3d" to produce RigidBody's gravity. E.g. a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
+-- | This is multiplied by the global 3D gravity setting found in [b]Project > Project Settings > Physics > 3d[/b] to produce RigidBody's gravity. For example, a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
 bindRigidBody_set_gravity_scale :: MethodBind
 bindRigidBody_set_gravity_scale
   = unsafePerformIO $
@@ -994,7 +1030,7 @@ bindRigidBody_set_gravity_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This is multiplied by the global 3D gravity setting found in "Project > Project Settings > Physics > 3d" to produce RigidBody's gravity. E.g. a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
+-- | This is multiplied by the global 3D gravity setting found in [b]Project > Project Settings > Physics > 3d[/b] to produce RigidBody's gravity. For example, a value of 1 will be normal gravity, 2 will apply double gravity, and 0.5 will apply half gravity to this object.
 set_gravity_scale ::
                     (RigidBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_gravity_scale cls arg1
@@ -1007,7 +1043,7 @@ set_gravity_scale cls arg1
 
 {-# NOINLINE bindRigidBody_set_linear_damp #-}
 
--- | The body's linear damp. Default value: -1, cannot be less than -1. If this value is different from -1, any linear damp derived from the world or areas will be overridden.
+-- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
 bindRigidBody_set_linear_damp :: MethodBind
 bindRigidBody_set_linear_damp
   = unsafePerformIO $
@@ -1017,7 +1053,7 @@ bindRigidBody_set_linear_damp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear damp. Default value: -1, cannot be less than -1. If this value is different from -1, any linear damp derived from the world or areas will be overridden.
+-- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
 set_linear_damp ::
                   (RigidBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_linear_damp cls arg1
@@ -1030,7 +1066,7 @@ set_linear_damp cls arg1
 
 {-# NOINLINE bindRigidBody_set_linear_velocity #-}
 
--- | The body's linear velocity. Can be used sporadically, but [b]DON'T SET THIS IN EVERY FRAME[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
+-- | The body's linear velocity. Can be used sporadically, but [b]don't set this every frame[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
 bindRigidBody_set_linear_velocity :: MethodBind
 bindRigidBody_set_linear_velocity
   = unsafePerformIO $
@@ -1040,7 +1076,7 @@ bindRigidBody_set_linear_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear velocity. Can be used sporadically, but [b]DON'T SET THIS IN EVERY FRAME[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
+-- | The body's linear velocity. Can be used sporadically, but [b]don't set this every frame[/b], because physics may run in another thread and runs at a different granularity. Use [method _integrate_forces] as your process loop for precise control of the body state.
 set_linear_velocity ::
                       (RigidBody :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_linear_velocity cls arg1
@@ -1076,7 +1112,8 @@ set_mass cls arg1
 
 {-# NOINLINE bindRigidBody_set_max_contacts_reported #-}
 
--- | The maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 bindRigidBody_set_max_contacts_reported :: MethodBind
 bindRigidBody_set_max_contacts_reported
   = unsafePerformIO $
@@ -1086,7 +1123,8 @@ bindRigidBody_set_max_contacts_reported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum contacts to report. Bodies can keep a log of the contacts with other bodies, this is enabled by setting the maximum amount of contacts reported to a number greater than 0.
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 set_max_contacts_reported ::
                             (RigidBody :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_contacts_reported cls arg1
@@ -1100,7 +1138,7 @@ set_max_contacts_reported cls arg1
 
 {-# NOINLINE bindRigidBody_set_mode #-}
 
--- | The body mode from the MODE_* enum. Modes include: MODE_STATIC, MODE_KINEMATIC, MODE_RIGID, and MODE_CHARACTER.
+-- | The body mode. See [enum Mode] for possible values.
 bindRigidBody_set_mode :: MethodBind
 bindRigidBody_set_mode
   = unsafePerformIO $
@@ -1110,7 +1148,7 @@ bindRigidBody_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body mode from the MODE_* enum. Modes include: MODE_STATIC, MODE_KINEMATIC, MODE_RIGID, and MODE_CHARACTER.
+-- | The body mode. See [enum Mode] for possible values.
 set_mode ::
            (RigidBody :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
@@ -1122,6 +1160,8 @@ set_mode cls arg1
 
 {-# NOINLINE bindRigidBody_set_physics_material_override #-}
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 bindRigidBody_set_physics_material_override :: MethodBind
 bindRigidBody_set_physics_material_override
   = unsafePerformIO $
@@ -1131,6 +1171,8 @@ bindRigidBody_set_physics_material_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 set_physics_material_override ::
                                 (RigidBody :< cls, Object :< cls) =>
                                 cls -> PhysicsMaterial -> IO ()
@@ -1145,7 +1187,7 @@ set_physics_material_override cls arg1
 
 {-# NOINLINE bindRigidBody_set_sleeping #-}
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or the [code]apply_impulse[/code] method.
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 bindRigidBody_set_sleeping :: MethodBind
 bindRigidBody_set_sleeping
   = unsafePerformIO $
@@ -1155,7 +1197,7 @@ bindRigidBody_set_sleeping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or the [code]apply_impulse[/code] method.
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 set_sleeping ::
                (RigidBody :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_sleeping cls arg1
@@ -1170,7 +1212,7 @@ set_sleeping cls arg1
              #-}
 
 -- | If [code]true[/code], continuous collision detection is used.
---   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses less impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
+--   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses fewer impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
 bindRigidBody_set_use_continuous_collision_detection :: MethodBind
 bindRigidBody_set_use_continuous_collision_detection
   = unsafePerformIO $
@@ -1181,7 +1223,7 @@ bindRigidBody_set_use_continuous_collision_detection
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If [code]true[/code], continuous collision detection is used.
---   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses less impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
+--   			Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided. Continuous collision detection is more precise, and misses fewer impacts by small, fast-moving objects. Not using continuous collision detection is faster to compute, but can miss small, fast-moving objects.
 set_use_continuous_collision_detection ::
                                          (RigidBody :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_continuous_collision_detection cls arg1
@@ -1220,7 +1262,7 @@ set_use_custom_integrator cls arg1
 
 {-# NOINLINE bindRigidBody_set_weight #-}
 
--- | The body's weight based on its mass and the global 3D gravity. Global values are set in "Project > Project Settings > Physics > 3d".
+-- | The body's weight based on its mass and the global 3D gravity. Global values are set in [b]Project > Project Settings > Physics > 3d[/b].
 bindRigidBody_set_weight :: MethodBind
 bindRigidBody_set_weight
   = unsafePerformIO $
@@ -1230,7 +1272,7 @@ bindRigidBody_set_weight
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's weight based on its mass and the global 3D gravity. Global values are set in "Project > Project Settings > Physics > 3d".
+-- | The body's weight based on its mass and the global 3D gravity. Global values are set in [b]Project > Project Settings > Physics > 3d[/b].
 set_weight ::
              (RigidBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_weight cls arg1

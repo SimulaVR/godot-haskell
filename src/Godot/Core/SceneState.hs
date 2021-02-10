@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SceneState
        (Godot.Core.SceneState._GEN_EDIT_STATE_DISABLED,
         Godot.Core.SceneState._GEN_EDIT_STATE_MAIN,

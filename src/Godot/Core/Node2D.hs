@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Node2D
        (Godot.Core.Node2D.get_global_transform,
         Godot.Core.Node2D.get_transform, Godot.Core.Node2D.apply_scale,
@@ -81,7 +82,7 @@ get_transform cls
 
 {-# NOINLINE bindNode2D_apply_scale #-}
 
--- | Multiplies the current scale by the 'ratio' vector.
+-- | Multiplies the current scale by the [code]ratio[/code] vector.
 bindNode2D_apply_scale :: MethodBind
 bindNode2D_apply_scale
   = unsafePerformIO $
@@ -91,7 +92,7 @@ bindNode2D_apply_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies the current scale by the 'ratio' vector.
+-- | Multiplies the current scale by the [code]ratio[/code] vector.
 apply_scale ::
               (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 apply_scale cls arg1
@@ -103,7 +104,7 @@ apply_scale cls arg1
 
 {-# NOINLINE bindNode2D_get_angle_to #-}
 
--- | Returns the angle between the node and the 'point' in radians.
+-- | Returns the angle between the node and the [code]point[/code] in radians.
 bindNode2D_get_angle_to :: MethodBind
 bindNode2D_get_angle_to
   = unsafePerformIO $
@@ -113,7 +114,7 @@ bindNode2D_get_angle_to
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the angle between the node and the 'point' in radians.
+-- | Returns the angle between the node and the [code]point[/code] in radians.
 get_angle_to ::
                (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO Float
 get_angle_to cls arg1
@@ -307,7 +308,7 @@ get_rotation_degrees cls
 
 {-# NOINLINE bindNode2D_get_scale #-}
 
--- | The node's scale. Unscaled value: [code](1, 1)[/code]
+-- | The node's scale. Unscaled value: [code](1, 1)[/code].
 bindNode2D_get_scale :: MethodBind
 bindNode2D_get_scale
   = unsafePerformIO $
@@ -317,7 +318,7 @@ bindNode2D_get_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node's scale. Unscaled value: [code](1, 1)[/code]
+-- | The node's scale. Unscaled value: [code](1, 1)[/code].
 get_scale :: (Node2D :< cls, Object :< cls) => cls -> IO Vector2
 get_scale cls
   = withVariantArray []
@@ -327,7 +328,7 @@ get_scale cls
 
 {-# NOINLINE bindNode2D_get_z_index #-}
 
--- | Z-index. Controls the order in which the nodes render. A node with a higher Z-index will display in front of others.
+-- | Z index. Controls the order in which the nodes render. A node with a higher Z index will display in front of others.
 bindNode2D_get_z_index :: MethodBind
 bindNode2D_get_z_index
   = unsafePerformIO $
@@ -337,7 +338,7 @@ bindNode2D_get_z_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Z-index. Controls the order in which the nodes render. A node with a higher Z-index will display in front of others.
+-- | Z index. Controls the order in which the nodes render. A node with a higher Z index will display in front of others.
 get_z_index :: (Node2D :< cls, Object :< cls) => cls -> IO Int
 get_z_index cls
   = withVariantArray []
@@ -348,7 +349,7 @@ get_z_index cls
 
 {-# NOINLINE bindNode2D_global_translate #-}
 
--- | Adds the 'offset' vector to the node's global position.
+-- | Adds the [code]offset[/code] vector to the node's global position.
 bindNode2D_global_translate :: MethodBind
 bindNode2D_global_translate
   = unsafePerformIO $
@@ -358,7 +359,7 @@ bindNode2D_global_translate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the 'offset' vector to the node's global position.
+-- | Adds the [code]offset[/code] vector to the node's global position.
 global_translate ::
                    (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 global_translate cls arg1
@@ -371,7 +372,7 @@ global_translate cls arg1
 
 {-# NOINLINE bindNode2D_is_z_relative #-}
 
--- | If [code]true[/code], the node's Z-index is relative to its parent's Z-index. If this node's Z-index is 2 and its parent's effective Z-index is 3, then this node's effective Z-index will be 2 + 3 = 5.
+-- | If [code]true[/code], the node's Z index is relative to its parent's Z index. If this node's Z index is 2 and its parent's effective Z index is 3, then this node's effective Z index will be 2 + 3 = 5.
 bindNode2D_is_z_relative :: MethodBind
 bindNode2D_is_z_relative
   = unsafePerformIO $
@@ -381,7 +382,7 @@ bindNode2D_is_z_relative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the node's Z-index is relative to its parent's Z-index. If this node's Z-index is 2 and its parent's effective Z-index is 3, then this node's effective Z-index will be 2 + 3 = 5.
+-- | If [code]true[/code], the node's Z index is relative to its parent's Z index. If this node's Z index is 2 and its parent's effective Z index is 3, then this node's effective Z index will be 2 + 3 = 5.
 is_z_relative :: (Node2D :< cls, Object :< cls) => cls -> IO Bool
 is_z_relative cls
   = withVariantArray []
@@ -392,7 +393,7 @@ is_z_relative cls
 
 {-# NOINLINE bindNode2D_look_at #-}
 
--- | Rotates the node so it points towards the 'point'.
+-- | Rotates the node so it points towards the [code]point[/code], which is expected to use global coordinates.
 bindNode2D_look_at :: MethodBind
 bindNode2D_look_at
   = unsafePerformIO $
@@ -402,7 +403,7 @@ bindNode2D_look_at
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotates the node so it points towards the 'point'.
+-- | Rotates the node so it points towards the [code]point[/code], which is expected to use global coordinates.
 look_at ::
           (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 look_at cls arg1
@@ -660,7 +661,7 @@ set_rotation_degrees cls arg1
 
 {-# NOINLINE bindNode2D_set_scale #-}
 
--- | The node's scale. Unscaled value: [code](1, 1)[/code]
+-- | The node's scale. Unscaled value: [code](1, 1)[/code].
 bindNode2D_set_scale :: MethodBind
 bindNode2D_set_scale
   = unsafePerformIO $
@@ -670,7 +671,7 @@ bindNode2D_set_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node's scale. Unscaled value: [code](1, 1)[/code]
+-- | The node's scale. Unscaled value: [code](1, 1)[/code].
 set_scale ::
             (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_scale cls arg1
@@ -703,7 +704,7 @@ set_transform cls arg1
 
 {-# NOINLINE bindNode2D_set_z_as_relative #-}
 
--- | If [code]true[/code], the node's Z-index is relative to its parent's Z-index. If this node's Z-index is 2 and its parent's effective Z-index is 3, then this node's effective Z-index will be 2 + 3 = 5.
+-- | If [code]true[/code], the node's Z index is relative to its parent's Z index. If this node's Z index is 2 and its parent's effective Z index is 3, then this node's effective Z index will be 2 + 3 = 5.
 bindNode2D_set_z_as_relative :: MethodBind
 bindNode2D_set_z_as_relative
   = unsafePerformIO $
@@ -713,7 +714,7 @@ bindNode2D_set_z_as_relative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the node's Z-index is relative to its parent's Z-index. If this node's Z-index is 2 and its parent's effective Z-index is 3, then this node's effective Z-index will be 2 + 3 = 5.
+-- | If [code]true[/code], the node's Z index is relative to its parent's Z index. If this node's Z index is 2 and its parent's effective Z index is 3, then this node's effective Z index will be 2 + 3 = 5.
 set_z_as_relative ::
                     (Node2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_z_as_relative cls arg1
@@ -726,7 +727,7 @@ set_z_as_relative cls arg1
 
 {-# NOINLINE bindNode2D_set_z_index #-}
 
--- | Z-index. Controls the order in which the nodes render. A node with a higher Z-index will display in front of others.
+-- | Z index. Controls the order in which the nodes render. A node with a higher Z index will display in front of others.
 bindNode2D_set_z_index :: MethodBind
 bindNode2D_set_z_index
   = unsafePerformIO $
@@ -736,7 +737,7 @@ bindNode2D_set_z_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Z-index. Controls the order in which the nodes render. A node with a higher Z-index will display in front of others.
+-- | Z index. Controls the order in which the nodes render. A node with a higher Z index will display in front of others.
 set_z_index ::
               (Node2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_z_index cls arg1
@@ -748,7 +749,7 @@ set_z_index cls arg1
 
 {-# NOINLINE bindNode2D_to_global #-}
 
--- | Converts a local point's coordinates to global coordinates.
+-- | Transforms the provided local position into a position in global coordinate space. The input is expected to be local relative to the [Node2D] it is called on. e.g. Applying this method to the positions of child nodes will correctly transform their positions into the global coordinate space, but applying it to a node's own position will give an incorrect result, as it will incorporate the node's own transformation into its global position.
 bindNode2D_to_global :: MethodBind
 bindNode2D_to_global
   = unsafePerformIO $
@@ -758,7 +759,7 @@ bindNode2D_to_global
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Converts a local point's coordinates to global coordinates.
+-- | Transforms the provided local position into a position in global coordinate space. The input is expected to be local relative to the [Node2D] it is called on. e.g. Applying this method to the positions of child nodes will correctly transform their positions into the global coordinate space, but applying it to a node's own position will give an incorrect result, as it will incorporate the node's own transformation into its global position.
 to_global ::
             (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO Vector2
 to_global cls arg1
@@ -769,7 +770,7 @@ to_global cls arg1
 
 {-# NOINLINE bindNode2D_to_local #-}
 
--- | Converts a global point's coordinates to local coordinates.
+-- | Transforms the provided global position into a position in local coordinate space. The output will be local relative to the [Node2D] it is called on. e.g. It is appropriate for determining the positions of child nodes, but it is not appropriate for determining its own position relative to its parent.
 bindNode2D_to_local :: MethodBind
 bindNode2D_to_local
   = unsafePerformIO $
@@ -779,7 +780,7 @@ bindNode2D_to_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Converts a global point's coordinates to local coordinates.
+-- | Transforms the provided global position into a position in local coordinate space. The output will be local relative to the [Node2D] it is called on. e.g. It is appropriate for determining the positions of child nodes, but it is not appropriate for determining its own position relative to its parent.
 to_local ::
            (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO Vector2
 to_local cls arg1

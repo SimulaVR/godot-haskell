@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WindowDialog
        (Godot.Core.WindowDialog._closed,
         Godot.Core.WindowDialog._gui_input,
@@ -82,7 +83,7 @@ get_close_button cls
 
 {-# NOINLINE bindWindowDialog_get_resizable #-}
 
--- | If [code]true[/code], the user can resize the window. Default value: [code]false[/code].
+-- | If [code]true[/code], the user can resize the window.
 bindWindowDialog_get_resizable :: MethodBind
 bindWindowDialog_get_resizable
   = unsafePerformIO $
@@ -92,7 +93,7 @@ bindWindowDialog_get_resizable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the user can resize the window. Default value: [code]false[/code].
+-- | If [code]true[/code], the user can resize the window.
 get_resizable ::
                 (WindowDialog :< cls, Object :< cls) => cls -> IO Bool
 get_resizable cls
@@ -128,7 +129,7 @@ get_title cls
 
 {-# NOINLINE bindWindowDialog_set_resizable #-}
 
--- | If [code]true[/code], the user can resize the window. Default value: [code]false[/code].
+-- | If [code]true[/code], the user can resize the window.
 bindWindowDialog_set_resizable :: MethodBind
 bindWindowDialog_set_resizable
   = unsafePerformIO $
@@ -138,7 +139,7 @@ bindWindowDialog_set_resizable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the user can resize the window. Default value: [code]false[/code].
+-- | If [code]true[/code], the user can resize the window.
 set_resizable ::
                 (WindowDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_resizable cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptPropertySet
        (Godot.Core.VisualScriptPropertySet._CALL_MODE_BASIC_TYPE,
         Godot.Core.VisualScriptPropertySet._ASSIGN_OP_SHIFT_LEFT,

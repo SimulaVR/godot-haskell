@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Path
        (Godot.Core.Path.sig_curve_changed, Godot.Core.Path._curve_changed,
         Godot.Core.Path.get_curve, Godot.Core.Path.set_curve)
@@ -14,6 +15,8 @@ import Godot.Api.Types
 -- | Emitted when the [member curve] changes.
 sig_curve_changed :: Godot.Internal.Dispatch.Signal Path
 sig_curve_changed = Godot.Internal.Dispatch.Signal "curve_changed"
+
+instance NodeSignal Path "curve_changed" '[]
 
 {-# NOINLINE bindPath__curve_changed #-}
 

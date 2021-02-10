@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CubeMap
        (Godot.Core.CubeMap._SIDE_RIGHT, Godot.Core.CubeMap._SIDE_TOP,
         Godot.Core.CubeMap._SIDE_BACK, Godot.Core.CubeMap._STORAGE_RAW,
@@ -64,7 +65,7 @@ _FLAG_FILTER = 4
 
 {-# NOINLINE bindCubeMap_get_flags #-}
 
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+-- | The render flags for the [CubeMap]. See the [enum Flags] constants for details.
 bindCubeMap_get_flags :: MethodBind
 bindCubeMap_get_flags
   = unsafePerformIO $
@@ -74,7 +75,7 @@ bindCubeMap_get_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+-- | The render flags for the [CubeMap]. See the [enum Flags] constants for details.
 get_flags :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
 get_flags cls
   = withVariantArray []
@@ -85,7 +86,7 @@ get_flags cls
 
 {-# NOINLINE bindCubeMap_get_height #-}
 
--- | Returns the [code]CubeMap[/code]'s height.
+-- | Returns the [CubeMap]'s height.
 bindCubeMap_get_height :: MethodBind
 bindCubeMap_get_height
   = unsafePerformIO $
@@ -95,7 +96,7 @@ bindCubeMap_get_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]CubeMap[/code]'s height.
+-- | Returns the [CubeMap]'s height.
 get_height :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
 get_height cls
   = withVariantArray []
@@ -106,7 +107,7 @@ get_height cls
 
 {-# NOINLINE bindCubeMap_get_lossy_storage_quality #-}
 
--- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
+-- | The lossy storage quality of the [CubeMap] if the storage mode is set to [constant STORAGE_COMPRESS_LOSSY].
 bindCubeMap_get_lossy_storage_quality :: MethodBind
 bindCubeMap_get_lossy_storage_quality
   = unsafePerformIO $
@@ -116,7 +117,7 @@ bindCubeMap_get_lossy_storage_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
+-- | The lossy storage quality of the [CubeMap] if the storage mode is set to [constant STORAGE_COMPRESS_LOSSY].
 get_lossy_storage_quality ::
                             (CubeMap :< cls, Object :< cls) => cls -> IO Float
 get_lossy_storage_quality cls
@@ -130,7 +131,7 @@ get_lossy_storage_quality cls
 
 {-# NOINLINE bindCubeMap_get_side #-}
 
--- | Returns an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
+-- | Returns an [Image] for a side of the [CubeMap] using one of the [enum Side] constants.
 bindCubeMap_get_side :: MethodBind
 bindCubeMap_get_side
   = unsafePerformIO $
@@ -140,7 +141,7 @@ bindCubeMap_get_side
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
+-- | Returns an [Image] for a side of the [CubeMap] using one of the [enum Side] constants.
 get_side ::
            (CubeMap :< cls, Object :< cls) => cls -> Int -> IO Image
 get_side cls arg1
@@ -151,7 +152,7 @@ get_side cls arg1
 
 {-# NOINLINE bindCubeMap_get_storage #-}
 
--- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
+-- | The [CubeMap]'s storage mode. See [enum Storage] constants.
 bindCubeMap_get_storage :: MethodBind
 bindCubeMap_get_storage
   = unsafePerformIO $
@@ -161,7 +162,7 @@ bindCubeMap_get_storage
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
+-- | The [CubeMap]'s storage mode. See [enum Storage] constants.
 get_storage :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
 get_storage cls
   = withVariantArray []
@@ -172,7 +173,7 @@ get_storage cls
 
 {-# NOINLINE bindCubeMap_get_width #-}
 
--- | Returns the [code]CubeMap[/code]'s width.
+-- | Returns the [CubeMap]'s width.
 bindCubeMap_get_width :: MethodBind
 bindCubeMap_get_width
   = unsafePerformIO $
@@ -182,7 +183,7 @@ bindCubeMap_get_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]CubeMap[/code]'s width.
+-- | Returns the [CubeMap]'s width.
 get_width :: (CubeMap :< cls, Object :< cls) => cls -> IO Int
 get_width cls
   = withVariantArray []
@@ -193,7 +194,7 @@ get_width cls
 
 {-# NOINLINE bindCubeMap_set_flags #-}
 
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+-- | The render flags for the [CubeMap]. See the [enum Flags] constants for details.
 bindCubeMap_set_flags :: MethodBind
 bindCubeMap_set_flags
   = unsafePerformIO $
@@ -203,7 +204,7 @@ bindCubeMap_set_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The render flags for the [code]CubeMap[/code]. See the [code]FLAG_*[/code] constants for details.
+-- | The render flags for the [CubeMap]. See the [enum Flags] constants for details.
 set_flags :: (CubeMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_flags cls arg1
   = withVariantArray [toVariant arg1]
@@ -214,7 +215,7 @@ set_flags cls arg1
 
 {-# NOINLINE bindCubeMap_set_lossy_storage_quality #-}
 
--- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
+-- | The lossy storage quality of the [CubeMap] if the storage mode is set to [constant STORAGE_COMPRESS_LOSSY].
 bindCubeMap_set_lossy_storage_quality :: MethodBind
 bindCubeMap_set_lossy_storage_quality
   = unsafePerformIO $
@@ -224,7 +225,7 @@ bindCubeMap_set_lossy_storage_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The lossy storage quality of the [code]CubeMap[/code] if the storage mode is set to STORAGE_COMPRESS_LOSSY.
+-- | The lossy storage quality of the [CubeMap] if the storage mode is set to [constant STORAGE_COMPRESS_LOSSY].
 set_lossy_storage_quality ::
                             (CubeMap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_lossy_storage_quality cls arg1
@@ -238,7 +239,7 @@ set_lossy_storage_quality cls arg1
 
 {-# NOINLINE bindCubeMap_set_side #-}
 
--- | Sets an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
+-- | Sets an [Image] for a side of the [CubeMap] using one of the [enum Side] constants.
 bindCubeMap_set_side :: MethodBind
 bindCubeMap_set_side
   = unsafePerformIO $
@@ -248,7 +249,7 @@ bindCubeMap_set_side
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets an [Image] for a side of the [code]CubeMap[/code] using one of the [code]SIDE_*[/code] constants or an integer 0-5.
+-- | Sets an [Image] for a side of the [CubeMap] using one of the [enum Side] constants.
 set_side ::
            (CubeMap :< cls, Object :< cls) => cls -> Int -> Image -> IO ()
 set_side cls arg1 arg2
@@ -259,7 +260,7 @@ set_side cls arg1 arg2
 
 {-# NOINLINE bindCubeMap_set_storage #-}
 
--- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
+-- | The [CubeMap]'s storage mode. See [enum Storage] constants.
 bindCubeMap_set_storage :: MethodBind
 bindCubeMap_set_storage
   = unsafePerformIO $
@@ -269,7 +270,7 @@ bindCubeMap_set_storage
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [code]CubeMap[/code]'s storage mode. See [code]STORAGE_*[/code] constants.
+-- | The [CubeMap]'s storage mode. See [enum Storage] constants.
 set_storage ::
               (CubeMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_storage cls arg1

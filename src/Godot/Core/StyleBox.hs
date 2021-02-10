@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.StyleBox
        (Godot.Core.StyleBox.draw, Godot.Core.StyleBox.get_center_size,
         Godot.Core.StyleBox.get_current_item_drawn,
@@ -19,6 +20,8 @@ import Godot.Api.Types
 
 {-# NOINLINE bindStyleBox_draw #-}
 
+-- | Draws this stylebox using a [CanvasItem] with given [RID].
+--   				You can get a [RID] value using [method Object.get_instance_id] on a [CanvasItem]-derived node.
 bindStyleBox_draw :: MethodBind
 bindStyleBox_draw
   = unsafePerformIO $
@@ -28,6 +31,8 @@ bindStyleBox_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Draws this stylebox using a [CanvasItem] with given [RID].
+--   				You can get a [RID] value using [method Object.get_instance_id] on a [CanvasItem]-derived node.
 draw ::
        (StyleBox :< cls, Object :< cls) => cls -> Rid -> Rect2 -> IO ()
 draw cls arg1 arg2
@@ -38,6 +43,7 @@ draw cls arg1 arg2
 
 {-# NOINLINE bindStyleBox_get_center_size #-}
 
+-- | Returns the size of this [StyleBox] without the margins.
 bindStyleBox_get_center_size :: MethodBind
 bindStyleBox_get_center_size
   = unsafePerformIO $
@@ -47,6 +53,7 @@ bindStyleBox_get_center_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the size of this [StyleBox] without the margins.
 get_center_size ::
                   (StyleBox :< cls, Object :< cls) => cls -> IO Vector2
 get_center_size cls
@@ -59,6 +66,7 @@ get_center_size cls
 
 {-# NOINLINE bindStyleBox_get_current_item_drawn #-}
 
+-- | Returns the [CanvasItem] that handles its [constant CanvasItem.NOTIFICATION_DRAW] or [method CanvasItem._draw] callback at this moment.
 bindStyleBox_get_current_item_drawn :: MethodBind
 bindStyleBox_get_current_item_drawn
   = unsafePerformIO $
@@ -68,6 +76,7 @@ bindStyleBox_get_current_item_drawn
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [CanvasItem] that handles its [constant CanvasItem.NOTIFICATION_DRAW] or [method CanvasItem._draw] callback at this moment.
 get_current_item_drawn ::
                          (StyleBox :< cls, Object :< cls) => cls -> IO CanvasItem
 get_current_item_drawn cls
@@ -81,10 +90,7 @@ get_current_item_drawn cls
 
 {-# NOINLINE bindStyleBox_get_default_margin #-}
 
--- | The bottom margin for the contents of this style box. Increasing this value reduces the space available to the contents from the bottom.
---   			If this value is negative, it is ignored and a child-specific margin is used instead. For example for [StyleBoxFlat] the border thickness (if any) is used instead.
---   			It is up to the code using this style box to decide what these contents are: for example, a [Button] respects this content margin for the textual contents of the button.
---   			[method get_margin] should be used to fetch this value as consumer instead of reading these properties directly. This is because it correctly respects negative values and the fallback mentioned above.
+-- | Returns the default value of the specified [enum Margin].
 bindStyleBox_get_default_margin :: MethodBind
 bindStyleBox_get_default_margin
   = unsafePerformIO $
@@ -94,10 +100,7 @@ bindStyleBox_get_default_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The bottom margin for the contents of this style box. Increasing this value reduces the space available to the contents from the bottom.
---   			If this value is negative, it is ignored and a child-specific margin is used instead. For example for [StyleBoxFlat] the border thickness (if any) is used instead.
---   			It is up to the code using this style box to decide what these contents are: for example, a [Button] respects this content margin for the textual contents of the button.
---   			[method get_margin] should be used to fetch this value as consumer instead of reading these properties directly. This is because it correctly respects negative values and the fallback mentioned above.
+-- | Returns the default value of the specified [enum Margin].
 get_default_margin ::
                      (StyleBox :< cls, Object :< cls) => cls -> Int -> IO Float
 get_default_margin cls arg1
@@ -110,7 +113,7 @@ get_default_margin cls arg1
 
 {-# NOINLINE bindStyleBox_get_margin #-}
 
--- | Returns the content margin offset for the specified margin
+-- | Returns the content margin offset for the specified [enum Margin].
 --   				Positive values reduce size inwards, unlike [Control]'s margin values.
 bindStyleBox_get_margin :: MethodBind
 bindStyleBox_get_margin
@@ -121,7 +124,7 @@ bindStyleBox_get_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the content margin offset for the specified margin
+-- | Returns the content margin offset for the specified [enum Margin].
 --   				Positive values reduce size inwards, unlike [Control]'s margin values.
 get_margin ::
              (StyleBox :< cls, Object :< cls) => cls -> Int -> IO Float
@@ -157,7 +160,7 @@ get_minimum_size cls
 
 {-# NOINLINE bindStyleBox_get_offset #-}
 
--- | Returns the "offset" of a stylebox, this is a helper function, like writing [code]Vector2(style.get_margin(MARGIN_LEFT), style.get_margin(MARGIN_TOP))[/code].
+-- | Returns the "offset" of a stylebox. This helper function returns a value equivalent to [code]Vector2(style.get_margin(MARGIN_LEFT), style.get_margin(MARGIN_TOP))[/code].
 bindStyleBox_get_offset :: MethodBind
 bindStyleBox_get_offset
   = unsafePerformIO $
@@ -167,7 +170,7 @@ bindStyleBox_get_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the "offset" of a stylebox, this is a helper function, like writing [code]Vector2(style.get_margin(MARGIN_LEFT), style.get_margin(MARGIN_TOP))[/code].
+-- | Returns the "offset" of a stylebox. This helper function returns a value equivalent to [code]Vector2(style.get_margin(MARGIN_LEFT), style.get_margin(MARGIN_TOP))[/code].
 get_offset :: (StyleBox :< cls, Object :< cls) => cls -> IO Vector2
 get_offset cls
   = withVariantArray []
@@ -178,10 +181,7 @@ get_offset cls
 
 {-# NOINLINE bindStyleBox_set_default_margin #-}
 
--- | The bottom margin for the contents of this style box. Increasing this value reduces the space available to the contents from the bottom.
---   			If this value is negative, it is ignored and a child-specific margin is used instead. For example for [StyleBoxFlat] the border thickness (if any) is used instead.
---   			It is up to the code using this style box to decide what these contents are: for example, a [Button] respects this content margin for the textual contents of the button.
---   			[method get_margin] should be used to fetch this value as consumer instead of reading these properties directly. This is because it correctly respects negative values and the fallback mentioned above.
+-- | Sets the default value of the specified [enum Margin] to given [code]offset[/code] in pixels.
 bindStyleBox_set_default_margin :: MethodBind
 bindStyleBox_set_default_margin
   = unsafePerformIO $
@@ -191,10 +191,7 @@ bindStyleBox_set_default_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The bottom margin for the contents of this style box. Increasing this value reduces the space available to the contents from the bottom.
---   			If this value is negative, it is ignored and a child-specific margin is used instead. For example for [StyleBoxFlat] the border thickness (if any) is used instead.
---   			It is up to the code using this style box to decide what these contents are: for example, a [Button] respects this content margin for the textual contents of the button.
---   			[method get_margin] should be used to fetch this value as consumer instead of reading these properties directly. This is because it correctly respects negative values and the fallback mentioned above.
+-- | Sets the default value of the specified [enum Margin] to given [code]offset[/code] in pixels.
 set_default_margin ::
                      (StyleBox :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_default_margin cls arg1 arg2

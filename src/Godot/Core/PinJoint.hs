@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PinJoint
        (Godot.Core.PinJoint._PARAM_IMPULSE_CLAMP,
         Godot.Core.PinJoint._PARAM_DAMPING,
@@ -24,8 +25,7 @@ _PARAM_BIAS = 0
 
 {-# NOINLINE bindPinJoint_get_param #-}
 
--- | The force with which the pinned objects stay in positional relation to each other.
---   			The higher, the stronger.
+-- | Returns the value of the specified parameter.
 bindPinJoint_get_param :: MethodBind
 bindPinJoint_get_param
   = unsafePerformIO $
@@ -35,8 +35,7 @@ bindPinJoint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The force with which the pinned objects stay in positional relation to each other.
---   			The higher, the stronger.
+-- | Returns the value of the specified parameter.
 get_param ::
             (PinJoint :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param cls arg1
@@ -48,8 +47,7 @@ get_param cls arg1
 
 {-# NOINLINE bindPinJoint_set_param #-}
 
--- | The force with which the pinned objects stay in positional relation to each other.
---   			The higher, the stronger.
+-- | Sets the value of the specified parameter.
 bindPinJoint_set_param :: MethodBind
 bindPinJoint_set_param
   = unsafePerformIO $
@@ -59,8 +57,7 @@ bindPinJoint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The force with which the pinned objects stay in positional relation to each other.
---   			The higher, the stronger.
+-- | Sets the value of the specified parameter.
 set_param ::
             (PinJoint :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_param cls arg1 arg2

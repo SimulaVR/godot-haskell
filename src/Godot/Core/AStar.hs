@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AStar
        (Godot.Core.AStar._compute_cost, Godot.Core.AStar._estimate_cost,
         Godot.Core.AStar.add_point, Godot.Core.AStar.are_points_connected,
@@ -30,6 +31,7 @@ import Godot.Api.Types
 {-# NOINLINE bindAStar__compute_cost #-}
 
 -- | Called when computing the cost between two connected points.
+--   				Note that this function is hidden in the default [code]AStar[/code] class.
 bindAStar__compute_cost :: MethodBind
 bindAStar__compute_cost
   = unsafePerformIO $
@@ -40,6 +42,7 @@ bindAStar__compute_cost
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Called when computing the cost between two connected points.
+--   				Note that this function is hidden in the default [code]AStar[/code] class.
 _compute_cost ::
                 (AStar :< cls, Object :< cls) => cls -> Int -> Int -> IO Float
 _compute_cost cls arg1 arg2
@@ -52,6 +55,7 @@ _compute_cost cls arg1 arg2
 {-# NOINLINE bindAStar__estimate_cost #-}
 
 -- | Called when estimating the cost between a point and the path's ending point.
+--   				Note that this function is hidden in the default [code]AStar[/code] class.
 bindAStar__estimate_cost :: MethodBind
 bindAStar__estimate_cost
   = unsafePerformIO $
@@ -62,6 +66,7 @@ bindAStar__estimate_cost
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Called when estimating the cost between a point and the path's ending point.
+--   				Note that this function is hidden in the default [code]AStar[/code] class.
 _estimate_cost ::
                  (AStar :< cls, Object :< cls) => cls -> Int -> Int -> IO Float
 _estimate_cost cls arg1 arg2
@@ -78,7 +83,7 @@ _estimate_cost cls arg1 arg2
 --   				var astar = AStar.new()
 --   				astar.add_point(1, Vector3(1, 0, 0), 4) # Adds the point (1, 0, 0) with weight_scale 4 and id 1
 --   				[/codeblock]
---   				If there already exists a point for the given id, its position and weight scale are updated to the given values.
+--   				If there already exists a point for the given [code]id[/code], its position and weight scale are updated to the given values.
 bindAStar_add_point :: MethodBind
 bindAStar_add_point
   = unsafePerformIO $
@@ -93,7 +98,7 @@ bindAStar_add_point
 --   				var astar = AStar.new()
 --   				astar.add_point(1, Vector3(1, 0, 0), 4) # Adds the point (1, 0, 0) with weight_scale 4 and id 1
 --   				[/codeblock]
---   				If there already exists a point for the given id, its position and weight scale are updated to the given values.
+--   				If there already exists a point for the given [code]id[/code], its position and weight scale are updated to the given values.
 add_point ::
             (AStar :< cls, Object :< cls) =>
             cls -> Int -> Vector3 -> Float -> IO ()
@@ -105,7 +110,7 @@ add_point cls arg1 arg2 arg3
 
 {-# NOINLINE bindAStar_are_points_connected #-}
 
--- | Returns whether there is a connection/segment between the given points.
+-- | Returns whether the two given points are directly connected by a segment. If [code]bidirectional[/code] is [code]false[/code], returns whether movement from [code]id[/code] to [code]to_id[/code] is possible through this segment.
 bindAStar_are_points_connected :: MethodBind
 bindAStar_are_points_connected
   = unsafePerformIO $
@@ -115,7 +120,7 @@ bindAStar_are_points_connected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether there is a connection/segment between the given points.
+-- | Returns whether the two given points are directly connected by a segment. If [code]bidirectional[/code] is [code]false[/code], returns whether movement from [code]id[/code] to [code]to_id[/code] is possible through this segment.
 are_points_connected ::
                        (AStar :< cls, Object :< cls) =>
                        cls -> Int -> Int -> Bool -> IO Bool
@@ -183,7 +188,7 @@ connect_points cls arg1 arg2 arg3
 
 {-# NOINLINE bindAStar_disconnect_points #-}
 
--- | Deletes the segment between the given points.
+-- | Deletes the segment between the given points. If [code]bidirectional[/code] is [code]false[/code], only movement from [code]id[/code] to [code]to_id[/code] is prevented, and a unidirectional segment possibly remains.
 bindAStar_disconnect_points :: MethodBind
 bindAStar_disconnect_points
   = unsafePerformIO $
@@ -193,7 +198,7 @@ bindAStar_disconnect_points
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deletes the segment between the given points.
+-- | Deletes the segment between the given points. If [code]bidirectional[/code] is [code]false[/code], only movement from [code]id[/code] to [code]to_id[/code] is prevented, and a unidirectional segment possibly remains.
 disconnect_points ::
                     (AStar :< cls, Object :< cls) => cls -> Int -> Int -> Bool -> IO ()
 disconnect_points cls arg1 arg2 arg3
@@ -206,7 +211,7 @@ disconnect_points cls arg1 arg2 arg3
 
 {-# NOINLINE bindAStar_get_available_point_id #-}
 
--- | Returns the next available point id with no point associated to it.
+-- | Returns the next available point ID with no point associated to it.
 bindAStar_get_available_point_id :: MethodBind
 bindAStar_get_available_point_id
   = unsafePerformIO $
@@ -216,7 +221,7 @@ bindAStar_get_available_point_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next available point id with no point associated to it.
+-- | Returns the next available point ID with no point associated to it.
 get_available_point_id ::
                          (AStar :< cls, Object :< cls) => cls -> IO Int
 get_available_point_id cls
@@ -230,7 +235,8 @@ get_available_point_id cls
 
 {-# NOINLINE bindAStar_get_closest_point #-}
 
--- | Returns the id of the closest point to [code]to_position[/code]. Returns -1 if there are no points in the points pool.
+-- | Returns the ID of the closest point to [code]to_position[/code], optionally taking disabled points into account. Returns [code]-1[/code] if there are no points in the points pool.
+--   				[b]Note:[/b] If several points are the closest to [code]to_position[/code], the one with the smallest ID will be returned, ensuring a deterministic result.
 bindAStar_get_closest_point :: MethodBind
 bindAStar_get_closest_point
   = unsafePerformIO $
@@ -240,7 +246,8 @@ bindAStar_get_closest_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the id of the closest point to [code]to_position[/code]. Returns -1 if there are no points in the points pool.
+-- | Returns the ID of the closest point to [code]to_position[/code], optionally taking disabled points into account. Returns [code]-1[/code] if there are no points in the points pool.
+--   				[b]Note:[/b] If several points are the closest to [code]to_position[/code], the one with the smallest ID will be returned, ensuring a deterministic result.
 get_closest_point ::
                     (AStar :< cls, Object :< cls) => cls -> Vector3 -> Bool -> IO Int
 get_closest_point cls arg1 arg2
@@ -293,7 +300,7 @@ get_closest_position_in_segment cls arg1
 
 {-# NOINLINE bindAStar_get_id_path #-}
 
--- | Returns an array with the ids of the points that form the path found by AStar between the given points. The array is ordered from the starting point to the ending point of the path.
+-- | Returns an array with the IDs of the points that form the path found by AStar between the given points. The array is ordered from the starting point to the ending point of the path.
 --   				[codeblock]
 --   				var astar = AStar.new()
 --   				astar.add_point(1, Vector3(0, 0, 0))
@@ -318,7 +325,7 @@ bindAStar_get_id_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array with the ids of the points that form the path found by AStar between the given points. The array is ordered from the starting point to the ending point of the path.
+-- | Returns an array with the IDs of the points that form the path found by AStar between the given points. The array is ordered from the starting point to the ending point of the path.
 --   				[codeblock]
 --   				var astar = AStar.new()
 --   				astar.add_point(1, Vector3(0, 0, 0))
@@ -346,6 +353,7 @@ get_id_path cls arg1 arg2
 
 {-# NOINLINE bindAStar_get_point_capacity #-}
 
+-- | Returns the capacity of the structure backing the points, useful in conjunction with [code]reserve_space[/code].
 bindAStar_get_point_capacity :: MethodBind
 bindAStar_get_point_capacity
   = unsafePerformIO $
@@ -355,6 +363,7 @@ bindAStar_get_point_capacity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the capacity of the structure backing the points, useful in conjunction with [code]reserve_space[/code].
 get_point_capacity ::
                      (AStar :< cls, Object :< cls) => cls -> IO Int
 get_point_capacity cls
@@ -367,7 +376,7 @@ get_point_capacity cls
 
 {-# NOINLINE bindAStar_get_point_connections #-}
 
--- | Returns an array with the ids of the points that form the connect with the given point.
+-- | Returns an array with the IDs of the points that form the connection with the given point.
 --   				[codeblock]
 --   				var astar = AStar.new()
 --   				astar.add_point(1, Vector3(0, 0, 0))
@@ -389,7 +398,7 @@ bindAStar_get_point_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array with the ids of the points that form the connect with the given point.
+-- | Returns an array with the IDs of the points that form the connection with the given point.
 --   				[codeblock]
 --   				var astar = AStar.new()
 --   				astar.add_point(1, Vector3(0, 0, 0))
@@ -414,6 +423,7 @@ get_point_connections cls arg1
 
 {-# NOINLINE bindAStar_get_point_count #-}
 
+-- | Returns the number of points currently in the points pool.
 bindAStar_get_point_count :: MethodBind
 bindAStar_get_point_count
   = unsafePerformIO $
@@ -423,6 +433,7 @@ bindAStar_get_point_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of points currently in the points pool.
 get_point_count :: (AStar :< cls, Object :< cls) => cls -> IO Int
 get_point_count cls
   = withVariantArray []
@@ -457,7 +468,7 @@ get_point_path cls arg1 arg2
 
 {-# NOINLINE bindAStar_get_point_position #-}
 
--- | Returns the position of the point associated with the given id.
+-- | Returns the position of the point associated with the given [code]id[/code].
 bindAStar_get_point_position :: MethodBind
 bindAStar_get_point_position
   = unsafePerformIO $
@@ -467,7 +478,7 @@ bindAStar_get_point_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the point associated with the given id.
+-- | Returns the position of the point associated with the given [code]id[/code].
 get_point_position ::
                      (AStar :< cls, Object :< cls) => cls -> Int -> IO Vector3
 get_point_position cls arg1
@@ -480,7 +491,7 @@ get_point_position cls arg1
 
 {-# NOINLINE bindAStar_get_point_weight_scale #-}
 
--- | Returns the weight scale of the point associated with the given id.
+-- | Returns the weight scale of the point associated with the given [code]id[/code].
 bindAStar_get_point_weight_scale :: MethodBind
 bindAStar_get_point_weight_scale
   = unsafePerformIO $
@@ -490,7 +501,7 @@ bindAStar_get_point_weight_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the weight scale of the point associated with the given id.
+-- | Returns the weight scale of the point associated with the given [code]id[/code].
 get_point_weight_scale ::
                          (AStar :< cls, Object :< cls) => cls -> Int -> IO Float
 get_point_weight_scale cls arg1
@@ -524,7 +535,7 @@ get_points cls
 
 {-# NOINLINE bindAStar_has_point #-}
 
--- | Returns whether a point associated with the given id exists.
+-- | Returns whether a point associated with the given [code]id[/code] exists.
 bindAStar_has_point :: MethodBind
 bindAStar_has_point
   = unsafePerformIO $
@@ -534,7 +545,7 @@ bindAStar_has_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether a point associated with the given id exists.
+-- | Returns whether a point associated with the given [code]id[/code] exists.
 has_point :: (AStar :< cls, Object :< cls) => cls -> Int -> IO Bool
 has_point cls arg1
   = withVariantArray [toVariant arg1]
@@ -567,7 +578,7 @@ is_point_disabled cls arg1
 
 {-# NOINLINE bindAStar_remove_point #-}
 
--- | Removes the point associated with the given id from the points pool.
+-- | Removes the point associated with the given [code]id[/code] from the points pool.
 bindAStar_remove_point :: MethodBind
 bindAStar_remove_point
   = unsafePerformIO $
@@ -577,7 +588,7 @@ bindAStar_remove_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the point associated with the given id from the points pool.
+-- | Removes the point associated with the given [code]id[/code] from the points pool.
 remove_point ::
                (AStar :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_point cls arg1
@@ -589,6 +600,7 @@ remove_point cls arg1
 
 {-# NOINLINE bindAStar_reserve_space #-}
 
+-- | Reserves space internally for [code]num_nodes[/code] points, useful if you're adding a known large number of points at once, for a grid for instance. New capacity must be greater or equals to old capacity.
 bindAStar_reserve_space :: MethodBind
 bindAStar_reserve_space
   = unsafePerformIO $
@@ -598,6 +610,7 @@ bindAStar_reserve_space
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Reserves space internally for [code]num_nodes[/code] points, useful if you're adding a known large number of points at once, for a grid for instance. New capacity must be greater or equals to old capacity.
 reserve_space ::
                 (AStar :< cls, Object :< cls) => cls -> Int -> IO ()
 reserve_space cls arg1
@@ -632,7 +645,7 @@ set_point_disabled cls arg1 arg2
 
 {-# NOINLINE bindAStar_set_point_position #-}
 
--- | Sets the position for the point with the given id.
+-- | Sets the [code]position[/code] for the point with the given [code]id[/code].
 bindAStar_set_point_position :: MethodBind
 bindAStar_set_point_position
   = unsafePerformIO $
@@ -642,7 +655,7 @@ bindAStar_set_point_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the position for the point with the given id.
+-- | Sets the [code]position[/code] for the point with the given [code]id[/code].
 set_point_position ::
                      (AStar :< cls, Object :< cls) => cls -> Int -> Vector3 -> IO ()
 set_point_position cls arg1 arg2
@@ -655,7 +668,7 @@ set_point_position cls arg1 arg2
 
 {-# NOINLINE bindAStar_set_point_weight_scale #-}
 
--- | Sets the [code]weight_scale[/code] for the point with the given id.
+-- | Sets the [code]weight_scale[/code] for the point with the given [code]id[/code].
 bindAStar_set_point_weight_scale :: MethodBind
 bindAStar_set_point_weight_scale
   = unsafePerformIO $
@@ -665,7 +678,7 @@ bindAStar_set_point_weight_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [code]weight_scale[/code] for the point with the given id.
+-- | Sets the [code]weight_scale[/code] for the point with the given [code]id[/code].
 set_point_weight_scale ::
                          (AStar :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_point_weight_scale cls arg1 arg2

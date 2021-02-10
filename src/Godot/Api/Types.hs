@@ -250,9 +250,9 @@ import Godot.Gdnative.Internal
 newtype GlobalConstants = GlobalConstants Object
                             deriving newtype AsVariant
 
--- | Anchor point in AR Space.
---   The ARVR Anchor point is a spatial node that maps a real world location identified by the AR platform to a position within the game world. For example, as long as plane detection in ARKit is on, ARKit will identify and update the position of planes (tables, floors, etc) and create anchors for them.
---   		This node is mapped to one of the anchors through its unique id. When you receive a signal that a new anchor is available, you should add this node to your scene for that anchor. You can predefine nodes and set the id and the nodes will simply remain on 0,0,0 until a plane is recognized.
+-- | An anchor point in AR space.
+--   The [ARVRAnchor] point is a spatial node that maps a real world location identified by the AR platform to a position within the game world. For example, as long as plane detection in ARKit is on, ARKit will identify and update the position of planes (tables, floors, etc) and create anchors for them.
+--   		This node is mapped to one of the anchors through its unique ID. When you receive a signal that a new anchor is available, you should add this node to your scene for that anchor. You can predefine nodes and set the ID; the nodes will simply remain on 0,0,0 until a plane is recognized.
 --   		Keep in mind that, as long as plane detection is enabled, the size, placing and orientation of an anchor will be updated as the detection logic learns more about the real world out there especially if only part of the surface is in view.
 newtype ARVRAnchor = ARVRAnchor Object
                        deriving newtype AsVariant
@@ -271,10 +271,10 @@ instance HasBaseClass ARVRCamera where
         type BaseClass ARVRCamera = Camera
         super = coerce
 
--- | A spatial node representing a spatially tracked controller.
+-- | A spatial node representing a spatially-tracked controller.
 --   This is a helper spatial node that is linked to the tracking of controllers. It also offers several handy passthroughs to the state of buttons and such on the controllers.
---   		Controllers are linked by their id. You can create controller nodes before the controllers are available. Say your game always uses two controllers (one for each hand) you can predefine the controllers with id 1 and 2 and they will become active as soon as the controllers are identified. If you expect additional controllers to be used, you should react to the signals and add ARVRController nodes to your scene.
---   		The position of the controller node is automatically updated by the ARVR Server. This makes this node ideal to add child nodes to visualise the controller.
+--   		Controllers are linked by their ID. You can create controller nodes before the controllers are available. If your game always uses two controllers (one for each hand), you can predefine the controllers with ID 1 and 2; they will become active as soon as the controllers are identified. If you expect additional controllers to be used, you should react to the signals and add ARVRController nodes to your scene.
+--   		The position of the controller node is automatically updated by the [ARVRServer]. This makes this node ideal to add child nodes to visualize the controller.
 newtype ARVRController = ARVRController Object
                            deriving newtype AsVariant
 
@@ -282,9 +282,9 @@ instance HasBaseClass ARVRController where
         type BaseClass ARVRController = Spatial
         super = coerce
 
--- | Base class for ARVR interface implementation.
+-- | Base class for an AR/VR interface implementation.
 --   This class needs to be implemented to make an AR or VR platform available to Godot and these should be implemented as C++ modules or GDNative modules (note that for GDNative the subclass ARVRScriptInterface should be used). Part of the interface is exposed to GDScript so you can detect, enable and configure an AR or VR platform.
---   		Interfaces should be written in such a way that simply enabling them will give us a working setup. You can query the available interfaces through ARVRServer.
+--   		Interfaces should be written in such a way that simply enabling them will give us a working setup. You can query the available interfaces through [ARVRServer].
 newtype ARVRInterface = ARVRInterface Object
                           deriving newtype AsVariant
 
@@ -299,11 +299,11 @@ instance HasBaseClass ARVRInterfaceGDNative where
         type BaseClass ARVRInterfaceGDNative = ARVRInterface
         super = coerce
 
--- | Our origin point in AR/VR.
+-- | The origin point in AR/VR.
 --   This is a special node within the AR/VR system that maps the physical location of the center of our tracking space to the virtual location within our game world.
 --   		There should be only one of these nodes in your scene and you must have one. All the ARVRCamera, ARVRController and ARVRAnchor nodes should be direct children of this node for spatial tracking to work correctly.
 --   		It is the position of this node that you update when your character needs to move through your game world while we're not moving in the real world. Movement in the real world is always in relation to this origin point.
---   		So say that your character is driving a car, the ARVROrigin node should be a child node of this car. If you implement a teleport system to move your character, you change the position of this node. Etc.
+--   		For example, if your character is driving a car, the ARVROrigin node should be a child node of this car. Or, if you're implementing a teleport system to move your character, you should change the position of this node.
 newtype ARVROrigin = ARVROrigin Object
                        deriving newtype AsVariant
 
@@ -311,10 +311,10 @@ instance HasBaseClass ARVROrigin where
         type BaseClass ARVROrigin = Spatial
         super = coerce
 
--- | A tracked object
---   An instance of this object represents a device that is tracked such as a controller or anchor point. HMDs aren't represented here as they are fully handled internally.
---   		As controllers are turned on and the AR/VR interface detects them instances of this object are automatically added to this list of active tracking objects accessible through the ARVRServer
---   		The ARVRController and ARVRAnchor both consume objects of this type and should be the objects you use in game. The positional trackers are just the under the hood objects that make this all work and are mostly exposed so GDNative based interfaces can interact with them.
+-- | A tracked object.
+--   An instance of this object represents a device that is tracked, such as a controller or anchor point. HMDs aren't represented here as they are handled internally.
+--   		As controllers are turned on and the AR/VR interface detects them, instances of this object are automatically added to this list of active tracking objects accessible through the [ARVRServer].
+--   		The [ARVRController] and [ARVRAnchor] both consume objects of this type and should be used in your project. The positional trackers are just under-the-hood objects that make this all work. These are mostly exposed so that GDNative-based interfaces can interact with them.
 newtype ARVRPositionalTracker = ARVRPositionalTracker Object
                                   deriving newtype AsVariant
 
@@ -322,8 +322,8 @@ instance HasBaseClass ARVRPositionalTracker where
         type BaseClass ARVRPositionalTracker = Object
         super = coerce
 
--- | This is our AR/VR Server.
---   The AR/VR Server is the heart of our AR/VR solution and handles all the processing.
+-- | Server for AR and VR features.
+--   The AR/VR server is the heart of our Advanced and Virtual Reality solution and handles all the processing.
 newtype ARVRServer = ARVRServer Object
                        deriving newtype AsVariant
 
@@ -331,9 +331,21 @@ instance HasBaseClass ARVRServer where
         type BaseClass ARVRServer = Object
         super = coerce
 
--- | AStar class representation that uses vectors as edges.
---   A* (A star) is a computer algorithm that is widely used in pathfinding and graph traversal, the process of plotting an efficiently directed path between multiple points. It enjoys widespread use due to its performance and accuracy. Godot's A* implementation make use of vectors as points.
---   		You must add points manually with [method AStar.add_point] and create segments manually with [method AStar.connect_points]. So you can test if there is a path between two points with the [method AStar.are_points_connected] function, get the list of existing ids in the found path with [method AStar.get_id_path], or the points list with [method AStar.get_point_path].
+-- | An implementation of A* to find shortest paths among connected points in space.
+--   A* (A star) is a computer algorithm that is widely used in pathfinding and graph traversal, the process of plotting short paths among vertices (points), passing through a given set of edges (segments). It enjoys widespread use due to its performance and accuracy. Godot's A* implementation uses points in three-dimensional space and Euclidean distances by default.
+--   		You must add points manually with [method add_point] and create segments manually with [method connect_points]. Then you can test if there is a path between two points with the [method are_points_connected] function, get a path containing indices by [method get_id_path], or one containing actual coordinates with [method get_point_path].
+--   		It is also possible to use non-Euclidean distances. To do so, create a class that extends [code]AStar[/code] and override methods [method _compute_cost] and [method _estimate_cost]. Both take two indices and return a length, as is shown in the following example.
+--   		[codeblock]
+--   		class MyAStar:
+--   		    extends AStar
+--   
+--   		    func _compute_cost(u, v):
+--   		        return abs(u - v)
+--   
+--   		    func _estimate_cost(u, v):
+--   		        return min(0, abs(u - v) - 1)
+--   		[/codeblock]
+--   		[method _estimate_cost] should return a lower bound of the distance, i.e. [code]_estimate_cost(u, v) <= _compute_cost(u, v)[/code]. This serves as a hint to the algorithm because the custom [code]_compute_cost[/code] might be computation-heavy. If this is not the case, make [method _estimate_cost] return the same value as [method _compute_cost] to provide the algorithm with the most accurate information.
 newtype AStar = AStar Object
                   deriving newtype AsVariant
 
@@ -341,6 +353,8 @@ instance HasBaseClass AStar where
         type BaseClass AStar = Reference
         super = coerce
 
+-- | AStar class representation that uses 2D vectors as edges.
+--   This is a wrapper for the [AStar] class which uses 2D vectors instead of 3D vectors.
 newtype AStar2D = AStar2D Object
                     deriving newtype AsVariant
 
@@ -359,6 +373,7 @@ instance HasBaseClass AcceptDialog where
 
 -- | Sprite node that can use multiple textures for animation.
 --   Animations are created using a [SpriteFrames] resource, which can be configured in the editor via the SpriteFrames panel.
+--   		[b]Note:[/b] You can associate a set of normal maps by creating additional [SpriteFrames] resources with a [code]_normal[/code] suffix. For example, having 2 [SpriteFrames] resources [code]run[/code] and [code]run_normal[/code] will make it so the [code]run[/code] animation uses the normal map.
 newtype AnimatedSprite = AnimatedSprite Object
                            deriving newtype AsVariant
 
@@ -376,9 +391,10 @@ instance HasBaseClass AnimatedSprite3D where
         super = coerce
 
 -- | Proxy texture for simple frame-based animations.
---   [code]AnimatedTexture[/code] is a resource format for frame-based animations, where multiple textures can be chained automatically with a predefined delay for each frame. Unlike [AnimationPlayer] or [AnimatedSprite], it isn't a [Node], but has the advantage of being usable anywhere a [Texture] resource can be used, e.g. in a [TileSet].
+--   [AnimatedTexture] is a resource format for frame-based animations, where multiple textures can be chained automatically with a predefined delay for each frame. Unlike [AnimationPlayer] or [AnimatedSprite], it isn't a [Node], but has the advantage of being usable anywhere a [Texture] resource can be used, e.g. in a [TileSet].
 --   		The playback of the animation is controlled by the [member fps] property as well as each frame's optional delay (see [method set_frame_delay]). The animation loops, i.e. it will restart at frame 0 automatically after playing the last frame.
---   		[code]AnimatedTexture[/code] currently requires all frame textures to have the same size, otherwise the bigger ones will be cropped to match the smallest one.
+--   		[AnimatedTexture] currently requires all frame textures to have the same size, otherwise the bigger ones will be cropped to match the smallest one.
+--   		[b]Note:[/b] AnimatedTexture doesn't support using [AtlasTexture]s. Each frame needs to be a separate [Texture].
 newtype AnimatedTexture = AnimatedTexture Object
                             deriving newtype AsVariant
 
@@ -390,14 +406,14 @@ instance HasBaseClass AnimatedTexture where
 --   An Animation resource contains data used to animate everything in the engine. Animations are divided into tracks, and each track must be linked to a node. The state of that node can be changed through time, by adding timed keys (events) to the track.
 --   		[codeblock]
 --   		# This creates an animation that makes the node "Enemy" move to the right by
---   		# 100 pixels in 1 second.
+--   		# 100 pixels in 0.5 seconds.
 --   		var animation = Animation.new()
 --   		var track_index = animation.add_track(Animation.TYPE_VALUE)
---   		animation.track_set_path(track_index, "Enemy:position.x")
+--   		animation.track_set_path(track_index, "Enemy:position:x")
 --   		animation.track_insert_key(track_index, 0.0, 0)
 --   		animation.track_insert_key(track_index, 0.5, 100)
 --   		[/codeblock]
---   		Animations are just data containers, and must be added to nodes such as an [AnimationPlayer] or [AnimationTreePlayer] to be played back.
+--   		Animations are just data containers, and must be added to nodes such as an [AnimationPlayer] or [AnimationTreePlayer] to be played back. Animation tracks have different types, each with its own set of dedicated methods. Check [enum TrackType] to see available types.
 newtype Animation = Animation Object
                       deriving newtype AsVariant
 
@@ -406,7 +422,7 @@ instance HasBaseClass Animation where
         super = coerce
 
 -- | Base resource for [AnimationTree] nodes.
---    In general it's not used directly but you can create custom ones with custom blending formulas.
+--    In general, it's not used directly, but you can create custom ones with custom blending formulas.
 --   	Inherit this when creating nodes mainly for use in [AnimationNodeBlendTree], otherwise [AnimationRootNode] should be used instead.
 newtype AnimationNode = AnimationNode Object
                           deriving newtype AsVariant
@@ -471,7 +487,7 @@ instance HasBaseClass AnimationNodeBlend3 where
 -- | Blends linearly between two of any number of [AnimationNode] of any type placed on a virtual axis.
 --   A resource to add to an [AnimationNodeBlendTree].
 --   		This is a virtual axis on which you can add any type of [AnimationNode] using [method add_blend_point].
---   		Outputs the linear blend of the two [code]AnimationNode[/code] closest to the node's current [code]value[/code].
+--   		Outputs the linear blend of the two [AnimationNode]s closest to the node's current value.
 --   		You can set the extents of the axis using the [member min_space] and [member max_space].
 newtype AnimationNodeBlendSpace1D = AnimationNodeBlendSpace1D Object
                                       deriving newtype AsVariant
@@ -480,7 +496,7 @@ instance HasBaseClass AnimationNodeBlendSpace1D where
         type BaseClass AnimationNodeBlendSpace1D = AnimationRootNode
         super = coerce
 
--- | Blends linearly between three [AnimationNode] of any type placed in a 2d space.
+-- | Blends linearly between three [AnimationNode] of any type placed in a 2D space.
 --   A resource to add to an [AnimationNodeBlendTree].
 --   		This node allows you to blend linearly between three animations using a [Vector2] weight.
 --   		You can add vertices to the blend space with [method add_blend_point] and automatically triangulate it by setting [member auto_triangles] to [code]true[/code]. Otherwise, use [method add_triangle] and [method remove_triangle] to create up the blend space by hand.
@@ -491,6 +507,8 @@ instance HasBaseClass AnimationNodeBlendSpace2D where
         type BaseClass AnimationNodeBlendSpace2D = AnimationRootNode
         super = coerce
 
+-- | [AnimationTree] node resource that contains many blend type nodes.
+--   This node may contain a sub-tree of any other blend type nodes, such as mix, blend2, blend3, one shot, etc. This is one of the most commonly used roots.
 newtype AnimationNodeBlendTree = AnimationNodeBlendTree Object
                                    deriving newtype AsVariant
 
@@ -498,6 +516,8 @@ instance HasBaseClass AnimationNodeBlendTree where
         type BaseClass AnimationNodeBlendTree = AnimationRootNode
         super = coerce
 
+-- | Plays an animation once in [AnimationNodeBlendTree].
+--   A resource to add to an [AnimationNodeBlendTree]. This node will execute a sub-animation and return once it finishes. Blend times for fading in and out can be customized, as well as filters.
 newtype AnimationNodeOneShot = AnimationNodeOneShot Object
                                  deriving newtype AsVariant
 
@@ -505,6 +525,7 @@ instance HasBaseClass AnimationNodeOneShot where
         type BaseClass AnimationNodeOneShot = AnimationNode
         super = coerce
 
+-- | Generic output node to be added to [AnimationNodeBlendTree].
 newtype AnimationNodeOutput = AnimationNodeOutput Object
                                 deriving newtype AsVariant
 
@@ -513,7 +534,8 @@ instance HasBaseClass AnimationNodeOutput where
         super = coerce
 
 -- | State machine for control of animations.
---   Contains multiple nodes representing animation states, connected in a graph. Nodes transitions can be configured to happen automatically or via code, using a shortest-path algorithm. Retrieve the AnimationNodeStateMachinePlayback object from the [code]AnimationTree[/code] node to control it programatically. Example:
+--   Contains multiple nodes representing animation states, connected in a graph. Node transitions can be configured to happen automatically or via code, using a shortest-path algorithm. Retrieve the [AnimationNodeStateMachinePlayback] object from the [AnimationTree] node to control it programmatically.
+--   		[b]Example:[/b]
 --   		[codeblock]
 --   		var state_machine = $AnimationTree.get("parameters/playback")
 --   		state_machine.travel("some_state")
@@ -525,8 +547,9 @@ instance HasBaseClass AnimationNodeStateMachine where
         type BaseClass AnimationNodeStateMachine = AnimationRootNode
         super = coerce
 
--- | Playback control for AnimationNodeStateMachine.
---   Allows control of [AnimationTree] state machines created with [AnimationNodeStateMachine]. Retrieve with [code]$AnimationTree.get("parameters/playback")[/code]. Example:
+-- | Playback control for [AnimationNodeStateMachine].
+--   Allows control of [AnimationTree] state machines created with [AnimationNodeStateMachine]. Retrieve with [code]$AnimationTree.get("parameters/playback")[/code].
+--   		[b]Example:[/b]
 --   		[codeblock]
 --   		var state_machine = $AnimationTree.get("parameters/playback")
 --   		state_machine.travel("some_state")
@@ -545,6 +568,8 @@ instance HasBaseClass AnimationNodeStateMachineTransition where
         type BaseClass AnimationNodeStateMachineTransition = Resource
         super = coerce
 
+-- | A time-scaling animation node to be used with [AnimationTree].
+--   Allows scaling the speed of the animation (or reversing it) in any children nodes. Setting it to 0 will pause the animation.
 newtype AnimationNodeTimeScale = AnimationNodeTimeScale Object
                                    deriving newtype AsVariant
 
@@ -552,6 +577,8 @@ instance HasBaseClass AnimationNodeTimeScale where
         type BaseClass AnimationNodeTimeScale = AnimationNode
         super = coerce
 
+-- | A time-seeking animation node to be used with [AnimationTree].
+--   This node can be used to cause a seek command to happen to any sub-children of the graph. After setting the time, this value returns to -1.
 newtype AnimationNodeTimeSeek = AnimationNodeTimeSeek Object
                                   deriving newtype AsVariant
 
@@ -559,6 +586,8 @@ instance HasBaseClass AnimationNodeTimeSeek where
         type BaseClass AnimationNodeTimeSeek = AnimationNode
         super = coerce
 
+-- | A generic animation transition node for [AnimationTree].
+--   Simple state machine for cases which don't require a more advanced [AnimationNodeStateMachine]. Animations can be connected to the inputs and transition times can be specified.
 newtype AnimationNodeTransition = AnimationNodeTransition Object
                                     deriving newtype AsVariant
 
@@ -567,7 +596,9 @@ instance HasBaseClass AnimationNodeTransition where
         super = coerce
 
 -- | Container and player of [Animation] resources.
---   An animation player is used for general purpose playback of [Animation] resources. It contains a dictionary of animations (referenced by name) and custom blend times between their transitions. Additionally, animations can be played and blended in different channels.
+--   An animation player is used for general-purpose playback of [Animation] resources. It contains a dictionary of animations (referenced by name) and custom blend times between their transitions. Additionally, animations can be played and blended in different channels.
+--   		[AnimationPlayer] is more suited than [Tween] for animations where you know the final values in advance. For example, fading a screen in and out is more easily done with an [AnimationPlayer] node thanks to the animation tools provided by the editor. That particular example can also be implemented with a [Tween] node, but it requires doing everything by code.
+--   		Updating the target properties of animations occurs at process time.
 newtype AnimationPlayer = AnimationPlayer Object
                             deriving newtype AsVariant
 
@@ -589,6 +620,8 @@ instance HasBaseClass AnimationTrackEditPlugin where
         type BaseClass AnimationTrackEditPlugin = Reference
         super = coerce
 
+-- | A node to be used for advanced animation transitions in an [AnimationPlayer].
+--   Note: When linked with an [AnimationPlayer], several properties and methods of the corresponding [AnimationPlayer] will not function as expected. Playback and transitions should be handled using only the [AnimationTree] and its constituent [AnimationNode](s). The [AnimationPlayer] node should be used solely for adding, deleting, and editing animations.
 newtype AnimationTree = AnimationTree Object
                           deriving newtype AsVariant
 
@@ -596,9 +629,10 @@ instance HasBaseClass AnimationTree where
         type BaseClass AnimationTree = Node
         super = coerce
 
--- | Animation Player that uses a node graph for blending Animations.
---   A node graph tool for blending multiple animations bound to an [AnimationPlayer]. Especially useful for animating characters or other skeleton-based rigs. It can combine several animations to form a desired pose.
+-- | [i]Deprecated.[/i] Animation player that uses a node graph for blending animations. Superseded by [AnimationTree].
+--   [i]Deprecated.[/i] A node graph tool for blending multiple animations bound to an [AnimationPlayer]. Especially useful for animating characters or other skeleton-based rigs. It can combine several animations to form a desired pose.
 --   		It takes [Animation]s from an [AnimationPlayer] node and mixes them depending on the graph.
+--   		See [AnimationTree] for a more full-featured replacement of this node.
 newtype AnimationTreePlayer = AnimationTreePlayer Object
                                 deriving newtype AsVariant
 
@@ -606,7 +640,7 @@ instance HasBaseClass AnimationTreePlayer where
         type BaseClass AnimationTreePlayer = Node
         super = coerce
 
--- | General purpose area node for detection and 3D physics influence.
+-- | General-purpose area node for detection and 3D physics influence.
 --   3D area that detects [CollisionObject] nodes overlapping, entering, or exiting. Can also alter or override local physics parameters (gravity, damping).
 newtype Area = Area Object
                  deriving newtype AsVariant
@@ -625,7 +659,8 @@ instance HasBaseClass Area2D where
         super = coerce
 
 -- | [Mesh] type that provides utility for constructing a surface from arrays.
---   The [code]ArrayMesh[/code] is used to construct a [Mesh] by specifying the attributes as arrays. The most basic example is the creation of a single triangle
+--   The [ArrayMesh] is used to construct a [Mesh] by specifying the attributes as arrays.
+--   		The most basic example is the creation of a single triangle:
 --   		[codeblock]
 --   		var vertices = PoolVector3Array()
 --   		vertices.push_back(Vector3(0, 1, 0))
@@ -641,7 +676,9 @@ instance HasBaseClass Area2D where
 --   		var m = MeshInstance.new()
 --   		m.mesh = arr_mesh
 --   		[/codeblock]
---   		The [code]MeshInstance[/code] is ready to be added to the SceneTree to be shown.
+--   		The [MeshInstance] is ready to be added to the [SceneTree] to be shown.
+--   		See also [ImmediateGeometry], [MeshDataTool] and [SurfaceTool] for procedural geometry generation.
+--   		[b]Note:[/b] Godot uses clockwise [url=https://learnopengl.com/Advanced-OpenGL/Face-culling]winding order[/url] for front faces of triangle primitive modes.
 newtype ArrayMesh = ArrayMesh Object
                       deriving newtype AsVariant
 
@@ -650,8 +687,7 @@ instance HasBaseClass ArrayMesh where
         super = coerce
 
 -- | Packs multiple small textures in a single, bigger one. Helps to optimize video memory costs and render calls.
---   [Texture] resource aimed at managing big textures files that pack multiple smaller textures. Consists of a [Texture], a margin that defines the border width,
---   		and a region that defines the actual area of the AtlasTexture.
+--   [Texture] resource aimed at managing big textures files that pack multiple smaller textures. Consists of a [Texture], a margin that defines the border width, and a region that defines the actual area of the AtlasTexture.
 newtype AtlasTexture = AtlasTexture Object
                          deriving newtype AsVariant
 
@@ -659,7 +695,7 @@ instance HasBaseClass AtlasTexture where
         type BaseClass AtlasTexture = Texture
         super = coerce
 
--- | Stores information about the audiobusses.
+-- | Stores information about the audio buses.
 --   Stores position, muting, solo, bypass, effects, effect position, volume, and the connections between buses. See [AudioServer] for usage.
 newtype AudioBusLayout = AudioBusLayout Object
                            deriving newtype AsVariant
@@ -668,7 +704,7 @@ instance HasBaseClass AudioBusLayout where
         type BaseClass AudioBusLayout = Resource
         super = coerce
 
--- | Audio Effect For Audio.
+-- | Audio effect for audio.
 --   Base resource for audio bus. Applies an audio effect on the bus that the resource is applied on.
 newtype AudioEffect = AudioEffect Object
                         deriving newtype AsVariant
@@ -677,7 +713,7 @@ instance HasBaseClass AudioEffect where
         type BaseClass AudioEffect = Resource
         super = coerce
 
--- | Adds a Amplify audio effect to an Audio bus.
+-- | Adds an amplifying audio effect to an audio bus.
 --   		Increases or decreases the volume of the selected audio bus.
 --   Increases or decreases the volume being routed through the audio bus.
 newtype AudioEffectAmplify = AudioEffectAmplify Object
@@ -687,7 +723,7 @@ instance HasBaseClass AudioEffectAmplify where
         type BaseClass AudioEffectAmplify = AudioEffect
         super = coerce
 
--- | Adds a band limit filter to the Audio Bus.
+-- | Adds a band limit filter to the audio bus.
 --   Limits the frequencies in a range around the [member AudioEffectFilter.cutoff_hz] and allows frequencies outside of this range to pass.
 newtype AudioEffectBandLimitFilter = AudioEffectBandLimitFilter Object
                                        deriving newtype AsVariant
@@ -696,7 +732,7 @@ instance HasBaseClass AudioEffectBandLimitFilter where
         type BaseClass AudioEffectBandLimitFilter = AudioEffectFilter
         super = coerce
 
--- | Adds a band pass filter to the Audio Bus.
+-- | Adds a band pass filter to the audio bus.
 --   Attenuates the frequencies inside of a range around the [member AudioEffectFilter.cutoff_hz] and cuts frequencies outside of this band.
 newtype AudioEffectBandPassFilter = AudioEffectBandPassFilter Object
                                       deriving newtype AsVariant
@@ -714,13 +750,13 @@ instance HasBaseClass AudioEffectChorus where
         type BaseClass AudioEffectChorus = AudioEffect
         super = coerce
 
--- | Adds a Compressor audio effect to an Audio bus.
+-- | Adds a compressor audio effect to an audio bus.
 --   		Reduces sounds that exceed a certain threshold level, smooths out the dynamics and increases the overall volume.
 --   Dynamic range compressor reduces the level of the sound when the amplitude goes over a certain threshold in Decibels. One of the main uses of a compressor is to increase the dynamic range by clipping as little as possible (when sound goes over 0dB).
 --   		Compressor has many uses in the mix:
---   		- In the Master bus to compress the whole output (Although a [AudioEffectLimiter] is probably better)
+--   		- In the Master bus to compress the whole output (although an [AudioEffectLimiter] is probably better).
 --   		- In voice channels to ensure they sound as balanced as possible.
---   		- Sidechained. Sidechained, which can reduce the sound level sidechained with another audio bus for threshold detection.. This technique is very common in video game mixing to download the level of Music/SFX while voices are being heard.
+--   		- Sidechained. This can reduce the sound level sidechained with another audio bus for threshold detection. This technique is common in video game mixing to the level of music and SFX while voices are being heard.
 --   		- Accentuates transients by using a wider attack, making effects sound more punchy.
 newtype AudioEffectCompressor = AudioEffectCompressor Object
                                   deriving newtype AsVariant
@@ -729,7 +765,7 @@ instance HasBaseClass AudioEffectCompressor where
         type BaseClass AudioEffectCompressor = AudioEffect
         super = coerce
 
--- | Adds a Delay audio effect to an Audio bus. Plays input signal back after a period of time.
+-- | Adds a delay audio effect to an audio bus. Plays input signal back after a period of time.
 --   		Two tap delay and feedback options.
 --   Plays input signal back after a period of time. The delayed signal may be played back multiple times to create the sound of a repeating, decaying echo. Delay effects range from a subtle echo effect to a pronounced blending of previous sounds with new sounds.
 newtype AudioEffectDelay = AudioEffectDelay Object
@@ -739,9 +775,9 @@ instance HasBaseClass AudioEffectDelay where
         type BaseClass AudioEffectDelay = AudioEffect
         super = coerce
 
--- | Adds a Distortion audio effect to an Audio bus.
---   		Modify the sound to make it dirty.
---   Modify the sound and make it dirty. Different types are available : clip, tan, lofi (bit crushing), overdrive, or waveshape.
+-- | Adds a distortion audio effect to an Audio bus.
+--   		Modify the sound to make it distorted.
+--   Different types are available: clip, tan, lo-fi (bit crushing), overdrive, or waveshape.
 --   		By distorting the waveform the frequency content change, which will often make the sound "crunchy" or "abrasive". For games, it can simulate sound coming from some saturated device or speaker very efficiently.
 newtype AudioEffectDistortion = AudioEffectDistortion Object
                                   deriving newtype AsVariant
@@ -752,7 +788,7 @@ instance HasBaseClass AudioEffectDistortion where
 
 -- | Base class for audio equalizers. Gives you control over frequencies.
 --   		Use it to create a custom equalizer if [AudioEffectEQ6], [AudioEffectEQ10] or [AudioEffectEQ21] don't fit your needs.
---   AudioEffectEQ gives you control over frequencies. Use it to compensate for existing deficiencies in audio. AudioEffectEQ are very useful on the Master Bus to completely master a mix and give it character. They are also very useful when a game is run on a mobile device, to adjust the mix to that kind of speakers (it can be added but disabled when headphones are plugged).
+--   AudioEffectEQ gives you control over frequencies. Use it to compensate for existing deficiencies in audio. AudioEffectEQs are useful on the Master bus to completely master a mix and give it more character. They are also useful when a game is run on a mobile device, to adjust the mix to that kind of speakers (it can be added but disabled when headphones are plugged).
 newtype AudioEffectEQ = AudioEffectEQ Object
                           deriving newtype AsVariant
 
@@ -762,17 +798,17 @@ instance HasBaseClass AudioEffectEQ where
 
 -- | Adds a 10-band equalizer audio effect to an Audio bus. Gives you control over frequencies from 31 Hz to 16000 Hz.
 --   		Each frequency can be modulated between -60/+24 dB.
---   Frequency bands :
---   		Band 1 : 31 Hz
---   		Band 2 : 62 Hz
---   		Band 3 : 125 Hz
---   		Band 4 : 250 Hz
---   		Band 5 : 500 Hz
---   		Band 6 : 1000 Hz
---   		Band 7 : 2000 Hz
---   		Band 8 : 4000 Hz
---   		Band 9 : 8000 Hz
---   		Band 10 : 16000 Hz
+--   Frequency bands:
+--   		Band 1: 31 Hz
+--   		Band 2: 62 Hz
+--   		Band 3: 125 Hz
+--   		Band 4: 250 Hz
+--   		Band 5: 500 Hz
+--   		Band 6: 1000 Hz
+--   		Band 7: 2000 Hz
+--   		Band 8: 4000 Hz
+--   		Band 9: 8000 Hz
+--   		Band 10: 16000 Hz
 --   		See also [AudioEffectEQ], [AudioEffectEQ6], [AudioEffectEQ21].
 newtype AudioEffectEQ10 = AudioEffectEQ10 Object
                             deriving newtype AsVariant
@@ -783,28 +819,28 @@ instance HasBaseClass AudioEffectEQ10 where
 
 -- | Adds a 21-band equalizer audio effect to an Audio bus. Gives you control over frequencies from 22 Hz to 22000 Hz.
 --   		Each frequency can be modulated between -60/+24 dB.
---   Frequency bands :
---   		Band 1 : 22 Hz
---   		Band 2 : 32 Hz
---   		Band 3 : 44 Hz
---   		Band 4 : 63 Hz
---   		Band 5 : 90 Hz
---   		Band 6 : 125 Hz
---   		Band 7 : 175 Hz
---   		Band 8 : 250 Hz
---   		Band 9 : 350 Hz
---   		Band 10 : 500 Hz
---   		Band 11 : 700 Hz
---   		Band 12 : 1000 Hz
---   		Band 13 : 1400 Hz
---   		Band 14 : 2000 Hz
---   		Band 15 : 2800 Hz
---   		Band 16 : 4000 Hz
---   		Band 17 : 5600 Hz
---   		Band 18 : 8000 Hz
---   		Band 19 : 11000 Hz
---   		Band 20 : 16000 Hz
---   		Band 21 : 22000 Hz
+--   Frequency bands:
+--   		Band 1: 22 Hz
+--   		Band 2: 32 Hz
+--   		Band 3: 44 Hz
+--   		Band 4: 63 Hz
+--   		Band 5: 90 Hz
+--   		Band 6: 125 Hz
+--   		Band 7: 175 Hz
+--   		Band 8: 250 Hz
+--   		Band 9: 350 Hz
+--   		Band 10: 500 Hz
+--   		Band 11: 700 Hz
+--   		Band 12: 1000 Hz
+--   		Band 13: 1400 Hz
+--   		Band 14: 2000 Hz
+--   		Band 15: 2800 Hz
+--   		Band 16: 4000 Hz
+--   		Band 17: 5600 Hz
+--   		Band 18: 8000 Hz
+--   		Band 19: 11000 Hz
+--   		Band 20: 16000 Hz
+--   		Band 21: 22000 Hz
 --   		See also [AudioEffectEQ], [AudioEffectEQ6], [AudioEffectEQ10].
 newtype AudioEffectEQ21 = AudioEffectEQ21 Object
                             deriving newtype AsVariant
@@ -815,13 +851,13 @@ instance HasBaseClass AudioEffectEQ21 where
 
 -- | Adds a 6-band equalizer audio effect to an Audio bus. Gives you control over frequencies from 32 Hz to 10000 Hz.
 --   		Each frequency can be modulated between -60/+24 dB.
---   Frequency bands :
---   		Band 1 : 32 Hz
---   		Band 2 : 100 Hz
---   		Band 3 : 320 Hz
---   		Band 4 : 1000 Hz
---   		Band 5 : 3200 Hz
---   		Band 6 : 10000 Hz
+--   Frequency bands:
+--   		Band 1: 32 Hz
+--   		Band 2: 100 Hz
+--   		Band 3: 320 Hz
+--   		Band 4: 1000 Hz
+--   		Band 5: 3200 Hz
+--   		Band 6: 10000 Hz
 --   		See also [AudioEffectEQ], [AudioEffectEQ10], [AudioEffectEQ21].
 newtype AudioEffectEQ6 = AudioEffectEQ6 Object
                            deriving newtype AsVariant
@@ -830,7 +866,7 @@ instance HasBaseClass AudioEffectEQ6 where
         type BaseClass AudioEffectEQ6 = AudioEffectEQ
         super = coerce
 
--- | Adds a filter to the Audio Bus.
+-- | Adds a filter to the audio bus.
 --   Allows frequencies other than the [member cutoff_hz] to pass.
 newtype AudioEffectFilter = AudioEffectFilter Object
                               deriving newtype AsVariant
@@ -839,7 +875,7 @@ instance HasBaseClass AudioEffectFilter where
         type BaseClass AudioEffectFilter = AudioEffect
         super = coerce
 
--- | Adds a high pass filter to the Audio Bus.
+-- | Adds a high-pass filter to the Audio Bus.
 --   Cuts frequencies lower than the [member AudioEffectFilter.cutoff_hz] and allows higher frequencies to pass.
 newtype AudioEffectHighPassFilter = AudioEffectHighPassFilter Object
                                       deriving newtype AsVariant
@@ -862,8 +898,8 @@ instance HasBaseClass AudioEffectInstance where
         type BaseClass AudioEffectInstance = Reference
         super = coerce
 
--- | Adds a soft clip Limiter audio effect to an Audio bus.
---   A limiter is similar to a compressor, but it's less flexible and designed to disallow sound going over a given dB threshold. Adding one in the Master Bus is always recommended to reduce the effects of clipping.
+-- | Adds a soft-clip limiter audio effect to an Audio bus.
+--   A limiter is similar to a compressor, but it's less flexible and designed to disallow sound going over a given dB threshold. Adding one in the Master bus is always recommended to reduce the effects of clipping.
 --   		Soft clipping starts to reduce the peaks a little below the threshold level and progressively increases its effect as the input level increases such that the threshold is never exceeded.
 newtype AudioEffectLimiter = AudioEffectLimiter Object
                                deriving newtype AsVariant
@@ -872,7 +908,7 @@ instance HasBaseClass AudioEffectLimiter where
         type BaseClass AudioEffectLimiter = AudioEffect
         super = coerce
 
--- | Adds a low pass filter to the Audio Bus.
+-- | Adds a low-pass filter to the Audio bus.
 --   Cuts frequencies higher than the [member AudioEffectFilter.cutoff_hz] and allows lower frequencies to pass.
 newtype AudioEffectLowPassFilter = AudioEffectLowPassFilter Object
                                      deriving newtype AsVariant
@@ -888,7 +924,7 @@ instance HasBaseClass AudioEffectLowShelfFilter where
         type BaseClass AudioEffectLowShelfFilter = AudioEffectFilter
         super = coerce
 
--- | Adds a notch filter to the Audio Bus.
+-- | Adds a notch filter to the Audio bus.
 --   Attenuates frequencies in a narrow band around the [member AudioEffectFilter.cutoff_hz] and cuts frequencies outside of this range.
 newtype AudioEffectNotchFilter = AudioEffectNotchFilter Object
                                    deriving newtype AsVariant
@@ -897,7 +933,7 @@ instance HasBaseClass AudioEffectNotchFilter where
         type BaseClass AudioEffectNotchFilter = AudioEffectFilter
         super = coerce
 
--- | Adds a Panner audio effect to an Audio bus. Pans sound left or right.
+-- | Adds a panner audio effect to an Audio bus. Pans sound left or right.
 --   Determines how much of an audio signal is sent to the left and right buses.
 newtype AudioEffectPanner = AudioEffectPanner Object
                               deriving newtype AsVariant
@@ -906,9 +942,9 @@ instance HasBaseClass AudioEffectPanner where
         type BaseClass AudioEffectPanner = AudioEffect
         super = coerce
 
--- | Adds a Phaser audio effect to an Audio bus.
+-- | Adds a phaser audio effect to an Audio bus.
 --   		Combines the original signal with a copy that is slightly out of phase with the original.
---   Combines phase-shifted signals with the original signal. The movement of the phase-shifted signals is controlled using a Low Frequency Oscillator.
+--   Combines phase-shifted signals with the original signal. The movement of the phase-shifted signals is controlled using a low-frequency oscillator.
 newtype AudioEffectPhaser = AudioEffectPhaser Object
                               deriving newtype AsVariant
 
@@ -916,7 +952,7 @@ instance HasBaseClass AudioEffectPhaser where
         type BaseClass AudioEffectPhaser = AudioEffect
         super = coerce
 
--- | Adds a Pitch shift audio effect to an Audio bus.
+-- | Adds a pitch-shifting audio effect to an Audio bus.
 --   		Raises or lowers the pitch of original sound.
 --   Allows modulation of pitch independently of tempo. All frequencies can be increased/decreased with minimal effect on transients.
 newtype AudioEffectPitchShift = AudioEffectPitchShift Object
@@ -926,6 +962,8 @@ instance HasBaseClass AudioEffectPitchShift where
         type BaseClass AudioEffectPitchShift = AudioEffect
         super = coerce
 
+-- | Audio effect used for recording sound from a microphone.
+--   Allows the user to record sound from a microphone. It sets and gets the format in which the audio file will be recorded (8-bit, 16-bit, or compressed). It checks whether or not the recording is active, and if it is, records the sound. It then returns the recorded sample.
 newtype AudioEffectRecord = AudioEffectRecord Object
                               deriving newtype AsVariant
 
@@ -933,7 +971,7 @@ instance HasBaseClass AudioEffectRecord where
         type BaseClass AudioEffectRecord = AudioEffect
         super = coerce
 
--- | Adds a Reverb audio effect to an Audio bus.
+-- | Adds a reverberation audio effect to an Audio bus.
 --   		Simulates the sound of acoustic environments such as rooms, concert halls, caverns, or an open spaces.
 --   Simulates rooms of different sizes. Its parameters can be adjusted to simulate the sound of a specific room.
 newtype AudioEffectReverb = AudioEffectReverb Object
@@ -965,8 +1003,8 @@ instance HasBaseClass AudioEffectStereoEnhance where
         type BaseClass AudioEffectStereoEnhance = AudioEffect
         super = coerce
 
--- | Server interface for low level audio access.
---   AudioServer is a low level server interface for audio access. It is in charge of creating sample data (playable audio) as well as its playback via a voice interface.
+-- | Server interface for low-level audio access.
+--   [AudioServer] is a low-level server interface for audio access. It is in charge of creating sample data (playable audio) as well as its playback via a voice interface.
 newtype AudioServer = AudioServer Object
                         deriving newtype AsVariant
 
@@ -1013,7 +1051,7 @@ instance HasBaseClass AudioStreamOGGVorbis where
         super = coerce
 
 -- | Meta class for playing back audio.
---   Can play, loop, pause a scroll through Audio. See [AudioStream] and [AudioStreamOGGVorbis] for usage.
+--   Can play, loop, pause a scroll through audio. See [AudioStream] and [AudioStreamOGGVorbis] for usage.
 newtype AudioStreamPlayback = AudioStreamPlayback Object
                                 deriving newtype AsVariant
 
@@ -1028,8 +1066,8 @@ instance HasBaseClass AudioStreamPlaybackResampled where
         type BaseClass AudioStreamPlaybackResampled = AudioStreamPlayback
         super = coerce
 
--- | Plays back audio.
---   Plays background audio.
+-- | Plays back audio non-positionally.
+--   Plays an audio stream non-positionally.
 newtype AudioStreamPlayer = AudioStreamPlayer Object
                               deriving newtype AsVariant
 
@@ -1048,6 +1086,7 @@ instance HasBaseClass AudioStreamPlayer2D where
 
 -- | Plays 3D sound in 3D space.
 --   Plays a sound effect with directed sound effects, dampens with distance if needed, generates effect of hearable position in space.
+--   		By default, audio is heard from the camera position. This can be changed by adding a [Listener] node to the scene and enabling it by calling [method Listener.make_current] on it.
 newtype AudioStreamPlayer3D = AudioStreamPlayer3D Object
                                 deriving newtype AsVariant
 
@@ -1055,7 +1094,7 @@ instance HasBaseClass AudioStreamPlayer3D where
         type BaseClass AudioStreamPlayer3D = Spatial
         super = coerce
 
--- | Plays audio with random pitch tweaking.
+-- | Plays audio with random pitch shifting.
 --   Randomly varies pitch on each start.
 newtype AudioStreamRandomPitch = AudioStreamRandomPitch Object
                                    deriving newtype AsVariant
@@ -1064,9 +1103,9 @@ instance HasBaseClass AudioStreamRandomPitch where
         type BaseClass AudioStreamRandomPitch = AudioStream
         super = coerce
 
--- | Stores audio data loaded from [code].wav[/code] files.
---   AudioStreamSample stores sound samples loaded from [code].wav[/code] files. To play the stored sound use an [AudioStreamPlayer] (for background music) or [AudioStreamPlayer2D]/[AudioStreamPlayer3D] (for positional audio). The sound can be looped.
---   		This class can also be used to store dynamically generated PCM audio data.
+-- | Stores audio data loaded from WAV files.
+--   AudioStreamSample stores sound samples loaded from WAV files. To play the stored sound, use an [AudioStreamPlayer] (for non-positional audio) or [AudioStreamPlayer2D]/[AudioStreamPlayer3D] (for positional audio). The sound can be looped.
+--   		This class can also be used to store dynamically-generated PCM audio data.
 newtype AudioStreamSample = AudioStreamSample Object
                               deriving newtype AsVariant
 
@@ -1074,8 +1113,9 @@ instance HasBaseClass AudioStreamSample where
         type BaseClass AudioStreamSample = AudioStream
         super = coerce
 
--- | Copies a region of the screen (or the whole screen) to a buffer so it can be accessed with [code]SCREEN_TEXTURE[/code] in the [code]texture()[/code] function.
---   Node for back-buffering the currently displayed screen. The region defined in the BackBufferCopy node is bufferized with the content of the screen it covers, or the entire screen according to the copy mode set. Use [code]SCREEN_TEXTURE[/code] in the [code]texture()[/code] function to access the buffer.
+-- | Copies a region of the screen (or the whole screen) to a buffer so it can be accessed in your shader scripts through the [code]texture(SCREEN_TEXTURE, ...)[/code] function.
+--   Node for back-buffering the currently-displayed screen. The region defined in the BackBufferCopy node is bufferized with the content of the screen it covers, or the entire screen according to the copy mode set. Use the [code]texture(SCREEN_TEXTURE, ...)[/code] function in your shader scripts to access the buffer.
+--   		[b]Note:[/b] Since this node inherits from [Node2D] (and not [Control]), anchors and margins won't apply to child [Control]-derived nodes. This can be problematic when resizing the window. To avoid this, add [Control]-derived nodes as [i]siblings[/i] to the BackBufferCopy node instead of adding them as children.
 newtype BackBufferCopy = BackBufferCopy Object
                            deriving newtype AsVariant
 
@@ -1085,6 +1125,7 @@ instance HasBaseClass BackBufferCopy where
 
 -- | Prerendered indirect light map for a scene.
 --   Baked lightmaps are an alternative workflow for adding indirect (or baked) lighting to a scene. Unlike the [GIProbe] approach, baked lightmaps work fine on low-end PCs and mobile devices as they consume almost no resources in run-time.
+--   		[b]Note:[/b] This node has many known bugs and will be [url=https://godotengine.org/article/godot-40-will-get-new-modernized-lightmapper]rewritten for Godot 4.0[/url]. See [url=https://github.com/godotengine/godot/issues/30929]GitHub issue #30929[/url].
 newtype BakedLightmap = BakedLightmap Object
                           deriving newtype AsVariant
 
@@ -1117,7 +1158,8 @@ instance HasBaseClass BitMap where
         type BaseClass BitMap = Resource
         super = coerce
 
--- | Renders text using [code]*.fnt[/code] fonts.
+-- | Renders text using fonts under the [url=https://www.angelcode.com/products/bmfont/]BMFont[/url] format.
+--   		Handles files with the [code].fnt[/code] extension.
 --   Renders text using [code]*.fnt[/code] fonts containing texture atlases. Supports distance fields. For using vector font files like TTF directly, see [DynamicFont].
 newtype BitmapFont = BitmapFont Object
                        deriving newtype AsVariant
@@ -1182,6 +1224,18 @@ instance HasBaseClass BulletPhysicsServer where
 
 -- | Standard themed Button.
 --   Button is the standard themed button. It can contain text and an icon, and will display them according to the current [Theme].
+--   		[b]Example of creating a button and assigning an action when pressed by code:[/b]
+--   		[codeblock]
+--   		func _ready():
+--   		    var button = Button.new()
+--   		    button.text = "Click me"
+--   		    button.connect("pressed", self, "_button_pressed")
+--   		    add_child(button)
+--   
+--   		func _button_pressed():
+--   		    print("Hello world!")
+--   		[/codeblock]
+--   		Buttons (like all Control nodes) can also be created in the editor, but some situations may require creating them from code.
 newtype Button = Button Object
                    deriving newtype AsVariant
 
@@ -1283,7 +1337,7 @@ instance HasBaseClass CSGTorus where
         super = coerce
 
 -- | Camera node, displays from a point of view.
---   Camera is a special node that displays what is visible from its current location. Cameras register themselves in the nearest [Viewport] node (when ascending the tree). Only one camera can be active per viewport. If no viewport is available ascending the tree, the Camera will register in the global viewport. In other words, a Camera just provides [i]3D[/i] display capabilities to a [Viewport], and, without one, a scene registered in that [Viewport] (or higher viewports) can't be displayed.
+--   Camera is a special node that displays what is visible from its current location. Cameras register themselves in the nearest [Viewport] node (when ascending the tree). Only one camera can be active per viewport. If no viewport is available ascending the tree, the camera will register in the global viewport. In other words, a camera just provides 3D display capabilities to a [Viewport], and, without one, a scene registered in that [Viewport] (or higher viewports) can't be displayed.
 newtype Camera = Camera Object
                    deriving newtype AsVariant
 
@@ -1292,8 +1346,9 @@ instance HasBaseClass Camera where
         super = coerce
 
 -- | Camera node for 2D scenes.
---    It forces the screen (current layer) to scroll following this node. This makes it easier (and faster) to program scrollable scenes than manually changing the position of [CanvasItem] based nodes.
---   		This node is intended to be a simple helper to get things going quickly and it may happen often that more functionality is desired to change how the camera works. To make your own custom camera node, simply inherit from [Node2D] and change the transform of the canvas by calling get_viewport().set_canvas_transform(m) in [Viewport].
+--    It forces the screen (current layer) to scroll following this node. This makes it easier (and faster) to program scrollable scenes than manually changing the position of [CanvasItem]-based nodes.
+--   		This node is intended to be a simple helper to get things going quickly and it may happen that more functionality is desired to change how the camera works. To make your own custom camera node, inherit from [Node2D] and change the transform of the canvas by setting [member Viewport.canvas_transform] in [Viewport] (you can obtain the current [Viewport] by using [method Node.get_viewport]).
+--   		Note that the [Camera2D] node's [code]position[/code] doesn't represent the actual position of the screen, which may differ due to applied smoothing or limits. You can use [method get_camera_screen_center] to get the real position.
 newtype Camera2D = Camera2D Object
                      deriving newtype AsVariant
 
@@ -1301,6 +1356,9 @@ instance HasBaseClass Camera2D where
         type BaseClass Camera2D = Node2D
         super = coerce
 
+-- | A camera feed gives you access to a single physical camera attached to your device.
+--    When enabled, Godot will start capturing frames from the camera which can then be used.
+--   		[b]Note:[/b] Many cameras will return YCbCr images which are split into two textures and need to be combined in a shader. Godot does this automatically for you if you set the environment to show the camera image in the background.
 newtype CameraFeed = CameraFeed Object
                        deriving newtype AsVariant
 
@@ -1308,6 +1366,9 @@ instance HasBaseClass CameraFeed where
         type BaseClass CameraFeed = Reference
         super = coerce
 
+-- | Server keeping track of different cameras accessible in Godot.
+--   The [CameraServer] keeps track of different cameras accessible in Godot. These are external cameras such as webcams or the cameras on your phone.
+--   		It is notably used to provide AR modules with a video feed from the camera.
 newtype CameraServer = CameraServer Object
                          deriving newtype AsVariant
 
@@ -1315,6 +1376,9 @@ instance HasBaseClass CameraServer where
         type BaseClass CameraServer = Object
         super = coerce
 
+-- | Texture provided by a [CameraFeed].
+--   This texture gives access to the camera texture provided by a [CameraFeed].
+--   		[b]Note:[/b] Many cameras supply YCbCr images which need to be converted in a shader.
 newtype CameraTexture = CameraTexture Object
                           deriving newtype AsVariant
 
@@ -1323,11 +1387,12 @@ instance HasBaseClass CameraTexture where
         super = coerce
 
 -- | Base class of anything 2D.
---    Canvas items are laid out in a tree; children inherit and extend their parent's transform. CanvasItem is extended by [Control] for anything GUI-related, and by [Node2D] for anything related to the 2D engine.
---   		Any CanvasItem can draw. For this, [method update] must be called, then [constant NOTIFICATION_DRAW] will be received on idle time to request redraw. Because of this, canvas items don't need to be redrawn on every frame, improving the performance significantly. Several functions for drawing on the CanvasItem are provided (see [code]draw_*[/code] functions). However, they can only be used inside the [method Object._notification], signal or [method _draw] virtual functions.
---   		Canvas items are drawn in tree order. By default, children are on top of their parents so a root CanvasItem will be drawn behind everything. This behavior can be changed on a per-item basis.
---   		A CanvasItem can also be hidden, which will also hide its children. It provides many ways to change parameters such as modulation (for itself and its children) and self modulation (only for itself), as well as its blend mode.
+--    Canvas items are laid out in a tree; children inherit and extend their parent's transform. [CanvasItem] is extended by [Control] for anything GUI-related, and by [Node2D] for anything related to the 2D engine.
+--   		Any [CanvasItem] can draw. For this, [method update] must be called, then [constant NOTIFICATION_DRAW] will be received on idle time to request redraw. Because of this, canvas items don't need to be redrawn on every frame, improving the performance significantly. Several functions for drawing on the [CanvasItem] are provided (see [code]draw_*[/code] functions). However, they can only be used inside the [method Object._notification], signal or [method _draw] virtual functions.
+--   		Canvas items are drawn in tree order. By default, children are on top of their parents so a root [CanvasItem] will be drawn behind everything. This behavior can be changed on a per-item basis.
+--   		A [CanvasItem] can also be hidden, which will also hide its children. It provides many ways to change parameters such as modulation (for itself and its children) and self modulation (only for itself), as well as its blend mode.
 --   		Ultimately, a transform notification can be requested, which will notify the node that its global position changed in case the parent tree changed.
+--   		[b]Note:[/b] Unless otherwise specified, all methods that have angle parameters must have angles specified as [i]radians[/i]. To convert degrees to radians, use [method @GDScript.deg2rad].
 newtype CanvasItem = CanvasItem Object
                        deriving newtype AsVariant
 
@@ -1336,7 +1401,7 @@ instance HasBaseClass CanvasItem where
         super = coerce
 
 -- | A material for [CanvasItem]s.
---   [code]CanvasItemMaterial[/code]s provide a means of modifying the textures associated with a CanvasItem. They specialize in describing blend and lighting behaviors for textures. Use a [ShaderMaterial] to more fully customize a material's interactions with a [CanvasItem].
+--   [CanvasItemMaterial]s provide a means of modifying the textures associated with a CanvasItem. They specialize in describing blend and lighting behaviors for textures. Use a [ShaderMaterial] to more fully customize a material's interactions with a [CanvasItem].
 newtype CanvasItemMaterial = CanvasItemMaterial Object
                                deriving newtype AsVariant
 
@@ -1345,7 +1410,7 @@ instance HasBaseClass CanvasItemMaterial where
         super = coerce
 
 -- | Canvas drawing layer.
---    [CanvasItem] nodes that are direct or indirect children of a [code]CanvasLayer[/code] will be drawn in that layer. The layer is a numeric index that defines the draw order. The default 2D scene renders with index 0, so a [code]CanvasLayer[/code] with index -1 will be drawn below, and one with index 1 will be drawn above. This is very useful for HUDs (in layer 1+ or above), or backgrounds (in layer -1 or below).
+--    [CanvasItem] nodes that are direct or indirect children of a [CanvasLayer] will be drawn in that layer. The layer is a numeric index that defines the draw order. The default 2D scene renders with index 0, so a [CanvasLayer] with index -1 will be drawn below, and one with index 1 will be drawn above. This is very useful for HUDs (in layer 1+ or above), or backgrounds (in layer -1 or below).
 newtype CanvasLayer = CanvasLayer Object
                         deriving newtype AsVariant
 
@@ -1354,7 +1419,7 @@ instance HasBaseClass CanvasLayer where
         super = coerce
 
 -- | Tint the entire canvas.
---   [code]CanvasModulate[/code] tints the canvas elements using its assigned [code]color[/code].
+--   [CanvasModulate] tints the canvas elements using its assigned [member color].
 newtype CanvasModulate = CanvasModulate Object
                            deriving newtype AsVariant
 
@@ -1387,7 +1452,7 @@ instance HasBaseClass CapsuleShape2D where
         super = coerce
 
 -- | Keeps children controls centered.
---   CenterContainer Keeps children controls centered. This container keeps all children to their minimum size, in the center.
+--   CenterContainer keeps children controls centered. This container keeps all children to their minimum size, in the center.
 newtype CenterContainer = CenterContainer Object
                             deriving newtype AsVariant
 
@@ -1395,6 +1460,8 @@ instance HasBaseClass CenterContainer where
         type BaseClass CenterContainer = Container
         super = coerce
 
+-- | Controls how an individual character will be displayed in a [RichTextEffect].
+--   By setting various properties on this object, you can control how individual characters will be displayed in a [RichTextEffect].
 newtype CharFXTransform = CharFXTransform Object
                             deriving newtype AsVariant
 
@@ -1402,8 +1469,8 @@ instance HasBaseClass CharFXTransform where
         type BaseClass CharFXTransform = Reference
         super = coerce
 
--- | Binary choice user interface widget.
---   A checkbox allows the user to make a binary choice (choosing only one of two possible options), for example Answer 'yes' or 'no'.
+-- | Binary choice user interface widget. See also [CheckButton].
+--   A checkbox allows the user to make a binary choice (choosing only one of two possible options). It's similar to [CheckButton] in functionality, but it has a different apperance. To follow established UX patterns, it's recommended to use CheckBox when toggling it has [b]no[/b] immediate effect on something. For instance, it should be used when toggling it will only do something once a confirmation button is pressed.
 newtype CheckBox = CheckBox Object
                      deriving newtype AsVariant
 
@@ -1411,8 +1478,8 @@ instance HasBaseClass CheckBox where
         type BaseClass CheckBox = Button
         super = coerce
 
--- | Checkable button.
---   CheckButton is a toggle button displayed as a check field.
+-- | Checkable button. See also [CheckBox].
+--   CheckButton is a toggle button displayed as a check field. It's similar to [CheckBox] in functionality, but it has a different apperance. To follow established UX patterns, it's recommended to use CheckButton when toggling it has an [b]immediate[/b] effect on something. For instance, it should be used if toggling it enables/disables a setting without requiring the user to press a confirmation button.
 newtype CheckButton = CheckButton Object
                         deriving newtype AsVariant
 
@@ -1429,6 +1496,8 @@ instance HasBaseClass CircleShape2D where
         type BaseClass CircleShape2D = Shape2D
         super = coerce
 
+-- | A [Camera] that includes collision.
+--   This node extends [Camera] to add collisions with [Area] and/or [PhysicsBody] nodes. The camera cannot move through colliding objects.
 newtype ClippedCamera = ClippedCamera Object
                           deriving newtype AsVariant
 
@@ -1455,7 +1524,7 @@ instance HasBaseClass CollisionObject2D where
         super = coerce
 
 -- | Editor-only class for defining a collision polygon in 3D space.
---   Allows editing a collision polygon's vertices on a selected plane. Can also set a depth perpendicular to that plane. This class is only available in the editor. It will not appear in the scene tree at runtime. Creates a [Shape] for gameplay. Properties modified during gameplay will have no effect.
+--   Allows editing a collision polygon's vertices on a selected plane. Can also set a depth perpendicular to that plane. This class is only available in the editor. It will not appear in the scene tree at run-time. Creates a [Shape] for gameplay. Properties modified during gameplay will have no effect.
 newtype CollisionPolygon = CollisionPolygon Object
                              deriving newtype AsVariant
 
@@ -1464,7 +1533,7 @@ instance HasBaseClass CollisionPolygon where
         super = coerce
 
 -- | Defines a 2D collision polygon.
---   Provides a 2D collision polygon to a [CollisionObject2D] parent. Polygon can be drawn in the editor or specified by a list of vertices.
+--   Provides a 2D collision polygon to a [CollisionObject2D] parent. Polygons can be drawn in the editor or specified by a list of vertices.
 newtype CollisionPolygon2D = CollisionPolygon2D Object
                                deriving newtype AsVariant
 
@@ -1519,6 +1588,7 @@ instance HasBaseClass ColorRect where
 
 -- | Concave polygon shape.
 --   Concave polygon shape resource, which can be set into a [PhysicsBody] or area. This shape is created by feeding a list of triangles.
+--   		Note: when used for collision, [ConcavePolygonShape] is intended to work with static [PhysicsBody] nodes like [StaticBody] and will not work with [KinematicBody] or [RigidBody] with a mode other than Static.
 newtype ConcavePolygonShape = ConcavePolygonShape Object
                                 deriving newtype AsVariant
 
@@ -1527,8 +1597,8 @@ instance HasBaseClass ConcavePolygonShape where
         super = coerce
 
 -- | Concave polygon 2D shape resource for physics.
---    It is made out of segments and is very optimal for complex polygonal concave collisions. It is really not advised to use for [RigidBody2D] nodes. A CollisionPolygon2D in convex decomposition mode (solids) or several convex objects are advised for that instead. Otherwise, a concave polygon 2D shape is better for static collisions.
---   		The main difference between a [ConvexPolygonShape2D] and a [code]ConcavePolygonShape2D[/code] is that a concave polygon assumes it is concave and uses a more complex method of collision detection, and a convex one forces itself to be convex in order to speed up collision detection.
+--    It is made out of segments and is optimal for complex polygonal concave collisions. However, it is not advised to use for [RigidBody2D] nodes. A CollisionPolygon2D in convex decomposition mode (solids) or several convex objects are advised for that instead. Otherwise, a concave polygon 2D shape is better for static collisions.
+--   		The main difference between a [ConvexPolygonShape2D] and a [ConcavePolygonShape2D] is that a concave polygon assumes it is concave and uses a more complex method of collision detection, and a convex one forces itself to be convex in order to speed up collision detection.
 newtype ConcavePolygonShape2D = ConcavePolygonShape2D Object
                                   deriving newtype AsVariant
 
@@ -1538,7 +1608,7 @@ instance HasBaseClass ConcavePolygonShape2D where
 
 -- | A twist joint between two 3D bodies.
 --   The joint can rotate the bodies across an axis defined by the local x-axes of the [Joint].
---   		The twist axis is initiated as the x-axis of the [Joint].
+--   		The twist axis is initiated as the X axis of the [Joint].
 --   		Once the Bodies swing, the twist axis is calculated as the middle of the x-axes of the Joint in the local space of the two Bodies.
 newtype ConeTwistJoint = ConeTwistJoint Object
                            deriving newtype AsVariant
@@ -1560,7 +1630,7 @@ instance HasBaseClass ConeTwistJoint where
 --   		[codeblock]
 --   		var config = ConfigFile.new()
 --   		var err = config.load("user://settings.cfg")
---   		if err == OK: # if not, something went wrong with the file loading
+--   		if err == OK: # If not, something went wrong with the file loading
 --   		    # Look for the display/width pair, and default to 1024 if missing
 --   		    var screen_width = config.get_value("display", "width", 1024)
 --   		    # Store a variable if and only if it hasn't been defined yet
@@ -1570,6 +1640,7 @@ instance HasBaseClass ConeTwistJoint where
 --   		    config.save("user://settings.cfg")
 --   		[/codeblock]
 --   		Keep in mind that section and property names can't contain spaces. Anything after a space will be ignored on save and on load.
+--   		ConfigFiles can also contain manually written comment lines starting with a semicolon ([code];[/code]). Those lines will be ignored when parsing the file. Note that comments will be lost when saving the ConfigFile. This can still be useful for dedicated server configuration files, which are typically never overwritten without explicit user action.
 newtype ConfigFile = ConfigFile Object
                        deriving newtype AsVariant
 
@@ -1579,6 +1650,10 @@ instance HasBaseClass ConfigFile where
 
 -- | Dialog for confirmation of actions.
 --    This dialog inherits from [AcceptDialog], but has by default an OK and Cancel button (in host OS order).
+--   		To get cancel action, you can use:
+--   		[codeblock]
+--   		get_cancel().connect("pressed", self, "cancelled")
+--   		[/codeblock].
 newtype ConfirmationDialog = ConfirmationDialog Object
                                deriving newtype AsVariant
 
@@ -1587,7 +1662,7 @@ instance HasBaseClass ConfirmationDialog where
         super = coerce
 
 -- | Base node for containers.
---    A [code]Container[/code] contains other controls and automatically arranges them in a certain way.
+--    A [Container] contains other controls and automatically arranges them in a certain way.
 --   		A Control can inherit this to create custom container classes.
 newtype Container = Container Object
                       deriving newtype AsVariant
@@ -1596,14 +1671,15 @@ instance HasBaseClass Container where
         type BaseClass Container = Control
         super = coerce
 
--- | All User Interface nodes inherit from Control. A control's anchors and margins adapt its position and size relative to its parent.
---   Base class for all User Interface or [i]UI[/i] related nodes. [code]Control[/code] features a bounding rectangle that defines its extents, an anchor position relative to its parent control or the current viewport, and margins that represent an offset to the anchor. The margins update automatically when the node, any of its parents, or the screen size change.
---   		For more information on Godot's UI system, anchors, margins, and containers, see the related tutorials in the manual. To build flexible UIs, you'll need a mix of UI elements that inherit from [code]Control[/code] and [Container] nodes.
+-- | All user interface nodes inherit from Control. A control's anchors and margins adapt its position and size relative to its parent.
+--   Base class for all UI-related nodes. [Control] features a bounding rectangle that defines its extents, an anchor position relative to its parent control or the current viewport, and margins that represent an offset to the anchor. The margins update automatically when the node, any of its parents, or the screen size change.
+--   		For more information on Godot's UI system, anchors, margins, and containers, see the related tutorials in the manual. To build flexible UIs, you'll need a mix of UI elements that inherit from [Control] and [Container] nodes.
 --   		[b]User Interface nodes and input[/b]
 --   		Godot sends input events to the scene's root node first, by calling [method Node._input]. [method Node._input] forwards the event down the node tree to the nodes under the mouse cursor, or on keyboard focus. To do so, it calls [method MainLoop._input_event]. Call [method accept_event] so no other node receives the event. Once you accepted an input, it becomes handled so [method Node._unhandled_input] will not process it.
---   		Only one [code]Control[/code] node can be in keyboard focus. Only the node in focus will receive keyboard events. To get the focus, call [method grab_focus]. [code]Control[/code] nodes lose focus when another node grabs it, or if you hide the node in focus.
---   		Set [member mouse_filter] to [constant MOUSE_FILTER_IGNORE] to tell a [code]Control[/code] node to ignore mouse or touch events. You'll need it if you place an icon on top of a button.
---   		[Theme] resources change the Control's appearance. If you change the [Theme] on a [code]Control[/code] node, it affects all of its children. To override some of the theme's parameters, call one of the [code]add_*_override[/code] methods, like [method add_font_override]. You can override the theme with the inspector.
+--   		Only one [Control] node can be in keyboard focus. Only the node in focus will receive keyboard events. To get the focus, call [method grab_focus]. [Control] nodes lose focus when another node grabs it, or if you hide the node in focus.
+--   		Sets [member mouse_filter] to [constant MOUSE_FILTER_IGNORE] to tell a [Control] node to ignore mouse or touch events. You'll need it if you place an icon on top of a button.
+--   		[Theme] resources change the Control's appearance. If you change the [Theme] on a [Control] node, it affects all of its children. To override some of the theme's parameters, call one of the [code]add_*_override[/code] methods, like [method add_font_override]. You can override the theme with the inspector.
+--   		[b]Note:[/b] Theme items are [i]not[/i] [Object] properties. This means you can't access their values using [method Object.get] and [method Object.set]. Instead, use [method get_color], [method get_constant], [method get_font], [method get_icon], [method get_stylebox], and the [code]add_*_override[/code] methods provided by this class.
 newtype Control = Control Object
                     deriving newtype AsVariant
 
@@ -1620,9 +1696,9 @@ instance HasBaseClass ConvexPolygonShape where
         type BaseClass ConvexPolygonShape = Shape
         super = coerce
 
--- | Convex Polygon Shape for 2D physics.
+-- | Convex polygon shape for 2D physics.
 --    A convex polygon, whatever its shape, is internally decomposed into as many convex polygons as needed to ensure all collision checks against it are always done on convex polygons (which are faster to check).
---   		The main difference between a [code]ConvexPolygonShape2D[/code] and a [ConcavePolygonShape2D] is that a concave polygon assumes it is concave and uses a more complex method of collision detection, and a convex one forces itself to be convex in order to speed up collision detection.
+--   		The main difference between a [ConvexPolygonShape2D] and a [ConcavePolygonShape2D] is that a concave polygon assumes it is concave and uses a more complex method of collision detection, and a convex one forces itself to be convex in order to speed up collision detection.
 newtype ConvexPolygonShape2D = ConvexPolygonShape2D Object
                                  deriving newtype AsVariant
 
@@ -1630,6 +1706,26 @@ instance HasBaseClass ConvexPolygonShape2D where
         type BaseClass ConvexPolygonShape2D = Shape2D
         super = coerce
 
+-- | Access to advanced cryptographic functionalities.
+--   The Crypto class allows you to access some more advanced cryptographic functionalities in Godot.
+--   		For now, this includes generating cryptographically secure random bytes, and RSA keys and self-signed X509 certificates generation. More functionalities are planned for future releases.
+--   		[codeblock]
+--   		extends Node
+--   
+--   		var crypto = Crypto.new()
+--   		var key = CryptoKey.new()
+--   		var cert = X509Certificate.new()
+--   
+--   		func _ready():
+--   		    # Generate new RSA key.
+--   		    key = crypto.generate_rsa(4096)
+--   		    # Generate new self-signed certificate with the given key.
+--   		    cert = crypto.generate_self_signed_certificate(key, "CN=mydomain.com,O=My Game Company,C=IT")
+--   		    # Save key and certificate in the user folder.
+--   		    key.save("user://generated.key")
+--   		    cert.save("user://generated.crt")
+--   		[/codeblock]
+--   		[b]Note:[/b] Not available in HTML5 exports.
 newtype Crypto = Crypto Object
                    deriving newtype AsVariant
 
@@ -1637,6 +1733,10 @@ instance HasBaseClass Crypto where
         type BaseClass Crypto = Reference
         super = coerce
 
+-- | A cryptographic key (RSA).
+--   The CryptoKey class represents a cryptographic key. Keys can be loaded and saved like any other [Resource].
+--   		They can be used to generate a self-signed [X509Certificate] via [method Crypto.generate_self_signed_certificate] and as private key in [method StreamPeerSSL.accept_stream] along with the appropriate certificate.
+--   		[b]Note:[/b] Not available in HTML5 exports.
 newtype CryptoKey = CryptoKey Object
                       deriving newtype AsVariant
 
@@ -1644,7 +1744,7 @@ instance HasBaseClass CryptoKey where
         type BaseClass CryptoKey = Resource
         super = coerce
 
--- | A CubeMap is a 6 sided 3D texture.
+-- | A CubeMap is a 6-sided 3D texture.
 --   A 6-sided 3D texture typically used for faking reflections. It can be used to make an object look as if it's reflecting its surroundings. This usually delivers much better performance than other reflection methods.
 newtype CubeMap = CubeMap Object
                     deriving newtype AsVariant
@@ -1664,7 +1764,7 @@ instance HasBaseClass CubeMesh where
         super = coerce
 
 -- | A mathematic curve.
---   A curve that can be saved and re-used for other objects. By default it ranges between [code]0[/code] and [code]1[/code] on the y-axis and positions points relative to the [code]0.5[/code] y-position.
+--   A curve that can be saved and re-used for other objects. By default, it ranges between [code]0[/code] and [code]1[/code] on the Y axis and positions points relative to the [code]0.5[/code] Y position.
 newtype Curve = Curve Object
                   deriving newtype AsVariant
 
@@ -1672,9 +1772,9 @@ instance HasBaseClass Curve where
         type BaseClass Curve = Resource
         super = coerce
 
--- | Describes a Bezier curve in 2D space.
---   This class describes a Bezier curve in 2D space. It is mainly used to give a shape to a [Path2D], but can be manually sampled for other purposes.
---   		It keeps a cache of precalculated points along the curve, to speed further calculations up.
+-- | Describes a Bézier curve in 2D space.
+--   This class describes a Bézier curve in 2D space. It is mainly used to give a shape to a [Path2D], but can be manually sampled for other purposes.
+--   		It keeps a cache of precalculated points along the curve, to speed up further calculations.
 newtype Curve2D = Curve2D Object
                     deriving newtype AsVariant
 
@@ -1682,9 +1782,9 @@ instance HasBaseClass Curve2D where
         type BaseClass Curve2D = Resource
         super = coerce
 
--- | Describes a Bezier curve in 3D space.
---   This class describes a Bezier curve in 3D space. It is mainly used to give a shape to a [Path], but can be manually sampled for other purposes.
---   		It keeps a cache of precalculated points along the curve, to speed further calculations up.
+-- | Describes a Bézier curve in 3D space.
+--   This class describes a Bézier curve in 3D space. It is mainly used to give a shape to a [Path], but can be manually sampled for other purposes.
+--   		It keeps a cache of precalculated points along the curve, to speed up further calculations.
 newtype Curve3D = Curve3D Object
                     deriving newtype AsVariant
 
@@ -1728,7 +1828,7 @@ instance HasBaseClass DampedSpringJoint2D where
         super = coerce
 
 -- | Directional light from a distance, as from the Sun.
---   A directional light is a type of [Light] node that models an infinite number of parallel rays covering the entire scene. It is used for lights with strong intensity that are located far away from the scene to model sunlight or moonlight. The worldspace location of the DirectionalLight transform (origin) is ignored. Only the basis is used do determine light direction.
+--   A directional light is a type of [Light] node that models an infinite number of parallel rays covering the entire scene. It is used for lights with strong intensity that are located far away from the scene to model sunlight or moonlight. The worldspace location of the DirectionalLight transform (origin) is ignored. Only the basis is used to determine light direction.
 newtype DirectionalLight = DirectionalLight Object
                              deriving newtype AsVariant
 
@@ -1737,13 +1837,15 @@ instance HasBaseClass DirectionalLight where
         super = coerce
 
 -- | DynamicFont renders vector font files at runtime.
---   DynamicFont renders vector font files (such as TTF or OTF) dynamically at runtime instead of using a prerendered texture atlas like [BitmapFont]. This trades the faster loading time of [BitmapFont]s for the ability to change font parameters like size and spacing during runtime. [DynamicFontData] is used for referencing the font file paths.
+--   DynamicFont renders vector font files (such as TTF or OTF) dynamically at runtime instead of using a prerendered texture atlas like [BitmapFont]. This trades the faster loading time of [BitmapFont]s for the ability to change font parameters like size and spacing during runtime. [DynamicFontData] is used for referencing the font file paths. DynamicFont also supports defining one or more fallback fonts, which will be used when displaying a character not supported by the main font.
+--   		DynamicFont uses the [url=https://www.freetype.org/]FreeType[/url] library for rasterization.
 --   		[codeblock]
 --   		var dynamic_font = DynamicFont.new()
 --   		dynamic_font.font_data = load("res://BarlowCondensed-Bold.ttf")
 --   		dynamic_font.size = 64
 --   		$"Label".set("custom_fonts/font", dynamic_font)
 --   		[/codeblock]
+--   		[b]Note:[/b] DynamicFont doesn't support features such as kerning, right-to-left typesetting, ligatures, text shaping, variable fonts and optional font features yet. If you wish to "bake" an optional font feature into a TTF font file, you can use [url=https://fontforge.org/]FontForge[/url] to do so. In FontForge, use [b]File > Generate Fonts[/b], click [b]Options[/b], choose the desired features then generate the font.
 newtype DynamicFont = DynamicFont Object
                         deriving newtype AsVariant
 
@@ -1760,6 +1862,7 @@ instance HasBaseClass DynamicFontData where
         type BaseClass DynamicFontData = Resource
         super = coerce
 
+-- | A script that is executed when exporting projects.
 newtype EditorExportPlugin = EditorExportPlugin Object
                                deriving newtype AsVariant
 
@@ -1767,6 +1870,9 @@ instance HasBaseClass EditorExportPlugin where
         type BaseClass EditorExportPlugin = Reference
         super = coerce
 
+-- | An editor feature profile which can be used to disable specific features.
+--   An editor feature profile can be used to disable specific features of the Godot editor. When disabled, the features won't appear in the editor, which makes the editor less cluttered. This is useful in education settings to reduce confusion or when working in a team. For example, artists and level designers could use a feature profile that disables the script editor to avoid accidentally making changes to files they aren't supposed to edit.
+--   		To manage editor feature profiles visually, use [b]Editor > Manage Feature Profiles...[/b] at the top of the editor window.
 newtype EditorFeatureProfile = EditorFeatureProfile Object
                                  deriving newtype AsVariant
 
@@ -1774,6 +1880,7 @@ instance HasBaseClass EditorFeatureProfile where
         type BaseClass EditorFeatureProfile = Reference
         super = coerce
 
+-- | A modified version of [FileDialog] used by the editor.
 newtype EditorFileDialog = EditorFileDialog Object
                              deriving newtype AsVariant
 
@@ -1783,6 +1890,7 @@ instance HasBaseClass EditorFileDialog where
 
 -- | Resource filesystem, as the editor sees it.
 --   This object holds information of all resources in the filesystem, their types, etc.
+--   		[b]Note:[/b] This class shouldn't be instantiated directly. Instead, access the singleton using [method EditorInterface.get_resource_filesystem].
 newtype EditorFileSystem = EditorFileSystem Object
                              deriving newtype AsVariant
 
@@ -1801,7 +1909,7 @@ instance HasBaseClass EditorFileSystemDirectory where
 
 -- | Registers a custom resource importer in the editor. Use the class to parse any file and import it as a new resource type.
 --   EditorImportPlugins provide a way to extend the editor's resource import functionality. Use them to import resources from custom files or to provide alternatives to the editor's existing importers. Register your [EditorPlugin] with [method EditorPlugin.add_import_plugin].
---   		EditorImportPlugins work by associating with specific file extensions and a resource type. See [method get_recognized_extensions] and [method get_resource_type]). They may optionally specify some import presets that affect the import process. EditorImportPlugins are responsible for creating the resources and saving them in the [code].import[/code] directory.
+--   		EditorImportPlugins work by associating with specific file extensions and a resource type. See [method get_recognized_extensions] and [method get_resource_type]. They may optionally specify some import presets that affect the import process. EditorImportPlugins are responsible for creating the resources and saving them in the [code].import[/code] directory.
 --   		Below is an example EditorImportPlugin that imports a [Mesh] from a file with the extension ".special" or ".spec":
 --   		[codeblock]
 --   		tool
@@ -1837,7 +1945,7 @@ instance HasBaseClass EditorFileSystemDirectory where
 --   		        return FAILED
 --   
 --   		    var mesh = Mesh.new()
---   		    # Fill the Mesh with data read in 'file', left as exercise to the reader
+--   		    # Fill the Mesh with data read in "file", left as an exercise to the reader
 --   
 --   		    var filename = save_path + "." + get_save_extension()
 --   		    ResourceSaver.save(filename, mesh)
@@ -1850,6 +1958,9 @@ instance HasBaseClass EditorImportPlugin where
         type BaseClass EditorImportPlugin = ResourceImporter
         super = coerce
 
+-- | A tab used to edit properties of the selected node.
+--   The editor inspector is by default located on the right-hand side of the editor. It's used to edit the properties of the selected node. For example, you can select a node such as [Sprite] then edit its transform through the inspector tool. The editor inspector is an essential tool in the game development workflow.
+--   		[b]Note:[/b] This class shouldn't be instantiated directly. Instead, access the singleton using [method EditorInterface.get_inspector].
 newtype EditorInspector = EditorInspector Object
                             deriving newtype AsVariant
 
@@ -1857,6 +1968,14 @@ instance HasBaseClass EditorInspector where
         type BaseClass EditorInspector = ScrollContainer
         super = coerce
 
+-- | Plugin for adding custom property editors on inspector.
+--   This plugins allows adding custom property editors to [EditorInspector].
+--   		Plugins are registered via [method EditorPlugin.add_inspector_plugin].
+--   		When an object is edited, the [method can_handle] function is called and must return [code]true[/code] if the object type is supported.
+--   		If supported, the function [method parse_begin] will be called, allowing to place custom controls at the beginning of the class.
+--   		Subsequently, the [method parse_category] and [method parse_property] are called for every category and property. They offer the ability to add custom controls to the inspector too.
+--   		Finally [method parse_end] will be called.
+--   		On each of these calls, the "add" functions can be called.
 newtype EditorInspectorPlugin = EditorInspectorPlugin Object
                                   deriving newtype AsVariant
 
@@ -1866,6 +1985,7 @@ instance HasBaseClass EditorInspectorPlugin where
 
 -- | Godot editor's interface.
 --   EditorInterface gives you control over Godot editor's window. It allows customizing the window, saving and (re-)loading scenes, rendering mesh previews, inspecting and editing resources and objects, and provides access to [EditorSettings], [EditorFileSystem], [EditorResourcePreview], [ScriptEditor], the editor viewport, and information about scenes.
+--   		[b]Note:[/b] This class shouldn't be instantiated directly. Instead, access the singleton using [method EditorPlugin.get_editor_interface].
 newtype EditorInterface = EditorInterface Object
                             deriving newtype AsVariant
 
@@ -1881,7 +2001,7 @@ instance HasBaseClass EditorNavigationMeshGenerator where
         super = coerce
 
 -- | Used by the editor to extend its functionality.
---   Plugins are used by the editor to extend functionality. The most common types of plugins are those which edit a given node or resource type, import plugins and export plugins. Also see [EditorScript] to add functions to the editor.
+--   Plugins are used by the editor to extend functionality. The most common types of plugins are those which edit a given node or resource type, import plugins and export plugins. See also [EditorScript] to add functions to the editor.
 newtype EditorPlugin = EditorPlugin Object
                          deriving newtype AsVariant
 
@@ -1889,6 +2009,8 @@ instance HasBaseClass EditorPlugin where
         type BaseClass EditorPlugin = Node
         super = coerce
 
+-- | Custom control to edit properties for adding into the inspector.
+--   This control allows property editing for one or multiple properties into [EditorInspector]. It is added via [EditorInspectorPlugin].
 newtype EditorProperty = EditorProperty Object
                            deriving newtype AsVariant
 
@@ -1905,6 +2027,7 @@ instance HasBaseClass EditorResourceConversionPlugin where
 
 -- | Helper to generate previews of resources or files.
 --   This object is used to generate previews for resources of files.
+--   		[b]Note:[/b] This class shouldn't be instantiated directly. Instead, access the singleton using [method EditorInterface.get_resource_previewer].
 newtype EditorResourcePreview = EditorResourcePreview Object
                                   deriving newtype AsVariant
 
@@ -1913,7 +2036,7 @@ instance HasBaseClass EditorResourcePreview where
         super = coerce
 
 -- | Custom generator of previews.
---   Custom code to generate previews. Please check "file_dialog/thumbnail_size" in EditorSettings to find out the right size to do previews at.
+--   Custom code to generate previews. Please check [code]file_dialog/thumbnail_size[/code] in [EditorSettings] to find out the right size to do previews at.
 newtype EditorResourcePreviewGenerator = EditorResourcePreviewGenerator Object
                                            deriving newtype AsVariant
 
@@ -1921,6 +2044,7 @@ instance HasBaseClass EditorResourcePreviewGenerator where
         type BaseClass EditorResourcePreviewGenerator = Reference
         super = coerce
 
+-- | Imports scenes from third-parties' 3D files.
 newtype EditorSceneImporter = EditorSceneImporter Object
                                 deriving newtype AsVariant
 
@@ -1928,6 +2052,29 @@ instance HasBaseClass EditorSceneImporter where
         type BaseClass EditorSceneImporter = Reference
         super = coerce
 
+-- | FBX 3D asset importer based on [url=http://assimp.org/]Assimp[/url].
+--   This is an FBX 3D asset importer based on [url=http://assimp.org/]Assimp[/url]. It currently has many known limitations and works best with static meshes. Most animated meshes won't import correctly.
+--   		If exporting a FBX scene from Autodesk Maya, use these FBX export settings:
+--   		[codeblock]
+--   		- Smoothing Groups
+--   		- Smooth Mesh
+--   		- Triangluate (for meshes with blend shapes)
+--   		- Bake Animation
+--   		- Resample All
+--   		- Deformed Models
+--   		- Skins
+--   		- Blend Shapes
+--   		- Curve Filters
+--   		- Constant Key Reducer
+--   		- Auto Tangents Only
+--   		- *Do not check* Constraints (as it will break the file)
+--   		- Can check Embed Media (embeds textures into the exported FBX file)
+--   		  - Note that when importing embedded media, the texture and mesh will be a single immutable file.
+--   		  - You will have to re-export then re-import the FBX if the texture has changed.
+--   		- Units: Centimeters
+--   		- Up Axis: Y
+--   		- Binary format in FBX 2017
+--   		[/codeblock]
 newtype EditorSceneImporterAssimp = EditorSceneImporterAssimp Object
                                       deriving newtype AsVariant
 
@@ -1935,20 +2082,20 @@ instance HasBaseClass EditorSceneImporterAssimp where
         type BaseClass EditorSceneImporterAssimp = EditorSceneImporter
         super = coerce
 
--- | Post process scenes after import
---   Imported scenes can be automatically modified right after import by setting their [i]Custom Script[/i] Import property to a [code]tool[/code] script that inherits from this class.
+-- | Post-processes scenes after import.
+--   Imported scenes can be automatically modified right after import by setting their [b]Custom Script[/b] Import property to a [code]tool[/code] script that inherits from this class.
 --   		The [method post_import] callback receives the imported scene's root node and returns the modified version of the scene. Usage example:
 --   		[codeblock]
---   		tool # needed so it runs in editor
+--   		tool # Needed so it runs in editor
 --   		extends EditorScenePostImport
 --   
 --   		# This sample changes all node names
 --   
 --   		# Called right after the scene is imported and gets the root node
 --   		func post_import(scene):
---   		    # change all node names to "modified_[oldnodename]"
+--   		    # Change all node names to "modified_[oldnodename]"
 --   		    iterate(scene)
---   		    return scene # remember to return the imported scene
+--   		    return scene # Remember to return the imported scene
 --   
 --   		func iterate(node):
 --   		    if node != null:
@@ -1964,8 +2111,9 @@ instance HasBaseClass EditorScenePostImport where
         super = coerce
 
 -- | Base script that can be used to add extension functions to the editor.
---   Scripts extending this class and implementing its [code]_run()[/code] method can be executed from the Script Editor's [code]File -> Run[/code] menu option (or by pressing [code]CTRL+Shift+X[/code]) while the editor is running. This is useful for adding custom in-editor functionality to Godot. For more complex additions, consider using [EditorPlugin]s instead. Note that extending scripts need to have [code]tool mode[/code] enabled.
---   		Example script:
+--   Scripts extending this class and implementing its [method _run] method can be executed from the Script Editor's [b]File > Run[/b] menu option (or by pressing [code]Ctrl+Shift+X[/code]) while the editor is running. This is useful for adding custom in-editor functionality to Godot. For more complex additions, consider using [EditorPlugin]s instead.
+--   		[b]Note:[/b] Extending scripts need to have [code]tool[/code] mode enabled.
+--   		[b]Example script:[/b]
 --   		[codeblock]
 --   		tool
 --   		extends EditorScript
@@ -1973,7 +2121,7 @@ instance HasBaseClass EditorScenePostImport where
 --   		func _run():
 --   		    print("Hello from the Godot Editor!")
 --   		[/codeblock]
---   		Note that the script is run in the Editor context, which means the output is visible in the console window started with the Editor (STDOUT) instead of the usual Godot [i]Output[/i] dock.
+--   		[b]Note:[/b] The script is run in the Editor context, which means the output is visible in the console window started with the Editor (stdout) instead of the usual Godot [b]Output[/b] dock.
 newtype EditorScript = EditorScript Object
                          deriving newtype AsVariant
 
@@ -1983,6 +2131,7 @@ instance HasBaseClass EditorScript where
 
 -- | Manages the SceneTree selection in the editor.
 --   This object manages the SceneTree selection in the editor.
+--   		[b]Note:[/b] This class shouldn't be instantiated directly. Instead, access the singleton using [method EditorInterface.get_selection].
 newtype EditorSelection = EditorSelection Object
                             deriving newtype AsVariant
 
@@ -1991,13 +2140,19 @@ instance HasBaseClass EditorSelection where
         super = coerce
 
 -- | Object that holds the project-independent editor settings.
---    These settings are generally visible in the Editor Settings menu.
---   		Accessing the settings is done by using the regular [Object] API, such as:
+--    These settings are generally visible in the [b]Editor > Editor Settings[/b] menu.
+--   		Property names use slash delimiters to distinguish sections. Setting values can be of any [Variant] type. It's recommended to use [code]snake_case[/code] for editor settings to be consistent with the Godot editor itself.
+--   		Accessing the settings can be done using the following methods, such as:
 --   		[codeblock]
---   		settings.set(prop,value)
---   		settings.get(prop)
---   		list_of_settings = settings.get_property_list()
+--   		# `settings.set("some/property", value)` also works as this class overrides `_set()` internally.
+--   		settings.set_setting("some/property",value)
+--   
+--   		# `settings.get("some/property", value)` also works as this class overrides `_get()` internally.
+--   		settings.get_setting("some/property")
+--   
+--   		var list_of_settings = settings.get_property_list()
 --   		[/codeblock]
+--   		[b]Note:[/b] This class shouldn't be instantiated directly. Instead, access the singleton using [method EditorInterface.get_editor_settings].
 newtype EditorSettings = EditorSettings Object
                            deriving newtype AsVariant
 
@@ -2030,6 +2185,8 @@ instance HasBaseClass EditorSpinSlider where
         type BaseClass EditorSpinSlider = Range
         super = coerce
 
+-- | Version Control System (VCS) interface which reads and writes to the local VCS in use.
+--   Used by the editor to display VCS extracted information in the editor. The implementation of this API is included in VCS addons, which are essentially GDNative plugins that need to be put into the project folder. These VCS addons are scripts which are attached (on demand) to the object instance of [code]EditorVCSInterface[/code]. All the functions listed below, instead of performing the task themselves, they call the internally defined functions in the VCS addons to provide a plug-n-play experience.
 newtype EditorVCSInterface = EditorVCSInterface Object
                                deriving newtype AsVariant
 
@@ -2049,11 +2206,11 @@ instance HasBaseClass EncodedObjectAsID where
 
 -- | Resource for environment nodes (like [WorldEnvironment]) that define multiple rendering options.
 --   Resource for environment nodes (like [WorldEnvironment]) that define multiple environment operations (such as background [Sky] or [Color], ambient light, fog, depth-of-field...). These parameters affect the final render of the scene. The order of these operations is:
---   		- DOF Blur
---   		- Motion Blur
---   		- Bloom
---   		- Tonemap (auto exposure)
+--   		- Depth of Field Blur
+--   		- Glow
+--   		- Tonemap (Auto Exposure)
 --   		- Adjustments
+--   		These effects will only apply when the [Viewport]'s intended usage is "3D" or "3D Without Effects". This can be configured for the root Viewport with [member ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation], or for specific Viewports via the [member Viewport.usage] property.
 newtype Environment = Environment Object
                         deriving newtype AsVariant
 
@@ -2088,7 +2245,7 @@ instance HasBaseClass Expression where
         super = coerce
 
 -- | Dialog for selecting files or directories in the filesystem.
---   FileDialog is a preset dialog used to choose files and directories in the filesystem. It supports filter masks.
+--   FileDialog is a preset dialog used to choose files and directories in the filesystem. It supports filter masks. The FileDialog automatically sets its window title according to the [member mode]. If you want to use a custom title, disable this by setting [member mode_overrides_title] to [code]false[/code].
 newtype FileDialog = FileDialog Object
                        deriving newtype AsVariant
 
@@ -2097,7 +2254,9 @@ instance HasBaseClass FileDialog where
         super = coerce
 
 -- | Internationalized font and text drawing support.
---   Font contains a unicode compatible character set, as well as the ability to draw it with variable width, ascent, descent and kerning. For creating fonts from TTF files (or other font formats), see the editor support for fonts.
+--   Font contains a Unicode-compatible character set, as well as the ability to draw it with variable width, ascent, descent and kerning. For creating fonts from TTF files (or other font formats), see the editor support for fonts.
+--   		[b]Note:[/b] If a DynamicFont doesn't contain a character used in a string, the character in question will be replaced with codepoint [code]0xfffd[/code] if it's available in the DynamicFont. If this replacement character isn't available in the DynamicFont, the character will be hidden without displaying any replacement character in the string.
+--   		[b]Note:[/b] If a BitmapFont doesn't contain a character used in a string, the character in question will be hidden without displaying any replacement character in the string.
 newtype Font = Font Object
                  deriving newtype AsVariant
 
@@ -2107,7 +2266,7 @@ instance HasBaseClass Font where
 
 -- | Reference to a function in an object.
 --   In GDScript, functions are not [i]first-class objects[/i]. This means it is impossible to store them directly as variables, return them from another function, or pass them as arguments.
---   		However, by creating a [code]FuncRef[/code] using the [method @GDScript.funcref] function, a reference to a function in a given object can be created, passed around and called.
+--   		However, by creating a [FuncRef] using the [method @GDScript.funcref] function, a reference to a function in a given object can be created, passed around and called.
 newtype FuncRef = FuncRef Object
                     deriving newtype AsVariant
 
@@ -2143,6 +2302,9 @@ instance HasBaseClass GDScriptFunctionState where
         type BaseClass GDScriptFunctionState = Reference
         super = coerce
 
+-- | Real-time global illumination (GI) probe.
+--   [GIProbe]s are used to provide high-quality real-time indirect light to scenes. They precompute the effect of objects that emit light and the effect of static geometry to simulate the behavior of complex light in real-time. [GIProbe]s need to be baked before using, however, once baked, dynamic objects will receive light from them. Further, lights can be fully dynamic or baked.
+--   		Having [GIProbe]s in a scene can be expensive, the quality of the probe can be turned down in exchange for better performance in the [ProjectSettings] using [member ProjectSettings.rendering/quality/voxel_cone_tracing/high_quality].
 newtype GIProbe = GIProbe Object
                     deriving newtype AsVariant
 
@@ -2157,7 +2319,7 @@ instance HasBaseClass GIProbeData where
         type BaseClass GIProbeData = Resource
         super = coerce
 
--- | The generic 6 degrees of freedom joint can implement a variety of joint-types by locking certain axes' rotation or translation.
+-- | The generic 6-degrees-of-freedom joint can implement a variety of joint types by locking certain axes' rotation or translation.
 --   The first 3 DOF axes are linear axes, which represent translation of Bodies, and the latter 3 DOF axes represent the angular motion. Each axis can be either locked, or limited.
 newtype Generic6DOFJoint = Generic6DOFJoint Object
                              deriving newtype AsVariant
@@ -2166,7 +2328,7 @@ instance HasBaseClass Generic6DOFJoint where
         type BaseClass Generic6DOFJoint = Joint
         super = coerce
 
--- | Base node for geometry based visual instances.
+-- | Base node for geometry-based visual instances.
 --    Shares some common functionality like visibility and custom materials.
 newtype GeometryInstance = GeometryInstance Object
                              deriving newtype AsVariant
@@ -2175,8 +2337,8 @@ instance HasBaseClass GeometryInstance where
         type BaseClass GeometryInstance = VisualInstance
         super = coerce
 
--- | Color interpolator node.
---   Given a set of colors, this node will interpolate them in order, meaning, that if you have color 1, color 2 and color 3, the ramp will interpolate (generate the colors between two colors) from color 1 to color 2 and from color 2 to color 3. Initially the ramp will have 2 colors (black and white), one (black) at ramp lower offset 0 and the other (white) at the ramp higher offset 1.
+-- | A color interpolator resource which can be used to generate colors between user-defined color points.
+--   Given a set of colors, this resource will interpolate them in order. This means that if you have color 1, color 2 and color 3, the ramp will interpolate from color 1 to color 2 and from color 2 to color 3. The ramp will initially have 2 colors (black and white), one (black) at ramp lower offset 0 and the other (white) at the ramp higher offset 1.
 newtype Gradient = Gradient Object
                      deriving newtype AsVariant
 
@@ -2184,8 +2346,8 @@ instance HasBaseClass Gradient where
         type BaseClass Gradient = Resource
         super = coerce
 
--- | Gradient filled texture.
---   Uses a [Gradient] to fill the texture data, the gradient will be filled from left to right using colors obtained from the gradient, this means that the texture does not necessarily represent an exact copy of the gradient, but instead an interpolation of samples obtained from the gradient at fixed steps (see [member width]).
+-- | Gradient-filled texture.
+--   GradientTexture uses a [Gradient] to fill the texture data. The gradient will be filled from left to right using colors obtained from the gradient. This means the texture does not necessarily represent an exact copy of the gradient, but instead an interpolation of samples obtained from the gradient at fixed steps (see [member width]).
 newtype GradientTexture = GradientTexture Object
                             deriving newtype AsVariant
 
@@ -2194,8 +2356,8 @@ instance HasBaseClass GradientTexture where
         super = coerce
 
 -- | GraphEdit is an area capable of showing various GraphNodes. It manages connection events between them.
---   GraphEdit manages the showing of GraphNodes it contains, as well as connections and disconnections between them. Signals are sent for each of these two events. Disconnection between GraphNodes slots is disabled by default.
---   		It is greatly advised to enable low processor usage mode (see [member OS.low_processor_usage_mode]) when using GraphEdits.
+--   GraphEdit manages the showing of GraphNodes it contains, as well as connections and disconnections between them. Signals are sent for each of these two events. Disconnection between GraphNode slots is disabled by default.
+--   		It is greatly advised to enable low-processor usage mode (see [member OS.low_processor_usage_mode]) when using GraphEdits.
 newtype GraphEdit = GraphEdit Object
                       deriving newtype AsVariant
 
@@ -2203,8 +2365,10 @@ instance HasBaseClass GraphEdit where
         type BaseClass GraphEdit = Control
         super = coerce
 
--- | A GraphNode is a container with several input and output slots allowing connections between GraphNodes. Slots can have different, incompatible types.
---   A GraphNode is a container defined by a title. It can have 1 or more input and output slots, which can be enabled (shown) or disabled (not shown) and have different (incompatible) types. Colors can also be assigned to slots. A tuple of input and output slots is defined for each GUI element included in the GraphNode. Input and output connections are left and right slots, but only enabled slots are counted as connections.
+-- | A GraphNode is a container with potentially several input and output slots allowing connections between GraphNodes. Slots can have different, incompatible types.
+--   A GraphNode is a container. Each GraphNode can have several input and output slots, sometimes referred to as ports, allowing connections between GraphNodes. To add a slot to GraphNode, add any [Control]-derived child node to it.
+--   		After adding at least one child to GraphNode new sections will be automatically created in the Inspector called 'Slot'. When 'Slot' is expanded you will see list with index number for each slot. You can click on each of them to expand further.
+--   		In the Inspector you can enable (show) or disable (hide) slots. By default all slots are disabled so you may not see any slots on your GraphNode initially. You can assign a type to each slot. Only slots of the same type will be able to connect to each other. You can also assign colors to slots. A tuple of input and output slots is defined for each GUI element included in the GraphNode. Input connections are on the left and output connections are on the right side of GraphNode. Only enabled slots are counted as connections.
 newtype GraphNode = GraphNode Object
                       deriving newtype AsVariant
 
@@ -2212,8 +2376,10 @@ instance HasBaseClass GraphNode where
         type BaseClass GraphNode = Container
         super = coerce
 
--- | Grid container used to arrange elements in a grid like layout.
---   Grid container will arrange its children in a grid like structure, the grid columns are specified using the [member columns] property and the number of rows will be equal to the number of children in the container divided by the number of columns, for example: if the container has 5 children, and 2 columns, there will be 3 rows in the container. Notice that grid layout will preserve the columns and rows for every size of the container.
+-- | Grid container used to arrange Control-derived children in a grid like layout.
+--   GridContainer will arrange its Control-derived children in a grid like structure, the grid columns are specified using the [member columns] property and the number of rows will be equal to the number of children in the container divided by the number of columns. For example, if the container has 5 children, and 2 columns, there will be 3 rows in the container.
+--   		Notice that grid layout will preserve the columns and rows for every size of the container, and that empty columns will be expanded automatically.
+--   		[b]Note:[/b] GridContainer only works with child nodes inheriting from Control. It won't rearrange child nodes inheriting from Node2D.
 newtype GridContainer = GridContainer Object
                           deriving newtype AsVariant
 
@@ -2247,7 +2413,7 @@ instance HasBaseClass HBoxContainer where
         super = coerce
 
 -- | Horizontal scroll bar.
---    See [ScrollBar]. This one goes from left (min) to right (max).
+--   Horizontal version of [ScrollBar], which goes from left (min) to right (max).
 newtype HScrollBar = HScrollBar Object
                        deriving newtype AsVariant
 
@@ -2256,7 +2422,7 @@ instance HasBaseClass HScrollBar where
         super = coerce
 
 -- | Horizontal separator.
---    See [Separator]. It is used to separate objects vertically, though (but it looks horizontal!).
+--    See [Separator]. Even though it looks horizontal, it is used to separate objects vertically.
 newtype HSeparator = HSeparator Object
                        deriving newtype AsVariant
 
@@ -2266,6 +2432,7 @@ instance HasBaseClass HSeparator where
 
 -- | Horizontal slider.
 --    See [Slider]. This one goes from left (min) to right (max).
+--   		[b]Note:[/b] The [signal Range.changed] and [signal Range.value_changed] signals are part of the [Range] class which this class inherits from.
 newtype HSlider = HSlider Object
                     deriving newtype AsVariant
 
@@ -2282,11 +2449,12 @@ instance HasBaseClass HSplitContainer where
         type BaseClass HSplitContainer = SplitContainer
         super = coerce
 
--- | Hyper-text transfer protocol client.
---   Hyper-text transfer protocol client (sometimes called "User Agent"). Used to make HTTP requests to download web content, upload files and other data or to communicate with various services, among other use cases.
---   		Note that this client only needs to connect to a host once (see [method connect_to_host]) to send multiple requests. Because of this, methods that take URLs usually take just the part after the host instead of the full URL, as the client is already connected to a host. See [method request] for a full example and to get started.
---   		A [code]HTTPClient[/code] should be reused between multiple requests or to connect to different hosts instead of creating one client per request. Supports SSL and SSL server certificate verification. HTTP status codes in the 2xx range indicate success, 3xx redirection (i.e. "try again, but over here"), 4xx something was wrong with the request, and 5xx something went wrong on the server's side.
+-- | Low-level hyper-text transfer protocol client.
+--   Hyper-text transfer protocol client (sometimes called "User Agent"). Used to make HTTP requests to download web content, upload files and other data or to communicate with various services, among other use cases. [b]See the [HTTPRequest] node for an higher-level alternative.[/b]
+--   		[b]Note:[/b] This client only needs to connect to a host once (see [method connect_to_host]) to send multiple requests. Because of this, methods that take URLs usually take just the part after the host instead of the full URL, as the client is already connected to a host. See [method request] for a full example and to get started.
+--   		A [HTTPClient] should be reused between multiple requests or to connect to different hosts instead of creating one client per request. Supports SSL and SSL server certificate verification. HTTP status codes in the 2xx range indicate success, 3xx redirection (i.e. "try again, but over here"), 4xx something was wrong with the request, and 5xx something went wrong on the server's side.
 --   		For more information on HTTP, see https://developer.mozilla.org/en-US/docs/Web/HTTP (or read RFC 2616 to get it straight from the source: https://tools.ietf.org/html/rfc2616).
+--   		[b]Note:[/b] When performing HTTP requests from a project exported to HTML5, keep in mind the remote server may not allow requests from foreign origins due to [url=https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS]CORS[/url]. If you host the server in question, you should modify its backend to allow requests from foreign origins by adding the [code]Access-Control-Allow-Origin: *[/code] HTTP header.
 newtype HTTPClient = HTTPClient Object
                        deriving newtype AsVariant
 
@@ -2294,9 +2462,68 @@ instance HasBaseClass HTTPClient where
         type BaseClass HTTPClient = Reference
         super = coerce
 
--- | A node with the ability to send HTTP requests.
---    Uses [HTTPClient] internally.
+-- | A node with the ability to send HTTP(S) requests.
+--   A node with the ability to send HTTP requests. Uses [HTTPClient] internally.
 --   		Can be used to make HTTP requests, i.e. download or upload files or web content via HTTP.
+--   		[b]Example of contacting a REST API and printing one of its returned fields:[/b]
+--   		[codeblock]
+--   		func _ready():
+--   		    # Create an HTTP request node and connect its completion signal.
+--   		    var http_request = HTTPRequest.new()
+--   		    add_child(http_request)
+--   		    http_request.connect("request_completed", self, "_http_request_completed")
+--   
+--   		    # Perform a GET request. The URL below returns JSON as of writing.
+--   		    var error = http_request.request("https://httpbin.org/get")
+--   		    if error != OK:
+--   		        push_error("An error occurred in the HTTP request.")
+--   
+--   		    # Perform a POST request. The URL below returns JSON as of writing.
+--   		    # Note: Don't make simultaneous requests using a single HTTPRequest node.
+--   		    # The snippet below is provided for reference only.
+--   		    var body = {"name": "Godette"}
+--   		    var error = http_request.request("https://httpbin.org/post", [], true, HTTPClient.METHOD_POST, body)
+--   		    if error != OK:
+--   		        push_error("An error occurred in the HTTP request.")
+--   
+--   
+--   		# Called when the HTTP request is completed.
+--   		func _http_request_completed(result, response_code, headers, body):
+--   		    var response = parse_json(body.get_string_from_utf8())
+--   
+--   		    # Will print the user agent string used by the HTTPRequest node (as recognized by httpbin.org).
+--   		    print(response.headers["User-Agent"])
+--   		[/codeblock]
+--   		[b]Example of loading and displaying an image using HTTPRequest:[/b]
+--   		[codeblock]
+--   		func _ready():
+--   		    # Create an HTTP request node and connect its completion signal.
+--   		    var http_request = HTTPRequest.new()
+--   		    add_child(http_request)
+--   		    http_request.connect("request_completed", self, "_http_request_completed")
+--   
+--   		    # Perform the HTTP request. The URL below returns a PNG image as of writing.
+--   		    var error = http_request.request("https://via.placeholder.com/512")
+--   		    if error != OK:
+--   		        push_error("An error occurred in the HTTP request.")
+--   
+--   
+--   		# Called when the HTTP request is completed.
+--   		func _http_request_completed(result, response_code, headers, body):
+--   		    var image = Image.new()
+--   		    var error = image.load_png_from_buffer(body)
+--   		    if error != OK:
+--   		        push_error("Couldn't load the image.")
+--   
+--   		    var texture = ImageTexture.new()
+--   		    texture.create_from_image(image)
+--   
+--   		    # Display the image in a TextureRect node.
+--   		    var texture_rect = TextureRect.new()
+--   		    add_child(texture_rect)
+--   		    texture_rect.texture = texture
+--   		[/codeblock]
+--   		[b]Note:[/b] When performing HTTP requests from a project exported to HTML5, keep in mind the remote server may not allow requests from foreign origins due to [url=https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS]CORS[/url]. If you host the server in question, you should modify its backend to allow requests from foreign origins by adding the [code]Access-Control-Allow-Origin: *[/code] HTTP header.
 newtype HTTPRequest = HTTPRequest Object
                         deriving newtype AsVariant
 
@@ -2304,6 +2531,31 @@ instance HasBaseClass HTTPRequest where
         type BaseClass HTTPRequest = Node
         super = coerce
 
+-- | Context to compute cryptographic hashes over multiple iterations.
+--   The HashingContext class provides an interface for computing cryptographic hashes over multiple iterations. This is useful for example when computing hashes of big files (so you don't have to load them all in memory), network streams, and data streams in general (so you don't have to hold buffers).
+--   		The [enum HashType] enum shows the supported hashing algorithms.
+--   		[codeblock]
+--   		const CHUNK_SIZE = 1024
+--   
+--   		func hash_file(path):
+--   		    var ctx = HashingContext.new()
+--   		    var file = File.new()
+--   		    # Start a SHA-256 context.
+--   		    ctx.start(HashingContext.HASH_SHA256)
+--   		    # Check that file exists.
+--   		    if not file.file_exists(path):
+--   		        return
+--   		    # Open the file to hash.
+--   		    file.open(path, File.READ)
+--   		    # Update the context after reading each chunk.
+--   		    while not file.eof_reached():
+--   		        ctx.update(file.get_buffer(CHUNK_SIZE))
+--   		    # Get the computed hash.
+--   		    var res = ctx.finish()
+--   		    # Print the result as hex string and array.
+--   		    printt(res.hex_encode(), Array(res))
+--   		[/codeblock]
+--   		[b]Note:[/b] Not available in HTML5 exports.
 newtype HashingContext = HashingContext Object
                            deriving newtype AsVariant
 
@@ -2311,7 +2563,7 @@ instance HasBaseClass HashingContext where
         type BaseClass HashingContext = Reference
         super = coerce
 
--- | Height map shape for 3D physics (bullet only)
+-- | Height map shape for 3D physics (Bullet only).
 --   Height map shape resource, which can be added to a [PhysicsBody] or [Area].
 newtype HeightMapShape = HeightMapShape Object
                            deriving newtype AsVariant
@@ -2321,7 +2573,7 @@ instance HasBaseClass HeightMapShape where
         super = coerce
 
 -- | A hinge between two 3D bodies.
---   Normally uses the z-axis of body A as the hinge axis, another axis can be specified when adding it manually though.
+--   A HingeJoint normally uses the Z axis of body A as the hinge axis, another axis can be specified when adding it manually though.
 newtype HingeJoint = HingeJoint Object
                        deriving newtype AsVariant
 
@@ -2329,7 +2581,7 @@ instance HasBaseClass HingeJoint where
         type BaseClass HingeJoint = Joint
         super = coerce
 
--- | Internet protocol (IP) support functions like DNS resolution.
+-- | Internet protocol (IP) support functions such as DNS resolution.
 --   IP contains support functions for the Internet Protocol (IP). TCP/IP support is in different classes (see [StreamPeerTCP] and [TCP_Server]). IP provides DNS hostname resolution support, both blocking and threaded.
 newtype IP = IP Object
                deriving newtype AsVariant
@@ -2338,8 +2590,6 @@ instance HasBaseClass IP where
         type BaseClass IP = Object
         super = coerce
 
--- | Unix IP support. See [IP].
---   Unix-specific implementation of IP support functions. See [IP].
 newtype IP_Unix = IP_Unix Object
                     deriving newtype AsVariant
 
@@ -2348,7 +2598,8 @@ instance HasBaseClass IP_Unix where
         super = coerce
 
 -- | Image datatype.
---   Native image datatype. Contains image data, which can be converted to a [Texture], and several functions to interact with it. The maximum width and height for an [code]Image[/code] are [constant MAX_WIDTH] and [constant MAX_HEIGHT].
+--   Native image datatype. Contains image data, which can be converted to a [Texture], and several functions to interact with it. The maximum width and height for an [Image] are [constant MAX_WIDTH] and [constant MAX_HEIGHT].
+--   		[b]Note:[/b] The maximum image size is 16384×16384 pixels due to graphics hardware limitations. Larger images will fail to import.
 newtype Image = Image Object
                   deriving newtype AsVariant
 
@@ -2358,6 +2609,7 @@ instance HasBaseClass Image where
 
 -- | A [Texture] based on an [Image].
 --    Can be created from an [Image] with [method create_from_image].
+--   		[b]Note:[/b] The maximum image size is 16384×16384 pixels due to graphics hardware limitations. Larger images will fail to import.
 newtype ImageTexture = ImageTexture Object
                          deriving newtype AsVariant
 
@@ -2367,6 +2619,9 @@ instance HasBaseClass ImageTexture where
 
 -- | Draws simple geometry from code.
 --    Uses a drawing mode similar to OpenGL 1.x.
+--   		See also [ArrayMesh], [MeshDataTool] and [SurfaceTool] for procedural geometry generation.
+--   		[b]Note:[/b] ImmediateGeometry3D is best suited to small amounts of mesh data that change every frame. It will be slow when handling large amounts of mesh data. If mesh data doesn't change often, use [ArrayMesh], [MeshDataTool] or [SurfaceTool] instead.
+--   		[b]Note:[/b] Godot uses clockwise [url=https://learnopengl.com/Advanced-OpenGL/Face-culling]winding order[/url] for front faces of triangle primitive modes.
 newtype ImmediateGeometry = ImmediateGeometry Object
                               deriving newtype AsVariant
 
@@ -2374,8 +2629,8 @@ instance HasBaseClass ImmediateGeometry where
         type BaseClass ImmediateGeometry = GeometryInstance
         super = coerce
 
--- | A Singleton that deals with inputs.
---    This includes key presses, mouse buttons and movement, joypads, and input actions. Actions and their events can be set in the Project Settings / Input Map tab. Or be set with [InputMap].
+-- | A singleton that deals with inputs.
+--    This includes key presses, mouse buttons and movement, joypads, and input actions. Actions and their events can be set in the [b]Input Map[/b] tab in the [b]Project > Project Settings[/b], or with the [InputMap] class.
 newtype Input = Input Object
                   deriving newtype AsVariant
 
@@ -2383,8 +2638,6 @@ instance HasBaseClass Input where
         type BaseClass Input = Object
         super = coerce
 
--- | Default implementation of the [Input] class.
---   Default implementation of the [Input] class, used internally by the editor and games for default input management.
 newtype InputDefault = InputDefault Object
                          deriving newtype AsVariant
 
@@ -2392,7 +2645,7 @@ instance HasBaseClass InputDefault where
         type BaseClass InputDefault = Input
         super = coerce
 
--- | Generic input event
+-- | Generic input event.
 --   Base class of all sort of input event. See [method Node._input].
 newtype InputEvent = InputEvent Object
                        deriving newtype AsVariant
@@ -2402,7 +2655,7 @@ instance HasBaseClass InputEvent where
         super = coerce
 
 -- | Input event type for actions.
---   Contains a generic action which can be targeted from several type of inputs. Actions can be created from the project settings menu [code]Project > Project Settings > Input Map[/code]. See [method Node._input].
+--   Contains a generic action which can be targeted from several types of inputs. Actions can be created from the [b]Input Map[/b] tab in the [b]Project > Project Settings[/b] menu. See [method Node._input].
 newtype InputEventAction = InputEventAction Object
                              deriving newtype AsVariant
 
@@ -2410,6 +2663,7 @@ instance HasBaseClass InputEventAction where
         type BaseClass InputEventAction = InputEvent
         super = coerce
 
+-- | Base class for touch control gestures.
 newtype InputEventGesture = InputEventGesture Object
                               deriving newtype AsVariant
 
@@ -2418,7 +2672,7 @@ instance HasBaseClass InputEventGesture where
         super = coerce
 
 -- | Input event for gamepad buttons.
---   Input event type for gamepad buttons. For joysticks see [InputEventJoypadMotion].
+--   Input event type for gamepad buttons. For gamepad analog sticks and joysticks, see [InputEventJoypadMotion].
 newtype InputEventJoypadButton = InputEventJoypadButton Object
                                    deriving newtype AsVariant
 
@@ -2426,8 +2680,8 @@ instance HasBaseClass InputEventJoypadButton where
         type BaseClass InputEventJoypadButton = InputEvent
         super = coerce
 
--- | Input event type for gamepad joysticks and other motions. For buttons see [code]InputEventJoypadButton[/code].
---   Stores information about joystick motions. One [code]InputEventJoypadMotion[/code] represents one axis at a time.
+-- | Input event type for gamepad joysticks and other motions. For buttons, see [code]InputEventJoypadButton[/code].
+--   Stores information about joystick motions. One [InputEventJoypadMotion] represents one axis at a time.
 newtype InputEventJoypadMotion = InputEventJoypadMotion Object
                                    deriving newtype AsVariant
 
@@ -2477,7 +2731,8 @@ instance HasBaseClass InputEventMouseButton where
         super = coerce
 
 -- | Input event type for mouse motion events.
---   Contains mouse motion information. Supports relative, absolute positions and speed. See [method Node._input].
+--   Contains mouse and pen motion information. Supports relative, absolute positions and speed. See [method Node._input].
+--   		[b]Note:[/b] By default, this event is only emitted once per frame rendered at most. If you need more precise input reporting, call [method Input.set_use_accumulated_input] with [code]false[/code] to make events emitted as often as possible. If you use InputEventMouseMotion to draw lines, consider implementing [url=https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm]Bresenham's line algorithm[/url] as well to avoid visible gaps in lines if the user is moving the mouse quickly.
 newtype InputEventMouseMotion = InputEventMouseMotion Object
                                   deriving newtype AsVariant
 
@@ -2492,8 +2747,7 @@ instance HasBaseClass InputEventPanGesture where
         type BaseClass InputEventPanGesture = InputEventGesture
         super = coerce
 
--- | Input event type for screen drag events.
---   		(only available on mobile devices)
+-- | Input event type for screen drag events. Only available on mobile devices.
 --   Contains screen drag information. See [method Node._input].
 newtype InputEventScreenDrag = InputEventScreenDrag Object
                                  deriving newtype AsVariant
@@ -2522,7 +2776,7 @@ instance HasBaseClass InputEventWithModifiers where
         super = coerce
 
 -- | Singleton that manages [InputEventAction].
---   Manages all [InputEventAction] which can be created/modified from the project settings menu [code]Project > Project Settings > Input Map[/code] or in code with [method add_action] and [method action_add_event]. See [method Node._input].
+--   Manages all [InputEventAction] which can be created/modified from the project settings menu [b]Project > Project Settings > Input Map[/b] or in code with [method add_action] and [method action_add_event]. See [method Node._input].
 newtype InputMap = InputMap Object
                      deriving newtype AsVariant
 
@@ -2540,8 +2794,8 @@ instance HasBaseClass InstancePlaceholder where
         type BaseClass InstancePlaceholder = Node
         super = coerce
 
--- | Camera which moves toward another node.
---   InterpolatedCamera is a [Camera] which smoothly moves to match a target node's position and rotation.
+-- | [i]Deprecated.[/i] Camera which moves toward another node.
+--   [i]Deprecated (will be removed in Godot 4.0).[/i] InterpolatedCamera is a [Camera] which smoothly moves to match a target node's position and rotation.
 --   		If it is not [member enabled] or does not have a valid target set, InterpolatedCamera acts like a normal Camera.
 newtype InterpolatedCamera = InterpolatedCamera Object
                                deriving newtype AsVariant
@@ -2552,7 +2806,8 @@ instance HasBaseClass InterpolatedCamera where
 
 -- | Control that provides a list of selectable items (and/or icons) in a single column, or optionally in multiple columns.
 --   This control provides a selectable list of items that may be in a single (or multiple columns) with option of text, icons, or both text and icon. Tooltips are supported and may be different for every item in the list.
---   		Selectable items in the list may be selected or deselected and multiple selection may be enabled. Selection with right mouse button may also be enabled to allow use of popup context menus. Items may also be 'activated' with a double click (or Enter key).
+--   		Selectable items in the list may be selected or deselected and multiple selection may be enabled. Selection with right mouse button may also be enabled to allow use of popup context menus. Items may also be "activated" by double-clicking them or by pressing Enter.
+--   		Item text only supports single-line strings, newline characters (e.g. [code]\n[/code]) in the string won't produce a newline. Text wrapping is enabled in [constant ICON_MODE_TOP] mode, but column's width is adjusted to fully fit its content by default. You need to set [member fixed_column_width] greater than zero to wrap the text.
 newtype ItemList = ItemList Object
                      deriving newtype AsVariant
 
@@ -2561,7 +2816,7 @@ instance HasBaseClass ItemList where
         super = coerce
 
 -- | Data class wrapper for decoded JSON.
---   Returned by [method JSON.parse], [code]JSONParseResult[/code] contains decoded JSON or error information if JSON source not successfully parsed. You can check if JSON source was successfully parsed with [code]if json_result.error == OK[/code].
+--   Returned by [method JSON.parse], [JSONParseResult] contains the decoded JSON or error information if the JSON source wasn't successfully parsed. You can check if the JSON source was successfully parsed with [code]if json_result.error == OK[/code].
 newtype JSONParseResult = JSONParseResult Object
                             deriving newtype AsVariant
 
@@ -2591,7 +2846,7 @@ instance HasBaseClass JavaClassWrapper where
         super = coerce
 
 -- | Singleton that connects the engine with the browser's JavaScript context in HTML5 export.
---   The JavaScript singleton is implemented only in HTML5 export. It's used to access the browser's JavaScript context. This allows interaction with embedding pages or calling third-party JavaScript APIs.
+--   The JavaScript singleton is implemented only in the HTML5 export. It's used to access the browser's JavaScript context. This allows interaction with embedding pages or calling third-party JavaScript APIs.
 newtype JavaScript = JavaScript Object
                        deriving newtype AsVariant
 
@@ -2599,7 +2854,7 @@ instance HasBaseClass JavaScript where
         type BaseClass JavaScript = Object
         super = coerce
 
--- | Base class for all 3D joints
+-- | Base class for all 3D joints.
 --   Joints are used to bind together two physics bodies. They have a solver priority and can define if the bodies of the two attached nodes should be able to collide with each other.
 newtype Joint = Joint Object
                   deriving newtype AsVariant
@@ -2639,8 +2894,8 @@ instance HasBaseClass KinematicBody2D where
         type BaseClass KinematicBody2D = PhysicsBody2D
         super = coerce
 
--- | Collision data for KinematicBody collisions.
---   Contains collision data for KinematicBody collisions. When a [KinematicBody] is moved using [method KinematicBody.move_and_collide], it stops if it detects a collision with another body. If a collision is detected, a KinematicCollision object is returned.
+-- | Collision data for [KinematicBody] collisions.
+--   Contains collision data for [KinematicBody] collisions. When a [KinematicBody] is moved using [method KinematicBody.move_and_collide], it stops if it detects a collision with another body. If a collision is detected, a KinematicCollision object is returned.
 --   		This object contains information about the collision, including the colliding object, the remaining motion, and the collision position. This information can be used to calculate a collision response.
 newtype KinematicCollision = KinematicCollision Object
                                deriving newtype AsVariant
@@ -2649,8 +2904,8 @@ instance HasBaseClass KinematicCollision where
         type BaseClass KinematicCollision = Reference
         super = coerce
 
--- | Collision data for KinematicBody2D collisions.
---   Contains collision data for KinematicBody2D collisions. When a [KinematicBody2D] is moved using [method KinematicBody2D.move_and_collide], it stops if it detects a collision with another body. If a collision is detected, a KinematicCollision2D object is returned.
+-- | Collision data for [KinematicBody2D] collisions.
+--   Contains collision data for [KinematicBody2D] collisions. When a [KinematicBody2D] is moved using [method KinematicBody2D.move_and_collide], it stops if it detects a collision with another body. If a collision is detected, a KinematicCollision2D object is returned.
 --   		This object contains information about the collision, including the colliding object, the remaining motion, and the collision position. This information can be used to calculate a collision response.
 newtype KinematicCollision2D = KinematicCollision2D Object
                                  deriving newtype AsVariant
@@ -2661,7 +2916,7 @@ instance HasBaseClass KinematicCollision2D where
 
 -- | Displays plain text in a line or wrapped inside a rectangle. For formatted text, use [RichTextLabel].
 --   Label displays plain text on the screen. It gives you control over the horizontal and vertical alignment, and can wrap the text inside the node's bounding rectangle. It doesn't support bold, italics or other formatting. For that, use [RichTextLabel] instead.
---   		Note that contrarily to most other [Control]s, Label's [member Control.mouse_filter] defaults to MOUSE_FILTER_IGNORE (i.e. it doesn't react to mouse input events). This implies that a label won't display any configured [member Control.hint_tooltip], unless you change its mouse filter.
+--   		[b]Note:[/b] Contrarily to most other [Control]s, Label's [member Control.mouse_filter] defaults to [constant Control.MOUSE_FILTER_IGNORE] (i.e. it doesn't react to mouse input events). This implies that a label won't display any configured [member Control.hint_tooltip], unless you change its mouse filter.
 newtype Label = Label Object
                   deriving newtype AsVariant
 
@@ -2669,9 +2924,9 @@ instance HasBaseClass Label where
         type BaseClass Label = Control
         super = coerce
 
--- | A Texture capable of storing many smaller Textures with offsets.
+-- | A [Texture] capable of storing many smaller textures with offsets.
 --   
---   		You can dynamically add pieces([Texture]) to this [code]LargeTexture[/code] using different offsets.
+--   		You can dynamically add pieces ([Texture]s) to this [LargeTexture] using different offsets.
 newtype LargeTexture = LargeTexture Object
                          deriving newtype AsVariant
 
@@ -2680,7 +2935,7 @@ instance HasBaseClass LargeTexture where
         super = coerce
 
 -- | Provides a base class for different kinds of light nodes.
---   Light is the abstract base class for light nodes, so it shouldn't be used directly (It can't be instanced). Other types of light nodes inherit from it. Light contains the common variables and parameters used for lighting.
+--   Light is the [i]abstract[/i] base class for light nodes. As it can't be instanced, it shouldn't be used directly. Other types of light nodes inherit from it. Light contains the common variables and parameters used for lighting.
 newtype Light = Light Object
                   deriving newtype AsVariant
 
@@ -2689,7 +2944,8 @@ instance HasBaseClass Light where
         super = coerce
 
 -- | Casts light in a 2D environment.
---    Light is defined by a (usually grayscale) texture, a color, an energy value, a mode (see constants), and various other parameters (range and shadows-related). Note that Light2D can be used as a mask.
+--    Light is defined by a (usually grayscale) texture, a color, an energy value, a mode (see constants), and various other parameters (range and shadows-related).
+--   		[b]Note:[/b] Light2D can also be used as a mask.
 newtype Light2D = Light2D Object
                     deriving newtype AsVariant
 
@@ -2708,6 +2964,7 @@ instance HasBaseClass LightOccluder2D where
 
 -- | A 2D line.
 --   A line through several points in 2D space.
+--   		[b]Note:[/b] By default, Godot can only draw up to 4,096 polygon points at a time. To increase this limit, open the Project Settings and increase [member ProjectSettings.rendering/limits/buffers/canvas_polygon_buffer_size_kb] and [member ProjectSettings.rendering/limits/buffers/canvas_polygon_index_buffer_size_kb].
 newtype Line2D = Line2D Object
                    deriving newtype AsVariant
 
@@ -2716,7 +2973,8 @@ instance HasBaseClass Line2D where
         super = coerce
 
 -- | Control that provides single-line string editing.
---   LineEdit provides a single-line string editor, used for text fields. It features many built-in shortcuts which will always be available:
+--   LineEdit provides a single-line string editor, used for text fields.
+--   		It features many built-in shortcuts which will always be available ([code]Ctrl[/code] here maps to [code]Command[/code] on macOS):
 --   		- Ctrl + C: Copy
 --   		- Ctrl + X: Cut
 --   		- Ctrl + V or Ctrl + Y: Paste/"yank"
@@ -2726,6 +2984,15 @@ instance HasBaseClass Line2D where
 --   		- Ctrl + K: Delete text from the cursor position to the end of the line
 --   		- Ctrl + A: Select all text
 --   		- Up/Down arrow: Move the cursor to the beginning/end of the line
+--   		On macOS, some extra keyboard shortcuts are available:
+--   		- Ctrl + F: Like the right arrow key, move the cursor one character right
+--   		- Ctrl + B: Like the left arrow key, move the cursor one character left
+--   		- Ctrl + P: Like the up arrow key, move the cursor to the previous line
+--   		- Ctrl + N: Like the down arrow key, move the cursor to the next line
+--   		- Ctrl + D: Like the Delete key, delete the character on the right side of cursor
+--   		- Ctrl + H: Like the Backspace key, delete the character on the left side of the cursor
+--   		- Command + Left arrow: Like the Home key, move the cursor to the beginning of the line
+--   		- Command + Right arrow: Like the End key, move the cursor to the end of the line
 newtype LineEdit = LineEdit Object
                      deriving newtype AsVariant
 
@@ -2734,7 +3001,7 @@ instance HasBaseClass LineEdit where
         super = coerce
 
 -- | Line shape for 2D collisions.
---    It works like a 2D plane and will not allow any body to go to the negative side. Not recommended for rigid bodies, and usually not recommended for static bodies either because it forces checks against it on every frame.
+--    It works like a 2D plane and will not allow any physics body to go to the negative side. Not recommended for rigid bodies, and usually not recommended for static bodies either because it forces checks against it on every frame.
 newtype LineShape2D = LineShape2D Object
                         deriving newtype AsVariant
 
@@ -2743,7 +3010,7 @@ instance HasBaseClass LineShape2D where
         super = coerce
 
 -- | Simple button used to represent a link to some resource.
---   This kind of buttons are primarily used when the interaction with the button causes a context change (like linking to a web page).
+--   This kind of button is primarily used when the interaction with the button causes a context change (like linking to a web page).
 newtype LinkButton = LinkButton Object
                        deriving newtype AsVariant
 
@@ -2751,6 +3018,9 @@ instance HasBaseClass LinkButton where
         type BaseClass LinkButton = BaseButton
         super = coerce
 
+-- | Overrides the location sounds are heard from.
+--   Once added to the scene tree and enabled using [method make_current], this node will override the location sounds are heard from. This can be used to listen from a location different from the [Camera].
+--   		[b]Note:[/b] There is no 2D equivalent for this node yet.
 newtype Listener = Listener Object
                      deriving newtype AsVariant
 
@@ -2759,9 +3029,9 @@ instance HasBaseClass Listener where
         super = coerce
 
 -- | Abstract base class for the game's main loop.
---   [code]MainLoop[/code] is the abstract base class for a Godot project's game loop. It in inherited by [SceneTree], which is the default game loop implementation used in Godot projects, though it is also possible to write and use one's own [code]MainLoop[/code] subclass instead of the scene tree.
---   		Upon application start, a [code]MainLoop[/code] implementation has to be provided to the OS, or the application will exit. This happens automatically (and a [SceneTree] is created) unless a main [Script] is provided from the command line (with e.g. [code]godot -s my_loop.gd[/code], which should then be a [code]MainLoop[/code] implementation.
---   		Here is an example script implementing a simple [code]MainLoop[/code]:
+--   [MainLoop] is the abstract base class for a Godot project's game loop. It is inherited by [SceneTree], which is the default game loop implementation used in Godot projects, though it is also possible to write and use one's own [MainLoop] subclass instead of the scene tree.
+--   		Upon the application start, a [MainLoop] implementation must be provided to the OS; otherwise, the application will exit. This happens automatically (and a [SceneTree] is created) unless a main [Script] is provided from the command line (with e.g. [code]godot -s my_loop.gd[/code], which should then be a [MainLoop] implementation.
+--   		Here is an example script implementing a simple [MainLoop]:
 --   		[codeblock]
 --   		extends MainLoop
 --   
@@ -2770,29 +3040,29 @@ instance HasBaseClass Listener where
 --   		var quit = false
 --   
 --   		func _initialize():
---   			print("Initialized:")
---   			print("  Starting time: %s" % str(time_elapsed))
+--   		    print("Initialized:")
+--   		    print("  Starting time: %s" % str(time_elapsed))
 --   
 --   		func _idle(delta):
---   			time_elapsed += delta
---   			# Return true to end the main loop
---   			return quit
+--   		    time_elapsed += delta
+--   		    # Return true to end the main loop.
+--   		    return quit
 --   
 --   		func _input_event(event):
---   			# Record keys
---   			if event is InputEventKey and event.pressed and !event.echo:
---   				keys_typed.append(OS.get_scancode_string(event.scancode))
---   				# Quit on Escape press
---   				if event.scancode == KEY_ESCAPE:
---   					quit = true
---   			# Quit on any mouse click
---   			if event is InputEventMouseButton:
---   				quit = true
+--   		    # Record keys.
+--   		    if event is InputEventKey and event.pressed and !event.echo:
+--   		        keys_typed.append(OS.get_scancode_string(event.scancode))
+--   		        # Quit on Escape press.
+--   		        if event.scancode == KEY_ESCAPE:
+--   		            quit = true
+--   		    # Quit on any mouse click.
+--   		    if event is InputEventMouseButton:
+--   		        quit = true
 --   
 --   		func _finalize():
---   			print("Finalized:")
---   			print("  End time: %s" % str(time_elapsed))
---   			print("  Keys typed: %s" % var2str(keys_typed))
+--   		    print("Finalized:")
+--   		    print("  End time: %s" % str(time_elapsed))
+--   		    print("  Keys typed: %s" % var2str(keys_typed))
 --   		[/codeblock]
 newtype MainLoop = MainLoop Object
                      deriving newtype AsVariant
@@ -2803,7 +3073,7 @@ instance HasBaseClass MainLoop where
 
 -- | Simple margin container.
 --   Adds a top, left, bottom, and right margin to all [Control] nodes that are direct children of the container. To control the [MarginContainer]'s margin, use the [code]margin_*[/code] theme properties listed below.
---   		[b]Note:[/b] Be careful, [Control] margin values are different than the constant margin values. If you want to change the custom margin values of the [MarginContainer] by code you should use the following examples:
+--   		[b]Note:[/b] Be careful, [Control] margin values are different than the constant margin values. If you want to change the custom margin values of the [MarginContainer] by code, you should use the following examples:
 --   		[codeblock]
 --   		var margin_value = 100
 --   		set("custom_constants/margin_top", margin_value)
@@ -2828,7 +3098,8 @@ instance HasBaseClass Material where
         super = coerce
 
 -- | Special button that brings up a [PopupMenu] when clicked.
---    That's pretty much all it does, as it's just a helper class when building GUIs.
+--   
+--   		New items can be created inside this [PopupMenu] using [code]get_popup().add_item("My Item Name")[/code]. You can also create them directly from the editor. To do so, select the [MenuButton] node, then in the toolbar at the top of the 2D editor, click [b]Items[/b] then click [b]Add[/b] in the popup. You will be able to give each items new properties.
 newtype MenuButton = MenuButton Object
                        deriving newtype AsVariant
 
@@ -2836,8 +3107,8 @@ instance HasBaseClass MenuButton where
         type BaseClass MenuButton = Button
         super = coerce
 
--- | A [Resource] that contains vertex-array based geometry.
---   Mesh is a type of [Resource] that contains vertex-array based geometry, divided in [i]surfaces[/i]. Each surface contains a completely separate array and a material used to draw it. Design wise, a mesh with multiple surfaces is preferred to a single surface, because objects created in 3D editing software commonly contain multiple materials.
+-- | A [Resource] that contains vertex array-based geometry.
+--   Mesh is a type of [Resource] that contains vertex array-based geometry, divided in [i]surfaces[/i]. Each surface contains a completely separate array and a material used to draw it. Design wise, a mesh with multiple surfaces is preferred to a single surface, because objects created in 3D editing software commonly contain multiple materials.
 newtype Mesh = Mesh Object
                  deriving newtype AsVariant
 
@@ -2846,9 +3117,9 @@ instance HasBaseClass Mesh where
         super = coerce
 
 -- | Helper tool to access and edit [Mesh] data.
---   The MeshDataTool provides access to individual vertices in a [Mesh]. It allows users to read and edit vertex data of meshes. It also creates an array of faces and edges.
---   		To use the MeshDataTool, load a mesh with [method create_from_surface]. When you are finished editing the data commit the data to a mesh with [method commit_to_surface].
---   		Below is an example of how the MeshDataTool may be used.
+--   MeshDataTool provides access to individual vertices in a [Mesh]. It allows users to read and edit vertex data of meshes. It also creates an array of faces and edges.
+--   		To use MeshDataTool, load a mesh with [method create_from_surface]. When you are finished editing the data commit the data to a mesh with [method commit_to_surface].
+--   		Below is an example of how MeshDataTool may be used.
 --   		[codeblock]
 --   		var mdt = MeshDataTool.new()
 --   		mdt.create_from_surface(mesh, 0)
@@ -2859,6 +3130,8 @@ instance HasBaseClass Mesh where
 --   		mesh.surface_remove(0)
 --   		mdt.commit_to_surface(mesh)
 --   		[/codeblock]
+--   		See also [ArrayMesh], [ImmediateGeometry] and [SurfaceTool] for procedural geometry generation.
+--   		[b]Note:[/b] Godot uses clockwise [url=https://learnopengl.com/Advanced-OpenGL/Face-culling]winding order[/url] for front faces of triangle primitive modes.
 newtype MeshDataTool = MeshDataTool Object
                          deriving newtype AsVariant
 
@@ -2876,7 +3149,7 @@ instance HasBaseClass MeshInstance where
         super = coerce
 
 -- | Node used for displaying a [Mesh] in 2D.
---    Can be constructed from an existing [Sprite] use tool in Toolbar. Select "Sprite" then "Convert to Mesh2D", select settings in popup and press "Create Mesh2D".
+--    Can be constructed from an existing [Sprite] via a tool in the editor toolbar. Select "Sprite" then "Convert to Mesh2D", select settings in popup and press "Create Mesh2D".
 newtype MeshInstance2D = MeshInstance2D Object
                            deriving newtype AsVariant
 
@@ -2885,7 +3158,7 @@ instance HasBaseClass MeshInstance2D where
         super = coerce
 
 -- | Library of meshes.
---    Contains a list of [Mesh] resources, each with name and ID. Useful for GridMap or painting Terrain.
+--   A library of meshes. Contains a list of [Mesh] resources, each with a name and ID. Each item can also include collision and navigation shapes. This resource is used in [GridMap].
 newtype MeshLibrary = MeshLibrary Object
                         deriving newtype AsVariant
 
@@ -2893,6 +3166,8 @@ instance HasBaseClass MeshLibrary where
         type BaseClass MeshLibrary = Resource
         super = coerce
 
+-- | Simple texture that uses a mesh to draw itself.
+--    It's limited because flags can't be changed and region drawing is not supported.
 newtype MeshTexture = MeshTexture Object
                         deriving newtype AsVariant
 
@@ -2907,9 +3182,9 @@ instance HasBaseClass MobileVRInterface where
         type BaseClass MobileVRInterface = ARVRInterface
         super = coerce
 
--- | Provides high performance mesh instancing.
---   MultiMesh provides low level mesh instancing. Drawing thousands of [MeshInstance] nodes can be slow because each object is submitted to the GPU to be drawn individually.
---   		MultiMesh is much faster because it can draw thousands of instances with a single draw call, resulting in less API overhead.
+-- | Provides high-performance mesh instancing.
+--   MultiMesh provides low-level mesh instancing. Drawing thousands of [MeshInstance] nodes can be slow, since each object is submitted to the GPU then drawn individually.
+--   		MultiMesh is much faster as it can draw thousands of instances with a single draw call, resulting in less API overhead.
 --   		As a drawback, if the instances are too far away of each other, performance may be reduced as every single instance will always rendered (they are spatially indexed as one, for the whole object).
 --   		Since instances may have any behavior, the AABB used for visibility must be provided by the user.
 newtype MultiMesh = MultiMesh Object
@@ -2920,8 +3195,8 @@ instance HasBaseClass MultiMesh where
         super = coerce
 
 -- | Node that instances a [MultiMesh].
---   [code]MultiMeshInstance[/code] is a specialized node to instance [GeometryInstance]s based on a [MultiMesh] resource.
---   		This is useful to optimize the rendering of a high amount of instances of a given mesh (for example tree in a forest or grass strands).
+--   [MultiMeshInstance] is a specialized node to instance [GeometryInstance]s based on a [MultiMesh] resource.
+--   		This is useful to optimize the rendering of a high amount of instances of a given mesh (for example trees in a forest or grass strands).
 newtype MultiMeshInstance = MultiMeshInstance Object
                               deriving newtype AsVariant
 
@@ -2929,6 +3204,9 @@ instance HasBaseClass MultiMeshInstance where
         type BaseClass MultiMeshInstance = GeometryInstance
         super = coerce
 
+-- | Node that instances a [MultiMesh] in 2D.
+--   [MultiMeshInstance2D] is a specialized node to instance a [MultiMesh] resource in 2D.
+--   		Usage is the same as [MultiMeshInstance].
 newtype MultiMeshInstance2D = MultiMeshInstance2D Object
                                 deriving newtype AsVariant
 
@@ -2936,8 +3214,8 @@ instance HasBaseClass MultiMeshInstance2D where
         type BaseClass MultiMeshInstance2D = Node2D
         super = coerce
 
--- | High Level Multiplayer API.
---   This class implements most of the logic behind the high level multiplayer API.
+-- | High-level multiplayer API.
+--   This class implements most of the logic behind the high-level multiplayer API.
 --   		By default, [SceneTree] has a reference to this class that is used to provide multiplayer capabilities (i.e. RPC/RSET) across the whole scene.
 --   		It is possible to override the MultiplayerAPI instance used by specific Nodes by setting the [member Node.custom_multiplayer] property, effectively allowing to run both client and server in the same scene.
 newtype MultiplayerAPI = MultiplayerAPI Object
@@ -2962,7 +3240,7 @@ instance HasBaseClass NativeScript where
         super = coerce
 
 -- | Mesh-based navigation and pathfinding node.
---   Provides navigation and pathfinding within a collection of [NavigationMesh]es. By default these will be automatically collected from child [NavigationMeshInstance] nodes, but they can also be added on the fly with [method navmesh_add]. In addition to basic pathfinding, this class also assists with aligning navigation agents with the meshes they are navigating on.
+--   Provides navigation and pathfinding within a collection of [NavigationMesh]es. By default, these will be automatically collected from child [NavigationMeshInstance] nodes, but they can also be added on the fly with [method navmesh_add]. In addition to basic pathfinding, this class also assists with aligning navigation agents with the meshes they are navigating on.
 newtype Navigation = Navigation Object
                        deriving newtype AsVariant
 
@@ -2971,7 +3249,7 @@ instance HasBaseClass Navigation where
         super = coerce
 
 -- | 2D navigation and pathfinding node.
---   Navigation2D provides navigation and pathfinding within a 2D area, specified as a collection of [NavigationPolygon] resources. By default these are automatically collected from child [NavigationPolygonInstance] nodes, but they can also be added on the fly with [method navpoly_add].
+--   Navigation2D provides navigation and pathfinding within a 2D area, specified as a collection of [NavigationPolygon] resources. By default, these are automatically collected from child [NavigationPolygonInstance] nodes, but they can also be added on the fly with [method navpoly_add].
 newtype Navigation2D = Navigation2D Object
                          deriving newtype AsVariant
 
@@ -2994,7 +3272,7 @@ instance HasBaseClass NavigationMeshInstance where
         super = coerce
 
 -- | A node that has methods to draw outlines or use indices of vertices to create navigation polygons.
---   There are two ways to create polygons. Either by using the [method add_outline] method or using the [method add_polygon] method.
+--   There are two ways to create polygons. Either by using the [method add_outline] method, or using the [method add_polygon] method.
 --   		Using [method add_outline]:
 --   		[codeblock]
 --   		var polygon = NavigationPolygon.new()
@@ -3043,7 +3321,7 @@ instance HasBaseClass NetworkedMultiplayerPeer where
         super = coerce
 
 -- | Scalable texture-based frame that tiles the texture's centers and sides, but keeps the corners' original size. Perfect for panels and dialog boxes.
---   Better known as 9-slice panels, NinePatchRect produces clean panels of any size, based on a small texture. To do so, it splits the texture in a 3 by 3 grid. When you scale the node, it tiles the texture's sides horizontally or vertically, the center on both axes but it doesn't scale or tile the corners.
+--   Also known as 9-slice panels, NinePatchRect produces clean panels of any size, based on a small texture. To do so, it splits the texture in a 3×3 grid. When you scale the node, it tiles the texture's sides horizontally or vertically, the center on both axes but it doesn't scale or tile the corners.
 newtype NinePatchRect = NinePatchRect Object
                           deriving newtype AsVariant
 
@@ -3062,7 +3340,7 @@ instance HasBaseClass NinePatchRect where
 --   		To keep track of the scene hierarchy (especially when instancing scenes into other scenes), an "owner" can be set for the node with the [member owner] property. This keeps track of who instanced what. This is mostly useful when writing editors and tools, though.
 --   		Finally, when a node is freed with [method Object.free] or [method queue_free], it will also free all its children.
 --   		[b]Groups:[/b] Nodes can be added to as many groups as you want to be easy to manage, you could create groups like "enemies" or "collectables" for example, depending on your game. See [method add_to_group], [method is_in_group] and [method remove_from_group]. You can then retrieve all nodes in these groups, iterate them and even call methods on groups via the methods on [SceneTree].
---   		[b]Networking with nodes:[/b] After connecting to a server (or making one, see [NetworkedMultiplayerENet]) it is possible to use the built-in RPC (remote procedure call) system to communicate over the network. By calling [method rpc] with a method name, it will be called locally and in all connected peers (peers = clients and the server that accepts connections). To identify which node receives the RPC call Godot will use its [NodePath] (make sure node names are the same on all peers). Also take a look at the high-level networking tutorial and corresponding demos.
+--   		[b]Networking with nodes:[/b] After connecting to a server (or making one, see [NetworkedMultiplayerENet]), it is possible to use the built-in RPC (remote procedure call) system to communicate over the network. By calling [method rpc] with a method name, it will be called locally and in all connected peers (peers = clients and the server that accepts connections). To identify which node receives the RPC call, Godot will use its [NodePath] (make sure node names are the same on all peers). Also, take a look at the high-level networking tutorial and corresponding demos.
 newtype Node = Node Object
                  deriving newtype AsVariant
 
@@ -3070,8 +3348,8 @@ instance HasBaseClass Node where
         type BaseClass Node = Object
         super = coerce
 
--- | A 2D game object, parent of all 2D related nodes. Has a position, rotation, scale and Z-index.
---   A 2D game object, with a position, rotation and scale. All 2D physics nodes and sprites inherit from Node2D. Use Node2D as a parent node to move, scale and rotate children in a 2D project. Also gives control on the node's render order.
+-- | A 2D game object, inherited by all 2D-related nodes. Has a position, rotation, scale, and Z index.
+--   A 2D game object, with a transform (position, rotation, and scale). All 2D nodes, including physics objects and sprites, inherit from Node2D. Use Node2D as a parent node to move, scale and rotate children in a 2D project. Also gives control of the node's render order.
 newtype Node2D = Node2D Object
                    deriving newtype AsVariant
 
@@ -3120,6 +3398,15 @@ instance HasBaseClass OptionButton where
         type BaseClass OptionButton = Button
         super = coerce
 
+-- | Creates packages that can be loaded into a running project.
+--   The [PCKPacker] is used to create packages that can be loaded into a running project using [method ProjectSettings.load_resource_pack].
+--   		[codeblock]
+--   		var packer = PCKPacker.new()
+--   		packer.pck_start("test.pck")
+--   		packer.add_file("res://text.txt", "text.txt")
+--   		packer.flush()
+--   		[/codeblock]
+--   		The above [PCKPacker] creates package [code]test.pck[/code], then adds a file named [code]text.txt[/code] at the root of the package.
 newtype PCKPacker = PCKPacker Object
                       deriving newtype AsVariant
 
@@ -3143,6 +3430,7 @@ instance HasBaseClass PackedDataContainer where
         type BaseClass PackedDataContainer = Resource
         super = coerce
 
+-- | Reference version of [PackedDataContainer].
 newtype PackedDataContainerRef = PackedDataContainerRef Object
                                    deriving newtype AsVariant
 
@@ -3152,26 +3440,36 @@ instance HasBaseClass PackedDataContainerRef where
 
 -- | An abstraction of a serialized scene.
 --   A simplified interface to a scene file. Provides access to operations and checks that can be performed on the scene resource itself.
---   		Can be used to save a node to a file. When saving, the node as well as all the node it owns get saved (see [code]owner[/code] property on [Node]). Note that the node doesn't need to own itself.
---   		Example of saving a node with different owners: The following example creates 3 objects: [code]Node2D[/code] ([code]node[/code]), [code]RigidBody2D[/code] ([code]rigid[/code]) and [code]CollisionObject2D[/code] ([code]collision[/code]). [code]collision[/code] is a child of [code]rigid[/code] which is a child of [code]node[/code]. Only [code]rigid[/code] is owned by [code]node[/code] and [code]pack[/code] will therefore only save those two nodes, but not [code]collision[/code].
+--   		Can be used to save a node to a file. When saving, the node as well as all the node it owns get saved (see [code]owner[/code] property on [Node]).
+--   		[b]Note:[/b] The node doesn't need to own itself.
+--   		[b]Example of loading a saved scene:[/b]
 --   		[codeblock]
---   		# create the objects
+--   		# Use `load()` instead of `preload()` if the path isn't known at compile-time.
+--   		var scene = preload("res://scene.tscn").instance()
+--   		# Add the node as a child of the node the script is attached to.
+--   		add_child(scene)
+--   		[/codeblock]
+--   		[b]Example of saving a node with different owners:[/b] The following example creates 3 objects: [code]Node2D[/code] ([code]node[/code]), [code]RigidBody2D[/code] ([code]rigid[/code]) and [code]CollisionObject2D[/code] ([code]collision[/code]). [code]collision[/code] is a child of [code]rigid[/code] which is a child of [code]node[/code]. Only [code]rigid[/code] is owned by [code]node[/code] and [code]pack[/code] will therefore only save those two nodes, but not [code]collision[/code].
+--   		[codeblock]
+--   		# Create the objects.
 --   		var node = Node2D.new()
 --   		var rigid = RigidBody2D.new()
 --   		var collision = CollisionShape2D.new()
 --   
---   		# create the object hierarchy
+--   		# Create the object hierarchy.
 --   		rigid.add_child(collision)
 --   		node.add_child(rigid)
 --   
---   		# change owner of rigid, but not of collision
+--   		# Change owner of `rigid`, but not of `collision`.
 --   		rigid.owner = node
 --   
 --   		var scene = PackedScene.new()
---   		# only node and rigid are now packed
+--   		# Only `node` and `rigid` are now packed.
 --   		var result = scene.pack(node)
 --   		if result == OK:
---   		    ResourceSaver.save("res://path/name.scn", scene) # or user://...
+--   		    var error = ResourceSaver.save("res://path/name.scn", scene)  # Or "user://..."
+--   		    if error != OK:
+--   		        push_error("An error occurred while saving the scene to disk.")
 --   		[/codeblock]
 newtype PackedScene = PackedScene Object
                         deriving newtype AsVariant
@@ -3181,7 +3479,7 @@ instance HasBaseClass PackedScene where
         super = coerce
 
 -- | Abstraction and base class for packet-based protocols.
---   PacketPeer is an abstraction and base class for packet-based protocols (such as UDP). It provides an API for sending and receiving packets both as raw data or variables. This makes it easy to transfer data over a protocol, without having to encode data as low level bytes or having to worry about network ordering.
+--   PacketPeer is an abstraction and base class for packet-based protocols (such as UDP). It provides an API for sending and receiving packets both as raw data or variables. This makes it easy to transfer data over a protocol, without having to encode data as low-level bytes or having to worry about network ordering.
 newtype PacketPeer = PacketPeer Object
                        deriving newtype AsVariant
 
@@ -3233,7 +3531,9 @@ instance HasBaseClass PanelContainer where
         super = coerce
 
 -- | A type of [Sky] used to draw a background texture.
---   A resource referenced in an [Environment] that is used to draw a background. The Panorama sky functions similar to skyboxes in other engines except it uses a equirectangular sky map instead of a cube map.
+--   A resource referenced in an [Environment] that is used to draw a background. The Panorama sky functions similar to skyboxes in other engines, except it uses an equirectangular sky map instead of a cube map.
+--   		Using an HDR panorama is strongly recommended for accurate, high-quality reflections. Godot supports the Radiance HDR ([code].hdr[/code]) and OpenEXR ([code].exr[/code]) image formats for this purpose.
+--   		You can use [url=https://danilw.github.io/GLSL-howto/cubemap_to_panorama_js/cubemap_to_panorama.html]this tool[/url] to convert a cube map to an equirectangular sky map.
 newtype PanoramaSky = PanoramaSky Object
                         deriving newtype AsVariant
 
@@ -3253,7 +3553,7 @@ instance HasBaseClass ParallaxBackground where
 -- | A parallax scrolling layer to be used with [ParallaxBackground].
 --   A ParallaxLayer must be the child of a [ParallaxBackground] node. Each ParallaxLayer can be set to move at different speeds relative to the camera movement or the [member ParallaxBackground.scroll_offset] value.
 --   		This node's children will be affected by its scroll offset.
---   		Note that any changes to this node's position and scale made after it enters the scene will be ignored.
+--   		[b]Note:[/b] Any changes to this node's position and scale made after it enters the scene will be ignored.
 newtype ParallaxLayer = ParallaxLayer Object
                           deriving newtype AsVariant
 
@@ -3262,7 +3562,7 @@ instance HasBaseClass ParallaxLayer where
         super = coerce
 
 -- | 3D particle emitter.
---   3D particle node used to create a variety of particle systems and effects. [code]Particles[/code] features an emitter that generates some number of particles at a given rate.
+--   3D particle node used to create a variety of particle systems and effects. [Particles] features an emitter that generates some number of particles at a given rate.
 --   		Use the [code]process_material[/code] property to add a [ParticlesMaterial] to configure particle appearance and behavior. Alternatively, you can add a [ShaderMaterial] which will be applied to all particles.
 newtype Particles = Particles Object
                       deriving newtype AsVariant
@@ -3272,7 +3572,7 @@ instance HasBaseClass Particles where
         super = coerce
 
 -- | 2D particle emitter.
---   2D particle node used to create a variety of particle systems and effects. [code]Particles2D[/code] features an emitter that generates some number of particles at a given rate.
+--   2D particle node used to create a variety of particle systems and effects. [Particles2D] features an emitter that generates some number of particles at a given rate.
 --   		Use the [code]process_material[/code] property to add a [ParticlesMaterial] to configure particle appearance and behavior. Alternatively, you can add a [ShaderMaterial] which will be applied to all particles.
 newtype Particles2D = Particles2D Object
                         deriving newtype AsVariant
@@ -3303,8 +3603,8 @@ instance HasBaseClass Path where
         super = coerce
 
 -- | Contains a [Curve2D] path for [PathFollow2D] nodes to follow.
---   Can have [PathFollow2D] child nodes moving along the [Curve2D]. See [PathFollow2D] for more information on the usage.
---   		Note that the path is considered as relative to the moved nodes (children of [PathFollow2D]). As such, the curve should usually start with a zero vector [code](0, 0)[/code].
+--   Can have [PathFollow2D] child nodes moving along the [Curve2D]. See [PathFollow2D] for more information on usage.
+--   		[b]Note:[/b] The path is considered as relative to the moved nodes (children of [PathFollow2D]). As such, the curve should usually start with a zero vector ([code](0, 0)[/code]).
 newtype Path2D = Path2D Object
                    deriving newtype AsVariant
 
@@ -3314,7 +3614,7 @@ instance HasBaseClass Path2D where
 
 -- | Point sampler for a [Path].
 --   This node takes its parent [Path], and returns the coordinates of a point within it, given a distance from the first vertex.
---   		It is useful for making other nodes follow a path, without coding the movement pattern. For that, the nodes must be descendants of this node. Then, when setting an offset in this node, the descendant nodes will move accordingly.
+--   		It is useful for making other nodes follow a path, without coding the movement pattern. For that, the nodes must be children of this node. The descendant nodes will then move accordingly when setting an offset in this node.
 newtype PathFollow = PathFollow Object
                        deriving newtype AsVariant
 
@@ -3324,7 +3624,7 @@ instance HasBaseClass PathFollow where
 
 -- | Point sampler for a [Path2D].
 --   This node takes its parent [Path2D], and returns the coordinates of a point within it, given a distance from the first vertex.
---   		It is useful for making other nodes follow a path, without coding the movement pattern. For that, the nodes must be descendants of this node. Then, when setting an offset in this node, the descendant nodes will move accordingly.
+--   		It is useful for making other nodes follow a path, without coding the movement pattern. For that, the nodes must be children of this node. The descendant nodes will then move accordingly when setting an offset in this node.
 newtype PathFollow2D = PathFollow2D Object
                          deriving newtype AsVariant
 
@@ -3333,8 +3633,9 @@ instance HasBaseClass PathFollow2D where
         super = coerce
 
 -- | Exposes performance-related data.
---   This class provides access to a number of different monitors related to performance, such as memory usage, draw calls, and FPS. These are the same as the values displayed in the [i]Monitor[/i] tab in the editor's [i]Debugger[/i] panel. By using the [method get_monitor] method of this class, you can access this data from your code. Note that a few of these monitors are only available in debug mode and will always return 0 when used in a release build.
---   		Many of these monitors are not updated in real-time, so there may be a short delay between changes.
+--   This class provides access to a number of different monitors related to performance, such as memory usage, draw calls, and FPS. These are the same as the values displayed in the [b]Monitor[/b] tab in the editor's [b]Debugger[/b] panel. By using the [method get_monitor] method of this class, you can access this data from your code.
+--   		[b]Note:[/b] A few of these monitors are only available in debug mode and will always return 0 when used in a release build.
+--   		[b]Note:[/b] Many of these monitors are not updated in real-time, so there may be a short delay between changes.
 newtype Performance = Performance Object
                         deriving newtype AsVariant
 
@@ -3358,8 +3659,6 @@ instance HasBaseClass Physics2DDirectBodyState where
         type BaseClass Physics2DDirectBodyState = Object
         super = coerce
 
--- | Software implementation of [Physics2DDirectBodyState].
---    This object exposes no new methods or properties and should not be used, as [Physics2DDirectBodyState] selects the best implementation available.
 newtype Physics2DDirectBodyStateSW = Physics2DDirectBodyStateSW Object
                                        deriving newtype AsVariant
 
@@ -3377,8 +3676,8 @@ instance HasBaseClass Physics2DDirectSpaceState where
         type BaseClass Physics2DDirectSpaceState = Object
         super = coerce
 
--- | Physics 2D Server.
---   Physics 2D Server is the server responsible for all 2D physics. It can create many kinds of physics objects, but does not insert them on the node tree.
+-- | Server interface for low-level 2D physics access.
+--   Physics2DServer is the server responsible for all 2D physics. It can create many kinds of physics objects, but does not insert them on the node tree.
 newtype Physics2DServer = Physics2DServer Object
                             deriving newtype AsVariant
 
@@ -3386,8 +3685,6 @@ instance HasBaseClass Physics2DServer where
         type BaseClass Physics2DServer = Object
         super = coerce
 
--- | Software implementation of [Physics2DServer].
---   This class exposes no new methods or properties and should not be used, as [Physics2DServer] automatically selects the best implementation available.
 newtype Physics2DServerSW = Physics2DServerSW Object
                               deriving newtype AsVariant
 
@@ -3396,7 +3693,7 @@ instance HasBaseClass Physics2DServerSW where
         super = coerce
 
 -- | Parameters to be sent to a 2D shape physics query.
---   This class contains the shape and other parameters for intersection/collision queries.
+--   This class contains the shape and other parameters for 2D intersection/collision queries. See also [Physics2DShapeQueryResult].
 newtype Physics2DShapeQueryParameters = Physics2DShapeQueryParameters Object
                                           deriving newtype AsVariant
 
@@ -3404,6 +3701,8 @@ instance HasBaseClass Physics2DShapeQueryParameters where
         type BaseClass Physics2DShapeQueryParameters = Reference
         super = coerce
 
+-- | Result of a 2D shape query in [Physics2DServer].
+--   The result of a 2D shape query in [Physics2DServer]. See also [Physics2DShapeQueryParameters].
 newtype Physics2DShapeQueryResult = Physics2DShapeQueryResult Object
                                       deriving newtype AsVariant
 
@@ -3463,8 +3762,8 @@ instance HasBaseClass PhysicsMaterial where
         type BaseClass PhysicsMaterial = Resource
         super = coerce
 
--- | Server interface for low level physics access.
---   Everything related to physics in 3D.
+-- | Server interface for low-level physics access.
+--   PhysicsServer is the server responsible for all 3D physics. It can create many kinds of physics objects, but does not insert them on the node tree.
 newtype PhysicsServer = PhysicsServer Object
                           deriving newtype AsVariant
 
@@ -3472,6 +3771,8 @@ instance HasBaseClass PhysicsServer where
         type BaseClass PhysicsServer = Object
         super = coerce
 
+-- | Parameters to be sent to a 3D shape physics query.
+--   This class contains the shape and other parameters for 3D intersection/collision queries. See also [PhysicsShapeQueryResult].
 newtype PhysicsShapeQueryParameters = PhysicsShapeQueryParameters Object
                                         deriving newtype AsVariant
 
@@ -3479,7 +3780,8 @@ instance HasBaseClass PhysicsShapeQueryParameters where
         type BaseClass PhysicsShapeQueryParameters = Reference
         super = coerce
 
--- | Result of a shape query in Physics2DServer.
+-- | Result of a 3D shape query in [PhysicsServer].
+--   The result of a 3D shape query in [PhysicsServer]. See also [PhysicsShapeQueryParameters].
 newtype PhysicsShapeQueryResult = PhysicsShapeQueryResult Object
                                     deriving newtype AsVariant
 
@@ -3487,8 +3789,8 @@ instance HasBaseClass PhysicsShapeQueryResult where
         type BaseClass PhysicsShapeQueryResult = Reference
         super = coerce
 
--- | Pin Joint for 3D Shapes.
---   Pin Joint for 3D Rigid Bodies. It pins 2 bodies (rigid or static) together.
+-- | Pin joint for 3D shapes.
+--   Pin joint for 3D rigid bodies. It pins 2 bodies (rigid or static) together.
 newtype PinJoint = PinJoint Object
                      deriving newtype AsVariant
 
@@ -3496,8 +3798,8 @@ instance HasBaseClass PinJoint where
         type BaseClass PinJoint = Joint
         super = coerce
 
--- | Pin Joint for 2D Shapes.
---   Pin Joint for 2D Rigid Bodies. It pins two bodies (rigid or static) together.
+-- | Pin Joint for 2D shapes.
+--   Pin Joint for 2D rigid bodies. It pins two bodies (rigid or static) together.
 newtype PinJoint2D = PinJoint2D Object
                        deriving newtype AsVariant
 
@@ -3514,6 +3816,8 @@ instance HasBaseClass PlaneMesh where
         type BaseClass PlaneMesh = PrimitiveMesh
         super = coerce
 
+-- | Infinite plane shape for 3D collisions.
+--   An infinite plane shape for 3D collisions. Note that the [Plane]'s normal matters; anything "below" the plane will collide with it. If the [PlaneShape] is used in a [PhysicsBody], it will cause colliding objects placed "below" it to teleport "above" the plane.
 newtype PlaneShape = PlaneShape Object
                        deriving newtype AsVariant
 
@@ -3528,6 +3832,10 @@ instance HasBaseClass PluginScript where
         type BaseClass PluginScript = Script
         super = coerce
 
+-- | Mesh with a single Point primitive.
+--   The PointMesh is made from a single point. Instead of relying on triangles, points are rendered as a single rectangle on the screen with a constant size. They are intended to be used with Particle systems, but can be used as a cheap way to render constant size billboarded sprites (for example in a point cloud).
+--   		PointMeshes, must be used with a material that has a point size. Point size can be accessed in a shader with [code]POINT_SIZE[/code], or in a [SpatialMaterial] by setting [member SpatialMaterial.flags_use_point_size] and the variable [member SpatialMaterial.params_point_size].
+--   		When using PointMeshes, properties that normally alter vertices will be ignored, including billboard mode, grow, and cull face.
 newtype PointMesh = PointMesh Object
                       deriving newtype AsVariant
 
@@ -3537,6 +3845,7 @@ instance HasBaseClass PointMesh where
 
 -- | A 2D polygon.
 --   A Polygon2D is defined by a set of points. Each point is connected to the next, with the final point being connected to the first, resulting in a closed polygon. Polygon2Ds can be filled with color (solid or gradient) or filled with a given texture.
+--   		[b]Note:[/b] By default, Godot can only draw up to 4,096 polygon points at a time. To increase this limit, open the Project Settings and increase [member ProjectSettings.rendering/limits/buffers/canvas_polygon_buffer_size_kb] and [member ProjectSettings.rendering/limits/buffers/canvas_polygon_index_buffer_size_kb].
 newtype Polygon2D = Polygon2D Object
                       deriving newtype AsVariant
 
@@ -3552,7 +3861,7 @@ instance HasBaseClass PolygonPathFinder where
         super = coerce
 
 -- | Base container control for popups and dialogs.
---   Popup is a base [Control] used to show dialogs and popups. It's a subwindow and modal by default (see [Control]) and has helpers for custom popup behavior.
+--   Popup is a base [Control] used to show dialogs and popups. It's a subwindow and modal by default (see [Control]) and has helpers for custom popup behavior. All popup methods ensure correct placement within the viewport.
 newtype Popup = Popup Object
                   deriving newtype AsVariant
 
@@ -3560,7 +3869,7 @@ instance HasBaseClass Popup where
         type BaseClass Popup = Control
         super = coerce
 
--- | Base class for Popup Dialogs.
+-- | Base class for popup dialogs.
 --   PopupDialog is a base class for popup dialogs, along with [WindowDialog].
 newtype PopupDialog = PopupDialog Object
                         deriving newtype AsVariant
@@ -3587,8 +3896,8 @@ instance HasBaseClass PopupPanel where
         type BaseClass PopupPanel = Popup
         super = coerce
 
--- | Generic 2D Position hint for editing.
---    It's just like a plain [Node2D] but displays as a cross in the 2D-Editor at all times.
+-- | Generic 2D position hint for editing.
+--    It's just like a plain [Node2D], but it displays as a cross in the 2D editor at all times. You can set cross' visual size by using the gizmo in the 2D editor while the node is selected.
 newtype Position2D = Position2D Object
                        deriving newtype AsVariant
 
@@ -3596,8 +3905,8 @@ instance HasBaseClass Position2D where
         type BaseClass Position2D = Node2D
         super = coerce
 
--- | Generic 3D Position hint for editing.
---    It's just like a plain [Spatial] but displays as a cross in the 3D-Editor at all times.
+-- | Generic 3D position hint for editing.
+--    It's just like a plain [Spatial], but it displays as a cross in the 3D editor at all times.
 newtype Position3D = Position3D Object
                        deriving newtype AsVariant
 
@@ -3623,8 +3932,8 @@ instance HasBaseClass PrismMesh where
         super = coerce
 
 -- | Type of [Sky] that is generated procedurally based on user input parameters.
---   ProceduralSky provides a way to create an effective background quickly by defining procedural parameters for the sun, the sky and the ground. The sky and ground are very similar, they are defined by a color at the horizon, another color, and finally an easing curve to interpolate between these two colors. Similarly the sun is described by a position in the sky, a color, and an easing curve. However, the sun also defines a minimum and maximum angle, these two values define at what distance the easing curve begins and ends from the sun, and thus end up defining the size of the sun in the sky.
---   		The ProceduralSky is updated on the CPU after the parameters change and stored in a texture and then displayed as a background in the scene. This makes it relatively unsuitable for realtime updates during gameplay. But with a small texture size it is still feasible to update relatively frequently because it is updated on a background thread when multi-threading is available.
+--   ProceduralSky provides a way to create an effective background quickly by defining procedural parameters for the sun, the sky and the ground. The sky and ground are very similar, they are defined by a color at the horizon, another color, and finally an easing curve to interpolate between these two colors. Similarly, the sun is described by a position in the sky, a color, and an easing curve. However, the sun also defines a minimum and maximum angle, these two values define at what distance the easing curve begins and ends from the sun, and thus end up defining the size of the sun in the sky.
+--   		The ProceduralSky is updated on the CPU after the parameters change. It is stored in a texture and then displayed as a background in the scene. This makes it relatively unsuitable for real-time updates during gameplay. However, with a small enough texture size, it can still be updated relatively frequently, as it is updated on a background thread when multi-threading is available.
 newtype ProceduralSky = ProceduralSky Object
                           deriving newtype AsVariant
 
@@ -3632,7 +3941,7 @@ instance HasBaseClass ProceduralSky where
         type BaseClass ProceduralSky = Sky
         super = coerce
 
--- | General purpose progress bar.
+-- | General-purpose progress bar.
 --    Shows fill percentage from right to left.
 newtype ProgressBar = ProgressBar Object
                         deriving newtype AsVariant
@@ -3643,6 +3952,8 @@ instance HasBaseClass ProgressBar where
 
 -- | Contains global variables accessible from everywhere.
 --    Use [method get_setting], [method set_setting] or [method has_setting] to access them. Variables stored in [code]project.godot[/code] are also loaded into ProjectSettings, making this object very useful for reading custom game configuration options.
+--   		When naming a Project Settings property, use the full path to the setting including the category. For example, [code]"application/config/name"[/code] for the project name. Category and property names can be viewed in the Project Settings dialog.
+--   		[b]Overriding:[/b] Any project setting can be overridden by creating a file named [code]override.cfg[/code] in the project's root directory. This can also be used in exported projects by placing this file in the same directory as the project binary.
 newtype ProjectSettings = ProjectSettings Object
                             deriving newtype AsVariant
 
@@ -3650,7 +3961,7 @@ instance HasBaseClass ProjectSettings where
         type BaseClass ProjectSettings = Object
         super = coerce
 
--- | General purpose proximity-detection node.
+-- | General-purpose proximity detection node.
 newtype ProximityGroup = ProximityGroup Object
                            deriving newtype AsVariant
 
@@ -3692,7 +4003,7 @@ instance HasBaseClass RandomNumberGenerator where
         super = coerce
 
 -- | Abstract base class for range-based controls.
---   Range is a base class for [Control] nodes that change a floating point [i]value[/i] between a [i]minimum[/i] and a [i]maximum[/i], using [i]step[/i] and [i]page[/i], for example a [ScrollBar].
+--   Range is a base class for [Control] nodes that change a floating-point [i]value[/i] between a [i]minimum[/i] and a [i]maximum[/i], using [i]step[/i] and [i]page[/i], for example a [ScrollBar].
 newtype Range = Range Object
                   deriving newtype AsVariant
 
@@ -3727,7 +4038,7 @@ instance HasBaseClass RayCast2D where
         super = coerce
 
 -- | Ray shape for 3D collisions.
---   Ray shape for 3D collisions, which can be set into a [PhysicsBody] or [Area]. A ray is not really a collision body, instead it tries to separate itself from whatever is touching its far endpoint. It's often useful for characters.
+--   Ray shape for 3D collisions, which can be set into a [PhysicsBody] or [Area]. A ray is not really a collision body; instead, it tries to separate itself from whatever is touching its far endpoint. It's often useful for characters.
 newtype RayShape = RayShape Object
                      deriving newtype AsVariant
 
@@ -3736,7 +4047,7 @@ instance HasBaseClass RayShape where
         super = coerce
 
 -- | Ray shape for 2D collisions.
---    A ray is not really a collision body, instead it tries to separate itself from whatever is touching its far endpoint. It's often useful for characters.
+--    A ray is not really a collision body; instead, it tries to separate itself from whatever is touching its far endpoint. It's often useful for characters.
 newtype RayShape2D = RayShape2D Object
                        deriving newtype AsVariant
 
@@ -3755,7 +4066,7 @@ instance HasBaseClass RectangleShape2D where
 
 -- | Base class for reference-counted objects.
 --   Base class for any object that keeps a reference count. [Resource] and many other helper objects inherit this class.
---   		References keep an internal reference counter so that they are automatically released when no longer in use, and only then. References therefore do not need to be freed manually with [method Object.free].
+--   		Unlike [Object]s, References keep an internal reference counter so that they are automatically released when no longer in use, and only then. References therefore do not need to be freed manually with [method Object.free].
 --   		In the vast majority of use cases, instantiating and using [Reference]-derived types is all you need to do. The methods provided in this class are only for advanced users, and can cause issues if misused.
 newtype Reference = Reference Object
                       deriving newtype AsVariant
@@ -3765,7 +4076,7 @@ instance HasBaseClass Reference where
         super = coerce
 
 -- | Reference frame for GUI.
---    It's just like an empty control, except an outline border [member border_color] is displayed while editing around its size at all times.
+--   A rectangle box that displays only a [member border_color] border color around its rectangle. [ReferenceRect] has no fill [Color].
 newtype ReferenceRect = ReferenceRect Object
                           deriving newtype AsVariant
 
@@ -3773,6 +4084,10 @@ instance HasBaseClass ReferenceRect where
         type BaseClass ReferenceRect = Control
         super = coerce
 
+-- | Captures its surroundings to create reflections.
+--   Capture its surroundings as a dual paraboloid image, and stores versions of it with increasing levels of blur to simulate different material roughnesses.
+--   		The [ReflectionProbe] is used to create high-quality reflections at the cost of performance. It can be combined with [GIProbe]s and Screen Space Reflections to achieve high quality reflections. [ReflectionProbe]s render all objects within their [member cull_mask], so updating them can be quite expensive. It is best to update them once with the important static objects and then leave them.
+--   		Note: By default Godot will only render 16 reflection probes. If you need more, increase the number of atlas subdivisions. This setting can be found in [member ProjectSettings.rendering/quality/reflections/atlas_subdiv].
 newtype ReflectionProbe = ReflectionProbe Object
                             deriving newtype AsVariant
 
@@ -3815,7 +4130,7 @@ instance HasBaseClass RemoteTransform2D where
         super = coerce
 
 -- | Base class for all resources.
---   Resource is the base class for all Godot-specific resource types, serving primarily as data containers. They are reference counted and freed when no longer in use. They are also cached once loaded from disk, so that any further attempts to load a resource from a given path will return the same reference (all this in contrast to a [Node], which is not reference counted and can be instanced from disk as many times as desired). Resources can be saved externally on disk or bundled into another object, such as a [Node] or another resource.
+--   Resource is the base class for all Godot-specific resource types, serving primarily as data containers. Unlike [Object]s, they are reference-counted and freed when no longer in use. They are also cached once loaded from disk, so that any further attempts to load a resource from a given path will return the same reference (all this in contrast to a [Node], which is not reference-counted and can be instanced from disk as many times as desired). Resources can be saved externally on disk or bundled into another object, such as a [Node] or another resource.
 newtype Resource = Resource Object
                      deriving newtype AsVariant
 
@@ -3826,7 +4141,7 @@ instance HasBaseClass Resource where
 -- | Loads a specific resource type from a file.
 --   Godot loads resources in the editor or in exported games using ResourceFormatLoaders. They are queried automatically via the [ResourceLoader] singleton, or when a resource with internal dependencies is loaded. Each file type may load as a different resource type, so multiple ResourceFormatLoaders are registered in the engine.
 --   		Extending this class allows you to define your own loader. Be sure to respect the documented return types and values. You should give it a global class name with [code]class_name[/code] for it to be registered. Like built-in ResourceFormatLoaders, it will be called automatically when loading resources of its handled type(s). You may also implement a [ResourceFormatSaver].
---   		Note: You can also extend [EditorImportPlugin] if the resource type you need exists but Godot is unable to load its format. Choosing one way over another depends if the format is suitable or not for the final exported game. For example, it's better to import [code].png[/code] textures as [code].stex[/code] ([StreamTexture]) first, so they can be loaded with better efficiency on the graphics card.
+--   		[b]Note:[/b] You can also extend [EditorImportPlugin] if the resource type you need exists but Godot is unable to load its format. Choosing one way over another depends if the format is suitable or not for the final exported game. For example, it's better to import [code].png[/code] textures as [code].stex[/code] ([StreamTexture]) first, so they can be loaded with better efficiency on the graphics card.
 newtype ResourceFormatLoader = ResourceFormatLoader Object
                                  deriving newtype AsVariant
 
@@ -3866,7 +4181,7 @@ instance HasBaseClass ResourceImporter where
         super = coerce
 
 -- | Interactive [Resource] loader.
---    This object is returned by [ResourceLoader] when performing an interactive load. It allows to load with high granularity, so this is mainly useful for displaying loading bars/percentages.
+--    This object is returned by [ResourceLoader] when performing an interactive load. It allows loading resources with high granularity, which makes it mainly useful for displaying loading bars or percentages.
 newtype ResourceInteractiveLoader = ResourceInteractiveLoader Object
                                       deriving newtype AsVariant
 
@@ -3884,6 +4199,14 @@ instance HasBaseClass ResourcePreloader where
         type BaseClass ResourcePreloader = Node
         super = coerce
 
+-- | A custom effect for use with [RichTextLabel].
+--   
+--   		[b]Note:[/b] For a [RichTextEffect] to be usable, a BBCode tag must be defined as a member variable called [code]bbcode[/code] in the script.
+--   		[codeblock]
+--   		# The RichTextEffect will be usable like this: `[example]Some text[/example]`
+--   		var bbcode = "example"
+--   		[/codeblock]
+--   		[b]Note:[/b] As soon as a [RichTextLabel] contains at least one [RichTextEffect], it will continuously process the effect unless the project is paused. This may impact battery life negatively.
 newtype RichTextEffect = RichTextEffect Object
                            deriving newtype AsVariant
 
@@ -3893,7 +4216,8 @@ instance HasBaseClass RichTextEffect where
 
 -- | Label that displays rich text.
 --   Rich text can contain custom text, fonts, images and some basic formatting. The label manages these as an internal tag stack. It also adapts itself to given width/heights.
---   		Note that assignments to [member bbcode_text] clear the tag stack and reconstruct it from the property's contents. Any edits made to [member bbcode_text] will erase previous edits made from other manual sources such as [method append_bbcode] and the [code]push_*[/code] / [method pop] methods.
+--   		[b]Note:[/b] Assignments to [member bbcode_text] clear the tag stack and reconstruct it from the property's contents. Any edits made to [member bbcode_text] will erase previous edits made from other manual sources such as [method append_bbcode] and the [code]push_*[/code] / [method pop] methods.
+--   		[b]Note:[/b] Unlike [Label], RichTextLabel doesn't have a [i]property[/i] to horizontally align text to the center. Instead, enable [member bbcode_enabled] and surround the text in a [code][center][/code] tag as follows: [code][center]Example[/center][/code]. There is currently no built-in way to vertically align text either, but this can be emulated by relying on anchors/containers and the [member fit_content_height] property.
 newtype RichTextLabel = RichTextLabel Object
                           deriving newtype AsVariant
 
@@ -3902,10 +4226,11 @@ instance HasBaseClass RichTextLabel where
         super = coerce
 
 -- | Physics Body whose position is determined through physics simulation in 3D space.
---   This is the node that implements full 3D physics. This means that you do not control a RigidBody directly. Instead you can apply forces to it (gravity, impulses, etc.), and the physics simulation will calculate the resulting movement, collision, bouncing, rotating, etc.
+--   This is the node that implements full 3D physics. This means that you do not control a RigidBody directly. Instead, you can apply forces to it (gravity, impulses, etc.), and the physics simulation will calculate the resulting movement, collision, bouncing, rotating, etc.
 --   		A RigidBody has 4 behavior [member mode]s: Rigid, Static, Character, and Kinematic.
---   		[b]Note:[/b] Don't change a RigidBody's position every frame or very often. Sporadic changes work fine, but physics runs at a different granularity (fixed hz) than usual rendering (process callback) and maybe even in a separate thread, so changing this from a process loop will yield strange behavior. If you need to directly affect the body's state, use [method _integrate_forces], which allows you to directly access the physics state.
---   		If you need to override the default physics behavior, you can write a custom force integration. See [member custom_integrator].
+--   		[b]Note:[/b] Don't change a RigidBody's position every frame or very often. Sporadic changes work fine, but physics runs at a different granularity (fixed Hz) than usual rendering (process callback) and maybe even in a separate thread, so changing this from a process loop may result in strange behavior. If you need to directly affect the body's state, use [method _integrate_forces], which allows you to directly access the physics state.
+--   		If you need to override the default physics behavior, you can write a custom force integration function. See [member custom_integrator].
+--   		With Bullet physics (the default), the center of mass is the RigidBody3D center. With GodotPhysics, the center of mass is the average of the [CollisionShape] centers.
 newtype RigidBody = RigidBody Object
                       deriving newtype AsVariant
 
@@ -3919,6 +4244,7 @@ instance HasBaseClass RigidBody where
 --   		[b]Note:[/b] You should not change a RigidBody2D's [code]position[/code] or [code]linear_velocity[/code] every frame or even very often. If you need to directly affect the body's state, use [method _integrate_forces], which allows you to directly access the physics state.
 --   		Please also keep in mind that physics bodies manage their own transform which overwrites the ones you set. So any direct or indirect transformation (including scaling of the node or its parent) will be visible in the editor only, and immediately reset at runtime.
 --   		If you need to override the default physics behavior or add a transformation at runtime, you can write a custom force integration. See [member custom_integrator].
+--   		The center of mass is always located at the node's origin without taking into account the [CollisionShape2D] centroid offsets.
 newtype RigidBody2D = RigidBody2D Object
                         deriving newtype AsVariant
 
@@ -3944,9 +4270,9 @@ instance HasBaseClass SceneState where
         super = coerce
 
 -- | Manages the game loop via a hierarchy of nodes.
---   As one of the most important classes, the [code]SceneTree[/code] manages the hierarchy of nodes in a scene as well as scenes themselves. Nodes can be added, retrieved and removed. The whole scene tree (and thus the current scene) can be paused. Scenes can be loaded, switched and reloaded.
---   		You can also use the [code]SceneTree[/code] to organize your nodes into groups: every node can be assigned as many groups as you want to create, e.g. a "enemy" group. You can then iterate these groups or even call methods and set properties on all the group's members at once.
---   		[code]SceneTree[/code] is the default [MainLoop] implementation used by scenes, and is thus in charge of the game loop.
+--   As one of the most important classes, the [SceneTree] manages the hierarchy of nodes in a scene as well as scenes themselves. Nodes can be added, retrieved and removed. The whole scene tree (and thus the current scene) can be paused. Scenes can be loaded, switched and reloaded.
+--   		You can also use the [SceneTree] to organize your nodes into groups: every node can be assigned as many groups as you want to create, e.g. a "enemy" group. You can then iterate these groups or even call methods and set properties on all the group's members at once.
+--   		[SceneTree] is the default [MainLoop] implementation used by scenes, and is thus in charge of the game loop.
 newtype SceneTree = SceneTree Object
                       deriving newtype AsVariant
 
@@ -3959,9 +4285,9 @@ instance HasBaseClass SceneTree where
 --   		As opposed to [Timer], it does not require the instantiation of a node. Commonly used to create a one-shot delay timer as in the following example:
 --   		[codeblock]
 --   		func some_function():
---   			print("start")
---   			yield(get_tree().create_timer(1.0), "timeout")
---   			print("end")
+--   		    print("Timer started.")
+--   		    yield(get_tree().create_timer(1.0), "timeout")
+--   		    print("Timer ended.")
 --   		[/codeblock]
 newtype SceneTreeTimer = SceneTreeTimer Object
                            deriving newtype AsVariant
@@ -3971,7 +4297,7 @@ instance HasBaseClass SceneTreeTimer where
         super = coerce
 
 -- | A class stored as a resource.
---    A script exends the functionality of all objects that instance it.
+--    A script extends the functionality of all objects that instance it.
 --   		The [code]new[/code] method of a script subclass creates a new instance. [method Object.set_script] extends an existing object, if that object's class matches one of the script's base classes.
 newtype Script = Script Object
                    deriving newtype AsVariant
@@ -3981,11 +4307,11 @@ instance HasBaseClass Script where
         super = coerce
 
 -- | The Editor's popup dialog for creating new [Script] files.
---   The [code]ScriptCreateDialog[/code] creates script files according to a given template for a given scripting language. The standard use is to configure its fields prior to calling one of the [method Popup.popup] methods.
+--   The [ScriptCreateDialog] creates script files according to a given template for a given scripting language. The standard use is to configure its fields prior to calling one of the [method Popup.popup] methods.
 --   		[codeblock]
 --   		func _ready():
---   		    dialog.config("Node", "res://new_node.gd") # for in-engine types
---   		    dialog.config("\"res://base_node.gd\"", "res://derived_node.gd") # for script types
+--   		    dialog.config("Node", "res://new_node.gd") # For in-engine types
+--   		    dialog.config("\"res://base_node.gd\"", "res://derived_node.gd") # For script types
 --   		    dialog.popup_centered()
 --   		[/codeblock]
 newtype ScriptCreateDialog = ScriptCreateDialog Object
@@ -3995,6 +4321,8 @@ instance HasBaseClass ScriptCreateDialog where
         type BaseClass ScriptCreateDialog = ConfirmationDialog
         super = coerce
 
+-- | Godot editor's script editor.
+--   [b]Note:[/b] This class shouldn't be instantiated directly. Instead, access the singleton using [method EditorInterface.get_script_editor].
 newtype ScriptEditor = ScriptEditor Object
                          deriving newtype AsVariant
 
@@ -4003,7 +4331,7 @@ instance HasBaseClass ScriptEditor where
         super = coerce
 
 -- | Base class for scroll bars.
---   Scrollbars are a [Range] based [Control], that display a draggable area (the size of the page). Horizontal ([HScrollBar]) and Vertical ([VScrollBar]) versions are available.
+--   Scrollbars are a [Range]-based [Control], that display a draggable area (the size of the page). Horizontal ([HScrollBar]) and Vertical ([VScrollBar]) versions are available.
 newtype ScrollBar = ScrollBar Object
                       deriving newtype AsVariant
 
@@ -4011,8 +4339,8 @@ instance HasBaseClass ScrollBar where
         type BaseClass ScrollBar = Range
         super = coerce
 
--- | A helper node for displaying scrollable elements (e.g. lists).
---   A ScrollContainer node meant to contain a [Control] child. ScrollContainers will automatically create a scrollbar child ([HScrollBar], [VScrollBar], or both) when needed and will only draw the Control within the ScrollContainer area. Scrollbars will automatically be drawn at the right (for vertical) or bottom (for horizontal) and will enable dragging to move the viewable Control (and its children) within the ScrollContainer. Scrollbars will also automatically resize the grabber based on the minimum_size of the Control relative to the ScrollContainer. Works great with a [Panel] control. You can set EXPAND on children size flags, so they will upscale to ScrollContainer size if ScrollContainer size is bigger (scroll is invisible for chosen dimension).
+-- | A helper node for displaying scrollable elements such as lists.
+--   A ScrollContainer node meant to contain a [Control] child. ScrollContainers will automatically create a scrollbar child ([HScrollBar], [VScrollBar], or both) when needed and will only draw the Control within the ScrollContainer area. Scrollbars will automatically be drawn at the right (for vertical) or bottom (for horizontal) and will enable dragging to move the viewable Control (and its children) within the ScrollContainer. Scrollbars will also automatically resize the grabber based on the [member Control.rect_min_size] of the Control relative to the ScrollContainer. Works great with a [Panel] control. You can set [code]EXPAND[/code] on the children's size flags, so they will upscale to the ScrollContainer's size if it's larger (scroll is invisible for the chosen dimension).
 newtype ScrollContainer = ScrollContainer Object
                             deriving newtype AsVariant
 
@@ -4039,7 +4367,7 @@ instance HasBaseClass Separator where
         super = coerce
 
 -- | A custom shader program.
---   This class allows you to define a custom shader program that can be used for various materials to render objects.
+--   This class allows you to define a custom shader program that can be used by a [ShaderMaterial]. Shaders allow you to write your own custom behavior for rendering objects or updating particle information. For a detailed explanation and usage, please see the tutorials linked below.
 newtype Shader = Shader Object
                    deriving newtype AsVariant
 
@@ -4065,7 +4393,7 @@ instance HasBaseClass Shape where
         type BaseClass Shape = Resource
         super = coerce
 
--- | Base class for all 2D Shapes.
+-- | Base class for all 2D shapes.
 --    All 2D shape types inherit from this.
 newtype Shape2D = Shape2D Object
                     deriving newtype AsVariant
@@ -4085,7 +4413,7 @@ instance HasBaseClass ShortCut where
         super = coerce
 
 -- | Skeleton for characters and animated objects.
---   Skeleton provides a hierarchical interface for managing bones, including pose, rest and animation (see [Animation]). Skeleton will support rag doll dynamics in the future.
+--   Skeleton provides a hierarchical interface for managing bones, including pose, rest and animation (see [Animation]). It can also use ragdoll physics.
 --   		The overall transform of a bone with respect to the skeleton is determined by the following hierarchical order: rest pose, custom pose and pose.
 --   		Note that "global pose" below refers to the overall transform of the bone with respect to skeleton, so it not the actual global/world transform of the bone.
 newtype Skeleton = Skeleton Object
@@ -4095,6 +4423,8 @@ instance HasBaseClass Skeleton where
         type BaseClass Skeleton = Spatial
         super = coerce
 
+-- | Skeleton for 2D characters and animated objects.
+--   Skeleton2D parents a hierarchy of [Bone2D] objects. It is a requirement of [Bone2D]. Skeleton2D holds a reference to the rest pose of its children and acts as a single point of access to its bones.
 newtype Skeleton2D = Skeleton2D Object
                        deriving newtype AsVariant
 
@@ -4131,7 +4461,9 @@ instance HasBaseClass Sky where
         type BaseClass Sky = Resource
         super = coerce
 
--- | Base class for GUI Sliders.
+-- | Base class for GUI sliders.
+--   
+--   		[b]Note:[/b] The [signal Range.changed] and [signal Range.value_changed] signals are part of the [Range] class which this class inherits from.
 newtype Slider = Slider Object
                    deriving newtype AsVariant
 
@@ -4140,7 +4472,7 @@ instance HasBaseClass Slider where
         super = coerce
 
 -- | Piston kind of slider between two bodies in 3D.
---   Slides across the x-axis of the pivot object.
+--   Slides across the X axis of the pivot object.
 newtype SliderJoint = SliderJoint Object
                         deriving newtype AsVariant
 
@@ -4157,9 +4489,10 @@ instance HasBaseClass SoftBody where
         type BaseClass SoftBody = MeshInstance
         super = coerce
 
--- | Most basic 3D game object, parent of all 3D related nodes.
---   Most basic 3D game object, with a 3D [Transform] and visibility settings. All other 3D game objects inherit from Spatial. Use [code]Spatial[/code] as a parent node to move, scale, rotate and show/hide children in a 3D project.
---   		Affine operations (rotate, scale, translate) happen in parent's local coordinate system, unless the [code]Spatial[/code] object is set as top level. Affine operations in this coordinate system correspond to direct affine operations on the [code]Spatial[/code]'s transform. The word local below refers to this coordinate system. The coordinate system that is attached to the [code]Spatial[/code] object itself is referred to as object-local coordinate system.
+-- | Most basic 3D game object, parent of all 3D-related nodes.
+--   Most basic 3D game object, with a 3D [Transform] and visibility settings. All other 3D game objects inherit from Spatial. Use [Spatial] as a parent node to move, scale, rotate and show/hide children in a 3D project.
+--   		Affine operations (rotate, scale, translate) happen in parent's local coordinate system, unless the [Spatial] object is set as top-level. Affine operations in this coordinate system correspond to direct affine operations on the [Spatial]'s transform. The word local below refers to this coordinate system. The coordinate system that is attached to the [Spatial] object itself is referred to as object-local coordinate system.
+--   		[b]Note:[/b] Unless otherwise specified, all methods that have angle parameters must have angles specified as [i]radians[/i]. To convert degrees to radians, use [method @GDScript.deg2rad].
 newtype Spatial = Spatial Object
                     deriving newtype AsVariant
 
@@ -4227,7 +4560,7 @@ instance HasBaseClass SpinBox where
         super = coerce
 
 -- | Container for splitting and adjusting.
---   Container for splitting two controls vertically or horizontally, with a grabber that allows adjusting the split offset or ratio.
+--   Container for splitting two [Control]s vertically or horizontally, with a grabber that allows adjusting the split offset or ratio.
 newtype SplitContainer = SplitContainer Object
                            deriving newtype AsVariant
 
@@ -4235,8 +4568,8 @@ instance HasBaseClass SplitContainer where
         type BaseClass SplitContainer = Container
         super = coerce
 
--- | Spotlight [Light], such as a reflector spotlight or a lantern.
---   A SpotLight light is a type of [Light] node that emits lights in a specific direction, in the shape of a cone. The light is attenuated through the distance and this attenuation can be configured by changing the energy, radius and attenuation parameters of [Light].
+-- | A spotlight, such as a reflector spotlight or a lantern.
+--   A Spotlight is a type of [Light] node that emits lights in a specific direction, in the shape of a cone. The light is attenuated through the distance. This attenuation can be configured by changing the energy, radius and attenuation parameters of [Light].
 newtype SpotLight = SpotLight Object
                       deriving newtype AsVariant
 
@@ -4244,6 +4577,11 @@ instance HasBaseClass SpotLight where
         type BaseClass SpotLight = Light
         super = coerce
 
+-- | A helper node, mostly used in 3rd person cameras.
+--   The SpringArm node is a node that casts a ray (or collision shape) along its z axis and moves all its direct children to the collision point, minus a margin.
+--   		The most common use case for this is to make a 3rd person camera that reacts to collisions in the environment.
+--   		The SpringArm will either cast a ray, or if a shape is given, it will cast the shape in the direction of its z axis.
+--   		If you use the SpringArm as a camera controller for your player, you might need to exclude the player's collider from the SpringArm's collision check.
 newtype SpringArm = SpringArm Object
                       deriving newtype AsVariant
 
@@ -4251,7 +4589,7 @@ instance HasBaseClass SpringArm where
         type BaseClass SpringArm = Spatial
         super = coerce
 
--- | General purpose Sprite node.
+-- | General-purpose sprite node.
 --   A node that displays a 2D texture. The texture displayed can be a region from a larger atlas texture, or a frame from a sprite sheet animation.
 newtype Sprite = Sprite Object
                    deriving newtype AsVariant
@@ -4260,7 +4598,7 @@ instance HasBaseClass Sprite where
         type BaseClass Sprite = Node2D
         super = coerce
 
--- | 2D Sprite node in 3D world.
+-- | 2D sprite node in a 3D world.
 --   A node that displays a 2D texture in a 3D environment. The texture displayed can be a region from a larger atlas texture, or a frame from a sprite sheet animation.
 newtype Sprite3D = Sprite3D Object
                      deriving newtype AsVariant
@@ -4269,7 +4607,7 @@ instance HasBaseClass Sprite3D where
         type BaseClass Sprite3D = SpriteBase3D
         super = coerce
 
--- | 2D Sprite node in 3D environment.
+-- | 2D sprite node in 3D environment.
 --   A node that displays 2D texture information in a 3D environment.
 newtype SpriteBase3D = SpriteBase3D Object
                          deriving newtype AsVariant
@@ -4280,6 +4618,7 @@ instance HasBaseClass SpriteBase3D where
 
 -- | Sprite frame library for AnimatedSprite.
 --   Sprite frame library for [AnimatedSprite]. Contains frames and animation data for playback.
+--   		[b]Note:[/b] You can associate a set of normal maps by creating additional [SpriteFrames] resources with a [code]_normal[/code] suffix. For example, having 2 [SpriteFrames] resources [code]run[/code] and [code]run_normal[/code] will make it so the [code]run[/code] animation uses the normal map.
 newtype SpriteFrames = SpriteFrames Object
                          deriving newtype AsVariant
 
@@ -4288,9 +4627,8 @@ instance HasBaseClass SpriteFrames where
         super = coerce
 
 -- | Static body for 3D physics.
---    A static body is a simple body that is not intended to move. They don't consume any CPU resources in contrast to a [RigidBody] so they are great for scenario collision.
---   		A static body can also be animated by using simulated motion mode. This is useful for implementing functionalities such as moving platforms. When this mode is active the body can be animated and automatically computes linear and angular velocity to apply in that frame and to influence other bodies.
---   		Alternatively, a constant linear or angular velocity can be set for the static body, so even if it doesn't move, it affects other bodies as if it was moving (this is useful for simulating conveyor belts or conveyor wheels).
+--    A static body is a simple body that is not intended to move. In contrast to [RigidBody], they don't consume any CPU resources as long as they don't move.
+--   		Additionally, a constant linear or angular velocity can be set for the static body, so even if it doesn't move, it affects other bodies as if it was moving (this is useful for simulating conveyor belts or conveyor wheels).
 newtype StaticBody = StaticBody Object
                        deriving newtype AsVariant
 
@@ -4298,7 +4636,7 @@ instance HasBaseClass StaticBody where
         type BaseClass StaticBody = PhysicsBody
         super = coerce
 
--- | Static body for 2D Physics.
+-- | Static body for 2D physics.
 --    A StaticBody2D is a body that is not intended to move. It is ideal for implementing objects in the environment, such as walls or platforms.
 --   		Additionally, a constant linear or angular velocity can be set for the static body, which will affect colliding bodies as if it were moving (for example, a conveyor belt).
 newtype StaticBody2D = StaticBody2D Object
@@ -4309,7 +4647,7 @@ instance HasBaseClass StaticBody2D where
         super = coerce
 
 -- | Abstraction and base class for stream-based protocols.
---   StreamPeer is an abstraction and base class for stream-based protocols (such as TCP or Unix Sockets). It provides an API for sending and receiving data through streams as raw data or strings.
+--   StreamPeer is an abstraction and base class for stream-based protocols (such as TCP or UNIX sockets). It provides an API for sending and receiving data through streams as raw data or strings.
 newtype StreamPeer = StreamPeer Object
                        deriving newtype AsVariant
 
@@ -4331,8 +4669,8 @@ instance HasBaseClass StreamPeerGDNative where
         type BaseClass StreamPeerGDNative = StreamPeer
         super = coerce
 
--- | SSL Stream peer.
---    This object can be used to connect to SSL servers.
+-- | SSL stream peer.
+--    This object can be used to connect to an SSL server or accept a single SSL client connection.
 newtype StreamPeerSSL = StreamPeerSSL Object
                           deriving newtype AsVariant
 
@@ -4340,7 +4678,7 @@ instance HasBaseClass StreamPeerSSL where
         type BaseClass StreamPeerSSL = StreamPeer
         super = coerce
 
--- | TCP Stream peer.
+-- | TCP stream peer.
 --    This object can be used to connect to TCP servers, or also is returned by a TCP server.
 newtype StreamPeerTCP = StreamPeerTCP Object
                           deriving newtype AsVariant
@@ -4349,8 +4687,8 @@ instance HasBaseClass StreamPeerTCP where
         type BaseClass StreamPeerTCP = StreamPeer
         super = coerce
 
--- | A .stex texture.
---   A texture that is loaded from a .stex file.
+-- | A [code].stex[/code] texture.
+--   A texture that is loaded from a [code].stex[/code] file.
 newtype StreamTexture = StreamTexture Object
                           deriving newtype AsVariant
 
@@ -4376,13 +4714,13 @@ instance HasBaseClass StyleBoxEmpty where
         type BaseClass StyleBoxEmpty = StyleBox
         super = coerce
 
--- | Customizable Stylebox with a given set of parameters. (no texture required)
---   This stylebox can be used to achieve all kinds of looks without the need of a texture. Those properties are customizable:
+-- | Customizable [StyleBox] with a given set of parameters (no texture required).
+--   This [StyleBox] can be used to achieve all kinds of looks without the need of a texture. Those properties are customizable:
 --   		- Color
 --   		- Border width (individual width for each border)
 --   		- Rounded corners (individual radius for each corner)
---   		- Shadow
---   		Setting corner radius to high values is allowed. As soon as corners would overlap the stylebox will switch to a relative system. Example:
+--   		- Shadow (with blur and offset)
+--   		Setting corner radius to high values is allowed. As soon as corners would overlap, the stylebox will switch to a relative system. Example:
 --   		[codeblock]
 --   		height = 30
 --   		corner_radius_top_left = 50
@@ -4400,6 +4738,8 @@ instance HasBaseClass StyleBoxFlat where
         type BaseClass StyleBoxFlat = StyleBox
         super = coerce
 
+-- | [StyleBox] that displays a single line.
+--   [StyleBox] that displays a single line of a given color and thickness. It can be used to draw things like separators.
 newtype StyleBoxLine = StyleBoxLine Object
                          deriving newtype AsVariant
 
@@ -4407,8 +4747,8 @@ instance HasBaseClass StyleBoxLine where
         type BaseClass StyleBoxLine = StyleBox
         super = coerce
 
--- | Texture Based 3x3 scale style.
---    This stylebox performs a 3x3 scaling of a texture, where only the center cell is fully stretched. This allows for the easy creation of bordered styles.
+-- | Texture-based nine-patch [StyleBox].
+--   Texture-based nine-patch [StyleBox], in a way similar to [NinePatchRect]. This stylebox performs a 3×3 scaling of a texture, where only the center cell is fully stretched. This makes it possible to design bordered styles regardless of the stylebox's size.
 newtype StyleBoxTexture = StyleBoxTexture Object
                             deriving newtype AsVariant
 
@@ -4417,7 +4757,7 @@ instance HasBaseClass StyleBoxTexture where
         super = coerce
 
 -- | Helper tool to create geometry.
---   The [code]SurfaceTool[/code] is used to construct a [Mesh] by specifying vertex attributes individually. It can be used to construct a [Mesh] from script. All properties except index need to be added before a call to [method add_vertex]. For example adding vertex colors and UVs looks like
+--   The [SurfaceTool] is used to construct a [Mesh] by specifying vertex attributes individually. It can be used to construct a [Mesh] from a script. All properties except indices need to be added before calling [method add_vertex]. For example, to add vertex colors and UVs:
 --   		[codeblock]
 --   		var st = SurfaceTool.new()
 --   		st.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -4425,9 +4765,11 @@ instance HasBaseClass StyleBoxTexture where
 --   		st.add_uv(Vector2(0, 0))
 --   		st.add_vertex(Vector3(0, 0, 0))
 --   		[/codeblock]
---   		The [code]SurfaceTool[/code] now contains one vertex of a triangle which has a UV coordinate and a specified [Color]. If another vertex were added without calls to [method add_uv] or [method add_color] then the last values would be used.
---   		It is very important that vertex attributes are passed [b]before[/b] the call to [method add_vertex], failure to do this will result in an error when committing the vertex information to a mesh.
---   		Additionally, the attributes used before the first vertex is added determine the format of the mesh. For example if you only add UVs to the first vertex, you cannot add color to any of the subsequent vertices.
+--   		The above [SurfaceTool] now contains one vertex of a triangle which has a UV coordinate and a specified [Color]. If another vertex were added without calling [method add_uv] or [method add_color], then the last values would be used.
+--   		Vertex attributes must be passed [b]before[/b] calling [method add_vertex]. Failure to do so will result in an error when committing the vertex information to a mesh.
+--   		Additionally, the attributes used before the first vertex is added determine the format of the mesh. For example, if you only add UVs to the first vertex, you cannot add color to any of the subsequent vertices.
+--   		See also [ArrayMesh], [ImmediateGeometry] and [MeshDataTool] for procedural geometry generation.
+--   		[b]Note:[/b] Godot uses clockwise [url=https://learnopengl.com/Advanced-OpenGL/Face-culling]winding order[/url] for front faces of triangle primitive modes.
 newtype SurfaceTool = SurfaceTool Object
                         deriving newtype AsVariant
 
@@ -4435,8 +4777,8 @@ instance HasBaseClass SurfaceTool where
         type BaseClass SurfaceTool = Reference
         super = coerce
 
--- | TCP Server.
---   TCP Server class. Listens to connections on a port and returns a [StreamPeerTCP] when got a connection.
+-- | A TCP server.
+--    Listens to connections on a port and returns a [StreamPeerTCP] when it gets an incoming connection.
 newtype TCP_Server = TCP_Server Object
                        deriving newtype AsVariant
 
@@ -4444,11 +4786,11 @@ instance HasBaseClass TCP_Server where
         type BaseClass TCP_Server = Reference
         super = coerce
 
--- | Tabbed Container.
+-- | Tabbed container.
 --   Sets the active tab's [code]visible[/code] property to the value [code]true[/code]. Sets all other children's to [code]false[/code].
 --   		Ignores non-[Control] children.
 --   		Individual tabs are always visible unless you use [method set_tab_disabled] and [method set_tab_title] to hide it.
---   		To hide only a tab's content, nest the content inside a child [Control], so it receives the [code]TabContainer[/code]'s visibility setting instead.
+--   		To hide only a tab's content, nest the content inside a child [Control], so it receives the [TabContainer]'s visibility setting instead.
 newtype TabContainer = TabContainer Object
                          deriving newtype AsVariant
 
@@ -4456,7 +4798,7 @@ instance HasBaseClass TabContainer where
         type BaseClass TabContainer = Container
         super = coerce
 
--- | Tabs Control.
+-- | Tabs control.
 --   Simple tabs control, similar to [TabContainer] but is only in charge of drawing tabs, not interact with children.
 newtype Tabs = Tabs Object
                  deriving newtype AsVariant
@@ -4484,6 +4826,7 @@ instance HasBaseClass TextFile where
 -- | Texture for 2D and 3D.
 --   A texture works by registering an image in the video hardware, which then can be used in 3D models or 2D [Sprite] or GUI [Control].
 --   		Textures are often created by loading them from a file. See [method @GDScript.load].
+--   		[Texture] is a base for other resources. It cannot be used directly.
 newtype Texture = Texture Object
                     deriving newtype AsVariant
 
@@ -4491,6 +4834,8 @@ instance HasBaseClass Texture where
         type BaseClass Texture = Resource
         super = coerce
 
+-- | Texture with 3 dimensions.
+--   Texture3D is a 3-dimensional texture that has a width, height, and depth.
 newtype Texture3D = Texture3D Object
                       deriving newtype AsVariant
 
@@ -4498,6 +4843,8 @@ instance HasBaseClass Texture3D where
         type BaseClass Texture3D = TextureLayered
         super = coerce
 
+-- | Array of textures stored in a single primitive.
+--   [TextureArray]s store an array of images in a single [Texture] primitive. Each layer of the texture array has its own mipmap chain. This makes it is a good alternative to texture atlases.
 newtype TextureArray = TextureArray Object
                          deriving newtype AsVariant
 
@@ -4506,8 +4853,8 @@ instance HasBaseClass TextureArray where
         super = coerce
 
 -- | Texture-based button. Supports Pressed, Hover, Disabled and Focused states.
---   [code]TextureButton[/code] has the same functionality as [Button], except it uses sprites instead of Godot's [Theme] resource. It is faster to create, but it doesn't support localization like more complex Controls.
---   		The Normal state's texture is required. Others are optional.
+--   [TextureButton] has the same functionality as [Button], except it uses sprites instead of Godot's [Theme] resource. It is faster to create, but it doesn't support localization like more complex [Control]s.
+--   		The "normal" state must contain a texture ([member texture_normal]); other textures are optional.
 newtype TextureButton = TextureButton Object
                           deriving newtype AsVariant
 
@@ -4515,6 +4862,8 @@ instance HasBaseClass TextureButton where
         type BaseClass TextureButton = BaseButton
         super = coerce
 
+-- | Base class for 3D texture types.
+--   Base class for [Texture3D] and [TextureArray]. Cannot be used directly, but contains all the functions necessary for accessing and using [Texture3D] and [TextureArray]. Data is set on a per-layer basis. For [Texture3D]s, the layer sepcifies the depth or Z-index, they can be treated as a bunch of 2D slices. Similarly, for [TextureArray]s, the layer specifies the array layer.
 newtype TextureLayered = TextureLayered Object
                            deriving newtype AsVariant
 
@@ -4523,7 +4872,7 @@ instance HasBaseClass TextureLayered where
         super = coerce
 
 -- | Texture-based progress bar. Useful for loading screens and life or stamina bars.
---   TextureProgress works like [ProgressBar] but it uses up to 3 textures instead of Godot's [Theme] resource. Works horizontally, vertically, and radially.
+--   TextureProgress works like [ProgressBar], but uses up to 3 textures instead of Godot's [Theme] resource. It can be used to create horizontal, vertical and radial progress bars.
 newtype TextureProgress = TextureProgress Object
                             deriving newtype AsVariant
 
@@ -4533,6 +4882,7 @@ instance HasBaseClass TextureProgress where
 
 -- | Control for drawing textures.
 --   Used to draw icons and sprites in a user interface. The texture's placement can be controlled with the [member stretch_mode] property. It can scale, tile, or stay centered inside its bounding rectangle.
+--   		[b]Note:[/b] You should enable [member flip_v] when using a TextureRect to display a [ViewportTexture]. Alternatively, you can enable [member Viewport.render_target_v_flip] on the Viewport. Otherwise, the image will appear upside down.
 newtype TextureRect = TextureRect Object
                         deriving newtype AsVariant
 
@@ -4541,8 +4891,8 @@ instance HasBaseClass TextureRect where
         super = coerce
 
 -- | Theme for controls.
---   Theme for skinning controls. Controls can be skinned individually, but for complex applications it's more efficient to just create a global theme that defines everything. This theme can be applied to any [Control], and it and its children will automatically use it.
---   		Theme resources can be alternatively loaded by writing them in a .theme file, see docs for more info.
+--   A theme for skinning controls. Controls can be skinned individually, but for complex applications, it's more practical to just create a global theme that defines everything. This theme can be applied to any [Control]; the Control and its children will automatically use it.
+--   		Theme resources can alternatively be loaded by writing them in a [code].theme[/code] file, see the documentation for more information.
 newtype Theme = Theme Object
                   deriving newtype AsVariant
 
@@ -4570,7 +4920,8 @@ instance HasBaseClass TileSet where
         super = coerce
 
 -- | A countdown timer.
---   Counts down a specified interval and emits a signal on reaching 0. Can be set to repeat or "one shot" mode.
+--   Counts down a specified interval and emits a signal on reaching 0. Can be set to repeat or "one-shot" mode.
+--   		[b]Note:[/b] To create an one-shot timer without instantiating a node, use [method SceneTree.create_timer].
 newtype Timer = Timer Object
                   deriving newtype AsVariant
 
@@ -4579,7 +4930,7 @@ instance HasBaseClass Timer where
         super = coerce
 
 -- | Flat button helper class.
---   This is a helper class to generate a flat [Button] (see [member Button.flat]), creating a [code]ToolButton[/code] is equivalent to:
+--   This is a helper class to generate a flat [Button] (see [member Button.flat]), creating a [ToolButton] is equivalent to:
 --   		[codeblock]
 --   		var btn = Button.new()
 --   		btn.flat = true
@@ -4591,8 +4942,10 @@ instance HasBaseClass ToolButton where
         type BaseClass ToolButton = Button
         super = coerce
 
--- | Button for touch screen devices.
---    You can set it to be visible on all screens, or only on touch devices.
+-- | Button for touch screen devices for gameplay use.
+--   TouchScreenButton allows you to create on-screen buttons for touch devices. It's intended for gameplay use, such as a unit you have to touch to move.
+--   		This node inherits from [Node2D]. Unlike with [Control] nodes, you cannot set anchors on it. If you want to create menus or user interfaces, you may want to use [Button] nodes instead. To make button nodes react to touch events, you can enable the Emulate Mouse option in the Project Settings.
+--   		You can configure TouchScreenButton to be visible only on touch devices, helping you develop your game both for desktop and mobile devices.
 newtype TouchScreenButton = TouchScreenButton Object
                               deriving newtype AsVariant
 
@@ -4601,7 +4954,7 @@ instance HasBaseClass TouchScreenButton where
         super = coerce
 
 -- | Language Translation.
---   Translations are resources that can be loaded/unloaded on demand. They map a string to another string.
+--   Translations are resources that can be loaded and unloaded on demand. They map a string to another string.
 newtype Translation = Translation Object
                         deriving newtype AsVariant
 
@@ -4631,6 +4984,7 @@ instance HasBaseClass TranslationServer where
 --   		    var subchild1 = tree.create_item(child1)
 --   		    subchild1.set_text(0, "Subchild1")
 --   		[/codeblock]
+--   		To iterate over all the [TreeItem] objects in a [Tree] object, use [method TreeItem.get_next] and [method TreeItem.get_children] after getting the root through [method get_root]. You can use [method Object.free] on a [TreeItem] to remove it from the [Tree].
 newtype Tree = Tree Object
                  deriving newtype AsVariant
 
@@ -4639,7 +4993,8 @@ instance HasBaseClass Tree where
         super = coerce
 
 -- | Control for a single item inside a [Tree].
---    May have child [code]TreeItem[/code]s and be styled as well as contain buttons.
+--    May have child [TreeItem]s and be styled as well as contain buttons.
+--   		You can remove a [TreeItem] by using [method Object.free].
 newtype TreeItem = TreeItem Object
                      deriving newtype AsVariant
 
@@ -4657,8 +5012,9 @@ instance HasBaseClass TriangleMesh where
         super = coerce
 
 -- | Smoothly animates a node's properties over time.
---   Tweens are useful for animations requiring a numerical property to be interpolated over a range of values. The name *tween* comes from *in-betweening*, an animation technique where you specify *keyframes* and the computer interpolates the frames that appear between them.
---   		Here is a brief usage example that causes a 2D node to move smoothly between two positions:
+--   Tweens are useful for animations requiring a numerical property to be interpolated over a range of values. The name [i]tween[/i] comes from [i]in-betweening[/i], an animation technique where you specify [i]keyframes[/i] and the computer interpolates the frames that appear between them.
+--   		[Tween] is more suited than [AnimationPlayer] for animations where you don't know the final values in advance. For example, interpolating a dynamically-chosen camera zoom value is best done with a [Tween] node; it would be difficult to do the same thing with an [AnimationPlayer] node.
+--   		Here is a brief usage example that makes a 2D node move smoothly between two positions:
 --   		[codeblock]
 --   		var tween = get_node("Tween")
 --   		tween.interpolate_property($Node2D, "position",
@@ -4666,8 +5022,9 @@ instance HasBaseClass TriangleMesh where
 --   		        Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 --   		tween.start()
 --   		[/codeblock]
---   		Many methods require a property name, such as "position" above. You can find the correct property name by hovering over the property in the Inspector. You can also provide the components of a property directly by using "property:component" (eg. [code]position:x[/code]), where it would only apply to that particular component.
---   		Many of the methods accept [code]trans_type[/code] and [code]ease_type[/code]. The first accepts an [enum TransitionType] constant, and refers to the way the timing of the animation is handled (see [code]http://easings.net/[/code] for some examples). The second accepts an [enum EaseType] constant, and controls the where [code]trans_type[/code] is applied to the interpolation (in the beginning, the end, or both). If you don't know which transition and easing to pick, you can try different [enum TransitionType] constants with [constant EASE_IN_OUT], and use the one that looks best.
+--   		Many methods require a property name, such as [code]"position"[/code] above. You can find the correct property name by hovering over the property in the Inspector. You can also provide the components of a property directly by using [code]"property:component"[/code] (eg. [code]position:x[/code]), where it would only apply to that particular component.
+--   		Many of the methods accept [code]trans_type[/code] and [code]ease_type[/code]. The first accepts an [enum TransitionType] constant, and refers to the way the timing of the animation is handled (see [url=https://easings.net/]easings.net[/url] for some examples). The second accepts an [enum EaseType] constant, and controls where the [code]trans_type[/code] is applied to the interpolation (in the beginning, the end, or both). If you don't know which transition and easing to pick, you can try different [enum TransitionType] constants with [constant EASE_IN_OUT], and use the one that looks best.
+--   		[url=https://raw.githubusercontent.com/godotengine/godot-docs/master/img/tween_cheatsheet.png]Tween easing and transition types cheatsheet[/url]
 newtype Tween = Tween Object
                   deriving newtype AsVariant
 
@@ -4690,7 +5047,7 @@ instance HasBaseClass UPNPDevice where
         super = coerce
 
 -- | Helper to manage undo/redo operations in the editor or custom tools.
---    It works by registering methods and property changes inside 'actions'.
+--    It works by registering methods and property changes inside "actions".
 --   		Common behavior is to create an action, then add do/undo calls to functions or property changes, then committing the action.
 --   		Here's an example on how to add an action to the Godot editor's own [UndoRedo], from a plugin:
 --   		[codeblock]
@@ -4712,7 +5069,7 @@ instance HasBaseClass UPNPDevice where
 --   		    undo_redo.commit_action()
 --   		[/codeblock]
 --   		[method create_action], [method add_do_method], [method add_undo_method], [method add_do_property], [method add_undo_property], and [method commit_action] should be called one after the other, like in the example. Not doing so could lead to crashes.
---   		If you don't need to register a method you can leave [method add_do_method] and [method add_undo_method] out, and so it goes for properties. You can register more than one method/property.
+--   		If you don't need to register a method, you can leave [method add_do_method] and [method add_undo_method] out; the same goes for properties. You can also register more than one method/property.
 newtype UndoRedo = UndoRedo Object
                      deriving newtype AsVariant
 
@@ -4729,7 +5086,8 @@ instance HasBaseClass VBoxContainer where
         type BaseClass VBoxContainer = BoxContainer
         super = coerce
 
--- | Vertical version of [ScrollBar], which goes from left (min) to right (max).
+-- | Vertical scroll bar.
+--   Vertical version of [ScrollBar], which goes from top (min) to bottom (max).
 newtype VScrollBar = VScrollBar Object
                        deriving newtype AsVariant
 
@@ -4738,7 +5096,7 @@ instance HasBaseClass VScrollBar where
         super = coerce
 
 -- | Vertical version of [Separator].
---    It is used to separate objects horizontally, though (but it looks vertical!).
+--    Even though it looks vertical, it is used to separate objects horizontally.
 newtype VSeparator = VSeparator Object
                        deriving newtype AsVariant
 
@@ -4748,6 +5106,7 @@ instance HasBaseClass VSeparator where
 
 -- | Vertical slider.
 --    See [Slider]. This one goes from bottom (min) to top (max).
+--   		[b]Note:[/b] The [signal Range.changed] and [signal Range.value_changed] signals are part of the [Range] class which this class inherits from.
 newtype VSlider = VSlider Object
                     deriving newtype AsVariant
 
@@ -4765,8 +5124,9 @@ instance HasBaseClass VSplitContainer where
         super = coerce
 
 -- | Physics body that simulates the behavior of a car.
---   This nodes implements all the physics logic needed to simulate a car. It is based on the raycast vehicle system commonly found in physics engines. You will need to add a [CollisionShape] for the main body of your vehicle and add [VehicleWheel] nodes for the wheels. You should also add a [MeshInstance] to this node for the 3D model of your car but this model should not include meshes for the wheels. You should control the vehicle by using the [member brake], [member engine_force], and [member steering] properties and not change the position or orientation of this node directly.
---   		Note that the origin point of your VehicleBody will determine the center of gravity of your vehicle so it is better to keep this low and move the [CollisionShape] and [MeshInstance] upwards.
+--   This node implements all the physics logic needed to simulate a car. It is based on the raycast vehicle system commonly found in physics engines. You will need to add a [CollisionShape] for the main body of your vehicle and add [VehicleWheel] nodes for the wheels. You should also add a [MeshInstance] to this node for the 3D model of your car but this model should not include meshes for the wheels. You should control the vehicle by using the [member brake], [member engine_force], and [member steering] properties and not change the position or orientation of this node directly.
+--   		[b]Note:[/b] The origin point of your VehicleBody will determine the center of gravity of your vehicle so it is better to keep this low and move the [CollisionShape] and [MeshInstance] upwards.
+--   		[b]Note:[/b] This class has known issues and isn't designed to provide realistic 3D vehicle physics. If you want advanced vehicle physics, you will probably have to write your own physics integration using another [PhysicsBody] class.
 newtype VehicleBody = VehicleBody Object
                         deriving newtype AsVariant
 
@@ -4776,6 +5136,7 @@ instance HasBaseClass VehicleBody where
 
 -- | Physics object that simulates the behavior of a wheel.
 --   This node needs to be used as a child node of [VehicleBody] and simulates the behavior of one of its wheels. This node also acts as a collider to detect if the wheel is touching a surface.
+--   		[b]Note:[/b] This class has known issues and isn't designed to provide realistic 3D vehicle physics. If you want advanced vehicle physics, you will probably have to write your own physics integration using another [PhysicsBody] class.
 newtype VehicleWheel = VehicleWheel Object
                          deriving newtype AsVariant
 
@@ -4784,7 +5145,8 @@ instance HasBaseClass VehicleWheel where
         super = coerce
 
 -- | Control for playing video streams.
---   Control node for playing video streams. Supported formats are WebM and OGV Theora.
+--   Control node for playing video streams using [VideoStream] resources.
+--   		Supported video formats are [url=https://www.webmproject.org/]WebM[/url] ([VideoStreamWebm]), [url=https://www.theora.org/]Ogg Theora[/url] ([VideoStreamTheora]), and any format exposed via a GDNative plugin using [VideoStreamGDNative].
 newtype VideoPlayer = VideoPlayer Object
                         deriving newtype AsVariant
 
@@ -4793,6 +5155,7 @@ instance HasBaseClass VideoPlayer where
         super = coerce
 
 -- | Base resource for video streams.
+--   Base resource type for all video streams. Classes that derive from [VideoStream] can all be used as resource types to play back videos in [VideoPlayer].
 newtype VideoStream = VideoStream Object
                         deriving newtype AsVariant
 
@@ -4837,6 +5200,7 @@ instance HasBaseClass Viewport where
 
 -- | Control for holding [Viewport]s.
 --   A [Container] node that holds a [Viewport], automatically setting its size.
+--   		[b]Note:[/b] Changing a ViewportContainer's [member Control.rect_scale] will cause its contents to appear distorted. To change its visual size without causing distortion, adjust the node's margins instead (if it's not already in a container).
 newtype ViewportContainer = ViewportContainer Object
                               deriving newtype AsVariant
 
@@ -4854,8 +5218,11 @@ instance HasBaseClass ViewportTexture where
         type BaseClass ViewportTexture = Texture
         super = coerce
 
--- | Enable certain nodes only when visible.
+-- | Enables certain nodes only when approximately visible.
 --   The VisibilityEnabler will disable [RigidBody] and [AnimationPlayer] nodes when they are not visible. It will only affect other nodes within the same scene as the VisibilityEnabler itself.
+--   		If you just want to receive notifications, use [VisibilityNotifier] instead.
+--   		[b]Note:[/b] VisibilityEnabler uses an approximate heuristic for performance reasons. It doesn't take walls and other occlusion into account. The heuristic is an implementation detail and may change in future versions. If you need precise visibility checking, use another method such as adding an [Area] node as a child of a [Camera] node and/or [method Vector3.dot].
+--   		[b]Note:[/b] VisibilityEnabler will not affect nodes added after scene initialization.
 newtype VisibilityEnabler = VisibilityEnabler Object
                               deriving newtype AsVariant
 
@@ -4863,8 +5230,11 @@ instance HasBaseClass VisibilityEnabler where
         type BaseClass VisibilityEnabler = VisibilityNotifier
         super = coerce
 
--- | Enable certain nodes only when visible.
---   The VisibilityEnabler2D will disable [RigidBody2D], [AnimationPlayer], and other nodes when they are not visible. It will only affect other nodes within the same scene as the VisibilityEnabler2D itself.
+-- | Enables certain nodes only when approximately visible.
+--   The VisibilityEnabler2D will disable [RigidBody2D], [AnimationPlayer], and other nodes when they are not visible. It will only affect nodes with the same root node as the VisibilityEnabler2D, and the root node itself.
+--   		If you just want to receive notifications, use [VisibilityNotifier2D] instead.
+--   		[b]Note:[/b] For performance reasons, VisibilityEnabler2D uses an approximate heuristic with precision determined by [member ProjectSettings.world/2d/cell_size]. If you need precise visibility checking, use another method such as adding an [Area2D] node as a child of a [Camera2D] node.
+--   		[b]Note:[/b] VisibilityEnabler2D will not affect nodes added after scene initialization.
 newtype VisibilityEnabler2D = VisibilityEnabler2D Object
                                 deriving newtype AsVariant
 
@@ -4872,8 +5242,10 @@ instance HasBaseClass VisibilityEnabler2D where
         type BaseClass VisibilityEnabler2D = VisibilityNotifier2D
         super = coerce
 
--- | Detects when the node is visible on screen.
+-- | Detects approximately when the node is visible on screen.
 --   The VisibilityNotifier detects when it is visible on the screen. It also notifies when its bounding rectangle enters or exits the screen or a [Camera]'s view.
+--   		If you want nodes to be disabled automatically when they exit the screen, use [VisibilityEnabler] instead.
+--   		[b]Note:[/b] VisibilityNotifier uses an approximate heuristic for performance reasons. It does't take walls and other occlusion into account. The heuristic is an implementation detail and may change in future versions. If you need precise visibility checking, use another method such as adding an [Area] node as a child of a [Camera] node and/or [method Vector3.dot].
 newtype VisibilityNotifier = VisibilityNotifier Object
                                deriving newtype AsVariant
 
@@ -4881,8 +5253,10 @@ instance HasBaseClass VisibilityNotifier where
         type BaseClass VisibilityNotifier = Spatial
         super = coerce
 
--- | Detects when the node is visible on screen.
+-- | Detects approximately when the node is visible on screen.
 --   The VisibilityNotifier2D detects when it is visible on the screen. It also notifies when its bounding rectangle enters or exits the screen or a viewport.
+--   		If you want nodes to be disabled automatically when they exit the screen, use [VisibilityEnabler2D] instead.
+--   		[b]Note:[/b] For performance reasons, VisibilityNotifier2D uses an approximate heuristic with precision determined by [member ProjectSettings.world/2d/cell_size]. If you need precise visibility checking, use another method such as adding an [Area2D] node as a child of a [Camera2D] node.
 newtype VisibilityNotifier2D = VisibilityNotifier2D Object
                                  deriving newtype AsVariant
 
@@ -4890,6 +5264,8 @@ instance HasBaseClass VisibilityNotifier2D where
         type BaseClass VisibilityNotifier2D = Node2D
         super = coerce
 
+-- | Parent of all visual 3D nodes.
+--   The [VisualInstance] is used to connect a resource to a visual representation. All visual 3D nodes inherit from the [VisualInstance]. In general, you should not access the [VisualInstance] properties directly as they are accessed and managed by the nodes that inherit from [VisualInstance]. [VisualInstance] is the node representation of the [VisualServer] instance.
 newtype VisualInstance = VisualInstance Object
                            deriving newtype AsVariant
 
@@ -5222,6 +5598,13 @@ instance HasBaseClass VisualScriptYieldSignal where
 -- | Server for anything visible.
 --    The visual server is the API backend for everything visible. The whole scene system mounts on it to display.
 --   		The visual server is completely opaque, the internals are entirely implementation specific and cannot be accessed.
+--   		The visual server can be used to bypass the scene system entirely.
+--   		Resources are created using the [code]*_create[/code] functions.
+--   		All objects are drawn to a viewport. You can use the [Viewport] attached to the [SceneTree] or you can create one yourself with [method viewport_create]. When using a custom scenario or canvas, the scenario or canvas needs to be attached to the viewport using [method viewport_set_scenario] or [method viewport_attach_canvas].
+--   		In 3D, all visual objects must be associated with a scenario. The scenario is a visual representation of the world. If accessing the visual server from a running game, the scenario can be accessed from the scene tree from any [Spatial] node with [method Spatial.get_world]. Otherwise, a scenario can be created with [method scenario_create].
+--   		Similarly in 2D, a canvas is needed to draw all canvas items.
+--   		In 3D, all visible objects are comprised of a resource and an instance. A resource can be a mesh, a particle system, a light, or any other 3D object. In order to be visible resources must be attached to an instance using [method instance_set_base]. The instance must also be attached to the scenario using [method instance_set_scenario] in order to be visible.
+--   		In 2D, all visible objects are some form of canvas item. In order to be visible, a canvas item needs to be the child of a canvas attached to a viewport, or it needs to be the child of another canvas item that is eventually attached to the canvas.
 newtype VisualServer = VisualServer Object
                          deriving newtype AsVariant
 
@@ -5229,6 +5612,9 @@ instance HasBaseClass VisualServer where
         type BaseClass VisualServer = Object
         super = coerce
 
+-- | A custom shader program with a visual editor.
+--   This class allows you to define a custom shader program that can be used for various materials to render objects.
+--   		The visual shader editor creates the shader.
 newtype VisualShader = VisualShader Object
                          deriving newtype AsVariant
 
@@ -5236,6 +5622,7 @@ instance HasBaseClass VisualShader where
         type BaseClass VisualShader = Shader
         super = coerce
 
+-- | Base class for nodes in a visual shader graph.
 newtype VisualShaderNode = VisualShaderNode Object
                              deriving newtype AsVariant
 
@@ -5243,6 +5630,9 @@ instance HasBaseClass VisualShaderNode where
         type BaseClass VisualShaderNode = Resource
         super = coerce
 
+-- | A boolean constant to be used within the visual shader graph.
+--   Has only one output port and no inputs.
+--   		Translated to [code]bool[/code] in the shader language.
 newtype VisualShaderNodeBooleanConstant = VisualShaderNodeBooleanConstant Object
                                             deriving newtype AsVariant
 
@@ -5250,6 +5640,8 @@ instance HasBaseClass VisualShaderNodeBooleanConstant where
         type BaseClass VisualShaderNodeBooleanConstant = VisualShaderNode
         super = coerce
 
+-- | A boolean uniform to be used within the visual shader graph.
+--   Translated to [code]uniform bool[/code] in the shader language.
 newtype VisualShaderNodeBooleanUniform = VisualShaderNodeBooleanUniform Object
                                            deriving newtype AsVariant
 
@@ -5258,6 +5650,9 @@ instance HasBaseClass VisualShaderNodeBooleanUniform where
              VisualShaderNodeUniform
         super = coerce
 
+-- | A [Color] constant to be used within the visual shader graph.
+--   Has two output ports representing RGB and alpha channels of [Color].
+--   		Translated to [code]vec3 rgb[/code] and [code]float alpha[/code] in the shader language.
 newtype VisualShaderNodeColorConstant = VisualShaderNodeColorConstant Object
                                           deriving newtype AsVariant
 
@@ -5265,6 +5660,8 @@ instance HasBaseClass VisualShaderNodeColorConstant where
         type BaseClass VisualShaderNodeColorConstant = VisualShaderNode
         super = coerce
 
+-- | A [Color] function to be used within the visual shader graph.
+--   Accept a [Color] to the input port and transform it according to [member function].
 newtype VisualShaderNodeColorFunc = VisualShaderNodeColorFunc Object
                                       deriving newtype AsVariant
 
@@ -5272,6 +5669,8 @@ instance HasBaseClass VisualShaderNodeColorFunc where
         type BaseClass VisualShaderNodeColorFunc = VisualShaderNode
         super = coerce
 
+-- | A [Color] operator to be used within the visual shader graph.
+--   Applies [member operator] to two color inputs.
 newtype VisualShaderNodeColorOp = VisualShaderNodeColorOp Object
                                     deriving newtype AsVariant
 
@@ -5279,6 +5678,8 @@ instance HasBaseClass VisualShaderNodeColorOp where
         type BaseClass VisualShaderNodeColorOp = VisualShaderNode
         super = coerce
 
+-- | A [Color] uniform to be used within the visual shader graph.
+--   Translated to [code]uniform vec4[/code] in the shader language.
 newtype VisualShaderNodeColorUniform = VisualShaderNodeColorUniform Object
                                          deriving newtype AsVariant
 
@@ -5287,6 +5688,8 @@ instance HasBaseClass VisualShaderNodeColorUniform where
              VisualShaderNodeUniform
         super = coerce
 
+-- | A comparison function for common types within the visual shader graph.
+--   Compares [code]a[/code] and [code]b[/code] of [member type] by [member function]. Returns a boolean scalar. Translates to [code]if[/code] instruction in shader code.
 newtype VisualShaderNodeCompare = VisualShaderNodeCompare Object
                                     deriving newtype AsVariant
 
@@ -5294,6 +5697,8 @@ instance HasBaseClass VisualShaderNodeCompare where
         type BaseClass VisualShaderNodeCompare = VisualShaderNode
         super = coerce
 
+-- | A [CubeMap] sampling node to be used within the visual shader graph.
+--   Translated to [code]texture(cubemap, vec3)[/code] in the shader language. Returns a color vector and alpha channel as scalar.
 newtype VisualShaderNodeCubeMap = VisualShaderNodeCubeMap Object
                                     deriving newtype AsVariant
 
@@ -5301,6 +5706,8 @@ instance HasBaseClass VisualShaderNodeCubeMap where
         type BaseClass VisualShaderNodeCubeMap = VisualShaderNode
         super = coerce
 
+-- | A [CubeMap] uniform node to be used within the visual shader graph.
+--   Translated to [code]uniform samplerCube[/code] in the shader language. The output value can be used as port for [VisualShaderNodeCubeMap].
 newtype VisualShaderNodeCubeMapUniform = VisualShaderNodeCubeMapUniform Object
                                            deriving newtype AsVariant
 
@@ -5309,6 +5716,14 @@ instance HasBaseClass VisualShaderNodeCubeMapUniform where
              VisualShaderNodeTextureUniform
         super = coerce
 
+-- | Virtual class to define custom [VisualShaderNode]s for use in the Visual Shader Editor.
+--   By inheriting this class you can create a custom [VisualShader] script addon which will be automatically added to the Visual Shader Editor. The [VisualShaderNode]'s behavior is defined by overriding the provided virtual methods.
+--   		In order for the node to be registered as an editor addon, you must use the [code]tool[/code] keyword and provide a [code]class_name[/code] for your custom script. For example:
+--   		[codeblock]
+--   		tool
+--   		extends VisualShaderNodeCustom
+--   		class_name VisualShaderNodeNoise
+--   		[/codeblock]
 newtype VisualShaderNodeCustom = VisualShaderNodeCustom Object
                                    deriving newtype AsVariant
 
@@ -5316,6 +5731,8 @@ instance HasBaseClass VisualShaderNodeCustom where
         type BaseClass VisualShaderNodeCustom = VisualShaderNode
         super = coerce
 
+-- | Calculates the determinant of a [Transform] within the visual shader graph.
+--   Translates to [code]deteminant(x)[/code] in the shader language.
 newtype VisualShaderNodeDeterminant = VisualShaderNodeDeterminant Object
                                         deriving newtype AsVariant
 
@@ -5323,6 +5740,8 @@ instance HasBaseClass VisualShaderNodeDeterminant where
         type BaseClass VisualShaderNodeDeterminant = VisualShaderNode
         super = coerce
 
+-- | Calculates a dot product of two vectors within the visual shader graph.
+--   Translates to [code]dot(a, b)[/code] in the shader language.
 newtype VisualShaderNodeDotProduct = VisualShaderNodeDotProduct Object
                                        deriving newtype AsVariant
 
@@ -5330,6 +5749,9 @@ instance HasBaseClass VisualShaderNodeDotProduct where
         type BaseClass VisualShaderNodeDotProduct = VisualShaderNode
         super = coerce
 
+-- | A custom visual shader graph expression written in Godot Shading Language.
+--   Custom Godot Shading Language expression, with a custom amount of input and output ports.
+--   		The provided code is directly injected into the graph's matching shader function ([code]vertex[/code], [code]fragment[/code], or [code]light[/code]), so it cannot be used to to declare functions, varyings, uniforms, or global constants. See [VisualShaderNodeGlobalExpression] for such global definitions.
 newtype VisualShaderNodeExpression = VisualShaderNodeExpression Object
                                        deriving newtype AsVariant
 
@@ -5338,6 +5760,8 @@ instance HasBaseClass VisualShaderNodeExpression where
              VisualShaderNodeGroupBase
         super = coerce
 
+-- | Returns the vector that points in the same direction as a reference vector within the visual shader graph.
+--   Translates to [code]faceforward(N, I, Nref)[/code] in the shader language. The function has three vector parameters: [code]N[/code], the vector to orient, [code]I[/code], the incident vector, and [code]Nref[/code], the reference vector. If the dot product of [code]I[/code] and [code]Nref[/code] is smaller than zero the return value is [code]N[/code]. Otherwise [code]-N[/code] is returned.
 newtype VisualShaderNodeFaceForward = VisualShaderNodeFaceForward Object
                                         deriving newtype AsVariant
 
@@ -5345,6 +5769,8 @@ instance HasBaseClass VisualShaderNodeFaceForward where
         type BaseClass VisualShaderNodeFaceForward = VisualShaderNode
         super = coerce
 
+-- | A Fresnel effect to be used within the visual shader graph.
+--   Returns falloff based on the dot product of surface normal and view direction of camera (pass associated inputs to it).
 newtype VisualShaderNodeFresnel = VisualShaderNodeFresnel Object
                                     deriving newtype AsVariant
 
@@ -5352,6 +5778,8 @@ instance HasBaseClass VisualShaderNodeFresnel where
         type BaseClass VisualShaderNodeFresnel = VisualShaderNode
         super = coerce
 
+-- | A custom global visual shader graph expression written in Godot Shading Language.
+--   Custom Godot Shader Language expression, which is placed on top of the generated shader. You can place various function definitions inside to call later in [VisualShaderNodeExpression]s (which are injected in the main shader functions). You can also declare varyings, uniforms and global constants.
 newtype VisualShaderNodeGlobalExpression = VisualShaderNodeGlobalExpression Object
                                              deriving newtype AsVariant
 
@@ -5360,6 +5788,8 @@ instance HasBaseClass VisualShaderNodeGlobalExpression where
              VisualShaderNodeExpression
         super = coerce
 
+-- | Base class for a family of nodes with variable amount of input and output ports within the visual shader graph.
+--   Currently, has no direct usage, use the derived classes instead.
 newtype VisualShaderNodeGroupBase = VisualShaderNodeGroupBase Object
                                       deriving newtype AsVariant
 
@@ -5381,6 +5811,8 @@ instance HasBaseClass VisualShaderNodeInput where
         type BaseClass VisualShaderNodeInput = VisualShaderNode
         super = coerce
 
+-- | A boolean comparison operator to be used within the visual shader graph.
+--   Returns the boolean result of the comparison between [code]INF[/code] or [code]NaN[/code] and a scalar parameter.
 newtype VisualShaderNodeIs = VisualShaderNodeIs Object
                                deriving newtype AsVariant
 
@@ -5388,6 +5820,8 @@ instance HasBaseClass VisualShaderNodeIs where
         type BaseClass VisualShaderNodeIs = VisualShaderNode
         super = coerce
 
+-- | Calculates an outer product of two vectors within the visual shader graph.
+--   [code]OuterProduct[/code] treats the first parameter [code]c[/code] as a column vector (matrix with one column) and the second parameter [code]r[/code] as a row vector (matrix with one row) and does a linear algebraic matrix multiply [code]c * r[/code], yielding a matrix whose number of rows is the number of components in [code]c[/code] and whose number of columns is the number of components in [code]r[/code].
 newtype VisualShaderNodeOuterProduct = VisualShaderNodeOuterProduct Object
                                          deriving newtype AsVariant
 
@@ -5395,6 +5829,8 @@ instance HasBaseClass VisualShaderNodeOuterProduct where
         type BaseClass VisualShaderNodeOuterProduct = VisualShaderNode
         super = coerce
 
+-- | Represents the output shader parameters within the visual shader graph.
+--   This visual shader node is present in all shader graphs in form of "Output" block with mutliple output value ports.
 newtype VisualShaderNodeOutput = VisualShaderNodeOutput Object
                                    deriving newtype AsVariant
 
@@ -5402,6 +5838,8 @@ instance HasBaseClass VisualShaderNodeOutput where
         type BaseClass VisualShaderNodeOutput = VisualShaderNode
         super = coerce
 
+-- | Clamps a scalar value within the visual shader graph.
+--   Constrains a value to lie between [code]min[/code] and [code]max[/code] values.
 newtype VisualShaderNodeScalarClamp = VisualShaderNodeScalarClamp Object
                                         deriving newtype AsVariant
 
@@ -5416,6 +5854,8 @@ instance HasBaseClass VisualShaderNodeScalarConstant where
         type BaseClass VisualShaderNodeScalarConstant = VisualShaderNode
         super = coerce
 
+-- | Calculates a scalar derivative within the visual shader graph.
+--   This node is only available in [code]Fragment[/code] and [code]Light[/code] visual shaders.
 newtype VisualShaderNodeScalarDerivativeFunc = VisualShaderNodeScalarDerivativeFunc Object
                                                  deriving newtype AsVariant
 
@@ -5431,6 +5871,8 @@ instance HasBaseClass VisualShaderNodeScalarFunc where
         type BaseClass VisualShaderNodeScalarFunc = VisualShaderNode
         super = coerce
 
+-- | Linearly interpolates between two scalars within the visual shader graph.
+--   Translates to [code]mix(a, b, weight)[/code] in the shader language.
 newtype VisualShaderNodeScalarInterp = VisualShaderNodeScalarInterp Object
                                          deriving newtype AsVariant
 
@@ -5445,6 +5887,9 @@ instance HasBaseClass VisualShaderNodeScalarOp where
         type BaseClass VisualShaderNodeScalarOp = VisualShaderNode
         super = coerce
 
+-- | Calculates a scalar SmoothStep function within the visual shader graph.
+--   Translates to [code]smoothstep(edge0, edge1, x)[/code] in the shader language.
+--   		Returns [code]0.0[/code] if [code]x[/code] is smaller than [code]edge0[/code] and [code]1.0[/code] if [code]x[/code] is larger than [code]edge1[/code]. Otherwise the return value is interpolated between [code]0.0[/code] and [code]1.0[/code] using Hermite polynomials.
 newtype VisualShaderNodeScalarSmoothStep = VisualShaderNodeScalarSmoothStep Object
                                              deriving newtype AsVariant
 
@@ -5452,6 +5897,8 @@ instance HasBaseClass VisualShaderNodeScalarSmoothStep where
         type BaseClass VisualShaderNodeScalarSmoothStep = VisualShaderNode
         super = coerce
 
+-- | A boolean/scalar function for use within the visual shader graph.
+--   Returns an associated scalar if the provided boolean value is [code]true[/code] or [code]false[/code].
 newtype VisualShaderNodeScalarSwitch = VisualShaderNodeScalarSwitch Object
                                          deriving newtype AsVariant
 
@@ -5468,6 +5915,8 @@ instance HasBaseClass VisualShaderNodeScalarUniform where
              VisualShaderNodeUniform
         super = coerce
 
+-- | A boolean/vector function for use within the visual shader graph.
+--   Returns an associated vector if the provided boolean value is [code]true[/code] or [code]false[/code].
 newtype VisualShaderNodeSwitch = VisualShaderNodeSwitch Object
                                    deriving newtype AsVariant
 
@@ -5475,6 +5924,8 @@ instance HasBaseClass VisualShaderNodeSwitch where
         type BaseClass VisualShaderNodeSwitch = VisualShaderNode
         super = coerce
 
+-- | Performs a texture lookup within the visual shader graph.
+--   Performs a lookup operation on the provided texture, with support for multiple texture sources to choose from.
 newtype VisualShaderNodeTexture = VisualShaderNodeTexture Object
                                     deriving newtype AsVariant
 
@@ -5482,6 +5933,8 @@ instance HasBaseClass VisualShaderNodeTexture where
         type BaseClass VisualShaderNodeTexture = VisualShaderNode
         super = coerce
 
+-- | Performs a uniform texture lookup within the visual shader graph.
+--   Performs a lookup operation on the texture provided as a uniform for the shader.
 newtype VisualShaderNodeTextureUniform = VisualShaderNodeTextureUniform Object
                                            deriving newtype AsVariant
 
@@ -5490,6 +5943,8 @@ instance HasBaseClass VisualShaderNodeTextureUniform where
              VisualShaderNodeUniform
         super = coerce
 
+-- | Performs a uniform texture lookup with triplanar within the visual shader graph.
+--   Performs a lookup operation on the texture provided as a uniform for the shader, with support for triplanar mapping.
 newtype VisualShaderNodeTextureUniformTriplanar = VisualShaderNodeTextureUniformTriplanar Object
                                                     deriving newtype AsVariant
 
@@ -5498,6 +5953,8 @@ instance HasBaseClass VisualShaderNodeTextureUniformTriplanar where
              VisualShaderNodeTextureUniform
         super = coerce
 
+-- | Composes a [Transform] from four [Vector3]s within the visual shader graph.
+--   Creates a 4x4 transform matrix using four vectors of type [code]vec3[/code]. Each vector is one row in the matrix and the last column is a [code]vec4(0, 0, 0, 1)[/code].
 newtype VisualShaderNodeTransformCompose = VisualShaderNodeTransformCompose Object
                                              deriving newtype AsVariant
 
@@ -5505,6 +5962,8 @@ instance HasBaseClass VisualShaderNodeTransformCompose where
         type BaseClass VisualShaderNodeTransformCompose = VisualShaderNode
         super = coerce
 
+-- | A [Transform] constant for use within the visual shader graph.
+--   A constant [Transform], which can be used as an input node.
 newtype VisualShaderNodeTransformConstant = VisualShaderNodeTransformConstant Object
                                               deriving newtype AsVariant
 
@@ -5512,6 +5971,8 @@ instance HasBaseClass VisualShaderNodeTransformConstant where
         type BaseClass VisualShaderNodeTransformConstant = VisualShaderNode
         super = coerce
 
+-- | Decomposes a [Transform] into four [Vector3]s within the visual shader graph.
+--   Takes a 4x4 transform matrix and decomposes it into four [code]vec3[/code] values, one from each row of the matrix.
 newtype VisualShaderNodeTransformDecompose = VisualShaderNodeTransformDecompose Object
                                                deriving newtype AsVariant
 
@@ -5520,6 +5981,8 @@ instance HasBaseClass VisualShaderNodeTransformDecompose where
              VisualShaderNode
         super = coerce
 
+-- | Computes a [Transform] function within the visual shader graph.
+--   Computes an inverse or transpose function on the provided [Transform].
 newtype VisualShaderNodeTransformFunc = VisualShaderNodeTransformFunc Object
                                           deriving newtype AsVariant
 
@@ -5527,6 +5990,8 @@ instance HasBaseClass VisualShaderNodeTransformFunc where
         type BaseClass VisualShaderNodeTransformFunc = VisualShaderNode
         super = coerce
 
+-- | Multiplies [Transform] by [Transform] within the visual shader graph.
+--   A multiplication operation on two transforms (4x4 matrices), with support for different multiplication operators.
 newtype VisualShaderNodeTransformMult = VisualShaderNodeTransformMult Object
                                           deriving newtype AsVariant
 
@@ -5534,6 +5999,8 @@ instance HasBaseClass VisualShaderNodeTransformMult where
         type BaseClass VisualShaderNodeTransformMult = VisualShaderNode
         super = coerce
 
+-- | A [Transform] uniform for use within the visual shader graph.
+--   Translated to [code]uniform mat4[/code] in the shader language.
 newtype VisualShaderNodeTransformUniform = VisualShaderNodeTransformUniform Object
                                              deriving newtype AsVariant
 
@@ -5542,6 +6009,8 @@ instance HasBaseClass VisualShaderNodeTransformUniform where
              VisualShaderNodeUniform
         super = coerce
 
+-- | Multiplies a [Transform] and a [Vector3] within the visual shader graph.
+--   A multiplication operation on a transform (4x4 matrix) and a vector, with support for different multiplication operators.
 newtype VisualShaderNodeTransformVecMult = VisualShaderNodeTransformVecMult Object
                                              deriving newtype AsVariant
 
@@ -5549,6 +6018,8 @@ instance HasBaseClass VisualShaderNodeTransformVecMult where
         type BaseClass VisualShaderNodeTransformVecMult = VisualShaderNode
         super = coerce
 
+-- | A base type for the uniforms within the visual shader graph.
+--   A uniform represents a variable in the shader which is set externally, i.e. from the [ShaderMaterial]. Uniforms are exposed as properties in the [ShaderMaterial] and can be assigned from the inspector or from a script.
 newtype VisualShaderNodeUniform = VisualShaderNodeUniform Object
                                     deriving newtype AsVariant
 
@@ -5556,6 +6027,8 @@ instance HasBaseClass VisualShaderNodeUniform where
         type BaseClass VisualShaderNodeUniform = VisualShaderNode
         super = coerce
 
+-- | A [Vector3] constant to be used within the visual shader graph.
+--   A constant [Vector3], which can be used as an input node.
 newtype VisualShaderNodeVec3Constant = VisualShaderNodeVec3Constant Object
                                          deriving newtype AsVariant
 
@@ -5563,6 +6036,8 @@ instance HasBaseClass VisualShaderNodeVec3Constant where
         type BaseClass VisualShaderNodeVec3Constant = VisualShaderNode
         super = coerce
 
+-- | A [Vector3] uniform to be used within the visual shader graph.
+--   Translated to [code]uniform vec3[/code] in the shader language.
 newtype VisualShaderNodeVec3Uniform = VisualShaderNodeVec3Uniform Object
                                         deriving newtype AsVariant
 
@@ -5571,6 +6046,8 @@ instance HasBaseClass VisualShaderNodeVec3Uniform where
              VisualShaderNodeUniform
         super = coerce
 
+-- | Clamps a vector value within the visual shader graph.
+--   Constrains a value to lie between [code]min[/code] and [code]max[/code] values. The operation is performed on each component of the vector individually.
 newtype VisualShaderNodeVectorClamp = VisualShaderNodeVectorClamp Object
                                         deriving newtype AsVariant
 
@@ -5578,6 +6055,8 @@ instance HasBaseClass VisualShaderNodeVectorClamp where
         type BaseClass VisualShaderNodeVectorClamp = VisualShaderNode
         super = coerce
 
+-- | Composes a [Vector3] from three scalars within the visual shader graph.
+--   Creates a [code]vec3[/code] using three scalar values that can be provided from separate inputs.
 newtype VisualShaderNodeVectorCompose = VisualShaderNodeVectorCompose Object
                                           deriving newtype AsVariant
 
@@ -5585,6 +6064,8 @@ instance HasBaseClass VisualShaderNodeVectorCompose where
         type BaseClass VisualShaderNodeVectorCompose = VisualShaderNode
         super = coerce
 
+-- | Decomposes a [Vector3] into three scalars within the visual shader graph.
+--   Takes a [code]vec3[/code] and decomposes it into three scalar values that can be used as separate inputs.
 newtype VisualShaderNodeVectorDecompose = VisualShaderNodeVectorDecompose Object
                                             deriving newtype AsVariant
 
@@ -5592,6 +6073,8 @@ instance HasBaseClass VisualShaderNodeVectorDecompose where
         type BaseClass VisualShaderNodeVectorDecompose = VisualShaderNode
         super = coerce
 
+-- | Calculates a vector derivative within the visual shader graph.
+--   This node is only available in [code]Fragment[/code] and [code]Light[/code] visual shaders.
 newtype VisualShaderNodeVectorDerivativeFunc = VisualShaderNodeVectorDerivativeFunc Object
                                                  deriving newtype AsVariant
 
@@ -5600,6 +6083,9 @@ instance HasBaseClass VisualShaderNodeVectorDerivativeFunc where
              VisualShaderNode
         super = coerce
 
+-- | Returns the distance between two points. To be used within the visual shader graph.
+--   Calculates distance from point represented by vector [code]p0[/code] to vector [code]p1[/code].
+--   		Translated to [code]distance(p0, p1)[/code] in the shader language.
 newtype VisualShaderNodeVectorDistance = VisualShaderNodeVectorDistance Object
                                            deriving newtype AsVariant
 
@@ -5607,6 +6093,8 @@ instance HasBaseClass VisualShaderNodeVectorDistance where
         type BaseClass VisualShaderNodeVectorDistance = VisualShaderNode
         super = coerce
 
+-- | A vector function to be used within the visual shader graph.
+--   A visual shader node able to perform different functions using vectors.
 newtype VisualShaderNodeVectorFunc = VisualShaderNodeVectorFunc Object
                                        deriving newtype AsVariant
 
@@ -5614,6 +6102,8 @@ instance HasBaseClass VisualShaderNodeVectorFunc where
         type BaseClass VisualShaderNodeVectorFunc = VisualShaderNode
         super = coerce
 
+-- | Linearly interpolates between two vectors within the visual shader graph.
+--   Translates to [code]mix(a, b, weight)[/code] in the shader language, where [code]weight[/code] is a [Vector3] with weights for each component.
 newtype VisualShaderNodeVectorInterp = VisualShaderNodeVectorInterp Object
                                          deriving newtype AsVariant
 
@@ -5621,6 +6111,8 @@ instance HasBaseClass VisualShaderNodeVectorInterp where
         type BaseClass VisualShaderNodeVectorInterp = VisualShaderNode
         super = coerce
 
+-- | Returns the length of a [Vector3] within the visual shader graph.
+--   Translated to [code]length(p0)[/code] in the shader language.
 newtype VisualShaderNodeVectorLen = VisualShaderNodeVectorLen Object
                                       deriving newtype AsVariant
 
@@ -5628,6 +6120,8 @@ instance HasBaseClass VisualShaderNodeVectorLen where
         type BaseClass VisualShaderNodeVectorLen = VisualShaderNode
         super = coerce
 
+-- | A vector operator to be used within the visual shader graph.
+--   A visual shader node for use of vector operators. Operates on vector [code]a[/code] and vector [code]b[/code].
 newtype VisualShaderNodeVectorOp = VisualShaderNodeVectorOp Object
                                      deriving newtype AsVariant
 
@@ -5635,6 +6129,8 @@ instance HasBaseClass VisualShaderNodeVectorOp where
         type BaseClass VisualShaderNodeVectorOp = VisualShaderNode
         super = coerce
 
+-- | Returns the [Vector3] that points in the direction of refraction. For use within the visual shader graph.
+--   Translated to [code]refract(I, N, eta)[/code] in the shader language, where [code]I[/code] is the incident vector, [code]N[/code] is the normal vector and [code]eta[/code] is the ratio of the indicies of the refraction.
 newtype VisualShaderNodeVectorRefract = VisualShaderNodeVectorRefract Object
                                           deriving newtype AsVariant
 
@@ -5642,6 +6138,8 @@ instance HasBaseClass VisualShaderNodeVectorRefract where
         type BaseClass VisualShaderNodeVectorRefract = VisualShaderNode
         super = coerce
 
+-- | Linearly interpolates between two vectors using a scalar. For use within the visual shader graph.
+--   Translates to [code]mix(a, b, weight)[/code] in the shader language, where [code]a[/code] and [code]b[/code] are vectors and [code]weight[/code] is a scalar.
 newtype VisualShaderNodeVectorScalarMix = VisualShaderNodeVectorScalarMix Object
                                             deriving newtype AsVariant
 
@@ -5649,6 +6147,9 @@ instance HasBaseClass VisualShaderNodeVectorScalarMix where
         type BaseClass VisualShaderNodeVectorScalarMix = VisualShaderNode
         super = coerce
 
+-- | Calculates a vector SmoothStep function using scalar within the visual shader graph.
+--   Translates to [code]smoothstep(edge0, edge1, x)[/code] in the shader language, where [code]x[/code] is a scalar.
+--   		Returns [code]0.0[/code] if [code]x[/code] is smaller than [code]edge0[/code] and [code]1.0[/code] if [code]x[/code] is larger than [code]edge1[/code]. Otherwise the return value is interpolated between [code]0.0[/code] and [code]1.0[/code] using Hermite polynomials.
 newtype VisualShaderNodeVectorScalarSmoothStep = VisualShaderNodeVectorScalarSmoothStep Object
                                                    deriving newtype AsVariant
 
@@ -5657,6 +6158,9 @@ instance HasBaseClass VisualShaderNodeVectorScalarSmoothStep where
              VisualShaderNode
         super = coerce
 
+-- | Calculates a vector Step function within the visual shader graph.
+--   Translates to [code]step(edge, x)[/code] in the shader language.
+--   		Returns [code]0.0[/code] if [code]x[/code] is smaller than [code]edge[/code] and [code]1.0[/code] otherwise.
 newtype VisualShaderNodeVectorScalarStep = VisualShaderNodeVectorScalarStep Object
                                              deriving newtype AsVariant
 
@@ -5664,6 +6168,9 @@ instance HasBaseClass VisualShaderNodeVectorScalarStep where
         type BaseClass VisualShaderNodeVectorScalarStep = VisualShaderNode
         super = coerce
 
+-- | Calculates a vector SmoothStep function within the visual shader graph.
+--   Translates to [code]smoothstep(edge0, edge1, x)[/code] in the shader language, where [code]x[/code] is a vector.
+--   		Returns [code]0.0[/code] if [code]x[/code] is smaller than [code]edge0[/code] and [code]1.0[/code] if [code]x[/code] is larger than [code]edge1[/code]. Otherwise the return value is interpolated between [code]0.0[/code] and [code]1.0[/code] using Hermite polynomials.
 newtype VisualShaderNodeVectorSmoothStep = VisualShaderNodeVectorSmoothStep Object
                                              deriving newtype AsVariant
 
@@ -5771,9 +6278,9 @@ instance HasBaseClass World2D where
         super = coerce
 
 -- | Default environment properties for the entire scene (post-processing effects, lighting and background settings).
---   The [code]WorldEnvironment[/code] node is used to configure the default [Environment] for the scene.
---   		The parameters defined in the [code]WorldEnvironment[/code] can be overridden by an [Environment] node set on the current [Camera]. Additionally, only one [code]WorldEnvironment[/code] may be instanced in a given scene at a time.
---   		The [code]WorldEnvironment[/code] allows the user to specify default lighting parameters (e.g. ambient lighting), various post-processing effects (e.g. SSAO, DOF, Tonemapping), and how to draw the background (e.g. solid color, skybox). Usually, these are added in order to improve the realism/color balance of the scene.
+--   The [WorldEnvironment] node is used to configure the default [Environment] for the scene.
+--   		The parameters defined in the [WorldEnvironment] can be overridden by an [Environment] node set on the current [Camera]. Additionally, only one [WorldEnvironment] may be instanced in a given scene at a time.
+--   		The [WorldEnvironment] allows the user to specify default lighting parameters (e.g. ambient lighting), various post-processing effects (e.g. SSAO, DOF, Tonemapping), and how to draw the background (e.g. solid color, skybox). Usually, these are added in order to improve the realism/color balance of the scene.
 newtype WorldEnvironment = WorldEnvironment Object
                              deriving newtype AsVariant
 
@@ -5781,6 +6288,10 @@ instance HasBaseClass WorldEnvironment where
         type BaseClass WorldEnvironment = Node
         super = coerce
 
+-- | An X509 certificate (e.g. for SSL).
+--   The X509Certificate class represents an X509 certificate. Certificates can be loaded and saved like any other [Resource].
+--   		They can be used as the server certificate in [method StreamPeerSSL.accept_stream] (along with the proper [CryptoKey]), and to specify the only certificate that should be accepted when connecting to an SSL server via [method StreamPeerSSL.connect_to_stream].
+--   		[b]Note:[/b] Not available in HTML5 exports.
 newtype X509Certificate = X509Certificate Object
                             deriving newtype AsVariant
 
@@ -5788,8 +6299,8 @@ instance HasBaseClass X509Certificate where
         type BaseClass X509Certificate = Resource
         super = coerce
 
--- | Low-level class for creating parsers for XML files.
---   This class can serve as base to make custom XML parsers. Since XML is a very flexible standard, this interface is low level so it can be applied to any possible schema.
+-- | Low-level class for creating parsers for [url=https://en.wikipedia.org/wiki/XML]XML[/url] files.
+--   This class can serve as base to make custom XML parsers. Since XML is a very flexible standard, this interface is low-level so it can be applied to any possible schema.
 newtype XMLParser = XMLParser Object
                       deriving newtype AsVariant
 
@@ -5818,6 +6329,7 @@ instance HasBaseClass ClassDB where
 
 -- | Type used to handle the filesystem.
 --   Directory type. It is used to manage directories and their content (not restricted to the project folder).
+--   		When creating a new [Directory], its default opened directory will be [code]res://[/code]. This may change in the future, so it is advised to always use [method open] to initialize your [Directory] where you want to operate, with explicit error checking.
 --   		Here is an example on how to iterate through the files of a directory:
 --   		[codeblock]
 --   		func dir_contents(path):
@@ -5825,7 +6337,7 @@ instance HasBaseClass ClassDB where
 --   		    if dir.open(path) == OK:
 --   		        dir.list_dir_begin()
 --   		        var file_name = dir.get_next()
---   		        while (file_name != ""):
+--   		        while file_name != "":
 --   		            if dir.current_is_dir():
 --   		                print("Found directory: " + file_name)
 --   		            else:
@@ -5841,8 +6353,8 @@ instance HasBaseClass Directory where
         type BaseClass Directory = Reference
         super = coerce
 
--- | Access to basic engine properties.
---   The [code]Engine[/code] class allows you to query and modify the game's run-time parameters, such as frames per second, time scale, and others.
+-- | Access to engine properties.
+--   The [Engine] singleton allows you to query and modify the project's run-time parameters, such as frames per second, time scale, and others.
 newtype Engine = Engine Object
                    deriving newtype AsVariant
 
@@ -5867,6 +6379,7 @@ instance HasBaseClass Engine where
 --   		    file.close()
 --   		    return content
 --   		[/codeblock]
+--   		In the example above, the file will be saved in the user data folder as specified in the [url=https://docs.godotengine.org/en/latest/tutorials/io/data_paths.html]Data paths[/url] documentation.
 newtype File = File Object
                  deriving newtype AsVariant
 
@@ -5874,6 +6387,8 @@ instance HasBaseClass File where
         type BaseClass File = Reference
         super = coerce
 
+-- | Helper node to calculate generic geometry operations.
+--   Geometry provides users with a set of helper functions to create geometric shapes, compute intersections between shapes, and process various other geometric operations.
 newtype Geometry = Geometry Object
                      deriving newtype AsVariant
 
@@ -5899,8 +6414,8 @@ instance HasBaseClass Marshalls where
         type BaseClass Marshalls = Reference
         super = coerce
 
--- | A synchronization Mutex.
---    Element used to synchronize multiple [Thread]s. Basically a binary [Semaphore]. Guarantees that only one thread can ever acquire this lock at a time. Can be used to protect a critical section. Be careful to avoid deadlocks.
+-- | A synchronization mutex (mutual exclusion).
+--    This is used to synchronize multiple [Thread]s, and is equivalent to a binary [Semaphore]. It guarantees that only one thread can ever acquire the lock at a time. A mutex can be used to protect a critical section; however, be careful to avoid deadlocks.
 newtype Mutex = Mutex Object
                   deriving newtype AsVariant
 
@@ -5909,7 +6424,7 @@ instance HasBaseClass Mutex where
         super = coerce
 
 -- | Operating System functions.
---    OS Wraps the most common functionality to communicate with the host Operating System, such as: clipboard, video mode, date and time, timers, environment variables, execution of binaries, command line, etc.
+--    OS wraps the most common functionality to communicate with the host operating system, such as the clipboard, video driver, date and time, timers, environment variables, execution of binaries, command line, etc.
 newtype OS = OS Object
                deriving newtype AsVariant
 
@@ -5938,8 +6453,8 @@ instance HasBaseClass ResourceSaver where
         type BaseClass ResourceSaver = Object
         super = coerce
 
--- | A synchronization Semaphore.
---    Element used to synchronize multiple [Thread]s. Initialized to zero on creation. Be careful to avoid deadlocks. For a binary version, see [Mutex].
+-- | A synchronization semaphore.
+--   A synchronization semaphore which can be used to synchronize multiple [Thread]s. Initialized to zero on creation. Be careful to avoid deadlocks. For a binary version, see [Mutex].
 newtype Semaphore = Semaphore Object
                       deriving newtype AsVariant
 
@@ -5948,7 +6463,8 @@ instance HasBaseClass Semaphore where
         super = coerce
 
 -- | A unit of execution in a process.
---    Can run methods on [Object]s simultaneously. The use of synchronization via [Mutex], [Semaphore] is advised if working with shared objects.
+--    Can run methods on [Object]s simultaneously. The use of synchronization via [Mutex] or [Semaphore] is advised if working with shared objects.
+--   		[b]Note:[/b] Breakpoints won't break on code if it's running in a thread. This is a current limitation of the GDScript debugger.
 newtype Thread = Thread Object
                    deriving newtype AsVariant
 

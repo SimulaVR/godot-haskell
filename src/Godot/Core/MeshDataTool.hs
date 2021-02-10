@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.MeshDataTool
        (Godot.Core.MeshDataTool.clear,
         Godot.Core.MeshDataTool.commit_to_surface,
@@ -266,7 +267,7 @@ get_face_edge cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_get_face_meta #-}
 
--- | Returns meta data associated with given face.
+-- | Returns the metadata associated with the given face.
 bindMeshDataTool_get_face_meta :: MethodBind
 bindMeshDataTool_get_face_meta
   = unsafePerformIO $
@@ -276,7 +277,7 @@ bindMeshDataTool_get_face_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns meta data associated with given face.
+-- | Returns the metadata associated with the given face.
 get_face_meta ::
                 (MeshDataTool :< cls, Object :< cls) =>
                 cls -> Int -> IO GodotVariant
@@ -290,7 +291,7 @@ get_face_meta cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_face_normal #-}
 
--- | Calculates and returns face normal of given face.
+-- | Calculates and returns the face normal of the given face.
 bindMeshDataTool_get_face_normal :: MethodBind
 bindMeshDataTool_get_face_normal
   = unsafePerformIO $
@@ -300,7 +301,7 @@ bindMeshDataTool_get_face_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calculates and returns face normal of given face.
+-- | Calculates and returns the face normal of the given face.
 get_face_normal ::
                   (MeshDataTool :< cls, Object :< cls) => cls -> Int -> IO Vector3
 get_face_normal cls arg1
@@ -314,7 +315,7 @@ get_face_normal cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_face_vertex #-}
 
--- | Returns specified vertex of given face.
+-- | Returns the specified vertex of the given face.
 --   				Vertex argument must be 2 or less because faces contain three vertices.
 bindMeshDataTool_get_face_vertex :: MethodBind
 bindMeshDataTool_get_face_vertex
@@ -325,7 +326,7 @@ bindMeshDataTool_get_face_vertex
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns specified vertex of given face.
+-- | Returns the specified vertex of the given face.
 --   				Vertex argument must be 2 or less because faces contain three vertices.
 get_face_vertex ::
                   (MeshDataTool :< cls, Object :< cls) => cls -> Int -> Int -> IO Int
@@ -340,8 +341,8 @@ get_face_vertex cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_get_format #-}
 
--- | Returns format of [Mesh]. Format is an integer made up of [Mesh] format flags combined together. For example, a mesh containing both vertices and normals would return a format of [code]3[/code] because [constant ArrayMesh.ARRAY_FORMAT_VERTEX] is [code]1[/code] and [constant ArrayMesh.ARRAY_FORMAT_NORMAL] is [code]2[/code].
---   				For list of format flags see [enum ArrayMesh.ArrayFormat].
+-- | Returns the [Mesh]'s format. Format is an integer made up of [Mesh] format flags combined together. For example, a mesh containing both vertices and normals would return a format of [code]3[/code] because [constant ArrayMesh.ARRAY_FORMAT_VERTEX] is [code]1[/code] and [constant ArrayMesh.ARRAY_FORMAT_NORMAL] is [code]2[/code].
+--   				See [enum ArrayMesh.ArrayFormat] for a list of format flags.
 bindMeshDataTool_get_format :: MethodBind
 bindMeshDataTool_get_format
   = unsafePerformIO $
@@ -351,8 +352,8 @@ bindMeshDataTool_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns format of [Mesh]. Format is an integer made up of [Mesh] format flags combined together. For example, a mesh containing both vertices and normals would return a format of [code]3[/code] because [constant ArrayMesh.ARRAY_FORMAT_VERTEX] is [code]1[/code] and [constant ArrayMesh.ARRAY_FORMAT_NORMAL] is [code]2[/code].
---   				For list of format flags see [enum ArrayMesh.ArrayFormat].
+-- | Returns the [Mesh]'s format. Format is an integer made up of [Mesh] format flags combined together. For example, a mesh containing both vertices and normals would return a format of [code]3[/code] because [constant ArrayMesh.ARRAY_FORMAT_VERTEX] is [code]1[/code] and [constant ArrayMesh.ARRAY_FORMAT_NORMAL] is [code]2[/code].
+--   				See [enum ArrayMesh.ArrayFormat] for a list of format flags.
 get_format :: (MeshDataTool :< cls, Object :< cls) => cls -> IO Int
 get_format cls
   = withVariantArray []
@@ -364,7 +365,7 @@ get_format cls
 
 {-# NOINLINE bindMeshDataTool_get_material #-}
 
--- | Returns material assigned to the [Mesh].
+-- | Returns the material assigned to the [Mesh].
 bindMeshDataTool_get_material :: MethodBind
 bindMeshDataTool_get_material
   = unsafePerformIO $
@@ -374,7 +375,7 @@ bindMeshDataTool_get_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns material assigned to the [Mesh].
+-- | Returns the material assigned to the [Mesh].
 get_material ::
                (MeshDataTool :< cls, Object :< cls) => cls -> IO Material
 get_material cls
@@ -483,7 +484,7 @@ get_vertex_count cls
 
 {-# NOINLINE bindMeshDataTool_get_vertex_edges #-}
 
--- | Returns array of edges that share given vertex.
+-- | Returns an array of edges that share the given vertex.
 bindMeshDataTool_get_vertex_edges :: MethodBind
 bindMeshDataTool_get_vertex_edges
   = unsafePerformIO $
@@ -493,7 +494,7 @@ bindMeshDataTool_get_vertex_edges
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns array of edges that share given vertex.
+-- | Returns an array of edges that share the given vertex.
 get_vertex_edges ::
                    (MeshDataTool :< cls, Object :< cls) =>
                    cls -> Int -> IO PoolIntArray
@@ -508,7 +509,7 @@ get_vertex_edges cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_vertex_faces #-}
 
--- | Returns array of faces that share given vertex.
+-- | Returns an array of faces that share the given vertex.
 bindMeshDataTool_get_vertex_faces :: MethodBind
 bindMeshDataTool_get_vertex_faces
   = unsafePerformIO $
@@ -518,7 +519,7 @@ bindMeshDataTool_get_vertex_faces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns array of faces that share given vertex.
+-- | Returns an array of faces that share the given vertex.
 get_vertex_faces ::
                    (MeshDataTool :< cls, Object :< cls) =>
                    cls -> Int -> IO PoolIntArray
@@ -533,7 +534,7 @@ get_vertex_faces cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_vertex_meta #-}
 
--- | Returns meta data associated with given vertex.
+-- | Returns the metadata associated with the given vertex.
 bindMeshDataTool_get_vertex_meta :: MethodBind
 bindMeshDataTool_get_vertex_meta
   = unsafePerformIO $
@@ -543,7 +544,7 @@ bindMeshDataTool_get_vertex_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns meta data associated with given vertex.
+-- | Returns the metadata associated with the given vertex.
 get_vertex_meta ::
                   (MeshDataTool :< cls, Object :< cls) =>
                   cls -> Int -> IO GodotVariant
@@ -558,7 +559,7 @@ get_vertex_meta cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_vertex_normal #-}
 
--- | Returns normal of given vertex.
+-- | Returns the normal of the given vertex.
 bindMeshDataTool_get_vertex_normal :: MethodBind
 bindMeshDataTool_get_vertex_normal
   = unsafePerformIO $
@@ -568,7 +569,7 @@ bindMeshDataTool_get_vertex_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns normal of given vertex.
+-- | Returns the normal of the given vertex.
 get_vertex_normal ::
                     (MeshDataTool :< cls, Object :< cls) => cls -> Int -> IO Vector3
 get_vertex_normal cls arg1
@@ -582,7 +583,7 @@ get_vertex_normal cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_vertex_tangent #-}
 
--- | Returns tangent of given vertex.
+-- | Returns the tangent of the given vertex.
 bindMeshDataTool_get_vertex_tangent :: MethodBind
 bindMeshDataTool_get_vertex_tangent
   = unsafePerformIO $
@@ -592,7 +593,7 @@ bindMeshDataTool_get_vertex_tangent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns tangent of given vertex.
+-- | Returns the tangent of the given vertex.
 get_vertex_tangent ::
                      (MeshDataTool :< cls, Object :< cls) => cls -> Int -> IO Plane
 get_vertex_tangent cls arg1
@@ -606,7 +607,7 @@ get_vertex_tangent cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_vertex_uv #-}
 
--- | Returns UV of given vertex.
+-- | Returns the UV of the given vertex.
 bindMeshDataTool_get_vertex_uv :: MethodBind
 bindMeshDataTool_get_vertex_uv
   = unsafePerformIO $
@@ -616,7 +617,7 @@ bindMeshDataTool_get_vertex_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns UV of given vertex.
+-- | Returns the UV of the given vertex.
 get_vertex_uv ::
                 (MeshDataTool :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_vertex_uv cls arg1
@@ -629,7 +630,7 @@ get_vertex_uv cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_vertex_uv2 #-}
 
--- | Returns UV2 of given vertex.
+-- | Returns the UV2 of the given vertex.
 bindMeshDataTool_get_vertex_uv2 :: MethodBind
 bindMeshDataTool_get_vertex_uv2
   = unsafePerformIO $
@@ -639,7 +640,7 @@ bindMeshDataTool_get_vertex_uv2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns UV2 of given vertex.
+-- | Returns the UV2 of the given vertex.
 get_vertex_uv2 ::
                  (MeshDataTool :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_vertex_uv2 cls arg1
@@ -652,7 +653,7 @@ get_vertex_uv2 cls arg1
 
 {-# NOINLINE bindMeshDataTool_get_vertex_weights #-}
 
--- | Returns bone weights of given vertex.
+-- | Returns bone weights of the given vertex.
 bindMeshDataTool_get_vertex_weights :: MethodBind
 bindMeshDataTool_get_vertex_weights
   = unsafePerformIO $
@@ -662,7 +663,7 @@ bindMeshDataTool_get_vertex_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns bone weights of given vertex.
+-- | Returns bone weights of the given vertex.
 get_vertex_weights ::
                      (MeshDataTool :< cls, Object :< cls) =>
                      cls -> Int -> IO PoolRealArray
@@ -677,7 +678,7 @@ get_vertex_weights cls arg1
 
 {-# NOINLINE bindMeshDataTool_set_edge_meta #-}
 
--- | Sets the meta data of given edge.
+-- | Sets the metadata of the given edge.
 bindMeshDataTool_set_edge_meta :: MethodBind
 bindMeshDataTool_set_edge_meta
   = unsafePerformIO $
@@ -687,7 +688,7 @@ bindMeshDataTool_set_edge_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the meta data of given edge.
+-- | Sets the metadata of the given edge.
 set_edge_meta ::
                 (MeshDataTool :< cls, Object :< cls) =>
                 cls -> Int -> GodotVariant -> IO ()
@@ -701,7 +702,7 @@ set_edge_meta cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_face_meta #-}
 
--- | Sets the meta data of given face.
+-- | Sets the metadata of the given face.
 bindMeshDataTool_set_face_meta :: MethodBind
 bindMeshDataTool_set_face_meta
   = unsafePerformIO $
@@ -711,7 +712,7 @@ bindMeshDataTool_set_face_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the meta data of given face.
+-- | Sets the metadata of the given face.
 set_face_meta ::
                 (MeshDataTool :< cls, Object :< cls) =>
                 cls -> Int -> GodotVariant -> IO ()
@@ -725,7 +726,7 @@ set_face_meta cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_material #-}
 
--- | Sets the material to be used by newly constructed [Mesh].
+-- | Sets the material to be used by newly-constructed [Mesh].
 bindMeshDataTool_set_material :: MethodBind
 bindMeshDataTool_set_material
   = unsafePerformIO $
@@ -735,7 +736,7 @@ bindMeshDataTool_set_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the material to be used by newly constructed [Mesh].
+-- | Sets the material to be used by newly-constructed [Mesh].
 set_material ::
                (MeshDataTool :< cls, Object :< cls) => cls -> Material -> IO ()
 set_material cls arg1
@@ -748,7 +749,7 @@ set_material cls arg1
 
 {-# NOINLINE bindMeshDataTool_set_vertex #-}
 
--- | Sets the position of given vertex.
+-- | Sets the position of the given vertex.
 bindMeshDataTool_set_vertex :: MethodBind
 bindMeshDataTool_set_vertex
   = unsafePerformIO $
@@ -758,7 +759,7 @@ bindMeshDataTool_set_vertex
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the position of given vertex.
+-- | Sets the position of the given vertex.
 set_vertex ::
              (MeshDataTool :< cls, Object :< cls) =>
              cls -> Int -> Vector3 -> IO ()
@@ -772,7 +773,7 @@ set_vertex cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_bones #-}
 
--- | Sets the bones of given vertex.
+-- | Sets the bones of the given vertex.
 bindMeshDataTool_set_vertex_bones :: MethodBind
 bindMeshDataTool_set_vertex_bones
   = unsafePerformIO $
@@ -782,7 +783,7 @@ bindMeshDataTool_set_vertex_bones
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the bones of given vertex.
+-- | Sets the bones of the given vertex.
 set_vertex_bones ::
                    (MeshDataTool :< cls, Object :< cls) =>
                    cls -> Int -> PoolIntArray -> IO ()
@@ -797,7 +798,7 @@ set_vertex_bones cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_color #-}
 
--- | Sets the color of given vertex.
+-- | Sets the color of the given vertex.
 bindMeshDataTool_set_vertex_color :: MethodBind
 bindMeshDataTool_set_vertex_color
   = unsafePerformIO $
@@ -807,7 +808,7 @@ bindMeshDataTool_set_vertex_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the color of given vertex.
+-- | Sets the color of the given vertex.
 set_vertex_color ::
                    (MeshDataTool :< cls, Object :< cls) =>
                    cls -> Int -> Color -> IO ()
@@ -822,7 +823,7 @@ set_vertex_color cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_meta #-}
 
--- | Sets the meta data associated with given vertex.
+-- | Sets the metadata associated with the given vertex.
 bindMeshDataTool_set_vertex_meta :: MethodBind
 bindMeshDataTool_set_vertex_meta
   = unsafePerformIO $
@@ -832,7 +833,7 @@ bindMeshDataTool_set_vertex_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the meta data associated with given vertex.
+-- | Sets the metadata associated with the given vertex.
 set_vertex_meta ::
                   (MeshDataTool :< cls, Object :< cls) =>
                   cls -> Int -> GodotVariant -> IO ()
@@ -847,7 +848,7 @@ set_vertex_meta cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_normal #-}
 
--- | Sets the normal of given vertex.
+-- | Sets the normal of the given vertex.
 bindMeshDataTool_set_vertex_normal :: MethodBind
 bindMeshDataTool_set_vertex_normal
   = unsafePerformIO $
@@ -857,7 +858,7 @@ bindMeshDataTool_set_vertex_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the normal of given vertex.
+-- | Sets the normal of the given vertex.
 set_vertex_normal ::
                     (MeshDataTool :< cls, Object :< cls) =>
                     cls -> Int -> Vector3 -> IO ()
@@ -872,7 +873,7 @@ set_vertex_normal cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_tangent #-}
 
--- | Sets the tangent of given vertex.
+-- | Sets the tangent of the given vertex.
 bindMeshDataTool_set_vertex_tangent :: MethodBind
 bindMeshDataTool_set_vertex_tangent
   = unsafePerformIO $
@@ -882,7 +883,7 @@ bindMeshDataTool_set_vertex_tangent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the tangent of given vertex.
+-- | Sets the tangent of the given vertex.
 set_vertex_tangent ::
                      (MeshDataTool :< cls, Object :< cls) =>
                      cls -> Int -> Plane -> IO ()
@@ -897,7 +898,7 @@ set_vertex_tangent cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_uv #-}
 
--- | Sets the UV of given vertex.
+-- | Sets the UV of the given vertex.
 bindMeshDataTool_set_vertex_uv :: MethodBind
 bindMeshDataTool_set_vertex_uv
   = unsafePerformIO $
@@ -907,7 +908,7 @@ bindMeshDataTool_set_vertex_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the UV of given vertex.
+-- | Sets the UV of the given vertex.
 set_vertex_uv ::
                 (MeshDataTool :< cls, Object :< cls) =>
                 cls -> Int -> Vector2 -> IO ()
@@ -921,7 +922,7 @@ set_vertex_uv cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_uv2 #-}
 
--- | Sets the UV2 of given vertex.
+-- | Sets the UV2 of the given vertex.
 bindMeshDataTool_set_vertex_uv2 :: MethodBind
 bindMeshDataTool_set_vertex_uv2
   = unsafePerformIO $
@@ -931,7 +932,7 @@ bindMeshDataTool_set_vertex_uv2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the UV2 of given vertex.
+-- | Sets the UV2 of the given vertex.
 set_vertex_uv2 ::
                  (MeshDataTool :< cls, Object :< cls) =>
                  cls -> Int -> Vector2 -> IO ()
@@ -945,7 +946,7 @@ set_vertex_uv2 cls arg1 arg2
 
 {-# NOINLINE bindMeshDataTool_set_vertex_weights #-}
 
--- | Sets the bone weights of given vertex.
+-- | Sets the bone weights of the given vertex.
 bindMeshDataTool_set_vertex_weights :: MethodBind
 bindMeshDataTool_set_vertex_weights
   = unsafePerformIO $
@@ -955,7 +956,7 @@ bindMeshDataTool_set_vertex_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the bone weights of given vertex.
+-- | Sets the bone weights of the given vertex.
 set_vertex_weights ::
                      (MeshDataTool :< cls, Object :< cls) =>
                      cls -> Int -> PoolRealArray -> IO ()

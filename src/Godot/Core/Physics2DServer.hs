@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Physics2DServer
        (Godot.Core.Physics2DServer._SPACE_PARAM_CONSTRAINT_DEFAULT_BIAS,
         Godot.Core.Physics2DServer._AREA_SPACE_OVERRIDE_REPLACE,
@@ -813,7 +814,7 @@ area_set_collision_mask cls arg1 arg2
 {-# NOINLINE bindPhysics2DServer_area_set_monitor_callback #-}
 
 -- | Sets the function to call when any body/area enters or exits the area. This callback will be called for any object interacting with the area, and takes five parameters:
---   				1: AREA_BODY_ADDED or AREA_BODY_REMOVED, depending on whether the object entered or exited the area.
+--   				1: [constant AREA_BODY_ADDED] or [constant AREA_BODY_REMOVED], depending on whether the object entered or exited the area.
 --   				2: [RID] of the object that entered/exited the area.
 --   				3: Instance ID of the object that entered/exited the area.
 --   				4: The shape index of the object that entered/exited the area.
@@ -828,7 +829,7 @@ bindPhysics2DServer_area_set_monitor_callback
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the function to call when any body/area enters or exits the area. This callback will be called for any object interacting with the area, and takes five parameters:
---   				1: AREA_BODY_ADDED or AREA_BODY_REMOVED, depending on whether the object entered or exited the area.
+--   				1: [constant AREA_BODY_ADDED] or [constant AREA_BODY_REMOVED], depending on whether the object entered or exited the area.
 --   				2: [RID] of the object that entered/exited the area.
 --   				3: Instance ID of the object that entered/exited the area.
 --   				4: The shape index of the object that entered/exited the area.
@@ -2183,6 +2184,7 @@ body_set_space cls arg1 arg2
 {-# NOINLINE bindPhysics2DServer_body_set_state #-}
 
 -- | Sets a body state using one of the [enum BodyState] constants.
+--   				Note that the method doesn't take effect immediately. The state will change on the next physics frame.
 bindPhysics2DServer_body_set_state :: MethodBind
 bindPhysics2DServer_body_set_state
   = unsafePerformIO $
@@ -2193,6 +2195,7 @@ bindPhysics2DServer_body_set_state
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets a body state using one of the [enum BodyState] constants.
+--   				Note that the method doesn't take effect immediately. The state will change on the next physics frame.
 body_set_state ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> GodotVariant -> IO ()
@@ -2207,7 +2210,7 @@ body_set_state cls arg1 arg2 arg3
 
 {-# NOINLINE bindPhysics2DServer_body_test_motion #-}
 
--- | Returns whether a body can move from a given point in a given direction. Apart from the boolean return value, a [Physics2DTestMotionResult] can be passed to return additional information in.
+-- | Returns [code]true[/code] if a collision would result from moving in the given direction from a given point in space. Margin increases the size of the shapes involved in the collision detection. [Physics2DTestMotionResult] can be passed to return additional information in.
 bindPhysics2DServer_body_test_motion :: MethodBind
 bindPhysics2DServer_body_test_motion
   = unsafePerformIO $
@@ -2217,7 +2220,7 @@ bindPhysics2DServer_body_test_motion
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether a body can move from a given point in a given direction. Apart from the boolean return value, a [Physics2DTestMotionResult] can be passed to return additional information in.
+-- | Returns [code]true[/code] if a collision would result from moving in the given direction from a given point in space. Margin increases the size of the shapes involved in the collision detection. [Physics2DTestMotionResult] can be passed to return additional information in.
 body_test_motion ::
                    (Physics2DServer :< cls, Object :< cls) =>
                    cls ->
@@ -2505,7 +2508,7 @@ joint_get_param cls arg1 arg2
 
 {-# NOINLINE bindPhysics2DServer_joint_get_type #-}
 
--- | Returns the type of a joint (see [enum JointType]).
+-- | Returns a joint's type (see [enum JointType]).
 bindPhysics2DServer_joint_get_type :: MethodBind
 bindPhysics2DServer_joint_get_type
   = unsafePerformIO $
@@ -2515,7 +2518,7 @@ bindPhysics2DServer_joint_get_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the type of a joint (see [enum JointType]).
+-- | Returns a joint's type (see [enum JointType]).
 joint_get_type ::
                  (Physics2DServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 joint_get_type cls arg1
@@ -2715,7 +2718,7 @@ shape_get_data cls arg1
 
 {-# NOINLINE bindPhysics2DServer_shape_get_type #-}
 
--- | Returns the type of shape (see [enum ShapeType]).
+-- | Returns a shape's type (see [enum ShapeType]).
 bindPhysics2DServer_shape_get_type :: MethodBind
 bindPhysics2DServer_shape_get_type
   = unsafePerformIO $
@@ -2725,7 +2728,7 @@ bindPhysics2DServer_shape_get_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the type of shape (see [enum ShapeType]).
+-- | Returns a shape's type (see [enum ShapeType]).
 shape_get_type ::
                  (Physics2DServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 shape_get_type cls arg1

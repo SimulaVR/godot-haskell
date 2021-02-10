@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Generic6DOFJoint
        (Godot.Core.Generic6DOFJoint._PARAM_ANGULAR_LOWER_LIMIT,
         Godot.Core.Generic6DOFJoint._FLAG_ENABLE_LINEAR_MOTOR,
@@ -133,7 +134,7 @@ _PARAM_ANGULAR_RESTITUTION = 14
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_hi_limit_x #-}
 
--- | The minimum rotation in positive direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the X axis.
 bindGeneric6DOFJoint__get_angular_hi_limit_x :: MethodBind
 bindGeneric6DOFJoint__get_angular_hi_limit_x
   = unsafePerformIO $
@@ -143,7 +144,7 @@ bindGeneric6DOFJoint__get_angular_hi_limit_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in positive direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the X axis.
 _get_angular_hi_limit_x ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> IO Float
 _get_angular_hi_limit_x cls
@@ -157,7 +158,7 @@ _get_angular_hi_limit_x cls
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_hi_limit_y #-}
 
--- | The minimum rotation in positive direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Y axis.
 bindGeneric6DOFJoint__get_angular_hi_limit_y :: MethodBind
 bindGeneric6DOFJoint__get_angular_hi_limit_y
   = unsafePerformIO $
@@ -167,7 +168,7 @@ bindGeneric6DOFJoint__get_angular_hi_limit_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in positive direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Y axis.
 _get_angular_hi_limit_y ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> IO Float
 _get_angular_hi_limit_y cls
@@ -181,7 +182,7 @@ _get_angular_hi_limit_y cls
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_hi_limit_z #-}
 
--- | The minimum rotation in positive direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Z axis.
 bindGeneric6DOFJoint__get_angular_hi_limit_z :: MethodBind
 bindGeneric6DOFJoint__get_angular_hi_limit_z
   = unsafePerformIO $
@@ -191,7 +192,7 @@ bindGeneric6DOFJoint__get_angular_hi_limit_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in positive direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Z axis.
 _get_angular_hi_limit_z ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> IO Float
 _get_angular_hi_limit_z cls
@@ -205,7 +206,7 @@ _get_angular_hi_limit_z cls
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_lo_limit_x #-}
 
--- | The minimum rotation in negative direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the X axis.
 bindGeneric6DOFJoint__get_angular_lo_limit_x :: MethodBind
 bindGeneric6DOFJoint__get_angular_lo_limit_x
   = unsafePerformIO $
@@ -215,7 +216,7 @@ bindGeneric6DOFJoint__get_angular_lo_limit_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in negative direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the X axis.
 _get_angular_lo_limit_x ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> IO Float
 _get_angular_lo_limit_x cls
@@ -229,7 +230,7 @@ _get_angular_lo_limit_x cls
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_lo_limit_y #-}
 
--- | The minimum rotation in negative direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Y axis.
 bindGeneric6DOFJoint__get_angular_lo_limit_y :: MethodBind
 bindGeneric6DOFJoint__get_angular_lo_limit_y
   = unsafePerformIO $
@@ -239,7 +240,7 @@ bindGeneric6DOFJoint__get_angular_lo_limit_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in negative direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Y axis.
 _get_angular_lo_limit_y ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> IO Float
 _get_angular_lo_limit_y cls
@@ -253,7 +254,7 @@ _get_angular_lo_limit_y cls
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_lo_limit_z #-}
 
--- | The minimum rotation in negative direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Z axis.
 bindGeneric6DOFJoint__get_angular_lo_limit_z :: MethodBind
 bindGeneric6DOFJoint__get_angular_lo_limit_z
   = unsafePerformIO $
@@ -263,7 +264,7 @@ bindGeneric6DOFJoint__get_angular_lo_limit_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in negative direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Z axis.
 _get_angular_lo_limit_z ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> IO Float
 _get_angular_lo_limit_z cls
@@ -277,7 +278,7 @@ _get_angular_lo_limit_z cls
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_hi_limit_x #-}
 
--- | The minimum rotation in positive direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the X axis.
 bindGeneric6DOFJoint__set_angular_hi_limit_x :: MethodBind
 bindGeneric6DOFJoint__set_angular_hi_limit_x
   = unsafePerformIO $
@@ -287,7 +288,7 @@ bindGeneric6DOFJoint__set_angular_hi_limit_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in positive direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the X axis.
 _set_angular_hi_limit_x ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_angular_hi_limit_x cls arg1
@@ -301,7 +302,7 @@ _set_angular_hi_limit_x cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_hi_limit_y #-}
 
--- | The minimum rotation in positive direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Y axis.
 bindGeneric6DOFJoint__set_angular_hi_limit_y :: MethodBind
 bindGeneric6DOFJoint__set_angular_hi_limit_y
   = unsafePerformIO $
@@ -311,7 +312,7 @@ bindGeneric6DOFJoint__set_angular_hi_limit_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in positive direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Y axis.
 _set_angular_hi_limit_y ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_angular_hi_limit_y cls arg1
@@ -325,7 +326,7 @@ _set_angular_hi_limit_y cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_hi_limit_z #-}
 
--- | The minimum rotation in positive direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Z axis.
 bindGeneric6DOFJoint__set_angular_hi_limit_z :: MethodBind
 bindGeneric6DOFJoint__set_angular_hi_limit_z
   = unsafePerformIO $
@@ -335,7 +336,7 @@ bindGeneric6DOFJoint__set_angular_hi_limit_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in positive direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in positive direction to break loose and rotate around the Z axis.
 _set_angular_hi_limit_z ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_angular_hi_limit_z cls arg1
@@ -349,7 +350,7 @@ _set_angular_hi_limit_z cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_lo_limit_x #-}
 
--- | The minimum rotation in negative direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the X axis.
 bindGeneric6DOFJoint__set_angular_lo_limit_x :: MethodBind
 bindGeneric6DOFJoint__set_angular_lo_limit_x
   = unsafePerformIO $
@@ -359,7 +360,7 @@ bindGeneric6DOFJoint__set_angular_lo_limit_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in negative direction to break loose and rotate around the x-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the X axis.
 _set_angular_lo_limit_x ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_angular_lo_limit_x cls arg1
@@ -373,7 +374,7 @@ _set_angular_lo_limit_x cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_lo_limit_y #-}
 
--- | The minimum rotation in negative direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Y axis.
 bindGeneric6DOFJoint__set_angular_lo_limit_y :: MethodBind
 bindGeneric6DOFJoint__set_angular_lo_limit_y
   = unsafePerformIO $
@@ -383,7 +384,7 @@ bindGeneric6DOFJoint__set_angular_lo_limit_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in negative direction to break loose and rotate around the y-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Y axis.
 _set_angular_lo_limit_y ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_angular_lo_limit_y cls arg1
@@ -397,7 +398,7 @@ _set_angular_lo_limit_y cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_lo_limit_z #-}
 
--- | The minimum rotation in negative direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Z axis.
 bindGeneric6DOFJoint__set_angular_lo_limit_z :: MethodBind
 bindGeneric6DOFJoint__set_angular_lo_limit_z
   = unsafePerformIO $
@@ -407,7 +408,7 @@ bindGeneric6DOFJoint__set_angular_lo_limit_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation in negative direction to break loose and rotate around the z-axis.
+-- | The minimum rotation in negative direction to break loose and rotate around the Z axis.
 _set_angular_lo_limit_z ::
                           (Generic6DOFJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_angular_lo_limit_z cls arg1
@@ -421,7 +422,7 @@ _set_angular_lo_limit_z cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint_get_flag_x #-}
 
--- | If [code]true[/code], rotation across the x-axis is limited.
+-- | If [code]true[/code], rotation across the X axis is limited.
 bindGeneric6DOFJoint_get_flag_x :: MethodBind
 bindGeneric6DOFJoint_get_flag_x
   = unsafePerformIO $
@@ -431,7 +432,7 @@ bindGeneric6DOFJoint_get_flag_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the x-axis is limited.
+-- | If [code]true[/code], rotation across the X axis is limited.
 get_flag_x ::
              (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag_x cls arg1
@@ -444,7 +445,7 @@ get_flag_x cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint_get_flag_y #-}
 
--- | If [code]true[/code], rotation across the y-axis is limited.
+-- | If [code]true[/code], rotation across the Y axis is limited.
 bindGeneric6DOFJoint_get_flag_y :: MethodBind
 bindGeneric6DOFJoint_get_flag_y
   = unsafePerformIO $
@@ -454,7 +455,7 @@ bindGeneric6DOFJoint_get_flag_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the y-axis is limited.
+-- | If [code]true[/code], rotation across the Y axis is limited.
 get_flag_y ::
              (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag_y cls arg1
@@ -467,7 +468,7 @@ get_flag_y cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint_get_flag_z #-}
 
--- | If [code]true[/code], rotation across the z-axis is limited.
+-- | If [code]true[/code], rotation across the Z axis is limited.
 bindGeneric6DOFJoint_get_flag_z :: MethodBind
 bindGeneric6DOFJoint_get_flag_z
   = unsafePerformIO $
@@ -477,7 +478,7 @@ bindGeneric6DOFJoint_get_flag_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the z-axis is limited.
+-- | If [code]true[/code], rotation across the Z axis is limited.
 get_flag_z ::
              (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag_z cls arg1
@@ -490,7 +491,7 @@ get_flag_z cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint_get_param_x #-}
 
--- | The amount of rotational damping across the x-axis.
+-- | The amount of rotational damping across the X axis.
 --   			The lower, the longer an impulse from one side takes to travel to the other side.
 bindGeneric6DOFJoint_get_param_x :: MethodBind
 bindGeneric6DOFJoint_get_param_x
@@ -501,7 +502,7 @@ bindGeneric6DOFJoint_get_param_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of rotational damping across the x-axis.
+-- | The amount of rotational damping across the X axis.
 --   			The lower, the longer an impulse from one side takes to travel to the other side.
 get_param_x ::
               (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Float
@@ -516,7 +517,7 @@ get_param_x cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint_get_param_y #-}
 
--- | The amount of rotational damping across the y-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Y axis. The lower, the more dampening occurs.
 bindGeneric6DOFJoint_get_param_y :: MethodBind
 bindGeneric6DOFJoint_get_param_y
   = unsafePerformIO $
@@ -526,7 +527,7 @@ bindGeneric6DOFJoint_get_param_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of rotational damping across the y-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Y axis. The lower, the more dampening occurs.
 get_param_y ::
               (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param_y cls arg1
@@ -540,7 +541,7 @@ get_param_y cls arg1
 
 {-# NOINLINE bindGeneric6DOFJoint_get_param_z #-}
 
--- | The amount of rotational damping across the z-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Z axis. The lower, the more dampening occurs.
 bindGeneric6DOFJoint_get_param_z :: MethodBind
 bindGeneric6DOFJoint_get_param_z
   = unsafePerformIO $
@@ -550,7 +551,7 @@ bindGeneric6DOFJoint_get_param_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of rotational damping across the z-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Z axis. The lower, the more dampening occurs.
 get_param_z ::
               (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param_z cls arg1
@@ -586,7 +587,7 @@ get_precision cls
 
 {-# NOINLINE bindGeneric6DOFJoint_set_flag_x #-}
 
--- | If [code]true[/code], rotation across the x-axis is limited.
+-- | If [code]true[/code], rotation across the X axis is limited.
 bindGeneric6DOFJoint_set_flag_x :: MethodBind
 bindGeneric6DOFJoint_set_flag_x
   = unsafePerformIO $
@@ -596,7 +597,7 @@ bindGeneric6DOFJoint_set_flag_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the x-axis is limited.
+-- | If [code]true[/code], rotation across the X axis is limited.
 set_flag_x ::
              (Generic6DOFJoint :< cls, Object :< cls) =>
              cls -> Int -> Bool -> IO ()
@@ -610,7 +611,7 @@ set_flag_x cls arg1 arg2
 
 {-# NOINLINE bindGeneric6DOFJoint_set_flag_y #-}
 
--- | If [code]true[/code], rotation across the y-axis is limited.
+-- | If [code]true[/code], rotation across the Y axis is limited.
 bindGeneric6DOFJoint_set_flag_y :: MethodBind
 bindGeneric6DOFJoint_set_flag_y
   = unsafePerformIO $
@@ -620,7 +621,7 @@ bindGeneric6DOFJoint_set_flag_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the y-axis is limited.
+-- | If [code]true[/code], rotation across the Y axis is limited.
 set_flag_y ::
              (Generic6DOFJoint :< cls, Object :< cls) =>
              cls -> Int -> Bool -> IO ()
@@ -634,7 +635,7 @@ set_flag_y cls arg1 arg2
 
 {-# NOINLINE bindGeneric6DOFJoint_set_flag_z #-}
 
--- | If [code]true[/code], rotation across the z-axis is limited.
+-- | If [code]true[/code], rotation across the Z axis is limited.
 bindGeneric6DOFJoint_set_flag_z :: MethodBind
 bindGeneric6DOFJoint_set_flag_z
   = unsafePerformIO $
@@ -644,7 +645,7 @@ bindGeneric6DOFJoint_set_flag_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the z-axis is limited.
+-- | If [code]true[/code], rotation across the Z axis is limited.
 set_flag_z ::
              (Generic6DOFJoint :< cls, Object :< cls) =>
              cls -> Int -> Bool -> IO ()
@@ -658,7 +659,7 @@ set_flag_z cls arg1 arg2
 
 {-# NOINLINE bindGeneric6DOFJoint_set_param_x #-}
 
--- | The amount of rotational damping across the x-axis.
+-- | The amount of rotational damping across the X axis.
 --   			The lower, the longer an impulse from one side takes to travel to the other side.
 bindGeneric6DOFJoint_set_param_x :: MethodBind
 bindGeneric6DOFJoint_set_param_x
@@ -669,7 +670,7 @@ bindGeneric6DOFJoint_set_param_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of rotational damping across the x-axis.
+-- | The amount of rotational damping across the X axis.
 --   			The lower, the longer an impulse from one side takes to travel to the other side.
 set_param_x ::
               (Generic6DOFJoint :< cls, Object :< cls) =>
@@ -685,7 +686,7 @@ set_param_x cls arg1 arg2
 
 {-# NOINLINE bindGeneric6DOFJoint_set_param_y #-}
 
--- | The amount of rotational damping across the y-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Y axis. The lower, the more dampening occurs.
 bindGeneric6DOFJoint_set_param_y :: MethodBind
 bindGeneric6DOFJoint_set_param_y
   = unsafePerformIO $
@@ -695,7 +696,7 @@ bindGeneric6DOFJoint_set_param_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of rotational damping across the y-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Y axis. The lower, the more dampening occurs.
 set_param_y ::
               (Generic6DOFJoint :< cls, Object :< cls) =>
               cls -> Int -> Float -> IO ()
@@ -710,7 +711,7 @@ set_param_y cls arg1 arg2
 
 {-# NOINLINE bindGeneric6DOFJoint_set_param_z #-}
 
--- | The amount of rotational damping across the z-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Z axis. The lower, the more dampening occurs.
 bindGeneric6DOFJoint_set_param_z :: MethodBind
 bindGeneric6DOFJoint_set_param_z
   = unsafePerformIO $
@@ -720,7 +721,7 @@ bindGeneric6DOFJoint_set_param_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of rotational damping across the z-axis. The lower, the more dampening occurs.
+-- | The amount of rotational damping across the Z axis. The lower, the more dampening occurs.
 set_param_z ::
               (Generic6DOFJoint :< cls, Object :< cls) =>
               cls -> Int -> Float -> IO ()

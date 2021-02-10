@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Curve
        (Godot.Core.Curve._TANGENT_LINEAR, Godot.Core.Curve._TANGENT_FREE,
         Godot.Core.Curve._TANGENT_MODE_COUNT,
@@ -45,6 +46,8 @@ _TANGENT_MODE_COUNT = 2
 -- | Emitted when [member max_value] or [member min_value] is changed.
 sig_range_changed :: Godot.Internal.Dispatch.Signal Curve
 sig_range_changed = Godot.Internal.Dispatch.Signal "range_changed"
+
+instance NodeSignal Curve "range_changed" '[]
 
 {-# NOINLINE bindCurve__get_data #-}
 
@@ -193,7 +196,7 @@ get_bake_resolution cls
 
 {-# NOINLINE bindCurve_get_max_value #-}
 
--- | The maximum value the curve can reach. Default value: [code]1[/code].
+-- | The maximum value the curve can reach.
 bindCurve_get_max_value :: MethodBind
 bindCurve_get_max_value
   = unsafePerformIO $
@@ -203,7 +206,7 @@ bindCurve_get_max_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum value the curve can reach. Default value: [code]1[/code].
+-- | The maximum value the curve can reach.
 get_max_value :: (Curve :< cls, Object :< cls) => cls -> IO Float
 get_max_value cls
   = withVariantArray []
@@ -214,7 +217,7 @@ get_max_value cls
 
 {-# NOINLINE bindCurve_get_min_value #-}
 
--- | The minimum value the curve can reach. Default value: [code]0[/code].
+-- | The minimum value the curve can reach.
 bindCurve_get_min_value :: MethodBind
 bindCurve_get_min_value
   = unsafePerformIO $
@@ -224,7 +227,7 @@ bindCurve_get_min_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum value the curve can reach. Default value: [code]0[/code].
+-- | The minimum value the curve can reach.
 get_min_value :: (Curve :< cls, Object :< cls) => cls -> IO Float
 get_min_value cls
   = withVariantArray []
@@ -257,7 +260,7 @@ get_point_count cls
 
 {-# NOINLINE bindCurve_get_point_left_mode #-}
 
--- | Returns the left [code]TangentMode[/code] for the point at [code]index[/code].
+-- | Returns the left [enum TangentMode] for the point at [code]index[/code].
 bindCurve_get_point_left_mode :: MethodBind
 bindCurve_get_point_left_mode
   = unsafePerformIO $
@@ -267,7 +270,7 @@ bindCurve_get_point_left_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the left [code]TangentMode[/code] for the point at [code]index[/code].
+-- | Returns the left [enum TangentMode] for the point at [code]index[/code].
 get_point_left_mode ::
                       (Curve :< cls, Object :< cls) => cls -> Int -> IO Int
 get_point_left_mode cls arg1
@@ -327,7 +330,7 @@ get_point_position cls arg1
 
 {-# NOINLINE bindCurve_get_point_right_mode #-}
 
--- | Returns the right [code]TangentMode[/code] for the point at [code]index[/code].
+-- | Returns the right [enum TangentMode] for the point at [code]index[/code].
 bindCurve_get_point_right_mode :: MethodBind
 bindCurve_get_point_right_mode
   = unsafePerformIO $
@@ -337,7 +340,7 @@ bindCurve_get_point_right_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the right [code]TangentMode[/code] for the point at [code]index[/code].
+-- | Returns the right [enum TangentMode] for the point at [code]index[/code].
 get_point_right_mode ::
                        (Curve :< cls, Object :< cls) => cls -> Int -> IO Int
 get_point_right_mode cls arg1
@@ -374,7 +377,7 @@ get_point_right_tangent cls arg1
 
 {-# NOINLINE bindCurve_interpolate #-}
 
--- | Returns the y value for the point that would exist at x-position [code]offset[/code] along the curve.
+-- | Returns the Y value for the point that would exist at the X position [code]offset[/code] along the curve.
 bindCurve_interpolate :: MethodBind
 bindCurve_interpolate
   = unsafePerformIO $
@@ -384,7 +387,7 @@ bindCurve_interpolate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the y value for the point that would exist at x-position [code]offset[/code] along the curve.
+-- | Returns the Y value for the point that would exist at the X position [code]offset[/code] along the curve.
 interpolate ::
               (Curve :< cls, Object :< cls) => cls -> Float -> IO Float
 interpolate cls arg1
@@ -396,7 +399,7 @@ interpolate cls arg1
 
 {-# NOINLINE bindCurve_interpolate_baked #-}
 
--- | Returns the y value for the point that would exist at x-position [code]offset[/code] along the curve using the baked cache. Bakes the curve's points if not already baked.
+-- | Returns the Y value for the point that would exist at the X position [code]offset[/code] along the curve using the baked cache. Bakes the curve's points if not already baked.
 bindCurve_interpolate_baked :: MethodBind
 bindCurve_interpolate_baked
   = unsafePerformIO $
@@ -406,7 +409,7 @@ bindCurve_interpolate_baked
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the y value for the point that would exist at x-position [code]offset[/code] along the curve using the baked cache. Bakes the curve's points if not already baked.
+-- | Returns the Y value for the point that would exist at the X position [code]offset[/code] along the curve using the baked cache. Bakes the curve's points if not already baked.
 interpolate_baked ::
                     (Curve :< cls, Object :< cls) => cls -> Float -> IO Float
 interpolate_baked cls arg1
@@ -464,7 +467,7 @@ set_bake_resolution cls arg1
 
 {-# NOINLINE bindCurve_set_max_value #-}
 
--- | The maximum value the curve can reach. Default value: [code]1[/code].
+-- | The maximum value the curve can reach.
 bindCurve_set_max_value :: MethodBind
 bindCurve_set_max_value
   = unsafePerformIO $
@@ -474,7 +477,7 @@ bindCurve_set_max_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum value the curve can reach. Default value: [code]1[/code].
+-- | The maximum value the curve can reach.
 set_max_value ::
                 (Curve :< cls, Object :< cls) => cls -> Float -> IO ()
 set_max_value cls arg1
@@ -486,7 +489,7 @@ set_max_value cls arg1
 
 {-# NOINLINE bindCurve_set_min_value #-}
 
--- | The minimum value the curve can reach. Default value: [code]0[/code].
+-- | The minimum value the curve can reach.
 bindCurve_set_min_value :: MethodBind
 bindCurve_set_min_value
   = unsafePerformIO $
@@ -496,7 +499,7 @@ bindCurve_set_min_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum value the curve can reach. Default value: [code]0[/code].
+-- | The minimum value the curve can reach.
 set_min_value ::
                 (Curve :< cls, Object :< cls) => cls -> Float -> IO ()
 set_min_value cls arg1
@@ -508,7 +511,7 @@ set_min_value cls arg1
 
 {-# NOINLINE bindCurve_set_point_left_mode #-}
 
--- | Sets the left [code]TangentMode[/code] for the point at [code]index[/code] to [code]mode[/code].
+-- | Sets the left [enum TangentMode] for the point at [code]index[/code] to [code]mode[/code].
 bindCurve_set_point_left_mode :: MethodBind
 bindCurve_set_point_left_mode
   = unsafePerformIO $
@@ -518,7 +521,7 @@ bindCurve_set_point_left_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the left [code]TangentMode[/code] for the point at [code]index[/code] to [code]mode[/code].
+-- | Sets the left [enum TangentMode] for the point at [code]index[/code] to [code]mode[/code].
 set_point_left_mode ::
                       (Curve :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_point_left_mode cls arg1 arg2
@@ -555,7 +558,7 @@ set_point_left_tangent cls arg1 arg2
 
 {-# NOINLINE bindCurve_set_point_offset #-}
 
--- | Sets the offset from [code]0.5[/code]
+-- | Sets the offset from [code]0.5[/code].
 bindCurve_set_point_offset :: MethodBind
 bindCurve_set_point_offset
   = unsafePerformIO $
@@ -565,7 +568,7 @@ bindCurve_set_point_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the offset from [code]0.5[/code]
+-- | Sets the offset from [code]0.5[/code].
 set_point_offset ::
                    (Curve :< cls, Object :< cls) => cls -> Int -> Float -> IO Int
 set_point_offset cls arg1 arg2
@@ -578,7 +581,7 @@ set_point_offset cls arg1 arg2
 
 {-# NOINLINE bindCurve_set_point_right_mode #-}
 
--- | Sets the right [code]TangentMode[/code] for the point at [code]index[/code] to [code]mode[/code].
+-- | Sets the right [enum TangentMode] for the point at [code]index[/code] to [code]mode[/code].
 bindCurve_set_point_right_mode :: MethodBind
 bindCurve_set_point_right_mode
   = unsafePerformIO $
@@ -588,7 +591,7 @@ bindCurve_set_point_right_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the right [code]TangentMode[/code] for the point at [code]index[/code] to [code]mode[/code].
+-- | Sets the right [enum TangentMode] for the point at [code]index[/code] to [code]mode[/code].
 set_point_right_mode ::
                        (Curve :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_point_right_mode cls arg1 arg2

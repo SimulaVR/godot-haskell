@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorPlugin
        (Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_SIDE_LEFT,
         Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_BOTTOM,
@@ -149,27 +150,36 @@ _DOCK_SLOT_LEFT_BR = 3
 _DOCK_SLOT_MAX :: Int
 _DOCK_SLOT_MAX = 8
 
--- | Emitted when user changes the workspace (2D, 3D, Script, AssetLib). Also works with custom screens defined by plugins.
+-- | Emitted when user changes the workspace ([b]2D[/b], [b]3D[/b], [b]Script[/b], [b]AssetLib[/b]). Also works with custom screens defined by plugins.
 sig_main_screen_changed ::
                         Godot.Internal.Dispatch.Signal EditorPlugin
 sig_main_screen_changed
   = Godot.Internal.Dispatch.Signal "main_screen_changed"
 
+instance NodeSignal EditorPlugin "main_screen_changed"
+           '[GodotString]
+
 sig_resource_saved :: Godot.Internal.Dispatch.Signal EditorPlugin
 sig_resource_saved
   = Godot.Internal.Dispatch.Signal "resource_saved"
 
--- | Emitted when the scene is changed in the editor. The argument will return the root node of the scene that has just become active. If this scene is new and empty, the argument will be null.
+instance NodeSignal EditorPlugin "resource_saved" '[Resource]
+
+-- | Emitted when the scene is changed in the editor. The argument will return the root node of the scene that has just become active. If this scene is new and empty, the argument will be [code]null[/code].
 sig_scene_changed :: Godot.Internal.Dispatch.Signal EditorPlugin
 sig_scene_changed = Godot.Internal.Dispatch.Signal "scene_changed"
+
+instance NodeSignal EditorPlugin "scene_changed" '[Node]
 
 -- | Emitted when user closes a scene. The argument is file path to a closed scene.
 sig_scene_closed :: Godot.Internal.Dispatch.Signal EditorPlugin
 sig_scene_closed = Godot.Internal.Dispatch.Signal "scene_closed"
 
+instance NodeSignal EditorPlugin "scene_closed" '[GodotString]
+
 {-# NOINLINE bindEditorPlugin_add_autoload_singleton #-}
 
--- | Add a script at [code]path[/code] to the Autoload list as [code]name[/code].
+-- | Adds a script at [code]path[/code] to the Autoload list as [code]name[/code].
 bindEditorPlugin_add_autoload_singleton :: MethodBind
 bindEditorPlugin_add_autoload_singleton
   = unsafePerformIO $
@@ -179,7 +189,7 @@ bindEditorPlugin_add_autoload_singleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a script at [code]path[/code] to the Autoload list as [code]name[/code].
+-- | Adds a script at [code]path[/code] to the Autoload list as [code]name[/code].
 add_autoload_singleton ::
                          (EditorPlugin :< cls, Object :< cls) =>
                          cls -> GodotString -> GodotString -> IO ()
@@ -194,7 +204,7 @@ add_autoload_singleton cls arg1 arg2
 
 {-# NOINLINE bindEditorPlugin_add_control_to_bottom_panel #-}
 
--- | Add a control to the bottom panel (together with Output, Debug, Animation, etc). Returns a reference to the button added. It's up to you to hide/show the button when needed. When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_bottom_panel] and free it with [code]queue_free()[/code].
+-- | Adds a control to the bottom panel (together with Output, Debug, Animation, etc). Returns a reference to the button added. It's up to you to hide/show the button when needed. When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_bottom_panel] and free it with [method Node.queue_free].
 bindEditorPlugin_add_control_to_bottom_panel :: MethodBind
 bindEditorPlugin_add_control_to_bottom_panel
   = unsafePerformIO $
@@ -204,7 +214,7 @@ bindEditorPlugin_add_control_to_bottom_panel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a control to the bottom panel (together with Output, Debug, Animation, etc). Returns a reference to the button added. It's up to you to hide/show the button when needed. When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_bottom_panel] and free it with [code]queue_free()[/code].
+-- | Adds a control to the bottom panel (together with Output, Debug, Animation, etc). Returns a reference to the button added. It's up to you to hide/show the button when needed. When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_bottom_panel] and free it with [method Node.queue_free].
 add_control_to_bottom_panel ::
                               (EditorPlugin :< cls, Object :< cls) =>
                               cls -> Control -> GodotString -> IO ToolButton
@@ -219,9 +229,9 @@ add_control_to_bottom_panel cls arg1 arg2
 
 {-# NOINLINE bindEditorPlugin_add_control_to_container #-}
 
--- | Add a custom control to a container (see CONTAINER_* enum). There are many locations where custom controls can be added in the editor UI.
+-- | Adds a custom control to a container (see [enum CustomControlContainer]). There are many locations where custom controls can be added in the editor UI.
 --   				Please remember that you have to manage the visibility of your custom controls yourself (and likely hide it after adding it).
---   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_container] and free it with [code]queue_free()[/code].
+--   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_container] and free it with [method Node.queue_free].
 bindEditorPlugin_add_control_to_container :: MethodBind
 bindEditorPlugin_add_control_to_container
   = unsafePerformIO $
@@ -231,9 +241,9 @@ bindEditorPlugin_add_control_to_container
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a custom control to a container (see CONTAINER_* enum). There are many locations where custom controls can be added in the editor UI.
+-- | Adds a custom control to a container (see [enum CustomControlContainer]). There are many locations where custom controls can be added in the editor UI.
 --   				Please remember that you have to manage the visibility of your custom controls yourself (and likely hide it after adding it).
---   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_container] and free it with [code]queue_free()[/code].
+--   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_container] and free it with [method Node.queue_free].
 add_control_to_container ::
                            (EditorPlugin :< cls, Object :< cls) =>
                            cls -> Int -> Control -> IO ()
@@ -248,9 +258,9 @@ add_control_to_container cls arg1 arg2
 
 {-# NOINLINE bindEditorPlugin_add_control_to_dock #-}
 
--- | Add the control to a specific dock slot (see DOCK_* enum for options).
+-- | Adds the control to a specific dock slot (see [enum DockSlot] for options).
 --   				If the dock is repositioned and as long as the plugin is active, the editor will save the dock position on further sessions.
---   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_docks] and free it with [code]queue_free()[/code].
+--   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_docks] and free it with [method Node.queue_free].
 bindEditorPlugin_add_control_to_dock :: MethodBind
 bindEditorPlugin_add_control_to_dock
   = unsafePerformIO $
@@ -260,9 +270,9 @@ bindEditorPlugin_add_control_to_dock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add the control to a specific dock slot (see DOCK_* enum for options).
+-- | Adds the control to a specific dock slot (see [enum DockSlot] for options).
 --   				If the dock is repositioned and as long as the plugin is active, the editor will save the dock position on further sessions.
---   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_docks] and free it with [code]queue_free()[/code].
+--   				When your plugin is deactivated, make sure to remove your custom control with [method remove_control_from_docks] and free it with [method Node.queue_free].
 add_control_to_dock ::
                       (EditorPlugin :< cls, Object :< cls) =>
                       cls -> Int -> Control -> IO ()
@@ -277,9 +287,9 @@ add_control_to_dock cls arg1 arg2
 
 {-# NOINLINE bindEditorPlugin_add_custom_type #-}
 
--- | Add a custom type, which will appear in the list of nodes or resources. An icon can be optionally passed.
+-- | Adds a custom type, which will appear in the list of nodes or resources. An icon can be optionally passed.
 --   				When given node or resource is selected, the base type will be instanced (ie, "Spatial", "Control", "Resource"), then the script will be loaded and set to this object.
---   				You can use the virtual method [method handles] to check if your custom object is being edited by checking the script or using 'is' keyword.
+--   				You can use the virtual method [method handles] to check if your custom object is being edited by checking the script or using the [code]is[/code] keyword.
 --   				During run-time, this will be a simple object with a script so this function does not need to be called then.
 bindEditorPlugin_add_custom_type :: MethodBind
 bindEditorPlugin_add_custom_type
@@ -290,9 +300,9 @@ bindEditorPlugin_add_custom_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a custom type, which will appear in the list of nodes or resources. An icon can be optionally passed.
+-- | Adds a custom type, which will appear in the list of nodes or resources. An icon can be optionally passed.
 --   				When given node or resource is selected, the base type will be instanced (ie, "Spatial", "Control", "Resource"), then the script will be loaded and set to this object.
---   				You can use the virtual method [method handles] to check if your custom object is being edited by checking the script or using 'is' keyword.
+--   				You can use the virtual method [method handles] to check if your custom object is being edited by checking the script or using the [code]is[/code] keyword.
 --   				During run-time, this will be a simple object with a script so this function does not need to be called then.
 add_custom_type ::
                   (EditorPlugin :< cls, Object :< cls) =>
@@ -541,6 +551,7 @@ clear cls
 
 {-# NOINLINE bindEditorPlugin_disable_plugin #-}
 
+-- | Called by the engine when the user disables the [EditorPlugin] in the Plugin tab of the project settings window.
 bindEditorPlugin_disable_plugin :: MethodBind
 bindEditorPlugin_disable_plugin
   = unsafePerformIO $
@@ -550,6 +561,7 @@ bindEditorPlugin_disable_plugin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called by the engine when the user disables the [EditorPlugin] in the Plugin tab of the project settings window.
 disable_plugin ::
                  (EditorPlugin :< cls, Object :< cls) => cls -> IO ()
 disable_plugin cls
@@ -584,6 +596,7 @@ edit cls arg1
 
 {-# NOINLINE bindEditorPlugin_enable_plugin #-}
 
+-- | Called by the engine when the user enables the [EditorPlugin] in the Plugin tab of the project settings window.
 bindEditorPlugin_enable_plugin :: MethodBind
 bindEditorPlugin_enable_plugin
   = unsafePerformIO $
@@ -593,6 +606,7 @@ bindEditorPlugin_enable_plugin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called by the engine when the user enables the [EditorPlugin] in the Plugin tab of the project settings window.
 enable_plugin ::
                 (EditorPlugin :< cls, Object :< cls) => cls -> IO ()
 enable_plugin cls
@@ -605,12 +619,6 @@ enable_plugin cls
 
 {-# NOINLINE bindEditorPlugin_forward_canvas_draw_over_viewport #-}
 
--- | This method is called when there is an input event in the 2D viewport, e.g. the user clicks with the mouse in the 2D space (canvas GUI). Keep in mind that for this method to be called you have to first declare the virtual method [method handles] so the editor knows that you want to work with the workspace:
---   				[codeblock]
---   				func handles(object):
---   				    return true
---   				[/codeblock]
---   				Also note that the edited scene must have a root node.
 bindEditorPlugin_forward_canvas_draw_over_viewport :: MethodBind
 bindEditorPlugin_forward_canvas_draw_over_viewport
   = unsafePerformIO $
@@ -620,12 +628,6 @@ bindEditorPlugin_forward_canvas_draw_over_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This method is called when there is an input event in the 2D viewport, e.g. the user clicks with the mouse in the 2D space (canvas GUI). Keep in mind that for this method to be called you have to first declare the virtual method [method handles] so the editor knows that you want to work with the workspace:
---   				[codeblock]
---   				func handles(object):
---   				    return true
---   				[/codeblock]
---   				Also note that the edited scene must have a root node.
 forward_canvas_draw_over_viewport ::
                                     (EditorPlugin :< cls, Object :< cls) => cls -> Control -> IO ()
 forward_canvas_draw_over_viewport cls arg1
@@ -666,6 +668,22 @@ forward_canvas_force_draw_over_viewport cls arg1
 
 {-# NOINLINE bindEditorPlugin_forward_canvas_gui_input #-}
 
+-- | Called when there is a root node in the current edited scene, [method handles] is implemented and an [InputEvent] happens in the 2D viewport. Intercepts the [InputEvent], if [code]return true[/code] [EditorPlugin] consumes the [code]event[/code], otherwise forwards [code]event[/code] to other Editor classes. Example:
+--   				[codeblock]
+--   				# Prevents the InputEvent to reach other Editor classes
+--   				func forward_canvas_gui_input(event):
+--   				    var forward = true
+--   				    return forward
+--   				[/codeblock]
+--   				Must [code]return false[/code] in order to forward the [InputEvent] to other Editor classes. Example:
+--   				[codeblock]
+--   				# Consumes InputEventMouseMotion and forwards other InputEvent types
+--   				func forward_canvas_gui_input(event):
+--   				    var forward = false
+--   				    if event is InputEventMouseMotion:
+--   				        forward = true
+--   				    return forward
+--   				[/codeblock]
 bindEditorPlugin_forward_canvas_gui_input :: MethodBind
 bindEditorPlugin_forward_canvas_gui_input
   = unsafePerformIO $
@@ -675,6 +693,22 @@ bindEditorPlugin_forward_canvas_gui_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called when there is a root node in the current edited scene, [method handles] is implemented and an [InputEvent] happens in the 2D viewport. Intercepts the [InputEvent], if [code]return true[/code] [EditorPlugin] consumes the [code]event[/code], otherwise forwards [code]event[/code] to other Editor classes. Example:
+--   				[codeblock]
+--   				# Prevents the InputEvent to reach other Editor classes
+--   				func forward_canvas_gui_input(event):
+--   				    var forward = true
+--   				    return forward
+--   				[/codeblock]
+--   				Must [code]return false[/code] in order to forward the [InputEvent] to other Editor classes. Example:
+--   				[codeblock]
+--   				# Consumes InputEventMouseMotion and forwards other InputEvent types
+--   				func forward_canvas_gui_input(event):
+--   				    var forward = false
+--   				    if event is InputEventMouseMotion:
+--   				        forward = true
+--   				    return forward
+--   				[/codeblock]
 forward_canvas_gui_input ::
                            (EditorPlugin :< cls, Object :< cls) =>
                            cls -> InputEvent -> IO Bool
@@ -689,12 +723,22 @@ forward_canvas_gui_input cls arg1
 
 {-# NOINLINE bindEditorPlugin_forward_spatial_gui_input #-}
 
--- | This method is called when there is an input event in the 3D viewport, e.g. the user clicks with the mouse in the 3D space (spatial GUI). Keep in mind that for this method to be called you have to first declare the virtual method [method handles] so the editor knows that you want to work with the workspace:
+-- | Called when there is a root node in the current edited scene, [method handles] is implemented and an [InputEvent] happens in the 3D viewport. Intercepts the [InputEvent], if [code]return true[/code] [EditorPlugin] consumes the [code]event[/code], otherwise forwards [code]event[/code] to other Editor classes. Example:
 --   				[codeblock]
---   				func handles(object):
---   				    return true
+--   				# Prevents the InputEvent to reach other Editor classes
+--   				func forward_spatial_gui_input(camera, event):
+--   				    var forward = true
+--   				    return forward
 --   				[/codeblock]
---   				Also note that the edited scene must have a root node.
+--   				Must [code]return false[/code] in order to forward the [InputEvent] to other Editor classes. Example:
+--   				[codeblock]
+--   				# Consumes InputEventMouseMotion and forwards other InputEvent types
+--   				func forward_spatial_gui_input(camera, event):
+--   				    var forward = false
+--   				    if event is InputEventMouseMotion:
+--   				        forward = true
+--   				    return forward
+--   				[/codeblock]
 bindEditorPlugin_forward_spatial_gui_input :: MethodBind
 bindEditorPlugin_forward_spatial_gui_input
   = unsafePerformIO $
@@ -704,12 +748,22 @@ bindEditorPlugin_forward_spatial_gui_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This method is called when there is an input event in the 3D viewport, e.g. the user clicks with the mouse in the 3D space (spatial GUI). Keep in mind that for this method to be called you have to first declare the virtual method [method handles] so the editor knows that you want to work with the workspace:
+-- | Called when there is a root node in the current edited scene, [method handles] is implemented and an [InputEvent] happens in the 3D viewport. Intercepts the [InputEvent], if [code]return true[/code] [EditorPlugin] consumes the [code]event[/code], otherwise forwards [code]event[/code] to other Editor classes. Example:
 --   				[codeblock]
---   				func handles(object):
---   				    return true
+--   				# Prevents the InputEvent to reach other Editor classes
+--   				func forward_spatial_gui_input(camera, event):
+--   				    var forward = true
+--   				    return forward
 --   				[/codeblock]
---   				Also note that the edited scene must have a root node.
+--   				Must [code]return false[/code] in order to forward the [InputEvent] to other Editor classes. Example:
+--   				[codeblock]
+--   				# Consumes InputEventMouseMotion and forwards other InputEvent types
+--   				func forward_spatial_gui_input(camera, event):
+--   				    var forward = false
+--   				    if event is InputEventMouseMotion:
+--   				        forward = true
+--   				    return forward
+--   				[/codeblock]
 forward_spatial_gui_input ::
                             (EditorPlugin :< cls, Object :< cls) =>
                             cls -> Camera -> InputEvent -> IO Bool
@@ -724,7 +778,7 @@ forward_spatial_gui_input cls arg1 arg2
 
 {-# NOINLINE bindEditorPlugin_get_breakpoints #-}
 
--- | This is for editors that edit script based objects. You can return a list of breakpoints in the format (script:line), for example: res://path_to_script.gd:25
+-- | This is for editors that edit script-based objects. You can return a list of breakpoints in the format ([code]script:line[/code]), for example: [code]res://path_to_script.gd:25[/code].
 bindEditorPlugin_get_breakpoints :: MethodBind
 bindEditorPlugin_get_breakpoints
   = unsafePerformIO $
@@ -734,7 +788,7 @@ bindEditorPlugin_get_breakpoints
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This is for editors that edit script based objects. You can return a list of breakpoints in the format (script:line), for example: res://path_to_script.gd:25
+-- | This is for editors that edit script-based objects. You can return a list of breakpoints in the format ([code]script:line[/code]), for example: [code]res://path_to_script.gd:25[/code].
 get_breakpoints ::
                   (EditorPlugin :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_breakpoints cls
@@ -772,6 +826,16 @@ get_editor_interface cls
 
 {-# NOINLINE bindEditorPlugin_get_plugin_icon #-}
 
+-- | Override this method in your plugin to return a [Texture] in order to give it an icon.
+--   				For main screen plugins, this appears at the top of the screen, to the right of the "2D", "3D", "Script", and "AssetLib" buttons.
+--   				Ideally, the plugin icon should be white with a transparent background and 16x16 pixels in size.
+--   				[codeblock]
+--   				func get_plugin_icon():
+--   				    # You can use a custom icon:
+--   				    return preload("res://addons/my_plugin/my_plugin_icon.svg")
+--   				    # Or use a built-in icon:
+--   				    return get_editor_interface().get_base_control().get_icon("Node", "EditorIcons")
+--   				[/codeblock]
 bindEditorPlugin_get_plugin_icon :: MethodBind
 bindEditorPlugin_get_plugin_icon
   = unsafePerformIO $
@@ -781,6 +845,16 @@ bindEditorPlugin_get_plugin_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Override this method in your plugin to return a [Texture] in order to give it an icon.
+--   				For main screen plugins, this appears at the top of the screen, to the right of the "2D", "3D", "Script", and "AssetLib" buttons.
+--   				Ideally, the plugin icon should be white with a transparent background and 16x16 pixels in size.
+--   				[codeblock]
+--   				func get_plugin_icon():
+--   				    # You can use a custom icon:
+--   				    return preload("res://addons/my_plugin/my_plugin_icon.svg")
+--   				    # Or use a built-in icon:
+--   				    return get_editor_interface().get_base_control().get_icon("Node", "EditorIcons")
+--   				[/codeblock]
 get_plugin_icon ::
                   (EditorPlugin :< cls, Object :< cls) => cls -> IO Object
 get_plugin_icon cls
@@ -794,6 +868,8 @@ get_plugin_icon cls
 
 {-# NOINLINE bindEditorPlugin_get_plugin_name #-}
 
+-- | Override this method in your plugin to provide the name of the plugin when displayed in the Godot editor.
+--   				For main screen plugins, this appears at the top of the screen, to the right of the "2D", "3D", "Script", and "AssetLib" buttons.
 bindEditorPlugin_get_plugin_name :: MethodBind
 bindEditorPlugin_get_plugin_name
   = unsafePerformIO $
@@ -803,6 +879,8 @@ bindEditorPlugin_get_plugin_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Override this method in your plugin to provide the name of the plugin when displayed in the Godot editor.
+--   				For main screen plugins, this appears at the top of the screen, to the right of the "2D", "3D", "Script", and "AssetLib" buttons.
 get_plugin_name ::
                   (EditorPlugin :< cls, Object :< cls) => cls -> IO GodotString
 get_plugin_name cls
@@ -816,7 +894,8 @@ get_plugin_name cls
 
 {-# NOINLINE bindEditorPlugin_get_script_create_dialog #-}
 
--- | Gets the Editor's dialogue used for making scripts. Note that users can configure it before use.
+-- | Gets the Editor's dialogue used for making scripts.
+--   				[b]Note:[/b] Users can configure it before use.
 bindEditorPlugin_get_script_create_dialog :: MethodBind
 bindEditorPlugin_get_script_create_dialog
   = unsafePerformIO $
@@ -826,7 +905,8 @@ bindEditorPlugin_get_script_create_dialog
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the Editor's dialogue used for making scripts. Note that users can configure it before use.
+-- | Gets the Editor's dialogue used for making scripts.
+--   				[b]Note:[/b] Users can configure it before use.
 get_script_create_dialog ::
                            (EditorPlugin :< cls, Object :< cls) =>
                            cls -> IO ScriptCreateDialog
@@ -841,7 +921,7 @@ get_script_create_dialog cls
 
 {-# NOINLINE bindEditorPlugin_get_state #-}
 
--- | Get the state of your plugin editor. This is used when saving the scene (so state is kept when opening it again) and for switching tabs (so state can be restored when the tab returns).
+-- | Gets the state of your plugin editor. This is used when saving the scene (so state is kept when opening it again) and for switching tabs (so state can be restored when the tab returns).
 bindEditorPlugin_get_state :: MethodBind
 bindEditorPlugin_get_state
   = unsafePerformIO $
@@ -851,7 +931,7 @@ bindEditorPlugin_get_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the state of your plugin editor. This is used when saving the scene (so state is kept when opening it again) and for switching tabs (so state can be restored when the tab returns).
+-- | Gets the state of your plugin editor. This is used when saving the scene (so state is kept when opening it again) and for switching tabs (so state can be restored when the tab returns).
 get_state ::
             (EditorPlugin :< cls, Object :< cls) => cls -> IO Dictionary
 get_state cls
@@ -864,7 +944,7 @@ get_state cls
 
 {-# NOINLINE bindEditorPlugin_get_undo_redo #-}
 
--- | Get the undo/redo object. Most actions in the editor can be undoable, so use this object to make sure this happens when it's worth it.
+-- | Gets the undo/redo object. Most actions in the editor can be undoable, so use this object to make sure this happens when it's worth it.
 bindEditorPlugin_get_undo_redo :: MethodBind
 bindEditorPlugin_get_undo_redo
   = unsafePerformIO $
@@ -874,7 +954,7 @@ bindEditorPlugin_get_undo_redo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the undo/redo object. Most actions in the editor can be undoable, so use this object to make sure this happens when it's worth it.
+-- | Gets the undo/redo object. Most actions in the editor can be undoable, so use this object to make sure this happens when it's worth it.
 get_undo_redo ::
                 (EditorPlugin :< cls, Object :< cls) => cls -> IO UndoRedo
 get_undo_redo cls
@@ -887,7 +967,7 @@ get_undo_redo cls
 
 {-# NOINLINE bindEditorPlugin_get_window_layout #-}
 
--- | Get the GUI layout of the plugin. This is used to save the project's editor layout when [method queue_save_layout] is called or the editor layout was changed(For example changing the position of a dock).
+-- | Gets the GUI layout of the plugin. This is used to save the project's editor layout when [method queue_save_layout] is called or the editor layout was changed(For example changing the position of a dock).
 bindEditorPlugin_get_window_layout :: MethodBind
 bindEditorPlugin_get_window_layout
   = unsafePerformIO $
@@ -897,7 +977,7 @@ bindEditorPlugin_get_window_layout
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the GUI layout of the plugin. This is used to save the project's editor layout when [method queue_save_layout] is called or the editor layout was changed(For example changing the position of a dock).
+-- | Gets the GUI layout of the plugin. This is used to save the project's editor layout when [method queue_save_layout] is called or the editor layout was changed(For example changing the position of a dock).
 get_window_layout ::
                     (EditorPlugin :< cls, Object :< cls) => cls -> ConfigFile -> IO ()
 get_window_layout cls arg1
@@ -911,7 +991,7 @@ get_window_layout cls arg1
 
 {-# NOINLINE bindEditorPlugin_handles #-}
 
--- | Implement this function if your plugin edits a specific type of object (Resource or Node). If you return [code]true[/code], then you will get the functions [method EditorPlugin.edit] and [method EditorPlugin.make_visible] called when the editor requests them. If you have declared the methods [method forward_canvas_gui_input] and [method forward_spatial_gui_input] these will be called too.
+-- | Implement this function if your plugin edits a specific type of object (Resource or Node). If you return [code]true[/code], then you will get the functions [method edit] and [method make_visible] called when the editor requests them. If you have declared the methods [method forward_canvas_gui_input] and [method forward_spatial_gui_input] these will be called too.
 bindEditorPlugin_handles :: MethodBind
 bindEditorPlugin_handles
   = unsafePerformIO $
@@ -921,7 +1001,7 @@ bindEditorPlugin_handles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Implement this function if your plugin edits a specific type of object (Resource or Node). If you return [code]true[/code], then you will get the functions [method EditorPlugin.edit] and [method EditorPlugin.make_visible] called when the editor requests them. If you have declared the methods [method forward_canvas_gui_input] and [method forward_spatial_gui_input] these will be called too.
+-- | Implement this function if your plugin edits a specific type of object (Resource or Node). If you return [code]true[/code], then you will get the functions [method edit] and [method make_visible] called when the editor requests them. If you have declared the methods [method forward_canvas_gui_input] and [method forward_spatial_gui_input] these will be called too.
 handles ::
           (EditorPlugin :< cls, Object :< cls) => cls -> Object -> IO Bool
 handles cls arg1
@@ -933,7 +1013,7 @@ handles cls arg1
 
 {-# NOINLINE bindEditorPlugin_has_main_screen #-}
 
--- | Returns [code]true[/code] if this is a main screen editor plugin (it goes in the workspaces selector together with '2D', '3D', and 'Script').
+-- | Returns [code]true[/code] if this is a main screen editor plugin (it goes in the workspace selector together with [b]2D[/b], [b]3D[/b], [b]Script[/b] and [b]AssetLib[/b]).
 bindEditorPlugin_has_main_screen :: MethodBind
 bindEditorPlugin_has_main_screen
   = unsafePerformIO $
@@ -943,7 +1023,7 @@ bindEditorPlugin_has_main_screen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if this is a main screen editor plugin (it goes in the workspaces selector together with '2D', '3D', and 'Script').
+-- | Returns [code]true[/code] if this is a main screen editor plugin (it goes in the workspace selector together with [b]2D[/b], [b]3D[/b], [b]Script[/b] and [b]AssetLib[/b]).
 has_main_screen ::
                   (EditorPlugin :< cls, Object :< cls) => cls -> IO Bool
 has_main_screen cls
@@ -1051,7 +1131,7 @@ queue_save_layout cls
 
 {-# NOINLINE bindEditorPlugin_remove_autoload_singleton #-}
 
--- | Remove an Autoload [code]name[/code] from the list.
+-- | Removes an Autoload [code]name[/code] from the list.
 bindEditorPlugin_remove_autoload_singleton :: MethodBind
 bindEditorPlugin_remove_autoload_singleton
   = unsafePerformIO $
@@ -1061,7 +1141,7 @@ bindEditorPlugin_remove_autoload_singleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove an Autoload [code]name[/code] from the list.
+-- | Removes an Autoload [code]name[/code] from the list.
 remove_autoload_singleton ::
                             (EditorPlugin :< cls, Object :< cls) => cls -> GodotString -> IO ()
 remove_autoload_singleton cls arg1
@@ -1075,7 +1155,7 @@ remove_autoload_singleton cls arg1
 
 {-# NOINLINE bindEditorPlugin_remove_control_from_bottom_panel #-}
 
--- | Remove the control from the bottom panel. You have to manually [code]queue_free()[/code] the control.
+-- | Removes the control from the bottom panel. You have to manually [method Node.queue_free] the control.
 bindEditorPlugin_remove_control_from_bottom_panel :: MethodBind
 bindEditorPlugin_remove_control_from_bottom_panel
   = unsafePerformIO $
@@ -1085,7 +1165,7 @@ bindEditorPlugin_remove_control_from_bottom_panel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the control from the bottom panel. You have to manually [code]queue_free()[/code] the control.
+-- | Removes the control from the bottom panel. You have to manually [method Node.queue_free] the control.
 remove_control_from_bottom_panel ::
                                    (EditorPlugin :< cls, Object :< cls) => cls -> Control -> IO ()
 remove_control_from_bottom_panel cls arg1
@@ -1100,7 +1180,7 @@ remove_control_from_bottom_panel cls arg1
 
 {-# NOINLINE bindEditorPlugin_remove_control_from_container #-}
 
--- | Remove the control from the specified container. You have to manually [code]queue_free()[/code] the control.
+-- | Removes the control from the specified container. You have to manually [method Node.queue_free] the control.
 bindEditorPlugin_remove_control_from_container :: MethodBind
 bindEditorPlugin_remove_control_from_container
   = unsafePerformIO $
@@ -1110,7 +1190,7 @@ bindEditorPlugin_remove_control_from_container
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the control from the specified container. You have to manually [code]queue_free()[/code] the control.
+-- | Removes the control from the specified container. You have to manually [method Node.queue_free] the control.
 remove_control_from_container ::
                                 (EditorPlugin :< cls, Object :< cls) =>
                                 cls -> Int -> Control -> IO ()
@@ -1126,7 +1206,7 @@ remove_control_from_container cls arg1 arg2
 
 {-# NOINLINE bindEditorPlugin_remove_control_from_docks #-}
 
--- | Remove the control from the dock. You have to manually [code]queue_free()[/code] the control.
+-- | Removes the control from the dock. You have to manually [method Node.queue_free] the control.
 bindEditorPlugin_remove_control_from_docks :: MethodBind
 bindEditorPlugin_remove_control_from_docks
   = unsafePerformIO $
@@ -1136,7 +1216,7 @@ bindEditorPlugin_remove_control_from_docks
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the control from the dock. You have to manually [code]queue_free()[/code] the control.
+-- | Removes the control from the dock. You have to manually [method Node.queue_free] the control.
 remove_control_from_docks ::
                             (EditorPlugin :< cls, Object :< cls) => cls -> Control -> IO ()
 remove_control_from_docks cls arg1
@@ -1150,7 +1230,7 @@ remove_control_from_docks cls arg1
 
 {-# NOINLINE bindEditorPlugin_remove_custom_type #-}
 
--- | Remove a custom type added by [method add_custom_type]
+-- | Removes a custom type added by [method add_custom_type].
 bindEditorPlugin_remove_custom_type :: MethodBind
 bindEditorPlugin_remove_custom_type
   = unsafePerformIO $
@@ -1160,7 +1240,7 @@ bindEditorPlugin_remove_custom_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove a custom type added by [method add_custom_type]
+-- | Removes a custom type added by [method add_custom_type].
 remove_custom_type ::
                      (EditorPlugin :< cls, Object :< cls) => cls -> GodotString -> IO ()
 remove_custom_type cls arg1
@@ -1289,7 +1369,7 @@ remove_spatial_gizmo_plugin cls arg1
 
 {-# NOINLINE bindEditorPlugin_remove_tool_menu_item #-}
 
--- | Removes a menu [code]name[/code] from 'Project > Tools'.
+-- | Removes a menu [code]name[/code] from [b]Project > Tools[/b].
 bindEditorPlugin_remove_tool_menu_item :: MethodBind
 bindEditorPlugin_remove_tool_menu_item
   = unsafePerformIO $
@@ -1299,7 +1379,7 @@ bindEditorPlugin_remove_tool_menu_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes a menu [code]name[/code] from 'Project > Tools'.
+-- | Removes a menu [code]name[/code] from [b]Project > Tools[/b].
 remove_tool_menu_item ::
                         (EditorPlugin :< cls, Object :< cls) => cls -> GodotString -> IO ()
 remove_tool_menu_item cls arg1
@@ -1389,7 +1469,7 @@ set_input_event_forwarding_always_enabled cls
 
 {-# NOINLINE bindEditorPlugin_set_state #-}
 
--- | Restore the state saved by [method EditorPlugin.get_state].
+-- | Restore the state saved by [method get_state].
 bindEditorPlugin_set_state :: MethodBind
 bindEditorPlugin_set_state
   = unsafePerformIO $
@@ -1399,7 +1479,7 @@ bindEditorPlugin_set_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Restore the state saved by [method EditorPlugin.get_state].
+-- | Restore the state saved by [method get_state].
 set_state ::
             (EditorPlugin :< cls, Object :< cls) => cls -> Dictionary -> IO ()
 set_state cls arg1
@@ -1412,7 +1492,7 @@ set_state cls arg1
 
 {-# NOINLINE bindEditorPlugin_set_window_layout #-}
 
--- | Restore the plugin GUI layout saved by [method EditorPlugin.get_window_layout].
+-- | Restore the plugin GUI layout saved by [method get_window_layout].
 bindEditorPlugin_set_window_layout :: MethodBind
 bindEditorPlugin_set_window_layout
   = unsafePerformIO $
@@ -1422,7 +1502,7 @@ bindEditorPlugin_set_window_layout
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Restore the plugin GUI layout saved by [method EditorPlugin.get_window_layout].
+-- | Restore the plugin GUI layout saved by [method get_window_layout].
 set_window_layout ::
                     (EditorPlugin :< cls, Object :< cls) => cls -> ConfigFile -> IO ()
 set_window_layout cls arg1

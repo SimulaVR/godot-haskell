@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SpotLight
        (Godot.Core.SpotLight.get_param, Godot.Core.SpotLight.set_param)
        where
@@ -12,6 +13,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindSpotLight_get_param #-}
 
+-- | The spotlight's angle in degrees.
 bindSpotLight_get_param :: MethodBind
 bindSpotLight_get_param
   = unsafePerformIO $
@@ -21,6 +23,7 @@ bindSpotLight_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The spotlight's angle in degrees.
 get_param :: (SpotLight :< cls, Object :< cls) => cls -> IO Float
 get_param cls
   = withVariantArray []
@@ -31,6 +34,7 @@ get_param cls
 
 {-# NOINLINE bindSpotLight_set_param #-}
 
+-- | The spotlight's angle in degrees.
 bindSpotLight_set_param :: MethodBind
 bindSpotLight_set_param
   = unsafePerformIO $
@@ -40,6 +44,7 @@ bindSpotLight_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The spotlight's angle in degrees.
 set_param ::
             (SpotLight :< cls, Object :< cls) => cls -> Float -> IO ()
 set_param cls arg1

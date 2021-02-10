@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RayShape
        (Godot.Core.RayShape.get_length,
         Godot.Core.RayShape.get_slips_on_slope,
@@ -36,7 +37,7 @@ get_length cls
 
 {-# NOINLINE bindRayShape_get_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 bindRayShape_get_slips_on_slope :: MethodBind
 bindRayShape_get_slips_on_slope
   = unsafePerformIO $
@@ -46,7 +47,7 @@ bindRayShape_get_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 get_slips_on_slope ::
                      (RayShape :< cls, Object :< cls) => cls -> IO Bool
 get_slips_on_slope cls
@@ -81,7 +82,7 @@ set_length cls arg1
 
 {-# NOINLINE bindRayShape_set_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 bindRayShape_set_slips_on_slope :: MethodBind
 bindRayShape_set_slips_on_slope
   = unsafePerformIO $
@@ -91,7 +92,7 @@ bindRayShape_set_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 set_slips_on_slope ::
                      (RayShape :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_slips_on_slope cls arg1

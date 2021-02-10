@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CapsuleMesh
        (Godot.Core.CapsuleMesh.get_mid_height,
         Godot.Core.CapsuleMesh.get_radial_segments,
@@ -19,7 +20,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindCapsuleMesh_get_mid_height #-}
 
--- | Height of the capsule mesh from the center point. Defaults to 1.0.
+-- | Height of the capsule mesh from the center point.
 bindCapsuleMesh_get_mid_height :: MethodBind
 bindCapsuleMesh_get_mid_height
   = unsafePerformIO $
@@ -29,7 +30,7 @@ bindCapsuleMesh_get_mid_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Height of the capsule mesh from the center point. Defaults to 1.0.
+-- | Height of the capsule mesh from the center point.
 get_mid_height ::
                  (CapsuleMesh :< cls, Object :< cls) => cls -> IO Float
 get_mid_height cls
@@ -42,7 +43,7 @@ get_mid_height cls
 
 {-# NOINLINE bindCapsuleMesh_get_radial_segments #-}
 
--- | Number of radial segments on the capsule mesh. Defaults to 64.
+-- | Number of radial segments on the capsule mesh.
 bindCapsuleMesh_get_radial_segments :: MethodBind
 bindCapsuleMesh_get_radial_segments
   = unsafePerformIO $
@@ -52,7 +53,7 @@ bindCapsuleMesh_get_radial_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of radial segments on the capsule mesh. Defaults to 64.
+-- | Number of radial segments on the capsule mesh.
 get_radial_segments ::
                       (CapsuleMesh :< cls, Object :< cls) => cls -> IO Int
 get_radial_segments cls
@@ -66,7 +67,7 @@ get_radial_segments cls
 
 {-# NOINLINE bindCapsuleMesh_get_radius #-}
 
--- | Radius of the capsule mesh. Defaults to 1.0.
+-- | Radius of the capsule mesh.
 bindCapsuleMesh_get_radius :: MethodBind
 bindCapsuleMesh_get_radius
   = unsafePerformIO $
@@ -76,7 +77,7 @@ bindCapsuleMesh_get_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Radius of the capsule mesh. Defaults to 1.0.
+-- | Radius of the capsule mesh.
 get_radius ::
              (CapsuleMesh :< cls, Object :< cls) => cls -> IO Float
 get_radius cls
@@ -89,7 +90,7 @@ get_radius cls
 
 {-# NOINLINE bindCapsuleMesh_get_rings #-}
 
--- | Number of rings along the height of the capsule. Defaults to 8.
+-- | Number of rings along the height of the capsule.
 bindCapsuleMesh_get_rings :: MethodBind
 bindCapsuleMesh_get_rings
   = unsafePerformIO $
@@ -99,7 +100,7 @@ bindCapsuleMesh_get_rings
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of rings along the height of the capsule. Defaults to 8.
+-- | Number of rings along the height of the capsule.
 get_rings :: (CapsuleMesh :< cls, Object :< cls) => cls -> IO Int
 get_rings cls
   = withVariantArray []
@@ -111,7 +112,7 @@ get_rings cls
 
 {-# NOINLINE bindCapsuleMesh_set_mid_height #-}
 
--- | Height of the capsule mesh from the center point. Defaults to 1.0.
+-- | Height of the capsule mesh from the center point.
 bindCapsuleMesh_set_mid_height :: MethodBind
 bindCapsuleMesh_set_mid_height
   = unsafePerformIO $
@@ -121,7 +122,7 @@ bindCapsuleMesh_set_mid_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Height of the capsule mesh from the center point. Defaults to 1.0.
+-- | Height of the capsule mesh from the center point.
 set_mid_height ::
                  (CapsuleMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_mid_height cls arg1
@@ -134,7 +135,7 @@ set_mid_height cls arg1
 
 {-# NOINLINE bindCapsuleMesh_set_radial_segments #-}
 
--- | Number of radial segments on the capsule mesh. Defaults to 64.
+-- | Number of radial segments on the capsule mesh.
 bindCapsuleMesh_set_radial_segments :: MethodBind
 bindCapsuleMesh_set_radial_segments
   = unsafePerformIO $
@@ -144,7 +145,7 @@ bindCapsuleMesh_set_radial_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of radial segments on the capsule mesh. Defaults to 64.
+-- | Number of radial segments on the capsule mesh.
 set_radial_segments ::
                       (CapsuleMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_radial_segments cls arg1
@@ -158,7 +159,7 @@ set_radial_segments cls arg1
 
 {-# NOINLINE bindCapsuleMesh_set_radius #-}
 
--- | Radius of the capsule mesh. Defaults to 1.0.
+-- | Radius of the capsule mesh.
 bindCapsuleMesh_set_radius :: MethodBind
 bindCapsuleMesh_set_radius
   = unsafePerformIO $
@@ -168,7 +169,7 @@ bindCapsuleMesh_set_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Radius of the capsule mesh. Defaults to 1.0.
+-- | Radius of the capsule mesh.
 set_radius ::
              (CapsuleMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_radius cls arg1
@@ -181,7 +182,7 @@ set_radius cls arg1
 
 {-# NOINLINE bindCapsuleMesh_set_rings #-}
 
--- | Number of rings along the height of the capsule. Defaults to 8.
+-- | Number of rings along the height of the capsule.
 bindCapsuleMesh_set_rings :: MethodBind
 bindCapsuleMesh_set_rings
   = unsafePerformIO $
@@ -191,7 +192,7 @@ bindCapsuleMesh_set_rings
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of rings along the height of the capsule. Defaults to 8.
+-- | Number of rings along the height of the capsule.
 set_rings ::
             (CapsuleMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_rings cls arg1

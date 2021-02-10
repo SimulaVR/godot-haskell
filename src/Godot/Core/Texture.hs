@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Texture
        (Godot.Core.Texture._FLAG_VIDEO_SURFACE,
         Godot.Core.Texture._FLAGS_DEFAULT, Godot.Core.Texture._FLAG_REPEAT,
@@ -46,6 +47,7 @@ _FLAG_MIRRORED_REPEAT = 32
 
 {-# NOINLINE bindTexture_draw #-}
 
+-- | Draws the texture using a [CanvasItem] with the [VisualServer] API at the specified [code]position[/code]. Equivalent to [method VisualServer.canvas_item_add_texture_rect] with a rect at [code]position[/code] and the size of this [Texture].
 bindTexture_draw :: MethodBind
 bindTexture_draw
   = unsafePerformIO $
@@ -55,6 +57,7 @@ bindTexture_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Draws the texture using a [CanvasItem] with the [VisualServer] API at the specified [code]position[/code]. Equivalent to [method VisualServer.canvas_item_add_texture_rect] with a rect at [code]position[/code] and the size of this [Texture].
 draw ::
        (Texture :< cls, Object :< cls) =>
        cls -> Rid -> Vector2 -> Color -> Bool -> Texture -> IO ()
@@ -68,6 +71,7 @@ draw cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindTexture_draw_rect #-}
 
+-- | Draws the texture using a [CanvasItem] with the [VisualServer] API. Equivalent to [method VisualServer.canvas_item_add_texture_rect].
 bindTexture_draw_rect :: MethodBind
 bindTexture_draw_rect
   = unsafePerformIO $
@@ -77,6 +81,7 @@ bindTexture_draw_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Draws the texture using a [CanvasItem] with the [VisualServer] API. Equivalent to [method VisualServer.canvas_item_add_texture_rect].
 draw_rect ::
             (Texture :< cls, Object :< cls) =>
             cls -> Rid -> Rect2 -> Bool -> Color -> Bool -> Texture -> IO ()
@@ -91,6 +96,7 @@ draw_rect cls arg1 arg2 arg3 arg4 arg5 arg6
 
 {-# NOINLINE bindTexture_draw_rect_region #-}
 
+-- | Draws a part of the texture using a [CanvasItem] with the [VisualServer] API. Equivalent to [method VisualServer.canvas_item_add_texture_rect_region].
 bindTexture_draw_rect_region :: MethodBind
 bindTexture_draw_rect_region
   = unsafePerformIO $
@@ -100,6 +106,7 @@ bindTexture_draw_rect_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Draws a part of the texture using a [CanvasItem] with the [VisualServer] API. Equivalent to [method VisualServer.canvas_item_add_texture_rect_region].
 draw_rect_region ::
                    (Texture :< cls, Object :< cls) =>
                    cls ->
@@ -116,6 +123,7 @@ draw_rect_region cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
 
 {-# NOINLINE bindTexture_get_data #-}
 
+-- | Returns an [Image] that is a copy of data from this [Texture]. [Image]s can be accessed and manipulated directly.
 bindTexture_get_data :: MethodBind
 bindTexture_get_data
   = unsafePerformIO $
@@ -125,6 +133,7 @@ bindTexture_get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns an [Image] that is a copy of data from this [Texture]. [Image]s can be accessed and manipulated directly.
 get_data :: (Texture :< cls, Object :< cls) => cls -> IO Image
 get_data cls
   = withVariantArray []
@@ -134,7 +143,7 @@ get_data cls
 
 {-# NOINLINE bindTexture_get_flags #-}
 
--- | The texture's flags.
+-- | The texture's [enum Flags]. [enum Flags] are used to set various properties of the [Texture].
 bindTexture_get_flags :: MethodBind
 bindTexture_get_flags
   = unsafePerformIO $
@@ -144,7 +153,7 @@ bindTexture_get_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The texture's flags.
+-- | The texture's [enum Flags]. [enum Flags] are used to set various properties of the [Texture].
 get_flags :: (Texture :< cls, Object :< cls) => cls -> IO Int
 get_flags cls
   = withVariantArray []
@@ -217,6 +226,7 @@ get_width cls
 
 {-# NOINLINE bindTexture_has_alpha #-}
 
+-- | Returns [code]true[/code] if this [Texture] has an alpha channel.
 bindTexture_has_alpha :: MethodBind
 bindTexture_has_alpha
   = unsafePerformIO $
@@ -226,6 +236,7 @@ bindTexture_has_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if this [Texture] has an alpha channel.
 has_alpha :: (Texture :< cls, Object :< cls) => cls -> IO Bool
 has_alpha cls
   = withVariantArray []
@@ -236,7 +247,7 @@ has_alpha cls
 
 {-# NOINLINE bindTexture_set_flags #-}
 
--- | The texture's flags.
+-- | The texture's [enum Flags]. [enum Flags] are used to set various properties of the [Texture].
 bindTexture_set_flags :: MethodBind
 bindTexture_set_flags
   = unsafePerformIO $
@@ -246,7 +257,7 @@ bindTexture_set_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The texture's flags.
+-- | The texture's [enum Flags]. [enum Flags] are used to set various properties of the [Texture].
 set_flags :: (Texture :< cls, Object :< cls) => cls -> Int -> IO ()
 set_flags cls arg1
   = withVariantArray [toVariant arg1]

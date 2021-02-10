@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Tree
        (Godot.Core.Tree._DROP_MODE_DISABLED, Godot.Core.Tree._SELECT_ROW,
         Godot.Core.Tree._SELECT_MULTI, Godot.Core.Tree._DROP_MODE_ON_ITEM,
@@ -83,74 +84,109 @@ sig_button_pressed :: Godot.Internal.Dispatch.Signal Tree
 sig_button_pressed
   = Godot.Internal.Dispatch.Signal "button_pressed"
 
+instance NodeSignal Tree "button_pressed" '[TreeItem, Int, Int]
+
 -- | Emitted when a cell is selected.
 sig_cell_selected :: Godot.Internal.Dispatch.Signal Tree
 sig_cell_selected = Godot.Internal.Dispatch.Signal "cell_selected"
+
+instance NodeSignal Tree "cell_selected" '[]
 
 -- | Emitted when a column's title is pressed.
 sig_column_title_pressed :: Godot.Internal.Dispatch.Signal Tree
 sig_column_title_pressed
   = Godot.Internal.Dispatch.Signal "column_title_pressed"
 
+instance NodeSignal Tree "column_title_pressed" '[Int]
+
 -- | Emitted when a cell with the [constant TreeItem.CELL_MODE_CUSTOM] is clicked to be edited.
 sig_custom_popup_edited :: Godot.Internal.Dispatch.Signal Tree
 sig_custom_popup_edited
   = Godot.Internal.Dispatch.Signal "custom_popup_edited"
 
+instance NodeSignal Tree "custom_popup_edited" '[Bool]
+
+-- | Emitted when the right mouse button is pressed in the empty space of the tree.
 sig_empty_rmb :: Godot.Internal.Dispatch.Signal Tree
 sig_empty_rmb = Godot.Internal.Dispatch.Signal "empty_rmb"
 
--- | Emitted when the right mouse button is pressed if RMB selection is active and the tree is empty.
+instance NodeSignal Tree "empty_rmb" '[Vector2]
+
+-- | Emitted when the right mouse button is pressed if right mouse button selection is active and the tree is empty.
 sig_empty_tree_rmb_selected :: Godot.Internal.Dispatch.Signal Tree
 sig_empty_tree_rmb_selected
   = Godot.Internal.Dispatch.Signal "empty_tree_rmb_selected"
+
+instance NodeSignal Tree "empty_tree_rmb_selected" '[Vector2]
 
 -- | Emitted when an item's label is double-clicked.
 sig_item_activated :: Godot.Internal.Dispatch.Signal Tree
 sig_item_activated
   = Godot.Internal.Dispatch.Signal "item_activated"
 
+instance NodeSignal Tree "item_activated" '[]
+
 -- | Emitted when an item is collapsed by a click on the folding arrow.
 sig_item_collapsed :: Godot.Internal.Dispatch.Signal Tree
 sig_item_collapsed
   = Godot.Internal.Dispatch.Signal "item_collapsed"
 
+instance NodeSignal Tree "item_collapsed" '[TreeItem]
+
+-- | Emitted when a custom button is pressed (i.e. in a [constant TreeItem.CELL_MODE_CUSTOM] mode cell).
 sig_item_custom_button_pressed ::
                                Godot.Internal.Dispatch.Signal Tree
 sig_item_custom_button_pressed
   = Godot.Internal.Dispatch.Signal "item_custom_button_pressed"
+
+instance NodeSignal Tree "item_custom_button_pressed" '[]
 
 -- | Emitted when an item's icon is double-clicked.
 sig_item_double_clicked :: Godot.Internal.Dispatch.Signal Tree
 sig_item_double_clicked
   = Godot.Internal.Dispatch.Signal "item_double_clicked"
 
+instance NodeSignal Tree "item_double_clicked" '[]
+
 -- | Emitted when an item is edited.
 sig_item_edited :: Godot.Internal.Dispatch.Signal Tree
 sig_item_edited = Godot.Internal.Dispatch.Signal "item_edited"
+
+instance NodeSignal Tree "item_edited" '[]
 
 -- | Emitted when an item is edited using the right mouse button.
 sig_item_rmb_edited :: Godot.Internal.Dispatch.Signal Tree
 sig_item_rmb_edited
   = Godot.Internal.Dispatch.Signal "item_rmb_edited"
 
+instance NodeSignal Tree "item_rmb_edited" '[]
+
 -- | Emitted when an item is selected with the right mouse button.
 sig_item_rmb_selected :: Godot.Internal.Dispatch.Signal Tree
 sig_item_rmb_selected
   = Godot.Internal.Dispatch.Signal "item_rmb_selected"
 
+instance NodeSignal Tree "item_rmb_selected" '[Vector2]
+
 -- | Emitted when an item is selected.
 sig_item_selected :: Godot.Internal.Dispatch.Signal Tree
 sig_item_selected = Godot.Internal.Dispatch.Signal "item_selected"
 
--- | Emitted instead of [code]item_selected[/code] when [code]select_mode[/code] is [constant SELECT_MULTI].
+instance NodeSignal Tree "item_selected" '[]
+
+-- | Emitted instead of [code]item_selected[/code] if [code]select_mode[/code] is [constant SELECT_MULTI].
 sig_multi_selected :: Godot.Internal.Dispatch.Signal Tree
 sig_multi_selected
   = Godot.Internal.Dispatch.Signal "multi_selected"
 
+instance NodeSignal Tree "multi_selected" '[TreeItem, Int, Bool]
+
+-- | Emitted when a left mouse button click does not select any item.
 sig_nothing_selected :: Godot.Internal.Dispatch.Signal Tree
 sig_nothing_selected
   = Godot.Internal.Dispatch.Signal "nothing_selected"
+
+instance NodeSignal Tree "nothing_selected" '[]
 
 {-# NOINLINE bindTree__gui_input #-}
 
@@ -342,7 +378,9 @@ clear cls
 
 {-# NOINLINE bindTree_create_item #-}
 
--- | Create an item in the tree and add it as the last child of [code]parent[/code]. If parent is not given, it will be added as the root's last child, or it'll the be the root itself if the tree is empty.
+-- | Creates an item in the tree and adds it as a child of [code]parent[/code].
+--   				If [code]parent[/code] is [code]null[/code], the root item will be the parent, or the new item will be the root itself if the tree is empty.
+--   				The new item will be the [code]idx[/code]th child of parent, or it will be the last child if there are not enough siblings.
 bindTree_create_item :: MethodBind
 bindTree_create_item
   = unsafePerformIO $
@@ -352,7 +390,9 @@ bindTree_create_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create an item in the tree and add it as the last child of [code]parent[/code]. If parent is not given, it will be added as the root's last child, or it'll the be the root itself if the tree is empty.
+-- | Creates an item in the tree and adds it as a child of [code]parent[/code].
+--   				If [code]parent[/code] is [code]null[/code], the root item will be the parent, or the new item will be the root itself if the tree is empty.
+--   				The new item will be the [code]idx[/code]th child of parent, or it will be the last child if there are not enough siblings.
 create_item ::
               (Tree :< cls, Object :< cls) => cls -> Object -> Int -> IO TreeItem
 create_item cls arg1 arg2
@@ -363,7 +403,9 @@ create_item cls arg1 arg2
 
 {-# NOINLINE bindTree_ensure_cursor_is_visible #-}
 
--- | Makes the currently selected item visible. This will scroll the tree to make sure the selected item is visible.
+-- | Makes the currently focused cell visible.
+--   				This will scroll the tree if necessary. In [constant SELECT_ROW] mode, this will not do horizontal scrolling, as all the cells in the selected row is focused logically.
+--   				[b]Note:[/b] Despite the name of this method, the focus cursor itself is only visible in [constant SELECT_MULTI] mode.
 bindTree_ensure_cursor_is_visible :: MethodBind
 bindTree_ensure_cursor_is_visible
   = unsafePerformIO $
@@ -373,7 +415,9 @@ bindTree_ensure_cursor_is_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Makes the currently selected item visible. This will scroll the tree to make sure the selected item is visible.
+-- | Makes the currently focused cell visible.
+--   				This will scroll the tree if necessary. In [constant SELECT_ROW] mode, this will not do horizontal scrolling, as all the cells in the selected row is focused logically.
+--   				[b]Note:[/b] Despite the name of this method, the focus cursor itself is only visible in [constant SELECT_MULTI] mode.
 ensure_cursor_is_visible ::
                            (Tree :< cls, Object :< cls) => cls -> IO ()
 ensure_cursor_is_visible cls
@@ -433,7 +477,7 @@ get_allow_rmb_select cls
 
 {-# NOINLINE bindTree_get_column_at_position #-}
 
--- | Returns the column index under the given point.
+-- | Returns the column index at [code]position[/code], or -1 if no item is there.
 bindTree_get_column_at_position :: MethodBind
 bindTree_get_column_at_position
   = unsafePerformIO $
@@ -443,7 +487,7 @@ bindTree_get_column_at_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the column index under the given point.
+-- | Returns the column index at [code]position[/code], or -1 if no item is there.
 get_column_at_position ::
                          (Tree :< cls, Object :< cls) => cls -> Vector2 -> IO Int
 get_column_at_position cls arg1
@@ -502,7 +546,7 @@ get_column_width cls arg1
 
 {-# NOINLINE bindTree_get_columns #-}
 
--- | The amount of columns.
+-- | The number of columns.
 bindTree_get_columns :: MethodBind
 bindTree_get_columns
   = unsafePerformIO $
@@ -512,7 +556,7 @@ bindTree_get_columns
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of columns.
+-- | The number of columns.
 get_columns :: (Tree :< cls, Object :< cls) => cls -> IO Int
 get_columns cls
   = withVariantArray []
@@ -545,7 +589,8 @@ get_custom_popup_rect cls
 
 {-# NOINLINE bindTree_get_drop_mode_flags #-}
 
--- | The drop mode as an OR combination of flags. See [code]DROP_MODE_*[/code] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+-- | The drop mode as an OR combination of flags. See [enum DropModeFlags] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+--   			This controls the drop sections, i.e. the decision and drawing of possible drop locations based on the mouse position.
 bindTree_get_drop_mode_flags :: MethodBind
 bindTree_get_drop_mode_flags
   = unsafePerformIO $
@@ -555,7 +600,8 @@ bindTree_get_drop_mode_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The drop mode as an OR combination of flags. See [code]DROP_MODE_*[/code] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+-- | The drop mode as an OR combination of flags. See [enum DropModeFlags] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+--   			This controls the drop sections, i.e. the decision and drawing of possible drop locations based on the mouse position.
 get_drop_mode_flags ::
                       (Tree :< cls, Object :< cls) => cls -> IO Int
 get_drop_mode_flags cls
@@ -568,8 +614,9 @@ get_drop_mode_flags cls
 
 {-# NOINLINE bindTree_get_drop_section_at_position #-}
 
--- | If [member drop_mode_flags] includes [constant DROP_MODE_INBETWEEN], returns -1 if [code]position[/code] is the upper part of a tree item at that position, 1 for the lower part, and additionally 0 for the middle part if [member drop_mode_flags] includes [constant DROP_MODE_ON_ITEM].
---   				Otherwise, returns 0. If there are no tree item at [code]position[/code], returns -100.
+-- | Returns the drop section at [code]position[/code], or -100 if no item is there.
+--   				Values -1, 0, or 1 will be returned for the "above item", "on item", and "below item" drop sections, respectively. See [enum DropModeFlags] for a description of each drop section.
+--   				To get the item which the returned drop section is relative to, use [method get_item_at_position].
 bindTree_get_drop_section_at_position :: MethodBind
 bindTree_get_drop_section_at_position
   = unsafePerformIO $
@@ -579,8 +626,9 @@ bindTree_get_drop_section_at_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [member drop_mode_flags] includes [constant DROP_MODE_INBETWEEN], returns -1 if [code]position[/code] is the upper part of a tree item at that position, 1 for the lower part, and additionally 0 for the middle part if [member drop_mode_flags] includes [constant DROP_MODE_ON_ITEM].
---   				Otherwise, returns 0. If there are no tree item at [code]position[/code], returns -100.
+-- | Returns the drop section at [code]position[/code], or -100 if no item is there.
+--   				Values -1, 0, or 1 will be returned for the "above item", "on item", and "below item" drop sections, respectively. See [enum DropModeFlags] for a description of each drop section.
+--   				To get the item which the returned drop section is relative to, use [method get_item_at_position].
 get_drop_section_at_position ::
                                (Tree :< cls, Object :< cls) => cls -> Vector2 -> IO Int
 get_drop_section_at_position cls arg1
@@ -636,7 +684,7 @@ get_edited_column cls
 
 {-# NOINLINE bindTree_get_item_area_rect #-}
 
--- | Returns the rectangle area for the specified item. If column is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
+-- | Returns the rectangle area for the specified item. If [code]column[/code] is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
 bindTree_get_item_area_rect :: MethodBind
 bindTree_get_item_area_rect
   = unsafePerformIO $
@@ -646,7 +694,7 @@ bindTree_get_item_area_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the rectangle area for the specified item. If column is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
+-- | Returns the rectangle area for the specified item. If [code]column[/code] is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
 get_item_area_rect ::
                      (Tree :< cls, Object :< cls) => cls -> Object -> Int -> IO Rect2
 get_item_area_rect cls arg1 arg2
@@ -682,7 +730,8 @@ get_item_at_position cls arg1
 
 {-# NOINLINE bindTree_get_next_selected #-}
 
--- | Returns the next selected item after the given one.
+-- | Returns the next selected item after the given one, or [code]null[/code] if the end is reached.
+--   				If [code]from[/code] is [code]null[/code], this returns the first selected item.
 bindTree_get_next_selected :: MethodBind
 bindTree_get_next_selected
   = unsafePerformIO $
@@ -692,7 +741,8 @@ bindTree_get_next_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next selected item after the given one.
+-- | Returns the next selected item after the given one, or [code]null[/code] if the end is reached.
+--   				If [code]from[/code] is [code]null[/code], this returns the first selected item.
 get_next_selected ::
                     (Tree :< cls, Object :< cls) => cls -> Object -> IO TreeItem
 get_next_selected cls arg1
@@ -727,7 +777,7 @@ get_pressed_button cls
 
 {-# NOINLINE bindTree_get_root #-}
 
--- | Returns the tree's root item.
+-- | Returns the tree's root item, or [code]null[/code] if the tree is empty.
 bindTree_get_root :: MethodBind
 bindTree_get_root
   = unsafePerformIO $
@@ -737,7 +787,7 @@ bindTree_get_root
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the tree's root item.
+-- | Returns the tree's root item, or [code]null[/code] if the tree is empty.
 get_root :: (Tree :< cls, Object :< cls) => cls -> IO TreeItem
 get_root cls
   = withVariantArray []
@@ -767,7 +817,7 @@ get_scroll cls
 
 {-# NOINLINE bindTree_get_select_mode #-}
 
--- | Allow single or multiple selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple selection. See the [enum SelectMode] constants.
 bindTree_get_select_mode :: MethodBind
 bindTree_get_select_mode
   = unsafePerformIO $
@@ -777,7 +827,7 @@ bindTree_get_select_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allow single or multiple selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple selection. See the [enum SelectMode] constants.
 get_select_mode :: (Tree :< cls, Object :< cls) => cls -> IO Int
 get_select_mode cls
   = withVariantArray []
@@ -788,7 +838,9 @@ get_select_mode cls
 
 {-# NOINLINE bindTree_get_selected #-}
 
--- | Returns the currently selected item.
+-- | Returns the currently focused item, or [code]null[/code] if no item is focused.
+--   				In [constant SELECT_ROW] and [constant SELECT_SINGLE] modes, the focused item is same as the selected item. In [constant SELECT_MULTI] mode, the focused item is the item under the focus cursor, not necessarily selected.
+--   				To get the currently selected item(s), use [method get_next_selected].
 bindTree_get_selected :: MethodBind
 bindTree_get_selected
   = unsafePerformIO $
@@ -798,7 +850,9 @@ bindTree_get_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the currently selected item.
+-- | Returns the currently focused item, or [code]null[/code] if no item is focused.
+--   				In [constant SELECT_ROW] and [constant SELECT_SINGLE] modes, the focused item is same as the selected item. In [constant SELECT_MULTI] mode, the focused item is the item under the focus cursor, not necessarily selected.
+--   				To get the currently selected item(s), use [method get_next_selected].
 get_selected :: (Tree :< cls, Object :< cls) => cls -> IO TreeItem
 get_selected cls
   = withVariantArray []
@@ -809,7 +863,9 @@ get_selected cls
 
 {-# NOINLINE bindTree_get_selected_column #-}
 
--- | Returns the current selection's column.
+-- | Returns the currently focused column, or -1 if no column is focused.
+--   				In [constant SELECT_SINGLE] mode, the focused column is the selected column. In [constant SELECT_ROW] mode, the focused column is always 0 if any item is selected. In [constant SELECT_MULTI] mode, the focused column is the column under the focus cursor, and there are not necessarily any column selected.
+--   				To tell whether a column of an item is selected, use [method TreeItem.is_selected].
 bindTree_get_selected_column :: MethodBind
 bindTree_get_selected_column
   = unsafePerformIO $
@@ -819,7 +875,9 @@ bindTree_get_selected_column
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current selection's column.
+-- | Returns the currently focused column, or -1 if no column is focused.
+--   				In [constant SELECT_SINGLE] mode, the focused column is the selected column. In [constant SELECT_ROW] mode, the focused column is always 0 if any item is selected. In [constant SELECT_MULTI] mode, the focused column is the column under the focus cursor, and there are not necessarily any column selected.
+--   				To tell whether a column of an item is selected, use [method TreeItem.is_selected].
 get_selected_column ::
                       (Tree :< cls, Object :< cls) => cls -> IO Int
 get_selected_column cls
@@ -967,7 +1025,7 @@ set_column_min_width cls arg1 arg2
 
 {-# NOINLINE bindTree_set_column_title #-}
 
--- | Set the title of a column.
+-- | Sets the title of a column.
 bindTree_set_column_title :: MethodBind
 bindTree_set_column_title
   = unsafePerformIO $
@@ -977,7 +1035,7 @@ bindTree_set_column_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the title of a column.
+-- | Sets the title of a column.
 set_column_title ::
                    (Tree :< cls, Object :< cls) => cls -> Int -> GodotString -> IO ()
 set_column_title cls arg1 arg2
@@ -1014,7 +1072,7 @@ set_column_titles_visible cls arg1
 
 {-# NOINLINE bindTree_set_columns #-}
 
--- | The amount of columns.
+-- | The number of columns.
 bindTree_set_columns :: MethodBind
 bindTree_set_columns
   = unsafePerformIO $
@@ -1024,7 +1082,7 @@ bindTree_set_columns
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount of columns.
+-- | The number of columns.
 set_columns :: (Tree :< cls, Object :< cls) => cls -> Int -> IO ()
 set_columns cls arg1
   = withVariantArray [toVariant arg1]
@@ -1034,7 +1092,8 @@ set_columns cls arg1
 
 {-# NOINLINE bindTree_set_drop_mode_flags #-}
 
--- | The drop mode as an OR combination of flags. See [code]DROP_MODE_*[/code] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+-- | The drop mode as an OR combination of flags. See [enum DropModeFlags] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+--   			This controls the drop sections, i.e. the decision and drawing of possible drop locations based on the mouse position.
 bindTree_set_drop_mode_flags :: MethodBind
 bindTree_set_drop_mode_flags
   = unsafePerformIO $
@@ -1044,7 +1103,8 @@ bindTree_set_drop_mode_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The drop mode as an OR combination of flags. See [code]DROP_MODE_*[/code] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+-- | The drop mode as an OR combination of flags. See [enum DropModeFlags] constants. Once dropping is done, reverts to [constant DROP_MODE_DISABLED]. Setting this during [method Control.can_drop_data] is recommended.
+--   			This controls the drop sections, i.e. the decision and drawing of possible drop locations based on the mouse position.
 set_drop_mode_flags ::
                       (Tree :< cls, Object :< cls) => cls -> Int -> IO ()
 set_drop_mode_flags cls arg1
@@ -1102,7 +1162,7 @@ set_hide_root cls arg1
 
 {-# NOINLINE bindTree_set_select_mode #-}
 
--- | Allow single or multiple selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple selection. See the [enum SelectMode] constants.
 bindTree_set_select_mode :: MethodBind
 bindTree_set_select_mode
   = unsafePerformIO $
@@ -1112,7 +1172,7 @@ bindTree_set_select_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allow single or multiple selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple selection. See the [enum SelectMode] constants.
 set_select_mode ::
                   (Tree :< cls, Object :< cls) => cls -> Int -> IO ()
 set_select_mode cls arg1

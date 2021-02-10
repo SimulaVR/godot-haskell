@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VehicleWheel
        (Godot.Core.VehicleWheel.get_brake,
         Godot.Core.VehicleWheel.get_damping_compression,
@@ -42,6 +43,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindVehicleWheel_get_brake #-}
 
+-- | Slows down the wheel by applying a braking force. The wheel is only slowed down if it is in contact with a surface. The force you need to apply to adequately slow down your vehicle depends on the [member RigidBody.mass] of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 30 range for hard braking.
 bindVehicleWheel_get_brake :: MethodBind
 bindVehicleWheel_get_brake
   = unsafePerformIO $
@@ -51,6 +53,7 @@ bindVehicleWheel_get_brake
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Slows down the wheel by applying a braking force. The wheel is only slowed down if it is in contact with a surface. The force you need to apply to adequately slow down your vehicle depends on the [member RigidBody.mass] of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 30 range for hard braking.
 get_brake ::
             (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_brake cls
@@ -87,7 +90,7 @@ get_damping_compression cls
 
 {-# NOINLINE bindVehicleWheel_get_damping_relaxation #-}
 
--- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5
+-- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5.
 bindVehicleWheel_get_damping_relaxation :: MethodBind
 bindVehicleWheel_get_damping_relaxation
   = unsafePerformIO $
@@ -97,7 +100,7 @@ bindVehicleWheel_get_damping_relaxation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5
+-- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5.
 get_damping_relaxation ::
                          (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_damping_relaxation cls
@@ -111,6 +114,9 @@ get_damping_relaxation cls
 
 {-# NOINLINE bindVehicleWheel_get_engine_force #-}
 
+-- | Accelerates the wheel by applying an engine force. The wheel is only speed up if it is in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+--   			A negative value will result in the wheel reversing.
 bindVehicleWheel_get_engine_force :: MethodBind
 bindVehicleWheel_get_engine_force
   = unsafePerformIO $
@@ -120,6 +126,9 @@ bindVehicleWheel_get_engine_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Accelerates the wheel by applying an engine force. The wheel is only speed up if it is in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+--   			A negative value will result in the wheel reversing.
 get_engine_force ::
                    (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_engine_force cls
@@ -182,7 +191,7 @@ get_radius cls
 
 {-# NOINLINE bindVehicleWheel_get_roll_influence #-}
 
--- | This value effects the roll of your vehicle. If set to 0.0 for all wheels your vehicle will be prone to rolling over while a value of 1.0 will resist body roll.
+-- | This value affects the roll of your vehicle. If set to 1.0 for all wheels, your vehicle will be prone to rolling over, while a value of 0.0 will resist body roll.
 bindVehicleWheel_get_roll_influence :: MethodBind
 bindVehicleWheel_get_roll_influence
   = unsafePerformIO $
@@ -192,7 +201,7 @@ bindVehicleWheel_get_roll_influence
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This value effects the roll of your vehicle. If set to 0.0 for all wheels your vehicle will be prone to rolling over while a value of 1.0 will resist body roll.
+-- | This value affects the roll of your vehicle. If set to 1.0 for all wheels, your vehicle will be prone to rolling over, while a value of 0.0 will resist body roll.
 get_roll_influence ::
                      (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_roll_influence cls
@@ -206,6 +215,7 @@ get_roll_influence cls
 
 {-# NOINLINE bindVehicleWheel_get_rpm #-}
 
+-- | Returns the rotational speed of the wheel in revolutions per minute.
 bindVehicleWheel_get_rpm :: MethodBind
 bindVehicleWheel_get_rpm
   = unsafePerformIO $
@@ -215,6 +225,7 @@ bindVehicleWheel_get_rpm
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the rotational speed of the wheel in revolutions per minute.
 get_rpm :: (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_rpm cls
   = withVariantArray []
@@ -248,6 +259,7 @@ get_skidinfo cls
 
 {-# NOINLINE bindVehicleWheel_get_steering #-}
 
+-- | The steering angle for the wheel. Setting this to a non-zero value will result in the vehicle turning when it's moving.
 bindVehicleWheel_get_steering :: MethodBind
 bindVehicleWheel_get_steering
   = unsafePerformIO $
@@ -257,6 +269,7 @@ bindVehicleWheel_get_steering
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The steering angle for the wheel. Setting this to a non-zero value will result in the vehicle turning when it's moving.
 get_steering ::
                (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_steering cls
@@ -269,7 +282,7 @@ get_steering cls
 
 {-# NOINLINE bindVehicleWheel_get_suspension_max_force #-}
 
--- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3x to 4x this number.
+-- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3× to 4× this number.
 bindVehicleWheel_get_suspension_max_force :: MethodBind
 bindVehicleWheel_get_suspension_max_force
   = unsafePerformIO $
@@ -279,7 +292,7 @@ bindVehicleWheel_get_suspension_max_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3x to 4x this number.
+-- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3× to 4× this number.
 get_suspension_max_force ::
                            (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_suspension_max_force cls
@@ -341,7 +354,7 @@ get_suspension_stiffness cls
 
 {-# NOINLINE bindVehicleWheel_get_suspension_travel #-}
 
--- | This is the distance the suspension can travel. As Godot measures are in meters keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car .
+-- | This is the distance the suspension can travel. As Godot units are equivalent to meters, keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car.
 bindVehicleWheel_get_suspension_travel :: MethodBind
 bindVehicleWheel_get_suspension_travel
   = unsafePerformIO $
@@ -351,7 +364,7 @@ bindVehicleWheel_get_suspension_travel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This is the distance the suspension can travel. As Godot measures are in meters keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car .
+-- | This is the distance the suspension can travel. As Godot units are equivalent to meters, keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car.
 get_suspension_travel ::
                         (VehicleWheel :< cls, Object :< cls) => cls -> IO Float
 get_suspension_travel cls
@@ -388,7 +401,7 @@ is_in_contact cls
 
 {-# NOINLINE bindVehicleWheel_is_used_as_steering #-}
 
--- | If [code]true[/code] this wheel will be turned when the car steers.
+-- | If [code]true[/code], this wheel will be turned when the car steers. This value is used in conjunction with [member VehicleBody.steering] and ignored if you are using the per-wheel [member steering] value instead.
 bindVehicleWheel_is_used_as_steering :: MethodBind
 bindVehicleWheel_is_used_as_steering
   = unsafePerformIO $
@@ -398,7 +411,7 @@ bindVehicleWheel_is_used_as_steering
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] this wheel will be turned when the car steers.
+-- | If [code]true[/code], this wheel will be turned when the car steers. This value is used in conjunction with [member VehicleBody.steering] and ignored if you are using the per-wheel [member steering] value instead.
 is_used_as_steering ::
                       (VehicleWheel :< cls, Object :< cls) => cls -> IO Bool
 is_used_as_steering cls
@@ -412,7 +425,7 @@ is_used_as_steering cls
 
 {-# NOINLINE bindVehicleWheel_is_used_as_traction #-}
 
--- | If [code]true[/code] this wheel transfers engine force to the ground to propel the vehicle forward.
+-- | If [code]true[/code], this wheel transfers engine force to the ground to propel the vehicle forward. This value is used in conjunction with [member VehicleBody.engine_force] and ignored if you are using the per-wheel [member engine_force] value instead.
 bindVehicleWheel_is_used_as_traction :: MethodBind
 bindVehicleWheel_is_used_as_traction
   = unsafePerformIO $
@@ -422,7 +435,7 @@ bindVehicleWheel_is_used_as_traction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] this wheel transfers engine force to the ground to propel the vehicle forward.
+-- | If [code]true[/code], this wheel transfers engine force to the ground to propel the vehicle forward. This value is used in conjunction with [member VehicleBody.engine_force] and ignored if you are using the per-wheel [member engine_force] value instead.
 is_used_as_traction ::
                       (VehicleWheel :< cls, Object :< cls) => cls -> IO Bool
 is_used_as_traction cls
@@ -436,6 +449,7 @@ is_used_as_traction cls
 
 {-# NOINLINE bindVehicleWheel_set_brake #-}
 
+-- | Slows down the wheel by applying a braking force. The wheel is only slowed down if it is in contact with a surface. The force you need to apply to adequately slow down your vehicle depends on the [member RigidBody.mass] of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 30 range for hard braking.
 bindVehicleWheel_set_brake :: MethodBind
 bindVehicleWheel_set_brake
   = unsafePerformIO $
@@ -445,6 +459,7 @@ bindVehicleWheel_set_brake
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Slows down the wheel by applying a braking force. The wheel is only slowed down if it is in contact with a surface. The force you need to apply to adequately slow down your vehicle depends on the [member RigidBody.mass] of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 30 range for hard braking.
 set_brake ::
             (VehicleWheel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_brake cls arg1
@@ -481,7 +496,7 @@ set_damping_compression cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_damping_relaxation #-}
 
--- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5
+-- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5.
 bindVehicleWheel_set_damping_relaxation :: MethodBind
 bindVehicleWheel_set_damping_relaxation
   = unsafePerformIO $
@@ -491,7 +506,7 @@ bindVehicleWheel_set_damping_relaxation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5
+-- | The damping applied to the spring when relaxing. This value should be between 0.0 (no damping) and 1.0. This value should always be slightly higher than the [member damping_compression] property. For a [member damping_compression] value of 0.3, try a relaxation value of 0.5.
 set_damping_relaxation ::
                          (VehicleWheel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_damping_relaxation cls arg1
@@ -505,6 +520,9 @@ set_damping_relaxation cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_engine_force #-}
 
+-- | Accelerates the wheel by applying an engine force. The wheel is only speed up if it is in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+--   			A negative value will result in the wheel reversing.
 bindVehicleWheel_set_engine_force :: MethodBind
 bindVehicleWheel_set_engine_force
   = unsafePerformIO $
@@ -514,6 +532,9 @@ bindVehicleWheel_set_engine_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Accelerates the wheel by applying an engine force. The wheel is only speed up if it is in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+--   			A negative value will result in the wheel reversing.
 set_engine_force ::
                    (VehicleWheel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_engine_force cls arg1
@@ -576,7 +597,7 @@ set_radius cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_roll_influence #-}
 
--- | This value effects the roll of your vehicle. If set to 0.0 for all wheels your vehicle will be prone to rolling over while a value of 1.0 will resist body roll.
+-- | This value affects the roll of your vehicle. If set to 1.0 for all wheels, your vehicle will be prone to rolling over, while a value of 0.0 will resist body roll.
 bindVehicleWheel_set_roll_influence :: MethodBind
 bindVehicleWheel_set_roll_influence
   = unsafePerformIO $
@@ -586,7 +607,7 @@ bindVehicleWheel_set_roll_influence
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This value effects the roll of your vehicle. If set to 0.0 for all wheels your vehicle will be prone to rolling over while a value of 1.0 will resist body roll.
+-- | This value affects the roll of your vehicle. If set to 1.0 for all wheels, your vehicle will be prone to rolling over, while a value of 0.0 will resist body roll.
 set_roll_influence ::
                      (VehicleWheel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_roll_influence cls arg1
@@ -600,6 +621,7 @@ set_roll_influence cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_steering #-}
 
+-- | The steering angle for the wheel. Setting this to a non-zero value will result in the vehicle turning when it's moving.
 bindVehicleWheel_set_steering :: MethodBind
 bindVehicleWheel_set_steering
   = unsafePerformIO $
@@ -609,6 +631,7 @@ bindVehicleWheel_set_steering
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The steering angle for the wheel. Setting this to a non-zero value will result in the vehicle turning when it's moving.
 set_steering ::
                (VehicleWheel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_steering cls arg1
@@ -621,7 +644,7 @@ set_steering cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_suspension_max_force #-}
 
--- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3x to 4x this number.
+-- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3× to 4× this number.
 bindVehicleWheel_set_suspension_max_force :: MethodBind
 bindVehicleWheel_set_suspension_max_force
   = unsafePerformIO $
@@ -631,7 +654,7 @@ bindVehicleWheel_set_suspension_max_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3x to 4x this number.
+-- | The maximum force the spring can resist. This value should be higher than a quarter of the [member RigidBody.mass] of the [VehicleBody] or the spring will not carry the weight of the vehicle. Good results are often obtained by a value that is about 3× to 4× this number.
 set_suspension_max_force ::
                            (VehicleWheel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_suspension_max_force cls arg1
@@ -693,7 +716,7 @@ set_suspension_stiffness cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_suspension_travel #-}
 
--- | This is the distance the suspension can travel. As Godot measures are in meters keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car .
+-- | This is the distance the suspension can travel. As Godot units are equivalent to meters, keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car.
 bindVehicleWheel_set_suspension_travel :: MethodBind
 bindVehicleWheel_set_suspension_travel
   = unsafePerformIO $
@@ -703,7 +726,7 @@ bindVehicleWheel_set_suspension_travel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This is the distance the suspension can travel. As Godot measures are in meters keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car .
+-- | This is the distance the suspension can travel. As Godot units are equivalent to meters, keep this setting relatively low. Try a value between 0.1 and 0.3 depending on the type of car.
 set_suspension_travel ::
                         (VehicleWheel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_suspension_travel cls arg1
@@ -717,7 +740,7 @@ set_suspension_travel cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_use_as_steering #-}
 
--- | If [code]true[/code] this wheel will be turned when the car steers.
+-- | If [code]true[/code], this wheel will be turned when the car steers. This value is used in conjunction with [member VehicleBody.steering] and ignored if you are using the per-wheel [member steering] value instead.
 bindVehicleWheel_set_use_as_steering :: MethodBind
 bindVehicleWheel_set_use_as_steering
   = unsafePerformIO $
@@ -727,7 +750,7 @@ bindVehicleWheel_set_use_as_steering
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] this wheel will be turned when the car steers.
+-- | If [code]true[/code], this wheel will be turned when the car steers. This value is used in conjunction with [member VehicleBody.steering] and ignored if you are using the per-wheel [member steering] value instead.
 set_use_as_steering ::
                       (VehicleWheel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_as_steering cls arg1
@@ -741,7 +764,7 @@ set_use_as_steering cls arg1
 
 {-# NOINLINE bindVehicleWheel_set_use_as_traction #-}
 
--- | If [code]true[/code] this wheel transfers engine force to the ground to propel the vehicle forward.
+-- | If [code]true[/code], this wheel transfers engine force to the ground to propel the vehicle forward. This value is used in conjunction with [member VehicleBody.engine_force] and ignored if you are using the per-wheel [member engine_force] value instead.
 bindVehicleWheel_set_use_as_traction :: MethodBind
 bindVehicleWheel_set_use_as_traction
   = unsafePerformIO $
@@ -751,7 +774,7 @@ bindVehicleWheel_set_use_as_traction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] this wheel transfers engine force to the ground to propel the vehicle forward.
+-- | If [code]true[/code], this wheel transfers engine force to the ground to propel the vehicle forward. This value is used in conjunction with [member VehicleBody.engine_force] and ignored if you are using the per-wheel [member engine_force] value instead.
 set_use_as_traction ::
                       (VehicleWheel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_as_traction cls arg1

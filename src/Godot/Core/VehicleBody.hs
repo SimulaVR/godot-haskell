@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VehicleBody
        (Godot.Core.VehicleBody.get_brake,
         Godot.Core.VehicleBody.get_engine_force,
@@ -39,7 +40,8 @@ get_brake cls
 
 {-# NOINLINE bindVehicleBody_get_engine_force #-}
 
--- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration. Note that the simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+-- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
 --   			A negative value will result in the vehicle reversing.
 bindVehicleBody_get_engine_force :: MethodBind
 bindVehicleBody_get_engine_force
@@ -50,7 +52,8 @@ bindVehicleBody_get_engine_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration. Note that the simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+-- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
 --   			A negative value will result in the vehicle reversing.
 get_engine_force ::
                    (VehicleBody :< cls, Object :< cls) => cls -> IO Float
@@ -111,7 +114,8 @@ set_brake cls arg1
 
 {-# NOINLINE bindVehicleBody_set_engine_force #-}
 
--- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration. Note that the simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+-- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
 --   			A negative value will result in the vehicle reversing.
 bindVehicleBody_set_engine_force :: MethodBind
 bindVehicleBody_set_engine_force
@@ -122,7 +126,8 @@ bindVehicleBody_set_engine_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration. Note that the simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
+-- | Accelerates the vehicle by applying an engine force. The vehicle is only speed up if the wheels that have [member VehicleWheel.use_as_traction] set to [code]true[/code] and are in contact with a surface. The [member RigidBody.mass] of the vehicle has an effect on the acceleration of the vehicle. For a vehicle with a mass set to 1000, try a value in the 25 - 50 range for acceleration.
+--   			[b]Note:[/b] The simulation does not take the effect of gears into account, you will need to add logic for this if you wish to simulate gears.
 --   			A negative value will result in the vehicle reversing.
 set_engine_force ::
                    (VehicleBody :< cls, Object :< cls) => cls -> Float -> IO ()

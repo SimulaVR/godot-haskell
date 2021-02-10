@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Line2D
        (Godot.Core.Line2D._LINE_JOINT_ROUND,
         Godot.Core.Line2D._LINE_TEXTURE_NONE,
@@ -107,7 +108,8 @@ _gradient_changed cls
 
 {-# NOINLINE bindLine2D_add_point #-}
 
--- | Add a point at the [code]position[/code]. Appends the point at the end of the line.
+-- | Adds a point at the [code]position[/code]. Appends the point at the end of the line.
+--   				If [code]at_position[/code] is given, the point is inserted before the point number [code]at_position[/code], moving that point (and every point after) after the inserted point. If [code]at_position[/code] is not given, or is an illegal value ([code]at_position < 0[/code] or [code]at_position >= [method get_point_count][/code]), the point will be appended at the end of the point list.
 bindLine2D_add_point :: MethodBind
 bindLine2D_add_point
   = unsafePerformIO $
@@ -117,7 +119,8 @@ bindLine2D_add_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a point at the [code]position[/code]. Appends the point at the end of the line.
+-- | Adds a point at the [code]position[/code]. Appends the point at the end of the line.
+--   				If [code]at_position[/code] is given, the point is inserted before the point number [code]at_position[/code], moving that point (and every point after) after the inserted point. If [code]at_position[/code] is not given, or is an illegal value ([code]at_position < 0[/code] or [code]at_position >= [method get_point_count][/code]), the point will be appended at the end of the point list.
 add_point ::
             (Line2D :< cls, Object :< cls) => cls -> Vector2 -> Int -> IO ()
 add_point cls arg1 arg2
@@ -149,6 +152,7 @@ clear_points cls
 
 {-# NOINLINE bindLine2D_get_antialiased #-}
 
+-- | If [code]true[/code], the line's border will be anti-aliased.
 bindLine2D_get_antialiased :: MethodBind
 bindLine2D_get_antialiased
   = unsafePerformIO $
@@ -158,6 +162,7 @@ bindLine2D_get_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the line's border will be anti-aliased.
 get_antialiased :: (Line2D :< cls, Object :< cls) => cls -> IO Bool
 get_antialiased cls
   = withVariantArray []
@@ -169,7 +174,7 @@ get_antialiased cls
 
 {-# NOINLINE bindLine2D_get_begin_cap_mode #-}
 
--- | Controls the style of the line's first point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
 bindLine2D_get_begin_cap_mode :: MethodBind
 bindLine2D_get_begin_cap_mode
   = unsafePerformIO $
@@ -179,7 +184,7 @@ bindLine2D_get_begin_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's first point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
 get_begin_cap_mode ::
                      (Line2D :< cls, Object :< cls) => cls -> IO Int
 get_begin_cap_mode cls
@@ -192,6 +197,7 @@ get_begin_cap_mode cls
 
 {-# NOINLINE bindLine2D_get_curve #-}
 
+-- | The line's width varies with the curve. The original width is simply multiply by the value of the Curve.
 bindLine2D_get_curve :: MethodBind
 bindLine2D_get_curve
   = unsafePerformIO $
@@ -201,6 +207,7 @@ bindLine2D_get_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The line's width varies with the curve. The original width is simply multiply by the value of the Curve.
 get_curve :: (Line2D :< cls, Object :< cls) => cls -> IO Curve
 get_curve cls
   = withVariantArray []
@@ -233,7 +240,7 @@ get_default_color cls
 
 {-# NOINLINE bindLine2D_get_end_cap_mode #-}
 
--- | Controls the style of the line's last point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
 bindLine2D_get_end_cap_mode :: MethodBind
 bindLine2D_get_end_cap_mode
   = unsafePerformIO $
@@ -243,7 +250,7 @@ bindLine2D_get_end_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's last point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
 get_end_cap_mode :: (Line2D :< cls, Object :< cls) => cls -> IO Int
 get_end_cap_mode cls
   = withVariantArray []
@@ -344,7 +351,7 @@ get_point_position cls arg1
 
 {-# NOINLINE bindLine2D_get_points #-}
 
--- | The points that form the lines. The line is drawn between every point set in this array.
+-- | The points that form the lines. The line is drawn between every point set in this array. Points are interpreted as local vectors.
 bindLine2D_get_points :: MethodBind
 bindLine2D_get_points
   = unsafePerformIO $
@@ -354,7 +361,7 @@ bindLine2D_get_points
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The points that form the lines. The line is drawn between every point set in this array.
+-- | The points that form the lines. The line is drawn between every point set in this array. Points are interpreted as local vectors.
 get_points ::
              (Line2D :< cls, Object :< cls) => cls -> IO PoolVector2Array
 get_points cls
@@ -433,7 +440,7 @@ get_texture cls
 
 {-# NOINLINE bindLine2D_get_texture_mode #-}
 
--- | The style to render the [code]texture[/code] on the line. Use [code]LINE_TEXTURE_*[/code] constants. Default value: [constant LINE_TEXTURE_NONE].
+-- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
 bindLine2D_get_texture_mode :: MethodBind
 bindLine2D_get_texture_mode
   = unsafePerformIO $
@@ -443,7 +450,7 @@ bindLine2D_get_texture_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The style to render the [code]texture[/code] on the line. Use [code]LINE_TEXTURE_*[/code] constants. Default value: [constant LINE_TEXTURE_NONE].
+-- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
 get_texture_mode :: (Line2D :< cls, Object :< cls) => cls -> IO Int
 get_texture_mode cls
   = withVariantArray []
@@ -475,7 +482,7 @@ get_width cls
 
 {-# NOINLINE bindLine2D_remove_point #-}
 
--- | Remove the point at index [code]i[/code] from the line.
+-- | Removes the point at index [code]i[/code] from the line.
 bindLine2D_remove_point :: MethodBind
 bindLine2D_remove_point
   = unsafePerformIO $
@@ -485,7 +492,7 @@ bindLine2D_remove_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the point at index [code]i[/code] from the line.
+-- | Removes the point at index [code]i[/code] from the line.
 remove_point ::
                (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_point cls arg1
@@ -497,6 +504,7 @@ remove_point cls arg1
 
 {-# NOINLINE bindLine2D_set_antialiased #-}
 
+-- | If [code]true[/code], the line's border will be anti-aliased.
 bindLine2D_set_antialiased :: MethodBind
 bindLine2D_set_antialiased
   = unsafePerformIO $
@@ -506,6 +514,7 @@ bindLine2D_set_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the line's border will be anti-aliased.
 set_antialiased ::
                   (Line2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_antialiased cls arg1
@@ -518,7 +527,7 @@ set_antialiased cls arg1
 
 {-# NOINLINE bindLine2D_set_begin_cap_mode #-}
 
--- | Controls the style of the line's first point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
 bindLine2D_set_begin_cap_mode :: MethodBind
 bindLine2D_set_begin_cap_mode
   = unsafePerformIO $
@@ -528,7 +537,7 @@ bindLine2D_set_begin_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's first point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
 set_begin_cap_mode ::
                      (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_begin_cap_mode cls arg1
@@ -541,6 +550,7 @@ set_begin_cap_mode cls arg1
 
 {-# NOINLINE bindLine2D_set_curve #-}
 
+-- | The line's width varies with the curve. The original width is simply multiply by the value of the Curve.
 bindLine2D_set_curve :: MethodBind
 bindLine2D_set_curve
   = unsafePerformIO $
@@ -550,6 +560,7 @@ bindLine2D_set_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The line's width varies with the curve. The original width is simply multiply by the value of the Curve.
 set_curve ::
             (Line2D :< cls, Object :< cls) => cls -> Curve -> IO ()
 set_curve cls arg1
@@ -583,7 +594,7 @@ set_default_color cls arg1
 
 {-# NOINLINE bindLine2D_set_end_cap_mode #-}
 
--- | Controls the style of the line's last point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
 bindLine2D_set_end_cap_mode :: MethodBind
 bindLine2D_set_end_cap_mode
   = unsafePerformIO $
@@ -593,7 +604,7 @@ bindLine2D_set_end_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's last point. Use [code]LINE_CAP_*[/code] constants. Default value: [constant LINE_CAP_NONE].
+-- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
 set_end_cap_mode ::
                    (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_end_cap_mode cls arg1
@@ -674,7 +685,7 @@ set_point_position cls arg1 arg2
 
 {-# NOINLINE bindLine2D_set_points #-}
 
--- | The points that form the lines. The line is drawn between every point set in this array.
+-- | The points that form the lines. The line is drawn between every point set in this array. Points are interpreted as local vectors.
 bindLine2D_set_points :: MethodBind
 bindLine2D_set_points
   = unsafePerformIO $
@@ -684,7 +695,7 @@ bindLine2D_set_points
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The points that form the lines. The line is drawn between every point set in this array.
+-- | The points that form the lines. The line is drawn between every point set in this array. Points are interpreted as local vectors.
 set_points ::
              (Line2D :< cls, Object :< cls) => cls -> PoolVector2Array -> IO ()
 set_points cls arg1
@@ -764,7 +775,7 @@ set_texture cls arg1
 
 {-# NOINLINE bindLine2D_set_texture_mode #-}
 
--- | The style to render the [code]texture[/code] on the line. Use [code]LINE_TEXTURE_*[/code] constants. Default value: [constant LINE_TEXTURE_NONE].
+-- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
 bindLine2D_set_texture_mode :: MethodBind
 bindLine2D_set_texture_mode
   = unsafePerformIO $
@@ -774,7 +785,7 @@ bindLine2D_set_texture_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The style to render the [code]texture[/code] on the line. Use [code]LINE_TEXTURE_*[/code] constants. Default value: [constant LINE_TEXTURE_NONE].
+-- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
 set_texture_mode ::
                    (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_texture_mode cls arg1

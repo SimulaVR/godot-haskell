@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Performance
        (Godot.Core.Performance._PHYSICS_2D_ISLAND_COUNT,
         Godot.Core.Performance._OBJECT_RESOURCE_COUNT,

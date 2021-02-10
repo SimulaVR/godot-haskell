@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TCP_Server
        (Godot.Core.TCP_Server.is_connection_available,
         Godot.Core.TCP_Server.is_listening, Godot.Core.TCP_Server.listen,
@@ -38,6 +39,7 @@ is_connection_available cls
 
 {-# NOINLINE bindTCP_Server_is_listening #-}
 
+-- | Returns [code]true[/code] if the server is currently listening for connections.
 bindTCP_Server_is_listening :: MethodBind
 bindTCP_Server_is_listening
   = unsafePerformIO $
@@ -47,6 +49,7 @@ bindTCP_Server_is_listening
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the server is currently listening for connections.
 is_listening ::
                (TCP_Server :< cls, Object :< cls) => cls -> IO Bool
 is_listening cls
@@ -59,10 +62,10 @@ is_listening cls
 
 {-# NOINLINE bindTCP_Server_listen #-}
 
--- | Listen on the "port" binding to "bind_address".
---   				If "bind_address" is set as "*" (default), the server will listen on all available addresses (both IPv4 and IPv6).
---   				If "bind_address" is set as "0.0.0.0" (for IPv4) or "::" (for IPv6), the server will listen on all available addresses matching that IP type.
---   				If "bind_address" is set to any valid address (e.g. "192.168.1.101", "::1", etc), the server will only listen on the interface with that addresses (or fail if no interface with the given address exists).
+-- | Listen on the [code]port[/code] binding to [code]bind_address[/code].
+--   				If [code]bind_address[/code] is set as [code]"*"[/code] (default), the server will listen on all available addresses (both IPv4 and IPv6).
+--   				If [code]bind_address[/code] is set as [code]"0.0.0.0"[/code] (for IPv4) or [code]"::"[/code] (for IPv6), the server will listen on all available addresses matching that IP type.
+--   				If [code]bind_address[/code] is set to any valid address (e.g. [code]"192.168.1.101"[/code], [code]"::1"[/code], etc), the server will only listen on the interface with that addresses (or fail if no interface with the given address exists).
 bindTCP_Server_listen :: MethodBind
 bindTCP_Server_listen
   = unsafePerformIO $
@@ -72,10 +75,10 @@ bindTCP_Server_listen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Listen on the "port" binding to "bind_address".
---   				If "bind_address" is set as "*" (default), the server will listen on all available addresses (both IPv4 and IPv6).
---   				If "bind_address" is set as "0.0.0.0" (for IPv4) or "::" (for IPv6), the server will listen on all available addresses matching that IP type.
---   				If "bind_address" is set to any valid address (e.g. "192.168.1.101", "::1", etc), the server will only listen on the interface with that addresses (or fail if no interface with the given address exists).
+-- | Listen on the [code]port[/code] binding to [code]bind_address[/code].
+--   				If [code]bind_address[/code] is set as [code]"*"[/code] (default), the server will listen on all available addresses (both IPv4 and IPv6).
+--   				If [code]bind_address[/code] is set as [code]"0.0.0.0"[/code] (for IPv4) or [code]"::"[/code] (for IPv6), the server will listen on all available addresses matching that IP type.
+--   				If [code]bind_address[/code] is set to any valid address (e.g. [code]"192.168.1.101"[/code], [code]"::1"[/code], etc), the server will only listen on the interface with that addresses (or fail if no interface with the given address exists).
 listen ::
          (TCP_Server :< cls, Object :< cls) =>
          cls -> Int -> GodotString -> IO Int
@@ -88,7 +91,7 @@ listen cls arg1 arg2
 
 {-# NOINLINE bindTCP_Server_stop #-}
 
--- | Stop listening.
+-- | Stops listening.
 bindTCP_Server_stop :: MethodBind
 bindTCP_Server_stop
   = unsafePerformIO $
@@ -98,7 +101,7 @@ bindTCP_Server_stop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stop listening.
+-- | Stops listening.
 stop :: (TCP_Server :< cls, Object :< cls) => cls -> IO ()
 stop cls
   = withVariantArray []
@@ -108,7 +111,7 @@ stop cls
 
 {-# NOINLINE bindTCP_Server_take_connection #-}
 
--- | If a connection is available, return a StreamPeerTCP with the connection/
+-- | If a connection is available, returns a StreamPeerTCP with the connection.
 bindTCP_Server_take_connection :: MethodBind
 bindTCP_Server_take_connection
   = unsafePerformIO $
@@ -118,7 +121,7 @@ bindTCP_Server_take_connection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If a connection is available, return a StreamPeerTCP with the connection/
+-- | If a connection is available, returns a StreamPeerTCP with the connection.
 take_connection ::
                   (TCP_Server :< cls, Object :< cls) => cls -> IO StreamPeerTCP
 take_connection cls

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Button
        (Godot.Core.Button._ALIGN_RIGHT, Godot.Core.Button._ALIGN_LEFT,
         Godot.Core.Button._ALIGN_CENTER, Godot.Core.Button.get_button_icon,
@@ -51,7 +52,7 @@ get_button_icon cls
 
 {-# NOINLINE bindButton_get_clip_text #-}
 
--- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text. This property is disabled by default.
+-- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text.
 bindButton_get_clip_text :: MethodBind
 bindButton_get_clip_text
   = unsafePerformIO $
@@ -61,7 +62,7 @@ bindButton_get_clip_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text. This property is disabled by default.
+-- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text.
 get_clip_text :: (Button :< cls, Object :< cls) => cls -> IO Bool
 get_clip_text cls
   = withVariantArray []
@@ -92,7 +93,7 @@ get_text cls
 
 {-# NOINLINE bindButton_get_text_align #-}
 
--- | Text alignment policy for the button's text, use one of the ALIGN_* constants.
+-- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
 bindButton_get_text_align :: MethodBind
 bindButton_get_text_align
   = unsafePerformIO $
@@ -102,7 +103,7 @@ bindButton_get_text_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment policy for the button's text, use one of the ALIGN_* constants.
+-- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
 get_text_align :: (Button :< cls, Object :< cls) => cls -> IO Int
 get_text_align cls
   = withVariantArray []
@@ -114,6 +115,7 @@ get_text_align cls
 
 {-# NOINLINE bindButton_is_expand_icon #-}
 
+-- | When enabled, the button's icon will expand/shrink to fit the button's size while keeping its aspect.
 bindButton_is_expand_icon :: MethodBind
 bindButton_is_expand_icon
   = unsafePerformIO $
@@ -123,6 +125,7 @@ bindButton_is_expand_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | When enabled, the button's icon will expand/shrink to fit the button's size while keeping its aspect.
 is_expand_icon :: (Button :< cls, Object :< cls) => cls -> IO Bool
 is_expand_icon cls
   = withVariantArray []
@@ -177,7 +180,7 @@ set_button_icon cls arg1
 
 {-# NOINLINE bindButton_set_clip_text #-}
 
--- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text. This property is disabled by default.
+-- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text.
 bindButton_set_clip_text :: MethodBind
 bindButton_set_clip_text
   = unsafePerformIO $
@@ -187,7 +190,7 @@ bindButton_set_clip_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text. This property is disabled by default.
+-- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text.
 set_clip_text ::
                 (Button :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_clip_text cls arg1
@@ -199,6 +202,7 @@ set_clip_text cls arg1
 
 {-# NOINLINE bindButton_set_expand_icon #-}
 
+-- | When enabled, the button's icon will expand/shrink to fit the button's size while keeping its aspect.
 bindButton_set_expand_icon :: MethodBind
 bindButton_set_expand_icon
   = unsafePerformIO $
@@ -208,6 +212,7 @@ bindButton_set_expand_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | When enabled, the button's icon will expand/shrink to fit the button's size while keeping its aspect.
 set_expand_icon ::
                   (Button :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_expand_icon cls arg1
@@ -261,7 +266,7 @@ set_text cls arg1
 
 {-# NOINLINE bindButton_set_text_align #-}
 
--- | Text alignment policy for the button's text, use one of the ALIGN_* constants.
+-- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
 bindButton_set_text_align :: MethodBind
 bindButton_set_text_align
   = unsafePerformIO $
@@ -271,7 +276,7 @@ bindButton_set_text_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment policy for the button's text, use one of the ALIGN_* constants.
+-- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
 set_text_align ::
                  (Button :< cls, Object :< cls) => cls -> Int -> IO ()
 set_text_align cls arg1

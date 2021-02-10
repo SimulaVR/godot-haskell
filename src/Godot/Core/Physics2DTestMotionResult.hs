@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Physics2DTestMotionResult
        (Godot.Core.Physics2DTestMotionResult.get_collider,
         Godot.Core.Physics2DTestMotionResult.get_collider_id,

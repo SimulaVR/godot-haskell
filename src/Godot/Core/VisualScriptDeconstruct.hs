@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptDeconstruct
        (Godot.Core.VisualScriptDeconstruct._get_elem_cache,
         Godot.Core.VisualScriptDeconstruct._set_elem_cache,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TreeItem
        (Godot.Core.TreeItem._ALIGN_RIGHT,
         Godot.Core.TreeItem._CELL_MODE_CUSTOM,
@@ -119,6 +120,7 @@ add_button cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindTreeItem_call_recursive #-}
 
+-- | Calls the [code]method[/code] on the actual TreeItem and its children recursively. Pass parameters as a comma separated list.
 bindTreeItem_call_recursive :: MethodBind
 bindTreeItem_call_recursive
   = unsafePerformIO $
@@ -128,6 +130,7 @@ bindTreeItem_call_recursive
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Calls the [code]method[/code] on the actual TreeItem and its children recursively. Pass parameters as a comma separated list.
 call_recursive ::
                  (TreeItem :< cls, Object :< cls) =>
                  cls -> GodotString -> [Variant 'GodotTy] -> IO GodotVariant
@@ -277,6 +280,7 @@ get_button_count cls arg1
 
 {-# NOINLINE bindTreeItem_get_button_tooltip #-}
 
+-- | Returns the tooltip string for the button at index [code]button_idx[/code] in column [code]column[/code].
 bindTreeItem_get_button_tooltip :: MethodBind
 bindTreeItem_get_button_tooltip
   = unsafePerformIO $
@@ -286,6 +290,7 @@ bindTreeItem_get_button_tooltip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the tooltip string for the button at index [code]button_idx[/code] in column [code]column[/code].
 get_button_tooltip ::
                      (TreeItem :< cls, Object :< cls) =>
                      cls -> Int -> Int -> IO GodotString
@@ -299,7 +304,7 @@ get_button_tooltip cls arg1 arg2
 
 {-# NOINLINE bindTreeItem_get_cell_mode #-}
 
--- | Returns the column's cell mode. See [code]CELL_MODE_*[/code] constants.
+-- | Returns the column's cell mode.
 bindTreeItem_get_cell_mode :: MethodBind
 bindTreeItem_get_cell_mode
   = unsafePerformIO $
@@ -309,7 +314,7 @@ bindTreeItem_get_cell_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the column's cell mode. See [code]CELL_MODE_*[/code] constants.
+-- | Returns the column's cell mode.
 get_cell_mode ::
                 (TreeItem :< cls, Object :< cls) => cls -> Int -> IO Int
 get_cell_mode cls arg1
@@ -322,7 +327,7 @@ get_cell_mode cls arg1
 
 {-# NOINLINE bindTreeItem_get_children #-}
 
--- | Returns the TreeItem's child items.
+-- | Returns the TreeItem's first child item or a null object if there is none.
 bindTreeItem_get_children :: MethodBind
 bindTreeItem_get_children
   = unsafePerformIO $
@@ -332,7 +337,7 @@ bindTreeItem_get_children
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the TreeItem's child items.
+-- | Returns the TreeItem's first child item or a null object if there is none.
 get_children ::
                (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_children cls
@@ -369,6 +374,7 @@ get_custom_bg_color cls arg1
 
 {-# NOINLINE bindTreeItem_get_custom_color #-}
 
+-- | Returns the custom color of column [code]column[/code].
 bindTreeItem_get_custom_color :: MethodBind
 bindTreeItem_get_custom_color
   = unsafePerformIO $
@@ -378,6 +384,7 @@ bindTreeItem_get_custom_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the custom color of column [code]column[/code].
 get_custom_color ::
                    (TreeItem :< cls, Object :< cls) => cls -> Int -> IO Color
 get_custom_color cls arg1
@@ -482,6 +489,7 @@ get_icon_max_width cls arg1
 
 {-# NOINLINE bindTreeItem_get_icon_modulate #-}
 
+-- | Returns the [Color] modulating the column's icon.
 bindTreeItem_get_icon_modulate :: MethodBind
 bindTreeItem_get_icon_modulate
   = unsafePerformIO $
@@ -491,6 +499,7 @@ bindTreeItem_get_icon_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [Color] modulating the column's icon.
 get_icon_modulate ::
                     (TreeItem :< cls, Object :< cls) => cls -> Int -> IO Color
 get_icon_modulate cls arg1
@@ -547,7 +556,7 @@ get_metadata cls arg1
 
 {-# NOINLINE bindTreeItem_get_next #-}
 
--- | Returns the next TreeItem in the tree.
+-- | Returns the next TreeItem in the tree or a null object if there is none.
 bindTreeItem_get_next :: MethodBind
 bindTreeItem_get_next
   = unsafePerformIO $
@@ -557,7 +566,7 @@ bindTreeItem_get_next
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next TreeItem in the tree.
+-- | Returns the next TreeItem in the tree or a null object if there is none.
 get_next :: (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_next cls
   = withVariantArray []
@@ -568,7 +577,8 @@ get_next cls
 
 {-# NOINLINE bindTreeItem_get_next_visible #-}
 
--- | Returns the next visible TreeItem in the tree.
+-- | Returns the next visible TreeItem in the tree or a null object if there is none.
+--   				If [code]wrap[/code] is enabled, the method will wrap around to the first visible element in the tree when called on the last visible element, otherwise it returns [code]null[/code].
 bindTreeItem_get_next_visible :: MethodBind
 bindTreeItem_get_next_visible
   = unsafePerformIO $
@@ -578,7 +588,8 @@ bindTreeItem_get_next_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next visible TreeItem in the tree.
+-- | Returns the next visible TreeItem in the tree or a null object if there is none.
+--   				If [code]wrap[/code] is enabled, the method will wrap around to the first visible element in the tree when called on the last visible element, otherwise it returns [code]null[/code].
 get_next_visible ::
                    (TreeItem :< cls, Object :< cls) => cls -> Bool -> IO TreeItem
 get_next_visible cls arg1
@@ -591,7 +602,7 @@ get_next_visible cls arg1
 
 {-# NOINLINE bindTreeItem_get_parent #-}
 
--- | Returns the parent TreeItem.
+-- | Returns the parent TreeItem or a null object if there is none.
 bindTreeItem_get_parent :: MethodBind
 bindTreeItem_get_parent
   = unsafePerformIO $
@@ -601,7 +612,7 @@ bindTreeItem_get_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent TreeItem.
+-- | Returns the parent TreeItem or a null object if there is none.
 get_parent ::
              (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_parent cls
@@ -613,7 +624,7 @@ get_parent cls
 
 {-# NOINLINE bindTreeItem_get_prev #-}
 
--- | Returns the previous TreeItem in the tree.
+-- | Returns the previous TreeItem in the tree or a null object if there is none.
 bindTreeItem_get_prev :: MethodBind
 bindTreeItem_get_prev
   = unsafePerformIO $
@@ -623,7 +634,7 @@ bindTreeItem_get_prev
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the previous TreeItem in the tree.
+-- | Returns the previous TreeItem in the tree or a null object if there is none.
 get_prev :: (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_prev cls
   = withVariantArray []
@@ -634,7 +645,8 @@ get_prev cls
 
 {-# NOINLINE bindTreeItem_get_prev_visible #-}
 
--- | Returns the previous visible TreeItem in the tree.
+-- | Returns the previous visible TreeItem in the tree or a null object if there is none.
+--   				If [code]wrap[/code] is enabled, the method will wrap around to the last visible element in the tree when called on the first visible element, otherwise it returns [code]null[/code].
 bindTreeItem_get_prev_visible :: MethodBind
 bindTreeItem_get_prev_visible
   = unsafePerformIO $
@@ -644,7 +656,8 @@ bindTreeItem_get_prev_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the previous visible TreeItem in the tree.
+-- | Returns the previous visible TreeItem in the tree or a null object if there is none.
+--   				If [code]wrap[/code] is enabled, the method will wrap around to the last visible element in the tree when called on the first visible element, otherwise it returns [code]null[/code].
 get_prev_visible ::
                    (TreeItem :< cls, Object :< cls) => cls -> Bool -> IO TreeItem
 get_prev_visible cls arg1
@@ -988,7 +1001,7 @@ move_to_top cls
 
 {-# NOINLINE bindTreeItem_remove_child #-}
 
--- | Removes the given child TreeItem.
+-- | Removes the given child [TreeItem] and all its children from the [Tree]. Note that it doesn't free the item from memory, so it can be reused later. To completely remove a [TreeItem] use [method Object.free].
 bindTreeItem_remove_child :: MethodBind
 bindTreeItem_remove_child
   = unsafePerformIO $
@@ -998,7 +1011,7 @@ bindTreeItem_remove_child
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the given child TreeItem.
+-- | Removes the given child [TreeItem] and all its children from the [Tree]. Note that it doesn't free the item from memory, so it can be reused later. To completely remove a [TreeItem] use [method Object.free].
 remove_child ::
                (TreeItem :< cls, Object :< cls) => cls -> Object -> IO ()
 remove_child cls arg1
@@ -1054,6 +1067,7 @@ set_button cls arg1 arg2 arg3
 
 {-# NOINLINE bindTreeItem_set_button_disabled #-}
 
+-- | If [code]true[/code], disables the button at index [code]button_idx[/code] in column [code]column[/code].
 bindTreeItem_set_button_disabled :: MethodBind
 bindTreeItem_set_button_disabled
   = unsafePerformIO $
@@ -1063,6 +1077,7 @@ bindTreeItem_set_button_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], disables the button at index [code]button_idx[/code] in column [code]column[/code].
 set_button_disabled ::
                       (TreeItem :< cls, Object :< cls) =>
                       cls -> Int -> Int -> Bool -> IO ()
@@ -1077,7 +1092,7 @@ set_button_disabled cls arg1 arg2 arg3
 
 {-# NOINLINE bindTreeItem_set_cell_mode #-}
 
--- | Sets the given column's cell mode to [code]mode[/code]. See [code]CELL_MODE_*[/code] constants.
+-- | Sets the given column's cell mode to [code]mode[/code]. See [enum TreeCellMode] constants.
 bindTreeItem_set_cell_mode :: MethodBind
 bindTreeItem_set_cell_mode
   = unsafePerformIO $
@@ -1087,7 +1102,7 @@ bindTreeItem_set_cell_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the given column's cell mode to [code]mode[/code]. See [code]CELL_MODE_*[/code] constants.
+-- | Sets the given column's cell mode to [code]mode[/code]. See [enum TreeCellMode] constants.
 set_cell_mode ::
                 (TreeItem :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_cell_mode cls arg1 arg2
@@ -1380,6 +1395,7 @@ set_icon_max_width cls arg1 arg2
 
 {-# NOINLINE bindTreeItem_set_icon_modulate #-}
 
+-- | Modulates the given column's icon with [code]modulate[/code].
 bindTreeItem_set_icon_modulate :: MethodBind
 bindTreeItem_set_icon_modulate
   = unsafePerformIO $
@@ -1389,6 +1405,7 @@ bindTreeItem_set_icon_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Modulates the given column's icon with [code]modulate[/code].
 set_icon_modulate ::
                     (TreeItem :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 set_icon_modulate cls arg1 arg2
@@ -1534,7 +1551,7 @@ set_text cls arg1 arg2
 
 {-# NOINLINE bindTreeItem_set_text_align #-}
 
--- | Sets the given column's text alignment. See [code]ALIGN_*[/code] constants.
+-- | Sets the given column's text alignment. See [enum TextAlign] for possible values.
 bindTreeItem_set_text_align :: MethodBind
 bindTreeItem_set_text_align
   = unsafePerformIO $
@@ -1544,7 +1561,7 @@ bindTreeItem_set_text_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the given column's text alignment. See [code]ALIGN_*[/code] constants.
+-- | Sets the given column's text alignment. See [enum TextAlign] for possible values.
 set_text_align ::
                  (TreeItem :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_text_align cls arg1 arg2

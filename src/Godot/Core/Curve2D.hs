@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Curve2D
        (Godot.Core.Curve2D._get_data, Godot.Core.Curve2D._set_data,
         Godot.Core.Curve2D.add_point, Godot.Core.Curve2D.clear_points,
@@ -68,7 +69,7 @@ _set_data cls arg1
 
 {-# NOINLINE bindCurve2D_add_point #-}
 
--- | Adds a point to a curve, at [code]position[/code], with control points [code]in[/code] and [code]out[/code].
+-- | Adds a point to a curve at [code]position[/code], with control points [code]in[/code] and [code]out[/code].
 --   				If [code]at_position[/code] is given, the point is inserted before the point number [code]at_position[/code], moving that point (and every point after) after the inserted point. If [code]at_position[/code] is not given, or is an illegal value ([code]at_position <0[/code] or [code]at_position >= [method get_point_count][/code]), the point will be appended at the end of the point list.
 bindCurve2D_add_point :: MethodBind
 bindCurve2D_add_point
@@ -79,7 +80,7 @@ bindCurve2D_add_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a point to a curve, at [code]position[/code], with control points [code]in[/code] and [code]out[/code].
+-- | Adds a point to a curve at [code]position[/code], with control points [code]in[/code] and [code]out[/code].
 --   				If [code]at_position[/code] is given, the point is inserted before the point number [code]at_position[/code], moving that point (and every point after) after the inserted point. If [code]at_position[/code] is not given, or is an illegal value ([code]at_position <0[/code] or [code]at_position >= [method get_point_count][/code]), the point will be appended at the end of the point list.
 add_point ::
             (Curve2D :< cls, Object :< cls) =>

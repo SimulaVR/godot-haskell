@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventJoypadButton
        (Godot.Core.InputEventJoypadButton.is_pressed,
         Godot.Core.InputEventJoypadButton.get_button_index,
@@ -41,7 +42,7 @@ is_pressed cls
 
 {-# NOINLINE bindInputEventJoypadButton_get_button_index #-}
 
--- | Button identifier. One of the [code]JOY_BUTTON_*[/code] constants from [@GlobalScope].
+-- | Button identifier. One of the [enum JoystickList] button constants.
 bindInputEventJoypadButton_get_button_index :: MethodBind
 bindInputEventJoypadButton_get_button_index
   = unsafePerformIO $
@@ -51,7 +52,7 @@ bindInputEventJoypadButton_get_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Button identifier. One of the [code]JOY_BUTTON_*[/code] constants from [@GlobalScope].
+-- | Button identifier. One of the [enum JoystickList] button constants.
 get_button_index ::
                    (InputEventJoypadButton :< cls, Object :< cls) => cls -> IO Int
 get_button_index cls
@@ -89,7 +90,7 @@ get_pressure cls
 
 {-# NOINLINE bindInputEventJoypadButton_set_button_index #-}
 
--- | Button identifier. One of the [code]JOY_BUTTON_*[/code] constants from [@GlobalScope].
+-- | Button identifier. One of the [enum JoystickList] button constants.
 bindInputEventJoypadButton_set_button_index :: MethodBind
 bindInputEventJoypadButton_set_button_index
   = unsafePerformIO $
@@ -99,7 +100,7 @@ bindInputEventJoypadButton_set_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Button identifier. One of the [code]JOY_BUTTON_*[/code] constants from [@GlobalScope].
+-- | Button identifier. One of the [enum JoystickList] button constants.
 set_button_index ::
                    (InputEventJoypadButton :< cls, Object :< cls) =>
                    cls -> Int -> IO ()

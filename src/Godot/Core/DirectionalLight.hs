@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.DirectionalLight
        (Godot.Core.DirectionalLight._SHADOW_ORTHOGONAL,
         Godot.Core.DirectionalLight._SHADOW_PARALLEL_4_SPLITS,
@@ -39,7 +40,7 @@ _SHADOW_PARALLEL_2_SPLITS = 1
 
 {-# NOINLINE bindDirectionalLight_get_param #-}
 
--- | Amount of extra bias for shadow splits that are far away. If self shadowing occurs only on the splits far away, this value can fix them.
+-- | Amount of extra bias for shadow splits that are far away. If self-shadowing occurs only on the splits far away, increasing this value can fix them.
 bindDirectionalLight_get_param :: MethodBind
 bindDirectionalLight_get_param
   = unsafePerformIO $
@@ -49,7 +50,7 @@ bindDirectionalLight_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of extra bias for shadow splits that are far away. If self shadowing occurs only on the splits far away, this value can fix them.
+-- | Amount of extra bias for shadow splits that are far away. If self-shadowing occurs only on the splits far away, increasing this value can fix them.
 get_param ::
             (DirectionalLight :< cls, Object :< cls) => cls -> IO Float
 get_param cls
@@ -62,7 +63,7 @@ get_param cls
 
 {-# NOINLINE bindDirectionalLight_set_param #-}
 
--- | Amount of extra bias for shadow splits that are far away. If self shadowing occurs only on the splits far away, this value can fix them.
+-- | Amount of extra bias for shadow splits that are far away. If self-shadowing occurs only on the splits far away, increasing this value can fix them.
 bindDirectionalLight_set_param :: MethodBind
 bindDirectionalLight_set_param
   = unsafePerformIO $
@@ -72,7 +73,7 @@ bindDirectionalLight_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of extra bias for shadow splits that are far away. If self shadowing occurs only on the splits far away, this value can fix them.
+-- | Amount of extra bias for shadow splits that are far away. If self-shadowing occurs only on the splits far away, increasing this value can fix them.
 set_param ::
             (DirectionalLight :< cls, Object :< cls) => cls -> Float -> IO ()
 set_param cls arg1
@@ -133,7 +134,7 @@ get_shadow_mode cls
 
 {-# NOINLINE bindDirectionalLight_is_blend_splits_enabled #-}
 
--- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
+-- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits.
 bindDirectionalLight_is_blend_splits_enabled :: MethodBind
 bindDirectionalLight_is_blend_splits_enabled
   = unsafePerformIO $
@@ -143,7 +144,7 @@ bindDirectionalLight_is_blend_splits_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
+-- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits.
 is_blend_splits_enabled ::
                           (DirectionalLight :< cls, Object :< cls) => cls -> IO Bool
 is_blend_splits_enabled cls
@@ -157,7 +158,7 @@ is_blend_splits_enabled cls
 
 {-# NOINLINE bindDirectionalLight_set_blend_splits #-}
 
--- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
+-- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits.
 bindDirectionalLight_set_blend_splits :: MethodBind
 bindDirectionalLight_set_blend_splits
   = unsafePerformIO $
@@ -167,7 +168,7 @@ bindDirectionalLight_set_blend_splits
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits. Default value:[code]false[/code].
+-- | If [code]true[/code], shadow detail is sacrificed in exchange for smoother transitions between splits.
 set_blend_splits ::
                    (DirectionalLight :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_blend_splits cls arg1

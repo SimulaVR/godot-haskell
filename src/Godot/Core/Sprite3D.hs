@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Sprite3D
        (Godot.Core.Sprite3D.sig_frame_changed,
         Godot.Core.Sprite3D.get_frame,
@@ -24,6 +25,8 @@ import Godot.Api.Types
 sig_frame_changed :: Godot.Internal.Dispatch.Signal Sprite3D
 sig_frame_changed = Godot.Internal.Dispatch.Signal "frame_changed"
 
+instance NodeSignal Sprite3D "frame_changed" '[]
+
 {-# NOINLINE bindSprite3D_get_frame #-}
 
 -- | Current frame to display from sprite sheet. [member vframes] or [member hframes] must be greater than 1.
@@ -47,6 +50,7 @@ get_frame cls
 
 {-# NOINLINE bindSprite3D_get_frame_coords #-}
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 bindSprite3D_get_frame_coords :: MethodBind
 bindSprite3D_get_frame_coords
   = unsafePerformIO $
@@ -56,6 +60,7 @@ bindSprite3D_get_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 get_frame_coords ::
                    (Sprite3D :< cls, Object :< cls) => cls -> IO Vector2
 get_frame_coords cls
@@ -112,7 +117,7 @@ get_region_rect cls
 
 {-# NOINLINE bindSprite3D_get_texture #-}
 
--- | [Texture] object to draw.
+-- | [Texture] object to draw. If [member GeometryInstance.material_override] is used, this will be overridden.
 bindSprite3D_get_texture :: MethodBind
 bindSprite3D_get_texture
   = unsafePerformIO $
@@ -122,7 +127,7 @@ bindSprite3D_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Texture] object to draw.
+-- | [Texture] object to draw. If [member GeometryInstance.material_override] is used, this will be overridden.
 get_texture ::
               (Sprite3D :< cls, Object :< cls) => cls -> IO Texture
 get_texture cls
@@ -155,7 +160,7 @@ get_vframes cls
 
 {-# NOINLINE bindSprite3D_is_region #-}
 
--- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect].
 bindSprite3D_is_region :: MethodBind
 bindSprite3D_is_region
   = unsafePerformIO $
@@ -165,7 +170,7 @@ bindSprite3D_is_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect].
 is_region :: (Sprite3D :< cls, Object :< cls) => cls -> IO Bool
 is_region cls
   = withVariantArray []
@@ -198,6 +203,7 @@ set_frame cls arg1
 
 {-# NOINLINE bindSprite3D_set_frame_coords #-}
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 bindSprite3D_set_frame_coords :: MethodBind
 bindSprite3D_set_frame_coords
   = unsafePerformIO $
@@ -207,6 +213,7 @@ bindSprite3D_set_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 set_frame_coords ::
                    (Sprite3D :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_frame_coords cls arg1
@@ -241,7 +248,7 @@ set_hframes cls arg1
 
 {-# NOINLINE bindSprite3D_set_region #-}
 
--- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect].
 bindSprite3D_set_region :: MethodBind
 bindSprite3D_set_region
   = unsafePerformIO $
@@ -251,7 +258,7 @@ bindSprite3D_set_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture will be cut from a larger atlas texture. See [member region_rect].
 set_region ::
              (Sprite3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_region cls arg1
@@ -286,7 +293,7 @@ set_region_rect cls arg1
 
 {-# NOINLINE bindSprite3D_set_texture #-}
 
--- | [Texture] object to draw.
+-- | [Texture] object to draw. If [member GeometryInstance.material_override] is used, this will be overridden.
 bindSprite3D_set_texture :: MethodBind
 bindSprite3D_set_texture
   = unsafePerformIO $
@@ -296,7 +303,7 @@ bindSprite3D_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Texture] object to draw.
+-- | [Texture] object to draw. If [member GeometryInstance.material_override] is used, this will be overridden.
 set_texture ::
               (Sprite3D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_texture cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorExportPlugin
        (Godot.Tools.EditorExportPlugin._export_begin,
         Godot.Tools.EditorExportPlugin._export_end,
@@ -22,6 +23,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindEditorExportPlugin__export_begin #-}
 
+-- | Virtual method to be overridden by the user. It is called when the export starts and provides all information about the export.
 bindEditorExportPlugin__export_begin :: MethodBind
 bindEditorExportPlugin__export_begin
   = unsafePerformIO $
@@ -31,6 +33,7 @@ bindEditorExportPlugin__export_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Virtual method to be overridden by the user. It is called when the export starts and provides all information about the export.
 _export_begin ::
                 (EditorExportPlugin :< cls, Object :< cls) =>
                 cls -> PoolStringArray -> Bool -> GodotString -> Int -> IO ()
@@ -46,6 +49,7 @@ _export_begin cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindEditorExportPlugin__export_end #-}
 
+-- | Virtual method to be overridden by the user. Called when the export is finished.
 bindEditorExportPlugin__export_end :: MethodBind
 bindEditorExportPlugin__export_end
   = unsafePerformIO $
@@ -55,6 +59,7 @@ bindEditorExportPlugin__export_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Virtual method to be overridden by the user. Called when the export is finished.
 _export_end ::
               (EditorExportPlugin :< cls, Object :< cls) => cls -> IO ()
 _export_end cls
@@ -159,6 +164,7 @@ add_ios_cpp_code cls arg1
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_framework #-}
 
+-- | Adds a static library (*.a) or dynamic library (*.dylib, *.framework) to Linking Phase in iOS's Xcode project.
 bindEditorExportPlugin_add_ios_framework :: MethodBind
 bindEditorExportPlugin_add_ios_framework
   = unsafePerformIO $
@@ -168,6 +174,7 @@ bindEditorExportPlugin_add_ios_framework
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a static library (*.a) or dynamic library (*.dylib, *.framework) to Linking Phase in iOS's Xcode project.
 add_ios_framework ::
                     (EditorExportPlugin :< cls, Object :< cls) =>
                     cls -> GodotString -> IO ()

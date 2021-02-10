@@ -4,7 +4,7 @@ cabal-version: 2.0
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fd967698bfd9d9ccd2e79004baaa53ec943399bd7183259308c4623f7600d246
+-- hash: b57f253efc4223e59b8e1d2660fc37a43039000b9e9b4484d997a88a8bc85745
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -698,6 +698,7 @@ library
   hs-source-dirs:
       src
   default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
+  ghc-options: -O0
   include-dirs:
       godot_headers
       cbits
@@ -734,6 +735,7 @@ library generate
   hs-source-dirs:
       src-generate
   default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
+  ghc-options: -O0
   build-depends:
       aeson
     , ansi-wl-pprint
@@ -746,6 +748,35 @@ library generate
     , mtl
     , parsec
     , parsers
+    , stm
+    , template-haskell
+    , text
+    , th-abstraction
+    , unordered-containers
+    , vector
+  default-language: Haskell2010
+
+executable godot-haskell-project-generator
+  main-is: Main.hs
+  other-modules:
+      Paths_godot_haskell
+  hs-source-dirs:
+      project-generator
+  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
+  ghc-options: -O0
+  build-depends:
+      aeson
+    , base
+    , bytestring
+    , casing
+    , containers
+    , directory
+    , extra
+    , filepath
+    , fsnotify
+    , interpolate
+    , lens
+    , mtl
     , stm
     , template-haskell
     , text

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeIs
        (Godot.Core.VisualShaderNodeIs._FUNC_IS_NAN,
         Godot.Core.VisualShaderNodeIs._FUNC_IS_INF,
@@ -21,6 +22,7 @@ _FUNC_IS_INF = 0
 
 {-# NOINLINE bindVisualShaderNodeIs_get_function #-}
 
+-- | The comparison function. See [enum Function] for options.
 bindVisualShaderNodeIs_get_function :: MethodBind
 bindVisualShaderNodeIs_get_function
   = unsafePerformIO $
@@ -30,6 +32,7 @@ bindVisualShaderNodeIs_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The comparison function. See [enum Function] for options.
 get_function ::
                (VisualShaderNodeIs :< cls, Object :< cls) => cls -> IO Int
 get_function cls
@@ -43,6 +46,7 @@ get_function cls
 
 {-# NOINLINE bindVisualShaderNodeIs_set_function #-}
 
+-- | The comparison function. See [enum Function] for options.
 bindVisualShaderNodeIs_set_function :: MethodBind
 bindVisualShaderNodeIs_set_function
   = unsafePerformIO $
@@ -52,6 +56,7 @@ bindVisualShaderNodeIs_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The comparison function. See [enum Function] for options.
 set_function ::
                (VisualShaderNodeIs :< cls, Object :< cls) => cls -> Int -> IO ()
 set_function cls arg1

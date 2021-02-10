@@ -49,6 +49,17 @@ default-extensions:
 - PatternSynonyms
 - GeneralizedNewtypeDeriving
 
+executables:
+  godot-haskell-project-generator:
+    main: Main.hs
+    source-dirs: project-generator
+    dependencies:
+      - fsnotify
+      - directory
+      - filepath
+      - interpolate
+      - lens
+
 library:
   source-dirs: src
   generated-other-modules: Paths_godot_haskell
@@ -70,3 +81,6 @@ internal-libraries:
     - parsers
     - mtl
     - ansi-wl-pprint
+
+ghc-options:
+  - -O0

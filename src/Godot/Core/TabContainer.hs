@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TabContainer
        (Godot.Core.TabContainer._ALIGN_RIGHT,
         Godot.Core.TabContainer._ALIGN_LEFT,
@@ -53,19 +54,25 @@ _ALIGN_LEFT = 0
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
 
--- | Emitted when the [code]TabContainer[/code]'s [Popup] button is clicked. See [method set_popup] for details.
+-- | Emitted when the [TabContainer]'s [Popup] button is clicked. See [method set_popup] for details.
 sig_pre_popup_pressed ::
                       Godot.Internal.Dispatch.Signal TabContainer
 sig_pre_popup_pressed
   = Godot.Internal.Dispatch.Signal "pre_popup_pressed"
 
+instance NodeSignal TabContainer "pre_popup_pressed" '[]
+
 -- | Emitted when switching to another tab.
 sig_tab_changed :: Godot.Internal.Dispatch.Signal TabContainer
 sig_tab_changed = Godot.Internal.Dispatch.Signal "tab_changed"
 
+instance NodeSignal TabContainer "tab_changed" '[Int]
+
 -- | Emitted when a tab is selected, even if it is the current tab.
 sig_tab_selected :: Godot.Internal.Dispatch.Signal TabContainer
 sig_tab_selected = Godot.Internal.Dispatch.Signal "tab_selected"
+
+instance NodeSignal TabContainer "tab_selected" '[Int]
 
 {-# NOINLINE bindTabContainer__child_renamed_callback #-}
 
@@ -178,7 +185,7 @@ _update_current_tab cls
 
 {-# NOINLINE bindTabContainer_are_tabs_visible #-}
 
--- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden. Default value: [code]true[/code].
+-- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden.
 bindTabContainer_are_tabs_visible :: MethodBind
 bindTabContainer_are_tabs_visible
   = unsafePerformIO $
@@ -188,7 +195,7 @@ bindTabContainer_are_tabs_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden. Default value: [code]true[/code].
+-- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden.
 are_tabs_visible ::
                    (TabContainer :< cls, Object :< cls) => cls -> IO Bool
 are_tabs_visible cls
@@ -322,7 +329,7 @@ get_previous_tab cls
 
 {-# NOINLINE bindTabContainer_get_tab_align #-}
 
--- | The alignment of all tabs in the tab container. See the [code]ALIGN_*[/code] constants for details.
+-- | The alignment of all tabs in the tab container. See the [enum TabAlign] constants for details.
 bindTabContainer_get_tab_align :: MethodBind
 bindTabContainer_get_tab_align
   = unsafePerformIO $
@@ -332,7 +339,7 @@ bindTabContainer_get_tab_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The alignment of all tabs in the tab container. See the [code]ALIGN_*[/code] constants for details.
+-- | The alignment of all tabs in the tab container. See the [enum TabAlign] constants for details.
 get_tab_align ::
                 (TabContainer :< cls, Object :< cls) => cls -> IO Int
 get_tab_align cls
@@ -345,7 +352,7 @@ get_tab_align cls
 
 {-# NOINLINE bindTabContainer_get_tab_control #-}
 
--- | Returns the currently visible tab's [Control] node.
+-- | Returns the [Control] node from the tab at index [code]tab_idx[/code].
 bindTabContainer_get_tab_control :: MethodBind
 bindTabContainer_get_tab_control
   = unsafePerformIO $
@@ -355,7 +362,7 @@ bindTabContainer_get_tab_control
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the currently visible tab's [Control] node.
+-- | Returns the [Control] node from the tab at index [code]tab_idx[/code].
 get_tab_control ::
                   (TabContainer :< cls, Object :< cls) => cls -> Int -> IO Control
 get_tab_control cls arg1
@@ -416,7 +423,7 @@ get_tab_disabled cls arg1
 
 {-# NOINLINE bindTabContainer_get_tab_icon #-}
 
--- | Returns the [Texture] for the tab at index [code]tab_idx[/code] or null if the tab has no [Texture].
+-- | Returns the [Texture] for the tab at index [code]tab_idx[/code] or [code]null[/code] if the tab has no [Texture].
 bindTabContainer_get_tab_icon :: MethodBind
 bindTabContainer_get_tab_icon
   = unsafePerformIO $
@@ -426,7 +433,7 @@ bindTabContainer_get_tab_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Texture] for the tab at index [code]tab_idx[/code] or null if the tab has no [Texture].
+-- | Returns the [Texture] for the tab at index [code]tab_idx[/code] or [code]null[/code] if the tab has no [Texture].
 get_tab_icon ::
                (TabContainer :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_tab_icon cls arg1
@@ -463,7 +470,7 @@ get_tab_title cls arg1
 
 {-# NOINLINE bindTabContainer_get_tabs_rearrange_group #-}
 
--- | Returns the [code]TabContainer[/code] rearrange group id.
+-- | Returns the [TabContainer] rearrange group id.
 bindTabContainer_get_tabs_rearrange_group :: MethodBind
 bindTabContainer_get_tabs_rearrange_group
   = unsafePerformIO $
@@ -473,7 +480,7 @@ bindTabContainer_get_tabs_rearrange_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]TabContainer[/code] rearrange group id.
+-- | Returns the [TabContainer] rearrange group id.
 get_tabs_rearrange_group ::
                            (TabContainer :< cls, Object :< cls) => cls -> IO Int
 get_tabs_rearrange_group cls
@@ -487,6 +494,7 @@ get_tabs_rearrange_group cls
 
 {-# NOINLINE bindTabContainer_get_use_hidden_tabs_for_min_size #-}
 
+-- | If [code]true[/code], children [Control] nodes that are hidden have their minimum size take into account in the total, instead of only the currently visible one.
 bindTabContainer_get_use_hidden_tabs_for_min_size :: MethodBind
 bindTabContainer_get_use_hidden_tabs_for_min_size
   = unsafePerformIO $
@@ -496,6 +504,7 @@ bindTabContainer_get_use_hidden_tabs_for_min_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], children [Control] nodes that are hidden have their minimum size take into account in the total, instead of only the currently visible one.
 get_use_hidden_tabs_for_min_size ::
                                    (TabContainer :< cls, Object :< cls) => cls -> IO Bool
 get_use_hidden_tabs_for_min_size cls
@@ -559,7 +568,7 @@ set_drag_to_rearrange_enabled cls arg1
 
 {-# NOINLINE bindTabContainer_set_popup #-}
 
--- | If set on a [Popup] node instance, a popup menu icon appears in the top-right corner of the [code]TabContainer[/code]. Clicking it will expand the [Popup] node.
+-- | If set on a [Popup] node instance, a popup menu icon appears in the top-right corner of the [TabContainer]. Clicking it will expand the [Popup] node.
 bindTabContainer_set_popup :: MethodBind
 bindTabContainer_set_popup
   = unsafePerformIO $
@@ -569,7 +578,7 @@ bindTabContainer_set_popup
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If set on a [Popup] node instance, a popup menu icon appears in the top-right corner of the [code]TabContainer[/code]. Clicking it will expand the [Popup] node.
+-- | If set on a [Popup] node instance, a popup menu icon appears in the top-right corner of the [TabContainer]. Clicking it will expand the [Popup] node.
 set_popup ::
             (TabContainer :< cls, Object :< cls) => cls -> Node -> IO ()
 set_popup cls arg1
@@ -582,7 +591,7 @@ set_popup cls arg1
 
 {-# NOINLINE bindTabContainer_set_tab_align #-}
 
--- | The alignment of all tabs in the tab container. See the [code]ALIGN_*[/code] constants for details.
+-- | The alignment of all tabs in the tab container. See the [enum TabAlign] constants for details.
 bindTabContainer_set_tab_align :: MethodBind
 bindTabContainer_set_tab_align
   = unsafePerformIO $
@@ -592,7 +601,7 @@ bindTabContainer_set_tab_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The alignment of all tabs in the tab container. See the [code]ALIGN_*[/code] constants for details.
+-- | The alignment of all tabs in the tab container. See the [enum TabAlign] constants for details.
 set_tab_align ::
                 (TabContainer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tab_align cls arg1
@@ -605,7 +614,8 @@ set_tab_align cls arg1
 
 {-# NOINLINE bindTabContainer_set_tab_disabled #-}
 
--- | If [code]disabled[/code] is [code]false[/code], hides the tab at index [code]tab_idx[/code]. Note that its title text will remain, unless also removed with [method set_tab_title].
+-- | If [code]disabled[/code] is [code]false[/code], hides the tab at index [code]tab_idx[/code].
+--   				[b]Note:[/b] Its title text will remain, unless also removed with [method set_tab_title].
 bindTabContainer_set_tab_disabled :: MethodBind
 bindTabContainer_set_tab_disabled
   = unsafePerformIO $
@@ -615,7 +625,8 @@ bindTabContainer_set_tab_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]disabled[/code] is [code]false[/code], hides the tab at index [code]tab_idx[/code]. Note that its title text will remain, unless also removed with [method set_tab_title].
+-- | If [code]disabled[/code] is [code]false[/code], hides the tab at index [code]tab_idx[/code].
+--   				[b]Note:[/b] Its title text will remain, unless also removed with [method set_tab_title].
 set_tab_disabled ::
                    (TabContainer :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_tab_disabled cls arg1 arg2
@@ -677,7 +688,7 @@ set_tab_title cls arg1 arg2
 
 {-# NOINLINE bindTabContainer_set_tabs_rearrange_group #-}
 
--- | Defines rearrange group id, choose for each [code]TabContainer[/code] the same value to enable tab drag between [code]TabContainer[/code]. Enable drag with [code]set_drag_to_rearrange_enabled(true)[/code].
+-- | Defines rearrange group id, choose for each [TabContainer] the same value to enable tab drag between [TabContainer]. Enable drag with [code]set_drag_to_rearrange_enabled(true)[/code].
 bindTabContainer_set_tabs_rearrange_group :: MethodBind
 bindTabContainer_set_tabs_rearrange_group
   = unsafePerformIO $
@@ -687,7 +698,7 @@ bindTabContainer_set_tabs_rearrange_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines rearrange group id, choose for each [code]TabContainer[/code] the same value to enable tab drag between [code]TabContainer[/code]. Enable drag with [code]set_drag_to_rearrange_enabled(true)[/code].
+-- | Defines rearrange group id, choose for each [TabContainer] the same value to enable tab drag between [TabContainer]. Enable drag with [code]set_drag_to_rearrange_enabled(true)[/code].
 set_tabs_rearrange_group ::
                            (TabContainer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tabs_rearrange_group cls arg1
@@ -701,7 +712,7 @@ set_tabs_rearrange_group cls arg1
 
 {-# NOINLINE bindTabContainer_set_tabs_visible #-}
 
--- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden. Default value: [code]true[/code].
+-- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden.
 bindTabContainer_set_tabs_visible :: MethodBind
 bindTabContainer_set_tabs_visible
   = unsafePerformIO $
@@ -711,7 +722,7 @@ bindTabContainer_set_tabs_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden. Default value: [code]true[/code].
+-- | If [code]true[/code], tabs are visible. If [code]false[/code], tabs' content and titles are hidden.
 set_tabs_visible ::
                    (TabContainer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_tabs_visible cls arg1
@@ -725,6 +736,7 @@ set_tabs_visible cls arg1
 
 {-# NOINLINE bindTabContainer_set_use_hidden_tabs_for_min_size #-}
 
+-- | If [code]true[/code], children [Control] nodes that are hidden have their minimum size take into account in the total, instead of only the currently visible one.
 bindTabContainer_set_use_hidden_tabs_for_min_size :: MethodBind
 bindTabContainer_set_use_hidden_tabs_for_min_size
   = unsafePerformIO $
@@ -734,6 +746,7 @@ bindTabContainer_set_use_hidden_tabs_for_min_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], children [Control] nodes that are hidden have their minimum size take into account in the total, instead of only the currently visible one.
 set_use_hidden_tabs_for_min_size ::
                                    (TabContainer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_hidden_tabs_for_min_size cls arg1

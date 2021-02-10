@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationTree
        (Godot.Core.AnimationTree._ANIMATION_PROCESS_MANUAL,
         Godot.Core.AnimationTree._ANIMATION_PROCESS_PHYSICS,
@@ -125,6 +126,7 @@ _update_properties cls
 
 {-# NOINLINE bindAnimationTree_advance #-}
 
+-- | Manually advance the animations by the specified time (in seconds).
 bindAnimationTree_advance :: MethodBind
 bindAnimationTree_advance
   = unsafePerformIO $
@@ -134,6 +136,7 @@ bindAnimationTree_advance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Manually advance the animations by the specified time (in seconds).
 advance ::
           (AnimationTree :< cls, Object :< cls) => cls -> Float -> IO ()
 advance cls arg1
@@ -146,6 +149,7 @@ advance cls arg1
 
 {-# NOINLINE bindAnimationTree_get_animation_player #-}
 
+-- | The path to the [AnimationPlayer] used for animating.
 bindAnimationTree_get_animation_player :: MethodBind
 bindAnimationTree_get_animation_player
   = unsafePerformIO $
@@ -155,6 +159,7 @@ bindAnimationTree_get_animation_player
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The path to the [AnimationPlayer] used for animating.
 get_animation_player ::
                        (AnimationTree :< cls, Object :< cls) => cls -> IO NodePath
 get_animation_player cls
@@ -168,6 +173,7 @@ get_animation_player cls
 
 {-# NOINLINE bindAnimationTree_get_process_mode #-}
 
+-- | The process mode of this [AnimationTree]. See [enum AnimationProcessMode] for available modes.
 bindAnimationTree_get_process_mode :: MethodBind
 bindAnimationTree_get_process_mode
   = unsafePerformIO $
@@ -177,6 +183,7 @@ bindAnimationTree_get_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The process mode of this [AnimationTree]. See [enum AnimationProcessMode] for available modes.
 get_process_mode ::
                    (AnimationTree :< cls, Object :< cls) => cls -> IO Int
 get_process_mode cls
@@ -190,6 +197,8 @@ get_process_mode cls
 
 {-# NOINLINE bindAnimationTree_get_root_motion_track #-}
 
+-- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by [code]":"[/code]. For example, [code]"character/skeleton:ankle"[/code] or [code]"character/mesh:transform/local"[/code].
+--   			If the track has type [constant Animation.TYPE_TRANSFORM], the transformation will be cancelled visually, and the animation will appear to stay in place.
 bindAnimationTree_get_root_motion_track :: MethodBind
 bindAnimationTree_get_root_motion_track
   = unsafePerformIO $
@@ -199,6 +208,8 @@ bindAnimationTree_get_root_motion_track
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by [code]":"[/code]. For example, [code]"character/skeleton:ankle"[/code] or [code]"character/mesh:transform/local"[/code].
+--   			If the track has type [constant Animation.TYPE_TRANSFORM], the transformation will be cancelled visually, and the animation will appear to stay in place.
 get_root_motion_track ::
                         (AnimationTree :< cls, Object :< cls) => cls -> IO NodePath
 get_root_motion_track cls
@@ -212,6 +223,7 @@ get_root_motion_track cls
 
 {-# NOINLINE bindAnimationTree_get_root_motion_transform #-}
 
+-- | Retrieve the motion of the [member root_motion_track] as a [Transform] that can be used elsewhere. If [member root_motion_track] is not a path to a track of type [constant Animation.TYPE_TRANSFORM], returns an identity transformation.
 bindAnimationTree_get_root_motion_transform :: MethodBind
 bindAnimationTree_get_root_motion_transform
   = unsafePerformIO $
@@ -221,6 +233,7 @@ bindAnimationTree_get_root_motion_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Retrieve the motion of the [member root_motion_track] as a [Transform] that can be used elsewhere. If [member root_motion_track] is not a path to a track of type [constant Animation.TYPE_TRANSFORM], returns an identity transformation.
 get_root_motion_transform ::
                             (AnimationTree :< cls, Object :< cls) => cls -> IO Transform
 get_root_motion_transform cls
@@ -234,6 +247,7 @@ get_root_motion_transform cls
 
 {-# NOINLINE bindAnimationTree_get_tree_root #-}
 
+-- | The root animation node of this [AnimationTree]. See [AnimationNode].
 bindAnimationTree_get_tree_root :: MethodBind
 bindAnimationTree_get_tree_root
   = unsafePerformIO $
@@ -243,6 +257,7 @@ bindAnimationTree_get_tree_root
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The root animation node of this [AnimationTree]. See [AnimationNode].
 get_tree_root ::
                 (AnimationTree :< cls, Object :< cls) => cls -> IO AnimationNode
 get_tree_root cls
@@ -255,6 +270,7 @@ get_tree_root cls
 
 {-# NOINLINE bindAnimationTree_is_active #-}
 
+-- | If [code]true[/code], the [AnimationTree] will be processing.
 bindAnimationTree_is_active :: MethodBind
 bindAnimationTree_is_active
   = unsafePerformIO $
@@ -264,6 +280,7 @@ bindAnimationTree_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the [AnimationTree] will be processing.
 is_active ::
             (AnimationTree :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
@@ -299,6 +316,7 @@ rename_parameter cls arg1 arg2
 
 {-# NOINLINE bindAnimationTree_set_active #-}
 
+-- | If [code]true[/code], the [AnimationTree] will be processing.
 bindAnimationTree_set_active :: MethodBind
 bindAnimationTree_set_active
   = unsafePerformIO $
@@ -308,6 +326,7 @@ bindAnimationTree_set_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the [AnimationTree] will be processing.
 set_active ::
              (AnimationTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_active cls arg1
@@ -320,6 +339,7 @@ set_active cls arg1
 
 {-# NOINLINE bindAnimationTree_set_animation_player #-}
 
+-- | The path to the [AnimationPlayer] used for animating.
 bindAnimationTree_set_animation_player :: MethodBind
 bindAnimationTree_set_animation_player
   = unsafePerformIO $
@@ -329,6 +349,7 @@ bindAnimationTree_set_animation_player
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The path to the [AnimationPlayer] used for animating.
 set_animation_player ::
                        (AnimationTree :< cls, Object :< cls) => cls -> NodePath -> IO ()
 set_animation_player cls arg1
@@ -342,6 +363,7 @@ set_animation_player cls arg1
 
 {-# NOINLINE bindAnimationTree_set_process_mode #-}
 
+-- | The process mode of this [AnimationTree]. See [enum AnimationProcessMode] for available modes.
 bindAnimationTree_set_process_mode :: MethodBind
 bindAnimationTree_set_process_mode
   = unsafePerformIO $
@@ -351,6 +373,7 @@ bindAnimationTree_set_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The process mode of this [AnimationTree]. See [enum AnimationProcessMode] for available modes.
 set_process_mode ::
                    (AnimationTree :< cls, Object :< cls) => cls -> Int -> IO ()
 set_process_mode cls arg1
@@ -364,6 +387,8 @@ set_process_mode cls arg1
 
 {-# NOINLINE bindAnimationTree_set_root_motion_track #-}
 
+-- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by [code]":"[/code]. For example, [code]"character/skeleton:ankle"[/code] or [code]"character/mesh:transform/local"[/code].
+--   			If the track has type [constant Animation.TYPE_TRANSFORM], the transformation will be cancelled visually, and the animation will appear to stay in place.
 bindAnimationTree_set_root_motion_track :: MethodBind
 bindAnimationTree_set_root_motion_track
   = unsafePerformIO $
@@ -373,6 +398,8 @@ bindAnimationTree_set_root_motion_track
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by [code]":"[/code]. For example, [code]"character/skeleton:ankle"[/code] or [code]"character/mesh:transform/local"[/code].
+--   			If the track has type [constant Animation.TYPE_TRANSFORM], the transformation will be cancelled visually, and the animation will appear to stay in place.
 set_root_motion_track ::
                         (AnimationTree :< cls, Object :< cls) => cls -> NodePath -> IO ()
 set_root_motion_track cls arg1
@@ -386,6 +413,7 @@ set_root_motion_track cls arg1
 
 {-# NOINLINE bindAnimationTree_set_tree_root #-}
 
+-- | The root animation node of this [AnimationTree]. See [AnimationNode].
 bindAnimationTree_set_tree_root :: MethodBind
 bindAnimationTree_set_tree_root
   = unsafePerformIO $
@@ -395,6 +423,7 @@ bindAnimationTree_set_tree_root
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The root animation node of this [AnimationTree]. See [AnimationNode].
 set_tree_root ::
                 (AnimationTree :< cls, Object :< cls) =>
                 cls -> AnimationNode -> IO ()

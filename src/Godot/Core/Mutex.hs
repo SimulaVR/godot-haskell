@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Mutex
        (Godot.Core.Mutex.lock, Godot.Core.Mutex.try_lock,
         Godot.Core.Mutex.unlock)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindMutex_lock #-}
 
--- | Lock this [code]Mutex[/code], blocks until it is unlocked by the current owner.
+-- | Locks this [Mutex], blocks until it is unlocked by the current owner.
 bindMutex_lock :: MethodBind
 bindMutex_lock
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindMutex_lock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Lock this [code]Mutex[/code], blocks until it is unlocked by the current owner.
+-- | Locks this [Mutex], blocks until it is unlocked by the current owner.
 lock :: (Mutex :< cls, Object :< cls) => cls -> IO ()
 lock cls
   = withVariantArray []
@@ -33,7 +34,7 @@ lock cls
 
 {-# NOINLINE bindMutex_try_lock #-}
 
--- | Try locking this [code]Mutex[/code], does not block. Returns [constant @GlobalScope.OK] on success, [constant @GlobalScope.ERR_BUSY] otherwise.
+-- | Tries locking this [Mutex], but does not block. Returns [constant OK] on success, [constant ERR_BUSY] otherwise.
 bindMutex_try_lock :: MethodBind
 bindMutex_try_lock
   = unsafePerformIO $
@@ -43,7 +44,7 @@ bindMutex_try_lock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Try locking this [code]Mutex[/code], does not block. Returns [constant @GlobalScope.OK] on success, [constant @GlobalScope.ERR_BUSY] otherwise.
+-- | Tries locking this [Mutex], but does not block. Returns [constant OK] on success, [constant ERR_BUSY] otherwise.
 try_lock :: (Mutex :< cls, Object :< cls) => cls -> IO Int
 try_lock cls
   = withVariantArray []
@@ -53,7 +54,7 @@ try_lock cls
 
 {-# NOINLINE bindMutex_unlock #-}
 
--- | Unlock this [code]Mutex[/code], leaving it to other threads.
+-- | Unlocks this [Mutex], leaving it to other threads.
 bindMutex_unlock :: MethodBind
 bindMutex_unlock
   = unsafePerformIO $
@@ -63,7 +64,7 @@ bindMutex_unlock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Unlock this [code]Mutex[/code], leaving it to other threads.
+-- | Unlocks this [Mutex], leaving it to other threads.
 unlock :: (Mutex :< cls, Object :< cls) => cls -> IO ()
 unlock cls
   = withVariantArray []

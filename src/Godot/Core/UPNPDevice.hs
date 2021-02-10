@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.UPNPDevice
        (Godot.Core.UPNPDevice._IGD_STATUS_INVALID_CONTROL,
         Godot.Core.UPNPDevice._IGD_STATUS_DISCONNECTED,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorFileSystemDirectory
        (Godot.Tools.EditorFileSystemDirectory.find_dir_index,
         Godot.Tools.EditorFileSystemDirectory.find_file_index,
@@ -179,6 +180,7 @@ get_file_path cls arg1
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_script_class_extends
              #-}
 
+-- | Returns the base class of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
 bindEditorFileSystemDirectory_get_file_script_class_extends ::
                                                             MethodBind
 bindEditorFileSystemDirectory_get_file_script_class_extends
@@ -189,6 +191,7 @@ bindEditorFileSystemDirectory_get_file_script_class_extends
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the base class of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
 get_file_script_class_extends ::
                                 (EditorFileSystemDirectory :< cls, Object :< cls) =>
                                 cls -> Int -> IO GodotString
@@ -205,6 +208,7 @@ get_file_script_class_extends cls arg1
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_script_class_name
              #-}
 
+-- | Returns the name of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
 bindEditorFileSystemDirectory_get_file_script_class_name ::
                                                          MethodBind
 bindEditorFileSystemDirectory_get_file_script_class_name
@@ -215,6 +219,7 @@ bindEditorFileSystemDirectory_get_file_script_class_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the name of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
 get_file_script_class_name ::
                              (EditorFileSystemDirectory :< cls, Object :< cls) =>
                              cls -> Int -> IO GodotString
@@ -280,7 +285,7 @@ get_name cls
 
 {-# NOINLINE bindEditorFileSystemDirectory_get_parent #-}
 
--- | Returns the parent directory for this directory or null if called on a directory at [code]res://[/code] or [code]user://[/code].
+-- | Returns the parent directory for this directory or [code]null[/code] if called on a directory at [code]res://[/code] or [code]user://[/code].
 bindEditorFileSystemDirectory_get_parent :: MethodBind
 bindEditorFileSystemDirectory_get_parent
   = unsafePerformIO $
@@ -290,7 +295,7 @@ bindEditorFileSystemDirectory_get_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent directory for this directory or null if called on a directory at [code]res://[/code] or [code]user://[/code].
+-- | Returns the parent directory for this directory or [code]null[/code] if called on a directory at [code]res://[/code] or [code]user://[/code].
 get_parent ::
              (EditorFileSystemDirectory :< cls, Object :< cls) =>
              cls -> IO EditorFileSystemDirectory

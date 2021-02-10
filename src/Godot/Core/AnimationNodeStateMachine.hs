@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeStateMachine
        (Godot.Core.AnimationNodeStateMachine._tree_changed,
         Godot.Core.AnimationNodeStateMachine.add_node,
@@ -437,7 +438,7 @@ remove_node cls arg1
 
 {-# NOINLINE bindAnimationNodeStateMachine_remove_transition #-}
 
--- | Deletes the given transition.
+-- | Deletes the transition between the two specified nodes.
 bindAnimationNodeStateMachine_remove_transition :: MethodBind
 bindAnimationNodeStateMachine_remove_transition
   = unsafePerformIO $
@@ -447,7 +448,7 @@ bindAnimationNodeStateMachine_remove_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deletes the given transition.
+-- | Deletes the transition between the two specified nodes.
 remove_transition ::
                     (AnimationNodeStateMachine :< cls, Object :< cls) =>
                     cls -> GodotString -> GodotString -> IO ()
@@ -464,7 +465,7 @@ remove_transition cls arg1 arg2
 {-# NOINLINE bindAnimationNodeStateMachine_remove_transition_by_index
              #-}
 
--- | Deletes the given transition.
+-- | Deletes the given transition by index.
 bindAnimationNodeStateMachine_remove_transition_by_index ::
                                                          MethodBind
 bindAnimationNodeStateMachine_remove_transition_by_index
@@ -475,7 +476,7 @@ bindAnimationNodeStateMachine_remove_transition_by_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deletes the given transition.
+-- | Deletes the given transition by index.
 remove_transition_by_index ::
                              (AnimationNodeStateMachine :< cls, Object :< cls) =>
                              cls -> Int -> IO ()

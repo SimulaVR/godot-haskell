@@ -48,7 +48,8 @@ addClass cls mdoc = do
                                                                  ,HS.Ident Nothing "TypeFamilies"
                                                                  ,HS.Ident Nothing "TypeOperators"
                                                                  ,HS.Ident Nothing "FlexibleContexts"
-                                                                 ,HS.Ident Nothing "DataKinds"]]
+                                                                 ,HS.Ident Nothing "DataKinds"
+                                                                 ,HS.Ident Nothing "MultiParamTypeClasses"]]
                                       (noComments <$> classImports)
                                       classDecls)
   where
@@ -145,13 +146,23 @@ mkSignals cls mdoc = return $ concatMap mkSignal (V.toList $ cls ^. signals)
       sdoc <- V.find (\e -> e ^. D.name == name) ss
       d <- D.alt1 $ sdoc ^. D.description
       preComment (T.unpack d)
+    argToHsType (GodotArgument _ ty _) = toHsType ty
     mkSignal sig 
       = let sigStr = T.unpack (sig ^. name)
             sigName = HS.Ident () ("sig_" ++ sigStr)
         in [ HS.TypeSig (signalDoc (sig ^. name) mdoc) [noComments $ sigName] (noComments $ HS.TyApp () sigTy (clsTy cls))
            , noComments $ HS.PatBind () (HS.PVar () sigName) (
                HS.UnGuardedRhs () $ HS.App () sigCon $ HS.Lit () $ HS.String () sigStr sigStr
-           ) Nothing ]
+           ) Nothing
+           , noComments $ HS.InstDecl () Nothing
+             (HS.IRule () Nothing Nothing (HS.IHApp () (HS.IHApp () (HS.IHApp () (HS.IHCon () (HS.UnQual () (HS.Ident () "NodeSignal")))
+                                                                  (clsTy cls))
+                                                       (HS.TyPromoted () (HS.PromotedString () sigStr sigStr)))
+                                           (HS.TyPromoted ()
+                                            (HS.PromotedList () True
+                                             (map argToHsType $ V.toList $ sig ^. arguments)))))
+             Nothing
+           ]
 
 mkConstants :: GodotClass -> [HS.Decl ()]
 mkConstants cls = concatMap mkConstant (HM.toList $ cls ^. constants)

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CanvasItemMaterial
        (Godot.Core.CanvasItemMaterial._BLEND_MODE_ADD,
         Godot.Core.CanvasItemMaterial._BLEND_MODE_MIX,
@@ -103,6 +104,8 @@ get_light_mode cls
 
 {-# NOINLINE bindCanvasItemMaterial_get_particles_anim_h_frames #-}
 
+-- | The number of columns in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 bindCanvasItemMaterial_get_particles_anim_h_frames :: MethodBind
 bindCanvasItemMaterial_get_particles_anim_h_frames
   = unsafePerformIO $
@@ -112,6 +115,8 @@ bindCanvasItemMaterial_get_particles_anim_h_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The number of columns in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 get_particles_anim_h_frames ::
                               (CanvasItemMaterial :< cls, Object :< cls) => cls -> IO Int
 get_particles_anim_h_frames cls
@@ -126,6 +131,8 @@ get_particles_anim_h_frames cls
 
 {-# NOINLINE bindCanvasItemMaterial_get_particles_anim_loop #-}
 
+-- | If [code]true[/code], the particles animation will loop.
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 bindCanvasItemMaterial_get_particles_anim_loop :: MethodBind
 bindCanvasItemMaterial_get_particles_anim_loop
   = unsafePerformIO $
@@ -135,6 +142,8 @@ bindCanvasItemMaterial_get_particles_anim_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the particles animation will loop.
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 get_particles_anim_loop ::
                           (CanvasItemMaterial :< cls, Object :< cls) => cls -> IO Bool
 get_particles_anim_loop cls
@@ -149,6 +158,8 @@ get_particles_anim_loop cls
 
 {-# NOINLINE bindCanvasItemMaterial_get_particles_anim_v_frames #-}
 
+-- | The number of rows in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 bindCanvasItemMaterial_get_particles_anim_v_frames :: MethodBind
 bindCanvasItemMaterial_get_particles_anim_v_frames
   = unsafePerformIO $
@@ -158,6 +169,8 @@ bindCanvasItemMaterial_get_particles_anim_v_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The number of rows in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 get_particles_anim_v_frames ::
                               (CanvasItemMaterial :< cls, Object :< cls) => cls -> IO Int
 get_particles_anim_v_frames cls
@@ -172,6 +185,8 @@ get_particles_anim_v_frames cls
 
 {-# NOINLINE bindCanvasItemMaterial_get_particles_animation #-}
 
+-- | If [code]true[/code], enable spritesheet-based animation features when assigned to [Particles2D] and [CPUParticles2D] nodes. The [member ParticlesMaterial.anim_speed] or [member CPUParticles2D.anim_speed] should also be set to a positive value for the animation to play.
+--   			This property (and other [code]particles_anim_*[/code] properties that depend on it) has no effect on other types of nodes.
 bindCanvasItemMaterial_get_particles_animation :: MethodBind
 bindCanvasItemMaterial_get_particles_animation
   = unsafePerformIO $
@@ -181,6 +196,8 @@ bindCanvasItemMaterial_get_particles_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], enable spritesheet-based animation features when assigned to [Particles2D] and [CPUParticles2D] nodes. The [member ParticlesMaterial.anim_speed] or [member CPUParticles2D.anim_speed] should also be set to a positive value for the animation to play.
+--   			This property (and other [code]particles_anim_*[/code] properties that depend on it) has no effect on other types of nodes.
 get_particles_animation ::
                           (CanvasItemMaterial :< cls, Object :< cls) => cls -> IO Bool
 get_particles_animation cls
@@ -243,6 +260,8 @@ set_light_mode cls arg1
 
 {-# NOINLINE bindCanvasItemMaterial_set_particles_anim_h_frames #-}
 
+-- | The number of columns in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 bindCanvasItemMaterial_set_particles_anim_h_frames :: MethodBind
 bindCanvasItemMaterial_set_particles_anim_h_frames
   = unsafePerformIO $
@@ -252,6 +271,8 @@ bindCanvasItemMaterial_set_particles_anim_h_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The number of columns in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 set_particles_anim_h_frames ::
                               (CanvasItemMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_particles_anim_h_frames cls arg1
@@ -266,6 +287,8 @@ set_particles_anim_h_frames cls arg1
 
 {-# NOINLINE bindCanvasItemMaterial_set_particles_anim_loop #-}
 
+-- | If [code]true[/code], the particles animation will loop.
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 bindCanvasItemMaterial_set_particles_anim_loop :: MethodBind
 bindCanvasItemMaterial_set_particles_anim_loop
   = unsafePerformIO $
@@ -275,6 +298,8 @@ bindCanvasItemMaterial_set_particles_anim_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the particles animation will loop.
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 set_particles_anim_loop ::
                           (CanvasItemMaterial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_particles_anim_loop cls arg1
@@ -289,6 +314,8 @@ set_particles_anim_loop cls arg1
 
 {-# NOINLINE bindCanvasItemMaterial_set_particles_anim_v_frames #-}
 
+-- | The number of rows in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 bindCanvasItemMaterial_set_particles_anim_v_frames :: MethodBind
 bindCanvasItemMaterial_set_particles_anim_v_frames
   = unsafePerformIO $
@@ -298,6 +325,8 @@ bindCanvasItemMaterial_set_particles_anim_v_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The number of rows in the spritesheet assigned as [Texture] for a [Particles2D] or [CPUParticles2D].
+--   			[b]Note:[/b] This property is only used and visible in the editor if [member particles_animation] is [code]true[/code].
 set_particles_anim_v_frames ::
                               (CanvasItemMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_particles_anim_v_frames cls arg1
@@ -312,6 +341,8 @@ set_particles_anim_v_frames cls arg1
 
 {-# NOINLINE bindCanvasItemMaterial_set_particles_animation #-}
 
+-- | If [code]true[/code], enable spritesheet-based animation features when assigned to [Particles2D] and [CPUParticles2D] nodes. The [member ParticlesMaterial.anim_speed] or [member CPUParticles2D.anim_speed] should also be set to a positive value for the animation to play.
+--   			This property (and other [code]particles_anim_*[/code] properties that depend on it) has no effect on other types of nodes.
 bindCanvasItemMaterial_set_particles_animation :: MethodBind
 bindCanvasItemMaterial_set_particles_animation
   = unsafePerformIO $
@@ -321,6 +352,8 @@ bindCanvasItemMaterial_set_particles_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], enable spritesheet-based animation features when assigned to [Particles2D] and [CPUParticles2D] nodes. The [member ParticlesMaterial.anim_speed] or [member CPUParticles2D.anim_speed] should also be set to a positive value for the animation to play.
+--   			This property (and other [code]particles_anim_*[/code] properties that depend on it) has no effect on other types of nodes.
 set_particles_animation ::
                           (CanvasItemMaterial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_particles_animation cls arg1

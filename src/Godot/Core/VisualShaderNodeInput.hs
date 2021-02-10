@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeInput
        (Godot.Core.VisualShaderNodeInput.sig_input_type_changed,
         Godot.Core.VisualShaderNodeInput.get_input_name,
@@ -18,8 +19,11 @@ sig_input_type_changed ::
 sig_input_type_changed
   = Godot.Internal.Dispatch.Signal "input_type_changed"
 
+instance NodeSignal VisualShaderNodeInput "input_type_changed" '[]
+
 {-# NOINLINE bindVisualShaderNodeInput_get_input_name #-}
 
+-- | One of the several input constants in lower-case style like: "vertex"([code]VERTEX[/code]) or "point_size"([code]POINT_SIZE[/code]).
 bindVisualShaderNodeInput_get_input_name :: MethodBind
 bindVisualShaderNodeInput_get_input_name
   = unsafePerformIO $
@@ -29,6 +33,7 @@ bindVisualShaderNodeInput_get_input_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | One of the several input constants in lower-case style like: "vertex"([code]VERTEX[/code]) or "point_size"([code]POINT_SIZE[/code]).
 get_input_name ::
                  (VisualShaderNodeInput :< cls, Object :< cls) =>
                  cls -> IO GodotString
@@ -67,6 +72,7 @@ get_input_real_name cls
 
 {-# NOINLINE bindVisualShaderNodeInput_set_input_name #-}
 
+-- | One of the several input constants in lower-case style like: "vertex"([code]VERTEX[/code]) or "point_size"([code]POINT_SIZE[/code]).
 bindVisualShaderNodeInput_set_input_name :: MethodBind
 bindVisualShaderNodeInput_set_input_name
   = unsafePerformIO $
@@ -76,6 +82,7 @@ bindVisualShaderNodeInput_set_input_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | One of the several input constants in lower-case style like: "vertex"([code]VERTEX[/code]) or "point_size"([code]POINT_SIZE[/code]).
 set_input_name ::
                  (VisualShaderNodeInput :< cls, Object :< cls) =>
                  cls -> GodotString -> IO ()

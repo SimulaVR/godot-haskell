@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventMouseMotion
        (Godot.Core.InputEventMouseMotion.get_pressure,
         Godot.Core.InputEventMouseMotion.get_relative,
@@ -19,6 +20,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindInputEventMouseMotion_get_pressure #-}
 
+-- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
 bindInputEventMouseMotion_get_pressure :: MethodBind
 bindInputEventMouseMotion_get_pressure
   = unsafePerformIO $
@@ -28,6 +30,7 @@ bindInputEventMouseMotion_get_pressure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
 get_pressure ::
                (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Float
 get_pressure cls
@@ -41,7 +44,8 @@ get_pressure cls
 
 {-# NOINLINE bindInputEventMouseMotion_get_relative #-}
 
--- | Mouse position relative to the previous position (position at the last frame).
+-- | The mouse position relative to the previous position (position at the last frame).
+--   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
 bindInputEventMouseMotion_get_relative :: MethodBind
 bindInputEventMouseMotion_get_relative
   = unsafePerformIO $
@@ -51,7 +55,8 @@ bindInputEventMouseMotion_get_relative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Mouse position relative to the previous position (position at the last frame).
+-- | The mouse position relative to the previous position (position at the last frame).
+--   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
 get_relative ::
                (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Vector2
 get_relative cls
@@ -65,7 +70,7 @@ get_relative cls
 
 {-# NOINLINE bindInputEventMouseMotion_get_speed #-}
 
--- | Mouse speed.
+-- | The mouse speed in pixels per second.
 bindInputEventMouseMotion_get_speed :: MethodBind
 bindInputEventMouseMotion_get_speed
   = unsafePerformIO $
@@ -75,7 +80,7 @@ bindInputEventMouseMotion_get_speed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Mouse speed.
+-- | The mouse speed in pixels per second.
 get_speed ::
             (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Vector2
 get_speed cls
@@ -89,6 +94,7 @@ get_speed cls
 
 {-# NOINLINE bindInputEventMouseMotion_get_tilt #-}
 
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
 bindInputEventMouseMotion_get_tilt :: MethodBind
 bindInputEventMouseMotion_get_tilt
   = unsafePerformIO $
@@ -98,6 +104,7 @@ bindInputEventMouseMotion_get_tilt
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
 get_tilt ::
            (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Vector2
 get_tilt cls
@@ -111,6 +118,7 @@ get_tilt cls
 
 {-# NOINLINE bindInputEventMouseMotion_set_pressure #-}
 
+-- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
 bindInputEventMouseMotion_set_pressure :: MethodBind
 bindInputEventMouseMotion_set_pressure
   = unsafePerformIO $
@@ -120,6 +128,7 @@ bindInputEventMouseMotion_set_pressure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
 set_pressure ::
                (InputEventMouseMotion :< cls, Object :< cls) =>
                cls -> Float -> IO ()
@@ -134,7 +143,8 @@ set_pressure cls arg1
 
 {-# NOINLINE bindInputEventMouseMotion_set_relative #-}
 
--- | Mouse position relative to the previous position (position at the last frame).
+-- | The mouse position relative to the previous position (position at the last frame).
+--   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
 bindInputEventMouseMotion_set_relative :: MethodBind
 bindInputEventMouseMotion_set_relative
   = unsafePerformIO $
@@ -144,7 +154,8 @@ bindInputEventMouseMotion_set_relative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Mouse position relative to the previous position (position at the last frame).
+-- | The mouse position relative to the previous position (position at the last frame).
+--   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
 set_relative ::
                (InputEventMouseMotion :< cls, Object :< cls) =>
                cls -> Vector2 -> IO ()
@@ -159,7 +170,7 @@ set_relative cls arg1
 
 {-# NOINLINE bindInputEventMouseMotion_set_speed #-}
 
--- | Mouse speed.
+-- | The mouse speed in pixels per second.
 bindInputEventMouseMotion_set_speed :: MethodBind
 bindInputEventMouseMotion_set_speed
   = unsafePerformIO $
@@ -169,7 +180,7 @@ bindInputEventMouseMotion_set_speed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Mouse speed.
+-- | The mouse speed in pixels per second.
 set_speed ::
             (InputEventMouseMotion :< cls, Object :< cls) =>
             cls -> Vector2 -> IO ()
@@ -184,6 +195,7 @@ set_speed cls arg1
 
 {-# NOINLINE bindInputEventMouseMotion_set_tilt #-}
 
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
 bindInputEventMouseMotion_set_tilt :: MethodBind
 bindInputEventMouseMotion_set_tilt
   = unsafePerformIO $
@@ -193,6 +205,7 @@ bindInputEventMouseMotion_set_tilt
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
 set_tilt ::
            (InputEventMouseMotion :< cls, Object :< cls) =>
            cls -> Vector2 -> IO ()

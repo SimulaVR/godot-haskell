@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CSGMesh
        (Godot.Core.CSGMesh._mesh_changed, Godot.Core.CSGMesh.get_material,
         Godot.Core.CSGMesh.get_mesh, Godot.Core.CSGMesh.set_material,

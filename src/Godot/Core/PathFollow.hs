@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PathFollow
        (Godot.Core.PathFollow._ROTATION_ORIENTED,
         Godot.Core.PathFollow._ROTATION_XY,
@@ -45,7 +46,7 @@ _ROTATION_NONE = 0
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve3D] of the [Path] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 bindPathFollow_get_cubic_interpolation :: MethodBind
 bindPathFollow_get_cubic_interpolation
   = unsafePerformIO $
@@ -57,7 +58,7 @@ bindPathFollow_get_cubic_interpolation
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve3D] of the [Path] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 get_cubic_interpolation ::
                           (PathFollow :< cls, Object :< cls) => cls -> IO Bool
 get_cubic_interpolation cls
@@ -209,7 +210,7 @@ has_loop cls
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve3D] of the [Path] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 bindPathFollow_set_cubic_interpolation :: MethodBind
 bindPathFollow_set_cubic_interpolation
   = unsafePerformIO $
@@ -221,7 +222,7 @@ bindPathFollow_set_cubic_interpolation
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve3D] of the [Path] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 set_cubic_interpolation ::
                           (PathFollow :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_cubic_interpolation cls arg1

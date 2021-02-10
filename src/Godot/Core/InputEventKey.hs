@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventKey
        (Godot.Core.InputEventKey.is_echo,
         Godot.Core.InputEventKey.is_pressed,
@@ -65,7 +66,8 @@ is_pressed cls
 
 {-# NOINLINE bindInputEventKey_get_scancode #-}
 
--- | Key scancode, one of the [code]KEY_*[/code] constants in [@GlobalScope].
+-- | The key scancode, which corresponds to one of the [enum KeyList] constants.
+--   			To get a human-readable representation of the [InputEventKey], use [code]OS.get_scancode_string(event.scancode)[/code] where [code]event[/code] is the [InputEventKey].
 bindInputEventKey_get_scancode :: MethodBind
 bindInputEventKey_get_scancode
   = unsafePerformIO $
@@ -75,7 +77,8 @@ bindInputEventKey_get_scancode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Key scancode, one of the [code]KEY_*[/code] constants in [@GlobalScope].
+-- | The key scancode, which corresponds to one of the [enum KeyList] constants.
+--   			To get a human-readable representation of the [InputEventKey], use [code]OS.get_scancode_string(event.scancode)[/code] where [code]event[/code] is the [InputEventKey].
 get_scancode ::
                (InputEventKey :< cls, Object :< cls) => cls -> IO Int
 get_scancode cls
@@ -89,6 +92,7 @@ get_scancode cls
 {-# NOINLINE bindInputEventKey_get_scancode_with_modifiers #-}
 
 -- | Returns the scancode combined with modifier keys such as [code]Shift[/code] or [code]Alt[/code]. See also [InputEventWithModifiers].
+--   				To get a human-readable representation of the [InputEventKey] with modifiers, use [code]OS.get_scancode_string(event.get_scancode_with_modifiers())[/code] where [code]event[/code] is the [InputEventKey].
 bindInputEventKey_get_scancode_with_modifiers :: MethodBind
 bindInputEventKey_get_scancode_with_modifiers
   = unsafePerformIO $
@@ -99,6 +103,7 @@ bindInputEventKey_get_scancode_with_modifiers
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the scancode combined with modifier keys such as [code]Shift[/code] or [code]Alt[/code]. See also [InputEventWithModifiers].
+--   				To get a human-readable representation of the [InputEventKey] with modifiers, use [code]OS.get_scancode_string(event.get_scancode_with_modifiers())[/code] where [code]event[/code] is the [InputEventKey].
 get_scancode_with_modifiers ::
                               (InputEventKey :< cls, Object :< cls) => cls -> IO Int
 get_scancode_with_modifiers cls
@@ -113,7 +118,7 @@ get_scancode_with_modifiers cls
 
 {-# NOINLINE bindInputEventKey_get_unicode #-}
 
--- | Key unicode identifier when relevant.
+-- | The key Unicode identifier (when relevant). Unicode identifiers for the composite characters and complex scripts may not be available unless IME input mode is active. See [method OS.set_ime_active] for more information.
 bindInputEventKey_get_unicode :: MethodBind
 bindInputEventKey_get_unicode
   = unsafePerformIO $
@@ -123,7 +128,7 @@ bindInputEventKey_get_unicode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Key unicode identifier when relevant.
+-- | The key Unicode identifier (when relevant). Unicode identifiers for the composite characters and complex scripts may not be available unless IME input mode is active. See [method OS.set_ime_active] for more information.
 get_unicode ::
               (InputEventKey :< cls, Object :< cls) => cls -> IO Int
 get_unicode cls
@@ -182,7 +187,8 @@ set_pressed cls arg1
 
 {-# NOINLINE bindInputEventKey_set_scancode #-}
 
--- | Key scancode, one of the [code]KEY_*[/code] constants in [@GlobalScope].
+-- | The key scancode, which corresponds to one of the [enum KeyList] constants.
+--   			To get a human-readable representation of the [InputEventKey], use [code]OS.get_scancode_string(event.scancode)[/code] where [code]event[/code] is the [InputEventKey].
 bindInputEventKey_set_scancode :: MethodBind
 bindInputEventKey_set_scancode
   = unsafePerformIO $
@@ -192,7 +198,8 @@ bindInputEventKey_set_scancode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Key scancode, one of the [code]KEY_*[/code] constants in [@GlobalScope].
+-- | The key scancode, which corresponds to one of the [enum KeyList] constants.
+--   			To get a human-readable representation of the [InputEventKey], use [code]OS.get_scancode_string(event.scancode)[/code] where [code]event[/code] is the [InputEventKey].
 set_scancode ::
                (InputEventKey :< cls, Object :< cls) => cls -> Int -> IO ()
 set_scancode cls arg1
@@ -205,7 +212,7 @@ set_scancode cls arg1
 
 {-# NOINLINE bindInputEventKey_set_unicode #-}
 
--- | Key unicode identifier when relevant.
+-- | The key Unicode identifier (when relevant). Unicode identifiers for the composite characters and complex scripts may not be available unless IME input mode is active. See [method OS.set_ime_active] for more information.
 bindInputEventKey_set_unicode :: MethodBind
 bindInputEventKey_set_unicode
   = unsafePerformIO $
@@ -215,7 +222,7 @@ bindInputEventKey_set_unicode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Key unicode identifier when relevant.
+-- | The key Unicode identifier (when relevant). Unicode identifiers for the composite characters and complex scripts may not be available unless IME input mode is active. See [method OS.set_ime_active] for more information.
 set_unicode ::
               (InputEventKey :< cls, Object :< cls) => cls -> Int -> IO ()
 set_unicode cls arg1

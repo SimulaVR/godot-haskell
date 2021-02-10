@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectCompressor
        (Godot.Core.AudioEffectCompressor.get_attack_us,
         Godot.Core.AudioEffectCompressor.get_gain,
@@ -25,7 +26,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindAudioEffectCompressor_get_attack_us #-}
 
--- | Compressor's reaction time when the signal exceeds the threshold. Value can range from 20 to 2000. Default value: [code]20ms[/code].
+-- | Compressor's reaction time when the signal exceeds the threshold, in microseconds. Value can range from 20 to 2000.
 bindAudioEffectCompressor_get_attack_us :: MethodBind
 bindAudioEffectCompressor_get_attack_us
   = unsafePerformIO $
@@ -35,7 +36,7 @@ bindAudioEffectCompressor_get_attack_us
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Compressor's reaction time when the signal exceeds the threshold. Value can range from 20 to 2000. Default value: [code]20ms[/code].
+-- | Compressor's reaction time when the signal exceeds the threshold, in microseconds. Value can range from 20 to 2000.
 get_attack_us ::
                 (AudioEffectCompressor :< cls, Object :< cls) => cls -> IO Float
 get_attack_us cls
@@ -73,7 +74,7 @@ get_gain cls
 
 {-# NOINLINE bindAudioEffectCompressor_get_mix #-}
 
--- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet). Default value: [code]1[/code].
+-- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet).
 bindAudioEffectCompressor_get_mix :: MethodBind
 bindAudioEffectCompressor_get_mix
   = unsafePerformIO $
@@ -83,7 +84,7 @@ bindAudioEffectCompressor_get_mix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet). Default value: [code]1[/code].
+-- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet).
 get_mix ::
           (AudioEffectCompressor :< cls, Object :< cls) => cls -> IO Float
 get_mix cls
@@ -97,7 +98,7 @@ get_mix cls
 
 {-# NOINLINE bindAudioEffectCompressor_get_ratio #-}
 
--- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio the more the loud parts of the audio will be compressed. Value can range from 1 to 48. Default value: [code]4[/code].
+-- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio, the more the loud parts of the audio will be compressed. Value can range from 1 to 48.
 bindAudioEffectCompressor_get_ratio :: MethodBind
 bindAudioEffectCompressor_get_ratio
   = unsafePerformIO $
@@ -107,7 +108,7 @@ bindAudioEffectCompressor_get_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio the more the loud parts of the audio will be compressed. Value can range from 1 to 48. Default value: [code]4[/code].
+-- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio, the more the loud parts of the audio will be compressed. Value can range from 1 to 48.
 get_ratio ::
             (AudioEffectCompressor :< cls, Object :< cls) => cls -> IO Float
 get_ratio cls
@@ -121,7 +122,7 @@ get_ratio cls
 
 {-# NOINLINE bindAudioEffectCompressor_get_release_ms #-}
 
--- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold. Value can range from 20 to 2000. Default value: [code]250ms[/code].
+-- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold, in milliseconds. Value can range from 20 to 2000.
 bindAudioEffectCompressor_get_release_ms :: MethodBind
 bindAudioEffectCompressor_get_release_ms
   = unsafePerformIO $
@@ -131,7 +132,7 @@ bindAudioEffectCompressor_get_release_ms
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold. Value can range from 20 to 2000. Default value: [code]250ms[/code].
+-- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold, in milliseconds. Value can range from 20 to 2000.
 get_release_ms ::
                  (AudioEffectCompressor :< cls, Object :< cls) => cls -> IO Float
 get_release_ms cls
@@ -170,7 +171,7 @@ get_sidechain cls
 
 {-# NOINLINE bindAudioEffectCompressor_get_threshold #-}
 
--- | The level above which compression is applied to the audio. Value can range from -60 to 0. Default value: [code]0[/code].
+-- | The level above which compression is applied to the audio. Value can range from -60 to 0.
 bindAudioEffectCompressor_get_threshold :: MethodBind
 bindAudioEffectCompressor_get_threshold
   = unsafePerformIO $
@@ -180,7 +181,7 @@ bindAudioEffectCompressor_get_threshold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The level above which compression is applied to the audio. Value can range from -60 to 0. Default value: [code]0[/code].
+-- | The level above which compression is applied to the audio. Value can range from -60 to 0.
 get_threshold ::
                 (AudioEffectCompressor :< cls, Object :< cls) => cls -> IO Float
 get_threshold cls
@@ -194,7 +195,7 @@ get_threshold cls
 
 {-# NOINLINE bindAudioEffectCompressor_set_attack_us #-}
 
--- | Compressor's reaction time when the signal exceeds the threshold. Value can range from 20 to 2000. Default value: [code]20ms[/code].
+-- | Compressor's reaction time when the signal exceeds the threshold, in microseconds. Value can range from 20 to 2000.
 bindAudioEffectCompressor_set_attack_us :: MethodBind
 bindAudioEffectCompressor_set_attack_us
   = unsafePerformIO $
@@ -204,7 +205,7 @@ bindAudioEffectCompressor_set_attack_us
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Compressor's reaction time when the signal exceeds the threshold. Value can range from 20 to 2000. Default value: [code]20ms[/code].
+-- | Compressor's reaction time when the signal exceeds the threshold, in microseconds. Value can range from 20 to 2000.
 set_attack_us ::
                 (AudioEffectCompressor :< cls, Object :< cls) =>
                 cls -> Float -> IO ()
@@ -244,7 +245,7 @@ set_gain cls arg1
 
 {-# NOINLINE bindAudioEffectCompressor_set_mix #-}
 
--- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet). Default value: [code]1[/code].
+-- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet).
 bindAudioEffectCompressor_set_mix :: MethodBind
 bindAudioEffectCompressor_set_mix
   = unsafePerformIO $
@@ -254,7 +255,7 @@ bindAudioEffectCompressor_set_mix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet). Default value: [code]1[/code].
+-- | Balance between original signal and effect signal. Value can range from 0 (totally dry) to 1 (totally wet).
 set_mix ::
           (AudioEffectCompressor :< cls, Object :< cls) =>
           cls -> Float -> IO ()
@@ -269,7 +270,7 @@ set_mix cls arg1
 
 {-# NOINLINE bindAudioEffectCompressor_set_ratio #-}
 
--- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio the more the loud parts of the audio will be compressed. Value can range from 1 to 48. Default value: [code]4[/code].
+-- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio, the more the loud parts of the audio will be compressed. Value can range from 1 to 48.
 bindAudioEffectCompressor_set_ratio :: MethodBind
 bindAudioEffectCompressor_set_ratio
   = unsafePerformIO $
@@ -279,7 +280,7 @@ bindAudioEffectCompressor_set_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio the more the loud parts of the audio will be compressed. Value can range from 1 to 48. Default value: [code]4[/code].
+-- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio, the more the loud parts of the audio will be compressed. Value can range from 1 to 48.
 set_ratio ::
             (AudioEffectCompressor :< cls, Object :< cls) =>
             cls -> Float -> IO ()
@@ -294,7 +295,7 @@ set_ratio cls arg1
 
 {-# NOINLINE bindAudioEffectCompressor_set_release_ms #-}
 
--- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold. Value can range from 20 to 2000. Default value: [code]250ms[/code].
+-- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold, in milliseconds. Value can range from 20 to 2000.
 bindAudioEffectCompressor_set_release_ms :: MethodBind
 bindAudioEffectCompressor_set_release_ms
   = unsafePerformIO $
@@ -304,7 +305,7 @@ bindAudioEffectCompressor_set_release_ms
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold. Value can range from 20 to 2000. Default value: [code]250ms[/code].
+-- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold, in milliseconds. Value can range from 20 to 2000.
 set_release_ms ::
                  (AudioEffectCompressor :< cls, Object :< cls) =>
                  cls -> Float -> IO ()
@@ -344,7 +345,7 @@ set_sidechain cls arg1
 
 {-# NOINLINE bindAudioEffectCompressor_set_threshold #-}
 
--- | The level above which compression is applied to the audio. Value can range from -60 to 0. Default value: [code]0[/code].
+-- | The level above which compression is applied to the audio. Value can range from -60 to 0.
 bindAudioEffectCompressor_set_threshold :: MethodBind
 bindAudioEffectCompressor_set_threshold
   = unsafePerformIO $
@@ -354,7 +355,7 @@ bindAudioEffectCompressor_set_threshold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The level above which compression is applied to the audio. Value can range from -60 to 0. Default value: [code]0[/code].
+-- | The level above which compression is applied to the audio. Value can range from -60 to 0.
 set_threshold ::
                 (AudioEffectCompressor :< cls, Object :< cls) =>
                 cls -> Float -> IO ()

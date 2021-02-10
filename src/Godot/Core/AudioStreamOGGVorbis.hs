@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioStreamOGGVorbis
        (Godot.Core.AudioStreamOGGVorbis.get_data,
         Godot.Core.AudioStreamOGGVorbis.get_loop_offset,

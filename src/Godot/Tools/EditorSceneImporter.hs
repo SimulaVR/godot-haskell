@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorSceneImporter
        (Godot.Tools.EditorSceneImporter._IMPORT_MATERIALS_IN_INSTANCES,
         Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_FORCE_ALL_TRACKS_IN_ALL_CLIPS,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptLocalVarSet
        (Godot.Core.VisualScriptLocalVarSet.get_var_name,
         Godot.Core.VisualScriptLocalVarSet.get_var_type,

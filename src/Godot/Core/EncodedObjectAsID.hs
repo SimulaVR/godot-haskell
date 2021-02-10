@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.EncodedObjectAsID
        (Godot.Core.EncodedObjectAsID.get_object_id,
         Godot.Core.EncodedObjectAsID.set_object_id)

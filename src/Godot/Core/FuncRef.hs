@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.FuncRef
        (Godot.Core.FuncRef.call_func, Godot.Core.FuncRef.call_funcv,
         Godot.Core.FuncRef.is_valid, Godot.Core.FuncRef.set_function,
@@ -37,6 +38,7 @@ call_func cls varargs
 
 {-# NOINLINE bindFuncRef_call_funcv #-}
 
+-- | Calls the referenced function previously set by [method set_function] or [method @GDScript.funcref]. Contrarily to [method call_func], this method does not support a variable number of arguments but expects all parameters to be passed via a single [Array].
 bindFuncRef_call_funcv :: MethodBind
 bindFuncRef_call_funcv
   = unsafePerformIO $
@@ -46,6 +48,7 @@ bindFuncRef_call_funcv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Calls the referenced function previously set by [method set_function] or [method @GDScript.funcref]. Contrarily to [method call_func], this method does not support a variable number of arguments but expects all parameters to be passed via a single [Array].
 call_funcv ::
              (FuncRef :< cls, Object :< cls) => cls -> Array -> IO GodotVariant
 call_funcv cls arg1
@@ -57,6 +60,7 @@ call_funcv cls arg1
 
 {-# NOINLINE bindFuncRef_is_valid #-}
 
+-- | Returns whether the object still exists and has the function assigned.
 bindFuncRef_is_valid :: MethodBind
 bindFuncRef_is_valid
   = unsafePerformIO $
@@ -66,6 +70,7 @@ bindFuncRef_is_valid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns whether the object still exists and has the function assigned.
 is_valid :: (FuncRef :< cls, Object :< cls) => cls -> IO Bool
 is_valid cls
   = withVariantArray []

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.ScriptCreateDialog
        (Godot.Tools.ScriptCreateDialog.sig_script_created,
         Godot.Tools.ScriptCreateDialog._browse_class_in_tree,
@@ -28,6 +29,8 @@ sig_script_created ::
                    Godot.Internal.Dispatch.Signal ScriptCreateDialog
 sig_script_created
   = Godot.Internal.Dispatch.Signal "script_created"
+
+instance NodeSignal ScriptCreateDialog "script_created" '[Script]
 
 {-# NOINLINE bindScriptCreateDialog__browse_class_in_tree #-}
 

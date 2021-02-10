@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RayCast2D
        (Godot.Core.RayCast2D.add_exception,
         Godot.Core.RayCast2D.add_exception_rid,
@@ -104,7 +105,8 @@ clear_exceptions cls
 
 {-# NOINLINE bindRayCast2D_force_raycast_update #-}
 
--- | Updates the collision information for the ray. Use this method to update the collision information immediately instead of waiting for the next [code]_physics_process[/code] call, for example if the ray or its parent has changed state. Note: [code]enabled == true[/code] is not required for this to work.
+-- | Updates the collision information for the ray. Use this method to update the collision information immediately instead of waiting for the next [code]_physics_process[/code] call, for example if the ray or its parent has changed state.
+--   				[b]Note:[/b] [code]enabled[/code] is not required for this to work.
 bindRayCast2D_force_raycast_update :: MethodBind
 bindRayCast2D_force_raycast_update
   = unsafePerformIO $
@@ -114,7 +116,8 @@ bindRayCast2D_force_raycast_update
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Updates the collision information for the ray. Use this method to update the collision information immediately instead of waiting for the next [code]_physics_process[/code] call, for example if the ray or its parent has changed state. Note: [code]enabled == true[/code] is not required for this to work.
+-- | Updates the collision information for the ray. Use this method to update the collision information immediately instead of waiting for the next [code]_physics_process[/code] call, for example if the ray or its parent has changed state.
+--   				[b]Note:[/b] [code]enabled[/code] is not required for this to work.
 force_raycast_update ::
                        (RayCast2D :< cls, Object :< cls) => cls -> IO ()
 force_raycast_update cls
@@ -198,7 +201,7 @@ get_collider_shape cls
 
 {-# NOINLINE bindRayCast2D_get_collision_mask #-}
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindRayCast2D_get_collision_mask :: MethodBind
 bindRayCast2D_get_collision_mask
   = unsafePerformIO $
@@ -208,7 +211,7 @@ bindRayCast2D_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 get_collision_mask ::
                      (RayCast2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -270,7 +273,8 @@ get_collision_normal cls
 
 {-# NOINLINE bindRayCast2D_get_collision_point #-}
 
--- | Returns the collision point at which the ray intersects the closest object. Note: this point is in the [b]global[/b] coordinate system.
+-- | Returns the collision point at which the ray intersects the closest object.
+--   				[b]Note:[/b] this point is in the [b]global[/b] coordinate system.
 bindRayCast2D_get_collision_point :: MethodBind
 bindRayCast2D_get_collision_point
   = unsafePerformIO $
@@ -280,7 +284,8 @@ bindRayCast2D_get_collision_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the collision point at which the ray intersects the closest object. Note: this point is in the [b]global[/b] coordinate system.
+-- | Returns the collision point at which the ray intersects the closest object.
+--   				[b]Note:[/b] this point is in the [b]global[/b] coordinate system.
 get_collision_point ::
                       (RayCast2D :< cls, Object :< cls) => cls -> IO Vector2
 get_collision_point cls
@@ -294,7 +299,7 @@ get_collision_point cls
 
 {-# NOINLINE bindRayCast2D_get_exclude_parent_body #-}
 
--- | If [code]true[/code], the parent node will be excluded from collision detection. Default value: [code]true[/code].
+-- | If [code]true[/code], the parent node will be excluded from collision detection.
 bindRayCast2D_get_exclude_parent_body :: MethodBind
 bindRayCast2D_get_exclude_parent_body
   = unsafePerformIO $
@@ -304,7 +309,7 @@ bindRayCast2D_get_exclude_parent_body
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the parent node will be excluded from collision detection. Default value: [code]true[/code].
+-- | If [code]true[/code], the parent node will be excluded from collision detection.
 get_exclude_parent_body ::
                           (RayCast2D :< cls, Object :< cls) => cls -> IO Bool
 get_exclude_parent_body cls
@@ -318,7 +323,7 @@ get_exclude_parent_body cls
 
 {-# NOINLINE bindRayCast2D_is_collide_with_areas_enabled #-}
 
--- | If [code]true[/code], collision with [Area2D]s will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collision with [Area2D]s will be reported.
 bindRayCast2D_is_collide_with_areas_enabled :: MethodBind
 bindRayCast2D_is_collide_with_areas_enabled
   = unsafePerformIO $
@@ -328,7 +333,7 @@ bindRayCast2D_is_collide_with_areas_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collision with [Area2D]s will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collision with [Area2D]s will be reported.
 is_collide_with_areas_enabled ::
                                 (RayCast2D :< cls, Object :< cls) => cls -> IO Bool
 is_collide_with_areas_enabled cls
@@ -342,7 +347,7 @@ is_collide_with_areas_enabled cls
 
 {-# NOINLINE bindRayCast2D_is_collide_with_bodies_enabled #-}
 
--- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported. Default value: [code]true[/code].
+-- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported.
 bindRayCast2D_is_collide_with_bodies_enabled :: MethodBind
 bindRayCast2D_is_collide_with_bodies_enabled
   = unsafePerformIO $
@@ -352,7 +357,7 @@ bindRayCast2D_is_collide_with_bodies_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported. Default value: [code]true[/code].
+-- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported.
 is_collide_with_bodies_enabled ::
                                  (RayCast2D :< cls, Object :< cls) => cls -> IO Bool
 is_collide_with_bodies_enabled cls
@@ -388,7 +393,7 @@ is_colliding cls
 
 {-# NOINLINE bindRayCast2D_is_enabled #-}
 
--- | If [code]true[/code], collisions will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collisions will be reported.
 bindRayCast2D_is_enabled :: MethodBind
 bindRayCast2D_is_enabled
   = unsafePerformIO $
@@ -398,7 +403,7 @@ bindRayCast2D_is_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collisions will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collisions will be reported.
 is_enabled :: (RayCast2D :< cls, Object :< cls) => cls -> IO Bool
 is_enabled cls
   = withVariantArray []
@@ -479,7 +484,7 @@ set_cast_to cls arg1
 
 {-# NOINLINE bindRayCast2D_set_collide_with_areas #-}
 
--- | If [code]true[/code], collision with [Area2D]s will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collision with [Area2D]s will be reported.
 bindRayCast2D_set_collide_with_areas :: MethodBind
 bindRayCast2D_set_collide_with_areas
   = unsafePerformIO $
@@ -489,7 +494,7 @@ bindRayCast2D_set_collide_with_areas
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collision with [Area2D]s will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collision with [Area2D]s will be reported.
 set_collide_with_areas ::
                          (RayCast2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_collide_with_areas cls arg1
@@ -503,7 +508,7 @@ set_collide_with_areas cls arg1
 
 {-# NOINLINE bindRayCast2D_set_collide_with_bodies #-}
 
--- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported. Default value: [code]true[/code].
+-- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported.
 bindRayCast2D_set_collide_with_bodies :: MethodBind
 bindRayCast2D_set_collide_with_bodies
   = unsafePerformIO $
@@ -513,7 +518,7 @@ bindRayCast2D_set_collide_with_bodies
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported. Default value: [code]true[/code].
+-- | If [code]true[/code], collision with [PhysicsBody2D]s will be reported.
 set_collide_with_bodies ::
                           (RayCast2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_collide_with_bodies cls arg1
@@ -527,7 +532,7 @@ set_collide_with_bodies cls arg1
 
 {-# NOINLINE bindRayCast2D_set_collision_mask #-}
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindRayCast2D_set_collision_mask :: MethodBind
 bindRayCast2D_set_collision_mask
   = unsafePerformIO $
@@ -537,7 +542,7 @@ bindRayCast2D_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 set_collision_mask ::
                      (RayCast2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1
@@ -551,7 +556,7 @@ set_collision_mask cls arg1
 
 {-# NOINLINE bindRayCast2D_set_collision_mask_bit #-}
 
--- | Set/clear individual bits on the collision mask. This makes selecting the areas scanned easier.
+-- | Sets or clears individual bits on the collision mask. This makes selecting the areas scanned easier.
 bindRayCast2D_set_collision_mask_bit :: MethodBind
 bindRayCast2D_set_collision_mask_bit
   = unsafePerformIO $
@@ -561,7 +566,7 @@ bindRayCast2D_set_collision_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set/clear individual bits on the collision mask. This makes selecting the areas scanned easier.
+-- | Sets or clears individual bits on the collision mask. This makes selecting the areas scanned easier.
 set_collision_mask_bit ::
                          (RayCast2D :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_collision_mask_bit cls arg1 arg2
@@ -575,7 +580,7 @@ set_collision_mask_bit cls arg1 arg2
 
 {-# NOINLINE bindRayCast2D_set_enabled #-}
 
--- | If [code]true[/code], collisions will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collisions will be reported.
 bindRayCast2D_set_enabled :: MethodBind
 bindRayCast2D_set_enabled
   = unsafePerformIO $
@@ -585,7 +590,7 @@ bindRayCast2D_set_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collisions will be reported. Default value: [code]false[/code].
+-- | If [code]true[/code], collisions will be reported.
 set_enabled ::
               (RayCast2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enabled cls arg1
@@ -598,7 +603,7 @@ set_enabled cls arg1
 
 {-# NOINLINE bindRayCast2D_set_exclude_parent_body #-}
 
--- | If [code]true[/code], the parent node will be excluded from collision detection. Default value: [code]true[/code].
+-- | If [code]true[/code], the parent node will be excluded from collision detection.
 bindRayCast2D_set_exclude_parent_body :: MethodBind
 bindRayCast2D_set_exclude_parent_body
   = unsafePerformIO $
@@ -608,7 +613,7 @@ bindRayCast2D_set_exclude_parent_body
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the parent node will be excluded from collision detection. Default value: [code]true[/code].
+-- | If [code]true[/code], the parent node will be excluded from collision detection.
 set_exclude_parent_body ::
                           (RayCast2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_exclude_parent_body cls arg1

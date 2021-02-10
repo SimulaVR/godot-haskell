@@ -1,9 +1,0 @@
-[gd_resource type="NativeScript" load_steps=2 format=2]
-
-[ext_resource path="res://lib/libmyproject.gdnlib" type="GDNativeLibrary" id=1]
-
-[resource]
-resource_name = "TreeShort"
-class_name = "TreeShort"
-library = ExtResource( 1 )
-

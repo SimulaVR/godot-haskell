@@ -18,6 +18,9 @@ margin_bottom = 78.0
 custom_fonts/font = ExtResource( 2 )
 text = "0"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MessageLabel" type="Label" parent="."]
 anchor_top = 0.5
@@ -42,6 +45,9 @@ margin_bottom = -100.0
 custom_fonts/font = ExtResource( 2 )
 shortcut = SubResource( 2 )
 text = "Start"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MessageTimer" type="Timer" parent="."]
 wait_time = 2.0

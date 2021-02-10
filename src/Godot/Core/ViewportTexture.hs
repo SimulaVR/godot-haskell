@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ViewportTexture
        (Godot.Core.ViewportTexture.get_viewport_path_in_scene,
         Godot.Core.ViewportTexture.set_viewport_path_in_scene)

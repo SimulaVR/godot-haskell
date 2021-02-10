@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorResourcePreview
        (Godot.Tools.EditorResourcePreview.sig_preview_invalidated,
         Godot.Tools.EditorResourcePreview._preview_ready,
@@ -16,11 +17,14 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
--- | If a preview was invalidated (changed) this signal will emit (using the path of the preview)
+-- | Emitted if a preview was invalidated (changed). [code]path[/code] corresponds to the path of the preview.
 sig_preview_invalidated ::
                         Godot.Internal.Dispatch.Signal EditorResourcePreview
 sig_preview_invalidated
   = Godot.Internal.Dispatch.Signal "preview_invalidated"
+
+instance NodeSignal EditorResourcePreview "preview_invalidated"
+           '[GodotString]
 
 {-# NOINLINE bindEditorResourcePreview__preview_ready #-}
 
@@ -77,7 +81,7 @@ add_preview_generator cls arg1
 
 {-# NOINLINE bindEditorResourcePreview_check_for_invalidation #-}
 
--- | Check if the resource changed, if so it will be invalidated and the corresponding signal emitted.
+-- | Check if the resource changed, if so, it will be invalidated and the corresponding signal emitted.
 bindEditorResourcePreview_check_for_invalidation :: MethodBind
 bindEditorResourcePreview_check_for_invalidation
   = unsafePerformIO $
@@ -87,7 +91,7 @@ bindEditorResourcePreview_check_for_invalidation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Check if the resource changed, if so it will be invalidated and the corresponding signal emitted.
+-- | Check if the resource changed, if so, it will be invalidated and the corresponding signal emitted.
 check_for_invalidation ::
                          (EditorResourcePreview :< cls, Object :< cls) =>
                          cls -> GodotString -> IO ()
@@ -160,7 +164,7 @@ queue_resource_preview cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindEditorResourcePreview_remove_preview_generator #-}
 
--- | Remove a custom preview generator.
+-- | Removes a custom preview generator.
 bindEditorResourcePreview_remove_preview_generator :: MethodBind
 bindEditorResourcePreview_remove_preview_generator
   = unsafePerformIO $
@@ -170,7 +174,7 @@ bindEditorResourcePreview_remove_preview_generator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove a custom preview generator.
+-- | Removes a custom preview generator.
 remove_preview_generator ::
                            (EditorResourcePreview :< cls, Object :< cls) =>
                            cls -> EditorResourcePreviewGenerator -> IO ()

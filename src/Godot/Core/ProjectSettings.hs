@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ProjectSettings
        (Godot.Core.ProjectSettings.add_property_info,
         Godot.Core.ProjectSettings.clear,
@@ -26,8 +27,11 @@ import Godot.Api.Types
 
 {-# NOINLINE bindProjectSettings_add_property_info #-}
 
--- | Adds a custom property info to a property. The dictionary must contain: name:[String](the property's name) and type:[int](see TYPE_* in [@GlobalScope]), and optionally hint:[int](see PROPERTY_HINT_* in [@GlobalScope]), hint_string:[String].
---   				Example:
+-- | Adds a custom property info to a property. The dictionary must contain:
+--   				- [code]name[/code]: [String] (the property's name)
+--   				- [code]type[/code]: [int] (see [enum Variant.Type])
+--   				- optionally [code]hint[/code]: [int] (see [enum PropertyHint]) and [code]hint_string[/code]: [String]
+--   				[b]Example:[/b]
 --   				[codeblock]
 --   				ProjectSettings.set("category/property_name", 0)
 --   
@@ -49,8 +53,11 @@ bindProjectSettings_add_property_info
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a custom property info to a property. The dictionary must contain: name:[String](the property's name) and type:[int](see TYPE_* in [@GlobalScope]), and optionally hint:[int](see PROPERTY_HINT_* in [@GlobalScope]), hint_string:[String].
---   				Example:
+-- | Adds a custom property info to a property. The dictionary must contain:
+--   				- [code]name[/code]: [String] (the property's name)
+--   				- [code]type[/code]: [int] (see [enum Variant.Type])
+--   				- optionally [code]hint[/code]: [int] (see [enum PropertyHint]) and [code]hint_string[/code]: [String]
+--   				[b]Example:[/b]
 --   				[codeblock]
 --   				ProjectSettings.set("category/property_name", 0)
 --   
@@ -125,6 +132,11 @@ get_order cls arg1
 
 {-# NOINLINE bindProjectSettings_get_setting #-}
 
+-- | Returns the value of a setting.
+--   				[b]Example:[/b]
+--   				[codeblock]
+--   				print(ProjectSettings.get_setting("application/config/name"))
+--   				[/codeblock]
 bindProjectSettings_get_setting :: MethodBind
 bindProjectSettings_get_setting
   = unsafePerformIO $
@@ -134,6 +146,11 @@ bindProjectSettings_get_setting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the value of a setting.
+--   				[b]Example:[/b]
+--   				[codeblock]
+--   				print(ProjectSettings.get_setting("application/config/name"))
+--   				[/codeblock]
 get_setting ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO GodotVariant
@@ -197,7 +214,7 @@ has_setting cls arg1
 {-# NOINLINE bindProjectSettings_load_resource_pack #-}
 
 -- | Loads the contents of the .pck or .zip file specified by [code]pack[/code] into the resource filesystem ([code]res://[/code]). Returns [code]true[/code] on success.
---   				Note: If a file from [code]pack[/code] shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from [code]pack[/code].
+--   				[b]Note:[/b] If a file from [code]pack[/code] shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from [code]pack[/code] unless [code]replace_files[/code] is set to [code]false[/code].
 bindProjectSettings_load_resource_pack :: MethodBind
 bindProjectSettings_load_resource_pack
   = unsafePerformIO $
@@ -208,7 +225,7 @@ bindProjectSettings_load_resource_pack
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Loads the contents of the .pck or .zip file specified by [code]pack[/code] into the resource filesystem ([code]res://[/code]). Returns [code]true[/code] on success.
---   				Note: If a file from [code]pack[/code] shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from [code]pack[/code].
+--   				[b]Note:[/b] If a file from [code]pack[/code] shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from [code]pack[/code] unless [code]replace_files[/code] is set to [code]false[/code].
 load_resource_pack ::
                      (ProjectSettings :< cls, Object :< cls) =>
                      cls -> GodotString -> Bool -> IO Bool
@@ -319,7 +336,7 @@ save cls
 
 {-# NOINLINE bindProjectSettings_save_custom #-}
 
--- | Saves the configuration to a custom file.
+-- | Saves the configuration to a custom file. The file extension must be [code].godot[/code] (to save in text-based [ConfigFile] format) or [code].binary[/code] (to save in binary format).
 bindProjectSettings_save_custom :: MethodBind
 bindProjectSettings_save_custom
   = unsafePerformIO $
@@ -329,7 +346,7 @@ bindProjectSettings_save_custom
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the configuration to a custom file.
+-- | Saves the configuration to a custom file. The file extension must be [code].godot[/code] (to save in text-based [ConfigFile] format) or [code].binary[/code] (to save in binary format).
 save_custom ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO Int
@@ -343,6 +360,7 @@ save_custom cls arg1
 
 {-# NOINLINE bindProjectSettings_set_initial_value #-}
 
+-- | Sets the specified property's initial value. This is the value the property reverts to.
 bindProjectSettings_set_initial_value :: MethodBind
 bindProjectSettings_set_initial_value
   = unsafePerformIO $
@@ -352,6 +370,7 @@ bindProjectSettings_set_initial_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the specified property's initial value. This is the value the property reverts to.
 set_initial_value ::
                     (ProjectSettings :< cls, Object :< cls) =>
                     cls -> GodotString -> GodotVariant -> IO ()
@@ -390,6 +409,11 @@ set_order cls arg1 arg2
 
 {-# NOINLINE bindProjectSettings_set_setting #-}
 
+-- | Sets the value of a setting.
+--   				[b]Example:[/b]
+--   				[codeblock]
+--   				ProjectSettings.set_setting("application/config/name", "Example")
+--   				[/codeblock]
 bindProjectSettings_set_setting :: MethodBind
 bindProjectSettings_set_setting
   = unsafePerformIO $
@@ -399,6 +423,11 @@ bindProjectSettings_set_setting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the value of a setting.
+--   				[b]Example:[/b]
+--   				[codeblock]
+--   				ProjectSettings.set_setting("application/config/name", "Example")
+--   				[/codeblock]
 set_setting ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> GodotVariant -> IO ()

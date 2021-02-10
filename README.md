@@ -4,40 +4,71 @@
 
 Haskell bindings for the Godot game engine.
 
-* Low-level stuff (GDNative) resides in Godot.Gdnative
-* Nativescript stuff (binding classes/methods/etc) is in Godot.Nativescript
-* High-level stuff (classes generated from the API description) is in Godot.Api
-* To access methods import modules from Godot.Core.
+* Low-level (GDNative) in Godot.Gdnative
+* Nativescript (binding classes/methods/etc) in Godot.Nativescript
+* High-level (classes generated from the API ) in Godot.Api
+* Access methods through Godot.Core
 
 ## Getting started (demo game)
 
 The easiest way to get started is to have a look at the demo game included in
-the 'demo' directory. This is "Dodge the Creeps!", your first game
-from the [Godot
+the [demo](https://github.com/SimulaVR/godot-haskell/tree/master/demo)
+directory. This is "Dodge the Creeps!", your first game from the [Godot
 documentation](https://docs.godotengine.org/en/3.1/getting_started/step_by_step/your_first_game.html). Following
 along with the documentation and the code should make everything understandable.
 
-Higher-level bindings are found in Godot.Nativescript. These include many
-convenience functions for defining Godot objects, declaring their properties,
-and dealing with signals and async code.
+To build:
+```bash
+git clone --recursive https://github.com/SimulaVR/godot-haskell
+cd godot-haskell/demo
+make
+```
 
-Run the demo by doing a `make stack` then loading the demo into the Godot editor
-with `godot game/project.godot`. To run it in the editor press F5, stop with
-F8.
+To make changes to the game, in two different terminals:
+```bash
+make stack-watch
+make project-watch
+```
+
+The first command will constantly build Haskell code and copy the shared library
+into the Godot project, demo. The second command will constantly scan the Godot
+project and build Haskell code out of it.
+
+Load up the game by importing `game/project.godot` into the editor, which you
+can do from the commandline with `godot game/project.godot`. To run the game in
+the editor press F5, stop it with F8.
+
+### Understanding the demo game
+
+There are two parts of the demo. `demo/game` which is the Godot project and
+`demo/src` which are the Haskell sources. When you run `cd demo && make stack`
+to build the demo, it builds the project locally with `stack build` and then
+does a `cp` to copy the resulting shared library into the right place in
+`demo/game`. This way Godot will pick it up. If you just do a `stack build`
+without copying, your shared library will never update and Godot will run the
+old code.
+
+You must regenerate `demo/src/Project` any time you modify the Godot
+project. This directory contains the Godot project mirrored into Haskell, just
+like @Servant@ provides you with API safety by declaring APIs in Haskell. When
+you change the name of a node in Godot, this will update a Haskell class
+instance, which will lead to a type error in your project. You can do this with
+`stack exec godot-haskell-parse-game game src` which will watch your project for
+changes.
 
 ## Known issues & inconveniences
 
 * Script variables only appear in the editor when you reload it.
-* You have to register each class in 'exports'.
-* No type safety around signals or node paths; can still reference missing ones.
-* No type safety for call_deferred.
+* No type safety around signal arguments.
+* No type safety for call and call_deferred.
+* Quite a bit of boilerplate for every new class, we're slowly automating it.
 * Every time you add a new node which needs a native script you need to manually
   select the library. It's tedious right now. This is the procedure for adding a
   new node backed by Haskell code: create the node, right click it, attach a
   script, select nativescript, the script will open in the editor, in the
   inspector find the Library subheading under NativeScript, click [empty], pick
   Load, the file picker will open, open lib, and select libmyproject.dnlib or
-  whatever you've renamed the library to. That's it. Don't edit the emppty file
+  whatever you've renamed the library to. That's it. Don't edit the empty file
   that's been opened. Now in Haskell, you can create a class with the same name
   as the Godot one and that inherits from the same type. See the demo. There is
   a ticket in Godot to automate this process :(

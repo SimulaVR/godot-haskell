@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RigidBody2D
        (Godot.Core.RigidBody2D._MODE_STATIC,
         Godot.Core.RigidBody2D._CCD_MODE_DISABLED,
@@ -96,30 +97,43 @@ _MODE_RIGID = 0
 _MODE_CHARACTER :: Int
 _MODE_CHARACTER = 2
 
--- | Emitted when a body enters into contact with this one. [member contact_monitor] must be [code]true[/code] and [member contacts_reported] greater than [code]0[/code].
+-- | Emitted when a body enters into contact with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
 sig_body_entered :: Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_entered = Godot.Internal.Dispatch.Signal "body_entered"
 
--- | Emitted when a body exits contact with this one. [member contact_monitor] must be [code]true[/code] and [member contacts_reported] greater than [code]0[/code].
+instance NodeSignal RigidBody2D "body_entered" '[Node]
+
+-- | Emitted when a body exits contact with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
 sig_body_exited :: Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_exited = Godot.Internal.Dispatch.Signal "body_exited"
 
--- | Emitted when a body enters into contact with this one. Reports colliding shape information. See [CollisionObject2D] for shape index information. [member contact_monitor] must be [code]true[/code] and [member contacts_reported] greater than [code]0[/code].
+instance NodeSignal RigidBody2D "body_exited" '[Node]
+
+-- | Emitted when a body enters into contact with this one. Reports colliding shape information. See [CollisionObject2D] for shape index information. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
 sig_body_shape_entered ::
                        Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_shape_entered
   = Godot.Internal.Dispatch.Signal "body_shape_entered"
 
--- | Emitted when a body shape exits contact with this one. Reports colliding shape information. See [CollisionObject2D] for shape index information. [member contact_monitor] must be [code]true[/code] and [member contacts_reported] greater than [code]0[/code].
+instance NodeSignal RigidBody2D "body_shape_entered"
+           '[Int, Node, Int, Int]
+
+-- | Emitted when a body shape exits contact with this one. Reports colliding shape information. See [CollisionObject2D] for shape index information. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
 sig_body_shape_exited :: Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_shape_exited
   = Godot.Internal.Dispatch.Signal "body_shape_exited"
 
--- | Emitted when [member sleeping] changes.
+instance NodeSignal RigidBody2D "body_shape_exited"
+           '[Int, Node, Int, Int]
+
+-- | Emitted when the physics engine changes the body's sleeping state.
+--   				[b]Note:[/b] Changing the value [member sleeping] will not trigger this signal. It is only emitted if the sleeping state is changed by the physics engine or [code]emit_signal("sleeping_state_changed")[/code] is used.
 sig_sleeping_state_changed ::
                            Godot.Internal.Dispatch.Signal RigidBody2D
 sig_sleeping_state_changed
   = Godot.Internal.Dispatch.Signal "sleeping_state_changed"
+
+instance NodeSignal RigidBody2D "sleeping_state_changed" '[]
 
 {-# NOINLINE bindRigidBody2D__body_enter_tree #-}
 
@@ -331,7 +345,7 @@ apply_central_impulse cls arg1
 
 {-# NOINLINE bindRigidBody2D_apply_impulse #-}
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The position uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time-independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 bindRigidBody2D_apply_impulse :: MethodBind
 bindRigidBody2D_apply_impulse
   = unsafePerformIO $
@@ -341,7 +355,7 @@ bindRigidBody2D_apply_impulse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The position uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time-independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 apply_impulse ::
                 (RigidBody2D :< cls, Object :< cls) =>
                 cls -> Vector2 -> Vector2 -> IO ()
@@ -379,7 +393,7 @@ apply_torque_impulse cls arg1
 
 {-# NOINLINE bindRigidBody2D_get_angular_damp #-}
 
--- | Damps the body's [member angular_velocity]. If [code]-1[/code] the body will use the "Default Angular Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member angular_velocity]. If [code]-1[/code], the body will use the [b]Default Angular Damp[/b] defined in [b]Project > Project Settings > Physics > 2d[/b].
 bindRigidBody2D_get_angular_damp :: MethodBind
 bindRigidBody2D_get_angular_damp
   = unsafePerformIO $
@@ -389,7 +403,7 @@ bindRigidBody2D_get_angular_damp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Damps the body's [member angular_velocity]. If [code]-1[/code] the body will use the "Default Angular Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member angular_velocity]. If [code]-1[/code], the body will use the [b]Default Angular Damp[/b] defined in [b]Project > Project Settings > Physics > 2d[/b].
 get_angular_damp ::
                    (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_angular_damp cls
@@ -475,7 +489,8 @@ get_applied_torque cls
 
 {-# NOINLINE bindRigidBody2D_get_bounce #-}
 
--- | The body's bounciness. Default value: [code]0[/code].
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 bindRigidBody2D_get_bounce :: MethodBind
 bindRigidBody2D_get_bounce
   = unsafePerformIO $
@@ -485,7 +500,8 @@ bindRigidBody2D_get_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's bounciness. Default value: [code]0[/code].
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 get_bounce ::
              (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_bounce cls
@@ -498,7 +514,8 @@ get_bounce cls
 
 {-# NOINLINE bindRigidBody2D_get_colliding_bodies #-}
 
--- | Returns a list of the bodies colliding with this one. Use [member contacts_reported] to set the maximum number reported. You must also set [member contact_monitor] to [code]true[/code]. Note that the result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
+-- | Returns a list of the bodies colliding with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
 bindRigidBody2D_get_colliding_bodies :: MethodBind
 bindRigidBody2D_get_colliding_bodies
   = unsafePerformIO $
@@ -508,7 +525,8 @@ bindRigidBody2D_get_colliding_bodies
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a list of the bodies colliding with this one. Use [member contacts_reported] to set the maximum number reported. You must also set [member contact_monitor] to [code]true[/code]. Note that the result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
+-- | Returns a list of the bodies colliding with this one. Requires [member contact_monitor] to be set to [code]true[/code] and [member contacts_reported] to be set high enough to detect all the collisions.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
 get_colliding_bodies ::
                        (RigidBody2D :< cls, Object :< cls) => cls -> IO Array
 get_colliding_bodies cls
@@ -523,7 +541,7 @@ get_colliding_bodies cls
 {-# NOINLINE bindRigidBody2D_get_continuous_collision_detection_mode
              #-}
 
--- | Continuous collision detection mode. Default value: [constant CCD_MODE_DISABLED].
+-- | Continuous collision detection mode.
 --   			Continuous collision detection tries to predict where a moving body will collide instead of moving it and correcting its movement after collision. Continuous collision detection is slower, but more precise and misses fewer collisions with small, fast-moving objects. Raycasting and shapecasting methods are available. See [enum CCDMode] for details.
 bindRigidBody2D_get_continuous_collision_detection_mode ::
                                                         MethodBind
@@ -535,7 +553,7 @@ bindRigidBody2D_get_continuous_collision_detection_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Continuous collision detection mode. Default value: [constant CCD_MODE_DISABLED].
+-- | Continuous collision detection mode.
 --   			Continuous collision detection tries to predict where a moving body will collide instead of moving it and correcting its movement after collision. Continuous collision detection is slower, but more precise and misses fewer collisions with small, fast-moving objects. Raycasting and shapecasting methods are available. See [enum CCDMode] for details.
 get_continuous_collision_detection_mode ::
                                           (RigidBody2D :< cls, Object :< cls) => cls -> IO Int
@@ -551,7 +569,8 @@ get_continuous_collision_detection_mode cls
 
 {-# NOINLINE bindRigidBody2D_get_friction #-}
 
--- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction). Default value: [code]1[/code].
+-- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 bindRigidBody2D_get_friction :: MethodBind
 bindRigidBody2D_get_friction
   = unsafePerformIO $
@@ -561,7 +580,8 @@ bindRigidBody2D_get_friction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction). Default value: [code]1[/code].
+-- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 get_friction ::
                (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_friction cls
@@ -574,7 +594,7 @@ get_friction cls
 
 {-# NOINLINE bindRigidBody2D_get_gravity_scale #-}
 
--- | Multiplies the gravity applied to the body. The body's gravity is calculated from the "Default Gravity" value in "Project > Project Settings > Physics > 2d" and/or any additional gravity vector applied by [Area2D]s. Default value: [code]1[/code].
+-- | Multiplies the gravity applied to the body. The body's gravity is calculated from the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b] and/or any additional gravity vector applied by [Area2D]s.
 bindRigidBody2D_get_gravity_scale :: MethodBind
 bindRigidBody2D_get_gravity_scale
   = unsafePerformIO $
@@ -584,7 +604,7 @@ bindRigidBody2D_get_gravity_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies the gravity applied to the body. The body's gravity is calculated from the "Default Gravity" value in "Project > Project Settings > Physics > 2d" and/or any additional gravity vector applied by [Area2D]s. Default value: [code]1[/code].
+-- | Multiplies the gravity applied to the body. The body's gravity is calculated from the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b] and/or any additional gravity vector applied by [Area2D]s.
 get_gravity_scale ::
                     (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_gravity_scale cls
@@ -598,7 +618,7 @@ get_gravity_scale cls
 
 {-# NOINLINE bindRigidBody2D_get_inertia #-}
 
--- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 (or negative) inertia to return to automatically computing it.
+-- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 inertia to return to automatically computing it.
 bindRigidBody2D_get_inertia :: MethodBind
 bindRigidBody2D_get_inertia
   = unsafePerformIO $
@@ -608,7 +628,7 @@ bindRigidBody2D_get_inertia
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 (or negative) inertia to return to automatically computing it.
+-- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 inertia to return to automatically computing it.
 get_inertia ::
               (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_inertia cls
@@ -621,7 +641,7 @@ get_inertia cls
 
 {-# NOINLINE bindRigidBody2D_get_linear_damp #-}
 
--- | Damps the body's [member linear_velocity]. If [code]-1[/code] the body will use the "Default Linear Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member linear_velocity]. If [code]-1[/code], the body will use the [b]Default Linear Damp[/b] in [b]Project > Project Settings > Physics > 2d[/b].
 bindRigidBody2D_get_linear_damp :: MethodBind
 bindRigidBody2D_get_linear_damp
   = unsafePerformIO $
@@ -631,7 +651,7 @@ bindRigidBody2D_get_linear_damp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Damps the body's [member linear_velocity]. If [code]-1[/code] the body will use the "Default Linear Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member linear_velocity]. If [code]-1[/code], the body will use the [b]Default Linear Damp[/b] in [b]Project > Project Settings > Physics > 2d[/b].
 get_linear_damp ::
                   (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_linear_damp cls
@@ -668,7 +688,7 @@ get_linear_velocity cls
 
 {-# NOINLINE bindRigidBody2D_get_mass #-}
 
--- | The body's mass. Default value: [code]1[/code].
+-- | The body's mass.
 bindRigidBody2D_get_mass :: MethodBind
 bindRigidBody2D_get_mass
   = unsafePerformIO $
@@ -678,7 +698,7 @@ bindRigidBody2D_get_mass
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's mass. Default value: [code]1[/code].
+-- | The body's mass.
 get_mass :: (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_mass cls
   = withVariantArray []
@@ -689,7 +709,8 @@ get_mass cls
 
 {-# NOINLINE bindRigidBody2D_get_max_contacts_reported #-}
 
--- | The maximum number of contacts to report. Default value: [code]0[/code].
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 bindRigidBody2D_get_max_contacts_reported :: MethodBind
 bindRigidBody2D_get_max_contacts_reported
   = unsafePerformIO $
@@ -699,7 +720,8 @@ bindRigidBody2D_get_max_contacts_reported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum number of contacts to report. Default value: [code]0[/code].
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 get_max_contacts_reported ::
                             (RigidBody2D :< cls, Object :< cls) => cls -> IO Int
 get_max_contacts_reported cls
@@ -713,7 +735,7 @@ get_max_contacts_reported cls
 
 {-# NOINLINE bindRigidBody2D_get_mode #-}
 
--- | The body's mode. See [code]MODE_*[/code] constants. Default value: [constant MODE_RIGID].
+-- | The body's mode. See [enum Mode] for possible values.
 bindRigidBody2D_get_mode :: MethodBind
 bindRigidBody2D_get_mode
   = unsafePerformIO $
@@ -723,7 +745,7 @@ bindRigidBody2D_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's mode. See [code]MODE_*[/code] constants. Default value: [constant MODE_RIGID].
+-- | The body's mode. See [enum Mode] for possible values.
 get_mode :: (RigidBody2D :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
@@ -734,6 +756,8 @@ get_mode cls
 
 {-# NOINLINE bindRigidBody2D_get_physics_material_override #-}
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 bindRigidBody2D_get_physics_material_override :: MethodBind
 bindRigidBody2D_get_physics_material_override
   = unsafePerformIO $
@@ -743,6 +767,8 @@ bindRigidBody2D_get_physics_material_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 get_physics_material_override ::
                                 (RigidBody2D :< cls, Object :< cls) => cls -> IO PhysicsMaterial
 get_physics_material_override cls
@@ -757,7 +783,7 @@ get_physics_material_override cls
 
 {-# NOINLINE bindRigidBody2D_get_weight #-}
 
--- | The body's weight based on its mass and the "Default Gravity" value in "Project > Project Settings > Physics > 2d".
+-- | The body's weight based on its mass and the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b].
 bindRigidBody2D_get_weight :: MethodBind
 bindRigidBody2D_get_weight
   = unsafePerformIO $
@@ -767,7 +793,7 @@ bindRigidBody2D_get_weight
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's weight based on its mass and the "Default Gravity" value in "Project > Project Settings > Physics > 2d".
+-- | The body's weight based on its mass and the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b].
 get_weight ::
              (RigidBody2D :< cls, Object :< cls) => cls -> IO Float
 get_weight cls
@@ -780,7 +806,8 @@ get_weight cls
 
 {-# NOINLINE bindRigidBody2D_is_able_to_sleep #-}
 
--- | If [code]true[/code], the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using [method apply_impulse] or [method add_force]. Default value: [code]true[/code].
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody2D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 bindRigidBody2D_is_able_to_sleep :: MethodBind
 bindRigidBody2D_is_able_to_sleep
   = unsafePerformIO $
@@ -790,7 +817,8 @@ bindRigidBody2D_is_able_to_sleep
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using [method apply_impulse] or [method add_force]. Default value: [code]true[/code].
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody2D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 is_able_to_sleep ::
                    (RigidBody2D :< cls, Object :< cls) => cls -> IO Bool
 is_able_to_sleep cls
@@ -804,7 +832,7 @@ is_able_to_sleep cls
 
 {-# NOINLINE bindRigidBody2D_is_contact_monitor_enabled #-}
 
--- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported]. Default value: [code]false[/code].
+-- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported].
 bindRigidBody2D_is_contact_monitor_enabled :: MethodBind
 bindRigidBody2D_is_contact_monitor_enabled
   = unsafePerformIO $
@@ -814,7 +842,7 @@ bindRigidBody2D_is_contact_monitor_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported]. Default value: [code]false[/code].
+-- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported].
 is_contact_monitor_enabled ::
                              (RigidBody2D :< cls, Object :< cls) => cls -> IO Bool
 is_contact_monitor_enabled cls
@@ -828,7 +856,7 @@ is_contact_monitor_enabled cls
 
 {-# NOINLINE bindRigidBody2D_is_sleeping #-}
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or by using [method apply_impulse] or [method add_force].
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 bindRigidBody2D_is_sleeping :: MethodBind
 bindRigidBody2D_is_sleeping
   = unsafePerformIO $
@@ -838,7 +866,7 @@ bindRigidBody2D_is_sleeping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or by using [method apply_impulse] or [method add_force].
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 is_sleeping ::
               (RigidBody2D :< cls, Object :< cls) => cls -> IO Bool
 is_sleeping cls
@@ -875,7 +903,7 @@ is_using_custom_integrator cls
 
 {-# NOINLINE bindRigidBody2D_set_angular_damp #-}
 
--- | Damps the body's [member angular_velocity]. If [code]-1[/code] the body will use the "Default Angular Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member angular_velocity]. If [code]-1[/code], the body will use the [b]Default Angular Damp[/b] defined in [b]Project > Project Settings > Physics > 2d[/b].
 bindRigidBody2D_set_angular_damp :: MethodBind
 bindRigidBody2D_set_angular_damp
   = unsafePerformIO $
@@ -885,7 +913,7 @@ bindRigidBody2D_set_angular_damp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Damps the body's [member angular_velocity]. If [code]-1[/code] the body will use the "Default Angular Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member angular_velocity]. If [code]-1[/code], the body will use the [b]Default Angular Damp[/b] defined in [b]Project > Project Settings > Physics > 2d[/b].
 set_angular_damp ::
                    (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_angular_damp cls arg1
@@ -995,7 +1023,8 @@ set_axis_velocity cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_bounce #-}
 
--- | The body's bounciness. Default value: [code]0[/code].
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 bindRigidBody2D_set_bounce :: MethodBind
 bindRigidBody2D_set_bounce
   = unsafePerformIO $
@@ -1005,7 +1034,8 @@ bindRigidBody2D_set_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's bounciness. Default value: [code]0[/code].
+-- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
+--   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
 set_bounce ::
              (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bounce cls arg1
@@ -1018,7 +1048,8 @@ set_bounce cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_can_sleep #-}
 
--- | If [code]true[/code], the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using [method apply_impulse] or [method add_force]. Default value: [code]true[/code].
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody2D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 bindRigidBody2D_set_can_sleep :: MethodBind
 bindRigidBody2D_set_can_sleep
   = unsafePerformIO $
@@ -1028,7 +1059,8 @@ bindRigidBody2D_set_can_sleep
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using [method apply_impulse] or [method add_force]. Default value: [code]true[/code].
+-- | If [code]true[/code], the body can enter sleep mode when there is no movement. See [member sleeping].
+--   			[b]Note:[/b] A RigidBody2D will never enter sleep mode automatically if its [member mode] is [constant MODE_CHARACTER]. It can still be put to sleep manually by setting its [member sleeping] property to [code]true[/code].
 set_can_sleep ::
                 (RigidBody2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_can_sleep cls arg1
@@ -1041,7 +1073,7 @@ set_can_sleep cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_contact_monitor #-}
 
--- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported]. Default value: [code]false[/code].
+-- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported].
 bindRigidBody2D_set_contact_monitor :: MethodBind
 bindRigidBody2D_set_contact_monitor
   = unsafePerformIO $
@@ -1051,7 +1083,7 @@ bindRigidBody2D_set_contact_monitor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported]. Default value: [code]false[/code].
+-- | If [code]true[/code], the body will emit signals when it collides with another RigidBody2D. See also [member contacts_reported].
 set_contact_monitor ::
                       (RigidBody2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_contact_monitor cls arg1
@@ -1066,7 +1098,7 @@ set_contact_monitor cls arg1
 {-# NOINLINE bindRigidBody2D_set_continuous_collision_detection_mode
              #-}
 
--- | Continuous collision detection mode. Default value: [constant CCD_MODE_DISABLED].
+-- | Continuous collision detection mode.
 --   			Continuous collision detection tries to predict where a moving body will collide instead of moving it and correcting its movement after collision. Continuous collision detection is slower, but more precise and misses fewer collisions with small, fast-moving objects. Raycasting and shapecasting methods are available. See [enum CCDMode] for details.
 bindRigidBody2D_set_continuous_collision_detection_mode ::
                                                         MethodBind
@@ -1078,7 +1110,7 @@ bindRigidBody2D_set_continuous_collision_detection_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Continuous collision detection mode. Default value: [constant CCD_MODE_DISABLED].
+-- | Continuous collision detection mode.
 --   			Continuous collision detection tries to predict where a moving body will collide instead of moving it and correcting its movement after collision. Continuous collision detection is slower, but more precise and misses fewer collisions with small, fast-moving objects. Raycasting and shapecasting methods are available. See [enum CCDMode] for details.
 set_continuous_collision_detection_mode ::
                                           (RigidBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
@@ -1094,7 +1126,8 @@ set_continuous_collision_detection_mode cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_friction #-}
 
--- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction). Default value: [code]1[/code].
+-- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 bindRigidBody2D_set_friction :: MethodBind
 bindRigidBody2D_set_friction
   = unsafePerformIO $
@@ -1104,7 +1137,8 @@ bindRigidBody2D_set_friction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction). Default value: [code]1[/code].
+-- | The body's friction. Values range from [code]0[/code] (frictionless) to [code]1[/code] (maximum friction).
+--   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
 set_friction ::
                (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_friction cls arg1
@@ -1117,7 +1151,7 @@ set_friction cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_gravity_scale #-}
 
--- | Multiplies the gravity applied to the body. The body's gravity is calculated from the "Default Gravity" value in "Project > Project Settings > Physics > 2d" and/or any additional gravity vector applied by [Area2D]s. Default value: [code]1[/code].
+-- | Multiplies the gravity applied to the body. The body's gravity is calculated from the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b] and/or any additional gravity vector applied by [Area2D]s.
 bindRigidBody2D_set_gravity_scale :: MethodBind
 bindRigidBody2D_set_gravity_scale
   = unsafePerformIO $
@@ -1127,7 +1161,7 @@ bindRigidBody2D_set_gravity_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies the gravity applied to the body. The body's gravity is calculated from the "Default Gravity" value in "Project > Project Settings > Physics > 2d" and/or any additional gravity vector applied by [Area2D]s. Default value: [code]1[/code].
+-- | Multiplies the gravity applied to the body. The body's gravity is calculated from the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b] and/or any additional gravity vector applied by [Area2D]s.
 set_gravity_scale ::
                     (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_gravity_scale cls arg1
@@ -1141,7 +1175,7 @@ set_gravity_scale cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_inertia #-}
 
--- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 (or negative) inertia to return to automatically computing it.
+-- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 inertia to return to automatically computing it.
 bindRigidBody2D_set_inertia :: MethodBind
 bindRigidBody2D_set_inertia
   = unsafePerformIO $
@@ -1151,7 +1185,7 @@ bindRigidBody2D_set_inertia
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 (or negative) inertia to return to automatically computing it.
+-- | The body's moment of inertia. This is like mass, but for rotation: it determines how much torque it takes to rotate the body. The moment of inertia is usually computed automatically from the mass and the shapes, but this function allows you to set a custom value. Set 0 inertia to return to automatically computing it.
 set_inertia ::
               (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_inertia cls arg1
@@ -1164,7 +1198,7 @@ set_inertia cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_linear_damp #-}
 
--- | Damps the body's [member linear_velocity]. If [code]-1[/code] the body will use the "Default Linear Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member linear_velocity]. If [code]-1[/code], the body will use the [b]Default Linear Damp[/b] in [b]Project > Project Settings > Physics > 2d[/b].
 bindRigidBody2D_set_linear_damp :: MethodBind
 bindRigidBody2D_set_linear_damp
   = unsafePerformIO $
@@ -1174,7 +1208,7 @@ bindRigidBody2D_set_linear_damp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Damps the body's [member linear_velocity]. If [code]-1[/code] the body will use the "Default Linear Damp" in "Project > Project Settings > Physics > 2d". Default value: [code]-1[/code].
+-- | Damps the body's [member linear_velocity]. If [code]-1[/code], the body will use the [b]Default Linear Damp[/b] in [b]Project > Project Settings > Physics > 2d[/b].
 set_linear_damp ::
                   (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_linear_damp cls arg1
@@ -1211,7 +1245,7 @@ set_linear_velocity cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_mass #-}
 
--- | The body's mass. Default value: [code]1[/code].
+-- | The body's mass.
 bindRigidBody2D_set_mass :: MethodBind
 bindRigidBody2D_set_mass
   = unsafePerformIO $
@@ -1221,7 +1255,7 @@ bindRigidBody2D_set_mass
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's mass. Default value: [code]1[/code].
+-- | The body's mass.
 set_mass ::
            (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_mass cls arg1
@@ -1233,7 +1267,8 @@ set_mass cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_max_contacts_reported #-}
 
--- | The maximum number of contacts to report. Default value: [code]0[/code].
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 bindRigidBody2D_set_max_contacts_reported :: MethodBind
 bindRigidBody2D_set_max_contacts_reported
   = unsafePerformIO $
@@ -1243,7 +1278,8 @@ bindRigidBody2D_set_max_contacts_reported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum number of contacts to report. Default value: [code]0[/code].
+-- | The maximum number of contacts that will be recorded. Requires [member contact_monitor] to be set to [code]true[/code].
+--   			[b]Note:[/b] The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
 set_max_contacts_reported ::
                             (RigidBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_contacts_reported cls arg1
@@ -1257,7 +1293,7 @@ set_max_contacts_reported cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_mode #-}
 
--- | The body's mode. See [code]MODE_*[/code] constants. Default value: [constant MODE_RIGID].
+-- | The body's mode. See [enum Mode] for possible values.
 bindRigidBody2D_set_mode :: MethodBind
 bindRigidBody2D_set_mode
   = unsafePerformIO $
@@ -1267,7 +1303,7 @@ bindRigidBody2D_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's mode. See [code]MODE_*[/code] constants. Default value: [constant MODE_RIGID].
+-- | The body's mode. See [enum Mode] for possible values.
 set_mode ::
            (RigidBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
@@ -1279,6 +1315,8 @@ set_mode cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_physics_material_override #-}
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 bindRigidBody2D_set_physics_material_override :: MethodBind
 bindRigidBody2D_set_physics_material_override
   = unsafePerformIO $
@@ -1288,6 +1326,8 @@ bindRigidBody2D_set_physics_material_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The physics material override for the body.
+--   			If a material is assigned to this property, it will be used instead of any other physics material, such as an inherited one.
 set_physics_material_override ::
                                 (RigidBody2D :< cls, Object :< cls) =>
                                 cls -> PhysicsMaterial -> IO ()
@@ -1303,7 +1343,7 @@ set_physics_material_override cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_sleeping #-}
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or by using [method apply_impulse] or [method add_force].
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 bindRigidBody2D_set_sleeping :: MethodBind
 bindRigidBody2D_set_sleeping
   = unsafePerformIO $
@@ -1313,7 +1353,7 @@ bindRigidBody2D_set_sleeping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body is sleeping and will not calculate forces until woken up by a collision or by using [method apply_impulse] or [method add_force].
+-- | If [code]true[/code], the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the [method apply_impulse] or [method add_force] methods.
 set_sleeping ::
                (RigidBody2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_sleeping cls arg1
@@ -1350,7 +1390,7 @@ set_use_custom_integrator cls arg1
 
 {-# NOINLINE bindRigidBody2D_set_weight #-}
 
--- | The body's weight based on its mass and the "Default Gravity" value in "Project > Project Settings > Physics > 2d".
+-- | The body's weight based on its mass and the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b].
 bindRigidBody2D_set_weight :: MethodBind
 bindRigidBody2D_set_weight
   = unsafePerformIO $
@@ -1360,7 +1400,7 @@ bindRigidBody2D_set_weight
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's weight based on its mass and the "Default Gravity" value in "Project > Project Settings > Physics > 2d".
+-- | The body's weight based on its mass and the [b]Default Gravity[/b] value in [b]Project > Project Settings > Physics > 2d[/b].
 set_weight ::
              (RigidBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_weight cls arg1

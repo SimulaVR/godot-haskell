@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Sprite
        (Godot.Core.Sprite.sig_frame_changed,
         Godot.Core.Sprite.sig_texture_changed,
@@ -32,10 +33,14 @@ import Godot.Api.Types
 sig_frame_changed :: Godot.Internal.Dispatch.Signal Sprite
 sig_frame_changed = Godot.Internal.Dispatch.Signal "frame_changed"
 
+instance NodeSignal Sprite "frame_changed" '[]
+
 -- | Emitted when the [member texture] changes.
 sig_texture_changed :: Godot.Internal.Dispatch.Signal Sprite
 sig_texture_changed
   = Godot.Internal.Dispatch.Signal "texture_changed"
+
+instance NodeSignal Sprite "texture_changed" '[]
 
 {-# NOINLINE bindSprite__texture_changed #-}
 
@@ -79,6 +84,7 @@ get_frame cls
 
 {-# NOINLINE bindSprite_get_frame_coords #-}
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 bindSprite_get_frame_coords :: MethodBind
 bindSprite_get_frame_coords
   = unsafePerformIO $
@@ -88,6 +94,7 @@ bindSprite_get_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 get_frame_coords ::
                    (Sprite :< cls, Object :< cls) => cls -> IO Vector2
 get_frame_coords cls
@@ -122,6 +129,7 @@ get_hframes cls
 {-# NOINLINE bindSprite_get_normal_map #-}
 
 -- | The normal map gives depth to the Sprite.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 bindSprite_get_normal_map :: MethodBind
 bindSprite_get_normal_map
   = unsafePerformIO $
@@ -132,6 +140,7 @@ bindSprite_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map gives depth to the Sprite.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (Sprite :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -262,7 +271,7 @@ get_vframes cls
 
 {-# NOINLINE bindSprite_is_centered #-}
 
--- | If [code]true[/code], texture is centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture is centered.
 bindSprite_is_centered :: MethodBind
 bindSprite_is_centered
   = unsafePerformIO $
@@ -272,7 +281,7 @@ bindSprite_is_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture is centered.
 is_centered :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_centered cls
   = withVariantArray []
@@ -283,7 +292,7 @@ is_centered cls
 
 {-# NOINLINE bindSprite_is_flipped_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 bindSprite_is_flipped_h :: MethodBind
 bindSprite_is_flipped_h
   = unsafePerformIO $
@@ -293,7 +302,7 @@ bindSprite_is_flipped_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 is_flipped_h :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_h cls
   = withVariantArray []
@@ -304,7 +313,7 @@ is_flipped_h cls
 
 {-# NOINLINE bindSprite_is_flipped_v #-}
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 bindSprite_is_flipped_v :: MethodBind
 bindSprite_is_flipped_v
   = unsafePerformIO $
@@ -314,7 +323,7 @@ bindSprite_is_flipped_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 is_flipped_v :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_v cls
   = withVariantArray []
@@ -326,7 +335,7 @@ is_flipped_v cls
 {-# NOINLINE bindSprite_is_pixel_opaque #-}
 
 -- | Returns [code]true[/code], if the pixel at the given position is opaque and [code]false[/code] in other case.
---   				Note: It also returns [code]false[/code], if the sprite's texture is null or if the given position is invalid.
+--   				[b]Note:[/b] It also returns [code]false[/code], if the sprite's texture is [code]null[/code] or if the given position is invalid.
 bindSprite_is_pixel_opaque :: MethodBind
 bindSprite_is_pixel_opaque
   = unsafePerformIO $
@@ -337,7 +346,7 @@ bindSprite_is_pixel_opaque
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code], if the pixel at the given position is opaque and [code]false[/code] in other case.
---   				Note: It also returns [code]false[/code], if the sprite's texture is null or if the given position is invalid.
+--   				[b]Note:[/b] It also returns [code]false[/code], if the sprite's texture is [code]null[/code] or if the given position is invalid.
 is_pixel_opaque ::
                   (Sprite :< cls, Object :< cls) => cls -> Vector2 -> IO Bool
 is_pixel_opaque cls arg1
@@ -350,7 +359,7 @@ is_pixel_opaque cls arg1
 
 {-# NOINLINE bindSprite_is_region #-}
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
 bindSprite_is_region :: MethodBind
 bindSprite_is_region
   = unsafePerformIO $
@@ -360,7 +369,7 @@ bindSprite_is_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
 is_region :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_region cls
   = withVariantArray []
@@ -394,7 +403,7 @@ is_region_filter_clip_enabled cls
 
 {-# NOINLINE bindSprite_set_centered #-}
 
--- | If [code]true[/code], texture is centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture is centered.
 bindSprite_set_centered :: MethodBind
 bindSprite_set_centered
   = unsafePerformIO $
@@ -404,7 +413,7 @@ bindSprite_set_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture is centered.
 set_centered ::
                (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_centered cls arg1
@@ -416,7 +425,7 @@ set_centered cls arg1
 
 {-# NOINLINE bindSprite_set_flip_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 bindSprite_set_flip_h :: MethodBind
 bindSprite_set_flip_h
   = unsafePerformIO $
@@ -426,7 +435,7 @@ bindSprite_set_flip_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 set_flip_h ::
              (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_h cls arg1
@@ -438,7 +447,7 @@ set_flip_h cls arg1
 
 {-# NOINLINE bindSprite_set_flip_v #-}
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 bindSprite_set_flip_v :: MethodBind
 bindSprite_set_flip_v
   = unsafePerformIO $
@@ -448,7 +457,7 @@ bindSprite_set_flip_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 set_flip_v ::
              (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_v cls arg1
@@ -480,6 +489,7 @@ set_frame cls arg1
 
 {-# NOINLINE bindSprite_set_frame_coords #-}
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 bindSprite_set_frame_coords :: MethodBind
 bindSprite_set_frame_coords
   = unsafePerformIO $
@@ -489,6 +499,7 @@ bindSprite_set_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
 set_frame_coords ::
                    (Sprite :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_frame_coords cls arg1
@@ -524,6 +535,7 @@ set_hframes cls arg1
 {-# NOINLINE bindSprite_set_normal_map #-}
 
 -- | The normal map gives depth to the Sprite.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 bindSprite_set_normal_map :: MethodBind
 bindSprite_set_normal_map
   = unsafePerformIO $
@@ -534,6 +546,7 @@ bindSprite_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map gives depth to the Sprite.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (Sprite :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1
@@ -568,7 +581,7 @@ set_offset cls arg1
 
 {-# NOINLINE bindSprite_set_region #-}
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
 bindSprite_set_region :: MethodBind
 bindSprite_set_region
   = unsafePerformIO $
@@ -578,7 +591,7 @@ bindSprite_set_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect]. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
 set_region ::
              (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_region cls arg1

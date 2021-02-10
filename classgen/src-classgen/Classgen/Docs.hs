@@ -119,7 +119,7 @@ data GodotDocClass = GodotDocClass
   , _gdVersion :: !Text
   , _gdBrief_description :: !(AlternativeJSON Text Object)
   , _gdDescription ::  !(AlternativeJSON Text Object)
-  , _gdCategory :: !Text
+  , _gdCategory :: !(Maybe Text)
   , _gdInherits :: !(Maybe Text)
   , _gdMembers :: !(Maybe (HashMap Text (OptionalArray GodotProperty)))
   , _gdConstants :: !(HashMap Text (OptionalArray GodotConstant))

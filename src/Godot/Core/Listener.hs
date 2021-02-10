@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Listener
        (Godot.Core.Listener.clear_current,
         Godot.Core.Listener.get_listener_transform,
@@ -14,6 +15,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindListener_clear_current #-}
 
+-- | Disables the listener to use the current camera's listener instead.
 bindListener_clear_current :: MethodBind
 bindListener_clear_current
   = unsafePerformIO $
@@ -23,6 +25,7 @@ bindListener_clear_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Disables the listener to use the current camera's listener instead.
 clear_current :: (Listener :< cls, Object :< cls) => cls -> IO ()
 clear_current cls
   = withVariantArray []
@@ -34,6 +37,7 @@ clear_current cls
 
 {-# NOINLINE bindListener_get_listener_transform #-}
 
+-- | Returns the listener's global orthonormalized [Transform].
 bindListener_get_listener_transform :: MethodBind
 bindListener_get_listener_transform
   = unsafePerformIO $
@@ -43,6 +47,7 @@ bindListener_get_listener_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the listener's global orthonormalized [Transform].
 get_listener_transform ::
                          (Listener :< cls, Object :< cls) => cls -> IO Transform
 get_listener_transform cls
@@ -56,6 +61,8 @@ get_listener_transform cls
 
 {-# NOINLINE bindListener_is_current #-}
 
+-- | Returns [code]true[/code] if the listener was made current using [method make_current], [code]false[/code] otherwise.
+--   				[b]Note:[/b] There may be more than one Listener marked as "current" in the scene tree, but only the one that was made current last will be used.
 bindListener_is_current :: MethodBind
 bindListener_is_current
   = unsafePerformIO $
@@ -65,6 +72,8 @@ bindListener_is_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the listener was made current using [method make_current], [code]false[/code] otherwise.
+--   				[b]Note:[/b] There may be more than one Listener marked as "current" in the scene tree, but only the one that was made current last will be used.
 is_current :: (Listener :< cls, Object :< cls) => cls -> IO Bool
 is_current cls
   = withVariantArray []
@@ -75,6 +84,7 @@ is_current cls
 
 {-# NOINLINE bindListener_make_current #-}
 
+-- | Enables the listener. This will override the current camera's listener.
 bindListener_make_current :: MethodBind
 bindListener_make_current
   = unsafePerformIO $
@@ -84,6 +94,7 @@ bindListener_make_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Enables the listener. This will override the current camera's listener.
 make_current :: (Listener :< cls, Object :< cls) => cls -> IO ()
 make_current cls
   = withVariantArray []

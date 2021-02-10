@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.StreamTexture
        (Godot.Core.StreamTexture.get_load_path,
         Godot.Core.StreamTexture.load)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindStreamTexture_get_load_path #-}
 
--- | The StreamTexture's filepath to a .stex file.
+-- | The StreamTexture's file path to a [code].stex[/code] file.
 bindStreamTexture_get_load_path :: MethodBind
 bindStreamTexture_get_load_path
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindStreamTexture_get_load_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The StreamTexture's filepath to a .stex file.
+-- | The StreamTexture's file path to a [code].stex[/code] file.
 get_load_path ::
                 (StreamTexture :< cls, Object :< cls) => cls -> IO GodotString
 get_load_path cls
@@ -36,7 +37,7 @@ get_load_path cls
 
 {-# NOINLINE bindStreamTexture_load #-}
 
--- | The StreamTexture's filepath to a .stex file.
+-- | Loads the texture from the given path.
 bindStreamTexture_load :: MethodBind
 bindStreamTexture_load
   = unsafePerformIO $
@@ -46,7 +47,7 @@ bindStreamTexture_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The StreamTexture's filepath to a .stex file.
+-- | Loads the texture from the given path.
 load ::
        (StreamTexture :< cls, Object :< cls) =>
        cls -> GodotString -> IO Int

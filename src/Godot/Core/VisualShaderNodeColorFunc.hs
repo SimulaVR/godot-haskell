@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeColorFunc
        (Godot.Core.VisualShaderNodeColorFunc._FUNC_GRAYSCALE,
         Godot.Core.VisualShaderNodeColorFunc._FUNC_SEPIA,
@@ -21,6 +22,7 @@ _FUNC_SEPIA = 1
 
 {-# NOINLINE bindVisualShaderNodeColorFunc_get_function #-}
 
+-- | A function to be applied to the input color. See [enum Function] for options.
 bindVisualShaderNodeColorFunc_get_function :: MethodBind
 bindVisualShaderNodeColorFunc_get_function
   = unsafePerformIO $
@@ -30,6 +32,7 @@ bindVisualShaderNodeColorFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A function to be applied to the input color. See [enum Function] for options.
 get_function ::
                (VisualShaderNodeColorFunc :< cls, Object :< cls) => cls -> IO Int
 get_function cls
@@ -43,6 +46,7 @@ get_function cls
 
 {-# NOINLINE bindVisualShaderNodeColorFunc_set_function #-}
 
+-- | A function to be applied to the input color. See [enum Function] for options.
 bindVisualShaderNodeColorFunc_set_function :: MethodBind
 bindVisualShaderNodeColorFunc_set_function
   = unsafePerformIO $
@@ -52,6 +56,7 @@ bindVisualShaderNodeColorFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A function to be applied to the input color. See [enum Function] for options.
 set_function ::
                (VisualShaderNodeColorFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()

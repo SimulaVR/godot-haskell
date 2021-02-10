@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ResourceFormatSaver
        (Godot.Core.ResourceFormatSaver.get_recognized_extensions,
         Godot.Core.ResourceFormatSaver.recognize,
@@ -66,7 +67,7 @@ recognize cls arg1
 {-# NOINLINE bindResourceFormatSaver_save #-}
 
 -- | Saves the given resource object to a file at the target [code]path[/code]. [code]flags[/code] is a bitmask composed with [enum ResourceSaver.SaverFlags] constants.
---   				Returns [constant @GlobalScope.OK] on success, or an [enum @GlobalScope.Error] constant in case of failure.
+--   				Returns [constant OK] on success, or an [enum Error] constant in case of failure.
 bindResourceFormatSaver_save :: MethodBind
 bindResourceFormatSaver_save
   = unsafePerformIO $
@@ -77,7 +78,7 @@ bindResourceFormatSaver_save
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Saves the given resource object to a file at the target [code]path[/code]. [code]flags[/code] is a bitmask composed with [enum ResourceSaver.SaverFlags] constants.
---   				Returns [constant @GlobalScope.OK] on success, or an [enum @GlobalScope.Error] constant in case of failure.
+--   				Returns [constant OK] on success, or an [enum Error] constant in case of failure.
 save ::
        (ResourceFormatSaver :< cls, Object :< cls) =>
        cls -> GodotString -> Resource -> Int -> IO Int

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventGesture
        (Godot.Core.InputEventGesture.get_position,
         Godot.Core.InputEventGesture.set_position)
@@ -13,6 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindInputEventGesture_get_position #-}
 
+-- | The local gesture position relative to the [Viewport]. If used in [method Control._gui_input], the position is relative to the current [Control] that received this gesture.
 bindInputEventGesture_get_position :: MethodBind
 bindInputEventGesture_get_position
   = unsafePerformIO $
@@ -22,6 +24,7 @@ bindInputEventGesture_get_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The local gesture position relative to the [Viewport]. If used in [method Control._gui_input], the position is relative to the current [Control] that received this gesture.
 get_position ::
                (InputEventGesture :< cls, Object :< cls) => cls -> IO Vector2
 get_position cls
@@ -35,6 +38,7 @@ get_position cls
 
 {-# NOINLINE bindInputEventGesture_set_position #-}
 
+-- | The local gesture position relative to the [Viewport]. If used in [method Control._gui_input], the position is relative to the current [Control] that received this gesture.
 bindInputEventGesture_set_position :: MethodBind
 bindInputEventGesture_set_position
   = unsafePerformIO $
@@ -44,6 +48,7 @@ bindInputEventGesture_set_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The local gesture position relative to the [Viewport]. If used in [method Control._gui_input], the position is relative to the current [Control] that received this gesture.
 set_position ::
                (InputEventGesture :< cls, Object :< cls) =>
                cls -> Vector2 -> IO ()

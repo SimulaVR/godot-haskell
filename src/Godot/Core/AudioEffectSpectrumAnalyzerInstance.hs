@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectSpectrumAnalyzerInstance
        (Godot.Core.AudioEffectSpectrumAnalyzerInstance._MAGNITUDE_MAX,
         Godot.Core.AudioEffectSpectrumAnalyzerInstance._MAGNITUDE_AVERAGE,

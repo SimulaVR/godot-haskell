@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectAmplify
        (Godot.Core.AudioEffectAmplify.get_volume_db,
         Godot.Core.AudioEffectAmplify.set_volume_db)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindAudioEffectAmplify_get_volume_db #-}
 
--- | Amount of amplification. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Amount of amplification in decibels. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24.
 bindAudioEffectAmplify_get_volume_db :: MethodBind
 bindAudioEffectAmplify_get_volume_db
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindAudioEffectAmplify_get_volume_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of amplification. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Amount of amplification in decibels. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24.
 get_volume_db ::
                 (AudioEffectAmplify :< cls, Object :< cls) => cls -> IO Float
 get_volume_db cls
@@ -37,7 +38,7 @@ get_volume_db cls
 
 {-# NOINLINE bindAudioEffectAmplify_set_volume_db #-}
 
--- | Amount of amplification. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Amount of amplification in decibels. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24.
 bindAudioEffectAmplify_set_volume_db :: MethodBind
 bindAudioEffectAmplify_set_volume_db
   = unsafePerformIO $
@@ -47,7 +48,7 @@ bindAudioEffectAmplify_set_volume_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of amplification. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Amount of amplification in decibels. Positive values make the sound louder, negative values make it quieter. Value can range from -80 to 24.
 set_volume_db ::
                 (AudioEffectAmplify :< cls, Object :< cls) => cls -> Float -> IO ()
 set_volume_db cls arg1

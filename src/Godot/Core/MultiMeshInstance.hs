@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.MultiMeshInstance
        (Godot.Core.MultiMeshInstance.get_multimesh,
         Godot.Core.MultiMeshInstance.set_multimesh)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindMultiMeshInstance_get_multimesh #-}
 
--- | The [MultiMesh] resource that will be used and shared among all instances of the [code]MultiMeshInstance[/code].
+-- | The [MultiMesh] resource that will be used and shared among all instances of the [MultiMeshInstance].
 bindMultiMeshInstance_get_multimesh :: MethodBind
 bindMultiMeshInstance_get_multimesh
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindMultiMeshInstance_get_multimesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [MultiMesh] resource that will be used and shared among all instances of the [code]MultiMeshInstance[/code].
+-- | The [MultiMesh] resource that will be used and shared among all instances of the [MultiMeshInstance].
 get_multimesh ::
                 (MultiMeshInstance :< cls, Object :< cls) => cls -> IO MultiMesh
 get_multimesh cls
@@ -37,7 +38,7 @@ get_multimesh cls
 
 {-# NOINLINE bindMultiMeshInstance_set_multimesh #-}
 
--- | The [MultiMesh] resource that will be used and shared among all instances of the [code]MultiMeshInstance[/code].
+-- | The [MultiMesh] resource that will be used and shared among all instances of the [MultiMeshInstance].
 bindMultiMeshInstance_set_multimesh :: MethodBind
 bindMultiMeshInstance_set_multimesh
   = unsafePerformIO $
@@ -47,7 +48,7 @@ bindMultiMeshInstance_set_multimesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [MultiMesh] resource that will be used and shared among all instances of the [code]MultiMeshInstance[/code].
+-- | The [MultiMesh] resource that will be used and shared among all instances of the [MultiMeshInstance].
 set_multimesh ::
                 (MultiMeshInstance :< cls, Object :< cls) =>
                 cls -> MultiMesh -> IO ()

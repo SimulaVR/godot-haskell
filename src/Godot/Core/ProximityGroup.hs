@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ProximityGroup
        (Godot.Core.ProximityGroup._MODE_SIGNAL,
         Godot.Core.ProximityGroup._MODE_PROXY,
@@ -28,6 +29,9 @@ _MODE_PROXY = 0
 
 sig_broadcast :: Godot.Internal.Dispatch.Signal ProximityGroup
 sig_broadcast = Godot.Internal.Dispatch.Signal "broadcast"
+
+instance NodeSignal ProximityGroup "broadcast"
+           '[GodotString, Array]
 
 {-# NOINLINE bindProximityGroup__proximity_group_broadcast #-}
 

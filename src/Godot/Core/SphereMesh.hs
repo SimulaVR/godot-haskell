@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SphereMesh
        (Godot.Core.SphereMesh.get_height,
         Godot.Core.SphereMesh.get_is_hemisphere,
@@ -19,7 +20,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindSphereMesh_get_height #-}
 
--- | Full height of the sphere. Defaults to 2.0.
+-- | Full height of the sphere.
 bindSphereMesh_get_height :: MethodBind
 bindSphereMesh_get_height
   = unsafePerformIO $
@@ -29,7 +30,7 @@ bindSphereMesh_get_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Full height of the sphere. Defaults to 2.0.
+-- | Full height of the sphere.
 get_height :: (SphereMesh :< cls, Object :< cls) => cls -> IO Float
 get_height cls
   = withVariantArray []
@@ -41,7 +42,8 @@ get_height cls
 
 {-# NOINLINE bindSphereMesh_get_is_hemisphere #-}
 
--- | Determines whether a full sphere or a hemisphere is created. Attention: To get a regular hemisphere, the height and radius of the sphere have to equal. Defaults to [code]false[/code].
+-- | If [code]true[/code], a hemisphere is created rather than a full sphere.
+--   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
 bindSphereMesh_get_is_hemisphere :: MethodBind
 bindSphereMesh_get_is_hemisphere
   = unsafePerformIO $
@@ -51,7 +53,8 @@ bindSphereMesh_get_is_hemisphere
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines whether a full sphere or a hemisphere is created. Attention: To get a regular hemisphere, the height and radius of the sphere have to equal. Defaults to [code]false[/code].
+-- | If [code]true[/code], a hemisphere is created rather than a full sphere.
+--   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
 get_is_hemisphere ::
                     (SphereMesh :< cls, Object :< cls) => cls -> IO Bool
 get_is_hemisphere cls
@@ -65,7 +68,7 @@ get_is_hemisphere cls
 
 {-# NOINLINE bindSphereMesh_get_radial_segments #-}
 
--- | Number of radial segments on the sphere. Defaults to 64.
+-- | Number of radial segments on the sphere.
 bindSphereMesh_get_radial_segments :: MethodBind
 bindSphereMesh_get_radial_segments
   = unsafePerformIO $
@@ -75,7 +78,7 @@ bindSphereMesh_get_radial_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of radial segments on the sphere. Defaults to 64.
+-- | Number of radial segments on the sphere.
 get_radial_segments ::
                       (SphereMesh :< cls, Object :< cls) => cls -> IO Int
 get_radial_segments cls
@@ -89,7 +92,7 @@ get_radial_segments cls
 
 {-# NOINLINE bindSphereMesh_get_radius #-}
 
--- | Radius of sphere. Defaults to 1.0.
+-- | Radius of sphere.
 bindSphereMesh_get_radius :: MethodBind
 bindSphereMesh_get_radius
   = unsafePerformIO $
@@ -99,7 +102,7 @@ bindSphereMesh_get_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Radius of sphere. Defaults to 1.0.
+-- | Radius of sphere.
 get_radius :: (SphereMesh :< cls, Object :< cls) => cls -> IO Float
 get_radius cls
   = withVariantArray []
@@ -111,7 +114,7 @@ get_radius cls
 
 {-# NOINLINE bindSphereMesh_get_rings #-}
 
--- | Number of segments along the height of the sphere. Defaults to 32.
+-- | Number of segments along the height of the sphere.
 bindSphereMesh_get_rings :: MethodBind
 bindSphereMesh_get_rings
   = unsafePerformIO $
@@ -121,7 +124,7 @@ bindSphereMesh_get_rings
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of segments along the height of the sphere. Defaults to 32.
+-- | Number of segments along the height of the sphere.
 get_rings :: (SphereMesh :< cls, Object :< cls) => cls -> IO Int
 get_rings cls
   = withVariantArray []
@@ -132,7 +135,7 @@ get_rings cls
 
 {-# NOINLINE bindSphereMesh_set_height #-}
 
--- | Full height of the sphere. Defaults to 2.0.
+-- | Full height of the sphere.
 bindSphereMesh_set_height :: MethodBind
 bindSphereMesh_set_height
   = unsafePerformIO $
@@ -142,7 +145,7 @@ bindSphereMesh_set_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Full height of the sphere. Defaults to 2.0.
+-- | Full height of the sphere.
 set_height ::
              (SphereMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_height cls arg1
@@ -155,7 +158,8 @@ set_height cls arg1
 
 {-# NOINLINE bindSphereMesh_set_is_hemisphere #-}
 
--- | Determines whether a full sphere or a hemisphere is created. Attention: To get a regular hemisphere, the height and radius of the sphere have to equal. Defaults to [code]false[/code].
+-- | If [code]true[/code], a hemisphere is created rather than a full sphere.
+--   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
 bindSphereMesh_set_is_hemisphere :: MethodBind
 bindSphereMesh_set_is_hemisphere
   = unsafePerformIO $
@@ -165,7 +169,8 @@ bindSphereMesh_set_is_hemisphere
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines whether a full sphere or a hemisphere is created. Attention: To get a regular hemisphere, the height and radius of the sphere have to equal. Defaults to [code]false[/code].
+-- | If [code]true[/code], a hemisphere is created rather than a full sphere.
+--   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
 set_is_hemisphere ::
                     (SphereMesh :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_is_hemisphere cls arg1
@@ -179,7 +184,7 @@ set_is_hemisphere cls arg1
 
 {-# NOINLINE bindSphereMesh_set_radial_segments #-}
 
--- | Number of radial segments on the sphere. Defaults to 64.
+-- | Number of radial segments on the sphere.
 bindSphereMesh_set_radial_segments :: MethodBind
 bindSphereMesh_set_radial_segments
   = unsafePerformIO $
@@ -189,7 +194,7 @@ bindSphereMesh_set_radial_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of radial segments on the sphere. Defaults to 64.
+-- | Number of radial segments on the sphere.
 set_radial_segments ::
                       (SphereMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_radial_segments cls arg1
@@ -203,7 +208,7 @@ set_radial_segments cls arg1
 
 {-# NOINLINE bindSphereMesh_set_radius #-}
 
--- | Radius of sphere. Defaults to 1.0.
+-- | Radius of sphere.
 bindSphereMesh_set_radius :: MethodBind
 bindSphereMesh_set_radius
   = unsafePerformIO $
@@ -213,7 +218,7 @@ bindSphereMesh_set_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Radius of sphere. Defaults to 1.0.
+-- | Radius of sphere.
 set_radius ::
              (SphereMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_radius cls arg1
@@ -226,7 +231,7 @@ set_radius cls arg1
 
 {-# NOINLINE bindSphereMesh_set_rings #-}
 
--- | Number of segments along the height of the sphere. Defaults to 32.
+-- | Number of segments along the height of the sphere.
 bindSphereMesh_set_rings :: MethodBind
 bindSphereMesh_set_rings
   = unsafePerformIO $
@@ -236,7 +241,7 @@ bindSphereMesh_set_rings
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of segments along the height of the sphere. Defaults to 32.
+-- | Number of segments along the height of the sphere.
 set_rings ::
             (SphereMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_rings cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeBlendSpace2D
        (Godot.Core.AnimationNodeBlendSpace2D._BLEND_MODE_DISCRETE_CARRY,
         Godot.Core.AnimationNodeBlendSpace2D._BLEND_MODE_DISCRETE,
@@ -57,6 +58,9 @@ sig_triangles_updated ::
                       Godot.Internal.Dispatch.Signal AnimationNodeBlendSpace2D
 sig_triangles_updated
   = Godot.Internal.Dispatch.Signal "triangles_updated"
+
+instance NodeSignal AnimationNodeBlendSpace2D "triangles_updated"
+           '[]
 
 {-# NOINLINE bindAnimationNodeBlendSpace2D__add_blend_point #-}
 
@@ -175,7 +179,7 @@ _update_triangles cls
 
 {-# NOINLINE bindAnimationNodeBlendSpace2D_add_blend_point #-}
 
--- | Add a new point that represents a [code]node[/code] at the position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code] , the point is inserted at the end of the blend points array.
+-- | Adds a new point that represents a [code]node[/code] at the position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code], the point is inserted at the end of the blend points array.
 bindAnimationNodeBlendSpace2D_add_blend_point :: MethodBind
 bindAnimationNodeBlendSpace2D_add_blend_point
   = unsafePerformIO $
@@ -185,7 +189,7 @@ bindAnimationNodeBlendSpace2D_add_blend_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a new point that represents a [code]node[/code] at the position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code] , the point is inserted at the end of the blend points array.
+-- | Adds a new point that represents a [code]node[/code] at the position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code], the point is inserted at the end of the blend points array.
 add_blend_point ::
                   (AnimationNodeBlendSpace2D :< cls, Object :< cls) =>
                   cls -> AnimationRootNode -> Vector2 -> Int -> IO ()
@@ -201,7 +205,7 @@ add_blend_point cls arg1 arg2 arg3
 
 {-# NOINLINE bindAnimationNodeBlendSpace2D_add_triangle #-}
 
--- | Creates a new triangle using three points [code]x[/code], [code]y[/code], and [code]z[/code]. Triangles can overlap. You can insert the triangle at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code] , the point is inserted at the end of the blend points array.
+-- | Creates a new triangle using three points [code]x[/code], [code]y[/code], and [code]z[/code]. Triangles can overlap. You can insert the triangle at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code], the point is inserted at the end of the blend points array.
 bindAnimationNodeBlendSpace2D_add_triangle :: MethodBind
 bindAnimationNodeBlendSpace2D_add_triangle
   = unsafePerformIO $
@@ -211,7 +215,7 @@ bindAnimationNodeBlendSpace2D_add_triangle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new triangle using three points [code]x[/code], [code]y[/code], and [code]z[/code]. Triangles can overlap. You can insert the triangle at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code] , the point is inserted at the end of the blend points array.
+-- | Creates a new triangle using three points [code]x[/code], [code]y[/code], and [code]z[/code]. Triangles can overlap. You can insert the triangle at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code], the point is inserted at the end of the blend points array.
 add_triangle ::
                (AnimationNodeBlendSpace2D :< cls, Object :< cls) =>
                cls -> Int -> Int -> Int -> Int -> IO ()
@@ -227,7 +231,7 @@ add_triangle cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindAnimationNodeBlendSpace2D_get_auto_triangles #-}
 
--- | If true, the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
+-- | If [code]true[/code], the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
 bindAnimationNodeBlendSpace2D_get_auto_triangles :: MethodBind
 bindAnimationNodeBlendSpace2D_get_auto_triangles
   = unsafePerformIO $
@@ -237,7 +241,7 @@ bindAnimationNodeBlendSpace2D_get_auto_triangles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If true, the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
+-- | If [code]true[/code], the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
 get_auto_triangles ::
                      (AnimationNodeBlendSpace2D :< cls, Object :< cls) => cls -> IO Bool
 get_auto_triangles cls
@@ -302,7 +306,7 @@ get_blend_point_count cls
 
 {-# NOINLINE bindAnimationNodeBlendSpace2D_get_blend_point_node #-}
 
--- | Returns the [code]AnimationRootNode[/code] referenced by the point at index [code]point[/code].
+-- | Returns the [AnimationRootNode] referenced by the point at index [code]point[/code].
 bindAnimationNodeBlendSpace2D_get_blend_point_node :: MethodBind
 bindAnimationNodeBlendSpace2D_get_blend_point_node
   = unsafePerformIO $
@@ -312,7 +316,7 @@ bindAnimationNodeBlendSpace2D_get_blend_point_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]AnimationRootNode[/code] referenced by the point at index [code]point[/code].
+-- | Returns the [AnimationRootNode] referenced by the point at index [code]point[/code].
 get_blend_point_node ::
                        (AnimationNodeBlendSpace2D :< cls, Object :< cls) =>
                        cls -> Int -> IO AnimationRootNode
@@ -584,7 +588,7 @@ remove_triangle cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendSpace2D_set_auto_triangles #-}
 
--- | If true, the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
+-- | If [code]true[/code], the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
 bindAnimationNodeBlendSpace2D_set_auto_triangles :: MethodBind
 bindAnimationNodeBlendSpace2D_set_auto_triangles
   = unsafePerformIO $
@@ -594,7 +598,7 @@ bindAnimationNodeBlendSpace2D_set_auto_triangles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If true, the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
+-- | If [code]true[/code], the blend space is triangulated automatically. The mesh updates every time you add or remove points with [method add_blend_point] and [method remove_blend_point].
 set_auto_triangles ::
                      (AnimationNodeBlendSpace2D :< cls, Object :< cls) =>
                      cls -> Bool -> IO ()
@@ -635,7 +639,7 @@ set_blend_mode cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendSpace2D_set_blend_point_node #-}
 
--- | Changes the AnimationNode referenced by the point at index [code]point[/code].
+-- | Changes the [AnimationNode] referenced by the point at index [code]point[/code].
 bindAnimationNodeBlendSpace2D_set_blend_point_node :: MethodBind
 bindAnimationNodeBlendSpace2D_set_blend_point_node
   = unsafePerformIO $
@@ -645,7 +649,7 @@ bindAnimationNodeBlendSpace2D_set_blend_point_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the AnimationNode referenced by the point at index [code]point[/code].
+-- | Changes the [AnimationNode] referenced by the point at index [code]point[/code].
 set_blend_point_node ::
                        (AnimationNodeBlendSpace2D :< cls, Object :< cls) =>
                        cls -> Int -> AnimationRootNode -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CSGBox
        (Godot.Core.CSGBox.get_depth, Godot.Core.CSGBox.get_height,
         Godot.Core.CSGBox.get_material, Godot.Core.CSGBox.get_width,

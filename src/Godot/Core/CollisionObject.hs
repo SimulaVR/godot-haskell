@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CollisionObject
        (Godot.Core.CollisionObject.sig_input_event,
         Godot.Core.CollisionObject.sig_mouse_entered,
@@ -37,13 +38,20 @@ import Godot.Api.Types
 sig_input_event :: Godot.Internal.Dispatch.Signal CollisionObject
 sig_input_event = Godot.Internal.Dispatch.Signal "input_event"
 
+instance NodeSignal CollisionObject "input_event"
+           '[Node, InputEvent, Vector3, Vector3, Int]
+
 -- | Emitted when the mouse pointer enters any of this object's shapes.
 sig_mouse_entered :: Godot.Internal.Dispatch.Signal CollisionObject
 sig_mouse_entered = Godot.Internal.Dispatch.Signal "mouse_entered"
 
+instance NodeSignal CollisionObject "mouse_entered" '[]
+
 -- | Emitted when the mouse pointer exits all this object's shapes.
 sig_mouse_exited :: Godot.Internal.Dispatch.Signal CollisionObject
 sig_mouse_exited = Godot.Internal.Dispatch.Signal "mouse_exited"
+
+instance NodeSignal CollisionObject "mouse_exited" '[]
 
 {-# NOINLINE bindCollisionObject__input_event #-}
 
@@ -98,7 +106,7 @@ create_shape_owner cls arg1
 
 {-# NOINLINE bindCollisionObject_get_capture_input_on_drag #-}
 
--- | If [code]true[/code], the [code]CollisionObject[/code] will continue to receive input events as the mouse is dragged across its shapes. Default value: [code]false[/code].
+-- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
 bindCollisionObject_get_capture_input_on_drag :: MethodBind
 bindCollisionObject_get_capture_input_on_drag
   = unsafePerformIO $
@@ -108,7 +116,7 @@ bindCollisionObject_get_capture_input_on_drag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]CollisionObject[/code] will continue to receive input events as the mouse is dragged across its shapes. Default value: [code]false[/code].
+-- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
 get_capture_input_on_drag ::
                             (CollisionObject :< cls, Object :< cls) => cls -> IO Bool
 get_capture_input_on_drag cls
@@ -169,7 +177,7 @@ get_shape_owners cls
 
 {-# NOINLINE bindCollisionObject_is_ray_pickable #-}
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s. Default value: [code]true[/code].
+-- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
 bindCollisionObject_is_ray_pickable :: MethodBind
 bindCollisionObject_is_ray_pickable
   = unsafePerformIO $
@@ -179,7 +187,7 @@ bindCollisionObject_is_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s. Default value: [code]true[/code].
+-- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
 is_ray_pickable ::
                   (CollisionObject :< cls, Object :< cls) => cls -> IO Bool
 is_ray_pickable cls
@@ -241,7 +249,7 @@ remove_shape_owner cls arg1
 
 {-# NOINLINE bindCollisionObject_set_capture_input_on_drag #-}
 
--- | If [code]true[/code], the [code]CollisionObject[/code] will continue to receive input events as the mouse is dragged across its shapes. Default value: [code]false[/code].
+-- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
 bindCollisionObject_set_capture_input_on_drag :: MethodBind
 bindCollisionObject_set_capture_input_on_drag
   = unsafePerformIO $
@@ -251,7 +259,7 @@ bindCollisionObject_set_capture_input_on_drag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]CollisionObject[/code] will continue to receive input events as the mouse is dragged across its shapes. Default value: [code]false[/code].
+-- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
 set_capture_input_on_drag ::
                             (CollisionObject :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_capture_input_on_drag cls arg1
@@ -266,7 +274,7 @@ set_capture_input_on_drag cls arg1
 
 {-# NOINLINE bindCollisionObject_set_ray_pickable #-}
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s. Default value: [code]true[/code].
+-- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
 bindCollisionObject_set_ray_pickable :: MethodBind
 bindCollisionObject_set_ray_pickable
   = unsafePerformIO $
@@ -276,7 +284,7 @@ bindCollisionObject_set_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s. Default value: [code]true[/code].
+-- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
 set_ray_pickable ::
                    (CollisionObject :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ray_pickable cls arg1

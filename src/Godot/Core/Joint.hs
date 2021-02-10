@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Joint
        (Godot.Core.Joint.get_exclude_nodes_from_collision,
         Godot.Core.Joint.get_node_a, Godot.Core.Joint.get_node_b,

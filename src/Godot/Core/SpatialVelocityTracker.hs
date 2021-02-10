@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SpatialVelocityTracker
        (Godot.Core.SpatialVelocityTracker.get_tracked_linear_velocity,
         Godot.Core.SpatialVelocityTracker.is_tracking_physics_step,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Gradient
        (Godot.Core.Gradient.add_point, Godot.Core.Gradient.get_color,
         Godot.Core.Gradient.get_colors, Godot.Core.Gradient.get_offset,
@@ -18,7 +19,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindGradient_add_point #-}
 
--- | Adds the specified color to the end of the ramp, with the specified offset
+-- | Adds the specified color to the end of the ramp, with the specified offset.
 bindGradient_add_point :: MethodBind
 bindGradient_add_point
   = unsafePerformIO $
@@ -28,7 +29,7 @@ bindGradient_add_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified color to the end of the ramp, with the specified offset
+-- | Adds the specified color to the end of the ramp, with the specified offset.
 add_point ::
             (Gradient :< cls, Object :< cls) => cls -> Float -> Color -> IO ()
 add_point cls arg1 arg2
@@ -40,7 +41,7 @@ add_point cls arg1 arg2
 
 {-# NOINLINE bindGradient_get_color #-}
 
--- | Returns the color of the ramp color at index [i]point[/i]
+-- | Returns the color of the ramp color at index [code]point[/code].
 bindGradient_get_color :: MethodBind
 bindGradient_get_color
   = unsafePerformIO $
@@ -50,7 +51,7 @@ bindGradient_get_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color of the ramp color at index [i]point[/i]
+-- | Returns the color of the ramp color at index [code]point[/code].
 get_color ::
             (Gradient :< cls, Object :< cls) => cls -> Int -> IO Color
 get_color cls arg1
@@ -84,7 +85,7 @@ get_colors cls
 
 {-# NOINLINE bindGradient_get_offset #-}
 
--- | Returns the offset of the ramp color at index [i]point[/i]
+-- | Returns the offset of the ramp color at index [code]point[/code].
 bindGradient_get_offset :: MethodBind
 bindGradient_get_offset
   = unsafePerformIO $
@@ -94,7 +95,7 @@ bindGradient_get_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the offset of the ramp color at index [i]point[/i]
+-- | Returns the offset of the ramp color at index [code]point[/code].
 get_offset ::
              (Gradient :< cls, Object :< cls) => cls -> Int -> IO Float
 get_offset cls arg1
@@ -128,7 +129,7 @@ get_offsets cls
 
 {-# NOINLINE bindGradient_get_point_count #-}
 
--- | Returns the number of colors in the ramp
+-- | Returns the number of colors in the ramp.
 bindGradient_get_point_count :: MethodBind
 bindGradient_get_point_count
   = unsafePerformIO $
@@ -138,7 +139,7 @@ bindGradient_get_point_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of colors in the ramp
+-- | Returns the number of colors in the ramp.
 get_point_count ::
                   (Gradient :< cls, Object :< cls) => cls -> IO Int
 get_point_count cls
@@ -151,7 +152,7 @@ get_point_count cls
 
 {-# NOINLINE bindGradient_interpolate #-}
 
--- | Returns the interpolated color specified by [i]offset[/i]
+-- | Returns the interpolated color specified by [code]offset[/code].
 bindGradient_interpolate :: MethodBind
 bindGradient_interpolate
   = unsafePerformIO $
@@ -161,7 +162,7 @@ bindGradient_interpolate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the interpolated color specified by [i]offset[/i]
+-- | Returns the interpolated color specified by [code]offset[/code].
 interpolate ::
               (Gradient :< cls, Object :< cls) => cls -> Float -> IO Color
 interpolate cls arg1
@@ -173,7 +174,7 @@ interpolate cls arg1
 
 {-# NOINLINE bindGradient_remove_point #-}
 
--- | Removes the color at the index [i]offset[/i]
+-- | Removes the color at the index [code]offset[/code].
 bindGradient_remove_point :: MethodBind
 bindGradient_remove_point
   = unsafePerformIO $
@@ -183,7 +184,7 @@ bindGradient_remove_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the color at the index [i]offset[/i]
+-- | Removes the color at the index [code]offset[/code].
 remove_point ::
                (Gradient :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_point cls arg1
@@ -196,7 +197,7 @@ remove_point cls arg1
 
 {-# NOINLINE bindGradient_set_color #-}
 
--- | Sets the color of the ramp color at index [i]point[/i]
+-- | Sets the color of the ramp color at index [code]point[/code].
 bindGradient_set_color :: MethodBind
 bindGradient_set_color
   = unsafePerformIO $
@@ -206,7 +207,7 @@ bindGradient_set_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the color of the ramp color at index [i]point[/i]
+-- | Sets the color of the ramp color at index [code]point[/code].
 set_color ::
             (Gradient :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 set_color cls arg1 arg2
@@ -240,7 +241,7 @@ set_colors cls arg1
 
 {-# NOINLINE bindGradient_set_offset #-}
 
--- | Sets the offset for the ramp color at index [i]point[/i]
+-- | Sets the offset for the ramp color at index [code]point[/code].
 bindGradient_set_offset :: MethodBind
 bindGradient_set_offset
   = unsafePerformIO $
@@ -250,7 +251,7 @@ bindGradient_set_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the offset for the ramp color at index [i]point[/i]
+-- | Sets the offset for the ramp color at index [code]point[/code].
 set_offset ::
              (Gradient :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_offset cls arg1 arg2

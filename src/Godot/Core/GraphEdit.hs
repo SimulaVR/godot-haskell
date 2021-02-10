@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GraphEdit
        (Godot.Core.GraphEdit.sig__begin_node_move,
         Godot.Core.GraphEdit.sig__end_node_move,
@@ -55,68 +56,103 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
--- | Signal sent at the beginning of a GraphNode movement.
+-- | Emitted at the beginning of a GraphNode movement.
 sig__begin_node_move :: Godot.Internal.Dispatch.Signal GraphEdit
 sig__begin_node_move
   = Godot.Internal.Dispatch.Signal "_begin_node_move"
 
--- | Signal sent at the end of a GraphNode movement.
+instance NodeSignal GraphEdit "_begin_node_move" '[]
+
+-- | Emitted at the end of a GraphNode movement.
 sig__end_node_move :: Godot.Internal.Dispatch.Signal GraphEdit
 sig__end_node_move
   = Godot.Internal.Dispatch.Signal "_end_node_move"
 
+instance NodeSignal GraphEdit "_end_node_move" '[]
+
+-- | Emitted when user dragging connection from input port into empty space of the graph.
 sig_connection_from_empty ::
                           Godot.Internal.Dispatch.Signal GraphEdit
 sig_connection_from_empty
   = Godot.Internal.Dispatch.Signal "connection_from_empty"
 
--- | Signal sent to the GraphEdit when the connection between 'from_slot' slot of 'from' GraphNode and 'to_slot' slot of 'to' GraphNode is attempted to be created.
+instance NodeSignal GraphEdit "connection_from_empty"
+           '[GodotString, Int, Vector2]
+
+-- | Emitted to the GraphEdit when the connection between the [code]from_slot[/code] slot of the [code]from[/code] GraphNode and the [code]to_slot[/code] slot of the [code]to[/code] GraphNode is attempted to be created.
 sig_connection_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_connection_request
   = Godot.Internal.Dispatch.Signal "connection_request"
 
+instance NodeSignal GraphEdit "connection_request"
+           '[GodotString, Int, GodotString, Int]
+
+-- | Emitted when user dragging connection from output port into empty space of the graph.
 sig_connection_to_empty :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_connection_to_empty
   = Godot.Internal.Dispatch.Signal "connection_to_empty"
 
+instance NodeSignal GraphEdit "connection_to_empty"
+           '[GodotString, Int, Vector2]
+
+-- | Emitted when the user presses [code]Ctrl + C[/code].
 sig_copy_nodes_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_copy_nodes_request
   = Godot.Internal.Dispatch.Signal "copy_nodes_request"
 
--- | Signal sent when a GraphNode is attempted to be removed from the GraphEdit.
+instance NodeSignal GraphEdit "copy_nodes_request" '[]
+
+-- | Emitted when a GraphNode is attempted to be removed from the GraphEdit.
 sig_delete_nodes_request ::
                          Godot.Internal.Dispatch.Signal GraphEdit
 sig_delete_nodes_request
   = Godot.Internal.Dispatch.Signal "delete_nodes_request"
 
--- | Signal sent to the GraphEdit when the connection between 'from_slot' slot of 'from' GraphNode and 'to_slot' slot of 'to' GraphNode is attempted to be removed.
+instance NodeSignal GraphEdit "delete_nodes_request" '[]
+
+-- | Emitted to the GraphEdit when the connection between [code]from_slot[/code] slot of [code]from[/code] GraphNode and [code]to_slot[/code] slot of [code]to[/code] GraphNode is attempted to be removed.
 sig_disconnection_request ::
                           Godot.Internal.Dispatch.Signal GraphEdit
 sig_disconnection_request
   = Godot.Internal.Dispatch.Signal "disconnection_request"
 
--- | Signal sent when a GraphNode is attempted to be duplicated in the GraphEdit.
+instance NodeSignal GraphEdit "disconnection_request"
+           '[GodotString, Int, GodotString, Int]
+
+-- | Emitted when a GraphNode is attempted to be duplicated in the GraphEdit.
 sig_duplicate_nodes_request ::
                             Godot.Internal.Dispatch.Signal GraphEdit
 sig_duplicate_nodes_request
   = Godot.Internal.Dispatch.Signal "duplicate_nodes_request"
 
+instance NodeSignal GraphEdit "duplicate_nodes_request" '[]
+
 -- | Emitted when a GraphNode is selected.
 sig_node_selected :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_node_selected = Godot.Internal.Dispatch.Signal "node_selected"
 
+instance NodeSignal GraphEdit "node_selected" '[Node]
+
+-- | Emitted when the user presses [code]Ctrl + V[/code].
 sig_paste_nodes_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_paste_nodes_request
   = Godot.Internal.Dispatch.Signal "paste_nodes_request"
 
--- | Signal sent when a popup is requested. Happens on right-clicking in the GraphEdit. 'p_position' is the position of the mouse pointer when the signal is sent.
+instance NodeSignal GraphEdit "paste_nodes_request" '[]
+
+-- | Emitted when a popup is requested. Happens on right-clicking in the GraphEdit. [code]position[/code] is the position of the mouse pointer when the signal is sent.
 sig_popup_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_popup_request = Godot.Internal.Dispatch.Signal "popup_request"
 
+instance NodeSignal GraphEdit "popup_request" '[Vector2]
+
+-- | Emitted when the scroll offset is changed by the user. It will not be emitted when changed in code.
 sig_scroll_offset_changed ::
                           Godot.Internal.Dispatch.Signal GraphEdit
 sig_scroll_offset_changed
   = Godot.Internal.Dispatch.Signal "scroll_offset_changed"
+
+instance NodeSignal GraphEdit "scroll_offset_changed" '[Vector2]
 
 {-# NOINLINE bindGraphEdit__connections_layer_draw #-}
 
@@ -464,7 +500,7 @@ add_valid_right_disconnect_type cls arg1
 
 {-# NOINLINE bindGraphEdit_clear_connections #-}
 
--- | Remove all connections between nodes.
+-- | Removes all connections between nodes.
 bindGraphEdit_clear_connections :: MethodBind
 bindGraphEdit_clear_connections
   = unsafePerformIO $
@@ -474,7 +510,7 @@ bindGraphEdit_clear_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove all connections between nodes.
+-- | Removes all connections between nodes.
 clear_connections ::
                     (GraphEdit :< cls, Object :< cls) => cls -> IO ()
 clear_connections cls
@@ -487,7 +523,7 @@ clear_connections cls
 
 {-# NOINLINE bindGraphEdit_connect_node #-}
 
--- | Create a connection between 'from_port' slot of 'from' GraphNode and 'to_port' slot of 'to' GraphNode. If the connection already exists, no connection is created.
+-- | Create a connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection already exists, no connection is created.
 bindGraphEdit_connect_node :: MethodBind
 bindGraphEdit_connect_node
   = unsafePerformIO $
@@ -497,7 +533,7 @@ bindGraphEdit_connect_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a connection between 'from_port' slot of 'from' GraphNode and 'to_port' slot of 'to' GraphNode. If the connection already exists, no connection is created.
+-- | Create a connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection already exists, no connection is created.
 connect_node ::
                (GraphEdit :< cls, Object :< cls) =>
                cls -> GodotString -> Int -> GodotString -> Int -> IO Int
@@ -512,7 +548,7 @@ connect_node cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindGraphEdit_disconnect_node #-}
 
--- | Remove the connection between 'from_port' slot of 'from' GraphNode and 'to_port' slot of 'to' GraphNode, if connection exists.
+-- | Removes the connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection does not exist, no connection is removed.
 bindGraphEdit_disconnect_node :: MethodBind
 bindGraphEdit_disconnect_node
   = unsafePerformIO $
@@ -522,7 +558,7 @@ bindGraphEdit_disconnect_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the connection between 'from_port' slot of 'from' GraphNode and 'to_port' slot of 'to' GraphNode, if connection exists.
+-- | Removes the connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection does not exist, no connection is removed.
 disconnect_node ::
                   (GraphEdit :< cls, Object :< cls) =>
                   cls -> GodotString -> Int -> GodotString -> Int -> IO ()
@@ -537,7 +573,7 @@ disconnect_node cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindGraphEdit_get_connection_list #-}
 
--- | Returns an Array containing the list of connections. A connection consists in a structure of the form {from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }
+-- | Returns an Array containing the list of connections. A connection consists in a structure of the form [code]{ from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }[/code].
 bindGraphEdit_get_connection_list :: MethodBind
 bindGraphEdit_get_connection_list
   = unsafePerformIO $
@@ -547,7 +583,7 @@ bindGraphEdit_get_connection_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an Array containing the list of connections. A connection consists in a structure of the form {from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }
+-- | Returns an Array containing the list of connections. A connection consists in a structure of the form [code]{ from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }[/code].
 get_connection_list ::
                       (GraphEdit :< cls, Object :< cls) => cls -> IO Array
 get_connection_list cls
@@ -626,6 +662,8 @@ get_zoom cls
 
 {-# NOINLINE bindGraphEdit_get_zoom_hbox #-}
 
+-- | Gets the [HBoxContainer] that contains the zooming and grid snap controls in the top left of the graph.
+--   				Warning: The intended usage of this function is to allow you to reposition or add your own custom controls to the container. This is an internal control and as such should not be freed. If you wish to hide this or any of it's children use their [member CanvasItem.visible] property instead.
 bindGraphEdit_get_zoom_hbox :: MethodBind
 bindGraphEdit_get_zoom_hbox
   = unsafePerformIO $
@@ -635,6 +673,8 @@ bindGraphEdit_get_zoom_hbox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Gets the [HBoxContainer] that contains the zooming and grid snap controls in the top left of the graph.
+--   				Warning: The intended usage of this function is to allow you to reposition or add your own custom controls to the container. This is an internal control and as such should not be freed. If you wish to hide this or any of it's children use their [member CanvasItem.visible] property instead.
 get_zoom_hbox ::
                 (GraphEdit :< cls, Object :< cls) => cls -> IO HBoxContainer
 get_zoom_hbox cls
@@ -647,7 +687,7 @@ get_zoom_hbox cls
 
 {-# NOINLINE bindGraphEdit_is_node_connected #-}
 
--- | Returns [code]true[/code] if the 'from_port' slot of 'from' GraphNode is connected to the 'to_port' slot of 'to' GraphNode.
+-- | Returns [code]true[/code] if the [code]from_port[/code] slot of the [code]from[/code] GraphNode is connected to the [code]to_port[/code] slot of the [code]to[/code] GraphNode.
 bindGraphEdit_is_node_connected :: MethodBind
 bindGraphEdit_is_node_connected
   = unsafePerformIO $
@@ -657,7 +697,7 @@ bindGraphEdit_is_node_connected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the 'from_port' slot of 'from' GraphNode is connected to the 'to_port' slot of 'to' GraphNode.
+-- | Returns [code]true[/code] if the [code]from_port[/code] slot of the [code]from[/code] GraphNode is connected to the [code]to_port[/code] slot of the [code]to[/code] GraphNode.
 is_node_connected ::
                     (GraphEdit :< cls, Object :< cls) =>
                     cls -> GodotString -> Int -> GodotString -> Int -> IO Bool
@@ -817,6 +857,7 @@ remove_valid_right_disconnect_type cls arg1
 
 {-# NOINLINE bindGraphEdit_set_connection_activity #-}
 
+-- | Sets the coloration of the connection between [code]from[/code]'s [code]from_port[/code] and [code]to[/code]'s [code]to_port[/code] with the color provided in the [code]activity[/code] theme property.
 bindGraphEdit_set_connection_activity :: MethodBind
 bindGraphEdit_set_connection_activity
   = unsafePerformIO $
@@ -826,6 +867,7 @@ bindGraphEdit_set_connection_activity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the coloration of the connection between [code]from[/code]'s [code]from_port[/code] and [code]to[/code]'s [code]to_port[/code] with the color provided in the [code]activity[/code] theme property.
 set_connection_activity ::
                           (GraphEdit :< cls, Object :< cls) =>
                           cls -> GodotString -> Int -> GodotString -> Int -> Float -> IO ()

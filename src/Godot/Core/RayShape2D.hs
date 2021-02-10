@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RayShape2D
        (Godot.Core.RayShape2D.get_length,
         Godot.Core.RayShape2D.get_slips_on_slope,
@@ -37,7 +38,7 @@ get_length cls
 
 {-# NOINLINE bindRayShape2D_get_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 bindRayShape2D_get_slips_on_slope :: MethodBind
 bindRayShape2D_get_slips_on_slope
   = unsafePerformIO $
@@ -47,7 +48,7 @@ bindRayShape2D_get_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 get_slips_on_slope ::
                      (RayShape2D :< cls, Object :< cls) => cls -> IO Bool
 get_slips_on_slope cls
@@ -84,7 +85,7 @@ set_length cls arg1
 
 {-# NOINLINE bindRayShape2D_set_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 bindRayShape2D_set_slips_on_slope :: MethodBind
 bindRayShape2D_set_slips_on_slope
   = unsafePerformIO $
@@ -94,7 +95,7 @@ bindRayShape2D_set_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal. Default value: [code]false[/code].
+-- | If [code]true[/code], allow the shape to return the correct normal.
 set_slips_on_slope ::
                      (RayShape2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_slips_on_slope cls arg1

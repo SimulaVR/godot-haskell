@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorScript
        (Godot.Tools.EditorScript._run,
         Godot.Tools.EditorScript.add_root_node,
@@ -15,7 +16,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindEditorScript__run #-}
 
--- | This method is executed by the Editor when [code]File -> Run[/code] is used.
+-- | This method is executed by the Editor when [b]File > Run[/b] is used.
 bindEditorScript__run :: MethodBind
 bindEditorScript__run
   = unsafePerformIO $
@@ -25,7 +26,7 @@ bindEditorScript__run
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This method is executed by the Editor when [code]File -> Run[/code] is used.
+-- | This method is executed by the Editor when [b]File > Run[/b] is used.
 _run :: (EditorScript :< cls, Object :< cls) => cls -> IO ()
 _run cls
   = withVariantArray []
@@ -37,7 +38,7 @@ _run cls
 {-# NOINLINE bindEditorScript_add_root_node #-}
 
 -- | Adds [code]node[/code] as a child of the root node in the editor context.
---   				WARNING: The implementation of this method is currently disabled.
+--   				[b]Warning:[/b] The implementation of this method is currently disabled.
 bindEditorScript_add_root_node :: MethodBind
 bindEditorScript_add_root_node
   = unsafePerformIO $
@@ -48,7 +49,7 @@ bindEditorScript_add_root_node
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds [code]node[/code] as a child of the root node in the editor context.
---   				WARNING: The implementation of this method is currently disabled.
+--   				[b]Warning:[/b] The implementation of this method is currently disabled.
 add_root_node ::
                 (EditorScript :< cls, Object :< cls) => cls -> Node -> IO ()
 add_root_node cls arg1

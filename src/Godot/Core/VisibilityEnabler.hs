@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisibilityEnabler
        (Godot.Core.VisibilityEnabler._ENABLER_MAX,
         Godot.Core.VisibilityEnabler._ENABLER_PAUSE_ANIMATIONS,
@@ -48,7 +49,7 @@ _node_removed cls arg1
 
 {-# NOINLINE bindVisibilityEnabler_is_enabler_enabled #-}
 
--- | If [code]true[/code], [RigidBody] nodes will be paused.
+-- | Returns whether the enabler identified by given [enum Enabler] constant is active.
 bindVisibilityEnabler_is_enabler_enabled :: MethodBind
 bindVisibilityEnabler_is_enabler_enabled
   = unsafePerformIO $
@@ -58,7 +59,7 @@ bindVisibilityEnabler_is_enabler_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [RigidBody] nodes will be paused.
+-- | Returns whether the enabler identified by given [enum Enabler] constant is active.
 is_enabler_enabled ::
                      (VisibilityEnabler :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_enabler_enabled cls arg1
@@ -72,7 +73,7 @@ is_enabler_enabled cls arg1
 
 {-# NOINLINE bindVisibilityEnabler_set_enabler #-}
 
--- | If [code]true[/code], [RigidBody] nodes will be paused.
+-- | Sets active state of the enabler identified by given [enum Enabler] constant.
 bindVisibilityEnabler_set_enabler :: MethodBind
 bindVisibilityEnabler_set_enabler
   = unsafePerformIO $
@@ -82,7 +83,7 @@ bindVisibilityEnabler_set_enabler
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [RigidBody] nodes will be paused.
+-- | Sets active state of the enabler identified by given [enum Enabler] constant.
 set_enabler ::
               (VisibilityEnabler :< cls, Object :< cls) =>
               cls -> Int -> Bool -> IO ()

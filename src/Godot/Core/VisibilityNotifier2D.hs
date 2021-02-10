@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisibilityNotifier2D
        (Godot.Core.VisibilityNotifier2D.sig_screen_entered,
         Godot.Core.VisibilityNotifier2D.sig_screen_exited,
@@ -22,10 +23,14 @@ sig_screen_entered ::
 sig_screen_entered
   = Godot.Internal.Dispatch.Signal "screen_entered"
 
+instance NodeSignal VisibilityNotifier2D "screen_entered" '[]
+
 -- | Emitted when the VisibilityNotifier2D exits the screen.
 sig_screen_exited ::
                   Godot.Internal.Dispatch.Signal VisibilityNotifier2D
 sig_screen_exited = Godot.Internal.Dispatch.Signal "screen_exited"
+
+instance NodeSignal VisibilityNotifier2D "screen_exited" '[]
 
 -- | Emitted when the VisibilityNotifier2D enters a [Viewport]'s view.
 sig_viewport_entered ::
@@ -33,11 +38,17 @@ sig_viewport_entered ::
 sig_viewport_entered
   = Godot.Internal.Dispatch.Signal "viewport_entered"
 
+instance NodeSignal VisibilityNotifier2D "viewport_entered"
+           '[Viewport]
+
 -- | Emitted when the VisibilityNotifier2D exits a [Viewport]'s view.
 sig_viewport_exited ::
                     Godot.Internal.Dispatch.Signal VisibilityNotifier2D
 sig_viewport_exited
   = Godot.Internal.Dispatch.Signal "viewport_exited"
+
+instance NodeSignal VisibilityNotifier2D "viewport_exited"
+           '[Viewport]
 
 {-# NOINLINE bindVisibilityNotifier2D_get_rect #-}
 
@@ -66,7 +77,7 @@ get_rect cls
 {-# NOINLINE bindVisibilityNotifier2D_is_on_screen #-}
 
 -- | If [code]true[/code], the bounding rectangle is on the screen.
---   				Note: It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
+--   				[b]Note:[/b] It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
 bindVisibilityNotifier2D_is_on_screen :: MethodBind
 bindVisibilityNotifier2D_is_on_screen
   = unsafePerformIO $
@@ -77,7 +88,7 @@ bindVisibilityNotifier2D_is_on_screen
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If [code]true[/code], the bounding rectangle is on the screen.
---   				Note: It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
+--   				[b]Note:[/b] It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
 is_on_screen ::
                (VisibilityNotifier2D :< cls, Object :< cls) => cls -> IO Bool
 is_on_screen cls

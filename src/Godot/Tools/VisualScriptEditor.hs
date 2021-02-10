@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.VisualScriptEditor
        (Godot.Tools.VisualScriptEditor.sig_custom_nodes_updated,
         Godot.Tools.VisualScriptEditor.add_custom_node,
@@ -16,6 +17,8 @@ sig_custom_nodes_updated ::
                          Godot.Internal.Dispatch.Signal VisualScriptEditor
 sig_custom_nodes_updated
   = Godot.Internal.Dispatch.Signal "custom_nodes_updated"
+
+instance NodeSignal VisualScriptEditor "custom_nodes_updated" '[]
 
 {-# NOINLINE bindVisualScriptEditor_add_custom_node #-}
 

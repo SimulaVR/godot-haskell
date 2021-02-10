@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptYield
        (Godot.Core.VisualScriptYield._YIELD_FRAME,
         Godot.Core.VisualScriptYield._YIELD_PHYSICS_FRAME,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectRecord
        (Godot.Core.AudioEffectRecord.get_format,
         Godot.Core.AudioEffectRecord.get_recording,
@@ -16,6 +17,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindAudioEffectRecord_get_format #-}
 
+-- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
 bindAudioEffectRecord_get_format :: MethodBind
 bindAudioEffectRecord_get_format
   = unsafePerformIO $
@@ -25,6 +27,7 @@ bindAudioEffectRecord_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
 get_format ::
              (AudioEffectRecord :< cls, Object :< cls) => cls -> IO Int
 get_format cls
@@ -38,6 +41,7 @@ get_format cls
 
 {-# NOINLINE bindAudioEffectRecord_get_recording #-}
 
+-- | Returns the recorded sample.
 bindAudioEffectRecord_get_recording :: MethodBind
 bindAudioEffectRecord_get_recording
   = unsafePerformIO $
@@ -47,6 +51,7 @@ bindAudioEffectRecord_get_recording
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the recorded sample.
 get_recording ::
                 (AudioEffectRecord :< cls, Object :< cls) =>
                 cls -> IO AudioStreamSample
@@ -61,6 +66,7 @@ get_recording cls
 
 {-# NOINLINE bindAudioEffectRecord_is_recording_active #-}
 
+-- | Returns whether the recording is active or not.
 bindAudioEffectRecord_is_recording_active :: MethodBind
 bindAudioEffectRecord_is_recording_active
   = unsafePerformIO $
@@ -70,6 +76,7 @@ bindAudioEffectRecord_is_recording_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns whether the recording is active or not.
 is_recording_active ::
                       (AudioEffectRecord :< cls, Object :< cls) => cls -> IO Bool
 is_recording_active cls
@@ -83,6 +90,7 @@ is_recording_active cls
 
 {-# NOINLINE bindAudioEffectRecord_set_format #-}
 
+-- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
 bindAudioEffectRecord_set_format :: MethodBind
 bindAudioEffectRecord_set_format
   = unsafePerformIO $
@@ -92,6 +100,7 @@ bindAudioEffectRecord_set_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
 set_format ::
              (AudioEffectRecord :< cls, Object :< cls) => cls -> Int -> IO ()
 set_format cls arg1
@@ -105,6 +114,7 @@ set_format cls arg1
 
 {-# NOINLINE bindAudioEffectRecord_set_recording_active #-}
 
+-- | If [code]true[/code], the sound will be recorded. Note that restarting the recording will remove the previously recorded sample.
 bindAudioEffectRecord_set_recording_active :: MethodBind
 bindAudioEffectRecord_set_recording_active
   = unsafePerformIO $
@@ -114,6 +124,7 @@ bindAudioEffectRecord_set_recording_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the sound will be recorded. Note that restarting the recording will remove the previously recorded sample.
 set_recording_active ::
                        (AudioEffectRecord :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_recording_active cls arg1

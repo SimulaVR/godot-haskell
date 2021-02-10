@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WorldEnvironment
        (Godot.Core.WorldEnvironment.get_environment,
         Godot.Core.WorldEnvironment.set_environment)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindWorldEnvironment_get_environment #-}
 
--- | The [Environment] resource used by this [code]WorldEnvironment[/code], defining the default properties.
+-- | The [Environment] resource used by this [WorldEnvironment], defining the default properties.
 bindWorldEnvironment_get_environment :: MethodBind
 bindWorldEnvironment_get_environment
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindWorldEnvironment_get_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Environment] resource used by this [code]WorldEnvironment[/code], defining the default properties.
+-- | The [Environment] resource used by this [WorldEnvironment], defining the default properties.
 get_environment ::
                   (WorldEnvironment :< cls, Object :< cls) => cls -> IO Environment
 get_environment cls
@@ -37,7 +38,7 @@ get_environment cls
 
 {-# NOINLINE bindWorldEnvironment_set_environment #-}
 
--- | The [Environment] resource used by this [code]WorldEnvironment[/code], defining the default properties.
+-- | The [Environment] resource used by this [WorldEnvironment], defining the default properties.
 bindWorldEnvironment_set_environment :: MethodBind
 bindWorldEnvironment_set_environment
   = unsafePerformIO $
@@ -47,7 +48,7 @@ bindWorldEnvironment_set_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Environment] resource used by this [code]WorldEnvironment[/code], defining the default properties.
+-- | The [Environment] resource used by this [WorldEnvironment], defining the default properties.
 set_environment ::
                   (WorldEnvironment :< cls, Object :< cls) =>
                   cls -> Environment -> IO ()

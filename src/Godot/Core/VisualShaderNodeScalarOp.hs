@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeScalarOp
        (Godot.Core.VisualShaderNodeScalarOp._OP_MUL,
         Godot.Core.VisualShaderNodeScalarOp._OP_SUB,

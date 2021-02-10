@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ParallaxLayer
        (Godot.Core.ParallaxLayer.get_mirroring,
         Godot.Core.ParallaxLayer.get_motion_offset,
@@ -17,7 +18,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindParallaxLayer_get_mirroring #-}
 
--- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code] the [Texture] will not be mirrored. Default value: [code](0, 0)[/code].
+-- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code], the [Texture] will not be mirrored.
 bindParallaxLayer_get_mirroring :: MethodBind
 bindParallaxLayer_get_mirroring
   = unsafePerformIO $
@@ -27,7 +28,7 @@ bindParallaxLayer_get_mirroring
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code] the [Texture] will not be mirrored. Default value: [code](0, 0)[/code].
+-- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code], the [Texture] will not be mirrored.
 get_mirroring ::
                 (ParallaxLayer :< cls, Object :< cls) => cls -> IO Vector2
 get_mirroring cls
@@ -64,7 +65,7 @@ get_motion_offset cls
 
 {-# NOINLINE bindParallaxLayer_get_motion_scale #-}
 
--- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code] it will not scroll.
+-- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code], it will not scroll.
 bindParallaxLayer_get_motion_scale :: MethodBind
 bindParallaxLayer_get_motion_scale
   = unsafePerformIO $
@@ -74,7 +75,7 @@ bindParallaxLayer_get_motion_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code] it will not scroll.
+-- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code], it will not scroll.
 get_motion_scale ::
                    (ParallaxLayer :< cls, Object :< cls) => cls -> IO Vector2
 get_motion_scale cls
@@ -88,7 +89,7 @@ get_motion_scale cls
 
 {-# NOINLINE bindParallaxLayer_set_mirroring #-}
 
--- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code] the [Texture] will not be mirrored. Default value: [code](0, 0)[/code].
+-- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code], the [Texture] will not be mirrored.
 bindParallaxLayer_set_mirroring :: MethodBind
 bindParallaxLayer_set_mirroring
   = unsafePerformIO $
@@ -98,7 +99,7 @@ bindParallaxLayer_set_mirroring
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code] the [Texture] will not be mirrored. Default value: [code](0, 0)[/code].
+-- | The ParallaxLayer's [Texture] mirroring. Useful for creating an infinite scrolling background. If an axis is set to [code]0[/code], the [Texture] will not be mirrored.
 set_mirroring ::
                 (ParallaxLayer :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_mirroring cls arg1
@@ -135,7 +136,7 @@ set_motion_offset cls arg1
 
 {-# NOINLINE bindParallaxLayer_set_motion_scale #-}
 
--- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code] it will not scroll.
+-- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code], it will not scroll.
 bindParallaxLayer_set_motion_scale :: MethodBind
 bindParallaxLayer_set_motion_scale
   = unsafePerformIO $
@@ -145,7 +146,7 @@ bindParallaxLayer_set_motion_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code] it will not scroll.
+-- | Multiplies the ParallaxLayer's motion. If an axis is set to [code]0[/code], it will not scroll.
 set_motion_scale ::
                    (ParallaxLayer :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_motion_scale cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PopupMenu
        (Godot.Core.PopupMenu.sig_id_focused,
         Godot.Core.PopupMenu.sig_id_pressed,
@@ -76,17 +77,23 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
--- | This event is emitted when user navigated to an item of some id using [code]ui_up[/code] or [code]ui_down[/code] action.
+-- | Emitted when user navigated to an item of some [code]id[/code] using [code]ui_up[/code] or [code]ui_down[/code] action.
 sig_id_focused :: Godot.Internal.Dispatch.Signal PopupMenu
 sig_id_focused = Godot.Internal.Dispatch.Signal "id_focused"
 
--- | This event is emitted when an item of some id is pressed or its accelerator is activated.
+instance NodeSignal PopupMenu "id_focused" '[Int]
+
+-- | Emitted when an item of some [code]id[/code] is pressed or its accelerator is activated.
 sig_id_pressed :: Godot.Internal.Dispatch.Signal PopupMenu
 sig_id_pressed = Godot.Internal.Dispatch.Signal "id_pressed"
 
--- | This event is emitted when an item of some index is pressed or its accelerator is activated.
+instance NodeSignal PopupMenu "id_pressed" '[Int]
+
+-- | Emitted when an item of some [code]index[/code] is pressed or its accelerator is activated.
 sig_index_pressed :: Godot.Internal.Dispatch.Signal PopupMenu
 sig_index_pressed = Godot.Internal.Dispatch.Signal "index_pressed"
+
+instance NodeSignal PopupMenu "index_pressed" '[Int]
 
 {-# NOINLINE bindPopupMenu__get_items #-}
 
@@ -314,6 +321,7 @@ add_icon_item cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindPopupMenu_add_icon_radio_check_item #-}
 
+-- | Same as [method add_icon_check_item], but uses a radio check button.
 bindPopupMenu_add_icon_radio_check_item :: MethodBind
 bindPopupMenu_add_icon_radio_check_item
   = unsafePerformIO $
@@ -323,6 +331,7 @@ bindPopupMenu_add_icon_radio_check_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Same as [method add_icon_check_item], but uses a radio check button.
 add_icon_radio_check_item ::
                             (PopupMenu :< cls, Object :< cls) =>
                             cls -> Texture -> GodotString -> Int -> Int -> IO ()
@@ -338,6 +347,7 @@ add_icon_radio_check_item cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindPopupMenu_add_icon_radio_check_shortcut #-}
 
+-- | Same as [method add_icon_check_shortcut], but uses a radio check button.
 bindPopupMenu_add_icon_radio_check_shortcut :: MethodBind
 bindPopupMenu_add_icon_radio_check_shortcut
   = unsafePerformIO $
@@ -347,6 +357,7 @@ bindPopupMenu_add_icon_radio_check_shortcut
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Same as [method add_icon_check_shortcut], but uses a radio check button.
 add_icon_radio_check_shortcut ::
                                 (PopupMenu :< cls, Object :< cls) =>
                                 cls -> Texture -> ShortCut -> Int -> Bool -> IO ()
@@ -414,6 +425,9 @@ add_item cls arg1 arg2 arg3
 
 {-# NOINLINE bindPopupMenu_add_multistate_item #-}
 
+-- | Adds a new multistate item with text [code]label[/code].
+--   				Contrarily to normal binary items, multistate items can have more than two states, as defined by [code]max_states[/code]. Each press or activate of the item will increase the state by one. The default value is defined by [code]default_state[/code].
+--   				An [code]id[/code] can optionally be provided, as well as an accelerator ([code]accel[/code]). If no [code]id[/code] is provided, one will be created from the index. If no [code]accel[/code] is provided then the default [code]0[/code] will be assigned to it. See [method get_item_accelerator] for more info on accelerators.
 bindPopupMenu_add_multistate_item :: MethodBind
 bindPopupMenu_add_multistate_item
   = unsafePerformIO $
@@ -423,6 +437,9 @@ bindPopupMenu_add_multistate_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a new multistate item with text [code]label[/code].
+--   				Contrarily to normal binary items, multistate items can have more than two states, as defined by [code]max_states[/code]. Each press or activate of the item will increase the state by one. The default value is defined by [code]default_state[/code].
+--   				An [code]id[/code] can optionally be provided, as well as an accelerator ([code]accel[/code]). If no [code]id[/code] is provided, one will be created from the index. If no [code]accel[/code] is provided then the default [code]0[/code] will be assigned to it. See [method get_item_accelerator] for more info on accelerators.
 add_multistate_item ::
                       (PopupMenu :< cls, Object :< cls) =>
                       cls -> GodotString -> Int -> Int -> Int -> Int -> IO ()
@@ -439,7 +456,7 @@ add_multistate_item cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindPopupMenu_add_radio_check_item #-}
 
--- | Adds a new radio button with text [code]label[/code].
+-- | Adds a new radio check button with text [code]label[/code].
 --   				An [code]id[/code] can optionally be provided, as well as an accelerator ([code]accel[/code]). If no [code]id[/code] is provided, one will be created from the index. If no [code]accel[/code] is provided then the default [code]0[/code] will be assigned to it. See [method get_item_accelerator] for more info on accelerators.
 --   				[b]Note:[/b] Checkable items just display a checkmark, but don't have any built-in checking behavior and must be checked/unchecked manually. See [method set_item_checked] for more info on how to control it.
 bindPopupMenu_add_radio_check_item :: MethodBind
@@ -451,7 +468,7 @@ bindPopupMenu_add_radio_check_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a new radio button with text [code]label[/code].
+-- | Adds a new radio check button with text [code]label[/code].
 --   				An [code]id[/code] can optionally be provided, as well as an accelerator ([code]accel[/code]). If no [code]id[/code] is provided, one will be created from the index. If no [code]accel[/code] is provided then the default [code]0[/code] will be assigned to it. See [method get_item_accelerator] for more info on accelerators.
 --   				[b]Note:[/b] Checkable items just display a checkmark, but don't have any built-in checking behavior and must be checked/unchecked manually. See [method set_item_checked] for more info on how to control it.
 add_radio_check_item ::
@@ -497,7 +514,7 @@ add_radio_check_shortcut cls arg1 arg2 arg3
 
 {-# NOINLINE bindPopupMenu_add_separator #-}
 
--- | Add a separator between items. Separators also occupy an index.
+-- | Adds a separator between items. Separators also occupy an index.
 bindPopupMenu_add_separator :: MethodBind
 bindPopupMenu_add_separator
   = unsafePerformIO $
@@ -507,7 +524,7 @@ bindPopupMenu_add_separator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a separator between items. Separators also occupy an index.
+-- | Adds a separator between items. Separators also occupy an index.
 add_separator ::
                 (PopupMenu :< cls, Object :< cls) => cls -> GodotString -> IO ()
 add_separator cls arg1
@@ -592,6 +609,7 @@ clear cls
 
 {-# NOINLINE bindPopupMenu_get_allow_search #-}
 
+-- | If [code]true[/code], allows to navigate [PopupMenu] with letter keys.
 bindPopupMenu_get_allow_search :: MethodBind
 bindPopupMenu_get_allow_search
   = unsafePerformIO $
@@ -601,6 +619,7 @@ bindPopupMenu_get_allow_search
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], allows to navigate [PopupMenu] with letter keys.
 get_allow_search ::
                    (PopupMenu :< cls, Object :< cls) => cls -> IO Bool
 get_allow_search cls
@@ -613,7 +632,7 @@ get_allow_search cls
 
 {-# NOINLINE bindPopupMenu_get_item_accelerator #-}
 
--- | Returns the accelerator of the item at index "idx". Accelerators are special combinations of keys that activate the item, no matter which control is focused.
+-- | Returns the accelerator of the item at index [code]idx[/code]. Accelerators are special combinations of keys that activate the item, no matter which control is focused.
 bindPopupMenu_get_item_accelerator :: MethodBind
 bindPopupMenu_get_item_accelerator
   = unsafePerformIO $
@@ -623,7 +642,7 @@ bindPopupMenu_get_item_accelerator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the accelerator of the item at index "idx". Accelerators are special combinations of keys that activate the item, no matter which control is focused.
+-- | Returns the accelerator of the item at index [code]idx[/code]. Accelerators are special combinations of keys that activate the item, no matter which control is focused.
 get_item_accelerator ::
                        (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO Int
 get_item_accelerator cls arg1
@@ -660,7 +679,7 @@ get_item_count cls
 
 {-# NOINLINE bindPopupMenu_get_item_icon #-}
 
--- | Returns the icon of the item at index "idx".
+-- | Returns the icon of the item at index [code]idx[/code].
 bindPopupMenu_get_item_icon :: MethodBind
 bindPopupMenu_get_item_icon
   = unsafePerformIO $
@@ -670,7 +689,7 @@ bindPopupMenu_get_item_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the icon of the item at index "idx".
+-- | Returns the icon of the item at index [code]idx[/code].
 get_item_icon ::
                 (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_item_icon cls arg1
@@ -706,7 +725,7 @@ get_item_id cls arg1
 
 {-# NOINLINE bindPopupMenu_get_item_index #-}
 
--- | Returns the index of the item containing the specified [code]id[/code]. Index is automatically assigned to each item by the engine. Index can not be set manualy.
+-- | Returns the index of the item containing the specified [code]id[/code]. Index is automatically assigned to each item by the engine. Index can not be set manually.
 bindPopupMenu_get_item_index :: MethodBind
 bindPopupMenu_get_item_index
   = unsafePerformIO $
@@ -716,7 +735,7 @@ bindPopupMenu_get_item_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the index of the item containing the specified [code]id[/code]. Index is automatically assigned to each item by the engine. Index can not be set manualy.
+-- | Returns the index of the item containing the specified [code]id[/code]. Index is automatically assigned to each item by the engine. Index can not be set manually.
 get_item_index ::
                  (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO Int
 get_item_index cls arg1
@@ -798,7 +817,7 @@ get_item_submenu cls arg1
 
 {-# NOINLINE bindPopupMenu_get_item_text #-}
 
--- | Returns the text of the item at index "idx".
+-- | Returns the text of the item at index [code]idx[/code].
 bindPopupMenu_get_item_text :: MethodBind
 bindPopupMenu_get_item_text
   = unsafePerformIO $
@@ -808,7 +827,7 @@ bindPopupMenu_get_item_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the text of the item at index "idx".
+-- | Returns the text of the item at index [code]idx[/code].
 get_item_text ::
                 (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_item_text cls arg1
@@ -844,7 +863,7 @@ get_item_tooltip cls arg1
 
 {-# NOINLINE bindPopupMenu_get_submenu_popup_delay #-}
 
--- | Sets the delay time for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item. Default value: [code]0.3[/code] seconds.
+-- | Sets the delay time in seconds for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item.
 bindPopupMenu_get_submenu_popup_delay :: MethodBind
 bindPopupMenu_get_submenu_popup_delay
   = unsafePerformIO $
@@ -854,7 +873,7 @@ bindPopupMenu_get_submenu_popup_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the delay time for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item. Default value: [code]0.3[/code] seconds.
+-- | Sets the delay time in seconds for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item.
 get_submenu_popup_delay ::
                           (PopupMenu :< cls, Object :< cls) => cls -> IO Float
 get_submenu_popup_delay cls
@@ -942,7 +961,7 @@ is_hide_on_state_item_selection cls
 
 {-# NOINLINE bindPopupMenu_is_hide_on_window_lose_focus #-}
 
--- | Returns whether the popup will be hidden when the window loses focus or not.
+-- | Returns [code]true[/code] if the popup will be hidden when the window loses focus or not.
 bindPopupMenu_is_hide_on_window_lose_focus :: MethodBind
 bindPopupMenu_is_hide_on_window_lose_focus
   = unsafePerformIO $
@@ -952,7 +971,7 @@ bindPopupMenu_is_hide_on_window_lose_focus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the popup will be hidden when the window loses focus or not.
+-- | Returns [code]true[/code] if the popup will be hidden when the window loses focus or not.
 is_hide_on_window_lose_focus ::
                                (PopupMenu :< cls, Object :< cls) => cls -> IO Bool
 is_hide_on_window_lose_focus cls
@@ -966,7 +985,8 @@ is_hide_on_window_lose_focus cls
 
 {-# NOINLINE bindPopupMenu_is_item_checkable #-}
 
--- | Returns whether the item at index "idx" is checkable in some way, i.e., whether has a checkbox or radio button. Note that checkable items just display a checkmark or radio button, but don't have any built-in checking behavior and must be checked/unchecked manually.
+-- | Returns [code]true[/code] if the item at index [code]idx[/code] is checkable in some way, i.e. if it has a checkbox or radio button.
+--   				[b]Note:[/b] Checkable items just display a checkmark or radio button, but don't have any built-in checking behavior and must be checked/unchecked manually.
 bindPopupMenu_is_item_checkable :: MethodBind
 bindPopupMenu_is_item_checkable
   = unsafePerformIO $
@@ -976,7 +996,8 @@ bindPopupMenu_is_item_checkable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the item at index "idx" is checkable in some way, i.e., whether has a checkbox or radio button. Note that checkable items just display a checkmark or radio button, but don't have any built-in checking behavior and must be checked/unchecked manually.
+-- | Returns [code]true[/code] if the item at index [code]idx[/code] is checkable in some way, i.e. if it has a checkbox or radio button.
+--   				[b]Note:[/b] Checkable items just display a checkmark or radio button, but don't have any built-in checking behavior and must be checked/unchecked manually.
 is_item_checkable ::
                     (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_checkable cls arg1
@@ -989,7 +1010,7 @@ is_item_checkable cls arg1
 
 {-# NOINLINE bindPopupMenu_is_item_checked #-}
 
--- | Returns whether the item at index "idx" is checked.
+-- | Returns [code]true[/code] if the item at index [code]idx[/code] is checked.
 bindPopupMenu_is_item_checked :: MethodBind
 bindPopupMenu_is_item_checked
   = unsafePerformIO $
@@ -999,7 +1020,7 @@ bindPopupMenu_is_item_checked
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the item at index "idx" is checked.
+-- | Returns [code]true[/code] if the item at index [code]idx[/code] is checked.
 is_item_checked ::
                   (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_checked cls arg1
@@ -1086,7 +1107,7 @@ is_item_separator cls arg1
 
 {-# NOINLINE bindPopupMenu_is_item_shortcut_disabled #-}
 
--- | Returns whether the shortcut of the specified item [code]idx[/code] is disabled or not.
+-- | Returns [code]true[/code] if the specified item's shortcut is disabled.
 bindPopupMenu_is_item_shortcut_disabled :: MethodBind
 bindPopupMenu_is_item_shortcut_disabled
   = unsafePerformIO $
@@ -1096,7 +1117,7 @@ bindPopupMenu_is_item_shortcut_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the shortcut of the specified item [code]idx[/code] is disabled or not.
+-- | Returns [code]true[/code] if the specified item's shortcut is disabled.
 is_item_shortcut_disabled ::
                             (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_shortcut_disabled cls arg1
@@ -1110,7 +1131,8 @@ is_item_shortcut_disabled cls arg1
 
 {-# NOINLINE bindPopupMenu_remove_item #-}
 
--- | Removes the item at index "idx" from the menu. Note that the indexes of items after the removed item are going to be shifted by one.
+-- | Removes the item at index [code]idx[/code] from the menu.
+--   				[b]Note:[/b] The indices of items after the removed item will be shifted by one.
 bindPopupMenu_remove_item :: MethodBind
 bindPopupMenu_remove_item
   = unsafePerformIO $
@@ -1120,7 +1142,8 @@ bindPopupMenu_remove_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the item at index "idx" from the menu. Note that the indexes of items after the removed item are going to be shifted by one.
+-- | Removes the item at index [code]idx[/code] from the menu.
+--   				[b]Note:[/b] The indices of items after the removed item will be shifted by one.
 remove_item ::
               (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_item cls arg1
@@ -1133,6 +1156,7 @@ remove_item cls arg1
 
 {-# NOINLINE bindPopupMenu_set_allow_search #-}
 
+-- | If [code]true[/code], allows to navigate [PopupMenu] with letter keys.
 bindPopupMenu_set_allow_search :: MethodBind
 bindPopupMenu_set_allow_search
   = unsafePerformIO $
@@ -1142,6 +1166,7 @@ bindPopupMenu_set_allow_search
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], allows to navigate [PopupMenu] with letter keys.
 set_allow_search ::
                    (PopupMenu :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_allow_search cls arg1
@@ -1252,7 +1277,7 @@ set_hide_on_window_lose_focus cls arg1
 
 {-# NOINLINE bindPopupMenu_set_item_accelerator #-}
 
--- | Set the accelerator of the item at index "idx". Accelerators are special combinations of keys that activate the item, no matter which control is focused.
+-- | Sets the accelerator of the item at index [code]idx[/code]. Accelerators are special combinations of keys that activate the item, no matter which control is focused.
 bindPopupMenu_set_item_accelerator :: MethodBind
 bindPopupMenu_set_item_accelerator
   = unsafePerformIO $
@@ -1262,7 +1287,7 @@ bindPopupMenu_set_item_accelerator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the accelerator of the item at index "idx". Accelerators are special combinations of keys that activate the item, no matter which control is focused.
+-- | Sets the accelerator of the item at index [code]idx[/code]. Accelerators are special combinations of keys that activate the item, no matter which control is focused.
 set_item_accelerator ::
                        (PopupMenu :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_item_accelerator cls arg1 arg2
@@ -1302,7 +1327,7 @@ set_item_as_checkable cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_item_as_radio_checkable #-}
 
--- | Sets the type of the item at the specified index [code]idx[/code] to radio button. If false, sets the type of the item to plain text.
+-- | Sets the type of the item at the specified index [code]idx[/code] to radio button. If [code]false[/code], sets the type of the item to plain text.
 bindPopupMenu_set_item_as_radio_checkable :: MethodBind
 bindPopupMenu_set_item_as_radio_checkable
   = unsafePerformIO $
@@ -1312,7 +1337,7 @@ bindPopupMenu_set_item_as_radio_checkable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the type of the item at the specified index [code]idx[/code] to radio button. If false, sets the type of the item to plain text.
+-- | Sets the type of the item at the specified index [code]idx[/code] to radio button. If [code]false[/code], sets the type of the item to plain text.
 set_item_as_radio_checkable ::
                               (PopupMenu :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_item_as_radio_checkable cls arg1 arg2
@@ -1350,7 +1375,7 @@ set_item_as_separator cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_item_checked #-}
 
--- | Set the checkstate status of the item at index "idx".
+-- | Sets the checkstate status of the item at index [code]idx[/code].
 bindPopupMenu_set_item_checked :: MethodBind
 bindPopupMenu_set_item_checked
   = unsafePerformIO $
@@ -1360,7 +1385,7 @@ bindPopupMenu_set_item_checked
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the checkstate status of the item at index "idx".
+-- | Sets the checkstate status of the item at index [code]idx[/code].
 set_item_checked ::
                    (PopupMenu :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_item_checked cls arg1 arg2
@@ -1373,7 +1398,7 @@ set_item_checked cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_item_disabled #-}
 
--- | Sets whether the item at index "idx" is disabled or not. When it is disabled it can't be selected, or its action invoked.
+-- | Enables/disables the item at index [code]idx[/code]. When it is disabled, it can't be selected and its action can't be invoked.
 bindPopupMenu_set_item_disabled :: MethodBind
 bindPopupMenu_set_item_disabled
   = unsafePerformIO $
@@ -1383,7 +1408,7 @@ bindPopupMenu_set_item_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether the item at index "idx" is disabled or not. When it is disabled it can't be selected, or its action invoked.
+-- | Enables/disables the item at index [code]idx[/code]. When it is disabled, it can't be selected and its action can't be invoked.
 set_item_disabled ::
                     (PopupMenu :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_item_disabled cls arg1 arg2
@@ -1419,7 +1444,7 @@ set_item_icon cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_item_id #-}
 
--- | Set the id of the item at index "idx".
+-- | Sets the [code]id[/code] of the item at index [code]idx[/code].
 bindPopupMenu_set_item_id :: MethodBind
 bindPopupMenu_set_item_id
   = unsafePerformIO $
@@ -1429,7 +1454,7 @@ bindPopupMenu_set_item_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the id of the item at index "idx".
+-- | Sets the [code]id[/code] of the item at index [code]idx[/code].
 set_item_id ::
               (PopupMenu :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_item_id cls arg1 arg2
@@ -1442,7 +1467,7 @@ set_item_id cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_item_metadata #-}
 
--- | Sets the metadata of an item, which might be of any type. You can later get it with [method get_item_metadata], which provides a simple way of assigning context data to items.
+-- | Sets the metadata of an item, which may be of any type. You can later get it with [method get_item_metadata], which provides a simple way of assigning context data to items.
 bindPopupMenu_set_item_metadata :: MethodBind
 bindPopupMenu_set_item_metadata
   = unsafePerformIO $
@@ -1452,7 +1477,7 @@ bindPopupMenu_set_item_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the metadata of an item, which might be of any type. You can later get it with [method get_item_metadata], which provides a simple way of assigning context data to items.
+-- | Sets the metadata of an item, which may be of any type. You can later get it with [method get_item_metadata], which provides a simple way of assigning context data to items.
 set_item_metadata ::
                     (PopupMenu :< cls, Object :< cls) =>
                     cls -> Int -> GodotVariant -> IO ()
@@ -1466,6 +1491,7 @@ set_item_metadata cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_item_multistate #-}
 
+-- | Sets the state of an multistate item. See [method add_multistate_item] for details.
 bindPopupMenu_set_item_multistate :: MethodBind
 bindPopupMenu_set_item_multistate
   = unsafePerformIO $
@@ -1475,6 +1501,7 @@ bindPopupMenu_set_item_multistate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the state of an multistate item. See [method add_multistate_item] for details.
 set_item_multistate ::
                       (PopupMenu :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_item_multistate cls arg1 arg2
@@ -1560,7 +1587,7 @@ set_item_submenu cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_item_text #-}
 
--- | Set the text of the item at index "idx".
+-- | Sets the text of the item at index [code]idx[/code].
 bindPopupMenu_set_item_text :: MethodBind
 bindPopupMenu_set_item_text
   = unsafePerformIO $
@@ -1570,7 +1597,7 @@ bindPopupMenu_set_item_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the text of the item at index "idx".
+-- | Sets the text of the item at index [code]idx[/code].
 set_item_text ::
                 (PopupMenu :< cls, Object :< cls) =>
                 cls -> Int -> GodotString -> IO ()
@@ -1608,7 +1635,7 @@ set_item_tooltip cls arg1 arg2
 
 {-# NOINLINE bindPopupMenu_set_submenu_popup_delay #-}
 
--- | Sets the delay time for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item. Default value: [code]0.3[/code] seconds.
+-- | Sets the delay time in seconds for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item.
 bindPopupMenu_set_submenu_popup_delay :: MethodBind
 bindPopupMenu_set_submenu_popup_delay
   = unsafePerformIO $
@@ -1618,7 +1645,7 @@ bindPopupMenu_set_submenu_popup_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the delay time for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item. Default value: [code]0.3[/code] seconds.
+-- | Sets the delay time in seconds for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item.
 set_submenu_popup_delay ::
                           (PopupMenu :< cls, Object :< cls) => cls -> Float -> IO ()
 set_submenu_popup_delay cls arg1
@@ -1656,6 +1683,7 @@ toggle_item_checked cls arg1
 
 {-# NOINLINE bindPopupMenu_toggle_item_multistate #-}
 
+-- | Cycle to the next state of an multistate item. See [method add_multistate_item] for details.
 bindPopupMenu_toggle_item_multistate :: MethodBind
 bindPopupMenu_toggle_item_multistate
   = unsafePerformIO $
@@ -1665,6 +1693,7 @@ bindPopupMenu_toggle_item_multistate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Cycle to the next state of an multistate item. See [method add_multistate_item] for details.
 toggle_item_multistate ::
                          (PopupMenu :< cls, Object :< cls) => cls -> Int -> IO ()
 toggle_item_multistate cls arg1

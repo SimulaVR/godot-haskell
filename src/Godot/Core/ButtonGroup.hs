@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ButtonGroup
        (Godot.Core.ButtonGroup.get_buttons,
         Godot.Core.ButtonGroup.get_pressed_button)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindButtonGroup_get_buttons #-}
 
--- | Returns an [Array] of [Button]s who have this as their [code]ButtonGroup[/code] (see [member BaseButton.group]).
+-- | Returns an [Array] of [Button]s who have this as their [ButtonGroup] (see [member BaseButton.group]).
 bindButtonGroup_get_buttons :: MethodBind
 bindButtonGroup_get_buttons
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindButtonGroup_get_buttons
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an [Array] of [Button]s who have this as their [code]ButtonGroup[/code] (see [member BaseButton.group]).
+-- | Returns an [Array] of [Button]s who have this as their [ButtonGroup] (see [member BaseButton.group]).
 get_buttons ::
               (ButtonGroup :< cls, Object :< cls) => cls -> IO Array
 get_buttons cls

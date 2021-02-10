@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.UPNP
        (Godot.Core.UPNP._UPNP_RESULT_NO_SUCH_ENTRY_IN_ARRAY,
         Godot.Core.UPNP._UPNP_RESULT_NO_DEVICES,

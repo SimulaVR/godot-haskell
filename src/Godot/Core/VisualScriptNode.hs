@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptNode
        (Godot.Core.VisualScriptNode.sig_ports_changed,
         Godot.Core.VisualScriptNode._get_default_input_values,
@@ -19,6 +20,8 @@ import Godot.Api.Types
 sig_ports_changed ::
                   Godot.Internal.Dispatch.Signal VisualScriptNode
 sig_ports_changed = Godot.Internal.Dispatch.Signal "ports_changed"
+
+instance NodeSignal VisualScriptNode "ports_changed" '[]
 
 {-# NOINLINE bindVisualScriptNode__get_default_input_values #-}
 

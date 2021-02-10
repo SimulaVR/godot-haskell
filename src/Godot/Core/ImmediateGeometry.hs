@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ImmediateGeometry
        (Godot.Core.ImmediateGeometry.add_sphere,
         Godot.Core.ImmediateGeometry.add_vertex,
@@ -21,7 +22,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindImmediateGeometry_add_sphere #-}
 
--- | Simple helper to draw a uvsphere, with given latitudes, longitude and radius.
+-- | Simple helper to draw an UV sphere with given latitude, longitude and radius.
 bindImmediateGeometry_add_sphere :: MethodBind
 bindImmediateGeometry_add_sphere
   = unsafePerformIO $
@@ -31,7 +32,7 @@ bindImmediateGeometry_add_sphere
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Simple helper to draw a uvsphere, with given latitudes, longitude and radius.
+-- | Simple helper to draw an UV sphere with given latitude, longitude and radius.
 add_sphere ::
              (ImmediateGeometry :< cls, Object :< cls) =>
              cls -> Int -> Int -> Float -> Bool -> IO ()
@@ -47,7 +48,7 @@ add_sphere cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindImmediateGeometry_add_vertex #-}
 
--- | Adds a vertex with the currently set color/uv/etc.
+-- | Adds a vertex in local coordinate space with the currently set color/uv/etc.
 bindImmediateGeometry_add_vertex :: MethodBind
 bindImmediateGeometry_add_vertex
   = unsafePerformIO $
@@ -57,7 +58,7 @@ bindImmediateGeometry_add_vertex
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a vertex with the currently set color/uv/etc.
+-- | Adds a vertex in local coordinate space with the currently set color/uv/etc.
 add_vertex ::
              (ImmediateGeometry :< cls, Object :< cls) =>
              cls -> Vector3 -> IO ()
@@ -72,8 +73,8 @@ add_vertex cls arg1
 
 {-# NOINLINE bindImmediateGeometry_begin #-}
 
--- | Begin drawing (And optionally pass a texture override). When done call end(). For more information on how this works, search for glBegin() glEnd() references.
---   			For the type of primitive, use the [Mesh].PRIMITIVE_* enumerations.
+-- | Begin drawing (and optionally pass a texture override). When done call [method end]. For more information on how this works, search for [code]glBegin()[/code] and [code]glEnd()[/code] references.
+--   				For the type of primitive, see the [enum Mesh.PrimitiveType] enum.
 bindImmediateGeometry_begin :: MethodBind
 bindImmediateGeometry_begin
   = unsafePerformIO $
@@ -83,8 +84,8 @@ bindImmediateGeometry_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Begin drawing (And optionally pass a texture override). When done call end(). For more information on how this works, search for glBegin() glEnd() references.
---   			For the type of primitive, use the [Mesh].PRIMITIVE_* enumerations.
+-- | Begin drawing (and optionally pass a texture override). When done call [method end]. For more information on how this works, search for [code]glBegin()[/code] and [code]glEnd()[/code] references.
+--   				For the type of primitive, see the [enum Mesh.PrimitiveType] enum.
 begin ::
         (ImmediateGeometry :< cls, Object :< cls) =>
         cls -> Int -> Texture -> IO ()

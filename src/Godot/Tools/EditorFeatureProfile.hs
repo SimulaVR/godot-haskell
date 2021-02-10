@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorFeatureProfile
        (Godot.Tools.EditorFeatureProfile._FEATURE_FILESYSTEM_DOCK,
         Godot.Tools.EditorFeatureProfile._FEATURE_3D,
@@ -54,6 +55,7 @@ _FEATURE_ASSET_LIB = 2
 
 {-# NOINLINE bindEditorFeatureProfile_get_feature_name #-}
 
+-- | Returns the specified [code]feature[/code]'s human-readable name.
 bindEditorFeatureProfile_get_feature_name :: MethodBind
 bindEditorFeatureProfile_get_feature_name
   = unsafePerformIO $
@@ -63,6 +65,7 @@ bindEditorFeatureProfile_get_feature_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the specified [code]feature[/code]'s human-readable name.
 get_feature_name ::
                    (EditorFeatureProfile :< cls, Object :< cls) =>
                    cls -> Int -> IO GodotString
@@ -77,6 +80,7 @@ get_feature_name cls arg1
 
 {-# NOINLINE bindEditorFeatureProfile_is_class_disabled #-}
 
+-- | Returns [code]true[/code] if the class specified by [code]class_name[/code] is disabled. When disabled, the class won't appear in the Create New Node dialog.
 bindEditorFeatureProfile_is_class_disabled :: MethodBind
 bindEditorFeatureProfile_is_class_disabled
   = unsafePerformIO $
@@ -86,6 +90,7 @@ bindEditorFeatureProfile_is_class_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the class specified by [code]class_name[/code] is disabled. When disabled, the class won't appear in the Create New Node dialog.
 is_class_disabled ::
                     (EditorFeatureProfile :< cls, Object :< cls) =>
                     cls -> GodotString -> IO Bool
@@ -100,6 +105,7 @@ is_class_disabled cls arg1
 
 {-# NOINLINE bindEditorFeatureProfile_is_class_editor_disabled #-}
 
+-- | Returns [code]true[/code] if editing for the class specified by [code]class_name[/code] is disabled. When disabled, the class will still appear in the Create New Node dialog but the inspector will be read-only when selecting a node that extends the class.
 bindEditorFeatureProfile_is_class_editor_disabled :: MethodBind
 bindEditorFeatureProfile_is_class_editor_disabled
   = unsafePerformIO $
@@ -109,6 +115,7 @@ bindEditorFeatureProfile_is_class_editor_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if editing for the class specified by [code]class_name[/code] is disabled. When disabled, the class will still appear in the Create New Node dialog but the inspector will be read-only when selecting a node that extends the class.
 is_class_editor_disabled ::
                            (EditorFeatureProfile :< cls, Object :< cls) =>
                            cls -> GodotString -> IO Bool
@@ -125,6 +132,7 @@ is_class_editor_disabled cls arg1
 {-# NOINLINE bindEditorFeatureProfile_is_class_property_disabled
              #-}
 
+-- | Returns [code]true[/code] if [code]property[/code] is disabled in the class specified by [code]class_name[/code]. When a property is disabled, it won't appear in the inspector when selecting a node that extends the class specified by [code]class_name[/code].
 bindEditorFeatureProfile_is_class_property_disabled :: MethodBind
 bindEditorFeatureProfile_is_class_property_disabled
   = unsafePerformIO $
@@ -134,6 +142,7 @@ bindEditorFeatureProfile_is_class_property_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if [code]property[/code] is disabled in the class specified by [code]class_name[/code]. When a property is disabled, it won't appear in the inspector when selecting a node that extends the class specified by [code]class_name[/code].
 is_class_property_disabled ::
                              (EditorFeatureProfile :< cls, Object :< cls) =>
                              cls -> GodotString -> GodotString -> IO Bool
@@ -149,6 +158,7 @@ is_class_property_disabled cls arg1 arg2
 
 {-# NOINLINE bindEditorFeatureProfile_is_feature_disabled #-}
 
+-- | Returns [code]true[/code] if the [code]feature[/code] is disabled. When a feature is disabled, it will disappear from the editor entirely.
 bindEditorFeatureProfile_is_feature_disabled :: MethodBind
 bindEditorFeatureProfile_is_feature_disabled
   = unsafePerformIO $
@@ -158,6 +168,7 @@ bindEditorFeatureProfile_is_feature_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the [code]feature[/code] is disabled. When a feature is disabled, it will disappear from the editor entirely.
 is_feature_disabled ::
                       (EditorFeatureProfile :< cls, Object :< cls) =>
                       cls -> Int -> IO Bool
@@ -172,6 +183,7 @@ is_feature_disabled cls arg1
 
 {-# NOINLINE bindEditorFeatureProfile_load_from_file #-}
 
+-- | Loads an editor feature profile from a file. The file must follow the JSON format obtained by using the feature profile manager's [b]Export[/b] button or the [method save_to_file] method.
 bindEditorFeatureProfile_load_from_file :: MethodBind
 bindEditorFeatureProfile_load_from_file
   = unsafePerformIO $
@@ -181,6 +193,7 @@ bindEditorFeatureProfile_load_from_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Loads an editor feature profile from a file. The file must follow the JSON format obtained by using the feature profile manager's [b]Export[/b] button or the [method save_to_file] method.
 load_from_file ::
                  (EditorFeatureProfile :< cls, Object :< cls) =>
                  cls -> GodotString -> IO Int
@@ -195,6 +208,7 @@ load_from_file cls arg1
 
 {-# NOINLINE bindEditorFeatureProfile_save_to_file #-}
 
+-- | Saves the editor feature profile to a file in JSON format. It can then be imported using the feature profile manager's [b]Import[/b] button or the [method load_from_file] button.
 bindEditorFeatureProfile_save_to_file :: MethodBind
 bindEditorFeatureProfile_save_to_file
   = unsafePerformIO $
@@ -204,6 +218,7 @@ bindEditorFeatureProfile_save_to_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Saves the editor feature profile to a file in JSON format. It can then be imported using the feature profile manager's [b]Import[/b] button or the [method load_from_file] button.
 save_to_file ::
                (EditorFeatureProfile :< cls, Object :< cls) =>
                cls -> GodotString -> IO Int
@@ -218,6 +233,7 @@ save_to_file cls arg1
 
 {-# NOINLINE bindEditorFeatureProfile_set_disable_class #-}
 
+-- | If [code]disable[/code] is [code]true[/code], disables the class specified by [code]class_name[/code]. When disabled, the class won't appear in the Create New Node dialog.
 bindEditorFeatureProfile_set_disable_class :: MethodBind
 bindEditorFeatureProfile_set_disable_class
   = unsafePerformIO $
@@ -227,6 +243,7 @@ bindEditorFeatureProfile_set_disable_class
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]disable[/code] is [code]true[/code], disables the class specified by [code]class_name[/code]. When disabled, the class won't appear in the Create New Node dialog.
 set_disable_class ::
                     (EditorFeatureProfile :< cls, Object :< cls) =>
                     cls -> GodotString -> Bool -> IO ()
@@ -241,6 +258,7 @@ set_disable_class cls arg1 arg2
 
 {-# NOINLINE bindEditorFeatureProfile_set_disable_class_editor #-}
 
+-- | If [code]disable[/code] is [code]true[/code], disables editing for the class specified by [code]class_name[/code]. When disabled, the class will still appear in the Create New Node dialog but the inspector will be read-only when selecting a node that extends the class.
 bindEditorFeatureProfile_set_disable_class_editor :: MethodBind
 bindEditorFeatureProfile_set_disable_class_editor
   = unsafePerformIO $
@@ -250,6 +268,7 @@ bindEditorFeatureProfile_set_disable_class_editor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]disable[/code] is [code]true[/code], disables editing for the class specified by [code]class_name[/code]. When disabled, the class will still appear in the Create New Node dialog but the inspector will be read-only when selecting a node that extends the class.
 set_disable_class_editor ::
                            (EditorFeatureProfile :< cls, Object :< cls) =>
                            cls -> GodotString -> Bool -> IO ()
@@ -266,6 +285,7 @@ set_disable_class_editor cls arg1 arg2
 {-# NOINLINE bindEditorFeatureProfile_set_disable_class_property
              #-}
 
+-- | If [code]disable[/code] is [code]true[/code], disables editing for [code]property[/code] in the class specified by [code]class_name[/code]. When a property is disabled, it won't appear in the inspector when selecting a node that extends the class specified by [code]class_name[/code].
 bindEditorFeatureProfile_set_disable_class_property :: MethodBind
 bindEditorFeatureProfile_set_disable_class_property
   = unsafePerformIO $
@@ -275,6 +295,7 @@ bindEditorFeatureProfile_set_disable_class_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]disable[/code] is [code]true[/code], disables editing for [code]property[/code] in the class specified by [code]class_name[/code]. When a property is disabled, it won't appear in the inspector when selecting a node that extends the class specified by [code]class_name[/code].
 set_disable_class_property ::
                              (EditorFeatureProfile :< cls, Object :< cls) =>
                              cls -> GodotString -> GodotString -> Bool -> IO ()
@@ -290,6 +311,7 @@ set_disable_class_property cls arg1 arg2 arg3
 
 {-# NOINLINE bindEditorFeatureProfile_set_disable_feature #-}
 
+-- | If [code]disable[/code] is [code]true[/code], disables the editor feature specified in [code]feature[/code]. When a feature is disabled, it will disappear from the editor entirely.
 bindEditorFeatureProfile_set_disable_feature :: MethodBind
 bindEditorFeatureProfile_set_disable_feature
   = unsafePerformIO $
@@ -299,6 +321,7 @@ bindEditorFeatureProfile_set_disable_feature
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]disable[/code] is [code]true[/code], disables the editor feature specified in [code]feature[/code]. When a feature is disabled, it will disappear from the editor entirely.
 set_disable_feature ::
                       (EditorFeatureProfile :< cls, Object :< cls) =>
                       cls -> Int -> Bool -> IO ()

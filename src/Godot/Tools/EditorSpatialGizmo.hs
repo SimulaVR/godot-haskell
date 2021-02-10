@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorSpatialGizmo
        (Godot.Tools.EditorSpatialGizmo.add_collision_segments,
         Godot.Tools.EditorSpatialGizmo.add_collision_triangles,
@@ -28,6 +29,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindEditorSpatialGizmo_add_collision_segments #-}
 
+-- | Adds the specified [code]segments[/code] to the gizmo's collision shape for picking. Call this function during [method redraw].
 bindEditorSpatialGizmo_add_collision_segments :: MethodBind
 bindEditorSpatialGizmo_add_collision_segments
   = unsafePerformIO $
@@ -37,6 +39,7 @@ bindEditorSpatialGizmo_add_collision_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds the specified [code]segments[/code] to the gizmo's collision shape for picking. Call this function during [method redraw].
 add_collision_segments ::
                          (EditorSpatialGizmo :< cls, Object :< cls) =>
                          cls -> PoolVector3Array -> IO ()
@@ -52,7 +55,7 @@ add_collision_segments cls arg1
 
 {-# NOINLINE bindEditorSpatialGizmo_add_collision_triangles #-}
 
--- | Add collision triangles to the gizmo for picking. A [TriangleMesh] can be generated from a regular [Mesh] too. Call this function during [method redraw].
+-- | Adds collision triangles to the gizmo for picking. A [TriangleMesh] can be generated from a regular [Mesh] too. Call this function during [method redraw].
 bindEditorSpatialGizmo_add_collision_triangles :: MethodBind
 bindEditorSpatialGizmo_add_collision_triangles
   = unsafePerformIO $
@@ -62,7 +65,7 @@ bindEditorSpatialGizmo_add_collision_triangles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add collision triangles to the gizmo for picking. A [TriangleMesh] can be generated from a regular [Mesh] too. Call this function during [method redraw].
+-- | Adds collision triangles to the gizmo for picking. A [TriangleMesh] can be generated from a regular [Mesh] too. Call this function during [method redraw].
 add_collision_triangles ::
                           (EditorSpatialGizmo :< cls, Object :< cls) =>
                           cls -> TriangleMesh -> IO ()
@@ -78,7 +81,7 @@ add_collision_triangles cls arg1
 
 {-# NOINLINE bindEditorSpatialGizmo_add_handles #-}
 
--- | Add a list of handles (points) which can be used to deform the object being edited.
+-- | Adds a list of handles (points) which can be used to deform the object being edited.
 --   				There are virtual functions which will be called upon editing of these handles. Call this function during [method redraw].
 bindEditorSpatialGizmo_add_handles :: MethodBind
 bindEditorSpatialGizmo_add_handles
@@ -89,7 +92,7 @@ bindEditorSpatialGizmo_add_handles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a list of handles (points) which can be used to deform the object being edited.
+-- | Adds a list of handles (points) which can be used to deform the object being edited.
 --   				There are virtual functions which will be called upon editing of these handles. Call this function during [method redraw].
 add_handles ::
               (EditorSpatialGizmo :< cls, Object :< cls) =>
@@ -106,7 +109,7 @@ add_handles cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindEditorSpatialGizmo_add_lines #-}
 
--- | Add lines to the gizmo (as sets of 2 points), with a given material. The lines are used for visualizing the gizmo. Call this function during [method redraw].
+-- | Adds lines to the gizmo (as sets of 2 points), with a given material. The lines are used for visualizing the gizmo. Call this function during [method redraw].
 bindEditorSpatialGizmo_add_lines :: MethodBind
 bindEditorSpatialGizmo_add_lines
   = unsafePerformIO $
@@ -116,7 +119,7 @@ bindEditorSpatialGizmo_add_lines
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add lines to the gizmo (as sets of 2 points), with a given material. The lines are used for visualizing the gizmo. Call this function during [method redraw].
+-- | Adds lines to the gizmo (as sets of 2 points), with a given material. The lines are used for visualizing the gizmo. Call this function during [method redraw].
 add_lines ::
             (EditorSpatialGizmo :< cls, Object :< cls) =>
             cls -> PoolVector3Array -> Material -> Bool -> Color -> IO ()
@@ -132,6 +135,7 @@ add_lines cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindEditorSpatialGizmo_add_mesh #-}
 
+-- | Adds a mesh to the gizmo with the specified [code]billboard[/code] state, [code]skeleton[/code] and [code]material[/code]. If [code]billboard[/code] is [code]true[/code], the mesh will rotate to always face the camera. Call this function during [method redraw].
 bindEditorSpatialGizmo_add_mesh :: MethodBind
 bindEditorSpatialGizmo_add_mesh
   = unsafePerformIO $
@@ -141,6 +145,7 @@ bindEditorSpatialGizmo_add_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a mesh to the gizmo with the specified [code]billboard[/code] state, [code]skeleton[/code] and [code]material[/code]. If [code]billboard[/code] is [code]true[/code], the mesh will rotate to always face the camera. Call this function during [method redraw].
 add_mesh ::
            (EditorSpatialGizmo :< cls, Object :< cls) =>
            cls -> ArrayMesh -> Bool -> SkinReference -> Material -> IO ()
@@ -155,7 +160,7 @@ add_mesh cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindEditorSpatialGizmo_add_unscaled_billboard #-}
 
--- | Add an unscaled billboard for visualization. Call this function during [method redraw].
+-- | Adds an unscaled billboard for visualization. Call this function during [method redraw].
 bindEditorSpatialGizmo_add_unscaled_billboard :: MethodBind
 bindEditorSpatialGizmo_add_unscaled_billboard
   = unsafePerformIO $
@@ -165,7 +170,7 @@ bindEditorSpatialGizmo_add_unscaled_billboard
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add an unscaled billboard for visualization. Call this function during [method redraw].
+-- | Adds an unscaled billboard for visualization. Call this function during [method redraw].
 add_unscaled_billboard ::
                          (EditorSpatialGizmo :< cls, Object :< cls) =>
                          cls -> Material -> Float -> Color -> IO ()
@@ -181,6 +186,7 @@ add_unscaled_billboard cls arg1 arg2 arg3
 
 {-# NOINLINE bindEditorSpatialGizmo_clear #-}
 
+-- | Removes everything in the gizmo including meshes, collisions and handles.
 bindEditorSpatialGizmo_clear :: MethodBind
 bindEditorSpatialGizmo_clear
   = unsafePerformIO $
@@ -190,6 +196,7 @@ bindEditorSpatialGizmo_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes everything in the gizmo including meshes, collisions and handles.
 clear :: (EditorSpatialGizmo :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -202,7 +209,7 @@ clear cls
 {-# NOINLINE bindEditorSpatialGizmo_commit_handle #-}
 
 -- | Commit a handle being edited (handles must have been previously added by [method add_handles]).
---   				If the cancel parameter is [code]true[/code], an option to restore the edited value to the original is provided.
+--   				If the [code]cancel[/code] parameter is [code]true[/code], an option to restore the edited value to the original is provided.
 bindEditorSpatialGizmo_commit_handle :: MethodBind
 bindEditorSpatialGizmo_commit_handle
   = unsafePerformIO $
@@ -213,7 +220,7 @@ bindEditorSpatialGizmo_commit_handle
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Commit a handle being edited (handles must have been previously added by [method add_handles]).
---   				If the cancel parameter is [code]true[/code], an option to restore the edited value to the original is provided.
+--   				If the [code]cancel[/code] parameter is [code]true[/code], an option to restore the edited value to the original is provided.
 commit_handle ::
                 (EditorSpatialGizmo :< cls, Object :< cls) =>
                 cls -> Int -> GodotVariant -> Bool -> IO ()
@@ -228,7 +235,7 @@ commit_handle cls arg1 arg2 arg3
 
 {-# NOINLINE bindEditorSpatialGizmo_get_handle_name #-}
 
--- | Get the name of an edited handle (handles must have been previously added by [method add_handles]).
+-- | Gets the name of an edited handle (handles must have been previously added by [method add_handles]).
 --   				Handles can be named for reference to the user when editing.
 bindEditorSpatialGizmo_get_handle_name :: MethodBind
 bindEditorSpatialGizmo_get_handle_name
@@ -239,7 +246,7 @@ bindEditorSpatialGizmo_get_handle_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the name of an edited handle (handles must have been previously added by [method add_handles]).
+-- | Gets the name of an edited handle (handles must have been previously added by [method add_handles]).
 --   				Handles can be named for reference to the user when editing.
 get_handle_name ::
                   (EditorSpatialGizmo :< cls, Object :< cls) =>
@@ -255,7 +262,7 @@ get_handle_name cls arg1
 
 {-# NOINLINE bindEditorSpatialGizmo_get_handle_value #-}
 
--- | Get actual value of a handle. This value can be anything and used for eventually undoing the motion when calling [method commit_handle].
+-- | Gets actual value of a handle. This value can be anything and used for eventually undoing the motion when calling [method commit_handle].
 bindEditorSpatialGizmo_get_handle_value :: MethodBind
 bindEditorSpatialGizmo_get_handle_value
   = unsafePerformIO $
@@ -265,7 +272,7 @@ bindEditorSpatialGizmo_get_handle_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get actual value of a handle. This value can be anything and used for eventually undoing the motion when calling [method commit_handle].
+-- | Gets actual value of a handle. This value can be anything and used for eventually undoing the motion when calling [method commit_handle].
 get_handle_value ::
                    (EditorSpatialGizmo :< cls, Object :< cls) =>
                    cls -> Int -> IO GodotVariant
@@ -329,7 +336,7 @@ get_spatial_node cls
 
 {-# NOINLINE bindEditorSpatialGizmo_is_handle_highlighted #-}
 
--- | Get whether a handle is highlighted or not.
+-- | Returns [code]true[/code] if the handle at index [code]index[/code] is highlighted by being hovered with the mouse.
 bindEditorSpatialGizmo_is_handle_highlighted :: MethodBind
 bindEditorSpatialGizmo_is_handle_highlighted
   = unsafePerformIO $
@@ -339,7 +346,7 @@ bindEditorSpatialGizmo_is_handle_highlighted
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get whether a handle is highlighted or not.
+-- | Returns [code]true[/code] if the handle at index [code]index[/code] is highlighted by being hovered with the mouse.
 is_handle_highlighted ::
                         (EditorSpatialGizmo :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_handle_highlighted cls arg1
@@ -353,7 +360,7 @@ is_handle_highlighted cls arg1
 
 {-# NOINLINE bindEditorSpatialGizmo_redraw #-}
 
--- | This function is called when the Spatial this gizmo refers to changes (the [method Spatial.update_gizmo] is called).
+-- | This function is called when the [Spatial] this gizmo refers to changes (the [method Spatial.update_gizmo] is called).
 bindEditorSpatialGizmo_redraw :: MethodBind
 bindEditorSpatialGizmo_redraw
   = unsafePerformIO $
@@ -363,7 +370,7 @@ bindEditorSpatialGizmo_redraw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This function is called when the Spatial this gizmo refers to changes (the [method Spatial.update_gizmo] is called).
+-- | This function is called when the [Spatial] this gizmo refers to changes (the [method Spatial.update_gizmo] is called).
 redraw ::
          (EditorSpatialGizmo :< cls, Object :< cls) => cls -> IO ()
 redraw cls
@@ -403,6 +410,7 @@ set_handle cls arg1 arg2 arg3
 
 {-# NOINLINE bindEditorSpatialGizmo_set_hidden #-}
 
+-- | Sets the gizmo's hidden state. If [code]true[/code], the gizmo will be hidden. If [code]false[/code], it will be shown.
 bindEditorSpatialGizmo_set_hidden :: MethodBind
 bindEditorSpatialGizmo_set_hidden
   = unsafePerformIO $
@@ -412,6 +420,7 @@ bindEditorSpatialGizmo_set_hidden
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the gizmo's hidden state. If [code]true[/code], the gizmo will be hidden. If [code]false[/code], it will be shown.
 set_hidden ::
              (EditorSpatialGizmo :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hidden cls arg1
@@ -425,6 +434,7 @@ set_hidden cls arg1
 
 {-# NOINLINE bindEditorSpatialGizmo_set_spatial_node #-}
 
+-- | Sets the reference [Spatial] node for the gizmo. [code]node[/code] must inherit from [Spatial].
 bindEditorSpatialGizmo_set_spatial_node :: MethodBind
 bindEditorSpatialGizmo_set_spatial_node
   = unsafePerformIO $
@@ -434,6 +444,7 @@ bindEditorSpatialGizmo_set_spatial_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the reference [Spatial] node for the gizmo. [code]node[/code] must inherit from [Spatial].
 set_spatial_node ::
                    (EditorSpatialGizmo :< cls, Object :< cls) => cls -> Node -> IO ()
 set_spatial_node cls arg1

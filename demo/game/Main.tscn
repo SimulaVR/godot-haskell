@@ -18,6 +18,9 @@ PackedScene = ExtResource( 2 )
 margin_right = 480.0
 margin_bottom = 720.0
 color = Color( 0.229564, 0.339542, 0.394531, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimatedSprite
        (Godot.Core.AnimatedSprite.sig_animation_finished,
         Godot.Core.AnimatedSprite.sig_frame_changed,
@@ -39,9 +40,13 @@ sig_animation_finished ::
 sig_animation_finished
   = Godot.Internal.Dispatch.Signal "animation_finished"
 
+instance NodeSignal AnimatedSprite "animation_finished" '[]
+
 -- | Emitted when [member frame] changed.
 sig_frame_changed :: Godot.Internal.Dispatch.Signal AnimatedSprite
 sig_frame_changed = Godot.Internal.Dispatch.Signal "frame_changed"
+
+instance NodeSignal AnimatedSprite "frame_changed" '[]
 
 {-# NOINLINE bindAnimatedSprite__is_playing #-}
 
@@ -230,7 +235,7 @@ get_sprite_frames cls
 
 {-# NOINLINE bindAnimatedSprite_is_centered #-}
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 bindAnimatedSprite_is_centered :: MethodBind
 bindAnimatedSprite_is_centered
   = unsafePerformIO $
@@ -240,7 +245,7 @@ bindAnimatedSprite_is_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 is_centered ::
               (AnimatedSprite :< cls, Object :< cls) => cls -> IO Bool
 is_centered cls
@@ -253,7 +258,7 @@ is_centered cls
 
 {-# NOINLINE bindAnimatedSprite_is_flipped_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 bindAnimatedSprite_is_flipped_h :: MethodBind
 bindAnimatedSprite_is_flipped_h
   = unsafePerformIO $
@@ -263,7 +268,7 @@ bindAnimatedSprite_is_flipped_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 is_flipped_h ::
                (AnimatedSprite :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_h cls
@@ -276,7 +281,7 @@ is_flipped_h cls
 
 {-# NOINLINE bindAnimatedSprite_is_flipped_v #-}
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 bindAnimatedSprite_is_flipped_v :: MethodBind
 bindAnimatedSprite_is_flipped_v
   = unsafePerformIO $
@@ -286,7 +291,7 @@ bindAnimatedSprite_is_flipped_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 is_flipped_v ::
                (AnimatedSprite :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_v cls
@@ -299,7 +304,7 @@ is_flipped_v cls
 
 {-# NOINLINE bindAnimatedSprite_is_playing #-}
 
--- | Returns [code]true[/code] if an animation if currently being played.
+-- | Returns [code]true[/code] if an animation is currently being played.
 bindAnimatedSprite_is_playing :: MethodBind
 bindAnimatedSprite_is_playing
   = unsafePerformIO $
@@ -309,7 +314,7 @@ bindAnimatedSprite_is_playing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if an animation if currently being played.
+-- | Returns [code]true[/code] if an animation is currently being played.
 is_playing ::
              (AnimatedSprite :< cls, Object :< cls) => cls -> IO Bool
 is_playing cls
@@ -322,7 +327,7 @@ is_playing cls
 
 {-# NOINLINE bindAnimatedSprite_play #-}
 
--- | Play the animation set in parameter. If no parameter is provided, the current animation is played. Property [code]backwards[/code] plays the animation in reverse if set to [code]true[/code].
+-- | Plays the animation named [code]anim[/code]. If no [code]anim[/code] is provided, the current animation is played. If [code]backwards[/code] is [code]true[/code], the animation will be played in reverse.
 bindAnimatedSprite_play :: MethodBind
 bindAnimatedSprite_play
   = unsafePerformIO $
@@ -332,7 +337,7 @@ bindAnimatedSprite_play
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Play the animation set in parameter. If no parameter is provided, the current animation is played. Property [code]backwards[/code] plays the animation in reverse if set to [code]true[/code].
+-- | Plays the animation named [code]anim[/code]. If no [code]anim[/code] is provided, the current animation is played. If [code]backwards[/code] is [code]true[/code], the animation will be played in reverse.
 play ::
        (AnimatedSprite :< cls, Object :< cls) =>
        cls -> GodotString -> Bool -> IO ()
@@ -370,7 +375,7 @@ set_animation cls arg1
 
 {-# NOINLINE bindAnimatedSprite_set_centered #-}
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 bindAnimatedSprite_set_centered :: MethodBind
 bindAnimatedSprite_set_centered
   = unsafePerformIO $
@@ -380,7 +385,7 @@ bindAnimatedSprite_set_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 set_centered ::
                (AnimatedSprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_centered cls arg1
@@ -393,7 +398,7 @@ set_centered cls arg1
 
 {-# NOINLINE bindAnimatedSprite_set_flip_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 bindAnimatedSprite_set_flip_h :: MethodBind
 bindAnimatedSprite_set_flip_h
   = unsafePerformIO $
@@ -403,7 +408,7 @@ bindAnimatedSprite_set_flip_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 set_flip_h ::
              (AnimatedSprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_h cls arg1
@@ -416,7 +421,7 @@ set_flip_h cls arg1
 
 {-# NOINLINE bindAnimatedSprite_set_flip_v #-}
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 bindAnimatedSprite_set_flip_v :: MethodBind
 bindAnimatedSprite_set_flip_v
   = unsafePerformIO $
@@ -426,7 +431,7 @@ bindAnimatedSprite_set_flip_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 set_flip_v ::
              (AnimatedSprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_v cls arg1
@@ -534,7 +539,7 @@ set_sprite_frames cls arg1
 
 {-# NOINLINE bindAnimatedSprite_stop #-}
 
--- | Stop the current animation (does not reset the frame counter).
+-- | Stops the current animation (does not reset the frame counter).
 bindAnimatedSprite_stop :: MethodBind
 bindAnimatedSprite_stop
   = unsafePerformIO $
@@ -544,7 +549,7 @@ bindAnimatedSprite_stop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stop the current animation (does not reset the frame counter).
+-- | Stops the current animation (does not reset the frame counter).
 stop :: (AnimatedSprite :< cls, Object :< cls) => cls -> IO ()
 stop cls
   = withVariantArray []

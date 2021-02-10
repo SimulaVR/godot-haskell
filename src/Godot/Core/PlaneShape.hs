@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PlaneShape
        (Godot.Core.PlaneShape.get_plane, Godot.Core.PlaneShape.set_plane)
        where
@@ -12,6 +13,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindPlaneShape_get_plane #-}
 
+-- | The [Plane] used by the [PlaneShape] for collision.
 bindPlaneShape_get_plane :: MethodBind
 bindPlaneShape_get_plane
   = unsafePerformIO $
@@ -21,6 +23,7 @@ bindPlaneShape_get_plane
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The [Plane] used by the [PlaneShape] for collision.
 get_plane :: (PlaneShape :< cls, Object :< cls) => cls -> IO Plane
 get_plane cls
   = withVariantArray []
@@ -31,6 +34,7 @@ get_plane cls
 
 {-# NOINLINE bindPlaneShape_set_plane #-}
 
+-- | The [Plane] used by the [PlaneShape] for collision.
 bindPlaneShape_set_plane :: MethodBind
 bindPlaneShape_set_plane
   = unsafePerformIO $
@@ -40,6 +44,7 @@ bindPlaneShape_set_plane
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The [Plane] used by the [PlaneShape] for collision.
 set_plane ::
             (PlaneShape :< cls, Object :< cls) => cls -> Plane -> IO ()
 set_plane cls arg1

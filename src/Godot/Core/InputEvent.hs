@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEvent
        (Godot.Core.InputEvent.accumulate, Godot.Core.InputEvent.as_text,
         Godot.Core.InputEvent.get_action_strength,
@@ -94,6 +95,7 @@ get_action_strength cls arg1
 {-# NOINLINE bindInputEvent_get_device #-}
 
 -- | The event's device ID.
+--   			[b]Note:[/b] This device ID will always be [code]-1[/code] for emulated mouse input from a touchscreen. This can be used to distinguish emulated mouse input from physical mouse input.
 bindInputEvent_get_device :: MethodBind
 bindInputEvent_get_device
   = unsafePerformIO $
@@ -104,6 +106,7 @@ bindInputEvent_get_device
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The event's device ID.
+--   			[b]Note:[/b] This device ID will always be [code]-1[/code] for emulated mouse input from a touchscreen. This can be used to distinguish emulated mouse input from physical mouse input.
 get_device :: (InputEvent :< cls, Object :< cls) => cls -> IO Int
 get_device cls
   = withVariantArray []
@@ -137,7 +140,7 @@ is_action cls arg1
 
 {-# NOINLINE bindInputEvent_is_action_pressed #-}
 
--- | Returns [code]true[/code] if the given action is being pressed (and is not an echo event for [InputEventKey] events). Not relevant for events of type [InputEventMouseMotion] or [InputEventScreenDrag].
+-- | Returns [code]true[/code] if the given action is being pressed (and is not an echo event for [InputEventKey] events, unless [code]allow_echo[/code] is [code]true[/code]). Not relevant for events of type [InputEventMouseMotion] or [InputEventScreenDrag].
 bindInputEvent_is_action_pressed :: MethodBind
 bindInputEvent_is_action_pressed
   = unsafePerformIO $
@@ -147,7 +150,7 @@ bindInputEvent_is_action_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given action is being pressed (and is not an echo event for [InputEventKey] events). Not relevant for events of type [InputEventMouseMotion] or [InputEventScreenDrag].
+-- | Returns [code]true[/code] if the given action is being pressed (and is not an echo event for [InputEventKey] events, unless [code]allow_echo[/code] is [code]true[/code]). Not relevant for events of type [InputEventMouseMotion] or [InputEventScreenDrag].
 is_action_pressed ::
                     (InputEvent :< cls, Object :< cls) =>
                     cls -> GodotString -> Bool -> IO Bool
@@ -253,6 +256,7 @@ is_pressed cls
 {-# NOINLINE bindInputEvent_set_device #-}
 
 -- | The event's device ID.
+--   			[b]Note:[/b] This device ID will always be [code]-1[/code] for emulated mouse input from a touchscreen. This can be used to distinguish emulated mouse input from physical mouse input.
 bindInputEvent_set_device :: MethodBind
 bindInputEvent_set_device
   = unsafePerformIO $
@@ -263,6 +267,7 @@ bindInputEvent_set_device
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The event's device ID.
+--   			[b]Note:[/b] This device ID will always be [code]-1[/code] for emulated mouse input from a touchscreen. This can be used to distinguish emulated mouse input from physical mouse input.
 set_device ::
              (InputEvent :< cls, Object :< cls) => cls -> Int -> IO ()
 set_device cls arg1

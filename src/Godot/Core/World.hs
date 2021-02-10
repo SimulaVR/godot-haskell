@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.World
        (Godot.Core.World.get_direct_space_state,
         Godot.Core.World.get_environment,
@@ -17,7 +18,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindWorld_get_direct_space_state #-}
 
--- | The World's physics direct space state, used for making various queries. Might be used only during [code]_physics_process[/code].
+-- | Direct access to the world's physics 3D space state. Used for querying current and potential collisions. Must only be accessed from within [code]_physics_process(delta)[/code].
 bindWorld_get_direct_space_state :: MethodBind
 bindWorld_get_direct_space_state
   = unsafePerformIO $
@@ -27,7 +28,7 @@ bindWorld_get_direct_space_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The World's physics direct space state, used for making various queries. Might be used only during [code]_physics_process[/code].
+-- | Direct access to the world's physics 3D space state. Used for querying current and potential collisions. Must only be accessed from within [code]_physics_process(delta)[/code].
 get_direct_space_state ::
                          (World :< cls, Object :< cls) => cls -> IO PhysicsDirectSpaceState
 get_direct_space_state cls

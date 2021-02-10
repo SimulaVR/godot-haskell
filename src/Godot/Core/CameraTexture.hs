@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CameraTexture
        (Godot.Core.CameraTexture.get_camera_active,
         Godot.Core.CameraTexture.get_camera_feed_id,
@@ -17,6 +18,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindCameraTexture_get_camera_active #-}
 
+-- | Convenience property that gives access to the active property of the [CameraFeed].
 bindCameraTexture_get_camera_active :: MethodBind
 bindCameraTexture_get_camera_active
   = unsafePerformIO $
@@ -26,6 +28,7 @@ bindCameraTexture_get_camera_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Convenience property that gives access to the active property of the [CameraFeed].
 get_camera_active ::
                     (CameraTexture :< cls, Object :< cls) => cls -> IO Bool
 get_camera_active cls
@@ -39,6 +42,7 @@ get_camera_active cls
 
 {-# NOINLINE bindCameraTexture_get_camera_feed_id #-}
 
+-- | The ID of the [CameraFeed] for which we want to display the image.
 bindCameraTexture_get_camera_feed_id :: MethodBind
 bindCameraTexture_get_camera_feed_id
   = unsafePerformIO $
@@ -48,6 +52,7 @@ bindCameraTexture_get_camera_feed_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The ID of the [CameraFeed] for which we want to display the image.
 get_camera_feed_id ::
                      (CameraTexture :< cls, Object :< cls) => cls -> IO Int
 get_camera_feed_id cls
@@ -61,6 +66,7 @@ get_camera_feed_id cls
 
 {-# NOINLINE bindCameraTexture_get_which_feed #-}
 
+-- | Which image within the [CameraFeed] we want access to, important if the camera image is split in a Y and CbCr component.
 bindCameraTexture_get_which_feed :: MethodBind
 bindCameraTexture_get_which_feed
   = unsafePerformIO $
@@ -70,6 +76,7 @@ bindCameraTexture_get_which_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Which image within the [CameraFeed] we want access to, important if the camera image is split in a Y and CbCr component.
 get_which_feed ::
                  (CameraTexture :< cls, Object :< cls) => cls -> IO Int
 get_which_feed cls
@@ -83,6 +90,7 @@ get_which_feed cls
 
 {-# NOINLINE bindCameraTexture_set_camera_active #-}
 
+-- | Convenience property that gives access to the active property of the [CameraFeed].
 bindCameraTexture_set_camera_active :: MethodBind
 bindCameraTexture_set_camera_active
   = unsafePerformIO $
@@ -92,6 +100,7 @@ bindCameraTexture_set_camera_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Convenience property that gives access to the active property of the [CameraFeed].
 set_camera_active ::
                     (CameraTexture :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_camera_active cls arg1
@@ -105,6 +114,7 @@ set_camera_active cls arg1
 
 {-# NOINLINE bindCameraTexture_set_camera_feed_id #-}
 
+-- | The ID of the [CameraFeed] for which we want to display the image.
 bindCameraTexture_set_camera_feed_id :: MethodBind
 bindCameraTexture_set_camera_feed_id
   = unsafePerformIO $
@@ -114,6 +124,7 @@ bindCameraTexture_set_camera_feed_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The ID of the [CameraFeed] for which we want to display the image.
 set_camera_feed_id ::
                      (CameraTexture :< cls, Object :< cls) => cls -> Int -> IO ()
 set_camera_feed_id cls arg1
@@ -127,6 +138,7 @@ set_camera_feed_id cls arg1
 
 {-# NOINLINE bindCameraTexture_set_which_feed #-}
 
+-- | Which image within the [CameraFeed] we want access to, important if the camera image is split in a Y and CbCr component.
 bindCameraTexture_set_which_feed :: MethodBind
 bindCameraTexture_set_which_feed
   = unsafePerformIO $
@@ -136,6 +148,7 @@ bindCameraTexture_set_which_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Which image within the [CameraFeed] we want access to, important if the camera image is split in a Y and CbCr component.
 set_which_feed ::
                  (CameraTexture :< cls, Object :< cls) => cls -> Int -> IO ()
 set_which_feed cls arg1

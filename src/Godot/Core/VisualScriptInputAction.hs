@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptInputAction
        (Godot.Core.VisualScriptInputAction._MODE_PRESSED,
         Godot.Core.VisualScriptInputAction._MODE_JUST_PRESSED,

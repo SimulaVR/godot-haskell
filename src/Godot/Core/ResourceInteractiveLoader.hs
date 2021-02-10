@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ResourceInteractiveLoader
        (Godot.Core.ResourceInteractiveLoader.get_resource,
         Godot.Core.ResourceInteractiveLoader.get_stage,
@@ -91,9 +92,9 @@ get_stage_count cls
 {-# NOINLINE bindResourceInteractiveLoader_poll #-}
 
 -- | Polls the loading operation, i.e. loads a data chunk up to the next stage.
---   				Returns [constant @GlobalScope.OK] if the poll is successful but the load operation has not finished yet (intermediate stage). This means [method poll] will have to be called again until the last stage is completed.
---   				Returns [constant @GlobalScope.ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum @GlobalScope.Error] code if the poll has failed.
+--   				Returns [constant OK] if the poll is successful but the load operation has not finished yet (intermediate stage). This means [method poll] will have to be called again until the last stage is completed.
+--   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
+--   				Returns another [enum Error] code if the poll has failed.
 bindResourceInteractiveLoader_poll :: MethodBind
 bindResourceInteractiveLoader_poll
   = unsafePerformIO $
@@ -104,9 +105,9 @@ bindResourceInteractiveLoader_poll
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Polls the loading operation, i.e. loads a data chunk up to the next stage.
---   				Returns [constant @GlobalScope.OK] if the poll is successful but the load operation has not finished yet (intermediate stage). This means [method poll] will have to be called again until the last stage is completed.
---   				Returns [constant @GlobalScope.ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum @GlobalScope.Error] code if the poll has failed.
+--   				Returns [constant OK] if the poll is successful but the load operation has not finished yet (intermediate stage). This means [method poll] will have to be called again until the last stage is completed.
+--   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
+--   				Returns another [enum Error] code if the poll has failed.
 poll ::
        (ResourceInteractiveLoader :< cls, Object :< cls) => cls -> IO Int
 poll cls
@@ -121,8 +122,8 @@ poll cls
 {-# NOINLINE bindResourceInteractiveLoader_wait #-}
 
 -- | Polls the loading operation successively until the resource is completely loaded or a [method poll] fails.
---   				Returns [constant @GlobalScope.ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum @GlobalScope.Error] code if a poll has failed, aborting the operation.
+--   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
+--   				Returns another [enum Error] code if a poll has failed, aborting the operation.
 bindResourceInteractiveLoader_wait :: MethodBind
 bindResourceInteractiveLoader_wait
   = unsafePerformIO $
@@ -133,8 +134,8 @@ bindResourceInteractiveLoader_wait
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Polls the loading operation successively until the resource is completely loaded or a [method poll] fails.
---   				Returns [constant @GlobalScope.ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum @GlobalScope.Error] code if a poll has failed, aborting the operation.
+--   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
+--   				Returns another [enum Error] code if a poll has failed, aborting the operation.
 wait ::
        (ResourceInteractiveLoader :< cls, Object :< cls) => cls -> IO Int
 wait cls

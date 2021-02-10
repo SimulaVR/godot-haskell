@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CylinderMesh
        (Godot.Core.CylinderMesh.get_bottom_radius,
         Godot.Core.CylinderMesh.get_height,
@@ -21,7 +22,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindCylinderMesh_get_bottom_radius #-}
 
--- | Bottom radius of the cylinder. Defaults to 1.0.
+-- | Bottom radius of the cylinder.
 bindCylinderMesh_get_bottom_radius :: MethodBind
 bindCylinderMesh_get_bottom_radius
   = unsafePerformIO $
@@ -31,7 +32,7 @@ bindCylinderMesh_get_bottom_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bottom radius of the cylinder. Defaults to 1.0.
+-- | Bottom radius of the cylinder.
 get_bottom_radius ::
                     (CylinderMesh :< cls, Object :< cls) => cls -> IO Float
 get_bottom_radius cls
@@ -45,7 +46,7 @@ get_bottom_radius cls
 
 {-# NOINLINE bindCylinderMesh_get_height #-}
 
--- | Full height of the cylinder. Defaults to 2.0.
+-- | Full height of the cylinder.
 bindCylinderMesh_get_height :: MethodBind
 bindCylinderMesh_get_height
   = unsafePerformIO $
@@ -55,7 +56,7 @@ bindCylinderMesh_get_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Full height of the cylinder. Defaults to 2.0.
+-- | Full height of the cylinder.
 get_height ::
              (CylinderMesh :< cls, Object :< cls) => cls -> IO Float
 get_height cls
@@ -68,7 +69,7 @@ get_height cls
 
 {-# NOINLINE bindCylinderMesh_get_radial_segments #-}
 
--- | Number of radial segments on the cylinder. Defaults to 64.
+-- | Number of radial segments on the cylinder.
 bindCylinderMesh_get_radial_segments :: MethodBind
 bindCylinderMesh_get_radial_segments
   = unsafePerformIO $
@@ -78,7 +79,7 @@ bindCylinderMesh_get_radial_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of radial segments on the cylinder. Defaults to 64.
+-- | Number of radial segments on the cylinder.
 get_radial_segments ::
                       (CylinderMesh :< cls, Object :< cls) => cls -> IO Int
 get_radial_segments cls
@@ -92,7 +93,7 @@ get_radial_segments cls
 
 {-# NOINLINE bindCylinderMesh_get_rings #-}
 
--- | Number of edge rings along the height of the cylinder. Defaults to 4.
+-- | Number of edge rings along the height of the cylinder.
 bindCylinderMesh_get_rings :: MethodBind
 bindCylinderMesh_get_rings
   = unsafePerformIO $
@@ -102,7 +103,7 @@ bindCylinderMesh_get_rings
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of edge rings along the height of the cylinder. Defaults to 4.
+-- | Number of edge rings along the height of the cylinder.
 get_rings :: (CylinderMesh :< cls, Object :< cls) => cls -> IO Int
 get_rings cls
   = withVariantArray []
@@ -114,7 +115,7 @@ get_rings cls
 
 {-# NOINLINE bindCylinderMesh_get_top_radius #-}
 
--- | Top radius of the cylinder. Defaults to 1.0.
+-- | Top radius of the cylinder.
 bindCylinderMesh_get_top_radius :: MethodBind
 bindCylinderMesh_get_top_radius
   = unsafePerformIO $
@@ -124,7 +125,7 @@ bindCylinderMesh_get_top_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Top radius of the cylinder. Defaults to 1.0.
+-- | Top radius of the cylinder.
 get_top_radius ::
                  (CylinderMesh :< cls, Object :< cls) => cls -> IO Float
 get_top_radius cls
@@ -137,7 +138,7 @@ get_top_radius cls
 
 {-# NOINLINE bindCylinderMesh_set_bottom_radius #-}
 
--- | Bottom radius of the cylinder. Defaults to 1.0.
+-- | Bottom radius of the cylinder.
 bindCylinderMesh_set_bottom_radius :: MethodBind
 bindCylinderMesh_set_bottom_radius
   = unsafePerformIO $
@@ -147,7 +148,7 @@ bindCylinderMesh_set_bottom_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bottom radius of the cylinder. Defaults to 1.0.
+-- | Bottom radius of the cylinder.
 set_bottom_radius ::
                     (CylinderMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bottom_radius cls arg1
@@ -161,7 +162,7 @@ set_bottom_radius cls arg1
 
 {-# NOINLINE bindCylinderMesh_set_height #-}
 
--- | Full height of the cylinder. Defaults to 2.0.
+-- | Full height of the cylinder.
 bindCylinderMesh_set_height :: MethodBind
 bindCylinderMesh_set_height
   = unsafePerformIO $
@@ -171,7 +172,7 @@ bindCylinderMesh_set_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Full height of the cylinder. Defaults to 2.0.
+-- | Full height of the cylinder.
 set_height ::
              (CylinderMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_height cls arg1
@@ -184,7 +185,7 @@ set_height cls arg1
 
 {-# NOINLINE bindCylinderMesh_set_radial_segments #-}
 
--- | Number of radial segments on the cylinder. Defaults to 64.
+-- | Number of radial segments on the cylinder.
 bindCylinderMesh_set_radial_segments :: MethodBind
 bindCylinderMesh_set_radial_segments
   = unsafePerformIO $
@@ -194,7 +195,7 @@ bindCylinderMesh_set_radial_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of radial segments on the cylinder. Defaults to 64.
+-- | Number of radial segments on the cylinder.
 set_radial_segments ::
                       (CylinderMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_radial_segments cls arg1
@@ -208,7 +209,7 @@ set_radial_segments cls arg1
 
 {-# NOINLINE bindCylinderMesh_set_rings #-}
 
--- | Number of edge rings along the height of the cylinder. Defaults to 4.
+-- | Number of edge rings along the height of the cylinder.
 bindCylinderMesh_set_rings :: MethodBind
 bindCylinderMesh_set_rings
   = unsafePerformIO $
@@ -218,7 +219,7 @@ bindCylinderMesh_set_rings
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of edge rings along the height of the cylinder. Defaults to 4.
+-- | Number of edge rings along the height of the cylinder.
 set_rings ::
             (CylinderMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_rings cls arg1
@@ -231,7 +232,7 @@ set_rings cls arg1
 
 {-# NOINLINE bindCylinderMesh_set_top_radius #-}
 
--- | Top radius of the cylinder. Defaults to 1.0.
+-- | Top radius of the cylinder.
 bindCylinderMesh_set_top_radius :: MethodBind
 bindCylinderMesh_set_top_radius
   = unsafePerformIO $
@@ -241,7 +242,7 @@ bindCylinderMesh_set_top_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Top radius of the cylinder. Defaults to 1.0.
+-- | Top radius of the cylinder.
 set_top_radius ::
                  (CylinderMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_top_radius cls arg1

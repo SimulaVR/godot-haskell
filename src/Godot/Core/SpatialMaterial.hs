@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SpatialMaterial
        (Godot.Core.SpatialMaterial._DIFFUSE_BURLEY,
         Godot.Core.SpatialMaterial._DEPTH_DRAW_ALWAYS,
@@ -500,6 +501,7 @@ get_albedo cls
 
 {-# NOINLINE bindSpatialMaterial_get_alpha_scissor_threshold #-}
 
+-- | Threshold at which the alpha scissor will discard values.
 bindSpatialMaterial_get_alpha_scissor_threshold :: MethodBind
 bindSpatialMaterial_get_alpha_scissor_threshold
   = unsafePerformIO $
@@ -509,6 +511,7 @@ bindSpatialMaterial_get_alpha_scissor_threshold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Threshold at which the alpha scissor will discard values.
 get_alpha_scissor_threshold ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_alpha_scissor_threshold cls
@@ -547,6 +550,7 @@ get_anisotropy cls
 
 {-# NOINLINE bindSpatialMaterial_get_ao_light_affect #-}
 
+-- | Amount that ambient occlusion affects lighting from lights. If [code]0[/code], ambient occlusion only affects ambient light. If [code]1[/code], ambient occlusion affects lights just as much as it affects ambient light. This can be used to impact the strength of the ambient occlusion effect, but typically looks unrealistic.
 bindSpatialMaterial_get_ao_light_affect :: MethodBind
 bindSpatialMaterial_get_ao_light_affect
   = unsafePerformIO $
@@ -556,6 +560,7 @@ bindSpatialMaterial_get_ao_light_affect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Amount that ambient occlusion affects lighting from lights. If [code]0[/code], ambient occlusion only affects ambient light. If [code]1[/code], ambient occlusion affects lights just as much as it affects ambient light. This can be used to impact the strength of the ambient occlusion effect, but typically looks unrealistic.
 get_ao_light_affect ::
                       (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_ao_light_affect cls
@@ -569,6 +574,7 @@ get_ao_light_affect cls
 
 {-# NOINLINE bindSpatialMaterial_get_ao_texture_channel #-}
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_get_ao_texture_channel :: MethodBind
 bindSpatialMaterial_get_ao_texture_channel
   = unsafePerformIO $
@@ -578,6 +584,7 @@ bindSpatialMaterial_get_ao_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 get_ao_texture_channel ::
                          (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_ao_texture_channel cls
@@ -615,7 +622,8 @@ get_billboard_mode cls
 
 {-# NOINLINE bindSpatialMaterial_get_blend_mode #-}
 
--- | The material's blend mode. Note that values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
+-- | The material's blend mode.
+--   			[b]Note:[/b] Values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
 bindSpatialMaterial_get_blend_mode :: MethodBind
 bindSpatialMaterial_get_blend_mode
   = unsafePerformIO $
@@ -625,7 +633,8 @@ bindSpatialMaterial_get_blend_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The material's blend mode. Note that values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
+-- | The material's blend mode.
+--   			[b]Note:[/b] Values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
 get_blend_mode ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_blend_mode cls
@@ -639,6 +648,7 @@ get_blend_mode cls
 
 {-# NOINLINE bindSpatialMaterial_get_clearcoat #-}
 
+-- | Sets the strength of the clearcoat effect. Setting to [code]0[/code] looks the same as disabling the clearcoat effect.
 bindSpatialMaterial_get_clearcoat :: MethodBind
 bindSpatialMaterial_get_clearcoat
   = unsafePerformIO $
@@ -648,6 +658,7 @@ bindSpatialMaterial_get_clearcoat
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the strength of the clearcoat effect. Setting to [code]0[/code] looks the same as disabling the clearcoat effect.
 get_clearcoat ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_clearcoat cls
@@ -661,6 +672,7 @@ get_clearcoat cls
 
 {-# NOINLINE bindSpatialMaterial_get_clearcoat_gloss #-}
 
+-- | Sets the roughness of the clearcoat pass. A higher value results in a smoother clearcoat while a lower value results in a rougher clearcoat.
 bindSpatialMaterial_get_clearcoat_gloss :: MethodBind
 bindSpatialMaterial_get_clearcoat_gloss
   = unsafePerformIO $
@@ -670,6 +682,7 @@ bindSpatialMaterial_get_clearcoat_gloss
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the roughness of the clearcoat pass. A higher value results in a smoother clearcoat while a lower value results in a rougher clearcoat.
 get_clearcoat_gloss ::
                       (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_clearcoat_gloss cls
@@ -708,6 +721,7 @@ get_cull_mode cls
 {-# NOINLINE bindSpatialMaterial_get_depth_deep_parallax_flip_binormal
              #-}
 
+-- | If [code]true[/code], direction of the binormal is flipped before using in the depth effect. This may be necessary if you have encoded your binormals in a way that is conflicting with the depth effect.
 bindSpatialMaterial_get_depth_deep_parallax_flip_binormal ::
                                                           MethodBind
 bindSpatialMaterial_get_depth_deep_parallax_flip_binormal
@@ -718,6 +732,7 @@ bindSpatialMaterial_get_depth_deep_parallax_flip_binormal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], direction of the binormal is flipped before using in the depth effect. This may be necessary if you have encoded your binormals in a way that is conflicting with the depth effect.
 get_depth_deep_parallax_flip_binormal ::
                                         (SpatialMaterial :< cls, Object :< cls) => cls -> IO Bool
 get_depth_deep_parallax_flip_binormal cls
@@ -733,6 +748,7 @@ get_depth_deep_parallax_flip_binormal cls
 {-# NOINLINE bindSpatialMaterial_get_depth_deep_parallax_flip_tangent
              #-}
 
+-- | If [code]true[/code], direction of the tangent is flipped before using in the depth effect. This may be necessary if you have encoded your tangents in a way that is conflicting with the depth effect.
 bindSpatialMaterial_get_depth_deep_parallax_flip_tangent ::
                                                          MethodBind
 bindSpatialMaterial_get_depth_deep_parallax_flip_tangent
@@ -743,6 +759,7 @@ bindSpatialMaterial_get_depth_deep_parallax_flip_tangent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], direction of the tangent is flipped before using in the depth effect. This may be necessary if you have encoded your tangents in a way that is conflicting with the depth effect.
 get_depth_deep_parallax_flip_tangent ::
                                        (SpatialMaterial :< cls, Object :< cls) => cls -> IO Bool
 get_depth_deep_parallax_flip_tangent cls
@@ -758,6 +775,7 @@ get_depth_deep_parallax_flip_tangent cls
 {-# NOINLINE bindSpatialMaterial_get_depth_deep_parallax_max_layers
              #-}
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is perpendicular to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 bindSpatialMaterial_get_depth_deep_parallax_max_layers ::
                                                        MethodBind
 bindSpatialMaterial_get_depth_deep_parallax_max_layers
@@ -768,6 +786,7 @@ bindSpatialMaterial_get_depth_deep_parallax_max_layers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is perpendicular to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 get_depth_deep_parallax_max_layers ::
                                      (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_depth_deep_parallax_max_layers cls
@@ -783,6 +802,7 @@ get_depth_deep_parallax_max_layers cls
 {-# NOINLINE bindSpatialMaterial_get_depth_deep_parallax_min_layers
              #-}
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is parallel to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 bindSpatialMaterial_get_depth_deep_parallax_min_layers ::
                                                        MethodBind
 bindSpatialMaterial_get_depth_deep_parallax_min_layers
@@ -793,6 +813,7 @@ bindSpatialMaterial_get_depth_deep_parallax_min_layers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is parallel to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 get_depth_deep_parallax_min_layers ::
                                      (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_depth_deep_parallax_min_layers cls
@@ -831,6 +852,7 @@ get_depth_draw_mode cls
 
 {-# NOINLINE bindSpatialMaterial_get_depth_scale #-}
 
+-- | Scales the depth offset effect. A higher number will create a larger depth.
 bindSpatialMaterial_get_depth_scale :: MethodBind
 bindSpatialMaterial_get_depth_scale
   = unsafePerformIO $
@@ -840,6 +862,7 @@ bindSpatialMaterial_get_depth_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scales the depth offset effect. A higher number will create a larger depth.
 get_depth_scale ::
                   (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_depth_scale cls
@@ -853,6 +876,7 @@ get_depth_scale cls
 
 {-# NOINLINE bindSpatialMaterial_get_detail_blend_mode #-}
 
+-- | Specifies how the [member detail_albedo] should blend with the current [code]ALBEDO[/code]. See [enum BlendMode] for options.
 bindSpatialMaterial_get_detail_blend_mode :: MethodBind
 bindSpatialMaterial_get_detail_blend_mode
   = unsafePerformIO $
@@ -862,6 +886,7 @@ bindSpatialMaterial_get_detail_blend_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies how the [member detail_albedo] should blend with the current [code]ALBEDO[/code]. See [enum BlendMode] for options.
 get_detail_blend_mode ::
                         (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_detail_blend_mode cls
@@ -875,6 +900,7 @@ get_detail_blend_mode cls
 
 {-# NOINLINE bindSpatialMaterial_get_detail_uv #-}
 
+-- | Specifies whether to use [code]UV[/code] or [code]UV2[/code] for the detail layer. See [enum DetailUV] for options.
 bindSpatialMaterial_get_detail_uv :: MethodBind
 bindSpatialMaterial_get_detail_uv
   = unsafePerformIO $
@@ -884,6 +910,7 @@ bindSpatialMaterial_get_detail_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies whether to use [code]UV[/code] or [code]UV2[/code] for the detail layer. See [enum DetailUV] for options.
 get_detail_uv ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_detail_uv cls
@@ -921,6 +948,7 @@ get_diffuse_mode cls
 
 {-# NOINLINE bindSpatialMaterial_get_distance_fade #-}
 
+-- | Specifies which type of fade to use. Can be any of the [enum DistanceFadeMode]s.
 bindSpatialMaterial_get_distance_fade :: MethodBind
 bindSpatialMaterial_get_distance_fade
   = unsafePerformIO $
@@ -930,6 +958,7 @@ bindSpatialMaterial_get_distance_fade
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies which type of fade to use. Can be any of the [enum DistanceFadeMode]s.
 get_distance_fade ::
                     (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_distance_fade cls
@@ -943,6 +972,7 @@ get_distance_fade cls
 
 {-# NOINLINE bindSpatialMaterial_get_distance_fade_max_distance #-}
 
+-- | Distance at which the object fades fully and is no longer visible.
 bindSpatialMaterial_get_distance_fade_max_distance :: MethodBind
 bindSpatialMaterial_get_distance_fade_max_distance
   = unsafePerformIO $
@@ -952,6 +982,7 @@ bindSpatialMaterial_get_distance_fade_max_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Distance at which the object fades fully and is no longer visible.
 get_distance_fade_max_distance ::
                                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_distance_fade_max_distance cls
@@ -966,6 +997,7 @@ get_distance_fade_max_distance cls
 
 {-# NOINLINE bindSpatialMaterial_get_distance_fade_min_distance #-}
 
+-- | Distance at which the object starts to fade. If the object is less than this distance away it will appear normal.
 bindSpatialMaterial_get_distance_fade_min_distance :: MethodBind
 bindSpatialMaterial_get_distance_fade_min_distance
   = unsafePerformIO $
@@ -975,6 +1007,7 @@ bindSpatialMaterial_get_distance_fade_min_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Distance at which the object starts to fade. If the object is less than this distance away it will appear normal.
 get_distance_fade_min_distance ::
                                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_distance_fade_min_distance cls
@@ -1037,6 +1070,7 @@ get_emission_energy cls
 
 {-# NOINLINE bindSpatialMaterial_get_emission_operator #-}
 
+-- | Sets how [member emission] interacts with [member emission_texture]. Can either add or multiply. See [enum EmissionOperator] for options.
 bindSpatialMaterial_get_emission_operator :: MethodBind
 bindSpatialMaterial_get_emission_operator
   = unsafePerformIO $
@@ -1046,6 +1080,7 @@ bindSpatialMaterial_get_emission_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets how [member emission] interacts with [member emission_texture]. Can either add or multiply. See [enum EmissionOperator] for options.
 get_emission_operator ::
                         (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_emission_operator cls
@@ -1059,7 +1094,7 @@ get_emission_operator cls
 
 {-# NOINLINE bindSpatialMaterial_get_feature #-}
 
--- | If [code]true[/code], anisotropy is enabled. Changes the shape of the specular blob and aligns it to tangent space. Default value: [code]false[/code].
+-- | Returns [code]true[/code], if the specified [enum Feature] is enabled.
 bindSpatialMaterial_get_feature :: MethodBind
 bindSpatialMaterial_get_feature
   = unsafePerformIO $
@@ -1069,7 +1104,7 @@ bindSpatialMaterial_get_feature
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], anisotropy is enabled. Changes the shape of the specular blob and aligns it to tangent space. Default value: [code]false[/code].
+-- | Returns [code]true[/code], if the specified [enum Feature] is enabled.
 get_feature ::
               (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_feature cls arg1
@@ -1082,6 +1117,7 @@ get_feature cls arg1
 
 {-# NOINLINE bindSpatialMaterial_get_flag #-}
 
+-- | Returns [code]true[/code], if the specified flag is enabled. See [enum Flags] enumerator for options.
 bindSpatialMaterial_get_flag :: MethodBind
 bindSpatialMaterial_get_flag
   = unsafePerformIO $
@@ -1091,6 +1127,7 @@ bindSpatialMaterial_get_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code], if the specified flag is enabled. See [enum Flags] enumerator for options.
 get_flag ::
            (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag cls arg1
@@ -1126,6 +1163,7 @@ get_grow cls
 
 {-# NOINLINE bindSpatialMaterial_get_line_width #-}
 
+-- | Currently unimplemented in Godot.
 bindSpatialMaterial_get_line_width :: MethodBind
 bindSpatialMaterial_get_line_width
   = unsafePerformIO $
@@ -1135,6 +1173,7 @@ bindSpatialMaterial_get_line_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Currently unimplemented in Godot.
 get_line_width ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_line_width cls
@@ -1148,7 +1187,7 @@ get_line_width cls
 
 {-# NOINLINE bindSpatialMaterial_get_metallic #-}
 
--- | The reflectivity of the object's surface. The higher the value the more light is reflected.
+-- | A high value makes the material appear more like a metal. Non-metals use their albedo as the diffuse color and add diffuse to the specular reflection. With non-metals, the reflection appears on top of the albedo color. Metals use their albedo as a multiplier to the specular reflection and set the diffuse color to black resulting in a tinted reflection. Materials work better when fully metal or fully non-metal, values between [code]0[/code] and [code]1[/code] should only be used for blending between metal and non-metal sections. To alter the amount of reflection use [member roughness].
 bindSpatialMaterial_get_metallic :: MethodBind
 bindSpatialMaterial_get_metallic
   = unsafePerformIO $
@@ -1158,7 +1197,7 @@ bindSpatialMaterial_get_metallic
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The reflectivity of the object's surface. The higher the value the more light is reflected.
+-- | A high value makes the material appear more like a metal. Non-metals use their albedo as the diffuse color and add diffuse to the specular reflection. With non-metals, the reflection appears on top of the albedo color. Metals use their albedo as a multiplier to the specular reflection and set the diffuse color to black resulting in a tinted reflection. Materials work better when fully metal or fully non-metal, values between [code]0[/code] and [code]1[/code] should only be used for blending between metal and non-metal sections. To alter the amount of reflection use [member roughness].
 get_metallic ::
                (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_metallic cls
@@ -1172,6 +1211,7 @@ get_metallic cls
 
 {-# NOINLINE bindSpatialMaterial_get_metallic_texture_channel #-}
 
+-- | Specifies the channel of the [member metallic_texture] in which the metallic information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_get_metallic_texture_channel :: MethodBind
 bindSpatialMaterial_get_metallic_texture_channel
   = unsafePerformIO $
@@ -1181,6 +1221,7 @@ bindSpatialMaterial_get_metallic_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member metallic_texture] in which the metallic information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 get_metallic_texture_channel ::
                                (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_metallic_texture_channel cls
@@ -1219,7 +1260,7 @@ get_normal_scale cls
 
 {-# NOINLINE bindSpatialMaterial_get_particles_anim_h_frames #-}
 
--- | The number of horizontal frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of horizontal frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 bindSpatialMaterial_get_particles_anim_h_frames :: MethodBind
 bindSpatialMaterial_get_particles_anim_h_frames
   = unsafePerformIO $
@@ -1229,7 +1270,7 @@ bindSpatialMaterial_get_particles_anim_h_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of horizontal frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of horizontal frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 get_particles_anim_h_frames ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_particles_anim_h_frames cls
@@ -1244,7 +1285,7 @@ get_particles_anim_h_frames cls
 
 {-# NOINLINE bindSpatialMaterial_get_particles_anim_loop #-}
 
--- | If [code]true[/code], particle animations are looped. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | If [code]true[/code], particle animations are looped. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 bindSpatialMaterial_get_particles_anim_loop :: MethodBind
 bindSpatialMaterial_get_particles_anim_loop
   = unsafePerformIO $
@@ -1254,7 +1295,7 @@ bindSpatialMaterial_get_particles_anim_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], particle animations are looped. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | If [code]true[/code], particle animations are looped. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 get_particles_anim_loop ::
                           (SpatialMaterial :< cls, Object :< cls) => cls -> IO Bool
 get_particles_anim_loop cls
@@ -1268,7 +1309,7 @@ get_particles_anim_loop cls
 
 {-# NOINLINE bindSpatialMaterial_get_particles_anim_v_frames #-}
 
--- | The number of vertical frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of vertical frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 bindSpatialMaterial_get_particles_anim_v_frames :: MethodBind
 bindSpatialMaterial_get_particles_anim_v_frames
   = unsafePerformIO $
@@ -1278,7 +1319,7 @@ bindSpatialMaterial_get_particles_anim_v_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of vertical frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of vertical frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 get_particles_anim_v_frames ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_particles_anim_v_frames cls
@@ -1317,6 +1358,7 @@ get_point_size cls
 
 {-# NOINLINE bindSpatialMaterial_get_proximity_fade_distance #-}
 
+-- | Distance over which the fade effect takes place. The larger the distance the longer it takes for an object to fade.
 bindSpatialMaterial_get_proximity_fade_distance :: MethodBind
 bindSpatialMaterial_get_proximity_fade_distance
   = unsafePerformIO $
@@ -1326,6 +1368,7 @@ bindSpatialMaterial_get_proximity_fade_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Distance over which the fade effect takes place. The larger the distance the longer it takes for an object to fade.
 get_proximity_fade_distance ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_proximity_fade_distance cls
@@ -1364,6 +1407,7 @@ get_refraction cls
 
 {-# NOINLINE bindSpatialMaterial_get_refraction_texture_channel #-}
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_get_refraction_texture_channel :: MethodBind
 bindSpatialMaterial_get_refraction_texture_channel
   = unsafePerformIO $
@@ -1373,6 +1417,7 @@ bindSpatialMaterial_get_refraction_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 get_refraction_texture_channel ::
                                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_refraction_texture_channel cls
@@ -1387,6 +1432,7 @@ get_refraction_texture_channel cls
 
 {-# NOINLINE bindSpatialMaterial_get_rim #-}
 
+-- | Sets the strength of the rim lighting effect.
 bindSpatialMaterial_get_rim :: MethodBind
 bindSpatialMaterial_get_rim
   = unsafePerformIO $
@@ -1396,6 +1442,7 @@ bindSpatialMaterial_get_rim
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the strength of the rim lighting effect.
 get_rim ::
           (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_rim cls
@@ -1456,6 +1503,7 @@ get_roughness cls
 
 {-# NOINLINE bindSpatialMaterial_get_roughness_texture_channel #-}
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_get_roughness_texture_channel :: MethodBind
 bindSpatialMaterial_get_roughness_texture_channel
   = unsafePerformIO $
@@ -1465,6 +1513,7 @@ bindSpatialMaterial_get_roughness_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 get_roughness_texture_channel ::
                                 (SpatialMaterial :< cls, Object :< cls) => cls -> IO Int
 get_roughness_texture_channel cls
@@ -1479,7 +1528,8 @@ get_roughness_texture_channel cls
 
 {-# NOINLINE bindSpatialMaterial_get_specular #-}
 
--- | General reflectivity amount. Note: unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases.  See also [member roughness].
+-- | Sets the size of the specular lobe. The specular lobe is the bright spot that is reflected from light sources.
+--   			[b]Note:[/b] unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases. See also [member roughness].
 bindSpatialMaterial_get_specular :: MethodBind
 bindSpatialMaterial_get_specular
   = unsafePerformIO $
@@ -1489,7 +1539,8 @@ bindSpatialMaterial_get_specular
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | General reflectivity amount. Note: unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases.  See also [member roughness].
+-- | Sets the size of the specular lobe. The specular lobe is the bright spot that is reflected from light sources.
+--   			[b]Note:[/b] unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases. See also [member roughness].
 get_specular ::
                (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_specular cls
@@ -1554,6 +1605,7 @@ get_subsurface_scattering_strength cls
 
 {-# NOINLINE bindSpatialMaterial_get_texture #-}
 
+-- | Returns the [Texture] associated with the specified [enum TextureParam].
 bindSpatialMaterial_get_texture :: MethodBind
 bindSpatialMaterial_get_texture
   = unsafePerformIO $
@@ -1563,6 +1615,7 @@ bindSpatialMaterial_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [Texture] associated with the specified [enum TextureParam].
 get_texture ::
               (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_texture cls arg1
@@ -1599,6 +1652,7 @@ get_transmission cls
 
 {-# NOINLINE bindSpatialMaterial_get_uv1_offset #-}
 
+-- | How much to offset the [code]UV[/code] coordinates. This amount will be added to [code]UV[/code] in the vertex function. This can be used to offset a texture.
 bindSpatialMaterial_get_uv1_offset :: MethodBind
 bindSpatialMaterial_get_uv1_offset
   = unsafePerformIO $
@@ -1608,6 +1662,7 @@ bindSpatialMaterial_get_uv1_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to offset the [code]UV[/code] coordinates. This amount will be added to [code]UV[/code] in the vertex function. This can be used to offset a texture.
 get_uv1_offset ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Vector3
 get_uv1_offset cls
@@ -1621,6 +1676,7 @@ get_uv1_offset cls
 
 {-# NOINLINE bindSpatialMaterial_get_uv1_scale #-}
 
+-- | How much to scale the [code]UV[/code] coordinates. This is multiplied by [code]UV[/code] in the vertex function.
 bindSpatialMaterial_get_uv1_scale :: MethodBind
 bindSpatialMaterial_get_uv1_scale
   = unsafePerformIO $
@@ -1630,6 +1686,7 @@ bindSpatialMaterial_get_uv1_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to scale the [code]UV[/code] coordinates. This is multiplied by [code]UV[/code] in the vertex function.
 get_uv1_scale ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> IO Vector3
 get_uv1_scale cls
@@ -1644,6 +1701,7 @@ get_uv1_scale cls
 {-# NOINLINE bindSpatialMaterial_get_uv1_triplanar_blend_sharpness
              #-}
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 bindSpatialMaterial_get_uv1_triplanar_blend_sharpness :: MethodBind
 bindSpatialMaterial_get_uv1_triplanar_blend_sharpness
   = unsafePerformIO $
@@ -1653,6 +1711,7 @@ bindSpatialMaterial_get_uv1_triplanar_blend_sharpness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 get_uv1_triplanar_blend_sharpness ::
                                     (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_uv1_triplanar_blend_sharpness cls
@@ -1667,6 +1726,7 @@ get_uv1_triplanar_blend_sharpness cls
 
 {-# NOINLINE bindSpatialMaterial_get_uv2_offset #-}
 
+-- | How much to offset the [code]UV2[/code] coordinates. This amount will be added to [code]UV2[/code] in the vertex function. This can be used to offset a texture.
 bindSpatialMaterial_get_uv2_offset :: MethodBind
 bindSpatialMaterial_get_uv2_offset
   = unsafePerformIO $
@@ -1676,6 +1736,7 @@ bindSpatialMaterial_get_uv2_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to offset the [code]UV2[/code] coordinates. This amount will be added to [code]UV2[/code] in the vertex function. This can be used to offset a texture.
 get_uv2_offset ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Vector3
 get_uv2_offset cls
@@ -1689,6 +1750,7 @@ get_uv2_offset cls
 
 {-# NOINLINE bindSpatialMaterial_get_uv2_scale #-}
 
+-- | How much to scale the [code]UV2[/code] coordinates. This is multiplied by [code]UV2[/code] in the vertex function.
 bindSpatialMaterial_get_uv2_scale :: MethodBind
 bindSpatialMaterial_get_uv2_scale
   = unsafePerformIO $
@@ -1698,6 +1760,7 @@ bindSpatialMaterial_get_uv2_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to scale the [code]UV2[/code] coordinates. This is multiplied by [code]UV2[/code] in the vertex function.
 get_uv2_scale ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> IO Vector3
 get_uv2_scale cls
@@ -1712,6 +1775,7 @@ get_uv2_scale cls
 {-# NOINLINE bindSpatialMaterial_get_uv2_triplanar_blend_sharpness
              #-}
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 bindSpatialMaterial_get_uv2_triplanar_blend_sharpness :: MethodBind
 bindSpatialMaterial_get_uv2_triplanar_blend_sharpness
   = unsafePerformIO $
@@ -1721,6 +1785,7 @@ bindSpatialMaterial_get_uv2_triplanar_blend_sharpness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 get_uv2_triplanar_blend_sharpness ::
                                     (SpatialMaterial :< cls, Object :< cls) => cls -> IO Float
 get_uv2_triplanar_blend_sharpness cls
@@ -1735,6 +1800,7 @@ get_uv2_triplanar_blend_sharpness cls
 
 {-# NOINLINE bindSpatialMaterial_is_depth_deep_parallax_enabled #-}
 
+-- | If [code]true[/code], the shader will read depth texture at multiple points along the view ray to determine occlusion and parrallax. This can be very performance demanding, but results in more realistic looking depth mapping.
 bindSpatialMaterial_is_depth_deep_parallax_enabled :: MethodBind
 bindSpatialMaterial_is_depth_deep_parallax_enabled
   = unsafePerformIO $
@@ -1744,6 +1810,7 @@ bindSpatialMaterial_is_depth_deep_parallax_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the shader will read depth texture at multiple points along the view ray to determine occlusion and parrallax. This can be very performance demanding, but results in more realistic looking depth mapping.
 is_depth_deep_parallax_enabled ::
                                  (SpatialMaterial :< cls, Object :< cls) => cls -> IO Bool
 is_depth_deep_parallax_enabled cls
@@ -1782,7 +1849,7 @@ is_grow_enabled cls
 
 {-# NOINLINE bindSpatialMaterial_is_proximity_fade_enabled #-}
 
--- | If [code]true[/code], the proximity and distance fade effect is enabled. Default value: [code]false[/code].
+-- | If [code]true[/code], the proximity fade effect is enabled. The proximity fade effect fades out each pixel based on its distance to another object.
 bindSpatialMaterial_is_proximity_fade_enabled :: MethodBind
 bindSpatialMaterial_is_proximity_fade_enabled
   = unsafePerformIO $
@@ -1792,7 +1859,7 @@ bindSpatialMaterial_is_proximity_fade_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the proximity and distance fade effect is enabled. Default value: [code]false[/code].
+-- | If [code]true[/code], the proximity fade effect is enabled. The proximity fade effect fades out each pixel based on its distance to another object.
 is_proximity_fade_enabled ::
                             (SpatialMaterial :< cls, Object :< cls) => cls -> IO Bool
 is_proximity_fade_enabled cls
@@ -1830,6 +1897,7 @@ set_albedo cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_alpha_scissor_threshold #-}
 
+-- | Threshold at which the alpha scissor will discard values.
 bindSpatialMaterial_set_alpha_scissor_threshold :: MethodBind
 bindSpatialMaterial_set_alpha_scissor_threshold
   = unsafePerformIO $
@@ -1839,6 +1907,7 @@ bindSpatialMaterial_set_alpha_scissor_threshold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Threshold at which the alpha scissor will discard values.
 set_alpha_scissor_threshold ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_alpha_scissor_threshold cls arg1
@@ -1877,6 +1946,7 @@ set_anisotropy cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_ao_light_affect #-}
 
+-- | Amount that ambient occlusion affects lighting from lights. If [code]0[/code], ambient occlusion only affects ambient light. If [code]1[/code], ambient occlusion affects lights just as much as it affects ambient light. This can be used to impact the strength of the ambient occlusion effect, but typically looks unrealistic.
 bindSpatialMaterial_set_ao_light_affect :: MethodBind
 bindSpatialMaterial_set_ao_light_affect
   = unsafePerformIO $
@@ -1886,6 +1956,7 @@ bindSpatialMaterial_set_ao_light_affect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Amount that ambient occlusion affects lighting from lights. If [code]0[/code], ambient occlusion only affects ambient light. If [code]1[/code], ambient occlusion affects lights just as much as it affects ambient light. This can be used to impact the strength of the ambient occlusion effect, but typically looks unrealistic.
 set_ao_light_affect ::
                       (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ao_light_affect cls arg1
@@ -1899,6 +1970,7 @@ set_ao_light_affect cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_ao_texture_channel #-}
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_set_ao_texture_channel :: MethodBind
 bindSpatialMaterial_set_ao_texture_channel
   = unsafePerformIO $
@@ -1908,6 +1980,7 @@ bindSpatialMaterial_set_ao_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 set_ao_texture_channel ::
                          (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_ao_texture_channel cls arg1
@@ -1945,7 +2018,8 @@ set_billboard_mode cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_blend_mode #-}
 
--- | The material's blend mode. Note that values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
+-- | The material's blend mode.
+--   			[b]Note:[/b] Values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
 bindSpatialMaterial_set_blend_mode :: MethodBind
 bindSpatialMaterial_set_blend_mode
   = unsafePerformIO $
@@ -1955,7 +2029,8 @@ bindSpatialMaterial_set_blend_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The material's blend mode. Note that values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
+-- | The material's blend mode.
+--   			[b]Note:[/b] Values other than [code]Mix[/code] force the object into the transparent pipeline. See [enum BlendMode].
 set_blend_mode ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_blend_mode cls arg1
@@ -1969,6 +2044,7 @@ set_blend_mode cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_clearcoat #-}
 
+-- | Sets the strength of the clearcoat effect. Setting to [code]0[/code] looks the same as disabling the clearcoat effect.
 bindSpatialMaterial_set_clearcoat :: MethodBind
 bindSpatialMaterial_set_clearcoat
   = unsafePerformIO $
@@ -1978,6 +2054,7 @@ bindSpatialMaterial_set_clearcoat
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the strength of the clearcoat effect. Setting to [code]0[/code] looks the same as disabling the clearcoat effect.
 set_clearcoat ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_clearcoat cls arg1
@@ -1991,6 +2068,7 @@ set_clearcoat cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_clearcoat_gloss #-}
 
+-- | Sets the roughness of the clearcoat pass. A higher value results in a smoother clearcoat while a lower value results in a rougher clearcoat.
 bindSpatialMaterial_set_clearcoat_gloss :: MethodBind
 bindSpatialMaterial_set_clearcoat_gloss
   = unsafePerformIO $
@@ -2000,6 +2078,7 @@ bindSpatialMaterial_set_clearcoat_gloss
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the roughness of the clearcoat pass. A higher value results in a smoother clearcoat while a lower value results in a rougher clearcoat.
 set_clearcoat_gloss ::
                       (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_clearcoat_gloss cls arg1
@@ -2037,6 +2116,7 @@ set_cull_mode cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_depth_deep_parallax #-}
 
+-- | If [code]true[/code], the shader will read depth texture at multiple points along the view ray to determine occlusion and parrallax. This can be very performance demanding, but results in more realistic looking depth mapping.
 bindSpatialMaterial_set_depth_deep_parallax :: MethodBind
 bindSpatialMaterial_set_depth_deep_parallax
   = unsafePerformIO $
@@ -2046,6 +2126,7 @@ bindSpatialMaterial_set_depth_deep_parallax
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the shader will read depth texture at multiple points along the view ray to determine occlusion and parrallax. This can be very performance demanding, but results in more realistic looking depth mapping.
 set_depth_deep_parallax ::
                           (SpatialMaterial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_depth_deep_parallax cls arg1
@@ -2060,6 +2141,7 @@ set_depth_deep_parallax cls arg1
 {-# NOINLINE bindSpatialMaterial_set_depth_deep_parallax_flip_binormal
              #-}
 
+-- | If [code]true[/code], direction of the binormal is flipped before using in the depth effect. This may be necessary if you have encoded your binormals in a way that is conflicting with the depth effect.
 bindSpatialMaterial_set_depth_deep_parallax_flip_binormal ::
                                                           MethodBind
 bindSpatialMaterial_set_depth_deep_parallax_flip_binormal
@@ -2070,6 +2152,7 @@ bindSpatialMaterial_set_depth_deep_parallax_flip_binormal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], direction of the binormal is flipped before using in the depth effect. This may be necessary if you have encoded your binormals in a way that is conflicting with the depth effect.
 set_depth_deep_parallax_flip_binormal ::
                                         (SpatialMaterial :< cls, Object :< cls) =>
                                         cls -> Bool -> IO ()
@@ -2086,6 +2169,7 @@ set_depth_deep_parallax_flip_binormal cls arg1
 {-# NOINLINE bindSpatialMaterial_set_depth_deep_parallax_flip_tangent
              #-}
 
+-- | If [code]true[/code], direction of the tangent is flipped before using in the depth effect. This may be necessary if you have encoded your tangents in a way that is conflicting with the depth effect.
 bindSpatialMaterial_set_depth_deep_parallax_flip_tangent ::
                                                          MethodBind
 bindSpatialMaterial_set_depth_deep_parallax_flip_tangent
@@ -2096,6 +2180,7 @@ bindSpatialMaterial_set_depth_deep_parallax_flip_tangent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], direction of the tangent is flipped before using in the depth effect. This may be necessary if you have encoded your tangents in a way that is conflicting with the depth effect.
 set_depth_deep_parallax_flip_tangent ::
                                        (SpatialMaterial :< cls, Object :< cls) =>
                                        cls -> Bool -> IO ()
@@ -2112,6 +2197,7 @@ set_depth_deep_parallax_flip_tangent cls arg1
 {-# NOINLINE bindSpatialMaterial_set_depth_deep_parallax_max_layers
              #-}
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is perpendicular to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 bindSpatialMaterial_set_depth_deep_parallax_max_layers ::
                                                        MethodBind
 bindSpatialMaterial_set_depth_deep_parallax_max_layers
@@ -2122,6 +2208,7 @@ bindSpatialMaterial_set_depth_deep_parallax_max_layers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is perpendicular to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 set_depth_deep_parallax_max_layers ::
                                      (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_depth_deep_parallax_max_layers cls arg1
@@ -2137,6 +2224,7 @@ set_depth_deep_parallax_max_layers cls arg1
 {-# NOINLINE bindSpatialMaterial_set_depth_deep_parallax_min_layers
              #-}
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is parallel to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 bindSpatialMaterial_set_depth_deep_parallax_min_layers ::
                                                        MethodBind
 bindSpatialMaterial_set_depth_deep_parallax_min_layers
@@ -2147,6 +2235,7 @@ bindSpatialMaterial_set_depth_deep_parallax_min_layers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Number of layers to use when using [member depth_deep_parallax] and the view direction is parallel to the surface of the object. A higher number will be more performance demanding while a lower number may not look as crisp.
 set_depth_deep_parallax_min_layers ::
                                      (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_depth_deep_parallax_min_layers cls arg1
@@ -2185,6 +2274,7 @@ set_depth_draw_mode cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_depth_scale #-}
 
+-- | Scales the depth offset effect. A higher number will create a larger depth.
 bindSpatialMaterial_set_depth_scale :: MethodBind
 bindSpatialMaterial_set_depth_scale
   = unsafePerformIO $
@@ -2194,6 +2284,7 @@ bindSpatialMaterial_set_depth_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scales the depth offset effect. A higher number will create a larger depth.
 set_depth_scale ::
                   (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_depth_scale cls arg1
@@ -2207,6 +2298,7 @@ set_depth_scale cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_detail_blend_mode #-}
 
+-- | Specifies how the [member detail_albedo] should blend with the current [code]ALBEDO[/code]. See [enum BlendMode] for options.
 bindSpatialMaterial_set_detail_blend_mode :: MethodBind
 bindSpatialMaterial_set_detail_blend_mode
   = unsafePerformIO $
@@ -2216,6 +2308,7 @@ bindSpatialMaterial_set_detail_blend_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies how the [member detail_albedo] should blend with the current [code]ALBEDO[/code]. See [enum BlendMode] for options.
 set_detail_blend_mode ::
                         (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_detail_blend_mode cls arg1
@@ -2229,6 +2322,7 @@ set_detail_blend_mode cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_detail_uv #-}
 
+-- | Specifies whether to use [code]UV[/code] or [code]UV2[/code] for the detail layer. See [enum DetailUV] for options.
 bindSpatialMaterial_set_detail_uv :: MethodBind
 bindSpatialMaterial_set_detail_uv
   = unsafePerformIO $
@@ -2238,6 +2332,7 @@ bindSpatialMaterial_set_detail_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies whether to use [code]UV[/code] or [code]UV2[/code] for the detail layer. See [enum DetailUV] for options.
 set_detail_uv ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_detail_uv cls arg1
@@ -2275,6 +2370,7 @@ set_diffuse_mode cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_distance_fade #-}
 
+-- | Specifies which type of fade to use. Can be any of the [enum DistanceFadeMode]s.
 bindSpatialMaterial_set_distance_fade :: MethodBind
 bindSpatialMaterial_set_distance_fade
   = unsafePerformIO $
@@ -2284,6 +2380,7 @@ bindSpatialMaterial_set_distance_fade
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies which type of fade to use. Can be any of the [enum DistanceFadeMode]s.
 set_distance_fade ::
                     (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_distance_fade cls arg1
@@ -2297,6 +2394,7 @@ set_distance_fade cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_distance_fade_max_distance #-}
 
+-- | Distance at which the object fades fully and is no longer visible.
 bindSpatialMaterial_set_distance_fade_max_distance :: MethodBind
 bindSpatialMaterial_set_distance_fade_max_distance
   = unsafePerformIO $
@@ -2306,6 +2404,7 @@ bindSpatialMaterial_set_distance_fade_max_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Distance at which the object fades fully and is no longer visible.
 set_distance_fade_max_distance ::
                                  (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_distance_fade_max_distance cls arg1
@@ -2320,6 +2419,7 @@ set_distance_fade_max_distance cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_distance_fade_min_distance #-}
 
+-- | Distance at which the object starts to fade. If the object is less than this distance away it will appear normal.
 bindSpatialMaterial_set_distance_fade_min_distance :: MethodBind
 bindSpatialMaterial_set_distance_fade_min_distance
   = unsafePerformIO $
@@ -2329,6 +2429,7 @@ bindSpatialMaterial_set_distance_fade_min_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Distance at which the object starts to fade. If the object is less than this distance away it will appear normal.
 set_distance_fade_min_distance ::
                                  (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_distance_fade_min_distance cls arg1
@@ -2391,6 +2492,7 @@ set_emission_energy cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_emission_operator #-}
 
+-- | Sets how [member emission] interacts with [member emission_texture]. Can either add or multiply. See [enum EmissionOperator] for options.
 bindSpatialMaterial_set_emission_operator :: MethodBind
 bindSpatialMaterial_set_emission_operator
   = unsafePerformIO $
@@ -2400,6 +2502,7 @@ bindSpatialMaterial_set_emission_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets how [member emission] interacts with [member emission_texture]. Can either add or multiply. See [enum EmissionOperator] for options.
 set_emission_operator ::
                         (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_emission_operator cls arg1
@@ -2413,7 +2516,7 @@ set_emission_operator cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_feature #-}
 
--- | If [code]true[/code], anisotropy is enabled. Changes the shape of the specular blob and aligns it to tangent space. Default value: [code]false[/code].
+-- | If [code]true[/code], enables the specified [enum Feature]. Many features that are available in [SpatialMaterial]s need to be enabled before use. This way the cost for using the feature is only incurred when specified. Features can also be enabled by setting the corresponding member to [code]true[/code].
 bindSpatialMaterial_set_feature :: MethodBind
 bindSpatialMaterial_set_feature
   = unsafePerformIO $
@@ -2423,7 +2526,7 @@ bindSpatialMaterial_set_feature
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], anisotropy is enabled. Changes the shape of the specular blob and aligns it to tangent space. Default value: [code]false[/code].
+-- | If [code]true[/code], enables the specified [enum Feature]. Many features that are available in [SpatialMaterial]s need to be enabled before use. This way the cost for using the feature is only incurred when specified. Features can also be enabled by setting the corresponding member to [code]true[/code].
 set_feature ::
               (SpatialMaterial :< cls, Object :< cls) =>
               cls -> Int -> Bool -> IO ()
@@ -2437,6 +2540,7 @@ set_feature cls arg1 arg2
 
 {-# NOINLINE bindSpatialMaterial_set_flag #-}
 
+-- | If [code]true[/code], enables the specified flag. Flags are optional behaviour that can be turned on and off. Only one flag can be enabled at a time with this function, the flag enumerators cannot be bit-masked together to enable or disable multiple flags at once. Flags can also be enabled by setting the corresponding member to [code]true[/code]. See [enum Flags] enumerator for options.
 bindSpatialMaterial_set_flag :: MethodBind
 bindSpatialMaterial_set_flag
   = unsafePerformIO $
@@ -2446,6 +2550,7 @@ bindSpatialMaterial_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], enables the specified flag. Flags are optional behaviour that can be turned on and off. Only one flag can be enabled at a time with this function, the flag enumerators cannot be bit-masked together to enable or disable multiple flags at once. Flags can also be enabled by setting the corresponding member to [code]true[/code]. See [enum Flags] enumerator for options.
 set_flag ::
            (SpatialMaterial :< cls, Object :< cls) =>
            cls -> Int -> Bool -> IO ()
@@ -2506,6 +2611,7 @@ set_grow_enabled cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_line_width #-}
 
+-- | Currently unimplemented in Godot.
 bindSpatialMaterial_set_line_width :: MethodBind
 bindSpatialMaterial_set_line_width
   = unsafePerformIO $
@@ -2515,6 +2621,7 @@ bindSpatialMaterial_set_line_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Currently unimplemented in Godot.
 set_line_width ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_line_width cls arg1
@@ -2528,7 +2635,7 @@ set_line_width cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_metallic #-}
 
--- | The reflectivity of the object's surface. The higher the value the more light is reflected.
+-- | A high value makes the material appear more like a metal. Non-metals use their albedo as the diffuse color and add diffuse to the specular reflection. With non-metals, the reflection appears on top of the albedo color. Metals use their albedo as a multiplier to the specular reflection and set the diffuse color to black resulting in a tinted reflection. Materials work better when fully metal or fully non-metal, values between [code]0[/code] and [code]1[/code] should only be used for blending between metal and non-metal sections. To alter the amount of reflection use [member roughness].
 bindSpatialMaterial_set_metallic :: MethodBind
 bindSpatialMaterial_set_metallic
   = unsafePerformIO $
@@ -2538,7 +2645,7 @@ bindSpatialMaterial_set_metallic
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The reflectivity of the object's surface. The higher the value the more light is reflected.
+-- | A high value makes the material appear more like a metal. Non-metals use their albedo as the diffuse color and add diffuse to the specular reflection. With non-metals, the reflection appears on top of the albedo color. Metals use their albedo as a multiplier to the specular reflection and set the diffuse color to black resulting in a tinted reflection. Materials work better when fully metal or fully non-metal, values between [code]0[/code] and [code]1[/code] should only be used for blending between metal and non-metal sections. To alter the amount of reflection use [member roughness].
 set_metallic ::
                (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_metallic cls arg1
@@ -2552,6 +2659,7 @@ set_metallic cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_metallic_texture_channel #-}
 
+-- | Specifies the channel of the [member metallic_texture] in which the metallic information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_set_metallic_texture_channel :: MethodBind
 bindSpatialMaterial_set_metallic_texture_channel
   = unsafePerformIO $
@@ -2561,6 +2669,7 @@ bindSpatialMaterial_set_metallic_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member metallic_texture] in which the metallic information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 set_metallic_texture_channel ::
                                (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_metallic_texture_channel cls arg1
@@ -2599,7 +2708,7 @@ set_normal_scale cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_particles_anim_h_frames #-}
 
--- | The number of horizontal frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of horizontal frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 bindSpatialMaterial_set_particles_anim_h_frames :: MethodBind
 bindSpatialMaterial_set_particles_anim_h_frames
   = unsafePerformIO $
@@ -2609,7 +2718,7 @@ bindSpatialMaterial_set_particles_anim_h_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of horizontal frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of horizontal frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 set_particles_anim_h_frames ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_particles_anim_h_frames cls arg1
@@ -2624,7 +2733,7 @@ set_particles_anim_h_frames cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_particles_anim_loop #-}
 
--- | If [code]true[/code], particle animations are looped. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | If [code]true[/code], particle animations are looped. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 bindSpatialMaterial_set_particles_anim_loop :: MethodBind
 bindSpatialMaterial_set_particles_anim_loop
   = unsafePerformIO $
@@ -2634,7 +2743,7 @@ bindSpatialMaterial_set_particles_anim_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], particle animations are looped. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | If [code]true[/code], particle animations are looped. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 set_particles_anim_loop ::
                           (SpatialMaterial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_particles_anim_loop cls arg1
@@ -2648,7 +2757,7 @@ set_particles_anim_loop cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_particles_anim_v_frames #-}
 
--- | The number of vertical frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of vertical frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 bindSpatialMaterial_set_particles_anim_v_frames :: MethodBind
 bindSpatialMaterial_set_particles_anim_v_frames
   = unsafePerformIO $
@@ -2658,7 +2767,7 @@ bindSpatialMaterial_set_particles_anim_v_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of vertical frames in the particle spritesheet. Only enabled when using [code]BillboardMode.BILLBOARD_PARTICLES[/code]. See [member params_billboard_mode].
+-- | The number of vertical frames in the particle sprite sheet. Only enabled when using [constant BILLBOARD_PARTICLES]. See [member params_billboard_mode].
 set_particles_anim_v_frames ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_particles_anim_v_frames cls arg1
@@ -2697,7 +2806,7 @@ set_point_size cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_proximity_fade #-}
 
--- | If [code]true[/code], the proximity and distance fade effect is enabled. Default value: [code]false[/code].
+-- | If [code]true[/code], the proximity fade effect is enabled. The proximity fade effect fades out each pixel based on its distance to another object.
 bindSpatialMaterial_set_proximity_fade :: MethodBind
 bindSpatialMaterial_set_proximity_fade
   = unsafePerformIO $
@@ -2707,7 +2816,7 @@ bindSpatialMaterial_set_proximity_fade
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the proximity and distance fade effect is enabled. Default value: [code]false[/code].
+-- | If [code]true[/code], the proximity fade effect is enabled. The proximity fade effect fades out each pixel based on its distance to another object.
 set_proximity_fade ::
                      (SpatialMaterial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_proximity_fade cls arg1
@@ -2721,6 +2830,7 @@ set_proximity_fade cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_proximity_fade_distance #-}
 
+-- | Distance over which the fade effect takes place. The larger the distance the longer it takes for an object to fade.
 bindSpatialMaterial_set_proximity_fade_distance :: MethodBind
 bindSpatialMaterial_set_proximity_fade_distance
   = unsafePerformIO $
@@ -2730,6 +2840,7 @@ bindSpatialMaterial_set_proximity_fade_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Distance over which the fade effect takes place. The larger the distance the longer it takes for an object to fade.
 set_proximity_fade_distance ::
                               (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_proximity_fade_distance cls arg1
@@ -2768,6 +2879,7 @@ set_refraction cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_refraction_texture_channel #-}
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_set_refraction_texture_channel :: MethodBind
 bindSpatialMaterial_set_refraction_texture_channel
   = unsafePerformIO $
@@ -2777,6 +2889,7 @@ bindSpatialMaterial_set_refraction_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 set_refraction_texture_channel ::
                                  (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_refraction_texture_channel cls arg1
@@ -2791,6 +2904,7 @@ set_refraction_texture_channel cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_rim #-}
 
+-- | Sets the strength of the rim lighting effect.
 bindSpatialMaterial_set_rim :: MethodBind
 bindSpatialMaterial_set_rim
   = unsafePerformIO $
@@ -2800,6 +2914,7 @@ bindSpatialMaterial_set_rim
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the strength of the rim lighting effect.
 set_rim ::
           (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_rim cls arg1
@@ -2860,6 +2975,7 @@ set_roughness cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_roughness_texture_channel #-}
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 bindSpatialMaterial_set_roughness_texture_channel :: MethodBind
 bindSpatialMaterial_set_roughness_texture_channel
   = unsafePerformIO $
@@ -2869,6 +2985,7 @@ bindSpatialMaterial_set_roughness_texture_channel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies the channel of the [member ao_texture] in which the ambient occlusion information is stored. This is useful when you store the information for multiple effects in a single texture. For example if you stored metallic in the red channel, roughness in the blue, and ambient occlusion in the green you could reduce the number of textures you use.
 set_roughness_texture_channel ::
                                 (SpatialMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_roughness_texture_channel cls arg1
@@ -2883,7 +3000,8 @@ set_roughness_texture_channel cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_specular #-}
 
--- | General reflectivity amount. Note: unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases.  See also [member roughness].
+-- | Sets the size of the specular lobe. The specular lobe is the bright spot that is reflected from light sources.
+--   			[b]Note:[/b] unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases. See also [member roughness].
 bindSpatialMaterial_set_specular :: MethodBind
 bindSpatialMaterial_set_specular
   = unsafePerformIO $
@@ -2893,7 +3011,8 @@ bindSpatialMaterial_set_specular
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | General reflectivity amount. Note: unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases.  See also [member roughness].
+-- | Sets the size of the specular lobe. The specular lobe is the bright spot that is reflected from light sources.
+--   			[b]Note:[/b] unlike [member metallic], this is not energy-conserving, so it should be left at [code]0.5[/code] in most cases. See also [member roughness].
 set_specular ::
                (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_specular cls arg1
@@ -2959,6 +3078,7 @@ set_subsurface_scattering_strength cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_texture #-}
 
+-- | Sets the [Texture] to be used by the specified [enum TextureParam]. This function is called when setting members ending in [code]*_texture[/code].
 bindSpatialMaterial_set_texture :: MethodBind
 bindSpatialMaterial_set_texture
   = unsafePerformIO $
@@ -2968,6 +3088,7 @@ bindSpatialMaterial_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Texture] to be used by the specified [enum TextureParam]. This function is called when setting members ending in [code]*_texture[/code].
 set_texture ::
               (SpatialMaterial :< cls, Object :< cls) =>
               cls -> Int -> Texture -> IO ()
@@ -3005,6 +3126,7 @@ set_transmission cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_uv1_offset #-}
 
+-- | How much to offset the [code]UV[/code] coordinates. This amount will be added to [code]UV[/code] in the vertex function. This can be used to offset a texture.
 bindSpatialMaterial_set_uv1_offset :: MethodBind
 bindSpatialMaterial_set_uv1_offset
   = unsafePerformIO $
@@ -3014,6 +3136,7 @@ bindSpatialMaterial_set_uv1_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to offset the [code]UV[/code] coordinates. This amount will be added to [code]UV[/code] in the vertex function. This can be used to offset a texture.
 set_uv1_offset ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_uv1_offset cls arg1
@@ -3027,6 +3150,7 @@ set_uv1_offset cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_uv1_scale #-}
 
+-- | How much to scale the [code]UV[/code] coordinates. This is multiplied by [code]UV[/code] in the vertex function.
 bindSpatialMaterial_set_uv1_scale :: MethodBind
 bindSpatialMaterial_set_uv1_scale
   = unsafePerformIO $
@@ -3036,6 +3160,7 @@ bindSpatialMaterial_set_uv1_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to scale the [code]UV[/code] coordinates. This is multiplied by [code]UV[/code] in the vertex function.
 set_uv1_scale ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_uv1_scale cls arg1
@@ -3050,6 +3175,7 @@ set_uv1_scale cls arg1
 {-# NOINLINE bindSpatialMaterial_set_uv1_triplanar_blend_sharpness
              #-}
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 bindSpatialMaterial_set_uv1_triplanar_blend_sharpness :: MethodBind
 bindSpatialMaterial_set_uv1_triplanar_blend_sharpness
   = unsafePerformIO $
@@ -3059,6 +3185,7 @@ bindSpatialMaterial_set_uv1_triplanar_blend_sharpness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 set_uv1_triplanar_blend_sharpness ::
                                     (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_uv1_triplanar_blend_sharpness cls arg1
@@ -3073,6 +3200,7 @@ set_uv1_triplanar_blend_sharpness cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_uv2_offset #-}
 
+-- | How much to offset the [code]UV2[/code] coordinates. This amount will be added to [code]UV2[/code] in the vertex function. This can be used to offset a texture.
 bindSpatialMaterial_set_uv2_offset :: MethodBind
 bindSpatialMaterial_set_uv2_offset
   = unsafePerformIO $
@@ -3082,6 +3210,7 @@ bindSpatialMaterial_set_uv2_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to offset the [code]UV2[/code] coordinates. This amount will be added to [code]UV2[/code] in the vertex function. This can be used to offset a texture.
 set_uv2_offset ::
                  (SpatialMaterial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_uv2_offset cls arg1
@@ -3095,6 +3224,7 @@ set_uv2_offset cls arg1
 
 {-# NOINLINE bindSpatialMaterial_set_uv2_scale #-}
 
+-- | How much to scale the [code]UV2[/code] coordinates. This is multiplied by [code]UV2[/code] in the vertex function.
 bindSpatialMaterial_set_uv2_scale :: MethodBind
 bindSpatialMaterial_set_uv2_scale
   = unsafePerformIO $
@@ -3104,6 +3234,7 @@ bindSpatialMaterial_set_uv2_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | How much to scale the [code]UV2[/code] coordinates. This is multiplied by [code]UV2[/code] in the vertex function.
 set_uv2_scale ::
                 (SpatialMaterial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_uv2_scale cls arg1
@@ -3118,6 +3249,7 @@ set_uv2_scale cls arg1
 {-# NOINLINE bindSpatialMaterial_set_uv2_triplanar_blend_sharpness
              #-}
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 bindSpatialMaterial_set_uv2_triplanar_blend_sharpness :: MethodBind
 bindSpatialMaterial_set_uv2_triplanar_blend_sharpness
   = unsafePerformIO $
@@ -3127,6 +3259,7 @@ bindSpatialMaterial_set_uv2_triplanar_blend_sharpness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A lower number blends the texture more softly while a higher number blends the texture more sharply.
 set_uv2_triplanar_blend_sharpness ::
                                     (SpatialMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_uv2_triplanar_blend_sharpness cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GraphNode
        (Godot.Core.GraphNode._OVERLAY_DISABLED,
         Godot.Core.GraphNode._OVERLAY_POSITION,
@@ -54,26 +55,37 @@ _OVERLAY_POSITION = 2
 _OVERLAY_BREAKPOINT :: Int
 _OVERLAY_BREAKPOINT = 1
 
--- | Signal sent on closing the GraphNode.
+-- | Emitted when the GraphNode is requested to be closed. Happens on clicking the close button (see [member show_close]).
 sig_close_request :: Godot.Internal.Dispatch.Signal GraphNode
 sig_close_request = Godot.Internal.Dispatch.Signal "close_request"
 
--- | Signal sent when the GraphNode is dragged.
+instance NodeSignal GraphNode "close_request" '[]
+
+-- | Emitted when the GraphNode is dragged.
 sig_dragged :: Godot.Internal.Dispatch.Signal GraphNode
 sig_dragged = Godot.Internal.Dispatch.Signal "dragged"
 
--- | Signal sent when the GraphNode is moved.
+instance NodeSignal GraphNode "dragged" '[Vector2, Vector2]
+
+-- | Emitted when the GraphNode is moved.
 sig_offset_changed :: Godot.Internal.Dispatch.Signal GraphNode
 sig_offset_changed
   = Godot.Internal.Dispatch.Signal "offset_changed"
 
--- | Signal sent when the GraphNode is requested to be displayed over other ones. Happens on focusing (clicking into) the GraphNode.
+instance NodeSignal GraphNode "offset_changed" '[]
+
+-- | Emitted when the GraphNode is requested to be displayed over other ones. Happens on focusing (clicking into) the GraphNode.
 sig_raise_request :: Godot.Internal.Dispatch.Signal GraphNode
 sig_raise_request = Godot.Internal.Dispatch.Signal "raise_request"
 
+instance NodeSignal GraphNode "raise_request" '[]
+
+-- | Emitted when the GraphNode is requested to be resized. Happens on dragging the resizer handle (see [member resizable]).
 sig_resize_request :: Godot.Internal.Dispatch.Signal GraphNode
 sig_resize_request
   = Godot.Internal.Dispatch.Signal "resize_request"
+
+instance NodeSignal GraphNode "resize_request" '[Vector2]
 
 {-# NOINLINE bindGraphNode__gui_input #-}
 
@@ -97,7 +109,7 @@ _gui_input cls arg1
 
 {-# NOINLINE bindGraphNode_clear_all_slots #-}
 
--- | Disable all input and output slots of the GraphNode.
+-- | Disables all input and output slots of the GraphNode.
 bindGraphNode_clear_all_slots :: MethodBind
 bindGraphNode_clear_all_slots
   = unsafePerformIO $
@@ -107,7 +119,7 @@ bindGraphNode_clear_all_slots
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disable all input and output slots of the GraphNode.
+-- | Disables all input and output slots of the GraphNode.
 clear_all_slots ::
                   (GraphNode :< cls, Object :< cls) => cls -> IO ()
 clear_all_slots cls
@@ -120,7 +132,7 @@ clear_all_slots cls
 
 {-# NOINLINE bindGraphNode_clear_slot #-}
 
--- | Disable input and output slot whose index is 'idx'.
+-- | Disables input and output slot whose index is [code]idx[/code].
 bindGraphNode_clear_slot :: MethodBind
 bindGraphNode_clear_slot
   = unsafePerformIO $
@@ -130,7 +142,7 @@ bindGraphNode_clear_slot
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disable input and output slot whose index is 'idx'.
+-- | Disables input and output slot whose index is [code]idx[/code].
 clear_slot ::
              (GraphNode :< cls, Object :< cls) => cls -> Int -> IO ()
 clear_slot cls arg1
@@ -142,7 +154,7 @@ clear_slot cls arg1
 
 {-# NOINLINE bindGraphNode_get_connection_input_color #-}
 
--- | Returns the color of the input connection 'idx'.
+-- | Returns the color of the input connection [code]idx[/code].
 bindGraphNode_get_connection_input_color :: MethodBind
 bindGraphNode_get_connection_input_color
   = unsafePerformIO $
@@ -152,7 +164,7 @@ bindGraphNode_get_connection_input_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color of the input connection 'idx'.
+-- | Returns the color of the input connection [code]idx[/code].
 get_connection_input_color ::
                              (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Color
 get_connection_input_color cls arg1
@@ -190,7 +202,7 @@ get_connection_input_count cls
 
 {-# NOINLINE bindGraphNode_get_connection_input_position #-}
 
--- | Returns the position of the input connection 'idx'.
+-- | Returns the position of the input connection [code]idx[/code].
 bindGraphNode_get_connection_input_position :: MethodBind
 bindGraphNode_get_connection_input_position
   = unsafePerformIO $
@@ -200,7 +212,7 @@ bindGraphNode_get_connection_input_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the input connection 'idx'.
+-- | Returns the position of the input connection [code]idx[/code].
 get_connection_input_position ::
                                 (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_connection_input_position cls arg1
@@ -214,7 +226,7 @@ get_connection_input_position cls arg1
 
 {-# NOINLINE bindGraphNode_get_connection_input_type #-}
 
--- | Returns the type of the input connection 'idx'.
+-- | Returns the type of the input connection [code]idx[/code].
 bindGraphNode_get_connection_input_type :: MethodBind
 bindGraphNode_get_connection_input_type
   = unsafePerformIO $
@@ -224,7 +236,7 @@ bindGraphNode_get_connection_input_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the type of the input connection 'idx'.
+-- | Returns the type of the input connection [code]idx[/code].
 get_connection_input_type ::
                             (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Int
 get_connection_input_type cls arg1
@@ -238,7 +250,7 @@ get_connection_input_type cls arg1
 
 {-# NOINLINE bindGraphNode_get_connection_output_color #-}
 
--- | Returns the color of the output connection 'idx'.
+-- | Returns the color of the output connection [code]idx[/code].
 bindGraphNode_get_connection_output_color :: MethodBind
 bindGraphNode_get_connection_output_color
   = unsafePerformIO $
@@ -248,7 +260,7 @@ bindGraphNode_get_connection_output_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color of the output connection 'idx'.
+-- | Returns the color of the output connection [code]idx[/code].
 get_connection_output_color ::
                               (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Color
 get_connection_output_color cls arg1
@@ -286,7 +298,7 @@ get_connection_output_count cls
 
 {-# NOINLINE bindGraphNode_get_connection_output_position #-}
 
--- | Returns the position of the output connection 'idx'.
+-- | Returns the position of the output connection [code]idx[/code].
 bindGraphNode_get_connection_output_position :: MethodBind
 bindGraphNode_get_connection_output_position
   = unsafePerformIO $
@@ -296,7 +308,7 @@ bindGraphNode_get_connection_output_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the output connection 'idx'.
+-- | Returns the position of the output connection [code]idx[/code].
 get_connection_output_position ::
                                  (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_connection_output_position cls arg1
@@ -310,7 +322,7 @@ get_connection_output_position cls arg1
 
 {-# NOINLINE bindGraphNode_get_connection_output_type #-}
 
--- | Returns the type of the output connection 'idx'.
+-- | Returns the type of the output connection [code]idx[/code].
 bindGraphNode_get_connection_output_type :: MethodBind
 bindGraphNode_get_connection_output_type
   = unsafePerformIO $
@@ -320,7 +332,7 @@ bindGraphNode_get_connection_output_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the type of the output connection 'idx'.
+-- | Returns the type of the output connection [code]idx[/code].
 get_connection_output_type ::
                              (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Int
 get_connection_output_type cls arg1
@@ -334,7 +346,8 @@ get_connection_output_type cls arg1
 
 {-# NOINLINE bindGraphNode_get_offset #-}
 
--- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit]. Note that you cannot use position directly, as [GraphEdit] is a [Container].
+-- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit].
+--   			[b]Note:[/b] You cannot use position directly, as [GraphEdit] is a [Container].
 bindGraphNode_get_offset :: MethodBind
 bindGraphNode_get_offset
   = unsafePerformIO $
@@ -344,7 +357,8 @@ bindGraphNode_get_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit]. Note that you cannot use position directly, as [GraphEdit] is a [Container].
+-- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit].
+--   			[b]Note:[/b] You cannot use position directly, as [GraphEdit] is a [Container].
 get_offset ::
              (GraphNode :< cls, Object :< cls) => cls -> IO Vector2
 get_offset cls
@@ -356,6 +370,7 @@ get_offset cls
 
 {-# NOINLINE bindGraphNode_get_overlay #-}
 
+-- | Sets the overlay shown above the GraphNode. See [enum Overlay].
 bindGraphNode_get_overlay :: MethodBind
 bindGraphNode_get_overlay
   = unsafePerformIO $
@@ -365,6 +380,7 @@ bindGraphNode_get_overlay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the overlay shown above the GraphNode. See [enum Overlay].
 get_overlay :: (GraphNode :< cls, Object :< cls) => cls -> IO Int
 get_overlay cls
   = withVariantArray []
@@ -376,7 +392,7 @@ get_overlay cls
 
 {-# NOINLINE bindGraphNode_get_slot_color_left #-}
 
--- | Returns the color set to 'idx' left (input) slot.
+-- | Returns the color set to [code]idx[/code] left (input) slot.
 bindGraphNode_get_slot_color_left :: MethodBind
 bindGraphNode_get_slot_color_left
   = unsafePerformIO $
@@ -386,7 +402,7 @@ bindGraphNode_get_slot_color_left
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color set to 'idx' left (input) slot.
+-- | Returns the color set to [code]idx[/code] left (input) slot.
 get_slot_color_left ::
                       (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Color
 get_slot_color_left cls arg1
@@ -400,7 +416,7 @@ get_slot_color_left cls arg1
 
 {-# NOINLINE bindGraphNode_get_slot_color_right #-}
 
--- | Returns the color set to 'idx' right (output) slot.
+-- | Returns the color set to [code]idx[/code] right (output) slot.
 bindGraphNode_get_slot_color_right :: MethodBind
 bindGraphNode_get_slot_color_right
   = unsafePerformIO $
@@ -410,7 +426,7 @@ bindGraphNode_get_slot_color_right
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color set to 'idx' right (output) slot.
+-- | Returns the color set to [code]idx[/code] right (output) slot.
 get_slot_color_right ::
                        (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Color
 get_slot_color_right cls arg1
@@ -424,7 +440,7 @@ get_slot_color_right cls arg1
 
 {-# NOINLINE bindGraphNode_get_slot_type_left #-}
 
--- | Returns the (integer) type of left (input) 'idx' slot.
+-- | Returns the (integer) type of left (input) [code]idx[/code] slot.
 bindGraphNode_get_slot_type_left :: MethodBind
 bindGraphNode_get_slot_type_left
   = unsafePerformIO $
@@ -434,7 +450,7 @@ bindGraphNode_get_slot_type_left
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the (integer) type of left (input) 'idx' slot.
+-- | Returns the (integer) type of left (input) [code]idx[/code] slot.
 get_slot_type_left ::
                      (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Int
 get_slot_type_left cls arg1
@@ -448,7 +464,7 @@ get_slot_type_left cls arg1
 
 {-# NOINLINE bindGraphNode_get_slot_type_right #-}
 
--- | Returns the (integer) type of right (output) 'idx' slot.
+-- | Returns the (integer) type of right (output) [code]idx[/code] slot.
 bindGraphNode_get_slot_type_right :: MethodBind
 bindGraphNode_get_slot_type_right
   = unsafePerformIO $
@@ -458,7 +474,7 @@ bindGraphNode_get_slot_type_right
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the (integer) type of right (output) 'idx' slot.
+-- | Returns the (integer) type of right (output) [code]idx[/code] slot.
 get_slot_type_right ::
                       (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Int
 get_slot_type_right cls arg1
@@ -472,6 +488,7 @@ get_slot_type_right cls arg1
 
 {-# NOINLINE bindGraphNode_get_title #-}
 
+-- | The text displayed in the GraphNode's title bar.
 bindGraphNode_get_title :: MethodBind
 bindGraphNode_get_title
   = unsafePerformIO $
@@ -481,6 +498,7 @@ bindGraphNode_get_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The text displayed in the GraphNode's title bar.
 get_title ::
             (GraphNode :< cls, Object :< cls) => cls -> IO GodotString
 get_title cls
@@ -492,6 +510,8 @@ get_title cls
 
 {-# NOINLINE bindGraphNode_is_close_button_visible #-}
 
+-- | If [code]true[/code], the close button will be visible.
+--   			[b]Note:[/b] Pressing it will only emit the [signal close_request] signal, the GraphNode needs to be removed manually.
 bindGraphNode_is_close_button_visible :: MethodBind
 bindGraphNode_is_close_button_visible
   = unsafePerformIO $
@@ -501,6 +521,8 @@ bindGraphNode_is_close_button_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the close button will be visible.
+--   			[b]Note:[/b] Pressing it will only emit the [signal close_request] signal, the GraphNode needs to be removed manually.
 is_close_button_visible ::
                           (GraphNode :< cls, Object :< cls) => cls -> IO Bool
 is_close_button_visible cls
@@ -514,6 +536,7 @@ is_close_button_visible cls
 
 {-# NOINLINE bindGraphNode_is_comment #-}
 
+-- | If [code]true[/code], the GraphNode is a comment node.
 bindGraphNode_is_comment :: MethodBind
 bindGraphNode_is_comment
   = unsafePerformIO $
@@ -523,6 +546,7 @@ bindGraphNode_is_comment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the GraphNode is a comment node.
 is_comment :: (GraphNode :< cls, Object :< cls) => cls -> IO Bool
 is_comment cls
   = withVariantArray []
@@ -533,6 +557,8 @@ is_comment cls
 
 {-# NOINLINE bindGraphNode_is_resizable #-}
 
+-- | If [code]true[/code], the user can resize the GraphNode.
+--   			[b]Note:[/b] Dragging the handle will only emit the [signal resize_request] signal, the GraphNode needs to be resized manually.
 bindGraphNode_is_resizable :: MethodBind
 bindGraphNode_is_resizable
   = unsafePerformIO $
@@ -542,6 +568,8 @@ bindGraphNode_is_resizable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the user can resize the GraphNode.
+--   			[b]Note:[/b] Dragging the handle will only emit the [signal resize_request] signal, the GraphNode needs to be resized manually.
 is_resizable :: (GraphNode :< cls, Object :< cls) => cls -> IO Bool
 is_resizable cls
   = withVariantArray []
@@ -553,6 +581,7 @@ is_resizable cls
 
 {-# NOINLINE bindGraphNode_is_selected #-}
 
+-- | If [code]true[/code], the GraphNode is selected.
 bindGraphNode_is_selected :: MethodBind
 bindGraphNode_is_selected
   = unsafePerformIO $
@@ -562,6 +591,7 @@ bindGraphNode_is_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the GraphNode is selected.
 is_selected :: (GraphNode :< cls, Object :< cls) => cls -> IO Bool
 is_selected cls
   = withVariantArray []
@@ -573,7 +603,7 @@ is_selected cls
 
 {-# NOINLINE bindGraphNode_is_slot_enabled_left #-}
 
--- | Returns [code]true[/code] if left (input) slot 'idx' is enabled, [code]false[/code] otherwise.
+-- | Returns [code]true[/code] if left (input) slot [code]idx[/code] is enabled, [code]false[/code] otherwise.
 bindGraphNode_is_slot_enabled_left :: MethodBind
 bindGraphNode_is_slot_enabled_left
   = unsafePerformIO $
@@ -583,7 +613,7 @@ bindGraphNode_is_slot_enabled_left
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if left (input) slot 'idx' is enabled, [code]false[/code] otherwise.
+-- | Returns [code]true[/code] if left (input) slot [code]idx[/code] is enabled, [code]false[/code] otherwise.
 is_slot_enabled_left ::
                        (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_slot_enabled_left cls arg1
@@ -597,7 +627,7 @@ is_slot_enabled_left cls arg1
 
 {-# NOINLINE bindGraphNode_is_slot_enabled_right #-}
 
--- | Returns [code]true[/code] if right (output) slot 'idx' is enabled, [code]false[/code] otherwise.
+-- | Returns [code]true[/code] if right (output) slot [code]idx[/code] is enabled, [code]false[/code] otherwise.
 bindGraphNode_is_slot_enabled_right :: MethodBind
 bindGraphNode_is_slot_enabled_right
   = unsafePerformIO $
@@ -607,7 +637,7 @@ bindGraphNode_is_slot_enabled_right
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if right (output) slot 'idx' is enabled, [code]false[/code] otherwise.
+-- | Returns [code]true[/code] if right (output) slot [code]idx[/code] is enabled, [code]false[/code] otherwise.
 is_slot_enabled_right ::
                         (GraphNode :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_slot_enabled_right cls arg1
@@ -621,6 +651,7 @@ is_slot_enabled_right cls arg1
 
 {-# NOINLINE bindGraphNode_set_comment #-}
 
+-- | If [code]true[/code], the GraphNode is a comment node.
 bindGraphNode_set_comment :: MethodBind
 bindGraphNode_set_comment
   = unsafePerformIO $
@@ -630,6 +661,7 @@ bindGraphNode_set_comment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the GraphNode is a comment node.
 set_comment ::
               (GraphNode :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_comment cls arg1
@@ -642,7 +674,8 @@ set_comment cls arg1
 
 {-# NOINLINE bindGraphNode_set_offset #-}
 
--- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit]. Note that you cannot use position directly, as [GraphEdit] is a [Container].
+-- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit].
+--   			[b]Note:[/b] You cannot use position directly, as [GraphEdit] is a [Container].
 bindGraphNode_set_offset :: MethodBind
 bindGraphNode_set_offset
   = unsafePerformIO $
@@ -652,7 +685,8 @@ bindGraphNode_set_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit]. Note that you cannot use position directly, as [GraphEdit] is a [Container].
+-- | The offset of the GraphNode, relative to the scroll offset of the [GraphEdit].
+--   			[b]Note:[/b] You cannot use position directly, as [GraphEdit] is a [Container].
 set_offset ::
              (GraphNode :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_offset cls arg1
@@ -664,6 +698,7 @@ set_offset cls arg1
 
 {-# NOINLINE bindGraphNode_set_overlay #-}
 
+-- | Sets the overlay shown above the GraphNode. See [enum Overlay].
 bindGraphNode_set_overlay :: MethodBind
 bindGraphNode_set_overlay
   = unsafePerformIO $
@@ -673,6 +708,7 @@ bindGraphNode_set_overlay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the overlay shown above the GraphNode. See [enum Overlay].
 set_overlay ::
               (GraphNode :< cls, Object :< cls) => cls -> Int -> IO ()
 set_overlay cls arg1
@@ -685,6 +721,8 @@ set_overlay cls arg1
 
 {-# NOINLINE bindGraphNode_set_resizable #-}
 
+-- | If [code]true[/code], the user can resize the GraphNode.
+--   			[b]Note:[/b] Dragging the handle will only emit the [signal resize_request] signal, the GraphNode needs to be resized manually.
 bindGraphNode_set_resizable :: MethodBind
 bindGraphNode_set_resizable
   = unsafePerformIO $
@@ -694,6 +732,8 @@ bindGraphNode_set_resizable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the user can resize the GraphNode.
+--   			[b]Note:[/b] Dragging the handle will only emit the [signal resize_request] signal, the GraphNode needs to be resized manually.
 set_resizable ::
                 (GraphNode :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_resizable cls arg1
@@ -706,6 +746,7 @@ set_resizable cls arg1
 
 {-# NOINLINE bindGraphNode_set_selected #-}
 
+-- | If [code]true[/code], the GraphNode is selected.
 bindGraphNode_set_selected :: MethodBind
 bindGraphNode_set_selected
   = unsafePerformIO $
@@ -715,6 +756,7 @@ bindGraphNode_set_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the GraphNode is selected.
 set_selected ::
                (GraphNode :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_selected cls arg1
@@ -727,6 +769,8 @@ set_selected cls arg1
 
 {-# NOINLINE bindGraphNode_set_show_close_button #-}
 
+-- | If [code]true[/code], the close button will be visible.
+--   			[b]Note:[/b] Pressing it will only emit the [signal close_request] signal, the GraphNode needs to be removed manually.
 bindGraphNode_set_show_close_button :: MethodBind
 bindGraphNode_set_show_close_button
   = unsafePerformIO $
@@ -736,6 +780,8 @@ bindGraphNode_set_show_close_button
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the close button will be visible.
+--   			[b]Note:[/b] Pressing it will only emit the [signal close_request] signal, the GraphNode needs to be removed manually.
 set_show_close_button ::
                         (GraphNode :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_show_close_button cls arg1
@@ -749,6 +795,12 @@ set_show_close_button cls arg1
 
 {-# NOINLINE bindGraphNode_set_slot #-}
 
+-- | Sets properties of the slot with ID [code]idx[/code].
+--   				If [code]enable_left[/code]/[code]right[/code], a port will appear and the slot will be able to be connected from this side.
+--   				[code]type_left[/code]/[code]right[/code] is an arbitrary type of the port. Only ports with the same type values can be connected.
+--   				[code]color_left[/code]/[code]right[/code] is the tint of the port's icon on this side.
+--   				[code]custom_left[/code]/[code]right[/code] is a custom texture for this side's port.
+--   				[b]Note:[/b] This method only sets properties of the slot. To create the slot, add a [Control]-derived child to the GraphNode.
 bindGraphNode_set_slot :: MethodBind
 bindGraphNode_set_slot
   = unsafePerformIO $
@@ -758,6 +810,12 @@ bindGraphNode_set_slot
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets properties of the slot with ID [code]idx[/code].
+--   				If [code]enable_left[/code]/[code]right[/code], a port will appear and the slot will be able to be connected from this side.
+--   				[code]type_left[/code]/[code]right[/code] is an arbitrary type of the port. Only ports with the same type values can be connected.
+--   				[code]color_left[/code]/[code]right[/code] is the tint of the port's icon on this side.
+--   				[code]custom_left[/code]/[code]right[/code] is a custom texture for this side's port.
+--   				[b]Note:[/b] This method only sets properties of the slot. To create the slot, add a [Control]-derived child to the GraphNode.
 set_slot ::
            (GraphNode :< cls, Object :< cls) =>
            cls ->
@@ -776,6 +834,7 @@ set_slot cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9
 
 {-# NOINLINE bindGraphNode_set_title #-}
 
+-- | The text displayed in the GraphNode's title bar.
 bindGraphNode_set_title :: MethodBind
 bindGraphNode_set_title
   = unsafePerformIO $
@@ -785,6 +844,7 @@ bindGraphNode_set_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The text displayed in the GraphNode's title bar.
 set_title ::
             (GraphNode :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_title cls arg1

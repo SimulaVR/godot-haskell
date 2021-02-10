@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ProceduralSky
        (Godot.Core.ProceduralSky._TEXTURE_SIZE_512,
         Godot.Core.ProceduralSky._TEXTURE_SIZE_2048,
@@ -350,7 +351,7 @@ get_sun_angle_min cls
 
 {-# NOINLINE bindProceduralSky_get_sun_color #-}
 
--- | Color of the sun.
+-- | The sun's color.
 bindProceduralSky_get_sun_color :: MethodBind
 bindProceduralSky_get_sun_color
   = unsafePerformIO $
@@ -360,7 +361,7 @@ bindProceduralSky_get_sun_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Color of the sun.
+-- | The sun's color.
 get_sun_color ::
                 (ProceduralSky :< cls, Object :< cls) => cls -> IO Color
 get_sun_color cls
@@ -420,7 +421,7 @@ get_sun_energy cls
 
 {-# NOINLINE bindProceduralSky_get_sun_latitude #-}
 
--- | The suns height using polar coordinates.
+-- | The sun's height using polar coordinates.
 bindProceduralSky_get_sun_latitude :: MethodBind
 bindProceduralSky_get_sun_latitude
   = unsafePerformIO $
@@ -430,7 +431,7 @@ bindProceduralSky_get_sun_latitude
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The suns height using polar coordinates.
+-- | The sun's height using polar coordinates.
 get_sun_latitude ::
                    (ProceduralSky :< cls, Object :< cls) => cls -> IO Float
 get_sun_latitude cls
@@ -731,7 +732,7 @@ set_sun_angle_min cls arg1
 
 {-# NOINLINE bindProceduralSky_set_sun_color #-}
 
--- | Color of the sun.
+-- | The sun's color.
 bindProceduralSky_set_sun_color :: MethodBind
 bindProceduralSky_set_sun_color
   = unsafePerformIO $
@@ -741,7 +742,7 @@ bindProceduralSky_set_sun_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Color of the sun.
+-- | The sun's color.
 set_sun_color ::
                 (ProceduralSky :< cls, Object :< cls) => cls -> Color -> IO ()
 set_sun_color cls arg1
@@ -801,7 +802,7 @@ set_sun_energy cls arg1
 
 {-# NOINLINE bindProceduralSky_set_sun_latitude #-}
 
--- | The suns height using polar coordinates.
+-- | The sun's height using polar coordinates.
 bindProceduralSky_set_sun_latitude :: MethodBind
 bindProceduralSky_set_sun_latitude
   = unsafePerformIO $
@@ -811,7 +812,7 @@ bindProceduralSky_set_sun_latitude
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The suns height using polar coordinates.
+-- | The sun's height using polar coordinates.
 set_sun_latitude ::
                    (ProceduralSky :< cls, Object :< cls) => cls -> Float -> IO ()
 set_sun_latitude cls arg1

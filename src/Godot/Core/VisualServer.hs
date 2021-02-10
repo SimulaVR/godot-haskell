@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualServer
        (Godot.Core.VisualServer._ARRAY_COMPRESS_WEIGHTS,
         Godot.Core.VisualServer._ARRAY_FLAG_USE_16_BIT_BONES,
@@ -1235,13 +1236,19 @@ _ARRAY_FORMAT_TANGENT = 4
 _PRIMITIVE_POINTS :: Int
 _PRIMITIVE_POINTS = 0
 
+-- | Emitted at the end of the frame, after the VisualServer has finished updating all the Viewports.
 sig_frame_post_draw :: Godot.Internal.Dispatch.Signal VisualServer
 sig_frame_post_draw
   = Godot.Internal.Dispatch.Signal "frame_post_draw"
 
+instance NodeSignal VisualServer "frame_post_draw" '[]
+
+-- | Emitted at the beginning of the frame, before the VisualServer updates all the Viewports.
 sig_frame_pre_draw :: Godot.Internal.Dispatch.Signal VisualServer
 sig_frame_pre_draw
   = Godot.Internal.Dispatch.Signal "frame_pre_draw"
+
+instance NodeSignal VisualServer "frame_pre_draw" '[]
 
 {-# NOINLINE bindVisualServer_black_bars_set_images #-}
 
@@ -1297,6 +1304,8 @@ black_bars_set_margins cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindVisualServer_camera_create #-}
 
+-- | Creates a camera and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]camera_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_camera_create :: MethodBind
 bindVisualServer_camera_create
   = unsafePerformIO $
@@ -1306,6 +1315,8 @@ bindVisualServer_camera_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a camera and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]camera_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 camera_create ::
                 (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 camera_create cls
@@ -1318,6 +1329,7 @@ camera_create cls
 
 {-# NOINLINE bindVisualServer_camera_set_cull_mask #-}
 
+-- | Sets the cull mask associated with this camera. The cull mask describes which 3D layers are rendered by this camera. Equivalent to [member Camera.cull_mask].
 bindVisualServer_camera_set_cull_mask :: MethodBind
 bindVisualServer_camera_set_cull_mask
   = unsafePerformIO $
@@ -1327,6 +1339,7 @@ bindVisualServer_camera_set_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the cull mask associated with this camera. The cull mask describes which 3D layers are rendered by this camera. Equivalent to [member Camera.cull_mask].
 camera_set_cull_mask ::
                        (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 camera_set_cull_mask cls arg1 arg2
@@ -1340,6 +1353,7 @@ camera_set_cull_mask cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_camera_set_environment #-}
 
+-- | Sets the environment used by this camera. Equivalent to [member Camera.environment].
 bindVisualServer_camera_set_environment :: MethodBind
 bindVisualServer_camera_set_environment
   = unsafePerformIO $
@@ -1349,6 +1363,7 @@ bindVisualServer_camera_set_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the environment used by this camera. Equivalent to [member Camera.environment].
 camera_set_environment ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 camera_set_environment cls arg1 arg2
@@ -1362,6 +1377,7 @@ camera_set_environment cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_camera_set_frustum #-}
 
+-- | Sets camera to use frustum projection. This mode allows adjusting the [code]offset[/code] argument to create "tilted frustum" effects.
 bindVisualServer_camera_set_frustum :: MethodBind
 bindVisualServer_camera_set_frustum
   = unsafePerformIO $
@@ -1371,6 +1387,7 @@ bindVisualServer_camera_set_frustum
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets camera to use frustum projection. This mode allows adjusting the [code]offset[/code] argument to create "tilted frustum" effects.
 camera_set_frustum ::
                      (VisualServer :< cls, Object :< cls) =>
                      cls -> Rid -> Float -> Vector2 -> Float -> Float -> IO ()
@@ -1387,6 +1404,7 @@ camera_set_frustum cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindVisualServer_camera_set_orthogonal #-}
 
+-- | Sets camera to use orthogonal projection, also known as orthographic projection. Objects remain the same size on the screen no matter how far away they are.
 bindVisualServer_camera_set_orthogonal :: MethodBind
 bindVisualServer_camera_set_orthogonal
   = unsafePerformIO $
@@ -1396,6 +1414,7 @@ bindVisualServer_camera_set_orthogonal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets camera to use orthogonal projection, also known as orthographic projection. Objects remain the same size on the screen no matter how far away they are.
 camera_set_orthogonal ::
                         (VisualServer :< cls, Object :< cls) =>
                         cls -> Rid -> Float -> Float -> Float -> IO ()
@@ -1411,6 +1430,7 @@ camera_set_orthogonal cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindVisualServer_camera_set_perspective #-}
 
+-- | Sets camera to use perspective projection. Objects on the screen becomes smaller when they are far away.
 bindVisualServer_camera_set_perspective :: MethodBind
 bindVisualServer_camera_set_perspective
   = unsafePerformIO $
@@ -1420,6 +1440,7 @@ bindVisualServer_camera_set_perspective
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets camera to use perspective projection. Objects on the screen becomes smaller when they are far away.
 camera_set_perspective ::
                          (VisualServer :< cls, Object :< cls) =>
                          cls -> Rid -> Float -> Float -> Float -> IO ()
@@ -1435,6 +1456,7 @@ camera_set_perspective cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindVisualServer_camera_set_transform #-}
 
+-- | Sets [Transform] of camera.
 bindVisualServer_camera_set_transform :: MethodBind
 bindVisualServer_camera_set_transform
   = unsafePerformIO $
@@ -1444,6 +1466,7 @@ bindVisualServer_camera_set_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets [Transform] of camera.
 camera_set_transform ::
                        (VisualServer :< cls, Object :< cls) =>
                        cls -> Rid -> Transform -> IO ()
@@ -1458,6 +1481,7 @@ camera_set_transform cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_camera_set_use_vertical_aspect #-}
 
+-- | If [code]true[/code], preserves the horizontal aspect ratio which is equivalent to [constant Camera.KEEP_WIDTH]. If [code]false[/code], preserves the vertical aspect ratio which is equivalent to [constant Camera.KEEP_HEIGHT].
 bindVisualServer_camera_set_use_vertical_aspect :: MethodBind
 bindVisualServer_camera_set_use_vertical_aspect
   = unsafePerformIO $
@@ -1467,6 +1491,7 @@ bindVisualServer_camera_set_use_vertical_aspect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], preserves the horizontal aspect ratio which is equivalent to [constant Camera.KEEP_WIDTH]. If [code]false[/code], preserves the vertical aspect ratio which is equivalent to [constant Camera.KEEP_HEIGHT].
 camera_set_use_vertical_aspect ::
                                  (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 camera_set_use_vertical_aspect cls arg1 arg2
@@ -1481,7 +1506,8 @@ camera_set_use_vertical_aspect cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_create #-}
 
--- | Creates a canvas and returns the assigned [RID].
+-- | Creates a canvas and returns the assigned [RID]. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_canvas_create :: MethodBind
 bindVisualServer_canvas_create
   = unsafePerformIO $
@@ -1491,7 +1517,8 @@ bindVisualServer_canvas_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a canvas and returns the assigned [RID].
+-- | Creates a canvas and returns the assigned [RID]. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 canvas_create ::
                 (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 canvas_create cls
@@ -1581,7 +1608,7 @@ canvas_item_add_line cls arg1 arg2 arg3 arg4 arg5 arg6
 
 {-# NOINLINE bindVisualServer_canvas_item_add_mesh #-}
 
--- | Adds a [Mesh] to the [CanvasItem]'s draw commands. Only affects its aabb at the moment.
+-- | Adds a mesh command to the [CanvasItem]'s draw commands.
 bindVisualServer_canvas_item_add_mesh :: MethodBind
 bindVisualServer_canvas_item_add_mesh
   = unsafePerformIO $
@@ -1591,7 +1618,7 @@ bindVisualServer_canvas_item_add_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a [Mesh] to the [CanvasItem]'s draw commands. Only affects its aabb at the moment.
+-- | Adds a mesh command to the [CanvasItem]'s draw commands.
 canvas_item_add_mesh ::
                        (VisualServer :< cls, Object :< cls) =>
                        cls -> Rid -> Rid -> Transform2d -> Color -> Rid -> Rid -> IO ()
@@ -1671,7 +1698,7 @@ canvas_item_add_nine_patch cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
 
 {-# NOINLINE bindVisualServer_canvas_item_add_particles #-}
 
--- | Adds a particles system to the [CanvasItem]'s draw commands.
+-- | Adds a particle system to the [CanvasItem]'s draw commands.
 bindVisualServer_canvas_item_add_particles :: MethodBind
 bindVisualServer_canvas_item_add_particles
   = unsafePerformIO $
@@ -1681,7 +1708,7 @@ bindVisualServer_canvas_item_add_particles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a particles system to the [CanvasItem]'s draw commands.
+-- | Adds a particle system to the [CanvasItem]'s draw commands.
 canvas_item_add_particles ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> Rid -> Rid -> Rid -> IO ()
@@ -1899,6 +1926,7 @@ canvas_item_add_texture_rect_region cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindVisualServer_canvas_item_add_triangle_array #-}
 
+-- | Adds a triangle array to the [CanvasItem]'s draw commands.
 bindVisualServer_canvas_item_add_triangle_array :: MethodBind
 bindVisualServer_canvas_item_add_triangle_array
   = unsafePerformIO $
@@ -1908,6 +1936,7 @@ bindVisualServer_canvas_item_add_triangle_array
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a triangle array to the [CanvasItem]'s draw commands.
 canvas_item_add_triangle_array ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls ->
@@ -1959,7 +1988,8 @@ canvas_item_clear cls arg1
 
 {-# NOINLINE bindVisualServer_canvas_item_create #-}
 
--- | Creates a new [CanvasItem] and returns its [RID].
+-- | Creates a new [CanvasItem] and returns its [RID]. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_item_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_canvas_item_create :: MethodBind
 bindVisualServer_canvas_item_create
   = unsafePerformIO $
@@ -1969,7 +1999,8 @@ bindVisualServer_canvas_item_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new [CanvasItem] and returns its [RID].
+-- | Creates a new [CanvasItem] and returns its [RID]. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_item_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 canvas_item_create ::
                      (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 canvas_item_create cls
@@ -2060,6 +2091,7 @@ canvas_item_set_custom_rect cls arg1 arg2 arg3
 {-# NOINLINE bindVisualServer_canvas_item_set_distance_field_mode
              #-}
 
+-- | Enables the use of distance fields for GUI elements that are rendering distance field based fonts.
 bindVisualServer_canvas_item_set_distance_field_mode :: MethodBind
 bindVisualServer_canvas_item_set_distance_field_mode
   = unsafePerformIO $
@@ -2069,6 +2101,7 @@ bindVisualServer_canvas_item_set_distance_field_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Enables the use of distance fields for GUI elements that are rendering distance field based fonts.
 canvas_item_set_distance_field_mode ::
                                       (VisualServer :< cls, Object :< cls) =>
                                       cls -> Rid -> Bool -> IO ()
@@ -2208,7 +2241,7 @@ canvas_item_set_modulate cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_item_set_parent #-}
 
--- | Sets the parent for the [CanvasItem].
+-- | Sets the parent for the [CanvasItem]. The parent can be another canvas item, or it can be the root canvas that is attached to the viewport.
 bindVisualServer_canvas_item_set_parent :: MethodBind
 bindVisualServer_canvas_item_set_parent
   = unsafePerformIO $
@@ -2218,7 +2251,7 @@ bindVisualServer_canvas_item_set_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the parent for the [CanvasItem].
+-- | Sets the parent for the [CanvasItem]. The parent can be another canvas item, or it can be the root canvas that is attached to the viewport.
 canvas_item_set_parent ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 canvas_item_set_parent cls arg1 arg2
@@ -2362,7 +2395,7 @@ canvas_item_set_visible cls arg1 arg2
 {-# NOINLINE bindVisualServer_canvas_item_set_z_as_relative_to_parent
              #-}
 
--- | If this is enabled, the z-index of the parent will be added to the children's z-index.
+-- | If this is enabled, the Z index of the parent will be added to the children's Z index.
 bindVisualServer_canvas_item_set_z_as_relative_to_parent ::
                                                          MethodBind
 bindVisualServer_canvas_item_set_z_as_relative_to_parent
@@ -2373,7 +2406,7 @@ bindVisualServer_canvas_item_set_z_as_relative_to_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If this is enabled, the z-index of the parent will be added to the children's z-index.
+-- | If this is enabled, the Z index of the parent will be added to the children's Z index.
 canvas_item_set_z_as_relative_to_parent ::
                                           (VisualServer :< cls, Object :< cls) =>
                                           cls -> Rid -> Bool -> IO ()
@@ -2389,7 +2422,7 @@ canvas_item_set_z_as_relative_to_parent cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_item_set_z_index #-}
 
--- | Sets the [CanvasItem]'s z-index, i.e. its draw order (lower indexes are drawn first).
+-- | Sets the [CanvasItem]'s Z index, i.e. its draw order (lower indexes are drawn first).
 bindVisualServer_canvas_item_set_z_index :: MethodBind
 bindVisualServer_canvas_item_set_z_index
   = unsafePerformIO $
@@ -2399,7 +2432,7 @@ bindVisualServer_canvas_item_set_z_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [CanvasItem]'s z-index, i.e. its draw order (lower indexes are drawn first).
+-- | Sets the [CanvasItem]'s Z index, i.e. its draw order (lower indexes are drawn first).
 canvas_item_set_z_index ::
                           (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 canvas_item_set_z_index cls arg1 arg2
@@ -2438,7 +2471,8 @@ canvas_light_attach_to_canvas cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_create #-}
 
--- | Creates a canvas light.
+-- | Creates a canvas light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_canvas_light_create :: MethodBind
 bindVisualServer_canvas_light_create
   = unsafePerformIO $
@@ -2448,7 +2482,8 @@ bindVisualServer_canvas_light_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a canvas light.
+-- | Creates a canvas light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 canvas_light_create ::
                       (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 canvas_light_create cls
@@ -2490,7 +2525,8 @@ canvas_light_occluder_attach_to_canvas cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_occluder_create #-}
 
--- | Creates a light occluder.
+-- | Creates a light occluder and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_light_ocluder_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_canvas_light_occluder_create :: MethodBind
 bindVisualServer_canvas_light_occluder_create
   = unsafePerformIO $
@@ -2500,7 +2536,8 @@ bindVisualServer_canvas_light_occluder_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a light occluder.
+-- | Creates a light occluder and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_light_ocluder_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 canvas_light_occluder_create ::
                                (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 canvas_light_occluder_create cls
@@ -2542,7 +2579,7 @@ canvas_light_occluder_set_enabled cls arg1 arg2
 {-# NOINLINE bindVisualServer_canvas_light_occluder_set_light_mask
              #-}
 
--- | The light mask. See [LightOccluder2D] for more information on light masks
+-- | The light mask. See [LightOccluder2D] for more information on light masks.
 bindVisualServer_canvas_light_occluder_set_light_mask :: MethodBind
 bindVisualServer_canvas_light_occluder_set_light_mask
   = unsafePerformIO $
@@ -2552,7 +2589,7 @@ bindVisualServer_canvas_light_occluder_set_light_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light mask. See [LightOccluder2D] for more information on light masks
+-- | The light mask. See [LightOccluder2D] for more information on light masks.
 canvas_light_occluder_set_light_mask ::
                                        (VisualServer :< cls, Object :< cls) =>
                                        cls -> Rid -> Int -> IO ()
@@ -2720,7 +2757,7 @@ canvas_light_set_height cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_set_item_cull_mask #-}
 
--- | The light mask. See [LightOccluder2D] for more information on light masks
+-- | The light mask. See [LightOccluder2D] for more information on light masks.
 bindVisualServer_canvas_light_set_item_cull_mask :: MethodBind
 bindVisualServer_canvas_light_set_item_cull_mask
   = unsafePerformIO $
@@ -2730,7 +2767,7 @@ bindVisualServer_canvas_light_set_item_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light mask. See [LightOccluder2D] for more information on light masks
+-- | The light mask. See [LightOccluder2D] for more information on light masks.
 canvas_light_set_item_cull_mask ::
                                   (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 canvas_light_set_item_cull_mask cls arg1 arg2
@@ -2746,7 +2783,7 @@ canvas_light_set_item_cull_mask cls arg1 arg2
 {-# NOINLINE bindVisualServer_canvas_light_set_item_shadow_cull_mask
              #-}
 
--- | The shadow mask. binary about which layers this canvas light affects which canvas item's shadows. See [LightOccluder2D] for more information on light masks.
+-- | The binary mask used to determine which layers this canvas light's shadows affects. See [LightOccluder2D] for more information on light masks.
 bindVisualServer_canvas_light_set_item_shadow_cull_mask ::
                                                         MethodBind
 bindVisualServer_canvas_light_set_item_shadow_cull_mask
@@ -2757,7 +2794,7 @@ bindVisualServer_canvas_light_set_item_shadow_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The shadow mask. binary about which layers this canvas light affects which canvas item's shadows. See [LightOccluder2D] for more information on light masks.
+-- | The binary mask used to determine which layers this canvas light's shadows affects. See [LightOccluder2D] for more information on light masks.
 canvas_light_set_item_shadow_cull_mask ::
                                          (VisualServer :< cls, Object :< cls) =>
                                          cls -> Rid -> Int -> IO ()
@@ -2799,7 +2836,7 @@ canvas_light_set_layer_range cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_canvas_light_set_mode #-}
 
--- | The mode of the light, see CANVAS_LIGHT_MODE_* constants.
+-- | The mode of the light, see [enum CanvasLightMode] constants.
 bindVisualServer_canvas_light_set_mode :: MethodBind
 bindVisualServer_canvas_light_set_mode
   = unsafePerformIO $
@@ -2809,7 +2846,7 @@ bindVisualServer_canvas_light_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The mode of the light, see CANVAS_LIGHT_MODE_* constants.
+-- | The mode of the light, see [enum CanvasLightMode] constants.
 canvas_light_set_mode ::
                         (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 canvas_light_set_mode cls arg1 arg2
@@ -2823,6 +2860,7 @@ canvas_light_set_mode cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_set_scale #-}
 
+-- | Sets the texture's scale factor of the light. Equivalent to [member Light2D.texture_scale].
 bindVisualServer_canvas_light_set_scale :: MethodBind
 bindVisualServer_canvas_light_set_scale
   = unsafePerformIO $
@@ -2832,6 +2870,7 @@ bindVisualServer_canvas_light_set_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the texture's scale factor of the light. Equivalent to [member Light2D.texture_scale].
 canvas_light_set_scale ::
                          (VisualServer :< cls, Object :< cls) =>
                          cls -> Rid -> Float -> IO ()
@@ -2925,7 +2964,7 @@ canvas_light_set_shadow_enabled cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_set_shadow_filter #-}
 
--- | Sets the canvas light's shadow's filter, see CANVAS_LIGHT_SHADOW_FILTER_* constants.
+-- | Sets the canvas light's shadow's filter, see [enum CanvasLightShadowFilter] constants.
 bindVisualServer_canvas_light_set_shadow_filter :: MethodBind
 bindVisualServer_canvas_light_set_shadow_filter
   = unsafePerformIO $
@@ -2935,7 +2974,7 @@ bindVisualServer_canvas_light_set_shadow_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the canvas light's shadow's filter, see CANVAS_LIGHT_SHADOW_FILTER_* constants.
+-- | Sets the canvas light's shadow's filter, see [enum CanvasLightShadowFilter] constants.
 canvas_light_set_shadow_filter ::
                                  (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 canvas_light_set_shadow_filter cls arg1 arg2
@@ -2978,7 +3017,7 @@ canvas_light_set_shadow_gradient_length cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_set_shadow_smooth #-}
 
--- | Smoothens the shadow. The lower, the more smooth.
+-- | Smoothens the shadow. The lower, the smoother.
 bindVisualServer_canvas_light_set_shadow_smooth :: MethodBind
 bindVisualServer_canvas_light_set_shadow_smooth
   = unsafePerformIO $
@@ -2988,7 +3027,7 @@ bindVisualServer_canvas_light_set_shadow_smooth
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Smoothens the shadow. The lower, the more smooth.
+-- | Smoothens the shadow. The lower, the smoother.
 canvas_light_set_shadow_smooth ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Float -> IO ()
@@ -3004,6 +3043,7 @@ canvas_light_set_shadow_smooth cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_set_texture #-}
 
+-- | Sets texture to be used by light. Equivalent to [member Light2D.texture].
 bindVisualServer_canvas_light_set_texture :: MethodBind
 bindVisualServer_canvas_light_set_texture
   = unsafePerformIO $
@@ -3013,6 +3053,7 @@ bindVisualServer_canvas_light_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets texture to be used by light. Equivalent to [member Light2D.texture].
 canvas_light_set_texture ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 canvas_light_set_texture cls arg1 arg2
@@ -3026,6 +3067,7 @@ canvas_light_set_texture cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_set_texture_offset #-}
 
+-- | Sets the offset of the light's texture. Equivalent to [member Light2D.offset].
 bindVisualServer_canvas_light_set_texture_offset :: MethodBind
 bindVisualServer_canvas_light_set_texture_offset
   = unsafePerformIO $
@@ -3035,6 +3077,7 @@ bindVisualServer_canvas_light_set_texture_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the offset of the light's texture. Equivalent to [member Light2D.offset].
 canvas_light_set_texture_offset ::
                                   (VisualServer :< cls, Object :< cls) =>
                                   cls -> Rid -> Vector2 -> IO ()
@@ -3075,6 +3118,7 @@ canvas_light_set_transform cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_canvas_light_set_z_range #-}
 
+-- | Sets the Z range of objects that will be affected by this light. Equivalent to [member Light2D.range_z_min] and [member Light2D.range_z_max].
 bindVisualServer_canvas_light_set_z_range :: MethodBind
 bindVisualServer_canvas_light_set_z_range
   = unsafePerformIO $
@@ -3084,6 +3128,7 @@ bindVisualServer_canvas_light_set_z_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the Z range of objects that will be affected by this light. Equivalent to [member Light2D.range_z_min] and [member Light2D.range_z_max].
 canvas_light_set_z_range ::
                            (VisualServer :< cls, Object :< cls) =>
                            cls -> Rid -> Int -> Int -> IO ()
@@ -3098,7 +3143,8 @@ canvas_light_set_z_range cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_canvas_occluder_polygon_create #-}
 
--- | Creates a new light occluder polygon.
+-- | Creates a new light occluder polygon and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_occluder_polygon_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_canvas_occluder_polygon_create :: MethodBind
 bindVisualServer_canvas_occluder_polygon_create
   = unsafePerformIO $
@@ -3108,7 +3154,8 @@ bindVisualServer_canvas_occluder_polygon_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new light occluder polygon.
+-- | Creates a new light occluder polygon and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]canvas_occluder_polygon_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 canvas_occluder_polygon_create ::
                                  (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 canvas_occluder_polygon_create cls
@@ -3124,7 +3171,7 @@ canvas_occluder_polygon_create cls
 {-# NOINLINE bindVisualServer_canvas_occluder_polygon_set_cull_mode
              #-}
 
--- | Sets an occluder polygons cull mode. See CANVAS_OCCLUDER_POLYGON_CULL_MODE_* constants.
+-- | Sets an occluder polygons cull mode. See [enum CanvasOccluderPolygonCullMode] constants.
 bindVisualServer_canvas_occluder_polygon_set_cull_mode ::
                                                        MethodBind
 bindVisualServer_canvas_occluder_polygon_set_cull_mode
@@ -3135,7 +3182,7 @@ bindVisualServer_canvas_occluder_polygon_set_cull_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets an occluder polygons cull mode. See CANVAS_OCCLUDER_POLYGON_CULL_MODE_* constants.
+-- | Sets an occluder polygons cull mode. See [enum CanvasOccluderPolygonCullMode] constants.
 canvas_occluder_polygon_set_cull_mode ::
                                         (VisualServer :< cls, Object :< cls) =>
                                         cls -> Rid -> Int -> IO ()
@@ -3255,6 +3302,9 @@ canvas_set_modulate cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_directional_light_create #-}
 
+-- | Creates a directional light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID can be used in most [code]light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this directional light to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_directional_light_create :: MethodBind
 bindVisualServer_directional_light_create
   = unsafePerformIO $
@@ -3264,6 +3314,9 @@ bindVisualServer_directional_light_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a directional light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID can be used in most [code]light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this directional light to an instance using [method instance_set_base] using the returned RID.
 directional_light_create ::
                            (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 directional_light_create cls
@@ -3277,6 +3330,7 @@ directional_light_create cls
 
 {-# NOINLINE bindVisualServer_draw #-}
 
+-- | Draws a frame. [i]This method is deprecated[/i], please use [method force_draw] instead.
 bindVisualServer_draw :: MethodBind
 bindVisualServer_draw
   = unsafePerformIO $
@@ -3286,6 +3340,7 @@ bindVisualServer_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Draws a frame. [i]This method is deprecated[/i], please use [method force_draw] instead.
 draw ::
        (VisualServer :< cls, Object :< cls) =>
        cls -> Bool -> Float -> IO ()
@@ -3298,6 +3353,8 @@ draw cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_create #-}
 
+-- | Creates an environment and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]environment_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_environment_create :: MethodBind
 bindVisualServer_environment_create
   = unsafePerformIO $
@@ -3307,6 +3364,8 @@ bindVisualServer_environment_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates an environment and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]environment_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 environment_create ::
                      (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 environment_create cls
@@ -3320,6 +3379,7 @@ environment_create cls
 
 {-# NOINLINE bindVisualServer_environment_set_adjustment #-}
 
+-- | Sets the values to be used with the "Adjustment" post-process effect. See [Environment] for more details.
 bindVisualServer_environment_set_adjustment :: MethodBind
 bindVisualServer_environment_set_adjustment
   = unsafePerformIO $
@@ -3329,6 +3389,7 @@ bindVisualServer_environment_set_adjustment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the values to be used with the "Adjustment" post-process effect. See [Environment] for more details.
 environment_set_adjustment ::
                              (VisualServer :< cls, Object :< cls) =>
                              cls -> Rid -> Bool -> Float -> Float -> Float -> Rid -> IO ()
@@ -3345,6 +3406,7 @@ environment_set_adjustment cls arg1 arg2 arg3 arg4 arg5 arg6
 
 {-# NOINLINE bindVisualServer_environment_set_ambient_light #-}
 
+-- | Sets the ambient light parameters. See [Environment] for more details.
 bindVisualServer_environment_set_ambient_light :: MethodBind
 bindVisualServer_environment_set_ambient_light
   = unsafePerformIO $
@@ -3354,6 +3416,7 @@ bindVisualServer_environment_set_ambient_light
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the ambient light parameters. See [Environment] for more details.
 environment_set_ambient_light ::
                                 (VisualServer :< cls, Object :< cls) =>
                                 cls -> Rid -> Color -> Float -> Float -> IO ()
@@ -3370,6 +3433,7 @@ environment_set_ambient_light cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindVisualServer_environment_set_background #-}
 
+-- | Sets the [i]BGMode[/i] of the environment. Equivalent to [member Environment.background_mode].
 bindVisualServer_environment_set_background :: MethodBind
 bindVisualServer_environment_set_background
   = unsafePerformIO $
@@ -3379,6 +3443,7 @@ bindVisualServer_environment_set_background
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [i]BGMode[/i] of the environment. Equivalent to [member Environment.background_mode].
 environment_set_background ::
                              (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 environment_set_background cls arg1 arg2
@@ -3392,6 +3457,7 @@ environment_set_background cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_set_bg_color #-}
 
+-- | Color displayed for clear areas of the scene (if using Custom color or Color+Sky background modes).
 bindVisualServer_environment_set_bg_color :: MethodBind
 bindVisualServer_environment_set_bg_color
   = unsafePerformIO $
@@ -3401,6 +3467,7 @@ bindVisualServer_environment_set_bg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Color displayed for clear areas of the scene (if using Custom color or Color+Sky background modes).
 environment_set_bg_color ::
                            (VisualServer :< cls, Object :< cls) =>
                            cls -> Rid -> Color -> IO ()
@@ -3415,6 +3482,7 @@ environment_set_bg_color cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_set_bg_energy #-}
 
+-- | Sets the intensity of the background color.
 bindVisualServer_environment_set_bg_energy :: MethodBind
 bindVisualServer_environment_set_bg_energy
   = unsafePerformIO $
@@ -3424,6 +3492,7 @@ bindVisualServer_environment_set_bg_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the intensity of the background color.
 environment_set_bg_energy ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> Float -> IO ()
@@ -3438,6 +3507,7 @@ environment_set_bg_energy cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_set_canvas_max_layer #-}
 
+-- | Sets the maximum layer to use if using Canvas background mode.
 bindVisualServer_environment_set_canvas_max_layer :: MethodBind
 bindVisualServer_environment_set_canvas_max_layer
   = unsafePerformIO $
@@ -3447,6 +3517,7 @@ bindVisualServer_environment_set_canvas_max_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the maximum layer to use if using Canvas background mode.
 environment_set_canvas_max_layer ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Int -> IO ()
@@ -3462,6 +3533,7 @@ environment_set_canvas_max_layer cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_set_dof_blur_far #-}
 
+-- | Sets the values to be used with the "DoF Far Blur" post-process effect. See [Environment] for more details.
 bindVisualServer_environment_set_dof_blur_far :: MethodBind
 bindVisualServer_environment_set_dof_blur_far
   = unsafePerformIO $
@@ -3471,6 +3543,7 @@ bindVisualServer_environment_set_dof_blur_far
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the values to be used with the "DoF Far Blur" post-process effect. See [Environment] for more details.
 environment_set_dof_blur_far ::
                                (VisualServer :< cls, Object :< cls) =>
                                cls -> Rid -> Bool -> Float -> Float -> Float -> Int -> IO ()
@@ -3488,6 +3561,7 @@ environment_set_dof_blur_far cls arg1 arg2 arg3 arg4 arg5 arg6
 
 {-# NOINLINE bindVisualServer_environment_set_dof_blur_near #-}
 
+-- | Sets the values to be used with the "DoF Near Blur" post-process effect. See [Environment] for more details.
 bindVisualServer_environment_set_dof_blur_near :: MethodBind
 bindVisualServer_environment_set_dof_blur_near
   = unsafePerformIO $
@@ -3497,6 +3571,7 @@ bindVisualServer_environment_set_dof_blur_near
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the values to be used with the "DoF Near Blur" post-process effect. See [Environment] for more details.
 environment_set_dof_blur_near ::
                                 (VisualServer :< cls, Object :< cls) =>
                                 cls -> Rid -> Bool -> Float -> Float -> Float -> Int -> IO ()
@@ -3514,6 +3589,7 @@ environment_set_dof_blur_near cls arg1 arg2 arg3 arg4 arg5 arg6
 
 {-# NOINLINE bindVisualServer_environment_set_fog #-}
 
+-- | Sets the variables to be used with the scene fog. See [Environment] for more details.
 bindVisualServer_environment_set_fog :: MethodBind
 bindVisualServer_environment_set_fog
   = unsafePerformIO $
@@ -3523,6 +3599,7 @@ bindVisualServer_environment_set_fog
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the variables to be used with the scene fog. See [Environment] for more details.
 environment_set_fog ::
                       (VisualServer :< cls, Object :< cls) =>
                       cls -> Rid -> Bool -> Color -> Color -> Float -> IO ()
@@ -3539,6 +3616,7 @@ environment_set_fog cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindVisualServer_environment_set_fog_depth #-}
 
+-- | Sets the variables to be used with the fog depth effect. See [Environment] for more details.
 bindVisualServer_environment_set_fog_depth :: MethodBind
 bindVisualServer_environment_set_fog_depth
   = unsafePerformIO $
@@ -3548,6 +3626,7 @@ bindVisualServer_environment_set_fog_depth
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the variables to be used with the fog depth effect. See [Environment] for more details.
 environment_set_fog_depth ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls ->
@@ -3565,6 +3644,7 @@ environment_set_fog_depth cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
 
 {-# NOINLINE bindVisualServer_environment_set_fog_height #-}
 
+-- | Sets the variables to be used with the fog height effect. See [Environment] for more details.
 bindVisualServer_environment_set_fog_height :: MethodBind
 bindVisualServer_environment_set_fog_height
   = unsafePerformIO $
@@ -3574,6 +3654,7 @@ bindVisualServer_environment_set_fog_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the variables to be used with the fog height effect. See [Environment] for more details.
 environment_set_fog_height ::
                              (VisualServer :< cls, Object :< cls) =>
                              cls -> Rid -> Bool -> Float -> Float -> Float -> IO ()
@@ -3590,6 +3671,7 @@ environment_set_fog_height cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindVisualServer_environment_set_glow #-}
 
+-- | Sets the variables to be used with the "glow" post-process effect. See [Environment] for more details.
 bindVisualServer_environment_set_glow :: MethodBind
 bindVisualServer_environment_set_glow
   = unsafePerformIO $
@@ -3599,6 +3681,7 @@ bindVisualServer_environment_set_glow
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the variables to be used with the "glow" post-process effect. See [Environment] for more details.
 environment_set_glow ::
                        (VisualServer :< cls, Object :< cls) =>
                        cls ->
@@ -3622,6 +3705,7 @@ environment_set_glow cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
 
 {-# NOINLINE bindVisualServer_environment_set_sky #-}
 
+-- | Sets the [Sky] to be used as the environment's background when using [i]BGMode[/i] sky. Equivalent to [member Environment.background_sky].
 bindVisualServer_environment_set_sky :: MethodBind
 bindVisualServer_environment_set_sky
   = unsafePerformIO $
@@ -3631,6 +3715,7 @@ bindVisualServer_environment_set_sky
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Sky] to be used as the environment's background when using [i]BGMode[/i] sky. Equivalent to [member Environment.background_sky].
 environment_set_sky ::
                       (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 environment_set_sky cls arg1 arg2
@@ -3644,6 +3729,7 @@ environment_set_sky cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_set_sky_custom_fov #-}
 
+-- | Sets a custom field of view for the background [Sky]. Equivalent to [member Environment.background_sky_custom_fov].
 bindVisualServer_environment_set_sky_custom_fov :: MethodBind
 bindVisualServer_environment_set_sky_custom_fov
   = unsafePerformIO $
@@ -3653,6 +3739,7 @@ bindVisualServer_environment_set_sky_custom_fov
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a custom field of view for the background [Sky]. Equivalent to [member Environment.background_sky_custom_fov].
 environment_set_sky_custom_fov ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Float -> IO ()
@@ -3668,6 +3755,7 @@ environment_set_sky_custom_fov cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_set_sky_orientation #-}
 
+-- | Sets the rotation of the background [Sky] expressed as a [Basis]. Equivalent to [member Environment.background_sky_orientation].
 bindVisualServer_environment_set_sky_orientation :: MethodBind
 bindVisualServer_environment_set_sky_orientation
   = unsafePerformIO $
@@ -3677,6 +3765,7 @@ bindVisualServer_environment_set_sky_orientation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the rotation of the background [Sky] expressed as a [Basis]. Equivalent to [member Environment.background_sky_orientation].
 environment_set_sky_orientation ::
                                   (VisualServer :< cls, Object :< cls) =>
                                   cls -> Rid -> Basis -> IO ()
@@ -3692,6 +3781,7 @@ environment_set_sky_orientation cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_environment_set_ssao #-}
 
+-- | Sets the variables to be used with the "Screen Space Ambient Occlusion (SSAO)" post-process effect. See [Environment] for more details.
 bindVisualServer_environment_set_ssao :: MethodBind
 bindVisualServer_environment_set_ssao
   = unsafePerformIO $
@@ -3701,6 +3791,7 @@ bindVisualServer_environment_set_ssao
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the variables to be used with the "Screen Space Ambient Occlusion (SSAO)" post-process effect. See [Environment] for more details.
 environment_set_ssao ::
                        (VisualServer :< cls, Object :< cls) =>
                        cls ->
@@ -3728,6 +3819,7 @@ environment_set_ssao cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
 
 {-# NOINLINE bindVisualServer_environment_set_ssr #-}
 
+-- | Sets the variables to be used with the "screen space reflections" post-process effect. See [Environment] for more details.
 bindVisualServer_environment_set_ssr :: MethodBind
 bindVisualServer_environment_set_ssr
   = unsafePerformIO $
@@ -3737,6 +3829,7 @@ bindVisualServer_environment_set_ssr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the variables to be used with the "screen space reflections" post-process effect. See [Environment] for more details.
 environment_set_ssr ::
                       (VisualServer :< cls, Object :< cls) =>
                       cls ->
@@ -3754,6 +3847,7 @@ environment_set_ssr cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
 
 {-# NOINLINE bindVisualServer_environment_set_tonemap #-}
 
+-- | Sets the variables to be used with the "tonemap" post-process effect. See [Environment] for more details.
 bindVisualServer_environment_set_tonemap :: MethodBind
 bindVisualServer_environment_set_tonemap
   = unsafePerformIO $
@@ -3763,6 +3857,7 @@ bindVisualServer_environment_set_tonemap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the variables to be used with the "tonemap" post-process effect. See [Environment] for more details.
 environment_set_tonemap ::
                           (VisualServer :< cls, Object :< cls) =>
                           cls ->
@@ -3805,6 +3900,7 @@ finish cls
 
 {-# NOINLINE bindVisualServer_force_draw #-}
 
+-- | Forces a frame to be drawn when the function is called. Drawing a frame updates all [Viewport]s that are set to update. Use with extreme caution.
 bindVisualServer_force_draw :: MethodBind
 bindVisualServer_force_draw
   = unsafePerformIO $
@@ -3814,6 +3910,7 @@ bindVisualServer_force_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Forces a frame to be drawn when the function is called. Drawing a frame updates all [Viewport]s that are set to update. Use with extreme caution.
 force_draw ::
              (VisualServer :< cls, Object :< cls) =>
              cls -> Bool -> Float -> IO ()
@@ -3872,7 +3969,7 @@ free_rid cls arg1
 
 {-# NOINLINE bindVisualServer_get_render_info #-}
 
--- | Returns a certain information, see RENDER_INFO_* for options.
+-- | Returns a certain information, see [enum RenderInfo] for options.
 bindVisualServer_get_render_info :: MethodBind
 bindVisualServer_get_render_info
   = unsafePerformIO $
@@ -3882,7 +3979,7 @@ bindVisualServer_get_render_info
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a certain information, see RENDER_INFO_* for options.
+-- | Returns a certain information, see [enum RenderInfo] for options.
 get_render_info ::
                   (VisualServer :< cls, Object :< cls) => cls -> Int -> IO Int
 get_render_info cls arg1
@@ -3943,6 +4040,8 @@ get_test_texture cls
 
 {-# NOINLINE bindVisualServer_get_video_adapter_name #-}
 
+-- | Returns the name of the video adapter (e.g. "GeForce GTX 1080/PCIe/SSE2").
+--   				[b]Note:[/b] When running a headless or server binary, this function returns an empty string.
 bindVisualServer_get_video_adapter_name :: MethodBind
 bindVisualServer_get_video_adapter_name
   = unsafePerformIO $
@@ -3952,6 +4051,8 @@ bindVisualServer_get_video_adapter_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the name of the video adapter (e.g. "GeForce GTX 1080/PCIe/SSE2").
+--   				[b]Note:[/b] When running a headless or server binary, this function returns an empty string.
 get_video_adapter_name ::
                          (VisualServer :< cls, Object :< cls) => cls -> IO GodotString
 get_video_adapter_name cls
@@ -3965,6 +4066,8 @@ get_video_adapter_name cls
 
 {-# NOINLINE bindVisualServer_get_video_adapter_vendor #-}
 
+-- | Returns the vendor of the video adapter (e.g. "NVIDIA Corporation").
+--   				[b]Note:[/b] When running a headless or server binary, this function returns an empty string.
 bindVisualServer_get_video_adapter_vendor :: MethodBind
 bindVisualServer_get_video_adapter_vendor
   = unsafePerformIO $
@@ -3974,6 +4077,8 @@ bindVisualServer_get_video_adapter_vendor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the vendor of the video adapter (e.g. "NVIDIA Corporation").
+--   				[b]Note:[/b] When running a headless or server binary, this function returns an empty string.
 get_video_adapter_vendor ::
                            (VisualServer :< cls, Object :< cls) => cls -> IO GodotString
 get_video_adapter_vendor cls
@@ -4011,6 +4116,9 @@ get_white_texture cls
 
 {-# NOINLINE bindVisualServer_gi_probe_create #-}
 
+-- | Creates a GI probe and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]gi_probe_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this GI probe to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_gi_probe_create :: MethodBind
 bindVisualServer_gi_probe_create
   = unsafePerformIO $
@@ -4020,6 +4128,9 @@ bindVisualServer_gi_probe_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a GI probe and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]gi_probe_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this GI probe to an instance using [method instance_set_base] using the returned RID.
 gi_probe_create ::
                   (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 gi_probe_create cls
@@ -4033,6 +4144,7 @@ gi_probe_create cls
 
 {-# NOINLINE bindVisualServer_gi_probe_get_bias #-}
 
+-- | Returns the bias value for the GI probe. Bias is used to avoid self occlusion. Equivalent to [member GIProbeData.bias].
 bindVisualServer_gi_probe_get_bias :: MethodBind
 bindVisualServer_gi_probe_get_bias
   = unsafePerformIO $
@@ -4042,6 +4154,7 @@ bindVisualServer_gi_probe_get_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the bias value for the GI probe. Bias is used to avoid self occlusion. Equivalent to [member GIProbeData.bias].
 gi_probe_get_bias ::
                     (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Float
 gi_probe_get_bias cls arg1
@@ -4055,6 +4168,7 @@ gi_probe_get_bias cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_bounds #-}
 
+-- | Returns the axis-aligned bounding box that covers the full extent of the GI probe.
 bindVisualServer_gi_probe_get_bounds :: MethodBind
 bindVisualServer_gi_probe_get_bounds
   = unsafePerformIO $
@@ -4064,6 +4178,7 @@ bindVisualServer_gi_probe_get_bounds
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the axis-aligned bounding box that covers the full extent of the GI probe.
 gi_probe_get_bounds ::
                       (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Aabb
 gi_probe_get_bounds cls arg1
@@ -4077,6 +4192,7 @@ gi_probe_get_bounds cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_cell_size #-}
 
+-- | Returns the cell size set by [method gi_probe_set_cell_size].
 bindVisualServer_gi_probe_get_cell_size :: MethodBind
 bindVisualServer_gi_probe_get_cell_size
   = unsafePerformIO $
@@ -4086,6 +4202,7 @@ bindVisualServer_gi_probe_get_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the cell size set by [method gi_probe_set_cell_size].
 gi_probe_get_cell_size ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Float
 gi_probe_get_cell_size cls arg1
@@ -4099,6 +4216,7 @@ gi_probe_get_cell_size cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_dynamic_data #-}
 
+-- | Returns the data used by the GI probe.
 bindVisualServer_gi_probe_get_dynamic_data :: MethodBind
 bindVisualServer_gi_probe_get_dynamic_data
   = unsafePerformIO $
@@ -4108,6 +4226,7 @@ bindVisualServer_gi_probe_get_dynamic_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the data used by the GI probe.
 gi_probe_get_dynamic_data ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> IO PoolIntArray
@@ -4122,6 +4241,7 @@ gi_probe_get_dynamic_data cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_dynamic_range #-}
 
+-- | Returns the dynamic range set for this GI probe. Equivalent to [member GIProbe.dynamic_range].
 bindVisualServer_gi_probe_get_dynamic_range :: MethodBind
 bindVisualServer_gi_probe_get_dynamic_range
   = unsafePerformIO $
@@ -4131,6 +4251,7 @@ bindVisualServer_gi_probe_get_dynamic_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the dynamic range set for this GI probe. Equivalent to [member GIProbe.dynamic_range].
 gi_probe_get_dynamic_range ::
                              (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 gi_probe_get_dynamic_range cls arg1
@@ -4144,6 +4265,7 @@ gi_probe_get_dynamic_range cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_energy #-}
 
+-- | Returns the energy multiplier for this GI probe. Equivalent to [member GIProbe.energy].
 bindVisualServer_gi_probe_get_energy :: MethodBind
 bindVisualServer_gi_probe_get_energy
   = unsafePerformIO $
@@ -4153,6 +4275,7 @@ bindVisualServer_gi_probe_get_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the energy multiplier for this GI probe. Equivalent to [member GIProbe.energy].
 gi_probe_get_energy ::
                       (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Float
 gi_probe_get_energy cls arg1
@@ -4166,6 +4289,7 @@ gi_probe_get_energy cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_normal_bias #-}
 
+-- | Returns the normal bias for this GI probe. Equivalent to [member GIProbe.normal_bias].
 bindVisualServer_gi_probe_get_normal_bias :: MethodBind
 bindVisualServer_gi_probe_get_normal_bias
   = unsafePerformIO $
@@ -4175,6 +4299,7 @@ bindVisualServer_gi_probe_get_normal_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the normal bias for this GI probe. Equivalent to [member GIProbe.normal_bias].
 gi_probe_get_normal_bias ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Float
 gi_probe_get_normal_bias cls arg1
@@ -4188,6 +4313,7 @@ gi_probe_get_normal_bias cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_propagation #-}
 
+-- | Returns the propagation value for this GI probe. Equivalent to [member GIProbe.propagation].
 bindVisualServer_gi_probe_get_propagation :: MethodBind
 bindVisualServer_gi_probe_get_propagation
   = unsafePerformIO $
@@ -4197,6 +4323,7 @@ bindVisualServer_gi_probe_get_propagation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the propagation value for this GI probe. Equivalent to [member GIProbe.propagation].
 gi_probe_get_propagation ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Float
 gi_probe_get_propagation cls arg1
@@ -4210,6 +4337,7 @@ gi_probe_get_propagation cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_get_to_cell_xform #-}
 
+-- | Returns the Transform set by [method gi_probe_set_to_cell_xform].
 bindVisualServer_gi_probe_get_to_cell_xform :: MethodBind
 bindVisualServer_gi_probe_get_to_cell_xform
   = unsafePerformIO $
@@ -4219,6 +4347,7 @@ bindVisualServer_gi_probe_get_to_cell_xform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the Transform set by [method gi_probe_set_to_cell_xform].
 gi_probe_get_to_cell_xform ::
                              (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Transform
 gi_probe_get_to_cell_xform cls arg1
@@ -4232,6 +4361,7 @@ gi_probe_get_to_cell_xform cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_is_compressed #-}
 
+-- | Returns [code]true[/code] if the GI probe data associated with this GI probe is compressed. Equivalent to [member GIProbe.compress].
 bindVisualServer_gi_probe_is_compressed :: MethodBind
 bindVisualServer_gi_probe_is_compressed
   = unsafePerformIO $
@@ -4241,6 +4371,7 @@ bindVisualServer_gi_probe_is_compressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the GI probe data associated with this GI probe is compressed. Equivalent to [member GIProbe.compress].
 gi_probe_is_compressed ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
 gi_probe_is_compressed cls arg1
@@ -4254,6 +4385,7 @@ gi_probe_is_compressed cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_is_interior #-}
 
+-- | Returns [code]true[/code] if the GI probe is set to interior, meaning it does not account for sky light. Equivalent to [member GIProbe.interior].
 bindVisualServer_gi_probe_is_interior :: MethodBind
 bindVisualServer_gi_probe_is_interior
   = unsafePerformIO $
@@ -4263,6 +4395,7 @@ bindVisualServer_gi_probe_is_interior
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the GI probe is set to interior, meaning it does not account for sky light. Equivalent to [member GIProbe.interior].
 gi_probe_is_interior ::
                        (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
 gi_probe_is_interior cls arg1
@@ -4276,6 +4409,7 @@ gi_probe_is_interior cls arg1
 
 {-# NOINLINE bindVisualServer_gi_probe_set_bias #-}
 
+-- | Sets the bias value to avoid self-occlusion. Equivalent to [member GIProbe.bias].
 bindVisualServer_gi_probe_set_bias :: MethodBind
 bindVisualServer_gi_probe_set_bias
   = unsafePerformIO $
@@ -4285,6 +4419,7 @@ bindVisualServer_gi_probe_set_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the bias value to avoid self-occlusion. Equivalent to [member GIProbe.bias].
 gi_probe_set_bias ::
                     (VisualServer :< cls, Object :< cls) =>
                     cls -> Rid -> Float -> IO ()
@@ -4299,6 +4434,7 @@ gi_probe_set_bias cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_bounds #-}
 
+-- | Sets the axis-aligned bounding box that covers the extent of the GI probe.
 bindVisualServer_gi_probe_set_bounds :: MethodBind
 bindVisualServer_gi_probe_set_bounds
   = unsafePerformIO $
@@ -4308,6 +4444,7 @@ bindVisualServer_gi_probe_set_bounds
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the axis-aligned bounding box that covers the extent of the GI probe.
 gi_probe_set_bounds ::
                       (VisualServer :< cls, Object :< cls) => cls -> Rid -> Aabb -> IO ()
 gi_probe_set_bounds cls arg1 arg2
@@ -4321,6 +4458,7 @@ gi_probe_set_bounds cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_cell_size #-}
 
+-- | Sets the size of individual cells within the GI probe.
 bindVisualServer_gi_probe_set_cell_size :: MethodBind
 bindVisualServer_gi_probe_set_cell_size
   = unsafePerformIO $
@@ -4330,6 +4468,7 @@ bindVisualServer_gi_probe_set_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the size of individual cells within the GI probe.
 gi_probe_set_cell_size ::
                          (VisualServer :< cls, Object :< cls) =>
                          cls -> Rid -> Float -> IO ()
@@ -4344,6 +4483,7 @@ gi_probe_set_cell_size cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_compress #-}
 
+-- | Sets the compression setting for the GI probe data. Compressed data will take up less space but may look worse. Equivalent to [member GIProbe.compress].
 bindVisualServer_gi_probe_set_compress :: MethodBind
 bindVisualServer_gi_probe_set_compress
   = unsafePerformIO $
@@ -4353,6 +4493,7 @@ bindVisualServer_gi_probe_set_compress
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the compression setting for the GI probe data. Compressed data will take up less space but may look worse. Equivalent to [member GIProbe.compress].
 gi_probe_set_compress ::
                         (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 gi_probe_set_compress cls arg1 arg2
@@ -4366,6 +4507,7 @@ gi_probe_set_compress cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_dynamic_data #-}
 
+-- | Sets the data to be used in the GI probe for lighting calculations. Normally this is created and called internally within the [GIProbe] node. You should not try to set this yourself.
 bindVisualServer_gi_probe_set_dynamic_data :: MethodBind
 bindVisualServer_gi_probe_set_dynamic_data
   = unsafePerformIO $
@@ -4375,6 +4517,7 @@ bindVisualServer_gi_probe_set_dynamic_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the data to be used in the GI probe for lighting calculations. Normally this is created and called internally within the [GIProbe] node. You should not try to set this yourself.
 gi_probe_set_dynamic_data ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> PoolIntArray -> IO ()
@@ -4389,6 +4532,7 @@ gi_probe_set_dynamic_data cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_dynamic_range #-}
 
+-- | Sets the dynamic range of the GI probe. Dynamic range sets the limit for how bright lights can be. A smaller range captures greater detail but limits how bright lights can be. Equivalent to [member GIProbe.dynamic_range].
 bindVisualServer_gi_probe_set_dynamic_range :: MethodBind
 bindVisualServer_gi_probe_set_dynamic_range
   = unsafePerformIO $
@@ -4398,6 +4542,7 @@ bindVisualServer_gi_probe_set_dynamic_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the dynamic range of the GI probe. Dynamic range sets the limit for how bright lights can be. A smaller range captures greater detail but limits how bright lights can be. Equivalent to [member GIProbe.dynamic_range].
 gi_probe_set_dynamic_range ::
                              (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 gi_probe_set_dynamic_range cls arg1 arg2
@@ -4411,6 +4556,7 @@ gi_probe_set_dynamic_range cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_energy #-}
 
+-- | Sets the energy multiplier for this GI probe. A higher energy makes the indirect light from the GI probe brighter. Equivalent to [member GIProbe.energy].
 bindVisualServer_gi_probe_set_energy :: MethodBind
 bindVisualServer_gi_probe_set_energy
   = unsafePerformIO $
@@ -4420,6 +4566,7 @@ bindVisualServer_gi_probe_set_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the energy multiplier for this GI probe. A higher energy makes the indirect light from the GI probe brighter. Equivalent to [member GIProbe.energy].
 gi_probe_set_energy ::
                       (VisualServer :< cls, Object :< cls) =>
                       cls -> Rid -> Float -> IO ()
@@ -4434,6 +4581,7 @@ gi_probe_set_energy cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_interior #-}
 
+-- | Sets the interior value of this GI probe. A GI probe set to interior does not include the sky when calculating lighting. Equivalent to [member GIProbe.interior].
 bindVisualServer_gi_probe_set_interior :: MethodBind
 bindVisualServer_gi_probe_set_interior
   = unsafePerformIO $
@@ -4443,6 +4591,7 @@ bindVisualServer_gi_probe_set_interior
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the interior value of this GI probe. A GI probe set to interior does not include the sky when calculating lighting. Equivalent to [member GIProbe.interior].
 gi_probe_set_interior ::
                         (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 gi_probe_set_interior cls arg1 arg2
@@ -4456,6 +4605,7 @@ gi_probe_set_interior cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_normal_bias #-}
 
+-- | Sets the normal bias for this GI probe. Normal bias behaves similar to the other form of bias and may help reduce self-occlusion. Equivalent to [member GIProbe.normal_bias].
 bindVisualServer_gi_probe_set_normal_bias :: MethodBind
 bindVisualServer_gi_probe_set_normal_bias
   = unsafePerformIO $
@@ -4465,6 +4615,7 @@ bindVisualServer_gi_probe_set_normal_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the normal bias for this GI probe. Normal bias behaves similar to the other form of bias and may help reduce self-occlusion. Equivalent to [member GIProbe.normal_bias].
 gi_probe_set_normal_bias ::
                            (VisualServer :< cls, Object :< cls) =>
                            cls -> Rid -> Float -> IO ()
@@ -4479,6 +4630,7 @@ gi_probe_set_normal_bias cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_propagation #-}
 
+-- | Sets the propagation of light within this GI probe. Equivalent to [member GIProbe.propagation].
 bindVisualServer_gi_probe_set_propagation :: MethodBind
 bindVisualServer_gi_probe_set_propagation
   = unsafePerformIO $
@@ -4488,6 +4640,7 @@ bindVisualServer_gi_probe_set_propagation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the propagation of light within this GI probe. Equivalent to [member GIProbe.propagation].
 gi_probe_set_propagation ::
                            (VisualServer :< cls, Object :< cls) =>
                            cls -> Rid -> Float -> IO ()
@@ -4502,6 +4655,7 @@ gi_probe_set_propagation cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_gi_probe_set_to_cell_xform #-}
 
+-- | Sets the to cell [Transform] for this GI probe.
 bindVisualServer_gi_probe_set_to_cell_xform :: MethodBind
 bindVisualServer_gi_probe_set_to_cell_xform
   = unsafePerformIO $
@@ -4511,6 +4665,7 @@ bindVisualServer_gi_probe_set_to_cell_xform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the to cell [Transform] for this GI probe.
 gi_probe_set_to_cell_xform ::
                              (VisualServer :< cls, Object :< cls) =>
                              cls -> Rid -> Transform -> IO ()
@@ -4548,6 +4703,7 @@ has_changed cls
 
 {-# NOINLINE bindVisualServer_has_feature #-}
 
+-- | Not yet implemented. Always returns [code]false[/code].
 bindVisualServer_has_feature :: MethodBind
 bindVisualServer_has_feature
   = unsafePerformIO $
@@ -4557,6 +4713,7 @@ bindVisualServer_has_feature
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Not yet implemented. Always returns [code]false[/code].
 has_feature ::
               (VisualServer :< cls, Object :< cls) => cls -> Int -> IO Bool
 has_feature cls arg1
@@ -4569,7 +4726,7 @@ has_feature cls arg1
 
 {-# NOINLINE bindVisualServer_has_os_feature #-}
 
--- | Returns [code]true[/code] if the OS supports a certain feature. Features might be s3tc, etc, etc2 and pvrtc,
+-- | Returns [code]true[/code] if the OS supports a certain feature. Features might be [code]s3tc[/code], [code]etc[/code], [code]etc2[/code] and [code]pvrtc[/code].
 bindVisualServer_has_os_feature :: MethodBind
 bindVisualServer_has_os_feature
   = unsafePerformIO $
@@ -4579,7 +4736,7 @@ bindVisualServer_has_os_feature
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the OS supports a certain feature. Features might be s3tc, etc, etc2 and pvrtc,
+-- | Returns [code]true[/code] if the OS supports a certain feature. Features might be [code]s3tc[/code], [code]etc[/code], [code]etc2[/code] and [code]pvrtc[/code].
 has_os_feature ::
                  (VisualServer :< cls, Object :< cls) =>
                  cls -> GodotString -> IO Bool
@@ -4593,6 +4750,7 @@ has_os_feature cls arg1
 
 {-# NOINLINE bindVisualServer_immediate_begin #-}
 
+-- | Sets up [ImmediateGeometry] internals to prepare for drawing. Equivalent to [method ImmediateGeometry.begin].
 bindVisualServer_immediate_begin :: MethodBind
 bindVisualServer_immediate_begin
   = unsafePerformIO $
@@ -4602,6 +4760,7 @@ bindVisualServer_immediate_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets up [ImmediateGeometry] internals to prepare for drawing. Equivalent to [method ImmediateGeometry.begin].
 immediate_begin ::
                   (VisualServer :< cls, Object :< cls) =>
                   cls -> Rid -> Int -> Rid -> IO ()
@@ -4616,6 +4775,7 @@ immediate_begin cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_immediate_clear #-}
 
+-- | Clears everything that was set up between [method immediate_begin] and [method immediate_end]. Equivalent to [method ImmediateGeometry.clear].
 bindVisualServer_immediate_clear :: MethodBind
 bindVisualServer_immediate_clear
   = unsafePerformIO $
@@ -4625,6 +4785,7 @@ bindVisualServer_immediate_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Clears everything that was set up between [method immediate_begin] and [method immediate_end]. Equivalent to [method ImmediateGeometry.clear].
 immediate_clear ::
                   (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO ()
 immediate_clear cls arg1
@@ -4638,6 +4799,7 @@ immediate_clear cls arg1
 
 {-# NOINLINE bindVisualServer_immediate_color #-}
 
+-- | Sets the color to be used with next vertex. Equivalent to [method ImmediateGeometry.set_color].
 bindVisualServer_immediate_color :: MethodBind
 bindVisualServer_immediate_color
   = unsafePerformIO $
@@ -4647,6 +4809,7 @@ bindVisualServer_immediate_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the color to be used with next vertex. Equivalent to [method ImmediateGeometry.set_color].
 immediate_color ::
                   (VisualServer :< cls, Object :< cls) =>
                   cls -> Rid -> Color -> IO ()
@@ -4661,6 +4824,9 @@ immediate_color cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_immediate_create #-}
 
+-- | Creates an immediate geometry and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]immediate_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this immediate geometry to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_immediate_create :: MethodBind
 bindVisualServer_immediate_create
   = unsafePerformIO $
@@ -4670,6 +4836,9 @@ bindVisualServer_immediate_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates an immediate geometry and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]immediate_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this immediate geometry to an instance using [method instance_set_base] using the returned RID.
 immediate_create ::
                    (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 immediate_create cls
@@ -4683,6 +4852,7 @@ immediate_create cls
 
 {-# NOINLINE bindVisualServer_immediate_end #-}
 
+-- | Ends drawing the [ImmediateGeometry] and displays it. Equivalent to [method ImmediateGeometry.end].
 bindVisualServer_immediate_end :: MethodBind
 bindVisualServer_immediate_end
   = unsafePerformIO $
@@ -4692,6 +4862,7 @@ bindVisualServer_immediate_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Ends drawing the [ImmediateGeometry] and displays it. Equivalent to [method ImmediateGeometry.end].
 immediate_end ::
                 (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO ()
 immediate_end cls arg1
@@ -4704,6 +4875,7 @@ immediate_end cls arg1
 
 {-# NOINLINE bindVisualServer_immediate_get_material #-}
 
+-- | Returns the material assigned to the [ImmediateGeometry].
 bindVisualServer_immediate_get_material :: MethodBind
 bindVisualServer_immediate_get_material
   = unsafePerformIO $
@@ -4713,6 +4885,7 @@ bindVisualServer_immediate_get_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the material assigned to the [ImmediateGeometry].
 immediate_get_material ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Rid
 immediate_get_material cls arg1
@@ -4726,6 +4899,7 @@ immediate_get_material cls arg1
 
 {-# NOINLINE bindVisualServer_immediate_normal #-}
 
+-- | Sets the normal to be used with next vertex. Equivalent to [method ImmediateGeometry.set_normal].
 bindVisualServer_immediate_normal :: MethodBind
 bindVisualServer_immediate_normal
   = unsafePerformIO $
@@ -4735,6 +4909,7 @@ bindVisualServer_immediate_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the normal to be used with next vertex. Equivalent to [method ImmediateGeometry.set_normal].
 immediate_normal ::
                    (VisualServer :< cls, Object :< cls) =>
                    cls -> Rid -> Vector3 -> IO ()
@@ -4749,6 +4924,7 @@ immediate_normal cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_immediate_set_material #-}
 
+-- | Sets the material to be used to draw the [ImmediateGeometry].
 bindVisualServer_immediate_set_material :: MethodBind
 bindVisualServer_immediate_set_material
   = unsafePerformIO $
@@ -4758,6 +4934,7 @@ bindVisualServer_immediate_set_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the material to be used to draw the [ImmediateGeometry].
 immediate_set_material ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 immediate_set_material cls arg1 arg2
@@ -4771,6 +4948,7 @@ immediate_set_material cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_immediate_tangent #-}
 
+-- | Sets the tangent to be used with next vertex. Equivalent to [method ImmediateGeometry.set_tangent].
 bindVisualServer_immediate_tangent :: MethodBind
 bindVisualServer_immediate_tangent
   = unsafePerformIO $
@@ -4780,6 +4958,7 @@ bindVisualServer_immediate_tangent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the tangent to be used with next vertex. Equivalent to [method ImmediateGeometry.set_tangent].
 immediate_tangent ::
                     (VisualServer :< cls, Object :< cls) =>
                     cls -> Rid -> Plane -> IO ()
@@ -4794,6 +4973,7 @@ immediate_tangent cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_immediate_uv #-}
 
+-- | Sets the UV to be used with next vertex. Equivalent to [method ImmediateGeometry.set_uv].
 bindVisualServer_immediate_uv :: MethodBind
 bindVisualServer_immediate_uv
   = unsafePerformIO $
@@ -4803,6 +4983,7 @@ bindVisualServer_immediate_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the UV to be used with next vertex. Equivalent to [method ImmediateGeometry.set_uv].
 immediate_uv ::
                (VisualServer :< cls, Object :< cls) =>
                cls -> Rid -> Vector2 -> IO ()
@@ -4816,6 +4997,7 @@ immediate_uv cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_immediate_uv2 #-}
 
+-- | Sets the UV2 to be used with next vertex. Equivalent to [method ImmediateGeometry.set_uv2].
 bindVisualServer_immediate_uv2 :: MethodBind
 bindVisualServer_immediate_uv2
   = unsafePerformIO $
@@ -4825,6 +5007,7 @@ bindVisualServer_immediate_uv2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the UV2 to be used with next vertex. Equivalent to [method ImmediateGeometry.set_uv2].
 immediate_uv2 ::
                 (VisualServer :< cls, Object :< cls) =>
                 cls -> Rid -> Vector2 -> IO ()
@@ -4838,6 +5021,7 @@ immediate_uv2 cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_immediate_vertex #-}
 
+-- | Adds the next vertex using the information provided in advance. Equivalent to [method ImmediateGeometry.add_vertex].
 bindVisualServer_immediate_vertex :: MethodBind
 bindVisualServer_immediate_vertex
   = unsafePerformIO $
@@ -4847,6 +5031,7 @@ bindVisualServer_immediate_vertex
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds the next vertex using the information provided in advance. Equivalent to [method ImmediateGeometry.add_vertex].
 immediate_vertex ::
                    (VisualServer :< cls, Object :< cls) =>
                    cls -> Rid -> Vector3 -> IO ()
@@ -4861,6 +5046,7 @@ immediate_vertex cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_immediate_vertex_2d #-}
 
+-- | Adds the next vertex using the information provided in advance. This is a helper class that calls [method immediate_vertex] under the hood. Equivalent to [method ImmediateGeometry.add_vertex].
 bindVisualServer_immediate_vertex_2d :: MethodBind
 bindVisualServer_immediate_vertex_2d
   = unsafePerformIO $
@@ -4870,6 +5056,7 @@ bindVisualServer_immediate_vertex_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds the next vertex using the information provided in advance. This is a helper class that calls [method immediate_vertex] under the hood. Equivalent to [method ImmediateGeometry.add_vertex].
 immediate_vertex_2d ::
                       (VisualServer :< cls, Object :< cls) =>
                       cls -> Rid -> Vector2 -> IO ()
@@ -4884,7 +5071,7 @@ immediate_vertex_2d cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_init #-}
 
--- | Initializes the visual server.
+-- | Initializes the visual server. This function is called internally by platform-dependent code during engine initialization. If called from a running game, it will not do anything.
 bindVisualServer_init :: MethodBind
 bindVisualServer_init
   = unsafePerformIO $
@@ -4894,7 +5081,7 @@ bindVisualServer_init
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Initializes the visual server.
+-- | Initializes the visual server. This function is called internally by platform-dependent code during engine initialization. If called from a running game, it will not do anything.
 init :: (VisualServer :< cls, Object :< cls) => cls -> IO ()
 init cls
   = withVariantArray []
@@ -4906,6 +5093,7 @@ init cls
 {-# NOINLINE bindVisualServer_instance_attach_object_instance_id
              #-}
 
+-- | Attaches a unique Object ID to instance. Object ID must be attached to instance for proper culling with [method instances_cull_aabb], [method instances_cull_convex], and [method instances_cull_ray].
 bindVisualServer_instance_attach_object_instance_id :: MethodBind
 bindVisualServer_instance_attach_object_instance_id
   = unsafePerformIO $
@@ -4915,6 +5103,7 @@ bindVisualServer_instance_attach_object_instance_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Attaches a unique Object ID to instance. Object ID must be attached to instance for proper culling with [method instances_cull_aabb], [method instances_cull_convex], and [method instances_cull_ray].
 instance_attach_object_instance_id ::
                                      (VisualServer :< cls, Object :< cls) =>
                                      cls -> Rid -> Int -> IO ()
@@ -4930,6 +5119,7 @@ instance_attach_object_instance_id cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_attach_skeleton #-}
 
+-- | Attaches a skeleton to an instance. Removes the previous skeleton from the instance.
 bindVisualServer_instance_attach_skeleton :: MethodBind
 bindVisualServer_instance_attach_skeleton
   = unsafePerformIO $
@@ -4939,6 +5129,7 @@ bindVisualServer_instance_attach_skeleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Attaches a skeleton to an instance. Removes the previous skeleton from the instance.
 instance_attach_skeleton ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 instance_attach_skeleton cls arg1 arg2
@@ -4952,6 +5143,9 @@ instance_attach_skeleton cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_create #-}
 
+-- | Creates a visual instance and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]instance_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				An instance is a way of placing a 3D object in the scenario. Objects like particles, meshes, and reflection probes need to be associated with an instance to be visible in the scenario using [method instance_set_base].
 bindVisualServer_instance_create :: MethodBind
 bindVisualServer_instance_create
   = unsafePerformIO $
@@ -4961,6 +5155,9 @@ bindVisualServer_instance_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a visual instance and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]instance_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				An instance is a way of placing a 3D object in the scenario. Objects like particles, meshes, and reflection probes need to be associated with an instance to be visible in the scenario using [method instance_set_base].
 instance_create ::
                   (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 instance_create cls
@@ -4974,6 +5171,8 @@ instance_create cls
 
 {-# NOINLINE bindVisualServer_instance_create2 #-}
 
+-- | Creates a visual instance, adds it to the VisualServer, and sets both base and scenario. It can be accessed with the RID that is returned. This RID will be used in all [code]instance_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_instance_create2 :: MethodBind
 bindVisualServer_instance_create2
   = unsafePerformIO $
@@ -4983,6 +5182,8 @@ bindVisualServer_instance_create2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a visual instance, adds it to the VisualServer, and sets both base and scenario. It can be accessed with the RID that is returned. This RID will be used in all [code]instance_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 instance_create2 ::
                    (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO Rid
 instance_create2 cls arg1 arg2
@@ -4997,6 +5198,7 @@ instance_create2 cls arg1 arg2
 {-# NOINLINE bindVisualServer_instance_geometry_set_as_instance_lod
              #-}
 
+-- | Not implemented in Godot 3.x.
 bindVisualServer_instance_geometry_set_as_instance_lod ::
                                                        MethodBind
 bindVisualServer_instance_geometry_set_as_instance_lod
@@ -5007,6 +5209,7 @@ bindVisualServer_instance_geometry_set_as_instance_lod
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Not implemented in Godot 3.x.
 instance_geometry_set_as_instance_lod ::
                                         (VisualServer :< cls, Object :< cls) =>
                                         cls -> Rid -> Rid -> IO ()
@@ -5023,6 +5226,7 @@ instance_geometry_set_as_instance_lod cls arg1 arg2
 {-# NOINLINE bindVisualServer_instance_geometry_set_cast_shadows_setting
              #-}
 
+-- | Sets the shadow casting setting to one of [enum ShadowCastingSetting]. Equivalent to [member GeometryInstance.cast_shadow].
 bindVisualServer_instance_geometry_set_cast_shadows_setting ::
                                                             MethodBind
 bindVisualServer_instance_geometry_set_cast_shadows_setting
@@ -5033,6 +5237,7 @@ bindVisualServer_instance_geometry_set_cast_shadows_setting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the shadow casting setting to one of [enum ShadowCastingSetting]. Equivalent to [member GeometryInstance.cast_shadow].
 instance_geometry_set_cast_shadows_setting ::
                                              (VisualServer :< cls, Object :< cls) =>
                                              cls -> Rid -> Int -> IO ()
@@ -5048,6 +5253,7 @@ instance_geometry_set_cast_shadows_setting cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_geometry_set_draw_range #-}
 
+-- | Not implemented in Godot 3.x.
 bindVisualServer_instance_geometry_set_draw_range :: MethodBind
 bindVisualServer_instance_geometry_set_draw_range
   = unsafePerformIO $
@@ -5057,6 +5263,7 @@ bindVisualServer_instance_geometry_set_draw_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Not implemented in Godot 3.x.
 instance_geometry_set_draw_range ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Float -> Float -> Float -> Float -> IO ()
@@ -5074,6 +5281,7 @@ instance_geometry_set_draw_range cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindVisualServer_instance_geometry_set_flag #-}
 
+-- | Sets the flag for a given [enum InstanceFlags]. See [enum InstanceFlags] for more details.
 bindVisualServer_instance_geometry_set_flag :: MethodBind
 bindVisualServer_instance_geometry_set_flag
   = unsafePerformIO $
@@ -5083,6 +5291,7 @@ bindVisualServer_instance_geometry_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the flag for a given [enum InstanceFlags]. See [enum InstanceFlags] for more details.
 instance_geometry_set_flag ::
                              (VisualServer :< cls, Object :< cls) =>
                              cls -> Rid -> Int -> Bool -> IO ()
@@ -5098,6 +5307,7 @@ instance_geometry_set_flag cls arg1 arg2 arg3
 {-# NOINLINE bindVisualServer_instance_geometry_set_material_override
              #-}
 
+-- | Sets a material that will override the material for all surfaces on the mesh associated with this instance. Equivalent to [member GeometryInstance.material_override].
 bindVisualServer_instance_geometry_set_material_override ::
                                                          MethodBind
 bindVisualServer_instance_geometry_set_material_override
@@ -5108,6 +5318,7 @@ bindVisualServer_instance_geometry_set_material_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a material that will override the material for all surfaces on the mesh associated with this instance. Equivalent to [member GeometryInstance.material_override].
 instance_geometry_set_material_override ::
                                           (VisualServer :< cls, Object :< cls) =>
                                           cls -> Rid -> Rid -> IO ()
@@ -5123,6 +5334,7 @@ instance_geometry_set_material_override cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_set_base #-}
 
+-- | Sets the base of the instance. A base can be any of the 3D objects that are created in the VisualServer that can be displayed. For example, any of the light types, mesh, multimesh, immediate geometry, particle system, reflection probe, lightmap capture, and the GI probe are all types that can be set as the base of an instance in order to be displayed in the scenario.
 bindVisualServer_instance_set_base :: MethodBind
 bindVisualServer_instance_set_base
   = unsafePerformIO $
@@ -5132,6 +5344,7 @@ bindVisualServer_instance_set_base
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the base of the instance. A base can be any of the 3D objects that are created in the VisualServer that can be displayed. For example, any of the light types, mesh, multimesh, immediate geometry, particle system, reflection probe, lightmap capture, and the GI probe are all types that can be set as the base of an instance in order to be displayed in the scenario.
 instance_set_base ::
                     (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 instance_set_base cls arg1 arg2
@@ -5145,6 +5358,7 @@ instance_set_base cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_set_blend_shape_weight #-}
 
+-- | Sets the weight for a given blend shape associated with this instance.
 bindVisualServer_instance_set_blend_shape_weight :: MethodBind
 bindVisualServer_instance_set_blend_shape_weight
   = unsafePerformIO $
@@ -5154,6 +5368,7 @@ bindVisualServer_instance_set_blend_shape_weight
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the weight for a given blend shape associated with this instance.
 instance_set_blend_shape_weight ::
                                   (VisualServer :< cls, Object :< cls) =>
                                   cls -> Rid -> Int -> Float -> IO ()
@@ -5169,6 +5384,7 @@ instance_set_blend_shape_weight cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_instance_set_custom_aabb #-}
 
+-- | Sets a custom AABB to use when culling objects from the view frustum. Equivalent to [method GeometryInstance.set_custom_aabb].
 bindVisualServer_instance_set_custom_aabb :: MethodBind
 bindVisualServer_instance_set_custom_aabb
   = unsafePerformIO $
@@ -5178,6 +5394,7 @@ bindVisualServer_instance_set_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a custom AABB to use when culling objects from the view frustum. Equivalent to [method GeometryInstance.set_custom_aabb].
 instance_set_custom_aabb ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> Aabb -> IO ()
 instance_set_custom_aabb cls arg1 arg2
@@ -5191,6 +5408,7 @@ instance_set_custom_aabb cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_set_exterior #-}
 
+-- | Function not implemented in Godot 3.x.
 bindVisualServer_instance_set_exterior :: MethodBind
 bindVisualServer_instance_set_exterior
   = unsafePerformIO $
@@ -5200,6 +5418,7 @@ bindVisualServer_instance_set_exterior
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Function not implemented in Godot 3.x.
 instance_set_exterior ::
                         (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 instance_set_exterior cls arg1 arg2
@@ -5214,6 +5433,7 @@ instance_set_exterior cls arg1 arg2
 {-# NOINLINE bindVisualServer_instance_set_extra_visibility_margin
              #-}
 
+-- | Sets a margin to increase the size of the AABB when culling objects from the view frustum. This allows you avoid culling objects that fall outside the view frustum. Equivalent to [member GeometryInstance.extra_cull_margin].
 bindVisualServer_instance_set_extra_visibility_margin :: MethodBind
 bindVisualServer_instance_set_extra_visibility_margin
   = unsafePerformIO $
@@ -5223,6 +5443,7 @@ bindVisualServer_instance_set_extra_visibility_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a margin to increase the size of the AABB when culling objects from the view frustum. This allows you avoid culling objects that fall outside the view frustum. Equivalent to [member GeometryInstance.extra_cull_margin].
 instance_set_extra_visibility_margin ::
                                        (VisualServer :< cls, Object :< cls) =>
                                        cls -> Rid -> Float -> IO ()
@@ -5238,6 +5459,7 @@ instance_set_extra_visibility_margin cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_set_layer_mask #-}
 
+-- | Sets the render layers that this instance will be drawn to. Equivalent to [member VisualInstance.layers].
 bindVisualServer_instance_set_layer_mask :: MethodBind
 bindVisualServer_instance_set_layer_mask
   = unsafePerformIO $
@@ -5247,6 +5469,7 @@ bindVisualServer_instance_set_layer_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the render layers that this instance will be drawn to. Equivalent to [member VisualInstance.layers].
 instance_set_layer_mask ::
                           (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 instance_set_layer_mask cls arg1 arg2
@@ -5260,6 +5483,7 @@ instance_set_layer_mask cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_set_scenario #-}
 
+-- | Sets the scenario that the instance is in. The scenario is the 3D world that the objects will be displayed in.
 bindVisualServer_instance_set_scenario :: MethodBind
 bindVisualServer_instance_set_scenario
   = unsafePerformIO $
@@ -5269,6 +5493,7 @@ bindVisualServer_instance_set_scenario
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the scenario that the instance is in. The scenario is the 3D world that the objects will be displayed in.
 instance_set_scenario ::
                         (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 instance_set_scenario cls arg1 arg2
@@ -5282,6 +5507,7 @@ instance_set_scenario cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_set_surface_material #-}
 
+-- | Sets the material of a specific surface. Equivalent to [method MeshInstance.set_surface_material].
 bindVisualServer_instance_set_surface_material :: MethodBind
 bindVisualServer_instance_set_surface_material
   = unsafePerformIO $
@@ -5291,6 +5517,7 @@ bindVisualServer_instance_set_surface_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the material of a specific surface. Equivalent to [method MeshInstance.set_surface_material].
 instance_set_surface_material ::
                                 (VisualServer :< cls, Object :< cls) =>
                                 cls -> Rid -> Int -> Rid -> IO ()
@@ -5306,6 +5533,7 @@ instance_set_surface_material cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_instance_set_transform #-}
 
+-- | Sets the world space transform of the instance. Equivalent to [member Spatial.transform].
 bindVisualServer_instance_set_transform :: MethodBind
 bindVisualServer_instance_set_transform
   = unsafePerformIO $
@@ -5315,6 +5543,7 @@ bindVisualServer_instance_set_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the world space transform of the instance. Equivalent to [member Spatial.transform].
 instance_set_transform ::
                          (VisualServer :< cls, Object :< cls) =>
                          cls -> Rid -> Transform -> IO ()
@@ -5329,6 +5558,7 @@ instance_set_transform cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instance_set_use_lightmap #-}
 
+-- | Sets the lightmap to use with this instance.
 bindVisualServer_instance_set_use_lightmap :: MethodBind
 bindVisualServer_instance_set_use_lightmap
   = unsafePerformIO $
@@ -5338,6 +5568,7 @@ bindVisualServer_instance_set_use_lightmap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the lightmap to use with this instance.
 instance_set_use_lightmap ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> Rid -> Rid -> IO ()
@@ -5352,6 +5583,7 @@ instance_set_use_lightmap cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_instance_set_visible #-}
 
+-- | Sets whether an instance is drawn or not. Equivalent to [member Spatial.visible].
 bindVisualServer_instance_set_visible :: MethodBind
 bindVisualServer_instance_set_visible
   = unsafePerformIO $
@@ -5361,6 +5593,7 @@ bindVisualServer_instance_set_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets whether an instance is drawn or not. Equivalent to [member Spatial.visible].
 instance_set_visible ::
                        (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 instance_set_visible cls arg1 arg2
@@ -5374,6 +5607,8 @@ instance_set_visible cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instances_cull_aabb #-}
 
+-- | Returns an array of object IDs intersecting with the provided AABB. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query. This forces an update for all resources queued to update.
+--   				[b]Warning:[/b] This function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
 bindVisualServer_instances_cull_aabb :: MethodBind
 bindVisualServer_instances_cull_aabb
   = unsafePerformIO $
@@ -5383,6 +5618,8 @@ bindVisualServer_instances_cull_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns an array of object IDs intersecting with the provided AABB. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query. This forces an update for all resources queued to update.
+--   				[b]Warning:[/b] This function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
 instances_cull_aabb ::
                       (VisualServer :< cls, Object :< cls) =>
                       cls -> Aabb -> Rid -> IO Array
@@ -5397,6 +5634,8 @@ instances_cull_aabb cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instances_cull_convex #-}
 
+-- | Returns an array of object IDs intersecting with the provided convex shape. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query. This forces an update for all resources queued to update.
+--   				[b]Warning:[/b] This function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
 bindVisualServer_instances_cull_convex :: MethodBind
 bindVisualServer_instances_cull_convex
   = unsafePerformIO $
@@ -5406,6 +5645,8 @@ bindVisualServer_instances_cull_convex
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns an array of object IDs intersecting with the provided convex shape. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query. This forces an update for all resources queued to update.
+--   				[b]Warning:[/b] This function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
 instances_cull_convex ::
                         (VisualServer :< cls, Object :< cls) =>
                         cls -> Array -> Rid -> IO Array
@@ -5420,8 +5661,8 @@ instances_cull_convex cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_instances_cull_ray #-}
 
--- | Returns an array of object IDs intersecting with the provided 3D ray. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query.
---   				Warning: this function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
+-- | Returns an array of object IDs intersecting with the provided 3D ray. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query. This forces an update for all resources queued to update.
+--   				[b]Warning:[/b] This function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
 bindVisualServer_instances_cull_ray :: MethodBind
 bindVisualServer_instances_cull_ray
   = unsafePerformIO $
@@ -5431,8 +5672,8 @@ bindVisualServer_instances_cull_ray
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of object IDs intersecting with the provided 3D ray. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query.
---   				Warning: this function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
+-- | Returns an array of object IDs intersecting with the provided 3D ray. Only visual 3D nodes are considered, such as [MeshInstance] or [DirectionalLight]. Use [method @GDScript.instance_from_id] to obtain the actual nodes. A scenario RID must be provided, which is available in the [World] you want to query. This forces an update for all resources queued to update.
+--   				[b]Warning:[/b] This function is primarily intended for editor usage. For in-game use cases, prefer physics collision.
 instances_cull_ray ::
                      (VisualServer :< cls, Object :< cls) =>
                      cls -> Vector3 -> Vector3 -> Rid -> IO Array
@@ -5448,6 +5689,7 @@ instances_cull_ray cls arg1 arg2 arg3
 {-# NOINLINE bindVisualServer_light_directional_set_blend_splits
              #-}
 
+-- | If [code]true[/code], this directional light will blend between shadow map splits resulting in a smoother transition between them. Equivalent to [member DirectionalLight.directional_shadow_blend_splits].
 bindVisualServer_light_directional_set_blend_splits :: MethodBind
 bindVisualServer_light_directional_set_blend_splits
   = unsafePerformIO $
@@ -5457,6 +5699,7 @@ bindVisualServer_light_directional_set_blend_splits
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], this directional light will blend between shadow map splits resulting in a smoother transition between them. Equivalent to [member DirectionalLight.directional_shadow_blend_splits].
 light_directional_set_blend_splits ::
                                      (VisualServer :< cls, Object :< cls) =>
                                      cls -> Rid -> Bool -> IO ()
@@ -5473,6 +5716,7 @@ light_directional_set_blend_splits cls arg1 arg2
 {-# NOINLINE bindVisualServer_light_directional_set_shadow_depth_range_mode
              #-}
 
+-- | Sets the shadow depth range mode for this directional light. Equivalent to [member DirectionalLight.directional_shadow_depth_range]. See [enum LightDirectionalShadowDepthRangeMode] for options.
 bindVisualServer_light_directional_set_shadow_depth_range_mode ::
                                                                MethodBind
 bindVisualServer_light_directional_set_shadow_depth_range_mode
@@ -5483,6 +5727,7 @@ bindVisualServer_light_directional_set_shadow_depth_range_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the shadow depth range mode for this directional light. Equivalent to [member DirectionalLight.directional_shadow_depth_range]. See [enum LightDirectionalShadowDepthRangeMode] for options.
 light_directional_set_shadow_depth_range_mode ::
                                                 (VisualServer :< cls, Object :< cls) =>
                                                 cls -> Rid -> Int -> IO ()
@@ -5498,6 +5743,7 @@ light_directional_set_shadow_depth_range_mode cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_directional_set_shadow_mode #-}
 
+-- | Sets the shadow mode for this directional light. Equivalent to [member DirectionalLight.directional_shadow_mode]. See [enum LightDirectionalShadowMode] for options.
 bindVisualServer_light_directional_set_shadow_mode :: MethodBind
 bindVisualServer_light_directional_set_shadow_mode
   = unsafePerformIO $
@@ -5507,6 +5753,7 @@ bindVisualServer_light_directional_set_shadow_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the shadow mode for this directional light. Equivalent to [member DirectionalLight.directional_shadow_mode]. See [enum LightDirectionalShadowMode] for options.
 light_directional_set_shadow_mode ::
                                     (VisualServer :< cls, Object :< cls) =>
                                     cls -> Rid -> Int -> IO ()
@@ -5522,6 +5769,7 @@ light_directional_set_shadow_mode cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_omni_set_shadow_detail #-}
 
+-- | Sets whether to use vertical or horizontal detail for this omni light. This can be used to alleviate artifacts in the shadow map. Equivalent to [member OmniLight.omni_shadow_detail].
 bindVisualServer_light_omni_set_shadow_detail :: MethodBind
 bindVisualServer_light_omni_set_shadow_detail
   = unsafePerformIO $
@@ -5531,6 +5779,7 @@ bindVisualServer_light_omni_set_shadow_detail
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets whether to use vertical or horizontal detail for this omni light. This can be used to alleviate artifacts in the shadow map. Equivalent to [member OmniLight.omni_shadow_detail].
 light_omni_set_shadow_detail ::
                                (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 light_omni_set_shadow_detail cls arg1 arg2
@@ -5545,6 +5794,7 @@ light_omni_set_shadow_detail cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_omni_set_shadow_mode #-}
 
+-- | Sets whether to use a dual paraboloid or a cubemap for the shadow map. Dual paraboloid is faster but may suffer from artifacts. Equivalent to [member OmniLight.omni_shadow_mode].
 bindVisualServer_light_omni_set_shadow_mode :: MethodBind
 bindVisualServer_light_omni_set_shadow_mode
   = unsafePerformIO $
@@ -5554,6 +5804,7 @@ bindVisualServer_light_omni_set_shadow_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets whether to use a dual paraboloid or a cubemap for the shadow map. Dual paraboloid is faster but may suffer from artifacts. Equivalent to [member OmniLight.omni_shadow_mode].
 light_omni_set_shadow_mode ::
                              (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 light_omni_set_shadow_mode cls arg1 arg2
@@ -5567,6 +5818,7 @@ light_omni_set_shadow_mode cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_color #-}
 
+-- | Sets the color of the light. Equivalent to [member Light.light_color].
 bindVisualServer_light_set_color :: MethodBind
 bindVisualServer_light_set_color
   = unsafePerformIO $
@@ -5576,6 +5828,7 @@ bindVisualServer_light_set_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the color of the light. Equivalent to [member Light.light_color].
 light_set_color ::
                   (VisualServer :< cls, Object :< cls) =>
                   cls -> Rid -> Color -> IO ()
@@ -5590,6 +5843,7 @@ light_set_color cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_cull_mask #-}
 
+-- | Sets the cull mask for this Light. Lights only affect objects in the selected layers. Equivalent to [member Light.light_cull_mask].
 bindVisualServer_light_set_cull_mask :: MethodBind
 bindVisualServer_light_set_cull_mask
   = unsafePerformIO $
@@ -5599,6 +5853,7 @@ bindVisualServer_light_set_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the cull mask for this Light. Lights only affect objects in the selected layers. Equivalent to [member Light.light_cull_mask].
 light_set_cull_mask ::
                       (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 light_set_cull_mask cls arg1 arg2
@@ -5612,6 +5867,7 @@ light_set_cull_mask cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_negative #-}
 
+-- | If [code]true[/code], light will subtract light instead of adding light. Equivalent to [member Light.light_negative].
 bindVisualServer_light_set_negative :: MethodBind
 bindVisualServer_light_set_negative
   = unsafePerformIO $
@@ -5621,6 +5877,7 @@ bindVisualServer_light_set_negative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], light will subtract light instead of adding light. Equivalent to [member Light.light_negative].
 light_set_negative ::
                      (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 light_set_negative cls arg1 arg2
@@ -5634,6 +5891,7 @@ light_set_negative cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_param #-}
 
+-- | Sets the specified light parameter. See [enum LightParam] for options. Equivalent to [method Light.set_param].
 bindVisualServer_light_set_param :: MethodBind
 bindVisualServer_light_set_param
   = unsafePerformIO $
@@ -5643,6 +5901,7 @@ bindVisualServer_light_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the specified light parameter. See [enum LightParam] for options. Equivalent to [method Light.set_param].
 light_set_param ::
                   (VisualServer :< cls, Object :< cls) =>
                   cls -> Rid -> Int -> Float -> IO ()
@@ -5657,6 +5916,7 @@ light_set_param cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_light_set_projector #-}
 
+-- | Not implemented in Godot 3.x.
 bindVisualServer_light_set_projector :: MethodBind
 bindVisualServer_light_set_projector
   = unsafePerformIO $
@@ -5666,6 +5926,7 @@ bindVisualServer_light_set_projector
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Not implemented in Godot 3.x.
 light_set_projector ::
                       (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 light_set_projector cls arg1 arg2
@@ -5679,6 +5940,7 @@ light_set_projector cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_reverse_cull_face_mode #-}
 
+-- | If [code]true[/code], reverses the backface culling of the mesh. This can be useful when you have a flat mesh that has a light behind it. If you need to cast a shadow on both sides of the mesh, set the mesh to use double sided shadows with [method instance_geometry_set_cast_shadows_setting]. Equivalent to [member Light.shadow_reverse_cull_face].
 bindVisualServer_light_set_reverse_cull_face_mode :: MethodBind
 bindVisualServer_light_set_reverse_cull_face_mode
   = unsafePerformIO $
@@ -5688,6 +5950,7 @@ bindVisualServer_light_set_reverse_cull_face_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], reverses the backface culling of the mesh. This can be useful when you have a flat mesh that has a light behind it. If you need to cast a shadow on both sides of the mesh, set the mesh to use double sided shadows with [method instance_geometry_set_cast_shadows_setting]. Equivalent to [member Light.shadow_reverse_cull_face].
 light_set_reverse_cull_face_mode ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Bool -> IO ()
@@ -5703,6 +5966,7 @@ light_set_reverse_cull_face_mode cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_shadow #-}
 
+-- | If [code]true[/code], light will cast shadows. Equivalent to [member Light.shadow_enabled].
 bindVisualServer_light_set_shadow :: MethodBind
 bindVisualServer_light_set_shadow
   = unsafePerformIO $
@@ -5712,6 +5976,7 @@ bindVisualServer_light_set_shadow
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], light will cast shadows. Equivalent to [member Light.shadow_enabled].
 light_set_shadow ::
                    (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 light_set_shadow cls arg1 arg2
@@ -5725,6 +5990,7 @@ light_set_shadow cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_shadow_color #-}
 
+-- | Sets the color of the shadow cast by the light. Equivalent to [member Light.shadow_color].
 bindVisualServer_light_set_shadow_color :: MethodBind
 bindVisualServer_light_set_shadow_color
   = unsafePerformIO $
@@ -5734,6 +6000,7 @@ bindVisualServer_light_set_shadow_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the color of the shadow cast by the light. Equivalent to [member Light.shadow_color].
 light_set_shadow_color ::
                          (VisualServer :< cls, Object :< cls) =>
                          cls -> Rid -> Color -> IO ()
@@ -5748,6 +6015,7 @@ light_set_shadow_color cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_light_set_use_gi #-}
 
+-- | Sets whether GI probes capture light information from this light.
 bindVisualServer_light_set_use_gi :: MethodBind
 bindVisualServer_light_set_use_gi
   = unsafePerformIO $
@@ -5757,6 +6025,7 @@ bindVisualServer_light_set_use_gi
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets whether GI probes capture light information from this light.
 light_set_use_gi ::
                    (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 light_set_use_gi cls arg1 arg2
@@ -5770,6 +6039,9 @@ light_set_use_gi cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_lightmap_capture_create #-}
 
+-- | Creates a lightmap capture and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]lightmap_capture_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this lightmap capture to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_lightmap_capture_create :: MethodBind
 bindVisualServer_lightmap_capture_create
   = unsafePerformIO $
@@ -5779,6 +6051,9 @@ bindVisualServer_lightmap_capture_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a lightmap capture and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]lightmap_capture_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this lightmap capture to an instance using [method instance_set_base] using the returned RID.
 lightmap_capture_create ::
                           (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 lightmap_capture_create cls
@@ -5792,6 +6067,7 @@ lightmap_capture_create cls
 
 {-# NOINLINE bindVisualServer_lightmap_capture_get_bounds #-}
 
+-- | Returns the size of the lightmap capture area.
 bindVisualServer_lightmap_capture_get_bounds :: MethodBind
 bindVisualServer_lightmap_capture_get_bounds
   = unsafePerformIO $
@@ -5801,6 +6077,7 @@ bindVisualServer_lightmap_capture_get_bounds
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the size of the lightmap capture area.
 lightmap_capture_get_bounds ::
                               (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Aabb
 lightmap_capture_get_bounds cls arg1
@@ -5814,6 +6091,7 @@ lightmap_capture_get_bounds cls arg1
 
 {-# NOINLINE bindVisualServer_lightmap_capture_get_energy #-}
 
+-- | Returns the energy multiplier used by the lightmap capture.
 bindVisualServer_lightmap_capture_get_energy :: MethodBind
 bindVisualServer_lightmap_capture_get_energy
   = unsafePerformIO $
@@ -5823,6 +6101,7 @@ bindVisualServer_lightmap_capture_get_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the energy multiplier used by the lightmap capture.
 lightmap_capture_get_energy ::
                               (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Float
 lightmap_capture_get_energy cls arg1
@@ -5836,6 +6115,7 @@ lightmap_capture_get_energy cls arg1
 
 {-# NOINLINE bindVisualServer_lightmap_capture_get_octree #-}
 
+-- | Returns the octree used by the lightmap capture.
 bindVisualServer_lightmap_capture_get_octree :: MethodBind
 bindVisualServer_lightmap_capture_get_octree
   = unsafePerformIO $
@@ -5845,6 +6125,7 @@ bindVisualServer_lightmap_capture_get_octree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the octree used by the lightmap capture.
 lightmap_capture_get_octree ::
                               (VisualServer :< cls, Object :< cls) =>
                               cls -> Rid -> IO PoolByteArray
@@ -5860,6 +6141,7 @@ lightmap_capture_get_octree cls arg1
 {-# NOINLINE bindVisualServer_lightmap_capture_get_octree_cell_subdiv
              #-}
 
+-- | Returns the cell subdivision amount used by this lightmap capture's octree.
 bindVisualServer_lightmap_capture_get_octree_cell_subdiv ::
                                                          MethodBind
 bindVisualServer_lightmap_capture_get_octree_cell_subdiv
@@ -5870,6 +6152,7 @@ bindVisualServer_lightmap_capture_get_octree_cell_subdiv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the cell subdivision amount used by this lightmap capture's octree.
 lightmap_capture_get_octree_cell_subdiv ::
                                           (VisualServer :< cls, Object :< cls) =>
                                           cls -> Rid -> IO Int
@@ -5886,6 +6169,7 @@ lightmap_capture_get_octree_cell_subdiv cls arg1
 {-# NOINLINE bindVisualServer_lightmap_capture_get_octree_cell_transform
              #-}
 
+-- | Returns the cell transform for this lightmap capture's octree.
 bindVisualServer_lightmap_capture_get_octree_cell_transform ::
                                                             MethodBind
 bindVisualServer_lightmap_capture_get_octree_cell_transform
@@ -5896,6 +6180,7 @@ bindVisualServer_lightmap_capture_get_octree_cell_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the cell transform for this lightmap capture's octree.
 lightmap_capture_get_octree_cell_transform ::
                                              (VisualServer :< cls, Object :< cls) =>
                                              cls -> Rid -> IO Transform
@@ -5911,6 +6196,7 @@ lightmap_capture_get_octree_cell_transform cls arg1
 
 {-# NOINLINE bindVisualServer_lightmap_capture_set_bounds #-}
 
+-- | Sets the size of the area covered by the lightmap capture. Equivalent to [member BakedLightmapData.bounds].
 bindVisualServer_lightmap_capture_set_bounds :: MethodBind
 bindVisualServer_lightmap_capture_set_bounds
   = unsafePerformIO $
@@ -5920,6 +6206,7 @@ bindVisualServer_lightmap_capture_set_bounds
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the size of the area covered by the lightmap capture. Equivalent to [member BakedLightmapData.bounds].
 lightmap_capture_set_bounds ::
                               (VisualServer :< cls, Object :< cls) => cls -> Rid -> Aabb -> IO ()
 lightmap_capture_set_bounds cls arg1 arg2
@@ -5933,6 +6220,7 @@ lightmap_capture_set_bounds cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_lightmap_capture_set_energy #-}
 
+-- | Sets the energy multiplier for this lightmap capture. Equivalent to [member BakedLightmapData.energy].
 bindVisualServer_lightmap_capture_set_energy :: MethodBind
 bindVisualServer_lightmap_capture_set_energy
   = unsafePerformIO $
@@ -5942,6 +6230,7 @@ bindVisualServer_lightmap_capture_set_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the energy multiplier for this lightmap capture. Equivalent to [member BakedLightmapData.energy].
 lightmap_capture_set_energy ::
                               (VisualServer :< cls, Object :< cls) =>
                               cls -> Rid -> Float -> IO ()
@@ -5956,6 +6245,7 @@ lightmap_capture_set_energy cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_lightmap_capture_set_octree #-}
 
+-- | Sets the octree to be used by this lightmap capture. This function is normally used by the [BakedLightmap] node. Equivalent to [member BakedLightmapData.octree].
 bindVisualServer_lightmap_capture_set_octree :: MethodBind
 bindVisualServer_lightmap_capture_set_octree
   = unsafePerformIO $
@@ -5965,6 +6255,7 @@ bindVisualServer_lightmap_capture_set_octree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the octree to be used by this lightmap capture. This function is normally used by the [BakedLightmap] node. Equivalent to [member BakedLightmapData.octree].
 lightmap_capture_set_octree ::
                               (VisualServer :< cls, Object :< cls) =>
                               cls -> Rid -> PoolByteArray -> IO ()
@@ -5980,6 +6271,7 @@ lightmap_capture_set_octree cls arg1 arg2
 {-# NOINLINE bindVisualServer_lightmap_capture_set_octree_cell_subdiv
              #-}
 
+-- | Sets the subdivision level of this lightmap capture's octree. Equivalent to [member BakedLightmapData.cell_subdiv].
 bindVisualServer_lightmap_capture_set_octree_cell_subdiv ::
                                                          MethodBind
 bindVisualServer_lightmap_capture_set_octree_cell_subdiv
@@ -5990,6 +6282,7 @@ bindVisualServer_lightmap_capture_set_octree_cell_subdiv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the subdivision level of this lightmap capture's octree. Equivalent to [member BakedLightmapData.cell_subdiv].
 lightmap_capture_set_octree_cell_subdiv ::
                                           (VisualServer :< cls, Object :< cls) =>
                                           cls -> Rid -> Int -> IO ()
@@ -6006,6 +6299,7 @@ lightmap_capture_set_octree_cell_subdiv cls arg1 arg2
 {-# NOINLINE bindVisualServer_lightmap_capture_set_octree_cell_transform
              #-}
 
+-- | Sets the octree cell transform for this lightmap capture's octree. Equivalent to [member BakedLightmapData.cell_space_transform].
 bindVisualServer_lightmap_capture_set_octree_cell_transform ::
                                                             MethodBind
 bindVisualServer_lightmap_capture_set_octree_cell_transform
@@ -6016,6 +6310,7 @@ bindVisualServer_lightmap_capture_set_octree_cell_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the octree cell transform for this lightmap capture's octree. Equivalent to [member BakedLightmapData.cell_space_transform].
 lightmap_capture_set_octree_cell_transform ::
                                              (VisualServer :< cls, Object :< cls) =>
                                              cls -> Rid -> Transform -> IO ()
@@ -6056,7 +6351,8 @@ make_sphere_mesh cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_material_create #-}
 
--- | Returns an empty material.
+-- | Creates an empty material and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]material_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_material_create :: MethodBind
 bindVisualServer_material_create
   = unsafePerformIO $
@@ -6066,7 +6362,8 @@ bindVisualServer_material_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an empty material.
+-- | Creates an empty material and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]material_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 material_create ::
                   (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 material_create cls
@@ -6105,6 +6402,7 @@ material_get_param cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_material_get_param_default #-}
 
+-- | Returns the default value for the param if available. Otherwise returns an empty [Variant].
 bindVisualServer_material_get_param_default :: MethodBind
 bindVisualServer_material_get_param_default
   = unsafePerformIO $
@@ -6114,6 +6412,7 @@ bindVisualServer_material_get_param_default
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the default value for the param if available. Otherwise returns an empty [Variant].
 material_get_param_default ::
                              (VisualServer :< cls, Object :< cls) =>
                              cls -> Rid -> GodotString -> IO GodotVariant
@@ -6152,7 +6451,7 @@ material_get_shader cls arg1
 
 {-# NOINLINE bindVisualServer_material_set_line_width #-}
 
--- | Sets a materials line width.
+-- | Sets a material's line width.
 bindVisualServer_material_set_line_width :: MethodBind
 bindVisualServer_material_set_line_width
   = unsafePerformIO $
@@ -6162,7 +6461,7 @@ bindVisualServer_material_set_line_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a materials line width.
+-- | Sets a material's line width.
 material_set_line_width ::
                           (VisualServer :< cls, Object :< cls) =>
                           cls -> Rid -> Float -> IO ()
@@ -6177,7 +6476,7 @@ material_set_line_width cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_material_set_next_pass #-}
 
--- | Sets an objects next material.
+-- | Sets an object's next material.
 bindVisualServer_material_set_next_pass :: MethodBind
 bindVisualServer_material_set_next_pass
   = unsafePerformIO $
@@ -6187,7 +6486,7 @@ bindVisualServer_material_set_next_pass
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets an objects next material.
+-- | Sets an object's next material.
 material_set_next_pass ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 material_set_next_pass cls arg1 arg2
@@ -6201,7 +6500,7 @@ material_set_next_pass cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_material_set_param #-}
 
--- | Sets a materials parameter.
+-- | Sets a material's parameter.
 bindVisualServer_material_set_param :: MethodBind
 bindVisualServer_material_set_param
   = unsafePerformIO $
@@ -6211,7 +6510,7 @@ bindVisualServer_material_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a materials parameter.
+-- | Sets a material's parameter.
 material_set_param ::
                      (VisualServer :< cls, Object :< cls) =>
                      cls -> Rid -> GodotString -> GodotVariant -> IO ()
@@ -6275,7 +6574,7 @@ material_set_shader cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_mesh_add_surface_from_arrays #-}
 
--- | Adds a surface generated from the Arrays to a mesh. See PRIMITIVE_TYPE_* constants for types.
+-- | Adds a surface generated from the Arrays to a mesh. See [enum PrimitiveType] constants for types.
 bindVisualServer_mesh_add_surface_from_arrays :: MethodBind
 bindVisualServer_mesh_add_surface_from_arrays
   = unsafePerformIO $
@@ -6285,7 +6584,7 @@ bindVisualServer_mesh_add_surface_from_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a surface generated from the Arrays to a mesh. See PRIMITIVE_TYPE_* constants for types.
+-- | Adds a surface generated from the Arrays to a mesh. See [enum PrimitiveType] constants for types.
 mesh_add_surface_from_arrays ::
                                (VisualServer :< cls, Object :< cls) =>
                                cls -> Rid -> Int -> Array -> Array -> Int -> IO ()
@@ -6326,7 +6625,9 @@ mesh_clear cls arg1
 
 {-# NOINLINE bindVisualServer_mesh_create #-}
 
--- | Creates a new mesh.
+-- | Creates a new mesh and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]mesh_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this mesh to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_mesh_create :: MethodBind
 bindVisualServer_mesh_create
   = unsafePerformIO $
@@ -6336,7 +6637,9 @@ bindVisualServer_mesh_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new mesh.
+-- | Creates a new mesh and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]mesh_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this mesh to an instance using [method instance_set_base] using the returned RID.
 mesh_create ::
               (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 mesh_create cls
@@ -6667,7 +6970,7 @@ mesh_surface_get_arrays cls arg1 arg2
 {-# NOINLINE bindVisualServer_mesh_surface_get_blend_shape_arrays
              #-}
 
--- | Returns a mesh's surface's arrays for blend shapes
+-- | Returns a mesh's surface's arrays for blend shapes.
 bindVisualServer_mesh_surface_get_blend_shape_arrays :: MethodBind
 bindVisualServer_mesh_surface_get_blend_shape_arrays
   = unsafePerformIO $
@@ -6677,7 +6980,7 @@ bindVisualServer_mesh_surface_get_blend_shape_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a mesh's surface's arrays for blend shapes
+-- | Returns a mesh's surface's arrays for blend shapes.
 mesh_surface_get_blend_shape_arrays ::
                                       (VisualServer :< cls, Object :< cls) =>
                                       cls -> Rid -> Int -> IO Array
@@ -6717,6 +7020,7 @@ mesh_surface_get_format cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_mesh_surface_get_format_offset #-}
 
+-- | Function is unused in Godot 3.x.
 bindVisualServer_mesh_surface_get_format_offset :: MethodBind
 bindVisualServer_mesh_surface_get_format_offset
   = unsafePerformIO $
@@ -6726,6 +7030,7 @@ bindVisualServer_mesh_surface_get_format_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Function is unused in Godot 3.x.
 mesh_surface_get_format_offset ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Int -> Int -> Int -> Int -> IO Int
@@ -6742,6 +7047,7 @@ mesh_surface_get_format_offset cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindVisualServer_mesh_surface_get_format_stride #-}
 
+-- | Function is unused in Godot 3.x.
 bindVisualServer_mesh_surface_get_format_stride :: MethodBind
 bindVisualServer_mesh_surface_get_format_stride
   = unsafePerformIO $
@@ -6751,6 +7057,7 @@ bindVisualServer_mesh_surface_get_format_stride
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Function is unused in Godot 3.x.
 mesh_surface_get_format_stride ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Int -> Int -> Int -> IO Int
@@ -6893,6 +7200,7 @@ mesh_surface_set_material cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_mesh_surface_update_region #-}
 
+-- | Updates a specific region of a vertex buffer for the specified surface. Warning: this function alters the vertex buffer directly with no safety mechanisms, you can easily corrupt your mesh.
 bindVisualServer_mesh_surface_update_region :: MethodBind
 bindVisualServer_mesh_surface_update_region
   = unsafePerformIO $
@@ -6902,6 +7210,7 @@ bindVisualServer_mesh_surface_update_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Updates a specific region of a vertex buffer for the specified surface. Warning: this function alters the vertex buffer directly with no safety mechanisms, you can easily corrupt your mesh.
 mesh_surface_update_region ::
                              (VisualServer :< cls, Object :< cls) =>
                              cls -> Rid -> Int -> Int -> PoolByteArray -> IO ()
@@ -6917,6 +7226,7 @@ mesh_surface_update_region cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindVisualServer_multimesh_allocate #-}
 
+-- | Allocates space for the multimesh data. Format parameters determine how the data will be stored by OpenGL. See [enum MultimeshTransformFormat], [enum MultimeshColorFormat], and [enum MultimeshCustomDataFormat] for usage. Equivalent to [member MultiMesh.instance_count].
 bindVisualServer_multimesh_allocate :: MethodBind
 bindVisualServer_multimesh_allocate
   = unsafePerformIO $
@@ -6926,6 +7236,7 @@ bindVisualServer_multimesh_allocate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Allocates space for the multimesh data. Format parameters determine how the data will be stored by OpenGL. See [enum MultimeshTransformFormat], [enum MultimeshColorFormat], and [enum MultimeshCustomDataFormat] for usage. Equivalent to [member MultiMesh.instance_count].
 multimesh_allocate ::
                      (VisualServer :< cls, Object :< cls) =>
                      cls -> Rid -> Int -> Int -> Int -> Int -> IO ()
@@ -6942,6 +7253,9 @@ multimesh_allocate cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindVisualServer_multimesh_create #-}
 
+-- | Creates a new multimesh on the VisualServer and returns an [RID] handle. This RID will be used in all [code]multimesh_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this multimesh to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_multimesh_create :: MethodBind
 bindVisualServer_multimesh_create
   = unsafePerformIO $
@@ -6951,6 +7265,9 @@ bindVisualServer_multimesh_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a new multimesh on the VisualServer and returns an [RID] handle. This RID will be used in all [code]multimesh_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this multimesh to an instance using [method instance_set_base] using the returned RID.
 multimesh_create ::
                    (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 multimesh_create cls
@@ -6964,6 +7281,7 @@ multimesh_create cls
 
 {-# NOINLINE bindVisualServer_multimesh_get_aabb #-}
 
+-- | Calculates and returns the axis-aligned bounding box that encloses all instances within the multimesh.
 bindVisualServer_multimesh_get_aabb :: MethodBind
 bindVisualServer_multimesh_get_aabb
   = unsafePerformIO $
@@ -6973,6 +7291,7 @@ bindVisualServer_multimesh_get_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Calculates and returns the axis-aligned bounding box that encloses all instances within the multimesh.
 multimesh_get_aabb ::
                      (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Aabb
 multimesh_get_aabb cls arg1
@@ -6986,6 +7305,7 @@ multimesh_get_aabb cls arg1
 
 {-# NOINLINE bindVisualServer_multimesh_get_instance_count #-}
 
+-- | Returns the number of instances allocated for this multimesh.
 bindVisualServer_multimesh_get_instance_count :: MethodBind
 bindVisualServer_multimesh_get_instance_count
   = unsafePerformIO $
@@ -6995,6 +7315,7 @@ bindVisualServer_multimesh_get_instance_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of instances allocated for this multimesh.
 multimesh_get_instance_count ::
                                (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 multimesh_get_instance_count cls arg1
@@ -7009,6 +7330,7 @@ multimesh_get_instance_count cls arg1
 
 {-# NOINLINE bindVisualServer_multimesh_get_mesh #-}
 
+-- | Returns the RID of the mesh that will be used in drawing this multimesh.
 bindVisualServer_multimesh_get_mesh :: MethodBind
 bindVisualServer_multimesh_get_mesh
   = unsafePerformIO $
@@ -7018,6 +7340,7 @@ bindVisualServer_multimesh_get_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the RID of the mesh that will be used in drawing this multimesh.
 multimesh_get_mesh ::
                      (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Rid
 multimesh_get_mesh cls arg1
@@ -7031,6 +7354,7 @@ multimesh_get_mesh cls arg1
 
 {-# NOINLINE bindVisualServer_multimesh_get_visible_instances #-}
 
+-- | Returns the number of visible instances for this multimesh.
 bindVisualServer_multimesh_get_visible_instances :: MethodBind
 bindVisualServer_multimesh_get_visible_instances
   = unsafePerformIO $
@@ -7040,6 +7364,7 @@ bindVisualServer_multimesh_get_visible_instances
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of visible instances for this multimesh.
 multimesh_get_visible_instances ::
                                   (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 multimesh_get_visible_instances cls arg1
@@ -7054,6 +7379,7 @@ multimesh_get_visible_instances cls arg1
 
 {-# NOINLINE bindVisualServer_multimesh_instance_get_color #-}
 
+-- | Returns the color by which the specified instance will be modulated.
 bindVisualServer_multimesh_instance_get_color :: MethodBind
 bindVisualServer_multimesh_instance_get_color
   = unsafePerformIO $
@@ -7063,6 +7389,7 @@ bindVisualServer_multimesh_instance_get_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the color by which the specified instance will be modulated.
 multimesh_instance_get_color ::
                                (VisualServer :< cls, Object :< cls) =>
                                cls -> Rid -> Int -> IO Color
@@ -7079,6 +7406,7 @@ multimesh_instance_get_color cls arg1 arg2
 {-# NOINLINE bindVisualServer_multimesh_instance_get_custom_data
              #-}
 
+-- | Returns the custom data associated with the specified instance.
 bindVisualServer_multimesh_instance_get_custom_data :: MethodBind
 bindVisualServer_multimesh_instance_get_custom_data
   = unsafePerformIO $
@@ -7088,6 +7416,7 @@ bindVisualServer_multimesh_instance_get_custom_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the custom data associated with the specified instance.
 multimesh_instance_get_custom_data ::
                                      (VisualServer :< cls, Object :< cls) =>
                                      cls -> Rid -> Int -> IO Color
@@ -7103,6 +7432,7 @@ multimesh_instance_get_custom_data cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_multimesh_instance_get_transform #-}
 
+-- | Returns the [Transform] of the specified instance.
 bindVisualServer_multimesh_instance_get_transform :: MethodBind
 bindVisualServer_multimesh_instance_get_transform
   = unsafePerformIO $
@@ -7112,6 +7442,7 @@ bindVisualServer_multimesh_instance_get_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [Transform] of the specified instance.
 multimesh_instance_get_transform ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Int -> IO Transform
@@ -7128,6 +7459,7 @@ multimesh_instance_get_transform cls arg1 arg2
 {-# NOINLINE bindVisualServer_multimesh_instance_get_transform_2d
              #-}
 
+-- | Returns the [Transform2D] of the specified instance. For use when the multimesh is set to use 2D transforms.
 bindVisualServer_multimesh_instance_get_transform_2d :: MethodBind
 bindVisualServer_multimesh_instance_get_transform_2d
   = unsafePerformIO $
@@ -7137,6 +7469,7 @@ bindVisualServer_multimesh_instance_get_transform_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [Transform2D] of the specified instance. For use when the multimesh is set to use 2D transforms.
 multimesh_instance_get_transform_2d ::
                                       (VisualServer :< cls, Object :< cls) =>
                                       cls -> Rid -> Int -> IO Transform2d
@@ -7152,6 +7485,7 @@ multimesh_instance_get_transform_2d cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_multimesh_instance_set_color #-}
 
+-- | Sets the color by which this instance will be modulated. Equivalent to [method MultiMesh.set_instance_color].
 bindVisualServer_multimesh_instance_set_color :: MethodBind
 bindVisualServer_multimesh_instance_set_color
   = unsafePerformIO $
@@ -7161,6 +7495,7 @@ bindVisualServer_multimesh_instance_set_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the color by which this instance will be modulated. Equivalent to [method MultiMesh.set_instance_color].
 multimesh_instance_set_color ::
                                (VisualServer :< cls, Object :< cls) =>
                                cls -> Rid -> Int -> Color -> IO ()
@@ -7177,6 +7512,7 @@ multimesh_instance_set_color cls arg1 arg2 arg3
 {-# NOINLINE bindVisualServer_multimesh_instance_set_custom_data
              #-}
 
+-- | Sets the custom data for this instance. Custom data is passed as a [Color], but is interpreted as a [code]vec4[/code] in the shader. Equivalent to [method MultiMesh.set_instance_custom_data].
 bindVisualServer_multimesh_instance_set_custom_data :: MethodBind
 bindVisualServer_multimesh_instance_set_custom_data
   = unsafePerformIO $
@@ -7186,6 +7522,7 @@ bindVisualServer_multimesh_instance_set_custom_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the custom data for this instance. Custom data is passed as a [Color], but is interpreted as a [code]vec4[/code] in the shader. Equivalent to [method MultiMesh.set_instance_custom_data].
 multimesh_instance_set_custom_data ::
                                      (VisualServer :< cls, Object :< cls) =>
                                      cls -> Rid -> Int -> Color -> IO ()
@@ -7201,6 +7538,7 @@ multimesh_instance_set_custom_data cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_multimesh_instance_set_transform #-}
 
+-- | Sets the [Transform] for this instance. Equivalent to [method MultiMesh.set_instance_transform].
 bindVisualServer_multimesh_instance_set_transform :: MethodBind
 bindVisualServer_multimesh_instance_set_transform
   = unsafePerformIO $
@@ -7210,6 +7548,7 @@ bindVisualServer_multimesh_instance_set_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Transform] for this instance. Equivalent to [method MultiMesh.set_instance_transform].
 multimesh_instance_set_transform ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Int -> Transform -> IO ()
@@ -7226,6 +7565,7 @@ multimesh_instance_set_transform cls arg1 arg2 arg3
 {-# NOINLINE bindVisualServer_multimesh_instance_set_transform_2d
              #-}
 
+-- | Sets the [Transform2D] for this instance. For use when multimesh is used in 2D. Equivalent to [method MultiMesh.set_instance_transform_2d].
 bindVisualServer_multimesh_instance_set_transform_2d :: MethodBind
 bindVisualServer_multimesh_instance_set_transform_2d
   = unsafePerformIO $
@@ -7235,6 +7575,7 @@ bindVisualServer_multimesh_instance_set_transform_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Transform2D] for this instance. For use when multimesh is used in 2D. Equivalent to [method MultiMesh.set_instance_transform_2d].
 multimesh_instance_set_transform_2d ::
                                       (VisualServer :< cls, Object :< cls) =>
                                       cls -> Rid -> Int -> Transform2d -> IO ()
@@ -7250,6 +7591,11 @@ multimesh_instance_set_transform_2d cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_multimesh_set_as_bulk_array #-}
 
+-- | Sets all data related to the instances in one go. This is especially useful when loading the data from disk or preparing the data from GDNative.
+--   
+--   				All data is packed in one large float array. An array may look like this: Transform for instance 1, color data for instance 1, custom data for instance 1, transform for instance 2, color data for instance 2, etc.
+--   
+--   				[Transform] is stored as 12 floats, [Transform2D] is stored as 8 floats, [code]COLOR_8BIT[/code] / [code]CUSTOM_DATA_8BIT[/code] is stored as 1 float (4 bytes as is) and [code]COLOR_FLOAT[/code] / [code]CUSTOM_DATA_FLOAT[/code] is stored as 4 floats.
 bindVisualServer_multimesh_set_as_bulk_array :: MethodBind
 bindVisualServer_multimesh_set_as_bulk_array
   = unsafePerformIO $
@@ -7259,6 +7605,11 @@ bindVisualServer_multimesh_set_as_bulk_array
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets all data related to the instances in one go. This is especially useful when loading the data from disk or preparing the data from GDNative.
+--   
+--   				All data is packed in one large float array. An array may look like this: Transform for instance 1, color data for instance 1, custom data for instance 1, transform for instance 2, color data for instance 2, etc.
+--   
+--   				[Transform] is stored as 12 floats, [Transform2D] is stored as 8 floats, [code]COLOR_8BIT[/code] / [code]CUSTOM_DATA_8BIT[/code] is stored as 1 float (4 bytes as is) and [code]COLOR_FLOAT[/code] / [code]CUSTOM_DATA_FLOAT[/code] is stored as 4 floats.
 multimesh_set_as_bulk_array ::
                               (VisualServer :< cls, Object :< cls) =>
                               cls -> Rid -> PoolRealArray -> IO ()
@@ -7273,6 +7624,7 @@ multimesh_set_as_bulk_array cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_multimesh_set_mesh #-}
 
+-- | Sets the mesh to be drawn by the multimesh. Equivalent to [member MultiMesh.mesh].
 bindVisualServer_multimesh_set_mesh :: MethodBind
 bindVisualServer_multimesh_set_mesh
   = unsafePerformIO $
@@ -7282,6 +7634,7 @@ bindVisualServer_multimesh_set_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the mesh to be drawn by the multimesh. Equivalent to [member MultiMesh.mesh].
 multimesh_set_mesh ::
                      (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 multimesh_set_mesh cls arg1 arg2
@@ -7295,6 +7648,7 @@ multimesh_set_mesh cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_multimesh_set_visible_instances #-}
 
+-- | Sets the number of instances visible at a given time. If -1, all instances that have been allocated are drawn. Equivalent to [member MultiMesh.visible_instance_count].
 bindVisualServer_multimesh_set_visible_instances :: MethodBind
 bindVisualServer_multimesh_set_visible_instances
   = unsafePerformIO $
@@ -7304,6 +7658,7 @@ bindVisualServer_multimesh_set_visible_instances
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the number of instances visible at a given time. If -1, all instances that have been allocated are drawn. Equivalent to [member MultiMesh.visible_instance_count].
 multimesh_set_visible_instances ::
                                   (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 multimesh_set_visible_instances cls arg1 arg2
@@ -7318,6 +7673,9 @@ multimesh_set_visible_instances cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_omni_light_create #-}
 
+-- | Creates a new omni light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID can be used in most [code]light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this omni light to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_omni_light_create :: MethodBind
 bindVisualServer_omni_light_create
   = unsafePerformIO $
@@ -7327,6 +7685,9 @@ bindVisualServer_omni_light_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a new omni light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID can be used in most [code]light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this omni light to an instance using [method instance_set_base] using the returned RID.
 omni_light_create ::
                     (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 omni_light_create cls
@@ -7340,6 +7701,9 @@ omni_light_create cls
 
 {-# NOINLINE bindVisualServer_particles_create #-}
 
+-- | Creates a particle system and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]particles_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach these particles to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_particles_create :: MethodBind
 bindVisualServer_particles_create
   = unsafePerformIO $
@@ -7349,6 +7713,9 @@ bindVisualServer_particles_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a particle system and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]particles_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach these particles to an instance using [method instance_set_base] using the returned RID.
 particles_create ::
                    (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 particles_create cls
@@ -7362,6 +7729,7 @@ particles_create cls
 
 {-# NOINLINE bindVisualServer_particles_get_current_aabb #-}
 
+-- | Calculates and returns the axis-aligned bounding box that contains all the particles. Equivalent to [method Particles.capture_aabb].
 bindVisualServer_particles_get_current_aabb :: MethodBind
 bindVisualServer_particles_get_current_aabb
   = unsafePerformIO $
@@ -7371,6 +7739,7 @@ bindVisualServer_particles_get_current_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Calculates and returns the axis-aligned bounding box that contains all the particles. Equivalent to [method Particles.capture_aabb].
 particles_get_current_aabb ::
                              (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Aabb
 particles_get_current_aabb cls arg1
@@ -7384,6 +7753,7 @@ particles_get_current_aabb cls arg1
 
 {-# NOINLINE bindVisualServer_particles_get_emitting #-}
 
+-- | Returns [code]true[/code] if particles are currently set to emitting.
 bindVisualServer_particles_get_emitting :: MethodBind
 bindVisualServer_particles_get_emitting
   = unsafePerformIO $
@@ -7393,6 +7763,7 @@ bindVisualServer_particles_get_emitting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if particles are currently set to emitting.
 particles_get_emitting ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
 particles_get_emitting cls arg1
@@ -7406,6 +7777,7 @@ particles_get_emitting cls arg1
 
 {-# NOINLINE bindVisualServer_particles_is_inactive #-}
 
+-- | Returns [code]true[/code] if particles are not emitting and particles are set to inactive.
 bindVisualServer_particles_is_inactive :: MethodBind
 bindVisualServer_particles_is_inactive
   = unsafePerformIO $
@@ -7415,6 +7787,7 @@ bindVisualServer_particles_is_inactive
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if particles are not emitting and particles are set to inactive.
 particles_is_inactive ::
                         (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
 particles_is_inactive cls arg1
@@ -7428,6 +7801,7 @@ particles_is_inactive cls arg1
 
 {-# NOINLINE bindVisualServer_particles_request_process #-}
 
+-- | Add particle system to list of particle systems that need to be updated. Update will take place on the next frame, or on the next call to [method instances_cull_aabb], [method instances_cull_convex], or [method instances_cull_ray].
 bindVisualServer_particles_request_process :: MethodBind
 bindVisualServer_particles_request_process
   = unsafePerformIO $
@@ -7437,6 +7811,7 @@ bindVisualServer_particles_request_process
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Add particle system to list of particle systems that need to be updated. Update will take place on the next frame, or on the next call to [method instances_cull_aabb], [method instances_cull_convex], or [method instances_cull_ray].
 particles_request_process ::
                             (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO ()
 particles_request_process cls arg1
@@ -7450,6 +7825,7 @@ particles_request_process cls arg1
 
 {-# NOINLINE bindVisualServer_particles_restart #-}
 
+-- | Reset the particles on the next update. Equivalent to [method Particles.restart].
 bindVisualServer_particles_restart :: MethodBind
 bindVisualServer_particles_restart
   = unsafePerformIO $
@@ -7459,6 +7835,7 @@ bindVisualServer_particles_restart
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Reset the particles on the next update. Equivalent to [method Particles.restart].
 particles_restart ::
                     (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO ()
 particles_restart cls arg1
@@ -7472,6 +7849,7 @@ particles_restart cls arg1
 
 {-# NOINLINE bindVisualServer_particles_set_amount #-}
 
+-- | Sets the number of particles to be drawn and allocates the memory for them. Equivalent to [member Particles.amount].
 bindVisualServer_particles_set_amount :: MethodBind
 bindVisualServer_particles_set_amount
   = unsafePerformIO $
@@ -7481,6 +7859,7 @@ bindVisualServer_particles_set_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the number of particles to be drawn and allocates the memory for them. Equivalent to [member Particles.amount].
 particles_set_amount ::
                        (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 particles_set_amount cls arg1 arg2
@@ -7494,6 +7873,7 @@ particles_set_amount cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_custom_aabb #-}
 
+-- | Sets a custom axis-aligned bounding box for the particle system. Equivalent to [member Particles.visibility_aabb].
 bindVisualServer_particles_set_custom_aabb :: MethodBind
 bindVisualServer_particles_set_custom_aabb
   = unsafePerformIO $
@@ -7503,6 +7883,7 @@ bindVisualServer_particles_set_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a custom axis-aligned bounding box for the particle system. Equivalent to [member Particles.visibility_aabb].
 particles_set_custom_aabb ::
                             (VisualServer :< cls, Object :< cls) => cls -> Rid -> Aabb -> IO ()
 particles_set_custom_aabb cls arg1 arg2
@@ -7516,6 +7897,7 @@ particles_set_custom_aabb cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_draw_order #-}
 
+-- | Sets the draw order of the particles to one of the named enums from [enum ParticlesDrawOrder]. See [enum ParticlesDrawOrder] for options. Equivalent to [member Particles.draw_order].
 bindVisualServer_particles_set_draw_order :: MethodBind
 bindVisualServer_particles_set_draw_order
   = unsafePerformIO $
@@ -7525,6 +7907,7 @@ bindVisualServer_particles_set_draw_order
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the draw order of the particles to one of the named enums from [enum ParticlesDrawOrder]. See [enum ParticlesDrawOrder] for options. Equivalent to [member Particles.draw_order].
 particles_set_draw_order ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 particles_set_draw_order cls arg1 arg2
@@ -7538,6 +7921,7 @@ particles_set_draw_order cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_draw_pass_mesh #-}
 
+-- | Sets the mesh to be used for the specified draw pass. Equivalent to [member Particles.draw_pass_1], [member Particles.draw_pass_2], [member Particles.draw_pass_3], and [member Particles.draw_pass_4].
 bindVisualServer_particles_set_draw_pass_mesh :: MethodBind
 bindVisualServer_particles_set_draw_pass_mesh
   = unsafePerformIO $
@@ -7547,6 +7931,7 @@ bindVisualServer_particles_set_draw_pass_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the mesh to be used for the specified draw pass. Equivalent to [member Particles.draw_pass_1], [member Particles.draw_pass_2], [member Particles.draw_pass_3], and [member Particles.draw_pass_4].
 particles_set_draw_pass_mesh ::
                                (VisualServer :< cls, Object :< cls) =>
                                cls -> Rid -> Int -> Rid -> IO ()
@@ -7562,6 +7947,7 @@ particles_set_draw_pass_mesh cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_particles_set_draw_passes #-}
 
+-- | Sets the number of draw passes to use. Equivalent to [member Particles.draw_passes].
 bindVisualServer_particles_set_draw_passes :: MethodBind
 bindVisualServer_particles_set_draw_passes
   = unsafePerformIO $
@@ -7571,6 +7957,7 @@ bindVisualServer_particles_set_draw_passes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the number of draw passes to use. Equivalent to [member Particles.draw_passes].
 particles_set_draw_passes ::
                             (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 particles_set_draw_passes cls arg1 arg2
@@ -7584,6 +7971,7 @@ particles_set_draw_passes cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_emission_transform #-}
 
+-- | Sets the [Transform] that will be used by the particles when they first emit.
 bindVisualServer_particles_set_emission_transform :: MethodBind
 bindVisualServer_particles_set_emission_transform
   = unsafePerformIO $
@@ -7593,6 +7981,7 @@ bindVisualServer_particles_set_emission_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Transform] that will be used by the particles when they first emit.
 particles_set_emission_transform ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Transform -> IO ()
@@ -7608,6 +7997,7 @@ particles_set_emission_transform cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_emitting #-}
 
+-- | If [code]true[/code], particles will emit over time. Setting to false does not reset the particles, but only stops their emission. Equivalent to [member Particles.emitting].
 bindVisualServer_particles_set_emitting :: MethodBind
 bindVisualServer_particles_set_emitting
   = unsafePerformIO $
@@ -7617,6 +8007,7 @@ bindVisualServer_particles_set_emitting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], particles will emit over time. Setting to false does not reset the particles, but only stops their emission. Equivalent to [member Particles.emitting].
 particles_set_emitting ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 particles_set_emitting cls arg1 arg2
@@ -7630,6 +8021,7 @@ particles_set_emitting cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_explosiveness_ratio #-}
 
+-- | Sets the explosiveness ratio. Equivalent to [member Particles.explosiveness].
 bindVisualServer_particles_set_explosiveness_ratio :: MethodBind
 bindVisualServer_particles_set_explosiveness_ratio
   = unsafePerformIO $
@@ -7639,6 +8031,7 @@ bindVisualServer_particles_set_explosiveness_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the explosiveness ratio. Equivalent to [member Particles.explosiveness].
 particles_set_explosiveness_ratio ::
                                     (VisualServer :< cls, Object :< cls) =>
                                     cls -> Rid -> Float -> IO ()
@@ -7654,6 +8047,7 @@ particles_set_explosiveness_ratio cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_fixed_fps #-}
 
+-- | Sets the frame rate that the particle system rendering will be fixed to. Equivalent to [member Particles.fixed_fps].
 bindVisualServer_particles_set_fixed_fps :: MethodBind
 bindVisualServer_particles_set_fixed_fps
   = unsafePerformIO $
@@ -7663,6 +8057,7 @@ bindVisualServer_particles_set_fixed_fps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the frame rate that the particle system rendering will be fixed to. Equivalent to [member Particles.fixed_fps].
 particles_set_fixed_fps ::
                           (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 particles_set_fixed_fps cls arg1 arg2
@@ -7676,6 +8071,7 @@ particles_set_fixed_fps cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_fractional_delta #-}
 
+-- | If [code]true[/code], uses fractional delta which smooths the movement of the particles. Equivalent to [member Particles.fract_delta].
 bindVisualServer_particles_set_fractional_delta :: MethodBind
 bindVisualServer_particles_set_fractional_delta
   = unsafePerformIO $
@@ -7685,6 +8081,7 @@ bindVisualServer_particles_set_fractional_delta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], uses fractional delta which smooths the movement of the particles. Equivalent to [member Particles.fract_delta].
 particles_set_fractional_delta ::
                                  (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 particles_set_fractional_delta cls arg1 arg2
@@ -7699,6 +8096,7 @@ particles_set_fractional_delta cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_lifetime #-}
 
+-- | Sets the lifetime of each particle in the system. Equivalent to [member Particles.lifetime].
 bindVisualServer_particles_set_lifetime :: MethodBind
 bindVisualServer_particles_set_lifetime
   = unsafePerformIO $
@@ -7708,6 +8106,7 @@ bindVisualServer_particles_set_lifetime
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the lifetime of each particle in the system. Equivalent to [member Particles.lifetime].
 particles_set_lifetime ::
                          (VisualServer :< cls, Object :< cls) =>
                          cls -> Rid -> Float -> IO ()
@@ -7722,6 +8121,7 @@ particles_set_lifetime cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_one_shot #-}
 
+-- | If [code]true[/code], particles will emit once and then stop. Equivalent to [member Particles.one_shot].
 bindVisualServer_particles_set_one_shot :: MethodBind
 bindVisualServer_particles_set_one_shot
   = unsafePerformIO $
@@ -7731,6 +8131,7 @@ bindVisualServer_particles_set_one_shot
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], particles will emit once and then stop. Equivalent to [member Particles.one_shot].
 particles_set_one_shot ::
                          (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 particles_set_one_shot cls arg1 arg2
@@ -7744,6 +8145,7 @@ particles_set_one_shot cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_pre_process_time #-}
 
+-- | Sets the preprocess time for the particles animation. This lets you delay starting an animation until after the particles have begun emitting. Equivalent to [member Particles.preprocess].
 bindVisualServer_particles_set_pre_process_time :: MethodBind
 bindVisualServer_particles_set_pre_process_time
   = unsafePerformIO $
@@ -7753,6 +8155,7 @@ bindVisualServer_particles_set_pre_process_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the preprocess time for the particles animation. This lets you delay starting an animation until after the particles have begun emitting. Equivalent to [member Particles.preprocess].
 particles_set_pre_process_time ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Float -> IO ()
@@ -7768,6 +8171,7 @@ particles_set_pre_process_time cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_process_material #-}
 
+-- | Sets the material for processing the particles. Note: this is not the material used to draw the materials. Equivalent to [member Particles.process_material].
 bindVisualServer_particles_set_process_material :: MethodBind
 bindVisualServer_particles_set_process_material
   = unsafePerformIO $
@@ -7777,6 +8181,7 @@ bindVisualServer_particles_set_process_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the material for processing the particles. Note: this is not the material used to draw the materials. Equivalent to [member Particles.process_material].
 particles_set_process_material ::
                                  (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 particles_set_process_material cls arg1 arg2
@@ -7791,6 +8196,7 @@ particles_set_process_material cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_randomness_ratio #-}
 
+-- | Sets the emission randomness ratio. This randomizes the emission of particles within their phase. Equivalent to [member Particles.randomness].
 bindVisualServer_particles_set_randomness_ratio :: MethodBind
 bindVisualServer_particles_set_randomness_ratio
   = unsafePerformIO $
@@ -7800,6 +8206,7 @@ bindVisualServer_particles_set_randomness_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the emission randomness ratio. This randomizes the emission of particles within their phase. Equivalent to [member Particles.randomness].
 particles_set_randomness_ratio ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Float -> IO ()
@@ -7815,6 +8222,7 @@ particles_set_randomness_ratio cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_particles_set_speed_scale #-}
 
+-- | Sets the speed scale of the particle system. Equivalent to [member Particles.speed_scale].
 bindVisualServer_particles_set_speed_scale :: MethodBind
 bindVisualServer_particles_set_speed_scale
   = unsafePerformIO $
@@ -7824,6 +8232,7 @@ bindVisualServer_particles_set_speed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the speed scale of the particle system. Equivalent to [member Particles.speed_scale].
 particles_set_speed_scale ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> Float -> IO ()
@@ -7839,6 +8248,7 @@ particles_set_speed_scale cls arg1 arg2
 {-# NOINLINE bindVisualServer_particles_set_use_local_coordinates
              #-}
 
+-- | If [code]true[/code], particles use local coordinates. If [code]false[/code] they use global coordinates. Equivalent to [member Particles.local_coords].
 bindVisualServer_particles_set_use_local_coordinates :: MethodBind
 bindVisualServer_particles_set_use_local_coordinates
   = unsafePerformIO $
@@ -7848,6 +8258,7 @@ bindVisualServer_particles_set_use_local_coordinates
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], particles use local coordinates. If [code]false[/code] they use global coordinates. Equivalent to [member Particles.local_coords].
 particles_set_use_local_coordinates ::
                                       (VisualServer :< cls, Object :< cls) =>
                                       cls -> Rid -> Bool -> IO ()
@@ -7863,6 +8274,9 @@ particles_set_use_local_coordinates cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_reflection_probe_create #-}
 
+-- | Creates a reflection probe and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]reflection_probe_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this reflection probe to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_reflection_probe_create :: MethodBind
 bindVisualServer_reflection_probe_create
   = unsafePerformIO $
@@ -7872,6 +8286,9 @@ bindVisualServer_reflection_probe_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a reflection probe and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]reflection_probe_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this reflection probe to an instance using [method instance_set_base] using the returned RID.
 reflection_probe_create ::
                           (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 reflection_probe_create cls
@@ -7885,6 +8302,7 @@ reflection_probe_create cls
 
 {-# NOINLINE bindVisualServer_reflection_probe_set_as_interior #-}
 
+-- | If [code]true[/code], reflections will ignore sky contribution. Equivalent to [member ReflectionProbe.interior_enable].
 bindVisualServer_reflection_probe_set_as_interior :: MethodBind
 bindVisualServer_reflection_probe_set_as_interior
   = unsafePerformIO $
@@ -7894,6 +8312,7 @@ bindVisualServer_reflection_probe_set_as_interior
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], reflections will ignore sky contribution. Equivalent to [member ReflectionProbe.interior_enable].
 reflection_probe_set_as_interior ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Bool -> IO ()
@@ -7909,6 +8328,7 @@ reflection_probe_set_as_interior cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_reflection_probe_set_cull_mask #-}
 
+-- | Sets the render cull mask for this reflection probe. Only instances with a matching cull mask will be rendered by this probe. Equivalent to [member ReflectionProbe.cull_mask].
 bindVisualServer_reflection_probe_set_cull_mask :: MethodBind
 bindVisualServer_reflection_probe_set_cull_mask
   = unsafePerformIO $
@@ -7918,6 +8338,7 @@ bindVisualServer_reflection_probe_set_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the render cull mask for this reflection probe. Only instances with a matching cull mask will be rendered by this probe. Equivalent to [member ReflectionProbe.cull_mask].
 reflection_probe_set_cull_mask ::
                                  (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 reflection_probe_set_cull_mask cls arg1 arg2
@@ -7933,6 +8354,7 @@ reflection_probe_set_cull_mask cls arg1 arg2
 {-# NOINLINE bindVisualServer_reflection_probe_set_enable_box_projection
              #-}
 
+-- | If [code]true[/code], uses box projection. This can make reflections look more correct in certain situations. Equivalent to [member ReflectionProbe.box_projection].
 bindVisualServer_reflection_probe_set_enable_box_projection ::
                                                             MethodBind
 bindVisualServer_reflection_probe_set_enable_box_projection
@@ -7943,6 +8365,7 @@ bindVisualServer_reflection_probe_set_enable_box_projection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], uses box projection. This can make reflections look more correct in certain situations. Equivalent to [member ReflectionProbe.box_projection].
 reflection_probe_set_enable_box_projection ::
                                              (VisualServer :< cls, Object :< cls) =>
                                              cls -> Rid -> Bool -> IO ()
@@ -7959,6 +8382,7 @@ reflection_probe_set_enable_box_projection cls arg1 arg2
 {-# NOINLINE bindVisualServer_reflection_probe_set_enable_shadows
              #-}
 
+-- | If [code]true[/code], computes shadows in the reflection probe. This makes the reflection much slower to compute. Equivalent to [member ReflectionProbe.enable_shadows].
 bindVisualServer_reflection_probe_set_enable_shadows :: MethodBind
 bindVisualServer_reflection_probe_set_enable_shadows
   = unsafePerformIO $
@@ -7968,6 +8392,7 @@ bindVisualServer_reflection_probe_set_enable_shadows
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], computes shadows in the reflection probe. This makes the reflection much slower to compute. Equivalent to [member ReflectionProbe.enable_shadows].
 reflection_probe_set_enable_shadows ::
                                       (VisualServer :< cls, Object :< cls) =>
                                       cls -> Rid -> Bool -> IO ()
@@ -7983,6 +8408,7 @@ reflection_probe_set_enable_shadows cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_reflection_probe_set_extents #-}
 
+-- | Sets the size of the area that the reflection probe will capture. Equivalent to [member ReflectionProbe.extents].
 bindVisualServer_reflection_probe_set_extents :: MethodBind
 bindVisualServer_reflection_probe_set_extents
   = unsafePerformIO $
@@ -7992,6 +8418,7 @@ bindVisualServer_reflection_probe_set_extents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the size of the area that the reflection probe will capture. Equivalent to [member ReflectionProbe.extents].
 reflection_probe_set_extents ::
                                (VisualServer :< cls, Object :< cls) =>
                                cls -> Rid -> Vector3 -> IO ()
@@ -8007,6 +8434,7 @@ reflection_probe_set_extents cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_reflection_probe_set_intensity #-}
 
+-- | Sets the intensity of the reflection probe. Intensity modulates the strength of the reflection. Equivalent to [member ReflectionProbe.intensity].
 bindVisualServer_reflection_probe_set_intensity :: MethodBind
 bindVisualServer_reflection_probe_set_intensity
   = unsafePerformIO $
@@ -8016,6 +8444,7 @@ bindVisualServer_reflection_probe_set_intensity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the intensity of the reflection probe. Intensity modulates the strength of the reflection. Equivalent to [member ReflectionProbe.intensity].
 reflection_probe_set_intensity ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Float -> IO ()
@@ -8032,6 +8461,7 @@ reflection_probe_set_intensity cls arg1 arg2
 {-# NOINLINE bindVisualServer_reflection_probe_set_interior_ambient
              #-}
 
+-- | Sets the ambient light color for this reflection probe when set to interior mode. Equivalent to [member ReflectionProbe.interior_ambient_color].
 bindVisualServer_reflection_probe_set_interior_ambient ::
                                                        MethodBind
 bindVisualServer_reflection_probe_set_interior_ambient
@@ -8042,6 +8472,7 @@ bindVisualServer_reflection_probe_set_interior_ambient
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the ambient light color for this reflection probe when set to interior mode. Equivalent to [member ReflectionProbe.interior_ambient_color].
 reflection_probe_set_interior_ambient ::
                                         (VisualServer :< cls, Object :< cls) =>
                                         cls -> Rid -> Color -> IO ()
@@ -8058,6 +8489,7 @@ reflection_probe_set_interior_ambient cls arg1 arg2
 {-# NOINLINE bindVisualServer_reflection_probe_set_interior_ambient_energy
              #-}
 
+-- | Sets the energy multiplier for this reflection probes ambient light contribution when set to interior mode. Equivalent to [member ReflectionProbe.interior_ambient_energy].
 bindVisualServer_reflection_probe_set_interior_ambient_energy ::
                                                               MethodBind
 bindVisualServer_reflection_probe_set_interior_ambient_energy
@@ -8068,6 +8500,7 @@ bindVisualServer_reflection_probe_set_interior_ambient_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the energy multiplier for this reflection probes ambient light contribution when set to interior mode. Equivalent to [member ReflectionProbe.interior_ambient_energy].
 reflection_probe_set_interior_ambient_energy ::
                                                (VisualServer :< cls, Object :< cls) =>
                                                cls -> Rid -> Float -> IO ()
@@ -8084,6 +8517,7 @@ reflection_probe_set_interior_ambient_energy cls arg1 arg2
 {-# NOINLINE bindVisualServer_reflection_probe_set_interior_ambient_probe_contribution
              #-}
 
+-- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to interior mode. Useful so that ambient light matches the color of the room. Equivalent to [member ReflectionProbe.interior_ambient_contrib].
 bindVisualServer_reflection_probe_set_interior_ambient_probe_contribution ::
                                                                           MethodBind
 bindVisualServer_reflection_probe_set_interior_ambient_probe_contribution
@@ -8096,6 +8530,7 @@ bindVisualServer_reflection_probe_set_interior_ambient_probe_contribution
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to interior mode. Useful so that ambient light matches the color of the room. Equivalent to [member ReflectionProbe.interior_ambient_contrib].
 reflection_probe_set_interior_ambient_probe_contribution ::
                                                            (VisualServer :< cls, Object :< cls) =>
                                                            cls -> Rid -> Float -> IO ()
@@ -8112,6 +8547,7 @@ reflection_probe_set_interior_ambient_probe_contribution cls arg1
 
 {-# NOINLINE bindVisualServer_reflection_probe_set_max_distance #-}
 
+-- | Sets the max distance away from the probe an object can be before it is culled. Equivalent to [member ReflectionProbe.max_distance].
 bindVisualServer_reflection_probe_set_max_distance :: MethodBind
 bindVisualServer_reflection_probe_set_max_distance
   = unsafePerformIO $
@@ -8121,6 +8557,7 @@ bindVisualServer_reflection_probe_set_max_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the max distance away from the probe an object can be before it is culled. Equivalent to [member ReflectionProbe.max_distance].
 reflection_probe_set_max_distance ::
                                     (VisualServer :< cls, Object :< cls) =>
                                     cls -> Rid -> Float -> IO ()
@@ -8137,6 +8574,7 @@ reflection_probe_set_max_distance cls arg1 arg2
 {-# NOINLINE bindVisualServer_reflection_probe_set_origin_offset
              #-}
 
+-- | Sets the origin offset to be used when this reflection probe is in box project mode. Equivalent to [member ReflectionProbe.origin_offset].
 bindVisualServer_reflection_probe_set_origin_offset :: MethodBind
 bindVisualServer_reflection_probe_set_origin_offset
   = unsafePerformIO $
@@ -8146,6 +8584,7 @@ bindVisualServer_reflection_probe_set_origin_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the origin offset to be used when this reflection probe is in box project mode. Equivalent to [member ReflectionProbe.origin_offset].
 reflection_probe_set_origin_offset ::
                                      (VisualServer :< cls, Object :< cls) =>
                                      cls -> Rid -> Vector3 -> IO ()
@@ -8161,6 +8600,7 @@ reflection_probe_set_origin_offset cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_reflection_probe_set_update_mode #-}
 
+-- | Sets how often the reflection probe updates. Can either be once or every frame. See [enum ReflectionProbeUpdateMode] for options.
 bindVisualServer_reflection_probe_set_update_mode :: MethodBind
 bindVisualServer_reflection_probe_set_update_mode
   = unsafePerformIO $
@@ -8170,6 +8610,7 @@ bindVisualServer_reflection_probe_set_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets how often the reflection probe updates. Can either be once or every frame. See [enum ReflectionProbeUpdateMode] for options.
 reflection_probe_set_update_mode ::
                                    (VisualServer :< cls, Object :< cls) =>
                                    cls -> Rid -> Int -> IO ()
@@ -8185,8 +8626,8 @@ reflection_probe_set_update_mode cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_request_frame_drawn_callback #-}
 
--- | Schedules a callback to the corresponding named 'method' on 'where' after a frame has been drawn.
---   				The callback method must use only 1 argument which will be called with 'userdata'.
+-- | Schedules a callback to the corresponding named [code]method[/code] on [code]where[/code] after a frame has been drawn.
+--   				The callback method must use only 1 argument which will be called with [code]userdata[/code].
 bindVisualServer_request_frame_drawn_callback :: MethodBind
 bindVisualServer_request_frame_drawn_callback
   = unsafePerformIO $
@@ -8196,8 +8637,8 @@ bindVisualServer_request_frame_drawn_callback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Schedules a callback to the corresponding named 'method' on 'where' after a frame has been drawn.
---   				The callback method must use only 1 argument which will be called with 'userdata'.
+-- | Schedules a callback to the corresponding named [code]method[/code] on [code]where[/code] after a frame has been drawn.
+--   				The callback method must use only 1 argument which will be called with [code]userdata[/code].
 request_frame_drawn_callback ::
                                (VisualServer :< cls, Object :< cls) =>
                                cls -> Object -> GodotString -> GodotVariant -> IO ()
@@ -8213,6 +8654,9 @@ request_frame_drawn_callback cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_scenario_create #-}
 
+-- | Creates a scenario and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]scenario_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				The scenario is the 3D world that all the visual instances exist in.
 bindVisualServer_scenario_create :: MethodBind
 bindVisualServer_scenario_create
   = unsafePerformIO $
@@ -8222,6 +8666,9 @@ bindVisualServer_scenario_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a scenario and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]scenario_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				The scenario is the 3D world that all the visual instances exist in.
 scenario_create ::
                   (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 scenario_create cls
@@ -8235,6 +8682,7 @@ scenario_create cls
 
 {-# NOINLINE bindVisualServer_scenario_set_debug #-}
 
+-- | Sets the [enum ScenarioDebugMode] for this scenario. See [enum ScenarioDebugMode] for options.
 bindVisualServer_scenario_set_debug :: MethodBind
 bindVisualServer_scenario_set_debug
   = unsafePerformIO $
@@ -8244,6 +8692,7 @@ bindVisualServer_scenario_set_debug
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [enum ScenarioDebugMode] for this scenario. See [enum ScenarioDebugMode] for options.
 scenario_set_debug ::
                      (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 scenario_set_debug cls arg1 arg2
@@ -8257,6 +8706,7 @@ scenario_set_debug cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_scenario_set_environment #-}
 
+-- | Sets the environment that will be used with this scenario.
 bindVisualServer_scenario_set_environment :: MethodBind
 bindVisualServer_scenario_set_environment
   = unsafePerformIO $
@@ -8266,6 +8716,7 @@ bindVisualServer_scenario_set_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the environment that will be used with this scenario.
 scenario_set_environment ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 scenario_set_environment cls arg1 arg2
@@ -8279,6 +8730,7 @@ scenario_set_environment cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_scenario_set_fallback_environment #-}
 
+-- | Sets the fallback environment to be used by this scenario. The fallback environment is used if no environment is set. Internally, this is used by the editor to provide a default environment.
 bindVisualServer_scenario_set_fallback_environment :: MethodBind
 bindVisualServer_scenario_set_fallback_environment
   = unsafePerformIO $
@@ -8288,6 +8740,7 @@ bindVisualServer_scenario_set_fallback_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the fallback environment to be used by this scenario. The fallback environment is used if no environment is set. Internally, this is used by the editor to provide a default environment.
 scenario_set_fallback_environment ::
                                     (VisualServer :< cls, Object :< cls) =>
                                     cls -> Rid -> Rid -> IO ()
@@ -8304,6 +8757,7 @@ scenario_set_fallback_environment cls arg1 arg2
 {-# NOINLINE bindVisualServer_scenario_set_reflection_atlas_size
              #-}
 
+-- | Sets the size of the reflection atlas shared by all reflection probes in this scenario.
 bindVisualServer_scenario_set_reflection_atlas_size :: MethodBind
 bindVisualServer_scenario_set_reflection_atlas_size
   = unsafePerformIO $
@@ -8313,6 +8767,7 @@ bindVisualServer_scenario_set_reflection_atlas_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the size of the reflection atlas shared by all reflection probes in this scenario.
 scenario_set_reflection_atlas_size ::
                                      (VisualServer :< cls, Object :< cls) =>
                                      cls -> Rid -> Int -> Int -> IO ()
@@ -8328,7 +8783,7 @@ scenario_set_reflection_atlas_size cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_set_boot_image #-}
 
--- | Sets a boot image. The color defines the background color and if scale is [code]true[/code] the image will be scaled to fit the screen size.
+-- | Sets a boot image. The color defines the background color. If [code]scale[/code] is [code]true[/code], the image will be scaled to fit the screen size. If [code]use_filter[/code] is [code]true[/code], the image will be scaled with linear interpolation. If [code]use_filter[/code] is [code]false[/code], the image will be scaled with nearest-neighbor interpolation.
 bindVisualServer_set_boot_image :: MethodBind
 bindVisualServer_set_boot_image
   = unsafePerformIO $
@@ -8338,7 +8793,7 @@ bindVisualServer_set_boot_image
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a boot image. The color defines the background color and if scale is [code]true[/code] the image will be scaled to fit the screen size.
+-- | Sets a boot image. The color defines the background color. If [code]scale[/code] is [code]true[/code], the image will be scaled to fit the screen size. If [code]use_filter[/code] is [code]true[/code], the image will be scaled with linear interpolation. If [code]use_filter[/code] is [code]false[/code], the image will be scaled with nearest-neighbor interpolation.
 set_boot_image ::
                  (VisualServer :< cls, Object :< cls) =>
                  cls -> Image -> Color -> Bool -> Bool -> IO ()
@@ -8353,6 +8808,7 @@ set_boot_image cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindVisualServer_set_debug_generate_wireframes #-}
 
+-- | If [code]true[/code], the engine will generate wireframes for use with the wireframe debug mode.
 bindVisualServer_set_debug_generate_wireframes :: MethodBind
 bindVisualServer_set_debug_generate_wireframes
   = unsafePerformIO $
@@ -8362,6 +8818,7 @@ bindVisualServer_set_debug_generate_wireframes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the engine will generate wireframes for use with the wireframe debug mode.
 set_debug_generate_wireframes ::
                                 (VisualServer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_debug_generate_wireframes cls arg1
@@ -8376,6 +8833,7 @@ set_debug_generate_wireframes cls arg1
 
 {-# NOINLINE bindVisualServer_set_default_clear_color #-}
 
+-- | Sets the default clear color which is used when a specific clear color has not been selected.
 bindVisualServer_set_default_clear_color :: MethodBind
 bindVisualServer_set_default_clear_color
   = unsafePerformIO $
@@ -8385,6 +8843,7 @@ bindVisualServer_set_default_clear_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the default clear color which is used when a specific clear color has not been selected.
 set_default_clear_color ::
                           (VisualServer :< cls, Object :< cls) => cls -> Color -> IO ()
 set_default_clear_color cls arg1
@@ -8398,7 +8857,8 @@ set_default_clear_color cls arg1
 
 {-# NOINLINE bindVisualServer_shader_create #-}
 
--- | Creates an empty shader.
+-- | Creates an empty shader and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]shader_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_shader_create :: MethodBind
 bindVisualServer_shader_create
   = unsafePerformIO $
@@ -8408,7 +8868,8 @@ bindVisualServer_shader_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an empty shader.
+-- | Creates an empty shader and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]shader_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 shader_create ::
                 (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 shader_create cls
@@ -8547,6 +9008,7 @@ shader_set_default_texture_param cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_skeleton_allocate #-}
 
+-- | Allocates the GPU buffers for this skeleton.
 bindVisualServer_skeleton_allocate :: MethodBind
 bindVisualServer_skeleton_allocate
   = unsafePerformIO $
@@ -8556,6 +9018,7 @@ bindVisualServer_skeleton_allocate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Allocates the GPU buffers for this skeleton.
 skeleton_allocate ::
                     (VisualServer :< cls, Object :< cls) =>
                     cls -> Rid -> Int -> Bool -> IO ()
@@ -8570,6 +9033,7 @@ skeleton_allocate cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_skeleton_bone_get_transform #-}
 
+-- | Returns the [Transform] set for a specific bone of this skeleton.
 bindVisualServer_skeleton_bone_get_transform :: MethodBind
 bindVisualServer_skeleton_bone_get_transform
   = unsafePerformIO $
@@ -8579,6 +9043,7 @@ bindVisualServer_skeleton_bone_get_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [Transform] set for a specific bone of this skeleton.
 skeleton_bone_get_transform ::
                               (VisualServer :< cls, Object :< cls) =>
                               cls -> Rid -> Int -> IO Transform
@@ -8593,6 +9058,7 @@ skeleton_bone_get_transform cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_skeleton_bone_get_transform_2d #-}
 
+-- | Returns the [Transform2D] set for a specific bone of this skeleton.
 bindVisualServer_skeleton_bone_get_transform_2d :: MethodBind
 bindVisualServer_skeleton_bone_get_transform_2d
   = unsafePerformIO $
@@ -8602,6 +9068,7 @@ bindVisualServer_skeleton_bone_get_transform_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [Transform2D] set for a specific bone of this skeleton.
 skeleton_bone_get_transform_2d ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Int -> IO Transform2d
@@ -8617,6 +9084,7 @@ skeleton_bone_get_transform_2d cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_skeleton_bone_set_transform #-}
 
+-- | Sets the [Transform] for a specific bone of this skeleton.
 bindVisualServer_skeleton_bone_set_transform :: MethodBind
 bindVisualServer_skeleton_bone_set_transform
   = unsafePerformIO $
@@ -8626,6 +9094,7 @@ bindVisualServer_skeleton_bone_set_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Transform] for a specific bone of this skeleton.
 skeleton_bone_set_transform ::
                               (VisualServer :< cls, Object :< cls) =>
                               cls -> Rid -> Int -> Transform -> IO ()
@@ -8640,6 +9109,7 @@ skeleton_bone_set_transform cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_skeleton_bone_set_transform_2d #-}
 
+-- | Sets the [Transform2D] for a specific bone of this skeleton.
 bindVisualServer_skeleton_bone_set_transform_2d :: MethodBind
 bindVisualServer_skeleton_bone_set_transform_2d
   = unsafePerformIO $
@@ -8649,6 +9119,7 @@ bindVisualServer_skeleton_bone_set_transform_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Transform2D] for a specific bone of this skeleton.
 skeleton_bone_set_transform_2d ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Int -> Transform2d -> IO ()
@@ -8664,6 +9135,8 @@ skeleton_bone_set_transform_2d cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_skeleton_create #-}
 
+-- | Creates a skeleton and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]skeleton_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_skeleton_create :: MethodBind
 bindVisualServer_skeleton_create
   = unsafePerformIO $
@@ -8673,6 +9146,8 @@ bindVisualServer_skeleton_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a skeleton and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]skeleton_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 skeleton_create ::
                   (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 skeleton_create cls
@@ -8686,6 +9161,7 @@ skeleton_create cls
 
 {-# NOINLINE bindVisualServer_skeleton_get_bone_count #-}
 
+-- | Returns the number of bones allocated for this skeleton.
 bindVisualServer_skeleton_get_bone_count :: MethodBind
 bindVisualServer_skeleton_get_bone_count
   = unsafePerformIO $
@@ -8695,6 +9171,7 @@ bindVisualServer_skeleton_get_bone_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of bones allocated for this skeleton.
 skeleton_get_bone_count ::
                           (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 skeleton_get_bone_count cls arg1
@@ -8708,7 +9185,8 @@ skeleton_get_bone_count cls arg1
 
 {-# NOINLINE bindVisualServer_sky_create #-}
 
--- | Creates an empty sky.
+-- | Creates an empty sky and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]sky_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_sky_create :: MethodBind
 bindVisualServer_sky_create
   = unsafePerformIO $
@@ -8718,7 +9196,8 @@ bindVisualServer_sky_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an empty sky.
+-- | Creates an empty sky and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]sky_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 sky_create :: (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 sky_create cls
   = withVariantArray []
@@ -8755,6 +9234,9 @@ sky_set_texture cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_spot_light_create #-}
 
+-- | Creates a spot light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID can be used in most [code]light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this spot light to an instance using [method instance_set_base] using the returned RID.
 bindVisualServer_spot_light_create :: MethodBind
 bindVisualServer_spot_light_create
   = unsafePerformIO $
@@ -8764,6 +9246,9 @@ bindVisualServer_spot_light_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a spot light and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID can be used in most [code]light_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
+--   				To place in a scene, attach this spot light to an instance using [method instance_set_base] using the returned RID.
 spot_light_create ::
                     (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 spot_light_create cls
@@ -8777,6 +9262,7 @@ spot_light_create cls
 
 {-# NOINLINE bindVisualServer_sync #-}
 
+-- | Not implemented in Godot 3.x.
 bindVisualServer_sync :: MethodBind
 bindVisualServer_sync
   = unsafePerformIO $
@@ -8786,6 +9272,7 @@ bindVisualServer_sync
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Not implemented in Godot 3.x.
 sync :: (VisualServer :< cls, Object :< cls) => cls -> IO ()
 sync cls
   = withVariantArray []
@@ -8796,6 +9283,7 @@ sync cls
 
 {-# NOINLINE bindVisualServer_texture_allocate #-}
 
+-- | Allocates the GPU memory for the texture.
 bindVisualServer_texture_allocate :: MethodBind
 bindVisualServer_texture_allocate
   = unsafePerformIO $
@@ -8805,6 +9293,7 @@ bindVisualServer_texture_allocate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Allocates the GPU memory for the texture.
 texture_allocate ::
                    (VisualServer :< cls, Object :< cls) =>
                    cls -> Rid -> Int -> Int -> Int -> Int -> Int -> Int -> IO ()
@@ -8821,6 +9310,7 @@ texture_allocate cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
 
 {-# NOINLINE bindVisualServer_texture_bind #-}
 
+-- | Binds the texture to a texture slot.
 bindVisualServer_texture_bind :: MethodBind
 bindVisualServer_texture_bind
   = unsafePerformIO $
@@ -8830,6 +9320,7 @@ bindVisualServer_texture_bind
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Binds the texture to a texture slot.
 texture_bind ::
                (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 texture_bind cls arg1 arg2
@@ -8842,7 +9333,8 @@ texture_bind cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_texture_create #-}
 
--- | Creates an empty texture.
+-- | Creates an empty texture and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]texture_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_texture_create :: MethodBind
 bindVisualServer_texture_create
   = unsafePerformIO $
@@ -8852,7 +9344,8 @@ bindVisualServer_texture_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an empty texture.
+-- | Creates an empty texture and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]texture_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 texture_create ::
                  (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 texture_create cls
@@ -8939,6 +9432,7 @@ texture_get_data cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_texture_get_depth #-}
 
+-- | Returns the depth of the texture.
 bindVisualServer_texture_get_depth :: MethodBind
 bindVisualServer_texture_get_depth
   = unsafePerformIO $
@@ -8948,6 +9442,7 @@ bindVisualServer_texture_get_depth
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the depth of the texture.
 texture_get_depth ::
                     (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 texture_get_depth cls arg1
@@ -9082,6 +9577,7 @@ texture_get_texid cls arg1
 
 {-# NOINLINE bindVisualServer_texture_get_type #-}
 
+-- | Returns the type of the texture, can be any of the [enum TextureType].
 bindVisualServer_texture_get_type :: MethodBind
 bindVisualServer_texture_get_type
   = unsafePerformIO $
@@ -9091,6 +9587,7 @@ bindVisualServer_texture_get_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the type of the texture, can be any of the [enum TextureType].
 texture_get_type ::
                    (VisualServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 texture_get_type cls arg1
@@ -9153,6 +9650,7 @@ texture_set_data cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_texture_set_data_partial #-}
 
+-- | Sets a part of the data for a texture. Warning: this function calls the underlying graphics API directly and may corrupt your texture if used improperly.
 bindVisualServer_texture_set_data_partial :: MethodBind
 bindVisualServer_texture_set_data_partial
   = unsafePerformIO $
@@ -9162,6 +9660,7 @@ bindVisualServer_texture_set_data_partial
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a part of the data for a texture. Warning: this function calls the underlying graphics API directly and may corrupt your texture if used improperly.
 texture_set_data_partial ::
                            (VisualServer :< cls, Object :< cls) =>
                            cls ->
@@ -9183,7 +9682,7 @@ texture_set_data_partial cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
 
 {-# NOINLINE bindVisualServer_texture_set_flags #-}
 
--- | Sets the texture's flags. See [enum TextureFlags] for options
+-- | Sets the texture's flags. See [enum TextureFlags] for options.
 bindVisualServer_texture_set_flags :: MethodBind
 bindVisualServer_texture_set_flags
   = unsafePerformIO $
@@ -9193,7 +9692,7 @@ bindVisualServer_texture_set_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the texture's flags. See [enum TextureFlags] for options
+-- | Sets the texture's flags. See [enum TextureFlags] for options.
 texture_set_flags ::
                     (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 texture_set_flags cls arg1 arg2
@@ -9259,6 +9758,7 @@ texture_set_shrink_all_x2_on_set_data cls arg1
 
 {-# NOINLINE bindVisualServer_texture_set_size_override #-}
 
+-- | Resizes the texture to the specified dimensions.
 bindVisualServer_texture_set_size_override :: MethodBind
 bindVisualServer_texture_set_size_override
   = unsafePerformIO $
@@ -9268,6 +9768,7 @@ bindVisualServer_texture_set_size_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Resizes the texture to the specified dimensions.
 texture_set_size_override ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> Int -> Int -> Int -> IO ()
@@ -9355,7 +9856,14 @@ viewport_attach_canvas cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_viewport_attach_to_screen #-}
 
--- | Attaches a viewport to a screen.
+-- | Copies viewport to a region of the screen specified by [code]rect[/code]. If [member Viewport.render_direct_to_screen] is [code]true[/code], then viewport does not use a framebuffer and the contents of the viewport are rendered directly to screen. However, note that the root viewport is drawn last, therefore it will draw over the screen. Accordingly, you must set the root viewport to an area that does not cover the area that you have attached this viewport to.
+--   				For example, you can set the root viewport to not render at all with the following code:
+--   				[codeblock]
+--   				func _ready():
+--   				    get_viewport().set_attach_to_screen_rect(Rect2())
+--   				    $Viewport.set_attach_to_screen_rect(Rect2(0, 0, 600, 600))
+--   				[/codeblock]
+--   				Using this can result in significant optimization, especially on lower-end devices. However, it comes at the cost of having to manage your viewports manually. For a further optimization see, [method viewport_set_render_direct_to_screen].
 bindVisualServer_viewport_attach_to_screen :: MethodBind
 bindVisualServer_viewport_attach_to_screen
   = unsafePerformIO $
@@ -9365,7 +9873,14 @@ bindVisualServer_viewport_attach_to_screen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Attaches a viewport to a screen.
+-- | Copies viewport to a region of the screen specified by [code]rect[/code]. If [member Viewport.render_direct_to_screen] is [code]true[/code], then viewport does not use a framebuffer and the contents of the viewport are rendered directly to screen. However, note that the root viewport is drawn last, therefore it will draw over the screen. Accordingly, you must set the root viewport to an area that does not cover the area that you have attached this viewport to.
+--   				For example, you can set the root viewport to not render at all with the following code:
+--   				[codeblock]
+--   				func _ready():
+--   				    get_viewport().set_attach_to_screen_rect(Rect2())
+--   				    $Viewport.set_attach_to_screen_rect(Rect2(0, 0, 600, 600))
+--   				[/codeblock]
+--   				Using this can result in significant optimization, especially on lower-end devices. However, it comes at the cost of having to manage your viewports manually. For a further optimization see, [method viewport_set_render_direct_to_screen].
 viewport_attach_to_screen ::
                             (VisualServer :< cls, Object :< cls) =>
                             cls -> Rid -> Rect2 -> Int -> IO ()
@@ -9380,7 +9895,8 @@ viewport_attach_to_screen cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_viewport_create #-}
 
--- | Creates an empty viewport.
+-- | Creates an empty viewport and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]viewport_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 bindVisualServer_viewport_create :: MethodBind
 bindVisualServer_viewport_create
   = unsafePerformIO $
@@ -9390,7 +9906,8 @@ bindVisualServer_viewport_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an empty viewport.
+-- | Creates an empty viewport and adds it to the VisualServer. It can be accessed with the RID that is returned. This RID will be used in all [code]viewport_*[/code] VisualServer functions.
+--   				Once finished with your RID, you will want to free the RID using the VisualServer's [method free_rid] static method.
 viewport_create ::
                   (VisualServer :< cls, Object :< cls) => cls -> IO Rid
 viewport_create cls
@@ -9428,7 +9945,7 @@ viewport_detach cls arg1
 
 {-# NOINLINE bindVisualServer_viewport_get_render_info #-}
 
--- | Returns a viewport's render info. for options see VIEWPORT_RENDER_INFO* constants.
+-- | Returns a viewport's render information. For options, see the [enum ViewportRenderInfo] constants.
 bindVisualServer_viewport_get_render_info :: MethodBind
 bindVisualServer_viewport_get_render_info
   = unsafePerformIO $
@@ -9438,7 +9955,7 @@ bindVisualServer_viewport_get_render_info
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a viewport's render info. for options see VIEWPORT_RENDER_INFO* constants.
+-- | Returns a viewport's render information. For options, see the [enum ViewportRenderInfo] constants.
 viewport_get_render_info ::
                            (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO Int
 viewport_get_render_info cls arg1 arg2
@@ -9579,7 +10096,7 @@ viewport_set_canvas_transform cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_viewport_set_clear_mode #-}
 
--- | Sets the clear mode of a viewport. See [enum VisualServer.ViewportClearMode] for options.
+-- | Sets the clear mode of a viewport. See [enum ViewportClearMode] for options.
 bindVisualServer_viewport_set_clear_mode :: MethodBind
 bindVisualServer_viewport_set_clear_mode
   = unsafePerformIO $
@@ -9589,7 +10106,7 @@ bindVisualServer_viewport_set_clear_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the clear mode of a viewport. See [enum VisualServer.ViewportClearMode] for options.
+-- | Sets the clear mode of a viewport. See [enum ViewportClearMode] for options.
 viewport_set_clear_mode ::
                           (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 viewport_set_clear_mode cls arg1 arg2
@@ -9603,7 +10120,7 @@ viewport_set_clear_mode cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_viewport_set_debug_draw #-}
 
--- | Sets the debug draw mode of a viewport. See [enum VisualServer.ViewportDebugDraw] for options.
+-- | Sets the debug draw mode of a viewport. See [enum ViewportDebugDraw] for options.
 bindVisualServer_viewport_set_debug_draw :: MethodBind
 bindVisualServer_viewport_set_debug_draw
   = unsafePerformIO $
@@ -9613,7 +10130,7 @@ bindVisualServer_viewport_set_debug_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the debug draw mode of a viewport. See [enum VisualServer.ViewportDebugDraw] for options.
+-- | Sets the debug draw mode of a viewport. See [enum ViewportDebugDraw] for options.
 viewport_set_debug_draw ::
                           (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 viewport_set_debug_draw cls arg1 arg2
@@ -9752,6 +10269,7 @@ viewport_set_hide_canvas cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_viewport_set_hide_scenario #-}
 
+-- | Currently unimplemented in Godot 3.x.
 bindVisualServer_viewport_set_hide_scenario :: MethodBind
 bindVisualServer_viewport_set_hide_scenario
   = unsafePerformIO $
@@ -9761,6 +10279,7 @@ bindVisualServer_viewport_set_hide_scenario
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Currently unimplemented in Godot 3.x.
 viewport_set_hide_scenario ::
                              (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 viewport_set_hide_scenario cls arg1 arg2
@@ -9774,7 +10293,7 @@ viewport_set_hide_scenario cls arg1 arg2
 
 {-# NOINLINE bindVisualServer_viewport_set_msaa #-}
 
--- | Sets the anti-aliasing mode. see [enum ViewportMSAA] for options.
+-- | Sets the anti-aliasing mode. See [enum ViewportMSAA] for options.
 bindVisualServer_viewport_set_msaa :: MethodBind
 bindVisualServer_viewport_set_msaa
   = unsafePerformIO $
@@ -9784,7 +10303,7 @@ bindVisualServer_viewport_set_msaa
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the anti-aliasing mode. see [enum ViewportMSAA] for options.
+-- | Sets the anti-aliasing mode. See [enum ViewportMSAA] for options.
 viewport_set_msaa ::
                     (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 viewport_set_msaa cls arg1 arg2
@@ -9824,6 +10343,7 @@ viewport_set_parent_viewport cls arg1 arg2
 {-# NOINLINE bindVisualServer_viewport_set_render_direct_to_screen
              #-}
 
+-- | If [code]true[/code], render the contents of the viewport directly to screen. This allows a low-level optimization where you can skip drawing a viewport to the root viewport. While this optimization can result in a significant increase in speed (especially on older devices), it comes at a cost of usability. When this is enabled, you cannot read from the viewport or from the [code]SCREEN_TEXTURE[/code]. You also lose the benefit of certain window settings, such as the various stretch modes. Another consequence to be aware of is that in 2D the rendering happens in window coordinates, so if you have a viewport that is double the size of the window, and you set this, then only the portion that fits within the window will be drawn, no automatic scaling is possible, even if your game scene is significantly larger than the window size.
 bindVisualServer_viewport_set_render_direct_to_screen :: MethodBind
 bindVisualServer_viewport_set_render_direct_to_screen
   = unsafePerformIO $
@@ -9833,6 +10353,7 @@ bindVisualServer_viewport_set_render_direct_to_screen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], render the contents of the viewport directly to screen. This allows a low-level optimization where you can skip drawing a viewport to the root viewport. While this optimization can result in a significant increase in speed (especially on older devices), it comes at a cost of usability. When this is enabled, you cannot read from the viewport or from the [code]SCREEN_TEXTURE[/code]. You also lose the benefit of certain window settings, such as the various stretch modes. Another consequence to be aware of is that in 2D the rendering happens in window coordinates, so if you have a viewport that is double the size of the window, and you set this, then only the portion that fits within the window will be drawn, no automatic scaling is possible, even if your game scene is significantly larger than the window size.
 viewport_set_render_direct_to_screen ::
                                        (VisualServer :< cls, Object :< cls) =>
                                        cls -> Rid -> Bool -> IO ()
@@ -9902,7 +10423,7 @@ viewport_set_shadow_atlas_quadrant_subdivision cls arg1 arg2 arg3
 
 {-# NOINLINE bindVisualServer_viewport_set_shadow_atlas_size #-}
 
--- | Sets the size of the shadow atlas's images.
+-- | Sets the size of the shadow atlas's images (used for omni and spot lights). The value will be rounded up to the nearest power of 2.
 bindVisualServer_viewport_set_shadow_atlas_size :: MethodBind
 bindVisualServer_viewport_set_shadow_atlas_size
   = unsafePerformIO $
@@ -9912,7 +10433,7 @@ bindVisualServer_viewport_set_shadow_atlas_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the size of the shadow atlas's images.
+-- | Sets the size of the shadow atlas's images (used for omni and spot lights). The value will be rounded up to the nearest power of 2.
 viewport_set_shadow_atlas_size ::
                                  (VisualServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 viewport_set_shadow_atlas_size cls arg1 arg2

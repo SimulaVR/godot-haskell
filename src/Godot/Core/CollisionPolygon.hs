@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CollisionPolygon
        (Godot.Core.CollisionPolygon._is_editable_3d_polygon,
         Godot.Core.CollisionPolygon.get_depth,
@@ -63,7 +64,8 @@ get_depth cls
 
 {-# NOINLINE bindCollisionPolygon_get_polygon #-}
 
--- | Array of vertices which define the polygon. Note that the returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
+-- | Array of vertices which define the polygon.
+--   			[b]Note:[/b] The returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
 bindCollisionPolygon_get_polygon :: MethodBind
 bindCollisionPolygon_get_polygon
   = unsafePerformIO $
@@ -73,7 +75,8 @@ bindCollisionPolygon_get_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Array of vertices which define the polygon. Note that the returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
+-- | Array of vertices which define the polygon.
+--   			[b]Note:[/b] The returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
 get_polygon ::
               (CollisionPolygon :< cls, Object :< cls) =>
               cls -> IO PoolVector2Array
@@ -159,7 +162,8 @@ set_disabled cls arg1
 
 {-# NOINLINE bindCollisionPolygon_set_polygon #-}
 
--- | Array of vertices which define the polygon. Note that the returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
+-- | Array of vertices which define the polygon.
+--   			[b]Note:[/b] The returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
 bindCollisionPolygon_set_polygon :: MethodBind
 bindCollisionPolygon_set_polygon
   = unsafePerformIO $
@@ -169,7 +173,8 @@ bindCollisionPolygon_set_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Array of vertices which define the polygon. Note that the returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
+-- | Array of vertices which define the polygon.
+--   			[b]Note:[/b] The returned value is a copy of the original. Methods which mutate the size or properties of the return value will not impact the original polygon. To change properties of the polygon, assign it to a temporary variable and make changes before reassigning the [code]polygon[/code] member.
 set_polygon ::
               (CollisionPolygon :< cls, Object :< cls) =>
               cls -> PoolVector2Array -> IO ()

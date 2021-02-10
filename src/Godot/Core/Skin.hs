@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Skin
        (Godot.Core.Skin.add_bind, Godot.Core.Skin.clear_binds,
         Godot.Core.Skin.get_bind_bone, Godot.Core.Skin.get_bind_count,

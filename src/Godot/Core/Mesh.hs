@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Mesh
        (Godot.Core.Mesh._ARRAY_COMPRESS_WEIGHTS,
         Godot.Core.Mesh._ARRAY_FLAG_USE_16_BIT_BONES,
@@ -205,7 +206,8 @@ create_convex_shape cls
 
 {-# NOINLINE bindMesh_create_outline #-}
 
--- | Calculate an outline mesh at a defined offset (margin) from the original mesh. Note: Typically returns the vertices in reverse order (e.g. clockwise to anti-clockwise).
+-- | Calculate an outline mesh at a defined offset (margin) from the original mesh.
+--   				[b]Note:[/b] This method typically returns the vertices in reverse order (e.g. clockwise to counterclockwise).
 bindMesh_create_outline :: MethodBind
 bindMesh_create_outline
   = unsafePerformIO $
@@ -215,7 +217,8 @@ bindMesh_create_outline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calculate an outline mesh at a defined offset (margin) from the original mesh. Note: Typically returns the vertices in reverse order (e.g. clockwise to anti-clockwise).
+-- | Calculate an outline mesh at a defined offset (margin) from the original mesh.
+--   				[b]Note:[/b] This method typically returns the vertices in reverse order (e.g. clockwise to counterclockwise).
 create_outline ::
                  (Mesh :< cls, Object :< cls) => cls -> Float -> IO Mesh
 create_outline cls arg1
@@ -273,6 +276,8 @@ generate_triangle_mesh cls
 
 {-# NOINLINE bindMesh_get_aabb #-}
 
+-- | Returns the smallest [AABB] enclosing this mesh in local space. Not affected by [code]custom_aabb[/code]. See also [method VisualInstance.get_transformed_aabb].
+--   				[b]Note:[/b] This is only implemented for [ArrayMesh] and [PrimitiveMesh].
 bindMesh_get_aabb :: MethodBind
 bindMesh_get_aabb
   = unsafePerformIO $
@@ -282,6 +287,8 @@ bindMesh_get_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the smallest [AABB] enclosing this mesh in local space. Not affected by [code]custom_aabb[/code]. See also [method VisualInstance.get_transformed_aabb].
+--   				[b]Note:[/b] This is only implemented for [ArrayMesh] and [PrimitiveMesh].
 get_aabb :: (Mesh :< cls, Object :< cls) => cls -> IO Aabb
 get_aabb cls
   = withVariantArray []
@@ -312,6 +319,7 @@ get_faces cls
 
 {-# NOINLINE bindMesh_get_lightmap_size_hint #-}
 
+-- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
 bindMesh_get_lightmap_size_hint :: MethodBind
 bindMesh_get_lightmap_size_hint
   = unsafePerformIO $
@@ -321,6 +329,7 @@ bindMesh_get_lightmap_size_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
 get_lightmap_size_hint ::
                          (Mesh :< cls, Object :< cls) => cls -> IO Vector2
 get_lightmap_size_hint cls
@@ -333,7 +342,7 @@ get_lightmap_size_hint cls
 
 {-# NOINLINE bindMesh_get_surface_count #-}
 
--- | Returns the amount of surfaces that the [code]Mesh[/code] holds.
+-- | Returns the amount of surfaces that the [Mesh] holds.
 bindMesh_get_surface_count :: MethodBind
 bindMesh_get_surface_count
   = unsafePerformIO $
@@ -343,7 +352,7 @@ bindMesh_get_surface_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the amount of surfaces that the [code]Mesh[/code] holds.
+-- | Returns the amount of surfaces that the [Mesh] holds.
 get_surface_count :: (Mesh :< cls, Object :< cls) => cls -> IO Int
 get_surface_count cls
   = withVariantArray []
@@ -355,6 +364,7 @@ get_surface_count cls
 
 {-# NOINLINE bindMesh_set_lightmap_size_hint #-}
 
+-- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
 bindMesh_set_lightmap_size_hint :: MethodBind
 bindMesh_set_lightmap_size_hint
   = unsafePerformIO $
@@ -364,6 +374,7 @@ bindMesh_set_lightmap_size_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
 set_lightmap_size_hint ::
                          (Mesh :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_lightmap_size_hint cls arg1
@@ -446,6 +457,7 @@ surface_get_material cls arg1
 
 {-# NOINLINE bindMesh_surface_set_material #-}
 
+-- | Sets a [Material] for a given surface. Surface will be rendered using this material.
 bindMesh_surface_set_material :: MethodBind
 bindMesh_surface_set_material
   = unsafePerformIO $
@@ -455,6 +467,7 @@ bindMesh_surface_set_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a [Material] for a given surface. Surface will be rendered using this material.
 surface_set_material ::
                        (Mesh :< cls, Object :< cls) => cls -> Int -> Material -> IO ()
 surface_set_material cls arg1 arg2

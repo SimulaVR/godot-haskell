@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Navigation
        (Godot.Core.Navigation.get_closest_point,
         Godot.Core.Navigation.get_closest_point_normal,
@@ -142,7 +143,7 @@ get_simple_path cls arg1 arg2 arg3
 
 {-# NOINLINE bindNavigation_get_up_vector #-}
 
--- | Defines which direction is up. By default this is [code](0, 1, 0)[/code], which is the world up direction.
+-- | Defines which direction is up. By default, this is [code](0, 1, 0)[/code], which is the world's "up" direction.
 bindNavigation_get_up_vector :: MethodBind
 bindNavigation_get_up_vector
   = unsafePerformIO $
@@ -152,7 +153,7 @@ bindNavigation_get_up_vector
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines which direction is up. By default this is [code](0, 1, 0)[/code], which is the world up direction.
+-- | Defines which direction is up. By default, this is [code](0, 1, 0)[/code], which is the world's "up" direction.
 get_up_vector ::
                 (Navigation :< cls, Object :< cls) => cls -> IO Vector3
 get_up_vector cls
@@ -237,7 +238,7 @@ navmesh_set_transform cls arg1 arg2
 
 {-# NOINLINE bindNavigation_set_up_vector #-}
 
--- | Defines which direction is up. By default this is [code](0, 1, 0)[/code], which is the world up direction.
+-- | Defines which direction is up. By default, this is [code](0, 1, 0)[/code], which is the world's "up" direction.
 bindNavigation_set_up_vector :: MethodBind
 bindNavigation_set_up_vector
   = unsafePerformIO $
@@ -247,7 +248,7 @@ bindNavigation_set_up_vector
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines which direction is up. By default this is [code](0, 1, 0)[/code], which is the world up direction.
+-- | Defines which direction is up. By default, this is [code](0, 1, 0)[/code], which is the world's "up" direction.
 set_up_vector ::
                 (Navigation :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_up_vector cls arg1

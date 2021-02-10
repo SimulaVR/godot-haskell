@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WebSocketMultiplayerPeer
        (Godot.Core.WebSocketMultiplayerPeer.sig_peer_packet,
         Godot.Core.WebSocketMultiplayerPeer.get_peer,
@@ -15,6 +16,8 @@ import Godot.Api.Types
 sig_peer_packet ::
                 Godot.Internal.Dispatch.Signal WebSocketMultiplayerPeer
 sig_peer_packet = Godot.Internal.Dispatch.Signal "peer_packet"
+
+instance NodeSignal WebSocketMultiplayerPeer "peer_packet" '[Int]
 
 {-# NOINLINE bindWebSocketMultiplayerPeer_get_peer #-}
 

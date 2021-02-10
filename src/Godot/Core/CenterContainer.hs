@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CenterContainer
        (Godot.Core.CenterContainer.is_using_top_left,
         Godot.Core.CenterContainer.set_use_top_left)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindCenterContainer_is_using_top_left #-}
 
--- | If [code]true[/code], centers children relative to the [code]CenterContainer[/code]'s top left corner. Default value: [code]false[/code].
+-- | If [code]true[/code], centers children relative to the [CenterContainer]'s top left corner.
 bindCenterContainer_is_using_top_left :: MethodBind
 bindCenterContainer_is_using_top_left
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindCenterContainer_is_using_top_left
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], centers children relative to the [code]CenterContainer[/code]'s top left corner. Default value: [code]false[/code].
+-- | If [code]true[/code], centers children relative to the [CenterContainer]'s top left corner.
 is_using_top_left ::
                     (CenterContainer :< cls, Object :< cls) => cls -> IO Bool
 is_using_top_left cls
@@ -37,7 +38,7 @@ is_using_top_left cls
 
 {-# NOINLINE bindCenterContainer_set_use_top_left #-}
 
--- | If [code]true[/code], centers children relative to the [code]CenterContainer[/code]'s top left corner. Default value: [code]false[/code].
+-- | If [code]true[/code], centers children relative to the [CenterContainer]'s top left corner.
 bindCenterContainer_set_use_top_left :: MethodBind
 bindCenterContainer_set_use_top_left
   = unsafePerformIO $
@@ -47,7 +48,7 @@ bindCenterContainer_set_use_top_left
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], centers children relative to the [code]CenterContainer[/code]'s top left corner. Default value: [code]false[/code].
+-- | If [code]true[/code], centers children relative to the [CenterContainer]'s top left corner.
 set_use_top_left ::
                    (CenterContainer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_top_left cls arg1

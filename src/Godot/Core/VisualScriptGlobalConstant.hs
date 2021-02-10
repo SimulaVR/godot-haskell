@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptGlobalConstant
        (Godot.Core.VisualScriptGlobalConstant.get_global_constant,
         Godot.Core.VisualScriptGlobalConstant.set_global_constant)

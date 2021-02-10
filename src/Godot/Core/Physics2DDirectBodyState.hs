@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Physics2DDirectBodyState
        (Godot.Core.Physics2DDirectBodyState.add_central_force,
         Godot.Core.Physics2DDirectBodyState.add_force,
@@ -146,7 +147,7 @@ apply_central_impulse cls arg1
 
 {-# NOINLINE bindPhysics2DDirectBodyState_apply_impulse #-}
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The offset uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time-independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason, it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The offset uses the rotation of the global coordinate system, but is centered at the object's origin.
 bindPhysics2DDirectBodyState_apply_impulse :: MethodBind
 bindPhysics2DDirectBodyState_apply_impulse
   = unsafePerformIO $
@@ -156,7 +157,7 @@ bindPhysics2DDirectBodyState_apply_impulse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The offset uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time-independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason, it should only be used when simulating one-time impacts (use the "_force" functions otherwise). The offset uses the rotation of the global coordinate system, but is centered at the object's origin.
 apply_impulse ::
                 (Physics2DDirectBodyState :< cls, Object :< cls) =>
                 cls -> Vector2 -> Vector2 -> IO ()
@@ -415,7 +416,8 @@ get_contact_collider_velocity_at_position cls arg1
 
 {-# NOINLINE bindPhysics2DDirectBodyState_get_contact_count #-}
 
--- | Returns the number of contacts this body has with other bodies. Note that by default this returns 0 unless bodies are configured to log contacts. See [member RigidBody2D.contact_monitor].
+-- | Returns the number of contacts this body has with other bodies.
+--   				[b]Note:[/b] By default, this returns 0 unless bodies are configured to monitor contacts. See [member RigidBody2D.contact_monitor].
 bindPhysics2DDirectBodyState_get_contact_count :: MethodBind
 bindPhysics2DDirectBodyState_get_contact_count
   = unsafePerformIO $
@@ -425,7 +427,8 @@ bindPhysics2DDirectBodyState_get_contact_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of contacts this body has with other bodies. Note that by default this returns 0 unless bodies are configured to log contacts. See [member RigidBody2D.contact_monitor].
+-- | Returns the number of contacts this body has with other bodies.
+--   				[b]Note:[/b] By default, this returns 0 unless bodies are configured to monitor contacts. See [member RigidBody2D.contact_monitor].
 get_contact_count ::
                     (Physics2DDirectBodyState :< cls, Object :< cls) => cls -> IO Int
 get_contact_count cls

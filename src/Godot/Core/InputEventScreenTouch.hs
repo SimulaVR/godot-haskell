@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventScreenTouch
        (Godot.Core.InputEventScreenTouch.is_pressed,
         Godot.Core.InputEventScreenTouch.get_index,
@@ -41,7 +42,7 @@ is_pressed cls
 
 {-# NOINLINE bindInputEventScreenTouch_get_index #-}
 
--- | Touch index in the case of a multi-touch event. One index = one finger.
+-- | The touch index in the case of a multi-touch event. One index = one finger.
 bindInputEventScreenTouch_get_index :: MethodBind
 bindInputEventScreenTouch_get_index
   = unsafePerformIO $
@@ -51,7 +52,7 @@ bindInputEventScreenTouch_get_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Touch index in the case of a multi-touch event. One index = one finger.
+-- | The touch index in the case of a multi-touch event. One index = one finger.
 get_index ::
             (InputEventScreenTouch :< cls, Object :< cls) => cls -> IO Int
 get_index cls
@@ -65,7 +66,7 @@ get_index cls
 
 {-# NOINLINE bindInputEventScreenTouch_get_position #-}
 
--- | Touch position.
+-- | The touch position.
 bindInputEventScreenTouch_get_position :: MethodBind
 bindInputEventScreenTouch_get_position
   = unsafePerformIO $
@@ -75,7 +76,7 @@ bindInputEventScreenTouch_get_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Touch position.
+-- | The touch position.
 get_position ::
                (InputEventScreenTouch :< cls, Object :< cls) => cls -> IO Vector2
 get_position cls
@@ -89,7 +90,7 @@ get_position cls
 
 {-# NOINLINE bindInputEventScreenTouch_set_index #-}
 
--- | Touch index in the case of a multi-touch event. One index = one finger.
+-- | The touch index in the case of a multi-touch event. One index = one finger.
 bindInputEventScreenTouch_set_index :: MethodBind
 bindInputEventScreenTouch_set_index
   = unsafePerformIO $
@@ -99,7 +100,7 @@ bindInputEventScreenTouch_set_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Touch index in the case of a multi-touch event. One index = one finger.
+-- | The touch index in the case of a multi-touch event. One index = one finger.
 set_index ::
             (InputEventScreenTouch :< cls, Object :< cls) =>
             cls -> Int -> IO ()
@@ -114,7 +115,7 @@ set_index cls arg1
 
 {-# NOINLINE bindInputEventScreenTouch_set_position #-}
 
--- | Touch position.
+-- | The touch position.
 bindInputEventScreenTouch_set_position :: MethodBind
 bindInputEventScreenTouch_set_position
   = unsafePerformIO $
@@ -124,7 +125,7 @@ bindInputEventScreenTouch_set_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Touch position.
+-- | The touch position.
 set_position ::
                (InputEventScreenTouch :< cls, Object :< cls) =>
                cls -> Vector2 -> IO ()

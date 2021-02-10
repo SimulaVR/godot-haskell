@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptBuiltinFunc
        (Godot.Core.VisualScriptBuiltinFunc._MATH_RAD2DEG,
         Godot.Core.VisualScriptBuiltinFunc._MATH_TAN,

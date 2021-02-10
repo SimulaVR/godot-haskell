@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Light
        (Godot.Core.Light._PARAM_SHADOW_NORMAL_BIAS,
         Godot.Core.Light._PARAM_SHADOW_SPLIT_2_OFFSET,
@@ -117,7 +118,7 @@ get_bake_mode cls
 
 {-# NOINLINE bindLight_get_color #-}
 
--- | The light's color.
+-- | The light's color. An [i]overbright[/i] color can be used to achieve a result equivalent to increasing the light's [member light_energy].
 bindLight_get_color :: MethodBind
 bindLight_get_color
   = unsafePerformIO $
@@ -127,7 +128,7 @@ bindLight_get_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's color.
+-- | The light's color. An [i]overbright[/i] color can be used to achieve a result equivalent to increasing the light's [member light_energy].
 get_color :: (Light :< cls, Object :< cls) => cls -> IO Color
 get_color cls
   = withVariantArray []
@@ -158,7 +159,7 @@ get_cull_mask cls
 
 {-# NOINLINE bindLight_get_param #-}
 
--- | The light's strength multiplier.
+-- | Returns the value of the specified [enum Light.Param] parameter.
 bindLight_get_param :: MethodBind
 bindLight_get_param
   = unsafePerformIO $
@@ -168,7 +169,7 @@ bindLight_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's strength multiplier.
+-- | Returns the value of the specified [enum Light.Param] parameter.
 get_param ::
             (Light :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param cls arg1
@@ -202,6 +203,7 @@ get_shadow_color cls
 
 {-# NOINLINE bindLight_get_shadow_reverse_cull_face #-}
 
+-- | If [code]true[/code], reverses the backface culling of the mesh. This can be useful when you have a flat mesh that has a light behind it. If you need to cast a shadow on both sides of the mesh, set the mesh to use double-sided shadows with [constant GeometryInstance.SHADOW_CASTING_SETTING_DOUBLE_SIDED].
 bindLight_get_shadow_reverse_cull_face :: MethodBind
 bindLight_get_shadow_reverse_cull_face
   = unsafePerformIO $
@@ -211,6 +213,7 @@ bindLight_get_shadow_reverse_cull_face
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], reverses the backface culling of the mesh. This can be useful when you have a flat mesh that has a light behind it. If you need to cast a shadow on both sides of the mesh, set the mesh to use double-sided shadows with [constant GeometryInstance.SHADOW_CASTING_SETTING_DOUBLE_SIDED].
 get_shadow_reverse_cull_face ::
                                (Light :< cls, Object :< cls) => cls -> IO Bool
 get_shadow_reverse_cull_face cls
@@ -224,7 +227,7 @@ get_shadow_reverse_cull_face cls
 
 {-# NOINLINE bindLight_has_shadow #-}
 
--- | If [code]true[/code], the light will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light will cast shadows.
 bindLight_has_shadow :: MethodBind
 bindLight_has_shadow
   = unsafePerformIO $
@@ -234,7 +237,7 @@ bindLight_has_shadow
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the light will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light will cast shadows.
 has_shadow :: (Light :< cls, Object :< cls) => cls -> IO Bool
 has_shadow cls
   = withVariantArray []
@@ -244,7 +247,7 @@ has_shadow cls
 
 {-# NOINLINE bindLight_is_editor_only #-}
 
--- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime. Default value:[code]false[/code].
+-- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime.
 bindLight_is_editor_only :: MethodBind
 bindLight_is_editor_only
   = unsafePerformIO $
@@ -254,7 +257,7 @@ bindLight_is_editor_only
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime. Default value:[code]false[/code].
+-- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime.
 is_editor_only :: (Light :< cls, Object :< cls) => cls -> IO Bool
 is_editor_only cls
   = withVariantArray []
@@ -265,7 +268,7 @@ is_editor_only cls
 
 {-# NOINLINE bindLight_is_negative #-}
 
--- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows.
 bindLight_is_negative :: MethodBind
 bindLight_is_negative
   = unsafePerformIO $
@@ -275,7 +278,7 @@ bindLight_is_negative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows.
 is_negative :: (Light :< cls, Object :< cls) => cls -> IO Bool
 is_negative cls
   = withVariantArray []
@@ -308,7 +311,7 @@ set_bake_mode cls arg1
 
 {-# NOINLINE bindLight_set_color #-}
 
--- | The light's color.
+-- | The light's color. An [i]overbright[/i] color can be used to achieve a result equivalent to increasing the light's [member light_energy].
 bindLight_set_color :: MethodBind
 bindLight_set_color
   = unsafePerformIO $
@@ -318,7 +321,7 @@ bindLight_set_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's color.
+-- | The light's color. An [i]overbright[/i] color can be used to achieve a result equivalent to increasing the light's [member light_energy].
 set_color :: (Light :< cls, Object :< cls) => cls -> Color -> IO ()
 set_color cls arg1
   = withVariantArray [toVariant arg1]
@@ -350,7 +353,7 @@ set_cull_mask cls arg1
 
 {-# NOINLINE bindLight_set_editor_only #-}
 
--- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime. Default value:[code]false[/code].
+-- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime.
 bindLight_set_editor_only :: MethodBind
 bindLight_set_editor_only
   = unsafePerformIO $
@@ -360,7 +363,7 @@ bindLight_set_editor_only
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime. Default value:[code]false[/code].
+-- | If [code]true[/code], the light only appears in the editor and will not be visible at runtime.
 set_editor_only ::
                   (Light :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_editor_only cls arg1
@@ -373,7 +376,7 @@ set_editor_only cls arg1
 
 {-# NOINLINE bindLight_set_negative #-}
 
--- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows.
 bindLight_set_negative :: MethodBind
 bindLight_set_negative
   = unsafePerformIO $
@@ -383,7 +386,7 @@ bindLight_set_negative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light's effect is reversed, darkening areas and casting bright shadows.
 set_negative ::
                (Light :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_negative cls arg1
@@ -395,7 +398,7 @@ set_negative cls arg1
 
 {-# NOINLINE bindLight_set_param #-}
 
--- | The light's strength multiplier.
+-- | Sets the value of the specified [enum Light.Param] parameter.
 bindLight_set_param :: MethodBind
 bindLight_set_param
   = unsafePerformIO $
@@ -405,7 +408,7 @@ bindLight_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's strength multiplier.
+-- | Sets the value of the specified [enum Light.Param] parameter.
 set_param ::
             (Light :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_param cls arg1 arg2
@@ -416,7 +419,7 @@ set_param cls arg1 arg2
 
 {-# NOINLINE bindLight_set_shadow #-}
 
--- | If [code]true[/code], the light will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light will cast shadows.
 bindLight_set_shadow :: MethodBind
 bindLight_set_shadow
   = unsafePerformIO $
@@ -426,7 +429,7 @@ bindLight_set_shadow
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the light will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the light will cast shadows.
 set_shadow :: (Light :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shadow cls arg1
   = withVariantArray [toVariant arg1]
@@ -459,6 +462,7 @@ set_shadow_color cls arg1
 
 {-# NOINLINE bindLight_set_shadow_reverse_cull_face #-}
 
+-- | If [code]true[/code], reverses the backface culling of the mesh. This can be useful when you have a flat mesh that has a light behind it. If you need to cast a shadow on both sides of the mesh, set the mesh to use double-sided shadows with [constant GeometryInstance.SHADOW_CASTING_SETTING_DOUBLE_SIDED].
 bindLight_set_shadow_reverse_cull_face :: MethodBind
 bindLight_set_shadow_reverse_cull_face
   = unsafePerformIO $
@@ -468,6 +472,7 @@ bindLight_set_shadow_reverse_cull_face
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], reverses the backface culling of the mesh. This can be useful when you have a flat mesh that has a light behind it. If you need to cast a shadow on both sides of the mesh, set the mesh to use double-sided shadows with [constant GeometryInstance.SHADOW_CASTING_SETTING_DOUBLE_SIDED].
 set_shadow_reverse_cull_face ::
                                (Light :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shadow_reverse_cull_face cls arg1

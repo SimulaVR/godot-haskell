@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Container
        (Godot.Core.Container._NOTIFICATION_SORT_CHILDREN,
         Godot.Core.Container.sig_sort_children,
@@ -21,6 +22,8 @@ _NOTIFICATION_SORT_CHILDREN = 50
 -- | Emitted when sorting the children is needed.
 sig_sort_children :: Godot.Internal.Dispatch.Signal Container
 sig_sort_children = Godot.Internal.Dispatch.Signal "sort_children"
+
+instance NodeSignal Container "sort_children" '[]
 
 {-# NOINLINE bindContainer__child_minsize_changed #-}
 

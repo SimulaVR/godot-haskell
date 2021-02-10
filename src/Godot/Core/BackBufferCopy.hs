@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.BackBufferCopy
        (Godot.Core.BackBufferCopy._COPY_MODE_VIEWPORT,
         Godot.Core.BackBufferCopy._COPY_MODE_RECT,

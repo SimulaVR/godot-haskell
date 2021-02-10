@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.NinePatchRect
        (Godot.Core.NinePatchRect._AXIS_STRETCH_MODE_TILE_FIT,
         Godot.Core.NinePatchRect._AXIS_STRETCH_MODE_TILE,
@@ -34,10 +35,12 @@ _AXIS_STRETCH_MODE_TILE = 1
 _AXIS_STRETCH_MODE_STRETCH :: Int
 _AXIS_STRETCH_MODE_STRETCH = 0
 
--- | Fired when the node's texture changes.
+-- | Emitted when the node's texture changes.
 sig_texture_changed :: Godot.Internal.Dispatch.Signal NinePatchRect
 sig_texture_changed
   = Godot.Internal.Dispatch.Signal "texture_changed"
+
+instance NodeSignal NinePatchRect "texture_changed" '[]
 
 {-# NOINLINE bindNinePatchRect_get_h_axis_stretch_mode #-}
 
@@ -65,7 +68,7 @@ get_h_axis_stretch_mode cls
 
 {-# NOINLINE bindNinePatchRect_get_patch_margin #-}
 
--- | The height of the 9-slice's bottom row. A margin of 16 means the 9-slice's bottom corners and side will have a height of 16 pixels. You can set all 4 margin values individually to create panels with non-uniform borders.
+-- | Returns the size of the margin identified by the given [enum Margin] constant.
 bindNinePatchRect_get_patch_margin :: MethodBind
 bindNinePatchRect_get_patch_margin
   = unsafePerformIO $
@@ -75,7 +78,7 @@ bindNinePatchRect_get_patch_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The height of the 9-slice's bottom row. A margin of 16 means the 9-slice's bottom corners and side will have a height of 16 pixels. You can set all 4 margin values individually to create panels with non-uniform borders.
+-- | Returns the size of the margin identified by the given [enum Margin] constant.
 get_patch_margin ::
                    (NinePatchRect :< cls, Object :< cls) => cls -> Int -> IO Int
 get_patch_margin cls arg1
@@ -89,7 +92,7 @@ get_patch_margin cls arg1
 
 {-# NOINLINE bindNinePatchRect_get_region_rect #-}
 
--- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one.
+-- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one. If the rect is empty, NinePatchRect will use the whole texture.
 bindNinePatchRect_get_region_rect :: MethodBind
 bindNinePatchRect_get_region_rect
   = unsafePerformIO $
@@ -99,7 +102,7 @@ bindNinePatchRect_get_region_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one.
+-- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one. If the rect is empty, NinePatchRect will use the whole texture.
 get_region_rect ::
                   (NinePatchRect :< cls, Object :< cls) => cls -> IO Rect2
 get_region_rect cls
@@ -160,7 +163,7 @@ get_v_axis_stretch_mode cls
 
 {-# NOINLINE bindNinePatchRect_is_draw_center_enabled #-}
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders. Default value: [code]true[/code]
+-- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
 bindNinePatchRect_is_draw_center_enabled :: MethodBind
 bindNinePatchRect_is_draw_center_enabled
   = unsafePerformIO $
@@ -170,7 +173,7 @@ bindNinePatchRect_is_draw_center_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders. Default value: [code]true[/code]
+-- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
 is_draw_center_enabled ::
                          (NinePatchRect :< cls, Object :< cls) => cls -> IO Bool
 is_draw_center_enabled cls
@@ -184,7 +187,7 @@ is_draw_center_enabled cls
 
 {-# NOINLINE bindNinePatchRect_set_draw_center #-}
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders. Default value: [code]true[/code]
+-- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
 bindNinePatchRect_set_draw_center :: MethodBind
 bindNinePatchRect_set_draw_center
   = unsafePerformIO $
@@ -194,7 +197,7 @@ bindNinePatchRect_set_draw_center
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders. Default value: [code]true[/code]
+-- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
 set_draw_center ::
                   (NinePatchRect :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_center cls arg1
@@ -232,7 +235,7 @@ set_h_axis_stretch_mode cls arg1
 
 {-# NOINLINE bindNinePatchRect_set_patch_margin #-}
 
--- | The height of the 9-slice's bottom row. A margin of 16 means the 9-slice's bottom corners and side will have a height of 16 pixels. You can set all 4 margin values individually to create panels with non-uniform borders.
+-- | Sets the size of the margin identified by the given [enum Margin] constant to [code]value[/code] in pixels.
 bindNinePatchRect_set_patch_margin :: MethodBind
 bindNinePatchRect_set_patch_margin
   = unsafePerformIO $
@@ -242,7 +245,7 @@ bindNinePatchRect_set_patch_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The height of the 9-slice's bottom row. A margin of 16 means the 9-slice's bottom corners and side will have a height of 16 pixels. You can set all 4 margin values individually to create panels with non-uniform borders.
+-- | Sets the size of the margin identified by the given [enum Margin] constant to [code]value[/code] in pixels.
 set_patch_margin ::
                    (NinePatchRect :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_patch_margin cls arg1 arg2
@@ -256,7 +259,7 @@ set_patch_margin cls arg1 arg2
 
 {-# NOINLINE bindNinePatchRect_set_region_rect #-}
 
--- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one.
+-- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one. If the rect is empty, NinePatchRect will use the whole texture.
 bindNinePatchRect_set_region_rect :: MethodBind
 bindNinePatchRect_set_region_rect
   = unsafePerformIO $
@@ -266,7 +269,7 @@ bindNinePatchRect_set_region_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one.
+-- | Rectangular region of the texture to sample from. If you're working with an atlas, use this property to define the area the 9-slice should use. All other properties are relative to this one. If the rect is empty, NinePatchRect will use the whole texture.
 set_region_rect ::
                   (NinePatchRect :< cls, Object :< cls) => cls -> Rect2 -> IO ()
 set_region_rect cls arg1

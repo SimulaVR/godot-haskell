@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TextureButton
        (Godot.Core.TextureButton._STRETCH_TILE,
         Godot.Core.TextureButton._STRETCH_KEEP_ASPECT_COVERED,
@@ -103,7 +104,7 @@ get_disabled_texture cls
 
 {-# NOINLINE bindTextureButton_get_expand #-}
 
--- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node.
 bindTextureButton_get_expand :: MethodBind
 bindTextureButton_get_expand
   = unsafePerformIO $
@@ -113,7 +114,7 @@ bindTextureButton_get_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node.
 get_expand ::
              (TextureButton :< cls, Object :< cls) => cls -> IO Bool
 get_expand cls
@@ -198,7 +199,7 @@ get_normal_texture cls
 
 {-# NOINLINE bindTextureButton_get_pressed_texture #-}
 
--- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the enter key or if the player presses the [member BaseButton.shortcut] key.
+-- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the Enter key or if the player presses the [member BaseButton.shortcut] key.
 bindTextureButton_get_pressed_texture :: MethodBind
 bindTextureButton_get_pressed_texture
   = unsafePerformIO $
@@ -208,7 +209,7 @@ bindTextureButton_get_pressed_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the enter key or if the player presses the [member BaseButton.shortcut] key.
+-- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the Enter key or if the player presses the [member BaseButton.shortcut] key.
 get_pressed_texture ::
                       (TextureButton :< cls, Object :< cls) => cls -> IO Texture
 get_pressed_texture cls
@@ -222,7 +223,7 @@ get_pressed_texture cls
 
 {-# NOINLINE bindTextureButton_get_stretch_mode #-}
 
--- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [code]STRETCH_*[/code] constants. See the constants to learn more.
+-- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [enum StretchMode] constants. See the constants to learn more.
 bindTextureButton_get_stretch_mode :: MethodBind
 bindTextureButton_get_stretch_mode
   = unsafePerformIO $
@@ -232,7 +233,7 @@ bindTextureButton_get_stretch_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [code]STRETCH_*[/code] constants. See the constants to learn more.
+-- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [enum StretchMode] constants. See the constants to learn more.
 get_stretch_mode ::
                    (TextureButton :< cls, Object :< cls) => cls -> IO Int
 get_stretch_mode cls
@@ -294,7 +295,7 @@ set_disabled_texture cls arg1
 
 {-# NOINLINE bindTextureButton_set_expand #-}
 
--- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node.
 bindTextureButton_set_expand :: MethodBind
 bindTextureButton_set_expand
   = unsafePerformIO $
@@ -304,7 +305,7 @@ bindTextureButton_set_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture stretches to the edges of the node's bounding rectangle using the [member stretch_mode]. If [code]false[/code], the texture will not scale with the node.
 set_expand ::
              (TextureButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_expand cls arg1
@@ -389,7 +390,7 @@ set_normal_texture cls arg1
 
 {-# NOINLINE bindTextureButton_set_pressed_texture #-}
 
--- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the enter key or if the player presses the [member BaseButton.shortcut] key.
+-- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the Enter key or if the player presses the [member BaseButton.shortcut] key.
 bindTextureButton_set_pressed_texture :: MethodBind
 bindTextureButton_set_pressed_texture
   = unsafePerformIO $
@@ -399,7 +400,7 @@ bindTextureButton_set_pressed_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the enter key or if the player presses the [member BaseButton.shortcut] key.
+-- | Texture to display on mouse down over the node, if the node has keyboard focus and the player presses the Enter key or if the player presses the [member BaseButton.shortcut] key.
 set_pressed_texture ::
                       (TextureButton :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_pressed_texture cls arg1
@@ -413,7 +414,7 @@ set_pressed_texture cls arg1
 
 {-# NOINLINE bindTextureButton_set_stretch_mode #-}
 
--- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [code]STRETCH_*[/code] constants. See the constants to learn more.
+-- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [enum StretchMode] constants. See the constants to learn more.
 bindTextureButton_set_stretch_mode :: MethodBind
 bindTextureButton_set_stretch_mode
   = unsafePerformIO $
@@ -423,7 +424,7 @@ bindTextureButton_set_stretch_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [code]STRETCH_*[/code] constants. See the constants to learn more.
+-- | Controls the texture's behavior when you resize the node's bounding rectangle, [b]only if[/b] [member expand] is [code]true[/code]. Set it to one of the [enum StretchMode] constants. See the constants to learn more.
 set_stretch_mode ::
                    (TextureButton :< cls, Object :< cls) => cls -> Int -> IO ()
 set_stretch_mode cls arg1

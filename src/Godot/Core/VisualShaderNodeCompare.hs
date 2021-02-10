@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeCompare
        (Godot.Core.VisualShaderNodeCompare._FUNC_GREATER_THAN_EQUAL,
         Godot.Core.VisualShaderNodeCompare._FUNC_GREATER_THAN,
@@ -65,6 +66,7 @@ _CTYPE_BOOLEAN = 2
 
 {-# NOINLINE bindVisualShaderNodeCompare_get_comparison_type #-}
 
+-- | The type to be used in the comparison. See [enum ComparisonType] for options.
 bindVisualShaderNodeCompare_get_comparison_type :: MethodBind
 bindVisualShaderNodeCompare_get_comparison_type
   = unsafePerformIO $
@@ -74,6 +76,7 @@ bindVisualShaderNodeCompare_get_comparison_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The type to be used in the comparison. See [enum ComparisonType] for options.
 get_comparison_type ::
                       (VisualShaderNodeCompare :< cls, Object :< cls) => cls -> IO Int
 get_comparison_type cls
@@ -88,6 +91,7 @@ get_comparison_type cls
 
 {-# NOINLINE bindVisualShaderNodeCompare_get_condition #-}
 
+-- | Extra condition which is applied if [member type] is set to [constant CTYPE_VECTOR].
 bindVisualShaderNodeCompare_get_condition :: MethodBind
 bindVisualShaderNodeCompare_get_condition
   = unsafePerformIO $
@@ -97,6 +101,7 @@ bindVisualShaderNodeCompare_get_condition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Extra condition which is applied if [member type] is set to [constant CTYPE_VECTOR].
 get_condition ::
                 (VisualShaderNodeCompare :< cls, Object :< cls) => cls -> IO Int
 get_condition cls
@@ -110,6 +115,7 @@ get_condition cls
 
 {-# NOINLINE bindVisualShaderNodeCompare_get_function #-}
 
+-- | A comparison function. See [enum Function] for options.
 bindVisualShaderNodeCompare_get_function :: MethodBind
 bindVisualShaderNodeCompare_get_function
   = unsafePerformIO $
@@ -119,6 +125,7 @@ bindVisualShaderNodeCompare_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A comparison function. See [enum Function] for options.
 get_function ::
                (VisualShaderNodeCompare :< cls, Object :< cls) => cls -> IO Int
 get_function cls
@@ -132,6 +139,7 @@ get_function cls
 
 {-# NOINLINE bindVisualShaderNodeCompare_set_comparison_type #-}
 
+-- | The type to be used in the comparison. See [enum ComparisonType] for options.
 bindVisualShaderNodeCompare_set_comparison_type :: MethodBind
 bindVisualShaderNodeCompare_set_comparison_type
   = unsafePerformIO $
@@ -141,6 +149,7 @@ bindVisualShaderNodeCompare_set_comparison_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The type to be used in the comparison. See [enum ComparisonType] for options.
 set_comparison_type ::
                       (VisualShaderNodeCompare :< cls, Object :< cls) =>
                       cls -> Int -> IO ()
@@ -156,6 +165,7 @@ set_comparison_type cls arg1
 
 {-# NOINLINE bindVisualShaderNodeCompare_set_condition #-}
 
+-- | Extra condition which is applied if [member type] is set to [constant CTYPE_VECTOR].
 bindVisualShaderNodeCompare_set_condition :: MethodBind
 bindVisualShaderNodeCompare_set_condition
   = unsafePerformIO $
@@ -165,6 +175,7 @@ bindVisualShaderNodeCompare_set_condition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Extra condition which is applied if [member type] is set to [constant CTYPE_VECTOR].
 set_condition ::
                 (VisualShaderNodeCompare :< cls, Object :< cls) =>
                 cls -> Int -> IO ()
@@ -179,6 +190,7 @@ set_condition cls arg1
 
 {-# NOINLINE bindVisualShaderNodeCompare_set_function #-}
 
+-- | A comparison function. See [enum Function] for options.
 bindVisualShaderNodeCompare_set_function :: MethodBind
 bindVisualShaderNodeCompare_set_function
   = unsafePerformIO $
@@ -188,6 +200,7 @@ bindVisualShaderNodeCompare_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A comparison function. See [enum Function] for options.
 set_function ::
                (VisualShaderNodeCompare :< cls, Object :< cls) =>
                cls -> Int -> IO ()

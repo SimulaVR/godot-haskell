@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeVectorDerivativeFunc
        (Godot.Core.VisualShaderNodeVectorDerivativeFunc._FUNC_SUM,
         Godot.Core.VisualShaderNodeVectorDerivativeFunc._FUNC_Y,
@@ -26,6 +27,7 @@ _FUNC_X = 1
 {-# NOINLINE bindVisualShaderNodeVectorDerivativeFunc_get_function
              #-}
 
+-- | A derivative type. See [enum Function] for options.
 bindVisualShaderNodeVectorDerivativeFunc_get_function :: MethodBind
 bindVisualShaderNodeVectorDerivativeFunc_get_function
   = unsafePerformIO $
@@ -35,6 +37,7 @@ bindVisualShaderNodeVectorDerivativeFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A derivative type. See [enum Function] for options.
 get_function ::
                (VisualShaderNodeVectorDerivativeFunc :< cls, Object :< cls) =>
                cls -> IO Int
@@ -51,6 +54,7 @@ get_function cls
 {-# NOINLINE bindVisualShaderNodeVectorDerivativeFunc_set_function
              #-}
 
+-- | A derivative type. See [enum Function] for options.
 bindVisualShaderNodeVectorDerivativeFunc_set_function :: MethodBind
 bindVisualShaderNodeVectorDerivativeFunc_set_function
   = unsafePerformIO $
@@ -60,6 +64,7 @@ bindVisualShaderNodeVectorDerivativeFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A derivative type. See [enum Function] for options.
 set_function ::
                (VisualShaderNodeVectorDerivativeFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeStateMachinePlayback
        (Godot.Core.AnimationNodeStateMachinePlayback.get_current_node,
         Godot.Core.AnimationNodeStateMachinePlayback.get_travel_path,
@@ -46,6 +47,7 @@ get_current_node cls
 {-# NOINLINE bindAnimationNodeStateMachinePlayback_get_travel_path
              #-}
 
+-- | Returns the current travel path as computed internally by the A* algorithm.
 bindAnimationNodeStateMachinePlayback_get_travel_path :: MethodBind
 bindAnimationNodeStateMachinePlayback_get_travel_path
   = unsafePerformIO $
@@ -55,6 +57,7 @@ bindAnimationNodeStateMachinePlayback_get_travel_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the current travel path as computed internally by the A* algorithm.
 get_travel_path ::
                   (AnimationNodeStateMachinePlayback :< cls, Object :< cls) =>
                   cls -> IO PoolStringArray

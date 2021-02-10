@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WebRTCDataChannel
        (Godot.Core.WebRTCDataChannel._STATE_CLOSED,
         Godot.Core.WebRTCDataChannel._WRITE_MODE_TEXT,

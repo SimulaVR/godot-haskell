@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Camera
        (Godot.Core.Camera._PROJECTION_FRUSTUM,
         Godot.Core.Camera._PROJECTION_ORTHOGONAL,
@@ -75,7 +76,7 @@ _PROJECTION_PERSPECTIVE = 0
 
 {-# NOINLINE bindCamera_clear_current #-}
 
--- | If this is the current Camera, remove it from being current. If [code]enable_next[/code] is [code]true[/code], request to make the next Camera current, if any.
+-- | If this is the current camera, remove it from being current. If [code]enable_next[/code] is [code]true[/code], request to make the next camera current, if any.
 bindCamera_clear_current :: MethodBind
 bindCamera_clear_current
   = unsafePerformIO $
@@ -85,7 +86,7 @@ bindCamera_clear_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If this is the current Camera, remove it from being current. If [code]enable_next[/code] is [code]true[/code], request to make the next Camera current, if any.
+-- | If this is the current camera, remove it from being current. If [code]enable_next[/code] is [code]true[/code], request to make the next camera current, if any.
 clear_current ::
                 (Camera :< cls, Object :< cls) => cls -> Bool -> IO ()
 clear_current cls arg1
@@ -97,6 +98,7 @@ clear_current cls arg1
 
 {-# NOINLINE bindCamera_get_camera_rid #-}
 
+-- | Returns the camera's RID from the [VisualServer].
 bindCamera_get_camera_rid :: MethodBind
 bindCamera_get_camera_rid
   = unsafePerformIO $
@@ -106,6 +108,7 @@ bindCamera_get_camera_rid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the camera's RID from the [VisualServer].
 get_camera_rid :: (Camera :< cls, Object :< cls) => cls -> IO Rid
 get_camera_rid cls
   = withVariantArray []
@@ -117,7 +120,7 @@ get_camera_rid cls
 
 {-# NOINLINE bindCamera_get_camera_transform #-}
 
--- | Gets the camera transform. Subclassed cameras (such as CharacterCamera) may provide different transforms than the [Node] transform.
+-- | Gets the camera transform. Subclassed cameras such as [InterpolatedCamera] may provide different transforms than the [Node] transform.
 bindCamera_get_camera_transform :: MethodBind
 bindCamera_get_camera_transform
   = unsafePerformIO $
@@ -127,7 +130,7 @@ bindCamera_get_camera_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the camera transform. Subclassed cameras (such as CharacterCamera) may provide different transforms than the [Node] transform.
+-- | Gets the camera transform. Subclassed cameras such as [InterpolatedCamera] may provide different transforms than the [Node] transform.
 get_camera_transform ::
                        (Camera :< cls, Object :< cls) => cls -> IO Transform
 get_camera_transform cls
@@ -161,6 +164,7 @@ get_cull_mask cls
 
 {-# NOINLINE bindCamera_get_cull_mask_bit #-}
 
+-- | Returns [code]true[/code] if the given [code]layer[/code] in the [member cull_mask] is enabled, [code]false[/code] otherwise.
 bindCamera_get_cull_mask_bit :: MethodBind
 bindCamera_get_cull_mask_bit
   = unsafePerformIO $
@@ -170,6 +174,7 @@ bindCamera_get_cull_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the given [code]layer[/code] in the [member cull_mask] is enabled, [code]false[/code] otherwise.
 get_cull_mask_bit ::
                     (Camera :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_cull_mask_bit cls arg1
@@ -182,7 +187,7 @@ get_cull_mask_bit cls arg1
 
 {-# NOINLINE bindCamera_get_doppler_tracking #-}
 
--- | If not [constant DOPPLER_TRACKING_DISABLED] this Camera will simulate the Doppler effect for objects changed in particular [code]_process[/code] methods. Default value: [constant DOPPLER_TRACKING_DISABLED].
+-- | If not [constant DOPPLER_TRACKING_DISABLED], this camera will simulate the [url=https://en.wikipedia.org/wiki/Doppler_effect]Doppler effect[/url] for objects changed in particular [code]_process[/code] methods. See [enum DopplerTracking] for possible values.
 bindCamera_get_doppler_tracking :: MethodBind
 bindCamera_get_doppler_tracking
   = unsafePerformIO $
@@ -192,7 +197,7 @@ bindCamera_get_doppler_tracking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If not [constant DOPPLER_TRACKING_DISABLED] this Camera will simulate the Doppler effect for objects changed in particular [code]_process[/code] methods. Default value: [constant DOPPLER_TRACKING_DISABLED].
+-- | If not [constant DOPPLER_TRACKING_DISABLED], this camera will simulate the [url=https://en.wikipedia.org/wiki/Doppler_effect]Doppler effect[/url] for objects changed in particular [code]_process[/code] methods. See [enum DopplerTracking] for possible values.
 get_doppler_tracking ::
                        (Camera :< cls, Object :< cls) => cls -> IO Int
 get_doppler_tracking cls
@@ -205,7 +210,7 @@ get_doppler_tracking cls
 
 {-# NOINLINE bindCamera_get_environment #-}
 
--- | The [Environment] to use for this Camera.
+-- | The [Environment] to use for this camera.
 bindCamera_get_environment :: MethodBind
 bindCamera_get_environment
   = unsafePerformIO $
@@ -215,7 +220,7 @@ bindCamera_get_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Environment] to use for this Camera.
+-- | The [Environment] to use for this camera.
 get_environment ::
                   (Camera :< cls, Object :< cls) => cls -> IO Environment
 get_environment cls
@@ -248,6 +253,7 @@ get_fov cls
 
 {-# NOINLINE bindCamera_get_frustum #-}
 
+-- | Returns the camera's frustum planes in world-space units as an array of [Plane]s in the following order: near, far, left, top, right, bottom. Not to be confused with [member frustum_offset].
 bindCamera_get_frustum :: MethodBind
 bindCamera_get_frustum
   = unsafePerformIO $
@@ -257,6 +263,7 @@ bindCamera_get_frustum
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the camera's frustum planes in world-space units as an array of [Plane]s in the following order: near, far, left, top, right, bottom. Not to be confused with [member frustum_offset].
 get_frustum :: (Camera :< cls, Object :< cls) => cls -> IO Array
 get_frustum cls
   = withVariantArray []
@@ -267,6 +274,7 @@ get_frustum cls
 
 {-# NOINLINE bindCamera_get_frustum_offset #-}
 
+-- | The camera's frustum offset. This can be changed from the default to create "tilted frustum" effects such as [url=https://zdoom.org/wiki/Y-shearing]Y-shearing[/url].
 bindCamera_get_frustum_offset :: MethodBind
 bindCamera_get_frustum_offset
   = unsafePerformIO $
@@ -276,6 +284,7 @@ bindCamera_get_frustum_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The camera's frustum offset. This can be changed from the default to create "tilted frustum" effects such as [url=https://zdoom.org/wiki/Y-shearing]Y-shearing[/url].
 get_frustum_offset ::
                      (Camera :< cls, Object :< cls) => cls -> IO Vector2
 get_frustum_offset cls
@@ -288,7 +297,7 @@ get_frustum_offset cls
 
 {-# NOINLINE bindCamera_get_h_offset #-}
 
--- | The horizontal (X) offset of the Camera viewport.
+-- | The horizontal (X) offset of the camera viewport.
 bindCamera_get_h_offset :: MethodBind
 bindCamera_get_h_offset
   = unsafePerformIO $
@@ -298,7 +307,7 @@ bindCamera_get_h_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The horizontal (X) offset of the Camera viewport.
+-- | The horizontal (X) offset of the camera viewport.
 get_h_offset :: (Camera :< cls, Object :< cls) => cls -> IO Float
 get_h_offset cls
   = withVariantArray []
@@ -332,7 +341,7 @@ get_keep_aspect_mode cls
 
 {-# NOINLINE bindCamera_get_projection #-}
 
--- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' z-distance from the camera's local space scales their perceived size.
+-- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' Z distance from the camera's local space scales their perceived size.
 bindCamera_get_projection :: MethodBind
 bindCamera_get_projection
   = unsafePerformIO $
@@ -342,7 +351,7 @@ bindCamera_get_projection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' z-distance from the camera's local space scales their perceived size.
+-- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' Z distance from the camera's local space scales their perceived size.
 get_projection :: (Camera :< cls, Object :< cls) => cls -> IO Int
 get_projection cls
   = withVariantArray []
@@ -374,7 +383,7 @@ get_size cls
 
 {-# NOINLINE bindCamera_get_v_offset #-}
 
--- | The vertical (Y) offset of the Camera viewport.
+-- | The vertical (Y) offset of the camera viewport.
 bindCamera_get_v_offset :: MethodBind
 bindCamera_get_v_offset
   = unsafePerformIO $
@@ -384,7 +393,7 @@ bindCamera_get_v_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The vertical (Y) offset of the Camera viewport.
+-- | The vertical (Y) offset of the camera viewport.
 get_v_offset :: (Camera :< cls, Object :< cls) => cls -> IO Float
 get_v_offset cls
   = withVariantArray []
@@ -395,7 +404,7 @@ get_v_offset cls
 
 {-# NOINLINE bindCamera_get_zfar #-}
 
--- | The distance to the far culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the far culling boundary for this camera relative to its local Z axis.
 bindCamera_get_zfar :: MethodBind
 bindCamera_get_zfar
   = unsafePerformIO $
@@ -405,7 +414,7 @@ bindCamera_get_zfar
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The distance to the far culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the far culling boundary for this camera relative to its local Z axis.
 get_zfar :: (Camera :< cls, Object :< cls) => cls -> IO Float
 get_zfar cls
   = withVariantArray []
@@ -415,7 +424,7 @@ get_zfar cls
 
 {-# NOINLINE bindCamera_get_znear #-}
 
--- | The distance to the near culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the near culling boundary for this camera relative to its local Z axis.
 bindCamera_get_znear :: MethodBind
 bindCamera_get_znear
   = unsafePerformIO $
@@ -425,7 +434,7 @@ bindCamera_get_znear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The distance to the near culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the near culling boundary for this camera relative to its local Z axis.
 get_znear :: (Camera :< cls, Object :< cls) => cls -> IO Float
 get_znear cls
   = withVariantArray []
@@ -435,7 +444,7 @@ get_znear cls
 
 {-# NOINLINE bindCamera_is_current #-}
 
--- | If [code]true[/code], the ancestor [Viewport] is currently using this Camera. Default value: [code]false[/code].
+-- | If [code]true[/code], the ancestor [Viewport] is currently using this camera.
 bindCamera_is_current :: MethodBind
 bindCamera_is_current
   = unsafePerformIO $
@@ -445,7 +454,7 @@ bindCamera_is_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the ancestor [Viewport] is currently using this Camera. Default value: [code]false[/code].
+-- | If [code]true[/code], the ancestor [Viewport] is currently using this camera.
 is_current :: (Camera :< cls, Object :< cls) => cls -> IO Bool
 is_current cls
   = withVariantArray []
@@ -456,7 +465,8 @@ is_current cls
 
 {-# NOINLINE bindCamera_is_position_behind #-}
 
--- | Returns [code]true[/code] if the given position is behind the Camera. Note that a position which returns [code]false[/code] may still be outside the Camera's field of view.
+-- | Returns [code]true[/code] if the given position is behind the camera.
+--   				[b]Note:[/b] A position which returns [code]false[/code] may still be outside the camera's field of view.
 bindCamera_is_position_behind :: MethodBind
 bindCamera_is_position_behind
   = unsafePerformIO $
@@ -466,7 +476,8 @@ bindCamera_is_position_behind
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given position is behind the Camera. Note that a position which returns [code]false[/code] may still be outside the Camera's field of view.
+-- | Returns [code]true[/code] if the given position is behind the camera.
+--   				[b]Note:[/b] A position which returns [code]false[/code] may still be outside the camera's field of view.
 is_position_behind ::
                      (Camera :< cls, Object :< cls) => cls -> Vector3 -> IO Bool
 is_position_behind cls arg1
@@ -479,7 +490,7 @@ is_position_behind cls arg1
 
 {-# NOINLINE bindCamera_make_current #-}
 
--- | Makes this camera the current Camera for the [Viewport] (see class description). If the Camera Node is outside the scene tree, it will attempt to become current once it's added.
+-- | Makes this camera the current camera for the [Viewport] (see class description). If the camera node is outside the scene tree, it will attempt to become current once it's added.
 bindCamera_make_current :: MethodBind
 bindCamera_make_current
   = unsafePerformIO $
@@ -489,7 +500,7 @@ bindCamera_make_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Makes this camera the current Camera for the [Viewport] (see class description). If the Camera Node is outside the scene tree, it will attempt to become current once it's added.
+-- | Makes this camera the current camera for the [Viewport] (see class description). If the camera node is outside the scene tree, it will attempt to become current once it's added.
 make_current :: (Camera :< cls, Object :< cls) => cls -> IO ()
 make_current cls
   = withVariantArray []
@@ -524,7 +535,7 @@ project_local_ray_normal cls arg1
 
 {-# NOINLINE bindCamera_project_position #-}
 
--- | Returns the 3D point in worldspace that maps to the given 2D coordinate in the [Viewport] rectangle.
+-- | Returns the 3D point in worldspace that maps to the given 2D coordinate in the [Viewport] rectangle on a plane that is the given [code]z_depth[/code] distance into the scene away from the camera.
 bindCamera_project_position :: MethodBind
 bindCamera_project_position
   = unsafePerformIO $
@@ -534,7 +545,7 @@ bindCamera_project_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the 3D point in worldspace that maps to the given 2D coordinate in the [Viewport] rectangle.
+-- | Returns the 3D point in worldspace that maps to the given 2D coordinate in the [Viewport] rectangle on a plane that is the given [code]z_depth[/code] distance into the scene away from the camera.
 project_position ::
                    (Camera :< cls, Object :< cls) =>
                    cls -> Vector2 -> Float -> IO Vector3
@@ -616,6 +627,7 @@ set_cull_mask cls arg1
 
 {-# NOINLINE bindCamera_set_cull_mask_bit #-}
 
+-- | Enables or disables the given [code]layer[/code] in the [member cull_mask].
 bindCamera_set_cull_mask_bit :: MethodBind
 bindCamera_set_cull_mask_bit
   = unsafePerformIO $
@@ -625,6 +637,7 @@ bindCamera_set_cull_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Enables or disables the given [code]layer[/code] in the [member cull_mask].
 set_cull_mask_bit ::
                     (Camera :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_cull_mask_bit cls arg1 arg2
@@ -637,7 +650,7 @@ set_cull_mask_bit cls arg1 arg2
 
 {-# NOINLINE bindCamera_set_current #-}
 
--- | If [code]true[/code], the ancestor [Viewport] is currently using this Camera. Default value: [code]false[/code].
+-- | If [code]true[/code], the ancestor [Viewport] is currently using this camera.
 bindCamera_set_current :: MethodBind
 bindCamera_set_current
   = unsafePerformIO $
@@ -647,7 +660,7 @@ bindCamera_set_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the ancestor [Viewport] is currently using this Camera. Default value: [code]false[/code].
+-- | If [code]true[/code], the ancestor [Viewport] is currently using this camera.
 set_current ::
               (Camera :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_current cls arg1
@@ -659,7 +672,7 @@ set_current cls arg1
 
 {-# NOINLINE bindCamera_set_doppler_tracking #-}
 
--- | If not [constant DOPPLER_TRACKING_DISABLED] this Camera will simulate the Doppler effect for objects changed in particular [code]_process[/code] methods. Default value: [constant DOPPLER_TRACKING_DISABLED].
+-- | If not [constant DOPPLER_TRACKING_DISABLED], this camera will simulate the [url=https://en.wikipedia.org/wiki/Doppler_effect]Doppler effect[/url] for objects changed in particular [code]_process[/code] methods. See [enum DopplerTracking] for possible values.
 bindCamera_set_doppler_tracking :: MethodBind
 bindCamera_set_doppler_tracking
   = unsafePerformIO $
@@ -669,7 +682,7 @@ bindCamera_set_doppler_tracking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If not [constant DOPPLER_TRACKING_DISABLED] this Camera will simulate the Doppler effect for objects changed in particular [code]_process[/code] methods. Default value: [constant DOPPLER_TRACKING_DISABLED].
+-- | If not [constant DOPPLER_TRACKING_DISABLED], this camera will simulate the [url=https://en.wikipedia.org/wiki/Doppler_effect]Doppler effect[/url] for objects changed in particular [code]_process[/code] methods. See [enum DopplerTracking] for possible values.
 set_doppler_tracking ::
                        (Camera :< cls, Object :< cls) => cls -> Int -> IO ()
 set_doppler_tracking cls arg1
@@ -682,7 +695,7 @@ set_doppler_tracking cls arg1
 
 {-# NOINLINE bindCamera_set_environment #-}
 
--- | The [Environment] to use for this Camera.
+-- | The [Environment] to use for this camera.
 bindCamera_set_environment :: MethodBind
 bindCamera_set_environment
   = unsafePerformIO $
@@ -692,7 +705,7 @@ bindCamera_set_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Environment] to use for this Camera.
+-- | The [Environment] to use for this camera.
 set_environment ::
                   (Camera :< cls, Object :< cls) => cls -> Environment -> IO ()
 set_environment cls arg1
@@ -725,6 +738,7 @@ set_fov cls arg1
 
 {-# NOINLINE bindCamera_set_frustum #-}
 
+-- | Sets the camera projection to frustum mode (see [constant PROJECTION_FRUSTUM]), by specifying a [code]size[/code], an [code]offset[/code], and the [code]z_near[/code] and [code]z_far[/code] clip planes in world-space units.
 bindCamera_set_frustum :: MethodBind
 bindCamera_set_frustum
   = unsafePerformIO $
@@ -734,6 +748,7 @@ bindCamera_set_frustum
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the camera projection to frustum mode (see [constant PROJECTION_FRUSTUM]), by specifying a [code]size[/code], an [code]offset[/code], and the [code]z_near[/code] and [code]z_far[/code] clip planes in world-space units.
 set_frustum ::
               (Camera :< cls, Object :< cls) =>
               cls -> Float -> Vector2 -> Float -> Float -> IO ()
@@ -747,6 +762,7 @@ set_frustum cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindCamera_set_frustum_offset #-}
 
+-- | The camera's frustum offset. This can be changed from the default to create "tilted frustum" effects such as [url=https://zdoom.org/wiki/Y-shearing]Y-shearing[/url].
 bindCamera_set_frustum_offset :: MethodBind
 bindCamera_set_frustum_offset
   = unsafePerformIO $
@@ -756,6 +772,7 @@ bindCamera_set_frustum_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The camera's frustum offset. This can be changed from the default to create "tilted frustum" effects such as [url=https://zdoom.org/wiki/Y-shearing]Y-shearing[/url].
 set_frustum_offset ::
                      (Camera :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_frustum_offset cls arg1
@@ -768,7 +785,7 @@ set_frustum_offset cls arg1
 
 {-# NOINLINE bindCamera_set_h_offset #-}
 
--- | The horizontal (X) offset of the Camera viewport.
+-- | The horizontal (X) offset of the camera viewport.
 bindCamera_set_h_offset :: MethodBind
 bindCamera_set_h_offset
   = unsafePerformIO $
@@ -778,7 +795,7 @@ bindCamera_set_h_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The horizontal (X) offset of the Camera viewport.
+-- | The horizontal (X) offset of the camera viewport.
 set_h_offset ::
                (Camera :< cls, Object :< cls) => cls -> Float -> IO ()
 set_h_offset cls arg1
@@ -813,7 +830,7 @@ set_keep_aspect_mode cls arg1
 
 {-# NOINLINE bindCamera_set_orthogonal #-}
 
--- | Sets the camera projection to orthogonal mode, by specifying a width and the [i]near[/i] and [i]far[/i] clip planes in worldspace units. (As a hint, 2D games often use this projection, with values specified in pixels)
+-- | Sets the camera projection to orthogonal mode (see [constant PROJECTION_ORTHOGONAL]), by specifying a [code]size[/code], and the [code]z_near[/code] and [code]z_far[/code] clip planes in world-space units. (As a hint, 2D games often use this projection, with values specified in pixels.)
 bindCamera_set_orthogonal :: MethodBind
 bindCamera_set_orthogonal
   = unsafePerformIO $
@@ -823,7 +840,7 @@ bindCamera_set_orthogonal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the camera projection to orthogonal mode, by specifying a width and the [i]near[/i] and [i]far[/i] clip planes in worldspace units. (As a hint, 2D games often use this projection, with values specified in pixels)
+-- | Sets the camera projection to orthogonal mode (see [constant PROJECTION_ORTHOGONAL]), by specifying a [code]size[/code], and the [code]z_near[/code] and [code]z_far[/code] clip planes in world-space units. (As a hint, 2D games often use this projection, with values specified in pixels.)
 set_orthogonal ::
                  (Camera :< cls, Object :< cls) =>
                  cls -> Float -> Float -> Float -> IO ()
@@ -837,7 +854,7 @@ set_orthogonal cls arg1 arg2 arg3
 
 {-# NOINLINE bindCamera_set_perspective #-}
 
--- | Sets the camera projection to perspective mode, by specifying a [i]FOV[/i] Y angle in degrees (FOV means Field of View), and the [i]near[/i] and [i]far[/i] clip planes in worldspace units.
+-- | Sets the camera projection to perspective mode (see [constant PROJECTION_PERSPECTIVE]), by specifying a [code]fov[/code] (field of view) angle in degrees, and the [code]z_near[/code] and [code]z_far[/code] clip planes in world-space units.
 bindCamera_set_perspective :: MethodBind
 bindCamera_set_perspective
   = unsafePerformIO $
@@ -847,7 +864,7 @@ bindCamera_set_perspective
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the camera projection to perspective mode, by specifying a [i]FOV[/i] Y angle in degrees (FOV means Field of View), and the [i]near[/i] and [i]far[/i] clip planes in worldspace units.
+-- | Sets the camera projection to perspective mode (see [constant PROJECTION_PERSPECTIVE]), by specifying a [code]fov[/code] (field of view) angle in degrees, and the [code]z_near[/code] and [code]z_far[/code] clip planes in world-space units.
 set_perspective ::
                   (Camera :< cls, Object :< cls) =>
                   cls -> Float -> Float -> Float -> IO ()
@@ -861,7 +878,7 @@ set_perspective cls arg1 arg2 arg3
 
 {-# NOINLINE bindCamera_set_projection #-}
 
--- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' z-distance from the camera's local space scales their perceived size.
+-- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' Z distance from the camera's local space scales their perceived size.
 bindCamera_set_projection :: MethodBind
 bindCamera_set_projection
   = unsafePerformIO $
@@ -871,7 +888,7 @@ bindCamera_set_projection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' z-distance from the camera's local space scales their perceived size.
+-- | The camera's projection mode. In [constant PROJECTION_PERSPECTIVE] mode, objects' Z distance from the camera's local space scales their perceived size.
 set_projection ::
                  (Camera :< cls, Object :< cls) => cls -> Int -> IO ()
 set_projection cls arg1
@@ -904,7 +921,7 @@ set_size cls arg1
 
 {-# NOINLINE bindCamera_set_v_offset #-}
 
--- | The vertical (Y) offset of the Camera viewport.
+-- | The vertical (Y) offset of the camera viewport.
 bindCamera_set_v_offset :: MethodBind
 bindCamera_set_v_offset
   = unsafePerformIO $
@@ -914,7 +931,7 @@ bindCamera_set_v_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The vertical (Y) offset of the Camera viewport.
+-- | The vertical (Y) offset of the camera viewport.
 set_v_offset ::
                (Camera :< cls, Object :< cls) => cls -> Float -> IO ()
 set_v_offset cls arg1
@@ -926,7 +943,7 @@ set_v_offset cls arg1
 
 {-# NOINLINE bindCamera_set_zfar #-}
 
--- | The distance to the far culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the far culling boundary for this camera relative to its local Z axis.
 bindCamera_set_zfar :: MethodBind
 bindCamera_set_zfar
   = unsafePerformIO $
@@ -936,7 +953,7 @@ bindCamera_set_zfar
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The distance to the far culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the far culling boundary for this camera relative to its local Z axis.
 set_zfar :: (Camera :< cls, Object :< cls) => cls -> Float -> IO ()
 set_zfar cls arg1
   = withVariantArray [toVariant arg1]
@@ -946,7 +963,7 @@ set_zfar cls arg1
 
 {-# NOINLINE bindCamera_set_znear #-}
 
--- | The distance to the near culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the near culling boundary for this camera relative to its local Z axis.
 bindCamera_set_znear :: MethodBind
 bindCamera_set_znear
   = unsafePerformIO $
@@ -956,7 +973,7 @@ bindCamera_set_znear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The distance to the near culling boundary for this Camera relative to its local z-axis.
+-- | The distance to the near culling boundary for this camera relative to its local Z axis.
 set_znear ::
             (Camera :< cls, Object :< cls) => cls -> Float -> IO ()
 set_znear cls arg1

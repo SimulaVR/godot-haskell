@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TextureProgress
        (Godot.Core.TextureProgress._FILL_BOTTOM_TO_TOP,
         Godot.Core.TextureProgress._FILL_TOP_TO_BOTTOM,
@@ -97,7 +98,7 @@ get_fill_degrees cls
 
 {-# NOINLINE bindTextureProgress_get_fill_mode #-}
 
--- | The fill direction. Uses FILL_* constants.
+-- | The fill direction. See [enum FillMode] for possible values.
 bindTextureProgress_get_fill_mode :: MethodBind
 bindTextureProgress_get_fill_mode
   = unsafePerformIO $
@@ -107,7 +108,7 @@ bindTextureProgress_get_fill_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The fill direction. Uses FILL_* constants.
+-- | The fill direction. See [enum FillMode] for possible values.
 get_fill_mode ::
                 (TextureProgress :< cls, Object :< cls) => cls -> IO Int
 get_fill_mode cls
@@ -121,7 +122,7 @@ get_fill_mode cls
 
 {-# NOINLINE bindTextureProgress_get_nine_patch_stretch #-}
 
--- | If [code]true[/code], Godot treats the bar's textures like [NinePatchRect]. Use [code]stretch_margin_*[/code], like [member stretch_margin_bottom], to set up the nine patch's 3x3 grid. Default value: [code]false[/code].
+-- | If [code]true[/code], Godot treats the bar's textures like in [NinePatchRect]. Use the [code]stretch_margin_*[/code] properties like [member stretch_margin_bottom] to set up the nine patch's 3×3 grid. When using a radial [member fill_mode], this setting will enable stretching.
 bindTextureProgress_get_nine_patch_stretch :: MethodBind
 bindTextureProgress_get_nine_patch_stretch
   = unsafePerformIO $
@@ -131,7 +132,7 @@ bindTextureProgress_get_nine_patch_stretch
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], Godot treats the bar's textures like [NinePatchRect]. Use [code]stretch_margin_*[/code], like [member stretch_margin_bottom], to set up the nine patch's 3x3 grid. Default value: [code]false[/code].
+-- | If [code]true[/code], Godot treats the bar's textures like in [NinePatchRect]. Use the [code]stretch_margin_*[/code] properties like [member stretch_margin_bottom] to set up the nine patch's 3×3 grid. When using a radial [member fill_mode], this setting will enable stretching.
 get_nine_patch_stretch ::
                          (TextureProgress :< cls, Object :< cls) => cls -> IO Bool
 get_nine_patch_stretch cls
@@ -389,7 +390,7 @@ set_fill_degrees cls arg1
 
 {-# NOINLINE bindTextureProgress_set_fill_mode #-}
 
--- | The fill direction. Uses FILL_* constants.
+-- | The fill direction. See [enum FillMode] for possible values.
 bindTextureProgress_set_fill_mode :: MethodBind
 bindTextureProgress_set_fill_mode
   = unsafePerformIO $
@@ -399,7 +400,7 @@ bindTextureProgress_set_fill_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The fill direction. Uses FILL_* constants.
+-- | The fill direction. See [enum FillMode] for possible values.
 set_fill_mode ::
                 (TextureProgress :< cls, Object :< cls) => cls -> Int -> IO ()
 set_fill_mode cls arg1
@@ -413,7 +414,7 @@ set_fill_mode cls arg1
 
 {-# NOINLINE bindTextureProgress_set_nine_patch_stretch #-}
 
--- | If [code]true[/code], Godot treats the bar's textures like [NinePatchRect]. Use [code]stretch_margin_*[/code], like [member stretch_margin_bottom], to set up the nine patch's 3x3 grid. Default value: [code]false[/code].
+-- | If [code]true[/code], Godot treats the bar's textures like in [NinePatchRect]. Use the [code]stretch_margin_*[/code] properties like [member stretch_margin_bottom] to set up the nine patch's 3×3 grid. When using a radial [member fill_mode], this setting will enable stretching.
 bindTextureProgress_set_nine_patch_stretch :: MethodBind
 bindTextureProgress_set_nine_patch_stretch
   = unsafePerformIO $
@@ -423,7 +424,7 @@ bindTextureProgress_set_nine_patch_stretch
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], Godot treats the bar's textures like [NinePatchRect]. Use [code]stretch_margin_*[/code], like [member stretch_margin_bottom], to set up the nine patch's 3x3 grid. Default value: [code]false[/code].
+-- | If [code]true[/code], Godot treats the bar's textures like in [NinePatchRect]. Use the [code]stretch_margin_*[/code] properties like [member stretch_margin_bottom] to set up the nine patch's 3×3 grid. When using a radial [member fill_mode], this setting will enable stretching.
 set_nine_patch_stretch ::
                          (TextureProgress :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_nine_patch_stretch cls arg1

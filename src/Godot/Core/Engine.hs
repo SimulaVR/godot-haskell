@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Engine
        (Godot.Core.Engine.is_editor_hint,
         Godot.Core.Engine.set_editor_hint,
@@ -79,7 +80,7 @@ set_editor_hint cls arg1
 
 {-# NOINLINE bindEngine_get_iterations_per_second #-}
 
--- | The number of fixed iterations per second (for fixed process and physics).
+-- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 bindEngine_get_iterations_per_second :: MethodBind
 bindEngine_get_iterations_per_second
   = unsafePerformIO $
@@ -89,7 +90,7 @@ bindEngine_get_iterations_per_second
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of fixed iterations per second (for fixed process and physics).
+-- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 get_iterations_per_second ::
                             (Engine :< cls, Object :< cls) => cls -> IO Int
 get_iterations_per_second cls
@@ -103,7 +104,7 @@ get_iterations_per_second cls
 
 {-# NOINLINE bindEngine_set_iterations_per_second #-}
 
--- | The number of fixed iterations per second (for fixed process and physics).
+-- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 bindEngine_set_iterations_per_second :: MethodBind
 bindEngine_set_iterations_per_second
   = unsafePerformIO $
@@ -113,7 +114,7 @@ bindEngine_set_iterations_per_second
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of fixed iterations per second (for fixed process and physics).
+-- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 set_iterations_per_second ::
                             (Engine :< cls, Object :< cls) => cls -> Int -> IO ()
 set_iterations_per_second cls arg1
@@ -127,6 +128,7 @@ set_iterations_per_second cls arg1
 
 {-# NOINLINE bindEngine_get_physics_jitter_fix #-}
 
+-- | Controls how much physics ticks are synchronized with real time. For 0 or less, the ticks are synchronized. Such values are recommended for network games, where clock synchronization matters. Higher values cause higher deviation of in-game clock and real clock, but allows to smooth out framerate jitters. The default value of 0.5 should be fine for most; values above 2 could cause the game to react to dropped frames with a noticeable delay and are not recommended.
 bindEngine_get_physics_jitter_fix :: MethodBind
 bindEngine_get_physics_jitter_fix
   = unsafePerformIO $
@@ -136,6 +138,7 @@ bindEngine_get_physics_jitter_fix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Controls how much physics ticks are synchronized with real time. For 0 or less, the ticks are synchronized. Such values are recommended for network games, where clock synchronization matters. Higher values cause higher deviation of in-game clock and real clock, but allows to smooth out framerate jitters. The default value of 0.5 should be fine for most; values above 2 could cause the game to react to dropped frames with a noticeable delay and are not recommended.
 get_physics_jitter_fix ::
                          (Engine :< cls, Object :< cls) => cls -> IO Float
 get_physics_jitter_fix cls
@@ -149,6 +152,7 @@ get_physics_jitter_fix cls
 
 {-# NOINLINE bindEngine_set_physics_jitter_fix #-}
 
+-- | Controls how much physics ticks are synchronized with real time. For 0 or less, the ticks are synchronized. Such values are recommended for network games, where clock synchronization matters. Higher values cause higher deviation of in-game clock and real clock, but allows to smooth out framerate jitters. The default value of 0.5 should be fine for most; values above 2 could cause the game to react to dropped frames with a noticeable delay and are not recommended.
 bindEngine_set_physics_jitter_fix :: MethodBind
 bindEngine_set_physics_jitter_fix
   = unsafePerformIO $
@@ -158,6 +162,7 @@ bindEngine_set_physics_jitter_fix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Controls how much physics ticks are synchronized with real time. For 0 or less, the ticks are synchronized. Such values are recommended for network games, where clock synchronization matters. Higher values cause higher deviation of in-game clock and real clock, but allows to smooth out framerate jitters. The default value of 0.5 should be fine for most; values above 2 could cause the game to react to dropped frames with a noticeable delay and are not recommended.
 set_physics_jitter_fix ::
                          (Engine :< cls, Object :< cls) => cls -> Float -> IO ()
 set_physics_jitter_fix cls arg1
@@ -171,7 +176,7 @@ set_physics_jitter_fix cls arg1
 
 {-# NOINLINE bindEngine_get_target_fps #-}
 
--- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. Defaults to 0, which indicates no limit.
+-- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. A value of 0 means no limit.
 bindEngine_get_target_fps :: MethodBind
 bindEngine_get_target_fps
   = unsafePerformIO $
@@ -181,7 +186,7 @@ bindEngine_get_target_fps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. Defaults to 0, which indicates no limit.
+-- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. A value of 0 means no limit.
 get_target_fps :: (Engine :< cls, Object :< cls) => cls -> IO Int
 get_target_fps cls
   = withVariantArray []
@@ -193,7 +198,7 @@ get_target_fps cls
 
 {-# NOINLINE bindEngine_set_target_fps #-}
 
--- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. Defaults to 0, which indicates no limit.
+-- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. A value of 0 means no limit.
 bindEngine_set_target_fps :: MethodBind
 bindEngine_set_target_fps
   = unsafePerformIO $
@@ -203,7 +208,7 @@ bindEngine_set_target_fps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. Defaults to 0, which indicates no limit.
+-- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. A value of 0 means no limit.
 set_target_fps ::
                  (Engine :< cls, Object :< cls) => cls -> Int -> IO ()
 set_target_fps cls arg1
@@ -262,10 +267,10 @@ set_time_scale cls arg1
 {-# NOINLINE bindEngine_get_author_info #-}
 
 -- | Returns engine author information in a Dictionary.
---   				"lead_developers" - Array of Strings, lead developer names
---   				"founders" - Array of Strings, founder names
---   				"project_managers" - Array of Strings, project manager names
---   				"developers" - Array of Strings, developer names
+--   				[code]lead_developers[/code]    - Array of Strings, lead developer names
+--   				[code]founders[/code]           - Array of Strings, founder names
+--   				[code]project_managers[/code]   - Array of Strings, project manager names
+--   				[code]developers[/code]         - Array of Strings, developer names
 bindEngine_get_author_info :: MethodBind
 bindEngine_get_author_info
   = unsafePerformIO $
@@ -276,10 +281,10 @@ bindEngine_get_author_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns engine author information in a Dictionary.
---   				"lead_developers" - Array of Strings, lead developer names
---   				"founders" - Array of Strings, founder names
---   				"project_managers" - Array of Strings, project manager names
---   				"developers" - Array of Strings, developer names
+--   				[code]lead_developers[/code]    - Array of Strings, lead developer names
+--   				[code]founders[/code]           - Array of Strings, founder names
+--   				[code]project_managers[/code]   - Array of Strings, project manager names
+--   				[code]developers[/code]         - Array of Strings, developer names
 get_author_info ::
                   (Engine :< cls, Object :< cls) => cls -> IO Dictionary
 get_author_info cls
@@ -293,8 +298,8 @@ get_author_info cls
 {-# NOINLINE bindEngine_get_copyright_info #-}
 
 -- | Returns an Array of copyright information Dictionaries.
---   				"name" - String, component name
---   				"parts" - Array of Dictionaries {"files", "copyright", "license"} describing subsections of the component
+--   				[code]name[/code]    - String, component name
+--   				[code]parts[/code]   - Array of Dictionaries {[code]files[/code], [code]copyright[/code], [code]license[/code]} describing subsections of the component
 bindEngine_get_copyright_info :: MethodBind
 bindEngine_get_copyright_info
   = unsafePerformIO $
@@ -305,8 +310,8 @@ bindEngine_get_copyright_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns an Array of copyright information Dictionaries.
---   				"name" - String, component name
---   				"parts" - Array of Dictionaries {"files", "copyright", "license"} describing subsections of the component
+--   				[code]name[/code]    - String, component name
+--   				[code]parts[/code]   - Array of Dictionaries {[code]files[/code], [code]copyright[/code], [code]license[/code]} describing subsections of the component
 get_copyright_info ::
                      (Engine :< cls, Object :< cls) => cls -> IO Array
 get_copyright_info cls
@@ -320,7 +325,7 @@ get_copyright_info cls
 {-# NOINLINE bindEngine_get_donor_info #-}
 
 -- | Returns a Dictionary of Arrays of donor names.
---   				{"platinum_sponsors", "gold_sponsors", "mini_sponsors", "gold_donors", "silver_donors", "bronze_donors"}
+--   				{[code]platinum_sponsors[/code], [code]gold_sponsors[/code], [code]silver_sponsors[/code], [code]bronze_sponsors[/code], [code]mini_sponsors[/code], [code]gold_donors[/code], [code]silver_donors[/code], [code]bronze_donors[/code]}
 bindEngine_get_donor_info :: MethodBind
 bindEngine_get_donor_info
   = unsafePerformIO $
@@ -331,7 +336,7 @@ bindEngine_get_donor_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a Dictionary of Arrays of donor names.
---   				{"platinum_sponsors", "gold_sponsors", "mini_sponsors", "gold_donors", "silver_donors", "bronze_donors"}
+--   				{[code]platinum_sponsors[/code], [code]gold_sponsors[/code], [code]silver_sponsors[/code], [code]bronze_sponsors[/code], [code]mini_sponsors[/code], [code]gold_donors[/code], [code]silver_donors[/code], [code]bronze_donors[/code]}
 get_donor_info ::
                  (Engine :< cls, Object :< cls) => cls -> IO Dictionary
 get_donor_info cls
@@ -344,7 +349,7 @@ get_donor_info cls
 
 {-# NOINLINE bindEngine_get_frames_drawn #-}
 
--- | Returns the total number of frames drawn.
+-- | Returns the total number of frames drawn. If the render loop is disabled with [code]--disable-render-loop[/code] via command line, this returns [code]0[/code]. See also [method get_idle_frames].
 bindEngine_get_frames_drawn :: MethodBind
 bindEngine_get_frames_drawn
   = unsafePerformIO $
@@ -354,7 +359,7 @@ bindEngine_get_frames_drawn
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the total number of frames drawn.
+-- | Returns the total number of frames drawn. If the render loop is disabled with [code]--disable-render-loop[/code] via command line, this returns [code]0[/code]. See also [method get_idle_frames].
 get_frames_drawn :: (Engine :< cls, Object :< cls) => cls -> IO Int
 get_frames_drawn cls
   = withVariantArray []
@@ -390,6 +395,7 @@ get_frames_per_second cls
 
 {-# NOINLINE bindEngine_get_idle_frames #-}
 
+-- | Returns the total number of frames passed since engine initialization which is advanced on each [b]idle frame[/b], regardless of whether the render loop is enabled. See also [method get_frames_drawn].
 bindEngine_get_idle_frames :: MethodBind
 bindEngine_get_idle_frames
   = unsafePerformIO $
@@ -399,6 +405,7 @@ bindEngine_get_idle_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the total number of frames passed since engine initialization which is advanced on each [b]idle frame[/b], regardless of whether the render loop is enabled. See also [method get_frames_drawn].
 get_idle_frames :: (Engine :< cls, Object :< cls) => cls -> IO Int
 get_idle_frames cls
   = withVariantArray []
@@ -478,6 +485,7 @@ get_main_loop cls
 
 {-# NOINLINE bindEngine_get_physics_frames #-}
 
+-- | Returns the total number of frames passed since engine initialization which is advanced on each [b]physics frame[/b].
 bindEngine_get_physics_frames :: MethodBind
 bindEngine_get_physics_frames
   = unsafePerformIO $
@@ -487,6 +495,7 @@ bindEngine_get_physics_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the total number of frames passed since engine initialization which is advanced on each [b]physics frame[/b].
 get_physics_frames ::
                      (Engine :< cls, Object :< cls) => cls -> IO Int
 get_physics_frames cls
@@ -499,6 +508,7 @@ get_physics_frames cls
 
 {-# NOINLINE bindEngine_get_physics_interpolation_fraction #-}
 
+-- | Returns the fraction through the current physics tick we are at the time of rendering the frame. This can be used to implement fixed timestep interpolation.
 bindEngine_get_physics_interpolation_fraction :: MethodBind
 bindEngine_get_physics_interpolation_fraction
   = unsafePerformIO $
@@ -508,6 +518,7 @@ bindEngine_get_physics_interpolation_fraction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the fraction through the current physics tick we are at the time of rendering the frame. This can be used to implement fixed timestep interpolation.
 get_physics_interpolation_fraction ::
                                      (Engine :< cls, Object :< cls) => cls -> IO Float
 get_physics_interpolation_fraction cls
@@ -522,6 +533,7 @@ get_physics_interpolation_fraction cls
 
 {-# NOINLINE bindEngine_get_singleton #-}
 
+-- | Returns a global singleton with given [code]name[/code]. Often used for plugins, e.g. [code]GodotPayment[/code] on Android.
 bindEngine_get_singleton :: MethodBind
 bindEngine_get_singleton
   = unsafePerformIO $
@@ -531,6 +543,7 @@ bindEngine_get_singleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a global singleton with given [code]name[/code]. Often used for plugins, e.g. [code]GodotPayment[/code] on Android.
 get_singleton ::
                 (Engine :< cls, Object :< cls) => cls -> GodotString -> IO Object
 get_singleton cls arg1
@@ -546,18 +559,18 @@ get_singleton cls arg1
 --   				[code]major[/code]    - Holds the major version number as an int
 --   				[code]minor[/code]    - Holds the minor version number as an int
 --   				[code]patch[/code]    - Holds the patch version number as an int
---   				[code]hex[/code]      - Holds the full version number encoded as an hexadecimal int with one byte (2 places) per number (see example below)
+--   				[code]hex[/code]      - Holds the full version number encoded as a hexadecimal int with one byte (2 places) per number (see example below)
 --   				[code]status[/code]   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
 --   				[code]build[/code]    - Holds the build name (e.g. "custom_build") as a String
 --   				[code]hash[/code]     - Holds the full Git commit hash as a String
 --   				[code]year[/code]     - Holds the year the version was released in as an int
 --   				[code]string[/code]   - [code]major[/code] + [code]minor[/code] + [code]patch[/code] + [code]status[/code] + [code]build[/code] in a single String
---   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. Note that it's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
+--   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. [b]Note:[/b] It's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
 --   				[codeblock]
 --   				if Engine.get_version_info().hex >= 0x030200:
---   				    # do things specific to version 3.2 or later
+--   				    # Do things specific to version 3.2 or later
 --   				else:
---   				    # do things specific to versions before 3.2
+--   				    # Do things specific to versions before 3.2
 --   				[/codeblock]
 bindEngine_get_version_info :: MethodBind
 bindEngine_get_version_info
@@ -572,18 +585,18 @@ bindEngine_get_version_info
 --   				[code]major[/code]    - Holds the major version number as an int
 --   				[code]minor[/code]    - Holds the minor version number as an int
 --   				[code]patch[/code]    - Holds the patch version number as an int
---   				[code]hex[/code]      - Holds the full version number encoded as an hexadecimal int with one byte (2 places) per number (see example below)
+--   				[code]hex[/code]      - Holds the full version number encoded as a hexadecimal int with one byte (2 places) per number (see example below)
 --   				[code]status[/code]   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
 --   				[code]build[/code]    - Holds the build name (e.g. "custom_build") as a String
 --   				[code]hash[/code]     - Holds the full Git commit hash as a String
 --   				[code]year[/code]     - Holds the year the version was released in as an int
 --   				[code]string[/code]   - [code]major[/code] + [code]minor[/code] + [code]patch[/code] + [code]status[/code] + [code]build[/code] in a single String
---   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. Note that it's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
+--   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. [b]Note:[/b] It's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
 --   				[codeblock]
 --   				if Engine.get_version_info().hex >= 0x030200:
---   				    # do things specific to version 3.2 or later
+--   				    # Do things specific to version 3.2 or later
 --   				else:
---   				    # do things specific to versions before 3.2
+--   				    # Do things specific to versions before 3.2
 --   				[/codeblock]
 get_version_info ::
                    (Engine :< cls, Object :< cls) => cls -> IO Dictionary
@@ -597,6 +610,7 @@ get_version_info cls
 
 {-# NOINLINE bindEngine_has_singleton #-}
 
+-- | Returns [code]true[/code] if a singleton with given [code]name[/code] exists in global scope.
 bindEngine_has_singleton :: MethodBind
 bindEngine_has_singleton
   = unsafePerformIO $
@@ -606,6 +620,7 @@ bindEngine_has_singleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if a singleton with given [code]name[/code] exists in global scope.
 has_singleton ::
                 (Engine :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_singleton cls arg1

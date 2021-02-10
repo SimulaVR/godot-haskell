@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeScalarConstant
        (Godot.Core.VisualShaderNodeScalarConstant.get_constant,
         Godot.Core.VisualShaderNodeScalarConstant.set_constant)

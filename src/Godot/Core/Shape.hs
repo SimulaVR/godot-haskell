@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Shape
        (Godot.Core.Shape.get_margin, Godot.Core.Shape.set_margin) where
 import Data.Coerce
@@ -11,6 +12,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindShape_get_margin #-}
 
+-- | The collision margin for the shape.
 bindShape_get_margin :: MethodBind
 bindShape_get_margin
   = unsafePerformIO $
@@ -20,6 +22,7 @@ bindShape_get_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The collision margin for the shape.
 get_margin :: (Shape :< cls, Object :< cls) => cls -> IO Float
 get_margin cls
   = withVariantArray []
@@ -29,6 +32,7 @@ get_margin cls
 
 {-# NOINLINE bindShape_set_margin #-}
 
+-- | The collision margin for the shape.
 bindShape_set_margin :: MethodBind
 bindShape_set_margin
   = unsafePerformIO $
@@ -38,6 +42,7 @@ bindShape_set_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The collision margin for the shape.
 set_margin ::
              (Shape :< cls, Object :< cls) => cls -> Float -> IO ()
 set_margin cls arg1

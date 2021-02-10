@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Viewport
        (Godot.Core.Viewport._CLEAR_MODE_ONLY_NEXT_FRAME,
         Godot.Core.Viewport._DEBUG_DRAW_OVERDRAW,
@@ -226,13 +227,18 @@ _UPDATE_ONCE = 1
 _RENDER_INFO_SURFACE_CHANGES_IN_FRAME :: Int
 _RENDER_INFO_SURFACE_CHANGES_IN_FRAME = 4
 
+-- | Emitted when a Control node grabs keyboard focus.
 sig_gui_focus_changed :: Godot.Internal.Dispatch.Signal Viewport
 sig_gui_focus_changed
   = Godot.Internal.Dispatch.Signal "gui_focus_changed"
 
+instance NodeSignal Viewport "gui_focus_changed" '[Control]
+
 -- | Emitted when the size of the viewport is changed, whether by [method set_size_override], resize of window, or some other means.
 sig_size_changed :: Godot.Internal.Dispatch.Signal Viewport
 sig_size_changed = Godot.Internal.Dispatch.Signal "size_changed"
+
+instance NodeSignal Viewport "size_changed" '[]
 
 {-# NOINLINE bindViewport__gui_remove_focus #-}
 
@@ -495,7 +501,8 @@ get_canvas_transform cls
 
 {-# NOINLINE bindViewport_get_clear_mode #-}
 
--- | The clear mode when viewport used as a render target. Default value: [constant CLEAR_MODE_ALWAYS].
+-- | The clear mode when viewport used as a render target.
+--   			[b]Note:[/b] This property is intended for 2D usage.
 bindViewport_get_clear_mode :: MethodBind
 bindViewport_get_clear_mode
   = unsafePerformIO $
@@ -505,7 +512,8 @@ bindViewport_get_clear_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The clear mode when viewport used as a render target. Default value: [constant CLEAR_MODE_ALWAYS].
+-- | The clear mode when viewport used as a render target.
+--   			[b]Note:[/b] This property is intended for 2D usage.
 get_clear_mode :: (Viewport :< cls, Object :< cls) => cls -> IO Int
 get_clear_mode cls
   = withVariantArray []
@@ -517,7 +525,7 @@ get_clear_mode cls
 
 {-# NOINLINE bindViewport_get_debug_draw #-}
 
--- | The overlay mode for test rendered geometry in debug purposes. Default value: [constant DEBUG_DRAW_DISABLED].
+-- | The overlay mode for test rendered geometry in debug purposes.
 bindViewport_get_debug_draw :: MethodBind
 bindViewport_get_debug_draw
   = unsafePerformIO $
@@ -527,7 +535,7 @@ bindViewport_get_debug_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The overlay mode for test rendered geometry in debug purposes. Default value: [constant DEBUG_DRAW_DISABLED].
+-- | The overlay mode for test rendered geometry in debug purposes.
 get_debug_draw :: (Viewport :< cls, Object :< cls) => cls -> IO Int
 get_debug_draw cls
   = withVariantArray []
@@ -587,7 +595,8 @@ get_global_canvas_transform cls
 
 {-# NOINLINE bindViewport_get_hdr #-}
 
--- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. Default value: [code]true[/code].
+-- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
+--   			[b]Note:[/b] Requires [member usage] to be set to [constant USAGE_3D] or [constant USAGE_3D_NO_EFFECTS], since HDR is not supported for 2D.
 bindViewport_get_hdr :: MethodBind
 bindViewport_get_hdr
   = unsafePerformIO $
@@ -597,7 +606,8 @@ bindViewport_get_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. Default value: [code]true[/code].
+-- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
+--   			[b]Note:[/b] Requires [member usage] to be set to [constant USAGE_3D] or [constant USAGE_3D_NO_EFFECTS], since HDR is not supported for 2D.
 get_hdr :: (Viewport :< cls, Object :< cls) => cls -> IO Bool
 get_hdr cls
   = withVariantArray []
@@ -677,7 +687,7 @@ get_mouse_position cls
 
 {-# NOINLINE bindViewport_get_msaa #-}
 
--- | The multisample anti-aliasing mode. Default value: [constant MSAA_DISABLED].
+-- | The multisample anti-aliasing mode. A higher number results in smoother edges at the cost of significantly worse performance. A value of 4 is best unless targeting very high-end systems.
 bindViewport_get_msaa :: MethodBind
 bindViewport_get_msaa
   = unsafePerformIO $
@@ -687,7 +697,7 @@ bindViewport_get_msaa
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The multisample anti-aliasing mode. Default value: [constant MSAA_DISABLED].
+-- | The multisample anti-aliasing mode. A higher number results in smoother edges at the cost of significantly worse performance. A value of 4 is best unless targeting very high-end systems.
 get_msaa :: (Viewport :< cls, Object :< cls) => cls -> IO Int
 get_msaa cls
   = withVariantArray []
@@ -698,7 +708,7 @@ get_msaa cls
 
 {-# NOINLINE bindViewport_get_physics_object_picking #-}
 
--- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process. Default value: [code]false[/code].
+-- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process.
 bindViewport_get_physics_object_picking :: MethodBind
 bindViewport_get_physics_object_picking
   = unsafePerformIO $
@@ -708,7 +718,7 @@ bindViewport_get_physics_object_picking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process. Default value: [code]false[/code].
+-- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process.
 get_physics_object_picking ::
                              (Viewport :< cls, Object :< cls) => cls -> IO Bool
 get_physics_object_picking cls
@@ -745,7 +755,7 @@ get_render_info cls arg1
 
 {-# NOINLINE bindViewport_get_shadow_atlas_quadrant_subdiv #-}
 
--- | The subdivision amount of first quadrant on shadow atlas. Default value: [code]SHADOW_ATLAS_QUADRANT_SUBDIV_4[/code].
+-- | Returns the [enum ShadowAtlasQuadrantSubdiv] of the specified quadrant.
 bindViewport_get_shadow_atlas_quadrant_subdiv :: MethodBind
 bindViewport_get_shadow_atlas_quadrant_subdiv
   = unsafePerformIO $
@@ -755,7 +765,7 @@ bindViewport_get_shadow_atlas_quadrant_subdiv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The subdivision amount of first quadrant on shadow atlas. Default value: [code]SHADOW_ATLAS_QUADRANT_SUBDIV_4[/code].
+-- | Returns the [enum ShadowAtlasQuadrantSubdiv] of the specified quadrant.
 get_shadow_atlas_quadrant_subdiv ::
                                    (Viewport :< cls, Object :< cls) => cls -> Int -> IO Int
 get_shadow_atlas_quadrant_subdiv cls arg1
@@ -770,7 +780,8 @@ get_shadow_atlas_quadrant_subdiv cls arg1
 
 {-# NOINLINE bindViewport_get_shadow_atlas_size #-}
 
--- | The resolution of shadow atlas. Both width and height is equal to one value.
+-- | The shadow atlas' resolution (used for omni and spot lights). The value will be rounded up to the nearest power of 2.
+--   			[b]Note:[/b] If this is set to 0, shadows won't be visible. Since user-created viewports default to a value of 0, this value must be set above 0 manually.
 bindViewport_get_shadow_atlas_size :: MethodBind
 bindViewport_get_shadow_atlas_size
   = unsafePerformIO $
@@ -780,7 +791,8 @@ bindViewport_get_shadow_atlas_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The resolution of shadow atlas. Both width and height is equal to one value.
+-- | The shadow atlas' resolution (used for omni and spot lights). The value will be rounded up to the nearest power of 2.
+--   			[b]Note:[/b] If this is set to 0, shadows won't be visible. Since user-created viewports default to a value of 0, this value must be set above 0 manually.
 get_shadow_atlas_size ::
                         (Viewport :< cls, Object :< cls) => cls -> IO Int
 get_shadow_atlas_size cls
@@ -838,7 +850,8 @@ get_size_override cls
 
 {-# NOINLINE bindViewport_get_texture #-}
 
--- | Returns the viewport's texture. Note that due to the way OpenGL works, the resulting [ViewportTexture] is flipped vertically. You can use [method Image.flip_y] on the result of [method Texture.get_data] to flip it back, for example:
+-- | Returns the viewport's texture.
+--   				[b]Note:[/b] Due to the way OpenGL works, the resulting [ViewportTexture] is flipped vertically. You can use [method Image.flip_y] on the result of [method Texture.get_data] to flip it back, for example:
 --   				[codeblock]
 --   				var img = get_viewport().get_texture().get_data()
 --   				img.flip_y()
@@ -852,7 +865,8 @@ bindViewport_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the viewport's texture. Note that due to the way OpenGL works, the resulting [ViewportTexture] is flipped vertically. You can use [method Image.flip_y] on the result of [method Texture.get_data] to flip it back, for example:
+-- | Returns the viewport's texture.
+--   				[b]Note:[/b] Due to the way OpenGL works, the resulting [ViewportTexture] is flipped vertically. You can use [method Image.flip_y] on the result of [method Texture.get_data] to flip it back, for example:
 --   				[codeblock]
 --   				var img = get_viewport().get_texture().get_data()
 --   				img.flip_y()
@@ -868,7 +882,7 @@ get_texture cls
 
 {-# NOINLINE bindViewport_get_update_mode #-}
 
--- | The update mode when viewport used as a render target. Default value: [constant UPDATE_WHEN_VISIBLE].
+-- | The update mode when viewport used as a render target.
 bindViewport_get_update_mode :: MethodBind
 bindViewport_get_update_mode
   = unsafePerformIO $
@@ -878,7 +892,7 @@ bindViewport_get_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The update mode when viewport used as a render target. Default value: [constant UPDATE_WHEN_VISIBLE].
+-- | The update mode when viewport used as a render target.
 get_update_mode ::
                   (Viewport :< cls, Object :< cls) => cls -> IO Int
 get_update_mode cls
@@ -891,7 +905,7 @@ get_update_mode cls
 
 {-# NOINLINE bindViewport_get_usage #-}
 
--- | The rendering mode of viewport. Default value: [code]USAGE_3D[/code].
+-- | The rendering mode of viewport.
 bindViewport_get_usage :: MethodBind
 bindViewport_get_usage
   = unsafePerformIO $
@@ -901,7 +915,7 @@ bindViewport_get_usage
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The rendering mode of viewport. Default value: [code]USAGE_3D[/code].
+-- | The rendering mode of viewport.
 get_usage :: (Viewport :< cls, Object :< cls) => cls -> IO Int
 get_usage cls
   = withVariantArray []
@@ -912,7 +926,7 @@ get_usage cls
 
 {-# NOINLINE bindViewport_get_vflip #-}
 
--- | If [code]true[/code], the result of rendering will be flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], the result of rendering will be flipped vertically.
 bindViewport_get_vflip :: MethodBind
 bindViewport_get_vflip
   = unsafePerformIO $
@@ -922,7 +936,7 @@ bindViewport_get_vflip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the result of rendering will be flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], the result of rendering will be flipped vertically.
 get_vflip :: (Viewport :< cls, Object :< cls) => cls -> IO Bool
 get_vflip cls
   = withVariantArray []
@@ -1070,6 +1084,7 @@ gui_has_modal_stack cls
 
 {-# NOINLINE bindViewport_gui_is_dragging #-}
 
+-- | Returns [code]true[/code] if the viewport is currently performing a drag operation.
 bindViewport_gui_is_dragging :: MethodBind
 bindViewport_gui_is_dragging
   = unsafePerformIO $
@@ -1079,6 +1094,7 @@ bindViewport_gui_is_dragging
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the viewport is currently performing a drag operation.
 gui_is_dragging ::
                   (Viewport :< cls, Object :< cls) => cls -> IO Bool
 gui_is_dragging cls
@@ -1091,7 +1107,7 @@ gui_is_dragging cls
 
 {-# NOINLINE bindViewport_has_transparent_background #-}
 
--- | If [code]true[/code], the viewport should render its background as transparent. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport should render its background as transparent.
 bindViewport_has_transparent_background :: MethodBind
 bindViewport_has_transparent_background
   = unsafePerformIO $
@@ -1101,7 +1117,7 @@ bindViewport_has_transparent_background
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport should render its background as transparent. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport should render its background as transparent.
 has_transparent_background ::
                              (Viewport :< cls, Object :< cls) => cls -> IO Bool
 has_transparent_background cls
@@ -1134,7 +1150,7 @@ input cls arg1
 
 {-# NOINLINE bindViewport_is_3d_disabled #-}
 
--- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code].
 bindViewport_is_3d_disabled :: MethodBind
 bindViewport_is_3d_disabled
   = unsafePerformIO $
@@ -1144,7 +1160,7 @@ bindViewport_is_3d_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code].
 is_3d_disabled ::
                  (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_3d_disabled cls
@@ -1157,7 +1173,7 @@ is_3d_disabled cls
 
 {-# NOINLINE bindViewport_is_audio_listener #-}
 
--- | If [code]true[/code], the viewport will process 3D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 3D audio streams.
 bindViewport_is_audio_listener :: MethodBind
 bindViewport_is_audio_listener
   = unsafePerformIO $
@@ -1167,7 +1183,7 @@ bindViewport_is_audio_listener
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will process 3D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 3D audio streams.
 is_audio_listener ::
                     (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_audio_listener cls
@@ -1180,7 +1196,7 @@ is_audio_listener cls
 
 {-# NOINLINE bindViewport_is_audio_listener_2d #-}
 
--- | If [code]true[/code], the viewport will process 2D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 2D audio streams.
 bindViewport_is_audio_listener_2d :: MethodBind
 bindViewport_is_audio_listener_2d
   = unsafePerformIO $
@@ -1190,7 +1206,7 @@ bindViewport_is_audio_listener_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will process 2D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 2D audio streams.
 is_audio_listener_2d ::
                        (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_audio_listener_2d cls
@@ -1226,7 +1242,7 @@ is_handling_input_locally cls
 
 {-# NOINLINE bindViewport_is_input_disabled #-}
 
--- | If [code]true[/code], the viewport will not receive input event. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will not receive input event.
 bindViewport_is_input_disabled :: MethodBind
 bindViewport_is_input_disabled
   = unsafePerformIO $
@@ -1236,7 +1252,7 @@ bindViewport_is_input_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will not receive input event. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will not receive input event.
 is_input_disabled ::
                     (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_input_disabled cls
@@ -1294,6 +1310,7 @@ is_size_override_enabled cls
 
 {-# NOINLINE bindViewport_is_size_override_stretch_enabled #-}
 
+-- | If [code]true[/code], the size override affects stretch as well.
 bindViewport_is_size_override_stretch_enabled :: MethodBind
 bindViewport_is_size_override_stretch_enabled
   = unsafePerformIO $
@@ -1303,6 +1320,7 @@ bindViewport_is_size_override_stretch_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the size override affects stretch as well.
 is_size_override_stretch_enabled ::
                                    (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_size_override_stretch_enabled cls
@@ -1317,7 +1335,7 @@ is_size_override_stretch_enabled cls
 
 {-# NOINLINE bindViewport_is_snap_controls_to_pixels_enabled #-}
 
--- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly. Default value: [code]true[/code].
+-- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly.
 bindViewport_is_snap_controls_to_pixels_enabled :: MethodBind
 bindViewport_is_snap_controls_to_pixels_enabled
   = unsafePerformIO $
@@ -1327,7 +1345,7 @@ bindViewport_is_snap_controls_to_pixels_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly. Default value: [code]true[/code].
+-- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly.
 is_snap_controls_to_pixels_enabled ::
                                      (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_snap_controls_to_pixels_enabled cls
@@ -1342,7 +1360,7 @@ is_snap_controls_to_pixels_enabled cls
 
 {-# NOINLINE bindViewport_is_using_own_world #-}
 
--- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property.
 bindViewport_is_using_own_world :: MethodBind
 bindViewport_is_using_own_world
   = unsafePerformIO $
@@ -1352,7 +1370,7 @@ bindViewport_is_using_own_world
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property.
 is_using_own_world ::
                      (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_using_own_world cls
@@ -1365,6 +1383,7 @@ is_using_own_world cls
 
 {-# NOINLINE bindViewport_is_using_render_direct_to_screen #-}
 
+-- | If [code]true[/code], renders the Viewport directly to the screen instead of to the root viewport. Only available in GLES2. This is a low-level optimization and should not be used in most cases. If used, reading from the Viewport or from [code]SCREEN_TEXTURE[/code] becomes unavailable. For more information see [method VisualServer.viewport_set_render_direct_to_screen].
 bindViewport_is_using_render_direct_to_screen :: MethodBind
 bindViewport_is_using_render_direct_to_screen
   = unsafePerformIO $
@@ -1374,6 +1393,7 @@ bindViewport_is_using_render_direct_to_screen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], renders the Viewport directly to the screen instead of to the root viewport. Only available in GLES2. This is a low-level optimization and should not be used in most cases. If used, reading from the Viewport or from [code]SCREEN_TEXTURE[/code] becomes unavailable. For more information see [method VisualServer.viewport_set_render_direct_to_screen].
 is_using_render_direct_to_screen ::
                                    (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_using_render_direct_to_screen cls
@@ -1388,7 +1408,7 @@ is_using_render_direct_to_screen cls
 
 {-# NOINLINE bindViewport_set_as_audio_listener #-}
 
--- | If [code]true[/code], the viewport will process 3D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 3D audio streams.
 bindViewport_set_as_audio_listener :: MethodBind
 bindViewport_set_as_audio_listener
   = unsafePerformIO $
@@ -1398,7 +1418,7 @@ bindViewport_set_as_audio_listener
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will process 3D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 3D audio streams.
 set_as_audio_listener ::
                         (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_as_audio_listener cls arg1
@@ -1412,7 +1432,7 @@ set_as_audio_listener cls arg1
 
 {-# NOINLINE bindViewport_set_as_audio_listener_2d #-}
 
--- | If [code]true[/code], the viewport will process 2D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 2D audio streams.
 bindViewport_set_as_audio_listener_2d :: MethodBind
 bindViewport_set_as_audio_listener_2d
   = unsafePerformIO $
@@ -1422,7 +1442,7 @@ bindViewport_set_as_audio_listener_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will process 2D audio streams. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will process 2D audio streams.
 set_as_audio_listener_2d ::
                            (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_as_audio_listener_2d cls arg1
@@ -1436,6 +1456,7 @@ set_as_audio_listener_2d cls arg1
 
 {-# NOINLINE bindViewport_set_attach_to_screen_rect #-}
 
+-- | Attaches this [Viewport] to the root [Viewport] with the specified rectangle. This bypasses the need for another node to display this [Viewport] but makes you responsible for updating the position of this [Viewport] manually.
 bindViewport_set_attach_to_screen_rect :: MethodBind
 bindViewport_set_attach_to_screen_rect
   = unsafePerformIO $
@@ -1445,6 +1466,7 @@ bindViewport_set_attach_to_screen_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Attaches this [Viewport] to the root [Viewport] with the specified rectangle. This bypasses the need for another node to display this [Viewport] but makes you responsible for updating the position of this [Viewport] manually.
 set_attach_to_screen_rect ::
                             (Viewport :< cls, Object :< cls) => cls -> Rect2 -> IO ()
 set_attach_to_screen_rect cls arg1
@@ -1482,7 +1504,8 @@ set_canvas_transform cls arg1
 
 {-# NOINLINE bindViewport_set_clear_mode #-}
 
--- | The clear mode when viewport used as a render target. Default value: [constant CLEAR_MODE_ALWAYS].
+-- | The clear mode when viewport used as a render target.
+--   			[b]Note:[/b] This property is intended for 2D usage.
 bindViewport_set_clear_mode :: MethodBind
 bindViewport_set_clear_mode
   = unsafePerformIO $
@@ -1492,7 +1515,8 @@ bindViewport_set_clear_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The clear mode when viewport used as a render target. Default value: [constant CLEAR_MODE_ALWAYS].
+-- | The clear mode when viewport used as a render target.
+--   			[b]Note:[/b] This property is intended for 2D usage.
 set_clear_mode ::
                  (Viewport :< cls, Object :< cls) => cls -> Int -> IO ()
 set_clear_mode cls arg1
@@ -1505,7 +1529,7 @@ set_clear_mode cls arg1
 
 {-# NOINLINE bindViewport_set_debug_draw #-}
 
--- | The overlay mode for test rendered geometry in debug purposes. Default value: [constant DEBUG_DRAW_DISABLED].
+-- | The overlay mode for test rendered geometry in debug purposes.
 bindViewport_set_debug_draw :: MethodBind
 bindViewport_set_debug_draw
   = unsafePerformIO $
@@ -1515,7 +1539,7 @@ bindViewport_set_debug_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The overlay mode for test rendered geometry in debug purposes. Default value: [constant DEBUG_DRAW_DISABLED].
+-- | The overlay mode for test rendered geometry in debug purposes.
 set_debug_draw ::
                  (Viewport :< cls, Object :< cls) => cls -> Int -> IO ()
 set_debug_draw cls arg1
@@ -1528,7 +1552,7 @@ set_debug_draw cls arg1
 
 {-# NOINLINE bindViewport_set_disable_3d #-}
 
--- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code].
 bindViewport_set_disable_3d :: MethodBind
 bindViewport_set_disable_3d
   = unsafePerformIO $
@@ -1538,7 +1562,7 @@ bindViewport_set_disable_3d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will disable 3D rendering. For actual disabling use [code]usage[/code].
 set_disable_3d ::
                  (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disable_3d cls arg1
@@ -1551,7 +1575,7 @@ set_disable_3d cls arg1
 
 {-# NOINLINE bindViewport_set_disable_input #-}
 
--- | If [code]true[/code], the viewport will not receive input event. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will not receive input event.
 bindViewport_set_disable_input :: MethodBind
 bindViewport_set_disable_input
   = unsafePerformIO $
@@ -1561,7 +1585,7 @@ bindViewport_set_disable_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will not receive input event. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will not receive input event.
 set_disable_input ::
                     (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disable_input cls arg1
@@ -1620,7 +1644,8 @@ set_handle_input_locally cls arg1
 
 {-# NOINLINE bindViewport_set_hdr #-}
 
--- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. Default value: [code]true[/code].
+-- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
+--   			[b]Note:[/b] Requires [member usage] to be set to [constant USAGE_3D] or [constant USAGE_3D_NO_EFFECTS], since HDR is not supported for 2D.
 bindViewport_set_hdr :: MethodBind
 bindViewport_set_hdr
   = unsafePerformIO $
@@ -1630,7 +1655,8 @@ bindViewport_set_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. Default value: [code]true[/code].
+-- | If [code]true[/code], the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
+--   			[b]Note:[/b] Requires [member usage] to be set to [constant USAGE_3D] or [constant USAGE_3D_NO_EFFECTS], since HDR is not supported for 2D.
 set_hdr :: (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hdr cls arg1
   = withVariantArray [toVariant arg1]
@@ -1640,6 +1666,7 @@ set_hdr cls arg1
 
 {-# NOINLINE bindViewport_set_input_as_handled #-}
 
+-- | Stops the input from propagating further down the [SceneTree].
 bindViewport_set_input_as_handled :: MethodBind
 bindViewport_set_input_as_handled
   = unsafePerformIO $
@@ -1649,6 +1676,7 @@ bindViewport_set_input_as_handled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Stops the input from propagating further down the [SceneTree].
 set_input_as_handled ::
                        (Viewport :< cls, Object :< cls) => cls -> IO ()
 set_input_as_handled cls
@@ -1685,7 +1713,7 @@ set_keep_3d_linear cls arg1
 
 {-# NOINLINE bindViewport_set_msaa #-}
 
--- | The multisample anti-aliasing mode. Default value: [constant MSAA_DISABLED].
+-- | The multisample anti-aliasing mode. A higher number results in smoother edges at the cost of significantly worse performance. A value of 4 is best unless targeting very high-end systems.
 bindViewport_set_msaa :: MethodBind
 bindViewport_set_msaa
   = unsafePerformIO $
@@ -1695,7 +1723,7 @@ bindViewport_set_msaa
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The multisample anti-aliasing mode. Default value: [constant MSAA_DISABLED].
+-- | The multisample anti-aliasing mode. A higher number results in smoother edges at the cost of significantly worse performance. A value of 4 is best unless targeting very high-end systems.
 set_msaa :: (Viewport :< cls, Object :< cls) => cls -> Int -> IO ()
 set_msaa cls arg1
   = withVariantArray [toVariant arg1]
@@ -1706,7 +1734,7 @@ set_msaa cls arg1
 
 {-# NOINLINE bindViewport_set_physics_object_picking #-}
 
--- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process. Default value: [code]false[/code].
+-- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process.
 bindViewport_set_physics_object_picking :: MethodBind
 bindViewport_set_physics_object_picking
   = unsafePerformIO $
@@ -1716,7 +1744,7 @@ bindViewport_set_physics_object_picking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process. Default value: [code]false[/code].
+-- | If [code]true[/code], the objects rendered by viewport become subjects of mouse picking process.
 set_physics_object_picking ::
                              (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_physics_object_picking cls arg1
@@ -1730,7 +1758,7 @@ set_physics_object_picking cls arg1
 
 {-# NOINLINE bindViewport_set_shadow_atlas_quadrant_subdiv #-}
 
--- | The subdivision amount of first quadrant on shadow atlas. Default value: [code]SHADOW_ATLAS_QUADRANT_SUBDIV_4[/code].
+-- | Sets the number of subdivisions to use in the specified quadrant. A higher number of subdivisions allows you to have more shadows in the scene at once, but reduces the quality of the shadows. A good practice is to have quadrants with a varying number of subdivisions and to have as few subdivisions as possible.
 bindViewport_set_shadow_atlas_quadrant_subdiv :: MethodBind
 bindViewport_set_shadow_atlas_quadrant_subdiv
   = unsafePerformIO $
@@ -1740,7 +1768,7 @@ bindViewport_set_shadow_atlas_quadrant_subdiv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The subdivision amount of first quadrant on shadow atlas. Default value: [code]SHADOW_ATLAS_QUADRANT_SUBDIV_4[/code].
+-- | Sets the number of subdivisions to use in the specified quadrant. A higher number of subdivisions allows you to have more shadows in the scene at once, but reduces the quality of the shadows. A good practice is to have quadrants with a varying number of subdivisions and to have as few subdivisions as possible.
 set_shadow_atlas_quadrant_subdiv ::
                                    (Viewport :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_shadow_atlas_quadrant_subdiv cls arg1 arg2
@@ -1755,7 +1783,8 @@ set_shadow_atlas_quadrant_subdiv cls arg1 arg2
 
 {-# NOINLINE bindViewport_set_shadow_atlas_size #-}
 
--- | The resolution of shadow atlas. Both width and height is equal to one value.
+-- | The shadow atlas' resolution (used for omni and spot lights). The value will be rounded up to the nearest power of 2.
+--   			[b]Note:[/b] If this is set to 0, shadows won't be visible. Since user-created viewports default to a value of 0, this value must be set above 0 manually.
 bindViewport_set_shadow_atlas_size :: MethodBind
 bindViewport_set_shadow_atlas_size
   = unsafePerformIO $
@@ -1765,7 +1794,8 @@ bindViewport_set_shadow_atlas_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The resolution of shadow atlas. Both width and height is equal to one value.
+-- | The shadow atlas' resolution (used for omni and spot lights). The value will be rounded up to the nearest power of 2.
+--   			[b]Note:[/b] If this is set to 0, shadows won't be visible. Since user-created viewports default to a value of 0, this value must be set above 0 manually.
 set_shadow_atlas_size ::
                         (Viewport :< cls, Object :< cls) => cls -> Int -> IO ()
 set_shadow_atlas_size cls arg1
@@ -1825,6 +1855,7 @@ set_size_override cls arg1 arg2 arg3
 
 {-# NOINLINE bindViewport_set_size_override_stretch #-}
 
+-- | If [code]true[/code], the size override affects stretch as well.
 bindViewport_set_size_override_stretch :: MethodBind
 bindViewport_set_size_override_stretch
   = unsafePerformIO $
@@ -1834,6 +1865,7 @@ bindViewport_set_size_override_stretch
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the size override affects stretch as well.
 set_size_override_stretch ::
                             (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_size_override_stretch cls arg1
@@ -1847,7 +1879,7 @@ set_size_override_stretch cls arg1
 
 {-# NOINLINE bindViewport_set_snap_controls_to_pixels #-}
 
--- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly. Default value: [code]true[/code].
+-- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly.
 bindViewport_set_snap_controls_to_pixels :: MethodBind
 bindViewport_set_snap_controls_to_pixels
   = unsafePerformIO $
@@ -1857,7 +1889,7 @@ bindViewport_set_snap_controls_to_pixels
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly. Default value: [code]true[/code].
+-- | If [code]true[/code], the GUI controls on the viewport will lay pixel perfectly.
 set_snap_controls_to_pixels ::
                               (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_snap_controls_to_pixels cls arg1
@@ -1871,7 +1903,7 @@ set_snap_controls_to_pixels cls arg1
 
 {-# NOINLINE bindViewport_set_transparent_background #-}
 
--- | If [code]true[/code], the viewport should render its background as transparent. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport should render its background as transparent.
 bindViewport_set_transparent_background :: MethodBind
 bindViewport_set_transparent_background
   = unsafePerformIO $
@@ -1881,7 +1913,7 @@ bindViewport_set_transparent_background
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport should render its background as transparent. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport should render its background as transparent.
 set_transparent_background ::
                              (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_transparent_background cls arg1
@@ -1895,7 +1927,7 @@ set_transparent_background cls arg1
 
 {-# NOINLINE bindViewport_set_update_mode #-}
 
--- | The update mode when viewport used as a render target. Default value: [constant UPDATE_WHEN_VISIBLE].
+-- | The update mode when viewport used as a render target.
 bindViewport_set_update_mode :: MethodBind
 bindViewport_set_update_mode
   = unsafePerformIO $
@@ -1905,7 +1937,7 @@ bindViewport_set_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The update mode when viewport used as a render target. Default value: [constant UPDATE_WHEN_VISIBLE].
+-- | The update mode when viewport used as a render target.
 set_update_mode ::
                   (Viewport :< cls, Object :< cls) => cls -> Int -> IO ()
 set_update_mode cls arg1
@@ -1918,7 +1950,7 @@ set_update_mode cls arg1
 
 {-# NOINLINE bindViewport_set_usage #-}
 
--- | The rendering mode of viewport. Default value: [code]USAGE_3D[/code].
+-- | The rendering mode of viewport.
 bindViewport_set_usage :: MethodBind
 bindViewport_set_usage
   = unsafePerformIO $
@@ -1928,7 +1960,7 @@ bindViewport_set_usage
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The rendering mode of viewport. Default value: [code]USAGE_3D[/code].
+-- | The rendering mode of viewport.
 set_usage ::
             (Viewport :< cls, Object :< cls) => cls -> Int -> IO ()
 set_usage cls arg1
@@ -1940,7 +1972,7 @@ set_usage cls arg1
 
 {-# NOINLINE bindViewport_set_use_arvr #-}
 
--- | If [code]true[/code], the viewport will be used in AR/VR process. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will be used in AR/VR process.
 bindViewport_set_use_arvr :: MethodBind
 bindViewport_set_use_arvr
   = unsafePerformIO $
@@ -1950,7 +1982,7 @@ bindViewport_set_use_arvr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will be used in AR/VR process. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will be used in AR/VR process.
 set_use_arvr ::
                (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_arvr cls arg1
@@ -1963,7 +1995,7 @@ set_use_arvr cls arg1
 
 {-# NOINLINE bindViewport_set_use_own_world #-}
 
--- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property.
 bindViewport_set_use_own_world :: MethodBind
 bindViewport_set_use_own_world
   = unsafePerformIO $
@@ -1973,7 +2005,7 @@ bindViewport_set_use_own_world
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will use [World] defined in [code]world[/code] property.
 set_use_own_world ::
                     (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_own_world cls arg1
@@ -1986,6 +2018,7 @@ set_use_own_world cls arg1
 
 {-# NOINLINE bindViewport_set_use_render_direct_to_screen #-}
 
+-- | If [code]true[/code], renders the Viewport directly to the screen instead of to the root viewport. Only available in GLES2. This is a low-level optimization and should not be used in most cases. If used, reading from the Viewport or from [code]SCREEN_TEXTURE[/code] becomes unavailable. For more information see [method VisualServer.viewport_set_render_direct_to_screen].
 bindViewport_set_use_render_direct_to_screen :: MethodBind
 bindViewport_set_use_render_direct_to_screen
   = unsafePerformIO $
@@ -1995,6 +2028,7 @@ bindViewport_set_use_render_direct_to_screen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], renders the Viewport directly to the screen instead of to the root viewport. Only available in GLES2. This is a low-level optimization and should not be used in most cases. If used, reading from the Viewport or from [code]SCREEN_TEXTURE[/code] becomes unavailable. For more information see [method VisualServer.viewport_set_render_direct_to_screen].
 set_use_render_direct_to_screen ::
                                   (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_render_direct_to_screen cls arg1
@@ -2008,7 +2042,7 @@ set_use_render_direct_to_screen cls arg1
 
 {-# NOINLINE bindViewport_set_vflip #-}
 
--- | If [code]true[/code], the result of rendering will be flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], the result of rendering will be flipped vertically.
 bindViewport_set_vflip :: MethodBind
 bindViewport_set_vflip
   = unsafePerformIO $
@@ -2018,7 +2052,7 @@ bindViewport_set_vflip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the result of rendering will be flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], the result of rendering will be flipped vertically.
 set_vflip ::
             (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_vflip cls arg1
@@ -2118,7 +2152,7 @@ update_worlds cls
 
 {-# NOINLINE bindViewport_use_arvr #-}
 
--- | If [code]true[/code], the viewport will be used in AR/VR process. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will be used in AR/VR process.
 bindViewport_use_arvr :: MethodBind
 bindViewport_use_arvr
   = unsafePerformIO $
@@ -2128,7 +2162,7 @@ bindViewport_use_arvr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the viewport will be used in AR/VR process. Default value: [code]false[/code].
+-- | If [code]true[/code], the viewport will be used in AR/VR process.
 use_arvr :: (Viewport :< cls, Object :< cls) => cls -> IO Bool
 use_arvr cls
   = withVariantArray []

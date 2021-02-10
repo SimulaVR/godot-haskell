@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.MultiplayerAPI
        (Godot.Core.MultiplayerAPI._RPC_MODE_SLAVE,
         Godot.Core.MultiplayerAPI._RPC_MODE_DISABLED,
@@ -71,41 +72,55 @@ _RPC_MODE_PUPPETSYNC = 6
 _RPC_MODE_REMOTESYNC :: Int
 _RPC_MODE_REMOTESYNC = 4
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] successfully connected to a server. Only emitted on clients.
+-- | Emitted when this MultiplayerAPI's [member network_peer] successfully connected to a server. Only emitted on clients.
 sig_connected_to_server ::
                         Godot.Internal.Dispatch.Signal MultiplayerAPI
 sig_connected_to_server
   = Godot.Internal.Dispatch.Signal "connected_to_server"
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] fails to establish a connection to a server. Only emitted on clients.
+instance NodeSignal MultiplayerAPI "connected_to_server" '[]
+
+-- | Emitted when this MultiplayerAPI's [member network_peer] fails to establish a connection to a server. Only emitted on clients.
 sig_connection_failed ::
                       Godot.Internal.Dispatch.Signal MultiplayerAPI
 sig_connection_failed
   = Godot.Internal.Dispatch.Signal "connection_failed"
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] connects with a new peer. ID is the peer ID of the new peer. Clients get notified when other clients connect to the same server. Upon connecting to a server, a client also receives this signal for the server (with ID being 1).
+instance NodeSignal MultiplayerAPI "connection_failed" '[]
+
+-- | Emitted when this MultiplayerAPI's [member network_peer] connects with a new peer. ID is the peer ID of the new peer. Clients get notified when other clients connect to the same server. Upon connecting to a server, a client also receives this signal for the server (with ID being 1).
 sig_network_peer_connected ::
                            Godot.Internal.Dispatch.Signal MultiplayerAPI
 sig_network_peer_connected
   = Godot.Internal.Dispatch.Signal "network_peer_connected"
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] disconnects from a peer. Clients get notified when other clients disconnect from the same server.
+instance NodeSignal MultiplayerAPI "network_peer_connected" '[Int]
+
+-- | Emitted when this MultiplayerAPI's [member network_peer] disconnects from a peer. Clients get notified when other clients disconnect from the same server.
 sig_network_peer_disconnected ::
                               Godot.Internal.Dispatch.Signal MultiplayerAPI
 sig_network_peer_disconnected
   = Godot.Internal.Dispatch.Signal "network_peer_disconnected"
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] receive a [code]packet[/code] with custom data (see [method send_bytes]). ID is the peer ID of the peer that sent the packet.
+instance NodeSignal MultiplayerAPI "network_peer_disconnected"
+           '[Int]
+
+-- | Emitted when this MultiplayerAPI's [member network_peer] receive a [code]packet[/code] with custom data (see [method send_bytes]). ID is the peer ID of the peer that sent the packet.
 sig_network_peer_packet ::
                         Godot.Internal.Dispatch.Signal MultiplayerAPI
 sig_network_peer_packet
   = Godot.Internal.Dispatch.Signal "network_peer_packet"
 
--- | Emitted whenever this MultiplayerAPI's [member network_peer] disconnects from server. Only emitted on clients.
+instance NodeSignal MultiplayerAPI "network_peer_packet"
+           '[Int, PoolByteArray]
+
+-- | Emitted when this MultiplayerAPI's [member network_peer] disconnects from server. Only emitted on clients.
 sig_server_disconnected ::
                         Godot.Internal.Dispatch.Signal MultiplayerAPI
 sig_server_disconnected
   = Godot.Internal.Dispatch.Signal "server_disconnected"
+
+instance NodeSignal MultiplayerAPI "server_disconnected" '[]
 
 {-# NOINLINE bindMultiplayerAPI__add_peer #-}
 
@@ -263,7 +278,7 @@ get_network_connected_peers cls
 
 {-# NOINLINE bindMultiplayerAPI_get_network_peer #-}
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master, or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
 bindMultiplayerAPI_get_network_peer :: MethodBind
 bindMultiplayerAPI_get_network_peer
   = unsafePerformIO $
@@ -273,7 +288,7 @@ bindMultiplayerAPI_get_network_peer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master, or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
 get_network_peer ::
                    (MultiplayerAPI :< cls, Object :< cls) =>
                    cls -> IO NetworkedMultiplayerPeer
@@ -313,7 +328,7 @@ get_network_unique_id cls
 {-# NOINLINE bindMultiplayerAPI_get_rpc_sender_id #-}
 
 -- | Returns the sender's peer ID for the RPC currently being executed.
---   				NOTE: If not inside an RPC this method will return 0.
+--   				[b]Note:[/b] If not inside an RPC this method will return 0.
 bindMultiplayerAPI_get_rpc_sender_id :: MethodBind
 bindMultiplayerAPI_get_rpc_sender_id
   = unsafePerformIO $
@@ -324,7 +339,7 @@ bindMultiplayerAPI_get_rpc_sender_id
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the sender's peer ID for the RPC currently being executed.
---   				NOTE: If not inside an RPC this method will return 0.
+--   				[b]Note:[/b] If not inside an RPC this method will return 0.
 get_rpc_sender_id ::
                     (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Int
 get_rpc_sender_id cls
@@ -386,8 +401,8 @@ is_network_server cls
 
 {-# NOINLINE bindMultiplayerAPI_is_object_decoding_allowed #-}
 
--- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
---   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | If [code]true[/code] (or if the [member network_peer] has [member PacketPeer.allow_object_decoding] set to [code]true[/code]), the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 bindMultiplayerAPI_is_object_decoding_allowed :: MethodBind
 bindMultiplayerAPI_is_object_decoding_allowed
   = unsafePerformIO $
@@ -397,8 +412,8 @@ bindMultiplayerAPI_is_object_decoding_allowed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
---   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | If [code]true[/code] (or if the [member network_peer] has [member PacketPeer.allow_object_decoding] set to [code]true[/code]), the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 is_object_decoding_allowed ::
                              (MultiplayerAPI :< cls, Object :< cls) => cls -> IO Bool
 is_object_decoding_allowed cls
@@ -440,8 +455,8 @@ is_refusing_new_network_connections cls
 
 {-# NOINLINE bindMultiplayerAPI_poll #-}
 
--- | Method used for polling the MultiplayerAPI. You only need to worry about this if you are using [member Node.custom_multiplayer] override or you set [member SceneTree.multiplayer_poll] to [code]false[/code]. By default [SceneTree] will poll its MultiplayerAPI for you.
---   				NOTE: This method results in RPCs and RSETs being called, so they will be executed in the same context of this function (e.g. [code]_process[/code], [code]physics[/code], [Thread]).
+-- | Method used for polling the MultiplayerAPI. You only need to worry about this if you are using [member Node.custom_multiplayer] override or you set [member SceneTree.multiplayer_poll] to [code]false[/code]. By default, [SceneTree] will poll its MultiplayerAPI for you.
+--   				[b]Note:[/b] This method results in RPCs and RSETs being called, so they will be executed in the same context of this function (e.g. [code]_process[/code], [code]physics[/code], [Thread]).
 bindMultiplayerAPI_poll :: MethodBind
 bindMultiplayerAPI_poll
   = unsafePerformIO $
@@ -451,8 +466,8 @@ bindMultiplayerAPI_poll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Method used for polling the MultiplayerAPI. You only need to worry about this if you are using [member Node.custom_multiplayer] override or you set [member SceneTree.multiplayer_poll] to [code]false[/code]. By default [SceneTree] will poll its MultiplayerAPI for you.
---   				NOTE: This method results in RPCs and RSETs being called, so they will be executed in the same context of this function (e.g. [code]_process[/code], [code]physics[/code], [Thread]).
+-- | Method used for polling the MultiplayerAPI. You only need to worry about this if you are using [member Node.custom_multiplayer] override or you set [member SceneTree.multiplayer_poll] to [code]false[/code]. By default, [SceneTree] will poll its MultiplayerAPI for you.
+--   				[b]Note:[/b] This method results in RPCs and RSETs being called, so they will be executed in the same context of this function (e.g. [code]_process[/code], [code]physics[/code], [Thread]).
 poll :: (MultiplayerAPI :< cls, Object :< cls) => cls -> IO ()
 poll cls
   = withVariantArray []
@@ -487,8 +502,8 @@ send_bytes cls arg1 arg2 arg3
 
 {-# NOINLINE bindMultiplayerAPI_set_allow_object_decoding #-}
 
--- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
---   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | If [code]true[/code] (or if the [member network_peer] has [member PacketPeer.allow_object_decoding] set to [code]true[/code]), the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 bindMultiplayerAPI_set_allow_object_decoding :: MethodBind
 bindMultiplayerAPI_set_allow_object_decoding
   = unsafePerformIO $
@@ -498,8 +513,8 @@ bindMultiplayerAPI_set_allow_object_decoding
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] (or if the [member network_peer] [member PacketPeer.allow_object_decoding] the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
---   			[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | If [code]true[/code] (or if the [member network_peer] has [member PacketPeer.allow_object_decoding] set to [code]true[/code]), the MultiplayerAPI will allow encoding and decoding of object during RPCs/RSETs.
+--   			[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 set_allow_object_decoding ::
                             (MultiplayerAPI :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_allow_object_decoding cls arg1
@@ -513,7 +528,7 @@ set_allow_object_decoding cls arg1
 
 {-# NOINLINE bindMultiplayerAPI_set_network_peer #-}
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master, or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
 bindMultiplayerAPI_set_network_peer :: MethodBind
 bindMultiplayerAPI_set_network_peer
   = unsafePerformIO $
@@ -523,7 +538,7 @@ bindMultiplayerAPI_set_network_peer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master (see NETWORK_MODE_* constants in [Node]), or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the MultiplayerAPI will become a network server (check with [method is_network_server]) and will set root node's network mode to master, or it will become a regular peer with root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to MultiplayerAPI's signals.
 set_network_peer ::
                    (MultiplayerAPI :< cls, Object :< cls) =>
                    cls -> NetworkedMultiplayerPeer -> IO ()

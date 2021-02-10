@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.StreamPeerSSL
        (Godot.Core.StreamPeerSSL._STATUS_CONNECTED,
         Godot.Core.StreamPeerSSL._STATUS_ERROR,
@@ -38,6 +39,7 @@ _STATUS_HANDSHAKING = 1
 
 {-# NOINLINE bindStreamPeerSSL_accept_stream #-}
 
+-- | Accepts a peer connection as a server using the given [code]private_key[/code] and providing the given [code]certificate[/code] to the client. You can pass the optional [code]chain[/code] parameter to provide additional CA chain information along with the certificate.
 bindStreamPeerSSL_accept_stream :: MethodBind
 bindStreamPeerSSL_accept_stream
   = unsafePerformIO $
@@ -47,6 +49,7 @@ bindStreamPeerSSL_accept_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Accepts a peer connection as a server using the given [code]private_key[/code] and providing the given [code]certificate[/code] to the client. You can pass the optional [code]chain[/code] parameter to provide additional CA chain information along with the certificate.
 accept_stream ::
                 (StreamPeerSSL :< cls, Object :< cls) =>
                 cls ->
@@ -63,7 +66,8 @@ accept_stream cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindStreamPeerSSL_connect_to_stream #-}
 
--- | Connect to a peer using an underlying [StreamPeer] "stream", when "validate_certs" is [code]true[/code], [code]StreamPeerSSL[/code] will validate that the certificate presented by the peer matches the "for_hostname".
+-- | Connects to a peer using an underlying [StreamPeer] [code]stream[/code]. If [code]validate_certs[/code] is [code]true[/code], [StreamPeerSSL] will validate that the certificate presented by the peer matches the [code]for_hostname[/code].
+--   				[b]Note:[/b] Specifying a custom [code]valid_certificate[/code] is not supported in HTML5 exports due to browsers restrictions.
 bindStreamPeerSSL_connect_to_stream :: MethodBind
 bindStreamPeerSSL_connect_to_stream
   = unsafePerformIO $
@@ -73,7 +77,8 @@ bindStreamPeerSSL_connect_to_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connect to a peer using an underlying [StreamPeer] "stream", when "validate_certs" is [code]true[/code], [code]StreamPeerSSL[/code] will validate that the certificate presented by the peer matches the "for_hostname".
+-- | Connects to a peer using an underlying [StreamPeer] [code]stream[/code]. If [code]validate_certs[/code] is [code]true[/code], [StreamPeerSSL] will validate that the certificate presented by the peer matches the [code]for_hostname[/code].
+--   				[b]Note:[/b] Specifying a custom [code]valid_certificate[/code] is not supported in HTML5 exports due to browsers restrictions.
 connect_to_stream ::
                     (StreamPeerSSL :< cls, Object :< cls) =>
                     cls ->
@@ -90,7 +95,7 @@ connect_to_stream cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindStreamPeerSSL_disconnect_from_stream #-}
 
--- | Disconnect from host.
+-- | Disconnects from host.
 bindStreamPeerSSL_disconnect_from_stream :: MethodBind
 bindStreamPeerSSL_disconnect_from_stream
   = unsafePerformIO $
@@ -100,7 +105,7 @@ bindStreamPeerSSL_disconnect_from_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disconnect from host.
+-- | Disconnects from host.
 disconnect_from_stream ::
                          (StreamPeerSSL :< cls, Object :< cls) => cls -> IO ()
 disconnect_from_stream cls
@@ -114,7 +119,7 @@ disconnect_from_stream cls
 
 {-# NOINLINE bindStreamPeerSSL_get_status #-}
 
--- | Returns the status of the connection, one of STATUS_* enum.
+-- | Returns the status of the connection. See [enum Status] for values.
 bindStreamPeerSSL_get_status :: MethodBind
 bindStreamPeerSSL_get_status
   = unsafePerformIO $
@@ -124,7 +129,7 @@ bindStreamPeerSSL_get_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the status of the connection, one of STATUS_* enum.
+-- | Returns the status of the connection. See [enum Status] for values.
 get_status ::
              (StreamPeerSSL :< cls, Object :< cls) => cls -> IO Int
 get_status cls
@@ -160,7 +165,7 @@ is_blocking_handshake_enabled cls
 
 {-# NOINLINE bindStreamPeerSSL_poll #-}
 
--- | Poll the connection to check for incoming bytes. Call this right before "get_available_bytes()" for it to work properly.
+-- | Poll the connection to check for incoming bytes. Call this right before [method StreamPeer.get_available_bytes] for it to work properly.
 bindStreamPeerSSL_poll :: MethodBind
 bindStreamPeerSSL_poll
   = unsafePerformIO $
@@ -170,7 +175,7 @@ bindStreamPeerSSL_poll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Poll the connection to check for incoming bytes. Call this right before "get_available_bytes()" for it to work properly.
+-- | Poll the connection to check for incoming bytes. Call this right before [method StreamPeer.get_available_bytes] for it to work properly.
 poll :: (StreamPeerSSL :< cls, Object :< cls) => cls -> IO ()
 poll cls
   = withVariantArray []

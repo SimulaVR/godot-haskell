@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.HTTPRequest
        (Godot.Core.HTTPRequest._RESULT_DOWNLOAD_FILE_CANT_OPEN,
         Godot.Core.HTTPRequest._RESULT_SUCCESS,
@@ -82,10 +83,13 @@ _RESULT_TIMEOUT = 12
 _RESULT_DOWNLOAD_FILE_WRITE_ERROR :: Int
 _RESULT_DOWNLOAD_FILE_WRITE_ERROR = 10
 
--- | This signal is emitted upon request completion.
+-- | Emitted when a request is completed.
 sig_request_completed :: Godot.Internal.Dispatch.Signal HTTPRequest
 sig_request_completed
   = Godot.Internal.Dispatch.Signal "request_completed"
+
+instance NodeSignal HTTPRequest "request_completed"
+           '[Int, Int, PoolStringArray, PoolByteArray]
 
 {-# NOINLINE bindHTTPRequest__redirect_request #-}
 
@@ -177,6 +181,7 @@ cancel_request cls
 {-# NOINLINE bindHTTPRequest_get_body_size #-}
 
 -- | Returns the response body length.
+--   				[b]Note:[/b] Some Web servers may not send a body length. In this case, the value returned will be [code]-1[/code]. If using chunked transfer encoding, the body length will also be [code]-1[/code].
 bindHTTPRequest_get_body_size :: MethodBind
 bindHTTPRequest_get_body_size
   = unsafePerformIO $
@@ -187,6 +192,7 @@ bindHTTPRequest_get_body_size
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the response body length.
+--   				[b]Note:[/b] Some Web servers may not send a body length. In this case, the value returned will be [code]-1[/code]. If using chunked transfer encoding, the body length will also be [code]-1[/code].
 get_body_size ::
                 (HTTPRequest :< cls, Object :< cls) => cls -> IO Int
 get_body_size cls
@@ -223,6 +229,8 @@ get_body_size_limit cls
 
 {-# NOINLINE bindHTTPRequest_get_download_chunk_size #-}
 
+-- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+--   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 bindHTTPRequest_get_download_chunk_size :: MethodBind
 bindHTTPRequest_get_download_chunk_size
   = unsafePerformIO $
@@ -232,6 +240,8 @@ bindHTTPRequest_get_download_chunk_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+--   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 get_download_chunk_size ::
                           (HTTPRequest :< cls, Object :< cls) => cls -> IO Int
 get_download_chunk_size cls
@@ -293,7 +303,7 @@ get_downloaded_bytes cls
 
 {-# NOINLINE bindHTTPRequest_get_http_client_status #-}
 
--- | Returns the current status of the underlying [HTTPClient]. See [code]STATUS_*[/code] enum on [HTTPClient].
+-- | Returns the current status of the underlying [HTTPClient]. See [enum HTTPClient.Status].
 bindHTTPRequest_get_http_client_status :: MethodBind
 bindHTTPRequest_get_http_client_status
   = unsafePerformIO $
@@ -303,7 +313,7 @@ bindHTTPRequest_get_http_client_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current status of the underlying [HTTPClient]. See [code]STATUS_*[/code] enum on [HTTPClient].
+-- | Returns the current status of the underlying [HTTPClient]. See [enum HTTPClient.Status].
 get_http_client_status ::
                          (HTTPRequest :< cls, Object :< cls) => cls -> IO Int
 get_http_client_status cls
@@ -386,7 +396,8 @@ is_using_threads cls
 {-# NOINLINE bindHTTPRequest_request #-}
 
 -- | Creates request on the underlying [HTTPClient]. If there is no configuration errors, it tries to connect using [method HTTPClient.connect_to_host] and passes parameters onto [method HTTPClient.request].
---   				Returns [constant @GlobalScope.OK] if request is successfully created. (Does not imply that the server has responded), [constant @GlobalScope.ERR_UNCONFIGURED] if not in the tree, [constant @GlobalScope.ERR_BUSY] if still processing previous request, [constant @GlobalScope.ERR_INVALID_PARAMETER] if given string is not a valid URL format, or [constant @GlobalScope.ERR_CANT_CONNECT] if not using thread and the [HTTPClient] cannot connect to host.
+--   				Returns [constant OK] if request is successfully created. (Does not imply that the server has responded), [constant ERR_UNCONFIGURED] if not in the tree, [constant ERR_BUSY] if still processing previous request, [constant ERR_INVALID_PARAMETER] if given string is not a valid URL format, or [constant ERR_CANT_CONNECT] if not using thread and the [HTTPClient] cannot connect to host.
+--   				[b]Note:[/b] The [code]request_data[/code] parameter is ignored if [code]method[/code] is [constant HTTPClient.METHOD_GET]. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See [method String.http_escape] for an example.
 bindHTTPRequest_request :: MethodBind
 bindHTTPRequest_request
   = unsafePerformIO $
@@ -397,7 +408,8 @@ bindHTTPRequest_request
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Creates request on the underlying [HTTPClient]. If there is no configuration errors, it tries to connect using [method HTTPClient.connect_to_host] and passes parameters onto [method HTTPClient.request].
---   				Returns [constant @GlobalScope.OK] if request is successfully created. (Does not imply that the server has responded), [constant @GlobalScope.ERR_UNCONFIGURED] if not in the tree, [constant @GlobalScope.ERR_BUSY] if still processing previous request, [constant @GlobalScope.ERR_INVALID_PARAMETER] if given string is not a valid URL format, or [constant @GlobalScope.ERR_CANT_CONNECT] if not using thread and the [HTTPClient] cannot connect to host.
+--   				Returns [constant OK] if request is successfully created. (Does not imply that the server has responded), [constant ERR_UNCONFIGURED] if not in the tree, [constant ERR_BUSY] if still processing previous request, [constant ERR_INVALID_PARAMETER] if given string is not a valid URL format, or [constant ERR_CANT_CONNECT] if not using thread and the [HTTPClient] cannot connect to host.
+--   				[b]Note:[/b] The [code]request_data[/code] parameter is ignored if [code]method[/code] is [constant HTTPClient.METHOD_GET]. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See [method String.http_escape] for an example.
 request ::
           (HTTPRequest :< cls, Object :< cls) =>
           cls ->
@@ -438,6 +450,8 @@ set_body_size_limit cls arg1
 
 {-# NOINLINE bindHTTPRequest_set_download_chunk_size #-}
 
+-- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+--   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 bindHTTPRequest_set_download_chunk_size :: MethodBind
 bindHTTPRequest_set_download_chunk_size
   = unsafePerformIO $
@@ -447,6 +461,8 @@ bindHTTPRequest_set_download_chunk_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+--   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 set_download_chunk_size ::
                           (HTTPRequest :< cls, Object :< cls) => cls -> Int -> IO ()
 set_download_chunk_size cls arg1

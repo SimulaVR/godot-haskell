@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RandomNumberGenerator
        (Godot.Core.RandomNumberGenerator.get_seed,
         Godot.Core.RandomNumberGenerator.randf,
@@ -45,7 +46,7 @@ get_seed cls
 
 {-# NOINLINE bindRandomNumberGenerator_randf #-}
 
--- | Generates pseudo-random float between '0.0' and '1.0', inclusive.
+-- | Generates a pseudo-random float between [code]0.0[/code] and [code]1.0[/code] (inclusive).
 bindRandomNumberGenerator_randf :: MethodBind
 bindRandomNumberGenerator_randf
   = unsafePerformIO $
@@ -55,7 +56,7 @@ bindRandomNumberGenerator_randf
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates pseudo-random float between '0.0' and '1.0', inclusive.
+-- | Generates a pseudo-random float between [code]0.0[/code] and [code]1.0[/code] (inclusive).
 randf ::
         (RandomNumberGenerator :< cls, Object :< cls) => cls -> IO Float
 randf cls
@@ -68,7 +69,7 @@ randf cls
 
 {-# NOINLINE bindRandomNumberGenerator_randf_range #-}
 
--- | Generates pseudo-random float between [code]from[/code] and [code]to[/code], inclusive.
+-- | Generates a pseudo-random float between [code]from[/code] and [code]to[/code] (inclusive).
 bindRandomNumberGenerator_randf_range :: MethodBind
 bindRandomNumberGenerator_randf_range
   = unsafePerformIO $
@@ -78,7 +79,7 @@ bindRandomNumberGenerator_randf_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates pseudo-random float between [code]from[/code] and [code]to[/code], inclusive.
+-- | Generates a pseudo-random float between [code]from[/code] and [code]to[/code] (inclusive).
 randf_range ::
               (RandomNumberGenerator :< cls, Object :< cls) =>
               cls -> Float -> Float -> IO Float
@@ -93,7 +94,7 @@ randf_range cls arg1 arg2
 
 {-# NOINLINE bindRandomNumberGenerator_randfn #-}
 
--- | Generates normally(gaussian) distributed pseudo-random number, using Box-Muller transform with the specified [code]mean[/code] and a standard [code]deviation[/code].
+-- | Generates a [url=https://en.wikipedia.org/wiki/Normal_distribution]normally-distributed[/url] pseudo-random number, using Box-Muller transform with the specified [code]mean[/code] and a standard [code]deviation[/code]. This is also called Gaussian distribution.
 bindRandomNumberGenerator_randfn :: MethodBind
 bindRandomNumberGenerator_randfn
   = unsafePerformIO $
@@ -103,7 +104,7 @@ bindRandomNumberGenerator_randfn
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates normally(gaussian) distributed pseudo-random number, using Box-Muller transform with the specified [code]mean[/code] and a standard [code]deviation[/code].
+-- | Generates a [url=https://en.wikipedia.org/wiki/Normal_distribution]normally-distributed[/url] pseudo-random number, using Box-Muller transform with the specified [code]mean[/code] and a standard [code]deviation[/code]. This is also called Gaussian distribution.
 randfn ::
          (RandomNumberGenerator :< cls, Object :< cls) =>
          cls -> Float -> Float -> IO Float
@@ -118,7 +119,7 @@ randfn cls arg1 arg2
 
 {-# NOINLINE bindRandomNumberGenerator_randi #-}
 
--- | Generates pseudo-random 32-bit unsigned integer between '0' and '4294967295', inclusive.
+-- | Generates a pseudo-random 32-bit unsigned integer between [code]0[/code] and [code]4294967295[/code] (inclusive).
 bindRandomNumberGenerator_randi :: MethodBind
 bindRandomNumberGenerator_randi
   = unsafePerformIO $
@@ -128,7 +129,7 @@ bindRandomNumberGenerator_randi
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates pseudo-random 32-bit unsigned integer between '0' and '4294967295', inclusive.
+-- | Generates a pseudo-random 32-bit unsigned integer between [code]0[/code] and [code]4294967295[/code] (inclusive).
 randi ::
         (RandomNumberGenerator :< cls, Object :< cls) => cls -> IO Int
 randi cls
@@ -141,7 +142,7 @@ randi cls
 
 {-# NOINLINE bindRandomNumberGenerator_randi_range #-}
 
--- | Generates pseudo-random 32-bit signed integer between [code]from[/code] and [code]to[/code] (inclusive).
+-- | Generates a pseudo-random 32-bit signed integer between [code]from[/code] and [code]to[/code] (inclusive).
 bindRandomNumberGenerator_randi_range :: MethodBind
 bindRandomNumberGenerator_randi_range
   = unsafePerformIO $
@@ -151,7 +152,7 @@ bindRandomNumberGenerator_randi_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates pseudo-random 32-bit signed integer between [code]from[/code] and [code]to[/code] (inclusive).
+-- | Generates a pseudo-random 32-bit signed integer between [code]from[/code] and [code]to[/code] (inclusive).
 randi_range ::
               (RandomNumberGenerator :< cls, Object :< cls) =>
               cls -> Int -> Int -> IO Int

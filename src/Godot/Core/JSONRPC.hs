@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.JSONRPC
        (Godot.Core.JSONRPC._METHOD_NOT_FOUND,
         Godot.Core.JSONRPC._INTERNAL_ERROR,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptYieldSignal
        (Godot.Core.VisualScriptYieldSignal._CALL_MODE_NODE_PATH,
         Godot.Core.VisualScriptYieldSignal._CALL_MODE_SELF,

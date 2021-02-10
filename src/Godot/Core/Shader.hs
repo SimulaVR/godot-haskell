@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Shader
        (Godot.Core.Shader._MODE_CANVAS_ITEM,
         Godot.Core.Shader._MODE_PARTICLES, Godot.Core.Shader._MODE_SPATIAL,
@@ -27,6 +28,7 @@ _MODE_SPATIAL = 0
 
 {-# NOINLINE bindShader_get_code #-}
 
+-- | Returns the shader's code as the user has written it, not the full generated code used internally.
 bindShader_get_code :: MethodBind
 bindShader_get_code
   = unsafePerformIO $
@@ -36,6 +38,7 @@ bindShader_get_code
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the shader's code as the user has written it, not the full generated code used internally.
 get_code :: (Shader :< cls, Object :< cls) => cls -> IO GodotString
 get_code cls
   = withVariantArray []
@@ -45,6 +48,8 @@ get_code cls
 
 {-# NOINLINE bindShader_get_default_texture_param #-}
 
+-- | Returns the texture that is set as default for the specified parameter.
+--   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 bindShader_get_default_texture_param :: MethodBind
 bindShader_get_default_texture_param
   = unsafePerformIO $
@@ -54,6 +59,8 @@ bindShader_get_default_texture_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the texture that is set as default for the specified parameter.
+--   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 get_default_texture_param ::
                             (Shader :< cls, Object :< cls) => cls -> GodotString -> IO Texture
 get_default_texture_param cls arg1
@@ -67,7 +74,7 @@ get_default_texture_param cls arg1
 
 {-# NOINLINE bindShader_get_mode #-}
 
--- | Returns the shader mode for the shader, either [constant MODE_CANVAS_ITEM], [constant MODE_SPATIAL] or [constant MODE_PARTICLES]
+-- | Returns the shader mode for the shader, either [constant MODE_CANVAS_ITEM], [constant MODE_SPATIAL] or [constant MODE_PARTICLES].
 bindShader_get_mode :: MethodBind
 bindShader_get_mode
   = unsafePerformIO $
@@ -77,7 +84,7 @@ bindShader_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the shader mode for the shader, either [constant MODE_CANVAS_ITEM], [constant MODE_SPATIAL] or [constant MODE_PARTICLES]
+-- | Returns the shader mode for the shader, either [constant MODE_CANVAS_ITEM], [constant MODE_SPATIAL] or [constant MODE_PARTICLES].
 get_mode :: (Shader :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
@@ -87,6 +94,8 @@ get_mode cls
 
 {-# NOINLINE bindShader_has_param #-}
 
+-- | Returns [code]true[/code] if the shader has this param defined as a uniform in its code.
+--   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 bindShader_has_param :: MethodBind
 bindShader_has_param
   = unsafePerformIO $
@@ -96,6 +105,8 @@ bindShader_has_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the shader has this param defined as a uniform in its code.
+--   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 has_param ::
             (Shader :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_param cls arg1
@@ -106,6 +117,7 @@ has_param cls arg1
 
 {-# NOINLINE bindShader_set_code #-}
 
+-- | Returns the shader's code as the user has written it, not the full generated code used internally.
 bindShader_set_code :: MethodBind
 bindShader_set_code
   = unsafePerformIO $
@@ -115,6 +127,7 @@ bindShader_set_code
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the shader's code as the user has written it, not the full generated code used internally.
 set_code ::
            (Shader :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_code cls arg1
@@ -125,6 +138,8 @@ set_code cls arg1
 
 {-# NOINLINE bindShader_set_default_texture_param #-}
 
+-- | Sets the default texture to be used with a texture uniform. The default is used if a texture is not set in the [ShaderMaterial].
+--   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 bindShader_set_default_texture_param :: MethodBind
 bindShader_set_default_texture_param
   = unsafePerformIO $
@@ -134,6 +149,8 @@ bindShader_set_default_texture_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the default texture to be used with a texture uniform. The default is used if a texture is not set in the [ShaderMaterial].
+--   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 set_default_texture_param ::
                             (Shader :< cls, Object :< cls) =>
                             cls -> GodotString -> Texture -> IO ()

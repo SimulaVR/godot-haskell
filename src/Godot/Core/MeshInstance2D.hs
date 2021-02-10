@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.MeshInstance2D
        (Godot.Core.MeshInstance2D.sig_texture_changed,
         Godot.Core.MeshInstance2D.get_mesh,
@@ -16,10 +17,13 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
+-- | Emitted when the [member texture] is changed.
 sig_texture_changed ::
                     Godot.Internal.Dispatch.Signal MeshInstance2D
 sig_texture_changed
   = Godot.Internal.Dispatch.Signal "texture_changed"
+
+instance NodeSignal MeshInstance2D "texture_changed" '[]
 
 {-# NOINLINE bindMeshInstance2D_get_mesh #-}
 
@@ -47,6 +51,7 @@ get_mesh cls
 {-# NOINLINE bindMeshInstance2D_get_normal_map #-}
 
 -- | The normal map that will be used if using the default [CanvasItemMaterial].
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 bindMeshInstance2D_get_normal_map :: MethodBind
 bindMeshInstance2D_get_normal_map
   = unsafePerformIO $
@@ -57,6 +62,7 @@ bindMeshInstance2D_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map that will be used if using the default [CanvasItemMaterial].
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (MeshInstance2D :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -117,6 +123,7 @@ set_mesh cls arg1
 {-# NOINLINE bindMeshInstance2D_set_normal_map #-}
 
 -- | The normal map that will be used if using the default [CanvasItemMaterial].
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 bindMeshInstance2D_set_normal_map :: MethodBind
 bindMeshInstance2D_set_normal_map
   = unsafePerformIO $
@@ -127,6 +134,7 @@ bindMeshInstance2D_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map that will be used if using the default [CanvasItemMaterial].
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (MeshInstance2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1

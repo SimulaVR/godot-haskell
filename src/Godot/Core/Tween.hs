@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Tween
        (Godot.Core.Tween._TRANS_SINE,
         Godot.Core.Tween._TWEEN_PROCESS_IDLE,
@@ -96,18 +97,27 @@ sig_tween_all_completed :: Godot.Internal.Dispatch.Signal Tween
 sig_tween_all_completed
   = Godot.Internal.Dispatch.Signal "tween_all_completed"
 
+instance NodeSignal Tween "tween_all_completed" '[]
+
 -- | Emitted when a tween ends.
 sig_tween_completed :: Godot.Internal.Dispatch.Signal Tween
 sig_tween_completed
   = Godot.Internal.Dispatch.Signal "tween_completed"
 
+instance NodeSignal Tween "tween_completed" '[Object, NodePath]
+
 -- | Emitted when a tween starts.
 sig_tween_started :: Godot.Internal.Dispatch.Signal Tween
 sig_tween_started = Godot.Internal.Dispatch.Signal "tween_started"
 
+instance NodeSignal Tween "tween_started" '[Object, NodePath]
+
 -- | Emitted at each step of the animation.
 sig_tween_step :: Godot.Internal.Dispatch.Signal Tween
 sig_tween_step = Godot.Internal.Dispatch.Signal "tween_step"
+
+instance NodeSignal Tween "tween_step"
+           '[Object, NodePath, Float, Object]
 
 {-# NOINLINE bindTween__remove_by_uid #-}
 
@@ -132,7 +142,7 @@ _remove_by_uid cls arg1
 {-# NOINLINE bindTween_follow_method #-}
 
 -- | Follows [code]method[/code] of [code]object[/code] and applies the returned value on [code]target_method[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_follow_method :: MethodBind
 bindTween_follow_method
   = unsafePerformIO $
@@ -143,7 +153,7 @@ bindTween_follow_method
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Follows [code]method[/code] of [code]object[/code] and applies the returned value on [code]target_method[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 follow_method ::
                 (Tween :< cls, Object :< cls) =>
                 cls ->
@@ -164,7 +174,7 @@ follow_method cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9
 {-# NOINLINE bindTween_follow_property #-}
 
 -- | Follows [code]property[/code] of [code]object[/code] and applies it on [code]target_property[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_follow_property :: MethodBind
 bindTween_follow_property
   = unsafePerformIO $
@@ -175,7 +185,7 @@ bindTween_follow_property
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Follows [code]property[/code] of [code]object[/code] and applies it on [code]target_property[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 follow_property ::
                   (Tween :< cls, Object :< cls) =>
                   cls ->
@@ -239,7 +249,7 @@ get_speed_scale cls
 
 {-# NOINLINE bindTween_get_tween_process_mode #-}
 
--- | The tween's animation process thread. See [enum TweenProcessMode]. Default value: [constant TWEEN_PROCESS_IDLE].
+-- | The tween's animation process thread. See [enum TweenProcessMode].
 bindTween_get_tween_process_mode :: MethodBind
 bindTween_get_tween_process_mode
   = unsafePerformIO $
@@ -249,7 +259,7 @@ bindTween_get_tween_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The tween's animation process thread. See [enum TweenProcessMode]. Default value: [constant TWEEN_PROCESS_IDLE].
+-- | The tween's animation process thread. See [enum TweenProcessMode].
 get_tween_process_mode ::
                          (Tween :< cls, Object :< cls) => cls -> IO Int
 get_tween_process_mode cls
@@ -330,7 +340,7 @@ interpolate_deferred_callback cls arg1 arg2 arg3 arg4 arg5 arg6
 {-# NOINLINE bindTween_interpolate_method #-}
 
 -- | Animates [code]method[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_interpolate_method :: MethodBind
 bindTween_interpolate_method
   = unsafePerformIO $
@@ -341,7 +351,7 @@ bindTween_interpolate_method
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Animates [code]method[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 interpolate_method ::
                      (Tween :< cls, Object :< cls) =>
                      cls ->
@@ -362,7 +372,7 @@ interpolate_method cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
 {-# NOINLINE bindTween_interpolate_property #-}
 
 -- | Animates [code]property[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Setting the initial value to [code]null[/code] uses the current value of the property.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_interpolate_property :: MethodBind
 bindTween_interpolate_property
   = unsafePerformIO $
@@ -373,7 +383,7 @@ bindTween_interpolate_property
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Animates [code]property[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Setting the initial value to [code]null[/code] uses the current value of the property.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 interpolate_property ::
                        (Tween :< cls, Object :< cls) =>
                        cls ->
@@ -393,7 +403,8 @@ interpolate_property cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
 
 {-# NOINLINE bindTween_is_active #-}
 
--- | Returns [code]true[/code] if any tweens are currently running. Note that this method doesn't consider tweens that have ended.
+-- | Returns [code]true[/code] if any tweens are currently running.
+--   				[b]Note:[/b] This method doesn't consider tweens that have ended.
 bindTween_is_active :: MethodBind
 bindTween_is_active
   = unsafePerformIO $
@@ -403,7 +414,8 @@ bindTween_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if any tweens are currently running. Note that this method doesn't consider tweens that have ended.
+-- | Returns [code]true[/code] if any tweens are currently running.
+--   				[b]Note:[/b] This method doesn't consider tweens that have ended.
 is_active :: (Tween :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
   = withVariantArray []
@@ -642,7 +654,7 @@ set_speed_scale cls arg1
 
 {-# NOINLINE bindTween_set_tween_process_mode #-}
 
--- | The tween's animation process thread. See [enum TweenProcessMode]. Default value: [constant TWEEN_PROCESS_IDLE].
+-- | The tween's animation process thread. See [enum TweenProcessMode].
 bindTween_set_tween_process_mode :: MethodBind
 bindTween_set_tween_process_mode
   = unsafePerformIO $
@@ -652,7 +664,7 @@ bindTween_set_tween_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The tween's animation process thread. See [enum TweenProcessMode]. Default value: [constant TWEEN_PROCESS_IDLE].
+-- | The tween's animation process thread. See [enum TweenProcessMode].
 set_tween_process_mode ::
                          (Tween :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tween_process_mode cls arg1
@@ -729,7 +741,7 @@ stop_all cls
 {-# NOINLINE bindTween_targeting_method #-}
 
 -- | Animates [code]method[/code] of [code]object[/code] from the value returned by [code]initial_method[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are animated by calling them with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_targeting_method :: MethodBind
 bindTween_targeting_method
   = unsafePerformIO $
@@ -740,7 +752,7 @@ bindTween_targeting_method
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Animates [code]method[/code] of [code]object[/code] from the value returned by [code]initial_method[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are animated by calling them with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 targeting_method ::
                    (Tween :< cls, Object :< cls) =>
                    cls ->
@@ -763,7 +775,7 @@ targeting_method cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9
 {-# NOINLINE bindTween_targeting_property #-}
 
 -- | Animates [code]property[/code] of [code]object[/code] from the current value of the [code]initial_val[/code] property of [code]initial[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_targeting_property :: MethodBind
 bindTween_targeting_property
   = unsafePerformIO $
@@ -774,7 +786,7 @@ bindTween_targeting_property
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Animates [code]property[/code] of [code]object[/code] from the current value of the [code]initial_val[/code] property of [code]initial[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information
+--   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 targeting_property ::
                      (Tween :< cls, Object :< cls) =>
                      cls ->

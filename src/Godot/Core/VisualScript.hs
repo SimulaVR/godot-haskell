@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScript
        (Godot.Core.VisualScript.sig_node_ports_changed,
         Godot.Core.VisualScript._get_data,
@@ -59,6 +60,9 @@ sig_node_ports_changed ::
                        Godot.Internal.Dispatch.Signal VisualScript
 sig_node_ports_changed
   = Godot.Internal.Dispatch.Signal "node_ports_changed"
+
+instance NodeSignal VisualScript "node_ports_changed"
+           '[GodotString, Int]
 
 {-# NOINLINE bindVisualScript__get_data #-}
 
