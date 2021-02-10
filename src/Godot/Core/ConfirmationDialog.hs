@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ConfirmationDialog
        (Godot.Core.ConfirmationDialog.get_cancel) where
 import Data.Coerce

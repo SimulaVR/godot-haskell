@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WebSocketPeer
        (Godot.Core.WebSocketPeer._WRITE_MODE_TEXT,
         Godot.Core.WebSocketPeer._WRITE_MODE_BINARY,

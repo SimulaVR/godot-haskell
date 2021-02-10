@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimatedTexture
        (Godot.Core.AnimatedTexture._MAX_FRAMES,
         Godot.Core.AnimatedTexture._update_proxy,
@@ -46,7 +47,7 @@ _update_proxy cls
 
 {-# NOINLINE bindAnimatedTexture_get_fps #-}
 
--- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]). Default value: 4.
+-- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]).
 --   			For example, an animation with 8 frames, no frame delay and a [code]fps[/code] value of 2 will run for 4 seconds, with each frame lasting 0.5 seconds.
 bindAnimatedTexture_get_fps :: MethodBind
 bindAnimatedTexture_get_fps
@@ -57,7 +58,7 @@ bindAnimatedTexture_get_fps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]). Default value: 4.
+-- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]).
 --   			For example, an animation with 8 frames, no frame delay and a [code]fps[/code] value of 2 will run for 4 seconds, with each frame lasting 0.5 seconds.
 get_fps ::
           (AnimatedTexture :< cls, Object :< cls) => cls -> IO Float
@@ -119,7 +120,7 @@ get_frame_texture cls arg1
 
 {-# NOINLINE bindAnimatedTexture_get_frames #-}
 
--- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES]. Default value: 1.
+-- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES].
 bindAnimatedTexture_get_frames :: MethodBind
 bindAnimatedTexture_get_frames
   = unsafePerformIO $
@@ -129,7 +130,7 @@ bindAnimatedTexture_get_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES]. Default value: 1.
+-- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES].
 get_frames ::
              (AnimatedTexture :< cls, Object :< cls) => cls -> IO Int
 get_frames cls
@@ -142,7 +143,7 @@ get_frames cls
 
 {-# NOINLINE bindAnimatedTexture_set_fps #-}
 
--- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]). Default value: 4.
+-- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]).
 --   			For example, an animation with 8 frames, no frame delay and a [code]fps[/code] value of 2 will run for 4 seconds, with each frame lasting 0.5 seconds.
 bindAnimatedTexture_set_fps :: MethodBind
 bindAnimatedTexture_set_fps
@@ -153,7 +154,7 @@ bindAnimatedTexture_set_fps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]). Default value: 4.
+-- | Animation speed in frames per second. This value defines the default time interval between two frames of the animation, and thus the overall duration of the animation loop based on the [member frames] property. A value of 0 means no predefined number of frames per second, the animation will play according to each frame's frame delay (see [method set_frame_delay]).
 --   			For example, an animation with 8 frames, no frame delay and a [code]fps[/code] value of 2 will run for 4 seconds, with each frame lasting 0.5 seconds.
 set_fps ::
           (AnimatedTexture :< cls, Object :< cls) => cls -> Float -> IO ()
@@ -233,7 +234,7 @@ set_frame_texture cls arg1 arg2
 
 {-# NOINLINE bindAnimatedTexture_set_frames #-}
 
--- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES]. Default value: 1.
+-- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES].
 bindAnimatedTexture_set_frames :: MethodBind
 bindAnimatedTexture_set_frames
   = unsafePerformIO $
@@ -243,7 +244,7 @@ bindAnimatedTexture_set_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES]. Default value: 1.
+-- | Number of frames to use in the animation. While you can create the frames independently with [method set_frame_texture], you need to set this value for the animation to take new frames into account. The maximum number of frames is [constant MAX_FRAMES].
 set_frames ::
              (AnimatedTexture :< cls, Object :< cls) => cls -> Int -> IO ()
 set_frames cls arg1

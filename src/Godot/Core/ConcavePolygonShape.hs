@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ConcavePolygonShape
        (Godot.Core.ConcavePolygonShape.get_faces,
         Godot.Core.ConcavePolygonShape.set_faces)
@@ -38,7 +39,7 @@ get_faces cls
 
 {-# NOINLINE bindConcavePolygonShape_set_faces #-}
 
--- | Set the faces (an array of triangles).
+-- | Sets the faces (an array of triangles).
 bindConcavePolygonShape_set_faces :: MethodBind
 bindConcavePolygonShape_set_faces
   = unsafePerformIO $
@@ -48,7 +49,7 @@ bindConcavePolygonShape_set_faces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the faces (an array of triangles).
+-- | Sets the faces (an array of triangles).
 set_faces ::
             (ConcavePolygonShape :< cls, Object :< cls) =>
             cls -> PoolVector3Array -> IO ()

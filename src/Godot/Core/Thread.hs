@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Thread
        (Godot.Core.Thread._PRIORITY_NORMAL,
         Godot.Core.Thread._PRIORITY_LOW, Godot.Core.Thread._PRIORITY_HIGH,
@@ -24,7 +25,7 @@ _PRIORITY_HIGH = 2
 
 {-# NOINLINE bindThread_get_id #-}
 
--- | Returns the current [code]Thread[/code]s id, uniquely identifying it among all threads.
+-- | Returns the current [Thread]'s ID, uniquely identifying it among all threads. If the [Thread] is not running this returns an empty string.
 bindThread_get_id :: MethodBind
 bindThread_get_id
   = unsafePerformIO $
@@ -34,7 +35,7 @@ bindThread_get_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current [code]Thread[/code]s id, uniquely identifying it among all threads.
+-- | Returns the current [Thread]'s ID, uniquely identifying it among all threads. If the [Thread] is not running this returns an empty string.
 get_id :: (Thread :< cls, Object :< cls) => cls -> IO GodotString
 get_id cls
   = withVariantArray []
@@ -44,7 +45,7 @@ get_id cls
 
 {-# NOINLINE bindThread_is_active #-}
 
--- | Returns [code]true[/code] if this [code]Thread[/code] is currently active. An active [code]Thread[/code] cannot start work on a new method but can be joined with [method wait_to_finish].
+-- | Returns [code]true[/code] if this [Thread] is currently active. An active [Thread] cannot start work on a new method but can be joined with [method wait_to_finish].
 bindThread_is_active :: MethodBind
 bindThread_is_active
   = unsafePerformIO $
@@ -54,7 +55,7 @@ bindThread_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if this [code]Thread[/code] is currently active. An active [code]Thread[/code] cannot start work on a new method but can be joined with [method wait_to_finish].
+-- | Returns [code]true[/code] if this [Thread] is currently active. An active [Thread] cannot start work on a new method but can be joined with [method wait_to_finish].
 is_active :: (Thread :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
   = withVariantArray []
@@ -64,8 +65,8 @@ is_active cls
 
 {-# NOINLINE bindThread_start #-}
 
--- | Starts a new [code]Thread[/code] that runs "method" on object "instance" with "userdata" passed as an argument. The "priority" of the [code]Thread[/code] can be changed by passing a PRIORITY_* enum.
---   				Returns OK on success, or ERR_CANT_CREATE on failure.
+-- | Starts a new [Thread] that runs [code]method[/code] on object [code]instance[/code] with [code]userdata[/code] passed as an argument. Even if no userdata is passed, [code]method[/code] must accept one argument and it will be null. The [code]priority[/code] of the [Thread] can be changed by passing a value from the [enum Priority] enum.
+--   				Returns [constant OK] on success, or [constant ERR_CANT_CREATE] on failure.
 bindThread_start :: MethodBind
 bindThread_start
   = unsafePerformIO $
@@ -75,8 +76,8 @@ bindThread_start
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Starts a new [code]Thread[/code] that runs "method" on object "instance" with "userdata" passed as an argument. The "priority" of the [code]Thread[/code] can be changed by passing a PRIORITY_* enum.
---   				Returns OK on success, or ERR_CANT_CREATE on failure.
+-- | Starts a new [Thread] that runs [code]method[/code] on object [code]instance[/code] with [code]userdata[/code] passed as an argument. Even if no userdata is passed, [code]method[/code] must accept one argument and it will be null. The [code]priority[/code] of the [Thread] can be changed by passing a value from the [enum Priority] enum.
+--   				Returns [constant OK] on success, or [constant ERR_CANT_CREATE] on failure.
 start ::
         (Thread :< cls, Object :< cls) =>
         cls -> Object -> GodotString -> GodotVariant -> Int -> IO Int
@@ -89,7 +90,7 @@ start cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindThread_wait_to_finish #-}
 
--- | Joins the [code]Thread[/code] and waits for it to finish. Returns what the method called returned.
+-- | Joins the [Thread] and waits for it to finish. Returns what the method called returned.
 bindThread_wait_to_finish :: MethodBind
 bindThread_wait_to_finish
   = unsafePerformIO $
@@ -99,7 +100,7 @@ bindThread_wait_to_finish
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Joins the [code]Thread[/code] and waits for it to finish. Returns what the method called returned.
+-- | Joins the [Thread] and waits for it to finish. Returns what the method called returned.
 wait_to_finish ::
                  (Thread :< cls, Object :< cls) => cls -> IO GodotVariant
 wait_to_finish cls

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ConfigFile
        (Godot.Core.ConfigFile.erase_section,
         Godot.Core.ConfigFile.erase_section_key,
@@ -22,7 +23,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindConfigFile_erase_section #-}
 
--- | Deletes the specified section along with all the key-value pairs inside.
+-- | Deletes the specified section along with all the key-value pairs inside. Raises an error if the section does not exist.
 bindConfigFile_erase_section :: MethodBind
 bindConfigFile_erase_section
   = unsafePerformIO $
@@ -32,7 +33,7 @@ bindConfigFile_erase_section
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deletes the specified section along with all the key-value pairs inside.
+-- | Deletes the specified section along with all the key-value pairs inside. Raises an error if the section does not exist.
 erase_section ::
                 (ConfigFile :< cls, Object :< cls) => cls -> GodotString -> IO ()
 erase_section cls arg1
@@ -45,6 +46,7 @@ erase_section cls arg1
 
 {-# NOINLINE bindConfigFile_erase_section_key #-}
 
+-- | Deletes the specified key in a section. Raises an error if either the section or the key do not exist.
 bindConfigFile_erase_section_key :: MethodBind
 bindConfigFile_erase_section_key
   = unsafePerformIO $
@@ -54,6 +56,7 @@ bindConfigFile_erase_section_key
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Deletes the specified key in a section. Raises an error if either the section or the key do not exist.
 erase_section_key ::
                     (ConfigFile :< cls, Object :< cls) =>
                     cls -> GodotString -> GodotString -> IO ()
@@ -68,7 +71,7 @@ erase_section_key cls arg1 arg2
 
 {-# NOINLINE bindConfigFile_get_section_keys #-}
 
--- | Returns an array of all defined key identifiers in the specified section.
+-- | Returns an array of all defined key identifiers in the specified section. Raises an error and returns an empty array if the section does not exist.
 bindConfigFile_get_section_keys :: MethodBind
 bindConfigFile_get_section_keys
   = unsafePerformIO $
@@ -78,7 +81,7 @@ bindConfigFile_get_section_keys
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of all defined key identifiers in the specified section.
+-- | Returns an array of all defined key identifiers in the specified section. Raises an error and returns an empty array if the section does not exist.
 get_section_keys ::
                    (ConfigFile :< cls, Object :< cls) =>
                    cls -> GodotString -> IO PoolStringArray
@@ -115,7 +118,7 @@ get_sections cls
 
 {-# NOINLINE bindConfigFile_get_value #-}
 
--- | Returns the current value for the specified section and key. If the section and/or the key do not exist, the method returns the value of the optional [code]default[/code] argument, or [code]null[/code] if it is omitted.
+-- | Returns the current value for the specified section and key. If either the section or the key do not exist, the method returns the fallback [code]default[/code] value. If [code]default[/code] is not specified or set to [code]null[/code], an error is also raised.
 bindConfigFile_get_value :: MethodBind
 bindConfigFile_get_value
   = unsafePerformIO $
@@ -125,7 +128,7 @@ bindConfigFile_get_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current value for the specified section and key. If the section and/or the key do not exist, the method returns the value of the optional [code]default[/code] argument, or [code]null[/code] if it is omitted.
+-- | Returns the current value for the specified section and key. If either the section or the key do not exist, the method returns the fallback [code]default[/code] value. If [code]default[/code] is not specified or set to [code]null[/code], an error is also raised.
 get_value ::
             (ConfigFile :< cls, Object :< cls) =>
             cls ->
@@ -186,7 +189,8 @@ has_section_key cls arg1 arg2
 
 {-# NOINLINE bindConfigFile_load #-}
 
--- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the ConfigFile object which the method was called on. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
+-- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the [ConfigFile] object which the method was called on.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindConfigFile_load :: MethodBind
 bindConfigFile_load
   = unsafePerformIO $
@@ -196,7 +200,8 @@ bindConfigFile_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the ConfigFile object which the method was called on. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
+-- | Loads the config file specified as a parameter. The file's contents are parsed and loaded in the [ConfigFile] object which the method was called on.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 load ::
        (ConfigFile :< cls, Object :< cls) => cls -> GodotString -> IO Int
 load cls arg1
@@ -207,6 +212,8 @@ load cls arg1
 
 {-# NOINLINE bindConfigFile_load_encrypted #-}
 
+-- | Loads the encrypted config file specified as a parameter, using the provided [code]key[/code] to decrypt it. The file's contents are parsed and loaded in the [ConfigFile] object which the method was called on.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindConfigFile_load_encrypted :: MethodBind
 bindConfigFile_load_encrypted
   = unsafePerformIO $
@@ -216,6 +223,8 @@ bindConfigFile_load_encrypted
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Loads the encrypted config file specified as a parameter, using the provided [code]key[/code] to decrypt it. The file's contents are parsed and loaded in the [ConfigFile] object which the method was called on.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 load_encrypted ::
                  (ConfigFile :< cls, Object :< cls) =>
                  cls -> GodotString -> PoolByteArray -> IO Int
@@ -229,6 +238,8 @@ load_encrypted cls arg1 arg2
 
 {-# NOINLINE bindConfigFile_load_encrypted_pass #-}
 
+-- | Loads the encrypted config file specified as a parameter, using the provided [code]password[/code] to decrypt it. The file's contents are parsed and loaded in the [ConfigFile] object which the method was called on.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindConfigFile_load_encrypted_pass :: MethodBind
 bindConfigFile_load_encrypted_pass
   = unsafePerformIO $
@@ -238,6 +249,8 @@ bindConfigFile_load_encrypted_pass
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Loads the encrypted config file specified as a parameter, using the provided [code]password[/code] to decrypt it. The file's contents are parsed and loaded in the [ConfigFile] object which the method was called on.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 load_encrypted_pass ::
                       (ConfigFile :< cls, Object :< cls) =>
                       cls -> GodotString -> GodotString -> IO Int
@@ -252,7 +265,8 @@ load_encrypted_pass cls arg1 arg2
 
 {-# NOINLINE bindConfigFile_save #-}
 
--- | Saves the contents of the ConfigFile object to the file specified as a parameter. The output file uses an INI-style structure. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
+-- | Saves the contents of the [ConfigFile] object to the file specified as a parameter. The output file uses an INI-style structure.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindConfigFile_save :: MethodBind
 bindConfigFile_save
   = unsafePerformIO $
@@ -262,7 +276,8 @@ bindConfigFile_save
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the contents of the ConfigFile object to the file specified as a parameter. The output file uses an INI-style structure. Returns one of the [constant @GlobalScope.OK], [constant @GlobalScope.FAILED] or [code]ERR_*[/code] constants listed in [@GlobalScope]. If the load was successful, the return value is [constant @GlobalScope.OK].
+-- | Saves the contents of the [ConfigFile] object to the file specified as a parameter. The output file uses an INI-style structure.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 save ::
        (ConfigFile :< cls, Object :< cls) => cls -> GodotString -> IO Int
 save cls arg1
@@ -273,6 +288,8 @@ save cls arg1
 
 {-# NOINLINE bindConfigFile_save_encrypted #-}
 
+-- | Saves the contents of the [ConfigFile] object to the AES-256 encrypted file specified as a parameter, using the provided [code]key[/code] to encrypt it. The output file uses an INI-style structure.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindConfigFile_save_encrypted :: MethodBind
 bindConfigFile_save_encrypted
   = unsafePerformIO $
@@ -282,6 +299,8 @@ bindConfigFile_save_encrypted
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Saves the contents of the [ConfigFile] object to the AES-256 encrypted file specified as a parameter, using the provided [code]key[/code] to encrypt it. The output file uses an INI-style structure.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 save_encrypted ::
                  (ConfigFile :< cls, Object :< cls) =>
                  cls -> GodotString -> PoolByteArray -> IO Int
@@ -295,6 +314,8 @@ save_encrypted cls arg1 arg2
 
 {-# NOINLINE bindConfigFile_save_encrypted_pass #-}
 
+-- | Saves the contents of the [ConfigFile] object to the AES-256 encrypted file specified as a parameter, using the provided [code]password[/code] to encrypt it. The output file uses an INI-style structure.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindConfigFile_save_encrypted_pass :: MethodBind
 bindConfigFile_save_encrypted_pass
   = unsafePerformIO $
@@ -304,6 +325,8 @@ bindConfigFile_save_encrypted_pass
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Saves the contents of the [ConfigFile] object to the AES-256 encrypted file specified as a parameter, using the provided [code]password[/code] to encrypt it. The output file uses an INI-style structure.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 save_encrypted_pass ::
                       (ConfigFile :< cls, Object :< cls) =>
                       cls -> GodotString -> GodotString -> IO Int
@@ -318,7 +341,7 @@ save_encrypted_pass cls arg1 arg2
 
 {-# NOINLINE bindConfigFile_set_value #-}
 
--- | Assigns a value to the specified key of the specified section. If the section and/or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
+-- | Assigns a value to the specified key of the specified section. If either the section or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
 bindConfigFile_set_value :: MethodBind
 bindConfigFile_set_value
   = unsafePerformIO $
@@ -328,7 +351,7 @@ bindConfigFile_set_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns a value to the specified key of the specified section. If the section and/or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
+-- | Assigns a value to the specified key of the specified section. If either the section or the key do not exist, they are created. Passing a [code]null[/code] value deletes the specified key if it exists, and deletes the section if it ends up empty once the key has been removed.
 set_value ::
             (ConfigFile :< cls, Object :< cls) =>
             cls -> GodotString -> GodotString -> GodotVariant -> IO ()

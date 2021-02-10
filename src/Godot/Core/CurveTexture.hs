@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CurveTexture
        (Godot.Core.CurveTexture.get_width,
         Godot.Core.CurveTexture._update, Godot.Core.CurveTexture.get_curve,

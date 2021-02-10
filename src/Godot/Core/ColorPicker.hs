@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ColorPicker
        (Godot.Core.ColorPicker.sig_color_changed,
         Godot.Core.ColorPicker.sig_preset_added,
@@ -47,14 +48,20 @@ import Godot.Api.Types
 sig_color_changed :: Godot.Internal.Dispatch.Signal ColorPicker
 sig_color_changed = Godot.Internal.Dispatch.Signal "color_changed"
 
+instance NodeSignal ColorPicker "color_changed" '[Color]
+
 -- | Emitted when a preset is added.
 sig_preset_added :: Godot.Internal.Dispatch.Signal ColorPicker
 sig_preset_added = Godot.Internal.Dispatch.Signal "preset_added"
+
+instance NodeSignal ColorPicker "preset_added" '[Color]
 
 -- | Emitted when a preset is removed.
 sig_preset_removed :: Godot.Internal.Dispatch.Signal ColorPicker
 sig_preset_removed
   = Godot.Internal.Dispatch.Signal "preset_removed"
+
+instance NodeSignal ColorPicker "preset_removed" '[Color]
 
 {-# NOINLINE bindColorPicker__add_preset_pressed #-}
 
@@ -374,7 +381,8 @@ _w_input cls arg1
 
 {-# NOINLINE bindColorPicker_add_preset #-}
 
--- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them. Note: the presets list is only for [i]this[/i] color picker.
+-- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them.
+--   				[b]Note:[/b] the presets list is only for [i]this[/i] color picker.
 bindColorPicker_add_preset :: MethodBind
 bindColorPicker_add_preset
   = unsafePerformIO $
@@ -384,7 +392,8 @@ bindColorPicker_add_preset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them. Note: the presets list is only for [i]this[/i] color picker.
+-- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them.
+--   				[b]Note:[/b] the presets list is only for [i]this[/i] color picker.
 add_preset ::
              (ColorPicker :< cls, Object :< cls) => cls -> Color -> IO ()
 add_preset cls arg1
@@ -397,6 +406,7 @@ add_preset cls arg1
 
 {-# NOINLINE bindColorPicker_are_presets_enabled #-}
 
+-- | If [code]true[/code], the "add preset" button is enabled.
 bindColorPicker_are_presets_enabled :: MethodBind
 bindColorPicker_are_presets_enabled
   = unsafePerformIO $
@@ -406,6 +416,7 @@ bindColorPicker_are_presets_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the "add preset" button is enabled.
 are_presets_enabled ::
                       (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 are_presets_enabled cls
@@ -419,6 +430,7 @@ are_presets_enabled cls
 
 {-# NOINLINE bindColorPicker_are_presets_visible #-}
 
+-- | If [code]true[/code], saved color presets are visible.
 bindColorPicker_are_presets_visible :: MethodBind
 bindColorPicker_are_presets_visible
   = unsafePerformIO $
@@ -428,6 +440,7 @@ bindColorPicker_are_presets_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], saved color presets are visible.
 are_presets_visible ::
                       (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 are_presets_visible cls
@@ -441,7 +454,7 @@ are_presets_visible cls
 
 {-# NOINLINE bindColorPicker_erase_preset #-}
 
--- | Remove the given color from the list of color presets of this color picker.
+-- | Removes the given color from the list of color presets of this color picker.
 bindColorPicker_erase_preset :: MethodBind
 bindColorPicker_erase_preset
   = unsafePerformIO $
@@ -451,7 +464,7 @@ bindColorPicker_erase_preset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the given color from the list of color presets of this color picker.
+-- | Removes the given color from the list of color presets of this color picker.
 erase_preset ::
                (ColorPicker :< cls, Object :< cls) => cls -> Color -> IO ()
 erase_preset cls arg1
@@ -558,6 +571,8 @@ is_editing_alpha cls
 
 {-# NOINLINE bindColorPicker_is_hsv_mode #-}
 
+-- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
+--   			[b]Note:[/b] Cannot be enabled if raw mode is on.
 bindColorPicker_is_hsv_mode :: MethodBind
 bindColorPicker_is_hsv_mode
   = unsafePerformIO $
@@ -567,6 +582,8 @@ bindColorPicker_is_hsv_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
+--   			[b]Note:[/b] Cannot be enabled if raw mode is on.
 is_hsv_mode ::
               (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 is_hsv_mode cls
@@ -580,6 +597,7 @@ is_hsv_mode cls
 {-# NOINLINE bindColorPicker_is_raw_mode #-}
 
 -- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
 bindColorPicker_is_raw_mode :: MethodBind
 bindColorPicker_is_raw_mode
   = unsafePerformIO $
@@ -590,6 +608,7 @@ bindColorPicker_is_raw_mode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
 is_raw_mode ::
               (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 is_raw_mode cls
@@ -649,6 +668,8 @@ set_edit_alpha cls arg1
 
 {-# NOINLINE bindColorPicker_set_hsv_mode #-}
 
+-- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
+--   			[b]Note:[/b] Cannot be enabled if raw mode is on.
 bindColorPicker_set_hsv_mode :: MethodBind
 bindColorPicker_set_hsv_mode
   = unsafePerformIO $
@@ -658,6 +679,8 @@ bindColorPicker_set_hsv_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
+--   			[b]Note:[/b] Cannot be enabled if raw mode is on.
 set_hsv_mode ::
                (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hsv_mode cls arg1
@@ -693,6 +716,7 @@ set_pick_color cls arg1
 
 {-# NOINLINE bindColorPicker_set_presets_enabled #-}
 
+-- | If [code]true[/code], the "add preset" button is enabled.
 bindColorPicker_set_presets_enabled :: MethodBind
 bindColorPicker_set_presets_enabled
   = unsafePerformIO $
@@ -702,6 +726,7 @@ bindColorPicker_set_presets_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the "add preset" button is enabled.
 set_presets_enabled ::
                       (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_presets_enabled cls arg1
@@ -715,6 +740,7 @@ set_presets_enabled cls arg1
 
 {-# NOINLINE bindColorPicker_set_presets_visible #-}
 
+-- | If [code]true[/code], saved color presets are visible.
 bindColorPicker_set_presets_visible :: MethodBind
 bindColorPicker_set_presets_visible
   = unsafePerformIO $
@@ -724,6 +750,7 @@ bindColorPicker_set_presets_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], saved color presets are visible.
 set_presets_visible ::
                       (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_presets_visible cls arg1
@@ -738,6 +765,7 @@ set_presets_visible cls arg1
 {-# NOINLINE bindColorPicker_set_raw_mode #-}
 
 -- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
 bindColorPicker_set_raw_mode :: MethodBind
 bindColorPicker_set_raw_mode
   = unsafePerformIO $
@@ -748,6 +776,7 @@ bindColorPicker_set_raw_mode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
 set_raw_mode ::
                (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_raw_mode cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeTransformFunc
        (Godot.Core.VisualShaderNodeTransformFunc._FUNC_TRANSPOSE,
         Godot.Core.VisualShaderNodeTransformFunc._FUNC_INVERSE,
@@ -21,6 +22,7 @@ _FUNC_INVERSE = 0
 
 {-# NOINLINE bindVisualShaderNodeTransformFunc_get_function #-}
 
+-- | The function to be computed. See [enum Function] for options.
 bindVisualShaderNodeTransformFunc_get_function :: MethodBind
 bindVisualShaderNodeTransformFunc_get_function
   = unsafePerformIO $
@@ -30,6 +32,7 @@ bindVisualShaderNodeTransformFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The function to be computed. See [enum Function] for options.
 get_function ::
                (VisualShaderNodeTransformFunc :< cls, Object :< cls) =>
                cls -> IO Int
@@ -45,6 +48,7 @@ get_function cls
 
 {-# NOINLINE bindVisualShaderNodeTransformFunc_set_function #-}
 
+-- | The function to be computed. See [enum Function] for options.
 bindVisualShaderNodeTransformFunc_set_function :: MethodBind
 bindVisualShaderNodeTransformFunc_set_function
   = unsafePerformIO $
@@ -54,6 +58,7 @@ bindVisualShaderNodeTransformFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The function to be computed. See [enum Function] for options.
 set_function ::
                (VisualShaderNodeTransformFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()

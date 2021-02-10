@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Timer
        (Godot.Core.Timer._TIMER_PROCESS_PHYSICS,
         Godot.Core.Timer._TIMER_PROCESS_IDLE, Godot.Core.Timer.sig_timeout,
@@ -30,10 +31,12 @@ _TIMER_PROCESS_IDLE = 1
 sig_timeout :: Godot.Internal.Dispatch.Signal Timer
 sig_timeout = Godot.Internal.Dispatch.Signal "timeout"
 
+instance NodeSignal Timer "timeout" '[]
+
 {-# NOINLINE bindTimer_get_time_left #-}
 
 -- | The timer's remaining time in seconds. Returns 0 if the timer is inactive.
---   			Note: You cannot set this value. To change the timer's remaining time, use [member wait_time].
+--   			[b]Note:[/b] You cannot set this value. To change the timer's remaining time, use [method start].
 bindTimer_get_time_left :: MethodBind
 bindTimer_get_time_left
   = unsafePerformIO $
@@ -44,7 +47,7 @@ bindTimer_get_time_left
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The timer's remaining time in seconds. Returns 0 if the timer is inactive.
---   			Note: You cannot set this value. To change the timer's remaining time, use [member wait_time].
+--   			[b]Note:[/b] You cannot set this value. To change the timer's remaining time, use [method start].
 get_time_left :: (Timer :< cls, Object :< cls) => cls -> IO Float
 get_time_left cls
   = withVariantArray []
@@ -100,7 +103,8 @@ get_wait_time cls
 
 {-# NOINLINE bindTimer_has_autostart #-}
 
--- | If [code]true[/code], the timer will automatically start when entering the scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will automatically start when entering the scene tree.
+--   			[b]Note:[/b] This property is automatically set to [code]false[/code] after the timer enters the scene tree and starts.
 bindTimer_has_autostart :: MethodBind
 bindTimer_has_autostart
   = unsafePerformIO $
@@ -110,7 +114,8 @@ bindTimer_has_autostart
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the timer will automatically start when entering the scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will automatically start when entering the scene tree.
+--   			[b]Note:[/b] This property is automatically set to [code]false[/code] after the timer enters the scene tree and starts.
 has_autostart :: (Timer :< cls, Object :< cls) => cls -> IO Bool
 has_autostart cls
   = withVariantArray []
@@ -121,7 +126,7 @@ has_autostart cls
 
 {-# NOINLINE bindTimer_is_one_shot #-}
 
--- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart.
 bindTimer_is_one_shot :: MethodBind
 bindTimer_is_one_shot
   = unsafePerformIO $
@@ -131,7 +136,7 @@ bindTimer_is_one_shot
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart.
 is_one_shot :: (Timer :< cls, Object :< cls) => cls -> IO Bool
 is_one_shot cls
   = withVariantArray []
@@ -182,7 +187,8 @@ is_stopped cls
 
 {-# NOINLINE bindTimer_set_autostart #-}
 
--- | If [code]true[/code], the timer will automatically start when entering the scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will automatically start when entering the scene tree.
+--   			[b]Note:[/b] This property is automatically set to [code]false[/code] after the timer enters the scene tree and starts.
 bindTimer_set_autostart :: MethodBind
 bindTimer_set_autostart
   = unsafePerformIO $
@@ -192,7 +198,8 @@ bindTimer_set_autostart
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the timer will automatically start when entering the scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will automatically start when entering the scene tree.
+--   			[b]Note:[/b] This property is automatically set to [code]false[/code] after the timer enters the scene tree and starts.
 set_autostart ::
                 (Timer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autostart cls arg1
@@ -204,7 +211,7 @@ set_autostart cls arg1
 
 {-# NOINLINE bindTimer_set_one_shot #-}
 
--- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart.
 bindTimer_set_one_shot :: MethodBind
 bindTimer_set_one_shot
   = unsafePerformIO $
@@ -214,7 +221,7 @@ bindTimer_set_one_shot
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart. Default value: [code]false[/code].
+-- | If [code]true[/code], the timer will stop when reaching 0. If [code]false[/code], it will restart.
 set_one_shot ::
                (Timer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_one_shot cls arg1
@@ -293,7 +300,7 @@ set_wait_time cls arg1
 {-# NOINLINE bindTimer_start #-}
 
 -- | Starts the timer. Sets [code]wait_time[/code] to [code]time_sec[/code] if [code]time_sec > 0[/code]. This also resets the remaining time to [code]wait_time[/code].
---   				Note: this method will not resume a paused timer. See [member paused].
+--   				[b]Note:[/b] this method will not resume a paused timer. See [member paused].
 bindTimer_start :: MethodBind
 bindTimer_start
   = unsafePerformIO $
@@ -304,7 +311,7 @@ bindTimer_start
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Starts the timer. Sets [code]wait_time[/code] to [code]time_sec[/code] if [code]time_sec > 0[/code]. This also resets the remaining time to [code]wait_time[/code].
---   				Note: this method will not resume a paused timer. See [member paused].
+--   				[b]Note:[/b] this method will not resume a paused timer. See [member paused].
 start :: (Timer :< cls, Object :< cls) => cls -> Float -> IO ()
 start cls arg1
   = withVariantArray [toVariant arg1]

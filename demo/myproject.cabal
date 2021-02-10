@@ -1,19 +1,19 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5e2529a87e5611de5cb2eb9d08f5e46b4d9cbc039f18332b75ab8ff76837a832
+-- hash: c76fa8f1a4c890a476e0623fb13a348091cbf8407e9bfa29f4dacd46cc89fbf7
 
 name:           myproject
 version:        0.0.0.0
-description:    Please see the README on Github at <https://github.com/abarbu/myproject#readme>
-homepage:       https://github.com/abarbu/myproject#readme
-bug-reports:    https://github.com/abarbu/myproject/issues
+description:    Please see the README on Github at <https://github.com/SimulaVR/godot-haskell/tree/master/demo#readme>
+homepage:       https://github.com/SimulaVR/godot-haskell#readme
+bug-reports:    https://github.com/SimulaVR/godot-haskell/issues
 author:         Andrei Barbu
 maintainer:     andrei@0xab.com
-copyright:      Andrei Barbu 2019
+copyright:      Andrei Barbu 2019, 2021
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -34,20 +34,32 @@ foreign-library myproject
 
 source-repository head
   type: git
-  location: https://github.com/abarbu/myproject
+  location: https://github.com/SimulaVR/godot-haskell
 
 library
   exposed-modules:
       Lib
   other-modules:
+      Game.HUD
+      Game.Main
+      Game.Mob
+      Game.Player
+      Project.Requirements
+      Project.Scenes
+      Project.Scenes.HUD
+      Project.Scenes.Main
+      Project.Scenes.Mob
+      Project.Scenes.Player
+      Project.Support
       Paths_myproject
   hs-source-dirs:
       src
       game
+  default-extensions: FlexibleContexts MultiParamTypeClasses OverloadedStrings TemplateHaskell TypeApplications TypeFamilies DataKinds FlexibleInstances ScopedTypeVariables AllowAmbiguousTypes
+  ghc-options: -Wall -Wno-orphans -O0
   build-depends:
       base >=4.12 && <5
     , containers
-    , deepseq
     , extra
     , godot-haskell
     , lens

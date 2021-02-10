@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RegEx
        (Godot.Core.RegEx.clear, Godot.Core.RegEx.compile,
         Godot.Core.RegEx.get_group_count, Godot.Core.RegEx.get_names,

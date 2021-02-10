@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectPitchShift
        (Godot.Core.AudioEffectPitchShift._FFT_SIZE_2048,
         Godot.Core.AudioEffectPitchShift._FFT_SIZE_4096,

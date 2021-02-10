@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ClassDB
        (Godot.Core.ClassDB.can_instance, Godot.Core.ClassDB.class_exists,
         Godot.Core.ClassDB.class_get_category,
@@ -29,7 +30,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindClassDB_can_instance #-}
 
--- | Returns [code]true[/code] if you can instance objects from the specified 'class', [code]false[/code] in other case.
+-- | Returns [code]true[/code] if you can instance objects from the specified [code]class[/code], [code]false[/code] in other case.
 bindClassDB_can_instance :: MethodBind
 bindClassDB_can_instance
   = unsafePerformIO $
@@ -39,7 +40,7 @@ bindClassDB_can_instance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if you can instance objects from the specified 'class', [code]false[/code] in other case.
+-- | Returns [code]true[/code] if you can instance objects from the specified [code]class[/code], [code]false[/code] in other case.
 can_instance ::
                (ClassDB :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 can_instance cls arg1
@@ -51,7 +52,7 @@ can_instance cls arg1
 
 {-# NOINLINE bindClassDB_class_exists #-}
 
--- | Returns whether the specified 'class' is available or not.
+-- | Returns whether the specified [code]class[/code] is available or not.
 bindClassDB_class_exists :: MethodBind
 bindClassDB_class_exists
   = unsafePerformIO $
@@ -61,7 +62,7 @@ bindClassDB_class_exists
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the specified 'class' is available or not.
+-- | Returns whether the specified [code]class[/code] is available or not.
 class_exists ::
                (ClassDB :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 class_exists cls arg1
@@ -97,7 +98,7 @@ class_get_category cls arg1
 
 {-# NOINLINE bindClassDB_class_get_integer_constant #-}
 
--- | Returns the value of the integer constant 'name' of 'class' or its ancestry. Always returns 0 when the constant could not be found.
+-- | Returns the value of the integer constant [code]name[/code] of [code]class[/code] or its ancestry. Always returns 0 when the constant could not be found.
 bindClassDB_class_get_integer_constant :: MethodBind
 bindClassDB_class_get_integer_constant
   = unsafePerformIO $
@@ -107,7 +108,7 @@ bindClassDB_class_get_integer_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of the integer constant 'name' of 'class' or its ancestry. Always returns 0 when the constant could not be found.
+-- | Returns the value of the integer constant [code]name[/code] of [code]class[/code] or its ancestry. Always returns 0 when the constant could not be found.
 class_get_integer_constant ::
                              (ClassDB :< cls, Object :< cls) =>
                              cls -> GodotString -> GodotString -> IO Int
@@ -122,7 +123,7 @@ class_get_integer_constant cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_get_integer_constant_list #-}
 
--- | Returns an array with the names all the integer constants of 'class' or its ancestry.
+-- | Returns an array with the names all the integer constants of [code]class[/code] or its ancestry.
 bindClassDB_class_get_integer_constant_list :: MethodBind
 bindClassDB_class_get_integer_constant_list
   = unsafePerformIO $
@@ -132,7 +133,7 @@ bindClassDB_class_get_integer_constant_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array with the names all the integer constants of 'class' or its ancestry.
+-- | Returns an array with the names all the integer constants of [code]class[/code] or its ancestry.
 class_get_integer_constant_list ::
                                   (ClassDB :< cls, Object :< cls) =>
                                   cls -> GodotString -> Bool -> IO PoolStringArray
@@ -147,7 +148,7 @@ class_get_integer_constant_list cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_get_method_list #-}
 
--- | Returns an array with all the methods of 'class' or its ancestry if 'no_inheritance' is [code]false[/code]. Every element of the array is a [Dictionary] with the following keys: args, default_args, flags, id, name, return: (class_name, hint, hint_string, name, type, usage).
+-- | Returns an array with all the methods of [code]class[/code] or its ancestry if [code]no_inheritance[/code] is [code]false[/code]. Every element of the array is a [Dictionary] with the following keys: [code]args[/code], [code]default_args[/code], [code]flags[/code], [code]id[/code], [code]name[/code], [code]return: (class_name, hint, hint_string, name, type, usage)[/code].
 bindClassDB_class_get_method_list :: MethodBind
 bindClassDB_class_get_method_list
   = unsafePerformIO $
@@ -157,7 +158,7 @@ bindClassDB_class_get_method_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array with all the methods of 'class' or its ancestry if 'no_inheritance' is [code]false[/code]. Every element of the array is a [Dictionary] with the following keys: args, default_args, flags, id, name, return: (class_name, hint, hint_string, name, type, usage).
+-- | Returns an array with all the methods of [code]class[/code] or its ancestry if [code]no_inheritance[/code] is [code]false[/code]. Every element of the array is a [Dictionary] with the following keys: [code]args[/code], [code]default_args[/code], [code]flags[/code], [code]id[/code], [code]name[/code], [code]return: (class_name, hint, hint_string, name, type, usage)[/code].
 class_get_method_list ::
                         (ClassDB :< cls, Object :< cls) =>
                         cls -> GodotString -> Bool -> IO Array
@@ -172,7 +173,7 @@ class_get_method_list cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_get_property #-}
 
--- | Returns the value of 'property' of 'class' or its ancestry.
+-- | Returns the value of [code]property[/code] of [code]class[/code] or its ancestry.
 bindClassDB_class_get_property :: MethodBind
 bindClassDB_class_get_property
   = unsafePerformIO $
@@ -182,7 +183,7 @@ bindClassDB_class_get_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of 'property' of 'class' or its ancestry.
+-- | Returns the value of [code]property[/code] of [code]class[/code] or its ancestry.
 class_get_property ::
                      (ClassDB :< cls, Object :< cls) =>
                      cls -> Object -> GodotString -> IO GodotVariant
@@ -196,7 +197,7 @@ class_get_property cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_get_property_list #-}
 
--- | Returns an array with all the properties of 'class' or its ancestry if 'no_inheritance' is [code]false[/code].
+-- | Returns an array with all the properties of [code]class[/code] or its ancestry if [code]no_inheritance[/code] is [code]false[/code].
 bindClassDB_class_get_property_list :: MethodBind
 bindClassDB_class_get_property_list
   = unsafePerformIO $
@@ -206,7 +207,7 @@ bindClassDB_class_get_property_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array with all the properties of 'class' or its ancestry if 'no_inheritance' is [code]false[/code].
+-- | Returns an array with all the properties of [code]class[/code] or its ancestry if [code]no_inheritance[/code] is [code]false[/code].
 class_get_property_list ::
                           (ClassDB :< cls, Object :< cls) =>
                           cls -> GodotString -> Bool -> IO Array
@@ -221,7 +222,7 @@ class_get_property_list cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_get_signal #-}
 
--- | Returns the 'signal' data of 'class' or its ancestry. The returned value is a [Dictionary] with the following keys: args, default_args, flags, id, name, return: (class_name, hint, hint_string, name, type, usage).
+-- | Returns the [code]signal[/code] data of [code]class[/code] or its ancestry. The returned value is a [Dictionary] with the following keys: [code]args[/code], [code]default_args[/code], [code]flags[/code], [code]id[/code], [code]name[/code], [code]return: (class_name, hint, hint_string, name, type, usage)[/code].
 bindClassDB_class_get_signal :: MethodBind
 bindClassDB_class_get_signal
   = unsafePerformIO $
@@ -231,7 +232,7 @@ bindClassDB_class_get_signal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the 'signal' data of 'class' or its ancestry. The returned value is a [Dictionary] with the following keys: args, default_args, flags, id, name, return: (class_name, hint, hint_string, name, type, usage).
+-- | Returns the [code]signal[/code] data of [code]class[/code] or its ancestry. The returned value is a [Dictionary] with the following keys: [code]args[/code], [code]default_args[/code], [code]flags[/code], [code]id[/code], [code]name[/code], [code]return: (class_name, hint, hint_string, name, type, usage)[/code].
 class_get_signal ::
                    (ClassDB :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotString -> IO Dictionary
@@ -245,7 +246,7 @@ class_get_signal cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_get_signal_list #-}
 
--- | Returns an array with all the signals of 'class' or its ancestry if 'no_inheritance' is [code]false[/code]. Every element of the array is a [Dictionary] as described in [method class_get_signal].
+-- | Returns an array with all the signals of [code]class[/code] or its ancestry if [code]no_inheritance[/code] is [code]false[/code]. Every element of the array is a [Dictionary] as described in [method class_get_signal].
 bindClassDB_class_get_signal_list :: MethodBind
 bindClassDB_class_get_signal_list
   = unsafePerformIO $
@@ -255,7 +256,7 @@ bindClassDB_class_get_signal_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array with all the signals of 'class' or its ancestry if 'no_inheritance' is [code]false[/code]. Every element of the array is a [Dictionary] as described in [method class_get_signal].
+-- | Returns an array with all the signals of [code]class[/code] or its ancestry if [code]no_inheritance[/code] is [code]false[/code]. Every element of the array is a [Dictionary] as described in [method class_get_signal].
 class_get_signal_list ::
                         (ClassDB :< cls, Object :< cls) =>
                         cls -> GodotString -> Bool -> IO Array
@@ -270,7 +271,7 @@ class_get_signal_list cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_has_integer_constant #-}
 
--- | Returns whether 'class' or its ancestry has an integer constant called 'name' or not.
+-- | Returns whether [code]class[/code] or its ancestry has an integer constant called [code]name[/code] or not.
 bindClassDB_class_has_integer_constant :: MethodBind
 bindClassDB_class_has_integer_constant
   = unsafePerformIO $
@@ -280,7 +281,7 @@ bindClassDB_class_has_integer_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether 'class' or its ancestry has an integer constant called 'name' or not.
+-- | Returns whether [code]class[/code] or its ancestry has an integer constant called [code]name[/code] or not.
 class_has_integer_constant ::
                              (ClassDB :< cls, Object :< cls) =>
                              cls -> GodotString -> GodotString -> IO Bool
@@ -295,7 +296,7 @@ class_has_integer_constant cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_has_method #-}
 
--- | Returns whether 'class' (or its ancestry if 'no_inheritance' is false) has a method called 'method' or not.
+-- | Returns whether [code]class[/code] (or its ancestry if [code]no_inheritance[/code] is [code]false[/code]) has a method called [code]method[/code] or not.
 bindClassDB_class_has_method :: MethodBind
 bindClassDB_class_has_method
   = unsafePerformIO $
@@ -305,7 +306,7 @@ bindClassDB_class_has_method
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether 'class' (or its ancestry if 'no_inheritance' is false) has a method called 'method' or not.
+-- | Returns whether [code]class[/code] (or its ancestry if [code]no_inheritance[/code] is [code]false[/code]) has a method called [code]method[/code] or not.
 class_has_method ::
                    (ClassDB :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotString -> Bool -> IO Bool
@@ -319,7 +320,7 @@ class_has_method cls arg1 arg2 arg3
 
 {-# NOINLINE bindClassDB_class_has_signal #-}
 
--- | Returns whether 'class' or its ancestry has a signal called 'signal' or not.
+-- | Returns whether [code]class[/code] or its ancestry has a signal called [code]signal[/code] or not.
 bindClassDB_class_has_signal :: MethodBind
 bindClassDB_class_has_signal
   = unsafePerformIO $
@@ -329,7 +330,7 @@ bindClassDB_class_has_signal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether 'class' or its ancestry has a signal called 'signal' or not.
+-- | Returns whether [code]class[/code] or its ancestry has a signal called [code]signal[/code] or not.
 class_has_signal ::
                    (ClassDB :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotString -> IO Bool
@@ -343,7 +344,7 @@ class_has_signal cls arg1 arg2
 
 {-# NOINLINE bindClassDB_class_set_property #-}
 
--- | Sets 'property' value of 'class' to 'value'.
+-- | Sets [code]property[/code] value of [code]class[/code] to [code]value[/code].
 bindClassDB_class_set_property :: MethodBind
 bindClassDB_class_set_property
   = unsafePerformIO $
@@ -353,7 +354,7 @@ bindClassDB_class_set_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets 'property' value of 'class' to 'value'.
+-- | Sets [code]property[/code] value of [code]class[/code] to [code]value[/code].
 class_set_property ::
                      (ClassDB :< cls, Object :< cls) =>
                      cls -> Object -> GodotString -> GodotVariant -> IO Int
@@ -390,7 +391,7 @@ get_class_list cls
 
 {-# NOINLINE bindClassDB_get_inheriters_from_class #-}
 
--- | Returns the names of all the classes that directly or indirectly inherit from 'class'.
+-- | Returns the names of all the classes that directly or indirectly inherit from [code]class[/code].
 bindClassDB_get_inheriters_from_class :: MethodBind
 bindClassDB_get_inheriters_from_class
   = unsafePerformIO $
@@ -400,7 +401,7 @@ bindClassDB_get_inheriters_from_class
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the names of all the classes that directly or indirectly inherit from 'class'.
+-- | Returns the names of all the classes that directly or indirectly inherit from [code]class[/code].
 get_inheriters_from_class ::
                             (ClassDB :< cls, Object :< cls) =>
                             cls -> GodotString -> IO PoolStringArray
@@ -415,7 +416,7 @@ get_inheriters_from_class cls arg1
 
 {-# NOINLINE bindClassDB_get_parent_class #-}
 
--- | Returns the parent class of 'class'.
+-- | Returns the parent class of [code]class[/code].
 bindClassDB_get_parent_class :: MethodBind
 bindClassDB_get_parent_class
   = unsafePerformIO $
@@ -425,7 +426,7 @@ bindClassDB_get_parent_class
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent class of 'class'.
+-- | Returns the parent class of [code]class[/code].
 get_parent_class ::
                    (ClassDB :< cls, Object :< cls) =>
                    cls -> GodotString -> IO GodotString
@@ -439,7 +440,7 @@ get_parent_class cls arg1
 
 {-# NOINLINE bindClassDB_instance' #-}
 
--- | Creates an instance of 'class'.
+-- | Creates an instance of [code]class[/code].
 bindClassDB_instance' :: MethodBind
 bindClassDB_instance'
   = unsafePerformIO $
@@ -449,7 +450,7 @@ bindClassDB_instance'
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an instance of 'class'.
+-- | Creates an instance of [code]class[/code].
 instance' ::
             (ClassDB :< cls, Object :< cls) =>
             cls -> GodotString -> IO GodotVariant
@@ -462,7 +463,7 @@ instance' cls arg1
 
 {-# NOINLINE bindClassDB_is_class_enabled #-}
 
--- | Returns whether this class is enabled or not.
+-- | Returns whether this [code]class[/code] is enabled or not.
 bindClassDB_is_class_enabled :: MethodBind
 bindClassDB_is_class_enabled
   = unsafePerformIO $
@@ -472,7 +473,7 @@ bindClassDB_is_class_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether this class is enabled or not.
+-- | Returns whether this [code]class[/code] is enabled or not.
 is_class_enabled ::
                    (ClassDB :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_class_enabled cls arg1
@@ -485,7 +486,7 @@ is_class_enabled cls arg1
 
 {-# NOINLINE bindClassDB_is_parent_class #-}
 
--- | Returns whether 'inherits' is an ancestor of 'class' or not.
+-- | Returns whether [code]inherits[/code] is an ancestor of [code]class[/code] or not.
 bindClassDB_is_parent_class :: MethodBind
 bindClassDB_is_parent_class
   = unsafePerformIO $
@@ -495,7 +496,7 @@ bindClassDB_is_parent_class
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether 'inherits' is an ancestor of 'class' or not.
+-- | Returns whether [code]inherits[/code] is an ancestor of [code]class[/code] or not.
 is_parent_class ::
                   (ClassDB :< cls, Object :< cls) =>
                   cls -> GodotString -> GodotString -> IO Bool

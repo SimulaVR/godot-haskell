@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Godot.Internal.Dispatch(HasBaseClass(..),(:<)(..),Signal(..),deriveBase) where
+module Godot.Internal.Dispatch(HasBaseClass(..),(:<)(..),Signal(..),deriveBase,NodeSignal) where
 import Data.Text (Text)
 import GHC.TypeLits as T
 import Godot.Gdnative.Internal.Gdnative hiding (Signal)
@@ -12,6 +12,11 @@ import Data.List
 class HasBaseClass child where
   type BaseClass child
   super :: child -> BaseClass child
+
+-- | This is here to make signals accessible to the type system
+-- You will have to define this for your own objects as well, eg:
+--    instance NodeSignal Player "on_start" []
+class NodeSignal node (name :: Symbol) (args :: [*]) | node name -> args
 
 -- | You should use this as @deriveBase ''Ty@ to create all the required parent
 -- instances of '(:<)' for upcasting your data.

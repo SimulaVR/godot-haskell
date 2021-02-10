@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.KinematicCollision2D
        (Godot.Core.KinematicCollision2D.get_collider,
         Godot.Core.KinematicCollision2D.get_collider_id,
@@ -46,7 +47,7 @@ get_collider cls
 
 {-# NOINLINE bindKinematicCollision2D_get_collider_id #-}
 
--- | The colliding body's unique [RID].
+-- | The colliding body's unique instance ID. See [method Object.get_instance_id].
 bindKinematicCollision2D_get_collider_id :: MethodBind
 bindKinematicCollision2D_get_collider_id
   = unsafePerformIO $
@@ -56,7 +57,7 @@ bindKinematicCollision2D_get_collider_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The colliding body's unique [RID].
+-- | The colliding body's unique instance ID. See [method Object.get_instance_id].
 get_collider_id ::
                   (KinematicCollision2D :< cls, Object :< cls) => cls -> IO Int
 get_collider_id cls
@@ -218,7 +219,7 @@ get_normal cls
 
 {-# NOINLINE bindKinematicCollision2D_get_position #-}
 
--- | The point of collision.
+-- | The point of collision, in global coordinates.
 bindKinematicCollision2D_get_position :: MethodBind
 bindKinematicCollision2D_get_position
   = unsafePerformIO $
@@ -228,7 +229,7 @@ bindKinematicCollision2D_get_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The point of collision.
+-- | The point of collision, in global coordinates.
 get_position ::
                (KinematicCollision2D :< cls, Object :< cls) => cls -> IO Vector2
 get_position cls

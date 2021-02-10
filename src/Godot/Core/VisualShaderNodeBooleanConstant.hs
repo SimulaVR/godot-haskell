@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeBooleanConstant
        (Godot.Core.VisualShaderNodeBooleanConstant.get_constant,
         Godot.Core.VisualShaderNodeBooleanConstant.set_constant)
@@ -13,6 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindVisualShaderNodeBooleanConstant_get_constant #-}
 
+-- | A boolean constant which represents a state of this node.
 bindVisualShaderNodeBooleanConstant_get_constant :: MethodBind
 bindVisualShaderNodeBooleanConstant_get_constant
   = unsafePerformIO $
@@ -22,6 +24,7 @@ bindVisualShaderNodeBooleanConstant_get_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A boolean constant which represents a state of this node.
 get_constant ::
                (VisualShaderNodeBooleanConstant :< cls, Object :< cls) =>
                cls -> IO Bool
@@ -37,6 +40,7 @@ get_constant cls
 
 {-# NOINLINE bindVisualShaderNodeBooleanConstant_set_constant #-}
 
+-- | A boolean constant which represents a state of this node.
 bindVisualShaderNodeBooleanConstant_set_constant :: MethodBind
 bindVisualShaderNodeBooleanConstant_set_constant
   = unsafePerformIO $
@@ -46,6 +50,7 @@ bindVisualShaderNodeBooleanConstant_set_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A boolean constant which represents a state of this node.
 set_constant ::
                (VisualShaderNodeBooleanConstant :< cls, Object :< cls) =>
                cls -> Bool -> IO ()

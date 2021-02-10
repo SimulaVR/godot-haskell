@@ -1,34 +1,45 @@
 name: myproject
 version: '0.0.0.0'
-description: Please see the README on Github at <https://github.com/abarbu/myproject#readme>
+description: Please see the README on Github at <https://github.com/SimulaVR/godot-haskell/tree/master/demo#readme>
 author: Andrei Barbu
 maintainer: andrei@0xab.com
-copyright: Andrei Barbu 2019
+copyright: Andrei Barbu 2019, 2021
 license: BSD3
-github: abarbu/myproject
+github: SimulaVR/godot-haskell
 extra-source-files:
-- ChangeLog.md
-- README.md
+  - ChangeLog.md
+  - README.md
 dependencies:
-- base >=4.12 && <5
-- godot-haskell
-- linear
-- random
-- deepseq
-- text
-- vector
-- strict-concurrency
-- lens
-- template-haskell
-- th-abstraction
-- containers
-- extra
+  - base >=4.12 && <5
+  - godot-haskell
+  - linear
+  - random
+  - text
+  - vector
+  - strict-concurrency
+  - lens
+  - template-haskell
+  - th-abstraction
+  - containers
+  - extra
 library:
   source-dirs:
     - src
     - game
+  default-extensions:
+    - FlexibleContexts
+    - MultiParamTypeClasses
+    - OverloadedStrings
+    - TemplateHaskell
+    - TypeApplications
+    - TypeFamilies
+    - DataKinds
+    - FlexibleInstances
+    - ScopedTypeVariables
+    - AllowAmbiguousTypes
   exposed-modules:
-  - Lib
+    - Lib
+  ghc-options: -Wall -Wno-orphans -O0
 
 verbatim: |
   foreign-library myproject

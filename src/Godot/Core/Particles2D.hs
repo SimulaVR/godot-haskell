@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Particles2D
        (Godot.Core.Particles2D._DRAW_ORDER_LIFETIME,
         Godot.Core.Particles2D._DRAW_ORDER_INDEX,
@@ -97,7 +98,7 @@ get_amount cls
 
 {-# NOINLINE bindParticles2D_get_draw_order #-}
 
--- | Particle draw order. Uses [code]DRAW_ORDER_*[/code] values. Default value: [constant DRAW_ORDER_INDEX].
+-- | Particle draw order. Uses [enum DrawOrder] values.
 bindParticles2D_get_draw_order :: MethodBind
 bindParticles2D_get_draw_order
   = unsafePerformIO $
@@ -107,7 +108,7 @@ bindParticles2D_get_draw_order
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particle draw order. Uses [code]DRAW_ORDER_*[/code] values. Default value: [constant DRAW_ORDER_INDEX].
+-- | Particle draw order. Uses [enum DrawOrder] values.
 get_draw_order ::
                  (Particles2D :< cls, Object :< cls) => cls -> IO Int
 get_draw_order cls
@@ -120,7 +121,7 @@ get_draw_order cls
 
 {-# NOINLINE bindParticles2D_get_explosiveness_ratio #-}
 
--- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins. Default value: [code]0[/code].
+-- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins.
 bindParticles2D_get_explosiveness_ratio :: MethodBind
 bindParticles2D_get_explosiveness_ratio
   = unsafePerformIO $
@@ -130,7 +131,7 @@ bindParticles2D_get_explosiveness_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins. Default value: [code]0[/code].
+-- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins.
 get_explosiveness_ratio ::
                           (Particles2D :< cls, Object :< cls) => cls -> IO Float
 get_explosiveness_ratio cls
@@ -167,7 +168,7 @@ get_fixed_fps cls
 
 {-# NOINLINE bindParticles2D_get_fractional_delta #-}
 
--- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect. Default value: [code]true[/code]
+-- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect.
 bindParticles2D_get_fractional_delta :: MethodBind
 bindParticles2D_get_fractional_delta
   = unsafePerformIO $
@@ -177,7 +178,7 @@ bindParticles2D_get_fractional_delta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect. Default value: [code]true[/code]
+-- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect.
 get_fractional_delta ::
                        (Particles2D :< cls, Object :< cls) => cls -> IO Bool
 get_fractional_delta cls
@@ -191,7 +192,7 @@ get_fractional_delta cls
 
 {-# NOINLINE bindParticles2D_get_lifetime #-}
 
--- | Amount of time each particle will exist. Default value: [code]1[/code].
+-- | Amount of time each particle will exist.
 bindParticles2D_get_lifetime :: MethodBind
 bindParticles2D_get_lifetime
   = unsafePerformIO $
@@ -201,7 +202,7 @@ bindParticles2D_get_lifetime
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of time each particle will exist. Default value: [code]1[/code].
+-- | Amount of time each particle will exist.
 get_lifetime ::
                (Particles2D :< cls, Object :< cls) => cls -> IO Float
 get_lifetime cls
@@ -215,6 +216,7 @@ get_lifetime cls
 {-# NOINLINE bindParticles2D_get_normal_map #-}
 
 -- | Normal map to be used for the [member texture] property.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 bindParticles2D_get_normal_map :: MethodBind
 bindParticles2D_get_normal_map
   = unsafePerformIO $
@@ -225,6 +227,7 @@ bindParticles2D_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Normal map to be used for the [member texture] property.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (Particles2D :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -237,7 +240,7 @@ get_normal_map cls
 
 {-# NOINLINE bindParticles2D_get_one_shot #-}
 
--- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end. Default value: [code]false[/code].
+-- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end.
 bindParticles2D_get_one_shot :: MethodBind
 bindParticles2D_get_one_shot
   = unsafePerformIO $
@@ -247,7 +250,7 @@ bindParticles2D_get_one_shot
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end. Default value: [code]false[/code].
+-- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end.
 get_one_shot ::
                (Particles2D :< cls, Object :< cls) => cls -> IO Bool
 get_one_shot cls
@@ -308,7 +311,7 @@ get_process_material cls
 
 {-# NOINLINE bindParticles2D_get_randomness_ratio #-}
 
--- | Emission lifetime randomness ratio. Default value: [code]0[/code].
+-- | Emission lifetime randomness ratio.
 bindParticles2D_get_randomness_ratio :: MethodBind
 bindParticles2D_get_randomness_ratio
   = unsafePerformIO $
@@ -318,7 +321,7 @@ bindParticles2D_get_randomness_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Emission lifetime randomness ratio. Default value: [code]0[/code].
+-- | Emission lifetime randomness ratio.
 get_randomness_ratio ::
                        (Particles2D :< cls, Object :< cls) => cls -> IO Float
 get_randomness_ratio cls
@@ -332,7 +335,7 @@ get_randomness_ratio cls
 
 {-# NOINLINE bindParticles2D_get_speed_scale #-}
 
--- | Particle system's running speed scaling ratio. Default value: [code]1[/code]. A value of [code]0[/code] can be used to pause the particles.
+-- | Particle system's running speed scaling ratio. A value of [code]0[/code] can be used to pause the particles.
 bindParticles2D_get_speed_scale :: MethodBind
 bindParticles2D_get_speed_scale
   = unsafePerformIO $
@@ -342,7 +345,7 @@ bindParticles2D_get_speed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particle system's running speed scaling ratio. Default value: [code]1[/code]. A value of [code]0[/code] can be used to pause the particles.
+-- | Particle system's running speed scaling ratio. A value of [code]0[/code] can be used to pause the particles.
 get_speed_scale ::
                   (Particles2D :< cls, Object :< cls) => cls -> IO Float
 get_speed_scale cls
@@ -355,7 +358,7 @@ get_speed_scale cls
 
 {-# NOINLINE bindParticles2D_get_texture #-}
 
--- | Particle texture. If [code]null[/code] particles will be squares.
+-- | Particle texture. If [code]null[/code], particles will be squares.
 bindParticles2D_get_texture :: MethodBind
 bindParticles2D_get_texture
   = unsafePerformIO $
@@ -365,7 +368,7 @@ bindParticles2D_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particle texture. If [code]null[/code] particles will be squares.
+-- | Particle texture. If [code]null[/code], particles will be squares.
 get_texture ::
               (Particles2D :< cls, Object :< cls) => cls -> IO Texture
 get_texture cls
@@ -378,7 +381,7 @@ get_texture cls
 
 {-# NOINLINE bindParticles2D_get_use_local_coordinates #-}
 
--- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates. Default value: [code]true[/code].
+-- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates.
 bindParticles2D_get_use_local_coordinates :: MethodBind
 bindParticles2D_get_use_local_coordinates
   = unsafePerformIO $
@@ -388,7 +391,7 @@ bindParticles2D_get_use_local_coordinates
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates. Default value: [code]true[/code].
+-- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates.
 get_use_local_coordinates ::
                             (Particles2D :< cls, Object :< cls) => cls -> IO Bool
 get_use_local_coordinates cls
@@ -426,7 +429,7 @@ get_visibility_rect cls
 
 {-# NOINLINE bindParticles2D_is_emitting #-}
 
--- | If [code]true[/code], particles are being emitted. Default value: [code]true[/code].
+-- | If [code]true[/code], particles are being emitted.
 bindParticles2D_is_emitting :: MethodBind
 bindParticles2D_is_emitting
   = unsafePerformIO $
@@ -436,7 +439,7 @@ bindParticles2D_is_emitting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], particles are being emitted. Default value: [code]true[/code].
+-- | If [code]true[/code], particles are being emitted.
 is_emitting ::
               (Particles2D :< cls, Object :< cls) => cls -> IO Bool
 is_emitting cls
@@ -493,7 +496,7 @@ set_amount cls arg1
 
 {-# NOINLINE bindParticles2D_set_draw_order #-}
 
--- | Particle draw order. Uses [code]DRAW_ORDER_*[/code] values. Default value: [constant DRAW_ORDER_INDEX].
+-- | Particle draw order. Uses [enum DrawOrder] values.
 bindParticles2D_set_draw_order :: MethodBind
 bindParticles2D_set_draw_order
   = unsafePerformIO $
@@ -503,7 +506,7 @@ bindParticles2D_set_draw_order
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particle draw order. Uses [code]DRAW_ORDER_*[/code] values. Default value: [constant DRAW_ORDER_INDEX].
+-- | Particle draw order. Uses [enum DrawOrder] values.
 set_draw_order ::
                  (Particles2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_draw_order cls arg1
@@ -516,7 +519,7 @@ set_draw_order cls arg1
 
 {-# NOINLINE bindParticles2D_set_emitting #-}
 
--- | If [code]true[/code], particles are being emitted. Default value: [code]true[/code].
+-- | If [code]true[/code], particles are being emitted.
 bindParticles2D_set_emitting :: MethodBind
 bindParticles2D_set_emitting
   = unsafePerformIO $
@@ -526,7 +529,7 @@ bindParticles2D_set_emitting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], particles are being emitted. Default value: [code]true[/code].
+-- | If [code]true[/code], particles are being emitted.
 set_emitting ::
                (Particles2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_emitting cls arg1
@@ -539,7 +542,7 @@ set_emitting cls arg1
 
 {-# NOINLINE bindParticles2D_set_explosiveness_ratio #-}
 
--- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins. Default value: [code]0[/code].
+-- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins.
 bindParticles2D_set_explosiveness_ratio :: MethodBind
 bindParticles2D_set_explosiveness_ratio
   = unsafePerformIO $
@@ -549,7 +552,7 @@ bindParticles2D_set_explosiveness_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins. Default value: [code]0[/code].
+-- | How rapidly particles in an emission cycle are emitted. If greater than [code]0[/code], there will be a gap in emissions before the next cycle begins.
 set_explosiveness_ratio ::
                           (Particles2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_explosiveness_ratio cls arg1
@@ -586,7 +589,7 @@ set_fixed_fps cls arg1
 
 {-# NOINLINE bindParticles2D_set_fractional_delta #-}
 
--- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect. Default value: [code]true[/code]
+-- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect.
 bindParticles2D_set_fractional_delta :: MethodBind
 bindParticles2D_set_fractional_delta
   = unsafePerformIO $
@@ -596,7 +599,7 @@ bindParticles2D_set_fractional_delta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect. Default value: [code]true[/code]
+-- | If [code]true[/code], results in fractional delta calculation which has a smoother particles display effect.
 set_fractional_delta ::
                        (Particles2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_fractional_delta cls arg1
@@ -610,7 +613,7 @@ set_fractional_delta cls arg1
 
 {-# NOINLINE bindParticles2D_set_lifetime #-}
 
--- | Amount of time each particle will exist. Default value: [code]1[/code].
+-- | Amount of time each particle will exist.
 bindParticles2D_set_lifetime :: MethodBind
 bindParticles2D_set_lifetime
   = unsafePerformIO $
@@ -620,7 +623,7 @@ bindParticles2D_set_lifetime
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of time each particle will exist. Default value: [code]1[/code].
+-- | Amount of time each particle will exist.
 set_lifetime ::
                (Particles2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_lifetime cls arg1
@@ -634,6 +637,7 @@ set_lifetime cls arg1
 {-# NOINLINE bindParticles2D_set_normal_map #-}
 
 -- | Normal map to be used for the [member texture] property.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 bindParticles2D_set_normal_map :: MethodBind
 bindParticles2D_set_normal_map
   = unsafePerformIO $
@@ -644,6 +648,7 @@ bindParticles2D_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Normal map to be used for the [member texture] property.
+--   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (Particles2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1
@@ -656,7 +661,7 @@ set_normal_map cls arg1
 
 {-# NOINLINE bindParticles2D_set_one_shot #-}
 
--- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end. Default value: [code]false[/code].
+-- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end.
 bindParticles2D_set_one_shot :: MethodBind
 bindParticles2D_set_one_shot
   = unsafePerformIO $
@@ -666,7 +671,7 @@ bindParticles2D_set_one_shot
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end. Default value: [code]false[/code].
+-- | If [code]true[/code], only one emission cycle occurs. If set [code]true[/code] during a cycle, emission will stop at the cycle's end.
 set_one_shot ::
                (Particles2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_one_shot cls arg1
@@ -727,7 +732,7 @@ set_process_material cls arg1
 
 {-# NOINLINE bindParticles2D_set_randomness_ratio #-}
 
--- | Emission lifetime randomness ratio. Default value: [code]0[/code].
+-- | Emission lifetime randomness ratio.
 bindParticles2D_set_randomness_ratio :: MethodBind
 bindParticles2D_set_randomness_ratio
   = unsafePerformIO $
@@ -737,7 +742,7 @@ bindParticles2D_set_randomness_ratio
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Emission lifetime randomness ratio. Default value: [code]0[/code].
+-- | Emission lifetime randomness ratio.
 set_randomness_ratio ::
                        (Particles2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_randomness_ratio cls arg1
@@ -751,7 +756,7 @@ set_randomness_ratio cls arg1
 
 {-# NOINLINE bindParticles2D_set_speed_scale #-}
 
--- | Particle system's running speed scaling ratio. Default value: [code]1[/code]. A value of [code]0[/code] can be used to pause the particles.
+-- | Particle system's running speed scaling ratio. A value of [code]0[/code] can be used to pause the particles.
 bindParticles2D_set_speed_scale :: MethodBind
 bindParticles2D_set_speed_scale
   = unsafePerformIO $
@@ -761,7 +766,7 @@ bindParticles2D_set_speed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particle system's running speed scaling ratio. Default value: [code]1[/code]. A value of [code]0[/code] can be used to pause the particles.
+-- | Particle system's running speed scaling ratio. A value of [code]0[/code] can be used to pause the particles.
 set_speed_scale ::
                   (Particles2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_speed_scale cls arg1
@@ -774,7 +779,7 @@ set_speed_scale cls arg1
 
 {-# NOINLINE bindParticles2D_set_texture #-}
 
--- | Particle texture. If [code]null[/code] particles will be squares.
+-- | Particle texture. If [code]null[/code], particles will be squares.
 bindParticles2D_set_texture :: MethodBind
 bindParticles2D_set_texture
   = unsafePerformIO $
@@ -784,7 +789,7 @@ bindParticles2D_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particle texture. If [code]null[/code] particles will be squares.
+-- | Particle texture. If [code]null[/code], particles will be squares.
 set_texture ::
               (Particles2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_texture cls arg1
@@ -797,7 +802,7 @@ set_texture cls arg1
 
 {-# NOINLINE bindParticles2D_set_use_local_coordinates #-}
 
--- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates. Default value: [code]true[/code].
+-- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates.
 bindParticles2D_set_use_local_coordinates :: MethodBind
 bindParticles2D_set_use_local_coordinates
   = unsafePerformIO $
@@ -807,7 +812,7 @@ bindParticles2D_set_use_local_coordinates
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates. Default value: [code]true[/code].
+-- | If [code]true[/code], particles use the parent node's coordinate space. If [code]false[/code], they use global coordinates.
 set_use_local_coordinates ::
                             (Particles2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_local_coordinates cls arg1

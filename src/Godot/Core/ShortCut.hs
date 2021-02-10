@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ShortCut
        (Godot.Core.ShortCut.get_as_text, Godot.Core.ShortCut.get_shortcut,
         Godot.Core.ShortCut.is_shortcut, Godot.Core.ShortCut.is_valid,

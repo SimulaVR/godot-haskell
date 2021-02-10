@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Light2D
        (Godot.Core.Light2D._SHADOW_FILTER_PCF7,
         Godot.Core.Light2D._MODE_ADD, Godot.Core.Light2D._MODE_SUB,
@@ -172,7 +173,7 @@ get_item_cull_mask cls
 
 {-# NOINLINE bindLight2D_get_item_shadow_cull_mask #-}
 
--- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching shadow mask will cast shadows.
+-- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching light mask will cast shadows.
 bindLight2D_get_item_shadow_cull_mask :: MethodBind
 bindLight2D_get_item_shadow_cull_mask
   = unsafePerformIO $
@@ -182,7 +183,7 @@ bindLight2D_get_item_shadow_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching shadow mask will cast shadows.
+-- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching light mask will cast shadows.
 get_item_shadow_cull_mask ::
                             (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_item_shadow_cull_mask cls
@@ -196,7 +197,7 @@ get_item_shadow_cull_mask cls
 
 {-# NOINLINE bindLight2D_get_layer_range_max #-}
 
--- | Maximum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Maximum layer value of objects that are affected by the Light2D.
 bindLight2D_get_layer_range_max :: MethodBind
 bindLight2D_get_layer_range_max
   = unsafePerformIO $
@@ -206,7 +207,7 @@ bindLight2D_get_layer_range_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Maximum layer value of objects that are affected by the Light2D.
 get_layer_range_max ::
                       (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_layer_range_max cls
@@ -219,7 +220,7 @@ get_layer_range_max cls
 
 {-# NOINLINE bindLight2D_get_layer_range_min #-}
 
--- | Minimum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Minimum layer value of objects that are affected by the Light2D.
 bindLight2D_get_layer_range_min :: MethodBind
 bindLight2D_get_layer_range_min
   = unsafePerformIO $
@@ -229,7 +230,7 @@ bindLight2D_get_layer_range_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Minimum layer value of objects that are affected by the Light2D.
 get_layer_range_min ::
                       (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_layer_range_min cls
@@ -242,7 +243,7 @@ get_layer_range_min cls
 
 {-# NOINLINE bindLight2D_get_mode #-}
 
--- | The Light2D's mode. See MODE_* constants for values.
+-- | The Light2D's mode. See [enum Mode] constants for values.
 bindLight2D_get_mode :: MethodBind
 bindLight2D_get_mode
   = unsafePerformIO $
@@ -252,7 +253,7 @@ bindLight2D_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The Light2D's mode. See MODE_* constants for values.
+-- | The Light2D's mode. See [enum Mode] constants for values.
 get_mode :: (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
@@ -262,7 +263,7 @@ get_mode cls
 
 {-# NOINLINE bindLight2D_get_shadow_buffer_size #-}
 
--- | Shadow buffer size. Default value: [code]2048[/code].
+-- | Shadow buffer size.
 bindLight2D_get_shadow_buffer_size :: MethodBind
 bindLight2D_get_shadow_buffer_size
   = unsafePerformIO $
@@ -272,7 +273,7 @@ bindLight2D_get_shadow_buffer_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shadow buffer size. Default value: [code]2048[/code].
+-- | Shadow buffer size.
 get_shadow_buffer_size ::
                          (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_shadow_buffer_size cls
@@ -309,7 +310,7 @@ get_shadow_color cls
 
 {-# NOINLINE bindLight2D_get_shadow_filter #-}
 
--- | Shadow filter type. Use [enum Light2D.ShadowFilter] constants as values. Default value: [code]SHADOW_FILTER_NONE[/code].
+-- | Shadow filter type. See [enum ShadowFilter] for possible values.
 bindLight2D_get_shadow_filter :: MethodBind
 bindLight2D_get_shadow_filter
   = unsafePerformIO $
@@ -319,7 +320,7 @@ bindLight2D_get_shadow_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shadow filter type. Use [enum Light2D.ShadowFilter] constants as values. Default value: [code]SHADOW_FILTER_NONE[/code].
+-- | Shadow filter type. See [enum ShadowFilter] for possible values.
 get_shadow_filter ::
                     (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_shadow_filter cls
@@ -446,7 +447,7 @@ get_texture_scale cls
 
 {-# NOINLINE bindLight2D_get_z_range_max #-}
 
--- | Maximum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]1024[/code].
+-- | Maximum [code]z[/code] value of objects that are affected by the Light2D.
 bindLight2D_get_z_range_max :: MethodBind
 bindLight2D_get_z_range_max
   = unsafePerformIO $
@@ -456,7 +457,7 @@ bindLight2D_get_z_range_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]1024[/code].
+-- | Maximum [code]z[/code] value of objects that are affected by the Light2D.
 get_z_range_max :: (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_z_range_max cls
   = withVariantArray []
@@ -468,7 +469,7 @@ get_z_range_max cls
 
 {-# NOINLINE bindLight2D_get_z_range_min #-}
 
--- | Minimum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]-1024[/code].
+-- | Minimum [code]z[/code] value of objects that are affected by the Light2D.
 bindLight2D_get_z_range_min :: MethodBind
 bindLight2D_get_z_range_min
   = unsafePerformIO $
@@ -478,7 +479,7 @@ bindLight2D_get_z_range_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]-1024[/code].
+-- | Minimum [code]z[/code] value of objects that are affected by the Light2D.
 get_z_range_min :: (Light2D :< cls, Object :< cls) => cls -> IO Int
 get_z_range_min cls
   = withVariantArray []
@@ -490,7 +491,7 @@ get_z_range_min cls
 
 {-# NOINLINE bindLight2D_is_editor_only #-}
 
--- | If [code]true[/code], Light2D will only appear when editing the scene. Default value: [code]false[/code].
+-- | If [code]true[/code], Light2D will only appear when editing the scene.
 bindLight2D_is_editor_only :: MethodBind
 bindLight2D_is_editor_only
   = unsafePerformIO $
@@ -500,7 +501,7 @@ bindLight2D_is_editor_only
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], Light2D will only appear when editing the scene. Default value: [code]false[/code].
+-- | If [code]true[/code], Light2D will only appear when editing the scene.
 is_editor_only :: (Light2D :< cls, Object :< cls) => cls -> IO Bool
 is_editor_only cls
   = withVariantArray []
@@ -512,7 +513,7 @@ is_editor_only cls
 
 {-# NOINLINE bindLight2D_is_enabled #-}
 
--- | If [code]true[/code], Light2D will emit light. Default value: [code]true[/code].
+-- | If [code]true[/code], Light2D will emit light.
 bindLight2D_is_enabled :: MethodBind
 bindLight2D_is_enabled
   = unsafePerformIO $
@@ -522,7 +523,7 @@ bindLight2D_is_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], Light2D will emit light. Default value: [code]true[/code].
+-- | If [code]true[/code], Light2D will emit light.
 is_enabled :: (Light2D :< cls, Object :< cls) => cls -> IO Bool
 is_enabled cls
   = withVariantArray []
@@ -533,7 +534,7 @@ is_enabled cls
 
 {-# NOINLINE bindLight2D_is_shadow_enabled #-}
 
--- | If [code]true[/code], the Light2D will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the Light2D will cast shadows.
 bindLight2D_is_shadow_enabled :: MethodBind
 bindLight2D_is_shadow_enabled
   = unsafePerformIO $
@@ -543,7 +544,7 @@ bindLight2D_is_shadow_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the Light2D will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the Light2D will cast shadows.
 is_shadow_enabled ::
                     (Light2D :< cls, Object :< cls) => cls -> IO Bool
 is_shadow_enabled cls
@@ -578,7 +579,7 @@ set_color cls arg1
 
 {-# NOINLINE bindLight2D_set_editor_only #-}
 
--- | If [code]true[/code], Light2D will only appear when editing the scene. Default value: [code]false[/code].
+-- | If [code]true[/code], Light2D will only appear when editing the scene.
 bindLight2D_set_editor_only :: MethodBind
 bindLight2D_set_editor_only
   = unsafePerformIO $
@@ -588,7 +589,7 @@ bindLight2D_set_editor_only
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], Light2D will only appear when editing the scene. Default value: [code]false[/code].
+-- | If [code]true[/code], Light2D will only appear when editing the scene.
 set_editor_only ::
                   (Light2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_editor_only cls arg1
@@ -601,7 +602,7 @@ set_editor_only cls arg1
 
 {-# NOINLINE bindLight2D_set_enabled #-}
 
--- | If [code]true[/code], Light2D will emit light. Default value: [code]true[/code].
+-- | If [code]true[/code], Light2D will emit light.
 bindLight2D_set_enabled :: MethodBind
 bindLight2D_set_enabled
   = unsafePerformIO $
@@ -611,7 +612,7 @@ bindLight2D_set_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], Light2D will emit light. Default value: [code]true[/code].
+-- | If [code]true[/code], Light2D will emit light.
 set_enabled ::
               (Light2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enabled cls arg1
@@ -690,7 +691,7 @@ set_item_cull_mask cls arg1
 
 {-# NOINLINE bindLight2D_set_item_shadow_cull_mask #-}
 
--- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching shadow mask will cast shadows.
+-- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching light mask will cast shadows.
 bindLight2D_set_item_shadow_cull_mask :: MethodBind
 bindLight2D_set_item_shadow_cull_mask
   = unsafePerformIO $
@@ -700,7 +701,7 @@ bindLight2D_set_item_shadow_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching shadow mask will cast shadows.
+-- | The shadow mask. Used with [LightOccluder2D] to cast shadows. Only occluders with a matching light mask will cast shadows.
 set_item_shadow_cull_mask ::
                             (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_item_shadow_cull_mask cls arg1
@@ -714,7 +715,7 @@ set_item_shadow_cull_mask cls arg1
 
 {-# NOINLINE bindLight2D_set_layer_range_max #-}
 
--- | Maximum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Maximum layer value of objects that are affected by the Light2D.
 bindLight2D_set_layer_range_max :: MethodBind
 bindLight2D_set_layer_range_max
   = unsafePerformIO $
@@ -724,7 +725,7 @@ bindLight2D_set_layer_range_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Maximum layer value of objects that are affected by the Light2D.
 set_layer_range_max ::
                       (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_layer_range_max cls arg1
@@ -737,7 +738,7 @@ set_layer_range_max cls arg1
 
 {-# NOINLINE bindLight2D_set_layer_range_min #-}
 
--- | Minimum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Minimum layer value of objects that are affected by the Light2D.
 bindLight2D_set_layer_range_min :: MethodBind
 bindLight2D_set_layer_range_min
   = unsafePerformIO $
@@ -747,7 +748,7 @@ bindLight2D_set_layer_range_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum layer value of objects that are affected by the Light2D. Default value: [code]0[/code].
+-- | Minimum layer value of objects that are affected by the Light2D.
 set_layer_range_min ::
                       (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_layer_range_min cls arg1
@@ -760,7 +761,7 @@ set_layer_range_min cls arg1
 
 {-# NOINLINE bindLight2D_set_mode #-}
 
--- | The Light2D's mode. See MODE_* constants for values.
+-- | The Light2D's mode. See [enum Mode] constants for values.
 bindLight2D_set_mode :: MethodBind
 bindLight2D_set_mode
   = unsafePerformIO $
@@ -770,7 +771,7 @@ bindLight2D_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The Light2D's mode. See MODE_* constants for values.
+-- | The Light2D's mode. See [enum Mode] constants for values.
 set_mode :: (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
   = withVariantArray [toVariant arg1]
@@ -780,7 +781,7 @@ set_mode cls arg1
 
 {-# NOINLINE bindLight2D_set_shadow_buffer_size #-}
 
--- | Shadow buffer size. Default value: [code]2048[/code].
+-- | Shadow buffer size.
 bindLight2D_set_shadow_buffer_size :: MethodBind
 bindLight2D_set_shadow_buffer_size
   = unsafePerformIO $
@@ -790,7 +791,7 @@ bindLight2D_set_shadow_buffer_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shadow buffer size. Default value: [code]2048[/code].
+-- | Shadow buffer size.
 set_shadow_buffer_size ::
                          (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_shadow_buffer_size cls arg1
@@ -827,7 +828,7 @@ set_shadow_color cls arg1
 
 {-# NOINLINE bindLight2D_set_shadow_enabled #-}
 
--- | If [code]true[/code], the Light2D will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the Light2D will cast shadows.
 bindLight2D_set_shadow_enabled :: MethodBind
 bindLight2D_set_shadow_enabled
   = unsafePerformIO $
@@ -837,7 +838,7 @@ bindLight2D_set_shadow_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the Light2D will cast shadows. Default value: [code]false[/code].
+-- | If [code]true[/code], the Light2D will cast shadows.
 set_shadow_enabled ::
                      (Light2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shadow_enabled cls arg1
@@ -850,7 +851,7 @@ set_shadow_enabled cls arg1
 
 {-# NOINLINE bindLight2D_set_shadow_filter #-}
 
--- | Shadow filter type. Use [enum Light2D.ShadowFilter] constants as values. Default value: [code]SHADOW_FILTER_NONE[/code].
+-- | Shadow filter type. See [enum ShadowFilter] for possible values.
 bindLight2D_set_shadow_filter :: MethodBind
 bindLight2D_set_shadow_filter
   = unsafePerformIO $
@@ -860,7 +861,7 @@ bindLight2D_set_shadow_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shadow filter type. Use [enum Light2D.ShadowFilter] constants as values. Default value: [code]SHADOW_FILTER_NONE[/code].
+-- | Shadow filter type. See [enum ShadowFilter] for possible values.
 set_shadow_filter ::
                     (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_shadow_filter cls arg1
@@ -988,7 +989,7 @@ set_texture_scale cls arg1
 
 {-# NOINLINE bindLight2D_set_z_range_max #-}
 
--- | Maximum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]1024[/code].
+-- | Maximum [code]z[/code] value of objects that are affected by the Light2D.
 bindLight2D_set_z_range_max :: MethodBind
 bindLight2D_set_z_range_max
   = unsafePerformIO $
@@ -998,7 +999,7 @@ bindLight2D_set_z_range_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]1024[/code].
+-- | Maximum [code]z[/code] value of objects that are affected by the Light2D.
 set_z_range_max ::
                   (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_z_range_max cls arg1
@@ -1011,7 +1012,7 @@ set_z_range_max cls arg1
 
 {-# NOINLINE bindLight2D_set_z_range_min #-}
 
--- | Minimum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]-1024[/code].
+-- | Minimum [code]z[/code] value of objects that are affected by the Light2D.
 bindLight2D_set_z_range_min :: MethodBind
 bindLight2D_set_z_range_min
   = unsafePerformIO $
@@ -1021,7 +1022,7 @@ bindLight2D_set_z_range_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum [code]z[/code] value of objects that are affected by the Light2D. Default value: [code]-1024[/code].
+-- | Minimum [code]z[/code] value of objects that are affected by the Light2D.
 set_z_range_min ::
                   (Light2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_z_range_min cls arg1

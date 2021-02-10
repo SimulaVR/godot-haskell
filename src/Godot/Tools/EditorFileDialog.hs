@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorFileDialog
        (Godot.Tools.EditorFileDialog._ACCESS_RESOURCES,
         Godot.Tools.EditorFileDialog._DISPLAY_THUMBNAILS,
@@ -106,16 +107,23 @@ _MODE_OPEN_ANY = 3
 sig_dir_selected :: Godot.Internal.Dispatch.Signal EditorFileDialog
 sig_dir_selected = Godot.Internal.Dispatch.Signal "dir_selected"
 
+instance NodeSignal EditorFileDialog "dir_selected" '[GodotString]
+
 -- | Emitted when a file is selected.
 sig_file_selected ::
                   Godot.Internal.Dispatch.Signal EditorFileDialog
 sig_file_selected = Godot.Internal.Dispatch.Signal "file_selected"
+
+instance NodeSignal EditorFileDialog "file_selected" '[GodotString]
 
 -- | Emitted when multiple files are selected.
 sig_files_selected ::
                    Godot.Internal.Dispatch.Signal EditorFileDialog
 sig_files_selected
   = Godot.Internal.Dispatch.Signal "files_selected"
+
+instance NodeSignal EditorFileDialog "files_selected"
+           '[PoolStringArray]
 
 {-# NOINLINE bindEditorFileDialog__action_pressed #-}
 
@@ -785,8 +793,8 @@ _update_file_name cls
 
 {-# NOINLINE bindEditorFileDialog_add_filter #-}
 
--- | Adds a comma-delimited file extension filter option to the [code]EditorFileDialog[/code] with an optional semi-colon-delimited label.
---   				Example: "*.tscn, *.scn; Scenes", results in filter text "Scenes (*.tscn, *.scn)".
+-- | Adds a comma-delimited file extension filter option to the [EditorFileDialog] with an optional semi-colon-delimited label.
+--   				For example, [code]"*.tscn, *.scn; Scenes"[/code] results in filter text "Scenes (*.tscn, *.scn)".
 bindEditorFileDialog_add_filter :: MethodBind
 bindEditorFileDialog_add_filter
   = unsafePerformIO $
@@ -796,8 +804,8 @@ bindEditorFileDialog_add_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a comma-delimited file extension filter option to the [code]EditorFileDialog[/code] with an optional semi-colon-delimited label.
---   				Example: "*.tscn, *.scn; Scenes", results in filter text "Scenes (*.tscn, *.scn)".
+-- | Adds a comma-delimited file extension filter option to the [EditorFileDialog] with an optional semi-colon-delimited label.
+--   				For example, [code]"*.tscn, *.scn; Scenes"[/code] results in filter text "Scenes (*.tscn, *.scn)".
 add_filter ::
              (EditorFileDialog :< cls, Object :< cls) =>
              cls -> GodotString -> IO ()
@@ -930,7 +938,7 @@ get_current_path cls
 
 {-# NOINLINE bindEditorFileDialog_get_display_mode #-}
 
--- | The view format in which the [code]EditorFileDialog[/code] displays resources to the user.
+-- | The view format in which the [EditorFileDialog] displays resources to the user.
 bindEditorFileDialog_get_display_mode :: MethodBind
 bindEditorFileDialog_get_display_mode
   = unsafePerformIO $
@@ -940,7 +948,7 @@ bindEditorFileDialog_get_display_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The view format in which the [code]EditorFileDialog[/code] displays resources to the user.
+-- | The view format in which the [EditorFileDialog] displays resources to the user.
 get_display_mode ::
                    (EditorFileDialog :< cls, Object :< cls) => cls -> IO Int
 get_display_mode cls
@@ -954,7 +962,7 @@ get_display_mode cls
 
 {-# NOINLINE bindEditorFileDialog_get_mode #-}
 
--- | The purpose of the [code]EditorFileDialog[/code]. Changes allowed behaviors.
+-- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
 bindEditorFileDialog_get_mode :: MethodBind
 bindEditorFileDialog_get_mode
   = unsafePerformIO $
@@ -964,7 +972,7 @@ bindEditorFileDialog_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The purpose of the [code]EditorFileDialog[/code]. Changes allowed behaviors.
+-- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
 get_mode ::
            (EditorFileDialog :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
@@ -1000,7 +1008,7 @@ get_vbox cls
 
 {-# NOINLINE bindEditorFileDialog_invalidate #-}
 
--- | Notify the [code]EditorFileDialog[/code] that its view of the data is no longer accurate. Updates the view contents on next view update.
+-- | Notify the [EditorFileDialog] that its view of the data is no longer accurate. Updates the view contents on next view update.
 bindEditorFileDialog_invalidate :: MethodBind
 bindEditorFileDialog_invalidate
   = unsafePerformIO $
@@ -1010,7 +1018,7 @@ bindEditorFileDialog_invalidate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Notify the [code]EditorFileDialog[/code] that its view of the data is no longer accurate. Updates the view contents on next view update.
+-- | Notify the [EditorFileDialog] that its view of the data is no longer accurate. Updates the view contents on next view update.
 invalidate ::
              (EditorFileDialog :< cls, Object :< cls) => cls -> IO ()
 invalidate cls
@@ -1023,7 +1031,7 @@ invalidate cls
 
 {-# NOINLINE bindEditorFileDialog_is_overwrite_warning_disabled #-}
 
--- | If [code]true[/code], the [code]EditorFileDialog[/code] will not warn the user before overwriting files.
+-- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
 bindEditorFileDialog_is_overwrite_warning_disabled :: MethodBind
 bindEditorFileDialog_is_overwrite_warning_disabled
   = unsafePerformIO $
@@ -1033,7 +1041,7 @@ bindEditorFileDialog_is_overwrite_warning_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]EditorFileDialog[/code] will not warn the user before overwriting files.
+-- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
 is_overwrite_warning_disabled ::
                                 (EditorFileDialog :< cls, Object :< cls) => cls -> IO Bool
 is_overwrite_warning_disabled cls
@@ -1048,7 +1056,7 @@ is_overwrite_warning_disabled cls
 
 {-# NOINLINE bindEditorFileDialog_is_showing_hidden_files #-}
 
--- | If [code]true[/code], hidden files and directories will be visible in the [code]EditorFileDialog[/code].
+-- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
 bindEditorFileDialog_is_showing_hidden_files :: MethodBind
 bindEditorFileDialog_is_showing_hidden_files
   = unsafePerformIO $
@@ -1058,7 +1066,7 @@ bindEditorFileDialog_is_showing_hidden_files
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], hidden files and directories will be visible in the [code]EditorFileDialog[/code].
+-- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
 is_showing_hidden_files ::
                           (EditorFileDialog :< cls, Object :< cls) => cls -> IO Bool
 is_showing_hidden_files cls
@@ -1170,7 +1178,7 @@ set_current_path cls arg1
 
 {-# NOINLINE bindEditorFileDialog_set_disable_overwrite_warning #-}
 
--- | If [code]true[/code], the [code]EditorFileDialog[/code] will not warn the user before overwriting files.
+-- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
 bindEditorFileDialog_set_disable_overwrite_warning :: MethodBind
 bindEditorFileDialog_set_disable_overwrite_warning
   = unsafePerformIO $
@@ -1180,7 +1188,7 @@ bindEditorFileDialog_set_disable_overwrite_warning
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]EditorFileDialog[/code] will not warn the user before overwriting files.
+-- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
 set_disable_overwrite_warning ::
                                 (EditorFileDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disable_overwrite_warning cls arg1
@@ -1195,7 +1203,7 @@ set_disable_overwrite_warning cls arg1
 
 {-# NOINLINE bindEditorFileDialog_set_display_mode #-}
 
--- | The view format in which the [code]EditorFileDialog[/code] displays resources to the user.
+-- | The view format in which the [EditorFileDialog] displays resources to the user.
 bindEditorFileDialog_set_display_mode :: MethodBind
 bindEditorFileDialog_set_display_mode
   = unsafePerformIO $
@@ -1205,7 +1213,7 @@ bindEditorFileDialog_set_display_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The view format in which the [code]EditorFileDialog[/code] displays resources to the user.
+-- | The view format in which the [EditorFileDialog] displays resources to the user.
 set_display_mode ::
                    (EditorFileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_display_mode cls arg1
@@ -1219,7 +1227,7 @@ set_display_mode cls arg1
 
 {-# NOINLINE bindEditorFileDialog_set_mode #-}
 
--- | The purpose of the [code]EditorFileDialog[/code]. Changes allowed behaviors.
+-- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
 bindEditorFileDialog_set_mode :: MethodBind
 bindEditorFileDialog_set_mode
   = unsafePerformIO $
@@ -1229,7 +1237,7 @@ bindEditorFileDialog_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The purpose of the [code]EditorFileDialog[/code]. Changes allowed behaviors.
+-- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
 set_mode ::
            (EditorFileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
@@ -1242,7 +1250,7 @@ set_mode cls arg1
 
 {-# NOINLINE bindEditorFileDialog_set_show_hidden_files #-}
 
--- | If [code]true[/code], hidden files and directories will be visible in the [code]EditorFileDialog[/code].
+-- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
 bindEditorFileDialog_set_show_hidden_files :: MethodBind
 bindEditorFileDialog_set_show_hidden_files
   = unsafePerformIO $
@@ -1252,7 +1260,7 @@ bindEditorFileDialog_set_show_hidden_files
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], hidden files and directories will be visible in the [code]EditorFileDialog[/code].
+-- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
 set_show_hidden_files ::
                         (EditorFileDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_show_hidden_files cls arg1

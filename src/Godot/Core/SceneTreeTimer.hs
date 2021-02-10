@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SceneTreeTimer
        (Godot.Core.SceneTreeTimer.sig_timeout,
         Godot.Core.SceneTreeTimer.get_time_left,
@@ -15,6 +16,8 @@ import Godot.Api.Types
 -- | Emitted when the timer reaches 0.
 sig_timeout :: Godot.Internal.Dispatch.Signal SceneTreeTimer
 sig_timeout = Godot.Internal.Dispatch.Signal "timeout"
+
+instance NodeSignal SceneTreeTimer "timeout" '[]
 
 {-# NOINLINE bindSceneTreeTimer_get_time_left #-}
 

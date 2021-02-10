@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SliderJoint
        (Godot.Core.SliderJoint._PARAM_ANGULAR_LIMIT_LOWER,
         Godot.Core.SliderJoint._PARAM_LINEAR_ORTHOGONAL_RESTITUTION,

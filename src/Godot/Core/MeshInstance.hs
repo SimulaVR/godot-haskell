@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.MeshInstance
        (Godot.Core.MeshInstance._mesh_changed,
         Godot.Core.MeshInstance.create_convex_collision,
@@ -163,6 +164,7 @@ get_skeleton_path cls
 
 {-# NOINLINE bindMeshInstance_get_skin #-}
 
+-- | Sets the skin to be used by this instance.
 bindMeshInstance_get_skin :: MethodBind
 bindMeshInstance_get_skin
   = unsafePerformIO $
@@ -172,6 +174,7 @@ bindMeshInstance_get_skin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the skin to be used by this instance.
 get_skin :: (MeshInstance :< cls, Object :< cls) => cls -> IO Skin
 get_skin cls
   = withVariantArray []
@@ -278,6 +281,7 @@ set_skeleton_path cls arg1
 
 {-# NOINLINE bindMeshInstance_set_skin #-}
 
+-- | Sets the skin to be used by this instance.
 bindMeshInstance_set_skin :: MethodBind
 bindMeshInstance_set_skin
   = unsafePerformIO $
@@ -287,6 +291,7 @@ bindMeshInstance_set_skin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the skin to be used by this instance.
 set_skin ::
            (MeshInstance :< cls, Object :< cls) => cls -> Skin -> IO ()
 set_skin cls arg1

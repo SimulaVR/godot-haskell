@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.NetworkedMultiplayerPeer
        (Godot.Core.NetworkedMultiplayerPeer._CONNECTION_DISCONNECTED,
         Godot.Core.NetworkedMultiplayerPeer._TRANSFER_MODE_UNRELIABLE,
@@ -61,11 +62,17 @@ sig_connection_failed ::
 sig_connection_failed
   = Godot.Internal.Dispatch.Signal "connection_failed"
 
+instance NodeSignal NetworkedMultiplayerPeer "connection_failed"
+           '[]
+
 -- | Emitted when a connection attempt succeeds.
 sig_connection_succeeded ::
                          Godot.Internal.Dispatch.Signal NetworkedMultiplayerPeer
 sig_connection_succeeded
   = Godot.Internal.Dispatch.Signal "connection_succeeded"
+
+instance NodeSignal NetworkedMultiplayerPeer "connection_succeeded"
+           '[]
 
 -- | Emitted by the server when a client connects.
 sig_peer_connected ::
@@ -73,17 +80,26 @@ sig_peer_connected ::
 sig_peer_connected
   = Godot.Internal.Dispatch.Signal "peer_connected"
 
+instance NodeSignal NetworkedMultiplayerPeer "peer_connected"
+           '[Int]
+
 -- | Emitted by the server when a client disconnects.
 sig_peer_disconnected ::
                       Godot.Internal.Dispatch.Signal NetworkedMultiplayerPeer
 sig_peer_disconnected
   = Godot.Internal.Dispatch.Signal "peer_disconnected"
 
+instance NodeSignal NetworkedMultiplayerPeer "peer_disconnected"
+           '[Int]
+
 -- | Emitted by clients when the server disconnects.
 sig_server_disconnected ::
                         Godot.Internal.Dispatch.Signal NetworkedMultiplayerPeer
 sig_server_disconnected
   = Godot.Internal.Dispatch.Signal "server_disconnected"
+
+instance NodeSignal NetworkedMultiplayerPeer "server_disconnected"
+           '[]
 
 {-# NOINLINE bindNetworkedMultiplayerPeer_get_connection_status #-}
 
@@ -112,7 +128,7 @@ get_connection_status cls
 
 {-# NOINLINE bindNetworkedMultiplayerPeer_get_packet_peer #-}
 
--- | Returns the ID of the [code]NetworkedMultiplayerPeer[/code] who sent the most recent packet.
+-- | Returns the ID of the [NetworkedMultiplayerPeer] who sent the most recent packet.
 bindNetworkedMultiplayerPeer_get_packet_peer :: MethodBind
 bindNetworkedMultiplayerPeer_get_packet_peer
   = unsafePerformIO $
@@ -122,7 +138,7 @@ bindNetworkedMultiplayerPeer_get_packet_peer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the ID of the [code]NetworkedMultiplayerPeer[/code] who sent the most recent packet.
+-- | Returns the ID of the [NetworkedMultiplayerPeer] who sent the most recent packet.
 get_packet_peer ::
                   (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Int
 get_packet_peer cls
@@ -161,7 +177,7 @@ get_transfer_mode cls
 
 {-# NOINLINE bindNetworkedMultiplayerPeer_get_unique_id #-}
 
--- | Returns the ID of this [code]NetworkedMultiplayerPeer[/code].
+-- | Returns the ID of this [NetworkedMultiplayerPeer].
 bindNetworkedMultiplayerPeer_get_unique_id :: MethodBind
 bindNetworkedMultiplayerPeer_get_unique_id
   = unsafePerformIO $
@@ -171,7 +187,7 @@ bindNetworkedMultiplayerPeer_get_unique_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the ID of this [code]NetworkedMultiplayerPeer[/code].
+-- | Returns the ID of this [NetworkedMultiplayerPeer].
 get_unique_id ::
                 (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Int
 get_unique_id cls
@@ -186,7 +202,7 @@ get_unique_id cls
 {-# NOINLINE bindNetworkedMultiplayerPeer_is_refusing_new_connections
              #-}
 
--- | If [code]true[/code], this [code]NetworkedMultiplayerPeer[/code] refuses new connections. Default value: [code]false[/code].
+-- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
 bindNetworkedMultiplayerPeer_is_refusing_new_connections ::
                                                          MethodBind
 bindNetworkedMultiplayerPeer_is_refusing_new_connections
@@ -197,7 +213,7 @@ bindNetworkedMultiplayerPeer_is_refusing_new_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [code]NetworkedMultiplayerPeer[/code] refuses new connections. Default value: [code]false[/code].
+-- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
 is_refusing_new_connections ::
                               (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Bool
 is_refusing_new_connections cls
@@ -237,7 +253,7 @@ poll cls
 {-# NOINLINE bindNetworkedMultiplayerPeer_set_refuse_new_connections
              #-}
 
--- | If [code]true[/code], this [code]NetworkedMultiplayerPeer[/code] refuses new connections. Default value: [code]false[/code].
+-- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
 bindNetworkedMultiplayerPeer_set_refuse_new_connections ::
                                                         MethodBind
 bindNetworkedMultiplayerPeer_set_refuse_new_connections
@@ -248,7 +264,7 @@ bindNetworkedMultiplayerPeer_set_refuse_new_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [code]NetworkedMultiplayerPeer[/code] refuses new connections. Default value: [code]false[/code].
+-- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
 set_refuse_new_connections ::
                              (NetworkedMultiplayerPeer :< cls, Object :< cls) =>
                              cls -> Bool -> IO ()
@@ -265,7 +281,7 @@ set_refuse_new_connections cls arg1
 {-# NOINLINE bindNetworkedMultiplayerPeer_set_target_peer #-}
 
 -- | Sets the peer to which packets will be sent.
---   				The [code]id[/code] can be one of: [constant TARGET_PEER_BROADCAST] to send to all connected peers, [constant TARGET_PEER_SERVER] to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. Default: [constant TARGET_PEER_BROADCAST]
+--   				The [code]id[/code] can be one of: [constant TARGET_PEER_BROADCAST] to send to all connected peers, [constant TARGET_PEER_SERVER] to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. By default, the target peer is [constant TARGET_PEER_BROADCAST].
 bindNetworkedMultiplayerPeer_set_target_peer :: MethodBind
 bindNetworkedMultiplayerPeer_set_target_peer
   = unsafePerformIO $
@@ -276,7 +292,7 @@ bindNetworkedMultiplayerPeer_set_target_peer
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the peer to which packets will be sent.
---   				The [code]id[/code] can be one of: [constant TARGET_PEER_BROADCAST] to send to all connected peers, [constant TARGET_PEER_SERVER] to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. Default: [constant TARGET_PEER_BROADCAST]
+--   				The [code]id[/code] can be one of: [constant TARGET_PEER_BROADCAST] to send to all connected peers, [constant TARGET_PEER_SERVER] to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. By default, the target peer is [constant TARGET_PEER_BROADCAST].
 set_target_peer ::
                   (NetworkedMultiplayerPeer :< cls, Object :< cls) =>
                   cls -> Int -> IO ()

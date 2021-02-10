@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptResourcePath
        (Godot.Core.VisualScriptResourcePath.get_resource_path,
         Godot.Core.VisualScriptResourcePath.set_resource_path)

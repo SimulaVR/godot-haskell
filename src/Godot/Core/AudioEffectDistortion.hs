@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectDistortion
        (Godot.Core.AudioEffectDistortion._MODE_CLIP,
         Godot.Core.AudioEffectDistortion._MODE_LOFI,
@@ -41,7 +42,7 @@ _MODE_ATAN = 1
 
 {-# NOINLINE bindAudioEffectDistortion_get_drive #-}
 
--- | Distortion power. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | Distortion power. Value can range from 0 to 1.
 bindAudioEffectDistortion_get_drive :: MethodBind
 bindAudioEffectDistortion_get_drive
   = unsafePerformIO $
@@ -51,7 +52,7 @@ bindAudioEffectDistortion_get_drive
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Distortion power. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | Distortion power. Value can range from 0 to 1.
 get_drive ::
             (AudioEffectDistortion :< cls, Object :< cls) => cls -> IO Float
 get_drive cls
@@ -65,7 +66,7 @@ get_drive cls
 
 {-# NOINLINE bindAudioEffectDistortion_get_keep_hf_hz #-}
 
--- | High-pass filter. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000. Default value: [code]16000[/code].
+-- | High-pass filter, in Hz. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000.
 bindAudioEffectDistortion_get_keep_hf_hz :: MethodBind
 bindAudioEffectDistortion_get_keep_hf_hz
   = unsafePerformIO $
@@ -75,7 +76,7 @@ bindAudioEffectDistortion_get_keep_hf_hz
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | High-pass filter. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000. Default value: [code]16000[/code].
+-- | High-pass filter, in Hz. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000.
 get_keep_hf_hz ::
                  (AudioEffectDistortion :< cls, Object :< cls) => cls -> IO Float
 get_keep_hf_hz cls
@@ -89,7 +90,7 @@ get_keep_hf_hz cls
 
 {-# NOINLINE bindAudioEffectDistortion_get_mode #-}
 
--- | Distortion type. Default value: [constant MODE_CLIP].
+-- | Distortion type.
 bindAudioEffectDistortion_get_mode :: MethodBind
 bindAudioEffectDistortion_get_mode
   = unsafePerformIO $
@@ -99,7 +100,7 @@ bindAudioEffectDistortion_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Distortion type. Default value: [constant MODE_CLIP].
+-- | Distortion type.
 get_mode ::
            (AudioEffectDistortion :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
@@ -113,7 +114,7 @@ get_mode cls
 
 {-# NOINLINE bindAudioEffectDistortion_get_post_gain #-}
 
--- | Increases or decreases the volume after the effect. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Increases or decreases the volume after the effect. Value can range from -80 to 24.
 bindAudioEffectDistortion_get_post_gain :: MethodBind
 bindAudioEffectDistortion_get_post_gain
   = unsafePerformIO $
@@ -123,7 +124,7 @@ bindAudioEffectDistortion_get_post_gain
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Increases or decreases the volume after the effect. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Increases or decreases the volume after the effect. Value can range from -80 to 24.
 get_post_gain ::
                 (AudioEffectDistortion :< cls, Object :< cls) => cls -> IO Float
 get_post_gain cls
@@ -137,7 +138,7 @@ get_post_gain cls
 
 {-# NOINLINE bindAudioEffectDistortion_get_pre_gain #-}
 
--- | Increases or decreases the volume before the effect. Value can range from -60 to 60. Default value: [code]0[/code].
+-- | Increases or decreases the volume before the effect. Value can range from -60 to 60.
 bindAudioEffectDistortion_get_pre_gain :: MethodBind
 bindAudioEffectDistortion_get_pre_gain
   = unsafePerformIO $
@@ -147,7 +148,7 @@ bindAudioEffectDistortion_get_pre_gain
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Increases or decreases the volume before the effect. Value can range from -60 to 60. Default value: [code]0[/code].
+-- | Increases or decreases the volume before the effect. Value can range from -60 to 60.
 get_pre_gain ::
                (AudioEffectDistortion :< cls, Object :< cls) => cls -> IO Float
 get_pre_gain cls
@@ -161,7 +162,7 @@ get_pre_gain cls
 
 {-# NOINLINE bindAudioEffectDistortion_set_drive #-}
 
--- | Distortion power. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | Distortion power. Value can range from 0 to 1.
 bindAudioEffectDistortion_set_drive :: MethodBind
 bindAudioEffectDistortion_set_drive
   = unsafePerformIO $
@@ -171,7 +172,7 @@ bindAudioEffectDistortion_set_drive
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Distortion power. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | Distortion power. Value can range from 0 to 1.
 set_drive ::
             (AudioEffectDistortion :< cls, Object :< cls) =>
             cls -> Float -> IO ()
@@ -186,7 +187,7 @@ set_drive cls arg1
 
 {-# NOINLINE bindAudioEffectDistortion_set_keep_hf_hz #-}
 
--- | High-pass filter. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000. Default value: [code]16000[/code].
+-- | High-pass filter, in Hz. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000.
 bindAudioEffectDistortion_set_keep_hf_hz :: MethodBind
 bindAudioEffectDistortion_set_keep_hf_hz
   = unsafePerformIO $
@@ -196,7 +197,7 @@ bindAudioEffectDistortion_set_keep_hf_hz
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | High-pass filter. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000. Default value: [code]16000[/code].
+-- | High-pass filter, in Hz. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000.
 set_keep_hf_hz ::
                  (AudioEffectDistortion :< cls, Object :< cls) =>
                  cls -> Float -> IO ()
@@ -211,7 +212,7 @@ set_keep_hf_hz cls arg1
 
 {-# NOINLINE bindAudioEffectDistortion_set_mode #-}
 
--- | Distortion type. Default value: [constant MODE_CLIP].
+-- | Distortion type.
 bindAudioEffectDistortion_set_mode :: MethodBind
 bindAudioEffectDistortion_set_mode
   = unsafePerformIO $
@@ -221,7 +222,7 @@ bindAudioEffectDistortion_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Distortion type. Default value: [constant MODE_CLIP].
+-- | Distortion type.
 set_mode ::
            (AudioEffectDistortion :< cls, Object :< cls) =>
            cls -> Int -> IO ()
@@ -236,7 +237,7 @@ set_mode cls arg1
 
 {-# NOINLINE bindAudioEffectDistortion_set_post_gain #-}
 
--- | Increases or decreases the volume after the effect. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Increases or decreases the volume after the effect. Value can range from -80 to 24.
 bindAudioEffectDistortion_set_post_gain :: MethodBind
 bindAudioEffectDistortion_set_post_gain
   = unsafePerformIO $
@@ -246,7 +247,7 @@ bindAudioEffectDistortion_set_post_gain
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Increases or decreases the volume after the effect. Value can range from -80 to 24. Default value: [code]0[/code].
+-- | Increases or decreases the volume after the effect. Value can range from -80 to 24.
 set_post_gain ::
                 (AudioEffectDistortion :< cls, Object :< cls) =>
                 cls -> Float -> IO ()
@@ -261,7 +262,7 @@ set_post_gain cls arg1
 
 {-# NOINLINE bindAudioEffectDistortion_set_pre_gain #-}
 
--- | Increases or decreases the volume before the effect. Value can range from -60 to 60. Default value: [code]0[/code].
+-- | Increases or decreases the volume before the effect. Value can range from -60 to 60.
 bindAudioEffectDistortion_set_pre_gain :: MethodBind
 bindAudioEffectDistortion_set_pre_gain
   = unsafePerformIO $
@@ -271,7 +272,7 @@ bindAudioEffectDistortion_set_pre_gain
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Increases or decreases the volume before the effect. Value can range from -60 to 60. Default value: [code]0[/code].
+-- | Increases or decreases the volume before the effect. Value can range from -60 to 60.
 set_pre_gain ::
                (AudioEffectDistortion :< cls, Object :< cls) =>
                cls -> Float -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CSGPolygon
        (Godot.Core.CSGPolygon._MODE_PATH,
         Godot.Core.CSGPolygon._PATH_ROTATION_PATH,

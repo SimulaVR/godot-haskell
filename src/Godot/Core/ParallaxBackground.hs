@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ParallaxBackground
        (Godot.Core.ParallaxBackground._camera_moved,
         Godot.Core.ParallaxBackground.get_limit_begin,
@@ -47,7 +48,7 @@ _camera_moved cls arg1 arg2
 
 {-# NOINLINE bindParallaxBackground_get_limit_begin #-}
 
--- | Top left limits for scrolling to begin. If the camera is outside of this limit the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
+-- | Top-left limits for scrolling to begin. If the camera is outside of this limit, the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
 bindParallaxBackground_get_limit_begin :: MethodBind
 bindParallaxBackground_get_limit_begin
   = unsafePerformIO $
@@ -57,7 +58,7 @@ bindParallaxBackground_get_limit_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Top left limits for scrolling to begin. If the camera is outside of this limit the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
+-- | Top-left limits for scrolling to begin. If the camera is outside of this limit, the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
 get_limit_begin ::
                   (ParallaxBackground :< cls, Object :< cls) => cls -> IO Vector2
 get_limit_begin cls
@@ -71,7 +72,7 @@ get_limit_begin cls
 
 {-# NOINLINE bindParallaxBackground_get_limit_end #-}
 
--- | Right bottom limits for scrolling to end. If the camera is outside of this limit the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
+-- | Bottom-right limits for scrolling to end. If the camera is outside of this limit, the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
 bindParallaxBackground_get_limit_end :: MethodBind
 bindParallaxBackground_get_limit_end
   = unsafePerformIO $
@@ -81,7 +82,7 @@ bindParallaxBackground_get_limit_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Right bottom limits for scrolling to end. If the camera is outside of this limit the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
+-- | Bottom-right limits for scrolling to end. If the camera is outside of this limit, the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
 get_limit_end ::
                 (ParallaxBackground :< cls, Object :< cls) => cls -> IO Vector2
 get_limit_end cls
@@ -95,7 +96,7 @@ get_limit_end cls
 
 {-# NOINLINE bindParallaxBackground_get_scroll_base_offset #-}
 
--- | Base position offset of all [ParallaxLayer] children.
+-- | The base position offset for all [ParallaxLayer] children.
 bindParallaxBackground_get_scroll_base_offset :: MethodBind
 bindParallaxBackground_get_scroll_base_offset
   = unsafePerformIO $
@@ -105,7 +106,7 @@ bindParallaxBackground_get_scroll_base_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Base position offset of all [ParallaxLayer] children.
+-- | The base position offset for all [ParallaxLayer] children.
 get_scroll_base_offset ::
                          (ParallaxBackground :< cls, Object :< cls) => cls -> IO Vector2
 get_scroll_base_offset cls
@@ -120,7 +121,7 @@ get_scroll_base_offset cls
 
 {-# NOINLINE bindParallaxBackground_get_scroll_base_scale #-}
 
--- | Base motion scale of all [ParallaxLayer] children.
+-- | The base motion scale for all [ParallaxLayer] children.
 bindParallaxBackground_get_scroll_base_scale :: MethodBind
 bindParallaxBackground_get_scroll_base_scale
   = unsafePerformIO $
@@ -130,7 +131,7 @@ bindParallaxBackground_get_scroll_base_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Base motion scale of all [ParallaxLayer] children.
+-- | The base motion scale for all [ParallaxLayer] children.
 get_scroll_base_scale ::
                         (ParallaxBackground :< cls, Object :< cls) => cls -> IO Vector2
 get_scroll_base_scale cls
@@ -217,7 +218,7 @@ set_ignore_camera_zoom cls arg1
 
 {-# NOINLINE bindParallaxBackground_set_limit_begin #-}
 
--- | Top left limits for scrolling to begin. If the camera is outside of this limit the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
+-- | Top-left limits for scrolling to begin. If the camera is outside of this limit, the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
 bindParallaxBackground_set_limit_begin :: MethodBind
 bindParallaxBackground_set_limit_begin
   = unsafePerformIO $
@@ -227,7 +228,7 @@ bindParallaxBackground_set_limit_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Top left limits for scrolling to begin. If the camera is outside of this limit the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
+-- | Top-left limits for scrolling to begin. If the camera is outside of this limit, the background will stop scrolling. Must be lower than [member scroll_limit_end] to work.
 set_limit_begin ::
                   (ParallaxBackground :< cls, Object :< cls) =>
                   cls -> Vector2 -> IO ()
@@ -242,7 +243,7 @@ set_limit_begin cls arg1
 
 {-# NOINLINE bindParallaxBackground_set_limit_end #-}
 
--- | Right bottom limits for scrolling to end. If the camera is outside of this limit the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
+-- | Bottom-right limits for scrolling to end. If the camera is outside of this limit, the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
 bindParallaxBackground_set_limit_end :: MethodBind
 bindParallaxBackground_set_limit_end
   = unsafePerformIO $
@@ -252,7 +253,7 @@ bindParallaxBackground_set_limit_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Right bottom limits for scrolling to end. If the camera is outside of this limit the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
+-- | Bottom-right limits for scrolling to end. If the camera is outside of this limit, the background will stop scrolling. Must be higher than [member scroll_limit_begin] to work.
 set_limit_end ::
                 (ParallaxBackground :< cls, Object :< cls) =>
                 cls -> Vector2 -> IO ()
@@ -267,7 +268,7 @@ set_limit_end cls arg1
 
 {-# NOINLINE bindParallaxBackground_set_scroll_base_offset #-}
 
--- | Base position offset of all [ParallaxLayer] children.
+-- | The base position offset for all [ParallaxLayer] children.
 bindParallaxBackground_set_scroll_base_offset :: MethodBind
 bindParallaxBackground_set_scroll_base_offset
   = unsafePerformIO $
@@ -277,7 +278,7 @@ bindParallaxBackground_set_scroll_base_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Base position offset of all [ParallaxLayer] children.
+-- | The base position offset for all [ParallaxLayer] children.
 set_scroll_base_offset ::
                          (ParallaxBackground :< cls, Object :< cls) =>
                          cls -> Vector2 -> IO ()
@@ -293,7 +294,7 @@ set_scroll_base_offset cls arg1
 
 {-# NOINLINE bindParallaxBackground_set_scroll_base_scale #-}
 
--- | Base motion scale of all [ParallaxLayer] children.
+-- | The base motion scale for all [ParallaxLayer] children.
 bindParallaxBackground_set_scroll_base_scale :: MethodBind
 bindParallaxBackground_set_scroll_base_scale
   = unsafePerformIO $
@@ -303,7 +304,7 @@ bindParallaxBackground_set_scroll_base_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Base motion scale of all [ParallaxLayer] children.
+-- | The base motion scale for all [ParallaxLayer] children.
 set_scroll_base_scale ::
                         (ParallaxBackground :< cls, Object :< cls) =>
                         cls -> Vector2 -> IO ()

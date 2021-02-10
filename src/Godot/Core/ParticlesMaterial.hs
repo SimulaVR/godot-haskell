@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ParticlesMaterial
        (Godot.Core.ParticlesMaterial._FLAG_ALIGN_Y_TO_VELOCITY,
         Godot.Core.ParticlesMaterial._PARAM_RADIAL_ACCEL,
@@ -192,6 +193,7 @@ get_color_ramp cls
 
 {-# NOINLINE bindParticlesMaterial_get_direction #-}
 
+-- | Unit vector specifying the particles' emission direction.
 bindParticlesMaterial_get_direction :: MethodBind
 bindParticlesMaterial_get_direction
   = unsafePerformIO $
@@ -201,6 +203,7 @@ bindParticlesMaterial_get_direction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Unit vector specifying the particles' emission direction.
 get_direction ::
                 (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Vector3
 get_direction cls
@@ -339,7 +342,7 @@ get_emission_point_texture cls
 
 {-# NOINLINE bindParticlesMaterial_get_emission_shape #-}
 
--- | Particles will be emitted inside this region. Use [code]EMISSION_SHAPE_*[/code] constants for values. Default value: [constant EMISSION_SHAPE_POINT].
+-- | Particles will be emitted inside this region. Use [enum EmissionShape] constants for values.
 bindParticlesMaterial_get_emission_shape :: MethodBind
 bindParticlesMaterial_get_emission_shape
   = unsafePerformIO $
@@ -349,7 +352,7 @@ bindParticlesMaterial_get_emission_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particles will be emitted inside this region. Use [code]EMISSION_SHAPE_*[/code] constants for values. Default value: [constant EMISSION_SHAPE_POINT].
+-- | Particles will be emitted inside this region. Use [enum EmissionShape] constants for values.
 get_emission_shape ::
                      (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Int
 get_emission_shape cls
@@ -388,7 +391,7 @@ get_emission_sphere_radius cls
 
 {-# NOINLINE bindParticlesMaterial_get_flag #-}
 
--- | Align y-axis of particle with the direction of its velocity.
+-- | Returns [code]true[/code] if the specified flag is enabled.
 bindParticlesMaterial_get_flag :: MethodBind
 bindParticlesMaterial_get_flag
   = unsafePerformIO $
@@ -398,7 +401,7 @@ bindParticlesMaterial_get_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Align y-axis of particle with the direction of its velocity.
+-- | Returns [code]true[/code] if the specified flag is enabled.
 get_flag ::
            (ParticlesMaterial :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag cls arg1
@@ -411,7 +414,7 @@ get_flag cls arg1
 
 {-# NOINLINE bindParticlesMaterial_get_flatness #-}
 
--- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane. Default [code]0[/code].
+-- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane.
 bindParticlesMaterial_get_flatness :: MethodBind
 bindParticlesMaterial_get_flatness
   = unsafePerformIO $
@@ -421,7 +424,7 @@ bindParticlesMaterial_get_flatness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane. Default [code]0[/code].
+-- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane.
 get_flatness ::
                (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Float
 get_flatness cls
@@ -435,7 +438,7 @@ get_flatness cls
 
 {-# NOINLINE bindParticlesMaterial_get_gravity #-}
 
--- | Gravity applied to every particle. Default value: [code](0, -9.8, 0)[/code].
+-- | Gravity applied to every particle.
 bindParticlesMaterial_get_gravity :: MethodBind
 bindParticlesMaterial_get_gravity
   = unsafePerformIO $
@@ -445,7 +448,7 @@ bindParticlesMaterial_get_gravity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gravity applied to every particle. Default value: [code](0, -9.8, 0)[/code].
+-- | Gravity applied to every particle.
 get_gravity ::
               (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Vector3
 get_gravity cls
@@ -459,6 +462,7 @@ get_gravity cls
 
 {-# NOINLINE bindParticlesMaterial_get_lifetime_randomness #-}
 
+-- | Particle lifetime randomness ratio.
 bindParticlesMaterial_get_lifetime_randomness :: MethodBind
 bindParticlesMaterial_get_lifetime_randomness
   = unsafePerformIO $
@@ -468,6 +472,7 @@ bindParticlesMaterial_get_lifetime_randomness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Particle lifetime randomness ratio.
 get_lifetime_randomness ::
                           (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Float
 get_lifetime_randomness cls
@@ -482,8 +487,7 @@ get_lifetime_randomness cls
 
 {-# NOINLINE bindParticlesMaterial_get_param #-}
 
--- | Initial rotation applied to each particle, in degrees.
---   			Only applied when [member flag_disable_z] or [member flag_rotate_y] are [code]true[/code] or the [SpatialMaterial] being used to draw the particle is using [code]BillboardMode.BILLBOARD_PARTICLES[/code].
+-- | Returns the value of the specified parameter.
 bindParticlesMaterial_get_param :: MethodBind
 bindParticlesMaterial_get_param
   = unsafePerformIO $
@@ -493,8 +497,7 @@ bindParticlesMaterial_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Initial rotation applied to each particle, in degrees.
---   			Only applied when [member flag_disable_z] or [member flag_rotate_y] are [code]true[/code] or the [SpatialMaterial] being used to draw the particle is using [code]BillboardMode.BILLBOARD_PARTICLES[/code].
+-- | Returns the value of the specified parameter.
 get_param ::
             (ParticlesMaterial :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param cls arg1
@@ -507,7 +510,7 @@ get_param cls arg1
 
 {-# NOINLINE bindParticlesMaterial_get_param_randomness #-}
 
--- | Rotation randomness ratio. Default value: [code]0[/code].
+-- | Returns the randomness ratio associated with the specified parameter.
 bindParticlesMaterial_get_param_randomness :: MethodBind
 bindParticlesMaterial_get_param_randomness
   = unsafePerformIO $
@@ -517,7 +520,7 @@ bindParticlesMaterial_get_param_randomness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotation randomness ratio. Default value: [code]0[/code].
+-- | Returns the randomness ratio associated with the specified parameter.
 get_param_randomness ::
                        (ParticlesMaterial :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param_randomness cls arg1
@@ -531,7 +534,7 @@ get_param_randomness cls arg1
 
 {-# NOINLINE bindParticlesMaterial_get_param_texture #-}
 
--- | Each particle's rotation will be animated along this [CurveTexture].
+-- | Returns the [Texture] used by the specified parameter.
 bindParticlesMaterial_get_param_texture :: MethodBind
 bindParticlesMaterial_get_param_texture
   = unsafePerformIO $
@@ -541,7 +544,7 @@ bindParticlesMaterial_get_param_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's rotation will be animated along this [CurveTexture].
+-- | Returns the [Texture] used by the specified parameter.
 get_param_texture ::
                     (ParticlesMaterial :< cls, Object :< cls) =>
                     cls -> Int -> IO Texture
@@ -556,7 +559,7 @@ get_param_texture cls arg1
 
 {-# NOINLINE bindParticlesMaterial_get_spread #-}
 
--- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Default value: [code]45[/code]. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Applied to X/Z plane and Y/Z planes.
 bindParticlesMaterial_get_spread :: MethodBind
 bindParticlesMaterial_get_spread
   = unsafePerformIO $
@@ -566,7 +569,7 @@ bindParticlesMaterial_get_spread
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Default value: [code]45[/code]. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Applied to X/Z plane and Y/Z planes.
 get_spread ::
              (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Float
 get_spread cls
@@ -703,6 +706,7 @@ set_color_ramp cls arg1
 
 {-# NOINLINE bindParticlesMaterial_set_direction #-}
 
+-- | Unit vector specifying the particles' emission direction.
 bindParticlesMaterial_set_direction :: MethodBind
 bindParticlesMaterial_set_direction
   = unsafePerformIO $
@@ -712,6 +716,7 @@ bindParticlesMaterial_set_direction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Unit vector specifying the particles' emission direction.
 set_direction ::
                 (ParticlesMaterial :< cls, Object :< cls) =>
                 cls -> Vector3 -> IO ()
@@ -855,7 +860,7 @@ set_emission_point_texture cls arg1
 
 {-# NOINLINE bindParticlesMaterial_set_emission_shape #-}
 
--- | Particles will be emitted inside this region. Use [code]EMISSION_SHAPE_*[/code] constants for values. Default value: [constant EMISSION_SHAPE_POINT].
+-- | Particles will be emitted inside this region. Use [enum EmissionShape] constants for values.
 bindParticlesMaterial_set_emission_shape :: MethodBind
 bindParticlesMaterial_set_emission_shape
   = unsafePerformIO $
@@ -865,7 +870,7 @@ bindParticlesMaterial_set_emission_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Particles will be emitted inside this region. Use [code]EMISSION_SHAPE_*[/code] constants for values. Default value: [constant EMISSION_SHAPE_POINT].
+-- | Particles will be emitted inside this region. Use [enum EmissionShape] constants for values.
 set_emission_shape ::
                      (ParticlesMaterial :< cls, Object :< cls) => cls -> Int -> IO ()
 set_emission_shape cls arg1
@@ -904,7 +909,7 @@ set_emission_sphere_radius cls arg1
 
 {-# NOINLINE bindParticlesMaterial_set_flag #-}
 
--- | Align y-axis of particle with the direction of its velocity.
+-- | If [code]true[/code], enables the specified flag. See [enum Flags] for options.
 bindParticlesMaterial_set_flag :: MethodBind
 bindParticlesMaterial_set_flag
   = unsafePerformIO $
@@ -914,7 +919,7 @@ bindParticlesMaterial_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Align y-axis of particle with the direction of its velocity.
+-- | If [code]true[/code], enables the specified flag. See [enum Flags] for options.
 set_flag ::
            (ParticlesMaterial :< cls, Object :< cls) =>
            cls -> Int -> Bool -> IO ()
@@ -928,7 +933,7 @@ set_flag cls arg1 arg2
 
 {-# NOINLINE bindParticlesMaterial_set_flatness #-}
 
--- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane. Default [code]0[/code].
+-- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane.
 bindParticlesMaterial_set_flatness :: MethodBind
 bindParticlesMaterial_set_flatness
   = unsafePerformIO $
@@ -938,7 +943,7 @@ bindParticlesMaterial_set_flatness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane. Default [code]0[/code].
+-- | Amount of [member spread] in Y/Z plane. A value of [code]1[/code] restricts particles to X/Z plane.
 set_flatness ::
                (ParticlesMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_flatness cls arg1
@@ -952,7 +957,7 @@ set_flatness cls arg1
 
 {-# NOINLINE bindParticlesMaterial_set_gravity #-}
 
--- | Gravity applied to every particle. Default value: [code](0, -9.8, 0)[/code].
+-- | Gravity applied to every particle.
 bindParticlesMaterial_set_gravity :: MethodBind
 bindParticlesMaterial_set_gravity
   = unsafePerformIO $
@@ -962,7 +967,7 @@ bindParticlesMaterial_set_gravity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gravity applied to every particle. Default value: [code](0, -9.8, 0)[/code].
+-- | Gravity applied to every particle.
 set_gravity ::
               (ParticlesMaterial :< cls, Object :< cls) =>
               cls -> Vector3 -> IO ()
@@ -977,6 +982,7 @@ set_gravity cls arg1
 
 {-# NOINLINE bindParticlesMaterial_set_lifetime_randomness #-}
 
+-- | Particle lifetime randomness ratio.
 bindParticlesMaterial_set_lifetime_randomness :: MethodBind
 bindParticlesMaterial_set_lifetime_randomness
   = unsafePerformIO $
@@ -986,6 +992,7 @@ bindParticlesMaterial_set_lifetime_randomness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Particle lifetime randomness ratio.
 set_lifetime_randomness ::
                           (ParticlesMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_lifetime_randomness cls arg1
@@ -1000,8 +1007,7 @@ set_lifetime_randomness cls arg1
 
 {-# NOINLINE bindParticlesMaterial_set_param #-}
 
--- | Initial rotation applied to each particle, in degrees.
---   			Only applied when [member flag_disable_z] or [member flag_rotate_y] are [code]true[/code] or the [SpatialMaterial] being used to draw the particle is using [code]BillboardMode.BILLBOARD_PARTICLES[/code].
+-- | Sets the specified [enum Parameter].
 bindParticlesMaterial_set_param :: MethodBind
 bindParticlesMaterial_set_param
   = unsafePerformIO $
@@ -1011,8 +1017,7 @@ bindParticlesMaterial_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Initial rotation applied to each particle, in degrees.
---   			Only applied when [member flag_disable_z] or [member flag_rotate_y] are [code]true[/code] or the [SpatialMaterial] being used to draw the particle is using [code]BillboardMode.BILLBOARD_PARTICLES[/code].
+-- | Sets the specified [enum Parameter].
 set_param ::
             (ParticlesMaterial :< cls, Object :< cls) =>
             cls -> Int -> Float -> IO ()
@@ -1026,7 +1031,7 @@ set_param cls arg1 arg2
 
 {-# NOINLINE bindParticlesMaterial_set_param_randomness #-}
 
--- | Rotation randomness ratio. Default value: [code]0[/code].
+-- | Sets the randomness ratio for the specified [enum Parameter].
 bindParticlesMaterial_set_param_randomness :: MethodBind
 bindParticlesMaterial_set_param_randomness
   = unsafePerformIO $
@@ -1036,7 +1041,7 @@ bindParticlesMaterial_set_param_randomness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotation randomness ratio. Default value: [code]0[/code].
+-- | Sets the randomness ratio for the specified [enum Parameter].
 set_param_randomness ::
                        (ParticlesMaterial :< cls, Object :< cls) =>
                        cls -> Int -> Float -> IO ()
@@ -1051,7 +1056,7 @@ set_param_randomness cls arg1 arg2
 
 {-# NOINLINE bindParticlesMaterial_set_param_texture #-}
 
--- | Each particle's rotation will be animated along this [CurveTexture].
+-- | Sets the [Texture] for the specified [enum Parameter].
 bindParticlesMaterial_set_param_texture :: MethodBind
 bindParticlesMaterial_set_param_texture
   = unsafePerformIO $
@@ -1061,7 +1066,7 @@ bindParticlesMaterial_set_param_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's rotation will be animated along this [CurveTexture].
+-- | Sets the [Texture] for the specified [enum Parameter].
 set_param_texture ::
                     (ParticlesMaterial :< cls, Object :< cls) =>
                     cls -> Int -> Texture -> IO ()
@@ -1076,7 +1081,7 @@ set_param_texture cls arg1 arg2
 
 {-# NOINLINE bindParticlesMaterial_set_spread #-}
 
--- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Default value: [code]45[/code]. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Applied to X/Z plane and Y/Z planes.
 bindParticlesMaterial_set_spread :: MethodBind
 bindParticlesMaterial_set_spread
   = unsafePerformIO $
@@ -1086,7 +1091,7 @@ bindParticlesMaterial_set_spread
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Default value: [code]45[/code]. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from [code]+spread[/code] to [code]-spread[/code] degrees. Applied to X/Z plane and Y/Z planes.
 set_spread ::
              (ParticlesMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_spread cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.UndoRedo
        (Godot.Core.UndoRedo._MERGE_DISABLE,
         Godot.Core.UndoRedo._MERGE_ALL, Godot.Core.UndoRedo._MERGE_ENDS,
@@ -35,9 +36,12 @@ _MERGE_ALL = 2
 _MERGE_ENDS :: Int
 _MERGE_ENDS = 1
 
+-- | Called when [method undo] or [method redo] was called.
 sig_version_changed :: Godot.Internal.Dispatch.Signal UndoRedo
 sig_version_changed
   = Godot.Internal.Dispatch.Signal "version_changed"
+
+instance NodeSignal UndoRedo "version_changed" '[]
 
 {-# NOINLINE bindUndoRedo_add_do_method #-}
 
@@ -65,7 +69,7 @@ add_do_method cls arg1 arg2 varargs
 
 {-# NOINLINE bindUndoRedo_add_do_property #-}
 
--- | Register a property value change for 'do'.
+-- | Register a property value change for "do".
 bindUndoRedo_add_do_property :: MethodBind
 bindUndoRedo_add_do_property
   = unsafePerformIO $
@@ -75,7 +79,7 @@ bindUndoRedo_add_do_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Register a property value change for 'do'.
+-- | Register a property value change for "do".
 add_do_property ::
                   (UndoRedo :< cls, Object :< cls) =>
                   cls -> Object -> GodotString -> GodotVariant -> IO ()
@@ -89,7 +93,7 @@ add_do_property cls arg1 arg2 arg3
 
 {-# NOINLINE bindUndoRedo_add_do_reference #-}
 
--- | Register a reference for 'do' that will be erased if the 'do' history is lost. This is useful mostly for new nodes created for the 'do' call. Do not use for resources.
+-- | Register a reference for "do" that will be erased if the "do" history is lost. This is useful mostly for new nodes created for the "do" call. Do not use for resources.
 bindUndoRedo_add_do_reference :: MethodBind
 bindUndoRedo_add_do_reference
   = unsafePerformIO $
@@ -99,7 +103,7 @@ bindUndoRedo_add_do_reference
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Register a reference for 'do' that will be erased if the 'do' history is lost. This is useful mostly for new nodes created for the 'do' call. Do not use for resources.
+-- | Register a reference for "do" that will be erased if the "do" history is lost. This is useful mostly for new nodes created for the "do" call. Do not use for resources.
 add_do_reference ::
                    (UndoRedo :< cls, Object :< cls) => cls -> Object -> IO ()
 add_do_reference cls arg1
@@ -136,7 +140,7 @@ add_undo_method cls arg1 arg2 varargs
 
 {-# NOINLINE bindUndoRedo_add_undo_property #-}
 
--- | Register a property value change for 'undo'.
+-- | Register a property value change for "undo".
 bindUndoRedo_add_undo_property :: MethodBind
 bindUndoRedo_add_undo_property
   = unsafePerformIO $
@@ -146,7 +150,7 @@ bindUndoRedo_add_undo_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Register a property value change for 'undo'.
+-- | Register a property value change for "undo".
 add_undo_property ::
                     (UndoRedo :< cls, Object :< cls) =>
                     cls -> Object -> GodotString -> GodotVariant -> IO ()
@@ -160,7 +164,7 @@ add_undo_property cls arg1 arg2 arg3
 
 {-# NOINLINE bindUndoRedo_add_undo_reference #-}
 
--- | Register a reference for 'undo' that will be erased if the 'undo' history is lost. This is useful mostly for nodes removed with the 'do' call (not the 'undo' call!).
+-- | Register a reference for "undo" that will be erased if the "undo" history is lost. This is useful mostly for nodes removed with the "do" call (not the "undo" call!).
 bindUndoRedo_add_undo_reference :: MethodBind
 bindUndoRedo_add_undo_reference
   = unsafePerformIO $
@@ -170,7 +174,7 @@ bindUndoRedo_add_undo_reference
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Register a reference for 'undo' that will be erased if the 'undo' history is lost. This is useful mostly for nodes removed with the 'do' call (not the 'undo' call!).
+-- | Register a reference for "undo" that will be erased if the "undo" history is lost. This is useful mostly for nodes removed with the "do" call (not the "undo" call!).
 add_undo_reference ::
                      (UndoRedo :< cls, Object :< cls) => cls -> Object -> IO ()
 add_undo_reference cls arg1
@@ -208,7 +212,7 @@ clear_history cls arg1
 
 {-# NOINLINE bindUndoRedo_commit_action #-}
 
--- | Commit the action. All 'do' methods/properties are called/set when this function is called.
+-- | Commit the action. All "do" methods/properties are called/set when this function is called.
 bindUndoRedo_commit_action :: MethodBind
 bindUndoRedo_commit_action
   = unsafePerformIO $
@@ -218,7 +222,7 @@ bindUndoRedo_commit_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Commit the action. All 'do' methods/properties are called/set when this function is called.
+-- | Commit the action. All "do" methods/properties are called/set when this function is called.
 commit_action :: (UndoRedo :< cls, Object :< cls) => cls -> IO ()
 commit_action cls
   = withVariantArray []
@@ -256,7 +260,7 @@ create_action cls arg1 arg2
 
 {-# NOINLINE bindUndoRedo_get_current_action_name #-}
 
--- | Get the name of the current action.
+-- | Gets the name of the current action.
 bindUndoRedo_get_current_action_name :: MethodBind
 bindUndoRedo_get_current_action_name
   = unsafePerformIO $
@@ -266,7 +270,7 @@ bindUndoRedo_get_current_action_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the name of the current action.
+-- | Gets the name of the current action.
 get_current_action_name ::
                           (UndoRedo :< cls, Object :< cls) => cls -> IO GodotString
 get_current_action_name cls
@@ -280,7 +284,7 @@ get_current_action_name cls
 
 {-# NOINLINE bindUndoRedo_get_version #-}
 
--- | Get the version, each time a new action is committed, the version number of the [UndoRedo] is increased automatically.
+-- | Gets the version. Every time a new action is committed, the [UndoRedo]'s version number is increased automatically.
 --   				This is useful mostly to check if something changed from a saved version.
 bindUndoRedo_get_version :: MethodBind
 bindUndoRedo_get_version
@@ -291,7 +295,7 @@ bindUndoRedo_get_version
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the version, each time a new action is committed, the version number of the [UndoRedo] is increased automatically.
+-- | Gets the version. Every time a new action is committed, the [UndoRedo]'s version number is increased automatically.
 --   				This is useful mostly to check if something changed from a saved version.
 get_version :: (UndoRedo :< cls, Object :< cls) => cls -> IO Int
 get_version cls
@@ -303,6 +307,7 @@ get_version cls
 
 {-# NOINLINE bindUndoRedo_has_redo #-}
 
+-- | Returns [code]true[/code] if a "redo" action is available.
 bindUndoRedo_has_redo :: MethodBind
 bindUndoRedo_has_redo
   = unsafePerformIO $
@@ -312,6 +317,7 @@ bindUndoRedo_has_redo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if a "redo" action is available.
 has_redo :: (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
 has_redo cls
   = withVariantArray []
@@ -322,6 +328,7 @@ has_redo cls
 
 {-# NOINLINE bindUndoRedo_has_undo #-}
 
+-- | Returns [code]true[/code] if an "undo" action is available.
 bindUndoRedo_has_undo :: MethodBind
 bindUndoRedo_has_undo
   = unsafePerformIO $
@@ -331,6 +338,7 @@ bindUndoRedo_has_undo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if an "undo" action is available.
 has_undo :: (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
 has_undo cls
   = withVariantArray []
@@ -341,7 +349,7 @@ has_undo cls
 
 {-# NOINLINE bindUndoRedo_is_commiting_action #-}
 
--- | Returns [code]true[/code] if the [UndoRedo] is currently committing the action, i.e. running its 'do' method or property change (see [method commit_action]).
+-- | Returns [code]true[/code] if the [UndoRedo] is currently committing the action, i.e. running its "do" method or property change (see [method commit_action]).
 bindUndoRedo_is_commiting_action :: MethodBind
 bindUndoRedo_is_commiting_action
   = unsafePerformIO $
@@ -351,7 +359,7 @@ bindUndoRedo_is_commiting_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the [UndoRedo] is currently committing the action, i.e. running its 'do' method or property change (see [method commit_action]).
+-- | Returns [code]true[/code] if the [UndoRedo] is currently committing the action, i.e. running its "do" method or property change (see [method commit_action]).
 is_commiting_action ::
                       (UndoRedo :< cls, Object :< cls) => cls -> IO Bool
 is_commiting_action cls

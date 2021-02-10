@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PacketPeerUDP
        (Godot.Core.PacketPeerUDP.close,
         Godot.Core.PacketPeerUDP.get_packet_ip,
@@ -21,7 +22,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindPacketPeerUDP_close #-}
 
--- | Close the UDP socket the [code]PacketPeerUDP[/code] is currently listening on.
+-- | Closes the UDP socket the [PacketPeerUDP] is currently listening on.
 bindPacketPeerUDP_close :: MethodBind
 bindPacketPeerUDP_close
   = unsafePerformIO $
@@ -31,7 +32,7 @@ bindPacketPeerUDP_close
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Close the UDP socket the [code]PacketPeerUDP[/code] is currently listening on.
+-- | Closes the UDP socket the [PacketPeerUDP] is currently listening on.
 close :: (PacketPeerUDP :< cls, Object :< cls) => cls -> IO ()
 close cls
   = withVariantArray []
@@ -89,7 +90,7 @@ get_packet_port cls
 
 {-# NOINLINE bindPacketPeerUDP_is_listening #-}
 
--- | Returns whether this [code]PacketPeerUDP[/code] is listening.
+-- | Returns whether this [PacketPeerUDP] is listening.
 bindPacketPeerUDP_is_listening :: MethodBind
 bindPacketPeerUDP_is_listening
   = unsafePerformIO $
@@ -99,7 +100,7 @@ bindPacketPeerUDP_is_listening
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether this [code]PacketPeerUDP[/code] is listening.
+-- | Returns whether this [PacketPeerUDP] is listening.
 is_listening ::
                (PacketPeerUDP :< cls, Object :< cls) => cls -> IO Bool
 is_listening cls
@@ -112,6 +113,9 @@ is_listening cls
 
 {-# NOINLINE bindPacketPeerUDP_join_multicast_group #-}
 
+-- | Joins the multicast group specified by [code]multicast_address[/code] using the interface identified by [code]interface_name[/code].
+--   				You can join the same multicast group with multiple interfaces. Use [method IP.get_local_interfaces] to know which are available.
+--   				Note: Some Android devices might require the [code]CHANGE_WIFI_MULTICAST_STATE[/code] permission for multicast to work.
 bindPacketPeerUDP_join_multicast_group :: MethodBind
 bindPacketPeerUDP_join_multicast_group
   = unsafePerformIO $
@@ -121,6 +125,9 @@ bindPacketPeerUDP_join_multicast_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Joins the multicast group specified by [code]multicast_address[/code] using the interface identified by [code]interface_name[/code].
+--   				You can join the same multicast group with multiple interfaces. Use [method IP.get_local_interfaces] to know which are available.
+--   				Note: Some Android devices might require the [code]CHANGE_WIFI_MULTICAST_STATE[/code] permission for multicast to work.
 join_multicast_group ::
                        (PacketPeerUDP :< cls, Object :< cls) =>
                        cls -> GodotString -> GodotString -> IO Int
@@ -135,6 +142,7 @@ join_multicast_group cls arg1 arg2
 
 {-# NOINLINE bindPacketPeerUDP_leave_multicast_group #-}
 
+-- | Removes the interface identified by [code]interface_name[/code] from the multicast group specified by [code]multicast_address[/code].
 bindPacketPeerUDP_leave_multicast_group :: MethodBind
 bindPacketPeerUDP_leave_multicast_group
   = unsafePerformIO $
@@ -144,6 +152,7 @@ bindPacketPeerUDP_leave_multicast_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes the interface identified by [code]interface_name[/code] from the multicast group specified by [code]multicast_address[/code].
 leave_multicast_group ::
                         (PacketPeerUDP :< cls, Object :< cls) =>
                         cls -> GodotString -> GodotString -> IO Int
@@ -158,10 +167,10 @@ leave_multicast_group cls arg1 arg2
 
 {-# NOINLINE bindPacketPeerUDP_listen #-}
 
--- | Make this [code]PacketPeerUDP[/code] listen on the "port" binding to "bind_address" with a buffer size "recv_buf_size".
---   				If "bind_address" is set as "*" (default), the peer will listen on all available addresses (both IPv4 and IPv6).
---   				If "bind_address" is set as "0.0.0.0" (for IPv4) or "::" (for IPv6), the peer will listen on all available addresses matching that IP type.
---   				If "bind_address" is set to any valid address (e.g. "192.168.1.101", "::1", etc), the peer will only listen on the interface with that addresses (or fail if no interface with the given address exists).
+-- | Makes this [PacketPeerUDP] listen on the [code]port[/code] binding to [code]bind_address[/code] with a buffer size [code]recv_buf_size[/code].
+--   				If [code]bind_address[/code] is set to [code]"*"[/code] (default), the peer will listen on all available addresses (both IPv4 and IPv6).
+--   				If [code]bind_address[/code] is set to [code]"0.0.0.0"[/code] (for IPv4) or [code]"::"[/code] (for IPv6), the peer will listen on all available addresses matching that IP type.
+--   				If [code]bind_address[/code] is set to any valid address (e.g. [code]"192.168.1.101"[/code], [code]"::1"[/code], etc), the peer will only listen on the interface with that addresses (or fail if no interface with the given address exists).
 bindPacketPeerUDP_listen :: MethodBind
 bindPacketPeerUDP_listen
   = unsafePerformIO $
@@ -171,10 +180,10 @@ bindPacketPeerUDP_listen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Make this [code]PacketPeerUDP[/code] listen on the "port" binding to "bind_address" with a buffer size "recv_buf_size".
---   				If "bind_address" is set as "*" (default), the peer will listen on all available addresses (both IPv4 and IPv6).
---   				If "bind_address" is set as "0.0.0.0" (for IPv4) or "::" (for IPv6), the peer will listen on all available addresses matching that IP type.
---   				If "bind_address" is set to any valid address (e.g. "192.168.1.101", "::1", etc), the peer will only listen on the interface with that addresses (or fail if no interface with the given address exists).
+-- | Makes this [PacketPeerUDP] listen on the [code]port[/code] binding to [code]bind_address[/code] with a buffer size [code]recv_buf_size[/code].
+--   				If [code]bind_address[/code] is set to [code]"*"[/code] (default), the peer will listen on all available addresses (both IPv4 and IPv6).
+--   				If [code]bind_address[/code] is set to [code]"0.0.0.0"[/code] (for IPv4) or [code]"::"[/code] (for IPv6), the peer will listen on all available addresses matching that IP type.
+--   				If [code]bind_address[/code] is set to any valid address (e.g. [code]"192.168.1.101"[/code], [code]"::1"[/code], etc), the peer will only listen on the interface with that addresses (or fail if no interface with the given address exists).
 listen ::
          (PacketPeerUDP :< cls, Object :< cls) =>
          cls -> Int -> GodotString -> Int -> IO Int
@@ -187,6 +196,8 @@ listen cls arg1 arg2 arg3
 
 {-# NOINLINE bindPacketPeerUDP_set_broadcast_enabled #-}
 
+-- | Enable or disable sending of broadcast packets (e.g. [code]set_dest_address("255.255.255.255", 4343)[/code]. This option is disabled by default.
+--   				Note: Some Android devices might require the [code]CHANGE_WIFI_MULTICAST_STATE[/code] permission and this option to be enabled to receive broadcast packets too.
 bindPacketPeerUDP_set_broadcast_enabled :: MethodBind
 bindPacketPeerUDP_set_broadcast_enabled
   = unsafePerformIO $
@@ -196,6 +207,8 @@ bindPacketPeerUDP_set_broadcast_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Enable or disable sending of broadcast packets (e.g. [code]set_dest_address("255.255.255.255", 4343)[/code]. This option is disabled by default.
+--   				Note: Some Android devices might require the [code]CHANGE_WIFI_MULTICAST_STATE[/code] permission and this option to be enabled to receive broadcast packets too.
 set_broadcast_enabled ::
                         (PacketPeerUDP :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_broadcast_enabled cls arg1
@@ -209,7 +222,8 @@ set_broadcast_enabled cls arg1
 
 {-# NOINLINE bindPacketPeerUDP_set_dest_address #-}
 
--- | Set the destination address and port for sending packets and variables, a hostname will be resolved using if valid.
+-- | Sets the destination address and port for sending packets and variables. A hostname will be resolved using DNS if needed.
+--   				Note: [method set_broadcast_enabled] must be enabled before sending packets to a broadcast address (e.g. [code]255.255.255.255[/code]).
 bindPacketPeerUDP_set_dest_address :: MethodBind
 bindPacketPeerUDP_set_dest_address
   = unsafePerformIO $
@@ -219,7 +233,8 @@ bindPacketPeerUDP_set_dest_address
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the destination address and port for sending packets and variables, a hostname will be resolved using if valid.
+-- | Sets the destination address and port for sending packets and variables. A hostname will be resolved using DNS if needed.
+--   				Note: [method set_broadcast_enabled] must be enabled before sending packets to a broadcast address (e.g. [code]255.255.255.255[/code]).
 set_dest_address ::
                    (PacketPeerUDP :< cls, Object :< cls) =>
                    cls -> GodotString -> Int -> IO Int
@@ -234,7 +249,7 @@ set_dest_address cls arg1 arg2
 
 {-# NOINLINE bindPacketPeerUDP_wait #-}
 
--- | Wait for a packet to arrive on the listening port, see [method listen].
+-- | Waits for a packet to arrive on the listening port. See [method listen].
 bindPacketPeerUDP_wait :: MethodBind
 bindPacketPeerUDP_wait
   = unsafePerformIO $
@@ -244,7 +259,7 @@ bindPacketPeerUDP_wait
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Wait for a packet to arrive on the listening port, see [method listen].
+-- | Waits for a packet to arrive on the listening port. See [method listen].
 wait :: (PacketPeerUDP :< cls, Object :< cls) => cls -> IO Int
 wait cls
   = withVariantArray []

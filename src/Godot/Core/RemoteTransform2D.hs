@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RemoteTransform2D
        (Godot.Core.RemoteTransform2D.force_update_cache,
         Godot.Core.RemoteTransform2D.get_remote_node,
@@ -22,6 +23,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindRemoteTransform2D_force_update_cache #-}
 
+-- | [RemoteTransform2D] caches the remote node. It may not notice if the remote node disappears; [method force_update_cache] forces it to update the cache again.
 bindRemoteTransform2D_force_update_cache :: MethodBind
 bindRemoteTransform2D_force_update_cache
   = unsafePerformIO $
@@ -31,6 +33,7 @@ bindRemoteTransform2D_force_update_cache
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | [RemoteTransform2D] caches the remote node. It may not notice if the remote node disappears; [method force_update_cache] forces it to update the cache again.
 force_update_cache ::
                      (RemoteTransform2D :< cls, Object :< cls) => cls -> IO ()
 force_update_cache cls
@@ -68,7 +71,7 @@ get_remote_node cls
 
 {-# NOINLINE bindRemoteTransform2D_get_update_position #-}
 
--- | If [code]true[/code], the remote node's position is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's position is updated.
 bindRemoteTransform2D_get_update_position :: MethodBind
 bindRemoteTransform2D_get_update_position
   = unsafePerformIO $
@@ -78,7 +81,7 @@ bindRemoteTransform2D_get_update_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the remote node's position is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's position is updated.
 get_update_position ::
                       (RemoteTransform2D :< cls, Object :< cls) => cls -> IO Bool
 get_update_position cls
@@ -92,7 +95,7 @@ get_update_position cls
 
 {-# NOINLINE bindRemoteTransform2D_get_update_rotation #-}
 
--- | If [code]true[/code], the remote node's rotation is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's rotation is updated.
 bindRemoteTransform2D_get_update_rotation :: MethodBind
 bindRemoteTransform2D_get_update_rotation
   = unsafePerformIO $
@@ -102,7 +105,7 @@ bindRemoteTransform2D_get_update_rotation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the remote node's rotation is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's rotation is updated.
 get_update_rotation ::
                       (RemoteTransform2D :< cls, Object :< cls) => cls -> IO Bool
 get_update_rotation cls
@@ -116,7 +119,7 @@ get_update_rotation cls
 
 {-# NOINLINE bindRemoteTransform2D_get_update_scale #-}
 
--- | If [code]true[/code], the remote node's scale is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's scale is updated.
 bindRemoteTransform2D_get_update_scale :: MethodBind
 bindRemoteTransform2D_get_update_scale
   = unsafePerformIO $
@@ -126,7 +129,7 @@ bindRemoteTransform2D_get_update_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the remote node's scale is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's scale is updated.
 get_update_scale ::
                    (RemoteTransform2D :< cls, Object :< cls) => cls -> IO Bool
 get_update_scale cls
@@ -140,7 +143,7 @@ get_update_scale cls
 
 {-# NOINLINE bindRemoteTransform2D_get_use_global_coordinates #-}
 
--- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used. Default value: [code]true[/code].
+-- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used.
 bindRemoteTransform2D_get_use_global_coordinates :: MethodBind
 bindRemoteTransform2D_get_use_global_coordinates
   = unsafePerformIO $
@@ -150,7 +153,7 @@ bindRemoteTransform2D_get_use_global_coordinates
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used. Default value: [code]true[/code].
+-- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used.
 get_use_global_coordinates ::
                              (RemoteTransform2D :< cls, Object :< cls) => cls -> IO Bool
 get_use_global_coordinates cls
@@ -190,7 +193,7 @@ set_remote_node cls arg1
 
 {-# NOINLINE bindRemoteTransform2D_set_update_position #-}
 
--- | If [code]true[/code], the remote node's position is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's position is updated.
 bindRemoteTransform2D_set_update_position :: MethodBind
 bindRemoteTransform2D_set_update_position
   = unsafePerformIO $
@@ -200,7 +203,7 @@ bindRemoteTransform2D_set_update_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the remote node's position is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's position is updated.
 set_update_position ::
                       (RemoteTransform2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_update_position cls arg1
@@ -214,7 +217,7 @@ set_update_position cls arg1
 
 {-# NOINLINE bindRemoteTransform2D_set_update_rotation #-}
 
--- | If [code]true[/code], the remote node's rotation is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's rotation is updated.
 bindRemoteTransform2D_set_update_rotation :: MethodBind
 bindRemoteTransform2D_set_update_rotation
   = unsafePerformIO $
@@ -224,7 +227,7 @@ bindRemoteTransform2D_set_update_rotation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the remote node's rotation is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's rotation is updated.
 set_update_rotation ::
                       (RemoteTransform2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_update_rotation cls arg1
@@ -238,7 +241,7 @@ set_update_rotation cls arg1
 
 {-# NOINLINE bindRemoteTransform2D_set_update_scale #-}
 
--- | If [code]true[/code], the remote node's scale is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's scale is updated.
 bindRemoteTransform2D_set_update_scale :: MethodBind
 bindRemoteTransform2D_set_update_scale
   = unsafePerformIO $
@@ -248,7 +251,7 @@ bindRemoteTransform2D_set_update_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the remote node's scale is updated. Default value: [code]true[/code].
+-- | If [code]true[/code], the remote node's scale is updated.
 set_update_scale ::
                    (RemoteTransform2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_update_scale cls arg1
@@ -262,7 +265,7 @@ set_update_scale cls arg1
 
 {-# NOINLINE bindRemoteTransform2D_set_use_global_coordinates #-}
 
--- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used. Default value: [code]true[/code].
+-- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used.
 bindRemoteTransform2D_set_use_global_coordinates :: MethodBind
 bindRemoteTransform2D_set_use_global_coordinates
   = unsafePerformIO $
@@ -272,7 +275,7 @@ bindRemoteTransform2D_set_use_global_coordinates
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used. Default value: [code]true[/code].
+-- | If [code]true[/code], global coordinates are used. If [code]false[/code], local coordinates are used.
 set_use_global_coordinates ::
                              (RemoteTransform2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_global_coordinates cls arg1

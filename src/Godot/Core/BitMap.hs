@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.BitMap
        (Godot.Core.BitMap._get_data, Godot.Core.BitMap._set_data,
         Godot.Core.BitMap.create,
@@ -163,6 +164,7 @@ get_true_bit_count cls
 
 {-# NOINLINE bindBitMap_grow_mask #-}
 
+-- | Applies morphological dilation to the bitmap. The first argument is the dilation amount, Rect2 is the area where the dilation will be applied.
 bindBitMap_grow_mask :: MethodBind
 bindBitMap_grow_mask
   = unsafePerformIO $
@@ -172,6 +174,7 @@ bindBitMap_grow_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Applies morphological dilation to the bitmap. The first argument is the dilation amount, Rect2 is the area where the dilation will be applied.
 grow_mask ::
             (BitMap :< cls, Object :< cls) => cls -> Int -> Rect2 -> IO ()
 grow_mask cls arg1 arg2

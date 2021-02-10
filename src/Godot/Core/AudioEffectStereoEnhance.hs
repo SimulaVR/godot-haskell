@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectStereoEnhance
        (Godot.Core.AudioEffectStereoEnhance.get_pan_pullout,
         Godot.Core.AudioEffectStereoEnhance.get_surround,

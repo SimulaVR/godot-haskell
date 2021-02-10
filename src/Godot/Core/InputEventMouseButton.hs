@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventMouseButton
        (Godot.Core.InputEventMouseButton.is_pressed,
         Godot.Core.InputEventMouseButton.get_button_index,
@@ -43,7 +44,7 @@ is_pressed cls
 
 {-# NOINLINE bindInputEventMouseButton_get_button_index #-}
 
--- | Mouse button identifier, one of the BUTTON_* or BUTTON_WHEEL_* constants in [@GlobalScope].
+-- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
 bindInputEventMouseButton_get_button_index :: MethodBind
 bindInputEventMouseButton_get_button_index
   = unsafePerformIO $
@@ -53,7 +54,7 @@ bindInputEventMouseButton_get_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Mouse button identifier, one of the BUTTON_* or BUTTON_WHEEL_* constants in [@GlobalScope].
+-- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
 get_button_index ::
                    (InputEventMouseButton :< cls, Object :< cls) => cls -> IO Int
 get_button_index cls
@@ -67,7 +68,7 @@ get_button_index cls
 
 {-# NOINLINE bindInputEventMouseButton_get_factor #-}
 
--- | Magnitude. Amount (or delta) of the event. Used for scroll events, indicates scroll amount (vertically or horizontally). Only supported on some platforms, sensitivity varies by platform. May be 0 if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
 bindInputEventMouseButton_get_factor :: MethodBind
 bindInputEventMouseButton_get_factor
   = unsafePerformIO $
@@ -77,7 +78,7 @@ bindInputEventMouseButton_get_factor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Magnitude. Amount (or delta) of the event. Used for scroll events, indicates scroll amount (vertically or horizontally). Only supported on some platforms, sensitivity varies by platform. May be 0 if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
 get_factor ::
              (InputEventMouseButton :< cls, Object :< cls) => cls -> IO Float
 get_factor cls
@@ -115,7 +116,7 @@ is_doubleclick cls
 
 {-# NOINLINE bindInputEventMouseButton_set_button_index #-}
 
--- | Mouse button identifier, one of the BUTTON_* or BUTTON_WHEEL_* constants in [@GlobalScope].
+-- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
 bindInputEventMouseButton_set_button_index :: MethodBind
 bindInputEventMouseButton_set_button_index
   = unsafePerformIO $
@@ -125,7 +126,7 @@ bindInputEventMouseButton_set_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Mouse button identifier, one of the BUTTON_* or BUTTON_WHEEL_* constants in [@GlobalScope].
+-- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
 set_button_index ::
                    (InputEventMouseButton :< cls, Object :< cls) =>
                    cls -> Int -> IO ()
@@ -165,7 +166,7 @@ set_doubleclick cls arg1
 
 {-# NOINLINE bindInputEventMouseButton_set_factor #-}
 
--- | Magnitude. Amount (or delta) of the event. Used for scroll events, indicates scroll amount (vertically or horizontally). Only supported on some platforms, sensitivity varies by platform. May be 0 if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
 bindInputEventMouseButton_set_factor :: MethodBind
 bindInputEventMouseButton_set_factor
   = unsafePerformIO $
@@ -175,7 +176,7 @@ bindInputEventMouseButton_set_factor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Magnitude. Amount (or delta) of the event. Used for scroll events, indicates scroll amount (vertically or horizontally). Only supported on some platforms, sensitivity varies by platform. May be 0 if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
 set_factor ::
              (InputEventMouseButton :< cls, Object :< cls) =>
              cls -> Float -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptCustomNode
        (Godot.Core.VisualScriptCustomNode._STEP_PUSH_STACK_BIT,
         Godot.Core.VisualScriptCustomNode._START_MODE_RESUME_YIELD,

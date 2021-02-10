@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ARVRPositionalTracker
        (Godot.Core.ARVRPositionalTracker._TRACKER_LEFT_HAND,
         Godot.Core.ARVRPositionalTracker._TRACKER_RIGHT_HAND,
@@ -179,7 +180,7 @@ _set_type cls arg1
 
 {-# NOINLINE bindARVRPositionalTracker_get_hand #-}
 
--- | Returns the hand holding this tracker, if known. See TRACKER_* constants.
+-- | Returns the hand holding this tracker, if known. See [enum TrackerHand] constants.
 bindARVRPositionalTracker_get_hand :: MethodBind
 bindARVRPositionalTracker_get_hand
   = unsafePerformIO $
@@ -189,7 +190,7 @@ bindARVRPositionalTracker_get_hand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the hand holding this tracker, if known. See TRACKER_* constants.
+-- | Returns the hand holding this tracker, if known. See [enum TrackerHand] constants.
 get_hand ::
            (ARVRPositionalTracker :< cls, Object :< cls) => cls -> IO Int
 get_hand cls
@@ -203,7 +204,7 @@ get_hand cls
 
 {-# NOINLINE bindARVRPositionalTracker_get_joy_id #-}
 
--- | If this is a controller that is being tracked the controller will also be represented by a joystick entry with this id.
+-- | If this is a controller that is being tracked, the controller will also be represented by a joystick entry with this ID.
 bindARVRPositionalTracker_get_joy_id :: MethodBind
 bindARVRPositionalTracker_get_joy_id
   = unsafePerformIO $
@@ -213,7 +214,7 @@ bindARVRPositionalTracker_get_joy_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If this is a controller that is being tracked the controller will also be represented by a joystick entry with this id.
+-- | If this is a controller that is being tracked, the controller will also be represented by a joystick entry with this ID.
 get_joy_id ::
              (ARVRPositionalTracker :< cls, Object :< cls) => cls -> IO Int
 get_joy_id cls
@@ -227,6 +228,7 @@ get_joy_id cls
 
 {-# NOINLINE bindARVRPositionalTracker_get_mesh #-}
 
+-- | Returns the mesh related to a controller or anchor point if one is available.
 bindARVRPositionalTracker_get_mesh :: MethodBind
 bindARVRPositionalTracker_get_mesh
   = unsafePerformIO $
@@ -236,6 +238,7 @@ bindARVRPositionalTracker_get_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the mesh related to a controller or anchor point if one is available.
 get_mesh ::
            (ARVRPositionalTracker :< cls, Object :< cls) => cls -> IO Mesh
 get_mesh cls

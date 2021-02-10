@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ResourceLoader
        (Godot.Core.ResourceLoader.exists,
         Godot.Core.ResourceLoader.get_dependencies,
@@ -97,7 +98,7 @@ get_recognized_extensions_for_type cls arg1
 
 {-# NOINLINE bindResourceLoader_has #-}
 
--- | Deprecated method. Use [method has_cached] or [method exists] instead.
+-- | [i]Deprecated method.[/i] Use [method has_cached] or [method exists] instead.
 bindResourceLoader_has :: MethodBind
 bindResourceLoader_has
   = unsafePerformIO $
@@ -107,7 +108,7 @@ bindResourceLoader_has
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deprecated method. Use [method has_cached] or [method exists] instead.
+-- | [i]Deprecated method.[/i] Use [method has_cached] or [method exists] instead.
 has ::
       (ResourceLoader :< cls, Object :< cls) =>
       cls -> GodotString -> IO Bool
@@ -204,7 +205,7 @@ load_interactive cls arg1 arg2
 
 {-# NOINLINE bindResourceLoader_set_abort_on_missing_resources #-}
 
--- | Change the behavior on missing sub-resources. Default is to abort load.
+-- | Changes the behavior on missing sub-resources. The default behavior is to abort loading.
 bindResourceLoader_set_abort_on_missing_resources :: MethodBind
 bindResourceLoader_set_abort_on_missing_resources
   = unsafePerformIO $
@@ -214,7 +215,7 @@ bindResourceLoader_set_abort_on_missing_resources
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Change the behavior on missing sub-resources. Default is to abort load.
+-- | Changes the behavior on missing sub-resources. The default behavior is to abort loading.
 set_abort_on_missing_resources ::
                                  (ResourceLoader :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_abort_on_missing_resources cls arg1

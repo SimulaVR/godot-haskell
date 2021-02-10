@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorSpinSlider
        (Godot.Tools.EditorSpinSlider._grabber_gui_input,
         Godot.Tools.EditorSpinSlider._grabber_mouse_entered,

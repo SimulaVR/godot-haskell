@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PrimitiveMesh
        (Godot.Core.PrimitiveMesh._update,
         Godot.Core.PrimitiveMesh.get_custom_aabb,
@@ -63,7 +64,8 @@ get_custom_aabb cls
 
 {-# NOINLINE bindPrimitiveMesh_get_flip_faces #-}
 
--- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
+--   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
 bindPrimitiveMesh_get_flip_faces :: MethodBind
 bindPrimitiveMesh_get_flip_faces
   = unsafePerformIO $
@@ -73,7 +75,8 @@ bindPrimitiveMesh_get_flip_faces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
+--   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
 get_flip_faces ::
                  (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Bool
 get_flip_faces cls
@@ -110,7 +113,12 @@ get_material cls
 
 {-# NOINLINE bindPrimitiveMesh_get_mesh_arrays #-}
 
--- | Returns mesh arrays used to constitute surface of [Mesh]. Mesh array can be used with [ArrayMesh] to create new surface.
+-- | Returns mesh arrays used to constitute surface of [Mesh]. The result can be passed to [method ArrayMesh.add_surface_from_arrays] to create a new surface. For example:
+--   				[codeblock]
+--   				var c := CylinderMesh.new()
+--   				var arr_mesh := ArrayMesh.new()
+--   				arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, c.get_mesh_arrays())
+--   				[/codeblock]
 bindPrimitiveMesh_get_mesh_arrays :: MethodBind
 bindPrimitiveMesh_get_mesh_arrays
   = unsafePerformIO $
@@ -120,7 +128,12 @@ bindPrimitiveMesh_get_mesh_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns mesh arrays used to constitute surface of [Mesh]. Mesh array can be used with [ArrayMesh] to create new surface.
+-- | Returns mesh arrays used to constitute surface of [Mesh]. The result can be passed to [method ArrayMesh.add_surface_from_arrays] to create a new surface. For example:
+--   				[codeblock]
+--   				var c := CylinderMesh.new()
+--   				var arr_mesh := ArrayMesh.new()
+--   				arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, c.get_mesh_arrays())
+--   				[/codeblock]
 get_mesh_arrays ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Array
 get_mesh_arrays cls
@@ -158,7 +171,8 @@ set_custom_aabb cls arg1
 
 {-# NOINLINE bindPrimitiveMesh_set_flip_faces #-}
 
--- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
+--   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
 bindPrimitiveMesh_set_flip_faces :: MethodBind
 bindPrimitiveMesh_set_flip_faces
   = unsafePerformIO $
@@ -168,7 +182,8 @@ bindPrimitiveMesh_set_flip_faces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn. Result is the same as using *CULL_BACK* in [SpatialMaterial]. Default is false.
+-- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
+--   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
 set_flip_faces ::
                  (PrimitiveMesh :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_faces cls arg1

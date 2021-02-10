@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.MeshLibrary
        (Godot.Core.MeshLibrary.clear, Godot.Core.MeshLibrary.create_item,
         Godot.Core.MeshLibrary.find_item_by_name,
@@ -28,7 +29,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindMeshLibrary_clear #-}
 
--- | Clear the library.
+-- | Clears the library.
 bindMeshLibrary_clear :: MethodBind
 bindMeshLibrary_clear
   = unsafePerformIO $
@@ -38,7 +39,7 @@ bindMeshLibrary_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clear the library.
+-- | Clears the library.
 clear :: (MeshLibrary :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -49,7 +50,8 @@ clear cls
 
 {-# NOINLINE bindMeshLibrary_create_item #-}
 
--- | Create a new item in the library, supplied an id.
+-- | Creates a new item in the library with the given ID.
+--   				You can get an unused ID from [method get_last_unused_item_id].
 bindMeshLibrary_create_item :: MethodBind
 bindMeshLibrary_create_item
   = unsafePerformIO $
@@ -59,7 +61,8 @@ bindMeshLibrary_create_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a new item in the library, supplied an id.
+-- | Creates a new item in the library with the given ID.
+--   				You can get an unused ID from [method get_last_unused_item_id].
 create_item ::
               (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO ()
 create_item cls arg1
@@ -72,6 +75,7 @@ create_item cls arg1
 
 {-# NOINLINE bindMeshLibrary_find_item_by_name #-}
 
+-- | Returns the first item with the given name.
 bindMeshLibrary_find_item_by_name :: MethodBind
 bindMeshLibrary_find_item_by_name
   = unsafePerformIO $
@@ -81,6 +85,7 @@ bindMeshLibrary_find_item_by_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the first item with the given name.
 find_item_by_name ::
                     (MeshLibrary :< cls, Object :< cls) => cls -> GodotString -> IO Int
 find_item_by_name cls arg1
@@ -94,7 +99,7 @@ find_item_by_name cls arg1
 
 {-# NOINLINE bindMeshLibrary_get_item_list #-}
 
--- | Returns the list of items.
+-- | Returns the list of item IDs in use.
 bindMeshLibrary_get_item_list :: MethodBind
 bindMeshLibrary_get_item_list
   = unsafePerformIO $
@@ -104,7 +109,7 @@ bindMeshLibrary_get_item_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of items.
+-- | Returns the list of item IDs in use.
 get_item_list ::
                 (MeshLibrary :< cls, Object :< cls) => cls -> IO PoolIntArray
 get_item_list cls
@@ -117,7 +122,7 @@ get_item_list cls
 
 {-# NOINLINE bindMeshLibrary_get_item_mesh #-}
 
--- | Returns the mesh of the item.
+-- | Returns the item's mesh.
 bindMeshLibrary_get_item_mesh :: MethodBind
 bindMeshLibrary_get_item_mesh
   = unsafePerformIO $
@@ -127,7 +132,7 @@ bindMeshLibrary_get_item_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the mesh of the item.
+-- | Returns the item's mesh.
 get_item_mesh ::
                 (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO Mesh
 get_item_mesh cls arg1
@@ -140,7 +145,7 @@ get_item_mesh cls arg1
 
 {-# NOINLINE bindMeshLibrary_get_item_name #-}
 
--- | Returns the name of the item.
+-- | Returns the item's name.
 bindMeshLibrary_get_item_name :: MethodBind
 bindMeshLibrary_get_item_name
   = unsafePerformIO $
@@ -150,7 +155,7 @@ bindMeshLibrary_get_item_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the name of the item.
+-- | Returns the item's name.
 get_item_name ::
                 (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_item_name cls arg1
@@ -163,6 +168,7 @@ get_item_name cls arg1
 
 {-# NOINLINE bindMeshLibrary_get_item_navmesh #-}
 
+-- | Returns the item's navigation mesh.
 bindMeshLibrary_get_item_navmesh :: MethodBind
 bindMeshLibrary_get_item_navmesh
   = unsafePerformIO $
@@ -172,6 +178,7 @@ bindMeshLibrary_get_item_navmesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the item's navigation mesh.
 get_item_navmesh ::
                    (MeshLibrary :< cls, Object :< cls) =>
                    cls -> Int -> IO NavigationMesh
@@ -186,6 +193,7 @@ get_item_navmesh cls arg1
 
 {-# NOINLINE bindMeshLibrary_get_item_navmesh_transform #-}
 
+-- | Returns the transform applied to the item's navigation mesh.
 bindMeshLibrary_get_item_navmesh_transform :: MethodBind
 bindMeshLibrary_get_item_navmesh_transform
   = unsafePerformIO $
@@ -195,6 +203,7 @@ bindMeshLibrary_get_item_navmesh_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the transform applied to the item's navigation mesh.
 get_item_navmesh_transform ::
                              (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO Transform
 get_item_navmesh_transform cls arg1
@@ -208,6 +217,7 @@ get_item_navmesh_transform cls arg1
 
 {-# NOINLINE bindMeshLibrary_get_item_preview #-}
 
+-- | When running in the editor, returns a generated item preview (a 3D rendering in isometric perspective). When used in a running project, returns the manually-defined item preview which can be set using [method set_item_preview]. Returns an empty [Texture] if no preview was manually set in a running project.
 bindMeshLibrary_get_item_preview :: MethodBind
 bindMeshLibrary_get_item_preview
   = unsafePerformIO $
@@ -217,6 +227,7 @@ bindMeshLibrary_get_item_preview
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | When running in the editor, returns a generated item preview (a 3D rendering in isometric perspective). When used in a running project, returns the manually-defined item preview which can be set using [method set_item_preview]. Returns an empty [Texture] if no preview was manually set in a running project.
 get_item_preview ::
                    (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_item_preview cls arg1
@@ -230,6 +241,8 @@ get_item_preview cls arg1
 
 {-# NOINLINE bindMeshLibrary_get_item_shapes #-}
 
+-- | Returns an item's collision shapes.
+--   				The array consists of each [Shape] followed by its [Transform].
 bindMeshLibrary_get_item_shapes :: MethodBind
 bindMeshLibrary_get_item_shapes
   = unsafePerformIO $
@@ -239,6 +252,8 @@ bindMeshLibrary_get_item_shapes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns an item's collision shapes.
+--   				The array consists of each [Shape] followed by its [Transform].
 get_item_shapes ::
                   (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO Array
 get_item_shapes cls arg1
@@ -251,7 +266,7 @@ get_item_shapes cls arg1
 
 {-# NOINLINE bindMeshLibrary_get_last_unused_item_id #-}
 
--- | Get an unused id for a new item.
+-- | Gets an unused ID for a new item.
 bindMeshLibrary_get_last_unused_item_id :: MethodBind
 bindMeshLibrary_get_last_unused_item_id
   = unsafePerformIO $
@@ -261,7 +276,7 @@ bindMeshLibrary_get_last_unused_item_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get an unused id for a new item.
+-- | Gets an unused ID for a new item.
 get_last_unused_item_id ::
                           (MeshLibrary :< cls, Object :< cls) => cls -> IO Int
 get_last_unused_item_id cls
@@ -275,7 +290,7 @@ get_last_unused_item_id cls
 
 {-# NOINLINE bindMeshLibrary_remove_item #-}
 
--- | Remove the item.
+-- | Removes the item.
 bindMeshLibrary_remove_item :: MethodBind
 bindMeshLibrary_remove_item
   = unsafePerformIO $
@@ -285,7 +300,7 @@ bindMeshLibrary_remove_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the item.
+-- | Removes the item.
 remove_item ::
               (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_item cls arg1
@@ -298,7 +313,7 @@ remove_item cls arg1
 
 {-# NOINLINE bindMeshLibrary_set_item_mesh #-}
 
--- | Set the mesh of the item.
+-- | Sets the item's mesh.
 bindMeshLibrary_set_item_mesh :: MethodBind
 bindMeshLibrary_set_item_mesh
   = unsafePerformIO $
@@ -308,7 +323,7 @@ bindMeshLibrary_set_item_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the mesh of the item.
+-- | Sets the item's mesh.
 set_item_mesh ::
                 (MeshLibrary :< cls, Object :< cls) => cls -> Int -> Mesh -> IO ()
 set_item_mesh cls arg1 arg2
@@ -321,7 +336,8 @@ set_item_mesh cls arg1 arg2
 
 {-# NOINLINE bindMeshLibrary_set_item_name #-}
 
--- | Set the name of the item.
+-- | Sets the item's name.
+--   				This name is shown in the editor. It can also be used to look up the item later using [method find_item_by_name].
 bindMeshLibrary_set_item_name :: MethodBind
 bindMeshLibrary_set_item_name
   = unsafePerformIO $
@@ -331,7 +347,8 @@ bindMeshLibrary_set_item_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the name of the item.
+-- | Sets the item's name.
+--   				This name is shown in the editor. It can also be used to look up the item later using [method find_item_by_name].
 set_item_name ::
                 (MeshLibrary :< cls, Object :< cls) =>
                 cls -> Int -> GodotString -> IO ()
@@ -345,6 +362,7 @@ set_item_name cls arg1 arg2
 
 {-# NOINLINE bindMeshLibrary_set_item_navmesh #-}
 
+-- | Sets the item's navigation mesh.
 bindMeshLibrary_set_item_navmesh :: MethodBind
 bindMeshLibrary_set_item_navmesh
   = unsafePerformIO $
@@ -354,6 +372,7 @@ bindMeshLibrary_set_item_navmesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the item's navigation mesh.
 set_item_navmesh ::
                    (MeshLibrary :< cls, Object :< cls) =>
                    cls -> Int -> NavigationMesh -> IO ()
@@ -368,6 +387,7 @@ set_item_navmesh cls arg1 arg2
 
 {-# NOINLINE bindMeshLibrary_set_item_navmesh_transform #-}
 
+-- | Sets the transform to apply to the item's navigation mesh.
 bindMeshLibrary_set_item_navmesh_transform :: MethodBind
 bindMeshLibrary_set_item_navmesh_transform
   = unsafePerformIO $
@@ -377,6 +397,7 @@ bindMeshLibrary_set_item_navmesh_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the transform to apply to the item's navigation mesh.
 set_item_navmesh_transform ::
                              (MeshLibrary :< cls, Object :< cls) =>
                              cls -> Int -> Transform -> IO ()
@@ -391,6 +412,7 @@ set_item_navmesh_transform cls arg1 arg2
 
 {-# NOINLINE bindMeshLibrary_set_item_preview #-}
 
+-- | Sets a texture to use as the item's preview icon in the editor.
 bindMeshLibrary_set_item_preview :: MethodBind
 bindMeshLibrary_set_item_preview
   = unsafePerformIO $
@@ -400,6 +422,7 @@ bindMeshLibrary_set_item_preview
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a texture to use as the item's preview icon in the editor.
 set_item_preview ::
                    (MeshLibrary :< cls, Object :< cls) =>
                    cls -> Int -> Texture -> IO ()
@@ -414,6 +437,8 @@ set_item_preview cls arg1 arg2
 
 {-# NOINLINE bindMeshLibrary_set_item_shapes #-}
 
+-- | Sets an item's collision shapes.
+--   				The array should consist of [Shape] objects, each followed by a [Transform] that will be applied to it. For shapes that should not have a transform, use [constant Transform.IDENTITY].
 bindMeshLibrary_set_item_shapes :: MethodBind
 bindMeshLibrary_set_item_shapes
   = unsafePerformIO $
@@ -423,6 +448,8 @@ bindMeshLibrary_set_item_shapes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets an item's collision shapes.
+--   				The array should consist of [Shape] objects, each followed by a [Transform] that will be applied to it. For shapes that should not have a transform, use [constant Transform.IDENTITY].
 set_item_shapes ::
                   (MeshLibrary :< cls, Object :< cls) => cls -> Int -> Array -> IO ()
 set_item_shapes cls arg1 arg2

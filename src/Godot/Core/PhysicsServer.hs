@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PhysicsServer
        (Godot.Core.PhysicsServer._SPACE_PARAM_CONSTRAINT_DEFAULT_BIAS,
         Godot.Core.PhysicsServer._JOINT_SLIDER,
@@ -747,7 +748,7 @@ area_get_object_instance_id cls arg1
 
 {-# NOINLINE bindPhysicsServer_area_get_param #-}
 
--- | Returns an area parameter value. A list of available parameters is on the AREA_PARAM_* constants.
+-- | Returns an area parameter value. A list of available parameters is on the [enum AreaParameter] constants.
 bindPhysicsServer_area_get_param :: MethodBind
 bindPhysicsServer_area_get_param
   = unsafePerformIO $
@@ -757,7 +758,7 @@ bindPhysicsServer_area_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an area parameter value. A list of available parameters is on the AREA_PARAM_* constants.
+-- | Returns an area parameter value. A list of available parameters is on the [enum AreaParameter] constants.
 area_get_param ::
                  (PhysicsServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> IO GodotVariant
@@ -1040,7 +1041,7 @@ area_set_collision_mask cls arg1 arg2
 {-# NOINLINE bindPhysicsServer_area_set_monitor_callback #-}
 
 -- | Sets the function to call when any body/area enters or exits the area. This callback will be called for any object interacting with the area, and takes five parameters:
---   				1: AREA_BODY_ADDED or AREA_BODY_REMOVED, depending on whether the object entered or exited the area.
+--   				1: [constant AREA_BODY_ADDED] or [constant AREA_BODY_REMOVED], depending on whether the object entered or exited the area.
 --   				2: [RID] of the object that entered/exited the area.
 --   				3: Instance ID of the object that entered/exited the area.
 --   				4: The shape index of the object that entered/exited the area.
@@ -1055,7 +1056,7 @@ bindPhysicsServer_area_set_monitor_callback
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the function to call when any body/area enters or exits the area. This callback will be called for any object interacting with the area, and takes five parameters:
---   				1: AREA_BODY_ADDED or AREA_BODY_REMOVED, depending on whether the object entered or exited the area.
+--   				1: [constant AREA_BODY_ADDED] or [constant AREA_BODY_REMOVED], depending on whether the object entered or exited the area.
 --   				2: [RID] of the object that entered/exited the area.
 --   				3: Instance ID of the object that entered/exited the area.
 --   				4: The shape index of the object that entered/exited the area.
@@ -1097,7 +1098,7 @@ area_set_monitorable cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_area_set_param #-}
 
--- | Sets the value for an area parameter. A list of available parameters is on the AREA_PARAM_* constants.
+-- | Sets the value for an area parameter. A list of available parameters is on the [enum AreaParameter] constants.
 bindPhysicsServer_area_set_param :: MethodBind
 bindPhysicsServer_area_set_param
   = unsafePerformIO $
@@ -1107,7 +1108,7 @@ bindPhysicsServer_area_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the value for an area parameter. A list of available parameters is on the AREA_PARAM_* constants.
+-- | Sets the value for an area parameter. A list of available parameters is on the [enum AreaParameter] constants.
 area_set_param ::
                  (PhysicsServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> GodotVariant -> IO ()
@@ -1244,7 +1245,7 @@ area_set_space cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_area_set_space_override_mode #-}
 
--- | Sets the space override mode for the area. The modes are described in the constants AREA_SPACE_OVERRIDE_*.
+-- | Sets the space override mode for the area. The modes are described in the [enum AreaSpaceOverrideMode] constants.
 bindPhysicsServer_area_set_space_override_mode :: MethodBind
 bindPhysicsServer_area_set_space_override_mode
   = unsafePerformIO $
@@ -1254,7 +1255,7 @@ bindPhysicsServer_area_set_space_override_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the space override mode for the area. The modes are described in the constants AREA_SPACE_OVERRIDE_*.
+-- | Sets the space override mode for the area. The modes are described in the [enum AreaSpaceOverrideMode] constants.
 area_set_space_override_mode ::
                                (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 area_set_space_override_mode cls arg1 arg2
@@ -1536,7 +1537,7 @@ body_clear_shapes cls arg1
 
 {-# NOINLINE bindPhysicsServer_body_create #-}
 
--- | Creates a physics body. The first parameter can be any value from constants BODY_MODE*, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
+-- | Creates a physics body. The first parameter can be any value from [enum BodyMode] constants, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
 bindPhysicsServer_body_create :: MethodBind
 bindPhysicsServer_body_create
   = unsafePerformIO $
@@ -1546,7 +1547,7 @@ bindPhysicsServer_body_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a physics body. The first parameter can be any value from constants BODY_MODE*, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
+-- | Creates a physics body. The first parameter can be any value from [enum BodyMode] constants, for the type of body created. Additionally, the body can be created in sleeping state to save processing time.
 body_create ::
               (PhysicsServer :< cls, Object :< cls) =>
               cls -> Int -> Bool -> IO Rid
@@ -1731,7 +1732,7 @@ body_get_object_instance_id cls arg1
 
 {-# NOINLINE bindPhysicsServer_body_get_param #-}
 
--- | Returns the value of a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+-- | Returns the value of a body parameter. A list of available parameters is on the [enum BodyParameter] constants.
 bindPhysicsServer_body_get_param :: MethodBind
 bindPhysicsServer_body_get_param
   = unsafePerformIO $
@@ -1741,7 +1742,7 @@ bindPhysicsServer_body_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+-- | Returns the value of a body parameter. A list of available parameters is on the [enum BodyParameter] constants.
 body_get_param ::
                  (PhysicsServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> IO Float
@@ -1956,7 +1957,7 @@ body_is_omitting_force_integration cls arg1
 
 {-# NOINLINE bindPhysicsServer_body_is_ray_pickable #-}
 
--- | If [code]true[/code], the body can be detected by rays
+-- | If [code]true[/code], the body can be detected by rays.
 bindPhysicsServer_body_is_ray_pickable :: MethodBind
 bindPhysicsServer_body_is_ray_pickable
   = unsafePerformIO $
@@ -1966,7 +1967,7 @@ bindPhysicsServer_body_is_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the body can be detected by rays
+-- | If [code]true[/code], the body can be detected by rays.
 body_is_ray_pickable ::
                        (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Bool
 body_is_ray_pickable cls arg1
@@ -2235,7 +2236,7 @@ body_set_max_contacts_reported cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_body_set_mode #-}
 
--- | Sets the body mode, from one of the constants BODY_MODE*.
+-- | Sets the body mode, from one of the [enum BodyMode] constants.
 bindPhysicsServer_body_set_mode :: MethodBind
 bindPhysicsServer_body_set_mode
   = unsafePerformIO $
@@ -2245,7 +2246,7 @@ bindPhysicsServer_body_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the body mode, from one of the constants BODY_MODE*.
+-- | Sets the body mode, from one of the [enum BodyMode] constants.
 body_set_mode ::
                 (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> Int -> IO ()
 body_set_mode cls arg1 arg2
@@ -2284,7 +2285,7 @@ body_set_omit_force_integration cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_body_set_param #-}
 
--- | Sets a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+-- | Sets a body parameter. A list of available parameters is on the [enum BodyParameter] constants.
 bindPhysicsServer_body_set_param :: MethodBind
 bindPhysicsServer_body_set_param
   = unsafePerformIO $
@@ -2294,7 +2295,7 @@ bindPhysicsServer_body_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a body parameter. A list of available parameters is on the BODY_PARAM_* constants.
+-- | Sets a body parameter. A list of available parameters is on the [enum BodyParameter] constants.
 body_set_param ::
                  (PhysicsServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> Float -> IO ()
@@ -2431,7 +2432,7 @@ body_set_space cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_body_set_state #-}
 
--- | Sets a body state (see BODY_STATE* constants).
+-- | Sets a body state (see [enum BodyState] constants).
 bindPhysicsServer_body_set_state :: MethodBind
 bindPhysicsServer_body_set_state
   = unsafePerformIO $
@@ -2441,7 +2442,7 @@ bindPhysicsServer_body_set_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a body state (see BODY_STATE* constants).
+-- | Sets a body state (see [enum BodyState] constants).
 body_set_state ::
                  (PhysicsServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> GodotVariant -> IO ()
@@ -2456,7 +2457,7 @@ body_set_state cls arg1 arg2 arg3
 
 {-# NOINLINE bindPhysicsServer_cone_twist_joint_get_param #-}
 
--- | Gets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
+-- | Gets a cone_twist_joint parameter (see [enum ConeTwistJointParam] constants).
 bindPhysicsServer_cone_twist_joint_get_param :: MethodBind
 bindPhysicsServer_cone_twist_joint_get_param
   = unsafePerformIO $
@@ -2466,7 +2467,7 @@ bindPhysicsServer_cone_twist_joint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
+-- | Gets a cone_twist_joint parameter (see [enum ConeTwistJointParam] constants).
 cone_twist_joint_get_param ::
                              (PhysicsServer :< cls, Object :< cls) =>
                              cls -> Rid -> Int -> IO Float
@@ -2481,7 +2482,7 @@ cone_twist_joint_get_param cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_cone_twist_joint_set_param #-}
 
--- | Sets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
+-- | Sets a cone_twist_joint parameter (see [enum ConeTwistJointParam] constants).
 bindPhysicsServer_cone_twist_joint_set_param :: MethodBind
 bindPhysicsServer_cone_twist_joint_set_param
   = unsafePerformIO $
@@ -2491,7 +2492,7 @@ bindPhysicsServer_cone_twist_joint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a cone_twist_joint parameter (see CONE_TWIST_JOINT* constants).
+-- | Sets a cone_twist_joint parameter (see [enum ConeTwistJointParam] constants).
 cone_twist_joint_set_param ::
                              (PhysicsServer :< cls, Object :< cls) =>
                              cls -> Rid -> Int -> Float -> IO ()
@@ -2529,7 +2530,7 @@ free_rid cls arg1
 
 {-# NOINLINE bindPhysicsServer_generic_6dof_joint_get_flag #-}
 
--- | Gets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
+-- | Gets a generic_6_DOF_joint flag (see [enum G6DOFJointAxisFlag] constants).
 bindPhysicsServer_generic_6dof_joint_get_flag :: MethodBind
 bindPhysicsServer_generic_6dof_joint_get_flag
   = unsafePerformIO $
@@ -2539,7 +2540,7 @@ bindPhysicsServer_generic_6dof_joint_get_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
+-- | Gets a generic_6_DOF_joint flag (see [enum G6DOFJointAxisFlag] constants).
 generic_6dof_joint_get_flag ::
                               (PhysicsServer :< cls, Object :< cls) =>
                               cls -> Rid -> Int -> Int -> IO Bool
@@ -2555,7 +2556,7 @@ generic_6dof_joint_get_flag cls arg1 arg2 arg3
 
 {-# NOINLINE bindPhysicsServer_generic_6dof_joint_get_param #-}
 
--- | Gets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
+-- | Gets a generic_6_DOF_joint parameter (see [enum G6DOFJointAxisParam] constants).
 bindPhysicsServer_generic_6dof_joint_get_param :: MethodBind
 bindPhysicsServer_generic_6dof_joint_get_param
   = unsafePerformIO $
@@ -2565,7 +2566,7 @@ bindPhysicsServer_generic_6dof_joint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
+-- | Gets a generic_6_DOF_joint parameter (see [enum G6DOFJointAxisParam] constants).
 generic_6dof_joint_get_param ::
                                (PhysicsServer :< cls, Object :< cls) =>
                                cls -> Rid -> Int -> Int -> IO Float
@@ -2581,7 +2582,7 @@ generic_6dof_joint_get_param cls arg1 arg2 arg3
 
 {-# NOINLINE bindPhysicsServer_generic_6dof_joint_set_flag #-}
 
--- | Sets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
+-- | Sets a generic_6_DOF_joint flag (see [enum G6DOFJointAxisFlag] constants).
 bindPhysicsServer_generic_6dof_joint_set_flag :: MethodBind
 bindPhysicsServer_generic_6dof_joint_set_flag
   = unsafePerformIO $
@@ -2591,7 +2592,7 @@ bindPhysicsServer_generic_6dof_joint_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a generic_6_DOF_joint flag (see G6DOF_JOINT_FLAG* constants).
+-- | Sets a generic_6_DOF_joint flag (see [enum G6DOFJointAxisFlag] constants).
 generic_6dof_joint_set_flag ::
                               (PhysicsServer :< cls, Object :< cls) =>
                               cls -> Rid -> Int -> Int -> Bool -> IO ()
@@ -2608,7 +2609,7 @@ generic_6dof_joint_set_flag cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindPhysicsServer_generic_6dof_joint_set_param #-}
 
--- | Sets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
+-- | Sets a generic_6_DOF_joint parameter (see [enum G6DOFJointAxisParam] constants).
 bindPhysicsServer_generic_6dof_joint_set_param :: MethodBind
 bindPhysicsServer_generic_6dof_joint_set_param
   = unsafePerformIO $
@@ -2618,7 +2619,7 @@ bindPhysicsServer_generic_6dof_joint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a generic_6_DOF_joint parameter (see G6DOF_JOINT* constants without the G6DOF_JOINT_FLAG*).
+-- | Sets a generic_6_DOF_joint parameter (see [enum G6DOFJointAxisParam] constants).
 generic_6dof_joint_set_param ::
                                (PhysicsServer :< cls, Object :< cls) =>
                                cls -> Rid -> Int -> Int -> Float -> IO ()
@@ -2635,7 +2636,7 @@ generic_6dof_joint_set_param cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindPhysicsServer_get_process_info #-}
 
--- | Returns an Info defined by the [enum PhysicsServer.ProcessInfo] input given.
+-- | Returns an Info defined by the [enum ProcessInfo] input given.
 bindPhysicsServer_get_process_info :: MethodBind
 bindPhysicsServer_get_process_info
   = unsafePerformIO $
@@ -2645,7 +2646,7 @@ bindPhysicsServer_get_process_info
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an Info defined by the [enum PhysicsServer.ProcessInfo] input given.
+-- | Returns an Info defined by the [enum ProcessInfo] input given.
 get_process_info ::
                    (PhysicsServer :< cls, Object :< cls) => cls -> Int -> IO Int
 get_process_info cls arg1
@@ -2659,7 +2660,7 @@ get_process_info cls arg1
 
 {-# NOINLINE bindPhysicsServer_hinge_joint_get_flag #-}
 
--- | Gets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+-- | Gets a hinge_joint flag (see [enum HingeJointFlag] constants).
 bindPhysicsServer_hinge_joint_get_flag :: MethodBind
 bindPhysicsServer_hinge_joint_get_flag
   = unsafePerformIO $
@@ -2669,7 +2670,7 @@ bindPhysicsServer_hinge_joint_get_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+-- | Gets a hinge_joint flag (see [enum HingeJointFlag] constants).
 hinge_joint_get_flag ::
                        (PhysicsServer :< cls, Object :< cls) =>
                        cls -> Rid -> Int -> IO Bool
@@ -2684,7 +2685,7 @@ hinge_joint_get_flag cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_hinge_joint_get_param #-}
 
--- | Gets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+-- | Gets a hinge_joint parameter (see [enum HingeJointParam]).
 bindPhysicsServer_hinge_joint_get_param :: MethodBind
 bindPhysicsServer_hinge_joint_get_param
   = unsafePerformIO $
@@ -2694,7 +2695,7 @@ bindPhysicsServer_hinge_joint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+-- | Gets a hinge_joint parameter (see [enum HingeJointParam]).
 hinge_joint_get_param ::
                         (PhysicsServer :< cls, Object :< cls) =>
                         cls -> Rid -> Int -> IO Float
@@ -2709,7 +2710,7 @@ hinge_joint_get_param cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_hinge_joint_set_flag #-}
 
--- | Sets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+-- | Sets a hinge_joint flag (see [enum HingeJointFlag] constants).
 bindPhysicsServer_hinge_joint_set_flag :: MethodBind
 bindPhysicsServer_hinge_joint_set_flag
   = unsafePerformIO $
@@ -2719,7 +2720,7 @@ bindPhysicsServer_hinge_joint_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a hinge_joint flag (see HINGE_JOINT_FLAG* constants).
+-- | Sets a hinge_joint flag (see [enum HingeJointFlag] constants).
 hinge_joint_set_flag ::
                        (PhysicsServer :< cls, Object :< cls) =>
                        cls -> Rid -> Int -> Bool -> IO ()
@@ -2734,7 +2735,7 @@ hinge_joint_set_flag cls arg1 arg2 arg3
 
 {-# NOINLINE bindPhysicsServer_hinge_joint_set_param #-}
 
--- | Sets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+-- | Sets a hinge_joint parameter (see [enum HingeJointParam] constants).
 bindPhysicsServer_hinge_joint_set_param :: MethodBind
 bindPhysicsServer_hinge_joint_set_param
   = unsafePerformIO $
@@ -2744,7 +2745,7 @@ bindPhysicsServer_hinge_joint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a hinge_joint parameter (see HINGE_JOINT* constants without the HINGE_JOINT_FLAG*).
+-- | Sets a hinge_joint parameter (see [enum HingeJointParam] constants).
 hinge_joint_set_param ::
                         (PhysicsServer :< cls, Object :< cls) =>
                         cls -> Rid -> Int -> Float -> IO ()
@@ -3009,7 +3010,7 @@ pin_joint_get_local_b cls arg1
 
 {-# NOINLINE bindPhysicsServer_pin_joint_get_param #-}
 
--- | Gets a pin_joint parameter (see PIN_JOINT* constants).
+-- | Gets a pin_joint parameter (see [enum PinJointParam] constants).
 bindPhysicsServer_pin_joint_get_param :: MethodBind
 bindPhysicsServer_pin_joint_get_param
   = unsafePerformIO $
@@ -3019,7 +3020,7 @@ bindPhysicsServer_pin_joint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a pin_joint parameter (see PIN_JOINT* constants).
+-- | Gets a pin_joint parameter (see [enum PinJointParam] constants).
 pin_joint_get_param ::
                       (PhysicsServer :< cls, Object :< cls) =>
                       cls -> Rid -> Int -> IO Float
@@ -3084,7 +3085,7 @@ pin_joint_set_local_b cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_pin_joint_set_param #-}
 
--- | Sets a pin_joint parameter (see PIN_JOINT* constants).
+-- | Sets a pin_joint parameter (see [enum PinJointParam] constants).
 bindPhysicsServer_pin_joint_set_param :: MethodBind
 bindPhysicsServer_pin_joint_set_param
   = unsafePerformIO $
@@ -3094,7 +3095,7 @@ bindPhysicsServer_pin_joint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a pin_joint parameter (see PIN_JOINT* constants).
+-- | Sets a pin_joint parameter (see [enum PinJointParam] constants).
 pin_joint_set_param ::
                       (PhysicsServer :< cls, Object :< cls) =>
                       cls -> Rid -> Int -> Float -> IO ()
@@ -3132,7 +3133,7 @@ set_active cls arg1
 
 {-# NOINLINE bindPhysicsServer_shape_create #-}
 
--- | Creates a shape of type SHAPE_*. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
+-- | Creates a shape of a type from [enum ShapeType]. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
 bindPhysicsServer_shape_create :: MethodBind
 bindPhysicsServer_shape_create
   = unsafePerformIO $
@@ -3142,7 +3143,7 @@ bindPhysicsServer_shape_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a shape of type SHAPE_*. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
+-- | Creates a shape of a type from [enum ShapeType]. Does not assign it to a body or an area. To do so, you must use [method area_set_shape] or [method body_set_shape].
 shape_create ::
                (PhysicsServer :< cls, Object :< cls) => cls -> Int -> IO Rid
 shape_create cls arg1
@@ -3180,7 +3181,7 @@ shape_get_data cls arg1
 
 {-# NOINLINE bindPhysicsServer_shape_get_type #-}
 
--- | Returns the type of shape (see SHAPE_* constants).
+-- | Returns the type of shape (see [enum ShapeType] constants).
 bindPhysicsServer_shape_get_type :: MethodBind
 bindPhysicsServer_shape_get_type
   = unsafePerformIO $
@@ -3190,7 +3191,7 @@ bindPhysicsServer_shape_get_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the type of shape (see SHAPE_* constants).
+-- | Returns the type of shape (see [enum ShapeType] constants).
 shape_get_type ::
                  (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 shape_get_type cls arg1
@@ -3229,7 +3230,7 @@ shape_set_data cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_slider_joint_get_param #-}
 
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+-- | Gets a slider_joint parameter (see [enum SliderJointParam] constants).
 bindPhysicsServer_slider_joint_get_param :: MethodBind
 bindPhysicsServer_slider_joint_get_param
   = unsafePerformIO $
@@ -3239,7 +3240,7 @@ bindPhysicsServer_slider_joint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+-- | Gets a slider_joint parameter (see [enum SliderJointParam] constants).
 slider_joint_get_param ::
                          (PhysicsServer :< cls, Object :< cls) =>
                          cls -> Rid -> Int -> IO Float
@@ -3254,7 +3255,7 @@ slider_joint_get_param cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_slider_joint_set_param #-}
 
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+-- | Gets a slider_joint parameter (see [enum SliderJointParam] constants).
 bindPhysicsServer_slider_joint_set_param :: MethodBind
 bindPhysicsServer_slider_joint_set_param
   = unsafePerformIO $
@@ -3264,7 +3265,7 @@ bindPhysicsServer_slider_joint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a slider_joint parameter (see SLIDER_JOINT* constants).
+-- | Gets a slider_joint parameter (see [enum SliderJointParam] constants).
 slider_joint_set_param ::
                          (PhysicsServer :< cls, Object :< cls) =>
                          cls -> Rid -> Int -> Float -> IO ()
@@ -3401,7 +3402,7 @@ space_set_active cls arg1 arg2
 
 {-# NOINLINE bindPhysicsServer_space_set_param #-}
 
--- | Sets the value for a space parameter. A list of available parameters is on the SPACE_PARAM_* constants.
+-- | Sets the value for a space parameter. A list of available parameters is on the [enum SpaceParameter] constants.
 bindPhysicsServer_space_set_param :: MethodBind
 bindPhysicsServer_space_set_param
   = unsafePerformIO $
@@ -3411,7 +3412,7 @@ bindPhysicsServer_space_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the value for a space parameter. A list of available parameters is on the SPACE_PARAM_* constants.
+-- | Sets the value for a space parameter. A list of available parameters is on the [enum SpaceParameter] constants.
 space_set_param ::
                   (PhysicsServer :< cls, Object :< cls) =>
                   cls -> Rid -> Int -> Float -> IO ()

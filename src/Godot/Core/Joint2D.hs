@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Joint2D
        (Godot.Core.Joint2D.get_bias,
         Godot.Core.Joint2D.get_exclude_nodes_from_collision,
@@ -17,7 +18,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindJoint2D_get_bias #-}
 
--- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint. Default value: [code]0[/code]
+-- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint.
 bindJoint2D_get_bias :: MethodBind
 bindJoint2D_get_bias
   = unsafePerformIO $
@@ -27,7 +28,7 @@ bindJoint2D_get_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint. Default value: [code]0[/code]
+-- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint.
 get_bias :: (Joint2D :< cls, Object :< cls) => cls -> IO Float
 get_bias cls
   = withVariantArray []
@@ -37,7 +38,7 @@ get_bias cls
 
 {-# NOINLINE bindJoint2D_get_exclude_nodes_from_collision #-}
 
--- | If [code]true[/code], [member node_a] and [member node_b] can collide. Default value: [code]false[/code].
+-- | If [code]true[/code], [member node_a] and [member node_b] can not collide.
 bindJoint2D_get_exclude_nodes_from_collision :: MethodBind
 bindJoint2D_get_exclude_nodes_from_collision
   = unsafePerformIO $
@@ -47,7 +48,7 @@ bindJoint2D_get_exclude_nodes_from_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [member node_a] and [member node_b] can collide. Default value: [code]false[/code].
+-- | If [code]true[/code], [member node_a] and [member node_b] can not collide.
 get_exclude_nodes_from_collision ::
                                    (Joint2D :< cls, Object :< cls) => cls -> IO Bool
 get_exclude_nodes_from_collision cls
@@ -103,7 +104,7 @@ get_node_b cls
 
 {-# NOINLINE bindJoint2D_set_bias #-}
 
--- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint. Default value: [code]0[/code]
+-- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint.
 bindJoint2D_set_bias :: MethodBind
 bindJoint2D_set_bias
   = unsafePerformIO $
@@ -113,7 +114,7 @@ bindJoint2D_set_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint. Default value: [code]0[/code]
+-- | When [member node_a] and [member node_b] move in different directions the [code]bias[/code] controls how fast the joint pulls them back to their original position. The lower the [code]bias[/code] the more the two bodies can pull on the joint.
 set_bias ::
            (Joint2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bias cls arg1
@@ -124,7 +125,7 @@ set_bias cls arg1
 
 {-# NOINLINE bindJoint2D_set_exclude_nodes_from_collision #-}
 
--- | If [code]true[/code], [member node_a] and [member node_b] can collide. Default value: [code]false[/code].
+-- | If [code]true[/code], [member node_a] and [member node_b] can not collide.
 bindJoint2D_set_exclude_nodes_from_collision :: MethodBind
 bindJoint2D_set_exclude_nodes_from_collision
   = unsafePerformIO $
@@ -134,7 +135,7 @@ bindJoint2D_set_exclude_nodes_from_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [member node_a] and [member node_b] can collide. Default value: [code]false[/code].
+-- | If [code]true[/code], [member node_a] and [member node_b] can not collide.
 set_exclude_nodes_from_collision ::
                                    (Joint2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_exclude_nodes_from_collision cls arg1

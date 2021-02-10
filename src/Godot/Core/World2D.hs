@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.World2D
        (Godot.Core.World2D.get_canvas,
         Godot.Core.World2D.get_direct_space_state,
@@ -35,7 +36,7 @@ get_canvas cls
 
 {-# NOINLINE bindWorld2D_get_direct_space_state #-}
 
--- | The state of this world's physics space. This allows arbitrary querying for collision.
+-- | Direct access to the world's physics 2D space state. Used for querying current and potential collisions. Must only be accessed from the main thread within [code]_physics_process(delta)[/code].
 bindWorld2D_get_direct_space_state :: MethodBind
 bindWorld2D_get_direct_space_state
   = unsafePerformIO $
@@ -45,7 +46,7 @@ bindWorld2D_get_direct_space_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The state of this world's physics space. This allows arbitrary querying for collision.
+-- | Direct access to the world's physics 2D space state. Used for querying current and potential collisions. Must only be accessed from the main thread within [code]_physics_process(delta)[/code].
 get_direct_space_state ::
                          (World2D :< cls, Object :< cls) =>
                          cls -> IO Physics2DDirectSpaceState

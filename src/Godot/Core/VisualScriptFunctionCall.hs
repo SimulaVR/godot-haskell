@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptFunctionCall
        (Godot.Core.VisualScriptFunctionCall._CALL_MODE_BASIC_TYPE,
         Godot.Core.VisualScriptFunctionCall._RPC_UNRELIABLE_TO_ID,

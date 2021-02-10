@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.HTTPClient
        (Godot.Core.HTTPClient._STATUS_CONNECTED,
         Godot.Core.HTTPClient._RESPONSE_CREATED,
@@ -353,7 +354,7 @@ _RESPONSE_PARTIAL_CONTENT = 206
 
 {-# NOINLINE bindHTTPClient_close #-}
 
--- | Closes the current connection, allowing reuse of this [code]HTTPClient[/code].
+-- | Closes the current connection, allowing reuse of this [HTTPClient].
 bindHTTPClient_close :: MethodBind
 bindHTTPClient_close
   = unsafePerformIO $
@@ -363,7 +364,7 @@ bindHTTPClient_close
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Closes the current connection, allowing reuse of this [code]HTTPClient[/code].
+-- | Closes the current connection, allowing reuse of this [HTTPClient].
 close :: (HTTPClient :< cls, Object :< cls) => cls -> IO ()
 close cls
   = withVariantArray []
@@ -373,7 +374,7 @@ close cls
 
 {-# NOINLINE bindHTTPClient_connect_to_host #-}
 
--- | Connect to a host. This needs to be done before any requests are sent.
+-- | Connects to a host. This needs to be done before any requests are sent.
 --   				The host should not have http:// prepended but will strip the protocol identifier if provided.
 --   				If no [code]port[/code] is specified (or [code]-1[/code] is used), it is automatically set to 80 for HTTP and 443 for HTTPS (if [code]use_ssl[/code] is enabled).
 --   				[code]verify_host[/code] will check the SSL identity of the host if set to [code]true[/code].
@@ -386,7 +387,7 @@ bindHTTPClient_connect_to_host
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connect to a host. This needs to be done before any requests are sent.
+-- | Connects to a host. This needs to be done before any requests are sent.
 --   				The host should not have http:// prepended but will strip the protocol identifier if provided.
 --   				If no [code]port[/code] is specified (or [code]-1[/code] is used), it is automatically set to 80 for HTTP and 443 for HTTPS (if [code]use_ssl[/code] is enabled).
 --   				[code]verify_host[/code] will check the SSL identity of the host if set to [code]true[/code].
@@ -427,6 +428,7 @@ get_connection cls
 
 {-# NOINLINE bindHTTPClient_get_read_chunk_size #-}
 
+-- | The size of the buffer used and maximum bytes to read per iteration. See [method read_response_body_chunk].
 bindHTTPClient_get_read_chunk_size :: MethodBind
 bindHTTPClient_get_read_chunk_size
   = unsafePerformIO $
@@ -436,6 +438,7 @@ bindHTTPClient_get_read_chunk_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the buffer used and maximum bytes to read per iteration. See [method read_response_body_chunk].
 get_read_chunk_size ::
                       (HTTPClient :< cls, Object :< cls) => cls -> IO Int
 get_read_chunk_size cls
@@ -450,6 +453,7 @@ get_read_chunk_size cls
 {-# NOINLINE bindHTTPClient_get_response_body_length #-}
 
 -- | Returns the response's body length.
+--   				[b]Note:[/b] Some Web servers may not send a body length. In this case, the value returned will be [code]-1[/code]. If using chunked transfer encoding, the body length will also be [code]-1[/code].
 bindHTTPClient_get_response_body_length :: MethodBind
 bindHTTPClient_get_response_body_length
   = unsafePerformIO $
@@ -460,6 +464,7 @@ bindHTTPClient_get_response_body_length
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the response's body length.
+--   				[b]Note:[/b] Some Web servers may not send a body length. In this case, the value returned will be [code]-1[/code]. If using chunked transfer encoding, the body length will also be [code]-1[/code].
 get_response_body_length ::
                            (HTTPClient :< cls, Object :< cls) => cls -> IO Int
 get_response_body_length cls
@@ -521,9 +526,14 @@ get_response_headers cls
 
 {-# NOINLINE bindHTTPClient_get_response_headers_as_dictionary #-}
 
--- | Returns all response headers as dictionary where the case-sensitivity of the keys and values is kept like the server delivers it. A value is a simple String, this string can have more than one value where "; " is used as separator.
---   				Structure: ("key":"value1; value2")
---   				Example: (content-length:12), (Content-Type:application/json; charset=UTF-8)
+-- | Returns all response headers as a Dictionary of structure [code]{ "key": "value1; value2" }[/code] where the case-sensitivity of the keys and values is kept like the server delivers it. A value is a simple String, this string can have more than one value where "; " is used as separator.
+--   				[b]Example:[/b]
+--   				[codeblock]
+--   				{
+--   				    "content-length": 12,
+--   				    "Content-Type": "application/json; charset=UTF-8",
+--   				}
+--   				[/codeblock]
 bindHTTPClient_get_response_headers_as_dictionary :: MethodBind
 bindHTTPClient_get_response_headers_as_dictionary
   = unsafePerformIO $
@@ -533,9 +543,14 @@ bindHTTPClient_get_response_headers_as_dictionary
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all response headers as dictionary where the case-sensitivity of the keys and values is kept like the server delivers it. A value is a simple String, this string can have more than one value where "; " is used as separator.
---   				Structure: ("key":"value1; value2")
---   				Example: (content-length:12), (Content-Type:application/json; charset=UTF-8)
+-- | Returns all response headers as a Dictionary of structure [code]{ "key": "value1; value2" }[/code] where the case-sensitivity of the keys and values is kept like the server delivers it. A value is a simple String, this string can have more than one value where "; " is used as separator.
+--   				[b]Example:[/b]
+--   				[codeblock]
+--   				{
+--   				    "content-length": 12,
+--   				    "Content-Type": "application/json; charset=UTF-8",
+--   				}
+--   				[/codeblock]
 get_response_headers_as_dictionary ::
                                      (HTTPClient :< cls, Object :< cls) => cls -> IO Dictionary
 get_response_headers_as_dictionary cls
@@ -550,7 +565,7 @@ get_response_headers_as_dictionary cls
 
 {-# NOINLINE bindHTTPClient_get_status #-}
 
--- | Returns a STATUS_* enum constant. Need to call [method poll] in order to get status updates.
+-- | Returns a [enum Status] constant. Need to call [method poll] in order to get status updates.
 bindHTTPClient_get_status :: MethodBind
 bindHTTPClient_get_status
   = unsafePerformIO $
@@ -560,7 +575,7 @@ bindHTTPClient_get_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a STATUS_* enum constant. Need to call [method poll] in order to get status updates.
+-- | Returns a [enum Status] constant. Need to call [method poll] in order to get status updates.
 get_status :: (HTTPClient :< cls, Object :< cls) => cls -> IO Int
 get_status cls
   = withVariantArray []
@@ -572,7 +587,7 @@ get_status cls
 
 {-# NOINLINE bindHTTPClient_has_response #-}
 
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response available.
+-- | If [code]true[/code], this [HTTPClient] has a response available.
 bindHTTPClient_has_response :: MethodBind
 bindHTTPClient_has_response
   = unsafePerformIO $
@@ -582,7 +597,7 @@ bindHTTPClient_has_response
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response available.
+-- | If [code]true[/code], this [HTTPClient] has a response available.
 has_response ::
                (HTTPClient :< cls, Object :< cls) => cls -> IO Bool
 has_response cls
@@ -619,7 +634,7 @@ is_blocking_mode_enabled cls
 
 {-# NOINLINE bindHTTPClient_is_response_chunked #-}
 
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response that is chunked.
+-- | If [code]true[/code], this [HTTPClient] has a response that is chunked.
 bindHTTPClient_is_response_chunked :: MethodBind
 bindHTTPClient_is_response_chunked
   = unsafePerformIO $
@@ -629,7 +644,7 @@ bindHTTPClient_is_response_chunked
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [code]HTTPClient[/code] has a response that is chunked.
+-- | If [code]true[/code], this [HTTPClient] has a response that is chunked.
 is_response_chunked ::
                       (HTTPClient :< cls, Object :< cls) => cls -> IO Bool
 is_response_chunked cls
@@ -643,7 +658,7 @@ is_response_chunked cls
 
 {-# NOINLINE bindHTTPClient_poll #-}
 
--- | This needs to be called in order to have any request processed. Check results with [method get_status]
+-- | This needs to be called in order to have any request processed. Check results with [method get_status].
 bindHTTPClient_poll :: MethodBind
 bindHTTPClient_poll
   = unsafePerformIO $
@@ -653,7 +668,7 @@ bindHTTPClient_poll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This needs to be called in order to have any request processed. Check results with [method get_status]
+-- | This needs to be called in order to have any request processed. Check results with [method get_status].
 poll :: (HTTPClient :< cls, Object :< cls) => cls -> IO Int
 poll cls
   = withVariantArray []
@@ -666,14 +681,14 @@ poll cls
 -- | Generates a GET/POST application/x-www-form-urlencoded style query string from a provided dictionary, e.g.:
 --   				[codeblock]
 --   				var fields = {"username": "user", "password": "pass"}
---   				String query_string = http_client.query_string_from_dict(fields)
---   				# returns: "username=user&password=pass"
+--   				var query_string = http_client.query_string_from_dict(fields)
+--   				# Returns "username=user&password=pass"
 --   				[/codeblock]
---   				Furthermore, if a key has a null value, only the key itself is added, without equal sign and value. If the value is an array, for each value in it a pair with the same key is added.
+--   				Furthermore, if a key has a [code]null[/code] value, only the key itself is added, without equal sign and value. If the value is an array, for each value in it a pair with the same key is added.
 --   				[codeblock]
 --   				var fields = {"single": 123, "not_valued": null, "multiple": [22, 33, 44]}
---   				String query_string = http_client.query_string_from_dict(fields)
---   				# returns: "single=123&not_valued&multiple=22&multiple=33&multiple=44"
+--   				var query_string = http_client.query_string_from_dict(fields)
+--   				# Returns "single=123&not_valued&multiple=22&multiple=33&multiple=44"
 --   				[/codeblock]
 bindHTTPClient_query_string_from_dict :: MethodBind
 bindHTTPClient_query_string_from_dict
@@ -687,14 +702,14 @@ bindHTTPClient_query_string_from_dict
 -- | Generates a GET/POST application/x-www-form-urlencoded style query string from a provided dictionary, e.g.:
 --   				[codeblock]
 --   				var fields = {"username": "user", "password": "pass"}
---   				String query_string = http_client.query_string_from_dict(fields)
---   				# returns: "username=user&password=pass"
+--   				var query_string = http_client.query_string_from_dict(fields)
+--   				# Returns "username=user&password=pass"
 --   				[/codeblock]
---   				Furthermore, if a key has a null value, only the key itself is added, without equal sign and value. If the value is an array, for each value in it a pair with the same key is added.
+--   				Furthermore, if a key has a [code]null[/code] value, only the key itself is added, without equal sign and value. If the value is an array, for each value in it a pair with the same key is added.
 --   				[codeblock]
 --   				var fields = {"single": 123, "not_valued": null, "multiple": [22, 33, 44]}
---   				String query_string = http_client.query_string_from_dict(fields)
---   				# returns: "single=123&not_valued&multiple=22&multiple=33&multiple=44"
+--   				var query_string = http_client.query_string_from_dict(fields)
+--   				# Returns "single=123&not_valued&multiple=22&multiple=33&multiple=44"
 --   				[/codeblock]
 query_string_from_dict ::
                          (HTTPClient :< cls, Object :< cls) =>
@@ -735,7 +750,7 @@ read_response_body_chunk cls
 {-# NOINLINE bindHTTPClient_request #-}
 
 -- | Sends a request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [enum Method].
 --   				To create a POST request with query strings to push to the server, do:
 --   				[codeblock]
 --   				var fields = {"username" : "user", "password" : "pass"}
@@ -743,6 +758,7 @@ read_response_body_chunk cls
 --   				var headers = ["Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())]
 --   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
 --   				[/codeblock]
+--   				[b]Note:[/b] The [code]request_data[/code] parameter is ignored if [code]method[/code] is [constant HTTPClient.METHOD_GET]. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See [method String.http_escape] for an example.
 bindHTTPClient_request :: MethodBind
 bindHTTPClient_request
   = unsafePerformIO $
@@ -753,7 +769,7 @@ bindHTTPClient_request
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sends a request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [enum Method].
 --   				To create a POST request with query strings to push to the server, do:
 --   				[codeblock]
 --   				var fields = {"username" : "user", "password" : "pass"}
@@ -761,6 +777,7 @@ bindHTTPClient_request
 --   				var headers = ["Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())]
 --   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
 --   				[/codeblock]
+--   				[b]Note:[/b] The [code]request_data[/code] parameter is ignored if [code]method[/code] is [constant HTTPClient.METHOD_GET]. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See [method String.http_escape] for an example.
 request ::
           (HTTPClient :< cls, Object :< cls) =>
           cls ->
@@ -776,7 +793,7 @@ request cls arg1 arg2 arg3 arg4
 {-# NOINLINE bindHTTPClient_request_raw #-}
 
 -- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [enum Method].
 --   				Sends the body data raw, as a byte array and does not encode it in any way.
 bindHTTPClient_request_raw :: MethodBind
 bindHTTPClient_request_raw
@@ -788,7 +805,7 @@ bindHTTPClient_request_raw
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for [code]http://somehost.com/index.php[/code], it is [code]index.php[/code].
---   				Headers are HTTP request headers. For available HTTP methods, see [code]METHOD_*[/code].
+--   				Headers are HTTP request headers. For available HTTP methods, see [enum Method].
 --   				Sends the body data raw, as a byte array and does not encode it in any way.
 request_raw ::
               (HTTPClient :< cls, Object :< cls) =>
@@ -852,7 +869,7 @@ set_connection cls arg1
 
 {-# NOINLINE bindHTTPClient_set_read_chunk_size #-}
 
--- | Sets the size of the buffer used and maximum bytes to read per iteration. see [method read_response_body_chunk]
+-- | The size of the buffer used and maximum bytes to read per iteration. See [method read_response_body_chunk].
 bindHTTPClient_set_read_chunk_size :: MethodBind
 bindHTTPClient_set_read_chunk_size
   = unsafePerformIO $
@@ -862,7 +879,7 @@ bindHTTPClient_set_read_chunk_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the size of the buffer used and maximum bytes to read per iteration. see [method read_response_body_chunk]
+-- | The size of the buffer used and maximum bytes to read per iteration. See [method read_response_body_chunk].
 set_read_chunk_size ::
                       (HTTPClient :< cls, Object :< cls) => cls -> Int -> IO ()
 set_read_chunk_size cls arg1

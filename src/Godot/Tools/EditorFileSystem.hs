@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorFileSystem
        (Godot.Tools.EditorFileSystem.sig_filesystem_changed,
         Godot.Tools.EditorFileSystem.sig_resources_reimported,
@@ -28,16 +29,25 @@ sig_filesystem_changed ::
 sig_filesystem_changed
   = Godot.Internal.Dispatch.Signal "filesystem_changed"
 
+instance NodeSignal EditorFileSystem "filesystem_changed" '[]
+
 -- | Remitted if a resource is reimported.
 sig_resources_reimported ::
                          Godot.Internal.Dispatch.Signal EditorFileSystem
 sig_resources_reimported
   = Godot.Internal.Dispatch.Signal "resources_reimported"
 
+instance NodeSignal EditorFileSystem "resources_reimported"
+           '[PoolStringArray]
+
+-- | Emitted if at least one resource is reloaded when the filesystem is scanned.
 sig_resources_reload ::
                      Godot.Internal.Dispatch.Signal EditorFileSystem
 sig_resources_reload
   = Godot.Internal.Dispatch.Signal "resources_reload"
+
+instance NodeSignal EditorFileSystem "resources_reload"
+           '[PoolStringArray]
 
 -- | Emitted if the source of any imported file changed.
 sig_sources_changed ::
@@ -45,9 +55,11 @@ sig_sources_changed ::
 sig_sources_changed
   = Godot.Internal.Dispatch.Signal "sources_changed"
 
+instance NodeSignal EditorFileSystem "sources_changed" '[Bool]
+
 {-# NOINLINE bindEditorFileSystem_get_file_type #-}
 
--- | Get the type of the file, given the full path.
+-- | Gets the type of the file, given the full path.
 bindEditorFileSystem_get_file_type :: MethodBind
 bindEditorFileSystem_get_file_type
   = unsafePerformIO $
@@ -57,7 +69,7 @@ bindEditorFileSystem_get_file_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the type of the file, given the full path.
+-- | Gets the type of the file, given the full path.
 get_file_type ::
                 (EditorFileSystem :< cls, Object :< cls) =>
                 cls -> GodotString -> IO GodotString
@@ -72,7 +84,7 @@ get_file_type cls arg1
 
 {-# NOINLINE bindEditorFileSystem_get_filesystem #-}
 
--- | Get the root directory object.
+-- | Gets the root directory object.
 bindEditorFileSystem_get_filesystem :: MethodBind
 bindEditorFileSystem_get_filesystem
   = unsafePerformIO $
@@ -82,7 +94,7 @@ bindEditorFileSystem_get_filesystem
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the root directory object.
+-- | Gets the root directory object.
 get_filesystem ::
                  (EditorFileSystem :< cls, Object :< cls) =>
                  cls -> IO EditorFileSystemDirectory
@@ -241,6 +253,7 @@ update_file cls arg1
 
 {-# NOINLINE bindEditorFileSystem_update_script_classes #-}
 
+-- | Scans the script files and updates the list of custom class names.
 bindEditorFileSystem_update_script_classes :: MethodBind
 bindEditorFileSystem_update_script_classes
   = unsafePerformIO $
@@ -250,6 +263,7 @@ bindEditorFileSystem_update_script_classes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scans the script files and updates the list of custom class names.
 update_script_classes ::
                         (EditorFileSystem :< cls, Object :< cls) => cls -> IO ()
 update_script_classes cls

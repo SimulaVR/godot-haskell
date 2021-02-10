@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.HashingContext
        (Godot.Core.HashingContext._HASH_SHA1,
         Godot.Core.HashingContext._HASH_MD5,
@@ -25,6 +26,7 @@ _HASH_SHA256 = 2
 
 {-# NOINLINE bindHashingContext_finish #-}
 
+-- | Closes the current context, and return the computed hash.
 bindHashingContext_finish :: MethodBind
 bindHashingContext_finish
   = unsafePerformIO $
@@ -34,6 +36,7 @@ bindHashingContext_finish
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Closes the current context, and return the computed hash.
 finish ::
          (HashingContext :< cls, Object :< cls) => cls -> IO PoolByteArray
 finish cls
@@ -46,6 +49,7 @@ finish cls
 
 {-# NOINLINE bindHashingContext_start #-}
 
+-- | Starts a new hash computation of the given [code]type[/code] (e.g. [constant HASH_SHA256] to start computation of a SHA-256).
 bindHashingContext_start :: MethodBind
 bindHashingContext_start
   = unsafePerformIO $
@@ -55,6 +59,7 @@ bindHashingContext_start
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Starts a new hash computation of the given [code]type[/code] (e.g. [constant HASH_SHA256] to start computation of a SHA-256).
 start ::
         (HashingContext :< cls, Object :< cls) => cls -> Int -> IO Int
 start cls arg1
@@ -66,6 +71,7 @@ start cls arg1
 
 {-# NOINLINE bindHashingContext_update #-}
 
+-- | Updates the computation with the given [code]chunk[/code] of data.
 bindHashingContext_update :: MethodBind
 bindHashingContext_update
   = unsafePerformIO $
@@ -75,6 +81,7 @@ bindHashingContext_update
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Updates the computation with the given [code]chunk[/code] of data.
 update ::
          (HashingContext :< cls, Object :< cls) =>
          cls -> PoolByteArray -> IO Int

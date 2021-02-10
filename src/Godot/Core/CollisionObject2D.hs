@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CollisionObject2D
        (Godot.Core.CollisionObject2D.sig_input_event,
         Godot.Core.CollisionObject2D.sig_mouse_entered,
@@ -39,15 +40,22 @@ import Godot.Api.Types
 sig_input_event :: Godot.Internal.Dispatch.Signal CollisionObject2D
 sig_input_event = Godot.Internal.Dispatch.Signal "input_event"
 
+instance NodeSignal CollisionObject2D "input_event"
+           '[Node, InputEvent, Int]
+
 -- | Emitted when the mouse pointer enters any of this object's shapes. Requires [member input_pickable] to be [code]true[/code] and at least one [code]collision_layer[/code] bit to be set.
 sig_mouse_entered ::
                   Godot.Internal.Dispatch.Signal CollisionObject2D
 sig_mouse_entered = Godot.Internal.Dispatch.Signal "mouse_entered"
 
+instance NodeSignal CollisionObject2D "mouse_entered" '[]
+
 -- | Emitted when the mouse pointer exits all this object's shapes. Requires [member input_pickable] to be [code]true[/code] and at least one [code]collision_layer[/code] bit to be set.
 sig_mouse_exited ::
                  Godot.Internal.Dispatch.Signal CollisionObject2D
 sig_mouse_exited = Godot.Internal.Dispatch.Signal "mouse_exited"
+
+instance NodeSignal CollisionObject2D "mouse_exited" '[]
 
 {-# NOINLINE bindCollisionObject2D__input_event #-}
 
@@ -125,6 +133,7 @@ get_rid cls
 {-# NOINLINE bindCollisionObject2D_get_shape_owner_one_way_collision_margin
              #-}
 
+-- | Returns the [code]one_way_collision_margin[/code] of the shape owner identified by given [code]owner_id[/code].
 bindCollisionObject2D_get_shape_owner_one_way_collision_margin ::
                                                                MethodBind
 bindCollisionObject2D_get_shape_owner_one_way_collision_margin
@@ -135,6 +144,7 @@ bindCollisionObject2D_get_shape_owner_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [code]one_way_collision_margin[/code] of the shape owner identified by given [code]owner_id[/code].
 get_shape_owner_one_way_collision_margin ::
                                            (CollisionObject2D :< cls, Object :< cls) =>
                                            cls -> Int -> IO Float
@@ -224,7 +234,7 @@ is_shape_owner_disabled cls arg1
 {-# NOINLINE bindCollisionObject2D_is_shape_owner_one_way_collision_enabled
              #-}
 
--- | Returns [code]true[/code] if collisions for the shape owner originating from this [code]CollisionObject2D[/code] will not be reported to collided with [code]CollisionObject2D[/code]s.
+-- | Returns [code]true[/code] if collisions for the shape owner originating from this [CollisionObject2D] will not be reported to collided with [CollisionObject2D]s.
 bindCollisionObject2D_is_shape_owner_one_way_collision_enabled ::
                                                                MethodBind
 bindCollisionObject2D_is_shape_owner_one_way_collision_enabled
@@ -235,7 +245,7 @@ bindCollisionObject2D_is_shape_owner_one_way_collision_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if collisions for the shape owner originating from this [code]CollisionObject2D[/code] will not be reported to collided with [code]CollisionObject2D[/code]s.
+-- | Returns [code]true[/code] if collisions for the shape owner originating from this [CollisionObject2D] will not be reported to collided with [CollisionObject2D]s.
 is_shape_owner_one_way_collision_enabled ::
                                            (CollisionObject2D :< cls, Object :< cls) =>
                                            cls -> Int -> IO Bool
@@ -553,7 +563,7 @@ shape_owner_set_disabled cls arg1 arg2
 {-# NOINLINE bindCollisionObject2D_shape_owner_set_one_way_collision
              #-}
 
--- | If [code]enable[/code] is [code]true[/code], collisions for the shape owner originating from this [code]CollisionObject2D[/code] will not be reported to collided with [code]CollisionObject2D[/code]s.
+-- | If [code]enable[/code] is [code]true[/code], collisions for the shape owner originating from this [CollisionObject2D] will not be reported to collided with [CollisionObject2D]s.
 bindCollisionObject2D_shape_owner_set_one_way_collision ::
                                                         MethodBind
 bindCollisionObject2D_shape_owner_set_one_way_collision
@@ -564,7 +574,7 @@ bindCollisionObject2D_shape_owner_set_one_way_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]enable[/code] is [code]true[/code], collisions for the shape owner originating from this [code]CollisionObject2D[/code] will not be reported to collided with [code]CollisionObject2D[/code]s.
+-- | If [code]enable[/code] is [code]true[/code], collisions for the shape owner originating from this [CollisionObject2D] will not be reported to collided with [CollisionObject2D]s.
 shape_owner_set_one_way_collision ::
                                     (CollisionObject2D :< cls, Object :< cls) =>
                                     cls -> Int -> Bool -> IO ()
@@ -581,6 +591,7 @@ shape_owner_set_one_way_collision cls arg1 arg2
 {-# NOINLINE bindCollisionObject2D_shape_owner_set_one_way_collision_margin
              #-}
 
+-- | Sets the [code]one_way_collision_margin[/code] of the shape owner identified by given [code]owner_id[/code] to [code]margin[/code] pixels.
 bindCollisionObject2D_shape_owner_set_one_way_collision_margin ::
                                                                MethodBind
 bindCollisionObject2D_shape_owner_set_one_way_collision_margin
@@ -591,6 +602,7 @@ bindCollisionObject2D_shape_owner_set_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [code]one_way_collision_margin[/code] of the shape owner identified by given [code]owner_id[/code] to [code]margin[/code] pixels.
 shape_owner_set_one_way_collision_margin ::
                                            (CollisionObject2D :< cls, Object :< cls) =>
                                            cls -> Int -> Float -> IO ()

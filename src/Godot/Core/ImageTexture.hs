@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ImageTexture
        (Godot.Core.ImageTexture._STORAGE_RAW,
         Godot.Core.ImageTexture._STORAGE_COMPRESS_LOSSLESS,
@@ -54,7 +55,7 @@ _reload_hook cls arg1
 
 {-# NOINLINE bindImageTexture_create #-}
 
--- | Create a new [code]ImageTexture[/code] with [code]width[/code] and [code]height[/code].
+-- | Create a new [ImageTexture] with [code]width[/code] and [code]height[/code].
 --   				[code]format[/code] is a value from [enum Image.Format], [code]flags[/code] is any combination of [enum Texture.Flags].
 bindImageTexture_create :: MethodBind
 bindImageTexture_create
@@ -65,7 +66,7 @@ bindImageTexture_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a new [code]ImageTexture[/code] with [code]width[/code] and [code]height[/code].
+-- | Create a new [ImageTexture] with [code]width[/code] and [code]height[/code].
 --   				[code]format[/code] is a value from [enum Image.Format], [code]flags[/code] is any combination of [enum Texture.Flags].
 create ::
          (ImageTexture :< cls, Object :< cls) =>
@@ -80,7 +81,7 @@ create cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindImageTexture_create_from_image #-}
 
--- | Create a new [code]ImageTexture[/code] from an [Image] with [code]flags[/code] from [enum Texture.Flags]. An sRGB to linear color space conversion can take place, according to [enum Image.Format].
+-- | Create a new [ImageTexture] from an [Image] with [code]flags[/code] from [enum Texture.Flags]. An sRGB to linear color space conversion can take place, according to [enum Image.Format].
 bindImageTexture_create_from_image :: MethodBind
 bindImageTexture_create_from_image
   = unsafePerformIO $
@@ -90,7 +91,7 @@ bindImageTexture_create_from_image
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a new [code]ImageTexture[/code] from an [Image] with [code]flags[/code] from [enum Texture.Flags]. An sRGB to linear color space conversion can take place, according to [enum Image.Format].
+-- | Create a new [ImageTexture] from an [Image] with [code]flags[/code] from [enum Texture.Flags]. An sRGB to linear color space conversion can take place, according to [enum Image.Format].
 create_from_image ::
                     (ImageTexture :< cls, Object :< cls) =>
                     cls -> Image -> Int -> IO ()
@@ -105,7 +106,7 @@ create_from_image cls arg1 arg2
 
 {-# NOINLINE bindImageTexture_get_format #-}
 
--- | Returns the format of the [code]ImageTexture[/code], one of [enum Image.Format].
+-- | Returns the format of the [ImageTexture], one of [enum Image.Format].
 bindImageTexture_get_format :: MethodBind
 bindImageTexture_get_format
   = unsafePerformIO $
@@ -115,7 +116,7 @@ bindImageTexture_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the format of the [code]ImageTexture[/code], one of [enum Image.Format].
+-- | Returns the format of the [ImageTexture], one of [enum Image.Format].
 get_format :: (ImageTexture :< cls, Object :< cls) => cls -> IO Int
 get_format cls
   = withVariantArray []
@@ -174,7 +175,7 @@ get_storage cls
 
 {-# NOINLINE bindImageTexture_load #-}
 
--- | Load an [code]ImageTexture[/code] from a file path.
+-- | Load an [ImageTexture] from a file path.
 bindImageTexture_load :: MethodBind
 bindImageTexture_load
   = unsafePerformIO $
@@ -184,7 +185,7 @@ bindImageTexture_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Load an [code]ImageTexture[/code] from a file path.
+-- | Load an [ImageTexture] from a file path.
 load ::
        (ImageTexture :< cls, Object :< cls) =>
        cls -> GodotString -> IO Int
@@ -197,7 +198,7 @@ load cls arg1
 
 {-# NOINLINE bindImageTexture_set_data #-}
 
--- | Set the [Image] of this [code]ImageTexture[/code].
+-- | Sets the [Image] of this [ImageTexture].
 bindImageTexture_set_data :: MethodBind
 bindImageTexture_set_data
   = unsafePerformIO $
@@ -207,7 +208,7 @@ bindImageTexture_set_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the [Image] of this [code]ImageTexture[/code].
+-- | Sets the [Image] of this [ImageTexture].
 set_data ::
            (ImageTexture :< cls, Object :< cls) => cls -> Image -> IO ()
 set_data cls arg1
@@ -244,7 +245,7 @@ set_lossy_storage_quality cls arg1
 
 {-# NOINLINE bindImageTexture_set_size_override #-}
 
--- | Resizes the [code]ImageTexture[/code] to the specified dimensions.
+-- | Resizes the [ImageTexture] to the specified dimensions.
 bindImageTexture_set_size_override :: MethodBind
 bindImageTexture_set_size_override
   = unsafePerformIO $
@@ -254,7 +255,7 @@ bindImageTexture_set_size_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Resizes the [code]ImageTexture[/code] to the specified dimensions.
+-- | Resizes the [ImageTexture] to the specified dimensions.
 set_size_override ::
                     (ImageTexture :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_size_override cls arg1

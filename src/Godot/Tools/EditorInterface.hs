@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorInterface
        (Godot.Tools.EditorInterface.edit_resource,
         Godot.Tools.EditorInterface.get_base_control,
@@ -59,7 +60,7 @@ edit_resource cls arg1
 
 {-# NOINLINE bindEditorInterface_get_base_control #-}
 
--- | Returns the main container of Godot editor's window. You can use it, for example, to retrieve the size of the container and place your controls accordingly.
+-- | Returns the main container of Godot editor's window. For example, you can use it to retrieve the size of the container and place your controls accordingly.
 bindEditorInterface_get_base_control :: MethodBind
 bindEditorInterface_get_base_control
   = unsafePerformIO $
@@ -69,7 +70,7 @@ bindEditorInterface_get_base_control
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the main container of Godot editor's window. You can use it, for example, to retrieve the size of the container and place your controls accordingly.
+-- | Returns the main container of Godot editor's window. For example, you can use it to retrieve the size of the container and place your controls accordingly.
 get_base_control ::
                    (EditorInterface :< cls, Object :< cls) => cls -> IO Control
 get_base_control cls
@@ -83,6 +84,7 @@ get_base_control cls
 
 {-# NOINLINE bindEditorInterface_get_current_path #-}
 
+-- | Returns the current path being viewed in the [FileSystemDock].
 bindEditorInterface_get_current_path :: MethodBind
 bindEditorInterface_get_current_path
   = unsafePerformIO $
@@ -92,6 +94,7 @@ bindEditorInterface_get_current_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the current path being viewed in the [FileSystemDock].
 get_current_path ::
                    (EditorInterface :< cls, Object :< cls) => cls -> IO GodotString
 get_current_path cls
@@ -129,7 +132,7 @@ get_edited_scene_root cls
 
 {-# NOINLINE bindEditorInterface_get_editor_settings #-}
 
--- | Returns the [EditorSettings].
+-- | Returns the editor's [EditorSettings] instance.
 bindEditorInterface_get_editor_settings :: MethodBind
 bindEditorInterface_get_editor_settings
   = unsafePerformIO $
@@ -139,7 +142,7 @@ bindEditorInterface_get_editor_settings
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [EditorSettings].
+-- | Returns the editor's [EditorSettings] instance.
 get_editor_settings ::
                       (EditorInterface :< cls, Object :< cls) => cls -> IO EditorSettings
 get_editor_settings cls
@@ -153,7 +156,8 @@ get_editor_settings cls
 
 {-# NOINLINE bindEditorInterface_get_editor_viewport #-}
 
--- | Returns the editor [Viewport].
+-- | Returns the main editor control. Use this as a parent for main screens.
+--   				[b]Note:[/b] This returns the main editor control containing the whole editor, not the 2D or 3D viewports specifically.
 bindEditorInterface_get_editor_viewport :: MethodBind
 bindEditorInterface_get_editor_viewport
   = unsafePerformIO $
@@ -163,7 +167,8 @@ bindEditorInterface_get_editor_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the editor [Viewport].
+-- | Returns the main editor control. Use this as a parent for main screens.
+--   				[b]Note:[/b] This returns the main editor control containing the whole editor, not the 2D or 3D viewports specifically.
 get_editor_viewport ::
                       (EditorInterface :< cls, Object :< cls) => cls -> IO Control
 get_editor_viewport cls
@@ -177,6 +182,7 @@ get_editor_viewport cls
 
 {-# NOINLINE bindEditorInterface_get_inspector #-}
 
+-- | Returns the editor's [EditorInspector] instance.
 bindEditorInterface_get_inspector :: MethodBind
 bindEditorInterface_get_inspector
   = unsafePerformIO $
@@ -186,6 +192,7 @@ bindEditorInterface_get_inspector
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the editor's [EditorInspector] instance.
 get_inspector ::
                 (EditorInterface :< cls, Object :< cls) =>
                 cls -> IO EditorInspector
@@ -224,7 +231,7 @@ get_open_scenes cls
 
 {-# NOINLINE bindEditorInterface_get_resource_filesystem #-}
 
--- | Returns the [EditorFileSystem].
+-- | Returns the editor's [EditorFileSystem] instance.
 bindEditorInterface_get_resource_filesystem :: MethodBind
 bindEditorInterface_get_resource_filesystem
   = unsafePerformIO $
@@ -234,7 +241,7 @@ bindEditorInterface_get_resource_filesystem
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [EditorFileSystem].
+-- | Returns the editor's [EditorFileSystem] instance.
 get_resource_filesystem ::
                           (EditorInterface :< cls, Object :< cls) =>
                           cls -> IO EditorFileSystem
@@ -249,7 +256,7 @@ get_resource_filesystem cls
 
 {-# NOINLINE bindEditorInterface_get_resource_previewer #-}
 
--- | Returns the [EditorResourcePreview].
+-- | Returns the editor's [EditorResourcePreview] instance.
 bindEditorInterface_get_resource_previewer :: MethodBind
 bindEditorInterface_get_resource_previewer
   = unsafePerformIO $
@@ -259,7 +266,7 @@ bindEditorInterface_get_resource_previewer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [EditorResourcePreview].
+-- | Returns the editor's [EditorResourcePreview] instance.
 get_resource_previewer ::
                          (EditorInterface :< cls, Object :< cls) =>
                          cls -> IO EditorResourcePreview
@@ -274,7 +281,7 @@ get_resource_previewer cls
 
 {-# NOINLINE bindEditorInterface_get_script_editor #-}
 
--- | Returns the [ScriptEditor].
+-- | Returns the editor's [ScriptEditor] instance.
 bindEditorInterface_get_script_editor :: MethodBind
 bindEditorInterface_get_script_editor
   = unsafePerformIO $
@@ -284,7 +291,7 @@ bindEditorInterface_get_script_editor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [ScriptEditor].
+-- | Returns the editor's [ScriptEditor] instance.
 get_script_editor ::
                     (EditorInterface :< cls, Object :< cls) => cls -> IO ScriptEditor
 get_script_editor cls
@@ -298,6 +305,7 @@ get_script_editor cls
 
 {-# NOINLINE bindEditorInterface_get_selected_path #-}
 
+-- | Returns the path of the directory currently selected in the [FileSystemDock]. If a file is selected, its base directory will be returned using [method String.get_base_dir] instead.
 bindEditorInterface_get_selected_path :: MethodBind
 bindEditorInterface_get_selected_path
   = unsafePerformIO $
@@ -307,6 +315,7 @@ bindEditorInterface_get_selected_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the path of the directory currently selected in the [FileSystemDock]. If a file is selected, its base directory will be returned using [method String.get_base_dir] instead.
 get_selected_path ::
                     (EditorInterface :< cls, Object :< cls) => cls -> IO GodotString
 get_selected_path cls
@@ -320,7 +329,7 @@ get_selected_path cls
 
 {-# NOINLINE bindEditorInterface_get_selection #-}
 
--- | Returns the [EditorSelection].
+-- | Returns the editor's [EditorSelection] instance.
 bindEditorInterface_get_selection :: MethodBind
 bindEditorInterface_get_selection
   = unsafePerformIO $
@@ -330,7 +339,7 @@ bindEditorInterface_get_selection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [EditorSelection].
+-- | Returns the editor's [EditorSelection] instance.
 get_selection ::
                 (EditorInterface :< cls, Object :< cls) =>
                 cls -> IO EditorSelection
@@ -345,7 +354,7 @@ get_selection cls
 
 {-# NOINLINE bindEditorInterface_inspect_object #-}
 
--- | Shows the given property on the given [code]object[/code] in the Editor's Inspector dock.
+-- | Shows the given property on the given [code]object[/code] in the editor's Inspector dock.
 bindEditorInterface_inspect_object :: MethodBind
 bindEditorInterface_inspect_object
   = unsafePerformIO $
@@ -355,7 +364,7 @@ bindEditorInterface_inspect_object
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shows the given property on the given [code]object[/code] in the Editor's Inspector dock.
+-- | Shows the given property on the given [code]object[/code] in the editor's Inspector dock.
 inspect_object ::
                  (EditorInterface :< cls, Object :< cls) =>
                  cls -> Object -> GodotString -> IO ()
@@ -370,7 +379,7 @@ inspect_object cls arg1 arg2
 
 {-# NOINLINE bindEditorInterface_is_plugin_enabled #-}
 
--- | Returns the enabled status of a plugin. The plugin name is the same as its directory name.
+-- | Returns [code]true[/code] if the specified [code]plugin[/code] is enabled. The plugin name is the same as its directory name.
 bindEditorInterface_is_plugin_enabled :: MethodBind
 bindEditorInterface_is_plugin_enabled
   = unsafePerformIO $
@@ -380,7 +389,7 @@ bindEditorInterface_is_plugin_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the enabled status of a plugin. The plugin name is the same as its directory name.
+-- | Returns [code]true[/code] if the specified [code]plugin[/code] is enabled. The plugin name is the same as its directory name.
 is_plugin_enabled ::
                     (EditorInterface :< cls, Object :< cls) =>
                     cls -> GodotString -> IO Bool
@@ -470,7 +479,7 @@ reload_scene_from_path cls arg1
 
 {-# NOINLINE bindEditorInterface_save_scene #-}
 
--- | Saves the scene. Returns either OK or ERR_CANT_CREATE. See [@GlobalScope] constants.
+-- | Saves the scene. Returns either [code]OK[/code] or [code]ERR_CANT_CREATE[/code] (see [@GlobalScope] constants).
 bindEditorInterface_save_scene :: MethodBind
 bindEditorInterface_save_scene
   = unsafePerformIO $
@@ -480,7 +489,7 @@ bindEditorInterface_save_scene
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the scene. Returns either OK or ERR_CANT_CREATE. See [@GlobalScope] constants.
+-- | Saves the scene. Returns either [code]OK[/code] or [code]ERR_CANT_CREATE[/code] (see [@GlobalScope] constants).
 save_scene ::
              (EditorInterface :< cls, Object :< cls) => cls -> IO Int
 save_scene cls
@@ -518,6 +527,7 @@ save_scene_as cls arg1 arg2
 
 {-# NOINLINE bindEditorInterface_select_file #-}
 
+-- | Selects the file, with the path provided by [code]file[/code], in the FileSystem dock.
 bindEditorInterface_select_file :: MethodBind
 bindEditorInterface_select_file
   = unsafePerformIO $
@@ -527,6 +537,7 @@ bindEditorInterface_select_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Selects the file, with the path provided by [code]file[/code], in the FileSystem dock.
 select_file ::
               (EditorInterface :< cls, Object :< cls) =>
               cls -> GodotString -> IO ()
@@ -540,6 +551,7 @@ select_file cls arg1
 
 {-# NOINLINE bindEditorInterface_set_distraction_free_mode #-}
 
+-- | If [code]true[/code], enables distraction-free mode which hides side docks to increase the space available for the main view.
 bindEditorInterface_set_distraction_free_mode :: MethodBind
 bindEditorInterface_set_distraction_free_mode
   = unsafePerformIO $
@@ -549,6 +561,7 @@ bindEditorInterface_set_distraction_free_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], enables distraction-free mode which hides side docks to increase the space available for the main view.
 set_distraction_free_mode ::
                             (EditorInterface :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_distraction_free_mode cls arg1
@@ -563,6 +576,7 @@ set_distraction_free_mode cls arg1
 
 {-# NOINLINE bindEditorInterface_set_main_screen_editor #-}
 
+-- | Sets the editor's current main screen to the one specified in [code]name[/code]. [code]name[/code] must match the text of the tab in question exactly ([code]2D[/code], [code]3D[/code], [code]Script[/code], [code]AssetLib[/code]).
 bindEditorInterface_set_main_screen_editor :: MethodBind
 bindEditorInterface_set_main_screen_editor
   = unsafePerformIO $
@@ -572,6 +586,7 @@ bindEditorInterface_set_main_screen_editor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the editor's current main screen to the one specified in [code]name[/code]. [code]name[/code] must match the text of the tab in question exactly ([code]2D[/code], [code]3D[/code], [code]Script[/code], [code]AssetLib[/code]).
 set_main_screen_editor ::
                          (EditorInterface :< cls, Object :< cls) =>
                          cls -> GodotString -> IO ()

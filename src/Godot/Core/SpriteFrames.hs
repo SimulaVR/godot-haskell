@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SpriteFrames
        (Godot.Core.SpriteFrames._get_animations,
         Godot.Core.SpriteFrames._get_frames,
@@ -52,6 +53,7 @@ _get_animations cls
 
 {-# NOINLINE bindSpriteFrames__get_frames #-}
 
+-- | Compatibility property, always equals to an empty array.
 bindSpriteFrames__get_frames :: MethodBind
 bindSpriteFrames__get_frames
   = unsafePerformIO $
@@ -61,6 +63,7 @@ bindSpriteFrames__get_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Compatibility property, always equals to an empty array.
 _get_frames ::
               (SpriteFrames :< cls, Object :< cls) => cls -> IO Array
 _get_frames cls
@@ -95,6 +98,7 @@ _set_animations cls arg1
 
 {-# NOINLINE bindSpriteFrames__set_frames #-}
 
+-- | Compatibility property, always equals to an empty array.
 bindSpriteFrames__set_frames :: MethodBind
 bindSpriteFrames__set_frames
   = unsafePerformIO $
@@ -104,6 +108,7 @@ bindSpriteFrames__set_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Compatibility property, always equals to an empty array.
 _set_frames ::
               (SpriteFrames :< cls, Object :< cls) => cls -> Array -> IO ()
 _set_frames cls arg1

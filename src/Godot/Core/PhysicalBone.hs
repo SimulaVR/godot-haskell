@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PhysicalBone
        (Godot.Core.PhysicalBone._JOINT_TYPE_6DOF,
         Godot.Core.PhysicalBone._JOINT_TYPE_PIN,

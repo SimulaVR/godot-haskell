@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorSpatialGizmoPlugin
        (Godot.Tools.EditorSpatialGizmoPlugin.add_material,
         Godot.Tools.EditorSpatialGizmoPlugin.can_be_hidden,
@@ -53,7 +54,7 @@ add_material cls arg1 arg2
 
 {-# NOINLINE bindEditorSpatialGizmoPlugin_can_be_hidden #-}
 
--- | Override this method to define whether the gizmo can be hidden or not. Defaults to [code]true[/code].
+-- | Override this method to define whether the gizmo can be hidden or not. Returns [code]true[/code] if not overridden.
 bindEditorSpatialGizmoPlugin_can_be_hidden :: MethodBind
 bindEditorSpatialGizmoPlugin_can_be_hidden
   = unsafePerformIO $
@@ -63,7 +64,7 @@ bindEditorSpatialGizmoPlugin_can_be_hidden
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override this method to define whether the gizmo can be hidden or not. Defaults to [code]true[/code].
+-- | Override this method to define whether the gizmo can be hidden or not. Returns [code]true[/code] if not overridden.
 can_be_hidden ::
                 (EditorSpatialGizmoPlugin :< cls, Object :< cls) => cls -> IO Bool
 can_be_hidden cls
@@ -103,7 +104,7 @@ commit_handle cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindEditorSpatialGizmoPlugin_create_gizmo #-}
 
--- | Override this method to return a custom [EditorSpatialGizmo] for the spatial nodes of your choice, return [code]null[/code] for the rest of nodes. (See also [method has_gizmo])
+-- | Override this method to return a custom [EditorSpatialGizmo] for the spatial nodes of your choice, return [code]null[/code] for the rest of nodes. See also [method has_gizmo].
 bindEditorSpatialGizmoPlugin_create_gizmo :: MethodBind
 bindEditorSpatialGizmoPlugin_create_gizmo
   = unsafePerformIO $
@@ -113,7 +114,7 @@ bindEditorSpatialGizmoPlugin_create_gizmo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override this method to return a custom [EditorSpatialGizmo] for the spatial nodes of your choice, return [code]null[/code] for the rest of nodes. (See also [method has_gizmo])
+-- | Override this method to return a custom [EditorSpatialGizmo] for the spatial nodes of your choice, return [code]null[/code] for the rest of nodes. See also [method has_gizmo].
 create_gizmo ::
                (EditorSpatialGizmoPlugin :< cls, Object :< cls) =>
                cls -> Spatial -> IO EditorSpatialGizmo
@@ -234,7 +235,7 @@ get_handle_name cls arg1 arg2
 
 {-# NOINLINE bindEditorSpatialGizmoPlugin_get_handle_value #-}
 
--- | Get actual value of a handle from gizmo. Called for this plugin's active gizmos.
+-- | Gets actual value of a handle from gizmo. Called for this plugin's active gizmos.
 bindEditorSpatialGizmoPlugin_get_handle_value :: MethodBind
 bindEditorSpatialGizmoPlugin_get_handle_value
   = unsafePerformIO $
@@ -244,7 +245,7 @@ bindEditorSpatialGizmoPlugin_get_handle_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get actual value of a handle from gizmo. Called for this plugin's active gizmos.
+-- | Gets actual value of a handle from gizmo. Called for this plugin's active gizmos.
 get_handle_value ::
                    (EditorSpatialGizmoPlugin :< cls, Object :< cls) =>
                    cls -> EditorSpatialGizmo -> Int -> IO GodotVariant
@@ -260,7 +261,7 @@ get_handle_value cls arg1 arg2
 
 {-# NOINLINE bindEditorSpatialGizmoPlugin_get_material #-}
 
--- | Get material from the internal list of materials. If an [EditorSpatialGizmo] is provided it will try to get the corresponding variant (selected and/or editable).
+-- | Gets material from the internal list of materials. If an [EditorSpatialGizmo] is provided, it will try to get the corresponding variant (selected and/or editable).
 bindEditorSpatialGizmoPlugin_get_material :: MethodBind
 bindEditorSpatialGizmoPlugin_get_material
   = unsafePerformIO $
@@ -270,7 +271,7 @@ bindEditorSpatialGizmoPlugin_get_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get material from the internal list of materials. If an [EditorSpatialGizmo] is provided it will try to get the corresponding variant (selected and/or editable).
+-- | Gets material from the internal list of materials. If an [EditorSpatialGizmo] is provided, it will try to get the corresponding variant (selected and/or editable).
 get_material ::
                (EditorSpatialGizmoPlugin :< cls, Object :< cls) =>
                cls -> GodotString -> EditorSpatialGizmo -> IO SpatialMaterial
@@ -310,6 +311,8 @@ get_name cls
 
 {-# NOINLINE bindEditorSpatialGizmoPlugin_get_priority #-}
 
+-- | Override this method to set the gizmo's priority. Higher values correspond to higher priority. If a gizmo with higher priority conflicts with another gizmo, only the gizmo with higher priority will be used.
+--   				All built-in editor gizmos return a priority of [code]-1[/code]. If not overridden, this method will return [code]0[/code], which means custom gizmos will automatically override built-in gizmos.
 bindEditorSpatialGizmoPlugin_get_priority :: MethodBind
 bindEditorSpatialGizmoPlugin_get_priority
   = unsafePerformIO $
@@ -319,6 +322,8 @@ bindEditorSpatialGizmoPlugin_get_priority
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Override this method to set the gizmo's priority. Higher values correspond to higher priority. If a gizmo with higher priority conflicts with another gizmo, only the gizmo with higher priority will be used.
+--   				All built-in editor gizmos return a priority of [code]-1[/code]. If not overridden, this method will return [code]0[/code], which means custom gizmos will automatically override built-in gizmos.
 get_priority ::
                (EditorSpatialGizmoPlugin :< cls, Object :< cls) =>
                cls -> IO GodotString
@@ -358,7 +363,7 @@ has_gizmo cls arg1
 
 {-# NOINLINE bindEditorSpatialGizmoPlugin_is_handle_highlighted #-}
 
--- | Get whether a handle is highlighted or not. Called for this plugin's active gizmos.
+-- | Gets whether a handle is highlighted or not. Called for this plugin's active gizmos.
 bindEditorSpatialGizmoPlugin_is_handle_highlighted :: MethodBind
 bindEditorSpatialGizmoPlugin_is_handle_highlighted
   = unsafePerformIO $
@@ -368,7 +373,7 @@ bindEditorSpatialGizmoPlugin_is_handle_highlighted
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get whether a handle is highlighted or not. Called for this plugin's active gizmos.
+-- | Gets whether a handle is highlighted or not. Called for this plugin's active gizmos.
 is_handle_highlighted ::
                         (EditorSpatialGizmoPlugin :< cls, Object :< cls) =>
                         cls -> EditorSpatialGizmo -> Int -> IO Bool

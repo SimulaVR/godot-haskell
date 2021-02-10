@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Object
        (Godot.Core.Object._CONNECT_REFERENCE_COUNTED,
         Godot.Core.Object._CONNECT_DEFERRED,
@@ -66,6 +67,8 @@ sig_script_changed :: Godot.Internal.Dispatch.Signal Object
 sig_script_changed
   = Godot.Internal.Dispatch.Signal "script_changed"
 
+instance NodeSignal Object "script_changed" '[]
+
 {-# NOINLINE bindObject__get #-}
 
 -- | Virtual method which can be overridden to customize the return value of [method get].
@@ -94,7 +97,7 @@ _get cls arg1
 
 -- | Virtual method which can be overridden to customize the return value of [method get_property_list].
 --   				Returns the object's property list as an [Array] of dictionaries.
---   				Each property's [Dictionary] must contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum @GlobalScope.Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum @GlobalScope.PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum @GlobalScope.PropertyUsageFlags]).
+--   				Each property's [Dictionary] must contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum PropertyUsageFlags]).
 bindObject__get_property_list :: MethodBind
 bindObject__get_property_list
   = unsafePerformIO $
@@ -106,7 +109,7 @@ bindObject__get_property_list
 
 -- | Virtual method which can be overridden to customize the return value of [method get_property_list].
 --   				Returns the object's property list as an [Array] of dictionaries.
---   				Each property's [Dictionary] must contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum @GlobalScope.Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum @GlobalScope.PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum @GlobalScope.PropertyUsageFlags]).
+--   				Each property's [Dictionary] must contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum PropertyUsageFlags]).
 _get_property_list ::
                      (Object :< cls, Object :< cls) => cls -> IO Array
 _get_property_list cls
@@ -185,6 +188,8 @@ _set cls arg1 arg2
 
 {-# NOINLINE bindObject__to_string #-}
 
+-- | Virtual method which can be overridden to customize the return value of [method to_string], and thus the object's representation where it is converted to a string, e.g. with [code]print(obj)[/code].
+--   				Returns a [String] representing the object. If not overridden, defaults to [code]"[ClassName:RID]"[/code].
 bindObject__to_string :: MethodBind
 bindObject__to_string
   = unsafePerformIO $
@@ -194,6 +199,8 @@ bindObject__to_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Virtual method which can be overridden to customize the return value of [method to_string], and thus the object's representation where it is converted to a string, e.g. with [code]print(obj)[/code].
+--   				Returns a [String] representing the object. If not overridden, defaults to [code]"[ClassName:RID]"[/code].
 _to_string ::
              (Object :< cls, Object :< cls) => cls -> IO GodotString
 _to_string cls
@@ -205,7 +212,7 @@ _to_string cls
 
 {-# NOINLINE bindObject_add_user_signal #-}
 
--- | Adds a user-defined [code]signal[/code]. Arguments are optional, but can be added as an [Array] of dictionaries, each containing [code]name: String[/code] and [code]type: int[/code] (see [enum @GlobalScope.Variant.Type]) entries.
+-- | Adds a user-defined [code]signal[/code]. Arguments are optional, but can be added as an [Array] of dictionaries, each containing [code]name: String[/code] and [code]type: int[/code] (see [enum Variant.Type]) entries.
 bindObject_add_user_signal :: MethodBind
 bindObject_add_user_signal
   = unsafePerformIO $
@@ -215,7 +222,7 @@ bindObject_add_user_signal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a user-defined [code]signal[/code]. Arguments are optional, but can be added as an [Array] of dictionaries, each containing [code]name: String[/code] and [code]type: int[/code] (see [enum @GlobalScope.Variant.Type]) entries.
+-- | Adds a user-defined [code]signal[/code]. Arguments are optional, but can be added as an [Array] of dictionaries, each containing [code]name: String[/code] and [code]type: int[/code] (see [enum Variant.Type]) entries.
 add_user_signal ::
                   (Object :< cls, Object :< cls) =>
                   cls -> GodotString -> Array -> IO ()
@@ -233,6 +240,7 @@ add_user_signal cls arg1 arg2
 --   				[codeblock]
 --   				call("set", "position", Vector2(42.0, 0.0))
 --   				[/codeblock]
+--   				[b]Note:[/b] In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_call :: MethodBind
 bindObject_call
   = unsafePerformIO $
@@ -246,6 +254,7 @@ bindObject_call
 --   				[codeblock]
 --   				call("set", "position", Vector2(42.0, 0.0))
 --   				[/codeblock]
+--   				[b]Note:[/b] In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 call ::
        (Object :< cls, Object :< cls) =>
        cls -> GodotString -> [Variant 'GodotTy] -> IO GodotVariant
@@ -257,10 +266,11 @@ call cls arg1 varargs
 
 {-# NOINLINE bindObject_call_deferred #-}
 
--- | Calls the [code]method[/code] on the object during idle time and returns the result. This method supports a variable number of arguments, so parameters are passed as a comma separated list. Example:
+-- | Calls the [code]method[/code] on the object during idle time. This method supports a variable number of arguments, so parameters are passed as a comma separated list. Example:
 --   				[codeblock]
 --   				call_deferred("set", "position", Vector2(42.0, 0.0))
 --   				[/codeblock]
+--   				[b]Note:[/b] In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_call_deferred :: MethodBind
 bindObject_call_deferred
   = unsafePerformIO $
@@ -270,10 +280,11 @@ bindObject_call_deferred
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls the [code]method[/code] on the object during idle time and returns the result. This method supports a variable number of arguments, so parameters are passed as a comma separated list. Example:
+-- | Calls the [code]method[/code] on the object during idle time. This method supports a variable number of arguments, so parameters are passed as a comma separated list. Example:
 --   				[codeblock]
 --   				call_deferred("set", "position", Vector2(42.0, 0.0))
 --   				[/codeblock]
+--   				[b]Note:[/b] In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 call_deferred ::
                 (Object :< cls, Object :< cls) =>
                 cls -> GodotString -> [Variant 'GodotTy] -> IO ()
@@ -286,7 +297,7 @@ call_deferred cls arg1 varargs
 
 {-# NOINLINE bindObject_callv #-}
 
--- | Calls the [code]method[/code] on the object and returns the result. Contrarily to [method call], this method does not support a variable number of arguments but expected all parameters passed via a single [Array].
+-- | Calls the [code]method[/code] on the object and returns the result. Contrarily to [method call], this method does not support a variable number of arguments but expects all parameters to be via a single [Array].
 --   				[codeblock]
 --   				callv("set", [ "position", Vector2(42.0, 0.0) ])
 --   				[/codeblock]
@@ -299,7 +310,7 @@ bindObject_callv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls the [code]method[/code] on the object and returns the result. Contrarily to [method call], this method does not support a variable number of arguments but expected all parameters passed via a single [Array].
+-- | Calls the [code]method[/code] on the object and returns the result. Contrarily to [method call], this method does not support a variable number of arguments but expects all parameters to be via a single [Array].
 --   				[codeblock]
 --   				callv("set", [ "position", Vector2(42.0, 0.0) ])
 --   				[/codeblock]
@@ -338,7 +349,7 @@ can_translate_messages cls
 
 {-# NOINLINE bindObject_connect #-}
 
--- | Connects a [code]signal[/code] to a [code]method[/code] on a [code]target[/code] object. Pass optional [code]binds[/code] to the call as an [Array] of parameters. Use [code]flags[/code] to set deferred or one shot connections. See [enum ConnectFlags] constants.
+-- | Connects a [code]signal[/code] to a [code]method[/code] on a [code]target[/code] object. Pass optional [code]binds[/code] to the call as an [Array] of parameters. These parameters will be passed to the method after any parameter used in the call to [method emit_signal]. Use [code]flags[/code] to set deferred or one-shot connections. See [enum ConnectFlags] constants.
 --   				A [code]signal[/code] can only be connected once to a [code]method[/code]. It will throw an error if already connected, unless the signal was connected with [constant CONNECT_REFERENCE_COUNTED]. To avoid this, first, use [method is_connected] to check for existing connections.
 --   				If the [code]target[/code] is destroyed in the game's lifecycle, the connection will be lost.
 --   				Examples:
@@ -346,6 +357,13 @@ can_translate_messages cls
 --   				connect("pressed", self, "_on_Button_pressed") # BaseButton signal
 --   				connect("text_entered", self, "_on_LineEdit_text_entered") # LineEdit signal
 --   				connect("hit", self, "_on_Player_hit", [ weapon_type, damage ]) # User-defined signal
+--   				[/codeblock]
+--   				An example of the relationship between [code]binds[/code] passed to [method connect] and parameters used when calling [method emit_signal]:
+--   				[codeblock]
+--   				connect("hit", self, "_on_Player_hit", [ weapon_type, damage ]) # weapon_type and damage are passed last
+--   				emit_signal("hit", "Dark lord", 5) # "Dark lord" and 5 are passed first
+--   				func _on_Player_hit(hit_by, level, weapon_type, damage):
+--   				    print("Hit by %s (lvl %d) with weapon %s for %d damage" % [hit_by, level, weapon_type, damage])
 --   				[/codeblock]
 bindObject_connect :: MethodBind
 bindObject_connect
@@ -356,7 +374,7 @@ bindObject_connect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connects a [code]signal[/code] to a [code]method[/code] on a [code]target[/code] object. Pass optional [code]binds[/code] to the call as an [Array] of parameters. Use [code]flags[/code] to set deferred or one shot connections. See [enum ConnectFlags] constants.
+-- | Connects a [code]signal[/code] to a [code]method[/code] on a [code]target[/code] object. Pass optional [code]binds[/code] to the call as an [Array] of parameters. These parameters will be passed to the method after any parameter used in the call to [method emit_signal]. Use [code]flags[/code] to set deferred or one-shot connections. See [enum ConnectFlags] constants.
 --   				A [code]signal[/code] can only be connected once to a [code]method[/code]. It will throw an error if already connected, unless the signal was connected with [constant CONNECT_REFERENCE_COUNTED]. To avoid this, first, use [method is_connected] to check for existing connections.
 --   				If the [code]target[/code] is destroyed in the game's lifecycle, the connection will be lost.
 --   				Examples:
@@ -364,6 +382,13 @@ bindObject_connect
 --   				connect("pressed", self, "_on_Button_pressed") # BaseButton signal
 --   				connect("text_entered", self, "_on_LineEdit_text_entered") # LineEdit signal
 --   				connect("hit", self, "_on_Player_hit", [ weapon_type, damage ]) # User-defined signal
+--   				[/codeblock]
+--   				An example of the relationship between [code]binds[/code] passed to [method connect] and parameters used when calling [method emit_signal]:
+--   				[codeblock]
+--   				connect("hit", self, "_on_Player_hit", [ weapon_type, damage ]) # weapon_type and damage are passed last
+--   				emit_signal("hit", "Dark lord", 5) # "Dark lord" and 5 are passed first
+--   				func _on_Player_hit(hit_by, level, weapon_type, damage):
+--   				    print("Hit by %s (lvl %d) with weapon %s for %d damage" % [hit_by, level, weapon_type, damage])
 --   				[/codeblock]
 connect ::
           (Object :< cls, Object :< cls) =>
@@ -435,7 +460,7 @@ emit_signal cls arg1 varargs
 
 {-# NOINLINE bindObject_free #-}
 
--- | Deletes the object from memory. Any pre-existing reference to the freed object will now return [code]null[/code].
+-- | Deletes the object from memory. Any pre-existing reference to the freed object will become invalid, e.g. [code]is_instance_valid(object)[/code] will return [code]false[/code].
 bindObject_free :: MethodBind
 bindObject_free
   = unsafePerformIO $
@@ -445,7 +470,7 @@ bindObject_free
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deletes the object from memory. Any pre-existing reference to the freed object will now return [code]null[/code].
+-- | Deletes the object from memory. Any pre-existing reference to the freed object will become invalid, e.g. [code]is_instance_valid(object)[/code] will return [code]false[/code].
 free :: (Object :< cls, Object :< cls) => cls -> IO ()
 free cls
   = withVariantArray []
@@ -455,7 +480,8 @@ free cls
 
 {-# NOINLINE bindObject_get #-}
 
--- | Returns the [Variant] value of the given [code]property[/code].
+-- | Returns the [Variant] value of the given [code]property[/code]. If the [code]property[/code] doesn't exist, this will return [code]null[/code].
+--   				[b]Note:[/b] In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_get :: MethodBind
 bindObject_get
   = unsafePerformIO $
@@ -465,7 +491,8 @@ bindObject_get
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Variant] value of the given [code]property[/code].
+-- | Returns the [Variant] value of the given [code]property[/code]. If the [code]property[/code] doesn't exist, this will return [code]null[/code].
+--   				[b]Note:[/b] In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 get ::
       (Object :< cls, Object :< cls) =>
       cls -> GodotString -> IO GodotVariant
@@ -530,7 +557,7 @@ get_incoming_connections cls
 
 {-# NOINLINE bindObject_get_indexed #-}
 
--- | Get the object's property indexed by the given [NodePath]. The node path should be relative to the current object and can use the colon character ([code]:[/code]) to access nested properties. Examples: [code]"position:x"[/code] or [code]"material:next_pass:blend_mode"[/code].
+-- | Gets the object's property indexed by the given [NodePath]. The node path should be relative to the current object and can use the colon character ([code]:[/code]) to access nested properties. Examples: [code]"position:x"[/code] or [code]"material:next_pass:blend_mode"[/code].
 bindObject_get_indexed :: MethodBind
 bindObject_get_indexed
   = unsafePerformIO $
@@ -540,7 +567,7 @@ bindObject_get_indexed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the object's property indexed by the given [NodePath]. The node path should be relative to the current object and can use the colon character ([code]:[/code]) to access nested properties. Examples: [code]"position:x"[/code] or [code]"material:next_pass:blend_mode"[/code].
+-- | Gets the object's property indexed by the given [NodePath]. The node path should be relative to the current object and can use the colon character ([code]:[/code]) to access nested properties. Examples: [code]"position:x"[/code] or [code]"material:next_pass:blend_mode"[/code].
 get_indexed ::
               (Object :< cls, Object :< cls) =>
               cls -> NodePath -> IO GodotVariant
@@ -645,7 +672,7 @@ get_method_list cls
 {-# NOINLINE bindObject_get_property_list #-}
 
 -- | Returns the object's property list as an [Array] of dictionaries.
---   				Each property's [Dictionary] contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum @GlobalScope.Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum @GlobalScope.PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum @GlobalScope.PropertyUsageFlags]).
+--   				Each property's [Dictionary] contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum PropertyUsageFlags]).
 bindObject_get_property_list :: MethodBind
 bindObject_get_property_list
   = unsafePerformIO $
@@ -656,7 +683,7 @@ bindObject_get_property_list
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the object's property list as an [Array] of dictionaries.
---   				Each property's [Dictionary] contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum @GlobalScope.Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum @GlobalScope.PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum @GlobalScope.PropertyUsageFlags]).
+--   				Each property's [Dictionary] contain at least [code]name: String[/code] and [code]type: int[/code] (see [enum Variant.Type]) entries. Optionally, it can also include [code]hint: int[/code] (see [enum PropertyHint]), [code]hint_string: String[/code], and [code]usage: int[/code] (see [enum PropertyUsageFlags]).
 get_property_list ::
                     (Object :< cls, Object :< cls) => cls -> IO Array
 get_property_list cls
@@ -780,7 +807,7 @@ has_method cls arg1
 
 {-# NOINLINE bindObject_has_user_signal #-}
 
--- | Returns [code]true[/code] if the given user-defined [code]signal[/code] exists.
+-- | Returns [code]true[/code] if the given user-defined [code]signal[/code] exists. Only signals added using [method add_user_signal] are taken into account.
 bindObject_has_user_signal :: MethodBind
 bindObject_has_user_signal
   = unsafePerformIO $
@@ -790,7 +817,7 @@ bindObject_has_user_signal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given user-defined [code]signal[/code] exists.
+-- | Returns [code]true[/code] if the given user-defined [code]signal[/code] exists. Only signals added using [method add_user_signal] are taken into account.
 has_user_signal ::
                   (Object :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_user_signal cls arg1
@@ -942,6 +969,7 @@ property_list_changed_notify cls
 
 {-# NOINLINE bindObject_remove_meta #-}
 
+-- | Removes a given entry from the object's metadata. See also [method set_meta].
 bindObject_remove_meta :: MethodBind
 bindObject_remove_meta
   = unsafePerformIO $
@@ -951,6 +979,7 @@ bindObject_remove_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes a given entry from the object's metadata. See also [method set_meta].
 remove_meta ::
               (Object :< cls, Object :< cls) => cls -> GodotString -> IO ()
 remove_meta cls arg1
@@ -963,6 +992,7 @@ remove_meta cls arg1
 {-# NOINLINE bindObject_set #-}
 
 -- | Assigns a new value to the given property. If the [code]property[/code] does not exist, nothing will happen.
+--   				[b]Note:[/b] In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_set :: MethodBind
 bindObject_set
   = unsafePerformIO $
@@ -973,6 +1003,7 @@ bindObject_set
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Assigns a new value to the given property. If the [code]property[/code] does not exist, nothing will happen.
+--   				[b]Note:[/b] In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 set ::
       (Object :< cls, Object :< cls) =>
       cls -> GodotString -> GodotVariant -> IO ()
@@ -1008,6 +1039,7 @@ set_block_signals cls arg1
 {-# NOINLINE bindObject_set_deferred #-}
 
 -- | Assigns a new value to the given property, after the current frame's physics step. This is equivalent to calling [method set] via [method call_deferred], i.e. [code]call_deferred("set", property, value)[/code].
+--   				[b]Note:[/b] In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_set_deferred :: MethodBind
 bindObject_set_deferred
   = unsafePerformIO $
@@ -1018,6 +1050,7 @@ bindObject_set_deferred
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Assigns a new value to the given property, after the current frame's physics step. This is equivalent to calling [method set] via [method call_deferred], i.e. [code]call_deferred("set", property, value)[/code].
+--   				[b]Note:[/b] In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 set_deferred ::
                (Object :< cls, Object :< cls) =>
                cls -> GodotString -> GodotVariant -> IO ()
@@ -1063,7 +1096,7 @@ set_indexed cls arg1 arg2
 
 {-# NOINLINE bindObject_set_message_translation #-}
 
--- | Defines whether the object can translate strings (with calls to [method tr]). Default is [code]true[/code].
+-- | Defines whether the object can translate strings (with calls to [method tr]). Enabled by default.
 bindObject_set_message_translation :: MethodBind
 bindObject_set_message_translation
   = unsafePerformIO $
@@ -1073,7 +1106,7 @@ bindObject_set_message_translation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines whether the object can translate strings (with calls to [method tr]). Default is [code]true[/code].
+-- | Defines whether the object can translate strings (with calls to [method tr]). Enabled by default.
 set_message_translation ::
                           (Object :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_message_translation cls arg1
@@ -1087,7 +1120,8 @@ set_message_translation cls arg1
 
 {-# NOINLINE bindObject_set_meta #-}
 
--- | Adds or changes a given entry in the object's metadata. Metadata are serialized, and can take any [Variant] value.
+-- | Adds, changes or removes a given entry in the object's metadata. Metadata are serialized and can take any [Variant] value.
+--   				To remove a given entry from the object's metadata, use [method remove_meta]. Metadata is also removed if its value is set to [code]null[/code]. This means you can also use [code]set_meta("name", null)[/code] to remove metadata for [code]"name"[/code].
 bindObject_set_meta :: MethodBind
 bindObject_set_meta
   = unsafePerformIO $
@@ -1097,7 +1131,8 @@ bindObject_set_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds or changes a given entry in the object's metadata. Metadata are serialized, and can take any [Variant] value.
+-- | Adds, changes or removes a given entry in the object's metadata. Metadata are serialized and can take any [Variant] value.
+--   				To remove a given entry from the object's metadata, use [method remove_meta]. Metadata is also removed if its value is set to [code]null[/code]. This means you can also use [code]set_meta("name", null)[/code] to remove metadata for [code]"name"[/code].
 set_meta ::
            (Object :< cls, Object :< cls) =>
            cls -> GodotString -> GodotVariant -> IO ()
@@ -1110,6 +1145,7 @@ set_meta cls arg1 arg2
 {-# NOINLINE bindObject_set_script #-}
 
 -- | Assigns a script to the object. Each object can have a single script assigned to it, which are used to extend its functionality.
+--   				If the object already had a script, the previous script instance will be freed and its variables and state will be lost. The new script's [method _init] method will be called.
 bindObject_set_script :: MethodBind
 bindObject_set_script
   = unsafePerformIO $
@@ -1120,6 +1156,7 @@ bindObject_set_script
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Assigns a script to the object. Each object can have a single script assigned to it, which are used to extend its functionality.
+--   				If the object already had a script, the previous script instance will be freed and its variables and state will be lost. The new script's [method _init] method will be called.
 set_script ::
              (Object :< cls, Object :< cls) => cls -> Reference -> IO ()
 set_script cls arg1
@@ -1131,6 +1168,8 @@ set_script cls arg1
 
 {-# NOINLINE bindObject_to_string #-}
 
+-- | Returns a [String] representing the object. If not overridden, defaults to [code]"[ClassName:RID]"[/code].
+--   				Override the method [method _to_string] to customize the [String] representation.
 bindObject_to_string :: MethodBind
 bindObject_to_string
   = unsafePerformIO $
@@ -1140,6 +1179,8 @@ bindObject_to_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a [String] representing the object. If not overridden, defaults to [code]"[ClassName:RID]"[/code].
+--   				Override the method [method _to_string] to customize the [String] representation.
 to_string ::
             (Object :< cls, Object :< cls) => cls -> IO GodotString
 to_string cls

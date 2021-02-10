@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SpriteBase3D
        (Godot.Core.SpriteBase3D._FLAG_SHADED,
         Godot.Core.SpriteBase3D._ALPHA_CUT_OPAQUE_PREPASS,
@@ -194,7 +195,7 @@ get_billboard_mode cls
 
 {-# NOINLINE bindSpriteBase3D_get_draw_flag #-}
 
--- | If [code]true[/code], texture can be seen from the back as well, if [code]false[/code], it is invisible when looking at it from behind. Default value: [code]true[/code].
+-- | Returns the value of the specified flag.
 bindSpriteBase3D_get_draw_flag :: MethodBind
 bindSpriteBase3D_get_draw_flag
   = unsafePerformIO $
@@ -204,7 +205,7 @@ bindSpriteBase3D_get_draw_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture can be seen from the back as well, if [code]false[/code], it is invisible when looking at it from behind. Default value: [code]true[/code].
+-- | Returns the value of the specified flag.
 get_draw_flag ::
                 (SpriteBase3D :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_draw_flag cls arg1
@@ -217,6 +218,7 @@ get_draw_flag cls arg1
 
 {-# NOINLINE bindSpriteBase3D_get_item_rect #-}
 
+-- | Returns the rectangle representing this sprite.
 bindSpriteBase3D_get_item_rect :: MethodBind
 bindSpriteBase3D_get_item_rect
   = unsafePerformIO $
@@ -226,6 +228,7 @@ bindSpriteBase3D_get_item_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the rectangle representing this sprite.
 get_item_rect ::
                 (SpriteBase3D :< cls, Object :< cls) => cls -> IO Rect2
 get_item_rect cls
@@ -307,7 +310,7 @@ get_opacity cls
 
 {-# NOINLINE bindSpriteBase3D_get_pixel_size #-}
 
--- | The size of one pixel's width on the Sprite to scale it in 3D.
+-- | The size of one pixel's width on the sprite to scale it in 3D.
 bindSpriteBase3D_get_pixel_size :: MethodBind
 bindSpriteBase3D_get_pixel_size
   = unsafePerformIO $
@@ -317,7 +320,7 @@ bindSpriteBase3D_get_pixel_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The size of one pixel's width on the Sprite to scale it in 3D.
+-- | The size of one pixel's width on the sprite to scale it in 3D.
 get_pixel_size ::
                  (SpriteBase3D :< cls, Object :< cls) => cls -> IO Float
 get_pixel_size cls
@@ -330,7 +333,7 @@ get_pixel_size cls
 
 {-# NOINLINE bindSpriteBase3D_is_centered #-}
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 bindSpriteBase3D_is_centered :: MethodBind
 bindSpriteBase3D_is_centered
   = unsafePerformIO $
@@ -340,7 +343,7 @@ bindSpriteBase3D_is_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 is_centered ::
               (SpriteBase3D :< cls, Object :< cls) => cls -> IO Bool
 is_centered cls
@@ -353,7 +356,7 @@ is_centered cls
 
 {-# NOINLINE bindSpriteBase3D_is_flipped_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 bindSpriteBase3D_is_flipped_h :: MethodBind
 bindSpriteBase3D_is_flipped_h
   = unsafePerformIO $
@@ -363,7 +366,7 @@ bindSpriteBase3D_is_flipped_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 is_flipped_h ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_h cls
@@ -376,7 +379,7 @@ is_flipped_h cls
 
 {-# NOINLINE bindSpriteBase3D_is_flipped_v #-}
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 bindSpriteBase3D_is_flipped_v :: MethodBind
 bindSpriteBase3D_is_flipped_v
   = unsafePerformIO $
@@ -386,7 +389,7 @@ bindSpriteBase3D_is_flipped_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 is_flipped_v ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_v cls
@@ -466,7 +469,7 @@ set_billboard_mode cls arg1
 
 {-# NOINLINE bindSpriteBase3D_set_centered #-}
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 bindSpriteBase3D_set_centered :: MethodBind
 bindSpriteBase3D_set_centered
   = unsafePerformIO $
@@ -476,7 +479,7 @@ bindSpriteBase3D_set_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be centered. Default value: [code]true[/code].
+-- | If [code]true[/code], texture will be centered.
 set_centered ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_centered cls arg1
@@ -489,7 +492,7 @@ set_centered cls arg1
 
 {-# NOINLINE bindSpriteBase3D_set_draw_flag #-}
 
--- | If [code]true[/code], texture can be seen from the back as well, if [code]false[/code], it is invisible when looking at it from behind. Default value: [code]true[/code].
+-- | If [code]true[/code], the specified flag will be enabled.
 bindSpriteBase3D_set_draw_flag :: MethodBind
 bindSpriteBase3D_set_draw_flag
   = unsafePerformIO $
@@ -499,7 +502,7 @@ bindSpriteBase3D_set_draw_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture can be seen from the back as well, if [code]false[/code], it is invisible when looking at it from behind. Default value: [code]true[/code].
+-- | If [code]true[/code], the specified flag will be enabled.
 set_draw_flag ::
                 (SpriteBase3D :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_draw_flag cls arg1 arg2
@@ -512,7 +515,7 @@ set_draw_flag cls arg1 arg2
 
 {-# NOINLINE bindSpriteBase3D_set_flip_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 bindSpriteBase3D_set_flip_h :: MethodBind
 bindSpriteBase3D_set_flip_h
   = unsafePerformIO $
@@ -522,7 +525,7 @@ bindSpriteBase3D_set_flip_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped horizontally.
 set_flip_h ::
              (SpriteBase3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_h cls arg1
@@ -535,7 +538,7 @@ set_flip_h cls arg1
 
 {-# NOINLINE bindSpriteBase3D_set_flip_v #-}
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 bindSpriteBase3D_set_flip_v :: MethodBind
 bindSpriteBase3D_set_flip_v
   = unsafePerformIO $
@@ -545,7 +548,7 @@ bindSpriteBase3D_set_flip_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically. Default value: [code]false[/code].
+-- | If [code]true[/code], texture is flipped vertically.
 set_flip_v ::
              (SpriteBase3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_v cls arg1
@@ -627,7 +630,7 @@ set_opacity cls arg1
 
 {-# NOINLINE bindSpriteBase3D_set_pixel_size #-}
 
--- | The size of one pixel's width on the Sprite to scale it in 3D.
+-- | The size of one pixel's width on the sprite to scale it in 3D.
 bindSpriteBase3D_set_pixel_size :: MethodBind
 bindSpriteBase3D_set_pixel_size
   = unsafePerformIO $
@@ -637,7 +640,7 @@ bindSpriteBase3D_set_pixel_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The size of one pixel's width on the Sprite to scale it in 3D.
+-- | The size of one pixel's width on the sprite to scale it in 3D.
 set_pixel_size ::
                  (SpriteBase3D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_pixel_size cls arg1

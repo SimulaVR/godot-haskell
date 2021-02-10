@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PlaneMesh
        (Godot.Core.PlaneMesh.get_size,
         Godot.Core.PlaneMesh.get_subdivide_depth,
@@ -17,7 +18,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindPlaneMesh_get_size #-}
 
--- | Size of the generated plane. Defaults to (2.0, 2.0).
+-- | Size of the generated plane.
 bindPlaneMesh_get_size :: MethodBind
 bindPlaneMesh_get_size
   = unsafePerformIO $
@@ -27,7 +28,7 @@ bindPlaneMesh_get_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Size of the generated plane. Defaults to (2.0, 2.0).
+-- | Size of the generated plane.
 get_size :: (PlaneMesh :< cls, Object :< cls) => cls -> IO Vector2
 get_size cls
   = withVariantArray []
@@ -38,7 +39,7 @@ get_size cls
 
 {-# NOINLINE bindPlaneMesh_get_subdivide_depth #-}
 
--- | Number of subdivision along the Z axis. Defaults to 0.
+-- | Number of subdivision along the Z axis.
 bindPlaneMesh_get_subdivide_depth :: MethodBind
 bindPlaneMesh_get_subdivide_depth
   = unsafePerformIO $
@@ -48,7 +49,7 @@ bindPlaneMesh_get_subdivide_depth
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of subdivision along the Z axis. Defaults to 0.
+-- | Number of subdivision along the Z axis.
 get_subdivide_depth ::
                       (PlaneMesh :< cls, Object :< cls) => cls -> IO Int
 get_subdivide_depth cls
@@ -62,7 +63,7 @@ get_subdivide_depth cls
 
 {-# NOINLINE bindPlaneMesh_get_subdivide_width #-}
 
--- | Number of subdivision along the X axis. Defaults to 0.
+-- | Number of subdivision along the X axis.
 bindPlaneMesh_get_subdivide_width :: MethodBind
 bindPlaneMesh_get_subdivide_width
   = unsafePerformIO $
@@ -72,7 +73,7 @@ bindPlaneMesh_get_subdivide_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of subdivision along the X axis. Defaults to 0.
+-- | Number of subdivision along the X axis.
 get_subdivide_width ::
                       (PlaneMesh :< cls, Object :< cls) => cls -> IO Int
 get_subdivide_width cls
@@ -86,7 +87,7 @@ get_subdivide_width cls
 
 {-# NOINLINE bindPlaneMesh_set_size #-}
 
--- | Size of the generated plane. Defaults to (2.0, 2.0).
+-- | Size of the generated plane.
 bindPlaneMesh_set_size :: MethodBind
 bindPlaneMesh_set_size
   = unsafePerformIO $
@@ -96,7 +97,7 @@ bindPlaneMesh_set_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Size of the generated plane. Defaults to (2.0, 2.0).
+-- | Size of the generated plane.
 set_size ::
            (PlaneMesh :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_size cls arg1
@@ -108,7 +109,7 @@ set_size cls arg1
 
 {-# NOINLINE bindPlaneMesh_set_subdivide_depth #-}
 
--- | Number of subdivision along the Z axis. Defaults to 0.
+-- | Number of subdivision along the Z axis.
 bindPlaneMesh_set_subdivide_depth :: MethodBind
 bindPlaneMesh_set_subdivide_depth
   = unsafePerformIO $
@@ -118,7 +119,7 @@ bindPlaneMesh_set_subdivide_depth
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of subdivision along the Z axis. Defaults to 0.
+-- | Number of subdivision along the Z axis.
 set_subdivide_depth ::
                       (PlaneMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_subdivide_depth cls arg1
@@ -132,7 +133,7 @@ set_subdivide_depth cls arg1
 
 {-# NOINLINE bindPlaneMesh_set_subdivide_width #-}
 
--- | Number of subdivision along the X axis. Defaults to 0.
+-- | Number of subdivision along the X axis.
 bindPlaneMesh_set_subdivide_width :: MethodBind
 bindPlaneMesh_set_subdivide_width
   = unsafePerformIO $
@@ -142,7 +143,7 @@ bindPlaneMesh_set_subdivide_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of subdivision along the X axis. Defaults to 0.
+-- | Number of subdivision along the X axis.
 set_subdivide_width ::
                       (PlaneMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_subdivide_width cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Spatial
        (Godot.Core.Spatial._NOTIFICATION_ENTER_WORLD,
         Godot.Core.Spatial._NOTIFICATION_EXIT_WORLD,
@@ -68,6 +69,8 @@ sig_visibility_changed :: Godot.Internal.Dispatch.Signal Spatial
 sig_visibility_changed
   = Godot.Internal.Dispatch.Signal "visibility_changed"
 
+instance NodeSignal Spatial "visibility_changed" '[]
+
 {-# NOINLINE bindSpatial__update_gizmo #-}
 
 bindSpatial__update_gizmo :: MethodBind
@@ -90,6 +93,7 @@ _update_gizmo cls
 
 {-# NOINLINE bindSpatial_force_update_transform #-}
 
+-- | Forces the transform to update. Transform changes in physics are not instant for performance reasons. Transforms are accumulated and then set. Use this if you need an up-to-date transform when doing physics operations.
 bindSpatial_force_update_transform :: MethodBind
 bindSpatial_force_update_transform
   = unsafePerformIO $
@@ -99,6 +103,7 @@ bindSpatial_force_update_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Forces the transform to update. Transform changes in physics are not instant for performance reasons. Transforms are accumulated and then set. Use this if you need an up-to-date transform when doing physics operations.
 force_update_transform ::
                          (Spatial :< cls, Object :< cls) => cls -> IO ()
 force_update_transform cls
@@ -158,7 +163,7 @@ get_global_transform cls
 
 {-# NOINLINE bindSpatial_get_parent_spatial #-}
 
--- | Returns the parent [code]Spatial[/code], or an empty [Object] if no parent exists or parent is not of type [code]Spatial[/code].
+-- | Returns the parent [Spatial], or an empty [Object] if no parent exists or parent is not of type [Spatial].
 bindSpatial_get_parent_spatial :: MethodBind
 bindSpatial_get_parent_spatial
   = unsafePerformIO $
@@ -168,7 +173,7 @@ bindSpatial_get_parent_spatial
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent [code]Spatial[/code], or an empty [Object] if no parent exists or parent is not of type [code]Spatial[/code].
+-- | Returns the parent [Spatial], or an empty [Object] if no parent exists or parent is not of type [Spatial].
 get_parent_spatial ::
                      (Spatial :< cls, Object :< cls) => cls -> IO Spatial
 get_parent_spatial cls
@@ -181,8 +186,8 @@ get_parent_spatial cls
 
 {-# NOINLINE bindSpatial_get_rotation #-}
 
--- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
---   			Note that in the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+-- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
+--   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 bindSpatial_get_rotation :: MethodBind
 bindSpatial_get_rotation
   = unsafePerformIO $
@@ -192,8 +197,8 @@ bindSpatial_get_rotation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
---   			Note that in the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+-- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
+--   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 get_rotation ::
                (Spatial :< cls, Object :< cls) => cls -> IO Vector3
 get_rotation cls
@@ -205,7 +210,7 @@ get_rotation cls
 
 {-# NOINLINE bindSpatial_get_rotation_degrees #-}
 
--- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
+-- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
 bindSpatial_get_rotation_degrees :: MethodBind
 bindSpatial_get_rotation_degrees
   = unsafePerformIO $
@@ -215,7 +220,7 @@ bindSpatial_get_rotation_degrees
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
+-- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
 get_rotation_degrees ::
                        (Spatial :< cls, Object :< cls) => cls -> IO Vector3
 get_rotation_degrees cls
@@ -296,7 +301,7 @@ get_translation cls
 
 {-# NOINLINE bindSpatial_get_world #-}
 
--- | Returns the current [World] resource this [code]Spatial[/code] node is registered to.
+-- | Returns the current [World] resource this [Spatial] node is registered to.
 bindSpatial_get_world :: MethodBind
 bindSpatial_get_world
   = unsafePerformIO $
@@ -306,7 +311,7 @@ bindSpatial_get_world
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current [World] resource this [code]Spatial[/code] node is registered to.
+-- | Returns the current [World] resource this [Spatial] node is registered to.
 get_world :: (Spatial :< cls, Object :< cls) => cls -> IO World
 get_world cls
   = withVariantArray []
@@ -340,6 +345,7 @@ global_rotate cls arg1 arg2
 
 {-# NOINLINE bindSpatial_global_scale #-}
 
+-- | Scales the global (world) transformation by the given [Vector3] scale factors.
 bindSpatial_global_scale :: MethodBind
 bindSpatial_global_scale
   = unsafePerformIO $
@@ -349,6 +355,7 @@ bindSpatial_global_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scales the global (world) transformation by the given [Vector3] scale factors.
 global_scale ::
                (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 global_scale cls arg1
@@ -404,7 +411,7 @@ hide cls
 {-# NOINLINE bindSpatial_is_local_transform_notification_enabled
              #-}
 
--- | Returns whether node notifies about its local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Returns whether node notifies about its local transformation changes. [Spatial] will not propagate this by default.
 bindSpatial_is_local_transform_notification_enabled :: MethodBind
 bindSpatial_is_local_transform_notification_enabled
   = unsafePerformIO $
@@ -414,7 +421,7 @@ bindSpatial_is_local_transform_notification_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether node notifies about its local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Returns whether node notifies about its local transformation changes. [Spatial] will not propagate this by default.
 is_local_transform_notification_enabled ::
                                           (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_local_transform_notification_enabled cls
@@ -429,6 +436,7 @@ is_local_transform_notification_enabled cls
 
 {-# NOINLINE bindSpatial_is_scale_disabled #-}
 
+-- | Returns whether this node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale.
 bindSpatial_is_scale_disabled :: MethodBind
 bindSpatial_is_scale_disabled
   = unsafePerformIO $
@@ -438,6 +446,7 @@ bindSpatial_is_scale_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns whether this node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale.
 is_scale_disabled ::
                     (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_scale_disabled cls
@@ -473,7 +482,7 @@ is_set_as_toplevel cls
 
 {-# NOINLINE bindSpatial_is_transform_notification_enabled #-}
 
--- | Returns whether the node notifies about its global and local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Returns whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
 bindSpatial_is_transform_notification_enabled :: MethodBind
 bindSpatial_is_transform_notification_enabled
   = unsafePerformIO $
@@ -483,7 +492,7 @@ bindSpatial_is_transform_notification_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the node notifies about its global and local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Returns whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
 is_transform_notification_enabled ::
                                     (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_transform_notification_enabled cls
@@ -498,7 +507,7 @@ is_transform_notification_enabled cls
 
 {-# NOINLINE bindSpatial_is_visible #-}
 
--- | If [code]true[/code], this node is drawn. Default value: [code]true[/code].
+-- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
 bindSpatial_is_visible :: MethodBind
 bindSpatial_is_visible
   = unsafePerformIO $
@@ -508,7 +517,7 @@ bindSpatial_is_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this node is drawn. Default value: [code]true[/code].
+-- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
 is_visible :: (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_visible cls
   = withVariantArray []
@@ -519,7 +528,7 @@ is_visible cls
 
 {-# NOINLINE bindSpatial_is_visible_in_tree #-}
 
--- | Returns whether the node is visible, taking into consideration that its parents visibility.
+-- | Returns [code]true[/code] if the node is present in the [SceneTree], its [member visible] property is [code]true[/code] and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
 bindSpatial_is_visible_in_tree :: MethodBind
 bindSpatial_is_visible_in_tree
   = unsafePerformIO $
@@ -529,7 +538,7 @@ bindSpatial_is_visible_in_tree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the node is visible, taking into consideration that its parents visibility.
+-- | Returns [code]true[/code] if the node is present in the [SceneTree], its [member visible] property is [code]true[/code] and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
 is_visible_in_tree ::
                      (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_visible_in_tree cls
@@ -659,7 +668,7 @@ rotate_object_local cls arg1 arg2
 
 {-# NOINLINE bindSpatial_rotate_x #-}
 
--- | Rotates the local transformation around the X axis by angle in radians
+-- | Rotates the local transformation around the X axis by angle in radians.
 bindSpatial_rotate_x :: MethodBind
 bindSpatial_rotate_x
   = unsafePerformIO $
@@ -669,7 +678,7 @@ bindSpatial_rotate_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotates the local transformation around the X axis by angle in radians
+-- | Rotates the local transformation around the X axis by angle in radians.
 rotate_x ::
            (Spatial :< cls, Object :< cls) => cls -> Float -> IO ()
 rotate_x cls arg1
@@ -768,6 +777,7 @@ set_as_toplevel cls arg1
 
 {-# NOINLINE bindSpatial_set_disable_scale #-}
 
+-- | Sets whether the node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale. Changes to the local transformation scale are preserved.
 bindSpatial_set_disable_scale :: MethodBind
 bindSpatial_set_disable_scale
   = unsafePerformIO $
@@ -777,6 +787,7 @@ bindSpatial_set_disable_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets whether the node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale. Changes to the local transformation scale are preserved.
 set_disable_scale ::
                     (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disable_scale cls arg1
@@ -835,7 +846,7 @@ set_global_transform cls arg1
 
 {-# NOINLINE bindSpatial_set_identity #-}
 
--- | Reset all transformations for this node. Set its [Transform] to identity matrix.
+-- | Reset all transformations for this node (sets its [Transform] to the identity matrix).
 bindSpatial_set_identity :: MethodBind
 bindSpatial_set_identity
   = unsafePerformIO $
@@ -845,7 +856,7 @@ bindSpatial_set_identity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Reset all transformations for this node. Set its [Transform] to identity matrix.
+-- | Reset all transformations for this node (sets its [Transform] to the identity matrix).
 set_identity :: (Spatial :< cls, Object :< cls) => cls -> IO ()
 set_identity cls
   = withVariantArray []
@@ -856,7 +867,7 @@ set_identity cls
 
 {-# NOINLINE bindSpatial_set_ignore_transform_notification #-}
 
--- | Set whether the node ignores notification that its transformation (global or local) changed.
+-- | Sets whether the node ignores notification that its transformation (global or local) changed.
 bindSpatial_set_ignore_transform_notification :: MethodBind
 bindSpatial_set_ignore_transform_notification
   = unsafePerformIO $
@@ -866,7 +877,7 @@ bindSpatial_set_ignore_transform_notification
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set whether the node ignores notification that its transformation (global or local) changed.
+-- | Sets whether the node ignores notification that its transformation (global or local) changed.
 set_ignore_transform_notification ::
                                     (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ignore_transform_notification cls arg1
@@ -881,7 +892,7 @@ set_ignore_transform_notification cls arg1
 
 {-# NOINLINE bindSpatial_set_notify_local_transform #-}
 
--- | Set whether the node notifies about its local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Sets whether the node notifies about its local transformation changes. [Spatial] will not propagate this by default.
 bindSpatial_set_notify_local_transform :: MethodBind
 bindSpatial_set_notify_local_transform
   = unsafePerformIO $
@@ -891,7 +902,7 @@ bindSpatial_set_notify_local_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set whether the node notifies about its local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Sets whether the node notifies about its local transformation changes. [Spatial] will not propagate this by default.
 set_notify_local_transform ::
                              (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_notify_local_transform cls arg1
@@ -905,7 +916,7 @@ set_notify_local_transform cls arg1
 
 {-# NOINLINE bindSpatial_set_notify_transform #-}
 
--- | Set whether the node notifies about its global and local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Sets whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
 bindSpatial_set_notify_transform :: MethodBind
 bindSpatial_set_notify_transform
   = unsafePerformIO $
@@ -915,7 +926,7 @@ bindSpatial_set_notify_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set whether the node notifies about its global and local transformation changes. [code]Spatial[/code] will not propagate this by default.
+-- | Sets whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
 set_notify_transform ::
                        (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_notify_transform cls arg1
@@ -929,8 +940,8 @@ set_notify_transform cls arg1
 
 {-# NOINLINE bindSpatial_set_rotation #-}
 
--- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
---   			Note that in the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+-- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
+--   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 bindSpatial_set_rotation :: MethodBind
 bindSpatial_set_rotation
   = unsafePerformIO $
@@ -940,8 +951,8 @@ bindSpatial_set_rotation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
---   			Note that in the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+-- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
+--   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 set_rotation ::
                (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_rotation cls arg1
@@ -953,7 +964,7 @@ set_rotation cls arg1
 
 {-# NOINLINE bindSpatial_set_rotation_degrees #-}
 
--- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
+-- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
 bindSpatial_set_rotation_degrees :: MethodBind
 bindSpatial_set_rotation_degrees
   = unsafePerformIO $
@@ -963,7 +974,7 @@ bindSpatial_set_rotation_degrees
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X-angle, Y-angle, Z-angle).
+-- | Rotation part of the local transformation in degrees, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
 set_rotation_degrees ::
                        (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_rotation_degrees cls arg1
@@ -1045,7 +1056,7 @@ set_translation cls arg1
 
 {-# NOINLINE bindSpatial_set_visible #-}
 
--- | If [code]true[/code], this node is drawn. Default value: [code]true[/code].
+-- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
 bindSpatial_set_visible :: MethodBind
 bindSpatial_set_visible
   = unsafePerformIO $
@@ -1055,7 +1066,7 @@ bindSpatial_set_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this node is drawn. Default value: [code]true[/code].
+-- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
 set_visible ::
               (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_visible cls arg1
@@ -1087,7 +1098,7 @@ show cls
 
 {-# NOINLINE bindSpatial_to_global #-}
 
--- | Transforms [Vector3] "local_point" from this node's local space to world space.
+-- | Transforms [code]local_point[/code] from this node's local space to world space.
 bindSpatial_to_global :: MethodBind
 bindSpatial_to_global
   = unsafePerformIO $
@@ -1097,7 +1108,7 @@ bindSpatial_to_global
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transforms [Vector3] "local_point" from this node's local space to world space.
+-- | Transforms [code]local_point[/code] from this node's local space to world space.
 to_global ::
             (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO Vector3
 to_global cls arg1
@@ -1109,7 +1120,7 @@ to_global cls arg1
 
 {-# NOINLINE bindSpatial_to_local #-}
 
--- | Transforms [Vector3] "global_point" from world space to this node's local space.
+-- | Transforms [code]global_point[/code] from world space to this node's local space.
 bindSpatial_to_local :: MethodBind
 bindSpatial_to_local
   = unsafePerformIO $
@@ -1119,7 +1130,7 @@ bindSpatial_to_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transforms [Vector3] "global_point" from world space to this node's local space.
+-- | Transforms [code]global_point[/code] from world space to this node's local space.
 to_local ::
            (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO Vector3
 to_local cls arg1
@@ -1130,7 +1141,7 @@ to_local cls arg1
 
 {-# NOINLINE bindSpatial_translate #-}
 
--- | Changes the node's position by given offset [Vector3].
+-- | Changes the node's position by the given offset [Vector3].
 --   				Note that the translation [code]offset[/code] is affected by the node's scale, so if scaled by e.g. [code](10, 1, 1)[/code], a translation by an offset of [code](2, 0, 0)[/code] would actually add 20 ([code]2 * 10[/code]) to the X coordinate.
 bindSpatial_translate :: MethodBind
 bindSpatial_translate
@@ -1141,7 +1152,7 @@ bindSpatial_translate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the node's position by given offset [Vector3].
+-- | Changes the node's position by the given offset [Vector3].
 --   				Note that the translation [code]offset[/code] is affected by the node's scale, so if scaled by e.g. [code](10, 1, 1)[/code], a translation by an offset of [code](2, 0, 0)[/code] would actually add 20 ([code]2 * 10[/code]) to the X coordinate.
 translate ::
             (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
@@ -1154,6 +1165,7 @@ translate cls arg1
 
 {-# NOINLINE bindSpatial_translate_object_local #-}
 
+-- | Changes the node's position by the given offset [Vector3] in local space.
 bindSpatial_translate_object_local :: MethodBind
 bindSpatial_translate_object_local
   = unsafePerformIO $
@@ -1163,6 +1175,7 @@ bindSpatial_translate_object_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Changes the node's position by the given offset [Vector3] in local space.
 translate_object_local ::
                          (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 translate_object_local cls arg1

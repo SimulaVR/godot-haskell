@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeAnimation
        (Godot.Core.AnimationNodeAnimation.get_animation,
         Godot.Core.AnimationNodeAnimation.set_animation)

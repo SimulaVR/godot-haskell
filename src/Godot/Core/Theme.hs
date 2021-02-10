@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Theme
        (Godot.Core.Theme._emit_theme_changed, Godot.Core.Theme.clear,
         Godot.Core.Theme.clear_color, Godot.Core.Theme.clear_constant,
@@ -50,6 +51,7 @@ _emit_theme_changed cls
 
 {-# NOINLINE bindTheme_clear #-}
 
+-- | Clears all values on the theme.
 bindTheme_clear :: MethodBind
 bindTheme_clear
   = unsafePerformIO $
@@ -59,6 +61,7 @@ bindTheme_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Clears all values on the theme.
 clear :: (Theme :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -68,7 +71,7 @@ clear cls
 
 {-# NOINLINE bindTheme_clear_color #-}
 
--- | Clears theme [Color] at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the [Color] at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_clear_color :: MethodBind
 bindTheme_clear_color
   = unsafePerformIO $
@@ -78,7 +81,7 @@ bindTheme_clear_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears theme [Color] at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the [Color] at [code]name[/code] if the theme has [code]type[/code].
 clear_color ::
               (Theme :< cls, Object :< cls) =>
               cls -> GodotString -> GodotString -> IO ()
@@ -91,7 +94,7 @@ clear_color cls arg1 arg2
 
 {-# NOINLINE bindTheme_clear_constant #-}
 
--- | Clears theme constant at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the constant at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_clear_constant :: MethodBind
 bindTheme_clear_constant
   = unsafePerformIO $
@@ -101,7 +104,7 @@ bindTheme_clear_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears theme constant at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the constant at [code]name[/code] if the theme has [code]type[/code].
 clear_constant ::
                  (Theme :< cls, Object :< cls) =>
                  cls -> GodotString -> GodotString -> IO ()
@@ -114,7 +117,7 @@ clear_constant cls arg1 arg2
 
 {-# NOINLINE bindTheme_clear_font #-}
 
--- | Clears [Font] at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the [Font] at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_clear_font :: MethodBind
 bindTheme_clear_font
   = unsafePerformIO $
@@ -124,7 +127,7 @@ bindTheme_clear_font
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears [Font] at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the [Font] at [code]name[/code] if the theme has [code]type[/code].
 clear_font ::
              (Theme :< cls, Object :< cls) =>
              cls -> GodotString -> GodotString -> IO ()
@@ -136,7 +139,7 @@ clear_font cls arg1 arg2
 
 {-# NOINLINE bindTheme_clear_icon #-}
 
--- | Clears icon at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the icon at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_clear_icon :: MethodBind
 bindTheme_clear_icon
   = unsafePerformIO $
@@ -146,7 +149,7 @@ bindTheme_clear_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears icon at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears the icon at [code]name[/code] if the theme has [code]type[/code].
 clear_icon ::
              (Theme :< cls, Object :< cls) =>
              cls -> GodotString -> GodotString -> IO ()
@@ -158,7 +161,7 @@ clear_icon cls arg1 arg2
 
 {-# NOINLINE bindTheme_clear_stylebox #-}
 
--- | Clears [StyleBox] at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears [StyleBox] at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_clear_stylebox :: MethodBind
 bindTheme_clear_stylebox
   = unsafePerformIO $
@@ -168,7 +171,7 @@ bindTheme_clear_stylebox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears [StyleBox] at [code]name[/code] if Theme has [code]type[/code].
+-- | Clears [StyleBox] at [code]name[/code] if the theme has [code]type[/code].
 clear_stylebox ::
                  (Theme :< cls, Object :< cls) =>
                  cls -> GodotString -> GodotString -> IO ()
@@ -181,7 +184,7 @@ clear_stylebox cls arg1 arg2
 
 {-# NOINLINE bindTheme_copy_default_theme #-}
 
--- | Sets theme values to a copy of the default theme values.
+-- | Sets the theme's values to a copy of the default theme values.
 bindTheme_copy_default_theme :: MethodBind
 bindTheme_copy_default_theme
   = unsafePerformIO $
@@ -191,7 +194,7 @@ bindTheme_copy_default_theme
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets theme values to a copy of the default theme values.
+-- | Sets the theme's values to a copy of the default theme values.
 copy_default_theme :: (Theme :< cls, Object :< cls) => cls -> IO ()
 copy_default_theme cls
   = withVariantArray []
@@ -203,6 +206,7 @@ copy_default_theme cls
 
 {-# NOINLINE bindTheme_copy_theme #-}
 
+-- | Sets the theme's values to a copy of a given theme.
 bindTheme_copy_theme :: MethodBind
 bindTheme_copy_theme
   = unsafePerformIO $
@@ -212,6 +216,7 @@ bindTheme_copy_theme
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the theme's values to a copy of a given theme.
 copy_theme ::
              (Theme :< cls, Object :< cls) => cls -> Theme -> IO ()
 copy_theme cls arg1
@@ -222,7 +227,7 @@ copy_theme cls arg1
 
 {-# NOINLINE bindTheme_get_color #-}
 
--- | Returns the [Color] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the [Color] at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_get_color :: MethodBind
 bindTheme_get_color
   = unsafePerformIO $
@@ -232,7 +237,7 @@ bindTheme_get_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Color] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the [Color] at [code]name[/code] if the theme has [code]type[/code].
 get_color ::
             (Theme :< cls, Object :< cls) =>
             cls -> GodotString -> GodotString -> IO Color
@@ -244,7 +249,7 @@ get_color cls arg1 arg2
 
 {-# NOINLINE bindTheme_get_color_list #-}
 
--- | Returns all of the [Color]s as a [PoolStringArray] filled with each [Color]'s name, for use in [method get_color], if Theme has [code]type[/code].
+-- | Returns all the [Color]s as a [PoolStringArray] filled with each [Color]'s name, for use in [method get_color], if the theme has [code]type[/code].
 bindTheme_get_color_list :: MethodBind
 bindTheme_get_color_list
   = unsafePerformIO $
@@ -254,7 +259,7 @@ bindTheme_get_color_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the [Color]s as a [PoolStringArray] filled with each [Color]'s name, for use in [method get_color], if Theme has [code]type[/code].
+-- | Returns all the [Color]s as a [PoolStringArray] filled with each [Color]'s name, for use in [method get_color], if the theme has [code]type[/code].
 get_color_list ::
                  (Theme :< cls, Object :< cls) =>
                  cls -> GodotString -> IO PoolStringArray
@@ -267,7 +272,7 @@ get_color_list cls arg1
 
 {-# NOINLINE bindTheme_get_constant #-}
 
--- | Returns the constant at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the constant at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_get_constant :: MethodBind
 bindTheme_get_constant
   = unsafePerformIO $
@@ -277,7 +282,7 @@ bindTheme_get_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the constant at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the constant at [code]name[/code] if the theme has [code]type[/code].
 get_constant ::
                (Theme :< cls, Object :< cls) =>
                cls -> GodotString -> GodotString -> IO Int
@@ -290,7 +295,7 @@ get_constant cls arg1 arg2
 
 {-# NOINLINE bindTheme_get_constant_list #-}
 
--- | Returns all of the constants as a [PoolStringArray] filled with each constant's name, for use in [method get_constant], if Theme has [code]type[/code].
+-- | Returns all the constants as a [PoolStringArray] filled with each constant's name, for use in [method get_constant], if the theme has [code]type[/code].
 bindTheme_get_constant_list :: MethodBind
 bindTheme_get_constant_list
   = unsafePerformIO $
@@ -300,7 +305,7 @@ bindTheme_get_constant_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the constants as a [PoolStringArray] filled with each constant's name, for use in [method get_constant], if Theme has [code]type[/code].
+-- | Returns all the constants as a [PoolStringArray] filled with each constant's name, for use in [method get_constant], if the theme has [code]type[/code].
 get_constant_list ::
                     (Theme :< cls, Object :< cls) =>
                     cls -> GodotString -> IO PoolStringArray
@@ -336,7 +341,7 @@ get_default_font cls
 
 {-# NOINLINE bindTheme_get_font #-}
 
--- | Returns the [Font] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the [Font] at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_get_font :: MethodBind
 bindTheme_get_font
   = unsafePerformIO $
@@ -346,7 +351,7 @@ bindTheme_get_font
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Font] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the [Font] at [code]name[/code] if the theme has [code]type[/code].
 get_font ::
            (Theme :< cls, Object :< cls) =>
            cls -> GodotString -> GodotString -> IO Font
@@ -358,7 +363,7 @@ get_font cls arg1 arg2
 
 {-# NOINLINE bindTheme_get_font_list #-}
 
--- | Returns all of the [Font]s as a [PoolStringArray] filled with each [Font]'s name, for use in [method get_font], if Theme has [code]type[/code].
+-- | Returns all the [Font]s as a [PoolStringArray] filled with each [Font]'s name, for use in [method get_font], if the theme has [code]type[/code].
 bindTheme_get_font_list :: MethodBind
 bindTheme_get_font_list
   = unsafePerformIO $
@@ -368,7 +373,7 @@ bindTheme_get_font_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the [Font]s as a [PoolStringArray] filled with each [Font]'s name, for use in [method get_font], if Theme has [code]type[/code].
+-- | Returns all the [Font]s as a [PoolStringArray] filled with each [Font]'s name, for use in [method get_font], if the theme has [code]type[/code].
 get_font_list ::
                 (Theme :< cls, Object :< cls) =>
                 cls -> GodotString -> IO PoolStringArray
@@ -381,7 +386,7 @@ get_font_list cls arg1
 
 {-# NOINLINE bindTheme_get_icon #-}
 
--- | Returns the icon [Texture] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the icon [Texture] at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_get_icon :: MethodBind
 bindTheme_get_icon
   = unsafePerformIO $
@@ -391,7 +396,7 @@ bindTheme_get_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the icon [Texture] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the icon [Texture] at [code]name[/code] if the theme has [code]type[/code].
 get_icon ::
            (Theme :< cls, Object :< cls) =>
            cls -> GodotString -> GodotString -> IO Texture
@@ -403,7 +408,7 @@ get_icon cls arg1 arg2
 
 {-# NOINLINE bindTheme_get_icon_list #-}
 
--- | Returns all of the icons as a [PoolStringArray] filled with each [Texture]'s name, for use in [method get_icon], if Theme has [code]type[/code].
+-- | Returns all the icons as a [PoolStringArray] filled with each [Texture]'s name, for use in [method get_icon], if the theme has [code]type[/code].
 bindTheme_get_icon_list :: MethodBind
 bindTheme_get_icon_list
   = unsafePerformIO $
@@ -413,7 +418,7 @@ bindTheme_get_icon_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the icons as a [PoolStringArray] filled with each [Texture]'s name, for use in [method get_icon], if Theme has [code]type[/code].
+-- | Returns all the icons as a [PoolStringArray] filled with each [Texture]'s name, for use in [method get_icon], if the theme has [code]type[/code].
 get_icon_list ::
                 (Theme :< cls, Object :< cls) =>
                 cls -> GodotString -> IO PoolStringArray
@@ -426,7 +431,7 @@ get_icon_list cls arg1
 
 {-# NOINLINE bindTheme_get_stylebox #-}
 
--- | Returns the icon [StyleBox] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the icon [StyleBox] at [code]name[/code] if the theme has [code]type[/code].
 bindTheme_get_stylebox :: MethodBind
 bindTheme_get_stylebox
   = unsafePerformIO $
@@ -436,7 +441,7 @@ bindTheme_get_stylebox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the icon [StyleBox] at [code]name[/code] if Theme has [code]type[/code].
+-- | Returns the icon [StyleBox] at [code]name[/code] if the theme has [code]type[/code].
 get_stylebox ::
                (Theme :< cls, Object :< cls) =>
                cls -> GodotString -> GodotString -> IO StyleBox
@@ -449,7 +454,7 @@ get_stylebox cls arg1 arg2
 
 {-# NOINLINE bindTheme_get_stylebox_list #-}
 
--- | Returns all of the [StyleBox]s as a [PoolStringArray] filled with each [StyleBox]'s name, for use in [method get_stylebox], if Theme has [code]type[/code].
+-- | Returns all the [StyleBox]s as a [PoolStringArray] filled with each [StyleBox]'s name, for use in [method get_stylebox], if the theme has [code]type[/code].
 bindTheme_get_stylebox_list :: MethodBind
 bindTheme_get_stylebox_list
   = unsafePerformIO $
@@ -459,7 +464,7 @@ bindTheme_get_stylebox_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the [StyleBox]s as a [PoolStringArray] filled with each [StyleBox]'s name, for use in [method get_stylebox], if Theme has [code]type[/code].
+-- | Returns all the [StyleBox]s as a [PoolStringArray] filled with each [StyleBox]'s name, for use in [method get_stylebox], if the theme has [code]type[/code].
 get_stylebox_list ::
                     (Theme :< cls, Object :< cls) =>
                     cls -> GodotString -> IO PoolStringArray
@@ -473,7 +478,7 @@ get_stylebox_list cls arg1
 
 {-# NOINLINE bindTheme_get_stylebox_types #-}
 
--- | Returns all of the [StyleBox] types as a [PoolStringArray] filled with each [StyleBox]'s type, for use in [method get_stylebox] and/or [method get_stylebox_list], if Theme has [code]type[/code].
+-- | Returns all the [StyleBox] types as a [PoolStringArray] filled with each [StyleBox]'s type, for use in [method get_stylebox] and/or [method get_stylebox_list], if the theme has [code]type[/code].
 bindTheme_get_stylebox_types :: MethodBind
 bindTheme_get_stylebox_types
   = unsafePerformIO $
@@ -483,7 +488,7 @@ bindTheme_get_stylebox_types
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the [StyleBox] types as a [PoolStringArray] filled with each [StyleBox]'s type, for use in [method get_stylebox] and/or [method get_stylebox_list], if Theme has [code]type[/code].
+-- | Returns all the [StyleBox] types as a [PoolStringArray] filled with each [StyleBox]'s type, for use in [method get_stylebox] and/or [method get_stylebox_list], if the theme has [code]type[/code].
 get_stylebox_types ::
                      (Theme :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_stylebox_types cls
@@ -496,7 +501,7 @@ get_stylebox_types cls
 
 {-# NOINLINE bindTheme_get_type_list #-}
 
--- | Returns all of the types in [code]type[/code] as a [PoolStringArray] for use in any of the get_* functions, if Theme has [code]type[/code].
+-- | Returns all the types in [code]type[/code] as a [PoolStringArray] for use in any of the [code]get_*[/code] functions, if the theme has [code]type[/code].
 bindTheme_get_type_list :: MethodBind
 bindTheme_get_type_list
   = unsafePerformIO $
@@ -506,7 +511,7 @@ bindTheme_get_type_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the types in [code]type[/code] as a [PoolStringArray] for use in any of the get_* functions, if Theme has [code]type[/code].
+-- | Returns all the types in [code]type[/code] as a [PoolStringArray] for use in any of the [code]get_*[/code] functions, if the theme has [code]type[/code].
 get_type_list ::
                 (Theme :< cls, Object :< cls) =>
                 cls -> GodotString -> IO PoolStringArray
@@ -520,7 +525,7 @@ get_type_list cls arg1
 {-# NOINLINE bindTheme_has_color #-}
 
 -- | Returns [code]true[/code] if [Color] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 bindTheme_has_color :: MethodBind
 bindTheme_has_color
   = unsafePerformIO $
@@ -531,7 +536,7 @@ bindTheme_has_color
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code] if [Color] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 has_color ::
             (Theme :< cls, Object :< cls) =>
             cls -> GodotString -> GodotString -> IO Bool
@@ -544,7 +549,7 @@ has_color cls arg1 arg2
 {-# NOINLINE bindTheme_has_constant #-}
 
 -- | Returns [code]true[/code] if constant with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 bindTheme_has_constant :: MethodBind
 bindTheme_has_constant
   = unsafePerformIO $
@@ -555,7 +560,7 @@ bindTheme_has_constant
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code] if constant with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 has_constant ::
                (Theme :< cls, Object :< cls) =>
                cls -> GodotString -> GodotString -> IO Bool
@@ -569,7 +574,7 @@ has_constant cls arg1 arg2
 {-# NOINLINE bindTheme_has_font #-}
 
 -- | Returns [code]true[/code] if [Font] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 bindTheme_has_font :: MethodBind
 bindTheme_has_font
   = unsafePerformIO $
@@ -580,7 +585,7 @@ bindTheme_has_font
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code] if [Font] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 has_font ::
            (Theme :< cls, Object :< cls) =>
            cls -> GodotString -> GodotString -> IO Bool
@@ -593,7 +598,7 @@ has_font cls arg1 arg2
 {-# NOINLINE bindTheme_has_icon #-}
 
 -- | Returns [code]true[/code] if icon [Texture] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 bindTheme_has_icon :: MethodBind
 bindTheme_has_icon
   = unsafePerformIO $
@@ -604,7 +609,7 @@ bindTheme_has_icon
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code] if icon [Texture] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 has_icon ::
            (Theme :< cls, Object :< cls) =>
            cls -> GodotString -> GodotString -> IO Bool
@@ -617,7 +622,7 @@ has_icon cls arg1 arg2
 {-# NOINLINE bindTheme_has_stylebox #-}
 
 -- | Returns [code]true[/code] if [StyleBox] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 bindTheme_has_stylebox :: MethodBind
 bindTheme_has_stylebox
   = unsafePerformIO $
@@ -628,7 +633,7 @@ bindTheme_has_stylebox
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code] if [StyleBox] with [code]name[/code] is in [code]type[/code].
---   				Returns [code]false[/code] if Theme does not have [code]type[/code].
+--   				Returns [code]false[/code] if the theme does not have [code]type[/code].
 has_stylebox ::
                (Theme :< cls, Object :< cls) =>
                cls -> GodotString -> GodotString -> IO Bool
@@ -641,8 +646,8 @@ has_stylebox cls arg1 arg2
 
 {-# NOINLINE bindTheme_set_color #-}
 
--- | Sets Theme's [Color] to [code]color[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's [Color] to [code]color[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 bindTheme_set_color :: MethodBind
 bindTheme_set_color
   = unsafePerformIO $
@@ -652,8 +657,8 @@ bindTheme_set_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets Theme's [Color] to [code]color[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's [Color] to [code]color[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 set_color ::
             (Theme :< cls, Object :< cls) =>
             cls -> GodotString -> GodotString -> Color -> IO ()
@@ -665,8 +670,8 @@ set_color cls arg1 arg2 arg3
 
 {-# NOINLINE bindTheme_set_constant #-}
 
--- | Sets Theme's constant to [code]constant[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's constant to [code]constant[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 bindTheme_set_constant :: MethodBind
 bindTheme_set_constant
   = unsafePerformIO $
@@ -676,8 +681,8 @@ bindTheme_set_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets Theme's constant to [code]constant[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's constant to [code]constant[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 set_constant ::
                (Theme :< cls, Object :< cls) =>
                cls -> GodotString -> GodotString -> Int -> IO ()
@@ -713,8 +718,8 @@ set_default_font cls arg1
 
 {-# NOINLINE bindTheme_set_font #-}
 
--- | Sets Theme's [Font] to [code]font[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's [Font] to [code]font[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 bindTheme_set_font :: MethodBind
 bindTheme_set_font
   = unsafePerformIO $
@@ -724,8 +729,8 @@ bindTheme_set_font
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets Theme's [Font] to [code]font[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's [Font] to [code]font[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 set_font ::
            (Theme :< cls, Object :< cls) =>
            cls -> GodotString -> GodotString -> Font -> IO ()
@@ -737,8 +742,8 @@ set_font cls arg1 arg2 arg3
 
 {-# NOINLINE bindTheme_set_icon #-}
 
--- | Sets Theme's icon [Texture] to [code]texture[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's icon [Texture] to [code]texture[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 bindTheme_set_icon :: MethodBind
 bindTheme_set_icon
   = unsafePerformIO $
@@ -748,8 +753,8 @@ bindTheme_set_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets Theme's icon [Texture] to [code]texture[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets the theme's icon [Texture] to [code]texture[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 set_icon ::
            (Theme :< cls, Object :< cls) =>
            cls -> GodotString -> GodotString -> Texture -> IO ()
@@ -761,8 +766,8 @@ set_icon cls arg1 arg2 arg3
 
 {-# NOINLINE bindTheme_set_stylebox #-}
 
--- | Sets Theme's [StyleBox] to [code]stylebox[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets theme's [StyleBox] to [code]stylebox[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 bindTheme_set_stylebox :: MethodBind
 bindTheme_set_stylebox
   = unsafePerformIO $
@@ -772,8 +777,8 @@ bindTheme_set_stylebox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets Theme's [StyleBox] to [code]stylebox[/code] at [code]name[/code] in [code]type[/code].
---   				Does nothing if Theme does not have [code]type[/code].
+-- | Sets theme's [StyleBox] to [code]stylebox[/code] at [code]name[/code] in [code]type[/code].
+--   				Does nothing if the theme does not have [code]type[/code].
 set_stylebox ::
                (Theme :< cls, Object :< cls) =>
                cls -> GodotString -> GodotString -> StyleBox -> IO ()

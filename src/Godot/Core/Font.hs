@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Font
        (Godot.Core.Font.draw, Godot.Core.Font.draw_char,
         Godot.Core.Font.get_ascent, Godot.Core.Font.get_descent,
@@ -18,7 +19,8 @@ import Godot.Api.Types
 
 {-# NOINLINE bindFont_draw #-}
 
--- | Draw "string" into a canvas item using the font at a given position, with "modulate" color, and optionally clipping the width. "position" specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis.
+-- | Draw [code]string[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis.
+--   				See also [method CanvasItem.draw_string].
 bindFont_draw :: MethodBind
 bindFont_draw
   = unsafePerformIO $
@@ -28,7 +30,8 @@ bindFont_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draw "string" into a canvas item using the font at a given position, with "modulate" color, and optionally clipping the width. "position" specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis.
+-- | Draw [code]string[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis.
+--   				See also [method CanvasItem.draw_string].
 draw ::
        (Font :< cls, Object :< cls) =>
        cls ->
@@ -43,7 +46,7 @@ draw cls arg1 arg2 arg3 arg4 arg5 arg6
 
 {-# NOINLINE bindFont_draw_char #-}
 
--- | Draw character "char" into a canvas item using the font at a given position, with "modulate" color, and optionally kerning if "next" is passed. clipping the width. "position" specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
+-- | Draw character [code]char[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally kerning if [code]next[/code] is passed. clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
 bindFont_draw_char :: MethodBind
 bindFont_draw_char
   = unsafePerformIO $
@@ -53,7 +56,7 @@ bindFont_draw_char
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draw character "char" into a canvas item using the font at a given position, with "modulate" color, and optionally kerning if "next" is passed. clipping the width. "position" specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
+-- | Draw character [code]char[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally kerning if [code]next[/code] is passed. clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
 draw_char ::
             (Font :< cls, Object :< cls) =>
             cls -> Rid -> Vector2 -> Int -> Int -> Color -> Bool -> IO Float
@@ -149,6 +152,7 @@ get_string_size cls arg1
 
 {-# NOINLINE bindFont_get_wordwrap_string_size #-}
 
+-- | Returns the size that the string would have with word wrapping enabled with a fixed [code]width[/code].
 bindFont_get_wordwrap_string_size :: MethodBind
 bindFont_get_wordwrap_string_size
   = unsafePerformIO $
@@ -158,6 +162,7 @@ bindFont_get_wordwrap_string_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the size that the string would have with word wrapping enabled with a fixed [code]width[/code].
 get_wordwrap_string_size ::
                            (Font :< cls, Object :< cls) =>
                            cls -> GodotString -> Float -> IO Vector2
@@ -172,6 +177,7 @@ get_wordwrap_string_size cls arg1 arg2
 
 {-# NOINLINE bindFont_has_outline #-}
 
+-- | Returns [code]true[/code] if the font has an outline.
 bindFont_has_outline :: MethodBind
 bindFont_has_outline
   = unsafePerformIO $
@@ -181,6 +187,7 @@ bindFont_has_outline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the font has an outline.
 has_outline :: (Font :< cls, Object :< cls) => cls -> IO Bool
 has_outline cls
   = withVariantArray []

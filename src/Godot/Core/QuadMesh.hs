@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.QuadMesh
        (Godot.Core.QuadMesh.get_size, Godot.Core.QuadMesh.set_size) where
 import Data.Coerce
@@ -11,7 +12,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindQuadMesh_get_size #-}
 
--- | Size in the X and Y axes. Default is [code]Vector2(1, 1)[/code].
+-- | Size on the X and Y axes.
 bindQuadMesh_get_size :: MethodBind
 bindQuadMesh_get_size
   = unsafePerformIO $
@@ -21,7 +22,7 @@ bindQuadMesh_get_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Size in the X and Y axes. Default is [code]Vector2(1, 1)[/code].
+-- | Size on the X and Y axes.
 get_size :: (QuadMesh :< cls, Object :< cls) => cls -> IO Vector2
 get_size cls
   = withVariantArray []
@@ -32,7 +33,7 @@ get_size cls
 
 {-# NOINLINE bindQuadMesh_set_size #-}
 
--- | Size in the X and Y axes. Default is [code]Vector2(1, 1)[/code].
+-- | Size on the X and Y axes.
 bindQuadMesh_set_size :: MethodBind
 bindQuadMesh_set_size
   = unsafePerformIO $
@@ -42,7 +43,7 @@ bindQuadMesh_set_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Size in the X and Y axes. Default is [code]Vector2(1, 1)[/code].
+-- | Size on the X and Y axes.
 set_size ::
            (QuadMesh :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_size cls arg1

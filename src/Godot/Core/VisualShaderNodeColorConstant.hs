@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeColorConstant
        (Godot.Core.VisualShaderNodeColorConstant.get_constant,
         Godot.Core.VisualShaderNodeColorConstant.set_constant)
@@ -13,6 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindVisualShaderNodeColorConstant_get_constant #-}
 
+-- | A [Color] constant which represents a state of this node.
 bindVisualShaderNodeColorConstant_get_constant :: MethodBind
 bindVisualShaderNodeColorConstant_get_constant
   = unsafePerformIO $
@@ -22,6 +24,7 @@ bindVisualShaderNodeColorConstant_get_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A [Color] constant which represents a state of this node.
 get_constant ::
                (VisualShaderNodeColorConstant :< cls, Object :< cls) =>
                cls -> IO Color
@@ -37,6 +40,7 @@ get_constant cls
 
 {-# NOINLINE bindVisualShaderNodeColorConstant_set_constant #-}
 
+-- | A [Color] constant which represents a state of this node.
 bindVisualShaderNodeColorConstant_set_constant :: MethodBind
 bindVisualShaderNodeColorConstant_set_constant
   = unsafePerformIO $
@@ -46,6 +50,7 @@ bindVisualShaderNodeColorConstant_set_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A [Color] constant which represents a state of this node.
 set_constant ::
                (VisualShaderNodeColorConstant :< cls, Object :< cls) =>
                cls -> Color -> IO ()

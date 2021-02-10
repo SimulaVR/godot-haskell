@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GeometryInstance
        (Godot.Core.GeometryInstance._SHADOW_CASTING_SETTING_SHADOWS_ONLY,
         Godot.Core.GeometryInstance._FLAG_USE_BAKED_LIGHT,
@@ -105,7 +106,7 @@ get_extra_cull_margin cls
 
 {-# NOINLINE bindGeometryInstance_get_flag #-}
 
--- | If [code]true[/code], this GeometryInstance will be used when baking lights using a [GIProbe] or [BakedLightmap].
+-- | Returns the [enum GeometryInstance.Flags] that have been set for this object.
 bindGeometryInstance_get_flag :: MethodBind
 bindGeometryInstance_get_flag
   = unsafePerformIO $
@@ -115,7 +116,7 @@ bindGeometryInstance_get_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this GeometryInstance will be used when baking lights using a [GIProbe] or [BakedLightmap].
+-- | Returns the [enum GeometryInstance.Flags] that have been set for this object.
 get_flag ::
            (GeometryInstance :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag cls arg1
@@ -283,6 +284,7 @@ set_cast_shadows_setting cls arg1
 
 {-# NOINLINE bindGeometryInstance_set_custom_aabb #-}
 
+-- | Overrides the bounding box of this node with a custom one. To remove it, set an [AABB] with all fields set to zero.
 bindGeometryInstance_set_custom_aabb :: MethodBind
 bindGeometryInstance_set_custom_aabb
   = unsafePerformIO $
@@ -292,6 +294,7 @@ bindGeometryInstance_set_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Overrides the bounding box of this node with a custom one. To remove it, set an [AABB] with all fields set to zero.
 set_custom_aabb ::
                   (GeometryInstance :< cls, Object :< cls) => cls -> Aabb -> IO ()
 set_custom_aabb cls arg1
@@ -329,7 +332,7 @@ set_extra_cull_margin cls arg1
 
 {-# NOINLINE bindGeometryInstance_set_flag #-}
 
--- | If [code]true[/code], this GeometryInstance will be used when baking lights using a [GIProbe] or [BakedLightmap].
+-- | Sets the [enum GeometryInstance.Flags] specified. See [enum GeometryInstance.Flags] for options.
 bindGeometryInstance_set_flag :: MethodBind
 bindGeometryInstance_set_flag
   = unsafePerformIO $
@@ -339,7 +342,7 @@ bindGeometryInstance_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this GeometryInstance will be used when baking lights using a [GIProbe] or [BakedLightmap].
+-- | Sets the [enum GeometryInstance.Flags] specified. See [enum GeometryInstance.Flags] for options.
 set_flag ::
            (GeometryInstance :< cls, Object :< cls) =>
            cls -> Int -> Bool -> IO ()

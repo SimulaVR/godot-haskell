@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeStateMachineTransition
        (Godot.Core.AnimationNodeStateMachineTransition._SWITCH_MODE_IMMEDIATE,
         Godot.Core.AnimationNodeStateMachineTransition._SWITCH_MODE_SYNC,
@@ -34,17 +35,22 @@ _SWITCH_MODE_SYNC = 1
 _SWITCH_MODE_AT_END :: Int
 _SWITCH_MODE_AT_END = 2
 
+-- | Emitted when [member advance_condition] is changed.
 sig_advance_condition_changed ::
                               Godot.Internal.Dispatch.Signal AnimationNodeStateMachineTransition
 sig_advance_condition_changed
   = Godot.Internal.Dispatch.Signal "advance_condition_changed"
 
+instance NodeSignal AnimationNodeStateMachineTransition
+           "advance_condition_changed"
+           '[]
+
 {-# NOINLINE bindAnimationNodeStateMachineTransition_get_advance_condition
              #-}
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to "idle":
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to [code]"idle"[/code]:
 --   			[codeblock]
---   			$animation_tree["parameters/conditions/idle"] = is_on_floor and linear_velocity.x == 0
+--   			$animation_tree["parameters/conditions/idle"] = is_on_floor and (linear_velocity.x == 0)
 --   			[/codeblock]
 bindAnimationNodeStateMachineTransition_get_advance_condition ::
                                                               MethodBind
@@ -56,9 +62,9 @@ bindAnimationNodeStateMachineTransition_get_advance_condition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to "idle":
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to [code]"idle"[/code]:
 --   			[codeblock]
---   			$animation_tree["parameters/conditions/idle"] = is_on_floor and linear_velocity.x == 0
+--   			$animation_tree["parameters/conditions/idle"] = is_on_floor and (linear_velocity.x == 0)
 --   			[/codeblock]
 get_advance_condition ::
                         (AnimationNodeStateMachineTransition :< cls, Object :< cls) =>
@@ -214,9 +220,9 @@ is_disabled cls
 {-# NOINLINE bindAnimationNodeStateMachineTransition_set_advance_condition
              #-}
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to "idle":
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to [code]"idle"[/code]:
 --   			[codeblock]
---   			$animation_tree["parameters/conditions/idle"] = is_on_floor and linear_velocity.x == 0
+--   			$animation_tree["parameters/conditions/idle"] = is_on_floor and (linear_velocity.x == 0)
 --   			[/codeblock]
 bindAnimationNodeStateMachineTransition_set_advance_condition ::
                                                               MethodBind
@@ -228,9 +234,9 @@ bindAnimationNodeStateMachineTransition_set_advance_condition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to "idle":
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the [AnimationTree] that can be controlled from code (see [url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code][/url]). For example, if [member AnimationTree.tree_root] is an [AnimationNodeStateMachine] and [member advance_condition] is set to [code]"idle"[/code]:
 --   			[codeblock]
---   			$animation_tree["parameters/conditions/idle"] = is_on_floor and linear_velocity.x == 0
+--   			$animation_tree["parameters/conditions/idle"] = is_on_floor and (linear_velocity.x == 0)
 --   			[/codeblock]
 set_advance_condition ::
                         (AnimationNodeStateMachineTransition :< cls, Object :< cls) =>

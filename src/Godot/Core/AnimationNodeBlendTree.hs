@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeBlendTree
        (Godot.Core.AnimationNodeBlendTree._CONNECTION_ERROR_NO_INPUT_INDEX,
         Godot.Core.AnimationNodeBlendTree._CONNECTION_ERROR_NO_OUTPUT,
@@ -93,6 +94,7 @@ _tree_changed cls
 
 {-# NOINLINE bindAnimationNodeBlendTree_add_node #-}
 
+-- | Adds an [AnimationNode] at the given [code]position[/code]. The [code]name[/code] is used to identify the created sub-node later.
 bindAnimationNodeBlendTree_add_node :: MethodBind
 bindAnimationNodeBlendTree_add_node
   = unsafePerformIO $
@@ -102,6 +104,7 @@ bindAnimationNodeBlendTree_add_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds an [AnimationNode] at the given [code]position[/code]. The [code]name[/code] is used to identify the created sub-node later.
 add_node ::
            (AnimationNodeBlendTree :< cls, Object :< cls) =>
            cls -> GodotString -> AnimationNode -> Vector2 -> IO ()
@@ -116,6 +119,7 @@ add_node cls arg1 arg2 arg3
 
 {-# NOINLINE bindAnimationNodeBlendTree_connect_node #-}
 
+-- | Connects the output of an [AnimationNode] as input for another [AnimationNode], at the input port specified by [code]input_index[/code].
 bindAnimationNodeBlendTree_connect_node :: MethodBind
 bindAnimationNodeBlendTree_connect_node
   = unsafePerformIO $
@@ -125,6 +129,7 @@ bindAnimationNodeBlendTree_connect_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Connects the output of an [AnimationNode] as input for another [AnimationNode], at the input port specified by [code]input_index[/code].
 connect_node ::
                (AnimationNodeBlendTree :< cls, Object :< cls) =>
                cls -> GodotString -> Int -> GodotString -> IO ()
@@ -139,6 +144,7 @@ connect_node cls arg1 arg2 arg3
 
 {-# NOINLINE bindAnimationNodeBlendTree_disconnect_node #-}
 
+-- | Disconnects the node connected to the specified input.
 bindAnimationNodeBlendTree_disconnect_node :: MethodBind
 bindAnimationNodeBlendTree_disconnect_node
   = unsafePerformIO $
@@ -148,6 +154,7 @@ bindAnimationNodeBlendTree_disconnect_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Disconnects the node connected to the specified input.
 disconnect_node ::
                   (AnimationNodeBlendTree :< cls, Object :< cls) =>
                   cls -> GodotString -> Int -> IO ()
@@ -162,6 +169,7 @@ disconnect_node cls arg1 arg2
 
 {-# NOINLINE bindAnimationNodeBlendTree_get_graph_offset #-}
 
+-- | The global offset of all sub-nodes.
 bindAnimationNodeBlendTree_get_graph_offset :: MethodBind
 bindAnimationNodeBlendTree_get_graph_offset
   = unsafePerformIO $
@@ -171,6 +179,7 @@ bindAnimationNodeBlendTree_get_graph_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The global offset of all sub-nodes.
 get_graph_offset ::
                    (AnimationNodeBlendTree :< cls, Object :< cls) => cls -> IO Vector2
 get_graph_offset cls
@@ -184,6 +193,7 @@ get_graph_offset cls
 
 {-# NOINLINE bindAnimationNodeBlendTree_get_node #-}
 
+-- | Returns the sub-node with the specified [code]name[/code].
 bindAnimationNodeBlendTree_get_node :: MethodBind
 bindAnimationNodeBlendTree_get_node
   = unsafePerformIO $
@@ -193,6 +203,7 @@ bindAnimationNodeBlendTree_get_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the sub-node with the specified [code]name[/code].
 get_node ::
            (AnimationNodeBlendTree :< cls, Object :< cls) =>
            cls -> GodotString -> IO AnimationNode
@@ -207,6 +218,7 @@ get_node cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendTree_get_node_position #-}
 
+-- | Returns the position of the sub-node with the specified [code]name[/code].
 bindAnimationNodeBlendTree_get_node_position :: MethodBind
 bindAnimationNodeBlendTree_get_node_position
   = unsafePerformIO $
@@ -216,6 +228,7 @@ bindAnimationNodeBlendTree_get_node_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the position of the sub-node with the specified [code]name[/code].
 get_node_position ::
                     (AnimationNodeBlendTree :< cls, Object :< cls) =>
                     cls -> GodotString -> IO Vector2
@@ -230,6 +243,7 @@ get_node_position cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendTree_has_node #-}
 
+-- | Returns [code]true[/code] if a sub-node with specified [code]name[/code] exists.
 bindAnimationNodeBlendTree_has_node :: MethodBind
 bindAnimationNodeBlendTree_has_node
   = unsafePerformIO $
@@ -239,6 +253,7 @@ bindAnimationNodeBlendTree_has_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if a sub-node with specified [code]name[/code] exists.
 has_node ::
            (AnimationNodeBlendTree :< cls, Object :< cls) =>
            cls -> GodotString -> IO Bool
@@ -253,6 +268,7 @@ has_node cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendTree_remove_node #-}
 
+-- | Removes a sub-node.
 bindAnimationNodeBlendTree_remove_node :: MethodBind
 bindAnimationNodeBlendTree_remove_node
   = unsafePerformIO $
@@ -262,6 +278,7 @@ bindAnimationNodeBlendTree_remove_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes a sub-node.
 remove_node ::
               (AnimationNodeBlendTree :< cls, Object :< cls) =>
               cls -> GodotString -> IO ()
@@ -276,6 +293,7 @@ remove_node cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendTree_rename_node #-}
 
+-- | Changes the name of a sub-node.
 bindAnimationNodeBlendTree_rename_node :: MethodBind
 bindAnimationNodeBlendTree_rename_node
   = unsafePerformIO $
@@ -285,6 +303,7 @@ bindAnimationNodeBlendTree_rename_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Changes the name of a sub-node.
 rename_node ::
               (AnimationNodeBlendTree :< cls, Object :< cls) =>
               cls -> GodotString -> GodotString -> IO ()
@@ -299,6 +318,7 @@ rename_node cls arg1 arg2
 
 {-# NOINLINE bindAnimationNodeBlendTree_set_graph_offset #-}
 
+-- | The global offset of all sub-nodes.
 bindAnimationNodeBlendTree_set_graph_offset :: MethodBind
 bindAnimationNodeBlendTree_set_graph_offset
   = unsafePerformIO $
@@ -308,6 +328,7 @@ bindAnimationNodeBlendTree_set_graph_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The global offset of all sub-nodes.
 set_graph_offset ::
                    (AnimationNodeBlendTree :< cls, Object :< cls) =>
                    cls -> Vector2 -> IO ()
@@ -322,6 +343,7 @@ set_graph_offset cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendTree_set_node_position #-}
 
+-- | Modifies the position of a sub-node.
 bindAnimationNodeBlendTree_set_node_position :: MethodBind
 bindAnimationNodeBlendTree_set_node_position
   = unsafePerformIO $
@@ -331,6 +353,7 @@ bindAnimationNodeBlendTree_set_node_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Modifies the position of a sub-node.
 set_node_position ::
                     (AnimationNodeBlendTree :< cls, Object :< cls) =>
                     cls -> GodotString -> Vector2 -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PathFollow2D
        (Godot.Core.PathFollow2D.get_cubic_interpolation,
         Godot.Core.PathFollow2D.get_h_offset,
@@ -29,7 +30,7 @@ import Godot.Api.Types
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 bindPathFollow2D_get_cubic_interpolation :: MethodBind
 bindPathFollow2D_get_cubic_interpolation
   = unsafePerformIO $
@@ -41,7 +42,7 @@ bindPathFollow2D_get_cubic_interpolation
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 get_cubic_interpolation ::
                           (PathFollow2D :< cls, Object :< cls) => cls -> IO Bool
 get_cubic_interpolation cls
@@ -78,7 +79,7 @@ get_h_offset cls
 
 {-# NOINLINE bindPathFollow2D_get_lookahead #-}
 
--- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations. Default value: [code]4[/code].
+-- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations.
 bindPathFollow2D_get_lookahead :: MethodBind
 bindPathFollow2D_get_lookahead
   = unsafePerformIO $
@@ -88,7 +89,7 @@ bindPathFollow2D_get_lookahead
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations. Default value: [code]4[/code].
+-- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations.
 get_lookahead ::
                 (PathFollow2D :< cls, Object :< cls) => cls -> IO Float
 get_lookahead cls
@@ -218,7 +219,7 @@ is_rotating cls
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 bindPathFollow2D_set_cubic_interpolation :: MethodBind
 bindPathFollow2D_set_cubic_interpolation
   = unsafePerformIO $
@@ -230,7 +231,7 @@ bindPathFollow2D_set_cubic_interpolation
 
 -- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
 --   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
---   			There are two answers to this problem: Either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
+--   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 set_cubic_interpolation ::
                           (PathFollow2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_cubic_interpolation cls arg1
@@ -267,7 +268,7 @@ set_h_offset cls arg1
 
 {-# NOINLINE bindPathFollow2D_set_lookahead #-}
 
--- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations. Default value: [code]4[/code].
+-- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations.
 bindPathFollow2D_set_lookahead :: MethodBind
 bindPathFollow2D_set_lookahead
   = unsafePerformIO $
@@ -277,7 +278,7 @@ bindPathFollow2D_set_lookahead
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations. Default value: [code]4[/code].
+-- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations.
 set_lookahead ::
                 (PathFollow2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_lookahead cls arg1

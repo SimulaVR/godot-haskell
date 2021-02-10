@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PacketPeerStream
        (Godot.Core.PacketPeerStream.get_input_buffer_max_size,
         Godot.Core.PacketPeerStream.get_output_buffer_max_size,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioStreamRandomPitch
        (Godot.Core.AudioStreamRandomPitch.get_audio_stream,
         Godot.Core.AudioStreamRandomPitch.get_random_pitch,

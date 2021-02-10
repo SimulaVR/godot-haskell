@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.DynamicFont
        (Godot.Core.DynamicFont._SPACING_TOP,
         Godot.Core.DynamicFont._SPACING_SPACE,
@@ -141,6 +142,8 @@ get_font_data cls
 
 {-# NOINLINE bindDynamicFont_get_outline_color #-}
 
+-- | The font outline's color.
+--   			[b]Note:[/b] It's recommended to leave this at the default value so that you can adjust it in individual controls. For example, if the outline is made black here, it won't be possible to change its color using a Label's font outline modulate theme item.
 bindDynamicFont_get_outline_color :: MethodBind
 bindDynamicFont_get_outline_color
   = unsafePerformIO $
@@ -150,6 +153,8 @@ bindDynamicFont_get_outline_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The font outline's color.
+--   			[b]Note:[/b] It's recommended to leave this at the default value so that you can adjust it in individual controls. For example, if the outline is made black here, it won't be possible to change its color using a Label's font outline modulate theme item.
 get_outline_color ::
                     (DynamicFont :< cls, Object :< cls) => cls -> IO Color
 get_outline_color cls
@@ -163,6 +168,7 @@ get_outline_color cls
 
 {-# NOINLINE bindDynamicFont_get_outline_size #-}
 
+-- | The font outline's thickness in pixels (not relative to the font size).
 bindDynamicFont_get_outline_size :: MethodBind
 bindDynamicFont_get_outline_size
   = unsafePerformIO $
@@ -172,6 +178,7 @@ bindDynamicFont_get_outline_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The font outline's thickness in pixels (not relative to the font size).
 get_outline_size ::
                    (DynamicFont :< cls, Object :< cls) => cls -> IO Int
 get_outline_size cls
@@ -185,7 +192,7 @@ get_outline_size cls
 
 {-# NOINLINE bindDynamicFont_get_size #-}
 
--- | The font size.
+-- | The font size in pixels.
 bindDynamicFont_get_size :: MethodBind
 bindDynamicFont_get_size
   = unsafePerformIO $
@@ -195,7 +202,7 @@ bindDynamicFont_get_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The font size.
+-- | The font size in pixels.
 get_size :: (DynamicFont :< cls, Object :< cls) => cls -> IO Int
 get_size cls
   = withVariantArray []
@@ -206,7 +213,7 @@ get_size cls
 
 {-# NOINLINE bindDynamicFont_get_spacing #-}
 
--- | Extra spacing at the bottom in pixels.
+-- | Returns the spacing for the given [code]type[/code] (see [enum SpacingType]).
 bindDynamicFont_get_spacing :: MethodBind
 bindDynamicFont_get_spacing
   = unsafePerformIO $
@@ -216,7 +223,7 @@ bindDynamicFont_get_spacing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Extra spacing at the bottom in pixels.
+-- | Returns the spacing for the given [code]type[/code] (see [enum SpacingType]).
 get_spacing ::
               (DynamicFont :< cls, Object :< cls) => cls -> Int -> IO Int
 get_spacing cls arg1
@@ -229,7 +236,7 @@ get_spacing cls arg1
 
 {-# NOINLINE bindDynamicFont_get_use_filter #-}
 
--- | If [code]true[/code], filtering is used.
+-- | If [code]true[/code], filtering is used. This makes the font blurry instead of pixelated when scaling it if font oversampling is disabled or ineffective. It's recommended to enable this when using the font in a control whose size changes over time, unless a pixel art aesthetic is desired.
 bindDynamicFont_get_use_filter :: MethodBind
 bindDynamicFont_get_use_filter
   = unsafePerformIO $
@@ -239,7 +246,7 @@ bindDynamicFont_get_use_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], filtering is used.
+-- | If [code]true[/code], filtering is used. This makes the font blurry instead of pixelated when scaling it if font oversampling is disabled or ineffective. It's recommended to enable this when using the font in a control whose size changes over time, unless a pixel art aesthetic is desired.
 get_use_filter ::
                  (DynamicFont :< cls, Object :< cls) => cls -> IO Bool
 get_use_filter cls
@@ -252,7 +259,7 @@ get_use_filter cls
 
 {-# NOINLINE bindDynamicFont_get_use_mipmaps #-}
 
--- | If [code]true[/code], mipmapping is used.
+-- | If [code]true[/code], mipmapping is used. This improves the font's appearance when downscaling it if font oversampling is disabled or ineffective.
 bindDynamicFont_get_use_mipmaps :: MethodBind
 bindDynamicFont_get_use_mipmaps
   = unsafePerformIO $
@@ -262,7 +269,7 @@ bindDynamicFont_get_use_mipmaps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], mipmapping is used.
+-- | If [code]true[/code], mipmapping is used. This improves the font's appearance when downscaling it if font oversampling is disabled or ineffective.
 get_use_mipmaps ::
                   (DynamicFont :< cls, Object :< cls) => cls -> IO Bool
 get_use_mipmaps cls
@@ -346,6 +353,8 @@ set_font_data cls arg1
 
 {-# NOINLINE bindDynamicFont_set_outline_color #-}
 
+-- | The font outline's color.
+--   			[b]Note:[/b] It's recommended to leave this at the default value so that you can adjust it in individual controls. For example, if the outline is made black here, it won't be possible to change its color using a Label's font outline modulate theme item.
 bindDynamicFont_set_outline_color :: MethodBind
 bindDynamicFont_set_outline_color
   = unsafePerformIO $
@@ -355,6 +364,8 @@ bindDynamicFont_set_outline_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The font outline's color.
+--   			[b]Note:[/b] It's recommended to leave this at the default value so that you can adjust it in individual controls. For example, if the outline is made black here, it won't be possible to change its color using a Label's font outline modulate theme item.
 set_outline_color ::
                     (DynamicFont :< cls, Object :< cls) => cls -> Color -> IO ()
 set_outline_color cls arg1
@@ -368,6 +379,7 @@ set_outline_color cls arg1
 
 {-# NOINLINE bindDynamicFont_set_outline_size #-}
 
+-- | The font outline's thickness in pixels (not relative to the font size).
 bindDynamicFont_set_outline_size :: MethodBind
 bindDynamicFont_set_outline_size
   = unsafePerformIO $
@@ -377,6 +389,7 @@ bindDynamicFont_set_outline_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The font outline's thickness in pixels (not relative to the font size).
 set_outline_size ::
                    (DynamicFont :< cls, Object :< cls) => cls -> Int -> IO ()
 set_outline_size cls arg1
@@ -390,7 +403,7 @@ set_outline_size cls arg1
 
 {-# NOINLINE bindDynamicFont_set_size #-}
 
--- | The font size.
+-- | The font size in pixels.
 bindDynamicFont_set_size :: MethodBind
 bindDynamicFont_set_size
   = unsafePerformIO $
@@ -400,7 +413,7 @@ bindDynamicFont_set_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The font size.
+-- | The font size in pixels.
 set_size ::
            (DynamicFont :< cls, Object :< cls) => cls -> Int -> IO ()
 set_size cls arg1
@@ -412,7 +425,7 @@ set_size cls arg1
 
 {-# NOINLINE bindDynamicFont_set_spacing #-}
 
--- | Extra spacing at the bottom in pixels.
+-- | Sets the spacing for [code]type[/code] (see [enum SpacingType]) to [code]value[/code] in pixels (not relative to the font size).
 bindDynamicFont_set_spacing :: MethodBind
 bindDynamicFont_set_spacing
   = unsafePerformIO $
@@ -422,7 +435,7 @@ bindDynamicFont_set_spacing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Extra spacing at the bottom in pixels.
+-- | Sets the spacing for [code]type[/code] (see [enum SpacingType]) to [code]value[/code] in pixels (not relative to the font size).
 set_spacing ::
               (DynamicFont :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_spacing cls arg1 arg2
@@ -435,7 +448,7 @@ set_spacing cls arg1 arg2
 
 {-# NOINLINE bindDynamicFont_set_use_filter #-}
 
--- | If [code]true[/code], filtering is used.
+-- | If [code]true[/code], filtering is used. This makes the font blurry instead of pixelated when scaling it if font oversampling is disabled or ineffective. It's recommended to enable this when using the font in a control whose size changes over time, unless a pixel art aesthetic is desired.
 bindDynamicFont_set_use_filter :: MethodBind
 bindDynamicFont_set_use_filter
   = unsafePerformIO $
@@ -445,7 +458,7 @@ bindDynamicFont_set_use_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], filtering is used.
+-- | If [code]true[/code], filtering is used. This makes the font blurry instead of pixelated when scaling it if font oversampling is disabled or ineffective. It's recommended to enable this when using the font in a control whose size changes over time, unless a pixel art aesthetic is desired.
 set_use_filter ::
                  (DynamicFont :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_filter cls arg1
@@ -458,7 +471,7 @@ set_use_filter cls arg1
 
 {-# NOINLINE bindDynamicFont_set_use_mipmaps #-}
 
--- | If [code]true[/code], mipmapping is used.
+-- | If [code]true[/code], mipmapping is used. This improves the font's appearance when downscaling it if font oversampling is disabled or ineffective.
 bindDynamicFont_set_use_mipmaps :: MethodBind
 bindDynamicFont_set_use_mipmaps
   = unsafePerformIO $
@@ -468,7 +481,7 @@ bindDynamicFont_set_use_mipmaps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], mipmapping is used.
+-- | If [code]true[/code], mipmapping is used. This improves the font's appearance when downscaling it if font oversampling is disabled or ineffective.
 set_use_mipmaps ::
                   (DynamicFont :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_mipmaps cls arg1

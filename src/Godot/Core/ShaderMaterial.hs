@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ShaderMaterial
        (Godot.Core.ShaderMaterial._shader_changed,
         Godot.Core.ShaderMaterial.get_shader,
@@ -88,6 +89,7 @@ get_shader_param cls arg1
 
 {-# NOINLINE bindShaderMaterial_property_can_revert #-}
 
+-- | Returns [code]true[/code] if the property identified by [code]name[/code] can be reverted to a default value.
 bindShaderMaterial_property_can_revert :: MethodBind
 bindShaderMaterial_property_can_revert
   = unsafePerformIO $
@@ -97,6 +99,7 @@ bindShaderMaterial_property_can_revert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the property identified by [code]name[/code] can be reverted to a default value.
 property_can_revert ::
                       (ShaderMaterial :< cls, Object :< cls) =>
                       cls -> GodotString -> IO Bool
@@ -111,6 +114,7 @@ property_can_revert cls arg1
 
 {-# NOINLINE bindShaderMaterial_property_get_revert #-}
 
+-- | Returns the default value of the material property with given [code]name[/code].
 bindShaderMaterial_property_get_revert :: MethodBind
 bindShaderMaterial_property_get_revert
   = unsafePerformIO $
@@ -120,6 +124,7 @@ bindShaderMaterial_property_get_revert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the default value of the material property with given [code]name[/code].
 property_get_revert ::
                       (ShaderMaterial :< cls, Object :< cls) =>
                       cls -> GodotString -> IO GodotVariant
@@ -157,7 +162,7 @@ set_shader cls arg1
 
 {-# NOINLINE bindShaderMaterial_set_shader_param #-}
 
--- | Changes the value set for this material of a uniform in the shader.
+-- | Changes the value set for this material of a uniform in the shader. [b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 bindShaderMaterial_set_shader_param :: MethodBind
 bindShaderMaterial_set_shader_param
   = unsafePerformIO $
@@ -167,7 +172,7 @@ bindShaderMaterial_set_shader_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the value set for this material of a uniform in the shader.
+-- | Changes the value set for this material of a uniform in the shader. [b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
 set_shader_param ::
                    (ShaderMaterial :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotVariant -> IO ()

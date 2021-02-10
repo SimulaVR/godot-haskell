@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeBlendSpace1D
        (Godot.Core.AnimationNodeBlendSpace1D._add_blend_point,
         Godot.Core.AnimationNodeBlendSpace1D._tree_changed,
@@ -74,7 +75,7 @@ _tree_changed cls
 
 {-# NOINLINE bindAnimationNodeBlendSpace1D_add_blend_point #-}
 
--- | Add a new point that represents a [code]node[/code] on the virtual axis at a given position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code] , the point is inserted at the end of the blend points array.
+-- | Adds a new point that represents a [code]node[/code] on the virtual axis at a given position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code], the point is inserted at the end of the blend points array.
 bindAnimationNodeBlendSpace1D_add_blend_point :: MethodBind
 bindAnimationNodeBlendSpace1D_add_blend_point
   = unsafePerformIO $
@@ -84,7 +85,7 @@ bindAnimationNodeBlendSpace1D_add_blend_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a new point that represents a [code]node[/code] on the virtual axis at a given position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code] , the point is inserted at the end of the blend points array.
+-- | Adds a new point that represents a [code]node[/code] on the virtual axis at a given position set by [code]pos[/code]. You can insert it at a specific index using the [code]at_index[/code] argument. If you use the default value for [code]at_index[/code], the point is inserted at the end of the blend points array.
 add_blend_point ::
                   (AnimationNodeBlendSpace1D :< cls, Object :< cls) =>
                   cls -> AnimationRootNode -> Float -> Int -> IO ()
@@ -126,7 +127,7 @@ get_blend_point_count cls
 
 {-# NOINLINE bindAnimationNodeBlendSpace1D_get_blend_point_node #-}
 
--- | Returns the [code]AnimationNode[/code] referenced by the point at index [code]point[/code].
+-- | Returns the [AnimationNode] referenced by the point at index [code]point[/code].
 bindAnimationNodeBlendSpace1D_get_blend_point_node :: MethodBind
 bindAnimationNodeBlendSpace1D_get_blend_point_node
   = unsafePerformIO $
@@ -136,7 +137,7 @@ bindAnimationNodeBlendSpace1D_get_blend_point_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]AnimationNode[/code] referenced by the point at index [code]point[/code].
+-- | Returns the [AnimationNode] referenced by the point at index [code]point[/code].
 get_blend_point_node ::
                        (AnimationNodeBlendSpace1D :< cls, Object :< cls) =>
                        cls -> Int -> IO AnimationRootNode
@@ -307,7 +308,7 @@ remove_blend_point cls arg1
 
 {-# NOINLINE bindAnimationNodeBlendSpace1D_set_blend_point_node #-}
 
--- | Changes the AnimationNode referenced by the point at index [code]point[/code].
+-- | Changes the [AnimationNode] referenced by the point at index [code]point[/code].
 bindAnimationNodeBlendSpace1D_set_blend_point_node :: MethodBind
 bindAnimationNodeBlendSpace1D_set_blend_point_node
   = unsafePerformIO $
@@ -317,7 +318,7 @@ bindAnimationNodeBlendSpace1D_set_blend_point_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the AnimationNode referenced by the point at index [code]point[/code].
+-- | Changes the [AnimationNode] referenced by the point at index [code]point[/code].
 set_blend_point_node ::
                        (AnimationNodeBlendSpace1D :< cls, Object :< cls) =>
                        cls -> Int -> AnimationRootNode -> IO ()

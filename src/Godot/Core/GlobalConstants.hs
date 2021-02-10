@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GlobalConstants
        (Godot.Core.GlobalConstants._KEY_BACKTAB,
         Godot.Core.GlobalConstants._KEY_BRACELEFT,

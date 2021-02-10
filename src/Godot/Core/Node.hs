@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Node
        (Godot.Core.Node._DUPLICATE_GROUPS,
         Godot.Core.Node._DUPLICATE_SCRIPTS,
@@ -227,21 +228,31 @@ _NOTIFICATION_CRASH = 1012
 sig_ready :: Godot.Internal.Dispatch.Signal Node
 sig_ready = Godot.Internal.Dispatch.Signal "ready"
 
+instance NodeSignal Node "ready" '[]
+
 -- | Emitted when the node is renamed.
 sig_renamed :: Godot.Internal.Dispatch.Signal Node
 sig_renamed = Godot.Internal.Dispatch.Signal "renamed"
+
+instance NodeSignal Node "renamed" '[]
 
 -- | Emitted when the node enters the tree.
 sig_tree_entered :: Godot.Internal.Dispatch.Signal Node
 sig_tree_entered = Godot.Internal.Dispatch.Signal "tree_entered"
 
+instance NodeSignal Node "tree_entered" '[]
+
 -- | Emitted after the node exits the tree and is no longer active.
 sig_tree_exited :: Godot.Internal.Dispatch.Signal Node
 sig_tree_exited = Godot.Internal.Dispatch.Signal "tree_exited"
 
+instance NodeSignal Node "tree_exited" '[]
+
 -- | Emitted when the node is still active but about to exit the tree. This is the right place for de-initialization (or a "destructor", if you will).
 sig_tree_exiting :: Godot.Internal.Dispatch.Signal Node
 sig_tree_exiting = Godot.Internal.Dispatch.Signal "tree_exiting"
+
+instance NodeSignal Node "tree_exiting" '[]
 
 {-# NOINLINE bindNode__enter_tree #-}
 
@@ -268,7 +279,7 @@ _enter_tree cls
 {-# NOINLINE bindNode__exit_tree #-}
 
 -- | Called when the node is about to leave the [SceneTree] (e.g. upon freeing, scene changing, or after calling [method remove_child] in a script). If the node has children, its [method _exit_tree] callback will be called last, after all its children have left the tree.
---   				Corresponds to the [constant NOTIFICATION_EXIT_TREE] notification in [method Object._notification] and signal [signal tree_exiting]. To get notified when the node has already left the active tree, connect to the [signal tree_exited]
+--   				Corresponds to the [constant NOTIFICATION_EXIT_TREE] notification in [method Object._notification] and signal [signal tree_exiting]. To get notified when the node has already left the active tree, connect to the [signal tree_exited].
 bindNode__exit_tree :: MethodBind
 bindNode__exit_tree
   = unsafePerformIO $
@@ -279,7 +290,7 @@ bindNode__exit_tree
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Called when the node is about to leave the [SceneTree] (e.g. upon freeing, scene changing, or after calling [method remove_child] in a script). If the node has children, its [method _exit_tree] callback will be called last, after all its children have left the tree.
---   				Corresponds to the [constant NOTIFICATION_EXIT_TREE] notification in [method Object._notification] and signal [signal tree_exiting]. To get notified when the node has already left the active tree, connect to the [signal tree_exited]
+--   				Corresponds to the [constant NOTIFICATION_EXIT_TREE] notification in [method Object._notification] and signal [signal tree_exiting]. To get notified when the node has already left the active tree, connect to the [signal tree_exited].
 _exit_tree :: (Node :< cls, Object :< cls) => cls -> IO ()
 _exit_tree cls
   = withVariantArray []
@@ -289,8 +300,9 @@ _exit_tree cls
 
 {-# NOINLINE bindNode__get_configuration_warning #-}
 
--- | The string returned from this method is displayed as a warning in the "Scene Dock" if the script that overrides it is a [code]tool[/code] script.
+-- | The string returned from this method is displayed as a warning in the Scene Dock if the script that overrides it is a [code]tool[/code] script.
 --   				Returning an empty string produces no warning.
+--   				Call [method update_configuration_warning] when the warning needs to be updated for this node.
 bindNode__get_configuration_warning :: MethodBind
 bindNode__get_configuration_warning
   = unsafePerformIO $
@@ -300,8 +312,9 @@ bindNode__get_configuration_warning
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The string returned from this method is displayed as a warning in the "Scene Dock" if the script that overrides it is a [code]tool[/code] script.
+-- | The string returned from this method is displayed as a warning in the Scene Dock if the script that overrides it is a [code]tool[/code] script.
 --   				Returning an empty string produces no warning.
+--   				Call [method update_configuration_warning] when the warning needs to be updated for this node.
 _get_configuration_warning ::
                              (Node :< cls, Object :< cls) => cls -> IO GodotString
 _get_configuration_warning cls
@@ -362,6 +375,7 @@ _get_import_path cls
 --   				It is only called if input processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process_input].
 --   				To consume the input event and stop it propagating further to other nodes, [method SceneTree.set_input_as_handled] can be called.
 --   				For gameplay input, [method _unhandled_input] and [method _unhandled_key_input] are usually a better fit as they allow the GUI to intercept the events first.
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__input :: MethodBind
 bindNode__input
   = unsafePerformIO $
@@ -375,6 +389,7 @@ bindNode__input
 --   				It is only called if input processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process_input].
 --   				To consume the input event and stop it propagating further to other nodes, [method SceneTree.set_input_as_handled] can be called.
 --   				For gameplay input, [method _unhandled_input] and [method _unhandled_key_input] are usually a better fit as they allow the GUI to intercept the events first.
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _input ::
          (Node :< cls, Object :< cls) => cls -> InputEvent -> IO ()
 _input cls arg1
@@ -388,6 +403,7 @@ _input cls arg1
 -- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the [code]delta[/code] variable should be constant.
 --   				It is only called if physics processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_physics_process].
 --   				Corresponds to the [constant NOTIFICATION_PHYSICS_PROCESS] notification in [method Object._notification].
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__physics_process :: MethodBind
 bindNode__physics_process
   = unsafePerformIO $
@@ -400,6 +416,7 @@ bindNode__physics_process
 -- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the [code]delta[/code] variable should be constant.
 --   				It is only called if physics processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_physics_process].
 --   				Corresponds to the [constant NOTIFICATION_PHYSICS_PROCESS] notification in [method Object._notification].
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _physics_process ::
                    (Node :< cls, Object :< cls) => cls -> Float -> IO ()
 _physics_process cls arg1
@@ -415,6 +432,7 @@ _physics_process cls arg1
 -- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the [code]delta[/code] time since the previous frame is not constant.
 --   				It is only called if processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process].
 --   				Corresponds to the [constant NOTIFICATION_PROCESS] notification in [method Object._notification].
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__process :: MethodBind
 bindNode__process
   = unsafePerformIO $
@@ -427,6 +445,7 @@ bindNode__process
 -- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the [code]delta[/code] time since the previous frame is not constant.
 --   				It is only called if processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process].
 --   				Corresponds to the [constant NOTIFICATION_PROCESS] notification in [method Object._notification].
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _process :: (Node :< cls, Object :< cls) => cls -> Float -> IO ()
 _process cls arg1
   = withVariantArray [toVariant arg1]
@@ -509,6 +528,7 @@ _set_import_path cls arg1
 --   				It is only called if unhandled input processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process_unhandled_input].
 --   				To consume the input event and stop it propagating further to other nodes, [method SceneTree.set_input_as_handled] can be called.
 --   				For gameplay input, this and [method _unhandled_key_input] are usually a better fit than [method _input] as they allow the GUI to intercept the events first.
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__unhandled_input :: MethodBind
 bindNode__unhandled_input
   = unsafePerformIO $
@@ -522,6 +542,7 @@ bindNode__unhandled_input
 --   				It is only called if unhandled input processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process_unhandled_input].
 --   				To consume the input event and stop it propagating further to other nodes, [method SceneTree.set_input_as_handled] can be called.
 --   				For gameplay input, this and [method _unhandled_key_input] are usually a better fit than [method _input] as they allow the GUI to intercept the events first.
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _unhandled_input ::
                    (Node :< cls, Object :< cls) => cls -> InputEvent -> IO ()
 _unhandled_input cls arg1
@@ -538,6 +559,7 @@ _unhandled_input cls arg1
 --   				It is only called if unhandled key input processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process_unhandled_key_input].
 --   				To consume the input event and stop it propagating further to other nodes, [method SceneTree.set_input_as_handled] can be called.
 --   				For gameplay input, this and [method _unhandled_input] are usually a better fit than [method _input] as they allow the GUI to intercept the events first.
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__unhandled_key_input :: MethodBind
 bindNode__unhandled_key_input
   = unsafePerformIO $
@@ -551,6 +573,7 @@ bindNode__unhandled_key_input
 --   				It is only called if unhandled key input processing is enabled, which is done automatically if this method is overridden, and can be toggled with [method set_process_unhandled_key_input].
 --   				To consume the input event and stop it propagating further to other nodes, [method SceneTree.set_input_as_handled] can be called.
 --   				For gameplay input, this and [method _unhandled_input] are usually a better fit than [method _input] as they allow the GUI to intercept the events first.
+--   				[b]Note:[/b] This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _unhandled_key_input ::
                        (Node :< cls, Object :< cls) => cls -> InputEventKey -> IO ()
 _unhandled_key_input cls arg1
@@ -564,7 +587,14 @@ _unhandled_key_input cls arg1
 {-# NOINLINE bindNode_add_child #-}
 
 -- | Adds a child node. Nodes can have any number of children, but every child must have a unique name. Child nodes are automatically deleted when the parent node is deleted, so an entire scene can be removed by deleting its topmost node.
---   				Setting [code]legible_unique_name[/code] to [code]true[/code] creates child nodes with human-readable names, based on the name of the node being instanced instead of its type.
+--   				If [code]legible_unique_name[/code] is [code]true[/code], the child node will have an human-readable name based on the name of the node being instanced instead of its type.
+--   				[b]Note:[/b] If the child node already has a parent, the function will fail. Use [method remove_child] first to remove the node from its current parent. For example:
+--   				[codeblock]
+--   				if child_node.get_parent():
+--   				    child_node.get_parent().remove_child(child_node)
+--   				add_child(child_node)
+--   				[/codeblock]
+--   				[b]Note:[/b] If you want a child to be persisted to a [PackedScene], you must set [member owner] in addition to calling [method add_child]. This is typically relevant for [url=https://godot.readthedocs.io/en/latest/tutorials/misc/running_code_in_the_editor.html]tool scripts[/url] and [url=https://godot.readthedocs.io/en/latest/tutorials/plugins/editor/index.html]editor plugins[/url]. If [method add_child] is called without setting [member owner], the newly added [Node] will not be visible in the scene tree, though it will be visible in the 2D/3D view.
 bindNode_add_child :: MethodBind
 bindNode_add_child
   = unsafePerformIO $
@@ -575,7 +605,14 @@ bindNode_add_child
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds a child node. Nodes can have any number of children, but every child must have a unique name. Child nodes are automatically deleted when the parent node is deleted, so an entire scene can be removed by deleting its topmost node.
---   				Setting [code]legible_unique_name[/code] to [code]true[/code] creates child nodes with human-readable names, based on the name of the node being instanced instead of its type.
+--   				If [code]legible_unique_name[/code] is [code]true[/code], the child node will have an human-readable name based on the name of the node being instanced instead of its type.
+--   				[b]Note:[/b] If the child node already has a parent, the function will fail. Use [method remove_child] first to remove the node from its current parent. For example:
+--   				[codeblock]
+--   				if child_node.get_parent():
+--   				    child_node.get_parent().remove_child(child_node)
+--   				add_child(child_node)
+--   				[/codeblock]
+--   				[b]Note:[/b] If you want a child to be persisted to a [PackedScene], you must set [member owner] in addition to calling [method add_child]. This is typically relevant for [url=https://godot.readthedocs.io/en/latest/tutorials/misc/running_code_in_the_editor.html]tool scripts[/url] and [url=https://godot.readthedocs.io/en/latest/tutorials/plugins/editor/index.html]editor plugins[/url]. If [method add_child] is called without setting [member owner], the newly added [Node] will not be visible in the scene tree, though it will be visible in the 2D/3D view.
 add_child ::
             (Node :< cls, Object :< cls) => cls -> Node -> Bool -> IO ()
 add_child cls arg1 arg2
@@ -586,8 +623,8 @@ add_child cls arg1 arg2
 
 {-# NOINLINE bindNode_add_child_below_node #-}
 
--- | Adds a child node. The child is placed below the given node in the list of children.
---   				Setting [code]legible_unique_name[/code] to [code]true[/code] creates child nodes with human-readable names, based on the name of the node being instanced instead of its type.
+-- | Adds [code]child_node[/code] as a child. The child is placed below the given [code]node[/code] in the list of children.
+--   				If [code]legible_unique_name[/code] is [code]true[/code], the child node will have an human-readable name based on the name of the node being instanced instead of its type.
 bindNode_add_child_below_node :: MethodBind
 bindNode_add_child_below_node
   = unsafePerformIO $
@@ -597,8 +634,8 @@ bindNode_add_child_below_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a child node. The child is placed below the given node in the list of children.
---   				Setting [code]legible_unique_name[/code] to [code]true[/code] creates child nodes with human-readable names, based on the name of the node being instanced instead of its type.
+-- | Adds [code]child_node[/code] as a child. The child is placed below the given [code]node[/code] in the list of children.
+--   				If [code]legible_unique_name[/code] is [code]true[/code], the child node will have an human-readable name based on the name of the node being instanced instead of its type.
 add_child_below_node ::
                        (Node :< cls, Object :< cls) =>
                        cls -> Node -> Node -> Bool -> IO ()
@@ -657,7 +694,8 @@ can_process cls
 {-# NOINLINE bindNode_duplicate #-}
 
 -- | Duplicates the node, returning a new node.
---   				You can fine-tune the behavior using the [code]flags[/code] (see [enum Node.DuplicateFlags]).
+--   				You can fine-tune the behavior using the [code]flags[/code] (see [enum DuplicateFlags]).
+--   				[b]Note:[/b] It will not work properly if the node contains a script with constructor arguments (i.e. needs to supply arguments to [method Object._init] method). In that case, the node will be duplicated without a script.
 bindNode_duplicate :: MethodBind
 bindNode_duplicate
   = unsafePerformIO $
@@ -668,7 +706,8 @@ bindNode_duplicate
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Duplicates the node, returning a new node.
---   				You can fine-tune the behavior using the [code]flags[/code] (see [enum Node.DuplicateFlags]).
+--   				You can fine-tune the behavior using the [code]flags[/code] (see [enum DuplicateFlags]).
+--   				[b]Note:[/b] It will not work properly if the node contains a script with constructor arguments (i.e. needs to supply arguments to [method Object._init] method). In that case, the node will be duplicated without a script.
 duplicate :: (Node :< cls, Object :< cls) => cls -> Int -> IO Node
 duplicate cls arg1
   = withVariantArray [toVariant arg1]
@@ -678,8 +717,10 @@ duplicate cls arg1
 
 {-# NOINLINE bindNode_find_node #-}
 
--- | Finds a descendant of this node whose name matches [code]mask[/code] as in [method String.match] (i.e. case sensitive, but '*' matches zero or more characters and '?' matches any single character except '.'). Note that it does not match against the full path, just against individual node names.
---   				If [code]owned[/code] is [code]true[/code], this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through script, because those scenes don't have an owner.
+-- | Finds a descendant of this node whose name matches [code]mask[/code] as in [method String.match] (i.e. case-sensitive, but [code]"*"[/code] matches zero or more characters and [code]"?"[/code] matches any single character except [code]"."[/code]).
+--   				[b]Note:[/b] It does not match against the full path, just against individual node names.
+--   				If [code]owned[/code] is [code]true[/code], this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through a script, because those scenes don't have an owner.
+--   				[b]Note:[/b] As this method walks through all the descendants of the node, it is the slowest way to get a reference to another node. Whenever possible, consider using [method get_node] instead. To avoid using [method find_node] too often, consider caching the node reference into a variable.
 bindNode_find_node :: MethodBind
 bindNode_find_node
   = unsafePerformIO $
@@ -689,8 +730,10 @@ bindNode_find_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Finds a descendant of this node whose name matches [code]mask[/code] as in [method String.match] (i.e. case sensitive, but '*' matches zero or more characters and '?' matches any single character except '.'). Note that it does not match against the full path, just against individual node names.
---   				If [code]owned[/code] is [code]true[/code], this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through script, because those scenes don't have an owner.
+-- | Finds a descendant of this node whose name matches [code]mask[/code] as in [method String.match] (i.e. case-sensitive, but [code]"*"[/code] matches zero or more characters and [code]"?"[/code] matches any single character except [code]"."[/code]).
+--   				[b]Note:[/b] It does not match against the full path, just against individual node names.
+--   				If [code]owned[/code] is [code]true[/code], this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through a script, because those scenes don't have an owner.
+--   				[b]Note:[/b] As this method walks through all the descendants of the node, it is the slowest way to get a reference to another node. Whenever possible, consider using [method get_node] instead. To avoid using [method find_node] too often, consider caching the node reference into a variable.
 find_node ::
             (Node :< cls, Object :< cls) =>
             cls -> GodotString -> Bool -> Bool -> IO Node
@@ -702,7 +745,9 @@ find_node cls arg1 arg2 arg3
 
 {-# NOINLINE bindNode_find_parent #-}
 
--- | Finds the first parent of the current node whose name matches [code]mask[/code] as in [method String.match] (i.e. case sensitive, but '*' matches zero or more characters and '?' matches any single character except '.'). Note that it does not match against the full path, just against individual node names.
+-- | Finds the first parent of the current node whose name matches [code]mask[/code] as in [method String.match] (i.e. case-sensitive, but [code]"*"[/code] matches zero or more characters and [code]"?"[/code] matches any single character except [code]"."[/code]).
+--   				[b]Note:[/b] It does not match against the full path, just against individual node names.
+--   				[b]Note:[/b] As this method walks upwards in the scene tree, it can be slow in large, deeply nested scene trees. Whenever possible, consider using [method get_node] instead. To avoid using [method find_parent] too often, consider caching the node reference into a variable.
 bindNode_find_parent :: MethodBind
 bindNode_find_parent
   = unsafePerformIO $
@@ -712,7 +757,9 @@ bindNode_find_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Finds the first parent of the current node whose name matches [code]mask[/code] as in [method String.match] (i.e. case sensitive, but '*' matches zero or more characters and '?' matches any single character except '.'). Note that it does not match against the full path, just against individual node names.
+-- | Finds the first parent of the current node whose name matches [code]mask[/code] as in [method String.match] (i.e. case-sensitive, but [code]"*"[/code] matches zero or more characters and [code]"?"[/code] matches any single character except [code]"."[/code]).
+--   				[b]Note:[/b] It does not match against the full path, just against individual node names.
+--   				[b]Note:[/b] As this method walks upwards in the scene tree, it can be slow in large, deeply nested scene trees. Whenever possible, consider using [method get_node] instead. To avoid using [method find_parent] too often, consider caching the node reference into a variable.
 find_parent ::
               (Node :< cls, Object :< cls) => cls -> GodotString -> IO Node
 find_parent cls arg1
@@ -787,7 +834,7 @@ get_children cls
 
 {-# NOINLINE bindNode_get_custom_multiplayer #-}
 
--- | The override to the default [MultiplayerAPI]. Set to null to use the default SceneTree one.
+-- | The override to the default [MultiplayerAPI]. Set to [code]null[/code] to use the default [SceneTree] one.
 bindNode_get_custom_multiplayer :: MethodBind
 bindNode_get_custom_multiplayer
   = unsafePerformIO $
@@ -797,7 +844,7 @@ bindNode_get_custom_multiplayer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The override to the default [MultiplayerAPI]. Set to null to use the default SceneTree one.
+-- | The override to the default [MultiplayerAPI]. Set to [code]null[/code] to use the default [SceneTree] one.
 get_custom_multiplayer ::
                          (Node :< cls, Object :< cls) => cls -> IO MultiplayerAPI
 get_custom_multiplayer cls
@@ -894,7 +941,7 @@ get_multiplayer cls
 
 {-# NOINLINE bindNode_get_name #-}
 
--- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed
+-- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
 bindNode_get_name :: MethodBind
 bindNode_get_name
   = unsafePerformIO $
@@ -904,7 +951,7 @@ bindNode_get_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed
+-- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
 get_name :: (Node :< cls, Object :< cls) => cls -> IO GodotString
 get_name cls
   = withVariantArray []
@@ -936,7 +983,7 @@ get_network_master cls
 
 {-# NOINLINE bindNode_get_node #-}
 
--- | Fetches a node. The [NodePath] can be either a relative path (from the current node) or an absolute path (in the scene tree) to a node. If the path does not exist, a [code]null instance[/code] is returned and attempts to access it will result in an "Attempt to call <method> on a null instance." error.
+-- | Fetches a node. The [NodePath] can be either a relative path (from the current node) or an absolute path (in the scene tree) to a node. If the path does not exist, a [code]null instance[/code] is returned and an error is logged. Attempts to access methods on the return value will result in an "Attempt to call <method> on a null instance." error.
 --   				[b]Note:[/b] Fetching absolute paths only works when the node is inside the scene tree (see [method is_inside_tree]).
 --   				[b]Example:[/b] Assume your current node is Character and the following tree:
 --   				[codeblock]
@@ -965,7 +1012,7 @@ bindNode_get_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Fetches a node. The [NodePath] can be either a relative path (from the current node) or an absolute path (in the scene tree) to a node. If the path does not exist, a [code]null instance[/code] is returned and attempts to access it will result in an "Attempt to call <method> on a null instance." error.
+-- | Fetches a node. The [NodePath] can be either a relative path (from the current node) or an absolute path (in the scene tree) to a node. If the path does not exist, a [code]null instance[/code] is returned and an error is logged. Attempts to access methods on the return value will result in an "Attempt to call <method> on a null instance." error.
 --   				[b]Note:[/b] Fetching absolute paths only works when the node is inside the scene tree (see [method is_inside_tree]).
 --   				[b]Example:[/b] Assume your current node is Character and the following tree:
 --   				[codeblock]
@@ -995,6 +1042,14 @@ get_node cls arg1
 
 {-# NOINLINE bindNode_get_node_and_resource #-}
 
+-- | Fetches a node and one of its resources as specified by the [NodePath]'s subname (e.g. [code]Area2D/CollisionShape2D:shape[/code]). If several nested resources are specified in the [NodePath], the last one will be fetched.
+--   				The return value is an array of size 3: the first index points to the [Node] (or [code]null[/code] if not found), the second index points to the [Resource] (or [code]null[/code] if not found), and the third index is the remaining [NodePath], if any.
+--   				For example, assuming that [code]Area2D/CollisionShape2D[/code] is a valid node and that its [code]shape[/code] property has been assigned a [RectangleShape2D] resource, one could have this kind of output:
+--   				[codeblock]
+--   				print(get_node_and_resource("Area2D/CollisionShape2D")) # [[CollisionShape2D:1161], Null, ]
+--   				print(get_node_and_resource("Area2D/CollisionShape2D:shape")) # [[CollisionShape2D:1161], [RectangleShape2D:1156], ]
+--   				print(get_node_and_resource("Area2D/CollisionShape2D:shape:extents")) # [[CollisionShape2D:1161], [RectangleShape2D:1156], :extents]
+--   				[/codeblock]
 bindNode_get_node_and_resource :: MethodBind
 bindNode_get_node_and_resource
   = unsafePerformIO $
@@ -1004,6 +1059,14 @@ bindNode_get_node_and_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Fetches a node and one of its resources as specified by the [NodePath]'s subname (e.g. [code]Area2D/CollisionShape2D:shape[/code]). If several nested resources are specified in the [NodePath], the last one will be fetched.
+--   				The return value is an array of size 3: the first index points to the [Node] (or [code]null[/code] if not found), the second index points to the [Resource] (or [code]null[/code] if not found), and the third index is the remaining [NodePath], if any.
+--   				For example, assuming that [code]Area2D/CollisionShape2D[/code] is a valid node and that its [code]shape[/code] property has been assigned a [RectangleShape2D] resource, one could have this kind of output:
+--   				[codeblock]
+--   				print(get_node_and_resource("Area2D/CollisionShape2D")) # [[CollisionShape2D:1161], Null, ]
+--   				print(get_node_and_resource("Area2D/CollisionShape2D:shape")) # [[CollisionShape2D:1161], [RectangleShape2D:1156], ]
+--   				print(get_node_and_resource("Area2D/CollisionShape2D:shape:extents")) # [[CollisionShape2D:1161], [RectangleShape2D:1156], :extents]
+--   				[/codeblock]
 get_node_and_resource ::
                         (Node :< cls, Object :< cls) => cls -> NodePath -> IO Array
 get_node_and_resource cls arg1
@@ -1016,7 +1079,7 @@ get_node_and_resource cls arg1
 
 {-# NOINLINE bindNode_get_node_or_null #-}
 
--- | Similar to [method get_node], but does not raise an error when [code]path[/code] does not point to a valid [code]Node[/code].
+-- | Similar to [method get_node], but does not log an error if [code]path[/code] does not point to a valid [Node].
 bindNode_get_node_or_null :: MethodBind
 bindNode_get_node_or_null
   = unsafePerformIO $
@@ -1026,7 +1089,7 @@ bindNode_get_node_or_null
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Similar to [method get_node], but does not raise an error when [code]path[/code] does not point to a valid [code]Node[/code].
+-- | Similar to [method get_node], but does not log an error if [code]path[/code] does not point to a valid [Node].
 get_node_or_null ::
                    (Node :< cls, Object :< cls) => cls -> NodePath -> IO Node
 get_node_or_null cls arg1
@@ -1039,7 +1102,7 @@ get_node_or_null cls arg1
 
 {-# NOINLINE bindNode_get_owner #-}
 
--- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]) all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
+-- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]), all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
 bindNode_get_owner :: MethodBind
 bindNode_get_owner
   = unsafePerformIO $
@@ -1049,7 +1112,7 @@ bindNode_get_owner
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]) all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
+-- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]), all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
 get_owner :: (Node :< cls, Object :< cls) => cls -> IO Node
 get_owner cls
   = withVariantArray []
@@ -1059,7 +1122,7 @@ get_owner cls
 
 {-# NOINLINE bindNode_get_parent #-}
 
--- | Returns the parent node of the current node, or an empty [code]Node[/code] if the node lacks a parent.
+-- | Returns the parent node of the current node, or a [code]null instance[/code] if the node lacks a parent.
 bindNode_get_parent :: MethodBind
 bindNode_get_parent
   = unsafePerformIO $
@@ -1069,7 +1132,7 @@ bindNode_get_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent node of the current node, or an empty [code]Node[/code] if the node lacks a parent.
+-- | Returns the parent node of the current node, or a [code]null instance[/code] if the node lacks a parent.
 get_parent :: (Node :< cls, Object :< cls) => cls -> IO Node
 get_parent cls
   = withVariantArray []
@@ -1141,7 +1204,7 @@ get_pause_mode cls
 
 {-# NOINLINE bindNode_get_physics_process_delta_time #-}
 
--- | Returns the time elapsed since the last physics-bound frame (see [method _physics_process]). This is always a constant value in physics processing unless the frames per second is changed via [member Engine.target_fps].
+-- | Returns the time elapsed since the last physics-bound frame (see [method _physics_process]). This is always a constant value in physics processing unless the frames per second is changed via [member Engine.iterations_per_second].
 bindNode_get_physics_process_delta_time :: MethodBind
 bindNode_get_physics_process_delta_time
   = unsafePerformIO $
@@ -1151,7 +1214,7 @@ bindNode_get_physics_process_delta_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the time elapsed since the last physics-bound frame (see [method _physics_process]). This is always a constant value in physics processing unless the frames per second is changed via [member Engine.target_fps].
+-- | Returns the time elapsed since the last physics-bound frame (see [method _physics_process]). This is always a constant value in physics processing unless the frames per second is changed via [member Engine.iterations_per_second].
 get_physics_process_delta_time ::
                                  (Node :< cls, Object :< cls) => cls -> IO Float
 get_physics_process_delta_time cls
@@ -1211,6 +1274,7 @@ get_process_delta_time cls
 
 {-# NOINLINE bindNode_get_process_priority #-}
 
+-- | The node's priority in the execution order of the enabled processing callbacks (i.e. [constant NOTIFICATION_PROCESS], [constant NOTIFICATION_PHYSICS_PROCESS] and their internal counterparts). Nodes whose process priority value is [i]lower[/i] will have their processing callbacks executed first.
 bindNode_get_process_priority :: MethodBind
 bindNode_get_process_priority
   = unsafePerformIO $
@@ -1220,6 +1284,7 @@ bindNode_get_process_priority
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The node's priority in the execution order of the enabled processing callbacks (i.e. [constant NOTIFICATION_PROCESS], [constant NOTIFICATION_PHYSICS_PROCESS] and their internal counterparts). Nodes whose process priority value is [i]lower[/i] will have their processing callbacks executed first.
 get_process_priority ::
                        (Node :< cls, Object :< cls) => cls -> IO Int
 get_process_priority cls
@@ -1318,6 +1383,7 @@ has_node cls arg1
 
 {-# NOINLINE bindNode_has_node_and_resource #-}
 
+-- | Returns [code]true[/code] if the [NodePath] points to a valid node and its subname points to a valid resource, e.g. [code]Area2D/CollisionShape2D:shape[/code]. Properties with a non-[Resource] type (e.g. nodes or primitive math types) are not considered resources.
 bindNode_has_node_and_resource :: MethodBind
 bindNode_has_node_and_resource
   = unsafePerformIO $
@@ -1327,6 +1393,7 @@ bindNode_has_node_and_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the [NodePath] points to a valid node and its subname points to a valid resource, e.g. [code]Area2D/CollisionShape2D:shape[/code]. Properties with a non-[Resource] type (e.g. nodes or primitive math types) are not considered resources.
 has_node_and_resource ::
                         (Node :< cls, Object :< cls) => cls -> NodePath -> IO Bool
 has_node_and_resource cls arg1
@@ -1675,7 +1742,8 @@ print_stray_nodes cls
 
 {-# NOINLINE bindNode_print_tree #-}
 
--- | Prints the tree to stdout. Used mainly for debugging purposes. This version displays the path relative to the current node, and is good for copy/pasting into the [method get_node] function. Example output:
+-- | Prints the tree to stdout. Used mainly for debugging purposes. This version displays the path relative to the current node, and is good for copy/pasting into the [method get_node] function.
+--   				[b]Example output:[/b]
 --   				[codeblock]
 --   				TheGame
 --   				TheGame/Menu
@@ -1693,7 +1761,8 @@ bindNode_print_tree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Prints the tree to stdout. Used mainly for debugging purposes. This version displays the path relative to the current node, and is good for copy/pasting into the [method get_node] function. Example output:
+-- | Prints the tree to stdout. Used mainly for debugging purposes. This version displays the path relative to the current node, and is good for copy/pasting into the [method get_node] function.
+--   				[b]Example output:[/b]
 --   				[codeblock]
 --   				TheGame
 --   				TheGame/Menu
@@ -1711,13 +1780,14 @@ print_tree cls
 
 {-# NOINLINE bindNode_print_tree_pretty #-}
 
--- | Similar to [method print_tree], this prints the tree to stdout. This version displays a more graphical representation similar to what is displayed in the scene inspector. It is useful for inspecting larger trees. Example output:
+-- | Similar to [method print_tree], this prints the tree to stdout. This version displays a more graphical representation similar to what is displayed in the scene inspector. It is useful for inspecting larger trees.
+--   				[b]Example output:[/b]
 --   				[codeblock]
 --   				 ┖╴TheGame
 --   				    ┠╴Menu
 --   				    ┃  ┠╴Label
 --   				    ┃  ┖╴Camera2D
---   				    ┖-SplashScreen
+--   				    ┖╴SplashScreen
 --   				       ┖╴Camera2D
 --   				[/codeblock]
 bindNode_print_tree_pretty :: MethodBind
@@ -1729,13 +1799,14 @@ bindNode_print_tree_pretty
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Similar to [method print_tree], this prints the tree to stdout. This version displays a more graphical representation similar to what is displayed in the scene inspector. It is useful for inspecting larger trees. Example output:
+-- | Similar to [method print_tree], this prints the tree to stdout. This version displays a more graphical representation similar to what is displayed in the scene inspector. It is useful for inspecting larger trees.
+--   				[b]Example output:[/b]
 --   				[codeblock]
 --   				 ┖╴TheGame
 --   				    ┠╴Menu
 --   				    ┃  ┠╴Label
 --   				    ┃  ┖╴Camera2D
---   				    ┖-SplashScreen
+--   				    ┖╴SplashScreen
 --   				       ┖╴Camera2D
 --   				[/codeblock]
 print_tree_pretty :: (Node :< cls, Object :< cls) => cls -> IO ()
@@ -1749,7 +1820,7 @@ print_tree_pretty cls
 
 {-# NOINLINE bindNode_propagate_call #-}
 
--- | Calls the given method (if present) with the arguments given in [code]args[/code] on this node and recursively on all its children. If the [code]parent_first[/code] argument is [code]true[/code] then the method will be called on the current node first, then on all children. If it is [code]false[/code] then the children will be called first.
+-- | Calls the given method (if present) with the arguments given in [code]args[/code] on this node and recursively on all its children. If the [code]parent_first[/code] argument is [code]true[/code], the method will be called on the current node first, then on all its children. If [code]parent_first[/code] is [code]false[/code], the children will be called first.
 bindNode_propagate_call :: MethodBind
 bindNode_propagate_call
   = unsafePerformIO $
@@ -1759,7 +1830,7 @@ bindNode_propagate_call
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls the given method (if present) with the arguments given in [code]args[/code] on this node and recursively on all its children. If the [code]parent_first[/code] argument is [code]true[/code] then the method will be called on the current node first, then on all children. If it is [code]false[/code] then the children will be called first.
+-- | Calls the given method (if present) with the arguments given in [code]args[/code] on this node and recursively on all its children. If the [code]parent_first[/code] argument is [code]true[/code], the method will be called on the current node first, then on all its children. If [code]parent_first[/code] is [code]false[/code], the children will be called first.
 propagate_call ::
                  (Node :< cls, Object :< cls) =>
                  cls -> GodotString -> Array -> Bool -> IO ()
@@ -1943,7 +2014,8 @@ request_ready cls
 
 {-# NOINLINE bindNode_rpc #-}
 
--- | Sends a remote procedure call request for the given [code]method[/code] to peers on the network (and locally), optionally sending all additional arguments as arguments to the method called by the RPC. The call request will only be received by nodes with the same [NodePath], including the exact same node name. Behaviour depends on the RPC configuration for the given method, see [method rpc_config]. Methods are not exposed to RPCs by default. Also see [method rset] and [method rset_config] for properties. Returns an empty [Variant]. Note that you can only safely use RPCs on clients after you received the [code]connected_to_server[/code] signal from the [SceneTree]. You also need to keep track of the connection state, either by the [SceneTree] signals like [code]server_disconnected[/code] or by checking [code]SceneTree.network_peer.get_connection_status() == CONNECTION_CONNECTED[/code].
+-- | Sends a remote procedure call request for the given [code]method[/code] to peers on the network (and locally), optionally sending all additional arguments as arguments to the method called by the RPC. The call request will only be received by nodes with the same [NodePath], including the exact same node name. Behaviour depends on the RPC configuration for the given method, see [method rpc_config]. Methods are not exposed to RPCs by default. See also [method rset] and [method rset_config] for properties. Returns an empty [Variant].
+--   				[b]Note:[/b] You can only safely use RPCs on clients after you received the [code]connected_to_server[/code] signal from the [SceneTree]. You also need to keep track of the connection state, either by the [SceneTree] signals like [code]server_disconnected[/code] or by checking [code]SceneTree.network_peer.get_connection_status() == CONNECTION_CONNECTED[/code].
 bindNode_rpc :: MethodBind
 bindNode_rpc
   = unsafePerformIO $
@@ -1953,7 +2025,8 @@ bindNode_rpc
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends a remote procedure call request for the given [code]method[/code] to peers on the network (and locally), optionally sending all additional arguments as arguments to the method called by the RPC. The call request will only be received by nodes with the same [NodePath], including the exact same node name. Behaviour depends on the RPC configuration for the given method, see [method rpc_config]. Methods are not exposed to RPCs by default. Also see [method rset] and [method rset_config] for properties. Returns an empty [Variant]. Note that you can only safely use RPCs on clients after you received the [code]connected_to_server[/code] signal from the [SceneTree]. You also need to keep track of the connection state, either by the [SceneTree] signals like [code]server_disconnected[/code] or by checking [code]SceneTree.network_peer.get_connection_status() == CONNECTION_CONNECTED[/code].
+-- | Sends a remote procedure call request for the given [code]method[/code] to peers on the network (and locally), optionally sending all additional arguments as arguments to the method called by the RPC. The call request will only be received by nodes with the same [NodePath], including the exact same node name. Behaviour depends on the RPC configuration for the given method, see [method rpc_config]. Methods are not exposed to RPCs by default. See also [method rset] and [method rset_config] for properties. Returns an empty [Variant].
+--   				[b]Note:[/b] You can only safely use RPCs on clients after you received the [code]connected_to_server[/code] signal from the [SceneTree]. You also need to keep track of the connection state, either by the [SceneTree] signals like [code]server_disconnected[/code] or by checking [code]SceneTree.network_peer.get_connection_status() == CONNECTION_CONNECTED[/code].
 rpc ::
       (Node :< cls, Object :< cls) =>
       cls -> GodotString -> [Variant 'GodotTy] -> IO GodotVariant
@@ -1965,7 +2038,7 @@ rpc cls arg1 varargs
 
 {-# NOINLINE bindNode_rpc_config #-}
 
--- | Changes the RPC mode for the given [code]method[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, methods are not exposed to networking (and RPCs). Also see [method rset] and [method rset_config] for properties.
+-- | Changes the RPC mode for the given [code]method[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, methods are not exposed to networking (and RPCs). See also [method rset] and [method rset_config] for properties.
 bindNode_rpc_config :: MethodBind
 bindNode_rpc_config
   = unsafePerformIO $
@@ -1975,7 +2048,7 @@ bindNode_rpc_config
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the RPC mode for the given [code]method[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, methods are not exposed to networking (and RPCs). Also see [method rset] and [method rset_config] for properties.
+-- | Changes the RPC mode for the given [code]method[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, methods are not exposed to networking (and RPCs). See also [method rset] and [method rset_config] for properties.
 rpc_config ::
              (Node :< cls, Object :< cls) => cls -> GodotString -> Int -> IO ()
 rpc_config cls arg1 arg2
@@ -2055,7 +2128,7 @@ rpc_unreliable_id cls arg1 arg2 varargs
 
 {-# NOINLINE bindNode_rset #-}
 
--- | Remotely changes a property's value on other peers (and locally). Behaviour depends on the RPC configuration for the given property, see [method rset_config]. Also see [method rpc] for RPCs for methods, most information applies to this method as well.
+-- | Remotely changes a property's value on other peers (and locally). Behaviour depends on the RPC configuration for the given property, see [method rset_config]. See also [method rpc] for RPCs for methods, most information applies to this method as well.
 bindNode_rset :: MethodBind
 bindNode_rset
   = unsafePerformIO $
@@ -2065,7 +2138,7 @@ bindNode_rset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remotely changes a property's value on other peers (and locally). Behaviour depends on the RPC configuration for the given property, see [method rset_config]. Also see [method rpc] for RPCs for methods, most information applies to this method as well.
+-- | Remotely changes a property's value on other peers (and locally). Behaviour depends on the RPC configuration for the given property, see [method rset_config]. See also [method rpc] for RPCs for methods, most information applies to this method as well.
 rset ::
        (Node :< cls, Object :< cls) =>
        cls -> GodotString -> GodotVariant -> IO ()
@@ -2077,7 +2150,7 @@ rset cls arg1 arg2
 
 {-# NOINLINE bindNode_rset_config #-}
 
--- | Changes the RPC mode for the given [code]property[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, properties are not exposed to networking (and RPCs). Also see [method rpc] and [method rpc_config] for methods.
+-- | Changes the RPC mode for the given [code]property[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, properties are not exposed to networking (and RPCs). See also [method rpc] and [method rpc_config] for methods.
 bindNode_rset_config :: MethodBind
 bindNode_rset_config
   = unsafePerformIO $
@@ -2087,7 +2160,7 @@ bindNode_rset_config
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the RPC mode for the given [code]property[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, properties are not exposed to networking (and RPCs). Also see [method rpc] and [method rpc_config] for methods.
+-- | Changes the RPC mode for the given [code]property[/code] to the given [code]mode[/code]. See [enum MultiplayerAPI.RPCMode]. An alternative is annotating methods and properties with the corresponding keywords ([code]remote[/code], [code]master[/code], [code]puppet[/code], [code]remotesync[/code], [code]mastersync[/code], [code]puppetsync[/code]). By default, properties are not exposed to networking (and RPCs). See also [method rpc] and [method rpc_config] for methods.
 rset_config ::
               (Node :< cls, Object :< cls) => cls -> GodotString -> Int -> IO ()
 rset_config cls arg1 arg2
@@ -2167,7 +2240,7 @@ rset_unreliable_id cls arg1 arg2 arg3
 
 {-# NOINLINE bindNode_set_custom_multiplayer #-}
 
--- | The override to the default [MultiplayerAPI]. Set to null to use the default SceneTree one.
+-- | The override to the default [MultiplayerAPI]. Set to [code]null[/code] to use the default [SceneTree] one.
 bindNode_set_custom_multiplayer :: MethodBind
 bindNode_set_custom_multiplayer
   = unsafePerformIO $
@@ -2177,7 +2250,7 @@ bindNode_set_custom_multiplayer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The override to the default [MultiplayerAPI]. Set to null to use the default SceneTree one.
+-- | The override to the default [MultiplayerAPI]. Set to [code]null[/code] to use the default [SceneTree] one.
 set_custom_multiplayer ::
                          (Node :< cls, Object :< cls) => cls -> MultiplayerAPI -> IO ()
 set_custom_multiplayer cls arg1
@@ -2235,7 +2308,7 @@ set_filename cls arg1
 
 {-# NOINLINE bindNode_set_name #-}
 
--- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed
+-- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
 bindNode_set_name :: MethodBind
 bindNode_set_name
   = unsafePerformIO $
@@ -2245,7 +2318,7 @@ bindNode_set_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed
+-- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
 set_name ::
            (Node :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_name cls arg1
@@ -2279,7 +2352,7 @@ set_network_master cls arg1 arg2
 
 {-# NOINLINE bindNode_set_owner #-}
 
--- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]) all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
+-- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]), all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
 bindNode_set_owner :: MethodBind
 bindNode_set_owner
   = unsafePerformIO $
@@ -2289,7 +2362,7 @@ bindNode_set_owner
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]) all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
+-- | The node owner. A node can have any other node as owner (as long as it is a valid parent, grandparent, etc. ascending in the tree). When saving a node (using [PackedScene]), all the nodes it owns will be saved with it. This allows for the creation of complex [SceneTree]s, with instancing and subinstancing.
 set_owner :: (Node :< cls, Object :< cls) => cls -> Node -> IO ()
 set_owner cls arg1
   = withVariantArray [toVariant arg1]
@@ -2321,7 +2394,7 @@ set_pause_mode cls arg1
 
 {-# NOINLINE bindNode_set_physics_process #-}
 
--- | Enables or disables physics (i.e. fixed framerate) processing. When a node is being processed, it will receive a [constant NOTIFICATION_PHYSICS_PROCESS] at a fixed (usually 60 FPS, see [member Engine.target_fps] to change) interval (and the [method _physics_process] callback will be called if exists). Enabled automatically if [method _physics_process] is overridden. Any calls to this before [method _ready] will be ignored.
+-- | Enables or disables physics (i.e. fixed framerate) processing. When a node is being processed, it will receive a [constant NOTIFICATION_PHYSICS_PROCESS] at a fixed (usually 60 FPS, see [member Engine.iterations_per_second] to change) interval (and the [method _physics_process] callback will be called if exists). Enabled automatically if [method _physics_process] is overridden. Any calls to this before [method _ready] will be ignored.
 bindNode_set_physics_process :: MethodBind
 bindNode_set_physics_process
   = unsafePerformIO $
@@ -2331,7 +2404,7 @@ bindNode_set_physics_process
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables or disables physics (i.e. fixed framerate) processing. When a node is being processed, it will receive a [constant NOTIFICATION_PHYSICS_PROCESS] at a fixed (usually 60 FPS, see [member Engine.target_fps] to change) interval (and the [method _physics_process] callback will be called if exists). Enabled automatically if [method _physics_process] is overridden. Any calls to this before [method _ready] will be ignored.
+-- | Enables or disables physics (i.e. fixed framerate) processing. When a node is being processed, it will receive a [constant NOTIFICATION_PHYSICS_PROCESS] at a fixed (usually 60 FPS, see [member Engine.iterations_per_second] to change) interval (and the [method _physics_process] callback will be called if exists). Enabled automatically if [method _physics_process] is overridden. Any calls to this before [method _ready] will be ignored.
 set_physics_process ::
                       (Node :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_physics_process cls arg1
@@ -2344,7 +2417,7 @@ set_physics_process cls arg1
 
 {-# NOINLINE bindNode_set_physics_process_internal #-}
 
--- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal [method _physics_process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting ([method set_physics_process]). Only useful for advanced uses to manipulate built-in nodes behavior.
+-- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal [method _physics_process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting ([method set_physics_process]). Only useful for advanced uses to manipulate built-in nodes' behaviour.
 bindNode_set_physics_process_internal :: MethodBind
 bindNode_set_physics_process_internal
   = unsafePerformIO $
@@ -2354,7 +2427,7 @@ bindNode_set_physics_process_internal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal [method _physics_process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting ([method set_physics_process]). Only useful for advanced uses to manipulate built-in nodes behavior.
+-- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal [method _physics_process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting ([method set_physics_process]). Only useful for advanced uses to manipulate built-in nodes' behaviour.
 set_physics_process_internal ::
                                (Node :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_physics_process_internal cls arg1
@@ -2411,7 +2484,7 @@ set_process_input cls arg1
 
 {-# NOINLINE bindNode_set_process_internal #-}
 
--- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal [method _process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting ([method set_process]). Only useful for advanced uses to manipulate built-in nodes behavior.
+-- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal [method _process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting ([method set_process]). Only useful for advanced uses to manipulate built-in nodes' behaviour.
 bindNode_set_process_internal :: MethodBind
 bindNode_set_process_internal
   = unsafePerformIO $
@@ -2421,7 +2494,7 @@ bindNode_set_process_internal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal [method _process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting ([method set_process]). Only useful for advanced uses to manipulate built-in nodes behavior.
+-- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal [method _process] calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting ([method set_process]). Only useful for advanced uses to manipulate built-in nodes' behaviour.
 set_process_internal ::
                        (Node :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_process_internal cls arg1
@@ -2434,7 +2507,7 @@ set_process_internal cls arg1
 
 {-# NOINLINE bindNode_set_process_priority #-}
 
--- | Sets the node's priority in the execution order of the enabled processing callbacks (i.e. [constant NOTIFICATION_PROCESS], [constant NOTIFICATION_PHYSICS_PROCESS] and their internal counterparts). Nodes with a higher process priority will have their processing callbacks executed first.
+-- | The node's priority in the execution order of the enabled processing callbacks (i.e. [constant NOTIFICATION_PROCESS], [constant NOTIFICATION_PHYSICS_PROCESS] and their internal counterparts). Nodes whose process priority value is [i]lower[/i] will have their processing callbacks executed first.
 bindNode_set_process_priority :: MethodBind
 bindNode_set_process_priority
   = unsafePerformIO $
@@ -2444,7 +2517,7 @@ bindNode_set_process_priority
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the node's priority in the execution order of the enabled processing callbacks (i.e. [constant NOTIFICATION_PROCESS], [constant NOTIFICATION_PHYSICS_PROCESS] and their internal counterparts). Nodes with a higher process priority will have their processing callbacks executed first.
+-- | The node's priority in the execution order of the enabled processing callbacks (i.e. [constant NOTIFICATION_PROCESS], [constant NOTIFICATION_PHYSICS_PROCESS] and their internal counterparts). Nodes whose process priority value is [i]lower[/i] will have their processing callbacks executed first.
 set_process_priority ::
                        (Node :< cls, Object :< cls) => cls -> Int -> IO ()
 set_process_priority cls arg1
@@ -2529,6 +2602,8 @@ set_scene_instance_load_placeholder cls arg1
 
 {-# NOINLINE bindNode_update_configuration_warning #-}
 
+-- | Updates the warning displayed for this node in the Scene Dock.
+--   				Use [method _get_configuration_warning] to setup the warning message to display.
 bindNode_update_configuration_warning :: MethodBind
 bindNode_update_configuration_warning
   = unsafePerformIO $
@@ -2538,6 +2613,8 @@ bindNode_update_configuration_warning
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Updates the warning displayed for this node in the Scene Dock.
+--   				Use [method _get_configuration_warning] to setup the warning message to display.
 update_configuration_warning ::
                                (Node :< cls, Object :< cls) => cls -> IO ()
 update_configuration_warning cls

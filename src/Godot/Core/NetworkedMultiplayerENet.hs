@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.NetworkedMultiplayerENet
        (Godot.Core.NetworkedMultiplayerENet._COMPRESS_NONE,
         Godot.Core.NetworkedMultiplayerENet._COMPRESS_RANGE_CODER,

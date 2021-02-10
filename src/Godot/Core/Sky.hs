@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Sky
        (Godot.Core.Sky._RADIANCE_SIZE_128,
         Godot.Core.Sky._RADIANCE_SIZE_2048,
@@ -43,9 +44,9 @@ _RADIANCE_SIZE_MAX = 7
 
 {-# NOINLINE bindSky_get_radiance_size #-}
 
--- | The [Sky]'s radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
+-- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values.
+--   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
 bindSky_get_radiance_size :: MethodBind
 bindSky_get_radiance_size
   = unsafePerformIO $
@@ -55,9 +56,9 @@ bindSky_get_radiance_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Sky]'s radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
+-- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values.
+--   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
 get_radiance_size :: (Sky :< cls, Object :< cls) => cls -> IO Int
 get_radiance_size cls
   = withVariantArray []
@@ -69,9 +70,9 @@ get_radiance_size cls
 
 {-# NOINLINE bindSky_set_radiance_size #-}
 
--- | The [Sky]'s radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
+-- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values.
+--   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
 bindSky_set_radiance_size :: MethodBind
 bindSky_set_radiance_size
   = unsafePerformIO $
@@ -81,9 +82,9 @@ bindSky_set_radiance_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Sky]'s radiance map size.
---   			The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values. Default size is [constant RADIANCE_SIZE_512].
+-- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
+--   			See [enum RadianceSize] constants for values.
+--   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
 set_radiance_size ::
                     (Sky :< cls, Object :< cls) => cls -> Int -> IO ()
 set_radiance_size cls arg1

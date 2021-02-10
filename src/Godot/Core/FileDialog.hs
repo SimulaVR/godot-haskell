@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.FileDialog
        (Godot.Core.FileDialog._ACCESS_RESOURCES,
         Godot.Core.FileDialog._MODE_OPEN_FILES,
@@ -80,18 +81,24 @@ _MODE_OPEN_DIR = 2
 _MODE_OPEN_ANY :: Int
 _MODE_OPEN_ANY = 3
 
--- | Event emitted when the user selects a directory.
+-- | Emitted when the user selects a directory.
 sig_dir_selected :: Godot.Internal.Dispatch.Signal FileDialog
 sig_dir_selected = Godot.Internal.Dispatch.Signal "dir_selected"
 
--- | Event emitted when the user selects a file (double clicks it or presses the OK button).
+instance NodeSignal FileDialog "dir_selected" '[GodotString]
+
+-- | Emitted when the user selects a file by double-clicking it or pressing the [b]OK[/b] button.
 sig_file_selected :: Godot.Internal.Dispatch.Signal FileDialog
 sig_file_selected = Godot.Internal.Dispatch.Signal "file_selected"
 
--- | Event emitted when the user selects multiple files.
+instance NodeSignal FileDialog "file_selected" '[GodotString]
+
+-- | Emitted when the user selects multiple files.
 sig_files_selected :: Godot.Internal.Dispatch.Signal FileDialog
 sig_files_selected
   = Godot.Internal.Dispatch.Signal "files_selected"
+
+instance NodeSignal FileDialog "files_selected" '[PoolStringArray]
 
 {-# NOINLINE bindFileDialog__action_pressed #-}
 
@@ -454,7 +461,7 @@ _update_file_name cls
 
 {-# NOINLINE bindFileDialog_add_filter #-}
 
--- | Add a custom filter. Example: [code]add_filter("*.png ; PNG Images")[/code]
+-- | Adds [code]filter[/code] as a custom filter; [code]filter[/code] should be of the form [code]"filename.extension ; Description"[/code]. For example, [code]"*.png ; PNG Images"[/code].
 bindFileDialog_add_filter :: MethodBind
 bindFileDialog_add_filter
   = unsafePerformIO $
@@ -464,7 +471,7 @@ bindFileDialog_add_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a custom filter. Example: [code]add_filter("*.png ; PNG Images")[/code]
+-- | Adds [code]filter[/code] as a custom filter; [code]filter[/code] should be of the form [code]"filename.extension ; Description"[/code]. For example, [code]"*.png ; PNG Images"[/code].
 add_filter ::
              (FileDialog :< cls, Object :< cls) => cls -> GodotString -> IO ()
 add_filter cls arg1
@@ -523,6 +530,7 @@ deselect_items cls
 {-# NOINLINE bindFileDialog_get_access #-}
 
 -- | The file system access scope. See enum [code]Access[/code] constants.
+--   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
 bindFileDialog_get_access :: MethodBind
 bindFileDialog_get_access
   = unsafePerformIO $
@@ -533,6 +541,7 @@ bindFileDialog_get_access
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The file system access scope. See enum [code]Access[/code] constants.
+--   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
 get_access :: (FileDialog :< cls, Object :< cls) => cls -> IO Int
 get_access cls
   = withVariantArray []
@@ -613,7 +622,7 @@ get_current_path cls
 
 {-# NOINLINE bindFileDialog_get_filters #-}
 
--- | Set file type filters. This example shows only .png and .gd files [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GD Script"]))[/code].
+-- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
 bindFileDialog_get_filters :: MethodBind
 bindFileDialog_get_filters
   = unsafePerformIO $
@@ -623,7 +632,7 @@ bindFileDialog_get_filters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set file type filters. This example shows only .png and .gd files [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GD Script"]))[/code].
+-- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
 get_filters ::
               (FileDialog :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_filters cls
@@ -659,7 +668,7 @@ get_line_edit cls
 
 {-# NOINLINE bindFileDialog_get_mode #-}
 
--- | Set dialog to open or save mode, changes selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
 bindFileDialog_get_mode :: MethodBind
 bindFileDialog_get_mode
   = unsafePerformIO $
@@ -669,7 +678,7 @@ bindFileDialog_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set dialog to open or save mode, changes selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
 get_mode :: (FileDialog :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
@@ -773,6 +782,7 @@ is_showing_hidden_files cls
 {-# NOINLINE bindFileDialog_set_access #-}
 
 -- | The file system access scope. See enum [code]Access[/code] constants.
+--   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
 bindFileDialog_set_access :: MethodBind
 bindFileDialog_set_access
   = unsafePerformIO $
@@ -783,6 +793,7 @@ bindFileDialog_set_access
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The file system access scope. See enum [code]Access[/code] constants.
+--   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
 set_access ::
              (FileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_access cls arg1
@@ -864,7 +875,7 @@ set_current_path cls arg1
 
 {-# NOINLINE bindFileDialog_set_filters #-}
 
--- | Set file type filters. This example shows only .png and .gd files [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GD Script"]))[/code].
+-- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
 bindFileDialog_set_filters :: MethodBind
 bindFileDialog_set_filters
   = unsafePerformIO $
@@ -874,7 +885,7 @@ bindFileDialog_set_filters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set file type filters. This example shows only .png and .gd files [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GD Script"]))[/code].
+-- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
 set_filters ::
               (FileDialog :< cls, Object :< cls) =>
               cls -> PoolStringArray -> IO ()
@@ -888,7 +899,7 @@ set_filters cls arg1
 
 {-# NOINLINE bindFileDialog_set_mode #-}
 
--- | Set dialog to open or save mode, changes selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
 bindFileDialog_set_mode :: MethodBind
 bindFileDialog_set_mode
   = unsafePerformIO $
@@ -898,7 +909,7 @@ bindFileDialog_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set dialog to open or save mode, changes selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
 set_mode ::
            (FileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1

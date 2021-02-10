@@ -16,6 +16,7 @@ module Godot.Nativescript
   , RPC(..)
   , Registerer(..)
   , PropertyAttributes(..)
+  , SignalArgument(..)
   , deriveBase
   , func
   , method
@@ -494,7 +495,7 @@ registerProperty (RegProperty desc (ClassProperty path attr setter getter)) = do
 createMVarProperty :: (Typeable v, AsVariant v) =>
      Text
      -> (t -> MVar v)
-     -- | We typically can't do IO (for initialisation) when calling this, in
+     -- ^ We typically can't do IO (for initialisation) when calling this, in
      -- which case we need to annotate the type without providing a value.
      -> Either VariantType v
      -> ClassProperty t

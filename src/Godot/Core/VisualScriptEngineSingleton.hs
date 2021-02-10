@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptEngineSingleton
        (Godot.Core.VisualScriptEngineSingleton.get_singleton,
         Godot.Core.VisualScriptEngineSingleton.set_singleton)

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorResourceConversionPlugin
        (Godot.Tools.EditorResourceConversionPlugin._convert,
         Godot.Tools.EditorResourceConversionPlugin._converts_to)

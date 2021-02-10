@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Shape2D
        (Godot.Core.Shape2D.collide,
         Godot.Core.Shape2D.collide_and_get_contacts,
@@ -130,6 +131,7 @@ collide_with_motion_and_get_contacts cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindShape2D_get_custom_solver_bias #-}
 
+-- | The shape's custom solver bias.
 bindShape2D_get_custom_solver_bias :: MethodBind
 bindShape2D_get_custom_solver_bias
   = unsafePerformIO $
@@ -139,6 +141,7 @@ bindShape2D_get_custom_solver_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The shape's custom solver bias.
 get_custom_solver_bias ::
                          (Shape2D :< cls, Object :< cls) => cls -> IO Float
 get_custom_solver_bias cls
@@ -152,6 +155,7 @@ get_custom_solver_bias cls
 
 {-# NOINLINE bindShape2D_set_custom_solver_bias #-}
 
+-- | The shape's custom solver bias.
 bindShape2D_set_custom_solver_bias :: MethodBind
 bindShape2D_set_custom_solver_bias
   = unsafePerformIO $
@@ -161,6 +165,7 @@ bindShape2D_set_custom_solver_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The shape's custom solver bias.
 set_custom_solver_bias ::
                          (Shape2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_custom_solver_bias cls arg1

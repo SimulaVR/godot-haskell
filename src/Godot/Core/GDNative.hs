@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GDNative
        (Godot.Core.GDNative.call_native, Godot.Core.GDNative.get_library,
         Godot.Core.GDNative.initialize, Godot.Core.GDNative.set_library,

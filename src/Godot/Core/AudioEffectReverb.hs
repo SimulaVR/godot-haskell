@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectReverb
        (Godot.Core.AudioEffectReverb.get_damping,
         Godot.Core.AudioEffectReverb.get_dry,
@@ -27,7 +28,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindAudioEffectReverb_get_damping #-}
 
--- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1.
 bindAudioEffectReverb_get_damping :: MethodBind
 bindAudioEffectReverb_get_damping
   = unsafePerformIO $
@@ -37,7 +38,7 @@ bindAudioEffectReverb_get_damping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1.
 get_damping ::
               (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_damping cls
@@ -51,7 +52,7 @@ get_damping cls
 
 {-# NOINLINE bindAudioEffectReverb_get_dry #-}
 
--- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1.
 bindAudioEffectReverb_get_dry :: MethodBind
 bindAudioEffectReverb_get_dry
   = unsafePerformIO $
@@ -61,7 +62,7 @@ bindAudioEffectReverb_get_dry
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1.
 get_dry ::
           (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_dry cls
@@ -74,7 +75,7 @@ get_dry cls
 
 {-# NOINLINE bindAudioEffectReverb_get_hpf #-}
 
--- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1.
 bindAudioEffectReverb_get_hpf :: MethodBind
 bindAudioEffectReverb_get_hpf
   = unsafePerformIO $
@@ -84,7 +85,7 @@ bindAudioEffectReverb_get_hpf
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1.
 get_hpf ::
           (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_hpf cls
@@ -97,7 +98,7 @@ get_hpf cls
 
 {-# NOINLINE bindAudioEffectReverb_get_predelay_feedback #-}
 
--- | Output percent of predelay. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of predelay. Value can range from 0 to 1.
 bindAudioEffectReverb_get_predelay_feedback :: MethodBind
 bindAudioEffectReverb_get_predelay_feedback
   = unsafePerformIO $
@@ -107,7 +108,7 @@ bindAudioEffectReverb_get_predelay_feedback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Output percent of predelay. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of predelay. Value can range from 0 to 1.
 get_predelay_feedback ::
                         (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_predelay_feedback cls
@@ -121,7 +122,7 @@ get_predelay_feedback cls
 
 {-# NOINLINE bindAudioEffectReverb_get_predelay_msec #-}
 
--- | Time between the original signal and the early reflections of the reverb signal. Default value: [code]150ms[/code].
+-- | Time between the original signal and the early reflections of the reverb signal, in milliseconds.
 bindAudioEffectReverb_get_predelay_msec :: MethodBind
 bindAudioEffectReverb_get_predelay_msec
   = unsafePerformIO $
@@ -131,7 +132,7 @@ bindAudioEffectReverb_get_predelay_msec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Time between the original signal and the early reflections of the reverb signal. Default value: [code]150ms[/code].
+-- | Time between the original signal and the early reflections of the reverb signal, in milliseconds.
 get_predelay_msec ::
                     (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_predelay_msec cls
@@ -145,7 +146,7 @@ get_predelay_msec cls
 
 {-# NOINLINE bindAudioEffectReverb_get_room_size #-}
 
--- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1. Default value: [code]0.8[/code].
+-- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1.
 bindAudioEffectReverb_get_room_size :: MethodBind
 bindAudioEffectReverb_get_room_size
   = unsafePerformIO $
@@ -155,7 +156,7 @@ bindAudioEffectReverb_get_room_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1. Default value: [code]0.8[/code].
+-- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1.
 get_room_size ::
                 (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_room_size cls
@@ -169,7 +170,7 @@ get_room_size cls
 
 {-# NOINLINE bindAudioEffectReverb_get_spread #-}
 
--- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1.
 bindAudioEffectReverb_get_spread :: MethodBind
 bindAudioEffectReverb_get_spread
   = unsafePerformIO $
@@ -179,7 +180,7 @@ bindAudioEffectReverb_get_spread
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1.
 get_spread ::
              (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_spread cls
@@ -193,7 +194,7 @@ get_spread cls
 
 {-# NOINLINE bindAudioEffectReverb_get_wet #-}
 
--- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1. Default value: [code]0.5[/code].
+-- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1.
 bindAudioEffectReverb_get_wet :: MethodBind
 bindAudioEffectReverb_get_wet
   = unsafePerformIO $
@@ -203,7 +204,7 @@ bindAudioEffectReverb_get_wet
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1. Default value: [code]0.5[/code].
+-- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1.
 get_wet ::
           (AudioEffectReverb :< cls, Object :< cls) => cls -> IO Float
 get_wet cls
@@ -216,7 +217,7 @@ get_wet cls
 
 {-# NOINLINE bindAudioEffectReverb_set_damping #-}
 
--- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1.
 bindAudioEffectReverb_set_damping :: MethodBind
 bindAudioEffectReverb_set_damping
   = unsafePerformIO $
@@ -226,7 +227,7 @@ bindAudioEffectReverb_set_damping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Defines how reflective the imaginary room's walls are. Value can range from 0 to 1.
 set_damping ::
               (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_damping cls arg1
@@ -240,7 +241,7 @@ set_damping cls arg1
 
 {-# NOINLINE bindAudioEffectReverb_set_dry #-}
 
--- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1.
 bindAudioEffectReverb_set_dry :: MethodBind
 bindAudioEffectReverb_set_dry
   = unsafePerformIO $
@@ -250,7 +251,7 @@ bindAudioEffectReverb_set_dry
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1.
 set_dry ::
           (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_dry cls arg1
@@ -263,7 +264,7 @@ set_dry cls arg1
 
 {-# NOINLINE bindAudioEffectReverb_set_hpf #-}
 
--- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1.
 bindAudioEffectReverb_set_hpf :: MethodBind
 bindAudioEffectReverb_set_hpf
   = unsafePerformIO $
@@ -273,7 +274,7 @@ bindAudioEffectReverb_set_hpf
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1. Default value: [code]0[/code].
+-- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1.
 set_hpf ::
           (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_hpf cls arg1
@@ -286,7 +287,7 @@ set_hpf cls arg1
 
 {-# NOINLINE bindAudioEffectReverb_set_predelay_feedback #-}
 
--- | Output percent of predelay. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of predelay. Value can range from 0 to 1.
 bindAudioEffectReverb_set_predelay_feedback :: MethodBind
 bindAudioEffectReverb_set_predelay_feedback
   = unsafePerformIO $
@@ -296,7 +297,7 @@ bindAudioEffectReverb_set_predelay_feedback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Output percent of predelay. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Output percent of predelay. Value can range from 0 to 1.
 set_predelay_feedback ::
                         (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_predelay_feedback cls arg1
@@ -310,7 +311,7 @@ set_predelay_feedback cls arg1
 
 {-# NOINLINE bindAudioEffectReverb_set_predelay_msec #-}
 
--- | Time between the original signal and the early reflections of the reverb signal. Default value: [code]150ms[/code].
+-- | Time between the original signal and the early reflections of the reverb signal, in milliseconds.
 bindAudioEffectReverb_set_predelay_msec :: MethodBind
 bindAudioEffectReverb_set_predelay_msec
   = unsafePerformIO $
@@ -320,7 +321,7 @@ bindAudioEffectReverb_set_predelay_msec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Time between the original signal and the early reflections of the reverb signal. Default value: [code]150ms[/code].
+-- | Time between the original signal and the early reflections of the reverb signal, in milliseconds.
 set_predelay_msec ::
                     (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_predelay_msec cls arg1
@@ -334,7 +335,7 @@ set_predelay_msec cls arg1
 
 {-# NOINLINE bindAudioEffectReverb_set_room_size #-}
 
--- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1. Default value: [code]0.8[/code].
+-- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1.
 bindAudioEffectReverb_set_room_size :: MethodBind
 bindAudioEffectReverb_set_room_size
   = unsafePerformIO $
@@ -344,7 +345,7 @@ bindAudioEffectReverb_set_room_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1. Default value: [code]0.8[/code].
+-- | Dimensions of simulated room. Bigger means more echoes. Value can range from 0 to 1.
 set_room_size ::
                 (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_room_size cls arg1
@@ -358,7 +359,7 @@ set_room_size cls arg1
 
 {-# NOINLINE bindAudioEffectReverb_set_spread #-}
 
--- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1.
 bindAudioEffectReverb_set_spread :: MethodBind
 bindAudioEffectReverb_set_spread
   = unsafePerformIO $
@@ -368,7 +369,7 @@ bindAudioEffectReverb_set_spread
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1. Default value: [code]1[/code].
+-- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1.
 set_spread ::
              (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_spread cls arg1
@@ -382,7 +383,7 @@ set_spread cls arg1
 
 {-# NOINLINE bindAudioEffectReverb_set_wet #-}
 
--- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1. Default value: [code]0.5[/code].
+-- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1.
 bindAudioEffectReverb_set_wet :: MethodBind
 bindAudioEffectReverb_set_wet
   = unsafePerformIO $
@@ -392,7 +393,7 @@ bindAudioEffectReverb_set_wet
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1. Default value: [code]0.5[/code].
+-- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1.
 set_wet ::
           (AudioEffectReverb :< cls, Object :< cls) => cls -> Float -> IO ()
 set_wet cls arg1

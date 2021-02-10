@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PhysicsDirectSpaceState
        (Godot.Core.PhysicsDirectSpaceState.cast_motion,
         Godot.Core.PhysicsDirectSpaceState.collide_shape,

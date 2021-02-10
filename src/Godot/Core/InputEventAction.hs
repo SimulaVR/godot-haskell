@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventAction
        (Godot.Core.InputEventAction.is_pressed,
         Godot.Core.InputEventAction.get_action,
@@ -63,6 +64,7 @@ get_action cls
 
 {-# NOINLINE bindInputEventAction_get_strength #-}
 
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is [code]false[/code]. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
 bindInputEventAction_get_strength :: MethodBind
 bindInputEventAction_get_strength
   = unsafePerformIO $
@@ -72,6 +74,7 @@ bindInputEventAction_get_strength
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is [code]false[/code]. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
 get_strength ::
                (InputEventAction :< cls, Object :< cls) => cls -> IO Float
 get_strength cls
@@ -133,6 +136,7 @@ set_pressed cls arg1
 
 {-# NOINLINE bindInputEventAction_set_strength #-}
 
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is [code]false[/code]. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
 bindInputEventAction_set_strength :: MethodBind
 bindInputEventAction_set_strength
   = unsafePerformIO $
@@ -142,6 +146,7 @@ bindInputEventAction_set_strength
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is [code]false[/code]. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
 set_strength ::
                (InputEventAction :< cls, Object :< cls) => cls -> Float -> IO ()
 set_strength cls arg1

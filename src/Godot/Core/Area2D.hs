@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Area2D
        (Godot.Core.Area2D._SPACE_OVERRIDE_REPLACE,
         Godot.Core.Area2D._SPACE_OVERRIDE_DISABLED,
@@ -78,37 +79,61 @@ _SPACE_OVERRIDE_COMBINE = 1
 sig_area_entered :: Godot.Internal.Dispatch.Signal Area2D
 sig_area_entered = Godot.Internal.Dispatch.Signal "area_entered"
 
+instance NodeSignal Area2D "area_entered" '[Area2D]
+
 -- | Emitted when another area exits.
 sig_area_exited :: Godot.Internal.Dispatch.Signal Area2D
 sig_area_exited = Godot.Internal.Dispatch.Signal "area_exited"
 
--- | Emitted when another area enters, reporting which shapes overlapped.
+instance NodeSignal Area2D "area_exited" '[Area2D]
+
+-- | Emitted when another area enters, reporting which shapes overlapped. [code]shape_owner_get_owner(shape_find_owner(shape))[/code] returns the parent object of the owner of the [code]shape[/code].
 sig_area_shape_entered :: Godot.Internal.Dispatch.Signal Area2D
 sig_area_shape_entered
   = Godot.Internal.Dispatch.Signal "area_shape_entered"
+
+instance NodeSignal Area2D "area_shape_entered"
+           '[Int, Area2D, Int, Int]
 
 -- | Emitted when another area exits, reporting which shapes were overlapping.
 sig_area_shape_exited :: Godot.Internal.Dispatch.Signal Area2D
 sig_area_shape_exited
   = Godot.Internal.Dispatch.Signal "area_shape_exited"
 
--- | Emitted when a [PhysicsBody2D] object enters.
+instance NodeSignal Area2D "area_shape_exited"
+           '[Int, Area2D, Int, Int]
+
+-- | Emitted when a physics body enters.
+--   				The [code]body[/code] argument can either be a [PhysicsBody2D] or a [TileMap] instance (while TileMaps are not physics body themselves, they register their tiles with collision shapes as a virtual physics body).
 sig_body_entered :: Godot.Internal.Dispatch.Signal Area2D
 sig_body_entered = Godot.Internal.Dispatch.Signal "body_entered"
 
--- | Emitted when a [PhysicsBody2D] object exits.
+instance NodeSignal Area2D "body_entered" '[Node]
+
+-- | Emitted when a physics body exits.
+--   				The [code]body[/code] argument can either be a [PhysicsBody2D] or a [TileMap] instance (while TileMaps are not physics body themselves, they register their tiles with collision shapes as a virtual physics body).
 sig_body_exited :: Godot.Internal.Dispatch.Signal Area2D
 sig_body_exited = Godot.Internal.Dispatch.Signal "body_exited"
 
--- | Emitted when a [PhysicsBody2D] object enters, reporting which shapes overlapped.
+instance NodeSignal Area2D "body_exited" '[Node]
+
+-- | Emitted when a physics body enters, reporting which shapes overlapped.
+--   				The [code]body[/code] argument can either be a [PhysicsBody2D] or a [TileMap] instance (while TileMaps are not physics body themselves, they register their tiles with collision shapes as a virtual physics body).
 sig_body_shape_entered :: Godot.Internal.Dispatch.Signal Area2D
 sig_body_shape_entered
   = Godot.Internal.Dispatch.Signal "body_shape_entered"
 
--- | Emitted when a [PhysicsBody2D] object exits, reporting which shapes were overlapping.
+instance NodeSignal Area2D "body_shape_entered"
+           '[Int, Node, Int, Int]
+
+-- | Emitted when a physics body exits, reporting which shapes were overlapping.
+--   				The [code]body[/code] argument can either be a [PhysicsBody2D] or a [TileMap] instance (while TileMaps are not physics body themselves, they register their tiles with collision shapes as a virtual physics body).
 sig_body_shape_exited :: Godot.Internal.Dispatch.Signal Area2D
 sig_body_shape_exited
   = Godot.Internal.Dispatch.Signal "body_shape_exited"
+
+instance NodeSignal Area2D "body_shape_exited"
+           '[Int, Node, Int, Int]
 
 {-# NOINLINE bindArea2D__area_enter_tree #-}
 
@@ -288,7 +313,7 @@ get_audio_bus_name cls
 
 {-# NOINLINE bindArea2D_get_collision_layer #-}
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask].
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask]. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindArea2D_get_collision_layer :: MethodBind
 bindArea2D_get_collision_layer
   = unsafePerformIO $
@@ -298,7 +323,7 @@ bindArea2D_get_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask].
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask]. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 get_collision_layer ::
                       (Area2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_layer cls
@@ -335,7 +360,7 @@ get_collision_layer_bit cls arg1
 
 {-# NOINLINE bindArea2D_get_collision_mask #-}
 
--- | The physics layers this area scans to determine collision detection.
+-- | The physics layers this area scans to determine collision detection. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindArea2D_get_collision_mask :: MethodBind
 bindArea2D_get_collision_mask
   = unsafePerformIO $
@@ -345,7 +370,7 @@ bindArea2D_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans to determine collision detection.
+-- | The physics layers this area scans to determine collision detection. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 get_collision_mask ::
                      (Area2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -473,7 +498,7 @@ get_linear_damp cls
 
 {-# NOINLINE bindArea2D_get_overlapping_areas #-}
 
--- | Returns a list of intersecting [code]Area2D[/code]s. For performance reasons (collisions are all processed at the same time) this list is modified once during the physics step, not immediately after objects are moved. Consider using signals instead.
+-- | Returns a list of intersecting [Area2D]s. For performance reasons (collisions are all processed at the same time) this list is modified once during the physics step, not immediately after objects are moved. Consider using signals instead.
 bindArea2D_get_overlapping_areas :: MethodBind
 bindArea2D_get_overlapping_areas
   = unsafePerformIO $
@@ -483,7 +508,7 @@ bindArea2D_get_overlapping_areas
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a list of intersecting [code]Area2D[/code]s. For performance reasons (collisions are all processed at the same time) this list is modified once during the physics step, not immediately after objects are moved. Consider using signals instead.
+-- | Returns a list of intersecting [Area2D]s. For performance reasons (collisions are all processed at the same time) this list is modified once during the physics step, not immediately after objects are moved. Consider using signals instead.
 get_overlapping_areas ::
                         (Area2D :< cls, Object :< cls) => cls -> IO Array
 get_overlapping_areas cls
@@ -521,7 +546,7 @@ get_overlapping_bodies cls
 
 {-# NOINLINE bindArea2D_get_priority #-}
 
--- | The area's priority. Higher priority areas are processed first. Default value: 0.
+-- | The area's priority. Higher priority areas are processed first.
 bindArea2D_get_priority :: MethodBind
 bindArea2D_get_priority
   = unsafePerformIO $
@@ -531,7 +556,7 @@ bindArea2D_get_priority
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The area's priority. Higher priority areas are processed first. Default value: 0.
+-- | The area's priority. Higher priority areas are processed first.
 get_priority :: (Area2D :< cls, Object :< cls) => cls -> IO Float
 get_priority cls
   = withVariantArray []
@@ -542,7 +567,7 @@ get_priority cls
 
 {-# NOINLINE bindArea2D_get_space_override_mode #-}
 
--- | Override mode for gravity and damping calculations within this area. See [enum Area2D.SpaceOverride] for possible values.
+-- | Override mode for gravity and damping calculations within this area. See [enum SpaceOverride] for possible values.
 bindArea2D_get_space_override_mode :: MethodBind
 bindArea2D_get_space_override_mode
   = unsafePerformIO $
@@ -552,7 +577,7 @@ bindArea2D_get_space_override_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override mode for gravity and damping calculations within this area. See [enum Area2D.SpaceOverride] for possible values.
+-- | Override mode for gravity and damping calculations within this area. See [enum SpaceOverride] for possible values.
 get_space_override_mode ::
                           (Area2D :< cls, Object :< cls) => cls -> IO Int
 get_space_override_mode cls
@@ -566,7 +591,7 @@ get_space_override_mode cls
 
 {-# NOINLINE bindArea2D_is_gravity_a_point #-}
 
--- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). Also see [member space_override]. Default value: [code]false[/code].
+-- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). See also [member space_override].
 bindArea2D_is_gravity_a_point :: MethodBind
 bindArea2D_is_gravity_a_point
   = unsafePerformIO $
@@ -576,7 +601,7 @@ bindArea2D_is_gravity_a_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). Also see [member space_override]. Default value: [code]false[/code].
+-- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). See also [member space_override].
 is_gravity_a_point ::
                      (Area2D :< cls, Object :< cls) => cls -> IO Bool
 is_gravity_a_point cls
@@ -589,7 +614,7 @@ is_gravity_a_point cls
 
 {-# NOINLINE bindArea2D_is_monitorable #-}
 
--- | If [code]true[/code], other monitoring areas can detect this area. Default value: [code]true[/code].
+-- | If [code]true[/code], other monitoring areas can detect this area.
 bindArea2D_is_monitorable :: MethodBind
 bindArea2D_is_monitorable
   = unsafePerformIO $
@@ -599,7 +624,7 @@ bindArea2D_is_monitorable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], other monitoring areas can detect this area. Default value: [code]true[/code].
+-- | If [code]true[/code], other monitoring areas can detect this area.
 is_monitorable :: (Area2D :< cls, Object :< cls) => cls -> IO Bool
 is_monitorable cls
   = withVariantArray []
@@ -611,7 +636,7 @@ is_monitorable cls
 
 {-# NOINLINE bindArea2D_is_monitoring #-}
 
--- | If [code]true[/code], the area detects bodies or areas entering and exiting it. Default value: [code]true[/code].
+-- | If [code]true[/code], the area detects bodies or areas entering and exiting it.
 bindArea2D_is_monitoring :: MethodBind
 bindArea2D_is_monitoring
   = unsafePerformIO $
@@ -621,7 +646,7 @@ bindArea2D_is_monitoring
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the area detects bodies or areas entering and exiting it. Default value: [code]true[/code].
+-- | If [code]true[/code], the area detects bodies or areas entering and exiting it.
 is_monitoring :: (Area2D :< cls, Object :< cls) => cls -> IO Bool
 is_monitoring cls
   = withVariantArray []
@@ -632,7 +657,7 @@ is_monitoring cls
 
 {-# NOINLINE bindArea2D_is_overriding_audio_bus #-}
 
--- | If [code]true[/code], the area's audio bus overrides the default audio bus. Default value: [code]false[/code].
+-- | If [code]true[/code], the area's audio bus overrides the default audio bus.
 bindArea2D_is_overriding_audio_bus :: MethodBind
 bindArea2D_is_overriding_audio_bus
   = unsafePerformIO $
@@ -642,7 +667,7 @@ bindArea2D_is_overriding_audio_bus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the area's audio bus overrides the default audio bus. Default value: [code]false[/code].
+-- | If [code]true[/code], the area's audio bus overrides the default audio bus.
 is_overriding_audio_bus ::
                           (Area2D :< cls, Object :< cls) => cls -> IO Bool
 is_overriding_audio_bus cls
@@ -656,7 +681,8 @@ is_overriding_audio_bus cls
 
 {-# NOINLINE bindArea2D_overlaps_area #-}
 
--- | If [code]true[/code], the given area overlaps the Area2D. Note that the result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
+-- | If [code]true[/code], the given area overlaps the Area2D.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
 bindArea2D_overlaps_area :: MethodBind
 bindArea2D_overlaps_area
   = unsafePerformIO $
@@ -666,7 +692,8 @@ bindArea2D_overlaps_area
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the given area overlaps the Area2D. Note that the result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
+-- | If [code]true[/code], the given area overlaps the Area2D.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
 overlaps_area ::
                 (Area2D :< cls, Object :< cls) => cls -> Node -> IO Bool
 overlaps_area cls arg1
@@ -678,7 +705,9 @@ overlaps_area cls arg1
 
 {-# NOINLINE bindArea2D_overlaps_body #-}
 
--- | If [code]true[/code], the given body overlaps the Area2D. Note that the result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
+-- | If [code]true[/code], the given physics body overlaps the Area2D.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
+--   				The [code]body[/code] argument can either be a [PhysicsBody2D] or a [TileMap] instance (while TileMaps are not physics body themselves, they register their tiles with collision shapes as a virtual physics body).
 bindArea2D_overlaps_body :: MethodBind
 bindArea2D_overlaps_body
   = unsafePerformIO $
@@ -688,7 +717,9 @@ bindArea2D_overlaps_body
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the given body overlaps the Area2D. Note that the result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
+-- | If [code]true[/code], the given physics body overlaps the Area2D.
+--   				[b]Note:[/b] The result of this test is not immediate after moving objects. For performance, list of overlaps is updated once per frame and before the physics step. Consider using signals instead.
+--   				The [code]body[/code] argument can either be a [PhysicsBody2D] or a [TileMap] instance (while TileMaps are not physics body themselves, they register their tiles with collision shapes as a virtual physics body).
 overlaps_body ::
                 (Area2D :< cls, Object :< cls) => cls -> Node -> IO Bool
 overlaps_body cls arg1
@@ -746,7 +777,7 @@ set_audio_bus_name cls arg1
 
 {-# NOINLINE bindArea2D_set_audio_bus_override #-}
 
--- | If [code]true[/code], the area's audio bus overrides the default audio bus. Default value: [code]false[/code].
+-- | If [code]true[/code], the area's audio bus overrides the default audio bus.
 bindArea2D_set_audio_bus_override :: MethodBind
 bindArea2D_set_audio_bus_override
   = unsafePerformIO $
@@ -756,7 +787,7 @@ bindArea2D_set_audio_bus_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the area's audio bus overrides the default audio bus. Default value: [code]false[/code].
+-- | If [code]true[/code], the area's audio bus overrides the default audio bus.
 set_audio_bus_override ::
                          (Area2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_audio_bus_override cls arg1
@@ -770,7 +801,7 @@ set_audio_bus_override cls arg1
 
 {-# NOINLINE bindArea2D_set_collision_layer #-}
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask].
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask]. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindArea2D_set_collision_layer :: MethodBind
 bindArea2D_set_collision_layer
   = unsafePerformIO $
@@ -780,7 +811,7 @@ bindArea2D_set_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask].
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also [member collision_mask]. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 set_collision_layer ::
                       (Area2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_layer cls arg1
@@ -817,7 +848,7 @@ set_collision_layer_bit cls arg1 arg2
 
 {-# NOINLINE bindArea2D_set_collision_mask #-}
 
--- | The physics layers this area scans to determine collision detection.
+-- | The physics layers this area scans to determine collision detection. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindArea2D_set_collision_mask :: MethodBind
 bindArea2D_set_collision_mask
   = unsafePerformIO $
@@ -827,7 +858,7 @@ bindArea2D_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans to determine collision detection.
+-- | The physics layers this area scans to determine collision detection. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 set_collision_mask ::
                      (Area2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1
@@ -910,7 +941,7 @@ set_gravity_distance_scale cls arg1
 
 {-# NOINLINE bindArea2D_set_gravity_is_point #-}
 
--- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). Also see [member space_override]. Default value: [code]false[/code].
+-- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). See also [member space_override].
 bindArea2D_set_gravity_is_point :: MethodBind
 bindArea2D_set_gravity_is_point
   = unsafePerformIO $
@@ -920,7 +951,7 @@ bindArea2D_set_gravity_is_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). Also see [member space_override]. Default value: [code]false[/code].
+-- | If [code]true[/code], gravity is calculated from a point (set via [member gravity_vec]). See also [member space_override].
 set_gravity_is_point ::
                        (Area2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_gravity_is_point cls arg1
@@ -979,7 +1010,7 @@ set_linear_damp cls arg1
 
 {-# NOINLINE bindArea2D_set_monitorable #-}
 
--- | If [code]true[/code], other monitoring areas can detect this area. Default value: [code]true[/code].
+-- | If [code]true[/code], other monitoring areas can detect this area.
 bindArea2D_set_monitorable :: MethodBind
 bindArea2D_set_monitorable
   = unsafePerformIO $
@@ -989,7 +1020,7 @@ bindArea2D_set_monitorable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], other monitoring areas can detect this area. Default value: [code]true[/code].
+-- | If [code]true[/code], other monitoring areas can detect this area.
 set_monitorable ::
                   (Area2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_monitorable cls arg1
@@ -1002,7 +1033,7 @@ set_monitorable cls arg1
 
 {-# NOINLINE bindArea2D_set_monitoring #-}
 
--- | If [code]true[/code], the area detects bodies or areas entering and exiting it. Default value: [code]true[/code].
+-- | If [code]true[/code], the area detects bodies or areas entering and exiting it.
 bindArea2D_set_monitoring :: MethodBind
 bindArea2D_set_monitoring
   = unsafePerformIO $
@@ -1012,7 +1043,7 @@ bindArea2D_set_monitoring
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the area detects bodies or areas entering and exiting it. Default value: [code]true[/code].
+-- | If [code]true[/code], the area detects bodies or areas entering and exiting it.
 set_monitoring ::
                  (Area2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_monitoring cls arg1
@@ -1025,7 +1056,7 @@ set_monitoring cls arg1
 
 {-# NOINLINE bindArea2D_set_priority #-}
 
--- | The area's priority. Higher priority areas are processed first. Default value: 0.
+-- | The area's priority. Higher priority areas are processed first.
 bindArea2D_set_priority :: MethodBind
 bindArea2D_set_priority
   = unsafePerformIO $
@@ -1035,7 +1066,7 @@ bindArea2D_set_priority
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The area's priority. Higher priority areas are processed first. Default value: 0.
+-- | The area's priority. Higher priority areas are processed first.
 set_priority ::
                (Area2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_priority cls arg1
@@ -1047,7 +1078,7 @@ set_priority cls arg1
 
 {-# NOINLINE bindArea2D_set_space_override_mode #-}
 
--- | Override mode for gravity and damping calculations within this area. See [enum Area2D.SpaceOverride] for possible values.
+-- | Override mode for gravity and damping calculations within this area. See [enum SpaceOverride] for possible values.
 bindArea2D_set_space_override_mode :: MethodBind
 bindArea2D_set_space_override_mode
   = unsafePerformIO $
@@ -1057,7 +1088,7 @@ bindArea2D_set_space_override_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override mode for gravity and damping calculations within this area. See [enum Area2D.SpaceOverride] for possible values.
+-- | Override mode for gravity and damping calculations within this area. See [enum SpaceOverride] for possible values.
 set_space_override_mode ::
                           (Area2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_space_override_mode cls arg1

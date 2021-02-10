@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Reference
        (Godot.Core.Reference.init_ref, Godot.Core.Reference.reference,
         Godot.Core.Reference.unreference)
@@ -37,7 +38,7 @@ init_ref cls
 {-# NOINLINE bindReference_reference #-}
 
 -- | Increments the internal reference counter. Use this only if you really know what you are doing.
---   				Returns whether the increment was successful.
+--   				Returns [code]true[/code] if the increment was successful, [code]false[/code] otherwise.
 bindReference_reference :: MethodBind
 bindReference_reference
   = unsafePerformIO $
@@ -48,7 +49,7 @@ bindReference_reference
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Increments the internal reference counter. Use this only if you really know what you are doing.
---   				Returns whether the increment was successful.
+--   				Returns [code]true[/code] if the increment was successful, [code]false[/code] otherwise.
 reference :: (Reference :< cls, Object :< cls) => cls -> IO Bool
 reference cls
   = withVariantArray []
@@ -60,7 +61,7 @@ reference cls
 {-# NOINLINE bindReference_unreference #-}
 
 -- | Decrements the internal reference counter. Use this only if you really know what you are doing.
---   				Returns whether the decrement was successful.
+--   				Returns [code]true[/code] if the decrement was successful, [code]false[/code] otherwise.
 bindReference_unreference :: MethodBind
 bindReference_unreference
   = unsafePerformIO $
@@ -71,7 +72,7 @@ bindReference_unreference
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Decrements the internal reference counter. Use this only if you really know what you are doing.
---   				Returns whether the decrement was successful.
+--   				Returns [code]true[/code] if the decrement was successful, [code]false[/code] otherwise.
 unreference :: (Reference :< cls, Object :< cls) => cls -> IO Bool
 unreference cls
   = withVariantArray []

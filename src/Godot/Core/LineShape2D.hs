@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.LineShape2D
        (Godot.Core.LineShape2D.get_d, Godot.Core.LineShape2D.get_normal,
         Godot.Core.LineShape2D.set_d, Godot.Core.LineShape2D.set_normal)

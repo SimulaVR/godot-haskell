@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.RichTextLabel
        (Godot.Core.RichTextLabel._ITEM_UNDERLINE,
         Godot.Core.RichTextLabel._ITEM_RAINBOW,
@@ -173,9 +174,11 @@ _ALIGN_LEFT = 0
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
 
--- | Triggered when the user clicks on content between [code][url][/code] tags. If the meta is defined in text, e.g. [code][url={"data"="hi"}]hi[/url][/code], then the parameter for this signal will be a [String] type. If a particular type or an object is desired, the [method push_meta] method must be used to manually insert the data into the tag stack.
+-- | Triggered when the user clicks on content between meta tags. If the meta is defined in text, e.g. [code][url={"data"="hi"}]hi[/url][/code], then the parameter for this signal will be a [String] type. If a particular type or an object is desired, the [method push_meta] method must be used to manually insert the data into the tag stack.
 sig_meta_clicked :: Godot.Internal.Dispatch.Signal RichTextLabel
 sig_meta_clicked = Godot.Internal.Dispatch.Signal "meta_clicked"
+
+instance NodeSignal RichTextLabel "meta_clicked" '[GodotVariant]
 
 -- | Triggers when the mouse exits a meta tag.
 sig_meta_hover_ended ::
@@ -183,11 +186,17 @@ sig_meta_hover_ended ::
 sig_meta_hover_ended
   = Godot.Internal.Dispatch.Signal "meta_hover_ended"
 
+instance NodeSignal RichTextLabel "meta_hover_ended"
+           '[GodotVariant]
+
 -- | Triggers when the mouse enters a meta tag.
 sig_meta_hover_started ::
                        Godot.Internal.Dispatch.Signal RichTextLabel
 sig_meta_hover_started
   = Godot.Internal.Dispatch.Signal "meta_hover_started"
+
+instance NodeSignal RichTextLabel "meta_hover_started"
+           '[GodotVariant]
 
 {-# NOINLINE bindRichTextLabel__gui_input #-}
 
@@ -234,7 +243,8 @@ _scroll_changed cls arg1
 
 {-# NOINLINE bindRichTextLabel_add_image #-}
 
--- | Adds an image's opening and closing tags to the tag stack.
+-- | Adds an image's opening and closing tags to the tag stack, optionally providing a [code]width[/code] and [code]height[/code] to resize the image.
+--   				If [code]width[/code] or [code]height[/code] is set to 0, the image size will be adjusted in order to keep the original aspect ratio.
 bindRichTextLabel_add_image :: MethodBind
 bindRichTextLabel_add_image
   = unsafePerformIO $
@@ -244,7 +254,8 @@ bindRichTextLabel_add_image
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an image's opening and closing tags to the tag stack.
+-- | Adds an image's opening and closing tags to the tag stack, optionally providing a [code]width[/code] and [code]height[/code] to resize the image.
+--   				If [code]width[/code] or [code]height[/code] is set to 0, the image size will be adjusted in order to keep the original aspect ratio.
 add_image ::
             (RichTextLabel :< cls, Object :< cls) =>
             cls -> Texture -> Int -> Int -> IO ()
@@ -258,7 +269,7 @@ add_image cls arg1 arg2 arg3
 
 {-# NOINLINE bindRichTextLabel_add_text #-}
 
--- | Adds raw non-bbcode-parsed text to the tag stack.
+-- | Adds raw non-BBCode-parsed text to the tag stack.
 bindRichTextLabel_add_text :: MethodBind
 bindRichTextLabel_add_text
   = unsafePerformIO $
@@ -268,7 +279,7 @@ bindRichTextLabel_add_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds raw non-bbcode-parsed text to the tag stack.
+-- | Adds raw non-BBCode-parsed text to the tag stack.
 add_text ::
            (RichTextLabel :< cls, Object :< cls) =>
            cls -> GodotString -> IO ()
@@ -282,7 +293,7 @@ add_text cls arg1
 
 {-# NOINLINE bindRichTextLabel_append_bbcode #-}
 
--- | Parses [code]bbcode[/code] and adds tags to the tag stack as needed. Returns the result of the parsing, [constant @GlobalScope.OK] if successful.
+-- | Parses [code]bbcode[/code] and adds tags to the tag stack as needed. Returns the result of the parsing, [constant OK] if successful.
 bindRichTextLabel_append_bbcode :: MethodBind
 bindRichTextLabel_append_bbcode
   = unsafePerformIO $
@@ -292,7 +303,7 @@ bindRichTextLabel_append_bbcode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Parses [code]bbcode[/code] and adds tags to the tag stack as needed. Returns the result of the parsing, [constant @GlobalScope.OK] if successful.
+-- | Parses [code]bbcode[/code] and adds tags to the tag stack as needed. Returns the result of the parsing, [constant OK] if successful.
 append_bbcode ::
                 (RichTextLabel :< cls, Object :< cls) =>
                 cls -> GodotString -> IO Int
@@ -328,6 +339,7 @@ clear cls
 {-# NOINLINE bindRichTextLabel_get_bbcode #-}
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
+--   			[b]Note:[/b] It is unadvised to use [code]+=[/code] operator with [code]bbcode_text[/code] (e.g. [code]bbcode_text += "some string"[/code]) as it replaces the whole text and can cause slowdowns. Use [method append_bbcode] for adding text instead.
 bindRichTextLabel_get_bbcode :: MethodBind
 bindRichTextLabel_get_bbcode
   = unsafePerformIO $
@@ -338,6 +350,7 @@ bindRichTextLabel_get_bbcode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
+--   			[b]Note:[/b] It is unadvised to use [code]+=[/code] operator with [code]bbcode_text[/code] (e.g. [code]bbcode_text += "some string"[/code]) as it replaces the whole text and can cause slowdowns. Use [method append_bbcode] for adding text instead.
 get_bbcode ::
              (RichTextLabel :< cls, Object :< cls) => cls -> IO GodotString
 get_bbcode cls
@@ -374,6 +387,8 @@ get_content_height cls
 
 {-# NOINLINE bindRichTextLabel_get_effects #-}
 
+-- | The currently installed custom effects. This is an array of [RichTextEffect]s.
+--   			To add a custom effect, it's more convenient to use [method install_effect].
 bindRichTextLabel_get_effects :: MethodBind
 bindRichTextLabel_get_effects
   = unsafePerformIO $
@@ -383,6 +398,8 @@ bindRichTextLabel_get_effects
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The currently installed custom effects. This is an array of [RichTextEffect]s.
+--   			To add a custom effect, it's more convenient to use [method install_effect].
 get_effects ::
               (RichTextLabel :< cls, Object :< cls) => cls -> IO Array
 get_effects cls
@@ -419,7 +436,8 @@ get_line_count cls
 
 {-# NOINLINE bindRichTextLabel_get_percent_visible #-}
 
--- | The text's visibility, as a [float] between 0.0 and 1.0.
+-- | The range of characters to display, as a [float] between 0.0 and 1.0. When assigned an out of range value, it's the same as assigning 1.0.
+--   			[b]Note:[/b] Setting this property updates [member visible_characters] based on current [method get_total_character_count].
 bindRichTextLabel_get_percent_visible :: MethodBind
 bindRichTextLabel_get_percent_visible
   = unsafePerformIO $
@@ -429,7 +447,8 @@ bindRichTextLabel_get_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The text's visibility, as a [float] between 0.0 and 1.0.
+-- | The range of characters to display, as a [float] between 0.0 and 1.0. When assigned an out of range value, it's the same as assigning 1.0.
+--   			[b]Note:[/b] Setting this property updates [member visible_characters] based on current [method get_total_character_count].
 get_percent_visible ::
                       (RichTextLabel :< cls, Object :< cls) => cls -> IO Float
 get_percent_visible cls
@@ -443,7 +462,7 @@ get_percent_visible cls
 
 {-# NOINLINE bindRichTextLabel_get_tab_size #-}
 
--- | The number of spaces associated with a single tab length. Does not affect "\t" in text tags, only indent tags.
+-- | The number of spaces associated with a single tab length. Does not affect [code]\t[/code] in text tags, only indent tags.
 bindRichTextLabel_get_tab_size :: MethodBind
 bindRichTextLabel_get_tab_size
   = unsafePerformIO $
@@ -453,7 +472,7 @@ bindRichTextLabel_get_tab_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of spaces associated with a single tab length. Does not affect "\t" in text tags, only indent tags.
+-- | The number of spaces associated with a single tab length. Does not affect [code]\t[/code] in text tags, only indent tags.
 get_tab_size ::
                (RichTextLabel :< cls, Object :< cls) => cls -> IO Int
 get_tab_size cls
@@ -467,7 +486,7 @@ get_tab_size cls
 {-# NOINLINE bindRichTextLabel_get_text #-}
 
 -- | The raw text of the label.
---   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse bbcodes. Does not modify [member bbcode_text].
+--   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse BBCodes. Does not modify [member bbcode_text].
 bindRichTextLabel_get_text :: MethodBind
 bindRichTextLabel_get_text
   = unsafePerformIO $
@@ -478,7 +497,7 @@ bindRichTextLabel_get_text
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The raw text of the label.
---   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse bbcodes. Does not modify [member bbcode_text].
+--   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse BBCodes. Does not modify [member bbcode_text].
 get_text ::
            (RichTextLabel :< cls, Object :< cls) => cls -> IO GodotString
 get_text cls
@@ -491,7 +510,7 @@ get_text cls
 
 {-# NOINLINE bindRichTextLabel_get_total_character_count #-}
 
--- | Returns the total number of characters from text tags. Does not include bbcodes.
+-- | Returns the total number of characters from text tags. Does not include BBCodes.
 bindRichTextLabel_get_total_character_count :: MethodBind
 bindRichTextLabel_get_total_character_count
   = unsafePerformIO $
@@ -501,7 +520,7 @@ bindRichTextLabel_get_total_character_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the total number of characters from text tags. Does not include bbcodes.
+-- | Returns the total number of characters from text tags. Does not include BBCodes.
 get_total_character_count ::
                             (RichTextLabel :< cls, Object :< cls) => cls -> IO Int
 get_total_character_count cls
@@ -538,7 +557,7 @@ get_v_scroll cls
 
 {-# NOINLINE bindRichTextLabel_get_visible_characters #-}
 
--- | The restricted number of characters to display in the label.
+-- | The restricted number of characters to display in the label. If [code]-1[/code], all characters will be displayed.
 bindRichTextLabel_get_visible_characters :: MethodBind
 bindRichTextLabel_get_visible_characters
   = unsafePerformIO $
@@ -548,7 +567,7 @@ bindRichTextLabel_get_visible_characters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The restricted number of characters to display in the label.
+-- | The restricted number of characters to display in the label. If [code]-1[/code], all characters will be displayed.
 get_visible_characters ::
                          (RichTextLabel :< cls, Object :< cls) => cls -> IO Int
 get_visible_characters cls
@@ -586,6 +605,7 @@ get_visible_line_count cls
 
 {-# NOINLINE bindRichTextLabel_install_effect #-}
 
+-- | Installs a custom effect. [code]effect[/code] should be a valid [RichTextEffect].
 bindRichTextLabel_install_effect :: MethodBind
 bindRichTextLabel_install_effect
   = unsafePerformIO $
@@ -595,6 +615,7 @@ bindRichTextLabel_install_effect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Installs a custom effect. [code]effect[/code] should be a valid [RichTextEffect].
 install_effect ::
                  (RichTextLabel :< cls, Object :< cls) =>
                  cls -> GodotVariant -> IO ()
@@ -609,7 +630,7 @@ install_effect cls arg1
 
 {-# NOINLINE bindRichTextLabel_is_meta_underlined #-}
 
--- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code]. Default value: [code]true[/code].
+-- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code].
 bindRichTextLabel_is_meta_underlined :: MethodBind
 bindRichTextLabel_is_meta_underlined
   = unsafePerformIO $
@@ -619,7 +640,7 @@ bindRichTextLabel_is_meta_underlined
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code]. Default value: [code]true[/code].
+-- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code].
 is_meta_underlined ::
                      (RichTextLabel :< cls, Object :< cls) => cls -> IO Bool
 is_meta_underlined cls
@@ -634,7 +655,7 @@ is_meta_underlined cls
 {-# NOINLINE bindRichTextLabel_is_overriding_selected_font_color
              #-}
 
--- | If [code]true[/code], the label uses the custom font color. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses the custom font color.
 bindRichTextLabel_is_overriding_selected_font_color :: MethodBind
 bindRichTextLabel_is_overriding_selected_font_color
   = unsafePerformIO $
@@ -644,7 +665,7 @@ bindRichTextLabel_is_overriding_selected_font_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the label uses the custom font color. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses the custom font color.
 is_overriding_selected_font_color ::
                                     (RichTextLabel :< cls, Object :< cls) => cls -> IO Bool
 is_overriding_selected_font_color cls
@@ -659,7 +680,7 @@ is_overriding_selected_font_color cls
 
 {-# NOINLINE bindRichTextLabel_is_scroll_active #-}
 
--- | If [code]true[/code], the scrollbar is visible. Does not block scrolling completely. See [method scroll_to_line]. Default value: [code]true[/code].
+-- | If [code]true[/code], the scrollbar is visible. Setting this to [code]false[/code] does not block scrolling completely. See [method scroll_to_line].
 bindRichTextLabel_is_scroll_active :: MethodBind
 bindRichTextLabel_is_scroll_active
   = unsafePerformIO $
@@ -669,7 +690,7 @@ bindRichTextLabel_is_scroll_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the scrollbar is visible. Does not block scrolling completely. See [method scroll_to_line]. Default value: [code]true[/code].
+-- | If [code]true[/code], the scrollbar is visible. Setting this to [code]false[/code] does not block scrolling completely. See [method scroll_to_line].
 is_scroll_active ::
                    (RichTextLabel :< cls, Object :< cls) => cls -> IO Bool
 is_scroll_active cls
@@ -683,7 +704,7 @@ is_scroll_active cls
 
 {-# NOINLINE bindRichTextLabel_is_scroll_following #-}
 
--- | If [code]true[/code], the window scrolls down to display new content automatically. Default value: [code]false[/code].
+-- | If [code]true[/code], the window scrolls down to display new content automatically.
 bindRichTextLabel_is_scroll_following :: MethodBind
 bindRichTextLabel_is_scroll_following
   = unsafePerformIO $
@@ -693,7 +714,7 @@ bindRichTextLabel_is_scroll_following
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the window scrolls down to display new content automatically. Default value: [code]false[/code].
+-- | If [code]true[/code], the window scrolls down to display new content automatically.
 is_scroll_following ::
                       (RichTextLabel :< cls, Object :< cls) => cls -> IO Bool
 is_scroll_following cls
@@ -731,7 +752,7 @@ is_selection_enabled cls
 
 {-# NOINLINE bindRichTextLabel_is_using_bbcode #-}
 
--- | If [code]true[/code], the label uses BBCode formatting. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses BBCode formatting.
 bindRichTextLabel_is_using_bbcode :: MethodBind
 bindRichTextLabel_is_using_bbcode
   = unsafePerformIO $
@@ -741,7 +762,7 @@ bindRichTextLabel_is_using_bbcode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the label uses BBCode formatting. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses BBCode formatting.
 is_using_bbcode ::
                   (RichTextLabel :< cls, Object :< cls) => cls -> IO Bool
 is_using_bbcode cls
@@ -777,7 +798,7 @@ newline cls
 
 {-# NOINLINE bindRichTextLabel_parse_bbcode #-}
 
--- | The assignment version of [method append_bbcode]. Clears the tag stack and inserts the new content. Returns [constant @GlobalScope.OK] if parses [code]bbcode[/code] successfully.
+-- | The assignment version of [method append_bbcode]. Clears the tag stack and inserts the new content. Returns [constant OK] if parses [code]bbcode[/code] successfully.
 bindRichTextLabel_parse_bbcode :: MethodBind
 bindRichTextLabel_parse_bbcode
   = unsafePerformIO $
@@ -787,7 +808,7 @@ bindRichTextLabel_parse_bbcode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The assignment version of [method append_bbcode]. Clears the tag stack and inserts the new content. Returns [constant @GlobalScope.OK] if parses [code]bbcode[/code] successfully.
+-- | The assignment version of [method append_bbcode]. Clears the tag stack and inserts the new content. Returns [constant OK] if parses [code]bbcode[/code] successfully.
 parse_bbcode ::
                (RichTextLabel :< cls, Object :< cls) =>
                cls -> GodotString -> IO Int
@@ -801,6 +822,7 @@ parse_bbcode cls arg1
 
 {-# NOINLINE bindRichTextLabel_parse_expressions_for_values #-}
 
+-- | Parses BBCode parameter [code]expressions[/code] into a dictionary.
 bindRichTextLabel_parse_expressions_for_values :: MethodBind
 bindRichTextLabel_parse_expressions_for_values
   = unsafePerformIO $
@@ -810,6 +832,7 @@ bindRichTextLabel_parse_expressions_for_values
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Parses BBCode parameter [code]expressions[/code] into a dictionary.
 parse_expressions_for_values ::
                                (RichTextLabel :< cls, Object :< cls) =>
                                cls -> PoolStringArray -> IO Dictionary
@@ -825,7 +848,7 @@ parse_expressions_for_values cls arg1
 
 {-# NOINLINE bindRichTextLabel_pop #-}
 
--- | Terminates the current tag. Use after [code]push_*[/code] methods to close bbcodes manually. Does not need to follow [code]add_*[/code] methods.
+-- | Terminates the current tag. Use after [code]push_*[/code] methods to close BBCodes manually. Does not need to follow [code]add_*[/code] methods.
 bindRichTextLabel_pop :: MethodBind
 bindRichTextLabel_pop
   = unsafePerformIO $
@@ -835,7 +858,7 @@ bindRichTextLabel_pop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Terminates the current tag. Use after [code]push_*[/code] methods to close bbcodes manually. Does not need to follow [code]add_*[/code] methods.
+-- | Terminates the current tag. Use after [code]push_*[/code] methods to close BBCodes manually. Does not need to follow [code]add_*[/code] methods.
 pop :: (RichTextLabel :< cls, Object :< cls) => cls -> IO ()
 pop cls
   = withVariantArray []
@@ -846,7 +869,7 @@ pop cls
 
 {-# NOINLINE bindRichTextLabel_push_align #-}
 
--- | Adds an alignment tag based on the given [code]align[/code] value. See [enum Align] for possible values.
+-- | Adds an [code][align][/code] tag based on the given [code]align[/code] value. See [enum Align] for possible values.
 bindRichTextLabel_push_align :: MethodBind
 bindRichTextLabel_push_align
   = unsafePerformIO $
@@ -856,7 +879,7 @@ bindRichTextLabel_push_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an alignment tag based on the given [code]align[/code] value. See [enum Align] for possible values.
+-- | Adds an [code][align][/code] tag based on the given [code]align[/code] value. See [enum Align] for possible values.
 push_align ::
              (RichTextLabel :< cls, Object :< cls) => cls -> Int -> IO ()
 push_align cls arg1
@@ -869,6 +892,7 @@ push_align cls arg1
 
 {-# NOINLINE bindRichTextLabel_push_bold #-}
 
+-- | Adds a [code][font][/code] tag with a bold font to the tag stack. This is the same as adding a [code][b][/code] tag if not currently in a [code][i][/code] tag.
 bindRichTextLabel_push_bold :: MethodBind
 bindRichTextLabel_push_bold
   = unsafePerformIO $
@@ -878,6 +902,7 @@ bindRichTextLabel_push_bold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a [code][font][/code] tag with a bold font to the tag stack. This is the same as adding a [code][b][/code] tag if not currently in a [code][i][/code] tag.
 push_bold :: (RichTextLabel :< cls, Object :< cls) => cls -> IO ()
 push_bold cls
   = withVariantArray []
@@ -889,6 +914,7 @@ push_bold cls
 
 {-# NOINLINE bindRichTextLabel_push_bold_italics #-}
 
+-- | Adds a [code][font][/code] tag with a bold italics font to the tag stack.
 bindRichTextLabel_push_bold_italics :: MethodBind
 bindRichTextLabel_push_bold_italics
   = unsafePerformIO $
@@ -898,6 +924,7 @@ bindRichTextLabel_push_bold_italics
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a [code][font][/code] tag with a bold italics font to the tag stack.
 push_bold_italics ::
                     (RichTextLabel :< cls, Object :< cls) => cls -> IO ()
 push_bold_italics cls
@@ -979,7 +1006,7 @@ push_font cls arg1
 
 {-# NOINLINE bindRichTextLabel_push_indent #-}
 
--- | Adds an [code][indent][/code] tag to the tag stack. Multiplies "level" by current tab_size to determine new margin length.
+-- | Adds an [code][indent][/code] tag to the tag stack. Multiplies [code]level[/code] by current [member tab_size] to determine new margin length.
 bindRichTextLabel_push_indent :: MethodBind
 bindRichTextLabel_push_indent
   = unsafePerformIO $
@@ -989,7 +1016,7 @@ bindRichTextLabel_push_indent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an [code][indent][/code] tag to the tag stack. Multiplies "level" by current tab_size to determine new margin length.
+-- | Adds an [code][indent][/code] tag to the tag stack. Multiplies [code]level[/code] by current [member tab_size] to determine new margin length.
 push_indent ::
               (RichTextLabel :< cls, Object :< cls) => cls -> Int -> IO ()
 push_indent cls arg1
@@ -1002,6 +1029,7 @@ push_indent cls arg1
 
 {-# NOINLINE bindRichTextLabel_push_italics #-}
 
+-- | Adds a [code][font][/code] tag with a italics font to the tag stack. This is the same as adding a [code][i][/code] tag if not currently in a [code][b][/code] tag.
 bindRichTextLabel_push_italics :: MethodBind
 bindRichTextLabel_push_italics
   = unsafePerformIO $
@@ -1011,6 +1039,7 @@ bindRichTextLabel_push_italics
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a [code][font][/code] tag with a italics font to the tag stack. This is the same as adding a [code][i][/code] tag if not currently in a [code][b][/code] tag.
 push_italics ::
                (RichTextLabel :< cls, Object :< cls) => cls -> IO ()
 push_italics cls
@@ -1023,7 +1052,7 @@ push_italics cls
 
 {-# NOINLINE bindRichTextLabel_push_list #-}
 
--- | Adds a list tag to the tag stack. Similar to the bbcodes [code][ol][/code] or [code][ul][/code], but supports more list types. Not fully implemented!
+-- | Adds a [code][list][/code] tag to the tag stack. Similar to the BBCodes [code][ol][/code] or [code][ul][/code], but supports more list types. Not fully implemented!
 bindRichTextLabel_push_list :: MethodBind
 bindRichTextLabel_push_list
   = unsafePerformIO $
@@ -1033,7 +1062,7 @@ bindRichTextLabel_push_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a list tag to the tag stack. Similar to the bbcodes [code][ol][/code] or [code][ul][/code], but supports more list types. Not fully implemented!
+-- | Adds a [code][list][/code] tag to the tag stack. Similar to the BBCodes [code][ol][/code] or [code][ul][/code], but supports more list types. Not fully implemented!
 push_list ::
             (RichTextLabel :< cls, Object :< cls) => cls -> Int -> IO ()
 push_list cls arg1
@@ -1046,7 +1075,7 @@ push_list cls arg1
 
 {-# NOINLINE bindRichTextLabel_push_meta #-}
 
--- | Adds a meta tag to the tag stack. Similar to the bbcode [code][url=something]{text}[/url][/code], but supports non-[String] metadata types.
+-- | Adds a [code][meta][/code] tag to the tag stack. Similar to the BBCode [code][url=something]{text}[/url][/code], but supports non-[String] metadata types.
 bindRichTextLabel_push_meta :: MethodBind
 bindRichTextLabel_push_meta
   = unsafePerformIO $
@@ -1056,7 +1085,7 @@ bindRichTextLabel_push_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a meta tag to the tag stack. Similar to the bbcode [code][url=something]{text}[/url][/code], but supports non-[String] metadata types.
+-- | Adds a [code][meta][/code] tag to the tag stack. Similar to the BBCode [code][url=something]{text}[/url][/code], but supports non-[String] metadata types.
 push_meta ::
             (RichTextLabel :< cls, Object :< cls) =>
             cls -> GodotVariant -> IO ()
@@ -1070,6 +1099,7 @@ push_meta cls arg1
 
 {-# NOINLINE bindRichTextLabel_push_mono #-}
 
+-- | Adds a [code][font][/code] tag with a monospace font to the tag stack.
 bindRichTextLabel_push_mono :: MethodBind
 bindRichTextLabel_push_mono
   = unsafePerformIO $
@@ -1079,6 +1109,7 @@ bindRichTextLabel_push_mono
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a [code][font][/code] tag with a monospace font to the tag stack.
 push_mono :: (RichTextLabel :< cls, Object :< cls) => cls -> IO ()
 push_mono cls
   = withVariantArray []
@@ -1090,6 +1121,7 @@ push_mono cls
 
 {-# NOINLINE bindRichTextLabel_push_normal #-}
 
+-- | Adds a [code][font][/code] tag with a normal font to the tag stack.
 bindRichTextLabel_push_normal :: MethodBind
 bindRichTextLabel_push_normal
   = unsafePerformIO $
@@ -1099,6 +1131,7 @@ bindRichTextLabel_push_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a [code][font][/code] tag with a normal font to the tag stack.
 push_normal ::
               (RichTextLabel :< cls, Object :< cls) => cls -> IO ()
 push_normal cls
@@ -1183,6 +1216,7 @@ push_underline cls
 {-# NOINLINE bindRichTextLabel_remove_line #-}
 
 -- | Removes a line of content from the label. Returns [code]true[/code] if the line exists.
+--   				The [code]line[/code] argument is the index of the line to remove, it can take values in the interval [code][0, get_line_count() - 1][/code].
 bindRichTextLabel_remove_line :: MethodBind
 bindRichTextLabel_remove_line
   = unsafePerformIO $
@@ -1193,6 +1227,7 @@ bindRichTextLabel_remove_line
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Removes a line of content from the label. Returns [code]true[/code] if the line exists.
+--   				The [code]line[/code] argument is the index of the line to remove, it can take values in the interval [code][0, get_line_count() - 1][/code].
 remove_line ::
               (RichTextLabel :< cls, Object :< cls) => cls -> Int -> IO Bool
 remove_line cls arg1
@@ -1230,6 +1265,7 @@ scroll_to_line cls arg1
 {-# NOINLINE bindRichTextLabel_set_bbcode #-}
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
+--   			[b]Note:[/b] It is unadvised to use [code]+=[/code] operator with [code]bbcode_text[/code] (e.g. [code]bbcode_text += "some string"[/code]) as it replaces the whole text and can cause slowdowns. Use [method append_bbcode] for adding text instead.
 bindRichTextLabel_set_bbcode :: MethodBind
 bindRichTextLabel_set_bbcode
   = unsafePerformIO $
@@ -1240,6 +1276,7 @@ bindRichTextLabel_set_bbcode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
+--   			[b]Note:[/b] It is unadvised to use [code]+=[/code] operator with [code]bbcode_text[/code] (e.g. [code]bbcode_text += "some string"[/code]) as it replaces the whole text and can cause slowdowns. Use [method append_bbcode] for adding text instead.
 set_bbcode ::
              (RichTextLabel :< cls, Object :< cls) =>
              cls -> GodotString -> IO ()
@@ -1253,6 +1290,8 @@ set_bbcode cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_effects #-}
 
+-- | The currently installed custom effects. This is an array of [RichTextEffect]s.
+--   			To add a custom effect, it's more convenient to use [method install_effect].
 bindRichTextLabel_set_effects :: MethodBind
 bindRichTextLabel_set_effects
   = unsafePerformIO $
@@ -1262,6 +1301,8 @@ bindRichTextLabel_set_effects
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The currently installed custom effects. This is an array of [RichTextEffect]s.
+--   			To add a custom effect, it's more convenient to use [method install_effect].
 set_effects ::
               (RichTextLabel :< cls, Object :< cls) => cls -> Array -> IO ()
 set_effects cls arg1
@@ -1274,7 +1315,7 @@ set_effects cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_meta_underline #-}
 
--- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code]. Default value: [code]true[/code].
+-- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code].
 bindRichTextLabel_set_meta_underline :: MethodBind
 bindRichTextLabel_set_meta_underline
   = unsafePerformIO $
@@ -1284,7 +1325,7 @@ bindRichTextLabel_set_meta_underline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code]. Default value: [code]true[/code].
+-- | If [code]true[/code], the label underlines meta tags such as [code][url]{text}[/url][/code].
 set_meta_underline ::
                      (RichTextLabel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_meta_underline cls arg1
@@ -1298,7 +1339,7 @@ set_meta_underline cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_override_selected_font_color #-}
 
--- | If [code]true[/code], the label uses the custom font color. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses the custom font color.
 bindRichTextLabel_set_override_selected_font_color :: MethodBind
 bindRichTextLabel_set_override_selected_font_color
   = unsafePerformIO $
@@ -1308,7 +1349,7 @@ bindRichTextLabel_set_override_selected_font_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the label uses the custom font color. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses the custom font color.
 set_override_selected_font_color ::
                                    (RichTextLabel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_override_selected_font_color cls arg1
@@ -1323,7 +1364,8 @@ set_override_selected_font_color cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_percent_visible #-}
 
--- | The text's visibility, as a [float] between 0.0 and 1.0.
+-- | The range of characters to display, as a [float] between 0.0 and 1.0. When assigned an out of range value, it's the same as assigning 1.0.
+--   			[b]Note:[/b] Setting this property updates [member visible_characters] based on current [method get_total_character_count].
 bindRichTextLabel_set_percent_visible :: MethodBind
 bindRichTextLabel_set_percent_visible
   = unsafePerformIO $
@@ -1333,7 +1375,8 @@ bindRichTextLabel_set_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The text's visibility, as a [float] between 0.0 and 1.0.
+-- | The range of characters to display, as a [float] between 0.0 and 1.0. When assigned an out of range value, it's the same as assigning 1.0.
+--   			[b]Note:[/b] Setting this property updates [member visible_characters] based on current [method get_total_character_count].
 set_percent_visible ::
                       (RichTextLabel :< cls, Object :< cls) => cls -> Float -> IO ()
 set_percent_visible cls arg1
@@ -1347,7 +1390,7 @@ set_percent_visible cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_scroll_active #-}
 
--- | If [code]true[/code], the scrollbar is visible. Does not block scrolling completely. See [method scroll_to_line]. Default value: [code]true[/code].
+-- | If [code]true[/code], the scrollbar is visible. Setting this to [code]false[/code] does not block scrolling completely. See [method scroll_to_line].
 bindRichTextLabel_set_scroll_active :: MethodBind
 bindRichTextLabel_set_scroll_active
   = unsafePerformIO $
@@ -1357,7 +1400,7 @@ bindRichTextLabel_set_scroll_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the scrollbar is visible. Does not block scrolling completely. See [method scroll_to_line]. Default value: [code]true[/code].
+-- | If [code]true[/code], the scrollbar is visible. Setting this to [code]false[/code] does not block scrolling completely. See [method scroll_to_line].
 set_scroll_active ::
                     (RichTextLabel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_scroll_active cls arg1
@@ -1371,7 +1414,7 @@ set_scroll_active cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_scroll_follow #-}
 
--- | If [code]true[/code], the window scrolls down to display new content automatically. Default value: [code]false[/code].
+-- | If [code]true[/code], the window scrolls down to display new content automatically.
 bindRichTextLabel_set_scroll_follow :: MethodBind
 bindRichTextLabel_set_scroll_follow
   = unsafePerformIO $
@@ -1381,7 +1424,7 @@ bindRichTextLabel_set_scroll_follow
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the window scrolls down to display new content automatically. Default value: [code]false[/code].
+-- | If [code]true[/code], the window scrolls down to display new content automatically.
 set_scroll_follow ::
                     (RichTextLabel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_scroll_follow cls arg1
@@ -1419,7 +1462,7 @@ set_selection_enabled cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_tab_size #-}
 
--- | The number of spaces associated with a single tab length. Does not affect "\t" in text tags, only indent tags.
+-- | The number of spaces associated with a single tab length. Does not affect [code]\t[/code] in text tags, only indent tags.
 bindRichTextLabel_set_tab_size :: MethodBind
 bindRichTextLabel_set_tab_size
   = unsafePerformIO $
@@ -1429,7 +1472,7 @@ bindRichTextLabel_set_tab_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of spaces associated with a single tab length. Does not affect "\t" in text tags, only indent tags.
+-- | The number of spaces associated with a single tab length. Does not affect [code]\t[/code] in text tags, only indent tags.
 set_tab_size ::
                (RichTextLabel :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tab_size cls arg1
@@ -1442,9 +1485,9 @@ set_tab_size cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_table_column_expand #-}
 
--- | Edits the selected columns expansion options. If [code]expand[/code] is [code]true[/code], the column expands in proportion to its expansion ratio versus the other columns' ratios.
+-- | Edits the selected column's expansion options. If [code]expand[/code] is [code]true[/code], the column expands in proportion to its expansion ratio versus the other columns' ratios.
 --   				For example, 2 columns with ratios 3 and 4 plus 70 pixels in available width would expand 30 and 40 pixels, respectively.
---   				Columns with a [code]false[/code] expand will not contribute to the total ratio.
+--   				If [code]expand[/code] is [code]false[/code], the column will not contribute to the total ratio.
 bindRichTextLabel_set_table_column_expand :: MethodBind
 bindRichTextLabel_set_table_column_expand
   = unsafePerformIO $
@@ -1454,9 +1497,9 @@ bindRichTextLabel_set_table_column_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Edits the selected columns expansion options. If [code]expand[/code] is [code]true[/code], the column expands in proportion to its expansion ratio versus the other columns' ratios.
+-- | Edits the selected column's expansion options. If [code]expand[/code] is [code]true[/code], the column expands in proportion to its expansion ratio versus the other columns' ratios.
 --   				For example, 2 columns with ratios 3 and 4 plus 70 pixels in available width would expand 30 and 40 pixels, respectively.
---   				Columns with a [code]false[/code] expand will not contribute to the total ratio.
+--   				If [code]expand[/code] is [code]false[/code], the column will not contribute to the total ratio.
 set_table_column_expand ::
                           (RichTextLabel :< cls, Object :< cls) =>
                           cls -> Int -> Bool -> Int -> IO ()
@@ -1472,7 +1515,7 @@ set_table_column_expand cls arg1 arg2 arg3
 {-# NOINLINE bindRichTextLabel_set_text #-}
 
 -- | The raw text of the label.
---   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse bbcodes. Does not modify [member bbcode_text].
+--   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse BBCodes. Does not modify [member bbcode_text].
 bindRichTextLabel_set_text :: MethodBind
 bindRichTextLabel_set_text
   = unsafePerformIO $
@@ -1483,7 +1526,7 @@ bindRichTextLabel_set_text
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The raw text of the label.
---   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse bbcodes. Does not modify [member bbcode_text].
+--   			When set, clears the tag stack and adds a raw text tag to the top of it. Does not parse BBCodes. Does not modify [member bbcode_text].
 set_text ::
            (RichTextLabel :< cls, Object :< cls) =>
            cls -> GodotString -> IO ()
@@ -1497,7 +1540,7 @@ set_text cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_use_bbcode #-}
 
--- | If [code]true[/code], the label uses BBCode formatting. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses BBCode formatting.
 bindRichTextLabel_set_use_bbcode :: MethodBind
 bindRichTextLabel_set_use_bbcode
   = unsafePerformIO $
@@ -1507,7 +1550,7 @@ bindRichTextLabel_set_use_bbcode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the label uses BBCode formatting. Default value: [code]false[/code].
+-- | If [code]true[/code], the label uses BBCode formatting.
 set_use_bbcode ::
                  (RichTextLabel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_bbcode cls arg1
@@ -1521,7 +1564,7 @@ set_use_bbcode cls arg1
 
 {-# NOINLINE bindRichTextLabel_set_visible_characters #-}
 
--- | The restricted number of characters to display in the label.
+-- | The restricted number of characters to display in the label. If [code]-1[/code], all characters will be displayed.
 bindRichTextLabel_set_visible_characters :: MethodBind
 bindRichTextLabel_set_visible_characters
   = unsafePerformIO $
@@ -1531,7 +1574,7 @@ bindRichTextLabel_set_visible_characters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The restricted number of characters to display in the label.
+-- | The restricted number of characters to display in the label. If [code]-1[/code], all characters will be displayed.
 set_visible_characters ::
                          (RichTextLabel :< cls, Object :< cls) => cls -> Int -> IO ()
 set_visible_characters cls arg1

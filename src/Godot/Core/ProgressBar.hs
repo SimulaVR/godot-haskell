@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ProgressBar
        (Godot.Core.ProgressBar.is_percent_visible,
         Godot.Core.ProgressBar.set_percent_visible)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindProgressBar_is_percent_visible #-}
 
--- | If [code]true[/code], the fill percentage is displayed on the bar. Default value: [code]true[/code].
+-- | If [code]true[/code], the fill percentage is displayed on the bar.
 bindProgressBar_is_percent_visible :: MethodBind
 bindProgressBar_is_percent_visible
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindProgressBar_is_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the fill percentage is displayed on the bar. Default value: [code]true[/code].
+-- | If [code]true[/code], the fill percentage is displayed on the bar.
 is_percent_visible ::
                      (ProgressBar :< cls, Object :< cls) => cls -> IO Bool
 is_percent_visible cls
@@ -37,7 +38,7 @@ is_percent_visible cls
 
 {-# NOINLINE bindProgressBar_set_percent_visible #-}
 
--- | If [code]true[/code], the fill percentage is displayed on the bar. Default value: [code]true[/code].
+-- | If [code]true[/code], the fill percentage is displayed on the bar.
 bindProgressBar_set_percent_visible :: MethodBind
 bindProgressBar_set_percent_visible
   = unsafePerformIO $
@@ -47,7 +48,7 @@ bindProgressBar_set_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the fill percentage is displayed on the bar. Default value: [code]true[/code].
+-- | If [code]true[/code], the fill percentage is displayed on the bar.
 set_percent_visible ::
                       (ProgressBar :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_percent_visible cls arg1

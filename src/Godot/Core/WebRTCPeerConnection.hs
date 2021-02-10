@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WebRTCPeerConnection
        (Godot.Core.WebRTCPeerConnection._STATE_CONNECTED,
         Godot.Core.WebRTCPeerConnection._STATE_CLOSED,
@@ -50,15 +51,25 @@ sig_data_channel_received ::
 sig_data_channel_received
   = Godot.Internal.Dispatch.Signal "data_channel_received"
 
+instance NodeSignal WebRTCPeerConnection "data_channel_received"
+           '[Object]
+
 sig_ice_candidate_created ::
                           Godot.Internal.Dispatch.Signal WebRTCPeerConnection
 sig_ice_candidate_created
   = Godot.Internal.Dispatch.Signal "ice_candidate_created"
 
+instance NodeSignal WebRTCPeerConnection "ice_candidate_created"
+           '[GodotString, Int, GodotString]
+
 sig_session_description_created ::
                                 Godot.Internal.Dispatch.Signal WebRTCPeerConnection
 sig_session_description_created
   = Godot.Internal.Dispatch.Signal "session_description_created"
+
+instance NodeSignal WebRTCPeerConnection
+           "session_description_created"
+           '[GodotString, GodotString]
 
 {-# NOINLINE bindWebRTCPeerConnection_add_ice_candidate #-}
 

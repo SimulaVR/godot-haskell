@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputEventJoypadMotion
        (Godot.Core.InputEventJoypadMotion.get_axis,
         Godot.Core.InputEventJoypadMotion.get_axis_value,
@@ -15,7 +16,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindInputEventJoypadMotion_get_axis #-}
 
--- | Axis identifier. Use one of the [code]JOY_AXIS_*[/code] constants in [@GlobalScope].
+-- | Axis identifier. Use one of the [enum JoystickList] axis constants.
 bindInputEventJoypadMotion_get_axis :: MethodBind
 bindInputEventJoypadMotion_get_axis
   = unsafePerformIO $
@@ -25,7 +26,7 @@ bindInputEventJoypadMotion_get_axis
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Axis identifier. Use one of the [code]JOY_AXIS_*[/code] constants in [@GlobalScope].
+-- | Axis identifier. Use one of the [enum JoystickList] axis constants.
 get_axis ::
            (InputEventJoypadMotion :< cls, Object :< cls) => cls -> IO Int
 get_axis cls
@@ -63,7 +64,7 @@ get_axis_value cls
 
 {-# NOINLINE bindInputEventJoypadMotion_set_axis #-}
 
--- | Axis identifier. Use one of the [code]JOY_AXIS_*[/code] constants in [@GlobalScope].
+-- | Axis identifier. Use one of the [enum JoystickList] axis constants.
 bindInputEventJoypadMotion_set_axis :: MethodBind
 bindInputEventJoypadMotion_set_axis
   = unsafePerformIO $
@@ -73,7 +74,7 @@ bindInputEventJoypadMotion_set_axis
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Axis identifier. Use one of the [code]JOY_AXIS_*[/code] constants in [@GlobalScope].
+-- | Axis identifier. Use one of the [enum JoystickList] axis constants.
 set_axis ::
            (InputEventJoypadMotion :< cls, Object :< cls) =>
            cls -> Int -> IO ()

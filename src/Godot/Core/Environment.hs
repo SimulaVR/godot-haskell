@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Environment
        (Godot.Core.Environment._TONE_MAPPER_FILMIC,
         Godot.Core.Environment._SSAO_QUALITY_LOW,
@@ -271,7 +272,7 @@ _BG_KEEP = 5
 
 {-# NOINLINE bindEnvironment_get_adjustment_brightness #-}
 
--- | Global brightness value of the rendered scene (default value is 1).
+-- | The global brightness value of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_get_adjustment_brightness :: MethodBind
 bindEnvironment_get_adjustment_brightness
   = unsafePerformIO $
@@ -281,7 +282,7 @@ bindEnvironment_get_adjustment_brightness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Global brightness value of the rendered scene (default value is 1).
+-- | The global brightness value of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 get_adjustment_brightness ::
                             (Environment :< cls, Object :< cls) => cls -> IO Float
 get_adjustment_brightness cls
@@ -295,7 +296,7 @@ get_adjustment_brightness cls
 
 {-# NOINLINE bindEnvironment_get_adjustment_color_correction #-}
 
--- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene.
+-- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_get_adjustment_color_correction :: MethodBind
 bindEnvironment_get_adjustment_color_correction
   = unsafePerformIO $
@@ -305,7 +306,7 @@ bindEnvironment_get_adjustment_color_correction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene.
+-- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 get_adjustment_color_correction ::
                                   (Environment :< cls, Object :< cls) => cls -> IO Texture
 get_adjustment_color_correction cls
@@ -320,7 +321,7 @@ get_adjustment_color_correction cls
 
 {-# NOINLINE bindEnvironment_get_adjustment_contrast #-}
 
--- | Global contrast value of the rendered scene (default value is 1).
+-- | The global contrast value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_get_adjustment_contrast :: MethodBind
 bindEnvironment_get_adjustment_contrast
   = unsafePerformIO $
@@ -330,7 +331,7 @@ bindEnvironment_get_adjustment_contrast
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Global contrast value of the rendered scene (default value is 1).
+-- | The global contrast value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 get_adjustment_contrast ::
                           (Environment :< cls, Object :< cls) => cls -> IO Float
 get_adjustment_contrast cls
@@ -344,7 +345,7 @@ get_adjustment_contrast cls
 
 {-# NOINLINE bindEnvironment_get_adjustment_saturation #-}
 
--- | Global color saturation value of the rendered scene (default value is 1).
+-- | The global color saturation value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_get_adjustment_saturation :: MethodBind
 bindEnvironment_get_adjustment_saturation
   = unsafePerformIO $
@@ -354,7 +355,7 @@ bindEnvironment_get_adjustment_saturation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Global color saturation value of the rendered scene (default value is 1).
+-- | The global color saturation value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 get_adjustment_saturation ::
                             (Environment :< cls, Object :< cls) => cls -> IO Float
 get_adjustment_saturation cls
@@ -368,7 +369,7 @@ get_adjustment_saturation cls
 
 {-# NOINLINE bindEnvironment_get_ambient_light_color #-}
 
--- | [Color] of the ambient light.
+-- | The ambient light's [Color].
 bindEnvironment_get_ambient_light_color :: MethodBind
 bindEnvironment_get_ambient_light_color
   = unsafePerformIO $
@@ -378,7 +379,7 @@ bindEnvironment_get_ambient_light_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Color] of the ambient light.
+-- | The ambient light's [Color].
 get_ambient_light_color ::
                           (Environment :< cls, Object :< cls) => cls -> IO Color
 get_ambient_light_color cls
@@ -392,7 +393,7 @@ get_ambient_light_color cls
 
 {-# NOINLINE bindEnvironment_get_ambient_light_energy #-}
 
--- | Energy of the ambient light. The higher the value, the stronger the light.
+-- | The ambient light's energy. The higher the value, the stronger the light.
 bindEnvironment_get_ambient_light_energy :: MethodBind
 bindEnvironment_get_ambient_light_energy
   = unsafePerformIO $
@@ -402,7 +403,7 @@ bindEnvironment_get_ambient_light_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Energy of the ambient light. The higher the value, the stronger the light.
+-- | The ambient light's energy. The higher the value, the stronger the light.
 get_ambient_light_energy ::
                            (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ambient_light_energy cls
@@ -441,7 +442,7 @@ get_ambient_light_sky_contribution cls
 
 {-# NOINLINE bindEnvironment_get_background #-}
 
--- | Defines the mode of background.
+-- | The background mode. See [enum BGMode] for possible values.
 bindEnvironment_get_background :: MethodBind
 bindEnvironment_get_background
   = unsafePerformIO $
@@ -451,7 +452,7 @@ bindEnvironment_get_background
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the mode of background.
+-- | The background mode. See [enum BGMode] for possible values.
 get_background ::
                  (Environment :< cls, Object :< cls) => cls -> IO Int
 get_background cls
@@ -464,7 +465,7 @@ get_background cls
 
 {-# NOINLINE bindEnvironment_get_bg_color #-}
 
--- | Color displayed for clear areas of the scene (if using Custom color or Color+Sky background modes).
+-- | The [Color] displayed for clear areas of the scene. Only effective when using the [constant BG_COLOR] or [constant BG_COLOR_SKY] background modes).
 bindEnvironment_get_bg_color :: MethodBind
 bindEnvironment_get_bg_color
   = unsafePerformIO $
@@ -474,7 +475,7 @@ bindEnvironment_get_bg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Color displayed for clear areas of the scene (if using Custom color or Color+Sky background modes).
+-- | The [Color] displayed for clear areas of the scene. Only effective when using the [constant BG_COLOR] or [constant BG_COLOR_SKY] background modes).
 get_bg_color ::
                (Environment :< cls, Object :< cls) => cls -> IO Color
 get_bg_color cls
@@ -487,7 +488,7 @@ get_bg_color cls
 
 {-# NOINLINE bindEnvironment_get_bg_energy #-}
 
--- | Power of light emitted by the background.
+-- | The power of the light emitted by the background.
 bindEnvironment_get_bg_energy :: MethodBind
 bindEnvironment_get_bg_energy
   = unsafePerformIO $
@@ -497,7 +498,7 @@ bindEnvironment_get_bg_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Power of light emitted by the background.
+-- | The power of the light emitted by the background.
 get_bg_energy ::
                 (Environment :< cls, Object :< cls) => cls -> IO Float
 get_bg_energy cls
@@ -510,6 +511,7 @@ get_bg_energy cls
 
 {-# NOINLINE bindEnvironment_get_camera_feed_id #-}
 
+-- | The ID of the camera feed to show in the background.
 bindEnvironment_get_camera_feed_id :: MethodBind
 bindEnvironment_get_camera_feed_id
   = unsafePerformIO $
@@ -519,6 +521,7 @@ bindEnvironment_get_camera_feed_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The ID of the camera feed to show in the background.
 get_camera_feed_id ::
                      (Environment :< cls, Object :< cls) => cls -> IO Int
 get_camera_feed_id cls
@@ -532,7 +535,7 @@ get_camera_feed_id cls
 
 {-# NOINLINE bindEnvironment_get_canvas_max_layer #-}
 
--- | Maximum layer id (if using Layer background mode).
+-- | The maximum layer ID to display. Only effective when using the [constant BG_CANVAS] background mode.
 bindEnvironment_get_canvas_max_layer :: MethodBind
 bindEnvironment_get_canvas_max_layer
   = unsafePerformIO $
@@ -542,7 +545,7 @@ bindEnvironment_get_canvas_max_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum layer id (if using Layer background mode).
+-- | The maximum layer ID to display. Only effective when using the [constant BG_CANVAS] background mode.
 get_canvas_max_layer ::
                        (Environment :< cls, Object :< cls) => cls -> IO Int
 get_canvas_max_layer cls
@@ -556,7 +559,7 @@ get_canvas_max_layer cls
 
 {-# NOINLINE bindEnvironment_get_dof_blur_far_amount #-}
 
--- | Amount of far blur.
+-- | The amount of far blur for the depth-of-field effect.
 bindEnvironment_get_dof_blur_far_amount :: MethodBind
 bindEnvironment_get_dof_blur_far_amount
   = unsafePerformIO $
@@ -566,7 +569,7 @@ bindEnvironment_get_dof_blur_far_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of far blur.
+-- | The amount of far blur for the depth-of-field effect.
 get_dof_blur_far_amount ::
                           (Environment :< cls, Object :< cls) => cls -> IO Float
 get_dof_blur_far_amount cls
@@ -580,7 +583,7 @@ get_dof_blur_far_amount cls
 
 {-# NOINLINE bindEnvironment_get_dof_blur_far_distance #-}
 
--- | Distance from the camera where the far blur effect affects the rendering.
+-- | The distance from the camera where the far blur effect affects the rendering.
 bindEnvironment_get_dof_blur_far_distance :: MethodBind
 bindEnvironment_get_dof_blur_far_distance
   = unsafePerformIO $
@@ -590,7 +593,7 @@ bindEnvironment_get_dof_blur_far_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Distance from the camera where the far blur effect affects the rendering.
+-- | The distance from the camera where the far blur effect affects the rendering.
 get_dof_blur_far_distance ::
                             (Environment :< cls, Object :< cls) => cls -> IO Float
 get_dof_blur_far_distance cls
@@ -604,7 +607,7 @@ get_dof_blur_far_distance cls
 
 {-# NOINLINE bindEnvironment_get_dof_blur_far_quality #-}
 
--- | Quality of the far blur quality.
+-- | The depth-of-field far blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 bindEnvironment_get_dof_blur_far_quality :: MethodBind
 bindEnvironment_get_dof_blur_far_quality
   = unsafePerformIO $
@@ -614,7 +617,7 @@ bindEnvironment_get_dof_blur_far_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Quality of the far blur quality.
+-- | The depth-of-field far blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 get_dof_blur_far_quality ::
                            (Environment :< cls, Object :< cls) => cls -> IO Int
 get_dof_blur_far_quality cls
@@ -628,7 +631,7 @@ get_dof_blur_far_quality cls
 
 {-# NOINLINE bindEnvironment_get_dof_blur_far_transition #-}
 
--- | Transition between no-blur area and far blur.
+-- | The length of the transition between the no-blur area and far blur.
 bindEnvironment_get_dof_blur_far_transition :: MethodBind
 bindEnvironment_get_dof_blur_far_transition
   = unsafePerformIO $
@@ -638,7 +641,7 @@ bindEnvironment_get_dof_blur_far_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transition between no-blur area and far blur.
+-- | The length of the transition between the no-blur area and far blur.
 get_dof_blur_far_transition ::
                               (Environment :< cls, Object :< cls) => cls -> IO Float
 get_dof_blur_far_transition cls
@@ -652,7 +655,7 @@ get_dof_blur_far_transition cls
 
 {-# NOINLINE bindEnvironment_get_dof_blur_near_amount #-}
 
--- | Amount of near blur.
+-- | The amount of near blur for the depth-of-field effect.
 bindEnvironment_get_dof_blur_near_amount :: MethodBind
 bindEnvironment_get_dof_blur_near_amount
   = unsafePerformIO $
@@ -662,7 +665,7 @@ bindEnvironment_get_dof_blur_near_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of near blur.
+-- | The amount of near blur for the depth-of-field effect.
 get_dof_blur_near_amount ::
                            (Environment :< cls, Object :< cls) => cls -> IO Float
 get_dof_blur_near_amount cls
@@ -700,7 +703,7 @@ get_dof_blur_near_distance cls
 
 {-# NOINLINE bindEnvironment_get_dof_blur_near_quality #-}
 
--- | Quality of the near blur quality.
+-- | The depth-of-field near blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 bindEnvironment_get_dof_blur_near_quality :: MethodBind
 bindEnvironment_get_dof_blur_near_quality
   = unsafePerformIO $
@@ -710,7 +713,7 @@ bindEnvironment_get_dof_blur_near_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Quality of the near blur quality.
+-- | The depth-of-field near blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 get_dof_blur_near_quality ::
                             (Environment :< cls, Object :< cls) => cls -> IO Int
 get_dof_blur_near_quality cls
@@ -724,7 +727,7 @@ get_dof_blur_near_quality cls
 
 {-# NOINLINE bindEnvironment_get_dof_blur_near_transition #-}
 
--- | Transition between near blur and no-blur area.
+-- | The length of the transition between the near blur and no-blur area.
 bindEnvironment_get_dof_blur_near_transition :: MethodBind
 bindEnvironment_get_dof_blur_near_transition
   = unsafePerformIO $
@@ -734,7 +737,7 @@ bindEnvironment_get_dof_blur_near_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transition between near blur and no-blur area.
+-- | The length of the transition between the near blur and no-blur area.
 get_dof_blur_near_transition ::
                                (Environment :< cls, Object :< cls) => cls -> IO Float
 get_dof_blur_near_transition cls
@@ -748,7 +751,7 @@ get_dof_blur_near_transition cls
 
 {-# NOINLINE bindEnvironment_get_fog_color #-}
 
--- | Fog's [Color].
+-- | The fog's [Color].
 bindEnvironment_get_fog_color :: MethodBind
 bindEnvironment_get_fog_color
   = unsafePerformIO $
@@ -758,7 +761,7 @@ bindEnvironment_get_fog_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Fog's [Color].
+-- | The fog's [Color].
 get_fog_color ::
                 (Environment :< cls, Object :< cls) => cls -> IO Color
 get_fog_color cls
@@ -771,7 +774,7 @@ get_fog_color cls
 
 {-# NOINLINE bindEnvironment_get_fog_depth_begin #-}
 
--- | Fog's depth starting distance from the camera.
+-- | The fog's depth starting distance from the camera.
 bindEnvironment_get_fog_depth_begin :: MethodBind
 bindEnvironment_get_fog_depth_begin
   = unsafePerformIO $
@@ -781,7 +784,7 @@ bindEnvironment_get_fog_depth_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Fog's depth starting distance from the camera.
+-- | The fog's depth starting distance from the camera.
 get_fog_depth_begin ::
                       (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_depth_begin cls
@@ -795,7 +798,7 @@ get_fog_depth_begin cls
 
 {-# NOINLINE bindEnvironment_get_fog_depth_curve #-}
 
--- | Value defining the fog depth intensity.
+-- | The fog depth's intensity curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 bindEnvironment_get_fog_depth_curve :: MethodBind
 bindEnvironment_get_fog_depth_curve
   = unsafePerformIO $
@@ -805,7 +808,7 @@ bindEnvironment_get_fog_depth_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Value defining the fog depth intensity.
+-- | The fog depth's intensity curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 get_fog_depth_curve ::
                       (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_depth_curve cls
@@ -819,6 +822,7 @@ get_fog_depth_curve cls
 
 {-# NOINLINE bindEnvironment_get_fog_depth_end #-}
 
+-- | The fog's depth end distance from the camera. If this value is set to 0, it will be equal to the current camera's [member Camera.far] value.
 bindEnvironment_get_fog_depth_end :: MethodBind
 bindEnvironment_get_fog_depth_end
   = unsafePerformIO $
@@ -828,6 +832,7 @@ bindEnvironment_get_fog_depth_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The fog's depth end distance from the camera. If this value is set to 0, it will be equal to the current camera's [member Camera.far] value.
 get_fog_depth_end ::
                     (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_depth_end cls
@@ -841,7 +846,7 @@ get_fog_depth_end cls
 
 {-# NOINLINE bindEnvironment_get_fog_height_curve #-}
 
--- | Value defining the fog height intensity.
+-- | The height fog's intensity. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 bindEnvironment_get_fog_height_curve :: MethodBind
 bindEnvironment_get_fog_height_curve
   = unsafePerformIO $
@@ -851,7 +856,7 @@ bindEnvironment_get_fog_height_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Value defining the fog height intensity.
+-- | The height fog's intensity. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 get_fog_height_curve ::
                        (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_height_curve cls
@@ -865,7 +870,7 @@ get_fog_height_curve cls
 
 {-# NOINLINE bindEnvironment_get_fog_height_max #-}
 
--- | Maximum height of fog.
+-- | The Y coordinate where the height fog will be the most intense. If this value is greater than [member fog_height_min], fog will be displayed from bottom to top. Otherwise, it will be displayed from top to bottom.
 bindEnvironment_get_fog_height_max :: MethodBind
 bindEnvironment_get_fog_height_max
   = unsafePerformIO $
@@ -875,7 +880,7 @@ bindEnvironment_get_fog_height_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum height of fog.
+-- | The Y coordinate where the height fog will be the most intense. If this value is greater than [member fog_height_min], fog will be displayed from bottom to top. Otherwise, it will be displayed from top to bottom.
 get_fog_height_max ::
                      (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_height_max cls
@@ -889,7 +894,7 @@ get_fog_height_max cls
 
 {-# NOINLINE bindEnvironment_get_fog_height_min #-}
 
--- | Minimum height of fog.
+-- | The Y coordinate where the height fog will be the least intense. If this value is greater than [member fog_height_max], fog will be displayed from top to bottom. Otherwise, it will be displayed from bottom to top.
 bindEnvironment_get_fog_height_min :: MethodBind
 bindEnvironment_get_fog_height_min
   = unsafePerformIO $
@@ -899,7 +904,7 @@ bindEnvironment_get_fog_height_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum height of fog.
+-- | The Y coordinate where the height fog will be the least intense. If this value is greater than [member fog_height_max], fog will be displayed from top to bottom. Otherwise, it will be displayed from bottom to top.
 get_fog_height_min ::
                      (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_height_min cls
@@ -913,7 +918,7 @@ get_fog_height_min cls
 
 {-# NOINLINE bindEnvironment_get_fog_sun_amount #-}
 
--- | Amount of sun that affects the fog rendering.
+-- | The intensity of the depth fog color transition when looking towards the sun. The sun's direction is determined automatically using the DirectionalLight node in the scene.
 bindEnvironment_get_fog_sun_amount :: MethodBind
 bindEnvironment_get_fog_sun_amount
   = unsafePerformIO $
@@ -923,7 +928,7 @@ bindEnvironment_get_fog_sun_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of sun that affects the fog rendering.
+-- | The intensity of the depth fog color transition when looking towards the sun. The sun's direction is determined automatically using the DirectionalLight node in the scene.
 get_fog_sun_amount ::
                      (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_sun_amount cls
@@ -937,7 +942,7 @@ get_fog_sun_amount cls
 
 {-# NOINLINE bindEnvironment_get_fog_sun_color #-}
 
--- | Sun [Color].
+-- | The depth fog's [Color] when looking towards the sun.
 bindEnvironment_get_fog_sun_color :: MethodBind
 bindEnvironment_get_fog_sun_color
   = unsafePerformIO $
@@ -947,7 +952,7 @@ bindEnvironment_get_fog_sun_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sun [Color].
+-- | The depth fog's [Color] when looking towards the sun.
 get_fog_sun_color ::
                     (Environment :< cls, Object :< cls) => cls -> IO Color
 get_fog_sun_color cls
@@ -961,7 +966,7 @@ get_fog_sun_color cls
 
 {-# NOINLINE bindEnvironment_get_fog_transmit_curve #-}
 
--- | Amount of light that the fog transmits.
+-- | The intensity of the fog light transmittance effect. Amount of light that the fog transmits.
 bindEnvironment_get_fog_transmit_curve :: MethodBind
 bindEnvironment_get_fog_transmit_curve
   = unsafePerformIO $
@@ -971,7 +976,7 @@ bindEnvironment_get_fog_transmit_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of light that the fog transmits.
+-- | The intensity of the fog light transmittance effect. Amount of light that the fog transmits.
 get_fog_transmit_curve ::
                          (Environment :< cls, Object :< cls) => cls -> IO Float
 get_fog_transmit_curve cls
@@ -985,7 +990,7 @@ get_fog_transmit_curve cls
 
 {-# NOINLINE bindEnvironment_get_glow_blend_mode #-}
 
--- | Glow blending mode.
+-- | The glow blending mode.
 bindEnvironment_get_glow_blend_mode :: MethodBind
 bindEnvironment_get_glow_blend_mode
   = unsafePerformIO $
@@ -995,7 +1000,7 @@ bindEnvironment_get_glow_blend_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Glow blending mode.
+-- | The glow blending mode.
 get_glow_blend_mode ::
                       (Environment :< cls, Object :< cls) => cls -> IO Int
 get_glow_blend_mode cls
@@ -1009,7 +1014,7 @@ get_glow_blend_mode cls
 
 {-# NOINLINE bindEnvironment_get_glow_bloom #-}
 
--- | Bloom value (global glow).
+-- | The bloom's intensity. If set to a value higher than [code]0[/code], this will make glow visible in areas darker than the [member glow_hdr_threshold].
 bindEnvironment_get_glow_bloom :: MethodBind
 bindEnvironment_get_glow_bloom
   = unsafePerformIO $
@@ -1019,7 +1024,7 @@ bindEnvironment_get_glow_bloom
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bloom value (global glow).
+-- | The bloom's intensity. If set to a value higher than [code]0[/code], this will make glow visible in areas darker than the [member glow_hdr_threshold].
 get_glow_bloom ::
                  (Environment :< cls, Object :< cls) => cls -> IO Float
 get_glow_bloom cls
@@ -1032,7 +1037,7 @@ get_glow_bloom cls
 
 {-# NOINLINE bindEnvironment_get_glow_hdr_bleed_scale #-}
 
--- | Bleed scale of the HDR glow.
+-- | The bleed scale of the HDR glow.
 bindEnvironment_get_glow_hdr_bleed_scale :: MethodBind
 bindEnvironment_get_glow_hdr_bleed_scale
   = unsafePerformIO $
@@ -1042,7 +1047,7 @@ bindEnvironment_get_glow_hdr_bleed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bleed scale of the HDR glow.
+-- | The bleed scale of the HDR glow.
 get_glow_hdr_bleed_scale ::
                            (Environment :< cls, Object :< cls) => cls -> IO Float
 get_glow_hdr_bleed_scale cls
@@ -1056,7 +1061,7 @@ get_glow_hdr_bleed_scale cls
 
 {-# NOINLINE bindEnvironment_get_glow_hdr_bleed_threshold #-}
 
--- | Bleed threshold of the HDR glow.
+-- | The lower threshold of the HDR glow. When using the GLES2 renderer (which doesn't support HDR), this needs to be below [code]1.0[/code] for glow to be visible. A value of [code]0.9[/code] works well in this case.
 bindEnvironment_get_glow_hdr_bleed_threshold :: MethodBind
 bindEnvironment_get_glow_hdr_bleed_threshold
   = unsafePerformIO $
@@ -1066,7 +1071,7 @@ bindEnvironment_get_glow_hdr_bleed_threshold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bleed threshold of the HDR glow.
+-- | The lower threshold of the HDR glow. When using the GLES2 renderer (which doesn't support HDR), this needs to be below [code]1.0[/code] for glow to be visible. A value of [code]0.9[/code] works well in this case.
 get_glow_hdr_bleed_threshold ::
                                (Environment :< cls, Object :< cls) => cls -> IO Float
 get_glow_hdr_bleed_threshold cls
@@ -1080,6 +1085,7 @@ get_glow_hdr_bleed_threshold cls
 
 {-# NOINLINE bindEnvironment_get_glow_hdr_luminance_cap #-}
 
+-- | The higher threshold of the HDR glow. Areas brighter than this threshold will be clamped for the purposes of the glow effect.
 bindEnvironment_get_glow_hdr_luminance_cap :: MethodBind
 bindEnvironment_get_glow_hdr_luminance_cap
   = unsafePerformIO $
@@ -1089,6 +1095,7 @@ bindEnvironment_get_glow_hdr_luminance_cap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The higher threshold of the HDR glow. Areas brighter than this threshold will be clamped for the purposes of the glow effect.
 get_glow_hdr_luminance_cap ::
                              (Environment :< cls, Object :< cls) => cls -> IO Float
 get_glow_hdr_luminance_cap cls
@@ -1102,7 +1109,7 @@ get_glow_hdr_luminance_cap cls
 
 {-# NOINLINE bindEnvironment_get_glow_intensity #-}
 
--- | Glow intensity.
+-- | The glow intensity. When using the GLES2 renderer, this should be increased to 1.5 to compensate for the lack of HDR rendering.
 bindEnvironment_get_glow_intensity :: MethodBind
 bindEnvironment_get_glow_intensity
   = unsafePerformIO $
@@ -1112,7 +1119,7 @@ bindEnvironment_get_glow_intensity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Glow intensity.
+-- | The glow intensity. When using the GLES2 renderer, this should be increased to 1.5 to compensate for the lack of HDR rendering.
 get_glow_intensity ::
                      (Environment :< cls, Object :< cls) => cls -> IO Float
 get_glow_intensity cls
@@ -1126,7 +1133,7 @@ get_glow_intensity cls
 
 {-# NOINLINE bindEnvironment_get_glow_strength #-}
 
--- | Glow strength.
+-- | The glow strength. When using the GLES2 renderer, this should be increased to 1.3 to compensate for the lack of HDR rendering.
 bindEnvironment_get_glow_strength :: MethodBind
 bindEnvironment_get_glow_strength
   = unsafePerformIO $
@@ -1136,7 +1143,7 @@ bindEnvironment_get_glow_strength
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Glow strength.
+-- | The glow strength. When using the GLES2 renderer, this should be increased to 1.3 to compensate for the lack of HDR rendering.
 get_glow_strength ::
                     (Environment :< cls, Object :< cls) => cls -> IO Float
 get_glow_strength cls
@@ -1150,7 +1157,7 @@ get_glow_strength cls
 
 {-# NOINLINE bindEnvironment_get_sky #-}
 
--- | [Sky] resource defined as background.
+-- | The [Sky] resource defined as background.
 bindEnvironment_get_sky :: MethodBind
 bindEnvironment_get_sky
   = unsafePerformIO $
@@ -1160,7 +1167,7 @@ bindEnvironment_get_sky
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource defined as background.
+-- | The [Sky] resource defined as background.
 get_sky :: (Environment :< cls, Object :< cls) => cls -> IO Sky
 get_sky cls
   = withVariantArray []
@@ -1171,7 +1178,7 @@ get_sky cls
 
 {-# NOINLINE bindEnvironment_get_sky_custom_fov #-}
 
--- | [Sky] resource's custom field of view.
+-- | The [Sky] resource's custom field of view.
 bindEnvironment_get_sky_custom_fov :: MethodBind
 bindEnvironment_get_sky_custom_fov
   = unsafePerformIO $
@@ -1181,7 +1188,7 @@ bindEnvironment_get_sky_custom_fov
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's custom field of view.
+-- | The [Sky] resource's custom field of view.
 get_sky_custom_fov ::
                      (Environment :< cls, Object :< cls) => cls -> IO Float
 get_sky_custom_fov cls
@@ -1195,7 +1202,7 @@ get_sky_custom_fov cls
 
 {-# NOINLINE bindEnvironment_get_sky_orientation #-}
 
--- | [Sky] resource's rotation expressed as a [Basis]
+-- | The [Sky] resource's rotation expressed as a [Basis].
 bindEnvironment_get_sky_orientation :: MethodBind
 bindEnvironment_get_sky_orientation
   = unsafePerformIO $
@@ -1205,7 +1212,7 @@ bindEnvironment_get_sky_orientation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's rotation expressed as a [Basis]
+-- | The [Sky] resource's rotation expressed as a [Basis].
 get_sky_orientation ::
                       (Environment :< cls, Object :< cls) => cls -> IO Basis
 get_sky_orientation cls
@@ -1219,7 +1226,7 @@ get_sky_orientation cls
 
 {-# NOINLINE bindEnvironment_get_sky_rotation #-}
 
--- | [Sky] resource's rotation expressed as euler angles in radians
+-- | The [Sky] resource's rotation expressed as Euler angles in radians.
 bindEnvironment_get_sky_rotation :: MethodBind
 bindEnvironment_get_sky_rotation
   = unsafePerformIO $
@@ -1229,7 +1236,7 @@ bindEnvironment_get_sky_rotation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's rotation expressed as euler angles in radians
+-- | The [Sky] resource's rotation expressed as Euler angles in radians.
 get_sky_rotation ::
                    (Environment :< cls, Object :< cls) => cls -> IO Vector3
 get_sky_rotation cls
@@ -1243,7 +1250,7 @@ get_sky_rotation cls
 
 {-# NOINLINE bindEnvironment_get_sky_rotation_degrees #-}
 
--- | [Sky] resource's rotation expressed as euler angles in degrees
+-- | The [Sky] resource's rotation expressed as Euler angles in degrees.
 bindEnvironment_get_sky_rotation_degrees :: MethodBind
 bindEnvironment_get_sky_rotation_degrees
   = unsafePerformIO $
@@ -1253,7 +1260,7 @@ bindEnvironment_get_sky_rotation_degrees
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's rotation expressed as euler angles in degrees
+-- | The [Sky] resource's rotation expressed as Euler angles in degrees.
 get_sky_rotation_degrees ::
                            (Environment :< cls, Object :< cls) => cls -> IO Vector3
 get_sky_rotation_degrees cls
@@ -1267,6 +1274,7 @@ get_sky_rotation_degrees cls
 
 {-# NOINLINE bindEnvironment_get_ssao_ao_channel_affect #-}
 
+-- | The screen-space ambient occlusion intensity on materials that have an AO texture defined. Values higher than [code]0[/code] will make the SSAO effect visible in areas darkened by AO textures.
 bindEnvironment_get_ssao_ao_channel_affect :: MethodBind
 bindEnvironment_get_ssao_ao_channel_affect
   = unsafePerformIO $
@@ -1276,6 +1284,7 @@ bindEnvironment_get_ssao_ao_channel_affect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion intensity on materials that have an AO texture defined. Values higher than [code]0[/code] will make the SSAO effect visible in areas darkened by AO textures.
 get_ssao_ao_channel_affect ::
                              (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_ao_channel_affect cls
@@ -1289,6 +1298,7 @@ get_ssao_ao_channel_affect cls
 
 {-# NOINLINE bindEnvironment_get_ssao_bias #-}
 
+-- | The screen-space ambient occlusion bias. This should be kept high enough to prevent "smooth" curves from being affected by ambient occlusion.
 bindEnvironment_get_ssao_bias :: MethodBind
 bindEnvironment_get_ssao_bias
   = unsafePerformIO $
@@ -1298,6 +1308,7 @@ bindEnvironment_get_ssao_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion bias. This should be kept high enough to prevent "smooth" curves from being affected by ambient occlusion.
 get_ssao_bias ::
                 (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_bias cls
@@ -1310,6 +1321,7 @@ get_ssao_bias cls
 
 {-# NOINLINE bindEnvironment_get_ssao_blur #-}
 
+-- | The screen-space ambient occlusion blur quality. See [enum SSAOBlur] for possible values.
 bindEnvironment_get_ssao_blur :: MethodBind
 bindEnvironment_get_ssao_blur
   = unsafePerformIO $
@@ -1319,6 +1331,7 @@ bindEnvironment_get_ssao_blur
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion blur quality. See [enum SSAOBlur] for possible values.
 get_ssao_blur ::
                 (Environment :< cls, Object :< cls) => cls -> IO Int
 get_ssao_blur cls
@@ -1331,6 +1344,7 @@ get_ssao_blur cls
 
 {-# NOINLINE bindEnvironment_get_ssao_color #-}
 
+-- | The screen-space ambient occlusion color.
 bindEnvironment_get_ssao_color :: MethodBind
 bindEnvironment_get_ssao_color
   = unsafePerformIO $
@@ -1340,6 +1354,7 @@ bindEnvironment_get_ssao_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion color.
 get_ssao_color ::
                  (Environment :< cls, Object :< cls) => cls -> IO Color
 get_ssao_color cls
@@ -1352,6 +1367,7 @@ get_ssao_color cls
 
 {-# NOINLINE bindEnvironment_get_ssao_direct_light_affect #-}
 
+-- | The screen-space ambient occlusion intensity in direct light. In real life, ambient occlusion only applies to indirect light, which means its effects can't be seen in direct light. Values higher than [code]0[/code] will make the SSAO effect visible in direct light.
 bindEnvironment_get_ssao_direct_light_affect :: MethodBind
 bindEnvironment_get_ssao_direct_light_affect
   = unsafePerformIO $
@@ -1361,6 +1377,7 @@ bindEnvironment_get_ssao_direct_light_affect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion intensity in direct light. In real life, ambient occlusion only applies to indirect light, which means its effects can't be seen in direct light. Values higher than [code]0[/code] will make the SSAO effect visible in direct light.
 get_ssao_direct_light_affect ::
                                (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_direct_light_affect cls
@@ -1374,6 +1391,7 @@ get_ssao_direct_light_affect cls
 
 {-# NOINLINE bindEnvironment_get_ssao_edge_sharpness #-}
 
+-- | The screen-space ambient occlusion edge sharpness.
 bindEnvironment_get_ssao_edge_sharpness :: MethodBind
 bindEnvironment_get_ssao_edge_sharpness
   = unsafePerformIO $
@@ -1383,6 +1401,7 @@ bindEnvironment_get_ssao_edge_sharpness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion edge sharpness.
 get_ssao_edge_sharpness ::
                           (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_edge_sharpness cls
@@ -1396,6 +1415,7 @@ get_ssao_edge_sharpness cls
 
 {-# NOINLINE bindEnvironment_get_ssao_intensity #-}
 
+-- | The primary screen-space ambient occlusion intensity. See also [member ssao_radius].
 bindEnvironment_get_ssao_intensity :: MethodBind
 bindEnvironment_get_ssao_intensity
   = unsafePerformIO $
@@ -1405,6 +1425,7 @@ bindEnvironment_get_ssao_intensity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The primary screen-space ambient occlusion intensity. See also [member ssao_radius].
 get_ssao_intensity ::
                      (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_intensity cls
@@ -1418,6 +1439,7 @@ get_ssao_intensity cls
 
 {-# NOINLINE bindEnvironment_get_ssao_intensity2 #-}
 
+-- | The secondary screen-space ambient occlusion intensity. See also [member ssao_radius2].
 bindEnvironment_get_ssao_intensity2 :: MethodBind
 bindEnvironment_get_ssao_intensity2
   = unsafePerformIO $
@@ -1427,6 +1449,7 @@ bindEnvironment_get_ssao_intensity2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The secondary screen-space ambient occlusion intensity. See also [member ssao_radius2].
 get_ssao_intensity2 ::
                       (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_intensity2 cls
@@ -1440,6 +1463,7 @@ get_ssao_intensity2 cls
 
 {-# NOINLINE bindEnvironment_get_ssao_quality #-}
 
+-- | The screen-space ambient occlusion quality. Higher qualities will make better use of small objects for ambient occlusion, but are slower.
 bindEnvironment_get_ssao_quality :: MethodBind
 bindEnvironment_get_ssao_quality
   = unsafePerformIO $
@@ -1449,6 +1473,7 @@ bindEnvironment_get_ssao_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion quality. Higher qualities will make better use of small objects for ambient occlusion, but are slower.
 get_ssao_quality ::
                    (Environment :< cls, Object :< cls) => cls -> IO Int
 get_ssao_quality cls
@@ -1462,6 +1487,7 @@ get_ssao_quality cls
 
 {-# NOINLINE bindEnvironment_get_ssao_radius #-}
 
+-- | The primary screen-space ambient occlusion radius.
 bindEnvironment_get_ssao_radius :: MethodBind
 bindEnvironment_get_ssao_radius
   = unsafePerformIO $
@@ -1471,6 +1497,7 @@ bindEnvironment_get_ssao_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The primary screen-space ambient occlusion radius.
 get_ssao_radius ::
                   (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_radius cls
@@ -1483,6 +1510,7 @@ get_ssao_radius cls
 
 {-# NOINLINE bindEnvironment_get_ssao_radius2 #-}
 
+-- | The secondary screen-space ambient occlusion radius. If set to a value higher than [code]0[/code], enables the secondary screen-space ambient occlusion effect which can be used to improve the effect's appearance (at the cost of performance).
 bindEnvironment_get_ssao_radius2 :: MethodBind
 bindEnvironment_get_ssao_radius2
   = unsafePerformIO $
@@ -1492,6 +1520,7 @@ bindEnvironment_get_ssao_radius2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The secondary screen-space ambient occlusion radius. If set to a value higher than [code]0[/code], enables the secondary screen-space ambient occlusion effect which can be used to improve the effect's appearance (at the cost of performance).
 get_ssao_radius2 ::
                    (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssao_radius2 cls
@@ -1505,6 +1534,7 @@ get_ssao_radius2 cls
 
 {-# NOINLINE bindEnvironment_get_ssr_depth_tolerance #-}
 
+-- | The depth tolerance for screen-space reflections.
 bindEnvironment_get_ssr_depth_tolerance :: MethodBind
 bindEnvironment_get_ssr_depth_tolerance
   = unsafePerformIO $
@@ -1514,6 +1544,7 @@ bindEnvironment_get_ssr_depth_tolerance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The depth tolerance for screen-space reflections.
 get_ssr_depth_tolerance ::
                           (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssr_depth_tolerance cls
@@ -1527,6 +1558,7 @@ get_ssr_depth_tolerance cls
 
 {-# NOINLINE bindEnvironment_get_ssr_fade_in #-}
 
+-- | The fade-in distance for screen-space reflections. Affects the area from the reflected material to the screen-space reflection).
 bindEnvironment_get_ssr_fade_in :: MethodBind
 bindEnvironment_get_ssr_fade_in
   = unsafePerformIO $
@@ -1536,6 +1568,7 @@ bindEnvironment_get_ssr_fade_in
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The fade-in distance for screen-space reflections. Affects the area from the reflected material to the screen-space reflection).
 get_ssr_fade_in ::
                   (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssr_fade_in cls
@@ -1548,6 +1581,7 @@ get_ssr_fade_in cls
 
 {-# NOINLINE bindEnvironment_get_ssr_fade_out #-}
 
+-- | The fade-out distance for screen-space reflections. Affects the area from the screen-space reflection to the "global" reflection.
 bindEnvironment_get_ssr_fade_out :: MethodBind
 bindEnvironment_get_ssr_fade_out
   = unsafePerformIO $
@@ -1557,6 +1591,7 @@ bindEnvironment_get_ssr_fade_out
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The fade-out distance for screen-space reflections. Affects the area from the screen-space reflection to the "global" reflection.
 get_ssr_fade_out ::
                    (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ssr_fade_out cls
@@ -1570,6 +1605,7 @@ get_ssr_fade_out cls
 
 {-# NOINLINE bindEnvironment_get_ssr_max_steps #-}
 
+-- | The maximum number of steps for screen-space reflections. Higher values are slower.
 bindEnvironment_get_ssr_max_steps :: MethodBind
 bindEnvironment_get_ssr_max_steps
   = unsafePerformIO $
@@ -1579,6 +1615,7 @@ bindEnvironment_get_ssr_max_steps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum number of steps for screen-space reflections. Higher values are slower.
 get_ssr_max_steps ::
                     (Environment :< cls, Object :< cls) => cls -> IO Int
 get_ssr_max_steps cls
@@ -1592,7 +1629,7 @@ get_ssr_max_steps cls
 
 {-# NOINLINE bindEnvironment_get_tonemap_auto_exposure #-}
 
--- | Enables the tonemapping auto exposure mode of the scene renderer. If activated, the renderer will automatically determine the exposure setting to adapt to the illumination of the scene and the observed light.
+-- | If [code]true[/code], enables the tonemapping auto exposure mode of the scene renderer. If [code]true[/code], the renderer will automatically determine the exposure setting to adapt to the scene's illumination and the observed light.
 bindEnvironment_get_tonemap_auto_exposure :: MethodBind
 bindEnvironment_get_tonemap_auto_exposure
   = unsafePerformIO $
@@ -1602,7 +1639,7 @@ bindEnvironment_get_tonemap_auto_exposure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the tonemapping auto exposure mode of the scene renderer. If activated, the renderer will automatically determine the exposure setting to adapt to the illumination of the scene and the observed light.
+-- | If [code]true[/code], enables the tonemapping auto exposure mode of the scene renderer. If [code]true[/code], the renderer will automatically determine the exposure setting to adapt to the scene's illumination and the observed light.
 get_tonemap_auto_exposure ::
                             (Environment :< cls, Object :< cls) => cls -> IO Bool
 get_tonemap_auto_exposure cls
@@ -1616,7 +1653,7 @@ get_tonemap_auto_exposure cls
 
 {-# NOINLINE bindEnvironment_get_tonemap_auto_exposure_grey #-}
 
--- | Scale of the auto exposure effect. Affects the intensity of auto exposure.
+-- | The scale of the auto exposure effect. Affects the intensity of auto exposure.
 bindEnvironment_get_tonemap_auto_exposure_grey :: MethodBind
 bindEnvironment_get_tonemap_auto_exposure_grey
   = unsafePerformIO $
@@ -1626,7 +1663,7 @@ bindEnvironment_get_tonemap_auto_exposure_grey
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Scale of the auto exposure effect. Affects the intensity of auto exposure.
+-- | The scale of the auto exposure effect. Affects the intensity of auto exposure.
 get_tonemap_auto_exposure_grey ::
                                  (Environment :< cls, Object :< cls) => cls -> IO Float
 get_tonemap_auto_exposure_grey cls
@@ -1641,7 +1678,7 @@ get_tonemap_auto_exposure_grey cls
 
 {-# NOINLINE bindEnvironment_get_tonemap_auto_exposure_max #-}
 
--- | Maximum luminance value for the auto exposure.
+-- | The maximum luminance value for the auto exposure.
 bindEnvironment_get_tonemap_auto_exposure_max :: MethodBind
 bindEnvironment_get_tonemap_auto_exposure_max
   = unsafePerformIO $
@@ -1651,7 +1688,7 @@ bindEnvironment_get_tonemap_auto_exposure_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum luminance value for the auto exposure.
+-- | The maximum luminance value for the auto exposure.
 get_tonemap_auto_exposure_max ::
                                 (Environment :< cls, Object :< cls) => cls -> IO Float
 get_tonemap_auto_exposure_max cls
@@ -1666,7 +1703,7 @@ get_tonemap_auto_exposure_max cls
 
 {-# NOINLINE bindEnvironment_get_tonemap_auto_exposure_min #-}
 
--- | Minimum luminance value for the auto exposure.
+-- | The minimum luminance value for the auto exposure.
 bindEnvironment_get_tonemap_auto_exposure_min :: MethodBind
 bindEnvironment_get_tonemap_auto_exposure_min
   = unsafePerformIO $
@@ -1676,7 +1713,7 @@ bindEnvironment_get_tonemap_auto_exposure_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum luminance value for the auto exposure.
+-- | The minimum luminance value for the auto exposure.
 get_tonemap_auto_exposure_min ::
                                 (Environment :< cls, Object :< cls) => cls -> IO Float
 get_tonemap_auto_exposure_min cls
@@ -1691,7 +1728,7 @@ get_tonemap_auto_exposure_min cls
 
 {-# NOINLINE bindEnvironment_get_tonemap_auto_exposure_speed #-}
 
--- | Speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
+-- | The speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
 bindEnvironment_get_tonemap_auto_exposure_speed :: MethodBind
 bindEnvironment_get_tonemap_auto_exposure_speed
   = unsafePerformIO $
@@ -1701,7 +1738,7 @@ bindEnvironment_get_tonemap_auto_exposure_speed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
+-- | The speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
 get_tonemap_auto_exposure_speed ::
                                   (Environment :< cls, Object :< cls) => cls -> IO Float
 get_tonemap_auto_exposure_speed cls
@@ -1716,7 +1753,7 @@ get_tonemap_auto_exposure_speed cls
 
 {-# NOINLINE bindEnvironment_get_tonemap_exposure #-}
 
--- | Default exposure for tonemap.
+-- | The default exposure used for tonemapping.
 bindEnvironment_get_tonemap_exposure :: MethodBind
 bindEnvironment_get_tonemap_exposure
   = unsafePerformIO $
@@ -1726,7 +1763,7 @@ bindEnvironment_get_tonemap_exposure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Default exposure for tonemap.
+-- | The default exposure used for tonemapping.
 get_tonemap_exposure ::
                        (Environment :< cls, Object :< cls) => cls -> IO Float
 get_tonemap_exposure cls
@@ -1740,7 +1777,7 @@ get_tonemap_exposure cls
 
 {-# NOINLINE bindEnvironment_get_tonemap_white #-}
 
--- | White reference value for tonemap.
+-- | The white reference value for tonemapping. Only effective if the [member tonemap_mode] isn't set to [constant TONE_MAPPER_LINEAR].
 bindEnvironment_get_tonemap_white :: MethodBind
 bindEnvironment_get_tonemap_white
   = unsafePerformIO $
@@ -1750,7 +1787,7 @@ bindEnvironment_get_tonemap_white
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | White reference value for tonemap.
+-- | The white reference value for tonemapping. Only effective if the [member tonemap_mode] isn't set to [constant TONE_MAPPER_LINEAR].
 get_tonemap_white ::
                     (Environment :< cls, Object :< cls) => cls -> IO Float
 get_tonemap_white cls
@@ -1764,7 +1801,7 @@ get_tonemap_white cls
 
 {-# NOINLINE bindEnvironment_get_tonemapper #-}
 
--- | Tonemapping mode.
+-- | The tonemapping mode to use. Tonemapping is the process that "converts" HDR values to be suitable for rendering on a LDR display. (Godot doesn't support rendering on HDR displays yet.)
 bindEnvironment_get_tonemapper :: MethodBind
 bindEnvironment_get_tonemapper
   = unsafePerformIO $
@@ -1774,7 +1811,7 @@ bindEnvironment_get_tonemapper
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Tonemapping mode.
+-- | The tonemapping mode to use. Tonemapping is the process that "converts" HDR values to be suitable for rendering on a LDR display. (Godot doesn't support rendering on HDR displays yet.)
 get_tonemapper ::
                  (Environment :< cls, Object :< cls) => cls -> IO Int
 get_tonemapper cls
@@ -1787,7 +1824,7 @@ get_tonemapper cls
 
 {-# NOINLINE bindEnvironment_is_adjustment_enabled #-}
 
--- | Enables the adjustment_* options provided by this resource. If [code]false[/code], adjustments modifications will have no effect on the rendered scene.
+-- | If [code]true[/code], enables the [code]adjustment_*[/code] properties provided by this resource. If [code]false[/code], modifications to the [code]adjustment_*[/code] properties will have no effect on the rendered scene.
 bindEnvironment_is_adjustment_enabled :: MethodBind
 bindEnvironment_is_adjustment_enabled
   = unsafePerformIO $
@@ -1797,7 +1834,7 @@ bindEnvironment_is_adjustment_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the adjustment_* options provided by this resource. If [code]false[/code], adjustments modifications will have no effect on the rendered scene.
+-- | If [code]true[/code], enables the [code]adjustment_*[/code] properties provided by this resource. If [code]false[/code], modifications to the [code]adjustment_*[/code] properties will have no effect on the rendered scene.
 is_adjustment_enabled ::
                         (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_adjustment_enabled cls
@@ -1811,7 +1848,7 @@ is_adjustment_enabled cls
 
 {-# NOINLINE bindEnvironment_is_dof_blur_far_enabled #-}
 
--- | Enables the far blur effect.
+-- | If [code]true[/code], enables the depth-of-field far blur effect.
 bindEnvironment_is_dof_blur_far_enabled :: MethodBind
 bindEnvironment_is_dof_blur_far_enabled
   = unsafePerformIO $
@@ -1821,7 +1858,7 @@ bindEnvironment_is_dof_blur_far_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the far blur effect.
+-- | If [code]true[/code], enables the depth-of-field far blur effect.
 is_dof_blur_far_enabled ::
                           (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_dof_blur_far_enabled cls
@@ -1835,7 +1872,7 @@ is_dof_blur_far_enabled cls
 
 {-# NOINLINE bindEnvironment_is_dof_blur_near_enabled #-}
 
--- | Enables the near blur effect.
+-- | If [code]true[/code], enables the depth-of-field near blur effect.
 bindEnvironment_is_dof_blur_near_enabled :: MethodBind
 bindEnvironment_is_dof_blur_near_enabled
   = unsafePerformIO $
@@ -1845,7 +1882,7 @@ bindEnvironment_is_dof_blur_near_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the near blur effect.
+-- | If [code]true[/code], enables the depth-of-field near blur effect.
 is_dof_blur_near_enabled ::
                            (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_dof_blur_near_enabled cls
@@ -1859,7 +1896,7 @@ is_dof_blur_near_enabled cls
 
 {-# NOINLINE bindEnvironment_is_fog_depth_enabled #-}
 
--- | Enables the fog depth.
+-- | If [code]true[/code], the depth fog effect is enabled. When enabled, fog will appear in the distance (relative to the camera).
 bindEnvironment_is_fog_depth_enabled :: MethodBind
 bindEnvironment_is_fog_depth_enabled
   = unsafePerformIO $
@@ -1869,7 +1906,7 @@ bindEnvironment_is_fog_depth_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the fog depth.
+-- | If [code]true[/code], the depth fog effect is enabled. When enabled, fog will appear in the distance (relative to the camera).
 is_fog_depth_enabled ::
                        (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_fog_depth_enabled cls
@@ -1883,7 +1920,7 @@ is_fog_depth_enabled cls
 
 {-# NOINLINE bindEnvironment_is_fog_enabled #-}
 
--- | Enables the fog. Needs fog_height_enabled and/or for_depth_enabled to actually display fog.
+-- | If [code]true[/code], fog effects are enabled. [member fog_height_enabled] and/or [member fog_depth_enabled] must be set to [code]true[/code] to actually display fog.
 bindEnvironment_is_fog_enabled :: MethodBind
 bindEnvironment_is_fog_enabled
   = unsafePerformIO $
@@ -1893,7 +1930,7 @@ bindEnvironment_is_fog_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the fog. Needs fog_height_enabled and/or for_depth_enabled to actually display fog.
+-- | If [code]true[/code], fog effects are enabled. [member fog_height_enabled] and/or [member fog_depth_enabled] must be set to [code]true[/code] to actually display fog.
 is_fog_enabled ::
                  (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_fog_enabled cls
@@ -1906,7 +1943,7 @@ is_fog_enabled cls
 
 {-# NOINLINE bindEnvironment_is_fog_height_enabled #-}
 
--- | Enables the fog height.
+-- | If [code]true[/code], the height fog effect is enabled. When enabled, fog will appear in a defined height range, regardless of the distance from the camera. This can be used to simulate "deep water" effects with a lower performance cost compared to a dedicated shader.
 bindEnvironment_is_fog_height_enabled :: MethodBind
 bindEnvironment_is_fog_height_enabled
   = unsafePerformIO $
@@ -1916,7 +1953,7 @@ bindEnvironment_is_fog_height_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the fog height.
+-- | If [code]true[/code], the height fog effect is enabled. When enabled, fog will appear in a defined height range, regardless of the distance from the camera. This can be used to simulate "deep water" effects with a lower performance cost compared to a dedicated shader.
 is_fog_height_enabled ::
                         (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_fog_height_enabled cls
@@ -1930,7 +1967,7 @@ is_fog_height_enabled cls
 
 {-# NOINLINE bindEnvironment_is_fog_transmit_enabled #-}
 
--- | Enables fog's light transmission. If enabled, lets reflections light to be transmitted by the fog.
+-- | Enables fog's light transmission effect. If [code]true[/code], light will be more visible in the fog to simulate light scattering as in real life.
 bindEnvironment_is_fog_transmit_enabled :: MethodBind
 bindEnvironment_is_fog_transmit_enabled
   = unsafePerformIO $
@@ -1940,7 +1977,7 @@ bindEnvironment_is_fog_transmit_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables fog's light transmission. If enabled, lets reflections light to be transmitted by the fog.
+-- | Enables fog's light transmission effect. If [code]true[/code], light will be more visible in the fog to simulate light scattering as in real life.
 is_fog_transmit_enabled ::
                           (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_fog_transmit_enabled cls
@@ -1954,6 +1991,8 @@ is_fog_transmit_enabled cls
 
 {-# NOINLINE bindEnvironment_is_glow_bicubic_upscale_enabled #-}
 
+-- | Smooths out the blockiness created by sampling higher levels, at the cost of performance.
+--   			[b]Note:[/b] When using the GLES2 renderer, this is only available if the GPU supports the [code]GL_EXT_gpu_shader4[/code] extension.
 bindEnvironment_is_glow_bicubic_upscale_enabled :: MethodBind
 bindEnvironment_is_glow_bicubic_upscale_enabled
   = unsafePerformIO $
@@ -1963,6 +2002,8 @@ bindEnvironment_is_glow_bicubic_upscale_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Smooths out the blockiness created by sampling higher levels, at the cost of performance.
+--   			[b]Note:[/b] When using the GLES2 renderer, this is only available if the GPU supports the [code]GL_EXT_gpu_shader4[/code] extension.
 is_glow_bicubic_upscale_enabled ::
                                   (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_glow_bicubic_upscale_enabled cls
@@ -1977,7 +2018,7 @@ is_glow_bicubic_upscale_enabled cls
 
 {-# NOINLINE bindEnvironment_is_glow_enabled #-}
 
--- | Enables glow rendering.
+-- | If [code]true[/code], the glow effect is enabled.
 bindEnvironment_is_glow_enabled :: MethodBind
 bindEnvironment_is_glow_enabled
   = unsafePerformIO $
@@ -1987,7 +2028,7 @@ bindEnvironment_is_glow_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables glow rendering.
+-- | If [code]true[/code], the glow effect is enabled.
 is_glow_enabled ::
                   (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_glow_enabled cls
@@ -2000,7 +2041,7 @@ is_glow_enabled cls
 
 {-# NOINLINE bindEnvironment_is_glow_level_enabled #-}
 
--- | First level of glow (most local).
+-- | Returns [code]true[/code] if the glow level [code]idx[/code] is specified, [code]false[/code] otherwise.
 bindEnvironment_is_glow_level_enabled :: MethodBind
 bindEnvironment_is_glow_level_enabled
   = unsafePerformIO $
@@ -2010,7 +2051,7 @@ bindEnvironment_is_glow_level_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | First level of glow (most local).
+-- | Returns [code]true[/code] if the glow level [code]idx[/code] is specified, [code]false[/code] otherwise.
 is_glow_level_enabled ::
                         (Environment :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_glow_level_enabled cls arg1
@@ -2024,6 +2065,7 @@ is_glow_level_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_is_ssao_enabled #-}
 
+-- | If [code]true[/code], the screen-space ambient occlusion effect is enabled. This darkens objects' corners and cavities to simulate ambient light not reaching the entire object as in real life. This works well for small, dynamic objects, but baked lighting or ambient occlusion textures will do a better job at displaying ambient occlusion on large static objects. This is a costly effect and should be disabled first when running into performance issues.
 bindEnvironment_is_ssao_enabled :: MethodBind
 bindEnvironment_is_ssao_enabled
   = unsafePerformIO $
@@ -2033,6 +2075,7 @@ bindEnvironment_is_ssao_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the screen-space ambient occlusion effect is enabled. This darkens objects' corners and cavities to simulate ambient light not reaching the entire object as in real life. This works well for small, dynamic objects, but baked lighting or ambient occlusion textures will do a better job at displaying ambient occlusion on large static objects. This is a costly effect and should be disabled first when running into performance issues.
 is_ssao_enabled ::
                   (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_ssao_enabled cls
@@ -2045,6 +2088,7 @@ is_ssao_enabled cls
 
 {-# NOINLINE bindEnvironment_is_ssr_enabled #-}
 
+-- | If [code]true[/code], screen-space reflections are enabled. Screen-space reflections are more accurate than reflections from [GIProbe]s or [ReflectionProbe]s, but are slower and can't reflect surfaces occluded by others.
 bindEnvironment_is_ssr_enabled :: MethodBind
 bindEnvironment_is_ssr_enabled
   = unsafePerformIO $
@@ -2054,6 +2098,7 @@ bindEnvironment_is_ssr_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], screen-space reflections are enabled. Screen-space reflections are more accurate than reflections from [GIProbe]s or [ReflectionProbe]s, but are slower and can't reflect surfaces occluded by others.
 is_ssr_enabled ::
                  (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_ssr_enabled cls
@@ -2066,6 +2111,7 @@ is_ssr_enabled cls
 
 {-# NOINLINE bindEnvironment_is_ssr_rough #-}
 
+-- | If [code]true[/code], screen-space reflections will take the material roughness into account.
 bindEnvironment_is_ssr_rough :: MethodBind
 bindEnvironment_is_ssr_rough
   = unsafePerformIO $
@@ -2075,6 +2121,7 @@ bindEnvironment_is_ssr_rough
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], screen-space reflections will take the material roughness into account.
 is_ssr_rough ::
                (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_ssr_rough cls
@@ -2087,7 +2134,7 @@ is_ssr_rough cls
 
 {-# NOINLINE bindEnvironment_set_adjustment_brightness #-}
 
--- | Global brightness value of the rendered scene (default value is 1).
+-- | The global brightness value of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_set_adjustment_brightness :: MethodBind
 bindEnvironment_set_adjustment_brightness
   = unsafePerformIO $
@@ -2097,7 +2144,7 @@ bindEnvironment_set_adjustment_brightness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Global brightness value of the rendered scene (default value is 1).
+-- | The global brightness value of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 set_adjustment_brightness ::
                             (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_adjustment_brightness cls arg1
@@ -2111,7 +2158,7 @@ set_adjustment_brightness cls arg1
 
 {-# NOINLINE bindEnvironment_set_adjustment_color_correction #-}
 
--- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene.
+-- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_set_adjustment_color_correction :: MethodBind
 bindEnvironment_set_adjustment_color_correction
   = unsafePerformIO $
@@ -2121,7 +2168,7 @@ bindEnvironment_set_adjustment_color_correction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene.
+-- | Applies the provided [Texture] resource to affect the global color aspect of the rendered scene. Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 set_adjustment_color_correction ::
                                   (Environment :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_adjustment_color_correction cls arg1
@@ -2136,7 +2183,7 @@ set_adjustment_color_correction cls arg1
 
 {-# NOINLINE bindEnvironment_set_adjustment_contrast #-}
 
--- | Global contrast value of the rendered scene (default value is 1).
+-- | The global contrast value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_set_adjustment_contrast :: MethodBind
 bindEnvironment_set_adjustment_contrast
   = unsafePerformIO $
@@ -2146,7 +2193,7 @@ bindEnvironment_set_adjustment_contrast
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Global contrast value of the rendered scene (default value is 1).
+-- | The global contrast value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 set_adjustment_contrast ::
                           (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_adjustment_contrast cls arg1
@@ -2160,7 +2207,7 @@ set_adjustment_contrast cls arg1
 
 {-# NOINLINE bindEnvironment_set_adjustment_enable #-}
 
--- | Enables the adjustment_* options provided by this resource. If [code]false[/code], adjustments modifications will have no effect on the rendered scene.
+-- | If [code]true[/code], enables the [code]adjustment_*[/code] properties provided by this resource. If [code]false[/code], modifications to the [code]adjustment_*[/code] properties will have no effect on the rendered scene.
 bindEnvironment_set_adjustment_enable :: MethodBind
 bindEnvironment_set_adjustment_enable
   = unsafePerformIO $
@@ -2170,7 +2217,7 @@ bindEnvironment_set_adjustment_enable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the adjustment_* options provided by this resource. If [code]false[/code], adjustments modifications will have no effect on the rendered scene.
+-- | If [code]true[/code], enables the [code]adjustment_*[/code] properties provided by this resource. If [code]false[/code], modifications to the [code]adjustment_*[/code] properties will have no effect on the rendered scene.
 set_adjustment_enable ::
                         (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_adjustment_enable cls arg1
@@ -2184,7 +2231,7 @@ set_adjustment_enable cls arg1
 
 {-# NOINLINE bindEnvironment_set_adjustment_saturation #-}
 
--- | Global color saturation value of the rendered scene (default value is 1).
+-- | The global color saturation value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 bindEnvironment_set_adjustment_saturation :: MethodBind
 bindEnvironment_set_adjustment_saturation
   = unsafePerformIO $
@@ -2194,7 +2241,7 @@ bindEnvironment_set_adjustment_saturation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Global color saturation value of the rendered scene (default value is 1).
+-- | The global color saturation value of the rendered scene (default value is 1). Effective only if [code]adjustment_enabled[/code] is [code]true[/code].
 set_adjustment_saturation ::
                             (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_adjustment_saturation cls arg1
@@ -2208,7 +2255,7 @@ set_adjustment_saturation cls arg1
 
 {-# NOINLINE bindEnvironment_set_ambient_light_color #-}
 
--- | [Color] of the ambient light.
+-- | The ambient light's [Color].
 bindEnvironment_set_ambient_light_color :: MethodBind
 bindEnvironment_set_ambient_light_color
   = unsafePerformIO $
@@ -2218,7 +2265,7 @@ bindEnvironment_set_ambient_light_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Color] of the ambient light.
+-- | The ambient light's [Color].
 set_ambient_light_color ::
                           (Environment :< cls, Object :< cls) => cls -> Color -> IO ()
 set_ambient_light_color cls arg1
@@ -2232,7 +2279,7 @@ set_ambient_light_color cls arg1
 
 {-# NOINLINE bindEnvironment_set_ambient_light_energy #-}
 
--- | Energy of the ambient light. The higher the value, the stronger the light.
+-- | The ambient light's energy. The higher the value, the stronger the light.
 bindEnvironment_set_ambient_light_energy :: MethodBind
 bindEnvironment_set_ambient_light_energy
   = unsafePerformIO $
@@ -2242,7 +2289,7 @@ bindEnvironment_set_ambient_light_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Energy of the ambient light. The higher the value, the stronger the light.
+-- | The ambient light's energy. The higher the value, the stronger the light.
 set_ambient_light_energy ::
                            (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ambient_light_energy cls arg1
@@ -2281,7 +2328,7 @@ set_ambient_light_sky_contribution cls arg1
 
 {-# NOINLINE bindEnvironment_set_background #-}
 
--- | Defines the mode of background.
+-- | The background mode. See [enum BGMode] for possible values.
 bindEnvironment_set_background :: MethodBind
 bindEnvironment_set_background
   = unsafePerformIO $
@@ -2291,7 +2338,7 @@ bindEnvironment_set_background
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the mode of background.
+-- | The background mode. See [enum BGMode] for possible values.
 set_background ::
                  (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_background cls arg1
@@ -2304,7 +2351,7 @@ set_background cls arg1
 
 {-# NOINLINE bindEnvironment_set_bg_color #-}
 
--- | Color displayed for clear areas of the scene (if using Custom color or Color+Sky background modes).
+-- | The [Color] displayed for clear areas of the scene. Only effective when using the [constant BG_COLOR] or [constant BG_COLOR_SKY] background modes).
 bindEnvironment_set_bg_color :: MethodBind
 bindEnvironment_set_bg_color
   = unsafePerformIO $
@@ -2314,7 +2361,7 @@ bindEnvironment_set_bg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Color displayed for clear areas of the scene (if using Custom color or Color+Sky background modes).
+-- | The [Color] displayed for clear areas of the scene. Only effective when using the [constant BG_COLOR] or [constant BG_COLOR_SKY] background modes).
 set_bg_color ::
                (Environment :< cls, Object :< cls) => cls -> Color -> IO ()
 set_bg_color cls arg1
@@ -2327,7 +2374,7 @@ set_bg_color cls arg1
 
 {-# NOINLINE bindEnvironment_set_bg_energy #-}
 
--- | Power of light emitted by the background.
+-- | The power of the light emitted by the background.
 bindEnvironment_set_bg_energy :: MethodBind
 bindEnvironment_set_bg_energy
   = unsafePerformIO $
@@ -2337,7 +2384,7 @@ bindEnvironment_set_bg_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Power of light emitted by the background.
+-- | The power of the light emitted by the background.
 set_bg_energy ::
                 (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bg_energy cls arg1
@@ -2350,6 +2397,7 @@ set_bg_energy cls arg1
 
 {-# NOINLINE bindEnvironment_set_camera_feed_id #-}
 
+-- | The ID of the camera feed to show in the background.
 bindEnvironment_set_camera_feed_id :: MethodBind
 bindEnvironment_set_camera_feed_id
   = unsafePerformIO $
@@ -2359,6 +2407,7 @@ bindEnvironment_set_camera_feed_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The ID of the camera feed to show in the background.
 set_camera_feed_id ::
                      (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_camera_feed_id cls arg1
@@ -2372,7 +2421,7 @@ set_camera_feed_id cls arg1
 
 {-# NOINLINE bindEnvironment_set_canvas_max_layer #-}
 
--- | Maximum layer id (if using Layer background mode).
+-- | The maximum layer ID to display. Only effective when using the [constant BG_CANVAS] background mode.
 bindEnvironment_set_canvas_max_layer :: MethodBind
 bindEnvironment_set_canvas_max_layer
   = unsafePerformIO $
@@ -2382,7 +2431,7 @@ bindEnvironment_set_canvas_max_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum layer id (if using Layer background mode).
+-- | The maximum layer ID to display. Only effective when using the [constant BG_CANVAS] background mode.
 set_canvas_max_layer ::
                        (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_canvas_max_layer cls arg1
@@ -2396,7 +2445,7 @@ set_canvas_max_layer cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_far_amount #-}
 
--- | Amount of far blur.
+-- | The amount of far blur for the depth-of-field effect.
 bindEnvironment_set_dof_blur_far_amount :: MethodBind
 bindEnvironment_set_dof_blur_far_amount
   = unsafePerformIO $
@@ -2406,7 +2455,7 @@ bindEnvironment_set_dof_blur_far_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of far blur.
+-- | The amount of far blur for the depth-of-field effect.
 set_dof_blur_far_amount ::
                           (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_dof_blur_far_amount cls arg1
@@ -2420,7 +2469,7 @@ set_dof_blur_far_amount cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_far_distance #-}
 
--- | Distance from the camera where the far blur effect affects the rendering.
+-- | The distance from the camera where the far blur effect affects the rendering.
 bindEnvironment_set_dof_blur_far_distance :: MethodBind
 bindEnvironment_set_dof_blur_far_distance
   = unsafePerformIO $
@@ -2430,7 +2479,7 @@ bindEnvironment_set_dof_blur_far_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Distance from the camera where the far blur effect affects the rendering.
+-- | The distance from the camera where the far blur effect affects the rendering.
 set_dof_blur_far_distance ::
                             (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_dof_blur_far_distance cls arg1
@@ -2444,7 +2493,7 @@ set_dof_blur_far_distance cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_far_enabled #-}
 
--- | Enables the far blur effect.
+-- | If [code]true[/code], enables the depth-of-field far blur effect.
 bindEnvironment_set_dof_blur_far_enabled :: MethodBind
 bindEnvironment_set_dof_blur_far_enabled
   = unsafePerformIO $
@@ -2454,7 +2503,7 @@ bindEnvironment_set_dof_blur_far_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the far blur effect.
+-- | If [code]true[/code], enables the depth-of-field far blur effect.
 set_dof_blur_far_enabled ::
                            (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_dof_blur_far_enabled cls arg1
@@ -2468,7 +2517,7 @@ set_dof_blur_far_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_far_quality #-}
 
--- | Quality of the far blur quality.
+-- | The depth-of-field far blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 bindEnvironment_set_dof_blur_far_quality :: MethodBind
 bindEnvironment_set_dof_blur_far_quality
   = unsafePerformIO $
@@ -2478,7 +2527,7 @@ bindEnvironment_set_dof_blur_far_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Quality of the far blur quality.
+-- | The depth-of-field far blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 set_dof_blur_far_quality ::
                            (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_dof_blur_far_quality cls arg1
@@ -2492,7 +2541,7 @@ set_dof_blur_far_quality cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_far_transition #-}
 
--- | Transition between no-blur area and far blur.
+-- | The length of the transition between the no-blur area and far blur.
 bindEnvironment_set_dof_blur_far_transition :: MethodBind
 bindEnvironment_set_dof_blur_far_transition
   = unsafePerformIO $
@@ -2502,7 +2551,7 @@ bindEnvironment_set_dof_blur_far_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transition between no-blur area and far blur.
+-- | The length of the transition between the no-blur area and far blur.
 set_dof_blur_far_transition ::
                               (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_dof_blur_far_transition cls arg1
@@ -2516,7 +2565,7 @@ set_dof_blur_far_transition cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_near_amount #-}
 
--- | Amount of near blur.
+-- | The amount of near blur for the depth-of-field effect.
 bindEnvironment_set_dof_blur_near_amount :: MethodBind
 bindEnvironment_set_dof_blur_near_amount
   = unsafePerformIO $
@@ -2526,7 +2575,7 @@ bindEnvironment_set_dof_blur_near_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of near blur.
+-- | The amount of near blur for the depth-of-field effect.
 set_dof_blur_near_amount ::
                            (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_dof_blur_near_amount cls arg1
@@ -2564,7 +2613,7 @@ set_dof_blur_near_distance cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_near_enabled #-}
 
--- | Enables the near blur effect.
+-- | If [code]true[/code], enables the depth-of-field near blur effect.
 bindEnvironment_set_dof_blur_near_enabled :: MethodBind
 bindEnvironment_set_dof_blur_near_enabled
   = unsafePerformIO $
@@ -2574,7 +2623,7 @@ bindEnvironment_set_dof_blur_near_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the near blur effect.
+-- | If [code]true[/code], enables the depth-of-field near blur effect.
 set_dof_blur_near_enabled ::
                             (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_dof_blur_near_enabled cls arg1
@@ -2588,7 +2637,7 @@ set_dof_blur_near_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_near_quality #-}
 
--- | Quality of the near blur quality.
+-- | The depth-of-field near blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 bindEnvironment_set_dof_blur_near_quality :: MethodBind
 bindEnvironment_set_dof_blur_near_quality
   = unsafePerformIO $
@@ -2598,7 +2647,7 @@ bindEnvironment_set_dof_blur_near_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Quality of the near blur quality.
+-- | The depth-of-field near blur's quality. Higher values can mitigate the visible banding effect seen at higher strengths, but are much slower.
 set_dof_blur_near_quality ::
                             (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_dof_blur_near_quality cls arg1
@@ -2612,7 +2661,7 @@ set_dof_blur_near_quality cls arg1
 
 {-# NOINLINE bindEnvironment_set_dof_blur_near_transition #-}
 
--- | Transition between near blur and no-blur area.
+-- | The length of the transition between the near blur and no-blur area.
 bindEnvironment_set_dof_blur_near_transition :: MethodBind
 bindEnvironment_set_dof_blur_near_transition
   = unsafePerformIO $
@@ -2622,7 +2671,7 @@ bindEnvironment_set_dof_blur_near_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transition between near blur and no-blur area.
+-- | The length of the transition between the near blur and no-blur area.
 set_dof_blur_near_transition ::
                                (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_dof_blur_near_transition cls arg1
@@ -2636,7 +2685,7 @@ set_dof_blur_near_transition cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_color #-}
 
--- | Fog's [Color].
+-- | The fog's [Color].
 bindEnvironment_set_fog_color :: MethodBind
 bindEnvironment_set_fog_color
   = unsafePerformIO $
@@ -2646,7 +2695,7 @@ bindEnvironment_set_fog_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Fog's [Color].
+-- | The fog's [Color].
 set_fog_color ::
                 (Environment :< cls, Object :< cls) => cls -> Color -> IO ()
 set_fog_color cls arg1
@@ -2659,7 +2708,7 @@ set_fog_color cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_depth_begin #-}
 
--- | Fog's depth starting distance from the camera.
+-- | The fog's depth starting distance from the camera.
 bindEnvironment_set_fog_depth_begin :: MethodBind
 bindEnvironment_set_fog_depth_begin
   = unsafePerformIO $
@@ -2669,7 +2718,7 @@ bindEnvironment_set_fog_depth_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Fog's depth starting distance from the camera.
+-- | The fog's depth starting distance from the camera.
 set_fog_depth_begin ::
                       (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_depth_begin cls arg1
@@ -2683,7 +2732,7 @@ set_fog_depth_begin cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_depth_curve #-}
 
--- | Value defining the fog depth intensity.
+-- | The fog depth's intensity curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 bindEnvironment_set_fog_depth_curve :: MethodBind
 bindEnvironment_set_fog_depth_curve
   = unsafePerformIO $
@@ -2693,7 +2742,7 @@ bindEnvironment_set_fog_depth_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Value defining the fog depth intensity.
+-- | The fog depth's intensity curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 set_fog_depth_curve ::
                       (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_depth_curve cls arg1
@@ -2707,7 +2756,7 @@ set_fog_depth_curve cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_depth_enabled #-}
 
--- | Enables the fog depth.
+-- | If [code]true[/code], the depth fog effect is enabled. When enabled, fog will appear in the distance (relative to the camera).
 bindEnvironment_set_fog_depth_enabled :: MethodBind
 bindEnvironment_set_fog_depth_enabled
   = unsafePerformIO $
@@ -2717,7 +2766,7 @@ bindEnvironment_set_fog_depth_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the fog depth.
+-- | If [code]true[/code], the depth fog effect is enabled. When enabled, fog will appear in the distance (relative to the camera).
 set_fog_depth_enabled ::
                         (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_fog_depth_enabled cls arg1
@@ -2731,6 +2780,7 @@ set_fog_depth_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_depth_end #-}
 
+-- | The fog's depth end distance from the camera. If this value is set to 0, it will be equal to the current camera's [member Camera.far] value.
 bindEnvironment_set_fog_depth_end :: MethodBind
 bindEnvironment_set_fog_depth_end
   = unsafePerformIO $
@@ -2740,6 +2790,7 @@ bindEnvironment_set_fog_depth_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The fog's depth end distance from the camera. If this value is set to 0, it will be equal to the current camera's [member Camera.far] value.
 set_fog_depth_end ::
                     (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_depth_end cls arg1
@@ -2753,7 +2804,7 @@ set_fog_depth_end cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_enabled #-}
 
--- | Enables the fog. Needs fog_height_enabled and/or for_depth_enabled to actually display fog.
+-- | If [code]true[/code], fog effects are enabled. [member fog_height_enabled] and/or [member fog_depth_enabled] must be set to [code]true[/code] to actually display fog.
 bindEnvironment_set_fog_enabled :: MethodBind
 bindEnvironment_set_fog_enabled
   = unsafePerformIO $
@@ -2763,7 +2814,7 @@ bindEnvironment_set_fog_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the fog. Needs fog_height_enabled and/or for_depth_enabled to actually display fog.
+-- | If [code]true[/code], fog effects are enabled. [member fog_height_enabled] and/or [member fog_depth_enabled] must be set to [code]true[/code] to actually display fog.
 set_fog_enabled ::
                   (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_fog_enabled cls arg1
@@ -2776,7 +2827,7 @@ set_fog_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_height_curve #-}
 
--- | Value defining the fog height intensity.
+-- | The height fog's intensity. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 bindEnvironment_set_fog_height_curve :: MethodBind
 bindEnvironment_set_fog_height_curve
   = unsafePerformIO $
@@ -2786,7 +2837,7 @@ bindEnvironment_set_fog_height_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Value defining the fog height intensity.
+-- | The height fog's intensity. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 set_fog_height_curve ::
                        (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_height_curve cls arg1
@@ -2800,7 +2851,7 @@ set_fog_height_curve cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_height_enabled #-}
 
--- | Enables the fog height.
+-- | If [code]true[/code], the height fog effect is enabled. When enabled, fog will appear in a defined height range, regardless of the distance from the camera. This can be used to simulate "deep water" effects with a lower performance cost compared to a dedicated shader.
 bindEnvironment_set_fog_height_enabled :: MethodBind
 bindEnvironment_set_fog_height_enabled
   = unsafePerformIO $
@@ -2810,7 +2861,7 @@ bindEnvironment_set_fog_height_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the fog height.
+-- | If [code]true[/code], the height fog effect is enabled. When enabled, fog will appear in a defined height range, regardless of the distance from the camera. This can be used to simulate "deep water" effects with a lower performance cost compared to a dedicated shader.
 set_fog_height_enabled ::
                          (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_fog_height_enabled cls arg1
@@ -2824,7 +2875,7 @@ set_fog_height_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_height_max #-}
 
--- | Maximum height of fog.
+-- | The Y coordinate where the height fog will be the most intense. If this value is greater than [member fog_height_min], fog will be displayed from bottom to top. Otherwise, it will be displayed from top to bottom.
 bindEnvironment_set_fog_height_max :: MethodBind
 bindEnvironment_set_fog_height_max
   = unsafePerformIO $
@@ -2834,7 +2885,7 @@ bindEnvironment_set_fog_height_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum height of fog.
+-- | The Y coordinate where the height fog will be the most intense. If this value is greater than [member fog_height_min], fog will be displayed from bottom to top. Otherwise, it will be displayed from top to bottom.
 set_fog_height_max ::
                      (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_height_max cls arg1
@@ -2848,7 +2899,7 @@ set_fog_height_max cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_height_min #-}
 
--- | Minimum height of fog.
+-- | The Y coordinate where the height fog will be the least intense. If this value is greater than [member fog_height_max], fog will be displayed from top to bottom. Otherwise, it will be displayed from bottom to top.
 bindEnvironment_set_fog_height_min :: MethodBind
 bindEnvironment_set_fog_height_min
   = unsafePerformIO $
@@ -2858,7 +2909,7 @@ bindEnvironment_set_fog_height_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum height of fog.
+-- | The Y coordinate where the height fog will be the least intense. If this value is greater than [member fog_height_max], fog will be displayed from top to bottom. Otherwise, it will be displayed from bottom to top.
 set_fog_height_min ::
                      (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_height_min cls arg1
@@ -2872,7 +2923,7 @@ set_fog_height_min cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_sun_amount #-}
 
--- | Amount of sun that affects the fog rendering.
+-- | The intensity of the depth fog color transition when looking towards the sun. The sun's direction is determined automatically using the DirectionalLight node in the scene.
 bindEnvironment_set_fog_sun_amount :: MethodBind
 bindEnvironment_set_fog_sun_amount
   = unsafePerformIO $
@@ -2882,7 +2933,7 @@ bindEnvironment_set_fog_sun_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of sun that affects the fog rendering.
+-- | The intensity of the depth fog color transition when looking towards the sun. The sun's direction is determined automatically using the DirectionalLight node in the scene.
 set_fog_sun_amount ::
                      (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_sun_amount cls arg1
@@ -2896,7 +2947,7 @@ set_fog_sun_amount cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_sun_color #-}
 
--- | Sun [Color].
+-- | The depth fog's [Color] when looking towards the sun.
 bindEnvironment_set_fog_sun_color :: MethodBind
 bindEnvironment_set_fog_sun_color
   = unsafePerformIO $
@@ -2906,7 +2957,7 @@ bindEnvironment_set_fog_sun_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sun [Color].
+-- | The depth fog's [Color] when looking towards the sun.
 set_fog_sun_color ::
                     (Environment :< cls, Object :< cls) => cls -> Color -> IO ()
 set_fog_sun_color cls arg1
@@ -2920,7 +2971,7 @@ set_fog_sun_color cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_transmit_curve #-}
 
--- | Amount of light that the fog transmits.
+-- | The intensity of the fog light transmittance effect. Amount of light that the fog transmits.
 bindEnvironment_set_fog_transmit_curve :: MethodBind
 bindEnvironment_set_fog_transmit_curve
   = unsafePerformIO $
@@ -2930,7 +2981,7 @@ bindEnvironment_set_fog_transmit_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of light that the fog transmits.
+-- | The intensity of the fog light transmittance effect. Amount of light that the fog transmits.
 set_fog_transmit_curve ::
                          (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fog_transmit_curve cls arg1
@@ -2944,7 +2995,7 @@ set_fog_transmit_curve cls arg1
 
 {-# NOINLINE bindEnvironment_set_fog_transmit_enabled #-}
 
--- | Enables fog's light transmission. If enabled, lets reflections light to be transmitted by the fog.
+-- | Enables fog's light transmission effect. If [code]true[/code], light will be more visible in the fog to simulate light scattering as in real life.
 bindEnvironment_set_fog_transmit_enabled :: MethodBind
 bindEnvironment_set_fog_transmit_enabled
   = unsafePerformIO $
@@ -2954,7 +3005,7 @@ bindEnvironment_set_fog_transmit_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables fog's light transmission. If enabled, lets reflections light to be transmitted by the fog.
+-- | Enables fog's light transmission effect. If [code]true[/code], light will be more visible in the fog to simulate light scattering as in real life.
 set_fog_transmit_enabled ::
                            (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_fog_transmit_enabled cls arg1
@@ -2968,6 +3019,8 @@ set_fog_transmit_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_bicubic_upscale #-}
 
+-- | Smooths out the blockiness created by sampling higher levels, at the cost of performance.
+--   			[b]Note:[/b] When using the GLES2 renderer, this is only available if the GPU supports the [code]GL_EXT_gpu_shader4[/code] extension.
 bindEnvironment_set_glow_bicubic_upscale :: MethodBind
 bindEnvironment_set_glow_bicubic_upscale
   = unsafePerformIO $
@@ -2977,6 +3030,8 @@ bindEnvironment_set_glow_bicubic_upscale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Smooths out the blockiness created by sampling higher levels, at the cost of performance.
+--   			[b]Note:[/b] When using the GLES2 renderer, this is only available if the GPU supports the [code]GL_EXT_gpu_shader4[/code] extension.
 set_glow_bicubic_upscale ::
                            (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_glow_bicubic_upscale cls arg1
@@ -2990,7 +3045,7 @@ set_glow_bicubic_upscale cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_blend_mode #-}
 
--- | Glow blending mode.
+-- | The glow blending mode.
 bindEnvironment_set_glow_blend_mode :: MethodBind
 bindEnvironment_set_glow_blend_mode
   = unsafePerformIO $
@@ -3000,7 +3055,7 @@ bindEnvironment_set_glow_blend_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Glow blending mode.
+-- | The glow blending mode.
 set_glow_blend_mode ::
                       (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_glow_blend_mode cls arg1
@@ -3014,7 +3069,7 @@ set_glow_blend_mode cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_bloom #-}
 
--- | Bloom value (global glow).
+-- | The bloom's intensity. If set to a value higher than [code]0[/code], this will make glow visible in areas darker than the [member glow_hdr_threshold].
 bindEnvironment_set_glow_bloom :: MethodBind
 bindEnvironment_set_glow_bloom
   = unsafePerformIO $
@@ -3024,7 +3079,7 @@ bindEnvironment_set_glow_bloom
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bloom value (global glow).
+-- | The bloom's intensity. If set to a value higher than [code]0[/code], this will make glow visible in areas darker than the [member glow_hdr_threshold].
 set_glow_bloom ::
                  (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_glow_bloom cls arg1
@@ -3037,7 +3092,7 @@ set_glow_bloom cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_enabled #-}
 
--- | Enables glow rendering.
+-- | If [code]true[/code], the glow effect is enabled.
 bindEnvironment_set_glow_enabled :: MethodBind
 bindEnvironment_set_glow_enabled
   = unsafePerformIO $
@@ -3047,7 +3102,7 @@ bindEnvironment_set_glow_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables glow rendering.
+-- | If [code]true[/code], the glow effect is enabled.
 set_glow_enabled ::
                    (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_glow_enabled cls arg1
@@ -3061,7 +3116,7 @@ set_glow_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_hdr_bleed_scale #-}
 
--- | Bleed scale of the HDR glow.
+-- | The bleed scale of the HDR glow.
 bindEnvironment_set_glow_hdr_bleed_scale :: MethodBind
 bindEnvironment_set_glow_hdr_bleed_scale
   = unsafePerformIO $
@@ -3071,7 +3126,7 @@ bindEnvironment_set_glow_hdr_bleed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bleed scale of the HDR glow.
+-- | The bleed scale of the HDR glow.
 set_glow_hdr_bleed_scale ::
                            (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_glow_hdr_bleed_scale cls arg1
@@ -3085,7 +3140,7 @@ set_glow_hdr_bleed_scale cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_hdr_bleed_threshold #-}
 
--- | Bleed threshold of the HDR glow.
+-- | The lower threshold of the HDR glow. When using the GLES2 renderer (which doesn't support HDR), this needs to be below [code]1.0[/code] for glow to be visible. A value of [code]0.9[/code] works well in this case.
 bindEnvironment_set_glow_hdr_bleed_threshold :: MethodBind
 bindEnvironment_set_glow_hdr_bleed_threshold
   = unsafePerformIO $
@@ -3095,7 +3150,7 @@ bindEnvironment_set_glow_hdr_bleed_threshold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bleed threshold of the HDR glow.
+-- | The lower threshold of the HDR glow. When using the GLES2 renderer (which doesn't support HDR), this needs to be below [code]1.0[/code] for glow to be visible. A value of [code]0.9[/code] works well in this case.
 set_glow_hdr_bleed_threshold ::
                                (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_glow_hdr_bleed_threshold cls arg1
@@ -3109,6 +3164,7 @@ set_glow_hdr_bleed_threshold cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_hdr_luminance_cap #-}
 
+-- | The higher threshold of the HDR glow. Areas brighter than this threshold will be clamped for the purposes of the glow effect.
 bindEnvironment_set_glow_hdr_luminance_cap :: MethodBind
 bindEnvironment_set_glow_hdr_luminance_cap
   = unsafePerformIO $
@@ -3118,6 +3174,7 @@ bindEnvironment_set_glow_hdr_luminance_cap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The higher threshold of the HDR glow. Areas brighter than this threshold will be clamped for the purposes of the glow effect.
 set_glow_hdr_luminance_cap ::
                              (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_glow_hdr_luminance_cap cls arg1
@@ -3131,7 +3188,7 @@ set_glow_hdr_luminance_cap cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_intensity #-}
 
--- | Glow intensity.
+-- | The glow intensity. When using the GLES2 renderer, this should be increased to 1.5 to compensate for the lack of HDR rendering.
 bindEnvironment_set_glow_intensity :: MethodBind
 bindEnvironment_set_glow_intensity
   = unsafePerformIO $
@@ -3141,7 +3198,7 @@ bindEnvironment_set_glow_intensity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Glow intensity.
+-- | The glow intensity. When using the GLES2 renderer, this should be increased to 1.5 to compensate for the lack of HDR rendering.
 set_glow_intensity ::
                      (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_glow_intensity cls arg1
@@ -3155,7 +3212,7 @@ set_glow_intensity cls arg1
 
 {-# NOINLINE bindEnvironment_set_glow_level #-}
 
--- | First level of glow (most local).
+-- | Enables or disables the glow level at index [code]idx[/code]. Each level relies on the previous level. This means that enabling higher glow levels will slow down the glow effect rendering, even if previous levels aren't enabled.
 bindEnvironment_set_glow_level :: MethodBind
 bindEnvironment_set_glow_level
   = unsafePerformIO $
@@ -3165,7 +3222,7 @@ bindEnvironment_set_glow_level
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | First level of glow (most local).
+-- | Enables or disables the glow level at index [code]idx[/code]. Each level relies on the previous level. This means that enabling higher glow levels will slow down the glow effect rendering, even if previous levels aren't enabled.
 set_glow_level ::
                  (Environment :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_glow_level cls arg1 arg2
@@ -3178,7 +3235,7 @@ set_glow_level cls arg1 arg2
 
 {-# NOINLINE bindEnvironment_set_glow_strength #-}
 
--- | Glow strength.
+-- | The glow strength. When using the GLES2 renderer, this should be increased to 1.3 to compensate for the lack of HDR rendering.
 bindEnvironment_set_glow_strength :: MethodBind
 bindEnvironment_set_glow_strength
   = unsafePerformIO $
@@ -3188,7 +3245,7 @@ bindEnvironment_set_glow_strength
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Glow strength.
+-- | The glow strength. When using the GLES2 renderer, this should be increased to 1.3 to compensate for the lack of HDR rendering.
 set_glow_strength ::
                     (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_glow_strength cls arg1
@@ -3202,7 +3259,7 @@ set_glow_strength cls arg1
 
 {-# NOINLINE bindEnvironment_set_sky #-}
 
--- | [Sky] resource defined as background.
+-- | The [Sky] resource defined as background.
 bindEnvironment_set_sky :: MethodBind
 bindEnvironment_set_sky
   = unsafePerformIO $
@@ -3212,7 +3269,7 @@ bindEnvironment_set_sky
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource defined as background.
+-- | The [Sky] resource defined as background.
 set_sky ::
           (Environment :< cls, Object :< cls) => cls -> Sky -> IO ()
 set_sky cls arg1
@@ -3224,7 +3281,7 @@ set_sky cls arg1
 
 {-# NOINLINE bindEnvironment_set_sky_custom_fov #-}
 
--- | [Sky] resource's custom field of view.
+-- | The [Sky] resource's custom field of view.
 bindEnvironment_set_sky_custom_fov :: MethodBind
 bindEnvironment_set_sky_custom_fov
   = unsafePerformIO $
@@ -3234,7 +3291,7 @@ bindEnvironment_set_sky_custom_fov
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's custom field of view.
+-- | The [Sky] resource's custom field of view.
 set_sky_custom_fov ::
                      (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_sky_custom_fov cls arg1
@@ -3248,7 +3305,7 @@ set_sky_custom_fov cls arg1
 
 {-# NOINLINE bindEnvironment_set_sky_orientation #-}
 
--- | [Sky] resource's rotation expressed as a [Basis]
+-- | The [Sky] resource's rotation expressed as a [Basis].
 bindEnvironment_set_sky_orientation :: MethodBind
 bindEnvironment_set_sky_orientation
   = unsafePerformIO $
@@ -3258,7 +3315,7 @@ bindEnvironment_set_sky_orientation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's rotation expressed as a [Basis]
+-- | The [Sky] resource's rotation expressed as a [Basis].
 set_sky_orientation ::
                       (Environment :< cls, Object :< cls) => cls -> Basis -> IO ()
 set_sky_orientation cls arg1
@@ -3272,7 +3329,7 @@ set_sky_orientation cls arg1
 
 {-# NOINLINE bindEnvironment_set_sky_rotation #-}
 
--- | [Sky] resource's rotation expressed as euler angles in radians
+-- | The [Sky] resource's rotation expressed as Euler angles in radians.
 bindEnvironment_set_sky_rotation :: MethodBind
 bindEnvironment_set_sky_rotation
   = unsafePerformIO $
@@ -3282,7 +3339,7 @@ bindEnvironment_set_sky_rotation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's rotation expressed as euler angles in radians
+-- | The [Sky] resource's rotation expressed as Euler angles in radians.
 set_sky_rotation ::
                    (Environment :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_sky_rotation cls arg1
@@ -3296,7 +3353,7 @@ set_sky_rotation cls arg1
 
 {-# NOINLINE bindEnvironment_set_sky_rotation_degrees #-}
 
--- | [Sky] resource's rotation expressed as euler angles in degrees
+-- | The [Sky] resource's rotation expressed as Euler angles in degrees.
 bindEnvironment_set_sky_rotation_degrees :: MethodBind
 bindEnvironment_set_sky_rotation_degrees
   = unsafePerformIO $
@@ -3306,7 +3363,7 @@ bindEnvironment_set_sky_rotation_degrees
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Sky] resource's rotation expressed as euler angles in degrees
+-- | The [Sky] resource's rotation expressed as Euler angles in degrees.
 set_sky_rotation_degrees ::
                            (Environment :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_sky_rotation_degrees cls arg1
@@ -3320,6 +3377,7 @@ set_sky_rotation_degrees cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_ao_channel_affect #-}
 
+-- | The screen-space ambient occlusion intensity on materials that have an AO texture defined. Values higher than [code]0[/code] will make the SSAO effect visible in areas darkened by AO textures.
 bindEnvironment_set_ssao_ao_channel_affect :: MethodBind
 bindEnvironment_set_ssao_ao_channel_affect
   = unsafePerformIO $
@@ -3329,6 +3387,7 @@ bindEnvironment_set_ssao_ao_channel_affect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion intensity on materials that have an AO texture defined. Values higher than [code]0[/code] will make the SSAO effect visible in areas darkened by AO textures.
 set_ssao_ao_channel_affect ::
                              (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_ao_channel_affect cls arg1
@@ -3342,6 +3401,7 @@ set_ssao_ao_channel_affect cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_bias #-}
 
+-- | The screen-space ambient occlusion bias. This should be kept high enough to prevent "smooth" curves from being affected by ambient occlusion.
 bindEnvironment_set_ssao_bias :: MethodBind
 bindEnvironment_set_ssao_bias
   = unsafePerformIO $
@@ -3351,6 +3411,7 @@ bindEnvironment_set_ssao_bias
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion bias. This should be kept high enough to prevent "smooth" curves from being affected by ambient occlusion.
 set_ssao_bias ::
                 (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_bias cls arg1
@@ -3363,6 +3424,7 @@ set_ssao_bias cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_blur #-}
 
+-- | The screen-space ambient occlusion blur quality. See [enum SSAOBlur] for possible values.
 bindEnvironment_set_ssao_blur :: MethodBind
 bindEnvironment_set_ssao_blur
   = unsafePerformIO $
@@ -3372,6 +3434,7 @@ bindEnvironment_set_ssao_blur
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion blur quality. See [enum SSAOBlur] for possible values.
 set_ssao_blur ::
                 (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_ssao_blur cls arg1
@@ -3384,6 +3447,7 @@ set_ssao_blur cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_color #-}
 
+-- | The screen-space ambient occlusion color.
 bindEnvironment_set_ssao_color :: MethodBind
 bindEnvironment_set_ssao_color
   = unsafePerformIO $
@@ -3393,6 +3457,7 @@ bindEnvironment_set_ssao_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion color.
 set_ssao_color ::
                  (Environment :< cls, Object :< cls) => cls -> Color -> IO ()
 set_ssao_color cls arg1
@@ -3405,6 +3470,7 @@ set_ssao_color cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_direct_light_affect #-}
 
+-- | The screen-space ambient occlusion intensity in direct light. In real life, ambient occlusion only applies to indirect light, which means its effects can't be seen in direct light. Values higher than [code]0[/code] will make the SSAO effect visible in direct light.
 bindEnvironment_set_ssao_direct_light_affect :: MethodBind
 bindEnvironment_set_ssao_direct_light_affect
   = unsafePerformIO $
@@ -3414,6 +3480,7 @@ bindEnvironment_set_ssao_direct_light_affect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion intensity in direct light. In real life, ambient occlusion only applies to indirect light, which means its effects can't be seen in direct light. Values higher than [code]0[/code] will make the SSAO effect visible in direct light.
 set_ssao_direct_light_affect ::
                                (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_direct_light_affect cls arg1
@@ -3427,6 +3494,7 @@ set_ssao_direct_light_affect cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_edge_sharpness #-}
 
+-- | The screen-space ambient occlusion edge sharpness.
 bindEnvironment_set_ssao_edge_sharpness :: MethodBind
 bindEnvironment_set_ssao_edge_sharpness
   = unsafePerformIO $
@@ -3436,6 +3504,7 @@ bindEnvironment_set_ssao_edge_sharpness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion edge sharpness.
 set_ssao_edge_sharpness ::
                           (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_edge_sharpness cls arg1
@@ -3449,6 +3518,7 @@ set_ssao_edge_sharpness cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_enabled #-}
 
+-- | If [code]true[/code], the screen-space ambient occlusion effect is enabled. This darkens objects' corners and cavities to simulate ambient light not reaching the entire object as in real life. This works well for small, dynamic objects, but baked lighting or ambient occlusion textures will do a better job at displaying ambient occlusion on large static objects. This is a costly effect and should be disabled first when running into performance issues.
 bindEnvironment_set_ssao_enabled :: MethodBind
 bindEnvironment_set_ssao_enabled
   = unsafePerformIO $
@@ -3458,6 +3528,7 @@ bindEnvironment_set_ssao_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the screen-space ambient occlusion effect is enabled. This darkens objects' corners and cavities to simulate ambient light not reaching the entire object as in real life. This works well for small, dynamic objects, but baked lighting or ambient occlusion textures will do a better job at displaying ambient occlusion on large static objects. This is a costly effect and should be disabled first when running into performance issues.
 set_ssao_enabled ::
                    (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ssao_enabled cls arg1
@@ -3471,6 +3542,7 @@ set_ssao_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_intensity #-}
 
+-- | The primary screen-space ambient occlusion intensity. See also [member ssao_radius].
 bindEnvironment_set_ssao_intensity :: MethodBind
 bindEnvironment_set_ssao_intensity
   = unsafePerformIO $
@@ -3480,6 +3552,7 @@ bindEnvironment_set_ssao_intensity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The primary screen-space ambient occlusion intensity. See also [member ssao_radius].
 set_ssao_intensity ::
                      (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_intensity cls arg1
@@ -3493,6 +3566,7 @@ set_ssao_intensity cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_intensity2 #-}
 
+-- | The secondary screen-space ambient occlusion intensity. See also [member ssao_radius2].
 bindEnvironment_set_ssao_intensity2 :: MethodBind
 bindEnvironment_set_ssao_intensity2
   = unsafePerformIO $
@@ -3502,6 +3576,7 @@ bindEnvironment_set_ssao_intensity2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The secondary screen-space ambient occlusion intensity. See also [member ssao_radius2].
 set_ssao_intensity2 ::
                       (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_intensity2 cls arg1
@@ -3515,6 +3590,7 @@ set_ssao_intensity2 cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_quality #-}
 
+-- | The screen-space ambient occlusion quality. Higher qualities will make better use of small objects for ambient occlusion, but are slower.
 bindEnvironment_set_ssao_quality :: MethodBind
 bindEnvironment_set_ssao_quality
   = unsafePerformIO $
@@ -3524,6 +3600,7 @@ bindEnvironment_set_ssao_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The screen-space ambient occlusion quality. Higher qualities will make better use of small objects for ambient occlusion, but are slower.
 set_ssao_quality ::
                    (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_ssao_quality cls arg1
@@ -3537,6 +3614,7 @@ set_ssao_quality cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_radius #-}
 
+-- | The primary screen-space ambient occlusion radius.
 bindEnvironment_set_ssao_radius :: MethodBind
 bindEnvironment_set_ssao_radius
   = unsafePerformIO $
@@ -3546,6 +3624,7 @@ bindEnvironment_set_ssao_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The primary screen-space ambient occlusion radius.
 set_ssao_radius ::
                   (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_radius cls arg1
@@ -3558,6 +3637,7 @@ set_ssao_radius cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssao_radius2 #-}
 
+-- | The secondary screen-space ambient occlusion radius. If set to a value higher than [code]0[/code], enables the secondary screen-space ambient occlusion effect which can be used to improve the effect's appearance (at the cost of performance).
 bindEnvironment_set_ssao_radius2 :: MethodBind
 bindEnvironment_set_ssao_radius2
   = unsafePerformIO $
@@ -3567,6 +3647,7 @@ bindEnvironment_set_ssao_radius2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The secondary screen-space ambient occlusion radius. If set to a value higher than [code]0[/code], enables the secondary screen-space ambient occlusion effect which can be used to improve the effect's appearance (at the cost of performance).
 set_ssao_radius2 ::
                    (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssao_radius2 cls arg1
@@ -3580,6 +3661,7 @@ set_ssao_radius2 cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssr_depth_tolerance #-}
 
+-- | The depth tolerance for screen-space reflections.
 bindEnvironment_set_ssr_depth_tolerance :: MethodBind
 bindEnvironment_set_ssr_depth_tolerance
   = unsafePerformIO $
@@ -3589,6 +3671,7 @@ bindEnvironment_set_ssr_depth_tolerance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The depth tolerance for screen-space reflections.
 set_ssr_depth_tolerance ::
                           (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssr_depth_tolerance cls arg1
@@ -3602,6 +3685,7 @@ set_ssr_depth_tolerance cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssr_enabled #-}
 
+-- | If [code]true[/code], screen-space reflections are enabled. Screen-space reflections are more accurate than reflections from [GIProbe]s or [ReflectionProbe]s, but are slower and can't reflect surfaces occluded by others.
 bindEnvironment_set_ssr_enabled :: MethodBind
 bindEnvironment_set_ssr_enabled
   = unsafePerformIO $
@@ -3611,6 +3695,7 @@ bindEnvironment_set_ssr_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], screen-space reflections are enabled. Screen-space reflections are more accurate than reflections from [GIProbe]s or [ReflectionProbe]s, but are slower and can't reflect surfaces occluded by others.
 set_ssr_enabled ::
                   (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ssr_enabled cls arg1
@@ -3623,6 +3708,7 @@ set_ssr_enabled cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssr_fade_in #-}
 
+-- | The fade-in distance for screen-space reflections. Affects the area from the reflected material to the screen-space reflection).
 bindEnvironment_set_ssr_fade_in :: MethodBind
 bindEnvironment_set_ssr_fade_in
   = unsafePerformIO $
@@ -3632,6 +3718,7 @@ bindEnvironment_set_ssr_fade_in
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The fade-in distance for screen-space reflections. Affects the area from the reflected material to the screen-space reflection).
 set_ssr_fade_in ::
                   (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssr_fade_in cls arg1
@@ -3644,6 +3731,7 @@ set_ssr_fade_in cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssr_fade_out #-}
 
+-- | The fade-out distance for screen-space reflections. Affects the area from the screen-space reflection to the "global" reflection.
 bindEnvironment_set_ssr_fade_out :: MethodBind
 bindEnvironment_set_ssr_fade_out
   = unsafePerformIO $
@@ -3653,6 +3741,7 @@ bindEnvironment_set_ssr_fade_out
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The fade-out distance for screen-space reflections. Affects the area from the screen-space reflection to the "global" reflection.
 set_ssr_fade_out ::
                    (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ssr_fade_out cls arg1
@@ -3666,6 +3755,7 @@ set_ssr_fade_out cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssr_max_steps #-}
 
+-- | The maximum number of steps for screen-space reflections. Higher values are slower.
 bindEnvironment_set_ssr_max_steps :: MethodBind
 bindEnvironment_set_ssr_max_steps
   = unsafePerformIO $
@@ -3675,6 +3765,7 @@ bindEnvironment_set_ssr_max_steps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum number of steps for screen-space reflections. Higher values are slower.
 set_ssr_max_steps ::
                     (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_ssr_max_steps cls arg1
@@ -3688,6 +3779,7 @@ set_ssr_max_steps cls arg1
 
 {-# NOINLINE bindEnvironment_set_ssr_rough #-}
 
+-- | If [code]true[/code], screen-space reflections will take the material roughness into account.
 bindEnvironment_set_ssr_rough :: MethodBind
 bindEnvironment_set_ssr_rough
   = unsafePerformIO $
@@ -3697,6 +3789,7 @@ bindEnvironment_set_ssr_rough
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], screen-space reflections will take the material roughness into account.
 set_ssr_rough ::
                 (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ssr_rough cls arg1
@@ -3709,7 +3802,7 @@ set_ssr_rough cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemap_auto_exposure #-}
 
--- | Enables the tonemapping auto exposure mode of the scene renderer. If activated, the renderer will automatically determine the exposure setting to adapt to the illumination of the scene and the observed light.
+-- | If [code]true[/code], enables the tonemapping auto exposure mode of the scene renderer. If [code]true[/code], the renderer will automatically determine the exposure setting to adapt to the scene's illumination and the observed light.
 bindEnvironment_set_tonemap_auto_exposure :: MethodBind
 bindEnvironment_set_tonemap_auto_exposure
   = unsafePerformIO $
@@ -3719,7 +3812,7 @@ bindEnvironment_set_tonemap_auto_exposure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables the tonemapping auto exposure mode of the scene renderer. If activated, the renderer will automatically determine the exposure setting to adapt to the illumination of the scene and the observed light.
+-- | If [code]true[/code], enables the tonemapping auto exposure mode of the scene renderer. If [code]true[/code], the renderer will automatically determine the exposure setting to adapt to the scene's illumination and the observed light.
 set_tonemap_auto_exposure ::
                             (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_tonemap_auto_exposure cls arg1
@@ -3733,7 +3826,7 @@ set_tonemap_auto_exposure cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemap_auto_exposure_grey #-}
 
--- | Scale of the auto exposure effect. Affects the intensity of auto exposure.
+-- | The scale of the auto exposure effect. Affects the intensity of auto exposure.
 bindEnvironment_set_tonemap_auto_exposure_grey :: MethodBind
 bindEnvironment_set_tonemap_auto_exposure_grey
   = unsafePerformIO $
@@ -3743,7 +3836,7 @@ bindEnvironment_set_tonemap_auto_exposure_grey
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Scale of the auto exposure effect. Affects the intensity of auto exposure.
+-- | The scale of the auto exposure effect. Affects the intensity of auto exposure.
 set_tonemap_auto_exposure_grey ::
                                  (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tonemap_auto_exposure_grey cls arg1
@@ -3758,7 +3851,7 @@ set_tonemap_auto_exposure_grey cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemap_auto_exposure_max #-}
 
--- | Maximum luminance value for the auto exposure.
+-- | The maximum luminance value for the auto exposure.
 bindEnvironment_set_tonemap_auto_exposure_max :: MethodBind
 bindEnvironment_set_tonemap_auto_exposure_max
   = unsafePerformIO $
@@ -3768,7 +3861,7 @@ bindEnvironment_set_tonemap_auto_exposure_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum luminance value for the auto exposure.
+-- | The maximum luminance value for the auto exposure.
 set_tonemap_auto_exposure_max ::
                                 (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tonemap_auto_exposure_max cls arg1
@@ -3783,7 +3876,7 @@ set_tonemap_auto_exposure_max cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemap_auto_exposure_min #-}
 
--- | Minimum luminance value for the auto exposure.
+-- | The minimum luminance value for the auto exposure.
 bindEnvironment_set_tonemap_auto_exposure_min :: MethodBind
 bindEnvironment_set_tonemap_auto_exposure_min
   = unsafePerformIO $
@@ -3793,7 +3886,7 @@ bindEnvironment_set_tonemap_auto_exposure_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum luminance value for the auto exposure.
+-- | The minimum luminance value for the auto exposure.
 set_tonemap_auto_exposure_min ::
                                 (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tonemap_auto_exposure_min cls arg1
@@ -3808,7 +3901,7 @@ set_tonemap_auto_exposure_min cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemap_auto_exposure_speed #-}
 
--- | Speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
+-- | The speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
 bindEnvironment_set_tonemap_auto_exposure_speed :: MethodBind
 bindEnvironment_set_tonemap_auto_exposure_speed
   = unsafePerformIO $
@@ -3818,7 +3911,7 @@ bindEnvironment_set_tonemap_auto_exposure_speed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
+-- | The speed of the auto exposure effect. Affects the time needed for the camera to perform auto exposure.
 set_tonemap_auto_exposure_speed ::
                                   (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tonemap_auto_exposure_speed cls arg1
@@ -3833,7 +3926,7 @@ set_tonemap_auto_exposure_speed cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemap_exposure #-}
 
--- | Default exposure for tonemap.
+-- | The default exposure used for tonemapping.
 bindEnvironment_set_tonemap_exposure :: MethodBind
 bindEnvironment_set_tonemap_exposure
   = unsafePerformIO $
@@ -3843,7 +3936,7 @@ bindEnvironment_set_tonemap_exposure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Default exposure for tonemap.
+-- | The default exposure used for tonemapping.
 set_tonemap_exposure ::
                        (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tonemap_exposure cls arg1
@@ -3857,7 +3950,7 @@ set_tonemap_exposure cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemap_white #-}
 
--- | White reference value for tonemap.
+-- | The white reference value for tonemapping. Only effective if the [member tonemap_mode] isn't set to [constant TONE_MAPPER_LINEAR].
 bindEnvironment_set_tonemap_white :: MethodBind
 bindEnvironment_set_tonemap_white
   = unsafePerformIO $
@@ -3867,7 +3960,7 @@ bindEnvironment_set_tonemap_white
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | White reference value for tonemap.
+-- | The white reference value for tonemapping. Only effective if the [member tonemap_mode] isn't set to [constant TONE_MAPPER_LINEAR].
 set_tonemap_white ::
                     (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tonemap_white cls arg1
@@ -3881,7 +3974,7 @@ set_tonemap_white cls arg1
 
 {-# NOINLINE bindEnvironment_set_tonemapper #-}
 
--- | Tonemapping mode.
+-- | The tonemapping mode to use. Tonemapping is the process that "converts" HDR values to be suitable for rendering on a LDR display. (Godot doesn't support rendering on HDR displays yet.)
 bindEnvironment_set_tonemapper :: MethodBind
 bindEnvironment_set_tonemapper
   = unsafePerformIO $
@@ -3891,7 +3984,7 @@ bindEnvironment_set_tonemapper
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Tonemapping mode.
+-- | The tonemapping mode to use. Tonemapping is the process that "converts" HDR values to be suitable for rendering on a LDR display. (Godot doesn't support rendering on HDR displays yet.)
 set_tonemapper ::
                  (Environment :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tonemapper cls arg1

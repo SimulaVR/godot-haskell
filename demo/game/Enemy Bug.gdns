@@ -1,8 +1,0 @@
-[gd_resource type="NativeScript" format=2]
-
-[ext_resource path="res://lib/libmyproject.gdnlib" type="GDNativeLibrary" id=1]
-
-[resource]
-resource_name = "EnemyBug"
-class_name = "EnemyBug"
-library = ExtResource( 1 )

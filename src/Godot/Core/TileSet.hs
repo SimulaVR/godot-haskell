@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TileSet
        (Godot.Core.TileSet._BITMASK_2X2, Godot.Core.TileSet._BITMASK_3X3,
         Godot.Core.TileSet._BIND_BOTTOMLEFT,
@@ -179,6 +180,8 @@ _forward_subtile_selection cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindTileSet__is_tile_bound #-}
 
+-- | Determines when the auto-tiler should consider two different auto-tile IDs to be bound together.
+--   				[b]Note:[/b] [code]neighbor_id[/code] will be [code]-1[/code] ([constant TileMap.INVALID_CELL]) when checking a tile against an empty neighbor tile.
 bindTileSet__is_tile_bound :: MethodBind
 bindTileSet__is_tile_bound
   = unsafePerformIO $
@@ -188,6 +191,8 @@ bindTileSet__is_tile_bound
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Determines when the auto-tiler should consider two different auto-tile IDs to be bound together.
+--   				[b]Note:[/b] [code]neighbor_id[/code] will be [code]-1[/code] ([constant TileMap.INVALID_CELL]) when checking a tile against an empty neighbor tile.
 _is_tile_bound ::
                  (TileSet :< cls, Object :< cls) => cls -> Int -> Int -> IO Bool
 _is_tile_bound cls arg1 arg2
@@ -200,7 +205,7 @@ _is_tile_bound cls arg1 arg2
 
 {-# NOINLINE bindTileSet_autotile_clear_bitmask_map #-}
 
--- | Clears all bitmask info of the autotile.
+-- | Clears all bitmask information of the autotile.
 bindTileSet_autotile_clear_bitmask_map :: MethodBind
 bindTileSet_autotile_clear_bitmask_map
   = unsafePerformIO $
@@ -210,7 +215,7 @@ bindTileSet_autotile_clear_bitmask_map
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears all bitmask info of the autotile.
+-- | Clears all bitmask information of the autotile.
 autotile_clear_bitmask_map ::
                              (TileSet :< cls, Object :< cls) => cls -> Int -> IO ()
 autotile_clear_bitmask_map cls arg1
@@ -225,7 +230,7 @@ autotile_clear_bitmask_map cls arg1
 {-# NOINLINE bindTileSet_autotile_get_bitmask #-}
 
 -- | Returns the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum TileSet.AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 bindTileSet_autotile_get_bitmask :: MethodBind
 bindTileSet_autotile_get_bitmask
   = unsafePerformIO $
@@ -236,7 +241,7 @@ bindTileSet_autotile_get_bitmask
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum TileSet.AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 autotile_get_bitmask ::
                        (TileSet :< cls, Object :< cls) => cls -> Int -> Vector2 -> IO Int
 autotile_get_bitmask cls arg1 arg2
@@ -250,7 +255,7 @@ autotile_get_bitmask cls arg1 arg2
 
 {-# NOINLINE bindTileSet_autotile_get_bitmask_mode #-}
 
--- | Returns the [enum TileSet.BitmaskMode] of the autotile.
+-- | Returns the [enum BitmaskMode] of the autotile.
 bindTileSet_autotile_get_bitmask_mode :: MethodBind
 bindTileSet_autotile_get_bitmask_mode
   = unsafePerformIO $
@@ -260,7 +265,7 @@ bindTileSet_autotile_get_bitmask_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [enum TileSet.BitmaskMode] of the autotile.
+-- | Returns the [enum BitmaskMode] of the autotile.
 autotile_get_bitmask_mode ::
                             (TileSet :< cls, Object :< cls) => cls -> Int -> IO Int
 autotile_get_bitmask_mode cls arg1
@@ -275,7 +280,7 @@ autotile_get_bitmask_mode cls arg1
 {-# NOINLINE bindTileSet_autotile_get_icon_coordinate #-}
 
 -- | Returns the subtile that's being used as an icon in an atlas/autotile given its coordinates.
---   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask info is incomplete. It will also be used to represent it in the TileSet editor.
+--   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask information is incomplete. It will also be used to represent it in the TileSet editor.
 bindTileSet_autotile_get_icon_coordinate :: MethodBind
 bindTileSet_autotile_get_icon_coordinate
   = unsafePerformIO $
@@ -286,7 +291,7 @@ bindTileSet_autotile_get_icon_coordinate
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the subtile that's being used as an icon in an atlas/autotile given its coordinates.
---   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask info is incomplete. It will also be used to represent it in the TileSet editor.
+--   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask information is incomplete. It will also be used to represent it in the TileSet editor.
 autotile_get_icon_coordinate ::
                                (TileSet :< cls, Object :< cls) => cls -> Int -> IO Vector2
 autotile_get_icon_coordinate cls arg1
@@ -448,7 +453,7 @@ autotile_get_z_index cls arg1 arg2
 {-# NOINLINE bindTileSet_autotile_set_bitmask #-}
 
 -- | Sets the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum TileSet.AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 bindTileSet_autotile_set_bitmask :: MethodBind
 bindTileSet_autotile_set_bitmask
   = unsafePerformIO $
@@ -459,7 +464,7 @@ bindTileSet_autotile_set_bitmask
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum TileSet.AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 autotile_set_bitmask ::
                        (TileSet :< cls, Object :< cls) =>
                        cls -> Int -> Vector2 -> Int -> IO ()
@@ -474,7 +479,7 @@ autotile_set_bitmask cls arg1 arg2 arg3
 
 {-# NOINLINE bindTileSet_autotile_set_bitmask_mode #-}
 
--- | Sets the [enum TileSet.BitmaskMode] of the autotile.
+-- | Sets the [enum BitmaskMode] of the autotile.
 bindTileSet_autotile_set_bitmask_mode :: MethodBind
 bindTileSet_autotile_set_bitmask_mode
   = unsafePerformIO $
@@ -484,7 +489,7 @@ bindTileSet_autotile_set_bitmask_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [enum TileSet.BitmaskMode] of the autotile.
+-- | Sets the [enum BitmaskMode] of the autotile.
 autotile_set_bitmask_mode ::
                             (TileSet :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 autotile_set_bitmask_mode cls arg1 arg2
@@ -499,7 +504,7 @@ autotile_set_bitmask_mode cls arg1 arg2
 {-# NOINLINE bindTileSet_autotile_set_icon_coordinate #-}
 
 -- | Sets the subtile that will be used as an icon in an atlas/autotile given its coordinates.
---   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask info is incomplete. It will also be used to represent it in the TileSet editor.
+--   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask information is incomplete. It will also be used to represent it in the TileSet editor.
 bindTileSet_autotile_set_icon_coordinate :: MethodBind
 bindTileSet_autotile_set_icon_coordinate
   = unsafePerformIO $
@@ -510,7 +515,7 @@ bindTileSet_autotile_set_icon_coordinate
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the subtile that will be used as an icon in an atlas/autotile given its coordinates.
---   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask info is incomplete. It will also be used to represent it in the TileSet editor.
+--   				The subtile defined as the icon will be used as a fallback when the atlas/autotile's bitmask information is incomplete. It will also be used to represent it in the TileSet editor.
 autotile_set_icon_coordinate ::
                                (TileSet :< cls, Object :< cls) => cls -> Int -> Vector2 -> IO ()
 autotile_set_icon_coordinate cls arg1 arg2
@@ -1188,7 +1193,17 @@ tile_get_shape_transform cls arg1 arg2
 
 {-# NOINLINE bindTileSet_tile_get_shapes #-}
 
--- | Returns an array of the tile's shapes.
+-- | Returns an array of dictionaries describing the tile's shapes.
+--   				[b]Dictionary structure in the array returned by this method:[/b]
+--   				[codeblock]
+--   				{
+--   				    "autotile_coord": Vector2,
+--   				    "one_way": bool,
+--   				    "one_way_margin": int,
+--   				    "shape": CollisionShape2D,
+--   				    "shape_transform": Transform2D,
+--   				}
+--   				[/codeblock]
 bindTileSet_tile_get_shapes :: MethodBind
 bindTileSet_tile_get_shapes
   = unsafePerformIO $
@@ -1198,7 +1213,17 @@ bindTileSet_tile_get_shapes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of the tile's shapes.
+-- | Returns an array of dictionaries describing the tile's shapes.
+--   				[b]Dictionary structure in the array returned by this method:[/b]
+--   				[codeblock]
+--   				{
+--   				    "autotile_coord": Vector2,
+--   				    "one_way": bool,
+--   				    "one_way_margin": int,
+--   				    "shape": CollisionShape2D,
+--   				    "shape_transform": Transform2D,
+--   				}
+--   				[/codeblock]
 tile_get_shapes ::
                   (TileSet :< cls, Object :< cls) => cls -> Int -> IO Array
 tile_get_shapes cls arg1
@@ -1258,7 +1283,7 @@ tile_get_texture_offset cls arg1
 
 {-# NOINLINE bindTileSet_tile_get_tile_mode #-}
 
--- | Returns the tile's [enum TileSet.TileMode].
+-- | Returns the tile's [enum TileMode].
 bindTileSet_tile_get_tile_mode :: MethodBind
 bindTileSet_tile_get_tile_mode
   = unsafePerformIO $
@@ -1268,7 +1293,7 @@ bindTileSet_tile_get_tile_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the tile's [enum TileSet.TileMode].
+-- | Returns the tile's [enum TileMode].
 tile_get_tile_mode ::
                      (TileSet :< cls, Object :< cls) => cls -> Int -> IO Int
 tile_get_tile_mode cls arg1
@@ -1281,7 +1306,7 @@ tile_get_tile_mode cls arg1
 
 {-# NOINLINE bindTileSet_tile_get_z_index #-}
 
--- | Returns the tile's z-index (drawing layer).
+-- | Returns the tile's Z index (drawing layer).
 bindTileSet_tile_get_z_index :: MethodBind
 bindTileSet_tile_get_z_index
   = unsafePerformIO $
@@ -1291,7 +1316,7 @@ bindTileSet_tile_get_z_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the tile's z-index (drawing layer).
+-- | Returns the tile's Z index (drawing layer).
 tile_get_z_index ::
                    (TileSet :< cls, Object :< cls) => cls -> Int -> IO Int
 tile_get_z_index cls arg1
@@ -1452,6 +1477,7 @@ tile_set_navigation_polygon_offset cls arg1 arg2
 {-# NOINLINE bindTileSet_tile_set_normal_map #-}
 
 -- | Sets the tile's normal map texture.
+--   				[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 bindTileSet_tile_set_normal_map :: MethodBind
 bindTileSet_tile_set_normal_map
   = unsafePerformIO $
@@ -1462,6 +1488,7 @@ bindTileSet_tile_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the tile's normal map texture.
+--   				[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
 tile_set_normal_map ::
                       (TileSet :< cls, Object :< cls) => cls -> Int -> Texture -> IO ()
 tile_set_normal_map cls arg1 arg2
@@ -1713,7 +1740,7 @@ tile_set_texture_offset cls arg1 arg2
 
 {-# NOINLINE bindTileSet_tile_set_tile_mode #-}
 
--- | Sets the tile's [enum TileSet.TileMode].
+-- | Sets the tile's [enum TileMode].
 bindTileSet_tile_set_tile_mode :: MethodBind
 bindTileSet_tile_set_tile_mode
   = unsafePerformIO $
@@ -1723,7 +1750,7 @@ bindTileSet_tile_set_tile_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the tile's [enum TileSet.TileMode].
+-- | Sets the tile's [enum TileMode].
 tile_set_tile_mode ::
                      (TileSet :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 tile_set_tile_mode cls arg1 arg2

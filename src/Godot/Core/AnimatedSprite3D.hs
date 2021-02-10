@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimatedSprite3D
        (Godot.Core.AnimatedSprite3D.sig_frame_changed,
         Godot.Core.AnimatedSprite3D._is_playing,
@@ -26,6 +27,8 @@ import Godot.Api.Types
 sig_frame_changed ::
                   Godot.Internal.Dispatch.Signal AnimatedSprite3D
 sig_frame_changed = Godot.Internal.Dispatch.Signal "frame_changed"
+
+instance NodeSignal AnimatedSprite3D "frame_changed" '[]
 
 {-# NOINLINE bindAnimatedSprite3D__is_playing #-}
 
@@ -170,7 +173,7 @@ get_sprite_frames cls
 
 {-# NOINLINE bindAnimatedSprite3D_is_playing #-}
 
--- | Returns [code]true[/code] if an animation if currently being played.
+-- | Returns [code]true[/code] if an animation is currently being played.
 bindAnimatedSprite3D_is_playing :: MethodBind
 bindAnimatedSprite3D_is_playing
   = unsafePerformIO $
@@ -180,7 +183,7 @@ bindAnimatedSprite3D_is_playing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if an animation if currently being played.
+-- | Returns [code]true[/code] if an animation is currently being played.
 is_playing ::
              (AnimatedSprite3D :< cls, Object :< cls) => cls -> IO Bool
 is_playing cls
@@ -193,7 +196,7 @@ is_playing cls
 
 {-# NOINLINE bindAnimatedSprite3D_play #-}
 
--- | Play the animation set in parameter. If no parameter is provided, the current animation is played.
+-- | Plays the animation named [code]anim[/code]. If no [code]anim[/code] is provided, the current animation is played.
 bindAnimatedSprite3D_play :: MethodBind
 bindAnimatedSprite3D_play
   = unsafePerformIO $
@@ -203,7 +206,7 @@ bindAnimatedSprite3D_play
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Play the animation set in parameter. If no parameter is provided, the current animation is played.
+-- | Plays the animation named [code]anim[/code]. If no [code]anim[/code] is provided, the current animation is played.
 play ::
        (AnimatedSprite3D :< cls, Object :< cls) =>
        cls -> GodotString -> IO ()
@@ -290,7 +293,7 @@ set_sprite_frames cls arg1
 
 {-# NOINLINE bindAnimatedSprite3D_stop #-}
 
--- | Stop the current animation (does not reset the frame counter).
+-- | Stops the current animation (does not reset the frame counter).
 bindAnimatedSprite3D_stop :: MethodBind
 bindAnimatedSprite3D_stop
   = unsafePerformIO $
@@ -300,7 +303,7 @@ bindAnimatedSprite3D_stop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stop the current animation (does not reset the frame counter).
+-- | Stops the current animation (does not reset the frame counter).
 stop :: (AnimatedSprite3D :< cls, Object :< cls) => cls -> IO ()
 stop cls
   = withVariantArray []

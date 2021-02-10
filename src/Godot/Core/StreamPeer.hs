@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.StreamPeer
        (Godot.Core.StreamPeer.get_16, Godot.Core.StreamPeer.get_32,
         Godot.Core.StreamPeer.get_64, Godot.Core.StreamPeer.get_8,
@@ -34,7 +35,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindStreamPeer_get_16 #-}
 
--- | Get a signed 16 bit value from the stream.
+-- | Gets a signed 16-bit value from the stream.
 bindStreamPeer_get_16 :: MethodBind
 bindStreamPeer_get_16
   = unsafePerformIO $
@@ -44,7 +45,7 @@ bindStreamPeer_get_16
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a signed 16 bit value from the stream.
+-- | Gets a signed 16-bit value from the stream.
 get_16 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_16 cls
   = withVariantArray []
@@ -55,7 +56,7 @@ get_16 cls
 
 {-# NOINLINE bindStreamPeer_get_32 #-}
 
--- | Get a signed 32 bit value from the stream.
+-- | Gets a signed 32-bit value from the stream.
 bindStreamPeer_get_32 :: MethodBind
 bindStreamPeer_get_32
   = unsafePerformIO $
@@ -65,7 +66,7 @@ bindStreamPeer_get_32
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a signed 32 bit value from the stream.
+-- | Gets a signed 32-bit value from the stream.
 get_32 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_32 cls
   = withVariantArray []
@@ -76,7 +77,7 @@ get_32 cls
 
 {-# NOINLINE bindStreamPeer_get_64 #-}
 
--- | Get a signed 64 bit value from the stream.
+-- | Gets a signed 64-bit value from the stream.
 bindStreamPeer_get_64 :: MethodBind
 bindStreamPeer_get_64
   = unsafePerformIO $
@@ -86,7 +87,7 @@ bindStreamPeer_get_64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a signed 64 bit value from the stream.
+-- | Gets a signed 64-bit value from the stream.
 get_64 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_64 cls
   = withVariantArray []
@@ -97,7 +98,7 @@ get_64 cls
 
 {-# NOINLINE bindStreamPeer_get_8 #-}
 
--- | Get a signed byte from the stream.
+-- | Gets a signed byte from the stream.
 bindStreamPeer_get_8 :: MethodBind
 bindStreamPeer_get_8
   = unsafePerformIO $
@@ -107,7 +108,7 @@ bindStreamPeer_get_8
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a signed byte from the stream.
+-- | Gets a signed byte from the stream.
 get_8 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_8 cls
   = withVariantArray []
@@ -117,7 +118,7 @@ get_8 cls
 
 {-# NOINLINE bindStreamPeer_get_available_bytes #-}
 
--- | Returns the amount of bytes this [code]StreamPeer[/code] has available.
+-- | Returns the amount of bytes this [StreamPeer] has available.
 bindStreamPeer_get_available_bytes :: MethodBind
 bindStreamPeer_get_available_bytes
   = unsafePerformIO $
@@ -127,7 +128,7 @@ bindStreamPeer_get_available_bytes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the amount of bytes this [code]StreamPeer[/code] has available.
+-- | Returns the amount of bytes this [StreamPeer] has available.
 get_available_bytes ::
                       (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_available_bytes cls
@@ -141,7 +142,7 @@ get_available_bytes cls
 
 {-# NOINLINE bindStreamPeer_get_data #-}
 
--- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the "bytes" argument. If not enough bytes are available, the function will block until the desired amount is received. This function returns two values, an Error code and a data array.
+-- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the [code]bytes[/code] argument. If not enough bytes are available, the function will block until the desired amount is received. This function returns two values, an [enum @GlobalScope.Error] code and a data array.
 bindStreamPeer_get_data :: MethodBind
 bindStreamPeer_get_data
   = unsafePerformIO $
@@ -151,7 +152,7 @@ bindStreamPeer_get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the "bytes" argument. If not enough bytes are available, the function will block until the desired amount is received. This function returns two values, an Error code and a data array.
+-- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the [code]bytes[/code] argument. If not enough bytes are available, the function will block until the desired amount is received. This function returns two values, an [enum @GlobalScope.Error] code and a data array.
 get_data ::
            (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO Array
 get_data cls arg1
@@ -163,7 +164,7 @@ get_data cls arg1
 
 {-# NOINLINE bindStreamPeer_get_double #-}
 
--- | Get a double-precision float from the stream.
+-- | Gets a double-precision float from the stream.
 bindStreamPeer_get_double :: MethodBind
 bindStreamPeer_get_double
   = unsafePerformIO $
@@ -173,7 +174,7 @@ bindStreamPeer_get_double
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a double-precision float from the stream.
+-- | Gets a double-precision float from the stream.
 get_double :: (StreamPeer :< cls, Object :< cls) => cls -> IO Float
 get_double cls
   = withVariantArray []
@@ -185,7 +186,7 @@ get_double cls
 
 {-# NOINLINE bindStreamPeer_get_float #-}
 
--- | Get a single-precision float from the stream.
+-- | Gets a single-precision float from the stream.
 bindStreamPeer_get_float :: MethodBind
 bindStreamPeer_get_float
   = unsafePerformIO $
@@ -195,7 +196,7 @@ bindStreamPeer_get_float
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a single-precision float from the stream.
+-- | Gets a single-precision float from the stream.
 get_float :: (StreamPeer :< cls, Object :< cls) => cls -> IO Float
 get_float cls
   = withVariantArray []
@@ -206,7 +207,7 @@ get_float cls
 
 {-# NOINLINE bindStreamPeer_get_partial_data #-}
 
--- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the "bytes" argument. If not enough bytes are available, the function will return how many were actually received. This function returns two values, an Error code, and a data array.
+-- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the "bytes" argument. If not enough bytes are available, the function will return how many were actually received. This function returns two values, an [enum @GlobalScope.Error] code, and a data array.
 bindStreamPeer_get_partial_data :: MethodBind
 bindStreamPeer_get_partial_data
   = unsafePerformIO $
@@ -216,7 +217,7 @@ bindStreamPeer_get_partial_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the "bytes" argument. If not enough bytes are available, the function will return how many were actually received. This function returns two values, an Error code, and a data array.
+-- | Returns a chunk data with the received bytes. The amount of bytes to be received can be requested in the "bytes" argument. If not enough bytes are available, the function will return how many were actually received. This function returns two values, an [enum @GlobalScope.Error] code, and a data array.
 get_partial_data ::
                    (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO Array
 get_partial_data cls arg1
@@ -229,7 +230,7 @@ get_partial_data cls arg1
 
 {-# NOINLINE bindStreamPeer_get_string #-}
 
--- | Get a string with byte-length [code]bytes[/code] from the stream. If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_string].
+-- | Gets a string with byte-length [code]bytes[/code] from the stream. If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_string].
 bindStreamPeer_get_string :: MethodBind
 bindStreamPeer_get_string
   = unsafePerformIO $
@@ -239,7 +240,7 @@ bindStreamPeer_get_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a string with byte-length [code]bytes[/code] from the stream. If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_string].
+-- | Gets a string with byte-length [code]bytes[/code] from the stream. If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_string].
 get_string ::
              (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_string cls arg1
@@ -252,7 +253,7 @@ get_string cls arg1
 
 {-# NOINLINE bindStreamPeer_get_u16 #-}
 
--- | Get an unsigned 16 bit value from the stream.
+-- | Gets an unsigned 16-bit value from the stream.
 bindStreamPeer_get_u16 :: MethodBind
 bindStreamPeer_get_u16
   = unsafePerformIO $
@@ -262,7 +263,7 @@ bindStreamPeer_get_u16
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get an unsigned 16 bit value from the stream.
+-- | Gets an unsigned 16-bit value from the stream.
 get_u16 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_u16 cls
   = withVariantArray []
@@ -273,7 +274,7 @@ get_u16 cls
 
 {-# NOINLINE bindStreamPeer_get_u32 #-}
 
--- | Get an unsigned 32 bit value from the stream.
+-- | Gets an unsigned 32-bit value from the stream.
 bindStreamPeer_get_u32 :: MethodBind
 bindStreamPeer_get_u32
   = unsafePerformIO $
@@ -283,7 +284,7 @@ bindStreamPeer_get_u32
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get an unsigned 32 bit value from the stream.
+-- | Gets an unsigned 32-bit value from the stream.
 get_u32 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_u32 cls
   = withVariantArray []
@@ -294,7 +295,7 @@ get_u32 cls
 
 {-# NOINLINE bindStreamPeer_get_u64 #-}
 
--- | Get an unsigned 64 bit value from the stream.
+-- | Gets an unsigned 64-bit value from the stream.
 bindStreamPeer_get_u64 :: MethodBind
 bindStreamPeer_get_u64
   = unsafePerformIO $
@@ -304,7 +305,7 @@ bindStreamPeer_get_u64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get an unsigned 64 bit value from the stream.
+-- | Gets an unsigned 64-bit value from the stream.
 get_u64 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_u64 cls
   = withVariantArray []
@@ -315,7 +316,7 @@ get_u64 cls
 
 {-# NOINLINE bindStreamPeer_get_u8 #-}
 
--- | Get an unsigned byte from the stream.
+-- | Gets an unsigned byte from the stream.
 bindStreamPeer_get_u8 :: MethodBind
 bindStreamPeer_get_u8
   = unsafePerformIO $
@@ -325,7 +326,7 @@ bindStreamPeer_get_u8
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get an unsigned byte from the stream.
+-- | Gets an unsigned byte from the stream.
 get_u8 :: (StreamPeer :< cls, Object :< cls) => cls -> IO Int
 get_u8 cls
   = withVariantArray []
@@ -336,7 +337,7 @@ get_u8 cls
 
 {-# NOINLINE bindStreamPeer_get_utf8_string #-}
 
--- | Get a utf8 string with byte-length [code]bytes[/code] from the stream (this decodes the string sent as utf8). If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_utf8_string].
+-- | Gets an UTF-8 string with byte-length [code]bytes[/code] from the stream (this decodes the string sent as UTF-8). If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_utf8_string].
 bindStreamPeer_get_utf8_string :: MethodBind
 bindStreamPeer_get_utf8_string
   = unsafePerformIO $
@@ -346,7 +347,7 @@ bindStreamPeer_get_utf8_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a utf8 string with byte-length [code]bytes[/code] from the stream (this decodes the string sent as utf8). If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_utf8_string].
+-- | Gets an UTF-8 string with byte-length [code]bytes[/code] from the stream (this decodes the string sent as UTF-8). If [code]bytes[/code] is negative (default) the length will be read from the stream using the reverse process of [method put_utf8_string].
 get_utf8_string ::
                   (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_utf8_string cls arg1
@@ -359,8 +360,8 @@ get_utf8_string cls arg1
 
 {-# NOINLINE bindStreamPeer_get_var #-}
 
--- | Get a Variant from the stream. When [code]allow_objects[/code] is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | Gets a Variant from the stream. If [code]allow_objects[/code] is [code]true[/code], decoding objects is allowed.
+--   				[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 bindStreamPeer_get_var :: MethodBind
 bindStreamPeer_get_var
   = unsafePerformIO $
@@ -370,8 +371,8 @@ bindStreamPeer_get_var
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get a Variant from the stream. When [code]allow_objects[/code] is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | Gets a Variant from the stream. If [code]allow_objects[/code] is [code]true[/code], decoding objects is allowed.
+--   				[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 get_var ::
           (StreamPeer :< cls, Object :< cls) =>
           cls -> Bool -> IO GodotVariant
@@ -384,7 +385,7 @@ get_var cls arg1
 
 {-# NOINLINE bindStreamPeer_is_big_endian_enabled #-}
 
--- | If [code]true[/code], this [code]StreamPeer[/code] will using big-endian format for encoding and decoding.
+-- | If [code]true[/code], this [StreamPeer] will using big-endian format for encoding and decoding.
 bindStreamPeer_is_big_endian_enabled :: MethodBind
 bindStreamPeer_is_big_endian_enabled
   = unsafePerformIO $
@@ -394,7 +395,7 @@ bindStreamPeer_is_big_endian_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [code]StreamPeer[/code] will using big-endian format for encoding and decoding.
+-- | If [code]true[/code], this [StreamPeer] will using big-endian format for encoding and decoding.
 is_big_endian_enabled ::
                         (StreamPeer :< cls, Object :< cls) => cls -> IO Bool
 is_big_endian_enabled cls
@@ -408,7 +409,7 @@ is_big_endian_enabled cls
 
 {-# NOINLINE bindStreamPeer_put_16 #-}
 
--- | Put a signed 16 bit value into the stream.
+-- | Puts a signed 16-bit value into the stream.
 bindStreamPeer_put_16 :: MethodBind
 bindStreamPeer_put_16
   = unsafePerformIO $
@@ -418,7 +419,7 @@ bindStreamPeer_put_16
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a signed 16 bit value into the stream.
+-- | Puts a signed 16-bit value into the stream.
 put_16 :: (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_16 cls arg1
   = withVariantArray [toVariant arg1]
@@ -429,7 +430,7 @@ put_16 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_32 #-}
 
--- | Put a signed 32 bit value into the stream.
+-- | Puts a signed 32-bit value into the stream.
 bindStreamPeer_put_32 :: MethodBind
 bindStreamPeer_put_32
   = unsafePerformIO $
@@ -439,7 +440,7 @@ bindStreamPeer_put_32
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a signed 32 bit value into the stream.
+-- | Puts a signed 32-bit value into the stream.
 put_32 :: (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_32 cls arg1
   = withVariantArray [toVariant arg1]
@@ -450,7 +451,7 @@ put_32 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_64 #-}
 
--- | Put a signed 64 bit value into the stream.
+-- | Puts a signed 64-bit value into the stream.
 bindStreamPeer_put_64 :: MethodBind
 bindStreamPeer_put_64
   = unsafePerformIO $
@@ -460,7 +461,7 @@ bindStreamPeer_put_64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a signed 64 bit value into the stream.
+-- | Puts a signed 64-bit value into the stream.
 put_64 :: (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_64 cls arg1
   = withVariantArray [toVariant arg1]
@@ -471,7 +472,7 @@ put_64 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_8 #-}
 
--- | Put a signed byte into the stream.
+-- | Puts a signed byte into the stream.
 bindStreamPeer_put_8 :: MethodBind
 bindStreamPeer_put_8
   = unsafePerformIO $
@@ -481,7 +482,7 @@ bindStreamPeer_put_8
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a signed byte into the stream.
+-- | Puts a signed byte into the stream.
 put_8 :: (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_8 cls arg1
   = withVariantArray [toVariant arg1]
@@ -491,7 +492,7 @@ put_8 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_data #-}
 
--- | Send a chunk of data through the connection, blocking if necessary until the data is done sending. This function returns an Error code.
+-- | Sends a chunk of data through the connection, blocking if necessary until the data is done sending. This function returns an [enum @GlobalScope.Error] code.
 bindStreamPeer_put_data :: MethodBind
 bindStreamPeer_put_data
   = unsafePerformIO $
@@ -501,7 +502,7 @@ bindStreamPeer_put_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Send a chunk of data through the connection, blocking if necessary until the data is done sending. This function returns an Error code.
+-- | Sends a chunk of data through the connection, blocking if necessary until the data is done sending. This function returns an [enum @GlobalScope.Error] code.
 put_data ::
            (StreamPeer :< cls, Object :< cls) =>
            cls -> PoolByteArray -> IO Int
@@ -514,7 +515,7 @@ put_data cls arg1
 
 {-# NOINLINE bindStreamPeer_put_double #-}
 
--- | Put a double-precision float into the stream.
+-- | Puts a double-precision float into the stream.
 bindStreamPeer_put_double :: MethodBind
 bindStreamPeer_put_double
   = unsafePerformIO $
@@ -524,7 +525,7 @@ bindStreamPeer_put_double
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a double-precision float into the stream.
+-- | Puts a double-precision float into the stream.
 put_double ::
              (StreamPeer :< cls, Object :< cls) => cls -> Float -> IO ()
 put_double cls arg1
@@ -537,7 +538,7 @@ put_double cls arg1
 
 {-# NOINLINE bindStreamPeer_put_float #-}
 
--- | Put a single-precision float into the stream.
+-- | Puts a single-precision float into the stream.
 bindStreamPeer_put_float :: MethodBind
 bindStreamPeer_put_float
   = unsafePerformIO $
@@ -547,7 +548,7 @@ bindStreamPeer_put_float
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a single-precision float into the stream.
+-- | Puts a single-precision float into the stream.
 put_float ::
             (StreamPeer :< cls, Object :< cls) => cls -> Float -> IO ()
 put_float cls arg1
@@ -559,7 +560,7 @@ put_float cls arg1
 
 {-# NOINLINE bindStreamPeer_put_partial_data #-}
 
--- | Send a chunk of data through the connection, if all the data could not be sent at once, only part of it will. This function returns two values, an Error code and an integer, describing how much data was actually sent.
+-- | Sends a chunk of data through the connection. If all the data could not be sent at once, only part of it will. This function returns two values, an [enum @GlobalScope.Error] code and an integer, describing how much data was actually sent.
 bindStreamPeer_put_partial_data :: MethodBind
 bindStreamPeer_put_partial_data
   = unsafePerformIO $
@@ -569,7 +570,7 @@ bindStreamPeer_put_partial_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Send a chunk of data through the connection, if all the data could not be sent at once, only part of it will. This function returns two values, an Error code and an integer, describing how much data was actually sent.
+-- | Sends a chunk of data through the connection. If all the data could not be sent at once, only part of it will. This function returns two values, an [enum @GlobalScope.Error] code and an integer, describing how much data was actually sent.
 put_partial_data ::
                    (StreamPeer :< cls, Object :< cls) =>
                    cls -> PoolByteArray -> IO Array
@@ -583,7 +584,11 @@ put_partial_data cls arg1
 
 {-# NOINLINE bindStreamPeer_put_string #-}
 
--- | Put a zero-terminated ascii string into the stream prepended by a 32 bits unsigned integer representing its size.
+-- | Puts a zero-terminated ASCII string into the stream prepended by a 32-bit unsigned integer representing its size.
+--   				Note: To put an ASCII string without prepending its size, you can use [method put_data]:
+--   				[codeblock]
+--   				put_data("Hello world".to_ascii())
+--   				[/codeblock]
 bindStreamPeer_put_string :: MethodBind
 bindStreamPeer_put_string
   = unsafePerformIO $
@@ -593,7 +598,11 @@ bindStreamPeer_put_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a zero-terminated ascii string into the stream prepended by a 32 bits unsigned integer representing its size.
+-- | Puts a zero-terminated ASCII string into the stream prepended by a 32-bit unsigned integer representing its size.
+--   				Note: To put an ASCII string without prepending its size, you can use [method put_data]:
+--   				[codeblock]
+--   				put_data("Hello world".to_ascii())
+--   				[/codeblock]
 put_string ::
              (StreamPeer :< cls, Object :< cls) => cls -> GodotString -> IO ()
 put_string cls arg1
@@ -606,7 +615,7 @@ put_string cls arg1
 
 {-# NOINLINE bindStreamPeer_put_u16 #-}
 
--- | Put an unsigned 16 bit value into the stream.
+-- | Puts an unsigned 16-bit value into the stream.
 bindStreamPeer_put_u16 :: MethodBind
 bindStreamPeer_put_u16
   = unsafePerformIO $
@@ -616,7 +625,7 @@ bindStreamPeer_put_u16
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put an unsigned 16 bit value into the stream.
+-- | Puts an unsigned 16-bit value into the stream.
 put_u16 ::
           (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_u16 cls arg1
@@ -628,7 +637,7 @@ put_u16 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_u32 #-}
 
--- | Put an unsigned 32 bit value into the stream.
+-- | Puts an unsigned 32-bit value into the stream.
 bindStreamPeer_put_u32 :: MethodBind
 bindStreamPeer_put_u32
   = unsafePerformIO $
@@ -638,7 +647,7 @@ bindStreamPeer_put_u32
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put an unsigned 32 bit value into the stream.
+-- | Puts an unsigned 32-bit value into the stream.
 put_u32 ::
           (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_u32 cls arg1
@@ -650,7 +659,7 @@ put_u32 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_u64 #-}
 
--- | Put an unsigned 64 bit value into the stream.
+-- | Puts an unsigned 64-bit value into the stream.
 bindStreamPeer_put_u64 :: MethodBind
 bindStreamPeer_put_u64
   = unsafePerformIO $
@@ -660,7 +669,7 @@ bindStreamPeer_put_u64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put an unsigned 64 bit value into the stream.
+-- | Puts an unsigned 64-bit value into the stream.
 put_u64 ::
           (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_u64 cls arg1
@@ -672,7 +681,7 @@ put_u64 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_u8 #-}
 
--- | Put an unsigned byte into the stream.
+-- | Puts an unsigned byte into the stream.
 bindStreamPeer_put_u8 :: MethodBind
 bindStreamPeer_put_u8
   = unsafePerformIO $
@@ -682,7 +691,7 @@ bindStreamPeer_put_u8
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put an unsigned byte into the stream.
+-- | Puts an unsigned byte into the stream.
 put_u8 :: (StreamPeer :< cls, Object :< cls) => cls -> Int -> IO ()
 put_u8 cls arg1
   = withVariantArray [toVariant arg1]
@@ -693,7 +702,11 @@ put_u8 cls arg1
 
 {-# NOINLINE bindStreamPeer_put_utf8_string #-}
 
--- | Put a zero-terminated utf8 string into the stream prepended by a 32 bits unsigned integer representing its size.
+-- | Puts a zero-terminated UTF-8 string into the stream prepended by a 32 bits unsigned integer representing its size.
+--   				Note: To put an UTF-8 string without prepending its size, you can use [method put_data]:
+--   				[codeblock]
+--   				put_data("Hello world".to_utf8())
+--   				[/codeblock]
 bindStreamPeer_put_utf8_string :: MethodBind
 bindStreamPeer_put_utf8_string
   = unsafePerformIO $
@@ -703,7 +716,11 @@ bindStreamPeer_put_utf8_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a zero-terminated utf8 string into the stream prepended by a 32 bits unsigned integer representing its size.
+-- | Puts a zero-terminated UTF-8 string into the stream prepended by a 32 bits unsigned integer representing its size.
+--   				Note: To put an UTF-8 string without prepending its size, you can use [method put_data]:
+--   				[codeblock]
+--   				put_data("Hello world".to_utf8())
+--   				[/codeblock]
 put_utf8_string ::
                   (StreamPeer :< cls, Object :< cls) => cls -> GodotString -> IO ()
 put_utf8_string cls arg1
@@ -716,7 +733,7 @@ put_utf8_string cls arg1
 
 {-# NOINLINE bindStreamPeer_put_var #-}
 
--- | Put a Variant into the stream. When [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
+-- | Puts a Variant into the stream. If [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
 bindStreamPeer_put_var :: MethodBind
 bindStreamPeer_put_var
   = unsafePerformIO $
@@ -726,7 +743,7 @@ bindStreamPeer_put_var
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Put a Variant into the stream. When [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
+-- | Puts a Variant into the stream. If [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
 put_var ::
           (StreamPeer :< cls, Object :< cls) =>
           cls -> GodotVariant -> Bool -> IO ()
@@ -739,7 +756,7 @@ put_var cls arg1 arg2
 
 {-# NOINLINE bindStreamPeer_set_big_endian #-}
 
--- | If [code]true[/code], this [code]StreamPeer[/code] will using big-endian format for encoding and decoding.
+-- | If [code]true[/code], this [StreamPeer] will using big-endian format for encoding and decoding.
 bindStreamPeer_set_big_endian :: MethodBind
 bindStreamPeer_set_big_endian
   = unsafePerformIO $
@@ -749,7 +766,7 @@ bindStreamPeer_set_big_endian
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [code]StreamPeer[/code] will using big-endian format for encoding and decoding.
+-- | If [code]true[/code], this [StreamPeer] will using big-endian format for encoding and decoding.
 set_big_endian ::
                  (StreamPeer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_big_endian cls arg1

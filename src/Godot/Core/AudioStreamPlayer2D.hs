@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioStreamPlayer2D
        (Godot.Core.AudioStreamPlayer2D.sig_finished,
         Godot.Core.AudioStreamPlayer2D._bus_layout_changed,
@@ -40,6 +41,8 @@ import Godot.Api.Types
 -- | Emitted when the audio stops playing.
 sig_finished :: Godot.Internal.Dispatch.Signal AudioStreamPlayer2D
 sig_finished = Godot.Internal.Dispatch.Signal "finished"
+
+instance NodeSignal AudioStreamPlayer2D "finished" '[]
 
 {-# NOINLINE bindAudioStreamPlayer2D__bus_layout_changed #-}
 
@@ -207,7 +210,7 @@ get_max_distance cls
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_pitch_scale #-}
 
--- | Changes the pitch and the tempo of the audio.
+-- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
 bindAudioStreamPlayer2D_get_pitch_scale :: MethodBind
 bindAudioStreamPlayer2D_get_pitch_scale
   = unsafePerformIO $
@@ -217,7 +220,7 @@ bindAudioStreamPlayer2D_get_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the pitch and the tempo of the audio.
+-- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
 get_pitch_scale ::
                   (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Float
 get_pitch_scale cls
@@ -281,6 +284,7 @@ get_stream cls
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_stream_paused #-}
 
+-- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
 bindAudioStreamPlayer2D_get_stream_paused :: MethodBind
 bindAudioStreamPlayer2D_get_stream_paused
   = unsafePerformIO $
@@ -290,6 +294,7 @@ bindAudioStreamPlayer2D_get_stream_paused
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
 get_stream_paused ::
                     (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Bool
 get_stream_paused cls
@@ -303,6 +308,7 @@ get_stream_paused cls
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_stream_playback #-}
 
+-- | Returns the [AudioStreamPlayback] object associated with this [AudioStreamPlayer2D].
 bindAudioStreamPlayer2D_get_stream_playback :: MethodBind
 bindAudioStreamPlayer2D_get_stream_playback
   = unsafePerformIO $
@@ -312,6 +318,7 @@ bindAudioStreamPlayer2D_get_stream_playback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [AudioStreamPlayback] object associated with this [AudioStreamPlayer2D].
 get_stream_playback ::
                       (AudioStreamPlayer2D :< cls, Object :< cls) =>
                       cls -> IO AudioStreamPlayback
@@ -350,7 +357,7 @@ get_volume_db cls
 
 {-# NOINLINE bindAudioStreamPlayer2D_is_autoplay_enabled #-}
 
--- | If [code]true[/code], audio plays when added to scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], audio plays when added to scene tree.
 bindAudioStreamPlayer2D_is_autoplay_enabled :: MethodBind
 bindAudioStreamPlayer2D_is_autoplay_enabled
   = unsafePerformIO $
@@ -360,7 +367,7 @@ bindAudioStreamPlayer2D_is_autoplay_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio plays when added to scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], audio plays when added to scene tree.
 is_autoplay_enabled ::
                       (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Bool
 is_autoplay_enabled cls
@@ -398,7 +405,7 @@ is_playing cls
 
 {-# NOINLINE bindAudioStreamPlayer2D_play #-}
 
--- | Plays the audio from the given position 'from_position', in seconds.
+-- | Plays the audio from the given position [code]from_position[/code], in seconds.
 bindAudioStreamPlayer2D_play :: MethodBind
 bindAudioStreamPlayer2D_play
   = unsafePerformIO $
@@ -408,7 +415,7 @@ bindAudioStreamPlayer2D_play
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Plays the audio from the given position 'from_position', in seconds.
+-- | Plays the audio from the given position [code]from_position[/code], in seconds.
 play ::
        (AudioStreamPlayer2D :< cls, Object :< cls) =>
        cls -> Float -> IO ()
@@ -495,7 +502,7 @@ set_attenuation cls arg1
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_autoplay #-}
 
--- | If [code]true[/code], audio plays when added to scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], audio plays when added to scene tree.
 bindAudioStreamPlayer2D_set_autoplay :: MethodBind
 bindAudioStreamPlayer2D_set_autoplay
   = unsafePerformIO $
@@ -505,7 +512,7 @@ bindAudioStreamPlayer2D_set_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio plays when added to scene tree. Default value: [code]false[/code].
+-- | If [code]true[/code], audio plays when added to scene tree.
 set_autoplay ::
                (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autoplay cls arg1
@@ -568,7 +575,7 @@ set_max_distance cls arg1
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_pitch_scale #-}
 
--- | Changes the pitch and the tempo of the audio.
+-- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
 bindAudioStreamPlayer2D_set_pitch_scale :: MethodBind
 bindAudioStreamPlayer2D_set_pitch_scale
   = unsafePerformIO $
@@ -578,7 +585,7 @@ bindAudioStreamPlayer2D_set_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the pitch and the tempo of the audio.
+-- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
 set_pitch_scale ::
                   (AudioStreamPlayer2D :< cls, Object :< cls) =>
                   cls -> Float -> IO ()
@@ -618,6 +625,7 @@ set_stream cls arg1
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_stream_paused #-}
 
+-- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
 bindAudioStreamPlayer2D_set_stream_paused :: MethodBind
 bindAudioStreamPlayer2D_set_stream_paused
   = unsafePerformIO $
@@ -627,6 +635,7 @@ bindAudioStreamPlayer2D_set_stream_paused
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
 set_stream_paused ::
                     (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_stream_paused cls arg1

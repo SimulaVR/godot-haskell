@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SurfaceTool
        (Godot.Core.SurfaceTool.add_bones,
         Godot.Core.SurfaceTool.add_color, Godot.Core.SurfaceTool.add_index,
@@ -29,7 +30,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindSurfaceTool_add_bones #-}
 
--- | Add an array of bones for the next Vertex to use. Array must contain 4 integers.
+-- | Adds an array of bones for the next vertex to use. [code]bones[/code] must contain 4 integers.
 bindSurfaceTool_add_bones :: MethodBind
 bindSurfaceTool_add_bones
   = unsafePerformIO $
@@ -39,7 +40,7 @@ bindSurfaceTool_add_bones
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add an array of bones for the next Vertex to use. Array must contain 4 integers.
+-- | Adds an array of bones for the next vertex to use. [code]bones[/code] must contain 4 integers.
 add_bones ::
             (SurfaceTool :< cls, Object :< cls) => cls -> PoolIntArray -> IO ()
 add_bones cls arg1
@@ -52,7 +53,7 @@ add_bones cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_color #-}
 
--- | Specify a [Color] for the next Vertex to use.
+-- | Specifies a [Color] for the next vertex to use.
 bindSurfaceTool_add_color :: MethodBind
 bindSurfaceTool_add_color
   = unsafePerformIO $
@@ -62,7 +63,7 @@ bindSurfaceTool_add_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify a [Color] for the next Vertex to use.
+-- | Specifies a [Color] for the next vertex to use.
 add_color ::
             (SurfaceTool :< cls, Object :< cls) => cls -> Color -> IO ()
 add_color cls arg1
@@ -75,7 +76,7 @@ add_color cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_index #-}
 
--- | Adds an index to index array if you are using indexed Vertices. Does not need to be called before adding Vertex.
+-- | Adds an index to index array if you are using indexed vertices. Does not need to be called before adding vertices.
 bindSurfaceTool_add_index :: MethodBind
 bindSurfaceTool_add_index
   = unsafePerformIO $
@@ -85,7 +86,7 @@ bindSurfaceTool_add_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an index to index array if you are using indexed Vertices. Does not need to be called before adding Vertex.
+-- | Adds an index to index array if you are using indexed vertices. Does not need to be called before adding vertices.
 add_index ::
             (SurfaceTool :< cls, Object :< cls) => cls -> Int -> IO ()
 add_index cls arg1
@@ -98,7 +99,7 @@ add_index cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_normal #-}
 
--- | Specify a normal for the next Vertex to use.
+-- | Specifies a normal for the next vertex to use.
 bindSurfaceTool_add_normal :: MethodBind
 bindSurfaceTool_add_normal
   = unsafePerformIO $
@@ -108,7 +109,7 @@ bindSurfaceTool_add_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify a normal for the next Vertex to use.
+-- | Specifies a normal for the next vertex to use.
 add_normal ::
              (SurfaceTool :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 add_normal cls arg1
@@ -121,7 +122,7 @@ add_normal cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_smooth_group #-}
 
--- | Specify whether current Vertex (if using only Vertex arrays) or current index (if also using index arrays) should utilize smooth normals for normal calculation.
+-- | Specifies whether the current vertex (if using only vertex arrays) or current index (if also using index arrays) should use smooth normals for normal calculation.
 bindSurfaceTool_add_smooth_group :: MethodBind
 bindSurfaceTool_add_smooth_group
   = unsafePerformIO $
@@ -131,7 +132,7 @@ bindSurfaceTool_add_smooth_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify whether current Vertex (if using only Vertex arrays) or current index (if also using index arrays) should utilize smooth normals for normal calculation.
+-- | Specifies whether the current vertex (if using only vertex arrays) or current index (if also using index arrays) should use smooth normals for normal calculation.
 add_smooth_group ::
                    (SurfaceTool :< cls, Object :< cls) => cls -> Bool -> IO ()
 add_smooth_group cls arg1
@@ -145,7 +146,7 @@ add_smooth_group cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_tangent #-}
 
--- | Specify a Tangent for the next Vertex to use.
+-- | Specifies a tangent for the next vertex to use.
 bindSurfaceTool_add_tangent :: MethodBind
 bindSurfaceTool_add_tangent
   = unsafePerformIO $
@@ -155,7 +156,7 @@ bindSurfaceTool_add_tangent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify a Tangent for the next Vertex to use.
+-- | Specifies a tangent for the next vertex to use.
 add_tangent ::
               (SurfaceTool :< cls, Object :< cls) => cls -> Plane -> IO ()
 add_tangent cls arg1
@@ -168,8 +169,8 @@ add_tangent cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_triangle_fan #-}
 
--- | Insert a triangle fan made of array data into [Mesh] being constructed.
---   				Requires primitive type be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Inserts a triangle fan made of array data into [Mesh] being constructed.
+--   				Requires the primitive type be set to [constant Mesh.PRIMITIVE_TRIANGLES].
 bindSurfaceTool_add_triangle_fan :: MethodBind
 bindSurfaceTool_add_triangle_fan
   = unsafePerformIO $
@@ -179,8 +180,8 @@ bindSurfaceTool_add_triangle_fan
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Insert a triangle fan made of array data into [Mesh] being constructed.
---   				Requires primitive type be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Inserts a triangle fan made of array data into [Mesh] being constructed.
+--   				Requires the primitive type be set to [constant Mesh.PRIMITIVE_TRIANGLES].
 add_triangle_fan ::
                    (SurfaceTool :< cls, Object :< cls) =>
                    cls ->
@@ -201,7 +202,7 @@ add_triangle_fan cls arg1 arg2 arg3 arg4 arg5 arg6
 
 {-# NOINLINE bindSurfaceTool_add_uv #-}
 
--- | Specify UV Coordinate for next Vertex to use.
+-- | Specifies a set of UV coordinates to use for the next vertex.
 bindSurfaceTool_add_uv :: MethodBind
 bindSurfaceTool_add_uv
   = unsafePerformIO $
@@ -211,7 +212,7 @@ bindSurfaceTool_add_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify UV Coordinate for next Vertex to use.
+-- | Specifies a set of UV coordinates to use for the next vertex.
 add_uv ::
          (SurfaceTool :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 add_uv cls arg1
@@ -223,7 +224,7 @@ add_uv cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_uv2 #-}
 
--- | Specify an optional second set of UV coordinates for next Vertex to use.
+-- | Specifies an optional second set of UV coordinates to use for the next vertex.
 bindSurfaceTool_add_uv2 :: MethodBind
 bindSurfaceTool_add_uv2
   = unsafePerformIO $
@@ -233,7 +234,7 @@ bindSurfaceTool_add_uv2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify an optional second set of UV coordinates for next Vertex to use.
+-- | Specifies an optional second set of UV coordinates to use for the next vertex.
 add_uv2 ::
           (SurfaceTool :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 add_uv2 cls arg1
@@ -245,7 +246,7 @@ add_uv2 cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_vertex #-}
 
--- | Specify position of current Vertex. Should be called after specifying other vertex properties (e.g. Color, UV).
+-- | Specifies the position of current vertex. Should be called after specifying other vertex properties (e.g. Color, UV).
 bindSurfaceTool_add_vertex :: MethodBind
 bindSurfaceTool_add_vertex
   = unsafePerformIO $
@@ -255,7 +256,7 @@ bindSurfaceTool_add_vertex
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify position of current Vertex. Should be called after specifying other vertex properties (e.g. Color, UV).
+-- | Specifies the position of current vertex. Should be called after specifying other vertex properties (e.g. Color, UV).
 add_vertex ::
              (SurfaceTool :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 add_vertex cls arg1
@@ -268,7 +269,7 @@ add_vertex cls arg1
 
 {-# NOINLINE bindSurfaceTool_add_weights #-}
 
--- | Specify weight values for next Vertex to use. Array must contain 4 values.
+-- | Specifies weight values for next vertex to use. [code]weights[/code] must contain 4 values.
 bindSurfaceTool_add_weights :: MethodBind
 bindSurfaceTool_add_weights
   = unsafePerformIO $
@@ -278,7 +279,7 @@ bindSurfaceTool_add_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify weight values for next Vertex to use. Array must contain 4 values.
+-- | Specifies weight values for next vertex to use. [code]weights[/code] must contain 4 values.
 add_weights ::
               (SurfaceTool :< cls, Object :< cls) =>
               cls -> PoolRealArray -> IO ()
@@ -316,7 +317,7 @@ append_from cls arg1 arg2 arg3
 
 {-# NOINLINE bindSurfaceTool_begin #-}
 
--- | Called before adding any Vertices. Takes the primitive type as an argument (e.g. [constant Mesh.PRIMITIVE_TRIANGLES]).
+-- | Called before adding any vertices. Takes the primitive type as an argument (e.g. [constant Mesh.PRIMITIVE_TRIANGLES]).
 bindSurfaceTool_begin :: MethodBind
 bindSurfaceTool_begin
   = unsafePerformIO $
@@ -326,7 +327,7 @@ bindSurfaceTool_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called before adding any Vertices. Takes the primitive type as an argument (e.g. [constant Mesh.PRIMITIVE_TRIANGLES]).
+-- | Called before adding any vertices. Takes the primitive type as an argument (e.g. [constant Mesh.PRIMITIVE_TRIANGLES]).
 begin :: (SurfaceTool :< cls, Object :< cls) => cls -> Int -> IO ()
 begin cls arg1
   = withVariantArray [toVariant arg1]
@@ -359,6 +360,7 @@ clear cls
 {-# NOINLINE bindSurfaceTool_commit #-}
 
 -- | Returns a constructed [ArrayMesh] from current information passed in. If an existing [ArrayMesh] is passed in as an argument, will add an extra surface to the existing [ArrayMesh].
+--   				Default flag is [constant Mesh.ARRAY_COMPRESS_DEFAULT]. See [code]ARRAY_COMPRESS_*[/code] constants in [enum Mesh.ArrayFormat] for other flags.
 bindSurfaceTool_commit :: MethodBind
 bindSurfaceTool_commit
   = unsafePerformIO $
@@ -369,6 +371,7 @@ bindSurfaceTool_commit
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a constructed [ArrayMesh] from current information passed in. If an existing [ArrayMesh] is passed in as an argument, will add an extra surface to the existing [ArrayMesh].
+--   				Default flag is [constant Mesh.ARRAY_COMPRESS_DEFAULT]. See [code]ARRAY_COMPRESS_*[/code] constants in [enum Mesh.ArrayFormat] for other flags.
 commit ::
          (SurfaceTool :< cls, Object :< cls) =>
          cls -> ArrayMesh -> Int -> IO ArrayMesh
@@ -381,6 +384,7 @@ commit cls arg1 arg2
 
 {-# NOINLINE bindSurfaceTool_commit_to_arrays #-}
 
+-- | Commits the data to the same format used by [method ArrayMesh.add_surface_from_arrays]. This way you can further process the mesh data using the [ArrayMesh] API.
 bindSurfaceTool_commit_to_arrays :: MethodBind
 bindSurfaceTool_commit_to_arrays
   = unsafePerformIO $
@@ -390,6 +394,7 @@ bindSurfaceTool_commit_to_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Commits the data to the same format used by [method ArrayMesh.add_surface_from_arrays]. This way you can further process the mesh data using the [ArrayMesh] API.
 commit_to_arrays ::
                    (SurfaceTool :< cls, Object :< cls) => cls -> IO Array
 commit_to_arrays cls
@@ -426,6 +431,7 @@ create_from cls arg1 arg2
 
 {-# NOINLINE bindSurfaceTool_create_from_blend_shape #-}
 
+-- | Creates a vertex array from the specified blend shape of an existing [Mesh]. This can be used to extract a specific pose from a blend shape.
 bindSurfaceTool_create_from_blend_shape :: MethodBind
 bindSurfaceTool_create_from_blend_shape
   = unsafePerformIO $
@@ -435,6 +441,7 @@ bindSurfaceTool_create_from_blend_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a vertex array from the specified blend shape of an existing [Mesh]. This can be used to extract a specific pose from a blend shape.
 create_from_blend_shape ::
                           (SurfaceTool :< cls, Object :< cls) =>
                           cls -> Mesh -> Int -> GodotString -> IO ()
@@ -449,7 +456,7 @@ create_from_blend_shape cls arg1 arg2 arg3
 
 {-# NOINLINE bindSurfaceTool_deindex #-}
 
--- | Removes index array by expanding Vertex array.
+-- | Removes the index array by expanding the vertex array.
 bindSurfaceTool_deindex :: MethodBind
 bindSurfaceTool_deindex
   = unsafePerformIO $
@@ -459,7 +466,7 @@ bindSurfaceTool_deindex
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes index array by expanding Vertex array.
+-- | Removes the index array by expanding the vertex array.
 deindex :: (SurfaceTool :< cls, Object :< cls) => cls -> IO ()
 deindex cls
   = withVariantArray []
@@ -470,9 +477,8 @@ deindex cls
 
 {-# NOINLINE bindSurfaceTool_generate_normals #-}
 
--- | Generates normals from Vertices so you do not have to do it manually.
---   				Setting [code]flip[/code] to [code]true[/code] inverts the resulting normals.
---   				Requires primitive type to be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Generates normals from vertices so you do not have to do it manually. If [code]flip[/code] is [code]true[/code], the resulting normals will be inverted.
+--   				Requires the primitive type to be set to [constant Mesh.PRIMITIVE_TRIANGLES].
 bindSurfaceTool_generate_normals :: MethodBind
 bindSurfaceTool_generate_normals
   = unsafePerformIO $
@@ -482,9 +488,8 @@ bindSurfaceTool_generate_normals
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates normals from Vertices so you do not have to do it manually.
---   				Setting [code]flip[/code] to [code]true[/code] inverts the resulting normals.
---   				Requires primitive type to be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Generates normals from vertices so you do not have to do it manually. If [code]flip[/code] is [code]true[/code], the resulting normals will be inverted.
+--   				Requires the primitive type to be set to [constant Mesh.PRIMITIVE_TRIANGLES].
 generate_normals ::
                    (SurfaceTool :< cls, Object :< cls) => cls -> Bool -> IO ()
 generate_normals cls arg1
@@ -498,8 +503,7 @@ generate_normals cls arg1
 
 {-# NOINLINE bindSurfaceTool_generate_tangents #-}
 
--- | Generates a tangent vector for each vertex.
---   				Requires that each vertex have UVs and normals set already.
+-- | Generates a tangent vector for each vertex. Requires that each vertex have UVs and normals set already.
 bindSurfaceTool_generate_tangents :: MethodBind
 bindSurfaceTool_generate_tangents
   = unsafePerformIO $
@@ -509,8 +513,7 @@ bindSurfaceTool_generate_tangents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates a tangent vector for each vertex.
---   				Requires that each vertex have UVs and normals set already.
+-- | Generates a tangent vector for each vertex. Requires that each vertex have UVs and normals set already.
 generate_tangents ::
                     (SurfaceTool :< cls, Object :< cls) => cls -> IO ()
 generate_tangents cls
@@ -524,7 +527,7 @@ generate_tangents cls
 
 {-# NOINLINE bindSurfaceTool_index #-}
 
--- | Shrinks Vertex array by creating an index array. Avoids reusing Vertices.
+-- | Shrinks the vertex array by creating an index array (avoids reusing vertices).
 bindSurfaceTool_index :: MethodBind
 bindSurfaceTool_index
   = unsafePerformIO $
@@ -534,7 +537,7 @@ bindSurfaceTool_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shrinks Vertex array by creating an index array. Avoids reusing Vertices.
+-- | Shrinks the vertex array by creating an index array (avoids reusing vertices).
 index :: (SurfaceTool :< cls, Object :< cls) => cls -> IO ()
 index cls
   = withVariantArray []

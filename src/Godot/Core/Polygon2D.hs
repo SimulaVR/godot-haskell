@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Polygon2D
        (Godot.Core.Polygon2D._get_bones, Godot.Core.Polygon2D._set_bones,
         Godot.Core.Polygon2D._skeleton_bone_setup_changed,
@@ -111,6 +112,7 @@ _skeleton_bone_setup_changed cls
 
 {-# NOINLINE bindPolygon2D_add_bone #-}
 
+-- | Adds a bone with the specified [code]path[/code] and [code]weights[/code].
 bindPolygon2D_add_bone :: MethodBind
 bindPolygon2D_add_bone
   = unsafePerformIO $
@@ -120,6 +122,7 @@ bindPolygon2D_add_bone
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a bone with the specified [code]path[/code] and [code]weights[/code].
 add_bone ::
            (Polygon2D :< cls, Object :< cls) =>
            cls -> NodePath -> PoolRealArray -> IO ()
@@ -132,6 +135,7 @@ add_bone cls arg1 arg2
 
 {-# NOINLINE bindPolygon2D_clear_bones #-}
 
+-- | Removes all bones from this [Polygon2D].
 bindPolygon2D_clear_bones :: MethodBind
 bindPolygon2D_clear_bones
   = unsafePerformIO $
@@ -141,6 +145,7 @@ bindPolygon2D_clear_bones
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes all bones from this [Polygon2D].
 clear_bones :: (Polygon2D :< cls, Object :< cls) => cls -> IO ()
 clear_bones cls
   = withVariantArray []
@@ -152,6 +157,7 @@ clear_bones cls
 
 {-# NOINLINE bindPolygon2D_erase_bone #-}
 
+-- | Removes the specified bone from this [Polygon2D].
 bindPolygon2D_erase_bone :: MethodBind
 bindPolygon2D_erase_bone
   = unsafePerformIO $
@@ -161,6 +167,7 @@ bindPolygon2D_erase_bone
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes the specified bone from this [Polygon2D].
 erase_bone ::
              (Polygon2D :< cls, Object :< cls) => cls -> Int -> IO ()
 erase_bone cls arg1
@@ -172,7 +179,7 @@ erase_bone cls arg1
 
 {-# NOINLINE bindPolygon2D_get_antialiased #-}
 
--- | If [code]true[/code], polygon edges will be anti-aliased. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon edges will be anti-aliased.
 bindPolygon2D_get_antialiased :: MethodBind
 bindPolygon2D_get_antialiased
   = unsafePerformIO $
@@ -182,7 +189,7 @@ bindPolygon2D_get_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], polygon edges will be anti-aliased. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon edges will be anti-aliased.
 get_antialiased ::
                   (Polygon2D :< cls, Object :< cls) => cls -> IO Bool
 get_antialiased cls
@@ -195,6 +202,7 @@ get_antialiased cls
 
 {-# NOINLINE bindPolygon2D_get_bone_count #-}
 
+-- | Returns the number of bones in this [Polygon2D].
 bindPolygon2D_get_bone_count :: MethodBind
 bindPolygon2D_get_bone_count
   = unsafePerformIO $
@@ -204,6 +212,7 @@ bindPolygon2D_get_bone_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of bones in this [Polygon2D].
 get_bone_count ::
                  (Polygon2D :< cls, Object :< cls) => cls -> IO Int
 get_bone_count cls
@@ -216,6 +225,7 @@ get_bone_count cls
 
 {-# NOINLINE bindPolygon2D_get_bone_path #-}
 
+-- | Returns the path to the node associated with the specified bone.
 bindPolygon2D_get_bone_path :: MethodBind
 bindPolygon2D_get_bone_path
   = unsafePerformIO $
@@ -225,6 +235,7 @@ bindPolygon2D_get_bone_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the path to the node associated with the specified bone.
 get_bone_path ::
                 (Polygon2D :< cls, Object :< cls) => cls -> Int -> IO NodePath
 get_bone_path cls arg1
@@ -237,6 +248,7 @@ get_bone_path cls arg1
 
 {-# NOINLINE bindPolygon2D_get_bone_weights #-}
 
+-- | Returns the height values of the specified bone.
 bindPolygon2D_get_bone_weights :: MethodBind
 bindPolygon2D_get_bone_weights
   = unsafePerformIO $
@@ -246,6 +258,7 @@ bindPolygon2D_get_bone_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the height values of the specified bone.
 get_bone_weights ::
                    (Polygon2D :< cls, Object :< cls) => cls -> Int -> IO PoolRealArray
 get_bone_weights cls arg1
@@ -301,7 +314,7 @@ get_internal_vertex_count cls
 
 {-# NOINLINE bindPolygon2D_get_invert #-}
 
--- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code].
 bindPolygon2D_get_invert :: MethodBind
 bindPolygon2D_get_invert
   = unsafePerformIO $
@@ -311,7 +324,7 @@ bindPolygon2D_get_invert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code].
 get_invert :: (Polygon2D :< cls, Object :< cls) => cls -> IO Bool
 get_invert cls
   = withVariantArray []
@@ -322,7 +335,7 @@ get_invert cls
 
 {-# NOINLINE bindPolygon2D_get_invert_border #-}
 
--- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error. Default value: [code]100[/code].
+-- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error.
 bindPolygon2D_get_invert_border :: MethodBind
 bindPolygon2D_get_invert_border
   = unsafePerformIO $
@@ -332,7 +345,7 @@ bindPolygon2D_get_invert_border
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error. Default value: [code]100[/code].
+-- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error.
 get_invert_border ::
                     (Polygon2D :< cls, Object :< cls) => cls -> IO Float
 get_invert_border cls
@@ -367,7 +380,8 @@ get_offset cls
 
 {-# NOINLINE bindPolygon2D_get_polygon #-}
 
--- | The polygon's list of vertices. The final point will be connected to the first. Note that this returns a copy of the [PoolVector2Array] rather than a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first.
+--   			[b]Note:[/b] This returns a copy of the [PoolVector2Array] rather than a reference.
 bindPolygon2D_get_polygon :: MethodBind
 bindPolygon2D_get_polygon
   = unsafePerformIO $
@@ -377,7 +391,8 @@ bindPolygon2D_get_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The polygon's list of vertices. The final point will be connected to the first. Note that this returns a copy of the [PoolVector2Array] rather than a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first.
+--   			[b]Note:[/b] This returns a copy of the [PoolVector2Array] rather than a reference.
 get_polygon ::
               (Polygon2D :< cls, Object :< cls) => cls -> IO PoolVector2Array
 get_polygon cls
@@ -594,7 +609,7 @@ get_vertex_colors cls
 
 {-# NOINLINE bindPolygon2D_set_antialiased #-}
 
--- | If [code]true[/code], polygon edges will be anti-aliased. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon edges will be anti-aliased.
 bindPolygon2D_set_antialiased :: MethodBind
 bindPolygon2D_set_antialiased
   = unsafePerformIO $
@@ -604,7 +619,7 @@ bindPolygon2D_set_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], polygon edges will be anti-aliased. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon edges will be anti-aliased.
 set_antialiased ::
                   (Polygon2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_antialiased cls arg1
@@ -617,6 +632,7 @@ set_antialiased cls arg1
 
 {-# NOINLINE bindPolygon2D_set_bone_path #-}
 
+-- | Sets the path to the node associated with the specified bone.
 bindPolygon2D_set_bone_path :: MethodBind
 bindPolygon2D_set_bone_path
   = unsafePerformIO $
@@ -626,6 +642,7 @@ bindPolygon2D_set_bone_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the path to the node associated with the specified bone.
 set_bone_path ::
                 (Polygon2D :< cls, Object :< cls) =>
                 cls -> Int -> NodePath -> IO ()
@@ -639,6 +656,7 @@ set_bone_path cls arg1 arg2
 
 {-# NOINLINE bindPolygon2D_set_bone_weights #-}
 
+-- | Sets the weight values for the specified bone.
 bindPolygon2D_set_bone_weights :: MethodBind
 bindPolygon2D_set_bone_weights
   = unsafePerformIO $
@@ -648,6 +666,7 @@ bindPolygon2D_set_bone_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the weight values for the specified bone.
 set_bone_weights ::
                    (Polygon2D :< cls, Object :< cls) =>
                    cls -> Int -> PoolRealArray -> IO ()
@@ -705,7 +724,7 @@ set_internal_vertex_count cls arg1
 
 {-# NOINLINE bindPolygon2D_set_invert #-}
 
--- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code].
 bindPolygon2D_set_invert :: MethodBind
 bindPolygon2D_set_invert
   = unsafePerformIO $
@@ -715,7 +734,7 @@ bindPolygon2D_set_invert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code]. Default value: [code]false[/code].
+-- | If [code]true[/code], polygon will be inverted, containing the area outside the defined points and extending to the [code]invert_border[/code].
 set_invert ::
              (Polygon2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_invert cls arg1
@@ -727,7 +746,7 @@ set_invert cls arg1
 
 {-# NOINLINE bindPolygon2D_set_invert_border #-}
 
--- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error. Default value: [code]100[/code].
+-- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error.
 bindPolygon2D_set_invert_border :: MethodBind
 bindPolygon2D_set_invert_border
   = unsafePerformIO $
@@ -737,7 +756,7 @@ bindPolygon2D_set_invert_border
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error. Default value: [code]100[/code].
+-- | Added padding applied to the bounding box when using [code]invert[/code]. Setting this value too small may result in a "Bad Polygon" error.
 set_invert_border ::
                     (Polygon2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_invert_border cls arg1
@@ -772,7 +791,8 @@ set_offset cls arg1
 
 {-# NOINLINE bindPolygon2D_set_polygon #-}
 
--- | The polygon's list of vertices. The final point will be connected to the first. Note that this returns a copy of the [PoolVector2Array] rather than a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first.
+--   			[b]Note:[/b] This returns a copy of the [PoolVector2Array] rather than a reference.
 bindPolygon2D_set_polygon :: MethodBind
 bindPolygon2D_set_polygon
   = unsafePerformIO $
@@ -782,7 +802,8 @@ bindPolygon2D_set_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The polygon's list of vertices. The final point will be connected to the first. Note that this returns a copy of the [PoolVector2Array] rather than a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first.
+--   			[b]Note:[/b] This returns a copy of the [PoolVector2Array] rather than a reference.
 set_polygon ::
               (Polygon2D :< cls, Object :< cls) =>
               cls -> PoolVector2Array -> IO ()

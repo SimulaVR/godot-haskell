@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.NavigationMeshInstance
        (Godot.Core.NavigationMeshInstance.get_navigation_mesh,
         Godot.Core.NavigationMeshInstance.is_enabled,

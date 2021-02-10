@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ScrollBar
        (Godot.Core.ScrollBar.sig_scrolling,
         Godot.Core.ScrollBar._drag_node_exit,
@@ -15,9 +16,11 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
--- | Emitted whenever the scrollbar is being scrolled.
+-- | Emitted when the scrollbar is being scrolled.
 sig_scrolling :: Godot.Internal.Dispatch.Signal ScrollBar
 sig_scrolling = Godot.Internal.Dispatch.Signal "scrolling"
+
+instance NodeSignal ScrollBar "scrolling" '[]
 
 {-# NOINLINE bindScrollBar__drag_node_exit #-}
 
@@ -83,6 +86,7 @@ _gui_input cls arg1
 
 {-# NOINLINE bindScrollBar_get_custom_step #-}
 
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
 bindScrollBar_get_custom_step :: MethodBind
 bindScrollBar_get_custom_step
   = unsafePerformIO $
@@ -92,6 +96,7 @@ bindScrollBar_get_custom_step
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
 get_custom_step ::
                   (ScrollBar :< cls, Object :< cls) => cls -> IO Float
 get_custom_step cls
@@ -104,6 +109,7 @@ get_custom_step cls
 
 {-# NOINLINE bindScrollBar_set_custom_step #-}
 
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
 bindScrollBar_set_custom_step :: MethodBind
 bindScrollBar_set_custom_step
   = unsafePerformIO $
@@ -113,6 +119,7 @@ bindScrollBar_set_custom_step
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
 set_custom_step ::
                   (ScrollBar :< cls, Object :< cls) => cls -> Float -> IO ()
 set_custom_step cls arg1

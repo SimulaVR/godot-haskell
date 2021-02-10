@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioStreamSample
        (Godot.Core.AudioStreamSample._FORMAT_8_BITS,
         Godot.Core.AudioStreamSample._LOOP_PING_PONG,
@@ -55,6 +56,7 @@ _FORMAT_16_BITS = 1
 {-# NOINLINE bindAudioStreamSample_get_data #-}
 
 -- | Contains the audio data in bytes.
+--   			[b]Note:[/b] This property expects signed PCM8 data. To convert unsigned PCM8 to signed PCM8, subtract 128 from each byte.
 bindAudioStreamSample_get_data :: MethodBind
 bindAudioStreamSample_get_data
   = unsafePerformIO $
@@ -65,6 +67,7 @@ bindAudioStreamSample_get_data
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Contains the audio data in bytes.
+--   			[b]Note:[/b] This property expects signed PCM8 data. To convert unsigned PCM8 to signed PCM8, subtract 128 from each byte.
 get_data ::
            (AudioStreamSample :< cls, Object :< cls) =>
            cls -> IO PoolByteArray
@@ -78,7 +81,7 @@ get_data cls
 
 {-# NOINLINE bindAudioStreamSample_get_format #-}
 
--- | Audio format. See FORMAT_* constants for values.
+-- | Audio format. See [enum Format] constants for values.
 bindAudioStreamSample_get_format :: MethodBind
 bindAudioStreamSample_get_format
   = unsafePerformIO $
@@ -88,7 +91,7 @@ bindAudioStreamSample_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Audio format. See FORMAT_* constants for values.
+-- | Audio format. See [enum Format] constants for values.
 get_format ::
              (AudioStreamSample :< cls, Object :< cls) => cls -> IO Int
 get_format cls
@@ -102,7 +105,7 @@ get_format cls
 
 {-# NOINLINE bindAudioStreamSample_get_loop_begin #-}
 
--- | Loop start in bytes.
+-- | The loop start point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 bindAudioStreamSample_get_loop_begin :: MethodBind
 bindAudioStreamSample_get_loop_begin
   = unsafePerformIO $
@@ -112,7 +115,7 @@ bindAudioStreamSample_get_loop_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loop start in bytes.
+-- | The loop start point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 get_loop_begin ::
                  (AudioStreamSample :< cls, Object :< cls) => cls -> IO Int
 get_loop_begin cls
@@ -126,7 +129,7 @@ get_loop_begin cls
 
 {-# NOINLINE bindAudioStreamSample_get_loop_end #-}
 
--- | Loop end in bytes.
+-- | The loop end point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 bindAudioStreamSample_get_loop_end :: MethodBind
 bindAudioStreamSample_get_loop_end
   = unsafePerformIO $
@@ -136,7 +139,7 @@ bindAudioStreamSample_get_loop_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loop end in bytes.
+-- | The loop end point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 get_loop_end ::
                (AudioStreamSample :< cls, Object :< cls) => cls -> IO Int
 get_loop_end cls
@@ -150,7 +153,7 @@ get_loop_end cls
 
 {-# NOINLINE bindAudioStreamSample_get_loop_mode #-}
 
--- | Loop mode. See LOOP_* constants for values.
+-- | The loop mode. This information will be imported automatically from the WAV file if present. See [enum LoopMode] constants for values.
 bindAudioStreamSample_get_loop_mode :: MethodBind
 bindAudioStreamSample_get_loop_mode
   = unsafePerformIO $
@@ -160,7 +163,7 @@ bindAudioStreamSample_get_loop_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loop mode. See LOOP_* constants for values.
+-- | The loop mode. This information will be imported automatically from the WAV file if present. See [enum LoopMode] constants for values.
 get_loop_mode ::
                 (AudioStreamSample :< cls, Object :< cls) => cls -> IO Int
 get_loop_mode cls
@@ -198,7 +201,7 @@ get_mix_rate cls
 
 {-# NOINLINE bindAudioStreamSample_is_stereo #-}
 
--- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
+-- | If [code]true[/code], audio is stereo.
 bindAudioStreamSample_is_stereo :: MethodBind
 bindAudioStreamSample_is_stereo
   = unsafePerformIO $
@@ -208,7 +211,7 @@ bindAudioStreamSample_is_stereo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
+-- | If [code]true[/code], audio is stereo.
 is_stereo ::
             (AudioStreamSample :< cls, Object :< cls) => cls -> IO Bool
 is_stereo cls
@@ -222,7 +225,7 @@ is_stereo cls
 {-# NOINLINE bindAudioStreamSample_save_to_wav #-}
 
 -- | Saves the AudioStreamSample as a WAV file to [code]path[/code]. Samples with IMA ADPCM format can't be saved.
---   				Note that a [code].wav[/code] extension is automatically appended to [code]path[/code] if it is missing.
+--   				[b]Note:[/b] A [code].wav[/code] extension is automatically appended to [code]path[/code] if it is missing.
 bindAudioStreamSample_save_to_wav :: MethodBind
 bindAudioStreamSample_save_to_wav
   = unsafePerformIO $
@@ -233,7 +236,7 @@ bindAudioStreamSample_save_to_wav
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Saves the AudioStreamSample as a WAV file to [code]path[/code]. Samples with IMA ADPCM format can't be saved.
---   				Note that a [code].wav[/code] extension is automatically appended to [code]path[/code] if it is missing.
+--   				[b]Note:[/b] A [code].wav[/code] extension is automatically appended to [code]path[/code] if it is missing.
 save_to_wav ::
               (AudioStreamSample :< cls, Object :< cls) =>
               cls -> GodotString -> IO Int
@@ -249,6 +252,7 @@ save_to_wav cls arg1
 {-# NOINLINE bindAudioStreamSample_set_data #-}
 
 -- | Contains the audio data in bytes.
+--   			[b]Note:[/b] This property expects signed PCM8 data. To convert unsigned PCM8 to signed PCM8, subtract 128 from each byte.
 bindAudioStreamSample_set_data :: MethodBind
 bindAudioStreamSample_set_data
   = unsafePerformIO $
@@ -259,6 +263,7 @@ bindAudioStreamSample_set_data
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Contains the audio data in bytes.
+--   			[b]Note:[/b] This property expects signed PCM8 data. To convert unsigned PCM8 to signed PCM8, subtract 128 from each byte.
 set_data ::
            (AudioStreamSample :< cls, Object :< cls) =>
            cls -> PoolByteArray -> IO ()
@@ -272,7 +277,7 @@ set_data cls arg1
 
 {-# NOINLINE bindAudioStreamSample_set_format #-}
 
--- | Audio format. See FORMAT_* constants for values.
+-- | Audio format. See [enum Format] constants for values.
 bindAudioStreamSample_set_format :: MethodBind
 bindAudioStreamSample_set_format
   = unsafePerformIO $
@@ -282,7 +287,7 @@ bindAudioStreamSample_set_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Audio format. See FORMAT_* constants for values.
+-- | Audio format. See [enum Format] constants for values.
 set_format ::
              (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
 set_format cls arg1
@@ -296,7 +301,7 @@ set_format cls arg1
 
 {-# NOINLINE bindAudioStreamSample_set_loop_begin #-}
 
--- | Loop start in bytes.
+-- | The loop start point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 bindAudioStreamSample_set_loop_begin :: MethodBind
 bindAudioStreamSample_set_loop_begin
   = unsafePerformIO $
@@ -306,7 +311,7 @@ bindAudioStreamSample_set_loop_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loop start in bytes.
+-- | The loop start point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 set_loop_begin ::
                  (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
 set_loop_begin cls arg1
@@ -320,7 +325,7 @@ set_loop_begin cls arg1
 
 {-# NOINLINE bindAudioStreamSample_set_loop_end #-}
 
--- | Loop end in bytes.
+-- | The loop end point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 bindAudioStreamSample_set_loop_end :: MethodBind
 bindAudioStreamSample_set_loop_end
   = unsafePerformIO $
@@ -330,7 +335,7 @@ bindAudioStreamSample_set_loop_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loop end in bytes.
+-- | The loop end point (in number of samples, relative to the beginning of the sample). This information will be imported automatically from the WAV file if present.
 set_loop_end ::
                (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
 set_loop_end cls arg1
@@ -344,7 +349,7 @@ set_loop_end cls arg1
 
 {-# NOINLINE bindAudioStreamSample_set_loop_mode #-}
 
--- | Loop mode. See LOOP_* constants for values.
+-- | The loop mode. This information will be imported automatically from the WAV file if present. See [enum LoopMode] constants for values.
 bindAudioStreamSample_set_loop_mode :: MethodBind
 bindAudioStreamSample_set_loop_mode
   = unsafePerformIO $
@@ -354,7 +359,7 @@ bindAudioStreamSample_set_loop_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loop mode. See LOOP_* constants for values.
+-- | The loop mode. This information will be imported automatically from the WAV file if present. See [enum LoopMode] constants for values.
 set_loop_mode ::
                 (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
 set_loop_mode cls arg1
@@ -392,7 +397,7 @@ set_mix_rate cls arg1
 
 {-# NOINLINE bindAudioStreamSample_set_stereo #-}
 
--- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
+-- | If [code]true[/code], audio is stereo.
 bindAudioStreamSample_set_stereo :: MethodBind
 bindAudioStreamSample_set_stereo
   = unsafePerformIO $
@@ -402,7 +407,7 @@ bindAudioStreamSample_set_stereo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio is stereo. Default value: [code]false[/code].
+-- | If [code]true[/code], audio is stereo.
 set_stereo ::
              (AudioStreamSample :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_stereo cls arg1

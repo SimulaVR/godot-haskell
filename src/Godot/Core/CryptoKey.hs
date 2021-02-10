@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CryptoKey
        (Godot.Core.CryptoKey.load, Godot.Core.CryptoKey.save) where
 import Data.Coerce
@@ -11,6 +12,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindCryptoKey_load #-}
 
+-- | Loads a key from [code]path[/code] ("*.key" file).
 bindCryptoKey_load :: MethodBind
 bindCryptoKey_load
   = unsafePerformIO $
@@ -20,6 +22,7 @@ bindCryptoKey_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Loads a key from [code]path[/code] ("*.key" file).
 load ::
        (CryptoKey :< cls, Object :< cls) => cls -> GodotString -> IO Int
 load cls arg1
@@ -30,6 +33,7 @@ load cls arg1
 
 {-# NOINLINE bindCryptoKey_save #-}
 
+-- | Saves a key to the given [code]path[/code] (should be a "*.key" file).
 bindCryptoKey_save :: MethodBind
 bindCryptoKey_save
   = unsafePerformIO $
@@ -39,6 +43,7 @@ bindCryptoKey_save
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Saves a key to the given [code]path[/code] (should be a "*.key" file).
 save ::
        (CryptoKey :< cls, Object :< cls) => cls -> GodotString -> IO Int
 save cls arg1

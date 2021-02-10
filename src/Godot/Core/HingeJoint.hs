@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.HingeJoint
        (Godot.Core.HingeJoint._PARAM_MOTOR_MAX_IMPULSE,
         Godot.Core.HingeJoint._FLAG_USE_LIMIT,
@@ -64,7 +65,7 @@ _PARAM_BIAS = 0
 
 {-# NOINLINE bindHingeJoint__get_lower_limit #-}
 
--- | The minimum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 bindHingeJoint__get_lower_limit :: MethodBind
 bindHingeJoint__get_lower_limit
   = unsafePerformIO $
@@ -74,7 +75,7 @@ bindHingeJoint__get_lower_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 _get_lower_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> IO Float
 _get_lower_limit cls
@@ -87,7 +88,7 @@ _get_lower_limit cls
 
 {-# NOINLINE bindHingeJoint__get_upper_limit #-}
 
--- | The maximum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 bindHingeJoint__get_upper_limit :: MethodBind
 bindHingeJoint__get_upper_limit
   = unsafePerformIO $
@@ -97,7 +98,7 @@ bindHingeJoint__get_upper_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 _get_upper_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> IO Float
 _get_upper_limit cls
@@ -110,7 +111,7 @@ _get_upper_limit cls
 
 {-# NOINLINE bindHingeJoint__set_lower_limit #-}
 
--- | The minimum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 bindHingeJoint__set_lower_limit :: MethodBind
 bindHingeJoint__set_lower_limit
   = unsafePerformIO $
@@ -120,7 +121,7 @@ bindHingeJoint__set_lower_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 _set_lower_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_lower_limit cls arg1
@@ -133,7 +134,7 @@ _set_lower_limit cls arg1
 
 {-# NOINLINE bindHingeJoint__set_upper_limit #-}
 
--- | The maximum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 bindHingeJoint__set_upper_limit :: MethodBind
 bindHingeJoint__set_upper_limit
   = unsafePerformIO $
@@ -143,7 +144,7 @@ bindHingeJoint__set_upper_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum rotation. only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
 _set_upper_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_upper_limit cls arg1
@@ -156,7 +157,7 @@ _set_upper_limit cls arg1
 
 {-# NOINLINE bindHingeJoint_get_flag #-}
 
--- | If [code]true[/code], the hinges maximum and minimum rotation, defined by [member angular_limit/lower] and [member angular_limit/upper] has effects.
+-- | Returns the value of the specified flag.
 bindHingeJoint_get_flag :: MethodBind
 bindHingeJoint_get_flag
   = unsafePerformIO $
@@ -166,7 +167,7 @@ bindHingeJoint_get_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the hinges maximum and minimum rotation, defined by [member angular_limit/lower] and [member angular_limit/upper] has effects.
+-- | Returns the value of the specified flag.
 get_flag ::
            (HingeJoint :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag cls arg1
@@ -178,7 +179,7 @@ get_flag cls arg1
 
 {-# NOINLINE bindHingeJoint_get_param #-}
 
--- | The speed with which the rotation across the axis perpendicular to the hinge gets corrected.
+-- | Returns the value of the specified parameter.
 bindHingeJoint_get_param :: MethodBind
 bindHingeJoint_get_param
   = unsafePerformIO $
@@ -188,7 +189,7 @@ bindHingeJoint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The speed with which the rotation across the axis perpendicular to the hinge gets corrected.
+-- | Returns the value of the specified parameter.
 get_param ::
             (HingeJoint :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param cls arg1
@@ -200,7 +201,7 @@ get_param cls arg1
 
 {-# NOINLINE bindHingeJoint_set_flag #-}
 
--- | If [code]true[/code], the hinges maximum and minimum rotation, defined by [member angular_limit/lower] and [member angular_limit/upper] has effects.
+-- | If [code]true[/code], enables the specified flag.
 bindHingeJoint_set_flag :: MethodBind
 bindHingeJoint_set_flag
   = unsafePerformIO $
@@ -210,7 +211,7 @@ bindHingeJoint_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the hinges maximum and minimum rotation, defined by [member angular_limit/lower] and [member angular_limit/upper] has effects.
+-- | If [code]true[/code], enables the specified flag.
 set_flag ::
            (HingeJoint :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_flag cls arg1 arg2
@@ -222,7 +223,7 @@ set_flag cls arg1 arg2
 
 {-# NOINLINE bindHingeJoint_set_param #-}
 
--- | The speed with which the rotation across the axis perpendicular to the hinge gets corrected.
+-- | Sets the value of the specified parameter.
 bindHingeJoint_set_param :: MethodBind
 bindHingeJoint_set_param
   = unsafePerformIO $
@@ -232,7 +233,7 @@ bindHingeJoint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The speed with which the rotation across the axis perpendicular to the hinge gets corrected.
+-- | Sets the value of the specified parameter.
 set_param ::
             (HingeJoint :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_param cls arg1 arg2

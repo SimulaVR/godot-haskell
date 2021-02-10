@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VideoPlayer
        (Godot.Core.VideoPlayer.sig_finished,
         Godot.Core.VideoPlayer.get_audio_track,
@@ -34,6 +35,8 @@ import Godot.Api.Types
 -- | Emitted when playback is finished.
 sig_finished :: Godot.Internal.Dispatch.Signal VideoPlayer
 sig_finished = Godot.Internal.Dispatch.Signal "finished"
+
+instance NodeSignal VideoPlayer "finished" '[]
 
 {-# NOINLINE bindVideoPlayer_get_audio_track #-}
 
@@ -106,6 +109,7 @@ get_bus cls
 
 {-# NOINLINE bindVideoPlayer_get_stream #-}
 
+-- | The assigned video stream. See description for supported formats.
 bindVideoPlayer_get_stream :: MethodBind
 bindVideoPlayer_get_stream
   = unsafePerformIO $
@@ -115,6 +119,7 @@ bindVideoPlayer_get_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The assigned video stream. See description for supported formats.
 get_stream ::
              (VideoPlayer :< cls, Object :< cls) => cls -> IO VideoStream
 get_stream cls
@@ -127,7 +132,7 @@ get_stream cls
 
 {-# NOINLINE bindVideoPlayer_get_stream_name #-}
 
--- | Returns the video stream's name.
+-- | Returns the video stream's name, or [code]"<No Stream>"[/code] if no video stream is assigned.
 bindVideoPlayer_get_stream_name :: MethodBind
 bindVideoPlayer_get_stream_name
   = unsafePerformIO $
@@ -137,7 +142,7 @@ bindVideoPlayer_get_stream_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the video stream's name.
+-- | Returns the video stream's name, or [code]"<No Stream>"[/code] if no video stream is assigned.
 get_stream_name ::
                   (VideoPlayer :< cls, Object :< cls) => cls -> IO GodotString
 get_stream_name cls
@@ -244,7 +249,7 @@ get_volume_db cls
 
 {-# NOINLINE bindVideoPlayer_has_autoplay #-}
 
--- | If [code]true[/code], playback starts when the scene loads. Default value: [code]false[/code].
+-- | If [code]true[/code], playback starts when the scene loads.
 bindVideoPlayer_has_autoplay :: MethodBind
 bindVideoPlayer_has_autoplay
   = unsafePerformIO $
@@ -254,7 +259,7 @@ bindVideoPlayer_has_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], playback starts when the scene loads. Default value: [code]false[/code].
+-- | If [code]true[/code], playback starts when the scene loads.
 has_autoplay ::
                (VideoPlayer :< cls, Object :< cls) => cls -> IO Bool
 has_autoplay cls
@@ -267,7 +272,7 @@ has_autoplay cls
 
 {-# NOINLINE bindVideoPlayer_has_expand #-}
 
--- | If [code]true[/code], the video scales to the control size. Default value: [code]true[/code].
+-- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 bindVideoPlayer_has_expand :: MethodBind
 bindVideoPlayer_has_expand
   = unsafePerformIO $
@@ -277,7 +282,7 @@ bindVideoPlayer_has_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the video scales to the control size. Default value: [code]true[/code].
+-- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 has_expand :: (VideoPlayer :< cls, Object :< cls) => cls -> IO Bool
 has_expand cls
   = withVariantArray []
@@ -312,6 +317,7 @@ is_paused cls
 {-# NOINLINE bindVideoPlayer_is_playing #-}
 
 -- | Returns [code]true[/code] if the video is playing.
+--   				[b]Note:[/b] The video is still considered playing if paused during playback.
 bindVideoPlayer_is_playing :: MethodBind
 bindVideoPlayer_is_playing
   = unsafePerformIO $
@@ -322,6 +328,7 @@ bindVideoPlayer_is_playing
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code] if the video is playing.
+--   				[b]Note:[/b] The video is still considered playing if paused during playback.
 is_playing :: (VideoPlayer :< cls, Object :< cls) => cls -> IO Bool
 is_playing cls
   = withVariantArray []
@@ -333,7 +340,7 @@ is_playing cls
 
 {-# NOINLINE bindVideoPlayer_play #-}
 
--- | Starts the video playback.
+-- | Starts the video playback from the beginning. If the video is paused, this will not unpause the video.
 bindVideoPlayer_play :: MethodBind
 bindVideoPlayer_play
   = unsafePerformIO $
@@ -343,7 +350,7 @@ bindVideoPlayer_play
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Starts the video playback.
+-- | Starts the video playback from the beginning. If the video is paused, this will not unpause the video.
 play :: (VideoPlayer :< cls, Object :< cls) => cls -> IO ()
 play cls
   = withVariantArray []
@@ -376,7 +383,7 @@ set_audio_track cls arg1
 
 {-# NOINLINE bindVideoPlayer_set_autoplay #-}
 
--- | If [code]true[/code], playback starts when the scene loads. Default value: [code]false[/code].
+-- | If [code]true[/code], playback starts when the scene loads.
 bindVideoPlayer_set_autoplay :: MethodBind
 bindVideoPlayer_set_autoplay
   = unsafePerformIO $
@@ -386,7 +393,7 @@ bindVideoPlayer_set_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], playback starts when the scene loads. Default value: [code]false[/code].
+-- | If [code]true[/code], playback starts when the scene loads.
 set_autoplay ::
                (VideoPlayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autoplay cls arg1
@@ -445,7 +452,7 @@ set_bus cls arg1
 
 {-# NOINLINE bindVideoPlayer_set_expand #-}
 
--- | If [code]true[/code], the video scales to the control size. Default value: [code]true[/code].
+-- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 bindVideoPlayer_set_expand :: MethodBind
 bindVideoPlayer_set_expand
   = unsafePerformIO $
@@ -455,7 +462,7 @@ bindVideoPlayer_set_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the video scales to the control size. Default value: [code]true[/code].
+-- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 set_expand ::
              (VideoPlayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_expand cls arg1
@@ -491,6 +498,7 @@ set_paused cls arg1
 
 {-# NOINLINE bindVideoPlayer_set_stream #-}
 
+-- | The assigned video stream. See description for supported formats.
 bindVideoPlayer_set_stream :: MethodBind
 bindVideoPlayer_set_stream
   = unsafePerformIO $
@@ -500,6 +508,7 @@ bindVideoPlayer_set_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The assigned video stream. See description for supported formats.
 set_stream ::
              (VideoPlayer :< cls, Object :< cls) => cls -> VideoStream -> IO ()
 set_stream cls arg1
@@ -582,7 +591,8 @@ set_volume_db cls arg1
 
 {-# NOINLINE bindVideoPlayer_stop #-}
 
--- | Stops the video playback.
+-- | Stops the video playback and sets the stream position to 0.
+--   				[b]Note:[/b] Although the stream position will be set to 0, the first frame of the video stream won't become the current frame.
 bindVideoPlayer_stop :: MethodBind
 bindVideoPlayer_stop
   = unsafePerformIO $
@@ -592,7 +602,8 @@ bindVideoPlayer_stop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stops the video playback.
+-- | Stops the video playback and sets the stream position to 0.
+--   				[b]Note:[/b] Although the stream position will be set to 0, the first frame of the video stream won't become the current frame.
 stop :: (VideoPlayer :< cls, Object :< cls) => cls -> IO ()
 stop cls
   = withVariantArray []

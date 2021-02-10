@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Range
        (Godot.Core.Range.sig_changed, Godot.Core.Range.sig_value_changed,
         Godot.Core.Range.get_as_ratio, Godot.Core.Range.get_max,
@@ -27,9 +28,13 @@ import Godot.Api.Types
 sig_changed :: Godot.Internal.Dispatch.Signal Range
 sig_changed = Godot.Internal.Dispatch.Signal "changed"
 
+instance NodeSignal Range "changed" '[]
+
 -- | Emitted when [member value] changes.
 sig_value_changed :: Godot.Internal.Dispatch.Signal Range
 sig_value_changed = Godot.Internal.Dispatch.Signal "value_changed"
+
+instance NodeSignal Range "value_changed" '[Float]
 
 {-# NOINLINE bindRange_get_as_ratio #-}
 
@@ -54,7 +59,7 @@ get_as_ratio cls
 
 {-# NOINLINE bindRange_get_max #-}
 
--- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code]. Default value: [code]100[/code].
+-- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code].
 bindRange_get_max :: MethodBind
 bindRange_get_max
   = unsafePerformIO $
@@ -64,7 +69,7 @@ bindRange_get_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code]. Default value: [code]100[/code].
+-- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code].
 get_max :: (Range :< cls, Object :< cls) => cls -> IO Float
 get_max cls
   = withVariantArray []
@@ -74,7 +79,7 @@ get_max cls
 
 {-# NOINLINE bindRange_get_min #-}
 
--- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code]. Default value: [code]0[/code].
+-- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code].
 bindRange_get_min :: MethodBind
 bindRange_get_min
   = unsafePerformIO $
@@ -84,7 +89,7 @@ bindRange_get_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code]. Default value: [code]0[/code].
+-- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code].
 get_min :: (Range :< cls, Object :< cls) => cls -> IO Float
 get_min cls
   = withVariantArray []
@@ -154,7 +159,7 @@ get_value cls
 
 {-# NOINLINE bindRange_is_greater_allowed #-}
 
--- | If [code]true[/code], [member value] may be greater than [member max_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be greater than [member max_value].
 bindRange_is_greater_allowed :: MethodBind
 bindRange_is_greater_allowed
   = unsafePerformIO $
@@ -164,7 +169,7 @@ bindRange_is_greater_allowed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [member value] may be greater than [member max_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be greater than [member max_value].
 is_greater_allowed ::
                      (Range :< cls, Object :< cls) => cls -> IO Bool
 is_greater_allowed cls
@@ -177,7 +182,7 @@ is_greater_allowed cls
 
 {-# NOINLINE bindRange_is_lesser_allowed #-}
 
--- | If [code]true[/code], [member value] may be less than [member min_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be less than [member min_value].
 bindRange_is_lesser_allowed :: MethodBind
 bindRange_is_lesser_allowed
   = unsafePerformIO $
@@ -187,7 +192,7 @@ bindRange_is_lesser_allowed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [member value] may be less than [member min_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be less than [member min_value].
 is_lesser_allowed ::
                     (Range :< cls, Object :< cls) => cls -> IO Bool
 is_lesser_allowed cls
@@ -221,7 +226,7 @@ is_ratio_exp cls
 
 {-# NOINLINE bindRange_is_using_rounded_values #-}
 
--- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer. Default value: [code]false[/code].
+-- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer.
 bindRange_is_using_rounded_values :: MethodBind
 bindRange_is_using_rounded_values
   = unsafePerformIO $
@@ -231,7 +236,7 @@ bindRange_is_using_rounded_values
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer. Default value: [code]false[/code].
+-- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer.
 is_using_rounded_values ::
                           (Range :< cls, Object :< cls) => cls -> IO Bool
 is_using_rounded_values cls
@@ -245,7 +250,7 @@ is_using_rounded_values cls
 
 {-# NOINLINE bindRange_set_allow_greater #-}
 
--- | If [code]true[/code], [member value] may be greater than [member max_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be greater than [member max_value].
 bindRange_set_allow_greater :: MethodBind
 bindRange_set_allow_greater
   = unsafePerformIO $
@@ -255,7 +260,7 @@ bindRange_set_allow_greater
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [member value] may be greater than [member max_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be greater than [member max_value].
 set_allow_greater ::
                     (Range :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_allow_greater cls arg1
@@ -268,7 +273,7 @@ set_allow_greater cls arg1
 
 {-# NOINLINE bindRange_set_allow_lesser #-}
 
--- | If [code]true[/code], [member value] may be less than [member min_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be less than [member min_value].
 bindRange_set_allow_lesser :: MethodBind
 bindRange_set_allow_lesser
   = unsafePerformIO $
@@ -278,7 +283,7 @@ bindRange_set_allow_lesser
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [member value] may be less than [member min_value]. Default value: [code]false[/code].
+-- | If [code]true[/code], [member value] may be less than [member min_value].
 set_allow_lesser ::
                    (Range :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_allow_lesser cls arg1
@@ -335,7 +340,7 @@ set_exp_ratio cls arg1
 
 {-# NOINLINE bindRange_set_max #-}
 
--- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code]. Default value: [code]100[/code].
+-- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code].
 bindRange_set_max :: MethodBind
 bindRange_set_max
   = unsafePerformIO $
@@ -345,7 +350,7 @@ bindRange_set_max
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code]. Default value: [code]100[/code].
+-- | Maximum value. Range is clamped if [code]value[/code] is greater than [code]max_value[/code].
 set_max :: (Range :< cls, Object :< cls) => cls -> Float -> IO ()
 set_max cls arg1
   = withVariantArray [toVariant arg1]
@@ -355,7 +360,7 @@ set_max cls arg1
 
 {-# NOINLINE bindRange_set_min #-}
 
--- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code]. Default value: [code]0[/code].
+-- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code].
 bindRange_set_min :: MethodBind
 bindRange_set_min
   = unsafePerformIO $
@@ -365,7 +370,7 @@ bindRange_set_min
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code]. Default value: [code]0[/code].
+-- | Minimum value. Range is clamped if [code]value[/code] is less than [code]min_value[/code].
 set_min :: (Range :< cls, Object :< cls) => cls -> Float -> IO ()
 set_min cls arg1
   = withVariantArray [toVariant arg1]
@@ -415,7 +420,7 @@ set_step cls arg1
 
 {-# NOINLINE bindRange_set_use_rounded_values #-}
 
--- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer. Default value: [code]false[/code].
+-- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer.
 bindRange_set_use_rounded_values :: MethodBind
 bindRange_set_use_rounded_values
   = unsafePerformIO $
@@ -425,7 +430,7 @@ bindRange_set_use_rounded_values
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer. Default value: [code]false[/code].
+-- | If [code]true[/code], [code]value[/code] will always be rounded to the nearest integer.
 set_use_rounded_values ::
                          (Range :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_rounded_values cls arg1
@@ -479,7 +484,7 @@ share cls arg1
 
 {-# NOINLINE bindRange_unshare #-}
 
--- | Stop range from sharing its member variables with any other.
+-- | Stops range from sharing its member variables with any other.
 bindRange_unshare :: MethodBind
 bindRange_unshare
   = unsafePerformIO $
@@ -489,7 +494,7 @@ bindRange_unshare
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stop range from sharing its member variables with any other.
+-- | Stops range from sharing its member variables with any other.
 unshare :: (Range :< cls, Object :< cls) => cls -> IO ()
 unshare cls
   = withVariantArray []

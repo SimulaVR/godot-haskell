@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TextEdit
        (Godot.Core.TextEdit._MENU_PASTE,
         Godot.Core.TextEdit._SEARCH_WHOLE_WORDS,
@@ -163,24 +164,38 @@ sig_breakpoint_toggled :: Godot.Internal.Dispatch.Signal TextEdit
 sig_breakpoint_toggled
   = Godot.Internal.Dispatch.Signal "breakpoint_toggled"
 
+instance NodeSignal TextEdit "breakpoint_toggled" '[Int]
+
 -- | Emitted when the cursor changes.
 sig_cursor_changed :: Godot.Internal.Dispatch.Signal TextEdit
 sig_cursor_changed
   = Godot.Internal.Dispatch.Signal "cursor_changed"
 
+instance NodeSignal TextEdit "cursor_changed" '[]
+
+-- | Emitted when the info icon is clicked.
 sig_info_clicked :: Godot.Internal.Dispatch.Signal TextEdit
 sig_info_clicked = Godot.Internal.Dispatch.Signal "info_clicked"
+
+instance NodeSignal TextEdit "info_clicked" '[Int, GodotString]
 
 sig_request_completion :: Godot.Internal.Dispatch.Signal TextEdit
 sig_request_completion
   = Godot.Internal.Dispatch.Signal "request_completion"
 
+instance NodeSignal TextEdit "request_completion" '[]
+
 sig_symbol_lookup :: Godot.Internal.Dispatch.Signal TextEdit
 sig_symbol_lookup = Godot.Internal.Dispatch.Signal "symbol_lookup"
+
+instance NodeSignal TextEdit "symbol_lookup"
+           '[GodotString, Int, Int]
 
 -- | Emitted when the text changes.
 sig_text_changed :: Godot.Internal.Dispatch.Signal TextEdit
 sig_text_changed = Godot.Internal.Dispatch.Signal "text_changed"
+
+instance NodeSignal TextEdit "text_changed" '[]
 
 {-# NOINLINE bindTextEdit__click_selection_held #-}
 
@@ -372,7 +387,7 @@ _v_scroll_input cls
 
 {-# NOINLINE bindTextEdit_add_color_region #-}
 
--- | Add color region (given the delimiters) and its colors.
+-- | Adds color region (given the delimiters) and its colors.
 bindTextEdit_add_color_region :: MethodBind
 bindTextEdit_add_color_region
   = unsafePerformIO $
@@ -382,7 +397,7 @@ bindTextEdit_add_color_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add color region (given the delimiters) and its colors.
+-- | Adds color region (given the delimiters) and its colors.
 add_color_region ::
                    (TextEdit :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotString -> Color -> Bool -> IO ()
@@ -397,7 +412,7 @@ add_color_region cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindTextEdit_add_keyword_color #-}
 
--- | Add a [code]keyword[/code] and its [Color].
+-- | Adds a [code]keyword[/code] and its [Color].
 bindTextEdit_add_keyword_color :: MethodBind
 bindTextEdit_add_keyword_color
   = unsafePerformIO $
@@ -407,7 +422,7 @@ bindTextEdit_add_keyword_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a [code]keyword[/code] and its [Color].
+-- | Adds a [code]keyword[/code] and its [Color].
 add_keyword_color ::
                     (TextEdit :< cls, Object :< cls) =>
                     cls -> GodotString -> Color -> IO ()
@@ -421,6 +436,7 @@ add_keyword_color cls arg1 arg2
 
 {-# NOINLINE bindTextEdit_can_fold #-}
 
+-- | Returns if the given line is foldable, that is, it has indented lines right below it.
 bindTextEdit_can_fold :: MethodBind
 bindTextEdit_can_fold
   = unsafePerformIO $
@@ -430,6 +446,7 @@ bindTextEdit_can_fold
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns if the given line is foldable, that is, it has indented lines right below it.
 can_fold ::
            (TextEdit :< cls, Object :< cls) => cls -> Int -> IO Bool
 can_fold cls arg1
@@ -441,6 +458,7 @@ can_fold cls arg1
 
 {-# NOINLINE bindTextEdit_center_viewport_to_cursor #-}
 
+-- | Centers the viewport on the line the editing cursor is at. This also resets the [member scroll_horizontal] value to [code]0[/code].
 bindTextEdit_center_viewport_to_cursor :: MethodBind
 bindTextEdit_center_viewport_to_cursor
   = unsafePerformIO $
@@ -450,6 +468,7 @@ bindTextEdit_center_viewport_to_cursor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Centers the viewport on the line the editing cursor is at. This also resets the [member scroll_horizontal] value to [code]0[/code].
 center_viewport_to_cursor ::
                             (TextEdit :< cls, Object :< cls) => cls -> IO ()
 center_viewport_to_cursor cls
@@ -463,7 +482,7 @@ center_viewport_to_cursor cls
 
 {-# NOINLINE bindTextEdit_clear_colors #-}
 
--- | Clears all the syntax coloring information.
+-- | Clears all custom syntax coloring information previously added with [method add_color_region] or [method add_keyword_color].
 bindTextEdit_clear_colors :: MethodBind
 bindTextEdit_clear_colors
   = unsafePerformIO $
@@ -473,7 +492,7 @@ bindTextEdit_clear_colors
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears all the syntax coloring information.
+-- | Clears all custom syntax coloring information previously added with [method add_color_region] or [method add_keyword_color].
 clear_colors :: (TextEdit :< cls, Object :< cls) => cls -> IO ()
 clear_colors cls
   = withVariantArray []
@@ -723,7 +742,7 @@ cursor_set_block_mode cls arg1
 {-# NOINLINE bindTextEdit_cursor_set_column #-}
 
 -- | Moves the cursor at the specified [code]column[/code] index.
---   				If [code]adjust_viewport[/code] is set to true, the viewport will center at the cursor position after the move occurs. Default value is [code]true[/code].
+--   				If [code]adjust_viewport[/code] is set to [code]true[/code], the viewport will center at the cursor position after the move occurs.
 bindTextEdit_cursor_set_column :: MethodBind
 bindTextEdit_cursor_set_column
   = unsafePerformIO $
@@ -734,7 +753,7 @@ bindTextEdit_cursor_set_column
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Moves the cursor at the specified [code]column[/code] index.
---   				If [code]adjust_viewport[/code] is set to true, the viewport will center at the cursor position after the move occurs. Default value is [code]true[/code].
+--   				If [code]adjust_viewport[/code] is set to [code]true[/code], the viewport will center at the cursor position after the move occurs.
 cursor_set_column ::
                     (TextEdit :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 cursor_set_column cls arg1 arg2
@@ -748,8 +767,8 @@ cursor_set_column cls arg1 arg2
 {-# NOINLINE bindTextEdit_cursor_set_line #-}
 
 -- | Moves the cursor at the specified [code]line[/code] index.
---   				If [code]adjust_viewport[/code] is set to true, the viewport will center at the cursor position after the move occurs. Default value is [code]true[/code].
---   				If [code]can_be_hidden[/code] is set to true, the specified [code]line[/code] can be hidden using [method set_line_as_hidden]. Default value is [code]true[/code].
+--   				If [code]adjust_viewport[/code] is set to [code]true[/code], the viewport will center at the cursor position after the move occurs.
+--   				If [code]can_be_hidden[/code] is set to [code]true[/code], the specified [code]line[/code] can be hidden using [method set_line_as_hidden].
 bindTextEdit_cursor_set_line :: MethodBind
 bindTextEdit_cursor_set_line
   = unsafePerformIO $
@@ -760,8 +779,8 @@ bindTextEdit_cursor_set_line
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Moves the cursor at the specified [code]line[/code] index.
---   				If [code]adjust_viewport[/code] is set to true, the viewport will center at the cursor position after the move occurs. Default value is [code]true[/code].
---   				If [code]can_be_hidden[/code] is set to true, the specified [code]line[/code] can be hidden using [method set_line_as_hidden]. Default value is [code]true[/code].
+--   				If [code]adjust_viewport[/code] is set to [code]true[/code], the viewport will center at the cursor position after the move occurs.
+--   				If [code]can_be_hidden[/code] is set to [code]true[/code], the specified [code]line[/code] can be hidden using [method set_line_as_hidden].
 cursor_set_line ::
                   (TextEdit :< cls, Object :< cls) =>
                   cls -> Int -> Bool -> Bool -> Int -> IO ()
@@ -817,6 +836,7 @@ deselect cls
 
 {-# NOINLINE bindTextEdit_draw_minimap #-}
 
+-- | If [code]true[/code], a minimap is shown, providing an outline of your source code.
 bindTextEdit_draw_minimap :: MethodBind
 bindTextEdit_draw_minimap
   = unsafePerformIO $
@@ -826,6 +846,7 @@ bindTextEdit_draw_minimap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], a minimap is shown, providing an outline of your source code.
 draw_minimap ::
                (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 draw_minimap cls arg1
@@ -838,6 +859,7 @@ draw_minimap cls arg1
 
 {-# NOINLINE bindTextEdit_fold_all_lines #-}
 
+-- | Folds all lines that are possible to be folded (see [method can_fold]).
 bindTextEdit_fold_all_lines :: MethodBind
 bindTextEdit_fold_all_lines
   = unsafePerformIO $
@@ -847,6 +869,7 @@ bindTextEdit_fold_all_lines
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Folds all lines that are possible to be folded (see [method can_fold]).
 fold_all_lines :: (TextEdit :< cls, Object :< cls) => cls -> IO ()
 fold_all_lines cls
   = withVariantArray []
@@ -858,6 +881,7 @@ fold_all_lines cls
 
 {-# NOINLINE bindTextEdit_fold_line #-}
 
+-- | Folds the given line, if possible (see [method can_fold]).
 bindTextEdit_fold_line :: MethodBind
 bindTextEdit_fold_line
   = unsafePerformIO $
@@ -867,6 +891,7 @@ bindTextEdit_fold_line
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Folds the given line, if possible (see [method can_fold]).
 fold_line ::
             (TextEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 fold_line cls arg1
@@ -901,6 +926,7 @@ get_breakpoints cls
 
 {-# NOINLINE bindTextEdit_get_h_scroll #-}
 
+-- | The current horizontal scroll value.
 bindTextEdit_get_h_scroll :: MethodBind
 bindTextEdit_get_h_scroll
   = unsafePerformIO $
@@ -910,6 +936,7 @@ bindTextEdit_get_h_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The current horizontal scroll value.
 get_h_scroll :: (TextEdit :< cls, Object :< cls) => cls -> IO Int
 get_h_scroll cls
   = withVariantArray []
@@ -988,6 +1015,7 @@ get_line_count cls
 
 {-# NOINLINE bindTextEdit_get_menu #-}
 
+-- | Returns the [PopupMenu] of this [TextEdit]. By default, this menu is displayed when right-clicking on the [TextEdit].
 bindTextEdit_get_menu :: MethodBind
 bindTextEdit_get_menu
   = unsafePerformIO $
@@ -997,6 +1025,7 @@ bindTextEdit_get_menu
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [PopupMenu] of this [TextEdit]. By default, this menu is displayed when right-clicking on the [TextEdit].
 get_menu :: (TextEdit :< cls, Object :< cls) => cls -> IO PopupMenu
 get_menu cls
   = withVariantArray []
@@ -1007,6 +1036,7 @@ get_menu cls
 
 {-# NOINLINE bindTextEdit_get_minimap_width #-}
 
+-- | The width, in pixels, of the minimap.
 bindTextEdit_get_minimap_width :: MethodBind
 bindTextEdit_get_minimap_width
   = unsafePerformIO $
@@ -1016,6 +1046,7 @@ bindTextEdit_get_minimap_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The width, in pixels, of the minimap.
 get_minimap_width ::
                     (TextEdit :< cls, Object :< cls) => cls -> IO Int
 get_minimap_width cls
@@ -1169,6 +1200,7 @@ get_text cls
 
 {-# NOINLINE bindTextEdit_get_v_scroll #-}
 
+-- | The current vertical scroll value.
 bindTextEdit_get_v_scroll :: MethodBind
 bindTextEdit_get_v_scroll
   = unsafePerformIO $
@@ -1178,6 +1210,7 @@ bindTextEdit_get_v_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The current vertical scroll value.
 get_v_scroll :: (TextEdit :< cls, Object :< cls) => cls -> IO Float
 get_v_scroll cls
   = withVariantArray []
@@ -1307,7 +1340,7 @@ is_breakpoint_gutter_enabled cls
 
 {-# NOINLINE bindTextEdit_is_context_menu_enabled #-}
 
--- | If [code]true[/code], a right click displays the context menu.
+-- | If [code]true[/code], a right-click displays the context menu.
 bindTextEdit_is_context_menu_enabled :: MethodBind
 bindTextEdit_is_context_menu_enabled
   = unsafePerformIO $
@@ -1317,7 +1350,7 @@ bindTextEdit_is_context_menu_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], a right click displays the context menu.
+-- | If [code]true[/code], a right-click displays the context menu.
 is_context_menu_enabled ::
                           (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_context_menu_enabled cls
@@ -1331,6 +1364,7 @@ is_context_menu_enabled cls
 
 {-# NOINLINE bindTextEdit_is_drawing_fold_gutter #-}
 
+-- | If [code]true[/code], the fold gutter is visible. This enables folding groups of indented lines.
 bindTextEdit_is_drawing_fold_gutter :: MethodBind
 bindTextEdit_is_drawing_fold_gutter
   = unsafePerformIO $
@@ -1340,6 +1374,7 @@ bindTextEdit_is_drawing_fold_gutter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the fold gutter is visible. This enables folding groups of indented lines.
 is_drawing_fold_gutter ::
                          (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_drawing_fold_gutter cls
@@ -1353,6 +1388,7 @@ is_drawing_fold_gutter cls
 
 {-# NOINLINE bindTextEdit_is_drawing_minimap #-}
 
+-- | If [code]true[/code], a minimap is shown, providing an outline of your source code.
 bindTextEdit_is_drawing_minimap :: MethodBind
 bindTextEdit_is_drawing_minimap
   = unsafePerformIO $
@@ -1362,6 +1398,7 @@ bindTextEdit_is_drawing_minimap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], a minimap is shown, providing an outline of your source code.
 is_drawing_minimap ::
                      (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_drawing_minimap cls
@@ -1374,6 +1411,7 @@ is_drawing_minimap cls
 
 {-# NOINLINE bindTextEdit_is_drawing_spaces #-}
 
+-- | If [code]true[/code], the "space" character will have a visible representation.
 bindTextEdit_is_drawing_spaces :: MethodBind
 bindTextEdit_is_drawing_spaces
   = unsafePerformIO $
@@ -1383,6 +1421,7 @@ bindTextEdit_is_drawing_spaces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the "space" character will have a visible representation.
 is_drawing_spaces ::
                     (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_drawing_spaces cls
@@ -1395,6 +1434,7 @@ is_drawing_spaces cls
 
 {-# NOINLINE bindTextEdit_is_drawing_tabs #-}
 
+-- | If [code]true[/code], the "tab" character will have a visible representation.
 bindTextEdit_is_drawing_tabs :: MethodBind
 bindTextEdit_is_drawing_tabs
   = unsafePerformIO $
@@ -1404,6 +1444,7 @@ bindTextEdit_is_drawing_tabs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the "tab" character will have a visible representation.
 is_drawing_tabs ::
                   (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_drawing_tabs cls
@@ -1438,6 +1479,7 @@ is_folded cls arg1
 
 {-# NOINLINE bindTextEdit_is_hiding_enabled #-}
 
+-- | If [code]true[/code], all lines that have been set to hidden by [method set_line_as_hidden], will not be visible.
 bindTextEdit_is_hiding_enabled :: MethodBind
 bindTextEdit_is_hiding_enabled
   = unsafePerformIO $
@@ -1447,6 +1489,7 @@ bindTextEdit_is_hiding_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], all lines that have been set to hidden by [method set_line_as_hidden], will not be visible.
 is_hiding_enabled ::
                     (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_hiding_enabled cls
@@ -1532,6 +1575,7 @@ is_line_hidden cls arg1
 
 {-# NOINLINE bindTextEdit_is_overriding_selected_font_color #-}
 
+-- | If [code]true[/code], custom [code]font_color_selected[/code] will be used for selected text.
 bindTextEdit_is_overriding_selected_font_color :: MethodBind
 bindTextEdit_is_overriding_selected_font_color
   = unsafePerformIO $
@@ -1541,6 +1585,7 @@ bindTextEdit_is_overriding_selected_font_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], custom [code]font_color_selected[/code] will be used for selected text.
 is_overriding_selected_font_color ::
                                     (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_overriding_selected_font_color cls
@@ -1576,7 +1621,7 @@ is_readonly cls
 
 {-# NOINLINE bindTextEdit_is_right_click_moving_caret #-}
 
--- | If [code]true[/code], a right click moves the cursor at the mouse position before displaying the context menu.
+-- | If [code]true[/code], a right-click moves the cursor at the mouse position before displaying the context menu.
 --   			If [code]false[/code], the context menu disregards mouse location.
 bindTextEdit_is_right_click_moving_caret :: MethodBind
 bindTextEdit_is_right_click_moving_caret
@@ -1587,7 +1632,7 @@ bindTextEdit_is_right_click_moving_caret
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], a right click moves the cursor at the mouse position before displaying the context menu.
+-- | If [code]true[/code], a right-click moves the cursor at the mouse position before displaying the context menu.
 --   			If [code]false[/code], the context menu disregards mouse location.
 is_right_click_moving_caret ::
                               (TextEdit :< cls, Object :< cls) => cls -> IO Bool
@@ -1602,6 +1647,8 @@ is_right_click_moving_caret cls
 
 {-# NOINLINE bindTextEdit_is_selecting_enabled #-}
 
+-- | If [code]true[/code], text can be selected.
+--   			If [code]false[/code], text can not be selected by the user or by the [method select] or [method select_all] methods.
 bindTextEdit_is_selecting_enabled :: MethodBind
 bindTextEdit_is_selecting_enabled
   = unsafePerformIO $
@@ -1611,6 +1658,8 @@ bindTextEdit_is_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], text can be selected.
+--   			If [code]false[/code], text can not be selected by the user or by the [method select] or [method select_all] methods.
 is_selecting_enabled ::
                        (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_selecting_enabled cls
@@ -1648,6 +1697,7 @@ is_selection_active cls
 
 {-# NOINLINE bindTextEdit_is_shortcut_keys_enabled #-}
 
+-- | If [code]true[/code], shortcut keys for context menu items are enabled, even if the context menu is disabled.
 bindTextEdit_is_shortcut_keys_enabled :: MethodBind
 bindTextEdit_is_shortcut_keys_enabled
   = unsafePerformIO $
@@ -1657,6 +1707,7 @@ bindTextEdit_is_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], shortcut keys for context menu items are enabled, even if the context menu is disabled.
 is_shortcut_keys_enabled ::
                            (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_shortcut_keys_enabled cls
@@ -1765,7 +1816,7 @@ is_wrap_enabled cls
 
 {-# NOINLINE bindTextEdit_menu_option #-}
 
--- | Triggers a right click menu action by the specified index. See [enum MenuItems] for a list of available indexes.
+-- | Triggers a right-click menu action by the specified index. See [enum MenuItems] for a list of available indexes.
 bindTextEdit_menu_option :: MethodBind
 bindTextEdit_menu_option
   = unsafePerformIO $
@@ -1775,7 +1826,7 @@ bindTextEdit_menu_option
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Triggers a right click menu action by the specified index. See [enum MenuItems] for a list of available indexes.
+-- | Triggers a right-click menu action by the specified index. See [enum MenuItems] for a list of available indexes.
 menu_option ::
               (TextEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 menu_option cls arg1
@@ -1827,7 +1878,7 @@ redo cls
 
 {-# NOINLINE bindTextEdit_remove_breakpoints #-}
 
--- | Removes all the breakpoints (without firing "breakpoint_toggled" signal).
+-- | Removes all the breakpoints. This will not fire the [signal breakpoint_toggled] signal.
 bindTextEdit_remove_breakpoints :: MethodBind
 bindTextEdit_remove_breakpoints
   = unsafePerformIO $
@@ -1837,7 +1888,7 @@ bindTextEdit_remove_breakpoints
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes all the breakpoints (without firing "breakpoint_toggled" signal).
+-- | Removes all the breakpoints. This will not fire the [signal breakpoint_toggled] signal.
 remove_breakpoints ::
                      (TextEdit :< cls, Object :< cls) => cls -> IO ()
 remove_breakpoints cls
@@ -1850,7 +1901,15 @@ remove_breakpoints cls
 
 {-# NOINLINE bindTextEdit_search #-}
 
--- | Perform a search inside the text. Search flags can be specified in the SEARCH_* enum.
+-- | Perform a search inside the text. Search flags can be specified in the [enum SearchFlags] enum.
+--   				Returns an empty [code]PoolIntArray[/code] if no result was found. Otherwise, the result line and column can be accessed at indices specified in the [enum SearchResult] enum, e.g:
+--   				[codeblock]
+--   				var result = search(key, flags, line, column)
+--   				if result.size() > 0:
+--   				    # Result found.
+--   				    var res_line = result[TextEdit.SEARCH_RESULT_LINE]
+--   				    var res_column = result[TextEdit.SEARCH_RESULT_COLUMN]
+--   				[/codeblock]
 bindTextEdit_search :: MethodBind
 bindTextEdit_search
   = unsafePerformIO $
@@ -1860,7 +1919,15 @@ bindTextEdit_search
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Perform a search inside the text. Search flags can be specified in the SEARCH_* enum.
+-- | Perform a search inside the text. Search flags can be specified in the [enum SearchFlags] enum.
+--   				Returns an empty [code]PoolIntArray[/code] if no result was found. Otherwise, the result line and column can be accessed at indices specified in the [enum SearchResult] enum, e.g:
+--   				[codeblock]
+--   				var result = search(key, flags, line, column)
+--   				if result.size() > 0:
+--   				    # Result found.
+--   				    var res_line = result[TextEdit.SEARCH_RESULT_LINE]
+--   				    var res_column = result[TextEdit.SEARCH_RESULT_COLUMN]
+--   				[/codeblock]
 search ::
          (TextEdit :< cls, Object :< cls) =>
          cls -> GodotString -> Int -> Int -> Int -> IO PoolIntArray
@@ -1874,6 +1941,7 @@ search cls arg1 arg2 arg3 arg4
 {-# NOINLINE bindTextEdit_select #-}
 
 -- | Perform selection, from line/column to line/column.
+--   				If [member selecting_enabled] is [code]false[/code], no selection will occur.
 bindTextEdit_select :: MethodBind
 bindTextEdit_select
   = unsafePerformIO $
@@ -1884,6 +1952,7 @@ bindTextEdit_select
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Perform selection, from line/column to line/column.
+--   				If [member selecting_enabled] is [code]false[/code], no selection will occur.
 select ::
          (TextEdit :< cls, Object :< cls) =>
          cls -> Int -> Int -> Int -> Int -> IO ()
@@ -1897,6 +1966,7 @@ select cls arg1 arg2 arg3 arg4
 {-# NOINLINE bindTextEdit_select_all #-}
 
 -- | Select all the text.
+--   				If [member selecting_enabled] is [code]false[/code], no selection will occur.
 bindTextEdit_select_all :: MethodBind
 bindTextEdit_select_all
   = unsafePerformIO $
@@ -1907,6 +1977,7 @@ bindTextEdit_select_all
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Select all the text.
+--   				If [member selecting_enabled] is [code]false[/code], no selection will occur.
 select_all :: (TextEdit :< cls, Object :< cls) => cls -> IO ()
 select_all cls
   = withVariantArray []
@@ -1941,7 +2012,7 @@ set_breakpoint_gutter_enabled cls arg1
 
 {-# NOINLINE bindTextEdit_set_context_menu_enabled #-}
 
--- | If [code]true[/code], a right click displays the context menu.
+-- | If [code]true[/code], a right-click displays the context menu.
 bindTextEdit_set_context_menu_enabled :: MethodBind
 bindTextEdit_set_context_menu_enabled
   = unsafePerformIO $
@@ -1951,7 +2022,7 @@ bindTextEdit_set_context_menu_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], a right click displays the context menu.
+-- | If [code]true[/code], a right-click displays the context menu.
 set_context_menu_enabled ::
                            (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_context_menu_enabled cls arg1
@@ -1965,6 +2036,7 @@ set_context_menu_enabled cls arg1
 
 {-# NOINLINE bindTextEdit_set_draw_fold_gutter #-}
 
+-- | If [code]true[/code], the fold gutter is visible. This enables folding groups of indented lines.
 bindTextEdit_set_draw_fold_gutter :: MethodBind
 bindTextEdit_set_draw_fold_gutter
   = unsafePerformIO $
@@ -1974,6 +2046,7 @@ bindTextEdit_set_draw_fold_gutter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the fold gutter is visible. This enables folding groups of indented lines.
 set_draw_fold_gutter ::
                        (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_fold_gutter cls arg1
@@ -1987,6 +2060,7 @@ set_draw_fold_gutter cls arg1
 
 {-# NOINLINE bindTextEdit_set_draw_spaces #-}
 
+-- | If [code]true[/code], the "space" character will have a visible representation.
 bindTextEdit_set_draw_spaces :: MethodBind
 bindTextEdit_set_draw_spaces
   = unsafePerformIO $
@@ -1996,6 +2070,7 @@ bindTextEdit_set_draw_spaces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the "space" character will have a visible representation.
 set_draw_spaces ::
                   (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_spaces cls arg1
@@ -2008,6 +2083,7 @@ set_draw_spaces cls arg1
 
 {-# NOINLINE bindTextEdit_set_draw_tabs #-}
 
+-- | If [code]true[/code], the "tab" character will have a visible representation.
 bindTextEdit_set_draw_tabs :: MethodBind
 bindTextEdit_set_draw_tabs
   = unsafePerformIO $
@@ -2017,6 +2093,7 @@ bindTextEdit_set_draw_tabs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the "tab" character will have a visible representation.
 set_draw_tabs ::
                 (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_tabs cls arg1
@@ -2029,6 +2106,7 @@ set_draw_tabs cls arg1
 
 {-# NOINLINE bindTextEdit_set_h_scroll #-}
 
+-- | The current horizontal scroll value.
 bindTextEdit_set_h_scroll :: MethodBind
 bindTextEdit_set_h_scroll
   = unsafePerformIO $
@@ -2038,6 +2116,7 @@ bindTextEdit_set_h_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The current horizontal scroll value.
 set_h_scroll ::
                (TextEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_h_scroll cls arg1
@@ -2050,6 +2129,7 @@ set_h_scroll cls arg1
 
 {-# NOINLINE bindTextEdit_set_hiding_enabled #-}
 
+-- | If [code]true[/code], all lines that have been set to hidden by [method set_line_as_hidden], will not be visible.
 bindTextEdit_set_hiding_enabled :: MethodBind
 bindTextEdit_set_hiding_enabled
   = unsafePerformIO $
@@ -2059,6 +2139,7 @@ bindTextEdit_set_hiding_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], all lines that have been set to hidden by [method set_line_as_hidden], will not be visible.
 set_hiding_enabled ::
                      (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hiding_enabled cls arg1
@@ -2142,6 +2223,7 @@ set_line_as_hidden cls arg1 arg2
 
 {-# NOINLINE bindTextEdit_set_minimap_width #-}
 
+-- | The width, in pixels, of the minimap.
 bindTextEdit_set_minimap_width :: MethodBind
 bindTextEdit_set_minimap_width
   = unsafePerformIO $
@@ -2151,6 +2233,7 @@ bindTextEdit_set_minimap_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The width, in pixels, of the minimap.
 set_minimap_width ::
                     (TextEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_minimap_width cls arg1
@@ -2163,6 +2246,7 @@ set_minimap_width cls arg1
 
 {-# NOINLINE bindTextEdit_set_override_selected_font_color #-}
 
+-- | If [code]true[/code], custom [code]font_color_selected[/code] will be used for selected text.
 bindTextEdit_set_override_selected_font_color :: MethodBind
 bindTextEdit_set_override_selected_font_color
   = unsafePerformIO $
@@ -2172,6 +2256,7 @@ bindTextEdit_set_override_selected_font_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], custom [code]font_color_selected[/code] will be used for selected text.
 set_override_selected_font_color ::
                                    (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_override_selected_font_color cls arg1
@@ -2209,7 +2294,7 @@ set_readonly cls arg1
 
 {-# NOINLINE bindTextEdit_set_right_click_moves_caret #-}
 
--- | If [code]true[/code], a right click moves the cursor at the mouse position before displaying the context menu.
+-- | If [code]true[/code], a right-click moves the cursor at the mouse position before displaying the context menu.
 --   			If [code]false[/code], the context menu disregards mouse location.
 bindTextEdit_set_right_click_moves_caret :: MethodBind
 bindTextEdit_set_right_click_moves_caret
@@ -2220,7 +2305,7 @@ bindTextEdit_set_right_click_moves_caret
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], a right click moves the cursor at the mouse position before displaying the context menu.
+-- | If [code]true[/code], a right-click moves the cursor at the mouse position before displaying the context menu.
 --   			If [code]false[/code], the context menu disregards mouse location.
 set_right_click_moves_caret ::
                               (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
@@ -2235,6 +2320,8 @@ set_right_click_moves_caret cls arg1
 
 {-# NOINLINE bindTextEdit_set_selecting_enabled #-}
 
+-- | If [code]true[/code], text can be selected.
+--   			If [code]false[/code], text can not be selected by the user or by the [method select] or [method select_all] methods.
 bindTextEdit_set_selecting_enabled :: MethodBind
 bindTextEdit_set_selecting_enabled
   = unsafePerformIO $
@@ -2244,6 +2331,8 @@ bindTextEdit_set_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], text can be selected.
+--   			If [code]false[/code], text can not be selected by the user or by the [method select] or [method select_all] methods.
 set_selecting_enabled ::
                         (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_selecting_enabled cls arg1
@@ -2257,6 +2346,7 @@ set_selecting_enabled cls arg1
 
 {-# NOINLINE bindTextEdit_set_shortcut_keys_enabled #-}
 
+-- | If [code]true[/code], shortcut keys for context menu items are enabled, even if the context menu is disabled.
 bindTextEdit_set_shortcut_keys_enabled :: MethodBind
 bindTextEdit_set_shortcut_keys_enabled
   = unsafePerformIO $
@@ -2266,6 +2356,7 @@ bindTextEdit_set_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], shortcut keys for context menu items are enabled, even if the context menu is disabled.
 set_shortcut_keys_enabled ::
                             (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shortcut_keys_enabled cls arg1
@@ -2373,6 +2464,7 @@ set_text cls arg1
 
 {-# NOINLINE bindTextEdit_set_v_scroll #-}
 
+-- | The current vertical scroll value.
 bindTextEdit_set_v_scroll :: MethodBind
 bindTextEdit_set_v_scroll
   = unsafePerformIO $
@@ -2382,6 +2474,7 @@ bindTextEdit_set_v_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The current vertical scroll value.
 set_v_scroll ::
                (TextEdit :< cls, Object :< cls) => cls -> Float -> IO ()
 set_v_scroll cls arg1
@@ -2483,6 +2576,7 @@ undo cls
 
 {-# NOINLINE bindTextEdit_unfold_line #-}
 
+-- | Unfolds the given line, if folded.
 bindTextEdit_unfold_line :: MethodBind
 bindTextEdit_unfold_line
   = unsafePerformIO $
@@ -2492,6 +2586,7 @@ bindTextEdit_unfold_line
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Unfolds the given line, if folded.
 unfold_line ::
               (TextEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 unfold_line cls arg1

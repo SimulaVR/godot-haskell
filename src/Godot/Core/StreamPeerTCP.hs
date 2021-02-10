@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.StreamPeerTCP
        (Godot.Core.StreamPeerTCP._STATUS_CONNECTED,
         Godot.Core.StreamPeerTCP._STATUS_CONNECTING,
@@ -34,7 +35,7 @@ _STATUS_NONE = 0
 
 {-# NOINLINE bindStreamPeerTCP_connect_to_host #-}
 
--- | Connect to the specified host:port pair. A hostname will be resolved if valid. Returns [constant @GlobalScope.OK] on success or [constant @GlobalScope.FAILED] on failure.
+-- | Connects to the specified [code]host:port[/code] pair. A hostname will be resolved if valid. Returns [constant OK] on success or [constant FAILED] on failure.
 bindStreamPeerTCP_connect_to_host :: MethodBind
 bindStreamPeerTCP_connect_to_host
   = unsafePerformIO $
@@ -44,7 +45,7 @@ bindStreamPeerTCP_connect_to_host
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connect to the specified host:port pair. A hostname will be resolved if valid. Returns [constant @GlobalScope.OK] on success or [constant @GlobalScope.FAILED] on failure.
+-- | Connects to the specified [code]host:port[/code] pair. A hostname will be resolved if valid. Returns [constant OK] on success or [constant FAILED] on failure.
 connect_to_host ::
                   (StreamPeerTCP :< cls, Object :< cls) =>
                   cls -> GodotString -> Int -> IO Int
@@ -59,7 +60,7 @@ connect_to_host cls arg1 arg2
 
 {-# NOINLINE bindStreamPeerTCP_disconnect_from_host #-}
 
--- | Disconnect from host.
+-- | Disconnects from host.
 bindStreamPeerTCP_disconnect_from_host :: MethodBind
 bindStreamPeerTCP_disconnect_from_host
   = unsafePerformIO $
@@ -69,7 +70,7 @@ bindStreamPeerTCP_disconnect_from_host
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disconnect from host.
+-- | Disconnects from host.
 disconnect_from_host ::
                        (StreamPeerTCP :< cls, Object :< cls) => cls -> IO ()
 disconnect_from_host cls
@@ -131,7 +132,7 @@ get_connected_port cls
 
 {-# NOINLINE bindStreamPeerTCP_get_status #-}
 
--- | Returns the status of the connection, see [enum StreamPeerTCP.Status].
+-- | Returns the status of the connection, see [enum Status].
 bindStreamPeerTCP_get_status :: MethodBind
 bindStreamPeerTCP_get_status
   = unsafePerformIO $
@@ -141,7 +142,7 @@ bindStreamPeerTCP_get_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the status of the connection, see [enum StreamPeerTCP.Status].
+-- | Returns the status of the connection, see [enum Status].
 get_status ::
              (StreamPeerTCP :< cls, Object :< cls) => cls -> IO Int
 get_status cls
@@ -178,8 +179,8 @@ is_connected_to_host cls
 
 {-# NOINLINE bindStreamPeerTCP_set_no_delay #-}
 
--- | Disable Nagle algorithm to improve latency for small packets.
---   				Note that for applications that send large packets, or need to transfer a lot of data, this can reduce total bandwidth.
+-- | Disables Nagle's algorithm to improve latency for small packets.
+--   				[b]Note:[/b] For applications that send large packets or need to transfer a lot of data, this can decrease the total available bandwidth.
 bindStreamPeerTCP_set_no_delay :: MethodBind
 bindStreamPeerTCP_set_no_delay
   = unsafePerformIO $
@@ -189,8 +190,8 @@ bindStreamPeerTCP_set_no_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disable Nagle algorithm to improve latency for small packets.
---   				Note that for applications that send large packets, or need to transfer a lot of data, this can reduce total bandwidth.
+-- | Disables Nagle's algorithm to improve latency for small packets.
+--   				[b]Note:[/b] For applications that send large packets or need to transfer a lot of data, this can decrease the total available bandwidth.
 set_no_delay ::
                (StreamPeerTCP :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_no_delay cls arg1

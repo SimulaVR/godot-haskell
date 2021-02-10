@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectLimiter
        (Godot.Core.AudioEffectLimiter.get_ceiling_db,
         Godot.Core.AudioEffectLimiter.get_soft_clip_db,
@@ -19,7 +20,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindAudioEffectLimiter_get_ceiling_db #-}
 
--- | The waveform's maximum allowed value. Value can range from -20 to -0.1. Default value: [code]-0.1dB[/code].
+-- | The waveform's maximum allowed value, in decibels. Value can range from -20 to -0.1.
 bindAudioEffectLimiter_get_ceiling_db :: MethodBind
 bindAudioEffectLimiter_get_ceiling_db
   = unsafePerformIO $
@@ -29,7 +30,7 @@ bindAudioEffectLimiter_get_ceiling_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The waveform's maximum allowed value. Value can range from -20 to -0.1. Default value: [code]-0.1dB[/code].
+-- | The waveform's maximum allowed value, in decibels. Value can range from -20 to -0.1.
 get_ceiling_db ::
                  (AudioEffectLimiter :< cls, Object :< cls) => cls -> IO Float
 get_ceiling_db cls
@@ -43,7 +44,7 @@ get_ceiling_db cls
 
 {-# NOINLINE bindAudioEffectLimiter_get_soft_clip_db #-}
 
--- | Applies a gain to the limited waves. Value can range from 0 to 6. Default value: [code]2dB[/code].
+-- | Applies a gain to the limited waves, in decibels. Value can range from 0 to 6.
 bindAudioEffectLimiter_get_soft_clip_db :: MethodBind
 bindAudioEffectLimiter_get_soft_clip_db
   = unsafePerformIO $
@@ -53,7 +54,7 @@ bindAudioEffectLimiter_get_soft_clip_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies a gain to the limited waves. Value can range from 0 to 6. Default value: [code]2dB[/code].
+-- | Applies a gain to the limited waves, in decibels. Value can range from 0 to 6.
 get_soft_clip_db ::
                    (AudioEffectLimiter :< cls, Object :< cls) => cls -> IO Float
 get_soft_clip_db cls
@@ -89,7 +90,7 @@ get_soft_clip_ratio cls
 
 {-# NOINLINE bindAudioEffectLimiter_get_threshold_db #-}
 
--- | Threshold from which the limiter begins to be active. Value can range from -30 to 0. Default value: [code]0dB[/code].
+-- | Threshold from which the limiter begins to be active, in decibels. Value can range from -30 to 0.
 bindAudioEffectLimiter_get_threshold_db :: MethodBind
 bindAudioEffectLimiter_get_threshold_db
   = unsafePerformIO $
@@ -99,7 +100,7 @@ bindAudioEffectLimiter_get_threshold_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Threshold from which the limiter begins to be active. Value can range from -30 to 0. Default value: [code]0dB[/code].
+-- | Threshold from which the limiter begins to be active, in decibels. Value can range from -30 to 0.
 get_threshold_db ::
                    (AudioEffectLimiter :< cls, Object :< cls) => cls -> IO Float
 get_threshold_db cls
@@ -113,7 +114,7 @@ get_threshold_db cls
 
 {-# NOINLINE bindAudioEffectLimiter_set_ceiling_db #-}
 
--- | The waveform's maximum allowed value. Value can range from -20 to -0.1. Default value: [code]-0.1dB[/code].
+-- | The waveform's maximum allowed value, in decibels. Value can range from -20 to -0.1.
 bindAudioEffectLimiter_set_ceiling_db :: MethodBind
 bindAudioEffectLimiter_set_ceiling_db
   = unsafePerformIO $
@@ -123,7 +124,7 @@ bindAudioEffectLimiter_set_ceiling_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The waveform's maximum allowed value. Value can range from -20 to -0.1. Default value: [code]-0.1dB[/code].
+-- | The waveform's maximum allowed value, in decibels. Value can range from -20 to -0.1.
 set_ceiling_db ::
                  (AudioEffectLimiter :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ceiling_db cls arg1
@@ -137,7 +138,7 @@ set_ceiling_db cls arg1
 
 {-# NOINLINE bindAudioEffectLimiter_set_soft_clip_db #-}
 
--- | Applies a gain to the limited waves. Value can range from 0 to 6. Default value: [code]2dB[/code].
+-- | Applies a gain to the limited waves, in decibels. Value can range from 0 to 6.
 bindAudioEffectLimiter_set_soft_clip_db :: MethodBind
 bindAudioEffectLimiter_set_soft_clip_db
   = unsafePerformIO $
@@ -147,7 +148,7 @@ bindAudioEffectLimiter_set_soft_clip_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies a gain to the limited waves. Value can range from 0 to 6. Default value: [code]2dB[/code].
+-- | Applies a gain to the limited waves, in decibels. Value can range from 0 to 6.
 set_soft_clip_db ::
                    (AudioEffectLimiter :< cls, Object :< cls) => cls -> Float -> IO ()
 set_soft_clip_db cls arg1
@@ -183,7 +184,7 @@ set_soft_clip_ratio cls arg1
 
 {-# NOINLINE bindAudioEffectLimiter_set_threshold_db #-}
 
--- | Threshold from which the limiter begins to be active. Value can range from -30 to 0. Default value: [code]0dB[/code].
+-- | Threshold from which the limiter begins to be active, in decibels. Value can range from -30 to 0.
 bindAudioEffectLimiter_set_threshold_db :: MethodBind
 bindAudioEffectLimiter_set_threshold_db
   = unsafePerformIO $
@@ -193,7 +194,7 @@ bindAudioEffectLimiter_set_threshold_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Threshold from which the limiter begins to be active. Value can range from -30 to 0. Default value: [code]0dB[/code].
+-- | Threshold from which the limiter begins to be active, in decibels. Value can range from -30 to 0.
 set_threshold_db ::
                    (AudioEffectLimiter :< cls, Object :< cls) => cls -> Float -> IO ()
 set_threshold_db cls arg1

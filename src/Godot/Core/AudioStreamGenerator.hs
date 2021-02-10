@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioStreamGenerator
        (Godot.Core.AudioStreamGenerator.get_buffer_length,
         Godot.Core.AudioStreamGenerator.get_mix_rate,

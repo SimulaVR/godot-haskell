@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeTextureUniform
        (Godot.Core.VisualShaderNodeTextureUniform._TYPE_DATA,
         Godot.Core.VisualShaderNodeTextureUniform._TYPE_ANISO,
@@ -40,6 +41,7 @@ _COLOR_DEFAULT_BLACK = 1
 {-# NOINLINE bindVisualShaderNodeTextureUniform_get_color_default
              #-}
 
+-- | Sets the default color if no texture is assigned to the uniform.
 bindVisualShaderNodeTextureUniform_get_color_default :: MethodBind
 bindVisualShaderNodeTextureUniform_get_color_default
   = unsafePerformIO $
@@ -49,6 +51,7 @@ bindVisualShaderNodeTextureUniform_get_color_default
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the default color if no texture is assigned to the uniform.
 get_color_default ::
                     (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                     cls -> IO Int
@@ -65,6 +68,7 @@ get_color_default cls
 {-# NOINLINE bindVisualShaderNodeTextureUniform_get_texture_type
              #-}
 
+-- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
 bindVisualShaderNodeTextureUniform_get_texture_type :: MethodBind
 bindVisualShaderNodeTextureUniform_get_texture_type
   = unsafePerformIO $
@@ -74,6 +78,7 @@ bindVisualShaderNodeTextureUniform_get_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
 get_texture_type ::
                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                    cls -> IO Int
@@ -90,6 +95,7 @@ get_texture_type cls
 {-# NOINLINE bindVisualShaderNodeTextureUniform_set_color_default
              #-}
 
+-- | Sets the default color if no texture is assigned to the uniform.
 bindVisualShaderNodeTextureUniform_set_color_default :: MethodBind
 bindVisualShaderNodeTextureUniform_set_color_default
   = unsafePerformIO $
@@ -99,6 +105,7 @@ bindVisualShaderNodeTextureUniform_set_color_default
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the default color if no texture is assigned to the uniform.
 set_color_default ::
                     (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                     cls -> Int -> IO ()
@@ -115,6 +122,7 @@ set_color_default cls arg1
 {-# NOINLINE bindVisualShaderNodeTextureUniform_set_texture_type
              #-}
 
+-- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
 bindVisualShaderNodeTextureUniform_set_texture_type :: MethodBind
 bindVisualShaderNodeTextureUniform_set_texture_type
   = unsafePerformIO $
@@ -124,6 +132,7 @@ bindVisualShaderNodeTextureUniform_set_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
 set_texture_type ::
                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                    cls -> Int -> IO ()

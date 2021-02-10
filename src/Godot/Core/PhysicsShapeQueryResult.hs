@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PhysicsShapeQueryResult
        (Godot.Core.PhysicsShapeQueryResult.get_result_count,
         Godot.Core.PhysicsShapeQueryResult.get_result_object,
@@ -16,6 +17,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_count #-}
 
+-- | Returns the number of objects that intersected with the shape.
 bindPhysicsShapeQueryResult_get_result_count :: MethodBind
 bindPhysicsShapeQueryResult_get_result_count
   = unsafePerformIO $
@@ -25,6 +27,7 @@ bindPhysicsShapeQueryResult_get_result_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of objects that intersected with the shape.
 get_result_count ::
                    (PhysicsShapeQueryResult :< cls, Object :< cls) => cls -> IO Int
 get_result_count cls
@@ -38,6 +41,7 @@ get_result_count cls
 
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_object #-}
 
+-- | Returns the [Object] that intersected with the shape at index [code]idx[/code].
 bindPhysicsShapeQueryResult_get_result_object :: MethodBind
 bindPhysicsShapeQueryResult_get_result_object
   = unsafePerformIO $
@@ -47,6 +51,7 @@ bindPhysicsShapeQueryResult_get_result_object
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [Object] that intersected with the shape at index [code]idx[/code].
 get_result_object ::
                     (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                     cls -> Int -> IO Object
@@ -62,6 +67,7 @@ get_result_object cls arg1
 
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_object_id #-}
 
+-- | Returns the instance ID of the [Object] that intersected with the shape at index [code]idx[/code].
 bindPhysicsShapeQueryResult_get_result_object_id :: MethodBind
 bindPhysicsShapeQueryResult_get_result_object_id
   = unsafePerformIO $
@@ -71,6 +77,7 @@ bindPhysicsShapeQueryResult_get_result_object_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the instance ID of the [Object] that intersected with the shape at index [code]idx[/code].
 get_result_object_id ::
                        (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                        cls -> Int -> IO Int
@@ -87,6 +94,7 @@ get_result_object_id cls arg1
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_object_shape
              #-}
 
+-- | Returns the child index of the object's [Shape] that intersected with the shape at index [code]idx[/code].
 bindPhysicsShapeQueryResult_get_result_object_shape :: MethodBind
 bindPhysicsShapeQueryResult_get_result_object_shape
   = unsafePerformIO $
@@ -96,6 +104,7 @@ bindPhysicsShapeQueryResult_get_result_object_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the child index of the object's [Shape] that intersected with the shape at index [code]idx[/code].
 get_result_object_shape ::
                           (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                           cls -> Int -> IO Int
@@ -111,6 +120,7 @@ get_result_object_shape cls arg1
 
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_rid #-}
 
+-- | Returns the [RID] of the object that intersected with the shape at index [code]idx[/code].
 bindPhysicsShapeQueryResult_get_result_rid :: MethodBind
 bindPhysicsShapeQueryResult_get_result_rid
   = unsafePerformIO $
@@ -120,6 +130,7 @@ bindPhysicsShapeQueryResult_get_result_rid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [RID] of the object that intersected with the shape at index [code]idx[/code].
 get_result_rid ::
                  (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                  cls -> Int -> IO Rid

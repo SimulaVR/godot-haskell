@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorInspectorPlugin
        (Godot.Tools.EditorInspectorPlugin.add_custom_control,
         Godot.Tools.EditorInspectorPlugin.add_property_editor,
@@ -19,6 +20,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindEditorInspectorPlugin_add_custom_control #-}
 
+-- | Adds a custom control, not necessarily a property editor.
 bindEditorInspectorPlugin_add_custom_control :: MethodBind
 bindEditorInspectorPlugin_add_custom_control
   = unsafePerformIO $
@@ -28,6 +30,7 @@ bindEditorInspectorPlugin_add_custom_control
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a custom control, not necessarily a property editor.
 add_custom_control ::
                      (EditorInspectorPlugin :< cls, Object :< cls) =>
                      cls -> Control -> IO ()
@@ -42,6 +45,7 @@ add_custom_control cls arg1
 
 {-# NOINLINE bindEditorInspectorPlugin_add_property_editor #-}
 
+-- | Adds a property editor, this must inherit [EditorProperty].
 bindEditorInspectorPlugin_add_property_editor :: MethodBind
 bindEditorInspectorPlugin_add_property_editor
   = unsafePerformIO $
@@ -51,6 +55,7 @@ bindEditorInspectorPlugin_add_property_editor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a property editor, this must inherit [EditorProperty].
 add_property_editor ::
                       (EditorInspectorPlugin :< cls, Object :< cls) =>
                       cls -> GodotString -> Control -> IO ()
@@ -67,6 +72,7 @@ add_property_editor cls arg1 arg2
 {-# NOINLINE bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
              #-}
 
+-- | Adds an editor that allows modifying multiple properties, this must inherit [EditorProperty].
 bindEditorInspectorPlugin_add_property_editor_for_multiple_properties ::
                                                                       MethodBind
 bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
@@ -77,6 +83,7 @@ bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds an editor that allows modifying multiple properties, this must inherit [EditorProperty].
 add_property_editor_for_multiple_properties ::
                                               (EditorInspectorPlugin :< cls, Object :< cls) =>
                                               cls ->
@@ -93,6 +100,7 @@ add_property_editor_for_multiple_properties cls arg1 arg2 arg3
 
 {-# NOINLINE bindEditorInspectorPlugin_can_handle #-}
 
+-- | Returns [code]true[/code] if this object can be handled by this plugin.
 bindEditorInspectorPlugin_can_handle :: MethodBind
 bindEditorInspectorPlugin_can_handle
   = unsafePerformIO $
@@ -102,6 +110,7 @@ bindEditorInspectorPlugin_can_handle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if this object can be handled by this plugin.
 can_handle ::
              (EditorInspectorPlugin :< cls, Object :< cls) =>
              cls -> Object -> IO Bool
@@ -116,6 +125,7 @@ can_handle cls arg1
 
 {-# NOINLINE bindEditorInspectorPlugin_parse_begin #-}
 
+-- | Called to allow adding controls at the beginning of the list.
 bindEditorInspectorPlugin_parse_begin :: MethodBind
 bindEditorInspectorPlugin_parse_begin
   = unsafePerformIO $
@@ -125,6 +135,7 @@ bindEditorInspectorPlugin_parse_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called to allow adding controls at the beginning of the list.
 parse_begin ::
               (EditorInspectorPlugin :< cls, Object :< cls) =>
               cls -> Object -> IO ()
@@ -139,6 +150,7 @@ parse_begin cls arg1
 
 {-# NOINLINE bindEditorInspectorPlugin_parse_category #-}
 
+-- | Called to allow adding controls at the beginning of the category.
 bindEditorInspectorPlugin_parse_category :: MethodBind
 bindEditorInspectorPlugin_parse_category
   = unsafePerformIO $
@@ -148,6 +160,7 @@ bindEditorInspectorPlugin_parse_category
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called to allow adding controls at the beginning of the category.
 parse_category ::
                  (EditorInspectorPlugin :< cls, Object :< cls) =>
                  cls -> Object -> GodotString -> IO ()
@@ -162,6 +175,7 @@ parse_category cls arg1 arg2
 
 {-# NOINLINE bindEditorInspectorPlugin_parse_end #-}
 
+-- | Called to allow adding controls at the end of the list.
 bindEditorInspectorPlugin_parse_end :: MethodBind
 bindEditorInspectorPlugin_parse_end
   = unsafePerformIO $
@@ -171,6 +185,7 @@ bindEditorInspectorPlugin_parse_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called to allow adding controls at the end of the list.
 parse_end ::
             (EditorInspectorPlugin :< cls, Object :< cls) => cls -> IO ()
 parse_end cls
@@ -184,6 +199,7 @@ parse_end cls
 
 {-# NOINLINE bindEditorInspectorPlugin_parse_property #-}
 
+-- | Called to allow adding property specific editors to the inspector. Usually these inherit [EditorProperty]. Returning [code]true[/code] removes the built-in editor for this property, otherwise allows to insert a custom editor before the built-in one.
 bindEditorInspectorPlugin_parse_property :: MethodBind
 bindEditorInspectorPlugin_parse_property
   = unsafePerformIO $
@@ -193,6 +209,7 @@ bindEditorInspectorPlugin_parse_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called to allow adding property specific editors to the inspector. Usually these inherit [EditorProperty]. Returning [code]true[/code] removes the built-in editor for this property, otherwise allows to insert a custom editor before the built-in one.
 parse_property ::
                  (EditorInspectorPlugin :< cls, Object :< cls) =>
                  cls ->

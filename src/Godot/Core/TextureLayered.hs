@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TextureLayered
        (Godot.Core.TextureLayered._FLAGS_DEFAULT,
         Godot.Core.TextureLayered._FLAG_REPEAT,
@@ -39,6 +40,7 @@ _FLAG_FILTER = 4
 
 {-# NOINLINE bindTextureLayered__get_data #-}
 
+-- | Returns a dictionary with all the data used by this texture.
 bindTextureLayered__get_data :: MethodBind
 bindTextureLayered__get_data
   = unsafePerformIO $
@@ -48,6 +50,7 @@ bindTextureLayered__get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a dictionary with all the data used by this texture.
 _get_data ::
             (TextureLayered :< cls, Object :< cls) => cls -> IO Dictionary
 _get_data cls
@@ -60,6 +63,7 @@ _get_data cls
 
 {-# NOINLINE bindTextureLayered__set_data #-}
 
+-- | Returns a dictionary with all the data used by this texture.
 bindTextureLayered__set_data :: MethodBind
 bindTextureLayered__set_data
   = unsafePerformIO $
@@ -69,6 +73,7 @@ bindTextureLayered__set_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a dictionary with all the data used by this texture.
 _set_data ::
             (TextureLayered :< cls, Object :< cls) =>
             cls -> Dictionary -> IO ()
@@ -82,6 +87,7 @@ _set_data cls arg1
 
 {-# NOINLINE bindTextureLayered_create #-}
 
+-- | Creates the [Texture3D] or [TextureArray] with specified [code]width[/code], [code]height[/code], and [code]depth[/code]. See [enum Image.Format] for [code]format[/code] options. See [enum Flags] enumerator for [code]flags[/code] options.
 bindTextureLayered_create :: MethodBind
 bindTextureLayered_create
   = unsafePerformIO $
@@ -91,6 +97,7 @@ bindTextureLayered_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates the [Texture3D] or [TextureArray] with specified [code]width[/code], [code]height[/code], and [code]depth[/code]. See [enum Image.Format] for [code]format[/code] options. See [enum Flags] enumerator for [code]flags[/code] options.
 create ::
          (TextureLayered :< cls, Object :< cls) =>
          cls -> Int -> Int -> Int -> Int -> Int -> IO ()
@@ -106,6 +113,7 @@ create cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindTextureLayered_get_depth #-}
 
+-- | Returns the depth of the texture. Depth is the 3rd dimension (typically Z-axis).
 bindTextureLayered_get_depth :: MethodBind
 bindTextureLayered_get_depth
   = unsafePerformIO $
@@ -115,6 +123,7 @@ bindTextureLayered_get_depth
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the depth of the texture. Depth is the 3rd dimension (typically Z-axis).
 get_depth ::
             (TextureLayered :< cls, Object :< cls) => cls -> IO Int
 get_depth cls
@@ -127,6 +136,7 @@ get_depth cls
 
 {-# NOINLINE bindTextureLayered_get_flags #-}
 
+-- | Specifies which [enum Flags] apply to this texture.
 bindTextureLayered_get_flags :: MethodBind
 bindTextureLayered_get_flags
   = unsafePerformIO $
@@ -136,6 +146,7 @@ bindTextureLayered_get_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies which [enum Flags] apply to this texture.
 get_flags ::
             (TextureLayered :< cls, Object :< cls) => cls -> IO Int
 get_flags cls
@@ -148,6 +159,7 @@ get_flags cls
 
 {-# NOINLINE bindTextureLayered_get_format #-}
 
+-- | Returns the current format being used by this texture. See [enum Image.Format] for details.
 bindTextureLayered_get_format :: MethodBind
 bindTextureLayered_get_format
   = unsafePerformIO $
@@ -157,6 +169,7 @@ bindTextureLayered_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the current format being used by this texture. See [enum Image.Format] for details.
 get_format ::
              (TextureLayered :< cls, Object :< cls) => cls -> IO Int
 get_format cls
@@ -169,6 +182,7 @@ get_format cls
 
 {-# NOINLINE bindTextureLayered_get_height #-}
 
+-- | Returns the height of the texture. Height is typically represented by the Y-axis.
 bindTextureLayered_get_height :: MethodBind
 bindTextureLayered_get_height
   = unsafePerformIO $
@@ -178,6 +192,7 @@ bindTextureLayered_get_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the height of the texture. Height is typically represented by the Y-axis.
 get_height ::
              (TextureLayered :< cls, Object :< cls) => cls -> IO Int
 get_height cls
@@ -190,6 +205,7 @@ get_height cls
 
 {-# NOINLINE bindTextureLayered_get_layer_data #-}
 
+-- | Returns an [Image] resource with the data from specified [code]layer[/code].
 bindTextureLayered_get_layer_data :: MethodBind
 bindTextureLayered_get_layer_data
   = unsafePerformIO $
@@ -199,6 +215,7 @@ bindTextureLayered_get_layer_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns an [Image] resource with the data from specified [code]layer[/code].
 get_layer_data ::
                  (TextureLayered :< cls, Object :< cls) => cls -> Int -> IO Image
 get_layer_data cls arg1
@@ -212,6 +229,7 @@ get_layer_data cls arg1
 
 {-# NOINLINE bindTextureLayered_get_width #-}
 
+-- | Returns the width of the texture. Width is typically represented by the X-axis.
 bindTextureLayered_get_width :: MethodBind
 bindTextureLayered_get_width
   = unsafePerformIO $
@@ -221,6 +239,7 @@ bindTextureLayered_get_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the width of the texture. Width is typically represented by the X-axis.
 get_width ::
             (TextureLayered :< cls, Object :< cls) => cls -> IO Int
 get_width cls
@@ -233,6 +252,7 @@ get_width cls
 
 {-# NOINLINE bindTextureLayered_set_data_partial #-}
 
+-- | Partially sets the data for a specified [code]layer[/code] by overwriting using the data of the specified [code]image[/code]. [code]x_offset[/code] and [code]y_offset[/code] determine where the [Image] is "stamped" over the texture. The [code]image[/code] must fit within the texture.
 bindTextureLayered_set_data_partial :: MethodBind
 bindTextureLayered_set_data_partial
   = unsafePerformIO $
@@ -242,6 +262,7 @@ bindTextureLayered_set_data_partial
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Partially sets the data for a specified [code]layer[/code] by overwriting using the data of the specified [code]image[/code]. [code]x_offset[/code] and [code]y_offset[/code] determine where the [Image] is "stamped" over the texture. The [code]image[/code] must fit within the texture.
 set_data_partial ::
                    (TextureLayered :< cls, Object :< cls) =>
                    cls -> Image -> Int -> Int -> Int -> Int -> IO ()
@@ -258,6 +279,7 @@ set_data_partial cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindTextureLayered_set_flags #-}
 
+-- | Specifies which [enum Flags] apply to this texture.
 bindTextureLayered_set_flags :: MethodBind
 bindTextureLayered_set_flags
   = unsafePerformIO $
@@ -267,6 +289,7 @@ bindTextureLayered_set_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Specifies which [enum Flags] apply to this texture.
 set_flags ::
             (TextureLayered :< cls, Object :< cls) => cls -> Int -> IO ()
 set_flags cls arg1
@@ -279,6 +302,7 @@ set_flags cls arg1
 
 {-# NOINLINE bindTextureLayered_set_layer_data #-}
 
+-- | Sets the data for the specified layer. Data takes the form of a 2-dimensional [Image] resource.
 bindTextureLayered_set_layer_data :: MethodBind
 bindTextureLayered_set_layer_data
   = unsafePerformIO $
@@ -288,6 +312,7 @@ bindTextureLayered_set_layer_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the data for the specified layer. Data takes the form of a 2-dimensional [Image] resource.
 set_layer_data ::
                  (TextureLayered :< cls, Object :< cls) =>
                  cls -> Image -> Int -> IO ()

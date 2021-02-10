@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ARVRServer
        (Godot.Core.ARVRServer._RESET_BUT_KEEP_TILT,
         Godot.Core.ARVRServer._RESET_FULL_ROTATION,
@@ -65,33 +66,43 @@ _TRACKER_ANCHOR = 4
 _TRACKER_ANY :: Int
 _TRACKER_ANY = 255
 
--- | Signal send when a new interface has been added.
+-- | Emitted when a new interface has been added.
 sig_interface_added :: Godot.Internal.Dispatch.Signal ARVRServer
 sig_interface_added
   = Godot.Internal.Dispatch.Signal "interface_added"
 
--- | Signal send when an interface is removed.
+instance NodeSignal ARVRServer "interface_added" '[GodotString]
+
+-- | Emitted when an interface is removed.
 sig_interface_removed :: Godot.Internal.Dispatch.Signal ARVRServer
 sig_interface_removed
   = Godot.Internal.Dispatch.Signal "interface_removed"
 
--- | Signal send when a new tracker has been added. If you don't use a fixed number of controllers or if you're using ARVRAnchors for an AR solution it is important to react to this signal and add the appropriate ARVRController or ARVRAnchor node related to this new tracker.
+instance NodeSignal ARVRServer "interface_removed" '[GodotString]
+
+-- | Emitted when a new tracker has been added. If you don't use a fixed number of controllers or if you're using [ARVRAnchor]s for an AR solution, it is important to react to this signal to add the appropriate [ARVRController] or [ARVRAnchor] nodes related to this new tracker.
 sig_tracker_added :: Godot.Internal.Dispatch.Signal ARVRServer
 sig_tracker_added = Godot.Internal.Dispatch.Signal "tracker_added"
 
--- | Signal send when a tracker is removed, you should remove any ARVRController or ARVRAnchor points if applicable. This is not mandatory, the nodes simply become inactive and will be made active again when a new tracker becomes available (i.e. a new controller is switched on that takes the place of the previous one).
+instance NodeSignal ARVRServer "tracker_added"
+           '[GodotString, Int, Int]
+
+-- | Emitted when a tracker is removed. You should remove any [ARVRController] or [ARVRAnchor] points if applicable. This is not mandatory, the nodes simply become inactive and will be made active again when a new tracker becomes available (i.e. a new controller is switched on that takes the place of the previous one).
 sig_tracker_removed :: Godot.Internal.Dispatch.Signal ARVRServer
 sig_tracker_removed
   = Godot.Internal.Dispatch.Signal "tracker_removed"
 
+instance NodeSignal ARVRServer "tracker_removed"
+           '[GodotString, Int, Int]
+
 {-# NOINLINE bindARVRServer_center_on_hmd #-}
 
--- | This is a really important function to understand correctly. AR and VR platforms all handle positioning slightly differently.
---   				For platforms that do not offer spatial tracking our origin point (0,0,0) is the location of our HMD but you have little control over the direction the player is facing in the real world.
---   				For platforms that do offer spatial tracking our origin point depends very much on the system. For OpenVR our origin point is usually the center of the tracking space, on the ground. For other platforms its often the location of the tracking camera.
---   				This method allows you to center our tracker on the location of the HMD, it will take the current location of the HMD and use that to adjust all our tracking data in essence realigning the real world to your players current position in your game world.
---   				For this method to produce usable results tracking information should be available and this often takes a few frames after starting your game.
---   				You should call this method after a few seconds have passed, when the user requests a realignment of the display holding a designated button on a controller for a short period of time, and when implementing a teleport mechanism.
+-- | This is an important function to understand correctly. AR and VR platforms all handle positioning slightly differently.
+--   				For platforms that do not offer spatial tracking, our origin point (0,0,0) is the location of our HMD, but you have little control over the direction the player is facing in the real world.
+--   				For platforms that do offer spatial tracking, our origin point depends very much on the system. For OpenVR, our origin point is usually the center of the tracking space, on the ground. For other platforms, it's often the location of the tracking camera.
+--   				This method allows you to center your tracker on the location of the HMD. It will take the current location of the HMD and use that to adjust all your tracking data; in essence, realigning the real world to your player's current position in the game world.
+--   				For this method to produce usable results, tracking information must be available. This often takes a few frames after starting your game.
+--   				You should call this method after a few seconds have passed. For instance, when the user requests a realignment of the display holding a designated button on a controller for a short period of time, or when implementing a teleport mechanism.
 bindARVRServer_center_on_hmd :: MethodBind
 bindARVRServer_center_on_hmd
   = unsafePerformIO $
@@ -101,12 +112,12 @@ bindARVRServer_center_on_hmd
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This is a really important function to understand correctly. AR and VR platforms all handle positioning slightly differently.
---   				For platforms that do not offer spatial tracking our origin point (0,0,0) is the location of our HMD but you have little control over the direction the player is facing in the real world.
---   				For platforms that do offer spatial tracking our origin point depends very much on the system. For OpenVR our origin point is usually the center of the tracking space, on the ground. For other platforms its often the location of the tracking camera.
---   				This method allows you to center our tracker on the location of the HMD, it will take the current location of the HMD and use that to adjust all our tracking data in essence realigning the real world to your players current position in your game world.
---   				For this method to produce usable results tracking information should be available and this often takes a few frames after starting your game.
---   				You should call this method after a few seconds have passed, when the user requests a realignment of the display holding a designated button on a controller for a short period of time, and when implementing a teleport mechanism.
+-- | This is an important function to understand correctly. AR and VR platforms all handle positioning slightly differently.
+--   				For platforms that do not offer spatial tracking, our origin point (0,0,0) is the location of our HMD, but you have little control over the direction the player is facing in the real world.
+--   				For platforms that do offer spatial tracking, our origin point depends very much on the system. For OpenVR, our origin point is usually the center of the tracking space, on the ground. For other platforms, it's often the location of the tracking camera.
+--   				This method allows you to center your tracker on the location of the HMD. It will take the current location of the HMD and use that to adjust all your tracking data; in essence, realigning the real world to your player's current position in the game world.
+--   				For this method to produce usable results, tracking information must be available. This often takes a few frames after starting your game.
+--   				You should call this method after a few seconds have passed. For instance, when the user requests a realignment of the display holding a designated button on a controller for a short period of time, or when implementing a teleport mechanism.
 center_on_hmd ::
                 (ARVRServer :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 center_on_hmd cls arg1 arg2
@@ -119,7 +130,7 @@ center_on_hmd cls arg1 arg2
 
 {-# NOINLINE bindARVRServer_find_interface #-}
 
--- | Find an interface by its name. Say that you're making a game that uses specific capabilities of an AR/VR platform you can find the interface for that platform by name and initialize it.
+-- | Finds an interface by its name. For instance, if your project uses capabilities of an AR/VR platform, you can find the interface for that platform by name and initialize it.
 bindARVRServer_find_interface :: MethodBind
 bindARVRServer_find_interface
   = unsafePerformIO $
@@ -129,7 +140,7 @@ bindARVRServer_find_interface
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Find an interface by its name. Say that you're making a game that uses specific capabilities of an AR/VR platform you can find the interface for that platform by name and initialize it.
+-- | Finds an interface by its name. For instance, if your project uses capabilities of an AR/VR platform, you can find the interface for that platform by name and initialize it.
 find_interface ::
                  (ARVRServer :< cls, Object :< cls) =>
                  cls -> GodotString -> IO ARVRInterface
@@ -167,7 +178,7 @@ get_hmd_transform cls
 
 {-# NOINLINE bindARVRServer_get_interface #-}
 
--- | Get the interface registered at a given index in our list of interfaces.
+-- | Returns the interface registered at a given index in our list of interfaces.
 bindARVRServer_get_interface :: MethodBind
 bindARVRServer_get_interface
   = unsafePerformIO $
@@ -177,7 +188,7 @@ bindARVRServer_get_interface
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the interface registered at a given index in our list of interfaces.
+-- | Returns the interface registered at a given index in our list of interfaces.
 get_interface ::
                 (ARVRServer :< cls, Object :< cls) =>
                 cls -> Int -> IO ARVRInterface
@@ -191,7 +202,7 @@ get_interface cls arg1
 
 {-# NOINLINE bindARVRServer_get_interface_count #-}
 
--- | Get the number of interfaces currently registered with the AR/VR server. If your game supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try an initialize each interface and use the first one that returns [code]true[/code].
+-- | Returns the number of interfaces currently registered with the AR/VR server. If your project supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try to initialize each interface and use the first one that returns [code]true[/code].
 bindARVRServer_get_interface_count :: MethodBind
 bindARVRServer_get_interface_count
   = unsafePerformIO $
@@ -201,7 +212,7 @@ bindARVRServer_get_interface_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the number of interfaces currently registered with the AR/VR server. If your game supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try an initialize each interface and use the first one that returns [code]true[/code].
+-- | Returns the number of interfaces currently registered with the AR/VR server. If your project supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try to initialize each interface and use the first one that returns [code]true[/code].
 get_interface_count ::
                       (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_interface_count cls
@@ -215,7 +226,7 @@ get_interface_count cls
 
 {-# NOINLINE bindARVRServer_get_interfaces #-}
 
--- | Returns a list of available interfaces with both id and name of the interface.
+-- | Returns a list of available interfaces the ID and name of each interface.
 bindARVRServer_get_interfaces :: MethodBind
 bindARVRServer_get_interfaces
   = unsafePerformIO $
@@ -225,7 +236,7 @@ bindARVRServer_get_interfaces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a list of available interfaces with both id and name of the interface.
+-- | Returns a list of available interfaces the ID and name of each interface.
 get_interfaces ::
                  (ARVRServer :< cls, Object :< cls) => cls -> IO Array
 get_interfaces cls
@@ -238,6 +249,7 @@ get_interfaces cls
 
 {-# NOINLINE bindARVRServer_get_last_commit_usec #-}
 
+-- | Returns the absolute timestamp (in μs) of the last [ARVRServer] commit of the AR/VR eyes to [VisualServer]. The value comes from an internal call to [method OS.get_ticks_usec].
 bindARVRServer_get_last_commit_usec :: MethodBind
 bindARVRServer_get_last_commit_usec
   = unsafePerformIO $
@@ -247,6 +259,7 @@ bindARVRServer_get_last_commit_usec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the absolute timestamp (in μs) of the last [ARVRServer] commit of the AR/VR eyes to [VisualServer]. The value comes from an internal call to [method OS.get_ticks_usec].
 get_last_commit_usec ::
                        (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_last_commit_usec cls
@@ -260,6 +273,7 @@ get_last_commit_usec cls
 
 {-# NOINLINE bindARVRServer_get_last_frame_usec #-}
 
+-- | Returns the duration (in μs) of the last frame. This is computed as the difference between [method get_last_commit_usec] and [method get_last_process_usec] when committing.
 bindARVRServer_get_last_frame_usec :: MethodBind
 bindARVRServer_get_last_frame_usec
   = unsafePerformIO $
@@ -269,6 +283,7 @@ bindARVRServer_get_last_frame_usec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the duration (in μs) of the last frame. This is computed as the difference between [method get_last_commit_usec] and [method get_last_process_usec] when committing.
 get_last_frame_usec ::
                       (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_last_frame_usec cls
@@ -282,6 +297,7 @@ get_last_frame_usec cls
 
 {-# NOINLINE bindARVRServer_get_last_process_usec #-}
 
+-- | Returns the absolute timestamp (in μs) of the last [ARVRServer] process callback. The value comes from an internal call to [method OS.get_ticks_usec].
 bindARVRServer_get_last_process_usec :: MethodBind
 bindARVRServer_get_last_process_usec
   = unsafePerformIO $
@@ -291,6 +307,7 @@ bindARVRServer_get_last_process_usec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the absolute timestamp (in μs) of the last [ARVRServer] process callback. The value comes from an internal call to [method OS.get_ticks_usec].
 get_last_process_usec ::
                         (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_last_process_usec cls
@@ -304,6 +321,7 @@ get_last_process_usec cls
 
 {-# NOINLINE bindARVRServer_get_primary_interface #-}
 
+-- | The primary [ARVRInterface] currently bound to the [ARVRServer].
 bindARVRServer_get_primary_interface :: MethodBind
 bindARVRServer_get_primary_interface
   = unsafePerformIO $
@@ -313,6 +331,7 @@ bindARVRServer_get_primary_interface
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The primary [ARVRInterface] currently bound to the [ARVRServer].
 get_primary_interface ::
                         (ARVRServer :< cls, Object :< cls) => cls -> IO ARVRInterface
 get_primary_interface cls
@@ -326,7 +345,7 @@ get_primary_interface cls
 
 {-# NOINLINE bindARVRServer_get_reference_frame #-}
 
--- | Gets our reference frame transform, mostly used internally and exposed for GDNative build interfaces.
+-- | Returns the reference frame transform. Mostly used internally and exposed for GDNative build interfaces.
 bindARVRServer_get_reference_frame :: MethodBind
 bindARVRServer_get_reference_frame
   = unsafePerformIO $
@@ -336,7 +355,7 @@ bindARVRServer_get_reference_frame
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets our reference frame transform, mostly used internally and exposed for GDNative build interfaces.
+-- | Returns the reference frame transform. Mostly used internally and exposed for GDNative build interfaces.
 get_reference_frame ::
                       (ARVRServer :< cls, Object :< cls) => cls -> IO Transform
 get_reference_frame cls
@@ -350,7 +369,7 @@ get_reference_frame cls
 
 {-# NOINLINE bindARVRServer_get_tracker #-}
 
--- | Get the positional tracker at the given ID.
+-- | Returns the positional tracker at the given ID.
 bindARVRServer_get_tracker :: MethodBind
 bindARVRServer_get_tracker
   = unsafePerformIO $
@@ -360,7 +379,7 @@ bindARVRServer_get_tracker
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the positional tracker at the given ID.
+-- | Returns the positional tracker at the given ID.
 get_tracker ::
               (ARVRServer :< cls, Object :< cls) =>
               cls -> Int -> IO ARVRPositionalTracker
@@ -374,7 +393,7 @@ get_tracker cls arg1
 
 {-# NOINLINE bindARVRServer_get_tracker_count #-}
 
--- | Get the number of trackers currently registered.
+-- | Returns the number of trackers currently registered.
 bindARVRServer_get_tracker_count :: MethodBind
 bindARVRServer_get_tracker_count
   = unsafePerformIO $
@@ -384,7 +403,7 @@ bindARVRServer_get_tracker_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the number of trackers currently registered.
+-- | Returns the number of trackers currently registered.
 get_tracker_count ::
                     (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_tracker_count cls
@@ -398,7 +417,7 @@ get_tracker_count cls
 
 {-# NOINLINE bindARVRServer_get_world_scale #-}
 
--- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 meter in the real world.
+-- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 real world meter.
 bindARVRServer_get_world_scale :: MethodBind
 bindARVRServer_get_world_scale
   = unsafePerformIO $
@@ -408,7 +427,7 @@ bindARVRServer_get_world_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 meter in the real world.
+-- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 real world meter.
 get_world_scale ::
                   (ARVRServer :< cls, Object :< cls) => cls -> IO Float
 get_world_scale cls
@@ -421,6 +440,7 @@ get_world_scale cls
 
 {-# NOINLINE bindARVRServer_set_primary_interface #-}
 
+-- | The primary [ARVRInterface] currently bound to the [ARVRServer].
 bindARVRServer_set_primary_interface :: MethodBind
 bindARVRServer_set_primary_interface
   = unsafePerformIO $
@@ -430,6 +450,7 @@ bindARVRServer_set_primary_interface
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The primary [ARVRInterface] currently bound to the [ARVRServer].
 set_primary_interface ::
                         (ARVRServer :< cls, Object :< cls) => cls -> ARVRInterface -> IO ()
 set_primary_interface cls arg1
@@ -443,7 +464,7 @@ set_primary_interface cls arg1
 
 {-# NOINLINE bindARVRServer_set_world_scale #-}
 
--- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 meter in the real world.
+-- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 real world meter.
 bindARVRServer_set_world_scale :: MethodBind
 bindARVRServer_set_world_scale
   = unsafePerformIO $
@@ -453,7 +474,7 @@ bindARVRServer_set_world_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 meter in the real world.
+-- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 real world meter.
 set_world_scale ::
                   (ARVRServer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_world_scale cls arg1

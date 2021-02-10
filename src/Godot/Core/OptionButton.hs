@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.OptionButton
        (Godot.Core.OptionButton.sig_item_focused,
         Godot.Core.OptionButton.sig_item_selected,
@@ -38,13 +39,17 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
--- | This signal is emitted when user navigated to an item using [code]ui_up[/code] or [code]ui_down[/code] action. ID of the item selected is passed as argument.
+-- | Emitted when the user navigates to an item using the [code]ui_up[/code] or [code]ui_down[/code] actions. The index of the item selected is passed as argument.
 sig_item_focused :: Godot.Internal.Dispatch.Signal OptionButton
 sig_item_focused = Godot.Internal.Dispatch.Signal "item_focused"
 
--- | This signal is emitted when the current item was changed by the user. Index of the item selected is passed as argument.
+instance NodeSignal OptionButton "item_focused" '[Int]
+
+-- | Emitted when the current item has been changed by the user. The index of the item selected is passed as argument.
 sig_item_selected :: Godot.Internal.Dispatch.Signal OptionButton
 sig_item_selected = Godot.Internal.Dispatch.Signal "item_selected"
+
+instance NodeSignal OptionButton "item_selected" '[Int]
 
 {-# NOINLINE bindOptionButton__focused #-}
 
@@ -90,6 +95,7 @@ _get_items cls
 
 {-# NOINLINE bindOptionButton__select_int #-}
 
+-- | The index of the currently selected item, or [code]-1[/code] if no item is selected.
 bindOptionButton__select_int :: MethodBind
 bindOptionButton__select_int
   = unsafePerformIO $
@@ -99,6 +105,7 @@ bindOptionButton__select_int
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The index of the currently selected item, or [code]-1[/code] if no item is selected.
 _select_int ::
               (OptionButton :< cls, Object :< cls) => cls -> Int -> IO ()
 _select_int cls arg1
@@ -153,7 +160,7 @@ _set_items cls arg1
 
 {-# NOINLINE bindOptionButton_add_icon_item #-}
 
--- | Add an item, with a "texture" icon, text "label" and (optionally) id. If no "id" is passed, "id" becomes the item index. New items are appended at the end.
+-- | Adds an item, with a [code]texture[/code] icon, text [code]label[/code] and (optionally) [code]id[/code]. If no [code]id[/code] is passed, the item index will be used as the item's ID. New items are appended at the end.
 bindOptionButton_add_icon_item :: MethodBind
 bindOptionButton_add_icon_item
   = unsafePerformIO $
@@ -163,7 +170,7 @@ bindOptionButton_add_icon_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add an item, with a "texture" icon, text "label" and (optionally) id. If no "id" is passed, "id" becomes the item index. New items are appended at the end.
+-- | Adds an item, with a [code]texture[/code] icon, text [code]label[/code] and (optionally) [code]id[/code]. If no [code]id[/code] is passed, the item index will be used as the item's ID. New items are appended at the end.
 add_icon_item ::
                 (OptionButton :< cls, Object :< cls) =>
                 cls -> Texture -> GodotString -> Int -> IO ()
@@ -177,7 +184,7 @@ add_icon_item cls arg1 arg2 arg3
 
 {-# NOINLINE bindOptionButton_add_item #-}
 
--- | Add an item, with text "label" and (optionally) id. If no "id" is passed, "id" becomes the item index. New items are appended at the end.
+-- | Adds an item, with text [code]label[/code] and (optionally) [code]id[/code]. If no [code]id[/code] is passed, the item index will be used as the item's ID. New items are appended at the end.
 bindOptionButton_add_item :: MethodBind
 bindOptionButton_add_item
   = unsafePerformIO $
@@ -187,7 +194,7 @@ bindOptionButton_add_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add an item, with text "label" and (optionally) id. If no "id" is passed, "id" becomes the item index. New items are appended at the end.
+-- | Adds an item, with text [code]label[/code] and (optionally) [code]id[/code]. If no [code]id[/code] is passed, the item index will be used as the item's ID. New items are appended at the end.
 add_item ::
            (OptionButton :< cls, Object :< cls) =>
            cls -> GodotString -> Int -> IO ()
@@ -201,7 +208,7 @@ add_item cls arg1 arg2
 
 {-# NOINLINE bindOptionButton_add_separator #-}
 
--- | Add a separator to the list of items. Separators help to group items. Separator also takes up an index and is appended at the end.
+-- | Adds a separator to the list of items. Separators help to group items. Separator also takes up an index and is appended at the end.
 bindOptionButton_add_separator :: MethodBind
 bindOptionButton_add_separator
   = unsafePerformIO $
@@ -211,7 +218,7 @@ bindOptionButton_add_separator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a separator to the list of items. Separators help to group items. Separator also takes up an index and is appended at the end.
+-- | Adds a separator to the list of items. Separators help to group items. Separator also takes up an index and is appended at the end.
 add_separator ::
                 (OptionButton :< cls, Object :< cls) => cls -> IO ()
 add_separator cls
@@ -224,7 +231,7 @@ add_separator cls
 
 {-# NOINLINE bindOptionButton_clear #-}
 
--- | Clear all the items in the [code]OptionButton[/code].
+-- | Clears all the items in the [OptionButton].
 bindOptionButton_clear :: MethodBind
 bindOptionButton_clear
   = unsafePerformIO $
@@ -234,7 +241,7 @@ bindOptionButton_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clear all the items in the [code]OptionButton[/code].
+-- | Clears all the items in the [OptionButton].
 clear :: (OptionButton :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -245,7 +252,7 @@ clear cls
 
 {-# NOINLINE bindOptionButton_get_item_count #-}
 
--- | Returns the amount of items in the OptionButton.
+-- | Returns the amount of items in the OptionButton, including separators.
 bindOptionButton_get_item_count :: MethodBind
 bindOptionButton_get_item_count
   = unsafePerformIO $
@@ -255,7 +262,7 @@ bindOptionButton_get_item_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the amount of items in the OptionButton.
+-- | Returns the amount of items in the OptionButton, including separators.
 get_item_count ::
                  (OptionButton :< cls, Object :< cls) => cls -> IO Int
 get_item_count cls
@@ -268,7 +275,7 @@ get_item_count cls
 
 {-# NOINLINE bindOptionButton_get_item_icon #-}
 
--- | Returns the icon of the item at index "idx".
+-- | Returns the icon of the item at index [code]idx[/code].
 bindOptionButton_get_item_icon :: MethodBind
 bindOptionButton_get_item_icon
   = unsafePerformIO $
@@ -278,7 +285,7 @@ bindOptionButton_get_item_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the icon of the item at index "idx".
+-- | Returns the icon of the item at index [code]idx[/code].
 get_item_icon ::
                 (OptionButton :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_item_icon cls arg1
@@ -337,6 +344,7 @@ get_item_index cls arg1
 
 {-# NOINLINE bindOptionButton_get_item_metadata #-}
 
+-- | Retrieves the metadata of an item. Metadata may be any type and can be used to store extra information about an item, such as an external string ID.
 bindOptionButton_get_item_metadata :: MethodBind
 bindOptionButton_get_item_metadata
   = unsafePerformIO $
@@ -346,6 +354,7 @@ bindOptionButton_get_item_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Retrieves the metadata of an item. Metadata may be any type and can be used to store extra information about an item, such as an external string ID.
 get_item_metadata ::
                     (OptionButton :< cls, Object :< cls) =>
                     cls -> Int -> IO GodotVariant
@@ -360,7 +369,7 @@ get_item_metadata cls arg1
 
 {-# NOINLINE bindOptionButton_get_item_text #-}
 
--- | Returns the text of the item at index "idx".
+-- | Returns the text of the item at index [code]idx[/code].
 bindOptionButton_get_item_text :: MethodBind
 bindOptionButton_get_item_text
   = unsafePerformIO $
@@ -370,7 +379,7 @@ bindOptionButton_get_item_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the text of the item at index "idx".
+-- | Returns the text of the item at index [code]idx[/code].
 get_item_text ::
                 (OptionButton :< cls, Object :< cls) =>
                 cls -> Int -> IO GodotString
@@ -407,6 +416,7 @@ get_popup cls
 
 {-# NOINLINE bindOptionButton_get_selected #-}
 
+-- | The index of the currently selected item, or [code]-1[/code] if no item is selected.
 bindOptionButton_get_selected :: MethodBind
 bindOptionButton_get_selected
   = unsafePerformIO $
@@ -416,6 +426,7 @@ bindOptionButton_get_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The index of the currently selected item, or [code]-1[/code] if no item is selected.
 get_selected ::
                (OptionButton :< cls, Object :< cls) => cls -> IO Int
 get_selected cls
@@ -428,6 +439,7 @@ get_selected cls
 
 {-# NOINLINE bindOptionButton_get_selected_id #-}
 
+-- | Returns the ID of the selected item, or [code]0[/code] if no item is selected.
 bindOptionButton_get_selected_id :: MethodBind
 bindOptionButton_get_selected_id
   = unsafePerformIO $
@@ -437,6 +449,7 @@ bindOptionButton_get_selected_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the ID of the selected item, or [code]0[/code] if no item is selected.
 get_selected_id ::
                   (OptionButton :< cls, Object :< cls) => cls -> IO Int
 get_selected_id cls
@@ -450,6 +463,7 @@ get_selected_id cls
 
 {-# NOINLINE bindOptionButton_get_selected_metadata #-}
 
+-- | Gets the metadata of the selected item. Metadata for items can be set using [method set_item_metadata].
 bindOptionButton_get_selected_metadata :: MethodBind
 bindOptionButton_get_selected_metadata
   = unsafePerformIO $
@@ -459,6 +473,7 @@ bindOptionButton_get_selected_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Gets the metadata of the selected item. Metadata for items can be set using [method set_item_metadata].
 get_selected_metadata ::
                         (OptionButton :< cls, Object :< cls) => cls -> IO GodotVariant
 get_selected_metadata cls
@@ -472,6 +487,7 @@ get_selected_metadata cls
 
 {-# NOINLINE bindOptionButton_is_item_disabled #-}
 
+-- | Returns [code]true[/code] if the item at index [code]idx[/code] is disabled.
 bindOptionButton_is_item_disabled :: MethodBind
 bindOptionButton_is_item_disabled
   = unsafePerformIO $
@@ -481,6 +497,7 @@ bindOptionButton_is_item_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the item at index [code]idx[/code] is disabled.
 is_item_disabled ::
                    (OptionButton :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_disabled cls arg1
@@ -494,6 +511,7 @@ is_item_disabled cls arg1
 
 {-# NOINLINE bindOptionButton_remove_item #-}
 
+-- | Removes the item at index [code]idx[/code].
 bindOptionButton_remove_item :: MethodBind
 bindOptionButton_remove_item
   = unsafePerformIO $
@@ -503,6 +521,7 @@ bindOptionButton_remove_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes the item at index [code]idx[/code].
 remove_item ::
               (OptionButton :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_item cls arg1
@@ -515,7 +534,7 @@ remove_item cls arg1
 
 {-# NOINLINE bindOptionButton_select #-}
 
--- | Select an item by index and make it the current item.
+-- | Selects an item by index and makes it the current item. This will work even if the item is disabled.
 bindOptionButton_select :: MethodBind
 bindOptionButton_select
   = unsafePerformIO $
@@ -525,7 +544,7 @@ bindOptionButton_select
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Select an item by index and make it the current item.
+-- | Selects an item by index and makes it the current item. This will work even if the item is disabled.
 select ::
          (OptionButton :< cls, Object :< cls) => cls -> Int -> IO ()
 select cls arg1
@@ -537,6 +556,8 @@ select cls arg1
 
 {-# NOINLINE bindOptionButton_set_item_disabled #-}
 
+-- | Sets whether the item at index [code]idx[/code] is disabled.
+--   				Disabled items are drawn differently in the dropdown and are not selectable by the user. If the current selected item is set as disabled, it will remain selected.
 bindOptionButton_set_item_disabled :: MethodBind
 bindOptionButton_set_item_disabled
   = unsafePerformIO $
@@ -546,6 +567,8 @@ bindOptionButton_set_item_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets whether the item at index [code]idx[/code] is disabled.
+--   				Disabled items are drawn differently in the dropdown and are not selectable by the user. If the current selected item is set as disabled, it will remain selected.
 set_item_disabled ::
                     (OptionButton :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_item_disabled cls arg1 arg2
@@ -559,7 +582,7 @@ set_item_disabled cls arg1 arg2
 
 {-# NOINLINE bindOptionButton_set_item_icon #-}
 
--- | Set the icon of an item at index "idx".
+-- | Sets the icon of the item at index [code]idx[/code].
 bindOptionButton_set_item_icon :: MethodBind
 bindOptionButton_set_item_icon
   = unsafePerformIO $
@@ -569,7 +592,7 @@ bindOptionButton_set_item_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the icon of an item at index "idx".
+-- | Sets the icon of the item at index [code]idx[/code].
 set_item_icon ::
                 (OptionButton :< cls, Object :< cls) =>
                 cls -> Int -> Texture -> IO ()
@@ -583,7 +606,7 @@ set_item_icon cls arg1 arg2
 
 {-# NOINLINE bindOptionButton_set_item_id #-}
 
--- | Set the ID of an item at index "idx".
+-- | Sets the ID of the item at index [code]idx[/code].
 bindOptionButton_set_item_id :: MethodBind
 bindOptionButton_set_item_id
   = unsafePerformIO $
@@ -593,7 +616,7 @@ bindOptionButton_set_item_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the ID of an item at index "idx".
+-- | Sets the ID of the item at index [code]idx[/code].
 set_item_id ::
               (OptionButton :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_item_id cls arg1 arg2
@@ -606,6 +629,7 @@ set_item_id cls arg1 arg2
 
 {-# NOINLINE bindOptionButton_set_item_metadata #-}
 
+-- | Sets the metadata of an item. Metadata may be of any type and can be used to store extra information about an item, such as an external string ID.
 bindOptionButton_set_item_metadata :: MethodBind
 bindOptionButton_set_item_metadata
   = unsafePerformIO $
@@ -615,6 +639,7 @@ bindOptionButton_set_item_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the metadata of an item. Metadata may be of any type and can be used to store extra information about an item, such as an external string ID.
 set_item_metadata ::
                     (OptionButton :< cls, Object :< cls) =>
                     cls -> Int -> GodotVariant -> IO ()
@@ -629,7 +654,7 @@ set_item_metadata cls arg1 arg2
 
 {-# NOINLINE bindOptionButton_set_item_text #-}
 
--- | Set the text of an item at index "idx".
+-- | Sets the text of the item at index [code]idx[/code].
 bindOptionButton_set_item_text :: MethodBind
 bindOptionButton_set_item_text
   = unsafePerformIO $
@@ -639,7 +664,7 @@ bindOptionButton_set_item_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the text of an item at index "idx".
+-- | Sets the text of the item at index [code]idx[/code].
 set_item_text ::
                 (OptionButton :< cls, Object :< cls) =>
                 cls -> Int -> GodotString -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationPlayer
        (Godot.Core.AnimationPlayer._ANIMATION_METHOD_CALL_IMMEDIATE,
         Godot.Core.AnimationPlayer._ANIMATION_METHOD_CALL_DEFERRED,
@@ -83,11 +84,17 @@ sig_animation_changed ::
 sig_animation_changed
   = Godot.Internal.Dispatch.Signal "animation_changed"
 
+instance NodeSignal AnimationPlayer "animation_changed"
+           '[GodotString, GodotString]
+
 -- | Notifies when an animation finished playing.
 sig_animation_finished ::
                        Godot.Internal.Dispatch.Signal AnimationPlayer
 sig_animation_finished
   = Godot.Internal.Dispatch.Signal "animation_finished"
+
+instance NodeSignal AnimationPlayer "animation_finished"
+           '[GodotString]
 
 -- | Notifies when an animation starts playing.
 sig_animation_started ::
@@ -95,10 +102,16 @@ sig_animation_started ::
 sig_animation_started
   = Godot.Internal.Dispatch.Signal "animation_started"
 
+instance NodeSignal AnimationPlayer "animation_started"
+           '[GodotString]
+
+-- | Notifies when the caches have been cleared, either automatically, or manually via [method clear_caches].
 sig_caches_cleared ::
                    Godot.Internal.Dispatch.Signal AnimationPlayer
 sig_caches_cleared
   = Godot.Internal.Dispatch.Signal "caches_cleared"
+
+instance NodeSignal AnimationPlayer "caches_cleared" '[]
 
 {-# NOINLINE bindAnimationPlayer__animation_changed #-}
 
@@ -171,7 +184,7 @@ add_animation cls arg1 arg2
 
 {-# NOINLINE bindAnimationPlayer_advance #-}
 
--- | Shifts position in the animation timeline. Delta is the time in seconds to shift. Events between the current frame and [code]delta[/code] are handled.
+-- | Shifts position in the animation timeline and immediately updates the animation. [code]delta[/code] is the time in seconds to shift. Events between the current frame and [code]delta[/code] are handled.
 bindAnimationPlayer_advance :: MethodBind
 bindAnimationPlayer_advance
   = unsafePerformIO $
@@ -181,7 +194,7 @@ bindAnimationPlayer_advance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shifts position in the animation timeline. Delta is the time in seconds to shift. Events between the current frame and [code]delta[/code] are handled.
+-- | Shifts position in the animation timeline and immediately updates the animation. [code]delta[/code] is the time in seconds to shift. Events between the current frame and [code]delta[/code] are handled.
 advance ::
           (AnimationPlayer :< cls, Object :< cls) => cls -> Float -> IO ()
 advance cls arg1
@@ -244,7 +257,7 @@ animation_set_next cls arg1 arg2
 
 {-# NOINLINE bindAnimationPlayer_clear_caches #-}
 
--- | [code]AnimationPlayer[/code] caches animated nodes. It may not notice if a node disappears, so clear_caches forces it to update the cache again.
+-- | [AnimationPlayer] caches animated nodes. It may not notice if a node disappears; [method clear_caches] forces it to update the cache again.
 bindAnimationPlayer_clear_caches :: MethodBind
 bindAnimationPlayer_clear_caches
   = unsafePerformIO $
@@ -254,7 +267,7 @@ bindAnimationPlayer_clear_caches
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [code]AnimationPlayer[/code] caches animated nodes. It may not notice if a node disappears, so clear_caches forces it to update the cache again.
+-- | [AnimationPlayer] caches animated nodes. It may not notice if a node disappears; [method clear_caches] forces it to update the cache again.
 clear_caches ::
                (AnimationPlayer :< cls, Object :< cls) => cls -> IO ()
 clear_caches cls
@@ -291,7 +304,7 @@ clear_queue cls
 
 {-# NOINLINE bindAnimationPlayer_find_animation #-}
 
--- | Returns the name of [code]animation[/code] or empty string if not found.
+-- | Returns the name of [code]animation[/code] or an empty string if not found.
 bindAnimationPlayer_find_animation :: MethodBind
 bindAnimationPlayer_find_animation
   = unsafePerformIO $
@@ -301,7 +314,7 @@ bindAnimationPlayer_find_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the name of [code]animation[/code] or empty string if not found.
+-- | Returns the name of [code]animation[/code] or an empty string if not found.
 find_animation ::
                  (AnimationPlayer :< cls, Object :< cls) =>
                  cls -> Animation -> IO GodotString
@@ -366,7 +379,7 @@ get_animation_list cls
 
 {-# NOINLINE bindAnimationPlayer_get_animation_process_mode #-}
 
--- | The process notification in which to update animations. Default value: [constant ANIMATION_PROCESS_IDLE].
+-- | The process notification in which to update animations.
 bindAnimationPlayer_get_animation_process_mode :: MethodBind
 bindAnimationPlayer_get_animation_process_mode
   = unsafePerformIO $
@@ -376,7 +389,7 @@ bindAnimationPlayer_get_animation_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The process notification in which to update animations. Default value: [constant ANIMATION_PROCESS_IDLE].
+-- | The process notification in which to update animations.
 get_animation_process_mode ::
                              (AnimationPlayer :< cls, Object :< cls) => cls -> IO Int
 get_animation_process_mode cls
@@ -415,7 +428,7 @@ get_assigned_animation cls
 
 {-# NOINLINE bindAnimationPlayer_get_autoplay #-}
 
--- | The name of the animation to play when the scene loads. Default value: [code]""[/code].
+-- | The name of the animation to play when the scene loads.
 bindAnimationPlayer_get_autoplay :: MethodBind
 bindAnimationPlayer_get_autoplay
   = unsafePerformIO $
@@ -425,7 +438,7 @@ bindAnimationPlayer_get_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the animation to play when the scene loads. Default value: [code]""[/code].
+-- | The name of the animation to play when the scene loads.
 get_autoplay ::
                (AnimationPlayer :< cls, Object :< cls) => cls -> IO GodotString
 get_autoplay cls
@@ -439,7 +452,7 @@ get_autoplay cls
 
 {-# NOINLINE bindAnimationPlayer_get_blend_time #-}
 
--- | Get the blend time (in seconds) between two animations, referenced by their names.
+-- | Gets the blend time (in seconds) between two animations, referenced by their names.
 bindAnimationPlayer_get_blend_time :: MethodBind
 bindAnimationPlayer_get_blend_time
   = unsafePerformIO $
@@ -449,7 +462,7 @@ bindAnimationPlayer_get_blend_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the blend time (in seconds) between two animations, referenced by their names.
+-- | Gets the blend time (in seconds) between two animations, referenced by their names.
 get_blend_time ::
                  (AnimationPlayer :< cls, Object :< cls) =>
                  cls -> GodotString -> GodotString -> IO Float
@@ -464,7 +477,8 @@ get_blend_time cls arg1 arg2
 
 {-# NOINLINE bindAnimationPlayer_get_current_animation #-}
 
--- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also [method play]. Default value: [code]""[/code].
+-- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See [method play] for more information on playing animations.
+--   			[b]Note[/b]: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see [Animation].
 bindAnimationPlayer_get_current_animation :: MethodBind
 bindAnimationPlayer_get_current_animation
   = unsafePerformIO $
@@ -474,7 +488,8 @@ bindAnimationPlayer_get_current_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also [method play]. Default value: [code]""[/code].
+-- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See [method play] for more information on playing animations.
+--   			[b]Note[/b]: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see [Animation].
 get_current_animation ::
                         (AnimationPlayer :< cls, Object :< cls) => cls -> IO GodotString
 get_current_animation cls
@@ -538,7 +553,7 @@ get_current_animation_position cls
 
 {-# NOINLINE bindAnimationPlayer_get_default_blend_time #-}
 
--- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision. Default value: [code]0[/code].
+-- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision.
 bindAnimationPlayer_get_default_blend_time :: MethodBind
 bindAnimationPlayer_get_default_blend_time
   = unsafePerformIO $
@@ -548,7 +563,7 @@ bindAnimationPlayer_get_default_blend_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision. Default value: [code]0[/code].
+-- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision.
 get_default_blend_time ::
                          (AnimationPlayer :< cls, Object :< cls) => cls -> IO Float
 get_default_blend_time cls
@@ -562,6 +577,7 @@ get_default_blend_time cls
 
 {-# NOINLINE bindAnimationPlayer_get_method_call_mode #-}
 
+-- | The call mode to use for Call Method tracks.
 bindAnimationPlayer_get_method_call_mode :: MethodBind
 bindAnimationPlayer_get_method_call_mode
   = unsafePerformIO $
@@ -571,6 +587,7 @@ bindAnimationPlayer_get_method_call_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The call mode to use for Call Method tracks.
 get_method_call_mode ::
                        (AnimationPlayer :< cls, Object :< cls) => cls -> IO Int
 get_method_call_mode cls
@@ -584,7 +601,7 @@ get_method_call_mode cls
 
 {-# NOINLINE bindAnimationPlayer_get_playing_speed #-}
 
--- | Get the actual playing speed of current animation or 0 if not playing. This speed is the [code]playback_speed[/code] property multiplied by [code]custom_speed[/code] argument specified when calling the [code]play[/code] method.
+-- | Gets the actual playing speed of current animation or 0 if not playing. This speed is the [member playback_speed] property multiplied by [code]custom_speed[/code] argument specified when calling the [method play] method.
 bindAnimationPlayer_get_playing_speed :: MethodBind
 bindAnimationPlayer_get_playing_speed
   = unsafePerformIO $
@@ -594,7 +611,7 @@ bindAnimationPlayer_get_playing_speed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the actual playing speed of current animation or 0 if not playing. This speed is the [code]playback_speed[/code] property multiplied by [code]custom_speed[/code] argument specified when calling the [code]play[/code] method.
+-- | Gets the actual playing speed of current animation or 0 if not playing. This speed is the [member playback_speed] property multiplied by [code]custom_speed[/code] argument specified when calling the [method play] method.
 get_playing_speed ::
                     (AnimationPlayer :< cls, Object :< cls) => cls -> IO Float
 get_playing_speed cls
@@ -608,6 +625,7 @@ get_playing_speed cls
 
 {-# NOINLINE bindAnimationPlayer_get_queue #-}
 
+-- | Returns a list of the animation names that are currently queued to play.
 bindAnimationPlayer_get_queue :: MethodBind
 bindAnimationPlayer_get_queue
   = unsafePerformIO $
@@ -617,6 +635,7 @@ bindAnimationPlayer_get_queue
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a list of the animation names that are currently queued to play.
 get_queue ::
             (AnimationPlayer :< cls, Object :< cls) =>
             cls -> IO PoolStringArray
@@ -630,7 +649,7 @@ get_queue cls
 
 {-# NOINLINE bindAnimationPlayer_get_root #-}
 
--- | The node from which node path references will travel. Default value: [code]".."[/code].
+-- | The node from which node path references will travel.
 bindAnimationPlayer_get_root :: MethodBind
 bindAnimationPlayer_get_root
   = unsafePerformIO $
@@ -640,7 +659,7 @@ bindAnimationPlayer_get_root
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node from which node path references will travel. Default value: [code]".."[/code].
+-- | The node from which node path references will travel.
 get_root ::
            (AnimationPlayer :< cls, Object :< cls) => cls -> IO NodePath
 get_root cls
@@ -653,7 +672,7 @@ get_root cls
 
 {-# NOINLINE bindAnimationPlayer_get_speed_scale #-}
 
--- | The speed scaling ratio. For instance, if this value is 1 then the animation plays at normal speed. If it's 0.5 then it plays at half speed. If it's 2 then it plays at double speed. Default value: [code]1[/code].
+-- | The speed scaling ratio. For instance, if this value is 1, then the animation plays at normal speed. If it's 0.5, then it plays at half speed. If it's 2, then it plays at double speed.
 bindAnimationPlayer_get_speed_scale :: MethodBind
 bindAnimationPlayer_get_speed_scale
   = unsafePerformIO $
@@ -663,7 +682,7 @@ bindAnimationPlayer_get_speed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The speed scaling ratio. For instance, if this value is 1 then the animation plays at normal speed. If it's 0.5 then it plays at half speed. If it's 2 then it plays at double speed. Default value: [code]1[/code].
+-- | The speed scaling ratio. For instance, if this value is 1, then the animation plays at normal speed. If it's 0.5, then it plays at half speed. If it's 2, then it plays at double speed.
 get_speed_scale ::
                   (AnimationPlayer :< cls, Object :< cls) => cls -> IO Float
 get_speed_scale cls
@@ -677,7 +696,7 @@ get_speed_scale cls
 
 {-# NOINLINE bindAnimationPlayer_has_animation #-}
 
--- | Returns [code]true[/code] if the [code]AnimationPlayer[/code] stores an [Animation] with key [code]name[/code].
+-- | Returns [code]true[/code] if the [AnimationPlayer] stores an [Animation] with key [code]name[/code].
 bindAnimationPlayer_has_animation :: MethodBind
 bindAnimationPlayer_has_animation
   = unsafePerformIO $
@@ -687,7 +706,7 @@ bindAnimationPlayer_has_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the [code]AnimationPlayer[/code] stores an [Animation] with key [code]name[/code].
+-- | Returns [code]true[/code] if the [AnimationPlayer] stores an [Animation] with key [code]name[/code].
 has_animation ::
                 (AnimationPlayer :< cls, Object :< cls) =>
                 cls -> GodotString -> IO Bool
@@ -702,7 +721,7 @@ has_animation cls arg1
 
 {-# NOINLINE bindAnimationPlayer_is_active #-}
 
--- | If [code]true[/code], updates animations in response to process-related notifications. Default value: [code]true[/code].
+-- | If [code]true[/code], updates animations in response to process-related notifications.
 bindAnimationPlayer_is_active :: MethodBind
 bindAnimationPlayer_is_active
   = unsafePerformIO $
@@ -712,7 +731,7 @@ bindAnimationPlayer_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], updates animations in response to process-related notifications. Default value: [code]true[/code].
+-- | If [code]true[/code], updates animations in response to process-related notifications.
 is_active ::
             (AnimationPlayer :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
@@ -748,8 +767,9 @@ is_playing cls
 
 {-# NOINLINE bindAnimationPlayer_play #-}
 
--- | Play the animation with key [code]name[/code]. Custom speed and blend times can be set. If custom speed is negative (-1), 'from_end' being [code]true[/code] can play the animation backwards.
---   				If the animation has been paused by [code]stop(true)[/code] it will be resumed. Calling [code]play()[/code] without arguments will also resume the animation.
+-- | Plays the animation with key [code]name[/code]. Custom blend times and speed can be set. If [code]custom_speed[/code] is negative and [code]from_end[/code] is [code]true[/code], the animation will play backwards (which is equivalent to calling [method play_backwards]).
+--   				The [AnimationPlayer] keeps track of its current or last played animation with [member assigned_animation]. If this method is called with that same animation [code]name[/code], or with no [code]name[/code] parameter, the assigned animation will resume playing if it was paused, or restart if it was stopped (see [method stop] for both pause and stop). If the animation was already playing, it will keep playing.
+--   				[b]Note:[/b] The animation will be updated the next time the [AnimationPlayer] is processed. If other variables are updated at the same time this is called, they may be updated too early. To perform the update immediately, call [code]advance(0)[/code].
 bindAnimationPlayer_play :: MethodBind
 bindAnimationPlayer_play
   = unsafePerformIO $
@@ -759,8 +779,9 @@ bindAnimationPlayer_play
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Play the animation with key [code]name[/code]. Custom speed and blend times can be set. If custom speed is negative (-1), 'from_end' being [code]true[/code] can play the animation backwards.
---   				If the animation has been paused by [code]stop(true)[/code] it will be resumed. Calling [code]play()[/code] without arguments will also resume the animation.
+-- | Plays the animation with key [code]name[/code]. Custom blend times and speed can be set. If [code]custom_speed[/code] is negative and [code]from_end[/code] is [code]true[/code], the animation will play backwards (which is equivalent to calling [method play_backwards]).
+--   				The [AnimationPlayer] keeps track of its current or last played animation with [member assigned_animation]. If this method is called with that same animation [code]name[/code], or with no [code]name[/code] parameter, the assigned animation will resume playing if it was paused, or restart if it was stopped (see [method stop] for both pause and stop). If the animation was already playing, it will keep playing.
+--   				[b]Note:[/b] The animation will be updated the next time the [AnimationPlayer] is processed. If other variables are updated at the same time this is called, they may be updated too early. To perform the update immediately, call [code]advance(0)[/code].
 play ::
        (AnimationPlayer :< cls, Object :< cls) =>
        cls -> GodotString -> Float -> Float -> Bool -> IO ()
@@ -774,8 +795,8 @@ play cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindAnimationPlayer_play_backwards #-}
 
--- | Play the animation with key [code]name[/code] in reverse.
---   				If the animation has been paused by [code]stop(true)[/code] it will be resumed backwards. Calling [code]play_backwards()[/code] without arguments will also resume the animation backwards.
+-- | Plays the animation with key [code]name[/code] in reverse.
+--   				This method is a shorthand for [method play] with [code]custom_speed = -1.0[/code] and [code]from_end = true[/code], so see its description for more information.
 bindAnimationPlayer_play_backwards :: MethodBind
 bindAnimationPlayer_play_backwards
   = unsafePerformIO $
@@ -785,8 +806,8 @@ bindAnimationPlayer_play_backwards
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Play the animation with key [code]name[/code] in reverse.
---   				If the animation has been paused by [code]stop(true)[/code] it will be resumed backwards. Calling [code]play_backwards()[/code] without arguments will also resume the animation backwards.
+-- | Plays the animation with key [code]name[/code] in reverse.
+--   				This method is a shorthand for [method play] with [code]custom_speed = -1.0[/code] and [code]from_end = true[/code], so see its description for more information.
 play_backwards ::
                  (AnimationPlayer :< cls, Object :< cls) =>
                  cls -> GodotString -> Float -> IO ()
@@ -801,7 +822,8 @@ play_backwards cls arg1 arg2
 
 {-# NOINLINE bindAnimationPlayer_queue #-}
 
--- | Queue an animation for playback once the current one is done.
+-- | Queues an animation for playback once the current one is done.
+--   				[b]Note:[/b] If a looped animation is currently playing, the queued animation will never play unless the looped animation is stopped somehow.
 bindAnimationPlayer_queue :: MethodBind
 bindAnimationPlayer_queue
   = unsafePerformIO $
@@ -811,7 +833,8 @@ bindAnimationPlayer_queue
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Queue an animation for playback once the current one is done.
+-- | Queues an animation for playback once the current one is done.
+--   				[b]Note:[/b] If a looped animation is currently playing, the queued animation will never play unless the looped animation is stopped somehow.
 queue ::
         (AnimationPlayer :< cls, Object :< cls) =>
         cls -> GodotString -> IO ()
@@ -825,7 +848,7 @@ queue cls arg1
 
 {-# NOINLINE bindAnimationPlayer_remove_animation #-}
 
--- | Remove the animation with key [code]name[/code].
+-- | Removes the animation with key [code]name[/code].
 bindAnimationPlayer_remove_animation :: MethodBind
 bindAnimationPlayer_remove_animation
   = unsafePerformIO $
@@ -835,7 +858,7 @@ bindAnimationPlayer_remove_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove the animation with key [code]name[/code].
+-- | Removes the animation with key [code]name[/code].
 remove_animation ::
                    (AnimationPlayer :< cls, Object :< cls) =>
                    cls -> GodotString -> IO ()
@@ -850,7 +873,7 @@ remove_animation cls arg1
 
 {-# NOINLINE bindAnimationPlayer_rename_animation #-}
 
--- | Rename an existing animation with key [code]name[/code] to [code]newname[/code].
+-- | Renames an existing animation with key [code]name[/code] to [code]newname[/code].
 bindAnimationPlayer_rename_animation :: MethodBind
 bindAnimationPlayer_rename_animation
   = unsafePerformIO $
@@ -860,7 +883,7 @@ bindAnimationPlayer_rename_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rename an existing animation with key [code]name[/code] to [code]newname[/code].
+-- | Renames an existing animation with key [code]name[/code] to [code]newname[/code].
 rename_animation ::
                    (AnimationPlayer :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotString -> IO ()
@@ -875,7 +898,7 @@ rename_animation cls arg1 arg2
 
 {-# NOINLINE bindAnimationPlayer_seek #-}
 
--- | Seek the animation to the [code]seconds[/code] point in time (in seconds). If [code]update[/code] is [code]true[/code], the animation updates too, otherwise it updates at process time. Events between the current frame and [code]seconds[/code] are skipped.
+-- | Seeks the animation to the [code]seconds[/code] point in time (in seconds). If [code]update[/code] is [code]true[/code], the animation updates too, otherwise it updates at process time. Events between the current frame and [code]seconds[/code] are skipped.
 bindAnimationPlayer_seek :: MethodBind
 bindAnimationPlayer_seek
   = unsafePerformIO $
@@ -885,7 +908,7 @@ bindAnimationPlayer_seek
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Seek the animation to the [code]seconds[/code] point in time (in seconds). If [code]update[/code] is [code]true[/code], the animation updates too, otherwise it updates at process time. Events between the current frame and [code]seconds[/code] are skipped.
+-- | Seeks the animation to the [code]seconds[/code] point in time (in seconds). If [code]update[/code] is [code]true[/code], the animation updates too, otherwise it updates at process time. Events between the current frame and [code]seconds[/code] are skipped.
 seek ::
        (AnimationPlayer :< cls, Object :< cls) =>
        cls -> Float -> Bool -> IO ()
@@ -898,7 +921,7 @@ seek cls arg1 arg2
 
 {-# NOINLINE bindAnimationPlayer_set_active #-}
 
--- | If [code]true[/code], updates animations in response to process-related notifications. Default value: [code]true[/code].
+-- | If [code]true[/code], updates animations in response to process-related notifications.
 bindAnimationPlayer_set_active :: MethodBind
 bindAnimationPlayer_set_active
   = unsafePerformIO $
@@ -908,7 +931,7 @@ bindAnimationPlayer_set_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], updates animations in response to process-related notifications. Default value: [code]true[/code].
+-- | If [code]true[/code], updates animations in response to process-related notifications.
 set_active ::
              (AnimationPlayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_active cls arg1
@@ -921,7 +944,7 @@ set_active cls arg1
 
 {-# NOINLINE bindAnimationPlayer_set_animation_process_mode #-}
 
--- | The process notification in which to update animations. Default value: [constant ANIMATION_PROCESS_IDLE].
+-- | The process notification in which to update animations.
 bindAnimationPlayer_set_animation_process_mode :: MethodBind
 bindAnimationPlayer_set_animation_process_mode
   = unsafePerformIO $
@@ -931,7 +954,7 @@ bindAnimationPlayer_set_animation_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The process notification in which to update animations. Default value: [constant ANIMATION_PROCESS_IDLE].
+-- | The process notification in which to update animations.
 set_animation_process_mode ::
                              (AnimationPlayer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_animation_process_mode cls arg1
@@ -971,7 +994,7 @@ set_assigned_animation cls arg1
 
 {-# NOINLINE bindAnimationPlayer_set_autoplay #-}
 
--- | The name of the animation to play when the scene loads. Default value: [code]""[/code].
+-- | The name of the animation to play when the scene loads.
 bindAnimationPlayer_set_autoplay :: MethodBind
 bindAnimationPlayer_set_autoplay
   = unsafePerformIO $
@@ -981,7 +1004,7 @@ bindAnimationPlayer_set_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the animation to play when the scene loads. Default value: [code]""[/code].
+-- | The name of the animation to play when the scene loads.
 set_autoplay ::
                (AnimationPlayer :< cls, Object :< cls) =>
                cls -> GodotString -> IO ()
@@ -996,7 +1019,7 @@ set_autoplay cls arg1
 
 {-# NOINLINE bindAnimationPlayer_set_blend_time #-}
 
--- | Specify a blend time (in seconds) between two animations, referenced by their names.
+-- | Specifies a blend time (in seconds) between two animations, referenced by their names.
 bindAnimationPlayer_set_blend_time :: MethodBind
 bindAnimationPlayer_set_blend_time
   = unsafePerformIO $
@@ -1006,7 +1029,7 @@ bindAnimationPlayer_set_blend_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specify a blend time (in seconds) between two animations, referenced by their names.
+-- | Specifies a blend time (in seconds) between two animations, referenced by their names.
 set_blend_time ::
                  (AnimationPlayer :< cls, Object :< cls) =>
                  cls -> GodotString -> GodotString -> Float -> IO ()
@@ -1021,7 +1044,8 @@ set_blend_time cls arg1 arg2 arg3
 
 {-# NOINLINE bindAnimationPlayer_set_current_animation #-}
 
--- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also [method play]. Default value: [code]""[/code].
+-- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See [method play] for more information on playing animations.
+--   			[b]Note[/b]: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see [Animation].
 bindAnimationPlayer_set_current_animation :: MethodBind
 bindAnimationPlayer_set_current_animation
   = unsafePerformIO $
@@ -1031,7 +1055,8 @@ bindAnimationPlayer_set_current_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also [method play]. Default value: [code]""[/code].
+-- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See [method play] for more information on playing animations.
+--   			[b]Note[/b]: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see [Animation].
 set_current_animation ::
                         (AnimationPlayer :< cls, Object :< cls) =>
                         cls -> GodotString -> IO ()
@@ -1046,7 +1071,7 @@ set_current_animation cls arg1
 
 {-# NOINLINE bindAnimationPlayer_set_default_blend_time #-}
 
--- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision. Default value: [code]0[/code].
+-- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision.
 bindAnimationPlayer_set_default_blend_time :: MethodBind
 bindAnimationPlayer_set_default_blend_time
   = unsafePerformIO $
@@ -1056,7 +1081,7 @@ bindAnimationPlayer_set_default_blend_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision. Default value: [code]0[/code].
+-- | The default time in which to blend animations. Ranges from 0 to 4096 with 0.01 precision.
 set_default_blend_time ::
                          (AnimationPlayer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_default_blend_time cls arg1
@@ -1070,6 +1095,7 @@ set_default_blend_time cls arg1
 
 {-# NOINLINE bindAnimationPlayer_set_method_call_mode #-}
 
+-- | The call mode to use for Call Method tracks.
 bindAnimationPlayer_set_method_call_mode :: MethodBind
 bindAnimationPlayer_set_method_call_mode
   = unsafePerformIO $
@@ -1079,6 +1105,7 @@ bindAnimationPlayer_set_method_call_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The call mode to use for Call Method tracks.
 set_method_call_mode ::
                        (AnimationPlayer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_method_call_mode cls arg1
@@ -1092,7 +1119,7 @@ set_method_call_mode cls arg1
 
 {-# NOINLINE bindAnimationPlayer_set_root #-}
 
--- | The node from which node path references will travel. Default value: [code]".."[/code].
+-- | The node from which node path references will travel.
 bindAnimationPlayer_set_root :: MethodBind
 bindAnimationPlayer_set_root
   = unsafePerformIO $
@@ -1102,7 +1129,7 @@ bindAnimationPlayer_set_root
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node from which node path references will travel. Default value: [code]".."[/code].
+-- | The node from which node path references will travel.
 set_root ::
            (AnimationPlayer :< cls, Object :< cls) => cls -> NodePath -> IO ()
 set_root cls arg1
@@ -1115,7 +1142,7 @@ set_root cls arg1
 
 {-# NOINLINE bindAnimationPlayer_set_speed_scale #-}
 
--- | The speed scaling ratio. For instance, if this value is 1 then the animation plays at normal speed. If it's 0.5 then it plays at half speed. If it's 2 then it plays at double speed. Default value: [code]1[/code].
+-- | The speed scaling ratio. For instance, if this value is 1, then the animation plays at normal speed. If it's 0.5, then it plays at half speed. If it's 2, then it plays at double speed.
 bindAnimationPlayer_set_speed_scale :: MethodBind
 bindAnimationPlayer_set_speed_scale
   = unsafePerformIO $
@@ -1125,7 +1152,7 @@ bindAnimationPlayer_set_speed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The speed scaling ratio. For instance, if this value is 1 then the animation plays at normal speed. If it's 0.5 then it plays at half speed. If it's 2 then it plays at double speed. Default value: [code]1[/code].
+-- | The speed scaling ratio. For instance, if this value is 1, then the animation plays at normal speed. If it's 0.5, then it plays at half speed. If it's 2, then it plays at double speed.
 set_speed_scale ::
                   (AnimationPlayer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_speed_scale cls arg1
@@ -1139,8 +1166,8 @@ set_speed_scale cls arg1
 
 {-# NOINLINE bindAnimationPlayer_stop #-}
 
--- | Stop the currently playing animation. If [code]reset[/code] is [code]true[/code], the animation position is reset to [code]0[/code] and the playback speed is reset to [code]1.0[/code].
---   				If [code]reset[/code] is [code]false[/code], then calling [code]play()[/code] without arguments or [code]play("same_as_before")[/code] will resume the animation. Works the same for the [code]play_backwards()[/code] method.
+-- | Stops or pauses the currently playing animation. If [code]reset[/code] is [code]true[/code], the animation position is reset to [code]0[/code] and the playback speed is reset to [code]1.0[/code].
+--   				If [code]reset[/code] is [code]false[/code], the [member current_animation_position] will be kept and calling [method play] or [method play_backwards] without arguments or with the same animation name as [member assigned_animation] will resume the animation.
 bindAnimationPlayer_stop :: MethodBind
 bindAnimationPlayer_stop
   = unsafePerformIO $
@@ -1150,8 +1177,8 @@ bindAnimationPlayer_stop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stop the currently playing animation. If [code]reset[/code] is [code]true[/code], the animation position is reset to [code]0[/code] and the playback speed is reset to [code]1.0[/code].
---   				If [code]reset[/code] is [code]false[/code], then calling [code]play()[/code] without arguments or [code]play("same_as_before")[/code] will resume the animation. Works the same for the [code]play_backwards()[/code] method.
+-- | Stops or pauses the currently playing animation. If [code]reset[/code] is [code]true[/code], the animation position is reset to [code]0[/code] and the playback speed is reset to [code]1.0[/code].
+--   				If [code]reset[/code] is [code]false[/code], the [member current_animation_position] will be kept and calling [method play] or [method play_backwards] without arguments or with the same animation name as [member assigned_animation] will resume the animation.
 stop ::
        (AnimationPlayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 stop cls arg1

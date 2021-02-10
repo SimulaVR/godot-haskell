@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.ScriptEditor
        (Godot.Tools.ScriptEditor.sig_editor_script_changed,
         Godot.Tools.ScriptEditor.sig_script_close,
@@ -80,9 +81,13 @@ sig_editor_script_changed ::
 sig_editor_script_changed
   = Godot.Internal.Dispatch.Signal "editor_script_changed"
 
+instance NodeSignal ScriptEditor "editor_script_changed" '[Script]
+
 -- | Emitted when editor is about to close the active script. Argument is a [Script] that is going to be closed.
 sig_script_close :: Godot.Internal.Dispatch.Signal ScriptEditor
 sig_script_close = Godot.Internal.Dispatch.Signal "script_close"
+
+instance NodeSignal ScriptEditor "script_close" '[Script]
 
 {-# NOINLINE bindScriptEditor__add_callback #-}
 
@@ -1434,6 +1439,7 @@ get_open_scripts cls
 
 {-# NOINLINE bindScriptEditor_goto_line #-}
 
+-- | Goes to the specified line in the current script.
 bindScriptEditor_goto_line :: MethodBind
 bindScriptEditor_goto_line
   = unsafePerformIO $
@@ -1443,6 +1449,7 @@ bindScriptEditor_goto_line
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Goes to the specified line in the current script.
 goto_line ::
             (ScriptEditor :< cls, Object :< cls) => cls -> Int -> IO ()
 goto_line cls arg1

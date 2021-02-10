@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeTransition
        (Godot.Core.AnimationNodeTransition.get_cross_fade_time,
         Godot.Core.AnimationNodeTransition.get_enabled_inputs,
@@ -19,6 +20,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindAnimationNodeTransition_get_cross_fade_time #-}
 
+-- | Cross-fading time (in seconds) between each animation connected to the inputs.
 bindAnimationNodeTransition_get_cross_fade_time :: MethodBind
 bindAnimationNodeTransition_get_cross_fade_time
   = unsafePerformIO $
@@ -28,6 +30,7 @@ bindAnimationNodeTransition_get_cross_fade_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Cross-fading time (in seconds) between each animation connected to the inputs.
 get_cross_fade_time ::
                       (AnimationNodeTransition :< cls, Object :< cls) => cls -> IO Float
 get_cross_fade_time cls
@@ -42,6 +45,7 @@ get_cross_fade_time cls
 
 {-# NOINLINE bindAnimationNodeTransition_get_enabled_inputs #-}
 
+-- | The number of available input ports for this node.
 bindAnimationNodeTransition_get_enabled_inputs :: MethodBind
 bindAnimationNodeTransition_get_enabled_inputs
   = unsafePerformIO $
@@ -51,6 +55,7 @@ bindAnimationNodeTransition_get_enabled_inputs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The number of available input ports for this node.
 get_enabled_inputs ::
                      (AnimationNodeTransition :< cls, Object :< cls) => cls -> IO Int
 get_enabled_inputs cls
@@ -115,6 +120,7 @@ is_input_set_as_auto_advance cls arg1
 
 {-# NOINLINE bindAnimationNodeTransition_set_cross_fade_time #-}
 
+-- | Cross-fading time (in seconds) between each animation connected to the inputs.
 bindAnimationNodeTransition_set_cross_fade_time :: MethodBind
 bindAnimationNodeTransition_set_cross_fade_time
   = unsafePerformIO $
@@ -124,6 +130,7 @@ bindAnimationNodeTransition_set_cross_fade_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Cross-fading time (in seconds) between each animation connected to the inputs.
 set_cross_fade_time ::
                       (AnimationNodeTransition :< cls, Object :< cls) =>
                       cls -> Float -> IO ()
@@ -139,6 +146,7 @@ set_cross_fade_time cls arg1
 
 {-# NOINLINE bindAnimationNodeTransition_set_enabled_inputs #-}
 
+-- | The number of available input ports for this node.
 bindAnimationNodeTransition_set_enabled_inputs :: MethodBind
 bindAnimationNodeTransition_set_enabled_inputs
   = unsafePerformIO $
@@ -148,6 +156,7 @@ bindAnimationNodeTransition_set_enabled_inputs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The number of available input ports for this node.
 set_enabled_inputs ::
                      (AnimationNodeTransition :< cls, Object :< cls) =>
                      cls -> Int -> IO ()

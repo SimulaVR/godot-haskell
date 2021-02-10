@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CollisionShape2D
        (Godot.Core.CollisionShape2D._shape_changed,
         Godot.Core.CollisionShape2D.get_one_way_collision_margin,
@@ -42,6 +43,7 @@ _shape_changed cls
 
 {-# NOINLINE bindCollisionShape2D_get_one_way_collision_margin #-}
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the shape at a high velocity.
 bindCollisionShape2D_get_one_way_collision_margin :: MethodBind
 bindCollisionShape2D_get_one_way_collision_margin
   = unsafePerformIO $
@@ -51,6 +53,7 @@ bindCollisionShape2D_get_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the shape at a high velocity.
 get_one_way_collision_margin ::
                                (CollisionShape2D :< cls, Object :< cls) => cls -> IO Float
 get_one_way_collision_margin cls
@@ -88,7 +91,7 @@ get_shape cls
 
 {-# NOINLINE bindCollisionShape2D_is_disabled #-}
 
--- | A disabled collision shape has no effect in the world.
+-- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
 bindCollisionShape2D_is_disabled :: MethodBind
 bindCollisionShape2D_is_disabled
   = unsafePerformIO $
@@ -98,7 +101,7 @@ bindCollisionShape2D_is_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A disabled collision shape has no effect in the world.
+-- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
 is_disabled ::
               (CollisionShape2D :< cls, Object :< cls) => cls -> IO Bool
 is_disabled cls
@@ -137,7 +140,7 @@ is_one_way_collision_enabled cls
 
 {-# NOINLINE bindCollisionShape2D_set_disabled #-}
 
--- | A disabled collision shape has no effect in the world.
+-- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
 bindCollisionShape2D_set_disabled :: MethodBind
 bindCollisionShape2D_set_disabled
   = unsafePerformIO $
@@ -147,7 +150,7 @@ bindCollisionShape2D_set_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A disabled collision shape has no effect in the world.
+-- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
 set_disabled ::
                (CollisionShape2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disabled cls arg1
@@ -185,6 +188,7 @@ set_one_way_collision cls arg1
 
 {-# NOINLINE bindCollisionShape2D_set_one_way_collision_margin #-}
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the shape at a high velocity.
 bindCollisionShape2D_set_one_way_collision_margin :: MethodBind
 bindCollisionShape2D_set_one_way_collision_margin
   = unsafePerformIO $
@@ -194,6 +198,7 @@ bindCollisionShape2D_set_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the shape at a high velocity.
 set_one_way_collision_margin ::
                                (CollisionShape2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_one_way_collision_margin cls arg1

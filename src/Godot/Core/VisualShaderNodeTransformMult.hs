@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeTransformMult
        (Godot.Core.VisualShaderNodeTransformMult._OP_AxB_COMP,
         Godot.Core.VisualShaderNodeTransformMult._OP_BxA_COMP,
@@ -29,6 +30,7 @@ _OP_BxA = 1
 
 {-# NOINLINE bindVisualShaderNodeTransformMult_get_operator #-}
 
+-- | The multiplication type to be performed on the transforms. See [enum Operator] for options.
 bindVisualShaderNodeTransformMult_get_operator :: MethodBind
 bindVisualShaderNodeTransformMult_get_operator
   = unsafePerformIO $
@@ -38,6 +40,7 @@ bindVisualShaderNodeTransformMult_get_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The multiplication type to be performed on the transforms. See [enum Operator] for options.
 get_operator ::
                (VisualShaderNodeTransformMult :< cls, Object :< cls) =>
                cls -> IO Int
@@ -53,6 +56,7 @@ get_operator cls
 
 {-# NOINLINE bindVisualShaderNodeTransformMult_set_operator #-}
 
+-- | The multiplication type to be performed on the transforms. See [enum Operator] for options.
 bindVisualShaderNodeTransformMult_set_operator :: MethodBind
 bindVisualShaderNodeTransformMult_set_operator
   = unsafePerformIO $
@@ -62,6 +66,7 @@ bindVisualShaderNodeTransformMult_set_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The multiplication type to be performed on the transforms. See [enum Operator] for options.
 set_operator ::
                (VisualShaderNodeTransformMult :< cls, Object :< cls) =>
                cls -> Int -> IO ()

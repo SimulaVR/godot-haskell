@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ConeTwistJoint
        (Godot.Core.ConeTwistJoint._PARAM_SWING_SPAN,
         Godot.Core.ConeTwistJoint._PARAM_SOFTNESS,
@@ -43,8 +44,8 @@ _PARAM_BIAS = 2
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
+--   			Could be defined as looseness in the [ConeTwistJoint].
+--   			If below 0.05, this behavior is locked.
 bindConeTwistJoint__get_swing_span :: MethodBind
 bindConeTwistJoint__get_swing_span
   = unsafePerformIO $
@@ -56,8 +57,8 @@ bindConeTwistJoint__get_swing_span
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
+--   			Could be defined as looseness in the [ConeTwistJoint].
+--   			If below 0.05, this behavior is locked.
 _get_swing_span ::
                   (ConeTwistJoint :< cls, Object :< cls) => cls -> IO Float
 _get_swing_span cls
@@ -99,8 +100,8 @@ _get_twist_span cls
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
+--   			Could be defined as looseness in the [ConeTwistJoint].
+--   			If below 0.05, this behavior is locked.
 bindConeTwistJoint__set_swing_span :: MethodBind
 bindConeTwistJoint__set_swing_span
   = unsafePerformIO $
@@ -112,8 +113,8 @@ bindConeTwistJoint__set_swing_span
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [code]ConeTwistJoint[/code].
---   			If below 0.05, this behavior is locked. Default value: [code]PI/4[/code].
+--   			Could be defined as looseness in the [ConeTwistJoint].
+--   			If below 0.05, this behavior is locked.
 _set_swing_span ::
                   (ConeTwistJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_swing_span cls arg1

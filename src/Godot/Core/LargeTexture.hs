@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.LargeTexture
        (Godot.Core.LargeTexture._get_data,
         Godot.Core.LargeTexture._set_data,
@@ -62,7 +63,7 @@ _set_data cls arg1
 
 {-# NOINLINE bindLargeTexture_add_piece #-}
 
--- | Add another [Texture] to this [code]LargeTexture[/code], starting on offset "ofs".
+-- | Adds [code]texture[/code] to this [LargeTexture], starting on offset [code]ofs[/code].
 bindLargeTexture_add_piece :: MethodBind
 bindLargeTexture_add_piece
   = unsafePerformIO $
@@ -72,7 +73,7 @@ bindLargeTexture_add_piece
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add another [Texture] to this [code]LargeTexture[/code], starting on offset "ofs".
+-- | Adds [code]texture[/code] to this [LargeTexture], starting on offset [code]ofs[/code].
 add_piece ::
             (LargeTexture :< cls, Object :< cls) =>
             cls -> Vector2 -> Texture -> IO Int
@@ -86,7 +87,7 @@ add_piece cls arg1 arg2
 
 {-# NOINLINE bindLargeTexture_clear #-}
 
--- | Clears the [code]LargeTexture[/code].
+-- | Clears the [LargeTexture].
 bindLargeTexture_clear :: MethodBind
 bindLargeTexture_clear
   = unsafePerformIO $
@@ -96,7 +97,7 @@ bindLargeTexture_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears the [code]LargeTexture[/code].
+-- | Clears the [LargeTexture].
 clear :: (LargeTexture :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -107,7 +108,7 @@ clear cls
 
 {-# NOINLINE bindLargeTexture_get_piece_count #-}
 
--- | Returns the number of pieces currently in this [code]LargeTexture[/code].
+-- | Returns the number of pieces currently in this [LargeTexture].
 bindLargeTexture_get_piece_count :: MethodBind
 bindLargeTexture_get_piece_count
   = unsafePerformIO $
@@ -117,7 +118,7 @@ bindLargeTexture_get_piece_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of pieces currently in this [code]LargeTexture[/code].
+-- | Returns the number of pieces currently in this [LargeTexture].
 get_piece_count ::
                   (LargeTexture :< cls, Object :< cls) => cls -> IO Int
 get_piece_count cls
@@ -131,7 +132,7 @@ get_piece_count cls
 
 {-# NOINLINE bindLargeTexture_get_piece_offset #-}
 
--- | Returns the offset of the piece with index "idx".
+-- | Returns the offset of the piece with the index [code]idx[/code].
 bindLargeTexture_get_piece_offset :: MethodBind
 bindLargeTexture_get_piece_offset
   = unsafePerformIO $
@@ -141,7 +142,7 @@ bindLargeTexture_get_piece_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the offset of the piece with index "idx".
+-- | Returns the offset of the piece with the index [code]idx[/code].
 get_piece_offset ::
                    (LargeTexture :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_piece_offset cls arg1
@@ -155,7 +156,7 @@ get_piece_offset cls arg1
 
 {-# NOINLINE bindLargeTexture_get_piece_texture #-}
 
--- | Returns the [Texture] of the piece with index "idx".
+-- | Returns the [Texture] of the piece with the index [code]idx[/code].
 bindLargeTexture_get_piece_texture :: MethodBind
 bindLargeTexture_get_piece_texture
   = unsafePerformIO $
@@ -165,7 +166,7 @@ bindLargeTexture_get_piece_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Texture] of the piece with index "idx".
+-- | Returns the [Texture] of the piece with the index [code]idx[/code].
 get_piece_texture ::
                     (LargeTexture :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_piece_texture cls arg1
@@ -179,7 +180,7 @@ get_piece_texture cls arg1
 
 {-# NOINLINE bindLargeTexture_set_piece_offset #-}
 
--- | Sets the offset of the piece with index "idx" to "ofs".
+-- | Sets the offset of the piece with the index [code]idx[/code] to [code]ofs[/code].
 bindLargeTexture_set_piece_offset :: MethodBind
 bindLargeTexture_set_piece_offset
   = unsafePerformIO $
@@ -189,7 +190,7 @@ bindLargeTexture_set_piece_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the offset of the piece with index "idx" to "ofs".
+-- | Sets the offset of the piece with the index [code]idx[/code] to [code]ofs[/code].
 set_piece_offset ::
                    (LargeTexture :< cls, Object :< cls) =>
                    cls -> Int -> Vector2 -> IO ()
@@ -204,7 +205,7 @@ set_piece_offset cls arg1 arg2
 
 {-# NOINLINE bindLargeTexture_set_piece_texture #-}
 
--- | Sets the [Texture] of the piece with index "idx" to "texture".
+-- | Sets the [Texture] of the piece with index [code]idx[/code] to [code]texture[/code].
 bindLargeTexture_set_piece_texture :: MethodBind
 bindLargeTexture_set_piece_texture
   = unsafePerformIO $
@@ -214,7 +215,7 @@ bindLargeTexture_set_piece_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [Texture] of the piece with index "idx" to "texture".
+-- | Sets the [Texture] of the piece with index [code]idx[/code] to [code]texture[/code].
 set_piece_texture ::
                     (LargeTexture :< cls, Object :< cls) =>
                     cls -> Int -> Texture -> IO ()
@@ -229,7 +230,7 @@ set_piece_texture cls arg1 arg2
 
 {-# NOINLINE bindLargeTexture_set_size #-}
 
--- | Sets the size of this [code]LargeTexture[/code].
+-- | Sets the size of this [LargeTexture].
 bindLargeTexture_set_size :: MethodBind
 bindLargeTexture_set_size
   = unsafePerformIO $
@@ -239,7 +240,7 @@ bindLargeTexture_set_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the size of this [code]LargeTexture[/code].
+-- | Sets the size of this [LargeTexture].
 set_size ::
            (LargeTexture :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_size cls arg1

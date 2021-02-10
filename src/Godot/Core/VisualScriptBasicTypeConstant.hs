@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptBasicTypeConstant
        (Godot.Core.VisualScriptBasicTypeConstant.get_basic_type,
         Godot.Core.VisualScriptBasicTypeConstant.get_basic_type_constant,

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioServer
        (Godot.Core.AudioServer._SPEAKER_SURROUND_71,
         Godot.Core.AudioServer._SPEAKER_SURROUND_31,
@@ -76,6 +77,8 @@ sig_bus_layout_changed ::
 sig_bus_layout_changed
   = Godot.Internal.Dispatch.Signal "bus_layout_changed"
 
+instance NodeSignal AudioServer "bus_layout_changed" '[]
+
 {-# NOINLINE bindAudioServer_add_bus #-}
 
 -- | Adds a bus at [code]at_position[/code].
@@ -124,6 +127,7 @@ add_bus_effect cls arg1 arg2 arg3
 
 {-# NOINLINE bindAudioServer_capture_get_device #-}
 
+-- | Name of the current device for audio input (see [method capture_get_device_list]).
 bindAudioServer_capture_get_device :: MethodBind
 bindAudioServer_capture_get_device
   = unsafePerformIO $
@@ -133,6 +137,7 @@ bindAudioServer_capture_get_device
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Name of the current device for audio input (see [method capture_get_device_list]).
 capture_get_device ::
                      (AudioServer :< cls, Object :< cls) => cls -> IO GodotString
 capture_get_device cls
@@ -146,6 +151,7 @@ capture_get_device cls
 
 {-# NOINLINE bindAudioServer_capture_get_device_list #-}
 
+-- | Returns the names of all audio input devices detected on the system.
 bindAudioServer_capture_get_device_list :: MethodBind
 bindAudioServer_capture_get_device_list
   = unsafePerformIO $
@@ -155,6 +161,7 @@ bindAudioServer_capture_get_device_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the names of all audio input devices detected on the system.
 capture_get_device_list ::
                           (AudioServer :< cls, Object :< cls) => cls -> IO Array
 capture_get_device_list cls
@@ -168,6 +175,7 @@ capture_get_device_list cls
 
 {-# NOINLINE bindAudioServer_capture_set_device #-}
 
+-- | Sets which audio input device is used for audio capture.
 bindAudioServer_capture_set_device :: MethodBind
 bindAudioServer_capture_set_device
   = unsafePerformIO $
@@ -177,6 +185,7 @@ bindAudioServer_capture_set_device
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets which audio input device is used for audio capture.
 capture_set_device ::
                      (AudioServer :< cls, Object :< cls) => cls -> GodotString -> IO ()
 capture_set_device cls arg1
@@ -238,7 +247,7 @@ get_bus_channels cls arg1
 
 {-# NOINLINE bindAudioServer_get_bus_count #-}
 
--- | Returns the number of available buses.
+-- | Number of available audio buses.
 bindAudioServer_get_bus_count :: MethodBind
 bindAudioServer_get_bus_count
   = unsafePerformIO $
@@ -248,7 +257,7 @@ bindAudioServer_get_bus_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of available buses.
+-- | Number of available audio buses.
 get_bus_count ::
                 (AudioServer :< cls, Object :< cls) => cls -> IO Int
 get_bus_count cls
@@ -309,6 +318,7 @@ get_bus_effect_count cls arg1
 
 {-# NOINLINE bindAudioServer_get_bus_effect_instance #-}
 
+-- | Returns the [AudioEffectInstance] assigned to the given bus and effect indices (and optionally channel).
 bindAudioServer_get_bus_effect_instance :: MethodBind
 bindAudioServer_get_bus_effect_instance
   = unsafePerformIO $
@@ -318,6 +328,7 @@ bindAudioServer_get_bus_effect_instance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [AudioEffectInstance] assigned to the given bus and effect indices (and optionally channel).
 get_bus_effect_instance ::
                           (AudioServer :< cls, Object :< cls) =>
                           cls -> Int -> Int -> Int -> IO AudioEffectInstance
@@ -475,6 +486,7 @@ get_bus_volume_db cls arg1
 
 {-# NOINLINE bindAudioServer_get_device #-}
 
+-- | Name of the current device for audio output (see [method get_device_list]).
 bindAudioServer_get_device :: MethodBind
 bindAudioServer_get_device
   = unsafePerformIO $
@@ -484,6 +496,7 @@ bindAudioServer_get_device
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Name of the current device for audio output (see [method get_device_list]).
 get_device ::
              (AudioServer :< cls, Object :< cls) => cls -> IO GodotString
 get_device cls
@@ -496,6 +509,7 @@ get_device cls
 
 {-# NOINLINE bindAudioServer_get_device_list #-}
 
+-- | Returns the names of all audio devices detected on the system.
 bindAudioServer_get_device_list :: MethodBind
 bindAudioServer_get_device_list
   = unsafePerformIO $
@@ -505,6 +519,7 @@ bindAudioServer_get_device_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the names of all audio devices detected on the system.
 get_device_list ::
                   (AudioServer :< cls, Object :< cls) => cls -> IO Array
 get_device_list cls
@@ -517,6 +532,7 @@ get_device_list cls
 
 {-# NOINLINE bindAudioServer_get_global_rate_scale #-}
 
+-- | Scales the rate at which audio is played (i.e. setting it to [code]0.5[/code] will make the audio be played twice as fast).
 bindAudioServer_get_global_rate_scale :: MethodBind
 bindAudioServer_get_global_rate_scale
   = unsafePerformIO $
@@ -526,6 +542,7 @@ bindAudioServer_get_global_rate_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scales the rate at which audio is played (i.e. setting it to [code]0.5[/code] will make the audio be played twice as fast).
 get_global_rate_scale ::
                         (AudioServer :< cls, Object :< cls) => cls -> IO Float
 get_global_rate_scale cls
@@ -539,7 +556,7 @@ get_global_rate_scale cls
 
 {-# NOINLINE bindAudioServer_get_mix_rate #-}
 
--- | Returns the sample rate at the output of the audioserver.
+-- | Returns the sample rate at the output of the [AudioServer].
 bindAudioServer_get_mix_rate :: MethodBind
 bindAudioServer_get_mix_rate
   = unsafePerformIO $
@@ -549,7 +566,7 @@ bindAudioServer_get_mix_rate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the sample rate at the output of the audioserver.
+-- | Returns the sample rate at the output of the [AudioServer].
 get_mix_rate ::
                (AudioServer :< cls, Object :< cls) => cls -> IO Float
 get_mix_rate cls
@@ -562,6 +579,7 @@ get_mix_rate cls
 
 {-# NOINLINE bindAudioServer_get_output_latency #-}
 
+-- | Returns the audio driver's output latency.
 bindAudioServer_get_output_latency :: MethodBind
 bindAudioServer_get_output_latency
   = unsafePerformIO $
@@ -571,6 +589,7 @@ bindAudioServer_get_output_latency
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the audio driver's output latency.
 get_output_latency ::
                      (AudioServer :< cls, Object :< cls) => cls -> IO Float
 get_output_latency cls
@@ -608,6 +627,7 @@ get_speaker_mode cls
 
 {-# NOINLINE bindAudioServer_get_time_since_last_mix #-}
 
+-- | Returns the relative time since the last mix occurred.
 bindAudioServer_get_time_since_last_mix :: MethodBind
 bindAudioServer_get_time_since_last_mix
   = unsafePerformIO $
@@ -617,6 +637,7 @@ bindAudioServer_get_time_since_last_mix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the relative time since the last mix occurred.
 get_time_since_last_mix ::
                           (AudioServer :< cls, Object :< cls) => cls -> IO Float
 get_time_since_last_mix cls
@@ -630,6 +651,7 @@ get_time_since_last_mix cls
 
 {-# NOINLINE bindAudioServer_get_time_to_next_mix #-}
 
+-- | Returns the relative time until the next mix occurs.
 bindAudioServer_get_time_to_next_mix :: MethodBind
 bindAudioServer_get_time_to_next_mix
   = unsafePerformIO $
@@ -639,6 +661,7 @@ bindAudioServer_get_time_to_next_mix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the relative time until the next mix occurs.
 get_time_to_next_mix ::
                        (AudioServer :< cls, Object :< cls) => cls -> IO Float
 get_time_to_next_mix cls
@@ -746,7 +769,8 @@ is_bus_solo cls arg1
 
 {-# NOINLINE bindAudioServer_lock #-}
 
--- | Locks the audio drivers mainloop. Remember to unlock it afterwards.
+-- | Locks the audio driver's main loop.
+--   				[b]Note:[/b] Remember to unlock it afterwards.
 bindAudioServer_lock :: MethodBind
 bindAudioServer_lock
   = unsafePerformIO $
@@ -756,7 +780,8 @@ bindAudioServer_lock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Locks the audio drivers mainloop. Remember to unlock it afterwards.
+-- | Locks the audio driver's main loop.
+--   				[b]Note:[/b] Remember to unlock it afterwards.
 lock :: (AudioServer :< cls, Object :< cls) => cls -> IO ()
 lock cls
   = withVariantArray []
@@ -859,7 +884,7 @@ set_bus_bypass_effects cls arg1 arg2
 
 {-# NOINLINE bindAudioServer_set_bus_count #-}
 
--- | Adds and removes buses to make the number of buses match [code]amount[/code].
+-- | Number of available audio buses.
 bindAudioServer_set_bus_count :: MethodBind
 bindAudioServer_set_bus_count
   = unsafePerformIO $
@@ -869,7 +894,7 @@ bindAudioServer_set_bus_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds and removes buses to make the number of buses match [code]amount[/code].
+-- | Number of available audio buses.
 set_bus_count ::
                 (AudioServer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_bus_count cls arg1
@@ -1049,6 +1074,7 @@ set_bus_volume_db cls arg1 arg2
 
 {-# NOINLINE bindAudioServer_set_device #-}
 
+-- | Name of the current device for audio output (see [method get_device_list]).
 bindAudioServer_set_device :: MethodBind
 bindAudioServer_set_device
   = unsafePerformIO $
@@ -1058,6 +1084,7 @@ bindAudioServer_set_device
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Name of the current device for audio output (see [method get_device_list]).
 set_device ::
              (AudioServer :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_device cls arg1
@@ -1070,6 +1097,7 @@ set_device cls arg1
 
 {-# NOINLINE bindAudioServer_set_global_rate_scale #-}
 
+-- | Scales the rate at which audio is played (i.e. setting it to [code]0.5[/code] will make the audio be played twice as fast).
 bindAudioServer_set_global_rate_scale :: MethodBind
 bindAudioServer_set_global_rate_scale
   = unsafePerformIO $
@@ -1079,6 +1107,7 @@ bindAudioServer_set_global_rate_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scales the rate at which audio is played (i.e. setting it to [code]0.5[/code] will make the audio be played twice as fast).
 set_global_rate_scale ::
                         (AudioServer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_global_rate_scale cls arg1
@@ -1117,7 +1146,7 @@ swap_bus_effects cls arg1 arg2 arg3
 
 {-# NOINLINE bindAudioServer_unlock #-}
 
--- | Unlocks the audiodriver's main loop. After locking it always unlock it.
+-- | Unlocks the audio driver's main loop. (After locking it, you should always unlock it.)
 bindAudioServer_unlock :: MethodBind
 bindAudioServer_unlock
   = unsafePerformIO $
@@ -1127,7 +1156,7 @@ bindAudioServer_unlock
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Unlocks the audiodriver's main loop. After locking it always unlock it.
+-- | Unlocks the audio driver's main loop. (After locking it, you should always unlock it.)
 unlock :: (AudioServer :< cls, Object :< cls) => cls -> IO ()
 unlock cls
   = withVariantArray []

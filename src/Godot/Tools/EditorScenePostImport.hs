@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorScenePostImport
        (Godot.Tools.EditorScenePostImport.get_source_file,
         Godot.Tools.EditorScenePostImport.get_source_folder,
@@ -64,7 +65,7 @@ get_source_folder cls
 
 {-# NOINLINE bindEditorScenePostImport_post_import #-}
 
--- | Gets called after the scene got imported and has to return the modified version of the scene.
+-- | Called after the scene was imported. This method must return the modified version of the scene.
 bindEditorScenePostImport_post_import :: MethodBind
 bindEditorScenePostImport_post_import
   = unsafePerformIO $
@@ -74,7 +75,7 @@ bindEditorScenePostImport_post_import
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets called after the scene got imported and has to return the modified version of the scene.
+-- | Called after the scene was imported. This method must return the modified version of the scene.
 post_import ::
               (EditorScenePostImport :< cls, Object :< cls) =>
               cls -> Object -> IO Object

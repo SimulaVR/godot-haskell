@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.OmniLight
        (Godot.Core.OmniLight._SHADOW_DUAL_PARABOLOID,
         Godot.Core.OmniLight._SHADOW_DETAIL_HORIZONTAL,
@@ -32,7 +33,7 @@ _SHADOW_CUBE = 1
 
 {-# NOINLINE bindOmniLight_get_param #-}
 
--- | The light's attenuation (drop-off) curve. A number of presets are available in the Inspector.
+-- | The light's attenuation (drop-off) curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 bindOmniLight_get_param :: MethodBind
 bindOmniLight_get_param
   = unsafePerformIO $
@@ -42,7 +43,7 @@ bindOmniLight_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's attenuation (drop-off) curve. A number of presets are available in the Inspector.
+-- | The light's attenuation (drop-off) curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 get_param :: (OmniLight :< cls, Object :< cls) => cls -> IO Float
 get_param cls
   = withVariantArray []
@@ -53,7 +54,7 @@ get_param cls
 
 {-# NOINLINE bindOmniLight_set_param #-}
 
--- | The light's attenuation (drop-off) curve. A number of presets are available in the Inspector.
+-- | The light's attenuation (drop-off) curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 bindOmniLight_set_param :: MethodBind
 bindOmniLight_set_param
   = unsafePerformIO $
@@ -63,7 +64,7 @@ bindOmniLight_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's attenuation (drop-off) curve. A number of presets are available in the Inspector.
+-- | The light's attenuation (drop-off) curve. A number of presets are available in the [b]Inspector[/b] by right-clicking the curve.
 set_param ::
             (OmniLight :< cls, Object :< cls) => cls -> Float -> IO ()
 set_param cls arg1

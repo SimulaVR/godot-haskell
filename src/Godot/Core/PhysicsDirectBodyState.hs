@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.PhysicsDirectBodyState
        (Godot.Core.PhysicsDirectBodyState.add_central_force,
         Godot.Core.PhysicsDirectBodyState.add_force,
@@ -151,7 +152,7 @@ apply_central_impulse cls arg1
 
 {-# NOINLINE bindPhysicsDirectBodyState_apply_impulse #-}
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time-independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 bindPhysicsDirectBodyState_apply_impulse :: MethodBind
 bindPhysicsDirectBodyState_apply_impulse
   = unsafePerformIO $
@@ -161,7 +162,7 @@ bindPhysicsDirectBodyState_apply_impulse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies a positioned impulse to the body. An impulse is time independent! Applying an impulse every frame would result in a framerate dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
+-- | Applies a positioned impulse to the body. An impulse is time-independent! Applying an impulse every frame would result in a framerate-dependent force. For this reason it should only be used when simulating one-time impacts. The position uses the rotation of the global coordinate system, but is centered at the object's origin.
 apply_impulse ::
                 (PhysicsDirectBodyState :< cls, Object :< cls) =>
                 cls -> Vector3 -> Vector3 -> IO ()
@@ -176,7 +177,7 @@ apply_impulse cls arg1 arg2
 
 {-# NOINLINE bindPhysicsDirectBodyState_apply_torque_impulse #-}
 
--- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the passed in vector.
+-- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the vector [code]j[/code] passed as parameter.
 bindPhysicsDirectBodyState_apply_torque_impulse :: MethodBind
 bindPhysicsDirectBodyState_apply_torque_impulse
   = unsafePerformIO $
@@ -186,7 +187,7 @@ bindPhysicsDirectBodyState_apply_torque_impulse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the passed in vector.
+-- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the vector [code]j[/code] passed as parameter.
 apply_torque_impulse ::
                        (PhysicsDirectBodyState :< cls, Object :< cls) =>
                        cls -> Vector3 -> IO ()
@@ -413,7 +414,8 @@ get_contact_collider_velocity_at_position cls arg1
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_count #-}
 
--- | Returns the number of contacts this body has with other bodies. Note that by default this returns 0 unless bodies are configured to log contacts. See [member RigidBody.contact_monitor].
+-- | Returns the number of contacts this body has with other bodies.
+--   				[b]Note:[/b] By default, this returns 0 unless bodies are configured to monitor contacts. See [member RigidBody.contact_monitor].
 bindPhysicsDirectBodyState_get_contact_count :: MethodBind
 bindPhysicsDirectBodyState_get_contact_count
   = unsafePerformIO $
@@ -423,7 +425,8 @@ bindPhysicsDirectBodyState_get_contact_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of contacts this body has with other bodies. Note that by default this returns 0 unless bodies are configured to log contacts. See [member RigidBody.contact_monitor].
+-- | Returns the number of contacts this body has with other bodies.
+--   				[b]Note:[/b] By default, this returns 0 unless bodies are configured to monitor contacts. See [member RigidBody.contact_monitor].
 get_contact_count ::
                     (PhysicsDirectBodyState :< cls, Object :< cls) => cls -> IO Int
 get_contact_count cls

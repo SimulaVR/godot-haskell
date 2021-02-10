@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.BoxShape
        (Godot.Core.BoxShape.get_extents, Godot.Core.BoxShape.set_extents)
        where
@@ -12,7 +13,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindBoxShape_get_extents #-}
 
--- | The shape's half extents.
+-- | The box's half extents. The width, height and depth of this shape is twice the half extents.
 bindBoxShape_get_extents :: MethodBind
 bindBoxShape_get_extents
   = unsafePerformIO $
@@ -22,7 +23,7 @@ bindBoxShape_get_extents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The shape's half extents.
+-- | The box's half extents. The width, height and depth of this shape is twice the half extents.
 get_extents ::
               (BoxShape :< cls, Object :< cls) => cls -> IO Vector3
 get_extents cls
@@ -34,7 +35,7 @@ get_extents cls
 
 {-# NOINLINE bindBoxShape_set_extents #-}
 
--- | The shape's half extents.
+-- | The box's half extents. The width, height and depth of this shape is twice the half extents.
 bindBoxShape_set_extents :: MethodBind
 bindBoxShape_set_extents
   = unsafePerformIO $
@@ -44,7 +45,7 @@ bindBoxShape_set_extents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The shape's half extents.
+-- | The box's half extents. The width, height and depth of this shape is twice the half extents.
 set_extents ::
               (BoxShape :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_extents cls arg1

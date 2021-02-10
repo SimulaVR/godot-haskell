@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AcceptDialog
        (Godot.Core.AcceptDialog.sig_confirmed,
         Godot.Core.AcceptDialog.sig_custom_action,
@@ -27,9 +28,13 @@ import Godot.Api.Types
 sig_confirmed :: Godot.Internal.Dispatch.Signal AcceptDialog
 sig_confirmed = Godot.Internal.Dispatch.Signal "confirmed"
 
+instance NodeSignal AcceptDialog "confirmed" '[]
+
 -- | Emitted when a custom button is pressed. See [method add_button].
 sig_custom_action :: Godot.Internal.Dispatch.Signal AcceptDialog
 sig_custom_action = Godot.Internal.Dispatch.Signal "custom_action"
+
+instance NodeSignal AcceptDialog "custom_action" '[GodotString]
 
 {-# NOINLINE bindAcceptDialog__builtin_text_entered #-}
 
@@ -94,8 +99,8 @@ _ok cls
 
 {-# NOINLINE bindAcceptDialog_add_button #-}
 
--- | Adds a button with label [i]text[/i] and a custom [i]action[/i] to the dialog and returns the created button. [i]action[/i] will be passed to the [signal custom_action] signal when pressed.
---   				If [code]true[/code], [i]right[/i] will place the button to the right of any sibling buttons. Default value: [code]false[/code].
+-- | Adds a button with label [code]text[/code] and a custom [code]action[/code] to the dialog and returns the created button. [code]action[/code] will be passed to the [signal custom_action] signal when pressed.
+--   				If [code]true[/code], [code]right[/code] will place the button to the right of any sibling buttons.
 bindAcceptDialog_add_button :: MethodBind
 bindAcceptDialog_add_button
   = unsafePerformIO $
@@ -105,8 +110,8 @@ bindAcceptDialog_add_button
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a button with label [i]text[/i] and a custom [i]action[/i] to the dialog and returns the created button. [i]action[/i] will be passed to the [signal custom_action] signal when pressed.
---   				If [code]true[/code], [i]right[/i] will place the button to the right of any sibling buttons. Default value: [code]false[/code].
+-- | Adds a button with label [code]text[/code] and a custom [code]action[/code] to the dialog and returns the created button. [code]action[/code] will be passed to the [signal custom_action] signal when pressed.
+--   				If [code]true[/code], [code]right[/code] will place the button to the right of any sibling buttons.
 add_button ::
              (AcceptDialog :< cls, Object :< cls) =>
              cls -> GodotString -> Bool -> GodotString -> IO Button
@@ -120,7 +125,7 @@ add_button cls arg1 arg2 arg3
 
 {-# NOINLINE bindAcceptDialog_add_cancel #-}
 
--- | Adds a button with label [i]name[/i] and a cancel action to the dialog and returns the created button.
+-- | Adds a button with label [code]name[/code] and a cancel action to the dialog and returns the created button.
 bindAcceptDialog_add_cancel :: MethodBind
 bindAcceptDialog_add_cancel
   = unsafePerformIO $
@@ -130,7 +135,7 @@ bindAcceptDialog_add_cancel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a button with label [i]name[/i] and a cancel action to the dialog and returns the created button.
+-- | Adds a button with label [code]name[/code] and a cancel action to the dialog and returns the created button.
 add_cancel ::
              (AcceptDialog :< cls, Object :< cls) =>
              cls -> GodotString -> IO Button
@@ -144,8 +149,8 @@ add_cancel cls arg1
 
 {-# NOINLINE bindAcceptDialog_get_hide_on_ok #-}
 
--- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic. Default value: [code]true[/code].
---   			Note: Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
+-- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic.
+--   			[b]Note:[/b] Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such, this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
 bindAcceptDialog_get_hide_on_ok :: MethodBind
 bindAcceptDialog_get_hide_on_ok
   = unsafePerformIO $
@@ -155,8 +160,8 @@ bindAcceptDialog_get_hide_on_ok
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic. Default value: [code]true[/code].
---   			Note: Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
+-- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic.
+--   			[b]Note:[/b] Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such, this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
 get_hide_on_ok ::
                  (AcceptDialog :< cls, Object :< cls) => cls -> IO Bool
 get_hide_on_ok cls
@@ -192,7 +197,7 @@ get_label cls
 
 {-# NOINLINE bindAcceptDialog_get_ok #-}
 
--- | Returns the OK Button.
+-- | Returns the OK [Button] instance.
 bindAcceptDialog_get_ok :: MethodBind
 bindAcceptDialog_get_ok
   = unsafePerformIO $
@@ -202,7 +207,7 @@ bindAcceptDialog_get_ok
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the OK Button.
+-- | Returns the OK [Button] instance.
 get_ok :: (AcceptDialog :< cls, Object :< cls) => cls -> IO Button
 get_ok cls
   = withVariantArray []
@@ -213,7 +218,7 @@ get_ok cls
 
 {-# NOINLINE bindAcceptDialog_get_text #-}
 
--- | The text displayed by this dialog.
+-- | The text displayed by the dialog.
 bindAcceptDialog_get_text :: MethodBind
 bindAcceptDialog_get_text
   = unsafePerformIO $
@@ -223,7 +228,7 @@ bindAcceptDialog_get_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The text displayed by this dialog.
+-- | The text displayed by the dialog.
 get_text ::
            (AcceptDialog :< cls, Object :< cls) => cls -> IO GodotString
 get_text cls
@@ -236,6 +241,7 @@ get_text cls
 
 {-# NOINLINE bindAcceptDialog_has_autowrap #-}
 
+-- | Sets autowrapping for the text in the dialog.
 bindAcceptDialog_has_autowrap :: MethodBind
 bindAcceptDialog_has_autowrap
   = unsafePerformIO $
@@ -245,6 +251,7 @@ bindAcceptDialog_has_autowrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets autowrapping for the text in the dialog.
 has_autowrap ::
                (AcceptDialog :< cls, Object :< cls) => cls -> IO Bool
 has_autowrap cls
@@ -281,6 +288,7 @@ register_text_enter cls arg1
 
 {-# NOINLINE bindAcceptDialog_set_autowrap #-}
 
+-- | Sets autowrapping for the text in the dialog.
 bindAcceptDialog_set_autowrap :: MethodBind
 bindAcceptDialog_set_autowrap
   = unsafePerformIO $
@@ -290,6 +298,7 @@ bindAcceptDialog_set_autowrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets autowrapping for the text in the dialog.
 set_autowrap ::
                (AcceptDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autowrap cls arg1
@@ -302,8 +311,8 @@ set_autowrap cls arg1
 
 {-# NOINLINE bindAcceptDialog_set_hide_on_ok #-}
 
--- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic. Default value: [code]true[/code].
---   			Note: Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
+-- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic.
+--   			[b]Note:[/b] Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such, this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
 bindAcceptDialog_set_hide_on_ok :: MethodBind
 bindAcceptDialog_set_hide_on_ok
   = unsafePerformIO $
@@ -313,8 +322,8 @@ bindAcceptDialog_set_hide_on_ok
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic. Default value: [code]true[/code].
---   			Note: Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
+-- | If [code]true[/code], the dialog is hidden when the OK button is pressed. You can set it to [code]false[/code] if you want to do e.g. input validation when receiving the [signal confirmed] signal, and handle hiding the dialog in your own logic.
+--   			[b]Note:[/b] Some nodes derived from this class can have a different default value, and potentially their own built-in logic overriding this setting. For example [FileDialog] defaults to [code]false[/code], and has its own input validation code that is called when you press OK, which eventually hides the dialog if the input is valid. As such, this property can't be used in [FileDialog] to disable hiding the dialog when pressing OK.
 set_hide_on_ok ::
                  (AcceptDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hide_on_ok cls arg1
@@ -327,7 +336,7 @@ set_hide_on_ok cls arg1
 
 {-# NOINLINE bindAcceptDialog_set_text #-}
 
--- | The text displayed by this dialog.
+-- | The text displayed by the dialog.
 bindAcceptDialog_set_text :: MethodBind
 bindAcceptDialog_set_text
   = unsafePerformIO $
@@ -337,7 +346,7 @@ bindAcceptDialog_set_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The text displayed by this dialog.
+-- | The text displayed by the dialog.
 set_text ::
            (AcceptDialog :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_text cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeVec3Constant
        (Godot.Core.VisualShaderNodeVec3Constant.get_constant,
         Godot.Core.VisualShaderNodeVec3Constant.set_constant)
@@ -13,6 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindVisualShaderNodeVec3Constant_get_constant #-}
 
+-- | A [Vector3] constant which represents the state of this node.
 bindVisualShaderNodeVec3Constant_get_constant :: MethodBind
 bindVisualShaderNodeVec3Constant_get_constant
   = unsafePerformIO $
@@ -22,6 +24,7 @@ bindVisualShaderNodeVec3Constant_get_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A [Vector3] constant which represents the state of this node.
 get_constant ::
                (VisualShaderNodeVec3Constant :< cls, Object :< cls) =>
                cls -> IO Vector3
@@ -37,6 +40,7 @@ get_constant cls
 
 {-# NOINLINE bindVisualShaderNodeVec3Constant_set_constant #-}
 
+-- | A [Vector3] constant which represents the state of this node.
 bindVisualShaderNodeVec3Constant_set_constant :: MethodBind
 bindVisualShaderNodeVec3Constant_set_constant
   = unsafePerformIO $
@@ -46,6 +50,7 @@ bindVisualShaderNodeVec3Constant_set_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | A [Vector3] constant which represents the state of this node.
 set_constant ::
                (VisualShaderNodeVec3Constant :< cls, Object :< cls) =>
                cls -> Vector3 -> IO ()

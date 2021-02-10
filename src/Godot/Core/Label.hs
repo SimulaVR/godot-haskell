@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Label
        (Godot.Core.Label._VALIGN_TOP, Godot.Core.Label._ALIGN_RIGHT,
         Godot.Core.Label._ALIGN_FILL, Godot.Core.Label._VALIGN_FILL,
@@ -56,7 +57,7 @@ _ALIGN_CENTER = 1
 
 {-# NOINLINE bindLabel_get_align #-}
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [code]ALIGN_*[/code] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
 bindLabel_get_align :: MethodBind
 bindLabel_get_align
   = unsafePerformIO $
@@ -66,7 +67,7 @@ bindLabel_get_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [code]ALIGN_*[/code] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
 get_align :: (Label :< cls, Object :< cls) => cls -> IO Int
 get_align cls
   = withVariantArray []
@@ -164,7 +165,7 @@ get_max_lines_visible cls
 
 {-# NOINLINE bindLabel_get_percent_visible #-}
 
--- | Limits the count of visible characters. If you set [code]percent_visible[/code] to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 bindLabel_get_percent_visible :: MethodBind
 bindLabel_get_percent_visible
   = unsafePerformIO $
@@ -174,7 +175,7 @@ bindLabel_get_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Limits the count of visible characters. If you set [code]percent_visible[/code] to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 get_percent_visible ::
                       (Label :< cls, Object :< cls) => cls -> IO Float
 get_percent_visible cls
@@ -231,7 +232,7 @@ get_total_character_count cls
 
 {-# NOINLINE bindLabel_get_valign #-}
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [code]VALIGN_*[/code] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
 bindLabel_get_valign :: MethodBind
 bindLabel_get_valign
   = unsafePerformIO $
@@ -241,7 +242,7 @@ bindLabel_get_valign
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [code]VALIGN_*[/code] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
 get_valign :: (Label :< cls, Object :< cls) => cls -> IO Int
 get_valign cls
   = withVariantArray []
@@ -275,7 +276,7 @@ get_visible_characters cls
 
 {-# NOINLINE bindLabel_get_visible_line_count #-}
 
--- | Returns the number of lines shown. Useful if the [code]Label[/code] 's height cannot currently display all lines.
+-- | Returns the number of lines shown. Useful if the [Label]'s height cannot currently display all lines.
 bindLabel_get_visible_line_count :: MethodBind
 bindLabel_get_visible_line_count
   = unsafePerformIO $
@@ -285,7 +286,7 @@ bindLabel_get_visible_line_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of lines shown. Useful if the [code]Label[/code] 's height cannot currently display all lines.
+-- | Returns the number of lines shown. Useful if the [Label]'s height cannot currently display all lines.
 get_visible_line_count ::
                          (Label :< cls, Object :< cls) => cls -> IO Int
 get_visible_line_count cls
@@ -299,7 +300,7 @@ get_visible_line_count cls
 
 {-# NOINLINE bindLabel_has_autowrap #-}
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text. Default: [code]false[/code].
+-- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 bindLabel_has_autowrap :: MethodBind
 bindLabel_has_autowrap
   = unsafePerformIO $
@@ -309,7 +310,7 @@ bindLabel_has_autowrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text. Default: [code]false[/code].
+-- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 has_autowrap :: (Label :< cls, Object :< cls) => cls -> IO Bool
 has_autowrap cls
   = withVariantArray []
@@ -363,7 +364,7 @@ is_uppercase cls
 
 {-# NOINLINE bindLabel_set_align #-}
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [code]ALIGN_*[/code] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
 bindLabel_set_align :: MethodBind
 bindLabel_set_align
   = unsafePerformIO $
@@ -373,7 +374,7 @@ bindLabel_set_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [code]ALIGN_*[/code] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
 set_align :: (Label :< cls, Object :< cls) => cls -> Int -> IO ()
 set_align cls arg1
   = withVariantArray [toVariant arg1]
@@ -383,7 +384,7 @@ set_align cls arg1
 
 {-# NOINLINE bindLabel_set_autowrap #-}
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text. Default: [code]false[/code].
+-- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 bindLabel_set_autowrap :: MethodBind
 bindLabel_set_autowrap
   = unsafePerformIO $
@@ -393,7 +394,7 @@ bindLabel_set_autowrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text. Default: [code]false[/code].
+-- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 set_autowrap ::
                (Label :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autowrap cls arg1
@@ -473,7 +474,7 @@ set_max_lines_visible cls arg1
 
 {-# NOINLINE bindLabel_set_percent_visible #-}
 
--- | Limits the count of visible characters. If you set [code]percent_visible[/code] to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 bindLabel_set_percent_visible :: MethodBind
 bindLabel_set_percent_visible
   = unsafePerformIO $
@@ -483,7 +484,7 @@ bindLabel_set_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Limits the count of visible characters. If you set [code]percent_visible[/code] to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 set_percent_visible ::
                       (Label :< cls, Object :< cls) => cls -> Float -> IO ()
 set_percent_visible cls arg1
@@ -539,7 +540,7 @@ set_uppercase cls arg1
 
 {-# NOINLINE bindLabel_set_valign #-}
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [code]VALIGN_*[/code] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
 bindLabel_set_valign :: MethodBind
 bindLabel_set_valign
   = unsafePerformIO $
@@ -549,7 +550,7 @@ bindLabel_set_valign
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [code]VALIGN_*[/code] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
 set_valign :: (Label :< cls, Object :< cls) => cls -> Int -> IO ()
 set_valign cls arg1
   = withVariantArray [toVariant arg1]

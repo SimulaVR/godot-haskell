@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.NavigationPolygonInstance
        (Godot.Core.NavigationPolygonInstance._navpoly_changed,
         Godot.Core.NavigationPolygonInstance.get_navigation_polygon,

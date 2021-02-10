@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.NavigationMesh
        (Godot.Core.NavigationMesh._SAMPLE_PARTITION_LAYERS,
         Godot.Core.NavigationMesh._SAMPLE_PARTITION_WATERSHED,

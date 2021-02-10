@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WebSocketServer
        (Godot.Core.WebSocketServer.sig_client_close_request,
         Godot.Core.WebSocketServer.sig_client_connected,
@@ -33,18 +34,29 @@ sig_client_close_request ::
 sig_client_close_request
   = Godot.Internal.Dispatch.Signal "client_close_request"
 
+instance NodeSignal WebSocketServer "client_close_request"
+           '[Int, Int, GodotString]
+
 sig_client_connected ::
                      Godot.Internal.Dispatch.Signal WebSocketServer
 sig_client_connected
   = Godot.Internal.Dispatch.Signal "client_connected"
+
+instance NodeSignal WebSocketServer "client_connected"
+           '[Int, GodotString]
 
 sig_client_disconnected ::
                         Godot.Internal.Dispatch.Signal WebSocketServer
 sig_client_disconnected
   = Godot.Internal.Dispatch.Signal "client_disconnected"
 
+instance NodeSignal WebSocketServer "client_disconnected"
+           '[Int, Bool]
+
 sig_data_received :: Godot.Internal.Dispatch.Signal WebSocketServer
 sig_data_received = Godot.Internal.Dispatch.Signal "data_received"
+
+instance NodeSignal WebSocketServer "data_received" '[Int]
 
 {-# NOINLINE bindWebSocketServer_disconnect_peer #-}
 

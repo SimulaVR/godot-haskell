@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Directory
        (Godot.Core.Directory.change_dir, Godot.Core.Directory.copy,
         Godot.Core.Directory.current_is_dir,
@@ -23,8 +24,8 @@ import Godot.Api.Types
 
 {-# NOINLINE bindDirectory_change_dir #-}
 
--- | Change the currently opened directory to the one passed as an argument. The argument can be relative to the current directory (e.g. [code]newdir[/code] or [code]../newdir[/code]), or an absolute path (e.g. [code]/tmp/newdir[/code] or [code]res://somedir/newdir[/code]).
---   				The method returns one of the error code constants defined in [@GlobalScope] (OK or ERR_*).
+-- | Changes the currently opened directory to the one passed as an argument. The argument can be relative to the current directory (e.g. [code]newdir[/code] or [code]../newdir[/code]), or an absolute path (e.g. [code]/tmp/newdir[/code] or [code]res://somedir/newdir[/code]).
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindDirectory_change_dir :: MethodBind
 bindDirectory_change_dir
   = unsafePerformIO $
@@ -34,8 +35,8 @@ bindDirectory_change_dir
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Change the currently opened directory to the one passed as an argument. The argument can be relative to the current directory (e.g. [code]newdir[/code] or [code]../newdir[/code]), or an absolute path (e.g. [code]/tmp/newdir[/code] or [code]res://somedir/newdir[/code]).
---   				The method returns one of the error code constants defined in [@GlobalScope] (OK or ERR_*).
+-- | Changes the currently opened directory to the one passed as an argument. The argument can be relative to the current directory (e.g. [code]newdir[/code] or [code]../newdir[/code]), or an absolute path (e.g. [code]/tmp/newdir[/code] or [code]res://somedir/newdir[/code]).
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 change_dir ::
              (Directory :< cls, Object :< cls) => cls -> GodotString -> IO Int
 change_dir cls arg1
@@ -47,8 +48,8 @@ change_dir cls arg1
 
 {-# NOINLINE bindDirectory_copy #-}
 
--- | Copy the [i]from[/i] file to the [i]to[/i] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK, FAILED or ERR_*).
+-- | Copies the [code]from[/code] file to the [code]to[/code] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindDirectory_copy :: MethodBind
 bindDirectory_copy
   = unsafePerformIO $
@@ -58,8 +59,8 @@ bindDirectory_copy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Copy the [i]from[/i] file to the [i]to[/i] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK, FAILED or ERR_*).
+-- | Copies the [code]from[/code] file to the [code]to[/code] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 copy ::
        (Directory :< cls, Object :< cls) =>
        cls -> GodotString -> GodotString -> IO Int
@@ -185,7 +186,7 @@ get_current_drive cls
 
 {-# NOINLINE bindDirectory_get_drive #-}
 
--- | On Windows, return the name of the drive (partition) passed as an argument (e.g. [code]C:[/code]). On other platforms, or if the requested drive does not existed, the method returns an empty String.
+-- | On Windows, returns the name of the drive (partition) passed as an argument (e.g. [code]C:[/code]). On other platforms, or if the requested drive does not existed, the method returns an empty String.
 bindDirectory_get_drive :: MethodBind
 bindDirectory_get_drive
   = unsafePerformIO $
@@ -195,7 +196,7 @@ bindDirectory_get_drive
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | On Windows, return the name of the drive (partition) passed as an argument (e.g. [code]C:[/code]). On other platforms, or if the requested drive does not existed, the method returns an empty String.
+-- | On Windows, returns the name of the drive (partition) passed as an argument (e.g. [code]C:[/code]). On other platforms, or if the requested drive does not existed, the method returns an empty String.
 get_drive ::
             (Directory :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_drive cls arg1
@@ -207,7 +208,7 @@ get_drive cls arg1
 
 {-# NOINLINE bindDirectory_get_drive_count #-}
 
--- | On Windows, return the number of drives (partitions) mounted on the current filesystem. On other platforms, the method returns 0.
+-- | On Windows, returns the number of drives (partitions) mounted on the current filesystem. On other platforms, the method returns 0.
 bindDirectory_get_drive_count :: MethodBind
 bindDirectory_get_drive_count
   = unsafePerformIO $
@@ -217,7 +218,7 @@ bindDirectory_get_drive_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | On Windows, return the number of drives (partitions) mounted on the current filesystem. On other platforms, the method returns 0.
+-- | On Windows, returns the number of drives (partitions) mounted on the current filesystem. On other platforms, the method returns 0.
 get_drive_count ::
                   (Directory :< cls, Object :< cls) => cls -> IO Int
 get_drive_count cls
@@ -254,7 +255,7 @@ get_next cls
 
 {-# NOINLINE bindDirectory_get_space_left #-}
 
--- | On Unix desktop systems, return the available space on the current directory's disk. On other platforms, this information is not available and the method returns 0 or -1.
+-- | On UNIX desktop systems, returns the available space on the current directory's disk. On other platforms, this information is not available and the method returns 0 or -1.
 bindDirectory_get_space_left :: MethodBind
 bindDirectory_get_space_left
   = unsafePerformIO $
@@ -264,7 +265,7 @@ bindDirectory_get_space_left
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | On Unix desktop systems, return the available space on the current directory's disk. On other platforms, this information is not available and the method returns 0 or -1.
+-- | On UNIX desktop systems, returns the available space on the current directory's disk. On other platforms, this information is not available and the method returns 0 or -1.
 get_space_left ::
                  (Directory :< cls, Object :< cls) => cls -> IO Int
 get_space_left cls
@@ -277,9 +278,9 @@ get_space_left cls
 
 {-# NOINLINE bindDirectory_list_dir_begin #-}
 
--- | Initialize the stream used to list all files and directories using the [method get_next] function, closing the current opened stream if needed. Once the stream has been processed, it should typically be closed with [method list_dir_end].
---   				If you pass [code]skip_navigational[/code], then [code].[/code] and [code]..[/code] would be filtered out.
---   				If you pass [code]skip_hidden[/code], then hidden files would be filtered out.
+-- | Initializes the stream used to list all files and directories using the [method get_next] function, closing the current opened stream if needed. Once the stream has been processed, it should typically be closed with [method list_dir_end].
+--   				If [code]skip_navigational[/code] is [code]true[/code], [code].[/code] and [code]..[/code] are filtered out.
+--   				If [code]skip_hidden[/code] is [code]true[/code], hidden files are filtered out.
 bindDirectory_list_dir_begin :: MethodBind
 bindDirectory_list_dir_begin
   = unsafePerformIO $
@@ -289,9 +290,9 @@ bindDirectory_list_dir_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Initialize the stream used to list all files and directories using the [method get_next] function, closing the current opened stream if needed. Once the stream has been processed, it should typically be closed with [method list_dir_end].
---   				If you pass [code]skip_navigational[/code], then [code].[/code] and [code]..[/code] would be filtered out.
---   				If you pass [code]skip_hidden[/code], then hidden files would be filtered out.
+-- | Initializes the stream used to list all files and directories using the [method get_next] function, closing the current opened stream if needed. Once the stream has been processed, it should typically be closed with [method list_dir_end].
+--   				If [code]skip_navigational[/code] is [code]true[/code], [code].[/code] and [code]..[/code] are filtered out.
+--   				If [code]skip_hidden[/code] is [code]true[/code], hidden files are filtered out.
 list_dir_begin ::
                  (Directory :< cls, Object :< cls) => cls -> Bool -> Bool -> IO Int
 list_dir_begin cls arg1 arg2
@@ -304,7 +305,7 @@ list_dir_begin cls arg1 arg2
 
 {-# NOINLINE bindDirectory_list_dir_end #-}
 
--- | Close the current stream opened with [method list_dir_begin] (whether it has been fully processed with [method get_next] or not does not matter).
+-- | Closes the current stream opened with [method list_dir_begin] (whether it has been fully processed with [method get_next] or not does not matter).
 bindDirectory_list_dir_end :: MethodBind
 bindDirectory_list_dir_end
   = unsafePerformIO $
@@ -314,7 +315,7 @@ bindDirectory_list_dir_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Close the current stream opened with [method list_dir_begin] (whether it has been fully processed with [method get_next] or not does not matter).
+-- | Closes the current stream opened with [method list_dir_begin] (whether it has been fully processed with [method get_next] or not does not matter).
 list_dir_end :: (Directory :< cls, Object :< cls) => cls -> IO ()
 list_dir_end cls
   = withVariantArray []
@@ -326,8 +327,8 @@ list_dir_end cls
 
 {-# NOINLINE bindDirectory_make_dir #-}
 
--- | Create a directory. The argument can be relative to the current directory, or an absolute path. The target directory should be placed in an already existing directory (to create the full path recursively, see [method make_dir_recursive]).
---   				The method returns one of the error code constants defined in [@GlobalScope] (OK, FAILED or ERR_*).
+-- | Creates a directory. The argument can be relative to the current directory, or an absolute path. The target directory should be placed in an already existing directory (to create the full path recursively, see [method make_dir_recursive]).
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindDirectory_make_dir :: MethodBind
 bindDirectory_make_dir
   = unsafePerformIO $
@@ -337,8 +338,8 @@ bindDirectory_make_dir
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a directory. The argument can be relative to the current directory, or an absolute path. The target directory should be placed in an already existing directory (to create the full path recursively, see [method make_dir_recursive]).
---   				The method returns one of the error code constants defined in [@GlobalScope] (OK, FAILED or ERR_*).
+-- | Creates a directory. The argument can be relative to the current directory, or an absolute path. The target directory should be placed in an already existing directory (to create the full path recursively, see [method make_dir_recursive]).
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 make_dir ::
            (Directory :< cls, Object :< cls) => cls -> GodotString -> IO Int
 make_dir cls arg1
@@ -350,8 +351,8 @@ make_dir cls arg1
 
 {-# NOINLINE bindDirectory_make_dir_recursive #-}
 
--- | Create a target directory and all necessary intermediate directories in its path, by calling [method make_dir] recursively. The argument can be relative to the current directory, or an absolute path.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK, FAILED or ERR_*).
+-- | Creates a target directory and all necessary intermediate directories in its path, by calling [method make_dir] recursively. The argument can be relative to the current directory, or an absolute path.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindDirectory_make_dir_recursive :: MethodBind
 bindDirectory_make_dir_recursive
   = unsafePerformIO $
@@ -361,8 +362,8 @@ bindDirectory_make_dir_recursive
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a target directory and all necessary intermediate directories in its path, by calling [method make_dir] recursively. The argument can be relative to the current directory, or an absolute path.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK, FAILED or ERR_*).
+-- | Creates a target directory and all necessary intermediate directories in its path, by calling [method make_dir] recursively. The argument can be relative to the current directory, or an absolute path.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 make_dir_recursive ::
                      (Directory :< cls, Object :< cls) => cls -> GodotString -> IO Int
 make_dir_recursive cls arg1
@@ -376,8 +377,8 @@ make_dir_recursive cls arg1
 
 {-# NOINLINE bindDirectory_open #-}
 
--- | Open an existing directory of the filesystem. The [i]path[/i] argument can be within the project tree ([code]res://folder[/code]), the user directory ([code]user://folder[/code]) or an absolute path of the user filesystem (e.g. [code]/tmp/folder[/code] or [code]C:\tmp\folder[/code]).
---   				The method returns one of the error code constants defined in [@GlobalScope] (OK or ERR_*).
+-- | Opens an existing directory of the filesystem. The [code]path[/code] argument can be within the project tree ([code]res://folder[/code]), the user directory ([code]user://folder[/code]) or an absolute path of the user filesystem (e.g. [code]/tmp/folder[/code] or [code]C:\tmp\folder[/code]).
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindDirectory_open :: MethodBind
 bindDirectory_open
   = unsafePerformIO $
@@ -387,8 +388,8 @@ bindDirectory_open
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Open an existing directory of the filesystem. The [i]path[/i] argument can be within the project tree ([code]res://folder[/code]), the user directory ([code]user://folder[/code]) or an absolute path of the user filesystem (e.g. [code]/tmp/folder[/code] or [code]C:\tmp\folder[/code]).
---   				The method returns one of the error code constants defined in [@GlobalScope] (OK or ERR_*).
+-- | Opens an existing directory of the filesystem. The [code]path[/code] argument can be within the project tree ([code]res://folder[/code]), the user directory ([code]user://folder[/code]) or an absolute path of the user filesystem (e.g. [code]/tmp/folder[/code] or [code]C:\tmp\folder[/code]).
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 open ::
        (Directory :< cls, Object :< cls) => cls -> GodotString -> IO Int
 open cls arg1
@@ -399,8 +400,8 @@ open cls arg1
 
 {-# NOINLINE bindDirectory_remove #-}
 
--- | Delete the target file or an empty directory. The argument can be relative to the current directory, or an absolute path. If the target directory is not empty, the operation will fail.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK or FAILED).
+-- | Deletes the target file or an empty directory. The argument can be relative to the current directory, or an absolute path. If the target directory is not empty, the operation will fail.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindDirectory_remove :: MethodBind
 bindDirectory_remove
   = unsafePerformIO $
@@ -410,8 +411,8 @@ bindDirectory_remove
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Delete the target file or an empty directory. The argument can be relative to the current directory, or an absolute path. If the target directory is not empty, the operation will fail.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK or FAILED).
+-- | Deletes the target file or an empty directory. The argument can be relative to the current directory, or an absolute path. If the target directory is not empty, the operation will fail.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 remove ::
          (Directory :< cls, Object :< cls) => cls -> GodotString -> IO Int
 remove cls arg1
@@ -422,8 +423,8 @@ remove cls arg1
 
 {-# NOINLINE bindDirectory_rename #-}
 
--- | Rename (move) the [i]from[/i] file to the [i]to[/i] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK or FAILED).
+-- | Renames (move) the [code]from[/code] file to the [code]to[/code] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 bindDirectory_rename :: MethodBind
 bindDirectory_rename
   = unsafePerformIO $
@@ -433,8 +434,8 @@ bindDirectory_rename
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rename (move) the [i]from[/i] file to the [i]to[/i] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
---   				Returns one of the error code constants defined in [@GlobalScope] (OK or FAILED).
+-- | Renames (move) the [code]from[/code] file to the [code]to[/code] destination. Both arguments should be paths to files, either relative or absolute. If the destination file exists and is not access-protected, it will be overwritten.
+--   				Returns one of the [enum Error] code constants ([code]OK[/code] on success).
 rename ::
          (Directory :< cls, Object :< cls) =>
          cls -> GodotString -> GodotString -> IO Int

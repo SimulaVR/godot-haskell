@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CameraFeed
        (Godot.Core.CameraFeed._FEED_FRONT,
         Godot.Core.CameraFeed._FEED_YCBCR_SEP,
@@ -179,6 +180,7 @@ _set_position cls arg1
 
 {-# NOINLINE bindCameraFeed_get_id #-}
 
+-- | Returns the unique ID for this feed.
 bindCameraFeed_get_id :: MethodBind
 bindCameraFeed_get_id
   = unsafePerformIO $
@@ -188,6 +190,7 @@ bindCameraFeed_get_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the unique ID for this feed.
 get_id :: (CameraFeed :< cls, Object :< cls) => cls -> IO Int
 get_id cls
   = withVariantArray []
@@ -198,6 +201,7 @@ get_id cls
 
 {-# NOINLINE bindCameraFeed_get_name #-}
 
+-- | Returns the camera's name.
 bindCameraFeed_get_name :: MethodBind
 bindCameraFeed_get_name
   = unsafePerformIO $
@@ -207,6 +211,7 @@ bindCameraFeed_get_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the camera's name.
 get_name ::
            (CameraFeed :< cls, Object :< cls) => cls -> IO GodotString
 get_name cls
@@ -218,6 +223,7 @@ get_name cls
 
 {-# NOINLINE bindCameraFeed_get_position #-}
 
+-- | Returns the position of camera on the device.
 bindCameraFeed_get_position :: MethodBind
 bindCameraFeed_get_position
   = unsafePerformIO $
@@ -227,6 +233,7 @@ bindCameraFeed_get_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the position of camera on the device.
 get_position :: (CameraFeed :< cls, Object :< cls) => cls -> IO Int
 get_position cls
   = withVariantArray []
@@ -238,6 +245,7 @@ get_position cls
 
 {-# NOINLINE bindCameraFeed_get_transform #-}
 
+-- | The transform applied to the camera's image.
 bindCameraFeed_get_transform :: MethodBind
 bindCameraFeed_get_transform
   = unsafePerformIO $
@@ -247,6 +255,7 @@ bindCameraFeed_get_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The transform applied to the camera's image.
 get_transform ::
                 (CameraFeed :< cls, Object :< cls) => cls -> IO Transform2d
 get_transform cls
@@ -259,6 +268,7 @@ get_transform cls
 
 {-# NOINLINE bindCameraFeed_is_active #-}
 
+-- | If [code]true[/code], the feed is active.
 bindCameraFeed_is_active :: MethodBind
 bindCameraFeed_is_active
   = unsafePerformIO $
@@ -268,6 +278,7 @@ bindCameraFeed_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the feed is active.
 is_active :: (CameraFeed :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
   = withVariantArray []
@@ -278,6 +289,7 @@ is_active cls
 
 {-# NOINLINE bindCameraFeed_set_active #-}
 
+-- | If [code]true[/code], the feed is active.
 bindCameraFeed_set_active :: MethodBind
 bindCameraFeed_set_active
   = unsafePerformIO $
@@ -287,6 +299,7 @@ bindCameraFeed_set_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the feed is active.
 set_active ::
              (CameraFeed :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_active cls arg1
@@ -299,6 +312,7 @@ set_active cls arg1
 
 {-# NOINLINE bindCameraFeed_set_transform #-}
 
+-- | The transform applied to the camera's image.
 bindCameraFeed_set_transform :: MethodBind
 bindCameraFeed_set_transform
   = unsafePerformIO $
@@ -308,6 +322,7 @@ bindCameraFeed_set_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The transform applied to the camera's image.
 set_transform ::
                 (CameraFeed :< cls, Object :< cls) => cls -> Transform2d -> IO ()
 set_transform cls arg1

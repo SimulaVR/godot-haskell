@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptMathConstant
        (Godot.Core.VisualScriptMathConstant._MATH_CONSTANT_INF,
         Godot.Core.VisualScriptMathConstant._MATH_CONSTANT_MAX,

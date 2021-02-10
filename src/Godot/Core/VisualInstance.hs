@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualInstance
        (Godot.Core.VisualInstance._get_visual_instance_rid,
         Godot.Core.VisualInstance.get_aabb,
@@ -43,7 +44,7 @@ _get_visual_instance_rid cls
 
 {-# NOINLINE bindVisualInstance_get_aabb #-}
 
--- | Returns the [AABB] (also known as the bounding box) for this VisualInstance.
+-- | Returns the [AABB] (also known as the bounding box) for this [VisualInstance]. See also [method get_transformed_aabb].
 bindVisualInstance_get_aabb :: MethodBind
 bindVisualInstance_get_aabb
   = unsafePerformIO $
@@ -53,7 +54,7 @@ bindVisualInstance_get_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [AABB] (also known as the bounding box) for this VisualInstance.
+-- | Returns the [AABB] (also known as the bounding box) for this [VisualInstance]. See also [method get_transformed_aabb].
 get_aabb ::
            (VisualInstance :< cls, Object :< cls) => cls -> IO Aabb
 get_aabb cls
@@ -66,6 +67,7 @@ get_aabb cls
 
 {-# NOINLINE bindVisualInstance_get_base #-}
 
+-- | Returns the RID of the resource associated with this [VisualInstance]. For example, if the Node is a [MeshInstance], this will return the RID of the associated [Mesh].
 bindVisualInstance_get_base :: MethodBind
 bindVisualInstance_get_base
   = unsafePerformIO $
@@ -75,6 +77,7 @@ bindVisualInstance_get_base
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the RID of the resource associated with this [VisualInstance]. For example, if the Node is a [MeshInstance], this will return the RID of the associated [Mesh].
 get_base :: (VisualInstance :< cls, Object :< cls) => cls -> IO Rid
 get_base cls
   = withVariantArray []
@@ -86,6 +89,7 @@ get_base cls
 
 {-# NOINLINE bindVisualInstance_get_instance #-}
 
+-- | Returns the RID of this instance. This RID is the same as the RID returned by [method VisualServer.instance_create]. This RID is needed if you want to call [VisualServer] functions directly on this [VisualInstance].
 bindVisualInstance_get_instance :: MethodBind
 bindVisualInstance_get_instance
   = unsafePerformIO $
@@ -95,6 +99,7 @@ bindVisualInstance_get_instance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the RID of this instance. This RID is the same as the RID returned by [method VisualServer.instance_create]. This RID is needed if you want to call [VisualServer] functions directly on this [VisualInstance].
 get_instance ::
                (VisualInstance :< cls, Object :< cls) => cls -> IO Rid
 get_instance cls
@@ -107,8 +112,8 @@ get_instance cls
 
 {-# NOINLINE bindVisualInstance_get_layer_mask #-}
 
--- | The render layer(s) this VisualInstance is drawn on.
---   			This object will only be visible for [Camera]s whose cull mask includes the render object this VisualInstance is set to.
+-- | The render layer(s) this [VisualInstance] is drawn on.
+--   			This object will only be visible for [Camera]s whose cull mask includes the render object this [VisualInstance] is set to.
 bindVisualInstance_get_layer_mask :: MethodBind
 bindVisualInstance_get_layer_mask
   = unsafePerformIO $
@@ -118,8 +123,8 @@ bindVisualInstance_get_layer_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The render layer(s) this VisualInstance is drawn on.
---   			This object will only be visible for [Camera]s whose cull mask includes the render object this VisualInstance is set to.
+-- | The render layer(s) this [VisualInstance] is drawn on.
+--   			This object will only be visible for [Camera]s whose cull mask includes the render object this [VisualInstance] is set to.
 get_layer_mask ::
                  (VisualInstance :< cls, Object :< cls) => cls -> IO Int
 get_layer_mask cls
@@ -133,6 +138,7 @@ get_layer_mask cls
 
 {-# NOINLINE bindVisualInstance_get_layer_mask_bit #-}
 
+-- | Returns [code]true[/code] when the specified layer is enabled in [member layers] and [code]false[/code] otherwise.
 bindVisualInstance_get_layer_mask_bit :: MethodBind
 bindVisualInstance_get_layer_mask_bit
   = unsafePerformIO $
@@ -142,6 +148,7 @@ bindVisualInstance_get_layer_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] when the specified layer is enabled in [member layers] and [code]false[/code] otherwise.
 get_layer_mask_bit ::
                      (VisualInstance :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_layer_mask_bit cls arg1
@@ -155,8 +162,8 @@ get_layer_mask_bit cls arg1
 
 {-# NOINLINE bindVisualInstance_get_transformed_aabb #-}
 
--- | Returns the transformed [AABB] (also known as the bounding box) for this VisualInstance.
---   				Transformed in this case means the [AABB] plus the position, rotation, and scale of the [Spatial]s [Transform]
+-- | Returns the transformed [AABB] (also known as the bounding box) for this [VisualInstance].
+--   				Transformed in this case means the [AABB] plus the position, rotation, and scale of the [Spatial]'s [Transform]. See also [method get_aabb].
 bindVisualInstance_get_transformed_aabb :: MethodBind
 bindVisualInstance_get_transformed_aabb
   = unsafePerformIO $
@@ -166,8 +173,8 @@ bindVisualInstance_get_transformed_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the transformed [AABB] (also known as the bounding box) for this VisualInstance.
---   				Transformed in this case means the [AABB] plus the position, rotation, and scale of the [Spatial]s [Transform]
+-- | Returns the transformed [AABB] (also known as the bounding box) for this [VisualInstance].
+--   				Transformed in this case means the [AABB] plus the position, rotation, and scale of the [Spatial]'s [Transform]. See also [method get_aabb].
 get_transformed_aabb ::
                        (VisualInstance :< cls, Object :< cls) => cls -> IO Aabb
 get_transformed_aabb cls
@@ -181,8 +188,7 @@ get_transformed_aabb cls
 
 {-# NOINLINE bindVisualInstance_set_base #-}
 
--- | Sets the base of the VisualInstance, which changes how the engine handles the VisualInstance under the hood.
---   				It is recommended to only use set_base if you know what you're doing.
+-- | Sets the resource that is instantiated by this [VisualInstance], which changes how the engine handles the [VisualInstance] under the hood. Equivalent to [method VisualServer.instance_set_base].
 bindVisualInstance_set_base :: MethodBind
 bindVisualInstance_set_base
   = unsafePerformIO $
@@ -192,8 +198,7 @@ bindVisualInstance_set_base
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the base of the VisualInstance, which changes how the engine handles the VisualInstance under the hood.
---   				It is recommended to only use set_base if you know what you're doing.
+-- | Sets the resource that is instantiated by this [VisualInstance], which changes how the engine handles the [VisualInstance] under the hood. Equivalent to [method VisualServer.instance_set_base].
 set_base ::
            (VisualInstance :< cls, Object :< cls) => cls -> Rid -> IO ()
 set_base cls arg1
@@ -206,8 +211,8 @@ set_base cls arg1
 
 {-# NOINLINE bindVisualInstance_set_layer_mask #-}
 
--- | The render layer(s) this VisualInstance is drawn on.
---   			This object will only be visible for [Camera]s whose cull mask includes the render object this VisualInstance is set to.
+-- | The render layer(s) this [VisualInstance] is drawn on.
+--   			This object will only be visible for [Camera]s whose cull mask includes the render object this [VisualInstance] is set to.
 bindVisualInstance_set_layer_mask :: MethodBind
 bindVisualInstance_set_layer_mask
   = unsafePerformIO $
@@ -217,8 +222,8 @@ bindVisualInstance_set_layer_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The render layer(s) this VisualInstance is drawn on.
---   			This object will only be visible for [Camera]s whose cull mask includes the render object this VisualInstance is set to.
+-- | The render layer(s) this [VisualInstance] is drawn on.
+--   			This object will only be visible for [Camera]s whose cull mask includes the render object this [VisualInstance] is set to.
 set_layer_mask ::
                  (VisualInstance :< cls, Object :< cls) => cls -> Int -> IO ()
 set_layer_mask cls arg1
@@ -232,6 +237,7 @@ set_layer_mask cls arg1
 
 {-# NOINLINE bindVisualInstance_set_layer_mask_bit #-}
 
+-- | Enables a particular layer in [member layers].
 bindVisualInstance_set_layer_mask_bit :: MethodBind
 bindVisualInstance_set_layer_mask_bit
   = unsafePerformIO $
@@ -241,6 +247,7 @@ bindVisualInstance_set_layer_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Enables a particular layer in [member layers].
 set_layer_mask_bit ::
                      (VisualInstance :< cls, Object :< cls) =>
                      cls -> Int -> Bool -> IO ()

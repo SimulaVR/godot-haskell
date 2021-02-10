@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.InputMap
        (Godot.Core.InputMap.action_add_event,
         Godot.Core.InputMap.action_erase_event,
@@ -117,6 +118,7 @@ action_has_event cls arg1 arg2
 
 {-# NOINLINE bindInputMap_action_set_deadzone #-}
 
+-- | Sets a deadzone value for the action.
 bindInputMap_action_set_deadzone :: MethodBind
 bindInputMap_action_set_deadzone
   = unsafePerformIO $
@@ -126,6 +128,7 @@ bindInputMap_action_set_deadzone
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets a deadzone value for the action.
 action_set_deadzone ::
                       (InputMap :< cls, Object :< cls) =>
                       cls -> GodotString -> Float -> IO ()
@@ -140,7 +143,7 @@ action_set_deadzone cls arg1 arg2
 
 {-# NOINLINE bindInputMap_add_action #-}
 
--- | Adds an empty action to the [code]InputMap[/code] with a configurable [code]deadzone[/code].
+-- | Adds an empty action to the [InputMap] with a configurable [code]deadzone[/code].
 --   				An [InputEvent] can then be added to this action with [method action_add_event].
 bindInputMap_add_action :: MethodBind
 bindInputMap_add_action
@@ -151,7 +154,7 @@ bindInputMap_add_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an empty action to the [code]InputMap[/code] with a configurable [code]deadzone[/code].
+-- | Adds an empty action to the [InputMap] with a configurable [code]deadzone[/code].
 --   				An [InputEvent] can then be added to this action with [method action_add_event].
 add_action ::
              (InputMap :< cls, Object :< cls) =>
@@ -165,7 +168,7 @@ add_action cls arg1 arg2
 
 {-# NOINLINE bindInputMap_erase_action #-}
 
--- | Removes an action from the [code]InputMap[/code].
+-- | Removes an action from the [InputMap].
 bindInputMap_erase_action :: MethodBind
 bindInputMap_erase_action
   = unsafePerformIO $
@@ -175,7 +178,7 @@ bindInputMap_erase_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes an action from the [code]InputMap[/code].
+-- | Removes an action from the [InputMap].
 erase_action ::
                (InputMap :< cls, Object :< cls) => cls -> GodotString -> IO ()
 erase_action cls arg1
@@ -235,7 +238,7 @@ get_action_list cls arg1
 
 {-# NOINLINE bindInputMap_get_actions #-}
 
--- | Returns an array of all actions in the [code]InputMap[/code].
+-- | Returns an array of all actions in the [InputMap].
 bindInputMap_get_actions :: MethodBind
 bindInputMap_get_actions
   = unsafePerformIO $
@@ -245,7 +248,7 @@ bindInputMap_get_actions
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of all actions in the [code]InputMap[/code].
+-- | Returns an array of all actions in the [InputMap].
 get_actions :: (InputMap :< cls, Object :< cls) => cls -> IO Array
 get_actions cls
   = withVariantArray []
@@ -256,7 +259,7 @@ get_actions cls
 
 {-# NOINLINE bindInputMap_has_action #-}
 
--- | Returns [code]true[/code] if the [code]InputMap[/code] has a registered action with the given name.
+-- | Returns [code]true[/code] if the [InputMap] has a registered action with the given name.
 bindInputMap_has_action :: MethodBind
 bindInputMap_has_action
   = unsafePerformIO $
@@ -266,7 +269,7 @@ bindInputMap_has_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the [code]InputMap[/code] has a registered action with the given name.
+-- | Returns [code]true[/code] if the [InputMap] has a registered action with the given name.
 has_action ::
              (InputMap :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_action cls arg1
@@ -278,7 +281,7 @@ has_action cls arg1
 
 {-# NOINLINE bindInputMap_load_from_globals #-}
 
--- | Clears all [InputEventAction] in the [code]InputMap[/code] and load it anew from [ProjectSettings].
+-- | Clears all [InputEventAction] in the [InputMap] and load it anew from [ProjectSettings].
 bindInputMap_load_from_globals :: MethodBind
 bindInputMap_load_from_globals
   = unsafePerformIO $
@@ -288,7 +291,7 @@ bindInputMap_load_from_globals
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears all [InputEventAction] in the [code]InputMap[/code] and load it anew from [ProjectSettings].
+-- | Clears all [InputEventAction] in the [InputMap] and load it anew from [ProjectSettings].
 load_from_globals ::
                     (InputMap :< cls, Object :< cls) => cls -> IO ()
 load_from_globals cls

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CollisionPolygon2D
        (Godot.Core.CollisionPolygon2D._BUILD_SOLIDS,
         Godot.Core.CollisionPolygon2D._BUILD_SEGMENTS,
@@ -29,7 +30,7 @@ _BUILD_SEGMENTS = 1
 
 {-# NOINLINE bindCollisionPolygon2D_get_build_mode #-}
 
--- | Collision build mode. Use one of the [code]BUILD_*[/code] constants. Default value: [constant BUILD_SOLIDS].
+-- | Collision build mode. Use one of the [enum BuildMode] constants.
 bindCollisionPolygon2D_get_build_mode :: MethodBind
 bindCollisionPolygon2D_get_build_mode
   = unsafePerformIO $
@@ -39,7 +40,7 @@ bindCollisionPolygon2D_get_build_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Collision build mode. Use one of the [code]BUILD_*[/code] constants. Default value: [constant BUILD_SOLIDS].
+-- | Collision build mode. Use one of the [enum BuildMode] constants.
 get_build_mode ::
                  (CollisionPolygon2D :< cls, Object :< cls) => cls -> IO Int
 get_build_mode cls
@@ -54,6 +55,7 @@ get_build_mode cls
 {-# NOINLINE bindCollisionPolygon2D_get_one_way_collision_margin
              #-}
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 bindCollisionPolygon2D_get_one_way_collision_margin :: MethodBind
 bindCollisionPolygon2D_get_one_way_collision_margin
   = unsafePerformIO $
@@ -63,6 +65,7 @@ bindCollisionPolygon2D_get_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 get_one_way_collision_margin ::
                                (CollisionPolygon2D :< cls, Object :< cls) => cls -> IO Float
 get_one_way_collision_margin cls
@@ -77,7 +80,7 @@ get_one_way_collision_margin cls
 
 {-# NOINLINE bindCollisionPolygon2D_get_polygon #-}
 
--- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the PoolVector2Array, not a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the [PoolVector2Array], not a reference.
 bindCollisionPolygon2D_get_polygon :: MethodBind
 bindCollisionPolygon2D_get_polygon
   = unsafePerformIO $
@@ -87,7 +90,7 @@ bindCollisionPolygon2D_get_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the PoolVector2Array, not a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the [PoolVector2Array], not a reference.
 get_polygon ::
               (CollisionPolygon2D :< cls, Object :< cls) =>
               cls -> IO PoolVector2Array
@@ -127,7 +130,7 @@ is_disabled cls
 {-# NOINLINE bindCollisionPolygon2D_is_one_way_collision_enabled
              #-}
 
--- | If [code]true[/code], only edges that face up, relative to CollisionPolygon2D's rotation, will collide with other objects.
+-- | If [code]true[/code], only edges that face up, relative to [CollisionPolygon2D]'s rotation, will collide with other objects.
 bindCollisionPolygon2D_is_one_way_collision_enabled :: MethodBind
 bindCollisionPolygon2D_is_one_way_collision_enabled
   = unsafePerformIO $
@@ -137,7 +140,7 @@ bindCollisionPolygon2D_is_one_way_collision_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], only edges that face up, relative to CollisionPolygon2D's rotation, will collide with other objects.
+-- | If [code]true[/code], only edges that face up, relative to [CollisionPolygon2D]'s rotation, will collide with other objects.
 is_one_way_collision_enabled ::
                                (CollisionPolygon2D :< cls, Object :< cls) => cls -> IO Bool
 is_one_way_collision_enabled cls
@@ -152,7 +155,7 @@ is_one_way_collision_enabled cls
 
 {-# NOINLINE bindCollisionPolygon2D_set_build_mode #-}
 
--- | Collision build mode. Use one of the [code]BUILD_*[/code] constants. Default value: [constant BUILD_SOLIDS].
+-- | Collision build mode. Use one of the [enum BuildMode] constants.
 bindCollisionPolygon2D_set_build_mode :: MethodBind
 bindCollisionPolygon2D_set_build_mode
   = unsafePerformIO $
@@ -162,7 +165,7 @@ bindCollisionPolygon2D_set_build_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Collision build mode. Use one of the [code]BUILD_*[/code] constants. Default value: [constant BUILD_SOLIDS].
+-- | Collision build mode. Use one of the [enum BuildMode] constants.
 set_build_mode ::
                  (CollisionPolygon2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_build_mode cls arg1
@@ -200,7 +203,7 @@ set_disabled cls arg1
 
 {-# NOINLINE bindCollisionPolygon2D_set_one_way_collision #-}
 
--- | If [code]true[/code], only edges that face up, relative to CollisionPolygon2D's rotation, will collide with other objects.
+-- | If [code]true[/code], only edges that face up, relative to [CollisionPolygon2D]'s rotation, will collide with other objects.
 bindCollisionPolygon2D_set_one_way_collision :: MethodBind
 bindCollisionPolygon2D_set_one_way_collision
   = unsafePerformIO $
@@ -210,7 +213,7 @@ bindCollisionPolygon2D_set_one_way_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], only edges that face up, relative to CollisionPolygon2D's rotation, will collide with other objects.
+-- | If [code]true[/code], only edges that face up, relative to [CollisionPolygon2D]'s rotation, will collide with other objects.
 set_one_way_collision ::
                         (CollisionPolygon2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_one_way_collision cls arg1
@@ -225,6 +228,7 @@ set_one_way_collision cls arg1
 {-# NOINLINE bindCollisionPolygon2D_set_one_way_collision_margin
              #-}
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 bindCollisionPolygon2D_set_one_way_collision_margin :: MethodBind
 bindCollisionPolygon2D_set_one_way_collision_margin
   = unsafePerformIO $
@@ -234,6 +238,7 @@ bindCollisionPolygon2D_set_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 set_one_way_collision_margin ::
                                (CollisionPolygon2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_one_way_collision_margin cls arg1
@@ -248,7 +253,7 @@ set_one_way_collision_margin cls arg1
 
 {-# NOINLINE bindCollisionPolygon2D_set_polygon #-}
 
--- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the PoolVector2Array, not a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the [PoolVector2Array], not a reference.
 bindCollisionPolygon2D_set_polygon :: MethodBind
 bindCollisionPolygon2D_set_polygon
   = unsafePerformIO $
@@ -258,7 +263,7 @@ bindCollisionPolygon2D_set_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the PoolVector2Array, not a reference.
+-- | The polygon's list of vertices. The final point will be connected to the first. The returned value is a clone of the [PoolVector2Array], not a reference.
 set_polygon ::
               (CollisionPolygon2D :< cls, Object :< cls) =>
               cls -> PoolVector2Array -> IO ()

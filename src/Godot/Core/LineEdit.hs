@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.LineEdit
        (Godot.Core.LineEdit._MENU_PASTE, Godot.Core.LineEdit._ALIGN_RIGHT,
         Godot.Core.LineEdit._ALIGN_FILL, Godot.Core.LineEdit._MENU_CLEAR,
@@ -92,17 +93,24 @@ _ALIGN_LEFT = 0
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
 
+-- | Emitted when trying to append text that would overflow the [member max_length].
 sig_text_change_rejected :: Godot.Internal.Dispatch.Signal LineEdit
 sig_text_change_rejected
   = Godot.Internal.Dispatch.Signal "text_change_rejected"
+
+instance NodeSignal LineEdit "text_change_rejected" '[]
 
 -- | Emitted when the text changes.
 sig_text_changed :: Godot.Internal.Dispatch.Signal LineEdit
 sig_text_changed = Godot.Internal.Dispatch.Signal "text_changed"
 
--- | Emitted when the user presses [code]KEY_ENTER[/code] on the [code]LineEdit[/code].
+instance NodeSignal LineEdit "text_changed" '[GodotString]
+
+-- | Emitted when the user presses [constant KEY_ENTER] on the [LineEdit].
 sig_text_entered :: Godot.Internal.Dispatch.Signal LineEdit
 sig_text_entered = Godot.Internal.Dispatch.Signal "text_entered"
+
+instance NodeSignal LineEdit "text_entered" '[GodotString]
 
 {-# NOINLINE bindLineEdit__editor_settings_changed #-}
 
@@ -212,7 +220,7 @@ append_at_cursor cls arg1
 
 {-# NOINLINE bindLineEdit_clear #-}
 
--- | Erases the [code]LineEdit[/code] text.
+-- | Erases the [LineEdit]'s [member text].
 bindLineEdit_clear :: MethodBind
 bindLineEdit_clear
   = unsafePerformIO $
@@ -222,7 +230,7 @@ bindLineEdit_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Erases the [code]LineEdit[/code] text.
+-- | Erases the [LineEdit]'s [member text].
 clear :: (LineEdit :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -349,7 +357,7 @@ deselect cls
 
 {-# NOINLINE bindLineEdit_get_align #-}
 
--- | Text alignment as defined in the ALIGN_* enum.
+-- | Text alignment as defined in the [enum Align] enum.
 bindLineEdit_get_align :: MethodBind
 bindLineEdit_get_align
   = unsafePerformIO $
@@ -359,7 +367,7 @@ bindLineEdit_get_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment as defined in the ALIGN_* enum.
+-- | Text alignment as defined in the [enum Align] enum.
 get_align :: (LineEdit :< cls, Object :< cls) => cls -> IO Int
 get_align cls
   = withVariantArray []
@@ -370,7 +378,7 @@ get_align cls
 
 {-# NOINLINE bindLineEdit_get_cursor_position #-}
 
--- | The cursor's position inside the [code]LineEdit[/code]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
 bindLineEdit_get_cursor_position :: MethodBind
 bindLineEdit_get_cursor_position
   = unsafePerformIO $
@@ -380,7 +388,7 @@ bindLineEdit_get_cursor_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The cursor's position inside the [code]LineEdit[/code]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
 get_cursor_position ::
                       (LineEdit :< cls, Object :< cls) => cls -> IO Int
 get_cursor_position cls
@@ -394,7 +402,7 @@ get_cursor_position cls
 
 {-# NOINLINE bindLineEdit_get_expand_to_text_length #-}
 
--- | If [code]true[/code], the [code]LineEdit[/code] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
 bindLineEdit_get_expand_to_text_length :: MethodBind
 bindLineEdit_get_expand_to_text_length
   = unsafePerformIO $
@@ -404,7 +412,7 @@ bindLineEdit_get_expand_to_text_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]LineEdit[/code] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
 get_expand_to_text_length ::
                             (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 get_expand_to_text_length cls
@@ -418,7 +426,7 @@ get_expand_to_text_length cls
 
 {-# NOINLINE bindLineEdit_get_max_length #-}
 
--- | Maximum amount of characters that can be entered inside the [code]LineEdit[/code]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
 bindLineEdit_get_max_length :: MethodBind
 bindLineEdit_get_max_length
   = unsafePerformIO $
@@ -428,7 +436,7 @@ bindLineEdit_get_max_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum amount of characters that can be entered inside the [code]LineEdit[/code]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
 get_max_length :: (LineEdit :< cls, Object :< cls) => cls -> IO Int
 get_max_length cls
   = withVariantArray []
@@ -440,7 +448,7 @@ get_max_length cls
 
 {-# NOINLINE bindLineEdit_get_menu #-}
 
--- | Returns the [PopupMenu] of this [code]LineEdit[/code]. By default, this menu is displayed when right-clicking on the [code]LineEdit[/code].
+-- | Returns the [PopupMenu] of this [LineEdit]. By default, this menu is displayed when right-clicking on the [LineEdit].
 bindLineEdit_get_menu :: MethodBind
 bindLineEdit_get_menu
   = unsafePerformIO $
@@ -450,7 +458,7 @@ bindLineEdit_get_menu
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [PopupMenu] of this [code]LineEdit[/code]. By default, this menu is displayed when right-clicking on the [code]LineEdit[/code].
+-- | Returns the [PopupMenu] of this [LineEdit]. By default, this menu is displayed when right-clicking on the [LineEdit].
 get_menu :: (LineEdit :< cls, Object :< cls) => cls -> IO PopupMenu
 get_menu cls
   = withVariantArray []
@@ -461,7 +469,7 @@ get_menu cls
 
 {-# NOINLINE bindLineEdit_get_placeholder #-}
 
--- | Text shown when the [code]LineEdit[/code] is empty. It is [b]not[/b] the [code]LineEdit[/code]'s default value (see [member text]).
+-- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
 bindLineEdit_get_placeholder :: MethodBind
 bindLineEdit_get_placeholder
   = unsafePerformIO $
@@ -471,7 +479,7 @@ bindLineEdit_get_placeholder
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text shown when the [code]LineEdit[/code] is empty. It is [b]not[/b] the [code]LineEdit[/code]'s default value (see [member text]).
+-- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
 get_placeholder ::
                   (LineEdit :< cls, Object :< cls) => cls -> IO GodotString
 get_placeholder cls
@@ -508,6 +516,7 @@ get_placeholder_alpha cls
 
 {-# NOINLINE bindLineEdit_get_right_icon #-}
 
+-- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
 bindLineEdit_get_right_icon :: MethodBind
 bindLineEdit_get_right_icon
   = unsafePerformIO $
@@ -517,6 +526,7 @@ bindLineEdit_get_right_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
 get_right_icon ::
                  (LineEdit :< cls, Object :< cls) => cls -> IO Texture
 get_right_icon cls
@@ -553,7 +563,8 @@ get_secret_character cls
 
 {-# NOINLINE bindLineEdit_get_text #-}
 
--- | String value of the [code]LineEdit[/code].
+-- | String value of the [LineEdit].
+--   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
 bindLineEdit_get_text :: MethodBind
 bindLineEdit_get_text
   = unsafePerformIO $
@@ -563,7 +574,8 @@ bindLineEdit_get_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | String value of the [code]LineEdit[/code].
+-- | String value of the [LineEdit].
+--   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
 get_text ::
            (LineEdit :< cls, Object :< cls) => cls -> IO GodotString
 get_text cls
@@ -575,7 +587,7 @@ get_text cls
 
 {-# NOINLINE bindLineEdit_is_clear_button_enabled #-}
 
--- | If [code]true[/code], the [code]LineEdit[/code] will show a clear button if [code]text[/code] is not empty.
+-- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
 bindLineEdit_is_clear_button_enabled :: MethodBind
 bindLineEdit_is_clear_button_enabled
   = unsafePerformIO $
@@ -585,7 +597,7 @@ bindLineEdit_is_clear_button_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]LineEdit[/code] will show a clear button if [code]text[/code] is not empty.
+-- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
 is_clear_button_enabled ::
                           (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_clear_button_enabled cls
@@ -599,7 +611,7 @@ is_clear_button_enabled cls
 
 {-# NOINLINE bindLineEdit_is_context_menu_enabled #-}
 
--- | If [code]true[/code], the context menu will appear when right clicked.
+-- | If [code]true[/code], the context menu will appear when right-clicked.
 bindLineEdit_is_context_menu_enabled :: MethodBind
 bindLineEdit_is_context_menu_enabled
   = unsafePerformIO $
@@ -609,7 +621,7 @@ bindLineEdit_is_context_menu_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the context menu will appear when right clicked.
+-- | If [code]true[/code], the context menu will appear when right-clicked.
 is_context_menu_enabled ::
                           (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_context_menu_enabled cls
@@ -665,6 +677,7 @@ is_secret cls
 
 {-# NOINLINE bindLineEdit_is_selecting_enabled #-}
 
+-- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
 bindLineEdit_is_selecting_enabled :: MethodBind
 bindLineEdit_is_selecting_enabled
   = unsafePerformIO $
@@ -674,6 +687,7 @@ bindLineEdit_is_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
 is_selecting_enabled ::
                        (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_selecting_enabled cls
@@ -687,6 +701,7 @@ is_selecting_enabled cls
 
 {-# NOINLINE bindLineEdit_is_shortcut_keys_enabled #-}
 
+-- | If [code]false[/code], using shortcuts will be disabled.
 bindLineEdit_is_shortcut_keys_enabled :: MethodBind
 bindLineEdit_is_shortcut_keys_enabled
   = unsafePerformIO $
@@ -696,6 +711,7 @@ bindLineEdit_is_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]false[/code], using shortcuts will be disabled.
 is_shortcut_keys_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_shortcut_keys_enabled cls
@@ -709,7 +725,7 @@ is_shortcut_keys_enabled cls
 
 {-# NOINLINE bindLineEdit_menu_option #-}
 
--- | Executes a given action as defined in the MENU_* enum.
+-- | Executes a given action as defined in the [enum MenuItems] enum.
 bindLineEdit_menu_option :: MethodBind
 bindLineEdit_menu_option
   = unsafePerformIO $
@@ -719,7 +735,7 @@ bindLineEdit_menu_option
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Executes a given action as defined in the MENU_* enum.
+-- | Executes a given action as defined in the [enum MenuItems] enum.
 menu_option ::
               (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 menu_option cls arg1
@@ -731,12 +747,12 @@ menu_option cls arg1
 
 {-# NOINLINE bindLineEdit_select #-}
 
--- | Selects characters inside [code]LineEdit[/code] between [code]from[/code] and [code]to[/code]. By default [code]from[/code] is at the beginning and [code]to[/code] at the end.
+-- | Selects characters inside [LineEdit] between [code]from[/code] and [code]to[/code]. By default, [code]from[/code] is at the beginning and [code]to[/code] at the end.
 --   				[codeblock]
 --   				text = "Welcome"
---   				select()     # Welcome
---   				select(4)    # ome
---   				select(2, 5) # lco
+--   				select() # Will select "Welcome".
+--   				select(4) # Will select "ome".
+--   				select(2, 5) # Will select "lco".
 --   				[/codeblock]
 bindLineEdit_select :: MethodBind
 bindLineEdit_select
@@ -747,12 +763,12 @@ bindLineEdit_select
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Selects characters inside [code]LineEdit[/code] between [code]from[/code] and [code]to[/code]. By default [code]from[/code] is at the beginning and [code]to[/code] at the end.
+-- | Selects characters inside [LineEdit] between [code]from[/code] and [code]to[/code]. By default, [code]from[/code] is at the beginning and [code]to[/code] at the end.
 --   				[codeblock]
 --   				text = "Welcome"
---   				select()     # Welcome
---   				select(4)    # ome
---   				select(2, 5) # lco
+--   				select() # Will select "Welcome".
+--   				select(4) # Will select "ome".
+--   				select(2, 5) # Will select "lco".
 --   				[/codeblock]
 select ::
          (LineEdit :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
@@ -785,7 +801,7 @@ select_all cls
 
 {-# NOINLINE bindLineEdit_set_align #-}
 
--- | Text alignment as defined in the ALIGN_* enum.
+-- | Text alignment as defined in the [enum Align] enum.
 bindLineEdit_set_align :: MethodBind
 bindLineEdit_set_align
   = unsafePerformIO $
@@ -795,7 +811,7 @@ bindLineEdit_set_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment as defined in the ALIGN_* enum.
+-- | Text alignment as defined in the [enum Align] enum.
 set_align ::
             (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_align cls arg1
@@ -807,7 +823,7 @@ set_align cls arg1
 
 {-# NOINLINE bindLineEdit_set_clear_button_enabled #-}
 
--- | If [code]true[/code], the [code]LineEdit[/code] will show a clear button if [code]text[/code] is not empty.
+-- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
 bindLineEdit_set_clear_button_enabled :: MethodBind
 bindLineEdit_set_clear_button_enabled
   = unsafePerformIO $
@@ -817,7 +833,7 @@ bindLineEdit_set_clear_button_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]LineEdit[/code] will show a clear button if [code]text[/code] is not empty.
+-- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
 set_clear_button_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_clear_button_enabled cls arg1
@@ -831,7 +847,7 @@ set_clear_button_enabled cls arg1
 
 {-# NOINLINE bindLineEdit_set_context_menu_enabled #-}
 
--- | If [code]true[/code], the context menu will appear when right clicked.
+-- | If [code]true[/code], the context menu will appear when right-clicked.
 bindLineEdit_set_context_menu_enabled :: MethodBind
 bindLineEdit_set_context_menu_enabled
   = unsafePerformIO $
@@ -841,7 +857,7 @@ bindLineEdit_set_context_menu_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the context menu will appear when right clicked.
+-- | If [code]true[/code], the context menu will appear when right-clicked.
 set_context_menu_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_context_menu_enabled cls arg1
@@ -855,7 +871,7 @@ set_context_menu_enabled cls arg1
 
 {-# NOINLINE bindLineEdit_set_cursor_position #-}
 
--- | The cursor's position inside the [code]LineEdit[/code]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
 bindLineEdit_set_cursor_position :: MethodBind
 bindLineEdit_set_cursor_position
   = unsafePerformIO $
@@ -865,7 +881,7 @@ bindLineEdit_set_cursor_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The cursor's position inside the [code]LineEdit[/code]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
 set_cursor_position ::
                       (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_cursor_position cls arg1
@@ -902,7 +918,7 @@ set_editable cls arg1
 
 {-# NOINLINE bindLineEdit_set_expand_to_text_length #-}
 
--- | If [code]true[/code], the [code]LineEdit[/code] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
 bindLineEdit_set_expand_to_text_length :: MethodBind
 bindLineEdit_set_expand_to_text_length
   = unsafePerformIO $
@@ -912,7 +928,7 @@ bindLineEdit_set_expand_to_text_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [code]LineEdit[/code] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
 set_expand_to_text_length ::
                             (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_expand_to_text_length cls arg1
@@ -926,7 +942,7 @@ set_expand_to_text_length cls arg1
 
 {-# NOINLINE bindLineEdit_set_max_length #-}
 
--- | Maximum amount of characters that can be entered inside the [code]LineEdit[/code]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
 bindLineEdit_set_max_length :: MethodBind
 bindLineEdit_set_max_length
   = unsafePerformIO $
@@ -936,7 +952,7 @@ bindLineEdit_set_max_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum amount of characters that can be entered inside the [code]LineEdit[/code]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
 set_max_length ::
                  (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_length cls arg1
@@ -949,7 +965,7 @@ set_max_length cls arg1
 
 {-# NOINLINE bindLineEdit_set_placeholder #-}
 
--- | Text shown when the [code]LineEdit[/code] is empty. It is [b]not[/b] the [code]LineEdit[/code]'s default value (see [member text]).
+-- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
 bindLineEdit_set_placeholder :: MethodBind
 bindLineEdit_set_placeholder
   = unsafePerformIO $
@@ -959,7 +975,7 @@ bindLineEdit_set_placeholder
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text shown when the [code]LineEdit[/code] is empty. It is [b]not[/b] the [code]LineEdit[/code]'s default value (see [member text]).
+-- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
 set_placeholder ::
                   (LineEdit :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_placeholder cls arg1
@@ -996,6 +1012,7 @@ set_placeholder_alpha cls arg1
 
 {-# NOINLINE bindLineEdit_set_right_icon #-}
 
+-- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
 bindLineEdit_set_right_icon :: MethodBind
 bindLineEdit_set_right_icon
   = unsafePerformIO $
@@ -1005,6 +1022,7 @@ bindLineEdit_set_right_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
 set_right_icon ::
                  (LineEdit :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_right_icon cls arg1
@@ -1063,6 +1081,7 @@ set_secret_character cls arg1
 
 {-# NOINLINE bindLineEdit_set_selecting_enabled #-}
 
+-- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
 bindLineEdit_set_selecting_enabled :: MethodBind
 bindLineEdit_set_selecting_enabled
   = unsafePerformIO $
@@ -1072,6 +1091,7 @@ bindLineEdit_set_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
 set_selecting_enabled ::
                         (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_selecting_enabled cls arg1
@@ -1085,6 +1105,7 @@ set_selecting_enabled cls arg1
 
 {-# NOINLINE bindLineEdit_set_shortcut_keys_enabled #-}
 
+-- | If [code]false[/code], using shortcuts will be disabled.
 bindLineEdit_set_shortcut_keys_enabled :: MethodBind
 bindLineEdit_set_shortcut_keys_enabled
   = unsafePerformIO $
@@ -1094,6 +1115,7 @@ bindLineEdit_set_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]false[/code], using shortcuts will be disabled.
 set_shortcut_keys_enabled ::
                             (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shortcut_keys_enabled cls arg1
@@ -1107,7 +1129,8 @@ set_shortcut_keys_enabled cls arg1
 
 {-# NOINLINE bindLineEdit_set_text #-}
 
--- | String value of the [code]LineEdit[/code].
+-- | String value of the [LineEdit].
+--   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
 bindLineEdit_set_text :: MethodBind
 bindLineEdit_set_text
   = unsafePerformIO $
@@ -1117,7 +1140,8 @@ bindLineEdit_set_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | String value of the [code]LineEdit[/code].
+-- | String value of the [LineEdit].
+--   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
 set_text ::
            (LineEdit :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_text cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TextureRect
        (Godot.Core.TextureRect._STRETCH_TILE,
         Godot.Core.TextureRect._STRETCH_KEEP_ASPECT_COVERED,
@@ -123,7 +124,7 @@ get_texture cls
 
 {-# NOINLINE bindTextureRect_has_expand #-}
 
--- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture scales to fit its bounding rectangle.
 bindTextureRect_has_expand :: MethodBind
 bindTextureRect_has_expand
   = unsafePerformIO $
@@ -133,7 +134,7 @@ bindTextureRect_has_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture scales to fit its bounding rectangle.
 has_expand :: (TextureRect :< cls, Object :< cls) => cls -> IO Bool
 has_expand cls
   = withVariantArray []
@@ -145,6 +146,7 @@ has_expand cls
 
 {-# NOINLINE bindTextureRect_is_flipped_h #-}
 
+-- | If [code]true[/code], texture is flipped horizontally.
 bindTextureRect_is_flipped_h :: MethodBind
 bindTextureRect_is_flipped_h
   = unsafePerformIO $
@@ -154,6 +156,7 @@ bindTextureRect_is_flipped_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], texture is flipped horizontally.
 is_flipped_h ::
                (TextureRect :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_h cls
@@ -166,6 +169,7 @@ is_flipped_h cls
 
 {-# NOINLINE bindTextureRect_is_flipped_v #-}
 
+-- | If [code]true[/code], texture is flipped vertically.
 bindTextureRect_is_flipped_v :: MethodBind
 bindTextureRect_is_flipped_v
   = unsafePerformIO $
@@ -175,6 +179,7 @@ bindTextureRect_is_flipped_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], texture is flipped vertically.
 is_flipped_v ::
                (TextureRect :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_v cls
@@ -187,7 +192,7 @@ is_flipped_v cls
 
 {-# NOINLINE bindTextureRect_set_expand #-}
 
--- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture scales to fit its bounding rectangle.
 bindTextureRect_set_expand :: MethodBind
 bindTextureRect_set_expand
   = unsafePerformIO $
@@ -197,7 +202,7 @@ bindTextureRect_set_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the texture scales to fit its bounding rectangle. Default value: [code]false[/code].
+-- | If [code]true[/code], the texture scales to fit its bounding rectangle.
 set_expand ::
              (TextureRect :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_expand cls arg1
@@ -210,6 +215,7 @@ set_expand cls arg1
 
 {-# NOINLINE bindTextureRect_set_flip_h #-}
 
+-- | If [code]true[/code], texture is flipped horizontally.
 bindTextureRect_set_flip_h :: MethodBind
 bindTextureRect_set_flip_h
   = unsafePerformIO $
@@ -219,6 +225,7 @@ bindTextureRect_set_flip_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], texture is flipped horizontally.
 set_flip_h ::
              (TextureRect :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_h cls arg1
@@ -231,6 +238,7 @@ set_flip_h cls arg1
 
 {-# NOINLINE bindTextureRect_set_flip_v #-}
 
+-- | If [code]true[/code], texture is flipped vertically.
 bindTextureRect_set_flip_v :: MethodBind
 bindTextureRect_set_flip_v
   = unsafePerformIO $
@@ -240,6 +248,7 @@ bindTextureRect_set_flip_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], texture is flipped vertically.
 set_flip_v ::
              (TextureRect :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_v cls arg1

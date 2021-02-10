@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SoftBody
        (Godot.Core.SoftBody._draw_soft_mesh,
         Godot.Core.SoftBody.add_collision_exception_with,
@@ -135,9 +136,9 @@ get_collision_exceptions cls
 
 {-# NOINLINE bindSoftBody_get_collision_layer #-}
 
--- | The physics layers this area is in.
+-- | The physics layers this SoftBody is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the collision_mask property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindSoftBody_get_collision_layer :: MethodBind
 bindSoftBody_get_collision_layer
   = unsafePerformIO $
@@ -147,9 +148,9 @@ bindSoftBody_get_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area is in.
+-- | The physics layers this SoftBody is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the collision_mask property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 get_collision_layer ::
                       (SoftBody :< cls, Object :< cls) => cls -> IO Int
 get_collision_layer cls
@@ -187,7 +188,7 @@ get_collision_layer_bit cls arg1
 
 {-# NOINLINE bindSoftBody_get_collision_mask #-}
 
--- | The physics layers this area scans for collisions.
+-- | The physics layers this SoftBody scans for collisions. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindSoftBody_get_collision_mask :: MethodBind
 bindSoftBody_get_collision_mask
   = unsafePerformIO $
@@ -197,7 +198,7 @@ bindSoftBody_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans for collisions.
+-- | The physics layers this SoftBody scans for collisions. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 get_collision_mask ::
                      (SoftBody :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -300,6 +301,7 @@ get_linear_stiffness cls
 
 {-# NOINLINE bindSoftBody_get_parent_collision_ignore #-}
 
+-- | [NodePath] to a [CollisionObject] this SoftBody should avoid clipping.
 bindSoftBody_get_parent_collision_ignore :: MethodBind
 bindSoftBody_get_parent_collision_ignore
   = unsafePerformIO $
@@ -309,6 +311,7 @@ bindSoftBody_get_parent_collision_ignore
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | [NodePath] to a [CollisionObject] this SoftBody should avoid clipping.
 get_parent_collision_ignore ::
                               (SoftBody :< cls, Object :< cls) => cls -> IO NodePath
 get_parent_collision_ignore cls
@@ -390,6 +393,7 @@ get_simulation_precision cls
 
 {-# NOINLINE bindSoftBody_get_total_mass #-}
 
+-- | The SoftBody's mass.
 bindSoftBody_get_total_mass :: MethodBind
 bindSoftBody_get_total_mass
   = unsafePerformIO $
@@ -399,6 +403,7 @@ bindSoftBody_get_total_mass
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The SoftBody's mass.
 get_total_mass ::
                  (SoftBody :< cls, Object :< cls) => cls -> IO Float
 get_total_mass cls
@@ -433,6 +438,7 @@ get_volume_stiffness cls
 
 {-# NOINLINE bindSoftBody_is_ray_pickable #-}
 
+-- | If [code]true[/code], the [SoftBody] will respond to [RayCast]s.
 bindSoftBody_is_ray_pickable :: MethodBind
 bindSoftBody_is_ray_pickable
   = unsafePerformIO $
@@ -442,6 +448,7 @@ bindSoftBody_is_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the [SoftBody] will respond to [RayCast]s.
 is_ray_pickable ::
                   (SoftBody :< cls, Object :< cls) => cls -> IO Bool
 is_ray_pickable cls
@@ -500,9 +507,9 @@ set_areaAngular_stiffness cls arg1
 
 {-# NOINLINE bindSoftBody_set_collision_layer #-}
 
--- | The physics layers this area is in.
+-- | The physics layers this SoftBody is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the collision_mask property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindSoftBody_set_collision_layer :: MethodBind
 bindSoftBody_set_collision_layer
   = unsafePerformIO $
@@ -512,9 +519,9 @@ bindSoftBody_set_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area is in.
+-- | The physics layers this SoftBody is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the collision_mask property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 set_collision_layer ::
                       (SoftBody :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_layer cls arg1
@@ -552,7 +559,7 @@ set_collision_layer_bit cls arg1 arg2
 
 {-# NOINLINE bindSoftBody_set_collision_mask #-}
 
--- | The physics layers this area scans for collisions.
+-- | The physics layers this SoftBody scans for collisions. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 bindSoftBody_set_collision_mask :: MethodBind
 bindSoftBody_set_collision_mask
   = unsafePerformIO $
@@ -562,7 +569,7 @@ bindSoftBody_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans for collisions.
+-- | The physics layers this SoftBody scans for collisions. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
 set_collision_mask ::
                      (SoftBody :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1
@@ -665,6 +672,7 @@ set_linear_stiffness cls arg1
 
 {-# NOINLINE bindSoftBody_set_parent_collision_ignore #-}
 
+-- | [NodePath] to a [CollisionObject] this SoftBody should avoid clipping.
 bindSoftBody_set_parent_collision_ignore :: MethodBind
 bindSoftBody_set_parent_collision_ignore
   = unsafePerformIO $
@@ -674,6 +682,7 @@ bindSoftBody_set_parent_collision_ignore
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | [NodePath] to a [CollisionObject] this SoftBody should avoid clipping.
 set_parent_collision_ignore ::
                               (SoftBody :< cls, Object :< cls) => cls -> NodePath -> IO ()
 set_parent_collision_ignore cls arg1
@@ -731,6 +740,7 @@ set_pressure_coefficient cls arg1
 
 {-# NOINLINE bindSoftBody_set_ray_pickable #-}
 
+-- | If [code]true[/code], the [SoftBody] will respond to [RayCast]s.
 bindSoftBody_set_ray_pickable :: MethodBind
 bindSoftBody_set_ray_pickable
   = unsafePerformIO $
@@ -740,6 +750,7 @@ bindSoftBody_set_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the [SoftBody] will respond to [RayCast]s.
 set_ray_pickable ::
                    (SoftBody :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ray_pickable cls arg1
@@ -776,6 +787,7 @@ set_simulation_precision cls arg1
 
 {-# NOINLINE bindSoftBody_set_total_mass #-}
 
+-- | The SoftBody's mass.
 bindSoftBody_set_total_mass :: MethodBind
 bindSoftBody_set_total_mass
   = unsafePerformIO $
@@ -785,6 +797,7 @@ bindSoftBody_set_total_mass
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The SoftBody's mass.
 set_total_mass ::
                  (SoftBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_total_mass cls arg1

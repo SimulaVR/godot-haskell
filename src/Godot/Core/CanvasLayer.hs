@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CanvasLayer
        (Godot.Core.CanvasLayer.get_canvas,
         Godot.Core.CanvasLayer.get_custom_viewport,
@@ -52,7 +53,7 @@ get_canvas cls
 
 {-# NOINLINE bindCanvasLayer_get_custom_viewport #-}
 
--- | The custom [Viewport] node assigned to the [code]CanvasLayer[/code]. If null, uses the default viewport instead.
+-- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
 bindCanvasLayer_get_custom_viewport :: MethodBind
 bindCanvasLayer_get_custom_viewport
   = unsafePerformIO $
@@ -62,7 +63,7 @@ bindCanvasLayer_get_custom_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Viewport] node assigned to the [code]CanvasLayer[/code]. If null, uses the default viewport instead.
+-- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
 get_custom_viewport ::
                       (CanvasLayer :< cls, Object :< cls) => cls -> IO Node
 get_custom_viewport cls
@@ -76,6 +77,7 @@ get_custom_viewport cls
 
 {-# NOINLINE bindCanvasLayer_get_follow_viewport_scale #-}
 
+-- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 bindCanvasLayer_get_follow_viewport_scale :: MethodBind
 bindCanvasLayer_get_follow_viewport_scale
   = unsafePerformIO $
@@ -85,6 +87,7 @@ bindCanvasLayer_get_follow_viewport_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 get_follow_viewport_scale ::
                             (CanvasLayer :< cls, Object :< cls) => cls -> IO Float
 get_follow_viewport_scale cls
@@ -98,7 +101,7 @@ get_follow_viewport_scale cls
 
 {-# NOINLINE bindCanvasLayer_get_layer #-}
 
--- | Layer index for draw order. Lower values are drawn first. Default value: [code]1[/code].
+-- | Layer index for draw order. Lower values are drawn first.
 bindCanvasLayer_get_layer :: MethodBind
 bindCanvasLayer_get_layer
   = unsafePerformIO $
@@ -108,7 +111,7 @@ bindCanvasLayer_get_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Layer index for draw order. Lower values are drawn first. Default value: [code]1[/code].
+-- | Layer index for draw order. Lower values are drawn first.
 get_layer :: (CanvasLayer :< cls, Object :< cls) => cls -> IO Int
 get_layer cls
   = withVariantArray []
@@ -236,6 +239,7 @@ get_transform cls
 
 {-# NOINLINE bindCanvasLayer_is_following_viewport #-}
 
+-- | Sets the layer to follow the viewport in order to simulate a pseudo 3D effect.
 bindCanvasLayer_is_following_viewport :: MethodBind
 bindCanvasLayer_is_following_viewport
   = unsafePerformIO $
@@ -245,6 +249,7 @@ bindCanvasLayer_is_following_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the layer to follow the viewport in order to simulate a pseudo 3D effect.
 is_following_viewport ::
                         (CanvasLayer :< cls, Object :< cls) => cls -> IO Bool
 is_following_viewport cls
@@ -258,7 +263,7 @@ is_following_viewport cls
 
 {-# NOINLINE bindCanvasLayer_set_custom_viewport #-}
 
--- | The custom [Viewport] node assigned to the [code]CanvasLayer[/code]. If null, uses the default viewport instead.
+-- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
 bindCanvasLayer_set_custom_viewport :: MethodBind
 bindCanvasLayer_set_custom_viewport
   = unsafePerformIO $
@@ -268,7 +273,7 @@ bindCanvasLayer_set_custom_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Viewport] node assigned to the [code]CanvasLayer[/code]. If null, uses the default viewport instead.
+-- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
 set_custom_viewport ::
                       (CanvasLayer :< cls, Object :< cls) => cls -> Node -> IO ()
 set_custom_viewport cls arg1
@@ -282,6 +287,7 @@ set_custom_viewport cls arg1
 
 {-# NOINLINE bindCanvasLayer_set_follow_viewport #-}
 
+-- | Sets the layer to follow the viewport in order to simulate a pseudo 3D effect.
 bindCanvasLayer_set_follow_viewport :: MethodBind
 bindCanvasLayer_set_follow_viewport
   = unsafePerformIO $
@@ -291,6 +297,7 @@ bindCanvasLayer_set_follow_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the layer to follow the viewport in order to simulate a pseudo 3D effect.
 set_follow_viewport ::
                       (CanvasLayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_follow_viewport cls arg1
@@ -304,6 +311,7 @@ set_follow_viewport cls arg1
 
 {-# NOINLINE bindCanvasLayer_set_follow_viewport_scale #-}
 
+-- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 bindCanvasLayer_set_follow_viewport_scale :: MethodBind
 bindCanvasLayer_set_follow_viewport_scale
   = unsafePerformIO $
@@ -313,6 +321,7 @@ bindCanvasLayer_set_follow_viewport_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 set_follow_viewport_scale ::
                             (CanvasLayer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_follow_viewport_scale cls arg1
@@ -326,7 +335,7 @@ set_follow_viewport_scale cls arg1
 
 {-# NOINLINE bindCanvasLayer_set_layer #-}
 
--- | Layer index for draw order. Lower values are drawn first. Default value: [code]1[/code].
+-- | Layer index for draw order. Lower values are drawn first.
 bindCanvasLayer_set_layer :: MethodBind
 bindCanvasLayer_set_layer
   = unsafePerformIO $
@@ -336,7 +345,7 @@ bindCanvasLayer_set_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Layer index for draw order. Lower values are drawn first. Default value: [code]1[/code].
+-- | Layer index for draw order. Lower values are drawn first.
 set_layer ::
             (CanvasLayer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_layer cls arg1

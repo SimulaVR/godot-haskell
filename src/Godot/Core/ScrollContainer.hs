@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ScrollContainer
        (Godot.Core.ScrollContainer.sig_scroll_ended,
         Godot.Core.ScrollContainer.sig_scroll_started,
@@ -29,15 +30,19 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
--- | Emitted whenever scrolling stops.
+-- | Emitted when scrolling stops.
 sig_scroll_ended :: Godot.Internal.Dispatch.Signal ScrollContainer
 sig_scroll_ended = Godot.Internal.Dispatch.Signal "scroll_ended"
 
--- | Emitted whenever scrolling is started.
+instance NodeSignal ScrollContainer "scroll_ended" '[]
+
+-- | Emitted when scrolling is started.
 sig_scroll_started ::
                    Godot.Internal.Dispatch.Signal ScrollContainer
 sig_scroll_started
   = Godot.Internal.Dispatch.Signal "scroll_started"
+
+instance NodeSignal ScrollContainer "scroll_started" '[]
 
 {-# NOINLINE bindScrollContainer__ensure_focused_visible #-}
 
@@ -176,6 +181,7 @@ get_h_scroll cls
 
 {-# NOINLINE bindScrollContainer_get_h_scrollbar #-}
 
+-- | Returns the horizontal scrollbar [HScrollBar] of this [ScrollContainer].
 bindScrollContainer_get_h_scrollbar :: MethodBind
 bindScrollContainer_get_h_scrollbar
   = unsafePerformIO $
@@ -185,6 +191,7 @@ bindScrollContainer_get_h_scrollbar
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the horizontal scrollbar [HScrollBar] of this [ScrollContainer].
 get_h_scrollbar ::
                   (ScrollContainer :< cls, Object :< cls) => cls -> IO HScrollBar
 get_h_scrollbar cls
@@ -222,6 +229,7 @@ get_v_scroll cls
 
 {-# NOINLINE bindScrollContainer_get_v_scrollbar #-}
 
+-- | Returns the vertical scrollbar [VScrollBar] of this [ScrollContainer].
 bindScrollContainer_get_v_scrollbar :: MethodBind
 bindScrollContainer_get_v_scrollbar
   = unsafePerformIO $
@@ -231,6 +239,7 @@ bindScrollContainer_get_v_scrollbar
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the vertical scrollbar [VScrollBar] of this [ScrollContainer].
 get_v_scrollbar ::
                   (ScrollContainer :< cls, Object :< cls) => cls -> IO VScrollBar
 get_v_scrollbar cls
@@ -244,6 +253,7 @@ get_v_scrollbar cls
 
 {-# NOINLINE bindScrollContainer_is_following_focus #-}
 
+-- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 bindScrollContainer_is_following_focus :: MethodBind
 bindScrollContainer_is_following_focus
   = unsafePerformIO $
@@ -253,6 +263,7 @@ bindScrollContainer_is_following_focus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 is_following_focus ::
                      (ScrollContainer :< cls, Object :< cls) => cls -> IO Bool
 is_following_focus cls
@@ -384,6 +395,7 @@ set_enable_v_scroll cls arg1
 
 {-# NOINLINE bindScrollContainer_set_follow_focus #-}
 
+-- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 bindScrollContainer_set_follow_focus :: MethodBind
 bindScrollContainer_set_follow_focus
   = unsafePerformIO $
@@ -393,6 +405,7 @@ bindScrollContainer_set_follow_focus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 set_follow_focus ::
                    (ScrollContainer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_follow_focus cls arg1

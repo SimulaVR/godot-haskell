@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.BaseButton
        (Godot.Core.BaseButton._DRAW_NORMAL,
         Godot.Core.BaseButton._DRAW_DISABLED,
@@ -70,17 +71,26 @@ _DRAW_HOVER = 2
 sig_button_down :: Godot.Internal.Dispatch.Signal BaseButton
 sig_button_down = Godot.Internal.Dispatch.Signal "button_down"
 
+instance NodeSignal BaseButton "button_down" '[]
+
 -- | Emitted when the button stops being held down.
 sig_button_up :: Godot.Internal.Dispatch.Signal BaseButton
 sig_button_up = Godot.Internal.Dispatch.Signal "button_up"
 
--- | This signal is emitted every time the button is toggled or pressed (i.e. activated, so on [code]button_down[/code] if "Click on press" is active and on [code]button_up[/code] otherwise).
+instance NodeSignal BaseButton "button_up" '[]
+
+-- | Emitted when the button is toggled or pressed. This is on [signal button_down] if [member action_mode] is [constant ACTION_MODE_BUTTON_PRESS] and on [signal button_up] otherwise.
+--   				If you need to know the button's pressed state (and [member toggle_mode] is active), use [signal toggled] instead.
 sig_pressed :: Godot.Internal.Dispatch.Signal BaseButton
 sig_pressed = Godot.Internal.Dispatch.Signal "pressed"
 
--- | This signal is emitted when the button was just toggled between pressed and normal states (only if toggle_mode is active). The new state is contained in the [i]button_pressed[/i] argument.
+instance NodeSignal BaseButton "pressed" '[]
+
+-- | Emitted when the button was just toggled between pressed and normal states (only if [member toggle_mode] is active). The new state is contained in the [code]button_pressed[/code] argument.
 sig_toggled :: Godot.Internal.Dispatch.Signal BaseButton
 sig_toggled = Godot.Internal.Dispatch.Signal "toggled"
+
+instance NodeSignal BaseButton "toggled" '[Bool]
 
 {-# NOINLINE bindBaseButton__gui_input #-}
 
@@ -105,7 +115,7 @@ _gui_input cls arg1
 
 {-# NOINLINE bindBaseButton__pressed #-}
 
--- | Called when the button is pressed.
+-- | Called when the button is pressed. If you need to know the button's pressed state (and [member toggle_mode] is active), use [method _toggled] instead.
 bindBaseButton__pressed :: MethodBind
 bindBaseButton__pressed
   = unsafePerformIO $
@@ -115,7 +125,7 @@ bindBaseButton__pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called when the button is pressed.
+-- | Called when the button is pressed. If you need to know the button's pressed state (and [member toggle_mode] is active), use [method _toggled] instead.
 _pressed :: (BaseButton :< cls, Object :< cls) => cls -> IO ()
 _pressed cls
   = withVariantArray []
@@ -126,7 +136,7 @@ _pressed cls
 
 {-# NOINLINE bindBaseButton__toggled #-}
 
--- | Called when the button is toggled (only if toggle_mode is active).
+-- | Called when the button is toggled (only if [member toggle_mode] is active).
 bindBaseButton__toggled :: MethodBind
 bindBaseButton__toggled
   = unsafePerformIO $
@@ -136,7 +146,7 @@ bindBaseButton__toggled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called when the button is toggled (only if toggle_mode is active).
+-- | Called when the button is toggled (only if [member toggle_mode] is active).
 _toggled ::
            (BaseButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 _toggled cls arg1
@@ -169,7 +179,7 @@ _unhandled_input cls arg1
 
 {-# NOINLINE bindBaseButton_get_action_mode #-}
 
--- | Determines when the button is considered clicked, one of the ACTION_MODE_* constants.
+-- | Determines when the button is considered clicked, one of the [enum ActionMode] constants.
 bindBaseButton_get_action_mode :: MethodBind
 bindBaseButton_get_action_mode
   = unsafePerformIO $
@@ -179,7 +189,7 @@ bindBaseButton_get_action_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines when the button is considered clicked, one of the ACTION_MODE_* constants.
+-- | Determines when the button is considered clicked, one of the [enum ActionMode] constants.
 get_action_mode ::
                   (BaseButton :< cls, Object :< cls) => cls -> IO Int
 get_action_mode cls
@@ -216,7 +226,7 @@ get_button_group cls
 {-# NOINLINE bindBaseButton_get_button_mask #-}
 
 -- | Binary mask to choose which mouse buttons this button will respond to.
---   			To allow both left-click and right-click, set this to 3, because it's BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT.
+--   			To allow both left-click and right-click, use [code]BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT[/code].
 bindBaseButton_get_button_mask :: MethodBind
 bindBaseButton_get_button_mask
   = unsafePerformIO $
@@ -227,7 +237,7 @@ bindBaseButton_get_button_mask
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Binary mask to choose which mouse buttons this button will respond to.
---   			To allow both left-click and right-click, set this to 3, because it's BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT.
+--   			To allow both left-click and right-click, use [code]BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT[/code].
 get_button_mask ::
                   (BaseButton :< cls, Object :< cls) => cls -> IO Int
 get_button_mask cls
@@ -240,7 +250,7 @@ get_button_mask cls
 
 {-# NOINLINE bindBaseButton_get_draw_mode #-}
 
--- | Returns the visual state used to draw the button. This is useful mainly when implementing your own draw code by either overriding _draw() or connecting to "draw" signal. The visual state of the button is defined by the DRAW_* enum.
+-- | Returns the visual state used to draw the button. This is useful mainly when implementing your own draw code by either overriding _draw() or connecting to "draw" signal. The visual state of the button is defined by the [enum DrawMode] enum.
 bindBaseButton_get_draw_mode :: MethodBind
 bindBaseButton_get_draw_mode
   = unsafePerformIO $
@@ -250,7 +260,7 @@ bindBaseButton_get_draw_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the visual state used to draw the button. This is useful mainly when implementing your own draw code by either overriding _draw() or connecting to "draw" signal. The visual state of the button is defined by the DRAW_* enum.
+-- | Returns the visual state used to draw the button. This is useful mainly when implementing your own draw code by either overriding _draw() or connecting to "draw" signal. The visual state of the button is defined by the [enum DrawMode] enum.
 get_draw_mode ::
                 (BaseButton :< cls, Object :< cls) => cls -> IO Int
 get_draw_mode cls
@@ -354,6 +364,8 @@ is_hovered cls
 
 {-# NOINLINE bindBaseButton_is_keep_pressed_outside #-}
 
+-- | If [code]true[/code], the button stays pressed when moving the cursor outside the button while pressing it.
+--   			[b]Note:[/b] This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 bindBaseButton_is_keep_pressed_outside :: MethodBind
 bindBaseButton_is_keep_pressed_outside
   = unsafePerformIO $
@@ -363,6 +375,8 @@ bindBaseButton_is_keep_pressed_outside
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the button stays pressed when moving the cursor outside the button while pressing it.
+--   			[b]Note:[/b] This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 is_keep_pressed_outside ::
                           (BaseButton :< cls, Object :< cls) => cls -> IO Bool
 is_keep_pressed_outside cls
@@ -376,7 +390,7 @@ is_keep_pressed_outside cls
 
 {-# NOINLINE bindBaseButton_is_pressed #-}
 
--- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if toggle_mode is active).
+-- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if [member toggle_mode] is active).
 bindBaseButton_is_pressed :: MethodBind
 bindBaseButton_is_pressed
   = unsafePerformIO $
@@ -386,7 +400,7 @@ bindBaseButton_is_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if toggle_mode is active).
+-- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if [member toggle_mode] is active).
 is_pressed :: (BaseButton :< cls, Object :< cls) => cls -> IO Bool
 is_pressed cls
   = withVariantArray []
@@ -446,7 +460,7 @@ is_toggle_mode cls
 
 {-# NOINLINE bindBaseButton_set_action_mode #-}
 
--- | Determines when the button is considered clicked, one of the ACTION_MODE_* constants.
+-- | Determines when the button is considered clicked, one of the [enum ActionMode] constants.
 bindBaseButton_set_action_mode :: MethodBind
 bindBaseButton_set_action_mode
   = unsafePerformIO $
@@ -456,7 +470,7 @@ bindBaseButton_set_action_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines when the button is considered clicked, one of the ACTION_MODE_* constants.
+-- | Determines when the button is considered clicked, one of the [enum ActionMode] constants.
 set_action_mode ::
                   (BaseButton :< cls, Object :< cls) => cls -> Int -> IO ()
 set_action_mode cls arg1
@@ -493,7 +507,7 @@ set_button_group cls arg1
 {-# NOINLINE bindBaseButton_set_button_mask #-}
 
 -- | Binary mask to choose which mouse buttons this button will respond to.
---   			To allow both left-click and right-click, set this to 3, because it's BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT.
+--   			To allow both left-click and right-click, use [code]BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT[/code].
 bindBaseButton_set_button_mask :: MethodBind
 bindBaseButton_set_button_mask
   = unsafePerformIO $
@@ -504,7 +518,7 @@ bindBaseButton_set_button_mask
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Binary mask to choose which mouse buttons this button will respond to.
---   			To allow both left-click and right-click, set this to 3, because it's BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT.
+--   			To allow both left-click and right-click, use [code]BUTTON_MASK_LEFT | BUTTON_MASK_RIGHT[/code].
 set_button_mask ::
                   (BaseButton :< cls, Object :< cls) => cls -> Int -> IO ()
 set_button_mask cls arg1
@@ -564,6 +578,8 @@ set_enabled_focus_mode cls arg1
 
 {-# NOINLINE bindBaseButton_set_keep_pressed_outside #-}
 
+-- | If [code]true[/code], the button stays pressed when moving the cursor outside the button while pressing it.
+--   			[b]Note:[/b] This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 bindBaseButton_set_keep_pressed_outside :: MethodBind
 bindBaseButton_set_keep_pressed_outside
   = unsafePerformIO $
@@ -573,6 +589,8 @@ bindBaseButton_set_keep_pressed_outside
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the button stays pressed when moving the cursor outside the button while pressing it.
+--   			[b]Note:[/b] This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 set_keep_pressed_outside ::
                            (BaseButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_keep_pressed_outside cls arg1
@@ -586,7 +604,7 @@ set_keep_pressed_outside cls arg1
 
 {-# NOINLINE bindBaseButton_set_pressed #-}
 
--- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if toggle_mode is active).
+-- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if [member toggle_mode] is active).
 bindBaseButton_set_pressed :: MethodBind
 bindBaseButton_set_pressed
   = unsafePerformIO $
@@ -596,7 +614,7 @@ bindBaseButton_set_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if toggle_mode is active).
+-- | If [code]true[/code], the button's state is pressed. Means the button is pressed down or toggled (if [member toggle_mode] is active).
 set_pressed ::
               (BaseButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_pressed cls arg1

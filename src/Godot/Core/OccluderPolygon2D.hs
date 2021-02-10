@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.OccluderPolygon2D
        (Godot.Core.OccluderPolygon2D._CULL_CLOCKWISE,
         Godot.Core.OccluderPolygon2D._CULL_DISABLED,
@@ -29,7 +30,7 @@ _CULL_COUNTER_CLOCKWISE = 2
 
 {-# NOINLINE bindOccluderPolygon2D_get_cull_mode #-}
 
--- | Set the direction of the occlusion culling or disable it. Default value: [constant CULL_DISABLED].
+-- | The culling mode to use.
 bindOccluderPolygon2D_get_cull_mode :: MethodBind
 bindOccluderPolygon2D_get_cull_mode
   = unsafePerformIO $
@@ -39,7 +40,7 @@ bindOccluderPolygon2D_get_cull_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the direction of the occlusion culling or disable it. Default value: [constant CULL_DISABLED].
+-- | The culling mode to use.
 get_cull_mode ::
                 (OccluderPolygon2D :< cls, Object :< cls) => cls -> IO Int
 get_cull_mode cls
@@ -53,7 +54,8 @@ get_cull_mode cls
 
 {-# NOINLINE bindOccluderPolygon2D_get_polygon #-}
 
--- | A [Vector2] array with the index for polygon's vertices positions. Note that the returned value is a copy of the underlying array, rather than a reference.
+-- | A [Vector2] array with the index for polygon's vertices positions.
+--   			[b]Note:[/b] The returned value is a copy of the underlying array, rather than a reference.
 bindOccluderPolygon2D_get_polygon :: MethodBind
 bindOccluderPolygon2D_get_polygon
   = unsafePerformIO $
@@ -63,7 +65,8 @@ bindOccluderPolygon2D_get_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A [Vector2] array with the index for polygon's vertices positions. Note that the returned value is a copy of the underlying array, rather than a reference.
+-- | A [Vector2] array with the index for polygon's vertices positions.
+--   			[b]Note:[/b] The returned value is a copy of the underlying array, rather than a reference.
 get_polygon ::
               (OccluderPolygon2D :< cls, Object :< cls) =>
               cls -> IO PoolVector2Array
@@ -78,7 +81,7 @@ get_polygon cls
 
 {-# NOINLINE bindOccluderPolygon2D_is_closed #-}
 
--- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction. Default value: [code]true[/code].
+-- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction.
 bindOccluderPolygon2D_is_closed :: MethodBind
 bindOccluderPolygon2D_is_closed
   = unsafePerformIO $
@@ -88,7 +91,7 @@ bindOccluderPolygon2D_is_closed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction. Default value: [code]true[/code].
+-- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction.
 is_closed ::
             (OccluderPolygon2D :< cls, Object :< cls) => cls -> IO Bool
 is_closed cls
@@ -101,7 +104,7 @@ is_closed cls
 
 {-# NOINLINE bindOccluderPolygon2D_set_closed #-}
 
--- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction. Default value: [code]true[/code].
+-- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction.
 bindOccluderPolygon2D_set_closed :: MethodBind
 bindOccluderPolygon2D_set_closed
   = unsafePerformIO $
@@ -111,7 +114,7 @@ bindOccluderPolygon2D_set_closed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction. Default value: [code]true[/code].
+-- | If [code]true[/code], closes the polygon. A closed OccluderPolygon2D occludes the light coming from any direction. An opened OccluderPolygon2D occludes the light only at its outline's direction.
 set_closed ::
              (OccluderPolygon2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_closed cls arg1
@@ -125,7 +128,7 @@ set_closed cls arg1
 
 {-# NOINLINE bindOccluderPolygon2D_set_cull_mode #-}
 
--- | Set the direction of the occlusion culling or disable it. Default value: [constant CULL_DISABLED].
+-- | The culling mode to use.
 bindOccluderPolygon2D_set_cull_mode :: MethodBind
 bindOccluderPolygon2D_set_cull_mode
   = unsafePerformIO $
@@ -135,7 +138,7 @@ bindOccluderPolygon2D_set_cull_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the direction of the occlusion culling or disable it. Default value: [constant CULL_DISABLED].
+-- | The culling mode to use.
 set_cull_mode ::
                 (OccluderPolygon2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_cull_mode cls arg1
@@ -149,7 +152,8 @@ set_cull_mode cls arg1
 
 {-# NOINLINE bindOccluderPolygon2D_set_polygon #-}
 
--- | A [Vector2] array with the index for polygon's vertices positions. Note that the returned value is a copy of the underlying array, rather than a reference.
+-- | A [Vector2] array with the index for polygon's vertices positions.
+--   			[b]Note:[/b] The returned value is a copy of the underlying array, rather than a reference.
 bindOccluderPolygon2D_set_polygon :: MethodBind
 bindOccluderPolygon2D_set_polygon
   = unsafePerformIO $
@@ -159,7 +163,8 @@ bindOccluderPolygon2D_set_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A [Vector2] array with the index for polygon's vertices positions. Note that the returned value is a copy of the underlying array, rather than a reference.
+-- | A [Vector2] array with the index for polygon's vertices positions.
+--   			[b]Note:[/b] The returned value is a copy of the underlying array, rather than a reference.
 set_polygon ::
               (OccluderPolygon2D :< cls, Object :< cls) =>
               cls -> PoolVector2Array -> IO ()

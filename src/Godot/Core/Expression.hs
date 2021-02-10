@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Expression
        (Godot.Core.Expression.execute,
         Godot.Core.Expression.get_error_text,
@@ -87,7 +88,7 @@ has_execute_failed cls
 
 {-# NOINLINE bindExpression_parse #-}
 
--- | Parses the expression and returns a [enum @GlobalScope.Error].
+-- | Parses the expression and returns an [enum Error] code.
 --   				You can optionally specify names of variables that may appear in the expression with [code]input_names[/code], so that you can bind them when it gets executed.
 bindExpression_parse :: MethodBind
 bindExpression_parse
@@ -98,7 +99,7 @@ bindExpression_parse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Parses the expression and returns a [enum @GlobalScope.Error].
+-- | Parses the expression and returns an [enum Error] code.
 --   				You can optionally specify names of variables that may appear in the expression with [code]input_names[/code], so that you can bind them when it gets executed.
 parse ::
         (Expression :< cls, Object :< cls) =>

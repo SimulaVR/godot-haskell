@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AtlasTexture
        (Godot.Core.AtlasTexture.get_atlas,
         Godot.Core.AtlasTexture.get_margin,
@@ -42,7 +43,7 @@ get_atlas cls
 
 {-# NOINLINE bindAtlasTexture_get_margin #-}
 
--- | The margin around the region. The [Rect2]'s 'size' parameter ('w' and 'h' in the editor) resizes the texture so it fits within the margin.
+-- | The margin around the region. The [Rect2]'s [member Rect2.size] parameter ("w" and "h" in the editor) resizes the texture so it fits within the margin.
 bindAtlasTexture_get_margin :: MethodBind
 bindAtlasTexture_get_margin
   = unsafePerformIO $
@@ -52,7 +53,7 @@ bindAtlasTexture_get_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The margin around the region. The [Rect2]'s 'size' parameter ('w' and 'h' in the editor) resizes the texture so it fits within the margin.
+-- | The margin around the region. The [Rect2]'s [member Rect2.size] parameter ("w" and "h" in the editor) resizes the texture so it fits within the margin.
 get_margin ::
              (AtlasTexture :< cls, Object :< cls) => cls -> IO Rect2
 get_margin cls
@@ -159,7 +160,7 @@ set_filter_clip cls arg1
 
 {-# NOINLINE bindAtlasTexture_set_margin #-}
 
--- | The margin around the region. The [Rect2]'s 'size' parameter ('w' and 'h' in the editor) resizes the texture so it fits within the margin.
+-- | The margin around the region. The [Rect2]'s [member Rect2.size] parameter ("w" and "h" in the editor) resizes the texture so it fits within the margin.
 bindAtlasTexture_set_margin :: MethodBind
 bindAtlasTexture_set_margin
   = unsafePerformIO $
@@ -169,7 +170,7 @@ bindAtlasTexture_set_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The margin around the region. The [Rect2]'s 'size' parameter ('w' and 'h' in the editor) resizes the texture so it fits within the margin.
+-- | The margin around the region. The [Rect2]'s [member Rect2.size] parameter ("w" and "h" in the editor) resizes the texture so it fits within the margin.
 set_margin ::
              (AtlasTexture :< cls, Object :< cls) => cls -> Rect2 -> IO ()
 set_margin cls arg1

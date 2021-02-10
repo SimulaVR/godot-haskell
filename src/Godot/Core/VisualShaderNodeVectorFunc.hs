@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeVectorFunc
        (Godot.Core.VisualShaderNodeVectorFunc._FUNC_ASINH,
         Godot.Core.VisualShaderNodeVectorFunc._FUNC_NORMALIZE,
@@ -153,6 +154,7 @@ _FUNC_FLOOR = 19
 
 {-# NOINLINE bindVisualShaderNodeVectorFunc_get_function #-}
 
+-- | The function to be performed. See [enum Function] for options.
 bindVisualShaderNodeVectorFunc_get_function :: MethodBind
 bindVisualShaderNodeVectorFunc_get_function
   = unsafePerformIO $
@@ -162,6 +164,7 @@ bindVisualShaderNodeVectorFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The function to be performed. See [enum Function] for options.
 get_function ::
                (VisualShaderNodeVectorFunc :< cls, Object :< cls) => cls -> IO Int
 get_function cls
@@ -175,6 +178,7 @@ get_function cls
 
 {-# NOINLINE bindVisualShaderNodeVectorFunc_set_function #-}
 
+-- | The function to be performed. See [enum Function] for options.
 bindVisualShaderNodeVectorFunc_set_function :: MethodBind
 bindVisualShaderNodeVectorFunc_set_function
   = unsafePerformIO $
@@ -184,6 +188,7 @@ bindVisualShaderNodeVectorFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The function to be performed. See [enum Function] for options.
 set_function ::
                (VisualShaderNodeVectorFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()

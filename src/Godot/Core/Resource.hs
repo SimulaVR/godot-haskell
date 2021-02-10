@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Resource
        (Godot.Core.Resource.sig_changed,
         Godot.Core.Resource._setup_local_to_scene,
@@ -21,6 +22,8 @@ import Godot.Api.Types
 -- | Emitted whenever the resource changes.
 sig_changed :: Godot.Internal.Dispatch.Signal Resource
 sig_changed = Godot.Internal.Dispatch.Signal "changed"
+
+instance NodeSignal Resource "changed" '[]
 
 {-# NOINLINE bindResource__setup_local_to_scene #-}
 
@@ -48,7 +51,8 @@ _setup_local_to_scene cls
 
 {-# NOINLINE bindResource_duplicate #-}
 
--- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency, this can be changed by passing [code]true[/code] to the [code]subresources[/code] argument.
+-- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing [code]true[/code] to the [code]subresources[/code] argument which will copy the subresources.
+--   				[b]Note:[/b] If [code]subresources[/code] is [code]true[/code], this method will only perform a shallow copy. Nested resources within subresources will not be duplicated and will still be shared.
 bindResource_duplicate :: MethodBind
 bindResource_duplicate
   = unsafePerformIO $
@@ -58,7 +62,8 @@ bindResource_duplicate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency, this can be changed by passing [code]true[/code] to the [code]subresources[/code] argument.
+-- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing [code]true[/code] to the [code]subresources[/code] argument which will copy the subresources.
+--   				[b]Note:[/b] If [code]subresources[/code] is [code]true[/code], this method will only perform a shallow copy. Nested resources within subresources will not be duplicated and will still be shared.
 duplicate ::
             (Resource :< cls, Object :< cls) => cls -> Bool -> IO Resource
 duplicate cls arg1
@@ -137,7 +142,7 @@ get_path cls
 
 {-# NOINLINE bindResource_get_rid #-}
 
--- | Returns the RID of the resource (or an empty RID). Many resources (such as [Texture], [Mesh], etc) are high level abstractions of resources stored in a server, so this function will return the original RID.
+-- | Returns the RID of the resource (or an empty RID). Many resources (such as [Texture], [Mesh], etc) are high-level abstractions of resources stored in a server, so this function will return the original RID.
 bindResource_get_rid :: MethodBind
 bindResource_get_rid
   = unsafePerformIO $
@@ -147,7 +152,7 @@ bindResource_get_rid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the RID of the resource (or an empty RID). Many resources (such as [Texture], [Mesh], etc) are high level abstractions of resources stored in a server, so this function will return the original RID.
+-- | Returns the RID of the resource (or an empty RID). Many resources (such as [Texture], [Mesh], etc) are high-level abstractions of resources stored in a server, so this function will return the original RID.
 get_rid :: (Resource :< cls, Object :< cls) => cls -> IO Rid
 get_rid cls
   = withVariantArray []

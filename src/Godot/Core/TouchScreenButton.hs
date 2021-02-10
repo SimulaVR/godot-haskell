@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.TouchScreenButton
        (Godot.Core.TouchScreenButton._VISIBILITY_ALWAYS,
         Godot.Core.TouchScreenButton._VISIBILITY_TOUCHSCREEN_ONLY,
@@ -43,9 +44,13 @@ _VISIBILITY_TOUCHSCREEN_ONLY = 1
 sig_pressed :: Godot.Internal.Dispatch.Signal TouchScreenButton
 sig_pressed = Godot.Internal.Dispatch.Signal "pressed"
 
+instance NodeSignal TouchScreenButton "pressed" '[]
+
 -- | Emitted when the button is released (up).
 sig_released :: Godot.Internal.Dispatch.Signal TouchScreenButton
 sig_released = Godot.Internal.Dispatch.Signal "released"
+
+instance NodeSignal TouchScreenButton "released" '[]
 
 {-# NOINLINE bindTouchScreenButton__input #-}
 
@@ -190,7 +195,7 @@ get_texture_pressed cls
 
 {-# NOINLINE bindTouchScreenButton_get_visibility_mode #-}
 
--- | The button's visibility mode. See [code]VISIBILITY_*[/code] constants.
+-- | The button's visibility mode. See [enum VisibilityMode] for possible values.
 bindTouchScreenButton_get_visibility_mode :: MethodBind
 bindTouchScreenButton_get_visibility_mode
   = unsafePerformIO $
@@ -200,7 +205,7 @@ bindTouchScreenButton_get_visibility_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The button's visibility mode. See [code]VISIBILITY_*[/code] constants.
+-- | The button's visibility mode. See [enum VisibilityMode] for possible values.
 get_visibility_mode ::
                       (TouchScreenButton :< cls, Object :< cls) => cls -> IO Int
 get_visibility_mode cls
@@ -214,7 +219,7 @@ get_visibility_mode cls
 
 {-# NOINLINE bindTouchScreenButton_is_passby_press_enabled #-}
 
--- | If [code]true[/code], passby presses are enabled.
+-- | If [code]true[/code], pass-by presses are enabled.
 bindTouchScreenButton_is_passby_press_enabled :: MethodBind
 bindTouchScreenButton_is_passby_press_enabled
   = unsafePerformIO $
@@ -224,7 +229,7 @@ bindTouchScreenButton_is_passby_press_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], passby presses are enabled.
+-- | If [code]true[/code], pass-by presses are enabled.
 is_passby_press_enabled ::
                           (TouchScreenButton :< cls, Object :< cls) => cls -> IO Bool
 is_passby_press_enabled cls
@@ -263,7 +268,7 @@ is_pressed cls
 
 {-# NOINLINE bindTouchScreenButton_is_shape_centered #-}
 
--- | If [code]true[/code], the button's shape is centered.
+-- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 bindTouchScreenButton_is_shape_centered :: MethodBind
 bindTouchScreenButton_is_shape_centered
   = unsafePerformIO $
@@ -273,7 +278,7 @@ bindTouchScreenButton_is_shape_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's shape is centered.
+-- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 is_shape_centered ::
                     (TouchScreenButton :< cls, Object :< cls) => cls -> IO Bool
 is_shape_centered cls
@@ -360,7 +365,7 @@ set_bitmask cls arg1
 
 {-# NOINLINE bindTouchScreenButton_set_passby_press #-}
 
--- | If [code]true[/code], passby presses are enabled.
+-- | If [code]true[/code], pass-by presses are enabled.
 bindTouchScreenButton_set_passby_press :: MethodBind
 bindTouchScreenButton_set_passby_press
   = unsafePerformIO $
@@ -370,7 +375,7 @@ bindTouchScreenButton_set_passby_press
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], passby presses are enabled.
+-- | If [code]true[/code], pass-by presses are enabled.
 set_passby_press ::
                    (TouchScreenButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_passby_press cls arg1
@@ -408,7 +413,7 @@ set_shape cls arg1
 
 {-# NOINLINE bindTouchScreenButton_set_shape_centered #-}
 
--- | If [code]true[/code], the button's shape is centered.
+-- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 bindTouchScreenButton_set_shape_centered :: MethodBind
 bindTouchScreenButton_set_shape_centered
   = unsafePerformIO $
@@ -418,7 +423,7 @@ bindTouchScreenButton_set_shape_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's shape is centered.
+-- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 set_shape_centered ::
                      (TouchScreenButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shape_centered cls arg1
@@ -506,7 +511,7 @@ set_texture_pressed cls arg1
 
 {-# NOINLINE bindTouchScreenButton_set_visibility_mode #-}
 
--- | The button's visibility mode. See [code]VISIBILITY_*[/code] constants.
+-- | The button's visibility mode. See [enum VisibilityMode] for possible values.
 bindTouchScreenButton_set_visibility_mode :: MethodBind
 bindTouchScreenButton_set_visibility_mode
   = unsafePerformIO $
@@ -516,7 +521,7 @@ bindTouchScreenButton_set_visibility_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The button's visibility mode. See [code]VISIBILITY_*[/code] constants.
+-- | The button's visibility mode. See [enum VisibilityMode] for possible values.
 set_visibility_mode ::
                       (TouchScreenButton :< cls, Object :< cls) => cls -> Int -> IO ()
 set_visibility_mode cls arg1

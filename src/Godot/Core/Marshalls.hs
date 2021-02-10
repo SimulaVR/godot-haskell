@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Marshalls
        (Godot.Core.Marshalls.base64_to_raw,
         Godot.Core.Marshalls.base64_to_utf8,
@@ -17,7 +18,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindMarshalls_base64_to_raw #-}
 
--- | Returns [PoolByteArray] of a given base64 encoded String.
+-- | Returns a decoded [PoolByteArray] corresponding to the Base64-encoded string [code]base64_str[/code].
 bindMarshalls_base64_to_raw :: MethodBind
 bindMarshalls_base64_to_raw
   = unsafePerformIO $
@@ -27,7 +28,7 @@ bindMarshalls_base64_to_raw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [PoolByteArray] of a given base64 encoded String.
+-- | Returns a decoded [PoolByteArray] corresponding to the Base64-encoded string [code]base64_str[/code].
 base64_to_raw ::
                 (Marshalls :< cls, Object :< cls) =>
                 cls -> GodotString -> IO PoolByteArray
@@ -41,7 +42,7 @@ base64_to_raw cls arg1
 
 {-# NOINLINE bindMarshalls_base64_to_utf8 #-}
 
--- | Returns utf8 String of a given base64 encoded String.
+-- | Returns a decoded string corresponding to the Base64-encoded string [code]base64_str[/code].
 bindMarshalls_base64_to_utf8 :: MethodBind
 bindMarshalls_base64_to_utf8
   = unsafePerformIO $
@@ -51,7 +52,7 @@ bindMarshalls_base64_to_utf8
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns utf8 String of a given base64 encoded String.
+-- | Returns a decoded string corresponding to the Base64-encoded string [code]base64_str[/code].
 base64_to_utf8 ::
                  (Marshalls :< cls, Object :< cls) =>
                  cls -> GodotString -> IO GodotString
@@ -65,8 +66,8 @@ base64_to_utf8 cls arg1
 
 {-# NOINLINE bindMarshalls_base64_to_variant #-}
 
--- | Returns [Variant] of a given base64 encoded String. When [code]allow_objects[/code] is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | Returns a decoded [Variant] corresponding to the Base64-encoded string [code]base64_str[/code]. If [code]allow_objects[/code] is [code]true[/code], decoding objects is allowed.
+--   				[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 bindMarshalls_base64_to_variant :: MethodBind
 bindMarshalls_base64_to_variant
   = unsafePerformIO $
@@ -76,8 +77,8 @@ bindMarshalls_base64_to_variant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [Variant] of a given base64 encoded String. When [code]allow_objects[/code] is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | Returns a decoded [Variant] corresponding to the Base64-encoded string [code]base64_str[/code]. If [code]allow_objects[/code] is [code]true[/code], decoding objects is allowed.
+--   				[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 base64_to_variant ::
                     (Marshalls :< cls, Object :< cls) =>
                     cls -> GodotString -> Bool -> IO GodotVariant
@@ -91,7 +92,7 @@ base64_to_variant cls arg1 arg2
 
 {-# NOINLINE bindMarshalls_raw_to_base64 #-}
 
--- | Returns base64 encoded String of a given [PoolByteArray].
+-- | Returns a Base64-encoded string of a given [PoolByteArray].
 bindMarshalls_raw_to_base64 :: MethodBind
 bindMarshalls_raw_to_base64
   = unsafePerformIO $
@@ -101,7 +102,7 @@ bindMarshalls_raw_to_base64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns base64 encoded String of a given [PoolByteArray].
+-- | Returns a Base64-encoded string of a given [PoolByteArray].
 raw_to_base64 ::
                 (Marshalls :< cls, Object :< cls) =>
                 cls -> PoolByteArray -> IO GodotString
@@ -115,7 +116,7 @@ raw_to_base64 cls arg1
 
 {-# NOINLINE bindMarshalls_utf8_to_base64 #-}
 
--- | Returns base64 encoded String of a given utf8 String.
+-- | Returns a Base64-encoded string of the UTF-8 string [code]utf8_str[/code].
 bindMarshalls_utf8_to_base64 :: MethodBind
 bindMarshalls_utf8_to_base64
   = unsafePerformIO $
@@ -125,7 +126,7 @@ bindMarshalls_utf8_to_base64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns base64 encoded String of a given utf8 String.
+-- | Returns a Base64-encoded string of the UTF-8 string [code]utf8_str[/code].
 utf8_to_base64 ::
                  (Marshalls :< cls, Object :< cls) =>
                  cls -> GodotString -> IO GodotString
@@ -139,7 +140,7 @@ utf8_to_base64 cls arg1
 
 {-# NOINLINE bindMarshalls_variant_to_base64 #-}
 
--- | Returns base64 encoded String of a given [Variant]. When [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
+-- | Returns a Base64-encoded string of the [Variant] [code]variant[/code]. If [code]full_objects[/code] is [code]true[/code], encoding objects is allowed (and can potentially include code).
 bindMarshalls_variant_to_base64 :: MethodBind
 bindMarshalls_variant_to_base64
   = unsafePerformIO $
@@ -149,7 +150,7 @@ bindMarshalls_variant_to_base64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns base64 encoded String of a given [Variant]. When [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
+-- | Returns a Base64-encoded string of the [Variant] [code]variant[/code]. If [code]full_objects[/code] is [code]true[/code], encoding objects is allowed (and can potentially include code).
 variant_to_base64 ::
                     (Marshalls :< cls, Object :< cls) =>
                     cls -> GodotVariant -> Bool -> IO GodotString

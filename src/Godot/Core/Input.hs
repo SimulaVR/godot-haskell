@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Input
        (Godot.Core.Input._CURSOR_MOVE, Godot.Core.Input._CURSOR_ARROW,
         Godot.Core.Input._CURSOR_IBEAM, Godot.Core.Input._CURSOR_HSPLIT,
@@ -128,6 +129,8 @@ sig_joy_connection_changed :: Godot.Internal.Dispatch.Signal Input
 sig_joy_connection_changed
   = Godot.Internal.Dispatch.Signal "joy_connection_changed"
 
+instance NodeSignal Input "joy_connection_changed" '[Int, Bool]
+
 {-# NOINLINE bindInput_action_press #-}
 
 -- | This will simulate pressing the specified action.
@@ -179,7 +182,7 @@ action_release cls arg1
 
 {-# NOINLINE bindInput_add_joy_mapping #-}
 
--- | Add a new mapping entry (in SDL2 format) to the mapping database. Optionally update already connected devices.
+-- | Adds a new mapping entry (in SDL2 format) to the mapping database. Optionally update already connected devices.
 bindInput_add_joy_mapping :: MethodBind
 bindInput_add_joy_mapping
   = unsafePerformIO $
@@ -189,7 +192,7 @@ bindInput_add_joy_mapping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a new mapping entry (in SDL2 format) to the mapping database. Optionally update already connected devices.
+-- | Adds a new mapping entry (in SDL2 format) to the mapping database. Optionally update already connected devices.
 add_joy_mapping ::
                   (Input :< cls, Object :< cls) =>
                   cls -> GodotString -> Bool -> IO ()
@@ -203,8 +206,9 @@ add_joy_mapping cls arg1 arg2
 
 {-# NOINLINE bindInput_get_accelerometer #-}
 
--- | If the device has an accelerometer, this will return the acceleration. Otherwise, it returns an empty [Vector3].
+-- | Returns the acceleration of the device's accelerometer, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
 --   				Note this method returns an empty [Vector3] when running from the editor even when your device has an accelerometer. You must export your project to a supported device to read values from the accelerometer.
+--   				[b]Note:[/b] This method only works on iOS, Android, and UWP. On other platforms, it always returns [constant Vector3.ZERO].
 bindInput_get_accelerometer :: MethodBind
 bindInput_get_accelerometer
   = unsafePerformIO $
@@ -214,8 +218,9 @@ bindInput_get_accelerometer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If the device has an accelerometer, this will return the acceleration. Otherwise, it returns an empty [Vector3].
+-- | Returns the acceleration of the device's accelerometer, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
 --   				Note this method returns an empty [Vector3] when running from the editor even when your device has an accelerometer. You must export your project to a supported device to read values from the accelerometer.
+--   				[b]Note:[/b] This method only works on iOS, Android, and UWP. On other platforms, it always returns [constant Vector3.ZERO].
 get_accelerometer ::
                     (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_accelerometer cls
@@ -274,6 +279,7 @@ get_connected_joypads cls
 
 {-# NOINLINE bindInput_get_current_cursor_shape #-}
 
+-- | Returns the currently assigned cursor shape (see [enum CursorShape]).
 bindInput_get_current_cursor_shape :: MethodBind
 bindInput_get_current_cursor_shape
   = unsafePerformIO $
@@ -283,6 +289,7 @@ bindInput_get_current_cursor_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the currently assigned cursor shape (see [enum CursorShape]).
 get_current_cursor_shape ::
                            (Input :< cls, Object :< cls) => cls -> IO Int
 get_current_cursor_shape cls
@@ -296,7 +303,8 @@ get_current_cursor_shape cls
 
 {-# NOINLINE bindInput_get_gravity #-}
 
--- | If the device has an accelerometer, this will return the gravity. Otherwise, it returns an empty [Vector3].
+-- | Returns the gravity of the device's accelerometer, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
+--   				[b]Note:[/b] This method only works on Android and iOS. On other platforms, it always returns [constant Vector3.ZERO].
 bindInput_get_gravity :: MethodBind
 bindInput_get_gravity
   = unsafePerformIO $
@@ -306,7 +314,8 @@ bindInput_get_gravity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If the device has an accelerometer, this will return the gravity. Otherwise, it returns an empty [Vector3].
+-- | Returns the gravity of the device's accelerometer, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
+--   				[b]Note:[/b] This method only works on Android and iOS. On other platforms, it always returns [constant Vector3.ZERO].
 get_gravity :: (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_gravity cls
   = withVariantArray []
@@ -317,7 +326,8 @@ get_gravity cls
 
 {-# NOINLINE bindInput_get_gyroscope #-}
 
--- | If the device has a gyroscope, this will return the rate of rotation in rad/s around a device's x, y, and z axis. Otherwise, it returns an empty [Vector3].
+-- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
+--   				[b]Note:[/b] This method only works on Android. On other platforms, it always returns [constant Vector3.ZERO].
 bindInput_get_gyroscope :: MethodBind
 bindInput_get_gyroscope
   = unsafePerformIO $
@@ -327,7 +337,8 @@ bindInput_get_gyroscope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If the device has a gyroscope, this will return the rate of rotation in rad/s around a device's x, y, and z axis. Otherwise, it returns an empty [Vector3].
+-- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
+--   				[b]Note:[/b] This method only works on Android. On other platforms, it always returns [constant Vector3.ZERO].
 get_gyroscope :: (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_gyroscope cls
   = withVariantArray []
@@ -338,7 +349,7 @@ get_gyroscope cls
 
 {-# NOINLINE bindInput_get_joy_axis #-}
 
--- | Returns the current value of the joypad axis at given index (see [code]JOY_*[/code] constants in [@GlobalScope])
+-- | Returns the current value of the joypad axis at given index (see [enum JoystickList]).
 bindInput_get_joy_axis :: MethodBind
 bindInput_get_joy_axis
   = unsafePerformIO $
@@ -348,7 +359,7 @@ bindInput_get_joy_axis
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current value of the joypad axis at given index (see [code]JOY_*[/code] constants in [@GlobalScope])
+-- | Returns the current value of the joypad axis at given index (see [enum JoystickList]).
 get_joy_axis ::
                (Input :< cls, Object :< cls) => cls -> Int -> Int -> IO Float
 get_joy_axis cls arg1 arg2
@@ -384,7 +395,7 @@ get_joy_axis_index_from_string cls arg1
 
 {-# NOINLINE bindInput_get_joy_axis_string #-}
 
--- | Receives a [code]JOY_AXIS_*[/code] Enum and returns its equivalent name as a string.
+-- | Receives a [enum JoystickList] axis and returns its equivalent name as a string.
 bindInput_get_joy_axis_string :: MethodBind
 bindInput_get_joy_axis_string
   = unsafePerformIO $
@@ -394,7 +405,7 @@ bindInput_get_joy_axis_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Receives a [code]JOY_AXIS_*[/code] Enum and returns its equivalent name as a string.
+-- | Receives a [enum JoystickList] axis and returns its equivalent name as a string.
 get_joy_axis_string ::
                       (Input :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_joy_axis_string cls arg1
@@ -431,7 +442,7 @@ get_joy_button_index_from_string cls arg1
 
 {-# NOINLINE bindInput_get_joy_button_string #-}
 
--- | Receives a [code]JOY_BUTTON_*[/code] Enum and returns its equivalent name as a string.
+-- | Receives a gamepad button from [enum JoystickList] and returns its equivalent name as a string.
 bindInput_get_joy_button_string :: MethodBind
 bindInput_get_joy_button_string
   = unsafePerformIO $
@@ -441,7 +452,7 @@ bindInput_get_joy_button_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Receives a [code]JOY_BUTTON_*[/code] Enum and returns its equivalent name as a string.
+-- | Receives a gamepad button from [enum JoystickList] and returns its equivalent name as a string.
 get_joy_button_string ::
                         (Input :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_joy_button_string cls arg1
@@ -454,7 +465,7 @@ get_joy_button_string cls arg1
 
 {-# NOINLINE bindInput_get_joy_guid #-}
 
--- | Returns a SDL2 compatible device guid on platforms that use gamepad remapping. Returns "Default Gamepad" otherwise.
+-- | Returns a SDL2-compatible device GUID on platforms that use gamepad remapping. Returns [code]"Default Gamepad"[/code] otherwise.
 bindInput_get_joy_guid :: MethodBind
 bindInput_get_joy_guid
   = unsafePerformIO $
@@ -464,7 +475,7 @@ bindInput_get_joy_guid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a SDL2 compatible device guid on platforms that use gamepad remapping. Returns "Default Gamepad" otherwise.
+-- | Returns a SDL2-compatible device GUID on platforms that use gamepad remapping. Returns [code]"Default Gamepad"[/code] otherwise.
 get_joy_guid ::
                (Input :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_joy_guid cls arg1
@@ -476,7 +487,7 @@ get_joy_guid cls arg1
 
 {-# NOINLINE bindInput_get_joy_name #-}
 
--- | Returns the name of the joypad at the specified device index
+-- | Returns the name of the joypad at the specified device index.
 bindInput_get_joy_name :: MethodBind
 bindInput_get_joy_name
   = unsafePerformIO $
@@ -486,7 +497,7 @@ bindInput_get_joy_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the name of the joypad at the specified device index
+-- | Returns the name of the joypad at the specified device index.
 get_joy_name ::
                (Input :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_joy_name cls arg1
@@ -569,7 +580,8 @@ get_last_mouse_speed cls
 
 {-# NOINLINE bindInput_get_magnetometer #-}
 
--- | If the device has a magnetometer, this will return the magnetic field strength in micro-Tesla for all axes.
+-- | Returns the the magnetic field strength in micro-Tesla for all axes of the device's magnetometer, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
+--   				[b]Note:[/b] This method only works on Android and UWP. On other platforms, it always returns [constant Vector3.ZERO].
 bindInput_get_magnetometer :: MethodBind
 bindInput_get_magnetometer
   = unsafePerformIO $
@@ -579,7 +591,8 @@ bindInput_get_magnetometer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If the device has a magnetometer, this will return the magnetic field strength in micro-Tesla for all axes.
+-- | Returns the the magnetic field strength in micro-Tesla for all axes of the device's magnetometer, if the device has one. Otherwise, the method returns [constant Vector3.ZERO].
+--   				[b]Note:[/b] This method only works on Android and UWP. On other platforms, it always returns [constant Vector3.ZERO].
 get_magnetometer ::
                    (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_magnetometer cls
@@ -592,7 +605,7 @@ get_magnetometer cls
 
 {-# NOINLINE bindInput_get_mouse_button_mask #-}
 
--- | Returns mouse buttons as a bitmask. If multiple mouse buttons are pressed at the same time the bits are added together.
+-- | Returns mouse buttons as a bitmask. If multiple mouse buttons are pressed at the same time, the bits are added together.
 bindInput_get_mouse_button_mask :: MethodBind
 bindInput_get_mouse_button_mask
   = unsafePerformIO $
@@ -602,7 +615,7 @@ bindInput_get_mouse_button_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns mouse buttons as a bitmask. If multiple mouse buttons are pressed at the same time the bits are added together.
+-- | Returns mouse buttons as a bitmask. If multiple mouse buttons are pressed at the same time, the bits are added together.
 get_mouse_button_mask ::
                         (Input :< cls, Object :< cls) => cls -> IO Int
 get_mouse_button_mask cls
@@ -686,7 +699,7 @@ is_action_just_released cls arg1
 
 {-# NOINLINE bindInput_is_action_pressed #-}
 
--- | Returns [code]true[/code] if you are pressing the action event. Note that if an action has multiple buttons asigned and more than one of them is pressed, releasing one button will release the action, even if some other button assigned to this action is still pressed.
+-- | Returns [code]true[/code] if you are pressing the action event. Note that if an action has multiple buttons assigned and more than one of them is pressed, releasing one button will release the action, even if some other button assigned to this action is still pressed.
 bindInput_is_action_pressed :: MethodBind
 bindInput_is_action_pressed
   = unsafePerformIO $
@@ -696,7 +709,7 @@ bindInput_is_action_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if you are pressing the action event. Note that if an action has multiple buttons asigned and more than one of them is pressed, releasing one button will release the action, even if some other button assigned to this action is still pressed.
+-- | Returns [code]true[/code] if you are pressing the action event. Note that if an action has multiple buttons assigned and more than one of them is pressed, releasing one button will release the action, even if some other button assigned to this action is still pressed.
 is_action_pressed ::
                     (Input :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_action_pressed cls arg1
@@ -709,7 +722,7 @@ is_action_pressed cls arg1
 
 {-# NOINLINE bindInput_is_joy_button_pressed #-}
 
--- | Returns [code]true[/code] if you are pressing the joypad button. (see [code]JOY_*[/code] constants in [@GlobalScope])
+-- | Returns [code]true[/code] if you are pressing the joypad button (see [enum JoystickList]).
 bindInput_is_joy_button_pressed :: MethodBind
 bindInput_is_joy_button_pressed
   = unsafePerformIO $
@@ -719,7 +732,7 @@ bindInput_is_joy_button_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if you are pressing the joypad button. (see [code]JOY_*[/code] constants in [@GlobalScope])
+-- | Returns [code]true[/code] if you are pressing the joypad button (see [enum JoystickList]).
 is_joy_button_pressed ::
                         (Input :< cls, Object :< cls) => cls -> Int -> Int -> IO Bool
 is_joy_button_pressed cls arg1 arg2
@@ -732,7 +745,7 @@ is_joy_button_pressed cls arg1 arg2
 
 {-# NOINLINE bindInput_is_joy_known #-}
 
--- | Returns [code]true[/code] if the system knows the specified device. This means that it sets all button and axis indices exactly as defined in the [code]JOY_*[/code] constants (see [@GlobalScope]). Unknown joypads are not expected to match these constants, but you can still retrieve events from them.
+-- | Returns [code]true[/code] if the system knows the specified device. This means that it sets all button and axis indices exactly as defined in [enum JoystickList]. Unknown joypads are not expected to match these constants, but you can still retrieve events from them.
 bindInput_is_joy_known :: MethodBind
 bindInput_is_joy_known
   = unsafePerformIO $
@@ -742,7 +755,7 @@ bindInput_is_joy_known
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the system knows the specified device. This means that it sets all button and axis indices exactly as defined in the [code]JOY_*[/code] constants (see [@GlobalScope]). Unknown joypads are not expected to match these constants, but you can still retrieve events from them.
+-- | Returns [code]true[/code] if the system knows the specified device. This means that it sets all button and axis indices exactly as defined in [enum JoystickList]. Unknown joypads are not expected to match these constants, but you can still retrieve events from them.
 is_joy_known ::
                (Input :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_joy_known cls arg1
@@ -754,7 +767,7 @@ is_joy_known cls arg1
 
 {-# NOINLINE bindInput_is_key_pressed #-}
 
--- | Returns [code]true[/code] if you are pressing the key. You can pass [code]KEY_*[/code], which are pre-defined constants listed in [@GlobalScope].
+-- | Returns [code]true[/code] if you are pressing the key. You can pass a [enum KeyList] constant.
 bindInput_is_key_pressed :: MethodBind
 bindInput_is_key_pressed
   = unsafePerformIO $
@@ -764,7 +777,7 @@ bindInput_is_key_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if you are pressing the key. You can pass [code]KEY_*[/code], which are pre-defined constants listed in [@GlobalScope].
+-- | Returns [code]true[/code] if you are pressing the key. You can pass a [enum KeyList] constant.
 is_key_pressed ::
                  (Input :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_key_pressed cls arg1
@@ -776,7 +789,7 @@ is_key_pressed cls arg1
 
 {-# NOINLINE bindInput_is_mouse_button_pressed #-}
 
--- | Returns [code]true[/code] if you are pressing the mouse button. You can pass [code]BUTTON_*[/code], which are pre-defined constants listed in [@GlobalScope].
+-- | Returns [code]true[/code] if you are pressing the mouse button specified with [enum ButtonList].
 bindInput_is_mouse_button_pressed :: MethodBind
 bindInput_is_mouse_button_pressed
   = unsafePerformIO $
@@ -786,7 +799,7 @@ bindInput_is_mouse_button_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if you are pressing the mouse button. You can pass [code]BUTTON_*[/code], which are pre-defined constants listed in [@GlobalScope].
+-- | Returns [code]true[/code] if you are pressing the mouse button specified with [enum ButtonList].
 is_mouse_button_pressed ::
                           (Input :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_mouse_button_pressed cls arg1
@@ -800,6 +813,8 @@ is_mouse_button_pressed cls arg1
 
 {-# NOINLINE bindInput_joy_connection_changed #-}
 
+-- | Notifies the [Input] singleton that a connection has changed, to update the state for the [code]device[/code] index.
+--   				This is used internally and should not have to be called from user scripts. See [signal joy_connection_changed] for the signal emitted when this is triggered internally.
 bindInput_joy_connection_changed :: MethodBind
 bindInput_joy_connection_changed
   = unsafePerformIO $
@@ -809,6 +824,8 @@ bindInput_joy_connection_changed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Notifies the [Input] singleton that a connection has changed, to update the state for the [code]device[/code] index.
+--   				This is used internally and should not have to be called from user scripts. See [signal joy_connection_changed] for the signal emitted when this is triggered internally.
 joy_connection_changed ::
                          (Input :< cls, Object :< cls) =>
                          cls -> Int -> Bool -> GodotString -> GodotString -> IO ()
@@ -861,7 +878,7 @@ parse_input_event cls arg1
 
 {-# NOINLINE bindInput_remove_joy_mapping #-}
 
--- | Removes all mappings from the internal db that match the given uid.
+-- | Removes all mappings from the internal database that match the given GUID.
 bindInput_remove_joy_mapping :: MethodBind
 bindInput_remove_joy_mapping
   = unsafePerformIO $
@@ -871,7 +888,7 @@ bindInput_remove_joy_mapping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes all mappings from the internal db that match the given uid.
+-- | Removes all mappings from the internal database that match the given GUID.
 remove_joy_mapping ::
                      (Input :< cls, Object :< cls) => cls -> GodotString -> IO ()
 remove_joy_mapping cls arg1
@@ -884,9 +901,11 @@ remove_joy_mapping cls arg1
 
 {-# NOINLINE bindInput_set_custom_mouse_cursor #-}
 
--- | Sets a custom mouse cursor image, which is only visible inside the game window. The hotspot can also be specified. Passing [code]null[/code] to the image parameter resets to the system cursor. See enum [code]CURSOR_*[/code] for the list of shapes.
---   				[code]image[/code]'s size must be lower than 256x256.
+-- | Sets a custom mouse cursor image, which is only visible inside the game window. The hotspot can also be specified. Passing [code]null[/code] to the image parameter resets to the system cursor. See [enum CursorShape] for the list of shapes.
+--   				[code]image[/code]'s size must be lower than 256×256.
 --   				[code]hotspot[/code] must be within [code]image[/code]'s size.
+--   				[b]Note:[/b] [AnimatedTexture]s aren't supported as custom mouse cursors. If using an [AnimatedTexture], only the first frame will be displayed.
+--   				[b]Note:[/b] Only images imported with the [b]Lossless[/b], [b]Lossy[/b] or [b]Uncompressed[/b] compression modes are supported. The [b]Video RAM[/b] compression mode can't be used for custom cursors.
 bindInput_set_custom_mouse_cursor :: MethodBind
 bindInput_set_custom_mouse_cursor
   = unsafePerformIO $
@@ -896,9 +915,11 @@ bindInput_set_custom_mouse_cursor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a custom mouse cursor image, which is only visible inside the game window. The hotspot can also be specified. Passing [code]null[/code] to the image parameter resets to the system cursor. See enum [code]CURSOR_*[/code] for the list of shapes.
---   				[code]image[/code]'s size must be lower than 256x256.
+-- | Sets a custom mouse cursor image, which is only visible inside the game window. The hotspot can also be specified. Passing [code]null[/code] to the image parameter resets to the system cursor. See [enum CursorShape] for the list of shapes.
+--   				[code]image[/code]'s size must be lower than 256×256.
 --   				[code]hotspot[/code] must be within [code]image[/code]'s size.
+--   				[b]Note:[/b] [AnimatedTexture]s aren't supported as custom mouse cursors. If using an [AnimatedTexture], only the first frame will be displayed.
+--   				[b]Note:[/b] Only images imported with the [b]Lossless[/b], [b]Lossy[/b] or [b]Uncompressed[/b] compression modes are supported. The [b]Video RAM[/b] compression mode can't be used for custom cursors.
 set_custom_mouse_cursor ::
                           (Input :< cls, Object :< cls) =>
                           cls -> Resource -> Int -> Vector2 -> IO ()
@@ -941,7 +962,7 @@ set_default_cursor_shape cls arg1
 
 {-# NOINLINE bindInput_set_mouse_mode #-}
 
--- | Set the mouse mode. See the constants for more information.
+-- | Sets the mouse mode. See the constants for more information.
 bindInput_set_mouse_mode :: MethodBind
 bindInput_set_mouse_mode
   = unsafePerformIO $
@@ -951,7 +972,7 @@ bindInput_set_mouse_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the mouse mode. See the constants for more information.
+-- | Sets the mouse mode. See the constants for more information.
 set_mouse_mode ::
                  (Input :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mouse_mode cls arg1
@@ -963,7 +984,8 @@ set_mouse_mode cls arg1
 
 {-# NOINLINE bindInput_set_use_accumulated_input #-}
 
--- | Whether to accumulate similar input events sent by the operating system. Defaults to [code]true[/code].
+-- | Enables or disables the accumulation of similar input events sent by the operating system. When input accumulation is enabled, all input events generated during a frame will be merged and emitted when the frame is done rendering. Therefore, this limits the number of input method calls per second to the rendering FPS.
+--   				Input accumulation is enabled by default. It can be disabled to get slightly more precise/reactive input at the cost of increased CPU usage. In applications where drawing freehand lines is required, input accumulation should generally be disabled while the user is drawing the line to get results that closely follow the actual input.
 bindInput_set_use_accumulated_input :: MethodBind
 bindInput_set_use_accumulated_input
   = unsafePerformIO $
@@ -973,7 +995,8 @@ bindInput_set_use_accumulated_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Whether to accumulate similar input events sent by the operating system. Defaults to [code]true[/code].
+-- | Enables or disables the accumulation of similar input events sent by the operating system. When input accumulation is enabled, all input events generated during a frame will be merged and emitted when the frame is done rendering. Therefore, this limits the number of input method calls per second to the rendering FPS.
+--   				Input accumulation is enabled by default. It can be disabled to get slightly more precise/reactive input at the cost of increased CPU usage. In applications where drawing freehand lines is required, input accumulation should generally be disabled while the user is drawing the line to get results that closely follow the actual input.
 set_use_accumulated_input ::
                             (Input :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_accumulated_input cls arg1
@@ -987,8 +1010,8 @@ set_use_accumulated_input cls arg1
 
 {-# NOINLINE bindInput_start_joy_vibration #-}
 
--- | Starts to vibrate the joypad. Joypads usually come with two rumble motors, a strong and a weak one. weak_magnitude is the strength of the weak motor (between 0 and 1) and strong_magnitude is the strength of the strong motor (between 0 and 1). duration is the duration of the effect in seconds (a duration of 0 will try to play the vibration indefinitely).
---   				Note that not every hardware is compatible with long effect durations, it is recommended to restart an effect if in need to play it for more than a few seconds.
+-- | Starts to vibrate the joypad. Joypads usually come with two rumble motors, a strong and a weak one. [code]weak_magnitude[/code] is the strength of the weak motor (between 0 and 1) and [code]strong_magnitude[/code] is the strength of the strong motor (between 0 and 1). [code]duration[/code] is the duration of the effect in seconds (a duration of 0 will try to play the vibration indefinitely).
+--   				[b]Note:[/b] Not every hardware is compatible with long effect durations; it is recommended to restart an effect if it has to be played for more than a few seconds.
 bindInput_start_joy_vibration :: MethodBind
 bindInput_start_joy_vibration
   = unsafePerformIO $
@@ -998,8 +1021,8 @@ bindInput_start_joy_vibration
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Starts to vibrate the joypad. Joypads usually come with two rumble motors, a strong and a weak one. weak_magnitude is the strength of the weak motor (between 0 and 1) and strong_magnitude is the strength of the strong motor (between 0 and 1). duration is the duration of the effect in seconds (a duration of 0 will try to play the vibration indefinitely).
---   				Note that not every hardware is compatible with long effect durations, it is recommended to restart an effect if in need to play it for more than a few seconds.
+-- | Starts to vibrate the joypad. Joypads usually come with two rumble motors, a strong and a weak one. [code]weak_magnitude[/code] is the strength of the weak motor (between 0 and 1) and [code]strong_magnitude[/code] is the strength of the strong motor (between 0 and 1). [code]duration[/code] is the duration of the effect in seconds (a duration of 0 will try to play the vibration indefinitely).
+--   				[b]Note:[/b] Not every hardware is compatible with long effect durations; it is recommended to restart an effect if it has to be played for more than a few seconds.
 start_joy_vibration ::
                       (Input :< cls, Object :< cls) =>
                       cls -> Int -> Float -> Float -> Float -> IO ()

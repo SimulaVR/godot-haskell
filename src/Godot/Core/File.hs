@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.File
        (Godot.Core.File._COMPRESSION_DEFLATE, Godot.Core.File._READ,
         Godot.Core.File._WRITE, Godot.Core.File._WRITE_READ,
@@ -63,8 +64,8 @@ _COMPRESSION_ZSTD = 2
 
 {-# NOINLINE bindFile_get_endian_swap #-}
 
--- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written in big endian machines.
---   			Note that this is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
+-- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written on big-endian machines.
+--   			[b]Note:[/b] This is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
 bindFile_get_endian_swap :: MethodBind
 bindFile_get_endian_swap
   = unsafePerformIO $
@@ -74,8 +75,8 @@ bindFile_get_endian_swap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written in big endian machines.
---   			Note that this is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
+-- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written on big-endian machines.
+--   			[b]Note:[/b] This is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
 get_endian_swap :: (File :< cls, Object :< cls) => cls -> IO Bool
 get_endian_swap cls
   = withVariantArray []
@@ -86,8 +87,8 @@ get_endian_swap cls
 
 {-# NOINLINE bindFile_set_endian_swap #-}
 
--- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written in big endian machines.
---   			Note that this is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
+-- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written on big-endian machines.
+--   			[b]Note:[/b] This is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
 bindFile_set_endian_swap :: MethodBind
 bindFile_set_endian_swap
   = unsafePerformIO $
@@ -97,8 +98,8 @@ bindFile_set_endian_swap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written in big endian machines.
---   			Note that this is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
+-- | If [code]true[/code], the file's endianness is swapped. Use this if you're dealing with files written on big-endian machines.
+--   			[b]Note:[/b] This is about the file format, not CPU type. This is always reset to [code]false[/code] whenever you open the file.
 set_endian_swap ::
                   (File :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_endian_swap cls arg1
@@ -130,7 +131,8 @@ close cls
 
 {-# NOINLINE bindFile_eof_reached #-}
 
--- | Returns [code]true[/code] if the file cursor has read past the end of the file. Note that this function will still return [code]false[/code] while at the end of the file and only activates when reading past it. This can be confusing but it conforms to how low level file access works in all operating systems. There is always [method get_len] and [method get_position] to implement a custom logic.
+-- | Returns [code]true[/code] if the file cursor has read past the end of the file.
+--   				[b]Note:[/b] This function will still return [code]false[/code] while at the end of the file and only activates when reading past it. This can be confusing but it conforms to how low-level file access works in all operating systems. There is always [method get_len] and [method get_position] to implement a custom logic.
 bindFile_eof_reached :: MethodBind
 bindFile_eof_reached
   = unsafePerformIO $
@@ -140,7 +142,8 @@ bindFile_eof_reached
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the file cursor has read past the end of the file. Note that this function will still return [code]false[/code] while at the end of the file and only activates when reading past it. This can be confusing but it conforms to how low level file access works in all operating systems. There is always [method get_len] and [method get_position] to implement a custom logic.
+-- | Returns [code]true[/code] if the file cursor has read past the end of the file.
+--   				[b]Note:[/b] This function will still return [code]false[/code] while at the end of the file and only activates when reading past it. This can be confusing but it conforms to how low-level file access works in all operating systems. There is always [method get_len] and [method get_position] to implement a custom logic.
 eof_reached :: (File :< cls, Object :< cls) => cls -> IO Bool
 eof_reached cls
   = withVariantArray []
@@ -151,7 +154,7 @@ eof_reached cls
 {-# NOINLINE bindFile_file_exists #-}
 
 -- | Returns [code]true[/code] if the file exists in the given path.
---   				Note that many resources types are imported (e.g. textures or sound files), and that their source asset will not be included in the exported game, as only the imported version is used (in the [code]res://.import[/code] folder). To check for the existence of such resources while taking into account the remapping to their imported location, use [method ResourceLoader.exists]. Typically, using [code]File.file_exists[/code] on an imported resource would work while you are developing in the editor (the source asset is present in [code]res://[/code], but fail when exported).
+--   				[b]Note:[/b] Many resources types are imported (e.g. textures or sound files), and that their source asset will not be included in the exported game, as only the imported version is used (in the [code]res://.import[/code] folder). To check for the existence of such resources while taking into account the remapping to their imported location, use [method ResourceLoader.exists]. Typically, using [code]File.file_exists[/code] on an imported resource would work while you are developing in the editor (the source asset is present in [code]res://[/code], but fail when exported).
 bindFile_file_exists :: MethodBind
 bindFile_file_exists
   = unsafePerformIO $
@@ -162,7 +165,7 @@ bindFile_file_exists
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns [code]true[/code] if the file exists in the given path.
---   				Note that many resources types are imported (e.g. textures or sound files), and that their source asset will not be included in the exported game, as only the imported version is used (in the [code]res://.import[/code] folder). To check for the existence of such resources while taking into account the remapping to their imported location, use [method ResourceLoader.exists]. Typically, using [code]File.file_exists[/code] on an imported resource would work while you are developing in the editor (the source asset is present in [code]res://[/code], but fail when exported).
+--   				[b]Note:[/b] Many resources types are imported (e.g. textures or sound files), and that their source asset will not be included in the exported game, as only the imported version is used (in the [code]res://.import[/code] folder). To check for the existence of such resources while taking into account the remapping to their imported location, use [method ResourceLoader.exists]. Typically, using [code]File.file_exists[/code] on an imported resource would work while you are developing in the editor (the source asset is present in [code]res://[/code], but fail when exported).
 file_exists ::
               (File :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 file_exists cls arg1
@@ -173,7 +176,7 @@ file_exists cls arg1
 
 {-# NOINLINE bindFile_get_16 #-}
 
--- | Returns the next 16 bits from the file as an integer.
+-- | Returns the next 16 bits from the file as an integer. See [method store_16] for details on what values can be stored and retrieved this way.
 bindFile_get_16 :: MethodBind
 bindFile_get_16
   = unsafePerformIO $
@@ -183,7 +186,7 @@ bindFile_get_16
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 16 bits from the file as an integer.
+-- | Returns the next 16 bits from the file as an integer. See [method store_16] for details on what values can be stored and retrieved this way.
 get_16 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_16 cls
   = withVariantArray []
@@ -193,7 +196,7 @@ get_16 cls
 
 {-# NOINLINE bindFile_get_32 #-}
 
--- | Returns the next 32 bits from the file as an integer.
+-- | Returns the next 32 bits from the file as an integer. See [method store_32] for details on what values can be stored and retrieved this way.
 bindFile_get_32 :: MethodBind
 bindFile_get_32
   = unsafePerformIO $
@@ -203,7 +206,7 @@ bindFile_get_32
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 32 bits from the file as an integer.
+-- | Returns the next 32 bits from the file as an integer. See [method store_32] for details on what values can be stored and retrieved this way.
 get_32 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_32 cls
   = withVariantArray []
@@ -213,7 +216,7 @@ get_32 cls
 
 {-# NOINLINE bindFile_get_64 #-}
 
--- | Returns the next 64 bits from the file as an integer.
+-- | Returns the next 64 bits from the file as an integer. See [method store_64] for details on what values can be stored and retrieved this way.
 bindFile_get_64 :: MethodBind
 bindFile_get_64
   = unsafePerformIO $
@@ -223,7 +226,7 @@ bindFile_get_64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 64 bits from the file as an integer.
+-- | Returns the next 64 bits from the file as an integer. See [method store_64] for details on what values can be stored and retrieved this way.
 get_64 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_64 cls
   = withVariantArray []
@@ -233,7 +236,7 @@ get_64 cls
 
 {-# NOINLINE bindFile_get_8 #-}
 
--- | Returns the next 8 bits from the file as an integer.
+-- | Returns the next 8 bits from the file as an integer. See [method store_8] for details on what values can be stored and retrieved this way.
 bindFile_get_8 :: MethodBind
 bindFile_get_8
   = unsafePerformIO $
@@ -243,7 +246,7 @@ bindFile_get_8
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 8 bits from the file as an integer.
+-- | Returns the next 8 bits from the file as an integer. See [method store_8] for details on what values can be stored and retrieved this way.
 get_8 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_8 cls
   = withVariantArray []
@@ -297,7 +300,7 @@ get_buffer cls arg1
 
 {-# NOINLINE bindFile_get_csv_line #-}
 
--- | Returns the next value of the file in CSV (Comma Separated Values) format. You can pass a different delimiter to use other than the default "," (comma), it should be one character long.
+-- | Returns the next value of the file in CSV (Comma-Separated Values) format. You can pass a different delimiter [code]delim[/code] to use other than the default [code]","[/code] (comma). This delimiter must be one-character long.
 --   				Text is interpreted as being UTF-8 encoded.
 bindFile_get_csv_line :: MethodBind
 bindFile_get_csv_line
@@ -308,7 +311,7 @@ bindFile_get_csv_line
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next value of the file in CSV (Comma Separated Values) format. You can pass a different delimiter to use other than the default "," (comma), it should be one character long.
+-- | Returns the next value of the file in CSV (Comma-Separated Values) format. You can pass a different delimiter [code]delim[/code] to use other than the default [code]","[/code] (comma). This delimiter must be one-character long.
 --   				Text is interpreted as being UTF-8 encoded.
 get_csv_line ::
                (File :< cls, Object :< cls) =>
@@ -322,7 +325,7 @@ get_csv_line cls arg1
 
 {-# NOINLINE bindFile_get_double #-}
 
--- | Returns the next 64 bits from the file as a floating point number.
+-- | Returns the next 64 bits from the file as a floating-point number.
 bindFile_get_double :: MethodBind
 bindFile_get_double
   = unsafePerformIO $
@@ -332,7 +335,7 @@ bindFile_get_double
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 64 bits from the file as a floating point number.
+-- | Returns the next 64 bits from the file as a floating-point number.
 get_double :: (File :< cls, Object :< cls) => cls -> IO Float
 get_double cls
   = withVariantArray []
@@ -342,7 +345,7 @@ get_double cls
 
 {-# NOINLINE bindFile_get_error #-}
 
--- | Returns the last error that happened when trying to perform operations. Compare with the [code]ERR_FILE_*[/code] constants from [enum @GlobalScope.Error].
+-- | Returns the last error that happened when trying to perform operations. Compare with the [code]ERR_FILE_*[/code] constants from [enum Error].
 bindFile_get_error :: MethodBind
 bindFile_get_error
   = unsafePerformIO $
@@ -352,7 +355,7 @@ bindFile_get_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the last error that happened when trying to perform operations. Compare with the [code]ERR_FILE_*[/code] constants from [enum @GlobalScope.Error].
+-- | Returns the last error that happened when trying to perform operations. Compare with the [code]ERR_FILE_*[/code] constants from [enum Error].
 get_error :: (File :< cls, Object :< cls) => cls -> IO Int
 get_error cls
   = withVariantArray []
@@ -362,7 +365,7 @@ get_error cls
 
 {-# NOINLINE bindFile_get_float #-}
 
--- | Returns the next 32 bits from the file as a floating point number.
+-- | Returns the next 32 bits from the file as a floating-point number.
 bindFile_get_float :: MethodBind
 bindFile_get_float
   = unsafePerformIO $
@@ -372,7 +375,7 @@ bindFile_get_float
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 32 bits from the file as a floating point number.
+-- | Returns the next 32 bits from the file as a floating-point number.
 get_float :: (File :< cls, Object :< cls) => cls -> IO Float
 get_float cls
   = withVariantArray []
@@ -558,7 +561,7 @@ get_position cls
 
 {-# NOINLINE bindFile_get_real #-}
 
--- | Returns the next bits from the file as a floating point number.
+-- | Returns the next bits from the file as a floating-point number.
 bindFile_get_real :: MethodBind
 bindFile_get_real
   = unsafePerformIO $
@@ -568,7 +571,7 @@ bindFile_get_real
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next bits from the file as a floating point number.
+-- | Returns the next bits from the file as a floating-point number.
 get_real :: (File :< cls, Object :< cls) => cls -> IO Float
 get_real cls
   = withVariantArray []
@@ -600,8 +603,8 @@ get_sha256 cls arg1
 
 {-# NOINLINE bindFile_get_var #-}
 
--- | Returns the next [Variant] value from the file. When [code]allow_objects[/code] is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | Returns the next [Variant] value from the file. If [code]allow_objects[/code] is [code]true[/code], decoding objects is allowed.
+--   				[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 bindFile_get_var :: MethodBind
 bindFile_get_var
   = unsafePerformIO $
@@ -611,8 +614,8 @@ bindFile_get_var
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next [Variant] value from the file. When [code]allow_objects[/code] is [code]true[/code] decoding objects is allowed.
---   				[b]WARNING:[/b] Deserialized object can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats (remote code execution).
+-- | Returns the next [Variant] value from the file. If [code]allow_objects[/code] is [code]true[/code], decoding objects is allowed.
+--   				[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 get_var ::
           (File :< cls, Object :< cls) => cls -> Bool -> IO GodotVariant
 get_var cls arg1
@@ -664,7 +667,7 @@ open cls arg1 arg2
 
 {-# NOINLINE bindFile_open_compressed #-}
 
--- | Opens a compressed file for reading or writing. Use [enum CompressionMode] constants to set [code]compression_mode[/code].
+-- | Opens a compressed file for reading or writing.
 bindFile_open_compressed :: MethodBind
 bindFile_open_compressed
   = unsafePerformIO $
@@ -674,7 +677,7 @@ bindFile_open_compressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Opens a compressed file for reading or writing. Use [enum CompressionMode] constants to set [code]compression_mode[/code].
+-- | Opens a compressed file for reading or writing.
 open_compressed ::
                   (File :< cls, Object :< cls) =>
                   cls -> GodotString -> Int -> Int -> IO Int
@@ -688,6 +691,7 @@ open_compressed cls arg1 arg2 arg3
 {-# NOINLINE bindFile_open_encrypted #-}
 
 -- | Opens an encrypted file in write or read mode. You need to pass a binary key to encrypt/decrypt it.
+--   				[b]Note:[/b] The provided key must be 32 bytes long.
 bindFile_open_encrypted :: MethodBind
 bindFile_open_encrypted
   = unsafePerformIO $
@@ -698,6 +702,7 @@ bindFile_open_encrypted
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Opens an encrypted file in write or read mode. You need to pass a binary key to encrypt/decrypt it.
+--   				[b]Note:[/b] The provided key must be 32 bytes long.
 open_encrypted ::
                  (File :< cls, Object :< cls) =>
                  cls -> GodotString -> Int -> PoolByteArray -> IO Int
@@ -735,7 +740,7 @@ open_encrypted_with_pass cls arg1 arg2 arg3
 
 {-# NOINLINE bindFile_seek #-}
 
--- | Change the file reading/writing cursor to the specified position (in bytes from the beginning of the file).
+-- | Changes the file reading/writing cursor to the specified position (in bytes from the beginning of the file).
 bindFile_seek :: MethodBind
 bindFile_seek
   = unsafePerformIO $
@@ -745,7 +750,7 @@ bindFile_seek
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Change the file reading/writing cursor to the specified position (in bytes from the beginning of the file).
+-- | Changes the file reading/writing cursor to the specified position (in bytes from the beginning of the file).
 seek :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 seek cls arg1
   = withVariantArray [toVariant arg1]
@@ -755,7 +760,8 @@ seek cls arg1
 
 {-# NOINLINE bindFile_seek_end #-}
 
--- | Changes the file reading/writing cursor to the specified position (in bytes from the end of the file). Note that this is an offset, so you should use negative numbers or the cursor will be at the end of the file.
+-- | Changes the file reading/writing cursor to the specified position (in bytes from the end of the file).
+--   				[b]Note:[/b] This is an offset, so you should use negative numbers or the cursor will be at the end of the file.
 bindFile_seek_end :: MethodBind
 bindFile_seek_end
   = unsafePerformIO $
@@ -765,7 +771,8 @@ bindFile_seek_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the file reading/writing cursor to the specified position (in bytes from the end of the file). Note that this is an offset, so you should use negative numbers or the cursor will be at the end of the file.
+-- | Changes the file reading/writing cursor to the specified position (in bytes from the end of the file).
+--   				[b]Note:[/b] This is an offset, so you should use negative numbers or the cursor will be at the end of the file.
 seek_end :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 seek_end cls arg1
   = withVariantArray [toVariant arg1]
@@ -776,6 +783,26 @@ seek_end cls arg1
 {-# NOINLINE bindFile_store_16 #-}
 
 -- | Stores an integer as 16 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] should lie in the interval [code][0, 2^16 - 1][/code]. Any other value will overflow and wrap around.
+--   				To store a signed integer, use [method store_64] or store a signed integer from the interval [code][-2^15, 2^15 - 1][/code] (i.e. keeping one bit for the signedness) and compute its sign manually when reading. For example:
+--   				[codeblock]
+--   				const MAX_15B = 1 << 15
+--   				const MAX_16B = 1 << 16
+--   
+--   				func unsigned16_to_signed(unsigned):
+--   				    return (unsigned + MAX_15B) % MAX_16B - MAX_15B
+--   
+--   				func _ready():
+--   				    var f = File.new()
+--   				    f.open("user://file.dat", File.WRITE_READ)
+--   				    f.store_16(-42) # This wraps around and stores 65494 (2^16 - 42).
+--   				    f.store_16(121) # In bounds, will store 121.
+--   				    f.seek(0) # Go back to start to read the stored value.
+--   				    var read1 = f.get_16() # 65494
+--   				    var read2 = f.get_16() # 121
+--   				    var converted1 = unsigned16_to_signed(read1) # -42
+--   				    var converted2 = unsigned16_to_signed(read2) # 121
+--   				[/codeblock]
 bindFile_store_16 :: MethodBind
 bindFile_store_16
   = unsafePerformIO $
@@ -786,6 +813,26 @@ bindFile_store_16
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 16 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] should lie in the interval [code][0, 2^16 - 1][/code]. Any other value will overflow and wrap around.
+--   				To store a signed integer, use [method store_64] or store a signed integer from the interval [code][-2^15, 2^15 - 1][/code] (i.e. keeping one bit for the signedness) and compute its sign manually when reading. For example:
+--   				[codeblock]
+--   				const MAX_15B = 1 << 15
+--   				const MAX_16B = 1 << 16
+--   
+--   				func unsigned16_to_signed(unsigned):
+--   				    return (unsigned + MAX_15B) % MAX_16B - MAX_15B
+--   
+--   				func _ready():
+--   				    var f = File.new()
+--   				    f.open("user://file.dat", File.WRITE_READ)
+--   				    f.store_16(-42) # This wraps around and stores 65494 (2^16 - 42).
+--   				    f.store_16(121) # In bounds, will store 121.
+--   				    f.seek(0) # Go back to start to read the stored value.
+--   				    var read1 = f.get_16() # 65494
+--   				    var read2 = f.get_16() # 121
+--   				    var converted1 = unsigned16_to_signed(read1) # -42
+--   				    var converted2 = unsigned16_to_signed(read2) # 121
+--   				[/codeblock]
 store_16 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_16 cls arg1
   = withVariantArray [toVariant arg1]
@@ -796,6 +843,8 @@ store_16 cls arg1
 {-# NOINLINE bindFile_store_32 #-}
 
 -- | Stores an integer as 32 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] should lie in the interval [code][0, 2^32 - 1][/code]. Any other value will overflow and wrap around.
+--   				To store a signed integer, use [method store_64], or convert it manually (see [method store_16] for an example).
 bindFile_store_32 :: MethodBind
 bindFile_store_32
   = unsafePerformIO $
@@ -806,6 +855,8 @@ bindFile_store_32
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 32 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] should lie in the interval [code][0, 2^32 - 1][/code]. Any other value will overflow and wrap around.
+--   				To store a signed integer, use [method store_64], or convert it manually (see [method store_16] for an example).
 store_32 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_32 cls arg1
   = withVariantArray [toVariant arg1]
@@ -816,6 +867,7 @@ store_32 cls arg1
 {-# NOINLINE bindFile_store_64 #-}
 
 -- | Stores an integer as 64 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] must lie in the interval [code][-2^63, 2^63 - 1][/code] (i.e. be a valid [int] value).
 bindFile_store_64 :: MethodBind
 bindFile_store_64
   = unsafePerformIO $
@@ -826,6 +878,7 @@ bindFile_store_64
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 64 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] must lie in the interval [code][-2^63, 2^63 - 1][/code] (i.e. be a valid [int] value).
 store_64 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_64 cls arg1
   = withVariantArray [toVariant arg1]
@@ -836,6 +889,8 @@ store_64 cls arg1
 {-# NOINLINE bindFile_store_8 #-}
 
 -- | Stores an integer as 8 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] should lie in the interval [code][0, 255][/code]. Any other value will overflow and wrap around.
+--   				To store a signed integer, use [method store_64], or convert it manually (see [method store_16] for an example).
 bindFile_store_8 :: MethodBind
 bindFile_store_8
   = unsafePerformIO $
@@ -846,6 +901,8 @@ bindFile_store_8
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 8 bits in the file.
+--   				[b]Note:[/b] The [code]value[/code] should lie in the interval [code][0, 255][/code]. Any other value will overflow and wrap around.
+--   				To store a signed integer, use [method store_64], or convert it manually (see [method store_16] for an example).
 store_8 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_8 cls arg1
   = withVariantArray [toVariant arg1]
@@ -877,7 +934,7 @@ store_buffer cls arg1
 
 {-# NOINLINE bindFile_store_csv_line #-}
 
--- | Store the given [PoolStringArray] in the file as a line formatted in the CSV (Comma Separated Values) format. You can pass a different delimiter to use other than the default "," (comma), it should be one character long.
+-- | Store the given [PoolStringArray] in the file as a line formatted in the CSV (Comma-Separated Values) format. You can pass a different delimiter [code]delim[/code] to use other than the default [code]","[/code] (comma). This delimiter must be one-character long.
 --   				Text will be encoded as UTF-8.
 bindFile_store_csv_line :: MethodBind
 bindFile_store_csv_line
@@ -888,7 +945,7 @@ bindFile_store_csv_line
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Store the given [PoolStringArray] in the file as a line formatted in the CSV (Comma Separated Values) format. You can pass a different delimiter to use other than the default "," (comma), it should be one character long.
+-- | Store the given [PoolStringArray] in the file as a line formatted in the CSV (Comma-Separated Values) format. You can pass a different delimiter [code]delim[/code] to use other than the default [code]","[/code] (comma). This delimiter must be one-character long.
 --   				Text will be encoded as UTF-8.
 store_csv_line ::
                  (File :< cls, Object :< cls) =>
@@ -902,7 +959,7 @@ store_csv_line cls arg1 arg2
 
 {-# NOINLINE bindFile_store_double #-}
 
--- | Stores a floating point number as 64 bits in the file.
+-- | Stores a floating-point number as 64 bits in the file.
 bindFile_store_double :: MethodBind
 bindFile_store_double
   = unsafePerformIO $
@@ -912,7 +969,7 @@ bindFile_store_double
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stores a floating point number as 64 bits in the file.
+-- | Stores a floating-point number as 64 bits in the file.
 store_double ::
                (File :< cls, Object :< cls) => cls -> Float -> IO ()
 store_double cls arg1
@@ -924,7 +981,7 @@ store_double cls arg1
 
 {-# NOINLINE bindFile_store_float #-}
 
--- | Stores a floating point number as 32 bits in the file.
+-- | Stores a floating-point number as 32 bits in the file.
 bindFile_store_float :: MethodBind
 bindFile_store_float
   = unsafePerformIO $
@@ -934,7 +991,7 @@ bindFile_store_float
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stores a floating point number as 32 bits in the file.
+-- | Stores a floating-point number as 32 bits in the file.
 store_float ::
               (File :< cls, Object :< cls) => cls -> Float -> IO ()
 store_float cls arg1
@@ -993,7 +1050,7 @@ store_pascal_string cls arg1
 
 {-# NOINLINE bindFile_store_real #-}
 
--- | Stores a floating point number in the file.
+-- | Stores a floating-point number in the file.
 bindFile_store_real :: MethodBind
 bindFile_store_real
   = unsafePerformIO $
@@ -1003,7 +1060,7 @@ bindFile_store_real
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stores a floating point number in the file.
+-- | Stores a floating-point number in the file.
 store_real :: (File :< cls, Object :< cls) => cls -> Float -> IO ()
 store_real cls arg1
   = withVariantArray [toVariant arg1]
@@ -1037,7 +1094,7 @@ store_string cls arg1
 
 {-# NOINLINE bindFile_store_var #-}
 
--- | Stores any Variant value in the file. When [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
+-- | Stores any Variant value in the file. If [code]full_objects[/code] is [code]true[/code], encoding objects is allowed (and can potentially include code).
 bindFile_store_var :: MethodBind
 bindFile_store_var
   = unsafePerformIO $
@@ -1047,7 +1104,7 @@ bindFile_store_var
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stores any Variant value in the file. When [code]full_objects[/code] is [code]true[/code] encoding objects is allowed (and can potentially include code).
+-- | Stores any Variant value in the file. If [code]full_objects[/code] is [code]true[/code], encoding objects is allowed (and can potentially include code).
 store_var ::
             (File :< cls, Object :< cls) =>
             cls -> GodotVariant -> Bool -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.KinematicBody2D
        (Godot.Core.KinematicBody2D._direct_state_changed,
         Godot.Core.KinematicBody2D.get_floor_normal,
@@ -49,6 +50,7 @@ _direct_state_changed cls arg1
 
 {-# NOINLINE bindKinematicBody2D_get_floor_normal #-}
 
+-- | Returns the surface normal of the floor at the last collision point. Only valid after calling [method move_and_slide] or [method move_and_slide_with_snap] and when [method is_on_floor] returns [code]true[/code].
 bindKinematicBody2D_get_floor_normal :: MethodBind
 bindKinematicBody2D_get_floor_normal
   = unsafePerformIO $
@@ -58,6 +60,7 @@ bindKinematicBody2D_get_floor_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the surface normal of the floor at the last collision point. Only valid after calling [method move_and_slide] or [method move_and_slide_with_snap] and when [method is_on_floor] returns [code]true[/code].
 get_floor_normal ::
                    (KinematicBody2D :< cls, Object :< cls) => cls -> IO Vector2
 get_floor_normal cls
@@ -71,7 +74,7 @@ get_floor_normal cls
 
 {-# NOINLINE bindKinematicBody2D_get_floor_velocity #-}
 
--- | Returns the velocity of the floor. Only updates when calling [method move_and_slide].
+-- | Returns the linear velocity of the floor at the last collision point. Only valid after calling [method move_and_slide] or [method move_and_slide_with_snap] and when [method is_on_floor] returns [code]true[/code].
 bindKinematicBody2D_get_floor_velocity :: MethodBind
 bindKinematicBody2D_get_floor_velocity
   = unsafePerformIO $
@@ -81,7 +84,7 @@ bindKinematicBody2D_get_floor_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the velocity of the floor. Only updates when calling [method move_and_slide].
+-- | Returns the linear velocity of the floor at the last collision point. Only valid after calling [method move_and_slide] or [method move_and_slide_with_snap] and when [method is_on_floor] returns [code]true[/code].
 get_floor_velocity ::
                      (KinematicBody2D :< cls, Object :< cls) => cls -> IO Vector2
 get_floor_velocity cls
@@ -120,7 +123,7 @@ get_safe_margin cls
 {-# NOINLINE bindKinematicBody2D_get_slide_collision #-}
 
 -- | Returns a [KinematicCollision2D], which contains information about a collision that occurred during the last [method move_and_slide] call. Since the body can collide several times in a single call to [method move_and_slide], you must specify the index of the collision in the range 0 to ([method get_slide_count] - 1).
---   				Example usage:
+--   				[b]Example usage:[/b]
 --   				[codeblock]
 --   				for i in get_slide_count():
 --   				    var collision = get_slide_collision(i)
@@ -136,7 +139,7 @@ bindKinematicBody2D_get_slide_collision
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a [KinematicCollision2D], which contains information about a collision that occurred during the last [method move_and_slide] call. Since the body can collide several times in a single call to [method move_and_slide], you must specify the index of the collision in the range 0 to ([method get_slide_count] - 1).
---   				Example usage:
+--   				[b]Example usage:[/b]
 --   				[codeblock]
 --   				for i in get_slide_count():
 --   				    var collision = get_slide_collision(i)
@@ -303,13 +306,14 @@ move_and_collide cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindKinematicBody2D_move_and_slide #-}
 
--- | Moves the body along a vector. If the body collides with another, it will slide along the other body rather than stop immediately. If the other body is a [code]KinematicBody2D[/code] or [RigidBody2D], it will also be affected by the motion of the other body. You can use this to make moving or rotating platforms, or to make nodes push other nodes.
+-- | Moves the body along a vector. If the body collides with another, it will slide along the other body rather than stop immediately. If the other body is a [KinematicBody2D] or [RigidBody2D], it will also be affected by the motion of the other body. You can use this to make moving or rotating platforms, or to make nodes push other nodes.
+--   				This method should be used in [method Node._physics_process] (or in a method called by [method Node._physics_process]), as it uses the physics step's [code]delta[/code] value automatically in calculations. Otherwise, the simulation will run at an incorrect speed.
 --   				[code]linear_velocity[/code] is the velocity vector in pixels per second. Unlike in [method move_and_collide], you should [i]not[/i] multiply it by [code]delta[/code] — the physics engine handles applying the velocity.
---   				[code]floor_normal[/code] is the up direction, used to determine what is a wall and what is a floor or a ceiling. If set to the default value of [code]Vector2(0, 0)[/code], everything is considered a wall. This is useful for topdown games.
+--   				[code]up_direction[/code] is the up direction, used to determine what is a wall and what is a floor or a ceiling. If set to the default value of [code]Vector2(0, 0)[/code], everything is considered a wall. This is useful for topdown games.
 --   				If [code]stop_on_slope[/code] is [code]true[/code], body will not slide on slopes when you include gravity in [code]linear_velocity[/code] and the body is standing still.
 --   				If the body collides, it will change direction a maximum of [code]max_slides[/code] times before it stops.
 --   				[code]floor_max_angle[/code] is the maximum angle (in radians) where a slope is still considered a floor (or a ceiling), rather than a wall. The default value equals 45 degrees.
---   				If [code]infinite_inertia[/code] is [code]true[/code], body will be able to push [RigidBody2D] nodes, but it won't also detect any collisions with them. If [code]false[/code] it will interact with [RigidBody2D] nodes like with [StaticBody2D].
+--   				If [code]infinite_inertia[/code] is [code]true[/code], body will be able to push [RigidBody2D] nodes, but it won't also detect any collisions with them. If [code]false[/code], it will interact with [RigidBody2D] nodes like with [StaticBody2D].
 --   				Returns the [code]linear_velocity[/code] vector, rotated and/or scaled if a slide collision occurred. To get detailed information about collisions that occurred, use [method get_slide_collision].
 bindKinematicBody2D_move_and_slide :: MethodBind
 bindKinematicBody2D_move_and_slide
@@ -320,13 +324,14 @@ bindKinematicBody2D_move_and_slide
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Moves the body along a vector. If the body collides with another, it will slide along the other body rather than stop immediately. If the other body is a [code]KinematicBody2D[/code] or [RigidBody2D], it will also be affected by the motion of the other body. You can use this to make moving or rotating platforms, or to make nodes push other nodes.
+-- | Moves the body along a vector. If the body collides with another, it will slide along the other body rather than stop immediately. If the other body is a [KinematicBody2D] or [RigidBody2D], it will also be affected by the motion of the other body. You can use this to make moving or rotating platforms, or to make nodes push other nodes.
+--   				This method should be used in [method Node._physics_process] (or in a method called by [method Node._physics_process]), as it uses the physics step's [code]delta[/code] value automatically in calculations. Otherwise, the simulation will run at an incorrect speed.
 --   				[code]linear_velocity[/code] is the velocity vector in pixels per second. Unlike in [method move_and_collide], you should [i]not[/i] multiply it by [code]delta[/code] — the physics engine handles applying the velocity.
---   				[code]floor_normal[/code] is the up direction, used to determine what is a wall and what is a floor or a ceiling. If set to the default value of [code]Vector2(0, 0)[/code], everything is considered a wall. This is useful for topdown games.
+--   				[code]up_direction[/code] is the up direction, used to determine what is a wall and what is a floor or a ceiling. If set to the default value of [code]Vector2(0, 0)[/code], everything is considered a wall. This is useful for topdown games.
 --   				If [code]stop_on_slope[/code] is [code]true[/code], body will not slide on slopes when you include gravity in [code]linear_velocity[/code] and the body is standing still.
 --   				If the body collides, it will change direction a maximum of [code]max_slides[/code] times before it stops.
 --   				[code]floor_max_angle[/code] is the maximum angle (in radians) where a slope is still considered a floor (or a ceiling), rather than a wall. The default value equals 45 degrees.
---   				If [code]infinite_inertia[/code] is [code]true[/code], body will be able to push [RigidBody2D] nodes, but it won't also detect any collisions with them. If [code]false[/code] it will interact with [RigidBody2D] nodes like with [StaticBody2D].
+--   				If [code]infinite_inertia[/code] is [code]true[/code], body will be able to push [RigidBody2D] nodes, but it won't also detect any collisions with them. If [code]false[/code], it will interact with [RigidBody2D] nodes like with [StaticBody2D].
 --   				Returns the [code]linear_velocity[/code] vector, rotated and/or scaled if a slide collision occurred. To get detailed information about collisions that occurred, use [method get_slide_collision].
 move_and_slide ::
                  (KinematicBody2D :< cls, Object :< cls) =>

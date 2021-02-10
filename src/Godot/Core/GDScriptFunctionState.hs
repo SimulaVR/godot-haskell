@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GDScriptFunctionState
        (Godot.Core.GDScriptFunctionState.sig_completed,
         Godot.Core.GDScriptFunctionState._signal_callback,
@@ -16,6 +17,9 @@ import Godot.Api.Types
 sig_completed ::
               Godot.Internal.Dispatch.Signal GDScriptFunctionState
 sig_completed = Godot.Internal.Dispatch.Signal "completed"
+
+instance NodeSignal GDScriptFunctionState "completed"
+           '[GodotVariant]
 
 {-# NOINLINE bindGDScriptFunctionState__signal_callback #-}
 

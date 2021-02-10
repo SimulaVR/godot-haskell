@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.OpenSimplexNoise
        (Godot.Core.OpenSimplexNoise.get_image,
         Godot.Core.OpenSimplexNoise.get_lacunarity,

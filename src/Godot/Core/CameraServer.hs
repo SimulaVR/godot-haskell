@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.CameraServer
        (Godot.Core.CameraServer._FEED_YCBCR_IMAGE,
         Godot.Core.CameraServer._FEED_Y_IMAGE,
@@ -31,18 +32,25 @@ _FEED_CBCR_IMAGE = 1
 _FEED_RGBA_IMAGE :: Int
 _FEED_RGBA_IMAGE = 0
 
+-- | Emitted when a [CameraFeed] is added (e.g. webcam is plugged in).
 sig_camera_feed_added ::
                       Godot.Internal.Dispatch.Signal CameraServer
 sig_camera_feed_added
   = Godot.Internal.Dispatch.Signal "camera_feed_added"
 
+instance NodeSignal CameraServer "camera_feed_added" '[Int]
+
+-- | Emitted when a [CameraFeed] is removed (e.g. webcam is unplugged).
 sig_camera_feed_removed ::
                         Godot.Internal.Dispatch.Signal CameraServer
 sig_camera_feed_removed
   = Godot.Internal.Dispatch.Signal "camera_feed_removed"
 
+instance NodeSignal CameraServer "camera_feed_removed" '[Int]
+
 {-# NOINLINE bindCameraServer_add_feed #-}
 
+-- | Adds a camera feed to the camera server.
 bindCameraServer_add_feed :: MethodBind
 bindCameraServer_add_feed
   = unsafePerformIO $
@@ -52,6 +60,7 @@ bindCameraServer_add_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a camera feed to the camera server.
 add_feed ::
            (CameraServer :< cls, Object :< cls) => cls -> CameraFeed -> IO ()
 add_feed cls arg1
@@ -64,6 +73,7 @@ add_feed cls arg1
 
 {-# NOINLINE bindCameraServer_feeds #-}
 
+-- | Returns an array of [CameraFeed]s.
 bindCameraServer_feeds :: MethodBind
 bindCameraServer_feeds
   = unsafePerformIO $
@@ -73,6 +83,7 @@ bindCameraServer_feeds
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns an array of [CameraFeed]s.
 feeds :: (CameraServer :< cls, Object :< cls) => cls -> IO Array
 feeds cls
   = withVariantArray []
@@ -83,6 +94,7 @@ feeds cls
 
 {-# NOINLINE bindCameraServer_get_feed #-}
 
+-- | Returns the [CameraFeed] with this id.
 bindCameraServer_get_feed :: MethodBind
 bindCameraServer_get_feed
   = unsafePerformIO $
@@ -92,6 +104,7 @@ bindCameraServer_get_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the [CameraFeed] with this id.
 get_feed ::
            (CameraServer :< cls, Object :< cls) => cls -> Int -> IO CameraFeed
 get_feed cls arg1
@@ -104,6 +117,7 @@ get_feed cls arg1
 
 {-# NOINLINE bindCameraServer_get_feed_count #-}
 
+-- | Returns the number of [CameraFeed]s registered.
 bindCameraServer_get_feed_count :: MethodBind
 bindCameraServer_get_feed_count
   = unsafePerformIO $
@@ -113,6 +127,7 @@ bindCameraServer_get_feed_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of [CameraFeed]s registered.
 get_feed_count ::
                  (CameraServer :< cls, Object :< cls) => cls -> IO Int
 get_feed_count cls
@@ -125,6 +140,7 @@ get_feed_count cls
 
 {-# NOINLINE bindCameraServer_remove_feed #-}
 
+-- | Removes a [CameraFeed].
 bindCameraServer_remove_feed :: MethodBind
 bindCameraServer_remove_feed
   = unsafePerformIO $
@@ -134,6 +150,7 @@ bindCameraServer_remove_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Removes a [CameraFeed].
 remove_feed ::
               (CameraServer :< cls, Object :< cls) => cls -> CameraFeed -> IO ()
 remove_feed cls arg1

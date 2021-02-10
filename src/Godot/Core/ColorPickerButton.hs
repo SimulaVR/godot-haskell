@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ColorPickerButton
        (Godot.Core.ColorPickerButton.sig_color_changed,
         Godot.Core.ColorPickerButton.sig_picker_created,
@@ -25,14 +26,22 @@ sig_color_changed ::
                   Godot.Internal.Dispatch.Signal ColorPickerButton
 sig_color_changed = Godot.Internal.Dispatch.Signal "color_changed"
 
+instance NodeSignal ColorPickerButton "color_changed" '[Color]
+
+-- | Emitted when the [ColorPicker] is created (the button is pressed for the first time).
 sig_picker_created ::
                    Godot.Internal.Dispatch.Signal ColorPickerButton
 sig_picker_created
   = Godot.Internal.Dispatch.Signal "picker_created"
 
+instance NodeSignal ColorPickerButton "picker_created" '[]
+
+-- | Emitted when the [ColorPicker] is closed.
 sig_popup_closed ::
                  Godot.Internal.Dispatch.Signal ColorPickerButton
 sig_popup_closed = Godot.Internal.Dispatch.Signal "popup_closed"
+
+instance NodeSignal ColorPickerButton "popup_closed" '[]
 
 {-# NOINLINE bindColorPickerButton__color_changed #-}
 
@@ -151,7 +160,7 @@ get_popup cls
 
 {-# NOINLINE bindColorPickerButton_is_editing_alpha #-}
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
+-- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
 bindColorPickerButton_is_editing_alpha :: MethodBind
 bindColorPickerButton_is_editing_alpha
   = unsafePerformIO $
@@ -161,7 +170,7 @@ bindColorPickerButton_is_editing_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
+-- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
 is_editing_alpha ::
                    (ColorPickerButton :< cls, Object :< cls) => cls -> IO Bool
 is_editing_alpha cls
@@ -175,7 +184,7 @@ is_editing_alpha cls
 
 {-# NOINLINE bindColorPickerButton_set_edit_alpha #-}
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
+-- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
 bindColorPickerButton_set_edit_alpha :: MethodBind
 bindColorPickerButton_set_edit_alpha
   = unsafePerformIO $
@@ -185,7 +194,7 @@ bindColorPickerButton_set_edit_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible. Default value: [code]true[/code].
+-- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
 set_edit_alpha ::
                  (ColorPickerButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_edit_alpha cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.WebSocketClient
        (Godot.Core.WebSocketClient.sig_connection_closed,
         Godot.Core.WebSocketClient.sig_connection_error,
@@ -27,23 +28,35 @@ sig_connection_closed ::
 sig_connection_closed
   = Godot.Internal.Dispatch.Signal "connection_closed"
 
+instance NodeSignal WebSocketClient "connection_closed" '[Bool]
+
 sig_connection_error ::
                      Godot.Internal.Dispatch.Signal WebSocketClient
 sig_connection_error
   = Godot.Internal.Dispatch.Signal "connection_error"
+
+instance NodeSignal WebSocketClient "connection_error" '[]
 
 sig_connection_established ::
                            Godot.Internal.Dispatch.Signal WebSocketClient
 sig_connection_established
   = Godot.Internal.Dispatch.Signal "connection_established"
 
+instance NodeSignal WebSocketClient "connection_established"
+           '[GodotString]
+
 sig_data_received :: Godot.Internal.Dispatch.Signal WebSocketClient
 sig_data_received = Godot.Internal.Dispatch.Signal "data_received"
+
+instance NodeSignal WebSocketClient "data_received" '[]
 
 sig_server_close_request ::
                          Godot.Internal.Dispatch.Signal WebSocketClient
 sig_server_close_request
   = Godot.Internal.Dispatch.Signal "server_close_request"
+
+instance NodeSignal WebSocketClient "server_close_request"
+           '[Int, GodotString]
 
 {-# NOINLINE bindWebSocketClient_connect_to_url #-}
 

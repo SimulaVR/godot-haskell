@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectFilter
        (Godot.Core.AudioEffectFilter._FILTER_24DB,
         Godot.Core.AudioEffectFilter._FILTER_12DB,
@@ -35,7 +36,7 @@ _FILTER_6DB = 0
 
 {-# NOINLINE bindAudioEffectFilter_get_cutoff #-}
 
--- | Threshold frequency for the filter.
+-- | Threshold frequency for the filter, in Hz.
 bindAudioEffectFilter_get_cutoff :: MethodBind
 bindAudioEffectFilter_get_cutoff
   = unsafePerformIO $
@@ -45,7 +46,7 @@ bindAudioEffectFilter_get_cutoff
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Threshold frequency for the filter.
+-- | Threshold frequency for the filter, in Hz.
 get_cutoff ::
              (AudioEffectFilter :< cls, Object :< cls) => cls -> IO Float
 get_cutoff cls
@@ -103,7 +104,7 @@ get_gain cls
 
 {-# NOINLINE bindAudioEffectFilter_get_resonance #-}
 
--- | Amount of boost in the overtones near the cutoff frequency.
+-- | Amount of boost in the frequency range near the cutoff frequency.
 bindAudioEffectFilter_get_resonance :: MethodBind
 bindAudioEffectFilter_get_resonance
   = unsafePerformIO $
@@ -113,7 +114,7 @@ bindAudioEffectFilter_get_resonance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of boost in the overtones near the cutoff frequency.
+-- | Amount of boost in the frequency range near the cutoff frequency.
 get_resonance ::
                 (AudioEffectFilter :< cls, Object :< cls) => cls -> IO Float
 get_resonance cls
@@ -127,7 +128,7 @@ get_resonance cls
 
 {-# NOINLINE bindAudioEffectFilter_set_cutoff #-}
 
--- | Threshold frequency for the filter.
+-- | Threshold frequency for the filter, in Hz.
 bindAudioEffectFilter_set_cutoff :: MethodBind
 bindAudioEffectFilter_set_cutoff
   = unsafePerformIO $
@@ -137,7 +138,7 @@ bindAudioEffectFilter_set_cutoff
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Threshold frequency for the filter.
+-- | Threshold frequency for the filter, in Hz.
 set_cutoff ::
              (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
 set_cutoff cls arg1
@@ -195,7 +196,7 @@ set_gain cls arg1
 
 {-# NOINLINE bindAudioEffectFilter_set_resonance #-}
 
--- | Amount of boost in the overtones near the cutoff frequency.
+-- | Amount of boost in the frequency range near the cutoff frequency.
 bindAudioEffectFilter_set_resonance :: MethodBind
 bindAudioEffectFilter_set_resonance
   = unsafePerformIO $
@@ -205,7 +206,7 @@ bindAudioEffectFilter_set_resonance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of boost in the overtones near the cutoff frequency.
+-- | Amount of boost in the frequency range near the cutoff frequency.
 set_resonance ::
                 (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
 set_resonance cls arg1

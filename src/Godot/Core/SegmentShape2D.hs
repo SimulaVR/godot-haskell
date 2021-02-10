@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.SegmentShape2D
        (Godot.Core.SegmentShape2D.get_a, Godot.Core.SegmentShape2D.get_b,
         Godot.Core.SegmentShape2D.set_a, Godot.Core.SegmentShape2D.set_b)

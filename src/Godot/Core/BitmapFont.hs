@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.BitmapFont
        (Godot.Core.BitmapFont.get_ascent,
         Godot.Core.BitmapFont.is_distance_field_hint,
@@ -226,7 +227,7 @@ _set_textures cls arg1
 
 {-# NOINLINE bindBitmapFont_add_char #-}
 
--- | Adds a character to the font, where [code]character[/code] is the unicode value, [code]texture[/code] is the texture index, [code]rect[/code] is the region in the texture (in pixels!), [code]align[/code] is the (optional) alignment for the character and [code]advance[/code] is the (optional) advance.
+-- | Adds a character to the font, where [code]character[/code] is the Unicode value, [code]texture[/code] is the texture index, [code]rect[/code] is the region in the texture (in pixels!), [code]align[/code] is the (optional) alignment for the character and [code]advance[/code] is the (optional) advance.
 bindBitmapFont_add_char :: MethodBind
 bindBitmapFont_add_char
   = unsafePerformIO $
@@ -236,7 +237,7 @@ bindBitmapFont_add_char
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a character to the font, where [code]character[/code] is the unicode value, [code]texture[/code] is the texture index, [code]rect[/code] is the region in the texture (in pixels!), [code]align[/code] is the (optional) alignment for the character and [code]advance[/code] is the (optional) advance.
+-- | Adds a character to the font, where [code]character[/code] is the Unicode value, [code]texture[/code] is the texture index, [code]rect[/code] is the region in the texture (in pixels!), [code]align[/code] is the (optional) alignment for the character and [code]advance[/code] is the (optional) advance.
 add_char ::
            (BitmapFont :< cls, Object :< cls) =>
            cls -> Int -> Int -> Rect2 -> Vector2 -> Float -> IO ()
@@ -251,7 +252,7 @@ add_char cls arg1 arg2 arg3 arg4 arg5
 
 {-# NOINLINE bindBitmapFont_add_kerning_pair #-}
 
--- | Adds a kerning pair to the [code]BitmapFont[/code] as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
+-- | Adds a kerning pair to the [BitmapFont] as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
 bindBitmapFont_add_kerning_pair :: MethodBind
 bindBitmapFont_add_kerning_pair
   = unsafePerformIO $
@@ -261,7 +262,7 @@ bindBitmapFont_add_kerning_pair
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a kerning pair to the [code]BitmapFont[/code] as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
+-- | Adds a kerning pair to the [BitmapFont] as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
 add_kerning_pair ::
                    (BitmapFont :< cls, Object :< cls) =>
                    cls -> Int -> Int -> Int -> IO ()
@@ -275,7 +276,7 @@ add_kerning_pair cls arg1 arg2 arg3
 
 {-# NOINLINE bindBitmapFont_add_texture #-}
 
--- | Adds a texture to the [code]BitmapFont[/code].
+-- | Adds a texture to the [BitmapFont].
 bindBitmapFont_add_texture :: MethodBind
 bindBitmapFont_add_texture
   = unsafePerformIO $
@@ -285,7 +286,7 @@ bindBitmapFont_add_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a texture to the [code]BitmapFont[/code].
+-- | Adds a texture to the [BitmapFont].
 add_texture ::
               (BitmapFont :< cls, Object :< cls) => cls -> Texture -> IO ()
 add_texture cls arg1
@@ -341,7 +342,6 @@ create_from_fnt cls arg1
 
 {-# NOINLINE bindBitmapFont_get_char_size #-}
 
--- | Returns the size of a character, optionally taking kerning into account if the next character is provided.
 bindBitmapFont_get_char_size :: MethodBind
 bindBitmapFont_get_char_size
   = unsafePerformIO $
@@ -351,7 +351,6 @@ bindBitmapFont_get_char_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the size of a character, optionally taking kerning into account if the next character is provided.
 get_char_size ::
                 (BitmapFont :< cls, Object :< cls) =>
                 cls -> Int -> Int -> IO Vector2

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeOneShot
        (Godot.Core.AnimationNodeOneShot._MIX_MODE_ADD,
         Godot.Core.AnimationNodeOneShot._MIX_MODE_BLEND,
@@ -33,6 +34,7 @@ _MIX_MODE_BLEND = 0
 
 {-# NOINLINE bindAnimationNodeOneShot_get_autorestart_delay #-}
 
+-- | The delay after which the automatic restart is triggered, in seconds.
 bindAnimationNodeOneShot_get_autorestart_delay :: MethodBind
 bindAnimationNodeOneShot_get_autorestart_delay
   = unsafePerformIO $
@@ -42,6 +44,7 @@ bindAnimationNodeOneShot_get_autorestart_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The delay after which the automatic restart is triggered, in seconds.
 get_autorestart_delay ::
                         (AnimationNodeOneShot :< cls, Object :< cls) => cls -> IO Float
 get_autorestart_delay cls
@@ -57,6 +60,7 @@ get_autorestart_delay cls
 {-# NOINLINE bindAnimationNodeOneShot_get_autorestart_random_delay
              #-}
 
+-- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
 bindAnimationNodeOneShot_get_autorestart_random_delay :: MethodBind
 bindAnimationNodeOneShot_get_autorestart_random_delay
   = unsafePerformIO $
@@ -66,6 +70,7 @@ bindAnimationNodeOneShot_get_autorestart_random_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
 get_autorestart_random_delay ::
                                (AnimationNodeOneShot :< cls, Object :< cls) => cls -> IO Float
 get_autorestart_random_delay cls
@@ -146,6 +151,7 @@ get_mix_mode cls
 
 {-# NOINLINE bindAnimationNodeOneShot_has_autorestart #-}
 
+-- | If [code]true[/code], the sub-animation will restart automatically after finishing.
 bindAnimationNodeOneShot_has_autorestart :: MethodBind
 bindAnimationNodeOneShot_has_autorestart
   = unsafePerformIO $
@@ -155,6 +161,7 @@ bindAnimationNodeOneShot_has_autorestart
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the sub-animation will restart automatically after finishing.
 has_autorestart ::
                   (AnimationNodeOneShot :< cls, Object :< cls) => cls -> IO Bool
 has_autorestart cls
@@ -190,6 +197,7 @@ is_using_sync cls
 
 {-# NOINLINE bindAnimationNodeOneShot_set_autorestart #-}
 
+-- | If [code]true[/code], the sub-animation will restart automatically after finishing.
 bindAnimationNodeOneShot_set_autorestart :: MethodBind
 bindAnimationNodeOneShot_set_autorestart
   = unsafePerformIO $
@@ -199,6 +207,7 @@ bindAnimationNodeOneShot_set_autorestart
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [code]true[/code], the sub-animation will restart automatically after finishing.
 set_autorestart ::
                   (AnimationNodeOneShot :< cls, Object :< cls) =>
                   cls -> Bool -> IO ()
@@ -213,6 +222,7 @@ set_autorestart cls arg1
 
 {-# NOINLINE bindAnimationNodeOneShot_set_autorestart_delay #-}
 
+-- | The delay after which the automatic restart is triggered, in seconds.
 bindAnimationNodeOneShot_set_autorestart_delay :: MethodBind
 bindAnimationNodeOneShot_set_autorestart_delay
   = unsafePerformIO $
@@ -222,6 +232,7 @@ bindAnimationNodeOneShot_set_autorestart_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The delay after which the automatic restart is triggered, in seconds.
 set_autorestart_delay ::
                         (AnimationNodeOneShot :< cls, Object :< cls) =>
                         cls -> Float -> IO ()
@@ -238,6 +249,7 @@ set_autorestart_delay cls arg1
 {-# NOINLINE bindAnimationNodeOneShot_set_autorestart_random_delay
              #-}
 
+-- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
 bindAnimationNodeOneShot_set_autorestart_random_delay :: MethodBind
 bindAnimationNodeOneShot_set_autorestart_random_delay
   = unsafePerformIO $
@@ -247,6 +259,7 @@ bindAnimationNodeOneShot_set_autorestart_random_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
 set_autorestart_random_delay ::
                                (AnimationNodeOneShot :< cls, Object :< cls) =>
                                cls -> Float -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ARVRInterface
        (Godot.Core.ARVRInterface._ARVR_STEREO,
         Godot.Core.ARVRInterface._ARVR_INSUFFICIENT_FEATURES,
@@ -77,7 +78,7 @@ _ARVR_MONO = 1
 
 {-# NOINLINE bindARVRInterface_get_anchor_detection_is_enabled #-}
 
--- | On an AR interface, is our anchor detection enabled?
+-- | On an AR interface, [code]true[/code] if anchor detection is enabled.
 bindARVRInterface_get_anchor_detection_is_enabled :: MethodBind
 bindARVRInterface_get_anchor_detection_is_enabled
   = unsafePerformIO $
@@ -87,7 +88,7 @@ bindARVRInterface_get_anchor_detection_is_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | On an AR interface, is our anchor detection enabled?
+-- | On an AR interface, [code]true[/code] if anchor detection is enabled.
 get_anchor_detection_is_enabled ::
                                   (ARVRInterface :< cls, Object :< cls) => cls -> IO Bool
 get_anchor_detection_is_enabled cls
@@ -102,6 +103,7 @@ get_anchor_detection_is_enabled cls
 
 {-# NOINLINE bindARVRInterface_get_camera_feed_id #-}
 
+-- | If this is an AR interface that requires displaying a camera feed as the background, this method returns the feed ID in the [CameraServer] for this interface.
 bindARVRInterface_get_camera_feed_id :: MethodBind
 bindARVRInterface_get_camera_feed_id
   = unsafePerformIO $
@@ -111,6 +113,7 @@ bindARVRInterface_get_camera_feed_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If this is an AR interface that requires displaying a camera feed as the background, this method returns the feed ID in the [CameraServer] for this interface.
 get_camera_feed_id ::
                      (ARVRInterface :< cls, Object :< cls) => cls -> IO Int
 get_camera_feed_id cls
@@ -124,7 +127,7 @@ get_camera_feed_id cls
 
 {-# NOINLINE bindARVRInterface_get_capabilities #-}
 
--- | Returns a combination of flags providing information about the capabilities of this interface.
+-- | Returns a combination of [enum Capabilities] flags providing information about the capabilities of this interface.
 bindARVRInterface_get_capabilities :: MethodBind
 bindARVRInterface_get_capabilities
   = unsafePerformIO $
@@ -134,7 +137,7 @@ bindARVRInterface_get_capabilities
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a combination of flags providing information about the capabilities of this interface.
+-- | Returns a combination of [enum Capabilities] flags providing information about the capabilities of this interface.
 get_capabilities ::
                    (ARVRInterface :< cls, Object :< cls) => cls -> IO Int
 get_capabilities cls
@@ -221,9 +224,9 @@ get_tracking_status cls
 
 -- | Call this to initialize this interface. The first interface that is initialized is identified as the primary interface and it will be used for rendering output.
 --   				After initializing the interface you want to use you then need to enable the AR/VR mode of a viewport and rendering should commence.
---   				Note that you must enable the AR/VR mode on the main viewport for any device that uses the main output of Godot such as for mobile VR.
---   				If you do this for a platform that handles its own output (such as OpenVR) Godot will show just one eye without distortion on screen. Alternatively you can add a separate viewport node to your scene and enable AR/VR on that viewport and it will be used to output to the HMD leaving you free to do anything you like in the main window such as using a separate camera as a spectator camera or render out something completely different.
---   				While currently not used you can activate additional interfaces, you may wish to do this if you want to track controllers from other platforms. However at this point in time only one interface can render to an HMD.
+--   				[b]Note:[/b] You must enable the AR/VR mode on the main viewport for any device that uses the main output of Godot, such as for mobile VR.
+--   				If you do this for a platform that handles its own output (such as OpenVR) Godot will show just one eye without distortion on screen. Alternatively, you can add a separate viewport node to your scene and enable AR/VR on that viewport. It will be used to output to the HMD, leaving you free to do anything you like in the main window, such as using a separate camera as a spectator camera or rendering something completely different.
+--   				While currently not used, you can activate additional interfaces. You may wish to do this if you want to track controllers from other platforms. However, at this point in time only one interface can render to an HMD.
 bindARVRInterface_initialize :: MethodBind
 bindARVRInterface_initialize
   = unsafePerformIO $
@@ -235,9 +238,9 @@ bindARVRInterface_initialize
 
 -- | Call this to initialize this interface. The first interface that is initialized is identified as the primary interface and it will be used for rendering output.
 --   				After initializing the interface you want to use you then need to enable the AR/VR mode of a viewport and rendering should commence.
---   				Note that you must enable the AR/VR mode on the main viewport for any device that uses the main output of Godot such as for mobile VR.
---   				If you do this for a platform that handles its own output (such as OpenVR) Godot will show just one eye without distortion on screen. Alternatively you can add a separate viewport node to your scene and enable AR/VR on that viewport and it will be used to output to the HMD leaving you free to do anything you like in the main window such as using a separate camera as a spectator camera or render out something completely different.
---   				While currently not used you can activate additional interfaces, you may wish to do this if you want to track controllers from other platforms. However at this point in time only one interface can render to an HMD.
+--   				[b]Note:[/b] You must enable the AR/VR mode on the main viewport for any device that uses the main output of Godot, such as for mobile VR.
+--   				If you do this for a platform that handles its own output (such as OpenVR) Godot will show just one eye without distortion on screen. Alternatively, you can add a separate viewport node to your scene and enable AR/VR on that viewport. It will be used to output to the HMD, leaving you free to do anything you like in the main window, such as using a separate camera as a spectator camera or rendering something completely different.
+--   				While currently not used, you can activate additional interfaces. You may wish to do this if you want to track controllers from other platforms. However, at this point in time only one interface can render to an HMD.
 initialize ::
              (ARVRInterface :< cls, Object :< cls) => cls -> IO Bool
 initialize cls
@@ -250,7 +253,7 @@ initialize cls
 
 {-# NOINLINE bindARVRInterface_is_initialized #-}
 
--- | Has this interface been initialized?
+-- | [code]true[/code] if this interface been initialized.
 bindARVRInterface_is_initialized :: MethodBind
 bindARVRInterface_is_initialized
   = unsafePerformIO $
@@ -260,7 +263,7 @@ bindARVRInterface_is_initialized
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Has this interface been initialized?
+-- | [code]true[/code] if this interface been initialized.
 is_initialized ::
                  (ARVRInterface :< cls, Object :< cls) => cls -> IO Bool
 is_initialized cls
@@ -274,7 +277,7 @@ is_initialized cls
 
 {-# NOINLINE bindARVRInterface_is_primary #-}
 
--- | Is this our primary interface?
+-- | [code]true[/code] if this is the primary interface.
 bindARVRInterface_is_primary :: MethodBind
 bindARVRInterface_is_primary
   = unsafePerformIO $
@@ -284,7 +287,7 @@ bindARVRInterface_is_primary
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Is this our primary interface?
+-- | [code]true[/code] if this is the primary interface.
 is_primary ::
              (ARVRInterface :< cls, Object :< cls) => cls -> IO Bool
 is_primary cls
@@ -320,7 +323,7 @@ is_stereo cls
 
 {-# NOINLINE bindARVRInterface_set_anchor_detection_is_enabled #-}
 
--- | On an AR interface, is our anchor detection enabled?
+-- | On an AR interface, [code]true[/code] if anchor detection is enabled.
 bindARVRInterface_set_anchor_detection_is_enabled :: MethodBind
 bindARVRInterface_set_anchor_detection_is_enabled
   = unsafePerformIO $
@@ -330,7 +333,7 @@ bindARVRInterface_set_anchor_detection_is_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | On an AR interface, is our anchor detection enabled?
+-- | On an AR interface, [code]true[/code] if anchor detection is enabled.
 set_anchor_detection_is_enabled ::
                                   (ARVRInterface :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_anchor_detection_is_enabled cls arg1
@@ -345,7 +348,7 @@ set_anchor_detection_is_enabled cls arg1
 
 {-# NOINLINE bindARVRInterface_set_is_initialized #-}
 
--- | Has this interface been initialized?
+-- | [code]true[/code] if this interface been initialized.
 bindARVRInterface_set_is_initialized :: MethodBind
 bindARVRInterface_set_is_initialized
   = unsafePerformIO $
@@ -355,7 +358,7 @@ bindARVRInterface_set_is_initialized
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Has this interface been initialized?
+-- | [code]true[/code] if this interface been initialized.
 set_is_initialized ::
                      (ARVRInterface :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_is_initialized cls arg1
@@ -369,7 +372,7 @@ set_is_initialized cls arg1
 
 {-# NOINLINE bindARVRInterface_set_is_primary #-}
 
--- | Is this our primary interface?
+-- | [code]true[/code] if this is the primary interface.
 bindARVRInterface_set_is_primary :: MethodBind
 bindARVRInterface_set_is_primary
   = unsafePerformIO $
@@ -379,7 +382,7 @@ bindARVRInterface_set_is_primary
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Is this our primary interface?
+-- | [code]true[/code] if this is the primary interface.
 set_is_primary ::
                  (ARVRInterface :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_is_primary cls arg1

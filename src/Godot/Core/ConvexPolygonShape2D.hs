@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ConvexPolygonShape2D
        (Godot.Core.ConvexPolygonShape2D.get_points,
         Godot.Core.ConvexPolygonShape2D.set_point_cloud,

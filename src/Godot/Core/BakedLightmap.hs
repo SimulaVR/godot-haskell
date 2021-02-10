@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.BakedLightmap
        (Godot.Core.BakedLightmap._BAKE_QUALITY_LOW,
         Godot.Core.BakedLightmap._BAKE_QUALITY_MEDIUM,
@@ -74,7 +75,7 @@ _BAKE_QUALITY_HIGH = 2
 
 {-# NOINLINE bindBakedLightmap_bake #-}
 
--- | Bakes the lightmaps within the currently edited scene.
+-- | Bakes the lightmaps within the currently edited scene. Returns a [enum BakeError] to signify if the bake was successful, or if unsuccessful, how the bake failed.
 bindBakedLightmap_bake :: MethodBind
 bindBakedLightmap_bake
   = unsafePerformIO $
@@ -84,7 +85,7 @@ bindBakedLightmap_bake
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bakes the lightmaps within the currently edited scene.
+-- | Bakes the lightmaps within the currently edited scene. Returns a [enum BakeError] to signify if the bake was successful, or if unsuccessful, how the bake failed.
 bake ::
        (BakedLightmap :< cls, Object :< cls) =>
        cls -> Node -> Bool -> IO Int
@@ -119,7 +120,7 @@ debug_bake cls
 
 {-# NOINLINE bindBakedLightmap_get_bake_cell_size #-}
 
--- | Grid subdivision size for lightmapper calculation. Default value of [code]0.25[/code] will work for most cases. Increase for better lighting on small details or if your scene is very large.
+-- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 bindBakedLightmap_get_bake_cell_size :: MethodBind
 bindBakedLightmap_get_bake_cell_size
   = unsafePerformIO $
@@ -129,7 +130,7 @@ bindBakedLightmap_get_bake_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid subdivision size for lightmapper calculation. Default value of [code]0.25[/code] will work for most cases. Increase for better lighting on small details or if your scene is very large.
+-- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 get_bake_cell_size ::
                      (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_bake_cell_size cls
@@ -143,6 +144,7 @@ get_bake_cell_size cls
 
 {-# NOINLINE bindBakedLightmap_get_bake_default_texels_per_unit #-}
 
+-- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 bindBakedLightmap_get_bake_default_texels_per_unit :: MethodBind
 bindBakedLightmap_get_bake_default_texels_per_unit
   = unsafePerformIO $
@@ -152,6 +154,7 @@ bindBakedLightmap_get_bake_default_texels_per_unit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 get_bake_default_texels_per_unit ::
                                    (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_bake_default_texels_per_unit cls
@@ -260,6 +263,7 @@ get_energy cls
 
 {-# NOINLINE bindBakedLightmap_get_extents #-}
 
+-- | The size of the affected area.
 bindBakedLightmap_get_extents :: MethodBind
 bindBakedLightmap_get_extents
   = unsafePerformIO $
@@ -269,6 +273,7 @@ bindBakedLightmap_get_extents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the affected area.
 get_extents ::
               (BakedLightmap :< cls, Object :< cls) => cls -> IO Vector3
 get_extents cls
@@ -281,7 +286,7 @@ get_extents cls
 
 {-# NOINLINE bindBakedLightmap_get_image_path #-}
 
--- | Location where lightmaps will be saved.
+-- | The location where lightmaps will be saved.
 bindBakedLightmap_get_image_path :: MethodBind
 bindBakedLightmap_get_image_path
   = unsafePerformIO $
@@ -291,7 +296,7 @@ bindBakedLightmap_get_image_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Location where lightmaps will be saved.
+-- | The location where lightmaps will be saved.
 get_image_path ::
                  (BakedLightmap :< cls, Object :< cls) => cls -> IO GodotString
 get_image_path cls
@@ -354,7 +359,7 @@ get_propagation cls
 
 {-# NOINLINE bindBakedLightmap_is_hdr #-}
 
--- | If [code]true[/code], lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller lightmap. Default value:[code]false[/code].
+-- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
 bindBakedLightmap_is_hdr :: MethodBind
 bindBakedLightmap_is_hdr
   = unsafePerformIO $
@@ -364,7 +369,7 @@ bindBakedLightmap_is_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller lightmap. Default value:[code]false[/code].
+-- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
 is_hdr :: (BakedLightmap :< cls, Object :< cls) => cls -> IO Bool
 is_hdr cls
   = withVariantArray []
@@ -375,7 +380,7 @@ is_hdr cls
 
 {-# NOINLINE bindBakedLightmap_set_bake_cell_size #-}
 
--- | Grid subdivision size for lightmapper calculation. Default value of [code]0.25[/code] will work for most cases. Increase for better lighting on small details or if your scene is very large.
+-- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 bindBakedLightmap_set_bake_cell_size :: MethodBind
 bindBakedLightmap_set_bake_cell_size
   = unsafePerformIO $
@@ -385,7 +390,7 @@ bindBakedLightmap_set_bake_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid subdivision size for lightmapper calculation. Default value of [code]0.25[/code] will work for most cases. Increase for better lighting on small details or if your scene is very large.
+-- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 set_bake_cell_size ::
                      (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bake_cell_size cls arg1
@@ -399,6 +404,7 @@ set_bake_cell_size cls arg1
 
 {-# NOINLINE bindBakedLightmap_set_bake_default_texels_per_unit #-}
 
+-- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 bindBakedLightmap_set_bake_default_texels_per_unit :: MethodBind
 bindBakedLightmap_set_bake_default_texels_per_unit
   = unsafePerformIO $
@@ -408,6 +414,7 @@ bindBakedLightmap_set_bake_default_texels_per_unit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 set_bake_default_texels_per_unit ::
                                    (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bake_default_texels_per_unit cls arg1
@@ -516,6 +523,7 @@ set_energy cls arg1
 
 {-# NOINLINE bindBakedLightmap_set_extents #-}
 
+-- | The size of the affected area.
 bindBakedLightmap_set_extents :: MethodBind
 bindBakedLightmap_set_extents
   = unsafePerformIO $
@@ -525,6 +533,7 @@ bindBakedLightmap_set_extents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the affected area.
 set_extents ::
               (BakedLightmap :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_extents cls arg1
@@ -537,7 +546,7 @@ set_extents cls arg1
 
 {-# NOINLINE bindBakedLightmap_set_hdr #-}
 
--- | If [code]true[/code], lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller lightmap. Default value:[code]false[/code].
+-- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
 bindBakedLightmap_set_hdr :: MethodBind
 bindBakedLightmap_set_hdr
   = unsafePerformIO $
@@ -547,7 +556,7 @@ bindBakedLightmap_set_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller lightmap. Default value:[code]false[/code].
+-- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
 set_hdr ::
           (BakedLightmap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hdr cls arg1
@@ -560,7 +569,7 @@ set_hdr cls arg1
 
 {-# NOINLINE bindBakedLightmap_set_image_path #-}
 
--- | Location where lightmaps will be saved.
+-- | The location where lightmaps will be saved.
 bindBakedLightmap_set_image_path :: MethodBind
 bindBakedLightmap_set_image_path
   = unsafePerformIO $
@@ -570,7 +579,7 @@ bindBakedLightmap_set_image_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Location where lightmaps will be saved.
+-- | The location where lightmaps will be saved.
 set_image_path ::
                  (BakedLightmap :< cls, Object :< cls) =>
                  cls -> GodotString -> IO ()

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.JSON
        (Godot.Core.JSON.parse, Godot.Core.JSON.print) where
 import Data.Coerce
@@ -11,7 +12,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindJSON_parse #-}
 
--- | Parses a JSON encoded string and returns a [JSONParseResult] containing the result.
+-- | Parses a JSON-encoded string and returns a [JSONParseResult] containing the result.
 bindJSON_parse :: MethodBind
 bindJSON_parse
   = unsafePerformIO $
@@ -21,7 +22,7 @@ bindJSON_parse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Parses a JSON encoded string and returns a [JSONParseResult] containing the result.
+-- | Parses a JSON-encoded string and returns a [JSONParseResult] containing the result.
 parse ::
         (JSON :< cls, Object :< cls) =>
         cls -> GodotString -> IO JSONParseResult
@@ -33,7 +34,30 @@ parse cls arg1
 
 {-# NOINLINE bindJSON_print #-}
 
--- | Converts a Variant var to JSON text and returns the result. Useful for serializing data to store or send over the network.
+-- | Converts a [Variant] var to JSON text and returns the result. Useful for serializing data to store or send over the network.
+--   				[b]Note:[/b] The JSON specification does not define integer or float types, but only a [i]number[/i] type. Therefore, converting a Variant to JSON text will convert all numerical values to [float] types.
+--   				Use [code]indent[/code] parameter to pretty print the output.
+--   				[b]Example output:[/b]
+--   				[codeblock]
+--   				## JSON.print(my_dictionary)
+--   				{"name":"my_dictionary","version":"1.0.0","entities":[{"name":"entity_0","value":"value_0"},{"name":"entity_1","value":"value_1"}]}
+--   
+--   				## JSON.print(my_dictionary, "\t")
+--   				{
+--   				        "name": "my_dictionary",
+--   				        "version": "1.0.0",
+--   				        "entities": [
+--   				                {
+--   				                        "name": "entity_0",
+--   				                        "value": "value_0"
+--   				                },
+--   				                {
+--   				                        "name": "entity_1",
+--   				                        "value": "value_1"
+--   				                }
+--   				        ]
+--   				}
+--   				[/codeblock]
 bindJSON_print :: MethodBind
 bindJSON_print
   = unsafePerformIO $
@@ -43,7 +67,30 @@ bindJSON_print
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Converts a Variant var to JSON text and returns the result. Useful for serializing data to store or send over the network.
+-- | Converts a [Variant] var to JSON text and returns the result. Useful for serializing data to store or send over the network.
+--   				[b]Note:[/b] The JSON specification does not define integer or float types, but only a [i]number[/i] type. Therefore, converting a Variant to JSON text will convert all numerical values to [float] types.
+--   				Use [code]indent[/code] parameter to pretty print the output.
+--   				[b]Example output:[/b]
+--   				[codeblock]
+--   				## JSON.print(my_dictionary)
+--   				{"name":"my_dictionary","version":"1.0.0","entities":[{"name":"entity_0","value":"value_0"},{"name":"entity_1","value":"value_1"}]}
+--   
+--   				## JSON.print(my_dictionary, "\t")
+--   				{
+--   				        "name": "my_dictionary",
+--   				        "version": "1.0.0",
+--   				        "entities": [
+--   				                {
+--   				                        "name": "entity_0",
+--   				                        "value": "value_0"
+--   				                },
+--   				                {
+--   				                        "name": "entity_1",
+--   				                        "value": "value_1"
+--   				                }
+--   				        ]
+--   				}
+--   				[/codeblock]
 print ::
         (JSON :< cls, Object :< cls) =>
         cls -> GodotVariant -> GodotString -> Bool -> IO GodotString

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ConcavePolygonShape2D
        (Godot.Core.ConcavePolygonShape2D.get_segments,
         Godot.Core.ConcavePolygonShape2D.set_segments)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindConcavePolygonShape2D_get_segments #-}
 
--- | The array of points that make up the [code]ConcavePolygonShape2D[/code]'s line segments.
+-- | The array of points that make up the [ConcavePolygonShape2D]'s line segments.
 bindConcavePolygonShape2D_get_segments :: MethodBind
 bindConcavePolygonShape2D_get_segments
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindConcavePolygonShape2D_get_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The array of points that make up the [code]ConcavePolygonShape2D[/code]'s line segments.
+-- | The array of points that make up the [ConcavePolygonShape2D]'s line segments.
 get_segments ::
                (ConcavePolygonShape2D :< cls, Object :< cls) =>
                cls -> IO PoolVector2Array
@@ -38,7 +39,7 @@ get_segments cls
 
 {-# NOINLINE bindConcavePolygonShape2D_set_segments #-}
 
--- | The array of points that make up the [code]ConcavePolygonShape2D[/code]'s line segments.
+-- | The array of points that make up the [ConcavePolygonShape2D]'s line segments.
 bindConcavePolygonShape2D_set_segments :: MethodBind
 bindConcavePolygonShape2D_set_segments
   = unsafePerformIO $
@@ -48,7 +49,7 @@ bindConcavePolygonShape2D_set_segments
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The array of points that make up the [code]ConcavePolygonShape2D[/code]'s line segments.
+-- | The array of points that make up the [ConcavePolygonShape2D]'s line segments.
 set_segments ::
                (ConcavePolygonShape2D :< cls, Object :< cls) =>
                cls -> PoolVector2Array -> IO ()

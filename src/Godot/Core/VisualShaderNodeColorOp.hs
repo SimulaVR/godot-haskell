@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeColorOp
        (Godot.Core.VisualShaderNodeColorOp._OP_SCREEN,
         Godot.Core.VisualShaderNodeColorOp._OP_SOFT_LIGHT,
@@ -49,6 +50,7 @@ _OP_LIGHTEN = 3
 
 {-# NOINLINE bindVisualShaderNodeColorOp_get_operator #-}
 
+-- | An operator to be applied to the inputs. See [enum Operator] for options.
 bindVisualShaderNodeColorOp_get_operator :: MethodBind
 bindVisualShaderNodeColorOp_get_operator
   = unsafePerformIO $
@@ -58,6 +60,7 @@ bindVisualShaderNodeColorOp_get_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | An operator to be applied to the inputs. See [enum Operator] for options.
 get_operator ::
                (VisualShaderNodeColorOp :< cls, Object :< cls) => cls -> IO Int
 get_operator cls
@@ -71,6 +74,7 @@ get_operator cls
 
 {-# NOINLINE bindVisualShaderNodeColorOp_set_operator #-}
 
+-- | An operator to be applied to the inputs. See [enum Operator] for options.
 bindVisualShaderNodeColorOp_set_operator :: MethodBind
 bindVisualShaderNodeColorOp_set_operator
   = unsafePerformIO $
@@ -80,6 +84,7 @@ bindVisualShaderNodeColorOp_set_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | An operator to be applied to the inputs. See [enum Operator] for options.
 set_operator ::
                (VisualShaderNodeColorOp :< cls, Object :< cls) =>
                cls -> Int -> IO ()

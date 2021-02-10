@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.IP
        (Godot.Core.IP._RESOLVER_INVALID_ID, Godot.Core.IP._TYPE_NONE,
         Godot.Core.IP._RESOLVER_STATUS_WAITING, Godot.Core.IP._TYPE_IPV4,
@@ -54,7 +55,7 @@ _TYPE_ANY = 3
 
 {-# NOINLINE bindIP_clear_cache #-}
 
--- | Removes all of a "hostname"'s cached references. If no "hostname" is given then all cached IP addresses are removed.
+-- | Removes all of a [code]hostname[/code]'s cached references. If no [code]hostname[/code] is given, all cached IP addresses are removed.
 bindIP_clear_cache :: MethodBind
 bindIP_clear_cache
   = unsafePerformIO $
@@ -64,7 +65,7 @@ bindIP_clear_cache
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes all of a "hostname"'s cached references. If no "hostname" is given then all cached IP addresses are removed.
+-- | Removes all of a [code]hostname[/code]'s cached references. If no [code]hostname[/code] is given, all cached IP addresses are removed.
 clear_cache ::
               (IP :< cls, Object :< cls) => cls -> GodotString -> IO ()
 clear_cache cls arg1
@@ -75,7 +76,7 @@ clear_cache cls arg1
 
 {-# NOINLINE bindIP_erase_resolve_item #-}
 
--- | Removes a given item "id" from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
+-- | Removes a given item [code]id[/code] from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
 bindIP_erase_resolve_item :: MethodBind
 bindIP_erase_resolve_item
   = unsafePerformIO $
@@ -85,7 +86,7 @@ bindIP_erase_resolve_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes a given item "id" from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
+-- | Removes a given item [code]id[/code] from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
 erase_resolve_item ::
                      (IP :< cls, Object :< cls) => cls -> Int -> IO ()
 erase_resolve_item cls arg1
@@ -121,6 +122,16 @@ get_local_addresses cls
 
 {-# NOINLINE bindIP_get_local_interfaces #-}
 
+-- | Returns all network adapters as an array.
+--   				Each adapter is a dictionary of the form:
+--   				[codeblock]
+--   				{
+--   				    "index": "1", # Interface index.
+--   				    "name": "eth0", # Interface name.
+--   				    "friendly": "Ethernet One", # A friendly name (might be empty).
+--   				    "addresses": ["192.168.1.101"], # An array of IP addresses associated to this interface.
+--   				}
+--   				[/codeblock]
 bindIP_get_local_interfaces :: MethodBind
 bindIP_get_local_interfaces
   = unsafePerformIO $
@@ -130,6 +141,16 @@ bindIP_get_local_interfaces
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns all network adapters as an array.
+--   				Each adapter is a dictionary of the form:
+--   				[codeblock]
+--   				{
+--   				    "index": "1", # Interface index.
+--   				    "name": "eth0", # Interface name.
+--   				    "friendly": "Ethernet One", # A friendly name (might be empty).
+--   				    "addresses": ["192.168.1.101"], # An array of IP addresses associated to this interface.
+--   				}
+--   				[/codeblock]
 get_local_interfaces ::
                        (IP :< cls, Object :< cls) => cls -> IO Array
 get_local_interfaces cls
@@ -142,7 +163,7 @@ get_local_interfaces cls
 
 {-# NOINLINE bindIP_get_resolve_item_address #-}
 
--- | Returns a queued hostname's IP address, given its queue "id". Returns an empty string on error or if resolution hasn't happened yet (see [method get_resolve_item_status]).
+-- | Returns a queued hostname's IP address, given its queue [code]id[/code]. Returns an empty string on error or if resolution hasn't happened yet (see [method get_resolve_item_status]).
 bindIP_get_resolve_item_address :: MethodBind
 bindIP_get_resolve_item_address
   = unsafePerformIO $
@@ -152,7 +173,7 @@ bindIP_get_resolve_item_address
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a queued hostname's IP address, given its queue "id". Returns an empty string on error or if resolution hasn't happened yet (see [method get_resolve_item_status]).
+-- | Returns a queued hostname's IP address, given its queue [code]id[/code]. Returns an empty string on error or if resolution hasn't happened yet (see [method get_resolve_item_status]).
 get_resolve_item_address ::
                            (IP :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_resolve_item_address cls arg1
@@ -165,7 +186,7 @@ get_resolve_item_address cls arg1
 
 {-# NOINLINE bindIP_get_resolve_item_status #-}
 
--- | Returns a queued hostname's status as a RESOLVER_STATUS_* constant, given its queue "id".
+-- | Returns a queued hostname's status as a [enum ResolverStatus] constant, given its queue [code]id[/code].
 bindIP_get_resolve_item_status :: MethodBind
 bindIP_get_resolve_item_status
   = unsafePerformIO $
@@ -175,7 +196,7 @@ bindIP_get_resolve_item_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a queued hostname's status as a RESOLVER_STATUS_* constant, given its queue "id".
+-- | Returns a queued hostname's status as a [enum ResolverStatus] constant, given its queue [code]id[/code].
 get_resolve_item_status ::
                           (IP :< cls, Object :< cls) => cls -> Int -> IO Int
 get_resolve_item_status cls arg1
@@ -188,7 +209,7 @@ get_resolve_item_status cls arg1
 
 {-# NOINLINE bindIP_resolve_hostname #-}
 
--- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the TYPE_* constant given as "ip_type".
+-- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the [enum Type] constant given as [code]ip_type[/code].
 bindIP_resolve_hostname :: MethodBind
 bindIP_resolve_hostname
   = unsafePerformIO $
@@ -198,7 +219,7 @@ bindIP_resolve_hostname
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the TYPE_* constant given as "ip_type".
+-- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the [enum Type] constant given as [code]ip_type[/code].
 resolve_hostname ::
                    (IP :< cls, Object :< cls) =>
                    cls -> GodotString -> Int -> IO GodotString
@@ -211,7 +232,7 @@ resolve_hostname cls arg1 arg2
 
 {-# NOINLINE bindIP_resolve_hostname_queue_item #-}
 
--- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the TYPE_* constant given as "ip_type". Returns the queue ID if successful, or RESOLVER_INVALID_ID on error.
+-- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the [enum Type] constant given as [code]ip_type[/code]. Returns the queue ID if successful, or [constant RESOLVER_INVALID_ID] on error.
 bindIP_resolve_hostname_queue_item :: MethodBind
 bindIP_resolve_hostname_queue_item
   = unsafePerformIO $
@@ -221,7 +242,7 @@ bindIP_resolve_hostname_queue_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the TYPE_* constant given as "ip_type". Returns the queue ID if successful, or RESOLVER_INVALID_ID on error.
+-- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the [enum Type] constant given as [code]ip_type[/code]. Returns the queue ID if successful, or [constant RESOLVER_INVALID_ID] on error.
 resolve_hostname_queue_item ::
                               (IP :< cls, Object :< cls) => cls -> GodotString -> Int -> IO Int
 resolve_hostname_queue_item cls arg1 arg2

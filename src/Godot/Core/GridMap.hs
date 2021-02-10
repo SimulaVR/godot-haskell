@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GridMap
        (Godot.Core.GridMap._INVALID_CELL_ITEM,
         Godot.Core.GridMap.sig_cell_size_changed,
@@ -48,6 +49,8 @@ _INVALID_CELL_ITEM = -1
 sig_cell_size_changed :: Godot.Internal.Dispatch.Signal GridMap
 sig_cell_size_changed
   = Godot.Internal.Dispatch.Signal "cell_size_changed"
+
+instance NodeSignal GridMap "cell_size_changed" '[Vector3]
 
 {-# NOINLINE bindGridMap__update_octants_callback #-}
 

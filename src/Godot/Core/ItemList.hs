@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ItemList
        (Godot.Core.ItemList._ICON_MODE_LEFT,
         Godot.Core.ItemList._SELECT_MULTI,
@@ -91,38 +92,49 @@ _SELECT_SINGLE = 0
 _ICON_MODE_TOP :: Int
 _ICON_MODE_TOP = 0
 
--- | Triggered when specified list item is activated via double click or Enter.
+-- | Triggered when specified list item is activated via double-clicking or by pressing Enter.
 sig_item_activated :: Godot.Internal.Dispatch.Signal ItemList
 sig_item_activated
   = Godot.Internal.Dispatch.Signal "item_activated"
 
+instance NodeSignal ItemList "item_activated" '[Int]
+
 -- | Triggered when specified list item has been selected via right mouse clicking.
---   				The click position is also provided to allow appropriate popup of context menus
---   				at the correct location.
+--   				The click position is also provided to allow appropriate popup of context menus at the correct location.
 --   				[member allow_rmb_select] must be enabled.
 sig_item_rmb_selected :: Godot.Internal.Dispatch.Signal ItemList
 sig_item_rmb_selected
   = Godot.Internal.Dispatch.Signal "item_rmb_selected"
+
+instance NodeSignal ItemList "item_rmb_selected" '[Int, Vector2]
 
 -- | Triggered when specified item has been selected.
 --   				[member allow_reselect] must be enabled to reselect an item.
 sig_item_selected :: Godot.Internal.Dispatch.Signal ItemList
 sig_item_selected = Godot.Internal.Dispatch.Signal "item_selected"
 
+instance NodeSignal ItemList "item_selected" '[Int]
+
 -- | Triggered when a multiple selection is altered on a list allowing multiple selection.
 sig_multi_selected :: Godot.Internal.Dispatch.Signal ItemList
 sig_multi_selected
   = Godot.Internal.Dispatch.Signal "multi_selected"
+
+instance NodeSignal ItemList "multi_selected" '[Int, Bool]
 
 -- | Triggered when a left mouse click is issued within the rect of the list but on empty space.
 sig_nothing_selected :: Godot.Internal.Dispatch.Signal ItemList
 sig_nothing_selected
   = Godot.Internal.Dispatch.Signal "nothing_selected"
 
+instance NodeSignal ItemList "nothing_selected" '[]
+
 -- | Triggered when a right mouse click is issued within the rect of the list but on empty space.
 --   				[member allow_rmb_select] must be enabled.
 sig_rmb_clicked :: Godot.Internal.Dispatch.Signal ItemList
 sig_rmb_clicked = Godot.Internal.Dispatch.Signal "rmb_clicked"
+
+instance NodeSignal ItemList "rmb_clicked" '[Vector2]
 
 {-# NOINLINE bindItemList__get_items #-}
 
@@ -229,8 +241,8 @@ add_icon_item cls arg1 arg2
 
 {-# NOINLINE bindItemList_add_item #-}
 
--- | Adds an item to the item list with specified text. Specify an icon of null for a list item with no icon.
---   				If selectable is [code]true[/code] the list item will be selectable.
+-- | Adds an item to the item list with specified text. Specify an [code]icon[/code], or use [code]null[/code] as the [code]icon[/code] for a list item with no icon.
+--   				If selectable is [code]true[/code], the list item will be selectable.
 bindItemList_add_item :: MethodBind
 bindItemList_add_item
   = unsafePerformIO $
@@ -240,8 +252,8 @@ bindItemList_add_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an item to the item list with specified text. Specify an icon of null for a list item with no icon.
---   				If selectable is [code]true[/code] the list item will be selectable.
+-- | Adds an item to the item list with specified text. Specify an [code]icon[/code], or use [code]null[/code] as the [code]icon[/code] for a list item with no icon.
+--   				If selectable is [code]true[/code], the list item will be selectable.
 add_item ::
            (ItemList :< cls, Object :< cls) =>
            cls -> GodotString -> Texture -> Bool -> IO ()
@@ -254,7 +266,7 @@ add_item cls arg1 arg2 arg3
 
 {-# NOINLINE bindItemList_clear #-}
 
--- | Remove all items from the list.
+-- | Removes all items from the list.
 bindItemList_clear :: MethodBind
 bindItemList_clear
   = unsafePerformIO $
@@ -264,7 +276,7 @@ bindItemList_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove all items from the list.
+-- | Removes all items from the list.
 clear :: (ItemList :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -345,8 +357,8 @@ get_allow_rmb_select cls
 
 {-# NOINLINE bindItemList_get_fixed_column_width #-}
 
--- | Sets the default column width in pixels.
---   			If left to default value, each item will have a width equal to the width of its content and the columns will have an uneven width.
+-- | The width all columns will be adjusted to.
+--   			A value of zero disables the adjustment, each item will have a width equal to the width of its content and the columns will have an uneven width.
 bindItemList_get_fixed_column_width :: MethodBind
 bindItemList_get_fixed_column_width
   = unsafePerformIO $
@@ -356,8 +368,8 @@ bindItemList_get_fixed_column_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default column width in pixels.
---   			If left to default value, each item will have a width equal to the width of its content and the columns will have an uneven width.
+-- | The width all columns will be adjusted to.
+--   			A value of zero disables the adjustment, each item will have a width equal to the width of its content and the columns will have an uneven width.
 get_fixed_column_width ::
                          (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_fixed_column_width cls
@@ -371,7 +383,8 @@ get_fixed_column_width cls
 
 {-# NOINLINE bindItemList_get_fixed_icon_size #-}
 
--- | Sets the default icon size in pixels.
+-- | The size all icons will be adjusted to.
+--   			If either X or Y component is not greater than zero, icon size won't be affected.
 bindItemList_get_fixed_icon_size :: MethodBind
 bindItemList_get_fixed_icon_size
   = unsafePerformIO $
@@ -381,7 +394,8 @@ bindItemList_get_fixed_icon_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default icon size in pixels.
+-- | The size all icons will be adjusted to.
+--   			If either X or Y component is not greater than zero, icon size won't be affected.
 get_fixed_icon_size ::
                       (ItemList :< cls, Object :< cls) => cls -> IO Vector2
 get_fixed_icon_size cls
@@ -395,7 +409,7 @@ get_fixed_icon_size cls
 
 {-# NOINLINE bindItemList_get_icon_mode #-}
 
--- | Sets the default position of the icon to either [constant ICON_MODE_LEFT] or [constant ICON_MODE_TOP].
+-- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
 bindItemList_get_icon_mode :: MethodBind
 bindItemList_get_icon_mode
   = unsafePerformIO $
@@ -405,7 +419,7 @@ bindItemList_get_icon_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default position of the icon to either [constant ICON_MODE_LEFT] or [constant ICON_MODE_TOP].
+-- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
 get_icon_mode :: (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_icon_mode cls
   = withVariantArray []
@@ -417,7 +431,7 @@ get_icon_mode cls
 
 {-# NOINLINE bindItemList_get_icon_scale #-}
 
--- | Sets the icon size to its initial size multiplied by the specified scale. Default value is 1.0.
+-- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
 bindItemList_get_icon_scale :: MethodBind
 bindItemList_get_icon_scale
   = unsafePerformIO $
@@ -427,7 +441,7 @@ bindItemList_get_icon_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the icon size to its initial size multiplied by the specified scale. Default value is 1.0.
+-- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
 get_icon_scale ::
                  (ItemList :< cls, Object :< cls) => cls -> IO Float
 get_icon_scale cls
@@ -440,7 +454,8 @@ get_icon_scale cls
 
 {-# NOINLINE bindItemList_get_item_at_position #-}
 
--- | Given a position within the control return the item (if any) at that point.
+-- | Returns the item index at the given [code]position[/code].
+--   				When there is no item at that point, -1 will be returned if [code]exact[/code] is [code]true[/code], and the closest item index will be returned otherwise.
 bindItemList_get_item_at_position :: MethodBind
 bindItemList_get_item_at_position
   = unsafePerformIO $
@@ -450,7 +465,8 @@ bindItemList_get_item_at_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Given a position within the control return the item (if any) at that point.
+-- | Returns the item index at the given [code]position[/code].
+--   				When there is no item at that point, -1 will be returned if [code]exact[/code] is [code]true[/code], and the closest item index will be returned otherwise.
 get_item_at_position ::
                        (ItemList :< cls, Object :< cls) =>
                        cls -> Vector2 -> Bool -> IO Int
@@ -487,7 +503,7 @@ get_item_count cls
 
 {-# NOINLINE bindItemList_get_item_custom_bg_color #-}
 
--- | Returns the [Color] set by [method set_item_custom_bg_color]. Default value is [code]Color(0, 0, 0, 0)[/code].
+-- | Returns the custom background color of the item specified by [code]idx[/code] index.
 bindItemList_get_item_custom_bg_color :: MethodBind
 bindItemList_get_item_custom_bg_color
   = unsafePerformIO $
@@ -497,7 +513,7 @@ bindItemList_get_item_custom_bg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Color] set by [method set_item_custom_bg_color]. Default value is [code]Color(0, 0, 0, 0)[/code].
+-- | Returns the custom background color of the item specified by [code]idx[/code] index.
 get_item_custom_bg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> IO Color
 get_item_custom_bg_color cls arg1
@@ -511,7 +527,7 @@ get_item_custom_bg_color cls arg1
 
 {-# NOINLINE bindItemList_get_item_custom_fg_color #-}
 
--- | Returns the [Color] set by [method set_item_custom_fg_color]. Default value is [code]Color(0, 0, 0, 0)[/code].
+-- | Returns the custom foreground color of the item specified by [code]idx[/code] index.
 bindItemList_get_item_custom_fg_color :: MethodBind
 bindItemList_get_item_custom_fg_color
   = unsafePerformIO $
@@ -521,7 +537,7 @@ bindItemList_get_item_custom_fg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Color] set by [method set_item_custom_fg_color]. Default value is [code]Color(0, 0, 0, 0)[/code].
+-- | Returns the custom foreground color of the item specified by [code]idx[/code] index.
 get_item_custom_fg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> IO Color
 get_item_custom_fg_color cls arg1
@@ -535,7 +551,7 @@ get_item_custom_fg_color cls arg1
 
 {-# NOINLINE bindItemList_get_item_icon #-}
 
--- | Returns the icon associated with the specified index. Default value is [code]null[/code].
+-- | Returns the icon associated with the specified index.
 bindItemList_get_item_icon :: MethodBind
 bindItemList_get_item_icon
   = unsafePerformIO $
@@ -545,7 +561,7 @@ bindItemList_get_item_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the icon associated with the specified index. Default value is [code]null[/code].
+-- | Returns the icon associated with the specified index.
 get_item_icon ::
                 (ItemList :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_item_icon cls arg1
@@ -582,6 +598,7 @@ get_item_icon_modulate cls arg1
 
 {-# NOINLINE bindItemList_get_item_icon_region #-}
 
+-- | Returns the region of item's icon used. The whole icon will be used if the region has no area.
 bindItemList_get_item_icon_region :: MethodBind
 bindItemList_get_item_icon_region
   = unsafePerformIO $
@@ -591,6 +608,7 @@ bindItemList_get_item_icon_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the region of item's icon used. The whole icon will be used if the region has no area.
 get_item_icon_region ::
                        (ItemList :< cls, Object :< cls) => cls -> Int -> IO Rect2
 get_item_icon_region cls arg1
@@ -604,7 +622,7 @@ get_item_icon_region cls arg1
 
 {-# NOINLINE bindItemList_get_item_metadata #-}
 
--- | Returns the metadata value of the specified index set by [method set_item_metadata].
+-- | Returns the metadata value of the specified index.
 bindItemList_get_item_metadata :: MethodBind
 bindItemList_get_item_metadata
   = unsafePerformIO $
@@ -614,7 +632,7 @@ bindItemList_get_item_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the metadata value of the specified index set by [method set_item_metadata].
+-- | Returns the metadata value of the specified index.
 get_item_metadata ::
                     (ItemList :< cls, Object :< cls) => cls -> Int -> IO GodotVariant
 get_item_metadata cls arg1
@@ -673,8 +691,9 @@ get_item_tooltip cls arg1
 
 {-# NOINLINE bindItemList_get_max_columns #-}
 
--- | Sets the maximum columns the list will have.
---   			If set to anything other than the default, the content will be split among the specified columns.
+-- | Maximum columns the list will have.
+--   			If greater than zero, the content will be split among the specified columns.
+--   			A value of zero means unlimited columns, i.e. all items will be put in the same row.
 bindItemList_get_max_columns :: MethodBind
 bindItemList_get_max_columns
   = unsafePerformIO $
@@ -684,8 +703,9 @@ bindItemList_get_max_columns
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the maximum columns the list will have.
---   			If set to anything other than the default, the content will be split among the specified columns.
+-- | Maximum columns the list will have.
+--   			If greater than zero, the content will be split among the specified columns.
+--   			A value of zero means unlimited columns, i.e. all items will be put in the same row.
 get_max_columns ::
                   (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_max_columns cls
@@ -698,6 +718,8 @@ get_max_columns cls
 
 {-# NOINLINE bindItemList_get_max_text_lines #-}
 
+-- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
+--   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
 bindItemList_get_max_text_lines :: MethodBind
 bindItemList_get_max_text_lines
   = unsafePerformIO $
@@ -707,6 +729,8 @@ bindItemList_get_max_text_lines
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
+--   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
 get_max_text_lines ::
                      (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_max_text_lines cls
@@ -719,7 +743,7 @@ get_max_text_lines cls
 
 {-# NOINLINE bindItemList_get_select_mode #-}
 
--- | Allow single or multiple item selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple item selection. See the [enum SelectMode] constants.
 bindItemList_get_select_mode :: MethodBind
 bindItemList_get_select_mode
   = unsafePerformIO $
@@ -729,7 +753,7 @@ bindItemList_get_select_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allow single or multiple item selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple item selection. See the [enum SelectMode] constants.
 get_select_mode ::
                   (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_select_mode cls
@@ -835,7 +859,7 @@ is_anything_selected cls
 
 {-# NOINLINE bindItemList_is_item_disabled #-}
 
--- | Returns whether or not the item at the specified index is disabled.
+-- | Returns [code]true[/code] if the item at the specified index is disabled.
 bindItemList_is_item_disabled :: MethodBind
 bindItemList_is_item_disabled
   = unsafePerformIO $
@@ -845,7 +869,7 @@ bindItemList_is_item_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether or not the item at the specified index is disabled.
+-- | Returns [code]true[/code] if the item at the specified index is disabled.
 is_item_disabled ::
                    (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_disabled cls arg1
@@ -858,6 +882,7 @@ is_item_disabled cls arg1
 
 {-# NOINLINE bindItemList_is_item_icon_transposed #-}
 
+-- | Returns [code]true[/code] if the item icon will be drawn transposed, i.e. the X and Y axes are swapped.
 bindItemList_is_item_icon_transposed :: MethodBind
 bindItemList_is_item_icon_transposed
   = unsafePerformIO $
@@ -867,6 +892,7 @@ bindItemList_is_item_icon_transposed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns [code]true[/code] if the item icon will be drawn transposed, i.e. the X and Y axes are swapped.
 is_item_icon_transposed ::
                           (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_icon_transposed cls arg1
@@ -880,7 +906,7 @@ is_item_icon_transposed cls arg1
 
 {-# NOINLINE bindItemList_is_item_selectable #-}
 
--- | Returns whether or not the item at the specified index is selectable.
+-- | Returns [code]true[/code] if the item at the specified index is selectable.
 bindItemList_is_item_selectable :: MethodBind
 bindItemList_is_item_selectable
   = unsafePerformIO $
@@ -890,7 +916,7 @@ bindItemList_is_item_selectable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether or not the item at the specified index is selectable.
+-- | Returns [code]true[/code] if the item at the specified index is selectable.
 is_item_selectable ::
                      (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_selectable cls arg1
@@ -903,7 +929,7 @@ is_item_selectable cls arg1
 
 {-# NOINLINE bindItemList_is_item_tooltip_enabled #-}
 
--- | Returns whether the tooltip is enabled for specified item index.
+-- | Returns [code]true[/code] if the tooltip is enabled for specified item index.
 bindItemList_is_item_tooltip_enabled :: MethodBind
 bindItemList_is_item_tooltip_enabled
   = unsafePerformIO $
@@ -913,7 +939,7 @@ bindItemList_is_item_tooltip_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the tooltip is enabled for specified item index.
+-- | Returns [code]true[/code] if the tooltip is enabled for specified item index.
 is_item_tooltip_enabled ::
                           (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_tooltip_enabled cls arg1
@@ -927,7 +953,8 @@ is_item_tooltip_enabled cls arg1
 
 {-# NOINLINE bindItemList_is_same_column_width #-}
 
--- | If set to [code]true[/code], all columns will have the same width specified by [member fixed_column_width].
+-- | Whether all columns will have the same width.
+--   			If [code]true[/code], the width is equal to the largest column width of all columns.
 bindItemList_is_same_column_width :: MethodBind
 bindItemList_is_same_column_width
   = unsafePerformIO $
@@ -937,7 +964,8 @@ bindItemList_is_same_column_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If set to [code]true[/code], all columns will have the same width specified by [member fixed_column_width].
+-- | Whether all columns will have the same width.
+--   			If [code]true[/code], the width is equal to the largest column width of all columns.
 is_same_column_width ::
                        (ItemList :< cls, Object :< cls) => cls -> IO Bool
 is_same_column_width cls
@@ -951,7 +979,7 @@ is_same_column_width cls
 
 {-# NOINLINE bindItemList_is_selected #-}
 
--- | Returns whether or not item at the specified index is currently selected.
+-- | Returns [code]true[/code] if the item at the specified index is currently selected.
 bindItemList_is_selected :: MethodBind
 bindItemList_is_selected
   = unsafePerformIO $
@@ -961,7 +989,7 @@ bindItemList_is_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether or not item at the specified index is currently selected.
+-- | Returns [code]true[/code] if the item at the specified index is currently selected.
 is_selected ::
               (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_selected cls arg1
@@ -1018,7 +1046,7 @@ remove_item cls arg1
 {-# NOINLINE bindItemList_select #-}
 
 -- | Select the item at the specified index.
---   				Note: This method does not trigger the item selection signal.
+--   				[b]Note:[/b] This method does not trigger the item selection signal.
 bindItemList_select :: MethodBind
 bindItemList_select
   = unsafePerformIO $
@@ -1029,7 +1057,7 @@ bindItemList_select
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Select the item at the specified index.
---   				Note: This method does not trigger the item selection signal.
+--   				[b]Note:[/b] This method does not trigger the item selection signal.
 select ::
          (ItemList :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 select cls arg1 arg2
@@ -1110,8 +1138,8 @@ set_auto_height cls arg1
 
 {-# NOINLINE bindItemList_set_fixed_column_width #-}
 
--- | Sets the default column width in pixels.
---   			If left to default value, each item will have a width equal to the width of its content and the columns will have an uneven width.
+-- | The width all columns will be adjusted to.
+--   			A value of zero disables the adjustment, each item will have a width equal to the width of its content and the columns will have an uneven width.
 bindItemList_set_fixed_column_width :: MethodBind
 bindItemList_set_fixed_column_width
   = unsafePerformIO $
@@ -1121,8 +1149,8 @@ bindItemList_set_fixed_column_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default column width in pixels.
---   			If left to default value, each item will have a width equal to the width of its content and the columns will have an uneven width.
+-- | The width all columns will be adjusted to.
+--   			A value of zero disables the adjustment, each item will have a width equal to the width of its content and the columns will have an uneven width.
 set_fixed_column_width ::
                          (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_fixed_column_width cls arg1
@@ -1136,7 +1164,8 @@ set_fixed_column_width cls arg1
 
 {-# NOINLINE bindItemList_set_fixed_icon_size #-}
 
--- | Sets the default icon size in pixels.
+-- | The size all icons will be adjusted to.
+--   			If either X or Y component is not greater than zero, icon size won't be affected.
 bindItemList_set_fixed_icon_size :: MethodBind
 bindItemList_set_fixed_icon_size
   = unsafePerformIO $
@@ -1146,7 +1175,8 @@ bindItemList_set_fixed_icon_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default icon size in pixels.
+-- | The size all icons will be adjusted to.
+--   			If either X or Y component is not greater than zero, icon size won't be affected.
 set_fixed_icon_size ::
                       (ItemList :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_fixed_icon_size cls arg1
@@ -1160,7 +1190,7 @@ set_fixed_icon_size cls arg1
 
 {-# NOINLINE bindItemList_set_icon_mode #-}
 
--- | Sets the default position of the icon to either [constant ICON_MODE_LEFT] or [constant ICON_MODE_TOP].
+-- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
 bindItemList_set_icon_mode :: MethodBind
 bindItemList_set_icon_mode
   = unsafePerformIO $
@@ -1170,7 +1200,7 @@ bindItemList_set_icon_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default position of the icon to either [constant ICON_MODE_LEFT] or [constant ICON_MODE_TOP].
+-- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
 set_icon_mode ::
                 (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_icon_mode cls arg1
@@ -1183,7 +1213,7 @@ set_icon_mode cls arg1
 
 {-# NOINLINE bindItemList_set_icon_scale #-}
 
--- | Sets the icon size to its initial size multiplied by the specified scale. Default value is 1.0.
+-- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
 bindItemList_set_icon_scale :: MethodBind
 bindItemList_set_icon_scale
   = unsafePerformIO $
@@ -1193,7 +1223,7 @@ bindItemList_set_icon_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the icon size to its initial size multiplied by the specified scale. Default value is 1.0.
+-- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
 set_icon_scale ::
                  (ItemList :< cls, Object :< cls) => cls -> Float -> IO ()
 set_icon_scale cls arg1
@@ -1270,8 +1300,8 @@ set_item_custom_fg_color cls arg1 arg2
 
 {-# NOINLINE bindItemList_set_item_disabled #-}
 
--- | Disable (or enable) item at the specified index.
---   				Disabled items are not be selectable and do not trigger activation (Enter or double-click) signals.
+-- | Disables (or enables) the item at the specified index.
+--   				Disabled items cannot be selected and do not trigger activation signals (when double-clicking or pressing Enter).
 bindItemList_set_item_disabled :: MethodBind
 bindItemList_set_item_disabled
   = unsafePerformIO $
@@ -1281,8 +1311,8 @@ bindItemList_set_item_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disable (or enable) item at the specified index.
---   				Disabled items are not be selectable and do not trigger activation (Enter or double-click) signals.
+-- | Disables (or enables) the item at the specified index.
+--   				Disabled items cannot be selected and do not trigger activation signals (when double-clicking or pressing Enter).
 set_item_disabled ::
                     (ItemList :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_item_disabled cls arg1 arg2
@@ -1295,7 +1325,7 @@ set_item_disabled cls arg1 arg2
 
 {-# NOINLINE bindItemList_set_item_icon #-}
 
--- | Set (or replace) the icon's [Texture] associated with the specified index.
+-- | Sets (or replaces) the icon's [Texture] associated with the specified index.
 bindItemList_set_item_icon :: MethodBind
 bindItemList_set_item_icon
   = unsafePerformIO $
@@ -1305,7 +1335,7 @@ bindItemList_set_item_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set (or replace) the icon's [Texture] associated with the specified index.
+-- | Sets (or replaces) the icon's [Texture] associated with the specified index.
 set_item_icon ::
                 (ItemList :< cls, Object :< cls) => cls -> Int -> Texture -> IO ()
 set_item_icon cls arg1 arg2
@@ -1342,6 +1372,7 @@ set_item_icon_modulate cls arg1 arg2
 
 {-# NOINLINE bindItemList_set_item_icon_region #-}
 
+-- | Sets the region of item's icon used. The whole icon will be used if the region has no area.
 bindItemList_set_item_icon_region :: MethodBind
 bindItemList_set_item_icon_region
   = unsafePerformIO $
@@ -1351,6 +1382,7 @@ bindItemList_set_item_icon_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the region of item's icon used. The whole icon will be used if the region has no area.
 set_item_icon_region ::
                        (ItemList :< cls, Object :< cls) => cls -> Int -> Rect2 -> IO ()
 set_item_icon_region cls arg1 arg2
@@ -1364,6 +1396,7 @@ set_item_icon_region cls arg1 arg2
 
 {-# NOINLINE bindItemList_set_item_icon_transposed #-}
 
+-- | Sets whether the item icon will be drawn transposed.
 bindItemList_set_item_icon_transposed :: MethodBind
 bindItemList_set_item_icon_transposed
   = unsafePerformIO $
@@ -1373,6 +1406,7 @@ bindItemList_set_item_icon_transposed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets whether the item icon will be drawn transposed.
 set_item_icon_transposed ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_item_icon_transposed cls arg1 arg2
@@ -1410,7 +1444,7 @@ set_item_metadata cls arg1 arg2
 
 {-# NOINLINE bindItemList_set_item_selectable #-}
 
--- | Allow or disallow selection of the item associated with the specified index.
+-- | Allows or disallows selection of the item associated with the specified index.
 bindItemList_set_item_selectable :: MethodBind
 bindItemList_set_item_selectable
   = unsafePerformIO $
@@ -1420,7 +1454,7 @@ bindItemList_set_item_selectable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allow or disallow selection of the item associated with the specified index.
+-- | Allows or disallows selection of the item associated with the specified index.
 set_item_selectable ::
                       (ItemList :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_item_selectable cls arg1 arg2
@@ -1458,7 +1492,7 @@ set_item_text cls arg1 arg2
 
 {-# NOINLINE bindItemList_set_item_tooltip #-}
 
--- | Sets tooltip hint for the item associated with the specified index.
+-- | Sets the tooltip hint for the item associated with the specified index.
 bindItemList_set_item_tooltip :: MethodBind
 bindItemList_set_item_tooltip
   = unsafePerformIO $
@@ -1468,7 +1502,7 @@ bindItemList_set_item_tooltip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets tooltip hint for the item associated with the specified index.
+-- | Sets the tooltip hint for the item associated with the specified index.
 set_item_tooltip ::
                    (ItemList :< cls, Object :< cls) =>
                    cls -> Int -> GodotString -> IO ()
@@ -1506,8 +1540,9 @@ set_item_tooltip_enabled cls arg1 arg2
 
 {-# NOINLINE bindItemList_set_max_columns #-}
 
--- | Sets the maximum columns the list will have.
---   			If set to anything other than the default, the content will be split among the specified columns.
+-- | Maximum columns the list will have.
+--   			If greater than zero, the content will be split among the specified columns.
+--   			A value of zero means unlimited columns, i.e. all items will be put in the same row.
 bindItemList_set_max_columns :: MethodBind
 bindItemList_set_max_columns
   = unsafePerformIO $
@@ -1517,8 +1552,9 @@ bindItemList_set_max_columns
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the maximum columns the list will have.
---   			If set to anything other than the default, the content will be split among the specified columns.
+-- | Maximum columns the list will have.
+--   			If greater than zero, the content will be split among the specified columns.
+--   			A value of zero means unlimited columns, i.e. all items will be put in the same row.
 set_max_columns ::
                   (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_columns cls arg1
@@ -1531,6 +1567,8 @@ set_max_columns cls arg1
 
 {-# NOINLINE bindItemList_set_max_text_lines #-}
 
+-- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
+--   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
 bindItemList_set_max_text_lines :: MethodBind
 bindItemList_set_max_text_lines
   = unsafePerformIO $
@@ -1540,6 +1578,8 @@ bindItemList_set_max_text_lines
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
+--   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
 set_max_text_lines ::
                      (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_text_lines cls arg1
@@ -1552,7 +1592,8 @@ set_max_text_lines cls arg1
 
 {-# NOINLINE bindItemList_set_same_column_width #-}
 
--- | If set to [code]true[/code], all columns will have the same width specified by [member fixed_column_width].
+-- | Whether all columns will have the same width.
+--   			If [code]true[/code], the width is equal to the largest column width of all columns.
 bindItemList_set_same_column_width :: MethodBind
 bindItemList_set_same_column_width
   = unsafePerformIO $
@@ -1562,7 +1603,8 @@ bindItemList_set_same_column_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If set to [code]true[/code], all columns will have the same width specified by [member fixed_column_width].
+-- | Whether all columns will have the same width.
+--   			If [code]true[/code], the width is equal to the largest column width of all columns.
 set_same_column_width ::
                         (ItemList :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_same_column_width cls arg1
@@ -1576,7 +1618,7 @@ set_same_column_width cls arg1
 
 {-# NOINLINE bindItemList_set_select_mode #-}
 
--- | Allow single or multiple item selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple item selection. See the [enum SelectMode] constants.
 bindItemList_set_select_mode :: MethodBind
 bindItemList_set_select_mode
   = unsafePerformIO $
@@ -1586,7 +1628,7 @@ bindItemList_set_select_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allow single or multiple item selection. See the [code]SELECT_*[/code] constants.
+-- | Allows single or multiple item selection. See the [enum SelectMode] constants.
 set_select_mode ::
                   (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_select_mode cls arg1
@@ -1622,7 +1664,7 @@ sort_items_by_text cls
 
 {-# NOINLINE bindItemList_unselect #-}
 
--- | Ensure the item associated with the specified index is not selected.
+-- | Ensures the item associated with the specified index is not selected.
 bindItemList_unselect :: MethodBind
 bindItemList_unselect
   = unsafePerformIO $
@@ -1632,7 +1674,7 @@ bindItemList_unselect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Ensure the item associated with the specified index is not selected.
+-- | Ensures the item associated with the specified index is not selected.
 unselect :: (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 unselect cls arg1
   = withVariantArray [toVariant arg1]
@@ -1643,7 +1685,7 @@ unselect cls arg1
 
 {-# NOINLINE bindItemList_unselect_all #-}
 
--- | Ensure there are no items selected.
+-- | Ensures there are no items selected.
 bindItemList_unselect_all :: MethodBind
 bindItemList_unselect_all
   = unsafePerformIO $
@@ -1653,7 +1695,7 @@ bindItemList_unselect_all
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Ensure there are no items selected.
+-- | Ensures there are no items selected.
 unselect_all :: (ItemList :< cls, Object :< cls) => cls -> IO ()
 unselect_all cls
   = withVariantArray []

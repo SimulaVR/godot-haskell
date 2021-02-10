@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Tools.EditorSelection
        (Godot.Tools.EditorSelection.sig_selection_changed,
         Godot.Tools.EditorSelection._emit_change,
@@ -22,6 +23,8 @@ sig_selection_changed ::
                       Godot.Internal.Dispatch.Signal EditorSelection
 sig_selection_changed
   = Godot.Internal.Dispatch.Signal "selection_changed"
+
+instance NodeSignal EditorSelection "selection_changed" '[]
 
 {-# NOINLINE bindEditorSelection__emit_change #-}
 
@@ -69,7 +72,7 @@ _node_removed cls arg1
 
 {-# NOINLINE bindEditorSelection_add_node #-}
 
--- | Add a node to the selection.
+-- | Adds a node to the selection.
 bindEditorSelection_add_node :: MethodBind
 bindEditorSelection_add_node
   = unsafePerformIO $
@@ -79,7 +82,7 @@ bindEditorSelection_add_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Add a node to the selection.
+-- | Adds a node to the selection.
 add_node ::
            (EditorSelection :< cls, Object :< cls) => cls -> Node -> IO ()
 add_node cls arg1
@@ -114,7 +117,7 @@ clear cls
 
 {-# NOINLINE bindEditorSelection_get_selected_nodes #-}
 
--- | Get the list of selected nodes.
+-- | Gets the list of selected nodes.
 bindEditorSelection_get_selected_nodes :: MethodBind
 bindEditorSelection_get_selected_nodes
   = unsafePerformIO $
@@ -124,7 +127,7 @@ bindEditorSelection_get_selected_nodes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the list of selected nodes.
+-- | Gets the list of selected nodes.
 get_selected_nodes ::
                      (EditorSelection :< cls, Object :< cls) => cls -> IO Array
 get_selected_nodes cls
@@ -139,7 +142,7 @@ get_selected_nodes cls
 {-# NOINLINE bindEditorSelection_get_transformable_selected_nodes
              #-}
 
--- | Get the list of selected nodes, optimized for transform operations (ie, moving them, rotating, etc). This list avoids situations where a node is selected and also chid/grandchild.
+-- | Gets the list of selected nodes, optimized for transform operations (i.e. moving them, rotating, etc). This list avoids situations where a node is selected and also child/grandchild.
 bindEditorSelection_get_transformable_selected_nodes :: MethodBind
 bindEditorSelection_get_transformable_selected_nodes
   = unsafePerformIO $
@@ -149,7 +152,7 @@ bindEditorSelection_get_transformable_selected_nodes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Get the list of selected nodes, optimized for transform operations (ie, moving them, rotating, etc). This list avoids situations where a node is selected and also chid/grandchild.
+-- | Gets the list of selected nodes, optimized for transform operations (i.e. moving them, rotating, etc). This list avoids situations where a node is selected and also child/grandchild.
 get_transformable_selected_nodes ::
                                    (EditorSelection :< cls, Object :< cls) => cls -> IO Array
 get_transformable_selected_nodes cls
@@ -164,7 +167,7 @@ get_transformable_selected_nodes cls
 
 {-# NOINLINE bindEditorSelection_remove_node #-}
 
--- | Remove a node from the selection.
+-- | Removes a node from the selection.
 bindEditorSelection_remove_node :: MethodBind
 bindEditorSelection_remove_node
   = unsafePerformIO $
@@ -174,7 +177,7 @@ bindEditorSelection_remove_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Remove a node from the selection.
+-- | Removes a node from the selection.
 remove_node ::
               (EditorSelection :< cls, Object :< cls) => cls -> Node -> IO ()
 remove_node cls arg1

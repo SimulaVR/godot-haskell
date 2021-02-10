@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.GridContainer
        (Godot.Core.GridContainer.get_columns,
         Godot.Core.GridContainer.set_columns)
@@ -13,7 +14,7 @@ import Godot.Api.Types
 
 {-# NOINLINE bindGridContainer_get_columns #-}
 
--- | The number of columns in the [code]GridContainer[/code]. If modified, [code]GridContainer[/code] reorders its children to accommodate the new layout.
+-- | The number of columns in the [GridContainer]. If modified, [GridContainer] reorders its Control-derived children to accommodate the new layout.
 bindGridContainer_get_columns :: MethodBind
 bindGridContainer_get_columns
   = unsafePerformIO $
@@ -23,7 +24,7 @@ bindGridContainer_get_columns
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of columns in the [code]GridContainer[/code]. If modified, [code]GridContainer[/code] reorders its children to accommodate the new layout.
+-- | The number of columns in the [GridContainer]. If modified, [GridContainer] reorders its Control-derived children to accommodate the new layout.
 get_columns ::
               (GridContainer :< cls, Object :< cls) => cls -> IO Int
 get_columns cls
@@ -36,7 +37,7 @@ get_columns cls
 
 {-# NOINLINE bindGridContainer_set_columns #-}
 
--- | The number of columns in the [code]GridContainer[/code]. If modified, [code]GridContainer[/code] reorders its children to accommodate the new layout.
+-- | The number of columns in the [GridContainer]. If modified, [GridContainer] reorders its Control-derived children to accommodate the new layout.
 bindGridContainer_set_columns :: MethodBind
 bindGridContainer_set_columns
   = unsafePerformIO $
@@ -46,7 +47,7 @@ bindGridContainer_set_columns
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of columns in the [code]GridContainer[/code]. If modified, [code]GridContainer[/code] reorders its children to accommodate the new layout.
+-- | The number of columns in the [GridContainer]. If modified, [GridContainer] reorders its Control-derived children to accommodate the new layout.
 set_columns ::
               (GridContainer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_columns cls arg1

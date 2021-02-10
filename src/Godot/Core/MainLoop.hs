@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.MainLoop
        (Godot.Core.MainLoop._NOTIFICATION_WM_ABOUT,
         Godot.Core.MainLoop._NOTIFICATION_APP_PAUSED,
@@ -73,10 +74,14 @@ _NOTIFICATION_WM_MOUSE_ENTER = 1002
 _NOTIFICATION_CRASH :: Int
 _NOTIFICATION_CRASH = 1012
 
+-- | Emitted when a user responds to a permission request.
 sig_on_request_permissions_result ::
                                   Godot.Internal.Dispatch.Signal MainLoop
 sig_on_request_permissions_result
   = Godot.Internal.Dispatch.Signal "on_request_permissions_result"
+
+instance NodeSignal MainLoop "on_request_permissions_result"
+           '[GodotString, Bool]
 
 {-# NOINLINE bindMainLoop__drop_files #-}
 
@@ -124,6 +129,7 @@ _finalize cls
 
 {-# NOINLINE bindMainLoop__global_menu_action #-}
 
+-- | Called when the user performs an action in the system global menu (e.g. the Mac OS menu bar).
 bindMainLoop__global_menu_action :: MethodBind
 bindMainLoop__global_menu_action
   = unsafePerformIO $
@@ -133,6 +139,7 @@ bindMainLoop__global_menu_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Called when the user performs an action in the system global menu (e.g. the Mac OS menu bar).
 _global_menu_action ::
                       (MainLoop :< cls, Object :< cls) =>
                       cls -> GodotVariant -> GodotVariant -> IO ()

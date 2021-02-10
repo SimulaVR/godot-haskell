@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Image
        (Godot.Core.Image._FORMAT_RGBAF, Godot.Core.Image._FORMAT_PVRTC2A,
         Godot.Core.Image._FORMAT_ETC2_RGB8, Godot.Core.Image._FORMAT_RGF,
@@ -246,7 +247,7 @@ _FORMAT_RGH = 13
 
 {-# NOINLINE bindImage__get_data #-}
 
--- | Holds all of the image's color data in a given format. See [code]FORMAT_*[/code] constants.
+-- | Holds all of the image's color data in a given format. See [enum Format] constants.
 bindImage__get_data :: MethodBind
 bindImage__get_data
   = unsafePerformIO $
@@ -256,7 +257,7 @@ bindImage__get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Holds all of the image's color data in a given format. See [code]FORMAT_*[/code] constants.
+-- | Holds all of the image's color data in a given format. See [enum Format] constants.
 _get_data :: (Image :< cls, Object :< cls) => cls -> IO Dictionary
 _get_data cls
   = withVariantArray []
@@ -266,7 +267,7 @@ _get_data cls
 
 {-# NOINLINE bindImage__set_data #-}
 
--- | Holds all of the image's color data in a given format. See [code]FORMAT_*[/code] constants.
+-- | Holds all of the image's color data in a given format. See [enum Format] constants.
 bindImage__set_data :: MethodBind
 bindImage__set_data
   = unsafePerformIO $
@@ -276,7 +277,7 @@ bindImage__set_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Holds all of the image's color data in a given format. See [code]FORMAT_*[/code] constants.
+-- | Holds all of the image's color data in a given format. See [enum Format] constants.
 _set_data ::
             (Image :< cls, Object :< cls) => cls -> Dictionary -> IO ()
 _set_data cls arg1
@@ -380,6 +381,7 @@ blit_rect_mask cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindImage_bumpmap_to_normalmap #-}
 
+-- | Converts a bumpmap to a normalmap. A bumpmap provides a height offset per-pixel, while a normalmap provides a normal direction per pixel.
 bindImage_bumpmap_to_normalmap :: MethodBind
 bindImage_bumpmap_to_normalmap
   = unsafePerformIO $
@@ -389,6 +391,7 @@ bindImage_bumpmap_to_normalmap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Converts a bumpmap to a normalmap. A bumpmap provides a height offset per-pixel, while a normalmap provides a normal direction per pixel.
 bumpmap_to_normalmap ::
                        (Image :< cls, Object :< cls) => cls -> Float -> IO ()
 bumpmap_to_normalmap cls arg1
@@ -422,7 +425,7 @@ clear_mipmaps cls
 
 {-# NOINLINE bindImage_compress #-}
 
--- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See [code]COMPRESS_*[/code] constants.
+-- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See [enum CompressMode] and [enum CompressSource] constants.
 bindImage_compress :: MethodBind
 bindImage_compress
   = unsafePerformIO $
@@ -432,7 +435,7 @@ bindImage_compress
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See [code]COMPRESS_*[/code] constants.
+-- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See [enum CompressMode] and [enum CompressSource] constants.
 compress ::
            (Image :< cls, Object :< cls) =>
            cls -> Int -> Int -> Float -> IO Int
@@ -444,7 +447,7 @@ compress cls arg1 arg2 arg3
 
 {-# NOINLINE bindImage_convert #-}
 
--- | Converts the image's format. See [code]FORMAT_*[/code] constants.
+-- | Converts the image's format. See [enum Format] constants.
 bindImage_convert :: MethodBind
 bindImage_convert
   = unsafePerformIO $
@@ -454,7 +457,7 @@ bindImage_convert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Converts the image's format. See [code]FORMAT_*[/code] constants.
+-- | Converts the image's format. See [enum Format] constants.
 convert :: (Image :< cls, Object :< cls) => cls -> Int -> IO ()
 convert cls arg1
   = withVariantArray [toVariant arg1]
@@ -484,7 +487,7 @@ copy_from cls arg1
 
 {-# NOINLINE bindImage_create #-}
 
--- | Creates an empty image of given size and format. See [code]FORMAT_*[/code] constants. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [code]generate_mipmaps[/code] method.
+-- | Creates an empty image of given size and format. See [enum Format] constants. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [method generate_mipmaps].
 bindImage_create :: MethodBind
 bindImage_create
   = unsafePerformIO $
@@ -494,7 +497,7 @@ bindImage_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an empty image of given size and format. See [code]FORMAT_*[/code] constants. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [code]generate_mipmaps[/code] method.
+-- | Creates an empty image of given size and format. See [enum Format] constants. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [method generate_mipmaps].
 create ::
          (Image :< cls, Object :< cls) =>
          cls -> Int -> Int -> Bool -> Int -> IO ()
@@ -507,7 +510,7 @@ create cls arg1 arg2 arg3 arg4
 
 {-# NOINLINE bindImage_create_from_data #-}
 
--- | Creates a new image of given size and format. See [code]FORMAT_*[/code] constants. Fills the image with the given raw data. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [code]generate_mipmaps[/code] method.
+-- | Creates a new image of given size and format. See [enum Format] constants. Fills the image with the given raw data. If [code]use_mipmaps[/code] is [code]true[/code] then loads mipmaps for this image from [code]data[/code]. See [method generate_mipmaps].
 bindImage_create_from_data :: MethodBind
 bindImage_create_from_data
   = unsafePerformIO $
@@ -517,7 +520,7 @@ bindImage_create_from_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new image of given size and format. See [code]FORMAT_*[/code] constants. Fills the image with the given raw data. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [code]generate_mipmaps[/code] method.
+-- | Creates a new image of given size and format. See [enum Format] constants. Fills the image with the given raw data. If [code]use_mipmaps[/code] is [code]true[/code] then loads mipmaps for this image from [code]data[/code]. See [method generate_mipmaps].
 create_from_data ::
                    (Image :< cls, Object :< cls) =>
                    cls -> Int -> Int -> Bool -> Int -> PoolByteArray -> IO ()
@@ -573,7 +576,7 @@ decompress cls
 
 {-# NOINLINE bindImage_detect_alpha #-}
 
--- | Returns ALPHA_BLEND if the image has data for alpha values. Returns ALPHA_BIT if all the alpha values are below a certain threshold or the maximum value. Returns ALPHA_NONE if no data for alpha values is found.
+-- | Returns [constant ALPHA_BLEND] if the image has data for alpha values. Returns [constant ALPHA_BIT] if all the alpha values are stored in a single bit. Returns [constant ALPHA_NONE] if no data for alpha values is found.
 bindImage_detect_alpha :: MethodBind
 bindImage_detect_alpha
   = unsafePerformIO $
@@ -583,7 +586,7 @@ bindImage_detect_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns ALPHA_BLEND if the image has data for alpha values. Returns ALPHA_BIT if all the alpha values are below a certain threshold or the maximum value. Returns ALPHA_NONE if no data for alpha values is found.
+-- | Returns [constant ALPHA_BLEND] if the image has data for alpha values. Returns [constant ALPHA_BIT] if all the alpha values are stored in a single bit. Returns [constant ALPHA_NONE] if no data for alpha values is found.
 detect_alpha :: (Image :< cls, Object :< cls) => cls -> IO Int
 detect_alpha cls
   = withVariantArray []
@@ -720,7 +723,7 @@ generate_mipmaps cls arg1
 
 {-# NOINLINE bindImage_get_data #-}
 
--- | Returns the image's raw data.
+-- | Returns a copy of the image's raw data.
 bindImage_get_data :: MethodBind
 bindImage_get_data
   = unsafePerformIO $
@@ -730,7 +733,7 @@ bindImage_get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the image's raw data.
+-- | Returns a copy of the image's raw data.
 get_data ::
            (Image :< cls, Object :< cls) => cls -> IO PoolByteArray
 get_data cls
@@ -741,7 +744,7 @@ get_data cls
 
 {-# NOINLINE bindImage_get_format #-}
 
--- | Returns the image's format. See [code]FORMAT_*[/code] constants.
+-- | Returns the image's format. See [enum Format] constants.
 bindImage_get_format :: MethodBind
 bindImage_get_format
   = unsafePerformIO $
@@ -751,7 +754,7 @@ bindImage_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the image's format. See [code]FORMAT_*[/code] constants.
+-- | Returns the image's format. See [enum Format] constants.
 get_format :: (Image :< cls, Object :< cls) => cls -> IO Int
 get_format cls
   = withVariantArray []
@@ -804,7 +807,7 @@ get_mipmap_offset cls arg1
 
 {-# NOINLINE bindImage_get_pixel #-}
 
--- | Returns the color of the pixel at [code](x, y)[/code] if the image is locked. If the image is unlocked it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code].
+-- | Returns the color of the pixel at [code](x, y)[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixelv], but two integer arguments instead of a Vector2 argument.
 bindImage_get_pixel :: MethodBind
 bindImage_get_pixel
   = unsafePerformIO $
@@ -814,7 +817,7 @@ bindImage_get_pixel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color of the pixel at [code](x, y)[/code] if the image is locked. If the image is unlocked it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code].
+-- | Returns the color of the pixel at [code](x, y)[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixelv], but two integer arguments instead of a Vector2 argument.
 get_pixel ::
             (Image :< cls, Object :< cls) => cls -> Int -> Int -> IO Color
 get_pixel cls arg1 arg2
@@ -825,6 +828,7 @@ get_pixel cls arg1 arg2
 
 {-# NOINLINE bindImage_get_pixelv #-}
 
+-- | Returns the color of the pixel at [code]src[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixel], but with a Vector2 argument instead of two integer arguments.
 bindImage_get_pixelv :: MethodBind
 bindImage_get_pixelv
   = unsafePerformIO $
@@ -834,6 +838,7 @@ bindImage_get_pixelv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the color of the pixel at [code]src[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixel], but with a Vector2 argument instead of two integer arguments.
 get_pixelv ::
              (Image :< cls, Object :< cls) => cls -> Vector2 -> IO Color
 get_pixelv cls arg1
@@ -885,7 +890,7 @@ get_size cls
 
 {-# NOINLINE bindImage_get_used_rect #-}
 
--- | Returns a [Rect2] enclosing the visible portion of the image.
+-- | Returns a [Rect2] enclosing the visible portion of the image, considering each pixel with a non-zero alpha channel as visible.
 bindImage_get_used_rect :: MethodBind
 bindImage_get_used_rect
   = unsafePerformIO $
@@ -895,7 +900,7 @@ bindImage_get_used_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [Rect2] enclosing the visible portion of the image.
+-- | Returns a [Rect2] enclosing the visible portion of the image, considering each pixel with a non-zero alpha channel as visible.
 get_used_rect :: (Image :< cls, Object :< cls) => cls -> IO Rect2
 get_used_rect cls
   = withVariantArray []
@@ -1009,7 +1014,7 @@ is_invisible cls
 
 {-# NOINLINE bindImage_load #-}
 
--- | Loads an image from file [code]path[/code].
+-- | Loads an image from file [code]path[/code]. See [url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats]Supported image formats[/url] for a list of supported image formats and limitations.
 bindImage_load :: MethodBind
 bindImage_load
   = unsafePerformIO $
@@ -1019,7 +1024,7 @@ bindImage_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads an image from file [code]path[/code].
+-- | Loads an image from file [code]path[/code]. See [url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats]Supported image formats[/url] for a list of supported image formats and limitations.
 load ::
        (Image :< cls, Object :< cls) => cls -> GodotString -> IO Int
 load cls arg1
@@ -1206,6 +1211,7 @@ resize_to_po2 cls arg1
 
 {-# NOINLINE bindImage_rgbe_to_srgb #-}
 
+-- | Converts a standard RGBE (Red Green Blue Exponent) image to an sRGB image.
 bindImage_rgbe_to_srgb :: MethodBind
 bindImage_rgbe_to_srgb
   = unsafePerformIO $
@@ -1215,6 +1221,7 @@ bindImage_rgbe_to_srgb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Converts a standard RGBE (Red Green Blue Exponent) image to an sRGB image.
 rgbe_to_srgb :: (Image :< cls, Object :< cls) => cls -> IO Image
 rgbe_to_srgb cls
   = withVariantArray []
@@ -1225,6 +1232,7 @@ rgbe_to_srgb cls
 
 {-# NOINLINE bindImage_save_exr #-}
 
+-- | Saves the image as an EXR file to [code]path[/code]. If [code]grayscale[/code] is [code]true[/code] and the image has only one channel, it will be saved explicitly as monochrome rather than one red channel. This function will return [constant ERR_UNAVAILABLE] if Godot was compiled without the TinyEXR module.
 bindImage_save_exr :: MethodBind
 bindImage_save_exr
   = unsafePerformIO $
@@ -1234,6 +1242,7 @@ bindImage_save_exr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Saves the image as an EXR file to [code]path[/code]. If [code]grayscale[/code] is [code]true[/code] and the image has only one channel, it will be saved explicitly as monochrome rather than one red channel. This function will return [constant ERR_UNAVAILABLE] if Godot was compiled without the TinyEXR module.
 save_exr ::
            (Image :< cls, Object :< cls) =>
            cls -> GodotString -> Bool -> IO Int
@@ -1304,6 +1313,15 @@ set_pixel cls arg1 arg2 arg3
 
 {-# NOINLINE bindImage_set_pixelv #-}
 
+-- | Sets the [Color] of the pixel at [code](dst.x, dst.y)[/code] if the image is locked. Note that the [code]dst[/code] values must be integers. Example:
+--   				[codeblock]
+--   				var img = Image.new()
+--   				img.create(img_width, img_height, false, Image.FORMAT_RGBA8)
+--   				img.lock()
+--   				img.set_pixelv(Vector2(x, y), color) # Works
+--   				img.unlock()
+--   				img.set_pixelv(Vector2(x, y), color) # Does not have an effect
+--   				[/codeblock]
 bindImage_set_pixelv :: MethodBind
 bindImage_set_pixelv
   = unsafePerformIO $
@@ -1313,6 +1331,15 @@ bindImage_set_pixelv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the [Color] of the pixel at [code](dst.x, dst.y)[/code] if the image is locked. Note that the [code]dst[/code] values must be integers. Example:
+--   				[codeblock]
+--   				var img = Image.new()
+--   				img.create(img_width, img_height, false, Image.FORMAT_RGBA8)
+--   				img.lock()
+--   				img.set_pixelv(Vector2(x, y), color) # Works
+--   				img.unlock()
+--   				img.set_pixelv(Vector2(x, y), color) # Does not have an effect
+--   				[/codeblock]
 set_pixelv ::
              (Image :< cls, Object :< cls) => cls -> Vector2 -> Color -> IO ()
 set_pixelv cls arg1 arg2

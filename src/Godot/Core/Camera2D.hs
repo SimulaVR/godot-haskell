@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.Camera2D
        (Godot.Core.Camera2D._ANCHOR_MODE_FIXED_TOP_LEFT,
         Godot.Core.Camera2D._CAMERA2D_PROCESS_PHYSICS,
@@ -155,7 +156,7 @@ _update_scroll cls
 
 {-# NOINLINE bindCamera2D_align #-}
 
--- | Align the camera to the tracked node
+-- | Aligns the camera to the tracked node.
 bindCamera2D_align :: MethodBind
 bindCamera2D_align
   = unsafePerformIO $
@@ -165,7 +166,7 @@ bindCamera2D_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Align the camera to the tracked node
+-- | Aligns the camera to the tracked node.
 align :: (Camera2D :< cls, Object :< cls) => cls -> IO ()
 align cls
   = withVariantArray []
@@ -175,7 +176,7 @@ align cls
 
 {-# NOINLINE bindCamera2D_clear_current #-}
 
--- | Removes any [code]Camera2D[/code] from the ancestor [Viewport]'s internal currently-assigned camera.
+-- | Removes any [Camera2D] from the ancestor [Viewport]'s internal currently-assigned camera.
 bindCamera2D_clear_current :: MethodBind
 bindCamera2D_clear_current
   = unsafePerformIO $
@@ -185,7 +186,7 @@ bindCamera2D_clear_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes any [code]Camera2D[/code] from the ancestor [Viewport]'s internal currently-assigned camera.
+-- | Removes any [Camera2D] from the ancestor [Viewport]'s internal currently-assigned camera.
 clear_current :: (Camera2D :< cls, Object :< cls) => cls -> IO ()
 clear_current cls
   = withVariantArray []
@@ -197,7 +198,7 @@ clear_current cls
 
 {-# NOINLINE bindCamera2D_force_update_scroll #-}
 
--- | Force the camera to update scroll immediately.
+-- | Forces the camera to update scroll immediately.
 bindCamera2D_force_update_scroll :: MethodBind
 bindCamera2D_force_update_scroll
   = unsafePerformIO $
@@ -207,7 +208,7 @@ bindCamera2D_force_update_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Force the camera to update scroll immediately.
+-- | Forces the camera to update scroll immediately.
 force_update_scroll ::
                       (Camera2D :< cls, Object :< cls) => cls -> IO ()
 force_update_scroll cls
@@ -221,7 +222,7 @@ force_update_scroll cls
 
 {-# NOINLINE bindCamera2D_get_anchor_mode #-}
 
--- | The Camera2D's anchor point. See [code]ANCHOR_MODE_*[/code] constants.
+-- | The Camera2D's anchor point. See [enum AnchorMode] constants.
 bindCamera2D_get_anchor_mode :: MethodBind
 bindCamera2D_get_anchor_mode
   = unsafePerformIO $
@@ -231,7 +232,7 @@ bindCamera2D_get_anchor_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The Camera2D's anchor point. See [code]ANCHOR_MODE_*[/code] constants.
+-- | The Camera2D's anchor point. See [enum AnchorMode] constants.
 get_anchor_mode ::
                   (Camera2D :< cls, Object :< cls) => cls -> IO Int
 get_anchor_mode cls
@@ -268,7 +269,7 @@ get_camera_position cls
 
 {-# NOINLINE bindCamera2D_get_camera_screen_center #-}
 
--- | Returns the location of the [code]Camera2D[/code]'s screen-center, relative to the origin.
+-- | Returns the location of the [Camera2D]'s screen-center, relative to the origin.
 bindCamera2D_get_camera_screen_center :: MethodBind
 bindCamera2D_get_camera_screen_center
   = unsafePerformIO $
@@ -278,7 +279,7 @@ bindCamera2D_get_camera_screen_center
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the location of the [code]Camera2D[/code]'s screen-center, relative to the origin.
+-- | Returns the location of the [Camera2D]'s screen-center, relative to the origin.
 get_camera_screen_center ::
                            (Camera2D :< cls, Object :< cls) => cls -> IO Vector2
 get_camera_screen_center cls
@@ -292,7 +293,7 @@ get_camera_screen_center cls
 
 {-# NOINLINE bindCamera2D_get_custom_viewport #-}
 
--- | The custom [Viewport] node attached to the [code]Camera2D[/code]. If null or not a [Viewport], uses the default viewport instead.
+-- | The custom [Viewport] node attached to the [Camera2D]. If [code]null[/code] or not a [Viewport], uses the default viewport instead.
 bindCamera2D_get_custom_viewport :: MethodBind
 bindCamera2D_get_custom_viewport
   = unsafePerformIO $
@@ -302,7 +303,7 @@ bindCamera2D_get_custom_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Viewport] node attached to the [code]Camera2D[/code]. If null or not a [Viewport], uses the default viewport instead.
+-- | The custom [Viewport] node attached to the [Camera2D]. If [code]null[/code] or not a [Viewport], uses the default viewport instead.
 get_custom_viewport ::
                       (Camera2D :< cls, Object :< cls) => cls -> IO Node
 get_custom_viewport cls
@@ -316,7 +317,7 @@ get_custom_viewport cls
 
 {-# NOINLINE bindCamera2D_get_drag_margin #-}
 
--- | Bottom margin needed to drag the camera. A value of [code]1[/code] makes the camera move only when reaching the edge of the screen.
+-- | Returns the specified margin. See also [member drag_margin_bottom], [member drag_margin_top], [member drag_margin_left], and [member drag_margin_right].
 bindCamera2D_get_drag_margin :: MethodBind
 bindCamera2D_get_drag_margin
   = unsafePerformIO $
@@ -326,7 +327,7 @@ bindCamera2D_get_drag_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bottom margin needed to drag the camera. A value of [code]1[/code] makes the camera move only when reaching the edge of the screen.
+-- | Returns the specified margin. See also [member drag_margin_bottom], [member drag_margin_top], [member drag_margin_left], and [member drag_margin_right].
 get_drag_margin ::
                   (Camera2D :< cls, Object :< cls) => cls -> Int -> IO Float
 get_drag_margin cls arg1
@@ -339,7 +340,7 @@ get_drag_margin cls arg1
 
 {-# NOINLINE bindCamera2D_get_follow_smoothing #-}
 
--- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code]
+-- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code].
 bindCamera2D_get_follow_smoothing :: MethodBind
 bindCamera2D_get_follow_smoothing
   = unsafePerformIO $
@@ -349,7 +350,7 @@ bindCamera2D_get_follow_smoothing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code]
+-- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code].
 get_follow_smoothing ::
                        (Camera2D :< cls, Object :< cls) => cls -> IO Float
 get_follow_smoothing cls
@@ -363,7 +364,8 @@ get_follow_smoothing cls
 
 {-# NOINLINE bindCamera2D_get_h_offset #-}
 
--- | The horizontal offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The horizontal offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Offset H is used only to force offset relative to margins. It's not updated in any way if drag margins are enabled and can be used to set initial offset.
 bindCamera2D_get_h_offset :: MethodBind
 bindCamera2D_get_h_offset
   = unsafePerformIO $
@@ -373,7 +375,8 @@ bindCamera2D_get_h_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The horizontal offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The horizontal offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Offset H is used only to force offset relative to margins. It's not updated in any way if drag margins are enabled and can be used to set initial offset.
 get_h_offset :: (Camera2D :< cls, Object :< cls) => cls -> IO Float
 get_h_offset cls
   = withVariantArray []
@@ -385,7 +388,7 @@ get_h_offset cls
 
 {-# NOINLINE bindCamera2D_get_limit #-}
 
--- | Bottom scroll limit in pixels. The camera stops moving when reaching this value.
+-- | Returns the specified camera limit. See also [member limit_bottom], [member limit_top], [member limit_left], and [member limit_right].
 bindCamera2D_get_limit :: MethodBind
 bindCamera2D_get_limit
   = unsafePerformIO $
@@ -395,7 +398,7 @@ bindCamera2D_get_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bottom scroll limit in pixels. The camera stops moving when reaching this value.
+-- | Returns the specified camera limit. See also [member limit_bottom], [member limit_top], [member limit_left], and [member limit_right].
 get_limit ::
             (Camera2D :< cls, Object :< cls) => cls -> Int -> IO Int
 get_limit cls arg1
@@ -428,6 +431,7 @@ get_offset cls
 
 {-# NOINLINE bindCamera2D_get_process_mode #-}
 
+-- | The camera's process callback. See [enum Camera2DProcessMode].
 bindCamera2D_get_process_mode :: MethodBind
 bindCamera2D_get_process_mode
   = unsafePerformIO $
@@ -437,6 +441,7 @@ bindCamera2D_get_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The camera's process callback. See [enum Camera2DProcessMode].
 get_process_mode ::
                    (Camera2D :< cls, Object :< cls) => cls -> IO Int
 get_process_mode cls
@@ -449,7 +454,8 @@ get_process_mode cls
 
 {-# NOINLINE bindCamera2D_get_v_offset #-}
 
--- | The vertical offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The vertical offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Used the same as [member offset_h].
 bindCamera2D_get_v_offset :: MethodBind
 bindCamera2D_get_v_offset
   = unsafePerformIO $
@@ -459,7 +465,8 @@ bindCamera2D_get_v_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The vertical offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The vertical offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Used the same as [member offset_h].
 get_v_offset :: (Camera2D :< cls, Object :< cls) => cls -> IO Float
 get_v_offset cls
   = withVariantArray []
@@ -471,7 +478,7 @@ get_v_offset cls
 
 {-# NOINLINE bindCamera2D_get_zoom #-}
 
--- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2x zoom in, and [code]Vector2(4, 4)[/code] for a 4x zoom out.
+-- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2× zoom-in, and [code]Vector2(4, 4)[/code] for a 4× zoom-out.
 bindCamera2D_get_zoom :: MethodBind
 bindCamera2D_get_zoom
   = unsafePerformIO $
@@ -481,7 +488,7 @@ bindCamera2D_get_zoom
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2x zoom in, and [code]Vector2(4, 4)[/code] for a 4x zoom out.
+-- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2× zoom-in, and [code]Vector2(4, 4)[/code] for a 4× zoom-out.
 get_zoom :: (Camera2D :< cls, Object :< cls) => cls -> IO Vector2
 get_zoom cls
   = withVariantArray []
@@ -513,7 +520,7 @@ is_current cls
 
 {-# NOINLINE bindCamera2D_is_follow_smoothing_enabled #-}
 
--- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed]. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed].
 bindCamera2D_is_follow_smoothing_enabled :: MethodBind
 bindCamera2D_is_follow_smoothing_enabled
   = unsafePerformIO $
@@ -523,7 +530,7 @@ bindCamera2D_is_follow_smoothing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed]. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed].
 is_follow_smoothing_enabled ::
                               (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_follow_smoothing_enabled cls
@@ -537,7 +544,7 @@ is_follow_smoothing_enabled cls
 
 {-# NOINLINE bindCamera2D_is_h_drag_enabled #-}
 
--- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins.
 bindCamera2D_is_h_drag_enabled :: MethodBind
 bindCamera2D_is_h_drag_enabled
   = unsafePerformIO $
@@ -547,7 +554,7 @@ bindCamera2D_is_h_drag_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins.
 is_h_drag_enabled ::
                     (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_h_drag_enabled cls
@@ -560,7 +567,7 @@ is_h_drag_enabled cls
 
 {-# NOINLINE bindCamera2D_is_limit_drawing_enabled #-}
 
--- | If [code]true[/code], draws the camera's limits rectangle in the editor. Default value: [code]true[/code]
+-- | If [code]true[/code], draws the camera's limits rectangle in the editor.
 bindCamera2D_is_limit_drawing_enabled :: MethodBind
 bindCamera2D_is_limit_drawing_enabled
   = unsafePerformIO $
@@ -570,7 +577,7 @@ bindCamera2D_is_limit_drawing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draws the camera's limits rectangle in the editor. Default value: [code]true[/code]
+-- | If [code]true[/code], draws the camera's limits rectangle in the editor.
 is_limit_drawing_enabled ::
                            (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_limit_drawing_enabled cls
@@ -584,7 +591,7 @@ is_limit_drawing_enabled cls
 
 {-# NOINLINE bindCamera2D_is_limit_smoothing_enabled #-}
 
--- | If [code]true[/code], the camera smoothly stops when reaches its limits. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly stops when reaches its limits.
 bindCamera2D_is_limit_smoothing_enabled :: MethodBind
 bindCamera2D_is_limit_smoothing_enabled
   = unsafePerformIO $
@@ -594,7 +601,7 @@ bindCamera2D_is_limit_smoothing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera smoothly stops when reaches its limits. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly stops when reaches its limits.
 is_limit_smoothing_enabled ::
                              (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_limit_smoothing_enabled cls
@@ -608,7 +615,7 @@ is_limit_smoothing_enabled cls
 
 {-# NOINLINE bindCamera2D_is_margin_drawing_enabled #-}
 
--- | If [code]true[/code], draws the camera's drag margin rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's drag margin rectangle in the editor.
 bindCamera2D_is_margin_drawing_enabled :: MethodBind
 bindCamera2D_is_margin_drawing_enabled
   = unsafePerformIO $
@@ -618,7 +625,7 @@ bindCamera2D_is_margin_drawing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draws the camera's drag margin rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's drag margin rectangle in the editor.
 is_margin_drawing_enabled ::
                             (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_margin_drawing_enabled cls
@@ -632,7 +639,7 @@ is_margin_drawing_enabled cls
 
 {-# NOINLINE bindCamera2D_is_rotating #-}
 
--- | If [code]true[/code], the camera rotates with the target. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera rotates with the target.
 bindCamera2D_is_rotating :: MethodBind
 bindCamera2D_is_rotating
   = unsafePerformIO $
@@ -642,7 +649,7 @@ bindCamera2D_is_rotating
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera rotates with the target. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera rotates with the target.
 is_rotating :: (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_rotating cls
   = withVariantArray []
@@ -653,7 +660,7 @@ is_rotating cls
 
 {-# NOINLINE bindCamera2D_is_screen_drawing_enabled #-}
 
--- | If [code]true[/code], draws the camera's screen rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's screen rectangle in the editor.
 bindCamera2D_is_screen_drawing_enabled :: MethodBind
 bindCamera2D_is_screen_drawing_enabled
   = unsafePerformIO $
@@ -663,7 +670,7 @@ bindCamera2D_is_screen_drawing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draws the camera's screen rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's screen rectangle in the editor.
 is_screen_drawing_enabled ::
                             (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_screen_drawing_enabled cls
@@ -677,7 +684,7 @@ is_screen_drawing_enabled cls
 
 {-# NOINLINE bindCamera2D_is_v_drag_enabled #-}
 
--- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins.
 bindCamera2D_is_v_drag_enabled :: MethodBind
 bindCamera2D_is_v_drag_enabled
   = unsafePerformIO $
@@ -687,7 +694,7 @@ bindCamera2D_is_v_drag_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins.
 is_v_drag_enabled ::
                     (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_v_drag_enabled cls
@@ -700,7 +707,7 @@ is_v_drag_enabled cls
 
 {-# NOINLINE bindCamera2D_make_current #-}
 
--- | Make this the current 2D camera for the scene (viewport and layer), in case there's many cameras in the scene.
+-- | Make this the current 2D camera for the scene (viewport and layer), in case there are many cameras in the scene.
 bindCamera2D_make_current :: MethodBind
 bindCamera2D_make_current
   = unsafePerformIO $
@@ -710,7 +717,7 @@ bindCamera2D_make_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Make this the current 2D camera for the scene (viewport and layer), in case there's many cameras in the scene.
+-- | Make this the current 2D camera for the scene (viewport and layer), in case there are many cameras in the scene.
 make_current :: (Camera2D :< cls, Object :< cls) => cls -> IO ()
 make_current cls
   = withVariantArray []
@@ -722,7 +729,7 @@ make_current cls
 
 {-# NOINLINE bindCamera2D_reset_smoothing #-}
 
--- | Set the camera's position immediately to its current smoothing destination.
+-- | Sets the camera's position immediately to its current smoothing destination.
 --   				This has no effect if smoothing is disabled.
 bindCamera2D_reset_smoothing :: MethodBind
 bindCamera2D_reset_smoothing
@@ -733,7 +740,7 @@ bindCamera2D_reset_smoothing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set the camera's position immediately to its current smoothing destination.
+-- | Sets the camera's position immediately to its current smoothing destination.
 --   				This has no effect if smoothing is disabled.
 reset_smoothing :: (Camera2D :< cls, Object :< cls) => cls -> IO ()
 reset_smoothing cls
@@ -746,7 +753,7 @@ reset_smoothing cls
 
 {-# NOINLINE bindCamera2D_set_anchor_mode #-}
 
--- | The Camera2D's anchor point. See [code]ANCHOR_MODE_*[/code] constants.
+-- | The Camera2D's anchor point. See [enum AnchorMode] constants.
 bindCamera2D_set_anchor_mode :: MethodBind
 bindCamera2D_set_anchor_mode
   = unsafePerformIO $
@@ -756,7 +763,7 @@ bindCamera2D_set_anchor_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The Camera2D's anchor point. See [code]ANCHOR_MODE_*[/code] constants.
+-- | The Camera2D's anchor point. See [enum AnchorMode] constants.
 set_anchor_mode ::
                   (Camera2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_anchor_mode cls arg1
@@ -769,7 +776,7 @@ set_anchor_mode cls arg1
 
 {-# NOINLINE bindCamera2D_set_custom_viewport #-}
 
--- | The custom [Viewport] node attached to the [code]Camera2D[/code]. If null or not a [Viewport], uses the default viewport instead.
+-- | The custom [Viewport] node attached to the [Camera2D]. If [code]null[/code] or not a [Viewport], uses the default viewport instead.
 bindCamera2D_set_custom_viewport :: MethodBind
 bindCamera2D_set_custom_viewport
   = unsafePerformIO $
@@ -779,7 +786,7 @@ bindCamera2D_set_custom_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Viewport] node attached to the [code]Camera2D[/code]. If null or not a [Viewport], uses the default viewport instead.
+-- | The custom [Viewport] node attached to the [Camera2D]. If [code]null[/code] or not a [Viewport], uses the default viewport instead.
 set_custom_viewport ::
                       (Camera2D :< cls, Object :< cls) => cls -> Node -> IO ()
 set_custom_viewport cls arg1
@@ -793,7 +800,7 @@ set_custom_viewport cls arg1
 
 {-# NOINLINE bindCamera2D_set_drag_margin #-}
 
--- | Bottom margin needed to drag the camera. A value of [code]1[/code] makes the camera move only when reaching the edge of the screen.
+-- | Sets the specified margin. See also [member drag_margin_bottom], [member drag_margin_top], [member drag_margin_left], and [member drag_margin_right].
 bindCamera2D_set_drag_margin :: MethodBind
 bindCamera2D_set_drag_margin
   = unsafePerformIO $
@@ -803,7 +810,7 @@ bindCamera2D_set_drag_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bottom margin needed to drag the camera. A value of [code]1[/code] makes the camera move only when reaching the edge of the screen.
+-- | Sets the specified margin. See also [member drag_margin_bottom], [member drag_margin_top], [member drag_margin_left], and [member drag_margin_right].
 set_drag_margin ::
                   (Camera2D :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_drag_margin cls arg1 arg2
@@ -816,7 +823,7 @@ set_drag_margin cls arg1 arg2
 
 {-# NOINLINE bindCamera2D_set_enable_follow_smoothing #-}
 
--- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed]. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed].
 bindCamera2D_set_enable_follow_smoothing :: MethodBind
 bindCamera2D_set_enable_follow_smoothing
   = unsafePerformIO $
@@ -826,7 +833,7 @@ bindCamera2D_set_enable_follow_smoothing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed]. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly moves towards the target at [member smoothing_speed].
 set_enable_follow_smoothing ::
                               (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enable_follow_smoothing cls arg1
@@ -840,7 +847,7 @@ set_enable_follow_smoothing cls arg1
 
 {-# NOINLINE bindCamera2D_set_follow_smoothing #-}
 
--- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code]
+-- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code].
 bindCamera2D_set_follow_smoothing :: MethodBind
 bindCamera2D_set_follow_smoothing
   = unsafePerformIO $
@@ -850,7 +857,7 @@ bindCamera2D_set_follow_smoothing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code]
+-- | Speed in pixels per second of the camera's smoothing effect when [member smoothing_enabled] is [code]true[/code].
 set_follow_smoothing ::
                        (Camera2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_follow_smoothing cls arg1
@@ -864,7 +871,7 @@ set_follow_smoothing cls arg1
 
 {-# NOINLINE bindCamera2D_set_h_drag_enabled #-}
 
--- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins.
 bindCamera2D_set_h_drag_enabled :: MethodBind
 bindCamera2D_set_h_drag_enabled
   = unsafePerformIO $
@@ -874,7 +881,7 @@ bindCamera2D_set_h_drag_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the horizontal drag margins. If [code]false[/code], the camera moves horizontally regardless of margins.
 set_h_drag_enabled ::
                      (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_h_drag_enabled cls arg1
@@ -887,7 +894,8 @@ set_h_drag_enabled cls arg1
 
 {-# NOINLINE bindCamera2D_set_h_offset #-}
 
--- | The horizontal offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The horizontal offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Offset H is used only to force offset relative to margins. It's not updated in any way if drag margins are enabled and can be used to set initial offset.
 bindCamera2D_set_h_offset :: MethodBind
 bindCamera2D_set_h_offset
   = unsafePerformIO $
@@ -897,7 +905,8 @@ bindCamera2D_set_h_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The horizontal offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The horizontal offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Offset H is used only to force offset relative to margins. It's not updated in any way if drag margins are enabled and can be used to set initial offset.
 set_h_offset ::
                (Camera2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_h_offset cls arg1
@@ -910,7 +919,7 @@ set_h_offset cls arg1
 
 {-# NOINLINE bindCamera2D_set_limit #-}
 
--- | Bottom scroll limit in pixels. The camera stops moving when reaching this value.
+-- | Sets the specified camera limit. See also [member limit_bottom], [member limit_top], [member limit_left], and [member limit_right].
 bindCamera2D_set_limit :: MethodBind
 bindCamera2D_set_limit
   = unsafePerformIO $
@@ -920,7 +929,7 @@ bindCamera2D_set_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bottom scroll limit in pixels. The camera stops moving when reaching this value.
+-- | Sets the specified camera limit. See also [member limit_bottom], [member limit_top], [member limit_left], and [member limit_right].
 set_limit ::
             (Camera2D :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_limit cls arg1 arg2
@@ -932,7 +941,7 @@ set_limit cls arg1 arg2
 
 {-# NOINLINE bindCamera2D_set_limit_drawing_enabled #-}
 
--- | If [code]true[/code], draws the camera's limits rectangle in the editor. Default value: [code]true[/code]
+-- | If [code]true[/code], draws the camera's limits rectangle in the editor.
 bindCamera2D_set_limit_drawing_enabled :: MethodBind
 bindCamera2D_set_limit_drawing_enabled
   = unsafePerformIO $
@@ -942,7 +951,7 @@ bindCamera2D_set_limit_drawing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draws the camera's limits rectangle in the editor. Default value: [code]true[/code]
+-- | If [code]true[/code], draws the camera's limits rectangle in the editor.
 set_limit_drawing_enabled ::
                             (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_limit_drawing_enabled cls arg1
@@ -956,7 +965,7 @@ set_limit_drawing_enabled cls arg1
 
 {-# NOINLINE bindCamera2D_set_limit_smoothing_enabled #-}
 
--- | If [code]true[/code], the camera smoothly stops when reaches its limits. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly stops when reaches its limits.
 bindCamera2D_set_limit_smoothing_enabled :: MethodBind
 bindCamera2D_set_limit_smoothing_enabled
   = unsafePerformIO $
@@ -966,7 +975,7 @@ bindCamera2D_set_limit_smoothing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera smoothly stops when reaches its limits. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera smoothly stops when reaches its limits.
 set_limit_smoothing_enabled ::
                               (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_limit_smoothing_enabled cls arg1
@@ -980,7 +989,7 @@ set_limit_smoothing_enabled cls arg1
 
 {-# NOINLINE bindCamera2D_set_margin_drawing_enabled #-}
 
--- | If [code]true[/code], draws the camera's drag margin rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's drag margin rectangle in the editor.
 bindCamera2D_set_margin_drawing_enabled :: MethodBind
 bindCamera2D_set_margin_drawing_enabled
   = unsafePerformIO $
@@ -990,7 +999,7 @@ bindCamera2D_set_margin_drawing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draws the camera's drag margin rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's drag margin rectangle in the editor.
 set_margin_drawing_enabled ::
                              (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_margin_drawing_enabled cls arg1
@@ -1026,6 +1035,7 @@ set_offset cls arg1
 
 {-# NOINLINE bindCamera2D_set_process_mode #-}
 
+-- | The camera's process callback. See [enum Camera2DProcessMode].
 bindCamera2D_set_process_mode :: MethodBind
 bindCamera2D_set_process_mode
   = unsafePerformIO $
@@ -1035,6 +1045,7 @@ bindCamera2D_set_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The camera's process callback. See [enum Camera2DProcessMode].
 set_process_mode ::
                    (Camera2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_process_mode cls arg1
@@ -1047,7 +1058,7 @@ set_process_mode cls arg1
 
 {-# NOINLINE bindCamera2D_set_rotating #-}
 
--- | If [code]true[/code], the camera rotates with the target. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera rotates with the target.
 bindCamera2D_set_rotating :: MethodBind
 bindCamera2D_set_rotating
   = unsafePerformIO $
@@ -1057,7 +1068,7 @@ bindCamera2D_set_rotating
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera rotates with the target. Default value: [code]false[/code]
+-- | If [code]true[/code], the camera rotates with the target.
 set_rotating ::
                (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_rotating cls arg1
@@ -1070,7 +1081,7 @@ set_rotating cls arg1
 
 {-# NOINLINE bindCamera2D_set_screen_drawing_enabled #-}
 
--- | If [code]true[/code], draws the camera's screen rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's screen rectangle in the editor.
 bindCamera2D_set_screen_drawing_enabled :: MethodBind
 bindCamera2D_set_screen_drawing_enabled
   = unsafePerformIO $
@@ -1080,7 +1091,7 @@ bindCamera2D_set_screen_drawing_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draws the camera's screen rectangle in the editor. Default value: [code]false[/code]
+-- | If [code]true[/code], draws the camera's screen rectangle in the editor.
 set_screen_drawing_enabled ::
                              (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_screen_drawing_enabled cls arg1
@@ -1094,7 +1105,7 @@ set_screen_drawing_enabled cls arg1
 
 {-# NOINLINE bindCamera2D_set_v_drag_enabled #-}
 
--- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins.
 bindCamera2D_set_v_drag_enabled :: MethodBind
 bindCamera2D_set_v_drag_enabled
   = unsafePerformIO $
@@ -1104,7 +1115,7 @@ bindCamera2D_set_v_drag_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins. Default value: [code]true[/code].
+-- | If [code]true[/code], the camera only moves when reaching the vertical drag margins. If [code]false[/code], the camera moves vertically regardless of margins.
 set_v_drag_enabled ::
                      (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_v_drag_enabled cls arg1
@@ -1117,7 +1128,8 @@ set_v_drag_enabled cls arg1
 
 {-# NOINLINE bindCamera2D_set_v_offset #-}
 
--- | The vertical offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The vertical offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Used the same as [member offset_h].
 bindCamera2D_set_v_offset :: MethodBind
 bindCamera2D_set_v_offset
   = unsafePerformIO $
@@ -1127,7 +1139,8 @@ bindCamera2D_set_v_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The vertical offset of the camera, relative to the drag margins. Default value: [code]0[/code]
+-- | The vertical offset of the camera, relative to the drag margins.
+--   			[b]Note:[/b] Used the same as [member offset_h].
 set_v_offset ::
                (Camera2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_v_offset cls arg1
@@ -1140,7 +1153,7 @@ set_v_offset cls arg1
 
 {-# NOINLINE bindCamera2D_set_zoom #-}
 
--- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2x zoom in, and [code]Vector2(4, 4)[/code] for a 4x zoom out.
+-- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2× zoom-in, and [code]Vector2(4, 4)[/code] for a 4× zoom-out.
 bindCamera2D_set_zoom :: MethodBind
 bindCamera2D_set_zoom
   = unsafePerformIO $
@@ -1150,7 +1163,7 @@ bindCamera2D_set_zoom
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2x zoom in, and [code]Vector2(4, 4)[/code] for a 4x zoom out.
+-- | The camera's zoom relative to the viewport. Values larger than [code]Vector2(1, 1)[/code] zoom out and smaller values zoom in. For an example, use [code]Vector2(0.5, 0.5)[/code] for a 2× zoom-in, and [code]Vector2(4, 4)[/code] for a 4× zoom-out.
 set_zoom ::
            (Camera2D :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_zoom cls arg1

@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies, GeneralizedNewtypeDeriving,
-  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds #-}
+  TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
+  MultiParamTypeClasses #-}
 module Godot.Core.ResourceSaver
        (Godot.Core.ResourceSaver._FLAG_REPLACE_SUBRESOURCE_PATHS,
         Godot.Core.ResourceSaver._FLAG_RELATIVE_PATHS,
@@ -68,7 +69,7 @@ get_recognized_extensions cls arg1
 
 -- | Saves a resource to disk to the given path, using a [ResourceFormatSaver] that recognizes the resource object.
 --   				The [code]flags[/code] bitmask can be specified to customize the save behavior.
---   				Returns [constant @GlobalScope.OK] on success.
+--   				Returns [constant OK] on success.
 bindResourceSaver_save :: MethodBind
 bindResourceSaver_save
   = unsafePerformIO $
@@ -80,7 +81,7 @@ bindResourceSaver_save
 
 -- | Saves a resource to disk to the given path, using a [ResourceFormatSaver] that recognizes the resource object.
 --   				The [code]flags[/code] bitmask can be specified to customize the save behavior.
---   				Returns [constant @GlobalScope.OK] on success.
+--   				Returns [constant OK] on success.
 save ::
        (ResourceSaver :< cls, Object :< cls) =>
        cls -> GodotString -> Resource -> Int -> IO Int

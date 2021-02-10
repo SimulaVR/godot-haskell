@@ -18,6 +18,10 @@ _global_script_class_icons={
 config/name="myproject"
 run/main_scene="res://Main.tscn"
 
+[audio]
+
+default_bus_layout=""
+
 [display]
 
 window/size/width=480
