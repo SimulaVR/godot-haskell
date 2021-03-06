@@ -20,13 +20,18 @@ module Godot.Tools.EditorFileSystemDirectory
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 {-# NOINLINE bindEditorFileSystemDirectory_find_dir_index #-}
 
--- | Returns the index of the directory with name [code]name[/code] or [code]-1[/code] if not found.
+-- | Returns the index of the directory with name @name@ or @-1@ if not found.
 bindEditorFileSystemDirectory_find_dir_index :: MethodBind
 bindEditorFileSystemDirectory_find_dir_index
   = unsafePerformIO $
@@ -36,7 +41,7 @@ bindEditorFileSystemDirectory_find_dir_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the index of the directory with name [code]name[/code] or [code]-1[/code] if not found.
+-- | Returns the index of the directory with name @name@ or @-1@ if not found.
 find_dir_index ::
                  (EditorFileSystemDirectory :< cls, Object :< cls) =>
                  cls -> GodotString -> IO Int
@@ -49,9 +54,15 @@ find_dir_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory "find_dir_index"
+           '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.find_dir_index
+
 {-# NOINLINE bindEditorFileSystemDirectory_find_file_index #-}
 
--- | Returns the index of the file with name [code]name[/code] or [code]-1[/code] if not found.
+-- | Returns the index of the file with name @name@ or @-1@ if not found.
 bindEditorFileSystemDirectory_find_file_index :: MethodBind
 bindEditorFileSystemDirectory_find_file_index
   = unsafePerformIO $
@@ -61,7 +72,7 @@ bindEditorFileSystemDirectory_find_file_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the index of the file with name [code]name[/code] or [code]-1[/code] if not found.
+-- | Returns the index of the file with name @name@ or @-1@ if not found.
 find_file_index ::
                   (EditorFileSystemDirectory :< cls, Object :< cls) =>
                   cls -> GodotString -> IO Int
@@ -75,9 +86,15 @@ find_file_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory "find_file_index"
+           '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.find_file_index
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_file #-}
 
--- | Returns the name of the file at index [code]idx[/code].
+-- | Returns the name of the file at index @idx@.
 bindEditorFileSystemDirectory_get_file :: MethodBind
 bindEditorFileSystemDirectory_get_file
   = unsafePerformIO $
@@ -87,7 +104,7 @@ bindEditorFileSystemDirectory_get_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the name of the file at index [code]idx[/code].
+-- | Returns the name of the file at index @idx@.
 get_file ::
            (EditorFileSystemDirectory :< cls, Object :< cls) =>
            cls -> Int -> IO GodotString
@@ -99,6 +116,11 @@ get_file cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystemDirectory "get_file" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_file
 
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_count #-}
 
@@ -124,10 +146,15 @@ get_file_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory "get_file_count" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_file_count
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_import_is_valid
              #-}
 
--- | Returns [code]true[/code] if the file at index [code]idx[/code] imported properly.
+-- | Returns @true@ if the file at index @idx@ imported properly.
 bindEditorFileSystemDirectory_get_file_import_is_valid ::
                                                        MethodBind
 bindEditorFileSystemDirectory_get_file_import_is_valid
@@ -138,7 +165,7 @@ bindEditorFileSystemDirectory_get_file_import_is_valid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the file at index [code]idx[/code] imported properly.
+-- | Returns @true@ if the file at index @idx@ imported properly.
 get_file_import_is_valid ::
                            (EditorFileSystemDirectory :< cls, Object :< cls) =>
                            cls -> Int -> IO Bool
@@ -152,9 +179,17 @@ get_file_import_is_valid cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory
+           "get_file_import_is_valid"
+           '[Int]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Tools.EditorFileSystemDirectory.get_file_import_is_valid
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_path #-}
 
--- | Returns the path to the file at index [code]idx[/code].
+-- | Returns the path to the file at index @idx@.
 bindEditorFileSystemDirectory_get_file_path :: MethodBind
 bindEditorFileSystemDirectory_get_file_path
   = unsafePerformIO $
@@ -164,7 +199,7 @@ bindEditorFileSystemDirectory_get_file_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the path to the file at index [code]idx[/code].
+-- | Returns the path to the file at index @idx@.
 get_file_path ::
                 (EditorFileSystemDirectory :< cls, Object :< cls) =>
                 cls -> Int -> IO GodotString
@@ -177,10 +212,16 @@ get_file_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory "get_file_path"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_file_path
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_script_class_extends
              #-}
 
--- | Returns the base class of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
+-- | Returns the base class of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 bindEditorFileSystemDirectory_get_file_script_class_extends ::
                                                             MethodBind
 bindEditorFileSystemDirectory_get_file_script_class_extends
@@ -191,7 +232,7 @@ bindEditorFileSystemDirectory_get_file_script_class_extends
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the base class of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
+-- | Returns the base class of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 get_file_script_class_extends ::
                                 (EditorFileSystemDirectory :< cls, Object :< cls) =>
                                 cls -> Int -> IO GodotString
@@ -205,10 +246,18 @@ get_file_script_class_extends cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory
+           "get_file_script_class_extends"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Tools.EditorFileSystemDirectory.get_file_script_class_extends
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_script_class_name
              #-}
 
--- | Returns the name of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
+-- | Returns the name of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 bindEditorFileSystemDirectory_get_file_script_class_name ::
                                                          MethodBind
 bindEditorFileSystemDirectory_get_file_script_class_name
@@ -219,7 +268,7 @@ bindEditorFileSystemDirectory_get_file_script_class_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the name of the script class defined in the file at index [code]idx[/code]. If the file doesn't define a script class using the [code]class_name[/code] syntax, this will return an empty string.
+-- | Returns the name of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 get_file_script_class_name ::
                              (EditorFileSystemDirectory :< cls, Object :< cls) =>
                              cls -> Int -> IO GodotString
@@ -233,9 +282,17 @@ get_file_script_class_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory
+           "get_file_script_class_name"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Tools.EditorFileSystemDirectory.get_file_script_class_name
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_type #-}
 
--- | Returns the file extension of the file at index [code]idx[/code].
+-- | Returns the file extension of the file at index @idx@.
 bindEditorFileSystemDirectory_get_file_type :: MethodBind
 bindEditorFileSystemDirectory_get_file_type
   = unsafePerformIO $
@@ -245,7 +302,7 @@ bindEditorFileSystemDirectory_get_file_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the file extension of the file at index [code]idx[/code].
+-- | Returns the file extension of the file at index @idx@.
 get_file_type ::
                 (EditorFileSystemDirectory :< cls, Object :< cls) =>
                 cls -> Int -> IO GodotString
@@ -257,6 +314,12 @@ get_file_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystemDirectory "get_file_type"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_file_type
 
 {-# NOINLINE bindEditorFileSystemDirectory_get_name #-}
 
@@ -283,9 +346,14 @@ get_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory "get_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_name
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_parent #-}
 
--- | Returns the parent directory for this directory or [code]null[/code] if called on a directory at [code]res://[/code] or [code]user://[/code].
+-- | Returns the parent directory for this directory or @null@ if called on a directory at @res://@ or @user://@.
 bindEditorFileSystemDirectory_get_parent :: MethodBind
 bindEditorFileSystemDirectory_get_parent
   = unsafePerformIO $
@@ -295,7 +363,7 @@ bindEditorFileSystemDirectory_get_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent directory for this directory or [code]null[/code] if called on a directory at [code]res://[/code] or [code]user://[/code].
+-- | Returns the parent directory for this directory or @null@ if called on a directory at @res://@ or @user://@.
 get_parent ::
              (EditorFileSystemDirectory :< cls, Object :< cls) =>
              cls -> IO EditorFileSystemDirectory
@@ -307,6 +375,11 @@ get_parent cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystemDirectory "get_parent" '[]
+           (IO EditorFileSystemDirectory)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_parent
 
 {-# NOINLINE bindEditorFileSystemDirectory_get_path #-}
 
@@ -333,9 +406,14 @@ get_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystemDirectory "get_path" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_path
+
 {-# NOINLINE bindEditorFileSystemDirectory_get_subdir #-}
 
--- | Returns the subdirectory at index [code]idx[/code].
+-- | Returns the subdirectory at index @idx@.
 bindEditorFileSystemDirectory_get_subdir :: MethodBind
 bindEditorFileSystemDirectory_get_subdir
   = unsafePerformIO $
@@ -345,7 +423,7 @@ bindEditorFileSystemDirectory_get_subdir
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the subdirectory at index [code]idx[/code].
+-- | Returns the subdirectory at index @idx@.
 get_subdir ::
              (EditorFileSystemDirectory :< cls, Object :< cls) =>
              cls -> Int -> IO EditorFileSystemDirectory
@@ -357,6 +435,11 @@ get_subdir cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystemDirectory "get_subdir" '[Int]
+           (IO EditorFileSystemDirectory)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_subdir
 
 {-# NOINLINE bindEditorFileSystemDirectory_get_subdir_count #-}
 
@@ -382,3 +465,9 @@ get_subdir_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystemDirectory "get_subdir_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystemDirectory.get_subdir_count

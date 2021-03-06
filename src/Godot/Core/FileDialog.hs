@@ -53,9 +53,14 @@ module Godot.Core.FileDialog
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.ConfirmationDialog()
 
 _ACCESS_RESOURCES :: Int
 _ACCESS_RESOURCES = 0
@@ -87,7 +92,7 @@ sig_dir_selected = Godot.Internal.Dispatch.Signal "dir_selected"
 
 instance NodeSignal FileDialog "dir_selected" '[GodotString]
 
--- | Emitted when the user selects a file by double-clicking it or pressing the [b]OK[/b] button.
+-- | Emitted when the user selects a file by double-clicking it or pressing the __OK__ button.
 sig_file_selected :: Godot.Internal.Dispatch.Signal FileDialog
 sig_file_selected = Godot.Internal.Dispatch.Signal "file_selected"
 
@@ -99,6 +104,44 @@ sig_files_selected
   = Godot.Internal.Dispatch.Signal "files_selected"
 
 instance NodeSignal FileDialog "files_selected" '[PoolStringArray]
+
+instance NodeProperty FileDialog "access" Int 'False where
+        nodeProperty = (get_access, wrapDroppingSetter set_access, Nothing)
+
+instance NodeProperty FileDialog "current_dir" GodotString 'False
+         where
+        nodeProperty
+          = (get_current_dir, wrapDroppingSetter set_current_dir, Nothing)
+
+instance NodeProperty FileDialog "current_file" GodotString 'False
+         where
+        nodeProperty
+          = (get_current_file, wrapDroppingSetter set_current_file, Nothing)
+
+instance NodeProperty FileDialog "current_path" GodotString 'False
+         where
+        nodeProperty
+          = (get_current_path, wrapDroppingSetter set_current_path, Nothing)
+
+instance NodeProperty FileDialog "filters" PoolStringArray 'False
+         where
+        nodeProperty
+          = (get_filters, wrapDroppingSetter set_filters, Nothing)
+
+instance NodeProperty FileDialog "mode" Int 'False where
+        nodeProperty = (get_mode, wrapDroppingSetter set_mode, Nothing)
+
+instance NodeProperty FileDialog "mode_overrides_title" Bool 'False
+         where
+        nodeProperty
+          = (is_mode_overriding_title,
+             wrapDroppingSetter set_mode_overrides_title, Nothing)
+
+instance NodeProperty FileDialog "show_hidden_files" Bool 'False
+         where
+        nodeProperty
+          = (is_showing_hidden_files,
+             wrapDroppingSetter set_show_hidden_files, Nothing)
 
 {-# NOINLINE bindFileDialog__action_pressed #-}
 
@@ -121,6 +164,9 @@ _action_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_action_pressed" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog._action_pressed
+
 {-# NOINLINE bindFileDialog__cancel_pressed #-}
 
 bindFileDialog__cancel_pressed :: MethodBind
@@ -141,6 +187,9 @@ _cancel_pressed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "_cancel_pressed" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog._cancel_pressed
 
 {-# NOINLINE bindFileDialog__dir_entered #-}
 
@@ -163,6 +212,11 @@ _dir_entered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_dir_entered" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._dir_entered
+
 {-# NOINLINE bindFileDialog__file_entered #-}
 
 bindFileDialog__file_entered :: MethodBind
@@ -183,6 +237,11 @@ _file_entered cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "_file_entered" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._file_entered
 
 {-# NOINLINE bindFileDialog__filter_selected #-}
 
@@ -205,6 +264,10 @@ _filter_selected cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_filter_selected" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._filter_selected
+
 {-# NOINLINE bindFileDialog__go_up #-}
 
 bindFileDialog__go_up :: MethodBind
@@ -224,6 +287,9 @@ _go_up cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_go_up" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog._go_up
+
 {-# NOINLINE bindFileDialog__make_dir #-}
 
 bindFileDialog__make_dir :: MethodBind
@@ -242,6 +308,9 @@ _make_dir cls
          godot_method_bind_call bindFileDialog__make_dir (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "_make_dir" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog._make_dir
 
 {-# NOINLINE bindFileDialog__make_dir_confirm #-}
 
@@ -265,6 +334,10 @@ _make_dir_confirm cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_make_dir_confirm" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._make_dir_confirm
+
 {-# NOINLINE bindFileDialog__save_confirm_pressed #-}
 
 bindFileDialog__save_confirm_pressed :: MethodBind
@@ -287,6 +360,10 @@ _save_confirm_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_save_confirm_pressed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._save_confirm_pressed
+
 {-# NOINLINE bindFileDialog__select_drive #-}
 
 bindFileDialog__select_drive :: MethodBind
@@ -307,6 +384,9 @@ _select_drive cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "_select_drive" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog._select_drive
 
 {-# NOINLINE bindFileDialog__tree_item_activated #-}
 
@@ -329,6 +409,10 @@ _tree_item_activated cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "_tree_item_activated" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._tree_item_activated
 
 {-# NOINLINE bindFileDialog__tree_multi_selected #-}
 
@@ -353,6 +437,12 @@ _tree_multi_selected cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_tree_multi_selected"
+           '[Object, Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._tree_multi_selected
+
 {-# NOINLINE bindFileDialog__tree_selected #-}
 
 bindFileDialog__tree_selected :: MethodBind
@@ -373,6 +463,9 @@ _tree_selected cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "_tree_selected" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog._tree_selected
 
 {-# NOINLINE bindFileDialog__unhandled_input #-}
 
@@ -395,6 +488,11 @@ _unhandled_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_unhandled_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._unhandled_input
+
 {-# NOINLINE bindFileDialog__update_dir #-}
 
 bindFileDialog__update_dir :: MethodBind
@@ -414,6 +512,9 @@ _update_dir cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "_update_dir" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog._update_dir
 
 {-# NOINLINE bindFileDialog__update_file_list #-}
 
@@ -437,6 +538,10 @@ _update_file_list cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_update_file_list" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._update_file_list
+
 {-# NOINLINE bindFileDialog__update_file_name #-}
 
 bindFileDialog__update_file_name :: MethodBind
@@ -459,9 +564,13 @@ _update_file_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "_update_file_name" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog._update_file_name
+
 {-# NOINLINE bindFileDialog_add_filter #-}
 
--- | Adds [code]filter[/code] as a custom filter; [code]filter[/code] should be of the form [code]"filename.extension ; Description"[/code]. For example, [code]"*.png ; PNG Images"[/code].
+-- | Adds @filter@ as a custom filter; @filter@ should be of the form @"filename.extension ; Description"@. For example, @"*.png ; PNG Images"@.
 bindFileDialog_add_filter :: MethodBind
 bindFileDialog_add_filter
   = unsafePerformIO $
@@ -471,7 +580,7 @@ bindFileDialog_add_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds [code]filter[/code] as a custom filter; [code]filter[/code] should be of the form [code]"filename.extension ; Description"[/code]. For example, [code]"*.png ; PNG Images"[/code].
+-- | Adds @filter@ as a custom filter; @filter@ should be of the form @"filename.extension ; Description"@. For example, @"*.png ; PNG Images"@.
 add_filter ::
              (FileDialog :< cls, Object :< cls) => cls -> GodotString -> IO ()
 add_filter cls arg1
@@ -481,6 +590,10 @@ add_filter cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "add_filter" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog.add_filter
 
 {-# NOINLINE bindFileDialog_clear_filters #-}
 
@@ -503,6 +616,9 @@ clear_filters cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "clear_filters" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog.clear_filters
 
 {-# NOINLINE bindFileDialog_deselect_items #-}
 
@@ -527,10 +643,13 @@ deselect_items cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "deselect_items" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog.deselect_items
+
 {-# NOINLINE bindFileDialog_get_access #-}
 
--- | The file system access scope. See enum [code]Access[/code] constants.
---   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
+-- | The file system access scope. See enum @Access@ constants.
+--   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 bindFileDialog_get_access :: MethodBind
 bindFileDialog_get_access
   = unsafePerformIO $
@@ -540,8 +659,8 @@ bindFileDialog_get_access
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The file system access scope. See enum [code]Access[/code] constants.
---   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
+-- | The file system access scope. See enum @Access@ constants.
+--   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 get_access :: (FileDialog :< cls, Object :< cls) => cls -> IO Int
 get_access cls
   = withVariantArray []
@@ -550,6 +669,9 @@ get_access cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "get_access" '[] (IO Int) where
+        nodeMethod = Godot.Core.FileDialog.get_access
 
 {-# NOINLINE bindFileDialog_get_current_dir #-}
 
@@ -574,6 +696,11 @@ get_current_dir cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "get_current_dir" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.FileDialog.get_current_dir
+
 {-# NOINLINE bindFileDialog_get_current_file #-}
 
 -- | The currently selected file of the file dialog.
@@ -596,6 +723,11 @@ get_current_file cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "get_current_file" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.FileDialog.get_current_file
 
 {-# NOINLINE bindFileDialog_get_current_path #-}
 
@@ -620,9 +752,14 @@ get_current_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "get_current_path" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.FileDialog.get_current_path
+
 {-# NOINLINE bindFileDialog_get_filters #-}
 
--- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
 bindFileDialog_get_filters :: MethodBind
 bindFileDialog_get_filters
   = unsafePerformIO $
@@ -632,7 +769,7 @@ bindFileDialog_get_filters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
 get_filters ::
               (FileDialog :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_filters cls
@@ -642,6 +779,11 @@ get_filters cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "get_filters" '[]
+           (IO PoolStringArray)
+         where
+        nodeMethod = Godot.Core.FileDialog.get_filters
 
 {-# NOINLINE bindFileDialog_get_line_edit #-}
 
@@ -666,9 +808,13 @@ get_line_edit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "get_line_edit" '[] (IO LineEdit)
+         where
+        nodeMethod = Godot.Core.FileDialog.get_line_edit
+
 {-# NOINLINE bindFileDialog_get_mode #-}
 
--- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum @Mode@ constants.
 bindFileDialog_get_mode :: MethodBind
 bindFileDialog_get_mode
   = unsafePerformIO $
@@ -678,7 +824,7 @@ bindFileDialog_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum @Mode@ constants.
 get_mode :: (FileDialog :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
@@ -686,6 +832,9 @@ get_mode cls
          godot_method_bind_call bindFileDialog_get_mode (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "get_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.FileDialog.get_mode
 
 {-# NOINLINE bindFileDialog_get_vbox #-}
 
@@ -709,6 +858,10 @@ get_vbox cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "get_vbox" '[] (IO VBoxContainer)
+         where
+        nodeMethod = Godot.Core.FileDialog.get_vbox
+
 {-# NOINLINE bindFileDialog_invalidate #-}
 
 -- | Invalidate and update the current dialog content list.
@@ -731,9 +884,12 @@ invalidate cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "invalidate" '[] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog.invalidate
+
 {-# NOINLINE bindFileDialog_is_mode_overriding_title #-}
 
--- | If [code]true[/code], changing the [code]Mode[/code] property will set the window title accordingly (e.g. setting mode to [constant MODE_OPEN_FILE] will change the window title to "Open a File").
+-- | If @true@, changing the @Mode@ property will set the window title accordingly (e.g. setting mode to @MODE_OPEN_FILE@ will change the window title to "Open a File").
 bindFileDialog_is_mode_overriding_title :: MethodBind
 bindFileDialog_is_mode_overriding_title
   = unsafePerformIO $
@@ -743,7 +899,7 @@ bindFileDialog_is_mode_overriding_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], changing the [code]Mode[/code] property will set the window title accordingly (e.g. setting mode to [constant MODE_OPEN_FILE] will change the window title to "Open a File").
+-- | If @true@, changing the @Mode@ property will set the window title accordingly (e.g. setting mode to @MODE_OPEN_FILE@ will change the window title to "Open a File").
 is_mode_overriding_title ::
                            (FileDialog :< cls, Object :< cls) => cls -> IO Bool
 is_mode_overriding_title cls
@@ -755,9 +911,14 @@ is_mode_overriding_title cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "is_mode_overriding_title" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.FileDialog.is_mode_overriding_title
+
 {-# NOINLINE bindFileDialog_is_showing_hidden_files #-}
 
--- | If [code]true[/code], the dialog will show hidden files.
+-- | If @true@, the dialog will show hidden files.
 bindFileDialog_is_showing_hidden_files :: MethodBind
 bindFileDialog_is_showing_hidden_files
   = unsafePerformIO $
@@ -767,7 +928,7 @@ bindFileDialog_is_showing_hidden_files
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the dialog will show hidden files.
+-- | If @true@, the dialog will show hidden files.
 is_showing_hidden_files ::
                           (FileDialog :< cls, Object :< cls) => cls -> IO Bool
 is_showing_hidden_files cls
@@ -779,10 +940,15 @@ is_showing_hidden_files cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "is_showing_hidden_files" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.FileDialog.is_showing_hidden_files
+
 {-# NOINLINE bindFileDialog_set_access #-}
 
--- | The file system access scope. See enum [code]Access[/code] constants.
---   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
+-- | The file system access scope. See enum @Access@ constants.
+--   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 bindFileDialog_set_access :: MethodBind
 bindFileDialog_set_access
   = unsafePerformIO $
@@ -792,8 +958,8 @@ bindFileDialog_set_access
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The file system access scope. See enum [code]Access[/code] constants.
---   			[b]Warning:[/b] Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See [url=https://github.com/godotengine/godot-proposals/issues/1123]godot-proposals#1123[/url].
+-- | The file system access scope. See enum @Access@ constants.
+--   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 set_access ::
              (FileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_access cls arg1
@@ -803,6 +969,9 @@ set_access cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "set_access" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog.set_access
 
 {-# NOINLINE bindFileDialog_set_current_dir #-}
 
@@ -827,6 +996,11 @@ set_current_dir cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "set_current_dir" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog.set_current_dir
+
 {-# NOINLINE bindFileDialog_set_current_file #-}
 
 -- | The currently selected file of the file dialog.
@@ -849,6 +1023,11 @@ set_current_file cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "set_current_file" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog.set_current_file
 
 {-# NOINLINE bindFileDialog_set_current_path #-}
 
@@ -873,9 +1052,14 @@ set_current_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "set_current_path" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog.set_current_path
+
 {-# NOINLINE bindFileDialog_set_filters #-}
 
--- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
 bindFileDialog_set_filters :: MethodBind
 bindFileDialog_set_filters
   = unsafePerformIO $
@@ -885,7 +1069,7 @@ bindFileDialog_set_filters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The available file type filters. For example, this shows only [code].png[/code] and [code].gd[/code] files: [code]set_filters(PoolStringArray(["*.png ; PNG Images","*.gd ; GDScript Files"]))[/code].
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
 set_filters ::
               (FileDialog :< cls, Object :< cls) =>
               cls -> PoolStringArray -> IO ()
@@ -897,9 +1081,14 @@ set_filters cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "set_filters" '[PoolStringArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog.set_filters
+
 {-# NOINLINE bindFileDialog_set_mode #-}
 
--- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum @Mode@ constants.
 bindFileDialog_set_mode :: MethodBind
 bindFileDialog_set_mode
   = unsafePerformIO $
@@ -909,7 +1098,7 @@ bindFileDialog_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The dialog's open or save mode, which affects the selection behavior. See enum [code]Mode[/code] constants.
+-- | The dialog's open or save mode, which affects the selection behavior. See enum @Mode@ constants.
 set_mode ::
            (FileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
@@ -919,9 +1108,12 @@ set_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "set_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.FileDialog.set_mode
+
 {-# NOINLINE bindFileDialog_set_mode_overrides_title #-}
 
--- | If [code]true[/code], changing the [code]Mode[/code] property will set the window title accordingly (e.g. setting mode to [constant MODE_OPEN_FILE] will change the window title to "Open a File").
+-- | If @true@, changing the @Mode@ property will set the window title accordingly (e.g. setting mode to @MODE_OPEN_FILE@ will change the window title to "Open a File").
 bindFileDialog_set_mode_overrides_title :: MethodBind
 bindFileDialog_set_mode_overrides_title
   = unsafePerformIO $
@@ -931,7 +1123,7 @@ bindFileDialog_set_mode_overrides_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], changing the [code]Mode[/code] property will set the window title accordingly (e.g. setting mode to [constant MODE_OPEN_FILE] will change the window title to "Open a File").
+-- | If @true@, changing the @Mode@ property will set the window title accordingly (e.g. setting mode to @MODE_OPEN_FILE@ will change the window title to "Open a File").
 set_mode_overrides_title ::
                            (FileDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_mode_overrides_title cls arg1
@@ -943,9 +1135,14 @@ set_mode_overrides_title cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod FileDialog "set_mode_overrides_title" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog.set_mode_overrides_title
+
 {-# NOINLINE bindFileDialog_set_show_hidden_files #-}
 
--- | If [code]true[/code], the dialog will show hidden files.
+-- | If @true@, the dialog will show hidden files.
 bindFileDialog_set_show_hidden_files :: MethodBind
 bindFileDialog_set_show_hidden_files
   = unsafePerformIO $
@@ -955,7 +1152,7 @@ bindFileDialog_set_show_hidden_files
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the dialog will show hidden files.
+-- | If @true@, the dialog will show hidden files.
 set_show_hidden_files ::
                         (FileDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_show_hidden_files cls arg1
@@ -966,3 +1163,8 @@ set_show_hidden_files cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod FileDialog "set_show_hidden_files" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.FileDialog.set_show_hidden_files

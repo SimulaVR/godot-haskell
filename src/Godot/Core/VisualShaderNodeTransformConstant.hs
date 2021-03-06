@@ -8,13 +8,25 @@ module Godot.Core.VisualShaderNodeTransformConstant
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
+
+instance NodeProperty VisualShaderNodeTransformConstant "constant"
+           Transform
+           'False
+         where
+        nodeProperty
+          = (get_constant, wrapDroppingSetter set_constant, Nothing)
 
 {-# NOINLINE bindVisualShaderNodeTransformConstant_get_constant #-}
 
--- | A [Transform] constant which represents the state of this node.
+-- | A @Transform@ constant which represents the state of this node.
 bindVisualShaderNodeTransformConstant_get_constant :: MethodBind
 bindVisualShaderNodeTransformConstant_get_constant
   = unsafePerformIO $
@@ -24,7 +36,7 @@ bindVisualShaderNodeTransformConstant_get_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A [Transform] constant which represents the state of this node.
+-- | A @Transform@ constant which represents the state of this node.
 get_constant ::
                (VisualShaderNodeTransformConstant :< cls, Object :< cls) =>
                cls -> IO Transform
@@ -38,9 +50,17 @@ get_constant cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTransformConstant
+           "get_constant"
+           '[]
+           (IO Transform)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeTransformConstant.get_constant
+
 {-# NOINLINE bindVisualShaderNodeTransformConstant_set_constant #-}
 
--- | A [Transform] constant which represents the state of this node.
+-- | A @Transform@ constant which represents the state of this node.
 bindVisualShaderNodeTransformConstant_set_constant :: MethodBind
 bindVisualShaderNodeTransformConstant_set_constant
   = unsafePerformIO $
@@ -50,7 +70,7 @@ bindVisualShaderNodeTransformConstant_set_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A [Transform] constant which represents the state of this node.
+-- | A @Transform@ constant which represents the state of this node.
 set_constant ::
                (VisualShaderNodeTransformConstant :< cls, Object :< cls) =>
                cls -> Transform -> IO ()
@@ -63,3 +83,11 @@ set_constant cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeTransformConstant
+           "set_constant"
+           '[Transform]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeTransformConstant.set_constant

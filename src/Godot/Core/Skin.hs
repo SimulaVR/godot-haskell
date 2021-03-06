@@ -10,9 +10,14 @@ module Godot.Core.Skin
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 {-# NOINLINE bindSkin_add_bind #-}
 
@@ -33,6 +38,9 @@ add_bind cls arg1 arg2
          godot_method_bind_call bindSkin_add_bind (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Skin "add_bind" '[Int, Transform] (IO ()) where
+        nodeMethod = Godot.Core.Skin.add_bind
+
 {-# NOINLINE bindSkin_clear_binds #-}
 
 bindSkin_clear_binds :: MethodBind
@@ -50,6 +58,9 @@ clear_binds cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSkin_clear_binds (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Skin "clear_binds" '[] (IO ()) where
+        nodeMethod = Godot.Core.Skin.clear_binds
 
 {-# NOINLINE bindSkin_get_bind_bone #-}
 
@@ -71,6 +82,9 @@ get_bind_bone cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Skin "get_bind_bone" '[Int] (IO Int) where
+        nodeMethod = Godot.Core.Skin.get_bind_bone
+
 {-# NOINLINE bindSkin_get_bind_count #-}
 
 bindSkin_get_bind_count :: MethodBind
@@ -89,6 +103,9 @@ get_bind_count cls
          godot_method_bind_call bindSkin_get_bind_count (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Skin "get_bind_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.Skin.get_bind_count
 
 {-# NOINLINE bindSkin_get_bind_pose #-}
 
@@ -110,6 +127,10 @@ get_bind_pose cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Skin "get_bind_pose" '[Int] (IO Transform)
+         where
+        nodeMethod = Godot.Core.Skin.get_bind_pose
+
 {-# NOINLINE bindSkin_set_bind_bone #-}
 
 bindSkin_set_bind_bone :: MethodBind
@@ -129,6 +150,9 @@ set_bind_bone cls arg1 arg2
          godot_method_bind_call bindSkin_set_bind_bone (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Skin "set_bind_bone" '[Int, Int] (IO ()) where
+        nodeMethod = Godot.Core.Skin.set_bind_bone
 
 {-# NOINLINE bindSkin_set_bind_count #-}
 
@@ -150,6 +174,9 @@ set_bind_count cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Skin "set_bind_count" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Skin.set_bind_count
+
 {-# NOINLINE bindSkin_set_bind_pose #-}
 
 bindSkin_set_bind_pose :: MethodBind
@@ -169,3 +196,7 @@ set_bind_pose cls arg1 arg2
          godot_method_bind_call bindSkin_set_bind_pose (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Skin "set_bind_pose" '[Int, Transform] (IO ())
+         where
+        nodeMethod = Godot.Core.Skin.set_bind_pose

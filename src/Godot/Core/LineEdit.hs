@@ -53,9 +53,14 @@ module Godot.Core.LineEdit
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 _MENU_PASTE :: Int
 _MENU_PASTE = 2
@@ -93,7 +98,7 @@ _ALIGN_LEFT = 0
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
 
--- | Emitted when trying to append text that would overflow the [member max_length].
+-- | Emitted when trying to append text that would overflow the @max_length@.
 sig_text_change_rejected :: Godot.Internal.Dispatch.Signal LineEdit
 sig_text_change_rejected
   = Godot.Internal.Dispatch.Signal "text_change_rejected"
@@ -106,11 +111,97 @@ sig_text_changed = Godot.Internal.Dispatch.Signal "text_changed"
 
 instance NodeSignal LineEdit "text_changed" '[GodotString]
 
--- | Emitted when the user presses [constant KEY_ENTER] on the [LineEdit].
+-- | Emitted when the user presses @KEY_ENTER@ on the @LineEdit@.
 sig_text_entered :: Godot.Internal.Dispatch.Signal LineEdit
 sig_text_entered = Godot.Internal.Dispatch.Signal "text_entered"
 
 instance NodeSignal LineEdit "text_entered" '[GodotString]
+
+instance NodeProperty LineEdit "align" Int 'False where
+        nodeProperty = (get_align, wrapDroppingSetter set_align, Nothing)
+
+instance NodeProperty LineEdit "caret_blink" Bool 'False where
+        nodeProperty
+          = (cursor_get_blink_enabled,
+             wrapDroppingSetter cursor_set_blink_enabled, Nothing)
+
+instance NodeProperty LineEdit "caret_blink_speed" Float 'False
+         where
+        nodeProperty
+          = (cursor_get_blink_speed,
+             wrapDroppingSetter cursor_set_blink_speed, Nothing)
+
+instance NodeProperty LineEdit "caret_position" Int 'False where
+        nodeProperty
+          = (get_cursor_position, wrapDroppingSetter set_cursor_position,
+             Nothing)
+
+instance NodeProperty LineEdit "clear_button_enabled" Bool 'False
+         where
+        nodeProperty
+          = (is_clear_button_enabled,
+             wrapDroppingSetter set_clear_button_enabled, Nothing)
+
+instance NodeProperty LineEdit "context_menu_enabled" Bool 'False
+         where
+        nodeProperty
+          = (is_context_menu_enabled,
+             wrapDroppingSetter set_context_menu_enabled, Nothing)
+
+instance NodeProperty LineEdit "editable" Bool 'False where
+        nodeProperty
+          = (is_editable, wrapDroppingSetter set_editable, Nothing)
+
+instance NodeProperty LineEdit "expand_to_text_length" Bool 'False
+         where
+        nodeProperty
+          = (get_expand_to_text_length,
+             wrapDroppingSetter set_expand_to_text_length, Nothing)
+
+instance NodeProperty LineEdit "max_length" Int 'False where
+        nodeProperty
+          = (get_max_length, wrapDroppingSetter set_max_length, Nothing)
+
+instance NodeProperty LineEdit "placeholder_alpha" Float 'False
+         where
+        nodeProperty
+          = (get_placeholder_alpha, wrapDroppingSetter set_placeholder_alpha,
+             Nothing)
+
+instance NodeProperty LineEdit "placeholder_text" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_placeholder, wrapDroppingSetter set_placeholder, Nothing)
+
+instance NodeProperty LineEdit "right_icon" Texture 'False where
+        nodeProperty
+          = (get_right_icon, wrapDroppingSetter set_right_icon, Nothing)
+
+instance NodeProperty LineEdit "secret" Bool 'False where
+        nodeProperty = (is_secret, wrapDroppingSetter set_secret, Nothing)
+
+instance NodeProperty LineEdit "secret_character" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_secret_character, wrapDroppingSetter set_secret_character,
+             Nothing)
+
+instance NodeProperty LineEdit "selecting_enabled" Bool 'False
+         where
+        nodeProperty
+          = (is_selecting_enabled, wrapDroppingSetter set_selecting_enabled,
+             Nothing)
+
+instance NodeProperty LineEdit "shortcut_keys_enabled" Bool 'False
+         where
+        nodeProperty
+          = (is_shortcut_keys_enabled,
+             wrapDroppingSetter set_shortcut_keys_enabled, Nothing)
+
+instance NodeProperty LineEdit "text" GodotString 'False where
+        nodeProperty = (get_text, wrapDroppingSetter set_text, Nothing)
 
 {-# NOINLINE bindLineEdit__editor_settings_changed #-}
 
@@ -134,6 +225,10 @@ _editor_settings_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "_editor_settings_changed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit._editor_settings_changed
+
 {-# NOINLINE bindLineEdit__gui_input #-}
 
 bindLineEdit__gui_input :: MethodBind
@@ -154,6 +249,10 @@ _gui_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "_gui_input" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit._gui_input
+
 {-# NOINLINE bindLineEdit__text_changed #-}
 
 bindLineEdit__text_changed :: MethodBind
@@ -173,6 +272,9 @@ _text_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineEdit "_text_changed" '[] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit._text_changed
 
 {-# NOINLINE bindLineEdit__toggle_draw_caret #-}
 
@@ -195,9 +297,12 @@ _toggle_draw_caret cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "_toggle_draw_caret" '[] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit._toggle_draw_caret
+
 {-# NOINLINE bindLineEdit_append_at_cursor #-}
 
--- | Adds [code]text[/code] after the cursor. If the resulting value is longer than [member max_length], nothing happens.
+-- | Adds @text@ after the cursor. If the resulting value is longer than @max_length@, nothing happens.
 bindLineEdit_append_at_cursor :: MethodBind
 bindLineEdit_append_at_cursor
   = unsafePerformIO $
@@ -207,7 +312,7 @@ bindLineEdit_append_at_cursor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds [code]text[/code] after the cursor. If the resulting value is longer than [member max_length], nothing happens.
+-- | Adds @text@ after the cursor. If the resulting value is longer than @max_length@, nothing happens.
 append_at_cursor ::
                    (LineEdit :< cls, Object :< cls) => cls -> GodotString -> IO ()
 append_at_cursor cls arg1
@@ -218,9 +323,14 @@ append_at_cursor cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "append_at_cursor" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.append_at_cursor
+
 {-# NOINLINE bindLineEdit_clear #-}
 
--- | Erases the [LineEdit]'s [member text].
+-- | Erases the @LineEdit@'s @text@.
 bindLineEdit_clear :: MethodBind
 bindLineEdit_clear
   = unsafePerformIO $
@@ -230,7 +340,7 @@ bindLineEdit_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Erases the [LineEdit]'s [member text].
+-- | Erases the @LineEdit@'s @text@.
 clear :: (LineEdit :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []
@@ -238,9 +348,12 @@ clear cls
          godot_method_bind_call bindLineEdit_clear (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.clear
+
 {-# NOINLINE bindLineEdit_cursor_get_blink_enabled #-}
 
--- | If [code]true[/code], the caret (visual cursor) blinks.
+-- | If @true@, the caret (visual cursor) blinks.
 bindLineEdit_cursor_get_blink_enabled :: MethodBind
 bindLineEdit_cursor_get_blink_enabled
   = unsafePerformIO $
@@ -250,7 +363,7 @@ bindLineEdit_cursor_get_blink_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the caret (visual cursor) blinks.
+-- | If @true@, the caret (visual cursor) blinks.
 cursor_get_blink_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 cursor_get_blink_enabled cls
@@ -261,6 +374,11 @@ cursor_get_blink_enabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineEdit "cursor_get_blink_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.LineEdit.cursor_get_blink_enabled
 
 {-# NOINLINE bindLineEdit_cursor_get_blink_speed #-}
 
@@ -286,9 +404,14 @@ cursor_get_blink_speed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "cursor_get_blink_speed" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.LineEdit.cursor_get_blink_speed
+
 {-# NOINLINE bindLineEdit_cursor_set_blink_enabled #-}
 
--- | If [code]true[/code], the caret (visual cursor) blinks.
+-- | If @true@, the caret (visual cursor) blinks.
 bindLineEdit_cursor_set_blink_enabled :: MethodBind
 bindLineEdit_cursor_set_blink_enabled
   = unsafePerformIO $
@@ -298,7 +421,7 @@ bindLineEdit_cursor_set_blink_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the caret (visual cursor) blinks.
+-- | If @true@, the caret (visual cursor) blinks.
 cursor_set_blink_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 cursor_set_blink_enabled cls arg1
@@ -309,6 +432,11 @@ cursor_set_blink_enabled cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineEdit "cursor_set_blink_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.cursor_set_blink_enabled
 
 {-# NOINLINE bindLineEdit_cursor_set_blink_speed #-}
 
@@ -334,6 +462,11 @@ cursor_set_blink_speed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "cursor_set_blink_speed" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.cursor_set_blink_speed
+
 {-# NOINLINE bindLineEdit_deselect #-}
 
 -- | Clears the current selection.
@@ -355,9 +488,12 @@ deselect cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "deselect" '[] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.deselect
+
 {-# NOINLINE bindLineEdit_get_align #-}
 
--- | Text alignment as defined in the [enum Align] enum.
+-- | Text alignment as defined in the @enum Align@ enum.
 bindLineEdit_get_align :: MethodBind
 bindLineEdit_get_align
   = unsafePerformIO $
@@ -367,7 +503,7 @@ bindLineEdit_get_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment as defined in the [enum Align] enum.
+-- | Text alignment as defined in the @enum Align@ enum.
 get_align :: (LineEdit :< cls, Object :< cls) => cls -> IO Int
 get_align cls
   = withVariantArray []
@@ -376,9 +512,12 @@ get_align cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_align" '[] (IO Int) where
+        nodeMethod = Godot.Core.LineEdit.get_align
+
 {-# NOINLINE bindLineEdit_get_cursor_position #-}
 
--- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the @LineEdit@. When set, the text may scroll to accommodate it.
 bindLineEdit_get_cursor_position :: MethodBind
 bindLineEdit_get_cursor_position
   = unsafePerformIO $
@@ -388,7 +527,7 @@ bindLineEdit_get_cursor_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the @LineEdit@. When set, the text may scroll to accommodate it.
 get_cursor_position ::
                       (LineEdit :< cls, Object :< cls) => cls -> IO Int
 get_cursor_position cls
@@ -400,9 +539,13 @@ get_cursor_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_cursor_position" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.LineEdit.get_cursor_position
+
 {-# NOINLINE bindLineEdit_get_expand_to_text_length #-}
 
--- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If @true@, the @LineEdit@ width will increase to stay longer than the @text@. It will __not__ compress if the @text@ is shortened.
 bindLineEdit_get_expand_to_text_length :: MethodBind
 bindLineEdit_get_expand_to_text_length
   = unsafePerformIO $
@@ -412,7 +555,7 @@ bindLineEdit_get_expand_to_text_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If @true@, the @LineEdit@ width will increase to stay longer than the @text@. It will __not__ compress if the @text@ is shortened.
 get_expand_to_text_length ::
                             (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 get_expand_to_text_length cls
@@ -424,9 +567,14 @@ get_expand_to_text_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_expand_to_text_length" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.LineEdit.get_expand_to_text_length
+
 {-# NOINLINE bindLineEdit_get_max_length #-}
 
--- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
 bindLineEdit_get_max_length :: MethodBind
 bindLineEdit_get_max_length
   = unsafePerformIO $
@@ -436,7 +584,7 @@ bindLineEdit_get_max_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
 get_max_length :: (LineEdit :< cls, Object :< cls) => cls -> IO Int
 get_max_length cls
   = withVariantArray []
@@ -446,9 +594,12 @@ get_max_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_max_length" '[] (IO Int) where
+        nodeMethod = Godot.Core.LineEdit.get_max_length
+
 {-# NOINLINE bindLineEdit_get_menu #-}
 
--- | Returns the [PopupMenu] of this [LineEdit]. By default, this menu is displayed when right-clicking on the [LineEdit].
+-- | Returns the @PopupMenu@ of this @LineEdit@. By default, this menu is displayed when right-clicking on the @LineEdit@.
 bindLineEdit_get_menu :: MethodBind
 bindLineEdit_get_menu
   = unsafePerformIO $
@@ -458,7 +609,7 @@ bindLineEdit_get_menu
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [PopupMenu] of this [LineEdit]. By default, this menu is displayed when right-clicking on the [LineEdit].
+-- | Returns the @PopupMenu@ of this @LineEdit@. By default, this menu is displayed when right-clicking on the @LineEdit@.
 get_menu :: (LineEdit :< cls, Object :< cls) => cls -> IO PopupMenu
 get_menu cls
   = withVariantArray []
@@ -467,9 +618,12 @@ get_menu cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_menu" '[] (IO PopupMenu) where
+        nodeMethod = Godot.Core.LineEdit.get_menu
+
 {-# NOINLINE bindLineEdit_get_placeholder #-}
 
--- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
+-- | Text shown when the @LineEdit@ is empty. It is __not__ the @LineEdit@'s default value (see @text@).
 bindLineEdit_get_placeholder :: MethodBind
 bindLineEdit_get_placeholder
   = unsafePerformIO $
@@ -479,7 +633,7 @@ bindLineEdit_get_placeholder
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
+-- | Text shown when the @LineEdit@ is empty. It is __not__ the @LineEdit@'s default value (see @text@).
 get_placeholder ::
                   (LineEdit :< cls, Object :< cls) => cls -> IO GodotString
 get_placeholder cls
@@ -490,9 +644,13 @@ get_placeholder cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_placeholder" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.LineEdit.get_placeholder
+
 {-# NOINLINE bindLineEdit_get_placeholder_alpha #-}
 
--- | Opacity of the [member placeholder_text]. From [code]0[/code] to [code]1[/code].
+-- | Opacity of the @placeholder_text@. From @0@ to @1@.
 bindLineEdit_get_placeholder_alpha :: MethodBind
 bindLineEdit_get_placeholder_alpha
   = unsafePerformIO $
@@ -502,7 +660,7 @@ bindLineEdit_get_placeholder_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Opacity of the [member placeholder_text]. From [code]0[/code] to [code]1[/code].
+-- | Opacity of the @placeholder_text@. From @0@ to @1@.
 get_placeholder_alpha ::
                         (LineEdit :< cls, Object :< cls) => cls -> IO Float
 get_placeholder_alpha cls
@@ -514,9 +672,13 @@ get_placeholder_alpha cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_placeholder_alpha" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.LineEdit.get_placeholder_alpha
+
 {-# NOINLINE bindLineEdit_get_right_icon #-}
 
--- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
+-- | Sets the icon that will appear in the right end of the @LineEdit@ if there's no @text@, or always, if @clear_button_enabled@ is set to @false@.
 bindLineEdit_get_right_icon :: MethodBind
 bindLineEdit_get_right_icon
   = unsafePerformIO $
@@ -526,7 +688,7 @@ bindLineEdit_get_right_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
+-- | Sets the icon that will appear in the right end of the @LineEdit@ if there's no @text@, or always, if @clear_button_enabled@ is set to @false@.
 get_right_icon ::
                  (LineEdit :< cls, Object :< cls) => cls -> IO Texture
 get_right_icon cls
@@ -536,6 +698,10 @@ get_right_icon cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineEdit "get_right_icon" '[] (IO Texture)
+         where
+        nodeMethod = Godot.Core.LineEdit.get_right_icon
 
 {-# NOINLINE bindLineEdit_get_secret_character #-}
 
@@ -561,10 +727,15 @@ get_secret_character cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_secret_character" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.LineEdit.get_secret_character
+
 {-# NOINLINE bindLineEdit_get_text #-}
 
--- | String value of the [LineEdit].
---   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
+-- | String value of the @LineEdit@.
+--   			__Note:__ Changing text using this property won't emit the @signal text_changed@ signal.
 bindLineEdit_get_text :: MethodBind
 bindLineEdit_get_text
   = unsafePerformIO $
@@ -574,8 +745,8 @@ bindLineEdit_get_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | String value of the [LineEdit].
---   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
+-- | String value of the @LineEdit@.
+--   			__Note:__ Changing text using this property won't emit the @signal text_changed@ signal.
 get_text ::
            (LineEdit :< cls, Object :< cls) => cls -> IO GodotString
 get_text cls
@@ -585,9 +756,12 @@ get_text cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "get_text" '[] (IO GodotString) where
+        nodeMethod = Godot.Core.LineEdit.get_text
+
 {-# NOINLINE bindLineEdit_is_clear_button_enabled #-}
 
--- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
+-- | If @true@, the @LineEdit@ will show a clear button if @text@ is not empty, which can be used to clear the text quickly.
 bindLineEdit_is_clear_button_enabled :: MethodBind
 bindLineEdit_is_clear_button_enabled
   = unsafePerformIO $
@@ -597,7 +771,7 @@ bindLineEdit_is_clear_button_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
+-- | If @true@, the @LineEdit@ will show a clear button if @text@ is not empty, which can be used to clear the text quickly.
 is_clear_button_enabled ::
                           (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_clear_button_enabled cls
@@ -609,9 +783,14 @@ is_clear_button_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "is_clear_button_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.LineEdit.is_clear_button_enabled
+
 {-# NOINLINE bindLineEdit_is_context_menu_enabled #-}
 
--- | If [code]true[/code], the context menu will appear when right-clicked.
+-- | If @true@, the context menu will appear when right-clicked.
 bindLineEdit_is_context_menu_enabled :: MethodBind
 bindLineEdit_is_context_menu_enabled
   = unsafePerformIO $
@@ -621,7 +800,7 @@ bindLineEdit_is_context_menu_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the context menu will appear when right-clicked.
+-- | If @true@, the context menu will appear when right-clicked.
 is_context_menu_enabled ::
                           (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_context_menu_enabled cls
@@ -633,9 +812,14 @@ is_context_menu_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "is_context_menu_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.LineEdit.is_context_menu_enabled
+
 {-# NOINLINE bindLineEdit_is_editable #-}
 
--- | If [code]false[/code], existing text cannot be modified and new text cannot be added.
+-- | If @false@, existing text cannot be modified and new text cannot be added.
 bindLineEdit_is_editable :: MethodBind
 bindLineEdit_is_editable
   = unsafePerformIO $
@@ -645,7 +829,7 @@ bindLineEdit_is_editable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]false[/code], existing text cannot be modified and new text cannot be added.
+-- | If @false@, existing text cannot be modified and new text cannot be added.
 is_editable :: (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_editable cls
   = withVariantArray []
@@ -654,9 +838,12 @@ is_editable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "is_editable" '[] (IO Bool) where
+        nodeMethod = Godot.Core.LineEdit.is_editable
+
 {-# NOINLINE bindLineEdit_is_secret #-}
 
--- | If [code]true[/code], every character is replaced with the secret character (see [member secret_character]).
+-- | If @true@, every character is replaced with the secret character (see @secret_character@).
 bindLineEdit_is_secret :: MethodBind
 bindLineEdit_is_secret
   = unsafePerformIO $
@@ -666,7 +853,7 @@ bindLineEdit_is_secret
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], every character is replaced with the secret character (see [member secret_character]).
+-- | If @true@, every character is replaced with the secret character (see @secret_character@).
 is_secret :: (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_secret cls
   = withVariantArray []
@@ -675,9 +862,12 @@ is_secret cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "is_secret" '[] (IO Bool) where
+        nodeMethod = Godot.Core.LineEdit.is_secret
+
 {-# NOINLINE bindLineEdit_is_selecting_enabled #-}
 
--- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
+-- | If @false@, it's impossible to select the text using mouse nor keyboard.
 bindLineEdit_is_selecting_enabled :: MethodBind
 bindLineEdit_is_selecting_enabled
   = unsafePerformIO $
@@ -687,7 +877,7 @@ bindLineEdit_is_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
+-- | If @false@, it's impossible to select the text using mouse nor keyboard.
 is_selecting_enabled ::
                        (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_selecting_enabled cls
@@ -699,9 +889,13 @@ is_selecting_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "is_selecting_enabled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.LineEdit.is_selecting_enabled
+
 {-# NOINLINE bindLineEdit_is_shortcut_keys_enabled #-}
 
--- | If [code]false[/code], using shortcuts will be disabled.
+-- | If @false@, using shortcuts will be disabled.
 bindLineEdit_is_shortcut_keys_enabled :: MethodBind
 bindLineEdit_is_shortcut_keys_enabled
   = unsafePerformIO $
@@ -711,7 +905,7 @@ bindLineEdit_is_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]false[/code], using shortcuts will be disabled.
+-- | If @false@, using shortcuts will be disabled.
 is_shortcut_keys_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> IO Bool
 is_shortcut_keys_enabled cls
@@ -723,9 +917,14 @@ is_shortcut_keys_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "is_shortcut_keys_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.LineEdit.is_shortcut_keys_enabled
+
 {-# NOINLINE bindLineEdit_menu_option #-}
 
--- | Executes a given action as defined in the [enum MenuItems] enum.
+-- | Executes a given action as defined in the @enum MenuItems@ enum.
 bindLineEdit_menu_option :: MethodBind
 bindLineEdit_menu_option
   = unsafePerformIO $
@@ -735,7 +934,7 @@ bindLineEdit_menu_option
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Executes a given action as defined in the [enum MenuItems] enum.
+-- | Executes a given action as defined in the @enum MenuItems@ enum.
 menu_option ::
               (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 menu_option cls arg1
@@ -745,15 +944,21 @@ menu_option cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "menu_option" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.menu_option
+
 {-# NOINLINE bindLineEdit_select #-}
 
--- | Selects characters inside [LineEdit] between [code]from[/code] and [code]to[/code]. By default, [code]from[/code] is at the beginning and [code]to[/code] at the end.
---   				[codeblock]
+-- | Selects characters inside @LineEdit@ between @from@ and @to@. By default, @from@ is at the beginning and @to@ at the end.
+--   				
+--   @
+--   
 --   				text = "Welcome"
 --   				select() # Will select "Welcome".
 --   				select(4) # Will select "ome".
 --   				select(2, 5) # Will select "lco".
---   				[/codeblock]
+--   				
+--   @
 bindLineEdit_select :: MethodBind
 bindLineEdit_select
   = unsafePerformIO $
@@ -763,24 +968,35 @@ bindLineEdit_select
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Selects characters inside [LineEdit] between [code]from[/code] and [code]to[/code]. By default, [code]from[/code] is at the beginning and [code]to[/code] at the end.
---   				[codeblock]
+-- | Selects characters inside @LineEdit@ between @from@ and @to@. By default, @from@ is at the beginning and @to@ at the end.
+--   				
+--   @
+--   
 --   				text = "Welcome"
 --   				select() # Will select "Welcome".
 --   				select(4) # Will select "ome".
 --   				select(2, 5) # Will select "lco".
---   				[/codeblock]
+--   				
+--   @
 select ::
-         (LineEdit :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
+         (LineEdit :< cls, Object :< cls) =>
+         cls -> Maybe Int -> Maybe Int -> IO ()
 select cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [maybe (VariantInt (0)) toVariant arg1,
+       maybe (VariantInt (-1)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLineEdit_select (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "select" '[Maybe Int, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.select
+
 {-# NOINLINE bindLineEdit_select_all #-}
 
--- | Selects the whole [String].
+-- | Selects the whole @String@.
 bindLineEdit_select_all :: MethodBind
 bindLineEdit_select_all
   = unsafePerformIO $
@@ -790,7 +1006,7 @@ bindLineEdit_select_all
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Selects the whole [String].
+-- | Selects the whole @String@.
 select_all :: (LineEdit :< cls, Object :< cls) => cls -> IO ()
 select_all cls
   = withVariantArray []
@@ -799,9 +1015,12 @@ select_all cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "select_all" '[] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.select_all
+
 {-# NOINLINE bindLineEdit_set_align #-}
 
--- | Text alignment as defined in the [enum Align] enum.
+-- | Text alignment as defined in the @enum Align@ enum.
 bindLineEdit_set_align :: MethodBind
 bindLineEdit_set_align
   = unsafePerformIO $
@@ -811,7 +1030,7 @@ bindLineEdit_set_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment as defined in the [enum Align] enum.
+-- | Text alignment as defined in the @enum Align@ enum.
 set_align ::
             (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_align cls arg1
@@ -821,9 +1040,12 @@ set_align cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_align" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.set_align
+
 {-# NOINLINE bindLineEdit_set_clear_button_enabled #-}
 
--- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
+-- | If @true@, the @LineEdit@ will show a clear button if @text@ is not empty, which can be used to clear the text quickly.
 bindLineEdit_set_clear_button_enabled :: MethodBind
 bindLineEdit_set_clear_button_enabled
   = unsafePerformIO $
@@ -833,7 +1055,7 @@ bindLineEdit_set_clear_button_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [LineEdit] will show a clear button if [code]text[/code] is not empty, which can be used to clear the text quickly.
+-- | If @true@, the @LineEdit@ will show a clear button if @text@ is not empty, which can be used to clear the text quickly.
 set_clear_button_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_clear_button_enabled cls arg1
@@ -845,9 +1067,14 @@ set_clear_button_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_clear_button_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_clear_button_enabled
+
 {-# NOINLINE bindLineEdit_set_context_menu_enabled #-}
 
--- | If [code]true[/code], the context menu will appear when right-clicked.
+-- | If @true@, the context menu will appear when right-clicked.
 bindLineEdit_set_context_menu_enabled :: MethodBind
 bindLineEdit_set_context_menu_enabled
   = unsafePerformIO $
@@ -857,7 +1084,7 @@ bindLineEdit_set_context_menu_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the context menu will appear when right-clicked.
+-- | If @true@, the context menu will appear when right-clicked.
 set_context_menu_enabled ::
                            (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_context_menu_enabled cls arg1
@@ -869,9 +1096,14 @@ set_context_menu_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_context_menu_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_context_menu_enabled
+
 {-# NOINLINE bindLineEdit_set_cursor_position #-}
 
--- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the @LineEdit@. When set, the text may scroll to accommodate it.
 bindLineEdit_set_cursor_position :: MethodBind
 bindLineEdit_set_cursor_position
   = unsafePerformIO $
@@ -881,7 +1113,7 @@ bindLineEdit_set_cursor_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The cursor's position inside the [LineEdit]. When set, the text may scroll to accommodate it.
+-- | The cursor's position inside the @LineEdit@. When set, the text may scroll to accommodate it.
 set_cursor_position ::
                       (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_cursor_position cls arg1
@@ -893,9 +1125,13 @@ set_cursor_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_cursor_position" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_cursor_position
+
 {-# NOINLINE bindLineEdit_set_editable #-}
 
--- | If [code]false[/code], existing text cannot be modified and new text cannot be added.
+-- | If @false@, existing text cannot be modified and new text cannot be added.
 bindLineEdit_set_editable :: MethodBind
 bindLineEdit_set_editable
   = unsafePerformIO $
@@ -905,7 +1141,7 @@ bindLineEdit_set_editable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]false[/code], existing text cannot be modified and new text cannot be added.
+-- | If @false@, existing text cannot be modified and new text cannot be added.
 set_editable ::
                (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_editable cls arg1
@@ -916,9 +1152,12 @@ set_editable cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_editable" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.set_editable
+
 {-# NOINLINE bindLineEdit_set_expand_to_text_length #-}
 
--- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If @true@, the @LineEdit@ width will increase to stay longer than the @text@. It will __not__ compress if the @text@ is shortened.
 bindLineEdit_set_expand_to_text_length :: MethodBind
 bindLineEdit_set_expand_to_text_length
   = unsafePerformIO $
@@ -928,7 +1167,7 @@ bindLineEdit_set_expand_to_text_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [LineEdit] width will increase to stay longer than the [member text]. It will [b]not[/b] compress if the [member text] is shortened.
+-- | If @true@, the @LineEdit@ width will increase to stay longer than the @text@. It will __not__ compress if the @text@ is shortened.
 set_expand_to_text_length ::
                             (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_expand_to_text_length cls arg1
@@ -940,9 +1179,14 @@ set_expand_to_text_length cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_expand_to_text_length" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_expand_to_text_length
+
 {-# NOINLINE bindLineEdit_set_max_length #-}
 
--- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
 bindLineEdit_set_max_length :: MethodBind
 bindLineEdit_set_max_length
   = unsafePerformIO $
@@ -952,7 +1196,7 @@ bindLineEdit_set_max_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Maximum amount of characters that can be entered inside the [LineEdit]. If [code]0[/code], there is no limit.
+-- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
 set_max_length ::
                  (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_length cls arg1
@@ -963,9 +1207,12 @@ set_max_length cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_max_length" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.set_max_length
+
 {-# NOINLINE bindLineEdit_set_placeholder #-}
 
--- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
+-- | Text shown when the @LineEdit@ is empty. It is __not__ the @LineEdit@'s default value (see @text@).
 bindLineEdit_set_placeholder :: MethodBind
 bindLineEdit_set_placeholder
   = unsafePerformIO $
@@ -975,7 +1222,7 @@ bindLineEdit_set_placeholder
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text shown when the [LineEdit] is empty. It is [b]not[/b] the [LineEdit]'s default value (see [member text]).
+-- | Text shown when the @LineEdit@ is empty. It is __not__ the @LineEdit@'s default value (see @text@).
 set_placeholder ::
                   (LineEdit :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_placeholder cls arg1
@@ -986,9 +1233,14 @@ set_placeholder cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_placeholder" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_placeholder
+
 {-# NOINLINE bindLineEdit_set_placeholder_alpha #-}
 
--- | Opacity of the [member placeholder_text]. From [code]0[/code] to [code]1[/code].
+-- | Opacity of the @placeholder_text@. From @0@ to @1@.
 bindLineEdit_set_placeholder_alpha :: MethodBind
 bindLineEdit_set_placeholder_alpha
   = unsafePerformIO $
@@ -998,7 +1250,7 @@ bindLineEdit_set_placeholder_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Opacity of the [member placeholder_text]. From [code]0[/code] to [code]1[/code].
+-- | Opacity of the @placeholder_text@. From @0@ to @1@.
 set_placeholder_alpha ::
                         (LineEdit :< cls, Object :< cls) => cls -> Float -> IO ()
 set_placeholder_alpha cls arg1
@@ -1010,9 +1262,14 @@ set_placeholder_alpha cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_placeholder_alpha" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_placeholder_alpha
+
 {-# NOINLINE bindLineEdit_set_right_icon #-}
 
--- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
+-- | Sets the icon that will appear in the right end of the @LineEdit@ if there's no @text@, or always, if @clear_button_enabled@ is set to @false@.
 bindLineEdit_set_right_icon :: MethodBind
 bindLineEdit_set_right_icon
   = unsafePerformIO $
@@ -1022,7 +1279,7 @@ bindLineEdit_set_right_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the icon that will appear in the right end of the [LineEdit] if there's no [member text], or always, if [member clear_button_enabled] is set to [code]false[/code].
+-- | Sets the icon that will appear in the right end of the @LineEdit@ if there's no @text@, or always, if @clear_button_enabled@ is set to @false@.
 set_right_icon ::
                  (LineEdit :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_right_icon cls arg1
@@ -1033,9 +1290,13 @@ set_right_icon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_right_icon" '[Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_right_icon
+
 {-# NOINLINE bindLineEdit_set_secret #-}
 
--- | If [code]true[/code], every character is replaced with the secret character (see [member secret_character]).
+-- | If @true@, every character is replaced with the secret character (see @secret_character@).
 bindLineEdit_set_secret :: MethodBind
 bindLineEdit_set_secret
   = unsafePerformIO $
@@ -1045,7 +1306,7 @@ bindLineEdit_set_secret
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], every character is replaced with the secret character (see [member secret_character]).
+-- | If @true@, every character is replaced with the secret character (see @secret_character@).
 set_secret ::
              (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_secret cls arg1
@@ -1054,6 +1315,9 @@ set_secret cls arg1
          godot_method_bind_call bindLineEdit_set_secret (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineEdit "set_secret" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.LineEdit.set_secret
 
 {-# NOINLINE bindLineEdit_set_secret_character #-}
 
@@ -1079,9 +1343,14 @@ set_secret_character cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_secret_character" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_secret_character
+
 {-# NOINLINE bindLineEdit_set_selecting_enabled #-}
 
--- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
+-- | If @false@, it's impossible to select the text using mouse nor keyboard.
 bindLineEdit_set_selecting_enabled :: MethodBind
 bindLineEdit_set_selecting_enabled
   = unsafePerformIO $
@@ -1091,7 +1360,7 @@ bindLineEdit_set_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]false[/code], it's impossible to select the text using mouse nor keyboard.
+-- | If @false@, it's impossible to select the text using mouse nor keyboard.
 set_selecting_enabled ::
                         (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_selecting_enabled cls arg1
@@ -1103,9 +1372,14 @@ set_selecting_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_selecting_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_selecting_enabled
+
 {-# NOINLINE bindLineEdit_set_shortcut_keys_enabled #-}
 
--- | If [code]false[/code], using shortcuts will be disabled.
+-- | If @false@, using shortcuts will be disabled.
 bindLineEdit_set_shortcut_keys_enabled :: MethodBind
 bindLineEdit_set_shortcut_keys_enabled
   = unsafePerformIO $
@@ -1115,7 +1389,7 @@ bindLineEdit_set_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]false[/code], using shortcuts will be disabled.
+-- | If @false@, using shortcuts will be disabled.
 set_shortcut_keys_enabled ::
                             (LineEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shortcut_keys_enabled cls arg1
@@ -1127,10 +1401,15 @@ set_shortcut_keys_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineEdit "set_shortcut_keys_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_shortcut_keys_enabled
+
 {-# NOINLINE bindLineEdit_set_text #-}
 
--- | String value of the [LineEdit].
---   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
+-- | String value of the @LineEdit@.
+--   			__Note:__ Changing text using this property won't emit the @signal text_changed@ signal.
 bindLineEdit_set_text :: MethodBind
 bindLineEdit_set_text
   = unsafePerformIO $
@@ -1140,8 +1419,8 @@ bindLineEdit_set_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | String value of the [LineEdit].
---   			[b]Note:[/b] Changing text using this property won't emit the [signal text_changed] signal.
+-- | String value of the @LineEdit@.
+--   			__Note:__ Changing text using this property won't emit the @signal text_changed@ signal.
 set_text ::
            (LineEdit :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_text cls arg1
@@ -1150,3 +1429,7 @@ set_text cls arg1
          godot_method_bind_call bindLineEdit_set_text (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineEdit "set_text" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.LineEdit.set_text

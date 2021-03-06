@@ -31,9 +31,14 @@ module Godot.Core.VisualShader
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shader()
 
 _NODE_ID_INVALID :: Int
 _NODE_ID_INVALID = -1
@@ -52,6 +57,11 @@ _TYPE_MAX = 3
 
 _TYPE_LIGHT :: Int
 _TYPE_LIGHT = 2
+
+instance NodeProperty VisualShader "graph_offset" Vector2 'False
+         where
+        nodeProperty
+          = (get_graph_offset, wrapDroppingSetter set_graph_offset, Nothing)
 
 {-# NOINLINE bindVisualShader__input_type_changed #-}
 
@@ -75,6 +85,11 @@ _input_type_changed cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "_input_type_changed" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShader._input_type_changed
+
 {-# NOINLINE bindVisualShader__queue_update #-}
 
 bindVisualShader__queue_update :: MethodBind
@@ -96,6 +111,9 @@ _queue_update cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "_queue_update" '[] (IO ()) where
+        nodeMethod = Godot.Core.VisualShader._queue_update
+
 {-# NOINLINE bindVisualShader__update_shader #-}
 
 bindVisualShader__update_shader :: MethodBind
@@ -116,6 +134,9 @@ _update_shader cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "_update_shader" '[] (IO ()) where
+        nodeMethod = Godot.Core.VisualShader._update_shader
 
 {-# NOINLINE bindVisualShader_add_node #-}
 
@@ -142,9 +163,15 @@ add_node cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "add_node"
+           '[Int, VisualShaderNode, Vector2, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShader.add_node
+
 {-# NOINLINE bindVisualShader_can_connect_nodes #-}
 
--- | Returns [code]true[/code] if the specified nodes and ports can be connected together.
+-- | Returns @true@ if the specified nodes and ports can be connected together.
 bindVisualShader_can_connect_nodes :: MethodBind
 bindVisualShader_can_connect_nodes
   = unsafePerformIO $
@@ -154,7 +181,7 @@ bindVisualShader_can_connect_nodes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the specified nodes and ports can be connected together.
+-- | Returns @true@ if the specified nodes and ports can be connected together.
 can_connect_nodes ::
                     (VisualShader :< cls, Object :< cls) =>
                     cls -> Int -> Int -> Int -> Int -> Int -> IO Bool
@@ -168,6 +195,12 @@ can_connect_nodes cls arg1 arg2 arg3 arg4 arg5
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "can_connect_nodes"
+           '[Int, Int, Int, Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualShader.can_connect_nodes
 
 {-# NOINLINE bindVisualShader_connect_nodes #-}
 
@@ -194,6 +227,12 @@ connect_nodes cls arg1 arg2 arg3 arg4 arg5
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "connect_nodes"
+           '[Int, Int, Int, Int, Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShader.connect_nodes
 
 {-# NOINLINE bindVisualShader_connect_nodes_forced #-}
 
@@ -222,6 +261,12 @@ connect_nodes_forced cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "connect_nodes_forced"
+           '[Int, Int, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShader.connect_nodes_forced
+
 {-# NOINLINE bindVisualShader_disconnect_nodes #-}
 
 -- | Connects the specified nodes and ports.
@@ -249,6 +294,12 @@ disconnect_nodes cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "disconnect_nodes"
+           '[Int, Int, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShader.disconnect_nodes
+
 {-# NOINLINE bindVisualShader_get_graph_offset #-}
 
 -- | The offset vector of the whole graph.
@@ -273,9 +324,14 @@ get_graph_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "get_graph_offset" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.VisualShader.get_graph_offset
+
 {-# NOINLINE bindVisualShader_get_node #-}
 
--- | Returns the shader node instance with specified [code]type[/code] and [code]id[/code].
+-- | Returns the shader node instance with specified @type@ and @id@.
 bindVisualShader_get_node :: MethodBind
 bindVisualShader_get_node
   = unsafePerformIO $
@@ -285,7 +341,7 @@ bindVisualShader_get_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the shader node instance with specified [code]type[/code] and [code]id[/code].
+-- | Returns the shader node instance with specified @type@ and @id@.
 get_node ::
            (VisualShader :< cls, Object :< cls) =>
            cls -> Int -> Int -> IO VisualShaderNode
@@ -296,6 +352,11 @@ get_node cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "get_node" '[Int, Int]
+           (IO VisualShaderNode)
+         where
+        nodeMethod = Godot.Core.VisualShader.get_node
 
 {-# NOINLINE bindVisualShader_get_node_connections #-}
 
@@ -321,6 +382,11 @@ get_node_connections cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "get_node_connections" '[Int]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.VisualShader.get_node_connections
+
 {-# NOINLINE bindVisualShader_get_node_list #-}
 
 -- | Returns the list of all nodes in the shader with the specified type.
@@ -344,6 +410,11 @@ get_node_list cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "get_node_list" '[Int]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.VisualShader.get_node_list
 
 {-# NOINLINE bindVisualShader_get_node_position #-}
 
@@ -370,6 +441,11 @@ get_node_position cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "get_node_position" '[Int, Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.VisualShader.get_node_position
+
 {-# NOINLINE bindVisualShader_get_valid_node_id #-}
 
 bindVisualShader_get_valid_node_id :: MethodBind
@@ -392,9 +468,14 @@ get_valid_node_id cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "get_valid_node_id" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShader.get_valid_node_id
+
 {-# NOINLINE bindVisualShader_is_node_connection #-}
 
--- | Returns [code]true[/code] if the specified node and port connection exist.
+-- | Returns @true@ if the specified node and port connection exist.
 bindVisualShader_is_node_connection :: MethodBind
 bindVisualShader_is_node_connection
   = unsafePerformIO $
@@ -404,7 +485,7 @@ bindVisualShader_is_node_connection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the specified node and port connection exist.
+-- | Returns @true@ if the specified node and port connection exist.
 is_node_connection ::
                      (VisualShader :< cls, Object :< cls) =>
                      cls -> Int -> Int -> Int -> Int -> Int -> IO Bool
@@ -418,6 +499,12 @@ is_node_connection cls arg1 arg2 arg3 arg4 arg5
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "is_node_connection"
+           '[Int, Int, Int, Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualShader.is_node_connection
 
 {-# NOINLINE bindVisualShader_remove_node #-}
 
@@ -441,6 +528,10 @@ remove_node cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "remove_node" '[Int, Int] (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShader.remove_node
 
 {-# NOINLINE bindVisualShader_set_graph_offset #-}
 
@@ -466,6 +557,11 @@ set_graph_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShader "set_graph_offset" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShader.set_graph_offset
+
 {-# NOINLINE bindVisualShader_set_mode #-}
 
 -- | Sets the mode of this shader.
@@ -488,6 +584,9 @@ set_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "set_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.VisualShader.set_mode
 
 {-# NOINLINE bindVisualShader_set_node_position #-}
 
@@ -513,3 +612,9 @@ set_node_position cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShader "set_node_position"
+           '[Int, Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShader.set_node_position

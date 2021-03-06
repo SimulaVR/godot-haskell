@@ -34,9 +34,14 @@ module Godot.Core.AnimationNode
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _FILTER_IGNORE :: Int
 _FILTER_IGNORE = 0
@@ -58,11 +63,21 @@ sig_removed_from_graph
 
 instance NodeSignal AnimationNode "removed_from_graph" '[]
 
--- | Emitted by nodes that inherit from this class and that have an internal tree when one of their nodes changes. The nodes that emit this signal are [AnimationNodeBlendSpace1D], [AnimationNodeBlendSpace2D], [AnimationNodeStateMachine], and [AnimationNodeBlendTree].
+-- | Emitted by nodes that inherit from this class and that have an internal tree when one of their nodes changes. The nodes that emit this signal are @AnimationNodeBlendSpace1D@, @AnimationNodeBlendSpace2D@, @AnimationNodeStateMachine@, and @AnimationNodeBlendTree@.
 sig_tree_changed :: Godot.Internal.Dispatch.Signal AnimationNode
 sig_tree_changed = Godot.Internal.Dispatch.Signal "tree_changed"
 
 instance NodeSignal AnimationNode "tree_changed" '[]
+
+instance NodeProperty AnimationNode "filter_enabled" Bool 'False
+         where
+        nodeProperty
+          = (is_filter_enabled, wrapDroppingSetter set_filter_enabled,
+             Nothing)
+
+instance NodeProperty AnimationNode "filters" Array 'False where
+        nodeProperty
+          = (_get_filters, wrapDroppingSetter _set_filters, Nothing)
 
 {-# NOINLINE bindAnimationNode__get_filters #-}
 
@@ -85,6 +100,10 @@ _get_filters cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "_get_filters" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.AnimationNode._get_filters
+
 {-# NOINLINE bindAnimationNode__set_filters #-}
 
 bindAnimationNode__set_filters :: MethodBind
@@ -106,9 +125,13 @@ _set_filters cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "_set_filters" '[Array] (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode._set_filters
+
 {-# NOINLINE bindAnimationNode_add_input #-}
 
--- | Adds an input to the node. This is only useful for nodes created for use in an [AnimationNodeBlendTree].
+-- | Adds an input to the node. This is only useful for nodes created for use in an @AnimationNodeBlendTree@.
 bindAnimationNode_add_input :: MethodBind
 bindAnimationNode_add_input
   = unsafePerformIO $
@@ -118,7 +141,7 @@ bindAnimationNode_add_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an input to the node. This is only useful for nodes created for use in an [AnimationNodeBlendTree].
+-- | Adds an input to the node. This is only useful for nodes created for use in an @AnimationNodeBlendTree@.
 add_input ::
             (AnimationNode :< cls, Object :< cls) =>
             cls -> GodotString -> IO ()
@@ -130,9 +153,14 @@ add_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "add_input" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode.add_input
+
 {-# NOINLINE bindAnimationNode_blend_animation #-}
 
--- | Blend an animation by [code]blend[/code] amount (name must be valid in the linked [AnimationPlayer]). A [code]time[/code] and [code]delta[/code] may be passed, as well as whether [code]seek[/code] happened.
+-- | Blend an animation by @blend@ amount (name must be valid in the linked @AnimationPlayer@). A @time@ and @delta@ may be passed, as well as whether @seek@ happened.
 bindAnimationNode_blend_animation :: MethodBind
 bindAnimationNode_blend_animation
   = unsafePerformIO $
@@ -142,7 +170,7 @@ bindAnimationNode_blend_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Blend an animation by [code]blend[/code] amount (name must be valid in the linked [AnimationPlayer]). A [code]time[/code] and [code]delta[/code] may be passed, as well as whether [code]seek[/code] happened.
+-- | Blend an animation by @blend@ amount (name must be valid in the linked @AnimationPlayer@). A @time@ and @delta@ may be passed, as well as whether @seek@ happened.
 blend_animation ::
                   (AnimationNode :< cls, Object :< cls) =>
                   cls -> GodotString -> Float -> Float -> Bool -> Float -> IO ()
@@ -157,9 +185,15 @@ blend_animation cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "blend_animation"
+           '[GodotString, Float, Float, Bool, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode.blend_animation
+
 {-# NOINLINE bindAnimationNode_blend_input #-}
 
--- | Blend an input. This is only useful for nodes created for an [AnimationNodeBlendTree]. The [code]time[/code] parameter is a relative delta, unless [code]seek[/code] is [code]true[/code], in which case it is absolute. A filter mode may be optionally passed (see [enum FilterAction] for options).
+-- | Blend an input. This is only useful for nodes created for an @AnimationNodeBlendTree@. The @time@ parameter is a relative delta, unless @seek@ is @true@, in which case it is absolute. A filter mode may be optionally passed (see @enum FilterAction@ for options).
 bindAnimationNode_blend_input :: MethodBind
 bindAnimationNode_blend_input
   = unsafePerformIO $
@@ -169,23 +203,32 @@ bindAnimationNode_blend_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Blend an input. This is only useful for nodes created for an [AnimationNodeBlendTree]. The [code]time[/code] parameter is a relative delta, unless [code]seek[/code] is [code]true[/code], in which case it is absolute. A filter mode may be optionally passed (see [enum FilterAction] for options).
+-- | Blend an input. This is only useful for nodes created for an @AnimationNodeBlendTree@. The @time@ parameter is a relative delta, unless @seek@ is @true@, in which case it is absolute. A filter mode may be optionally passed (see @enum FilterAction@ for options).
 blend_input ::
               (AnimationNode :< cls, Object :< cls) =>
-              cls -> Int -> Float -> Bool -> Float -> Int -> Bool -> IO Float
+              cls ->
+                Int ->
+                  Float -> Bool -> Float -> Maybe Int -> Maybe Bool -> IO Float
 blend_input cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+       maybe (VariantInt (0)) toVariant arg5,
+       maybe (VariantBool True) toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimationNode_blend_input (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "blend_input"
+           '[Int, Float, Bool, Float, Maybe Int, Maybe Bool]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AnimationNode.blend_input
+
 {-# NOINLINE bindAnimationNode_blend_node #-}
 
--- | Blend another animation node (in case this node contains children animation nodes). This function is only useful if you inherit from [AnimationRootNode] instead, else editors will not display your node for addition.
+-- | Blend another animation node (in case this node contains children animation nodes). This function is only useful if you inherit from @AnimationRootNode@ instead, else editors will not display your node for addition.
 bindAnimationNode_blend_node :: MethodBind
 bindAnimationNode_blend_node
   = unsafePerformIO $
@@ -195,21 +238,30 @@ bindAnimationNode_blend_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Blend another animation node (in case this node contains children animation nodes). This function is only useful if you inherit from [AnimationRootNode] instead, else editors will not display your node for addition.
+-- | Blend another animation node (in case this node contains children animation nodes). This function is only useful if you inherit from @AnimationRootNode@ instead, else editors will not display your node for addition.
 blend_node ::
              (AnimationNode :< cls, Object :< cls) =>
              cls ->
                GodotString ->
-                 AnimationNode -> Float -> Bool -> Float -> Int -> Bool -> IO Float
+                 AnimationNode ->
+                   Float -> Bool -> Float -> Maybe Int -> Maybe Bool -> IO Float
 blend_node cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7]
+       toVariant arg5, maybe (VariantInt (0)) toVariant arg6,
+       maybe (VariantBool True) toVariant arg7]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimationNode_blend_node (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNode "blend_node"
+           '[GodotString, AnimationNode, Float, Bool, Float, Maybe Int,
+             Maybe Bool]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AnimationNode.blend_node
 
 {-# NOINLINE bindAnimationNode_get_caption #-}
 
@@ -234,9 +286,14 @@ get_caption cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "get_caption" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_caption
+
 {-# NOINLINE bindAnimationNode_get_child_by_name #-}
 
--- | Gets a child node by index (used by editors inheriting from [AnimationRootNode]).
+-- | Gets a child node by index (used by editors inheriting from @AnimationRootNode@).
 bindAnimationNode_get_child_by_name :: MethodBind
 bindAnimationNode_get_child_by_name
   = unsafePerformIO $
@@ -246,7 +303,7 @@ bindAnimationNode_get_child_by_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets a child node by index (used by editors inheriting from [AnimationRootNode]).
+-- | Gets a child node by index (used by editors inheriting from @AnimationRootNode@).
 get_child_by_name ::
                     (AnimationNode :< cls, Object :< cls) =>
                     cls -> GodotString -> IO Object
@@ -259,9 +316,15 @@ get_child_by_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "get_child_by_name"
+           '[GodotString]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_child_by_name
+
 {-# NOINLINE bindAnimationNode_get_child_nodes #-}
 
--- | Gets all children nodes in order as a [code]name: node[/code] dictionary. Only useful when inheriting [AnimationRootNode].
+-- | Gets all children nodes in order as a @name: node@ dictionary. Only useful when inheriting @AnimationRootNode@.
 bindAnimationNode_get_child_nodes :: MethodBind
 bindAnimationNode_get_child_nodes
   = unsafePerformIO $
@@ -271,7 +334,7 @@ bindAnimationNode_get_child_nodes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets all children nodes in order as a [code]name: node[/code] dictionary. Only useful when inheriting [AnimationRootNode].
+-- | Gets all children nodes in order as a @name: node@ dictionary. Only useful when inheriting @AnimationRootNode@.
 get_child_nodes ::
                   (AnimationNode :< cls, Object :< cls) => cls -> IO Dictionary
 get_child_nodes cls
@@ -283,9 +346,14 @@ get_child_nodes cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "get_child_nodes" '[]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_child_nodes
+
 {-# NOINLINE bindAnimationNode_get_input_count #-}
 
--- | Amount of inputs in this node, only useful for nodes that go into [AnimationNodeBlendTree].
+-- | Amount of inputs in this node, only useful for nodes that go into @AnimationNodeBlendTree@.
 bindAnimationNode_get_input_count :: MethodBind
 bindAnimationNode_get_input_count
   = unsafePerformIO $
@@ -295,7 +363,7 @@ bindAnimationNode_get_input_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of inputs in this node, only useful for nodes that go into [AnimationNodeBlendTree].
+-- | Amount of inputs in this node, only useful for nodes that go into @AnimationNodeBlendTree@.
 get_input_count ::
                   (AnimationNode :< cls, Object :< cls) => cls -> IO Int
 get_input_count cls
@@ -306,6 +374,10 @@ get_input_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNode "get_input_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_input_count
 
 {-# NOINLINE bindAnimationNode_get_input_name #-}
 
@@ -332,6 +404,11 @@ get_input_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "get_input_name" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_input_name
+
 {-# NOINLINE bindAnimationNode_get_parameter #-}
 
 -- | Gets the value of a parameter. Parameters are custom local memory used for your nodes, given a resource can be reused in multiple trees.
@@ -355,6 +432,11 @@ get_parameter cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNode "get_parameter" '[GodotString]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_parameter
 
 {-# NOINLINE bindAnimationNode_get_parameter_default_value #-}
 
@@ -382,9 +464,15 @@ get_parameter_default_value cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "get_parameter_default_value"
+           '[GodotString]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_parameter_default_value
+
 {-# NOINLINE bindAnimationNode_get_parameter_list #-}
 
--- | Gets the property information for parameter. Parameters are custom local memory used for your nodes, given a resource can be reused in multiple trees. Format is similar to [method Object.get_property_list].
+-- | Gets the property information for parameter. Parameters are custom local memory used for your nodes, given a resource can be reused in multiple trees. Format is similar to @method Object.get_property_list@.
 bindAnimationNode_get_parameter_list :: MethodBind
 bindAnimationNode_get_parameter_list
   = unsafePerformIO $
@@ -394,7 +482,7 @@ bindAnimationNode_get_parameter_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the property information for parameter. Parameters are custom local memory used for your nodes, given a resource can be reused in multiple trees. Format is similar to [method Object.get_property_list].
+-- | Gets the property information for parameter. Parameters are custom local memory used for your nodes, given a resource can be reused in multiple trees. Format is similar to @method Object.get_property_list@.
 get_parameter_list ::
                      (AnimationNode :< cls, Object :< cls) => cls -> IO Array
 get_parameter_list cls
@@ -406,9 +494,14 @@ get_parameter_list cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "get_parameter_list" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.AnimationNode.get_parameter_list
+
 {-# NOINLINE bindAnimationNode_has_filter #-}
 
--- | Returns [code]true[/code] whether you want the blend tree editor to display filter editing on this node.
+-- | Returns @true@ whether you want the blend tree editor to display filter editing on this node.
 bindAnimationNode_has_filter :: MethodBind
 bindAnimationNode_has_filter
   = unsafePerformIO $
@@ -418,7 +511,7 @@ bindAnimationNode_has_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] whether you want the blend tree editor to display filter editing on this node.
+-- | Returns @true@ whether you want the blend tree editor to display filter editing on this node.
 has_filter ::
              (AnimationNode :< cls, Object :< cls) => cls -> IO GodotString
 has_filter cls
@@ -429,9 +522,13 @@ has_filter cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "has_filter" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AnimationNode.has_filter
+
 {-# NOINLINE bindAnimationNode_is_filter_enabled #-}
 
--- | If [code]true[/code], filtering is enabled.
+-- | If @true@, filtering is enabled.
 bindAnimationNode_is_filter_enabled :: MethodBind
 bindAnimationNode_is_filter_enabled
   = unsafePerformIO $
@@ -441,7 +538,7 @@ bindAnimationNode_is_filter_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], filtering is enabled.
+-- | If @true@, filtering is enabled.
 is_filter_enabled ::
                     (AnimationNode :< cls, Object :< cls) => cls -> IO Bool
 is_filter_enabled cls
@@ -453,9 +550,13 @@ is_filter_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "is_filter_enabled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.AnimationNode.is_filter_enabled
+
 {-# NOINLINE bindAnimationNode_is_path_filtered #-}
 
--- | Returns [code]true[/code] whether a given path is filtered.
+-- | Returns @true@ whether a given path is filtered.
 bindAnimationNode_is_path_filtered :: MethodBind
 bindAnimationNode_is_path_filtered
   = unsafePerformIO $
@@ -465,7 +566,7 @@ bindAnimationNode_is_path_filtered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] whether a given path is filtered.
+-- | Returns @true@ whether a given path is filtered.
 is_path_filtered ::
                    (AnimationNode :< cls, Object :< cls) => cls -> NodePath -> IO Bool
 is_path_filtered cls arg1
@@ -477,10 +578,15 @@ is_path_filtered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "is_path_filtered" '[NodePath]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AnimationNode.is_path_filtered
+
 {-# NOINLINE bindAnimationNode_process #-}
 
--- | User-defined callback called when a custom node is processed. The [code]time[/code] parameter is a relative delta, unless [code]seek[/code] is [code]true[/code], in which case it is absolute.
---   				Here, call the [method blend_input], [method blend_node] or [method blend_animation] functions. You can also use [method get_parameter] and [method set_parameter] to modify local memory.
+-- | User-defined callback called when a custom node is processed. The @time@ parameter is a relative delta, unless @seek@ is @true@, in which case it is absolute.
+--   				Here, call the @method blend_input@, @method blend_node@ or @method blend_animation@ functions. You can also use @method get_parameter@ and @method set_parameter@ to modify local memory.
 --   				This function should return the time left for the current animation to finish (if unsure, pass the value from the main blend being called).
 bindAnimationNode_process :: MethodBind
 bindAnimationNode_process
@@ -491,8 +597,8 @@ bindAnimationNode_process
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | User-defined callback called when a custom node is processed. The [code]time[/code] parameter is a relative delta, unless [code]seek[/code] is [code]true[/code], in which case it is absolute.
---   				Here, call the [method blend_input], [method blend_node] or [method blend_animation] functions. You can also use [method get_parameter] and [method set_parameter] to modify local memory.
+-- | User-defined callback called when a custom node is processed. The @time@ parameter is a relative delta, unless @seek@ is @true@, in which case it is absolute.
+--   				Here, call the @method blend_input@, @method blend_node@ or @method blend_animation@ functions. You can also use @method get_parameter@ and @method set_parameter@ to modify local memory.
 --   				This function should return the time left for the current animation to finish (if unsure, pass the value from the main blend being called).
 process ::
           (AnimationNode :< cls, Object :< cls) =>
@@ -504,6 +610,10 @@ process cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNode "process" '[Float, Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode.process
 
 {-# NOINLINE bindAnimationNode_remove_input #-}
 
@@ -528,9 +638,13 @@ remove_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "remove_input" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode.remove_input
+
 {-# NOINLINE bindAnimationNode_set_filter_enabled #-}
 
--- | If [code]true[/code], filtering is enabled.
+-- | If @true@, filtering is enabled.
 bindAnimationNode_set_filter_enabled :: MethodBind
 bindAnimationNode_set_filter_enabled
   = unsafePerformIO $
@@ -540,7 +654,7 @@ bindAnimationNode_set_filter_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], filtering is enabled.
+-- | If @true@, filtering is enabled.
 set_filter_enabled ::
                      (AnimationNode :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_filter_enabled cls arg1
@@ -551,6 +665,11 @@ set_filter_enabled cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNode "set_filter_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode.set_filter_enabled
 
 {-# NOINLINE bindAnimationNode_set_filter_path #-}
 
@@ -577,6 +696,12 @@ set_filter_path cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNode "set_filter_path"
+           '[NodePath, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode.set_filter_path
+
 {-# NOINLINE bindAnimationNode_set_parameter #-}
 
 -- | Sets a custom parameter. These are used as local storage, because resources can be reused across the tree or scenes.
@@ -600,3 +725,9 @@ set_parameter cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNode "set_parameter"
+           '[GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNode.set_parameter

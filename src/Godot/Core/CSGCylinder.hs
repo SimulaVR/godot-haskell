@@ -17,9 +17,34 @@ module Godot.Core.CSGCylinder
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.CSGPrimitive()
+
+instance NodeProperty CSGCylinder "cone" Bool 'False where
+        nodeProperty = (is_cone, wrapDroppingSetter set_cone, Nothing)
+
+instance NodeProperty CSGCylinder "height" Float 'False where
+        nodeProperty = (get_height, wrapDroppingSetter set_height, Nothing)
+
+instance NodeProperty CSGCylinder "material" Material 'False where
+        nodeProperty
+          = (get_material, wrapDroppingSetter set_material, Nothing)
+
+instance NodeProperty CSGCylinder "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
+
+instance NodeProperty CSGCylinder "sides" Int 'False where
+        nodeProperty = (get_sides, wrapDroppingSetter set_sides, Nothing)
+
+instance NodeProperty CSGCylinder "smooth_faces" Bool 'False where
+        nodeProperty
+          = (get_smooth_faces, wrapDroppingSetter set_smooth_faces, Nothing)
 
 {-# NOINLINE bindCSGCylinder_get_height #-}
 
@@ -42,6 +67,9 @@ get_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGCylinder "get_height" '[] (IO Float) where
+        nodeMethod = Godot.Core.CSGCylinder.get_height
+
 {-# NOINLINE bindCSGCylinder_get_material #-}
 
 bindCSGCylinder_get_material :: MethodBind
@@ -62,6 +90,10 @@ get_material cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGCylinder "get_material" '[] (IO Material)
+         where
+        nodeMethod = Godot.Core.CSGCylinder.get_material
 
 {-# NOINLINE bindCSGCylinder_get_radius #-}
 
@@ -84,6 +116,9 @@ get_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGCylinder "get_radius" '[] (IO Float) where
+        nodeMethod = Godot.Core.CSGCylinder.get_radius
+
 {-# NOINLINE bindCSGCylinder_get_sides #-}
 
 bindCSGCylinder_get_sides :: MethodBind
@@ -103,6 +138,9 @@ get_sides cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGCylinder "get_sides" '[] (IO Int) where
+        nodeMethod = Godot.Core.CSGCylinder.get_sides
 
 {-# NOINLINE bindCSGCylinder_get_smooth_faces #-}
 
@@ -126,6 +164,10 @@ get_smooth_faces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGCylinder "get_smooth_faces" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGCylinder.get_smooth_faces
+
 {-# NOINLINE bindCSGCylinder_is_cone #-}
 
 bindCSGCylinder_is_cone :: MethodBind
@@ -144,6 +186,9 @@ is_cone cls
          godot_method_bind_call bindCSGCylinder_is_cone (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGCylinder "is_cone" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CSGCylinder.is_cone
 
 {-# NOINLINE bindCSGCylinder_set_cone #-}
 
@@ -164,6 +209,9 @@ set_cone cls arg1
          godot_method_bind_call bindCSGCylinder_set_cone (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGCylinder "set_cone" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.CSGCylinder.set_cone
 
 {-# NOINLINE bindCSGCylinder_set_height #-}
 
@@ -186,6 +234,9 @@ set_height cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGCylinder "set_height" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.CSGCylinder.set_height
+
 {-# NOINLINE bindCSGCylinder_set_material #-}
 
 bindCSGCylinder_set_material :: MethodBind
@@ -206,6 +257,10 @@ set_material cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGCylinder "set_material" '[Material] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGCylinder.set_material
 
 {-# NOINLINE bindCSGCylinder_set_radius #-}
 
@@ -228,6 +283,9 @@ set_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGCylinder "set_radius" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.CSGCylinder.set_radius
+
 {-# NOINLINE bindCSGCylinder_set_sides #-}
 
 bindCSGCylinder_set_sides :: MethodBind
@@ -248,6 +306,9 @@ set_sides cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGCylinder "set_sides" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CSGCylinder.set_sides
 
 {-# NOINLINE bindCSGCylinder_set_smooth_faces #-}
 
@@ -270,3 +331,7 @@ set_smooth_faces cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGCylinder "set_smooth_faces" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGCylinder.set_smooth_faces

@@ -13,9 +13,19 @@ module Godot.Core.PackedDataContainer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty PackedDataContainer "__data__" PoolByteArray
+           'False
+         where
+        nodeProperty = (_get_data, wrapDroppingSetter _set_data, Nothing)
 
 {-# NOINLINE bindPackedDataContainer__get_data #-}
 
@@ -40,6 +50,11 @@ _get_data cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PackedDataContainer "_get_data" '[]
+           (IO PoolByteArray)
+         where
+        nodeMethod = Godot.Core.PackedDataContainer._get_data
+
 {-# NOINLINE bindPackedDataContainer__iter_get #-}
 
 bindPackedDataContainer__iter_get :: MethodBind
@@ -62,6 +77,11 @@ _iter_get cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PackedDataContainer "_iter_get" '[GodotVariant]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.PackedDataContainer._iter_get
 
 {-# NOINLINE bindPackedDataContainer__iter_init #-}
 
@@ -86,6 +106,11 @@ _iter_init cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PackedDataContainer "_iter_init" '[Array]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.PackedDataContainer._iter_init
+
 {-# NOINLINE bindPackedDataContainer__iter_next #-}
 
 bindPackedDataContainer__iter_next :: MethodBind
@@ -108,6 +133,11 @@ _iter_next cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PackedDataContainer "_iter_next" '[Array]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.PackedDataContainer._iter_next
 
 {-# NOINLINE bindPackedDataContainer__set_data #-}
 
@@ -132,6 +162,12 @@ _set_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PackedDataContainer "_set_data"
+           '[PoolByteArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PackedDataContainer._set_data
+
 {-# NOINLINE bindPackedDataContainer_pack #-}
 
 bindPackedDataContainer_pack :: MethodBind
@@ -154,6 +190,11 @@ pack cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PackedDataContainer "pack" '[GodotVariant]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.PackedDataContainer.pack
+
 {-# NOINLINE bindPackedDataContainer_size #-}
 
 bindPackedDataContainer_size :: MethodBind
@@ -174,3 +215,6 @@ size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PackedDataContainer "size" '[] (IO Int) where
+        nodeMethod = Godot.Core.PackedDataContainer.size

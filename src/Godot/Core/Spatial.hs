@@ -48,9 +48,14 @@ module Godot.Core.Spatial
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
 
 _NOTIFICATION_ENTER_WORLD :: Int
 _NOTIFICATION_ENTER_WORLD = 41
@@ -71,6 +76,40 @@ sig_visibility_changed
 
 instance NodeSignal Spatial "visibility_changed" '[]
 
+instance NodeProperty Spatial "gizmo" SpatialGizmo 'False where
+        nodeProperty = (get_gizmo, wrapDroppingSetter set_gizmo, Nothing)
+
+instance NodeProperty Spatial "global_transform" Transform 'False
+         where
+        nodeProperty
+          = (get_global_transform, wrapDroppingSetter set_global_transform,
+             Nothing)
+
+instance NodeProperty Spatial "rotation" Vector3 'False where
+        nodeProperty
+          = (get_rotation, wrapDroppingSetter set_rotation, Nothing)
+
+instance NodeProperty Spatial "rotation_degrees" Vector3 'False
+         where
+        nodeProperty
+          = (get_rotation_degrees, wrapDroppingSetter set_rotation_degrees,
+             Nothing)
+
+instance NodeProperty Spatial "scale" Vector3 'False where
+        nodeProperty = (get_scale, wrapDroppingSetter set_scale, Nothing)
+
+instance NodeProperty Spatial "transform" Transform 'False where
+        nodeProperty
+          = (get_transform, wrapDroppingSetter set_transform, Nothing)
+
+instance NodeProperty Spatial "translation" Vector3 'False where
+        nodeProperty
+          = (get_translation, wrapDroppingSetter set_translation, Nothing)
+
+instance NodeProperty Spatial "visible" Bool 'False where
+        nodeProperty
+          = (is_visible, wrapDroppingSetter set_visible, Nothing)
+
 {-# NOINLINE bindSpatial__update_gizmo #-}
 
 bindSpatial__update_gizmo :: MethodBind
@@ -90,6 +129,9 @@ _update_gizmo cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "_update_gizmo" '[] (IO ()) where
+        nodeMethod = Godot.Core.Spatial._update_gizmo
 
 {-# NOINLINE bindSpatial_force_update_transform #-}
 
@@ -115,9 +157,13 @@ force_update_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "force_update_transform" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.force_update_transform
+
 {-# NOINLINE bindSpatial_get_gizmo #-}
 
--- | The [SpatialGizmo] for this node. Used for example in [EditorSpatialGizmo] as custom visualization and editing handles in Editor.
+-- | The @SpatialGizmo@ for this node. Used for example in @EditorSpatialGizmo@ as custom visualization and editing handles in Editor.
 bindSpatial_get_gizmo :: MethodBind
 bindSpatial_get_gizmo
   = unsafePerformIO $
@@ -127,7 +173,7 @@ bindSpatial_get_gizmo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [SpatialGizmo] for this node. Used for example in [EditorSpatialGizmo] as custom visualization and editing handles in Editor.
+-- | The @SpatialGizmo@ for this node. Used for example in @EditorSpatialGizmo@ as custom visualization and editing handles in Editor.
 get_gizmo ::
             (Spatial :< cls, Object :< cls) => cls -> IO SpatialGizmo
 get_gizmo cls
@@ -137,9 +183,12 @@ get_gizmo cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "get_gizmo" '[] (IO SpatialGizmo) where
+        nodeMethod = Godot.Core.Spatial.get_gizmo
+
 {-# NOINLINE bindSpatial_get_global_transform #-}
 
--- | World space (global) [Transform] of this node.
+-- | World space (global) @Transform@ of this node.
 bindSpatial_get_global_transform :: MethodBind
 bindSpatial_get_global_transform
   = unsafePerformIO $
@@ -149,7 +198,7 @@ bindSpatial_get_global_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | World space (global) [Transform] of this node.
+-- | World space (global) @Transform@ of this node.
 get_global_transform ::
                        (Spatial :< cls, Object :< cls) => cls -> IO Transform
 get_global_transform cls
@@ -161,9 +210,14 @@ get_global_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "get_global_transform" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.Spatial.get_global_transform
+
 {-# NOINLINE bindSpatial_get_parent_spatial #-}
 
--- | Returns the parent [Spatial], or an empty [Object] if no parent exists or parent is not of type [Spatial].
+-- | Returns the parent @Spatial@, or an empty @Object@ if no parent exists or parent is not of type @Spatial@.
 bindSpatial_get_parent_spatial :: MethodBind
 bindSpatial_get_parent_spatial
   = unsafePerformIO $
@@ -173,7 +227,7 @@ bindSpatial_get_parent_spatial
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent [Spatial], or an empty [Object] if no parent exists or parent is not of type [Spatial].
+-- | Returns the parent @Spatial@, or an empty @Object@ if no parent exists or parent is not of type @Spatial@.
 get_parent_spatial ::
                      (Spatial :< cls, Object :< cls) => cls -> IO Spatial
 get_parent_spatial cls
@@ -184,10 +238,14 @@ get_parent_spatial cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "get_parent_spatial" '[] (IO Spatial)
+         where
+        nodeMethod = Godot.Core.Spatial.get_parent_spatial
+
 {-# NOINLINE bindSpatial_get_rotation #-}
 
 -- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
---   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+--   			__Note:__ In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a @Vector3@ data structure not because the rotation is a vector, but only because @Vector3@ exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 bindSpatial_get_rotation :: MethodBind
 bindSpatial_get_rotation
   = unsafePerformIO $
@@ -198,7 +256,7 @@ bindSpatial_get_rotation
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
---   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+--   			__Note:__ In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a @Vector3@ data structure not because the rotation is a vector, but only because @Vector3@ exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 get_rotation ::
                (Spatial :< cls, Object :< cls) => cls -> IO Vector3
 get_rotation cls
@@ -207,6 +265,9 @@ get_rotation cls
          godot_method_bind_call bindSpatial_get_rotation (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "get_rotation" '[] (IO Vector3) where
+        nodeMethod = Godot.Core.Spatial.get_rotation
 
 {-# NOINLINE bindSpatial_get_rotation_degrees #-}
 
@@ -232,6 +293,10 @@ get_rotation_degrees cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "get_rotation_degrees" '[] (IO Vector3)
+         where
+        nodeMethod = Godot.Core.Spatial.get_rotation_degrees
+
 {-# NOINLINE bindSpatial_get_scale #-}
 
 -- | Scale part of the local transformation.
@@ -253,9 +318,12 @@ get_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "get_scale" '[] (IO Vector3) where
+        nodeMethod = Godot.Core.Spatial.get_scale
+
 {-# NOINLINE bindSpatial_get_transform #-}
 
--- | Local space [Transform] of this node, with respect to the parent node.
+-- | Local space @Transform@ of this node, with respect to the parent node.
 bindSpatial_get_transform :: MethodBind
 bindSpatial_get_transform
   = unsafePerformIO $
@@ -265,7 +333,7 @@ bindSpatial_get_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Local space [Transform] of this node, with respect to the parent node.
+-- | Local space @Transform@ of this node, with respect to the parent node.
 get_transform ::
                 (Spatial :< cls, Object :< cls) => cls -> IO Transform
 get_transform cls
@@ -275,6 +343,10 @@ get_transform cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "get_transform" '[] (IO Transform)
+         where
+        nodeMethod = Godot.Core.Spatial.get_transform
 
 {-# NOINLINE bindSpatial_get_translation #-}
 
@@ -299,9 +371,13 @@ get_translation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "get_translation" '[] (IO Vector3)
+         where
+        nodeMethod = Godot.Core.Spatial.get_translation
+
 {-# NOINLINE bindSpatial_get_world #-}
 
--- | Returns the current [World] resource this [Spatial] node is registered to.
+-- | Returns the current @World@ resource this @Spatial@ node is registered to.
 bindSpatial_get_world :: MethodBind
 bindSpatial_get_world
   = unsafePerformIO $
@@ -311,7 +387,7 @@ bindSpatial_get_world
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current [World] resource this [Spatial] node is registered to.
+-- | Returns the current @World@ resource this @Spatial@ node is registered to.
 get_world :: (Spatial :< cls, Object :< cls) => cls -> IO World
 get_world cls
   = withVariantArray []
@@ -320,9 +396,12 @@ get_world cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "get_world" '[] (IO World) where
+        nodeMethod = Godot.Core.Spatial.get_world
+
 {-# NOINLINE bindSpatial_global_rotate #-}
 
--- | Rotates the global (world) transformation around axis, a unit [Vector3], by specified angle in radians. The rotation axis is in global coordinate system.
+-- | Rotates the global (world) transformation around axis, a unit @Vector3@, by specified angle in radians. The rotation axis is in global coordinate system.
 bindSpatial_global_rotate :: MethodBind
 bindSpatial_global_rotate
   = unsafePerformIO $
@@ -332,7 +411,7 @@ bindSpatial_global_rotate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotates the global (world) transformation around axis, a unit [Vector3], by specified angle in radians. The rotation axis is in global coordinate system.
+-- | Rotates the global (world) transformation around axis, a unit @Vector3@, by specified angle in radians. The rotation axis is in global coordinate system.
 global_rotate ::
                 (Spatial :< cls, Object :< cls) => cls -> Vector3 -> Float -> IO ()
 global_rotate cls arg1 arg2
@@ -343,9 +422,14 @@ global_rotate cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "global_rotate" '[Vector3, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.global_rotate
+
 {-# NOINLINE bindSpatial_global_scale #-}
 
--- | Scales the global (world) transformation by the given [Vector3] scale factors.
+-- | Scales the global (world) transformation by the given @Vector3@ scale factors.
 bindSpatial_global_scale :: MethodBind
 bindSpatial_global_scale
   = unsafePerformIO $
@@ -355,7 +439,7 @@ bindSpatial_global_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Scales the global (world) transformation by the given [Vector3] scale factors.
+-- | Scales the global (world) transformation by the given @Vector3@ scale factors.
 global_scale ::
                (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 global_scale cls arg1
@@ -365,9 +449,12 @@ global_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "global_scale" '[Vector3] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.global_scale
+
 {-# NOINLINE bindSpatial_global_translate #-}
 
--- | Moves the global (world) transformation by [Vector3] offset. The offset is in global coordinate system.
+-- | Moves the global (world) transformation by @Vector3@ offset. The offset is in global coordinate system.
 bindSpatial_global_translate :: MethodBind
 bindSpatial_global_translate
   = unsafePerformIO $
@@ -377,7 +464,7 @@ bindSpatial_global_translate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Moves the global (world) transformation by [Vector3] offset. The offset is in global coordinate system.
+-- | Moves the global (world) transformation by @Vector3@ offset. The offset is in global coordinate system.
 global_translate ::
                    (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 global_translate cls arg1
@@ -388,9 +475,13 @@ global_translate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "global_translate" '[Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.global_translate
+
 {-# NOINLINE bindSpatial_hide #-}
 
--- | Disables rendering of this node. Changes [member visible] to [code]false[/code].
+-- | Disables rendering of this node. Changes @visible@ to @false@.
 bindSpatial_hide :: MethodBind
 bindSpatial_hide
   = unsafePerformIO $
@@ -400,7 +491,7 @@ bindSpatial_hide
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disables rendering of this node. Changes [member visible] to [code]false[/code].
+-- | Disables rendering of this node. Changes @visible@ to @false@.
 hide :: (Spatial :< cls, Object :< cls) => cls -> IO ()
 hide cls
   = withVariantArray []
@@ -408,10 +499,13 @@ hide cls
          godot_method_bind_call bindSpatial_hide (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "hide" '[] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.hide
+
 {-# NOINLINE bindSpatial_is_local_transform_notification_enabled
              #-}
 
--- | Returns whether node notifies about its local transformation changes. [Spatial] will not propagate this by default.
+-- | Returns whether node notifies about its local transformation changes. @Spatial@ will not propagate this by default.
 bindSpatial_is_local_transform_notification_enabled :: MethodBind
 bindSpatial_is_local_transform_notification_enabled
   = unsafePerformIO $
@@ -421,7 +515,7 @@ bindSpatial_is_local_transform_notification_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether node notifies about its local transformation changes. [Spatial] will not propagate this by default.
+-- | Returns whether node notifies about its local transformation changes. @Spatial@ will not propagate this by default.
 is_local_transform_notification_enabled ::
                                           (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_local_transform_notification_enabled cls
@@ -434,9 +528,17 @@ is_local_transform_notification_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial
+           "is_local_transform_notification_enabled"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.Spatial.is_local_transform_notification_enabled
+
 {-# NOINLINE bindSpatial_is_scale_disabled #-}
 
--- | Returns whether this node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale.
+-- | Returns whether this node uses a scale of @(1, 1, 1)@ or its local transformation scale.
 bindSpatial_is_scale_disabled :: MethodBind
 bindSpatial_is_scale_disabled
   = unsafePerformIO $
@@ -446,7 +548,7 @@ bindSpatial_is_scale_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether this node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale.
+-- | Returns whether this node uses a scale of @(1, 1, 1)@ or its local transformation scale.
 is_scale_disabled ::
                     (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_scale_disabled cls
@@ -456,6 +558,9 @@ is_scale_disabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "is_scale_disabled" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Spatial.is_scale_disabled
 
 {-# NOINLINE bindSpatial_is_set_as_toplevel #-}
 
@@ -480,9 +585,13 @@ is_set_as_toplevel cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "is_set_as_toplevel" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Spatial.is_set_as_toplevel
+
 {-# NOINLINE bindSpatial_is_transform_notification_enabled #-}
 
--- | Returns whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
+-- | Returns whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default.
 bindSpatial_is_transform_notification_enabled :: MethodBind
 bindSpatial_is_transform_notification_enabled
   = unsafePerformIO $
@@ -492,7 +601,7 @@ bindSpatial_is_transform_notification_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
+-- | Returns whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default.
 is_transform_notification_enabled ::
                                     (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_transform_notification_enabled cls
@@ -505,9 +614,14 @@ is_transform_notification_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "is_transform_notification_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Spatial.is_transform_notification_enabled
+
 {-# NOINLINE bindSpatial_is_visible #-}
 
--- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
+-- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
 bindSpatial_is_visible :: MethodBind
 bindSpatial_is_visible
   = unsafePerformIO $
@@ -517,7 +631,7 @@ bindSpatial_is_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
+-- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
 is_visible :: (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_visible cls
   = withVariantArray []
@@ -526,9 +640,12 @@ is_visible cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "is_visible" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Spatial.is_visible
+
 {-# NOINLINE bindSpatial_is_visible_in_tree #-}
 
--- | Returns [code]true[/code] if the node is present in the [SceneTree], its [member visible] property is [code]true[/code] and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
 bindSpatial_is_visible_in_tree :: MethodBind
 bindSpatial_is_visible_in_tree
   = unsafePerformIO $
@@ -538,7 +655,7 @@ bindSpatial_is_visible_in_tree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the node is present in the [SceneTree], its [member visible] property is [code]true[/code] and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
 is_visible_in_tree ::
                      (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_visible_in_tree cls
@@ -549,10 +666,14 @@ is_visible_in_tree cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "is_visible_in_tree" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Spatial.is_visible_in_tree
+
 {-# NOINLINE bindSpatial_look_at #-}
 
--- | Rotates itself so that the local -Z axis points towards the [code]target[/code] position.
---   				The transform will first be rotated around the given [code]up[/code] vector, and then fully aligned to the target by a further rotation around an axis perpendicular to both the [code]target[/code] and [code]up[/code] vectors.
+-- | Rotates itself so that the local -Z axis points towards the @target@ position.
+--   				The transform will first be rotated around the given @up@ vector, and then fully aligned to the target by a further rotation around an axis perpendicular to both the @target@ and @up@ vectors.
 --   				Operations take place in global space.
 bindSpatial_look_at :: MethodBind
 bindSpatial_look_at
@@ -563,8 +684,8 @@ bindSpatial_look_at
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotates itself so that the local -Z axis points towards the [code]target[/code] position.
---   				The transform will first be rotated around the given [code]up[/code] vector, and then fully aligned to the target by a further rotation around an axis perpendicular to both the [code]target[/code] and [code]up[/code] vectors.
+-- | Rotates itself so that the local -Z axis points towards the @target@ position.
+--   				The transform will first be rotated around the given @up@ vector, and then fully aligned to the target by a further rotation around an axis perpendicular to both the @target@ and @up@ vectors.
 --   				Operations take place in global space.
 look_at ::
           (Spatial :< cls, Object :< cls) =>
@@ -575,9 +696,13 @@ look_at cls arg1 arg2
          godot_method_bind_call bindSpatial_look_at (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "look_at" '[Vector3, Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.look_at
+
 {-# NOINLINE bindSpatial_look_at_from_position #-}
 
--- | Moves the node to the specified [code]position[/code], and then rotates itself to point toward the [code]target[/code] as per [method look_at]. Operations take place in global space.
+-- | Moves the node to the specified @position@, and then rotates itself to point toward the @target@ as per @method look_at@. Operations take place in global space.
 bindSpatial_look_at_from_position :: MethodBind
 bindSpatial_look_at_from_position
   = unsafePerformIO $
@@ -587,7 +712,7 @@ bindSpatial_look_at_from_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Moves the node to the specified [code]position[/code], and then rotates itself to point toward the [code]target[/code] as per [method look_at]. Operations take place in global space.
+-- | Moves the node to the specified @position@, and then rotates itself to point toward the @target@ as per @method look_at@. Operations take place in global space.
 look_at_from_position ::
                         (Spatial :< cls, Object :< cls) =>
                         cls -> Vector3 -> Vector3 -> Vector3 -> IO ()
@@ -600,9 +725,15 @@ look_at_from_position cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "look_at_from_position"
+           '[Vector3, Vector3, Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.look_at_from_position
+
 {-# NOINLINE bindSpatial_orthonormalize #-}
 
--- | Resets this node's transformations (like scale, skew and taper) preserving its rotation and translation by performing Gram-Schmidt orthonormalization on this node's [Transform].
+-- | Resets this node's transformations (like scale, skew and taper) preserving its rotation and translation by performing Gram-Schmidt orthonormalization on this node's @Transform@.
 bindSpatial_orthonormalize :: MethodBind
 bindSpatial_orthonormalize
   = unsafePerformIO $
@@ -612,7 +743,7 @@ bindSpatial_orthonormalize
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Resets this node's transformations (like scale, skew and taper) preserving its rotation and translation by performing Gram-Schmidt orthonormalization on this node's [Transform].
+-- | Resets this node's transformations (like scale, skew and taper) preserving its rotation and translation by performing Gram-Schmidt orthonormalization on this node's @Transform@.
 orthonormalize :: (Spatial :< cls, Object :< cls) => cls -> IO ()
 orthonormalize cls
   = withVariantArray []
@@ -622,9 +753,12 @@ orthonormalize cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "orthonormalize" '[] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.orthonormalize
+
 {-# NOINLINE bindSpatial_rotate #-}
 
--- | Rotates the local transformation around axis, a unit [Vector3], by specified angle in radians.
+-- | Rotates the local transformation around axis, a unit @Vector3@, by specified angle in radians.
 bindSpatial_rotate :: MethodBind
 bindSpatial_rotate
   = unsafePerformIO $
@@ -634,7 +768,7 @@ bindSpatial_rotate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotates the local transformation around axis, a unit [Vector3], by specified angle in radians.
+-- | Rotates the local transformation around axis, a unit @Vector3@, by specified angle in radians.
 rotate ::
          (Spatial :< cls, Object :< cls) => cls -> Vector3 -> Float -> IO ()
 rotate cls arg1 arg2
@@ -643,9 +777,13 @@ rotate cls arg1 arg2
          godot_method_bind_call bindSpatial_rotate (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "rotate" '[Vector3, Float] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.rotate
+
 {-# NOINLINE bindSpatial_rotate_object_local #-}
 
--- | Rotates the local transformation around axis, a unit [Vector3], by specified angle in radians. The rotation axis is in object-local coordinate system.
+-- | Rotates the local transformation around axis, a unit @Vector3@, by specified angle in radians. The rotation axis is in object-local coordinate system.
 bindSpatial_rotate_object_local :: MethodBind
 bindSpatial_rotate_object_local
   = unsafePerformIO $
@@ -655,7 +793,7 @@ bindSpatial_rotate_object_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotates the local transformation around axis, a unit [Vector3], by specified angle in radians. The rotation axis is in object-local coordinate system.
+-- | Rotates the local transformation around axis, a unit @Vector3@, by specified angle in radians. The rotation axis is in object-local coordinate system.
 rotate_object_local ::
                       (Spatial :< cls, Object :< cls) => cls -> Vector3 -> Float -> IO ()
 rotate_object_local cls arg1 arg2
@@ -665,6 +803,11 @@ rotate_object_local cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "rotate_object_local" '[Vector3, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.rotate_object_local
 
 {-# NOINLINE bindSpatial_rotate_x #-}
 
@@ -687,6 +830,9 @@ rotate_x cls arg1
          godot_method_bind_call bindSpatial_rotate_x (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "rotate_x" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.rotate_x
+
 {-# NOINLINE bindSpatial_rotate_y #-}
 
 -- | Rotates the local transformation around the Y axis by angle in radians.
@@ -708,6 +854,9 @@ rotate_y cls arg1
          godot_method_bind_call bindSpatial_rotate_y (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "rotate_y" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.rotate_y
+
 {-# NOINLINE bindSpatial_rotate_z #-}
 
 -- | Rotates the local transformation around the Z axis by angle in radians.
@@ -728,6 +877,9 @@ rotate_z cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSpatial_rotate_z (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "rotate_z" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.rotate_z
 
 {-# NOINLINE bindSpatial_scale_object_local #-}
 
@@ -752,6 +904,10 @@ scale_object_local cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "scale_object_local" '[Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.scale_object_local
+
 {-# NOINLINE bindSpatial_set_as_toplevel #-}
 
 -- | Makes the node ignore its parents transformations. Node transformations are only in global space.
@@ -775,9 +931,12 @@ set_as_toplevel cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_as_toplevel" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.set_as_toplevel
+
 {-# NOINLINE bindSpatial_set_disable_scale #-}
 
--- | Sets whether the node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale. Changes to the local transformation scale are preserved.
+-- | Sets whether the node uses a scale of @(1, 1, 1)@ or its local transformation scale. Changes to the local transformation scale are preserved.
 bindSpatial_set_disable_scale :: MethodBind
 bindSpatial_set_disable_scale
   = unsafePerformIO $
@@ -787,7 +946,7 @@ bindSpatial_set_disable_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether the node uses a scale of [code](1, 1, 1)[/code] or its local transformation scale. Changes to the local transformation scale are preserved.
+-- | Sets whether the node uses a scale of @(1, 1, 1)@ or its local transformation scale. Changes to the local transformation scale are preserved.
 set_disable_scale ::
                     (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disable_scale cls arg1
@@ -798,9 +957,13 @@ set_disable_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_disable_scale" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_disable_scale
+
 {-# NOINLINE bindSpatial_set_gizmo #-}
 
--- | The [SpatialGizmo] for this node. Used for example in [EditorSpatialGizmo] as custom visualization and editing handles in Editor.
+-- | The @SpatialGizmo@ for this node. Used for example in @EditorSpatialGizmo@ as custom visualization and editing handles in Editor.
 bindSpatial_set_gizmo :: MethodBind
 bindSpatial_set_gizmo
   = unsafePerformIO $
@@ -810,7 +973,7 @@ bindSpatial_set_gizmo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [SpatialGizmo] for this node. Used for example in [EditorSpatialGizmo] as custom visualization and editing handles in Editor.
+-- | The @SpatialGizmo@ for this node. Used for example in @EditorSpatialGizmo@ as custom visualization and editing handles in Editor.
 set_gizmo ::
             (Spatial :< cls, Object :< cls) => cls -> SpatialGizmo -> IO ()
 set_gizmo cls arg1
@@ -820,9 +983,13 @@ set_gizmo cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_gizmo" '[SpatialGizmo] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_gizmo
+
 {-# NOINLINE bindSpatial_set_global_transform #-}
 
--- | World space (global) [Transform] of this node.
+-- | World space (global) @Transform@ of this node.
 bindSpatial_set_global_transform :: MethodBind
 bindSpatial_set_global_transform
   = unsafePerformIO $
@@ -832,7 +999,7 @@ bindSpatial_set_global_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | World space (global) [Transform] of this node.
+-- | World space (global) @Transform@ of this node.
 set_global_transform ::
                        (Spatial :< cls, Object :< cls) => cls -> Transform -> IO ()
 set_global_transform cls arg1
@@ -844,9 +1011,14 @@ set_global_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_global_transform" '[Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_global_transform
+
 {-# NOINLINE bindSpatial_set_identity #-}
 
--- | Reset all transformations for this node (sets its [Transform] to the identity matrix).
+-- | Reset all transformations for this node (sets its @Transform@ to the identity matrix).
 bindSpatial_set_identity :: MethodBind
 bindSpatial_set_identity
   = unsafePerformIO $
@@ -856,7 +1028,7 @@ bindSpatial_set_identity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Reset all transformations for this node (sets its [Transform] to the identity matrix).
+-- | Reset all transformations for this node (sets its @Transform@ to the identity matrix).
 set_identity :: (Spatial :< cls, Object :< cls) => cls -> IO ()
 set_identity cls
   = withVariantArray []
@@ -864,6 +1036,9 @@ set_identity cls
          godot_method_bind_call bindSpatial_set_identity (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "set_identity" '[] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.set_identity
 
 {-# NOINLINE bindSpatial_set_ignore_transform_notification #-}
 
@@ -890,9 +1065,15 @@ set_ignore_transform_notification cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_ignore_transform_notification"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_ignore_transform_notification
+
 {-# NOINLINE bindSpatial_set_notify_local_transform #-}
 
--- | Sets whether the node notifies about its local transformation changes. [Spatial] will not propagate this by default.
+-- | Sets whether the node notifies about its local transformation changes. @Spatial@ will not propagate this by default.
 bindSpatial_set_notify_local_transform :: MethodBind
 bindSpatial_set_notify_local_transform
   = unsafePerformIO $
@@ -902,7 +1083,7 @@ bindSpatial_set_notify_local_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether the node notifies about its local transformation changes. [Spatial] will not propagate this by default.
+-- | Sets whether the node notifies about its local transformation changes. @Spatial@ will not propagate this by default.
 set_notify_local_transform ::
                              (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_notify_local_transform cls arg1
@@ -914,9 +1095,14 @@ set_notify_local_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_notify_local_transform" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_notify_local_transform
+
 {-# NOINLINE bindSpatial_set_notify_transform #-}
 
--- | Sets whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
+-- | Sets whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default.
 bindSpatial_set_notify_transform :: MethodBind
 bindSpatial_set_notify_transform
   = unsafePerformIO $
@@ -926,7 +1112,7 @@ bindSpatial_set_notify_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether the node notifies about its global and local transformation changes. [Spatial] will not propagate this by default.
+-- | Sets whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default.
 set_notify_transform ::
                        (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_notify_transform cls arg1
@@ -938,10 +1124,14 @@ set_notify_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_notify_transform" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_notify_transform
+
 {-# NOINLINE bindSpatial_set_rotation #-}
 
 -- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
---   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+--   			__Note:__ In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a @Vector3@ data structure not because the rotation is a vector, but only because @Vector3@ exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 bindSpatial_set_rotation :: MethodBind
 bindSpatial_set_rotation
   = unsafePerformIO $
@@ -952,7 +1142,7 @@ bindSpatial_set_rotation
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Rotation part of the local transformation in radians, specified in terms of YXZ-Euler angles in the format (X angle, Y angle, Z angle).
---   			[b]Note:[/b] In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a [Vector3] data structure not because the rotation is a vector, but only because [Vector3] exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
+--   			__Note:__ In the mathematical sense, rotation is a matrix and not a vector. The three Euler angles, which are the three independent parameters of the Euler-angle parametrization of the rotation matrix, are stored in a @Vector3@ data structure not because the rotation is a vector, but only because @Vector3@ exists as a convenient data-structure to store 3 floating-point numbers. Therefore, applying affine operations on the rotation "vector" is not meaningful.
 set_rotation ::
                (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_rotation cls arg1
@@ -961,6 +1151,9 @@ set_rotation cls arg1
          godot_method_bind_call bindSpatial_set_rotation (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "set_rotation" '[Vector3] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.set_rotation
 
 {-# NOINLINE bindSpatial_set_rotation_degrees #-}
 
@@ -986,6 +1179,11 @@ set_rotation_degrees cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_rotation_degrees" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_rotation_degrees
+
 {-# NOINLINE bindSpatial_set_scale #-}
 
 -- | Scale part of the local transformation.
@@ -1008,9 +1206,12 @@ set_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_scale" '[Vector3] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.set_scale
+
 {-# NOINLINE bindSpatial_set_transform #-}
 
--- | Local space [Transform] of this node, with respect to the parent node.
+-- | Local space @Transform@ of this node, with respect to the parent node.
 bindSpatial_set_transform :: MethodBind
 bindSpatial_set_transform
   = unsafePerformIO $
@@ -1020,7 +1221,7 @@ bindSpatial_set_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Local space [Transform] of this node, with respect to the parent node.
+-- | Local space @Transform@ of this node, with respect to the parent node.
 set_transform ::
                 (Spatial :< cls, Object :< cls) => cls -> Transform -> IO ()
 set_transform cls arg1
@@ -1030,6 +1231,10 @@ set_transform cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "set_transform" '[Transform] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_transform
 
 {-# NOINLINE bindSpatial_set_translation #-}
 
@@ -1054,9 +1259,13 @@ set_translation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_translation" '[Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.set_translation
+
 {-# NOINLINE bindSpatial_set_visible #-}
 
--- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
+-- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
 bindSpatial_set_visible :: MethodBind
 bindSpatial_set_visible
   = unsafePerformIO $
@@ -1066,7 +1275,7 @@ bindSpatial_set_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
+-- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
 set_visible ::
               (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_visible cls arg1
@@ -1076,9 +1285,12 @@ set_visible cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "set_visible" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.set_visible
+
 {-# NOINLINE bindSpatial_show #-}
 
--- | Enables rendering of this node. Changes [member visible] to [code]true[/code].
+-- | Enables rendering of this node. Changes @visible@ to @true@.
 bindSpatial_show :: MethodBind
 bindSpatial_show
   = unsafePerformIO $
@@ -1088,7 +1300,7 @@ bindSpatial_show
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables rendering of this node. Changes [member visible] to [code]true[/code].
+-- | Enables rendering of this node. Changes @visible@ to @true@.
 show :: (Spatial :< cls, Object :< cls) => cls -> IO ()
 show cls
   = withVariantArray []
@@ -1096,9 +1308,12 @@ show cls
          godot_method_bind_call bindSpatial_show (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "show" '[] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.show
+
 {-# NOINLINE bindSpatial_to_global #-}
 
--- | Transforms [code]local_point[/code] from this node's local space to world space.
+-- | Transforms @local_point@ from this node's local space to world space.
 bindSpatial_to_global :: MethodBind
 bindSpatial_to_global
   = unsafePerformIO $
@@ -1108,7 +1323,7 @@ bindSpatial_to_global
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transforms [code]local_point[/code] from this node's local space to world space.
+-- | Transforms @local_point@ from this node's local space to world space.
 to_global ::
             (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO Vector3
 to_global cls arg1
@@ -1118,9 +1333,13 @@ to_global cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "to_global" '[Vector3] (IO Vector3)
+         where
+        nodeMethod = Godot.Core.Spatial.to_global
+
 {-# NOINLINE bindSpatial_to_local #-}
 
--- | Transforms [code]global_point[/code] from world space to this node's local space.
+-- | Transforms @global_point@ from world space to this node's local space.
 bindSpatial_to_local :: MethodBind
 bindSpatial_to_local
   = unsafePerformIO $
@@ -1130,7 +1349,7 @@ bindSpatial_to_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transforms [code]global_point[/code] from world space to this node's local space.
+-- | Transforms @global_point@ from world space to this node's local space.
 to_local ::
            (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO Vector3
 to_local cls arg1
@@ -1139,10 +1358,14 @@ to_local cls arg1
          godot_method_bind_call bindSpatial_to_local (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "to_local" '[Vector3] (IO Vector3)
+         where
+        nodeMethod = Godot.Core.Spatial.to_local
+
 {-# NOINLINE bindSpatial_translate #-}
 
--- | Changes the node's position by the given offset [Vector3].
---   				Note that the translation [code]offset[/code] is affected by the node's scale, so if scaled by e.g. [code](10, 1, 1)[/code], a translation by an offset of [code](2, 0, 0)[/code] would actually add 20 ([code]2 * 10[/code]) to the X coordinate.
+-- | Changes the node's position by the given offset @Vector3@.
+--   				Note that the translation @offset@ is affected by the node's scale, so if scaled by e.g. @(10, 1, 1)@, a translation by an offset of @(2, 0, 0)@ would actually add 20 (@2 * 10@) to the X coordinate.
 bindSpatial_translate :: MethodBind
 bindSpatial_translate
   = unsafePerformIO $
@@ -1152,8 +1375,8 @@ bindSpatial_translate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the node's position by the given offset [Vector3].
---   				Note that the translation [code]offset[/code] is affected by the node's scale, so if scaled by e.g. [code](10, 1, 1)[/code], a translation by an offset of [code](2, 0, 0)[/code] would actually add 20 ([code]2 * 10[/code]) to the X coordinate.
+-- | Changes the node's position by the given offset @Vector3@.
+--   				Note that the translation @offset@ is affected by the node's scale, so if scaled by e.g. @(10, 1, 1)@, a translation by an offset of @(2, 0, 0)@ would actually add 20 (@2 * 10@) to the X coordinate.
 translate ::
             (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 translate cls arg1
@@ -1163,9 +1386,12 @@ translate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "translate" '[Vector3] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.translate
+
 {-# NOINLINE bindSpatial_translate_object_local #-}
 
--- | Changes the node's position by the given offset [Vector3] in local space.
+-- | Changes the node's position by the given offset @Vector3@ in local space.
 bindSpatial_translate_object_local :: MethodBind
 bindSpatial_translate_object_local
   = unsafePerformIO $
@@ -1175,7 +1401,7 @@ bindSpatial_translate_object_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the node's position by the given offset [Vector3] in local space.
+-- | Changes the node's position by the given offset @Vector3@ in local space.
 translate_object_local ::
                          (Spatial :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 translate_object_local cls arg1
@@ -1187,9 +1413,14 @@ translate_object_local cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Spatial "translate_object_local" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Spatial.translate_object_local
+
 {-# NOINLINE bindSpatial_update_gizmo #-}
 
--- | Updates the [SpatialGizmo] of this node.
+-- | Updates the @SpatialGizmo@ of this node.
 bindSpatial_update_gizmo :: MethodBind
 bindSpatial_update_gizmo
   = unsafePerformIO $
@@ -1199,7 +1430,7 @@ bindSpatial_update_gizmo
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Updates the [SpatialGizmo] of this node.
+-- | Updates the @SpatialGizmo@ of this node.
 update_gizmo :: (Spatial :< cls, Object :< cls) => cls -> IO ()
 update_gizmo cls
   = withVariantArray []
@@ -1207,3 +1438,6 @@ update_gizmo cls
          godot_method_bind_call bindSpatial_update_gizmo (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Spatial "update_gizmo" '[] (IO ()) where
+        nodeMethod = Godot.Core.Spatial.update_gizmo

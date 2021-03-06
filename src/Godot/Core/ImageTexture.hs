@@ -19,9 +19,14 @@ module Godot.Core.ImageTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Texture()
 
 _STORAGE_RAW :: Int
 _STORAGE_RAW = 0
@@ -31,6 +36,16 @@ _STORAGE_COMPRESS_LOSSLESS = 2
 
 _STORAGE_COMPRESS_LOSSY :: Int
 _STORAGE_COMPRESS_LOSSY = 1
+
+instance NodeProperty ImageTexture "lossy_quality" Float 'False
+         where
+        nodeProperty
+          = (get_lossy_storage_quality,
+             wrapDroppingSetter set_lossy_storage_quality, Nothing)
+
+instance NodeProperty ImageTexture "storage" Int 'False where
+        nodeProperty
+          = (get_storage, wrapDroppingSetter set_storage, Nothing)
 
 {-# NOINLINE bindImageTexture__reload_hook #-}
 
@@ -53,10 +68,14 @@ _reload_hook cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "_reload_hook" '[Rid] (IO ())
+         where
+        nodeMethod = Godot.Core.ImageTexture._reload_hook
+
 {-# NOINLINE bindImageTexture_create #-}
 
--- | Create a new [ImageTexture] with [code]width[/code] and [code]height[/code].
---   				[code]format[/code] is a value from [enum Image.Format], [code]flags[/code] is any combination of [enum Texture.Flags].
+-- | Create a new @ImageTexture@ with @width@ and @height@.
+--   				@format@ is a value from @enum Image.Format@, @flags@ is any combination of @enum Texture.Flags@.
 bindImageTexture_create :: MethodBind
 bindImageTexture_create
   = unsafePerformIO $
@@ -66,22 +85,29 @@ bindImageTexture_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a new [ImageTexture] with [code]width[/code] and [code]height[/code].
---   				[code]format[/code] is a value from [enum Image.Format], [code]flags[/code] is any combination of [enum Texture.Flags].
+-- | Create a new @ImageTexture@ with @width@ and @height@.
+--   				@format@ is a value from @enum Image.Format@, @flags@ is any combination of @enum Texture.Flags@.
 create ::
          (ImageTexture :< cls, Object :< cls) =>
-         cls -> Int -> Int -> Int -> Int -> IO ()
+         cls -> Int -> Int -> Int -> Maybe Int -> IO ()
 create cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantInt (7)) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImageTexture_create (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "create"
+           '[Int, Int, Int, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImageTexture.create
+
 {-# NOINLINE bindImageTexture_create_from_image #-}
 
--- | Create a new [ImageTexture] from an [Image] with [code]flags[/code] from [enum Texture.Flags]. An sRGB to linear color space conversion can take place, according to [enum Image.Format].
+-- | Create a new @ImageTexture@ from an @Image@ with @flags@ from @enum Texture.Flags@. An sRGB to linear color space conversion can take place, according to @enum Image.Format@.
 bindImageTexture_create_from_image :: MethodBind
 bindImageTexture_create_from_image
   = unsafePerformIO $
@@ -91,12 +117,13 @@ bindImageTexture_create_from_image
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a new [ImageTexture] from an [Image] with [code]flags[/code] from [enum Texture.Flags]. An sRGB to linear color space conversion can take place, according to [enum Image.Format].
+-- | Create a new @ImageTexture@ from an @Image@ with @flags@ from @enum Texture.Flags@. An sRGB to linear color space conversion can take place, according to @enum Image.Format@.
 create_from_image ::
                     (ImageTexture :< cls, Object :< cls) =>
-                    cls -> Image -> Int -> IO ()
+                    cls -> Image -> Maybe Int -> IO ()
 create_from_image cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (7)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImageTexture_create_from_image
            (upcast cls)
@@ -104,9 +131,15 @@ create_from_image cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "create_from_image"
+           '[Image, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImageTexture.create_from_image
+
 {-# NOINLINE bindImageTexture_get_format #-}
 
--- | Returns the format of the [ImageTexture], one of [enum Image.Format].
+-- | Returns the format of the @ImageTexture@, one of @enum Image.Format@.
 bindImageTexture_get_format :: MethodBind
 bindImageTexture_get_format
   = unsafePerformIO $
@@ -116,7 +149,7 @@ bindImageTexture_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the format of the [ImageTexture], one of [enum Image.Format].
+-- | Returns the format of the @ImageTexture@, one of @enum Image.Format@.
 get_format :: (ImageTexture :< cls, Object :< cls) => cls -> IO Int
 get_format cls
   = withVariantArray []
@@ -126,9 +159,12 @@ get_format cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "get_format" '[] (IO Int) where
+        nodeMethod = Godot.Core.ImageTexture.get_format
+
 {-# NOINLINE bindImageTexture_get_lossy_storage_quality #-}
 
--- | The storage quality for [constant STORAGE_COMPRESS_LOSSY].
+-- | The storage quality for @STORAGE_COMPRESS_LOSSY@.
 bindImageTexture_get_lossy_storage_quality :: MethodBind
 bindImageTexture_get_lossy_storage_quality
   = unsafePerformIO $
@@ -138,7 +174,7 @@ bindImageTexture_get_lossy_storage_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The storage quality for [constant STORAGE_COMPRESS_LOSSY].
+-- | The storage quality for @STORAGE_COMPRESS_LOSSY@.
 get_lossy_storage_quality ::
                             (ImageTexture :< cls, Object :< cls) => cls -> IO Float
 get_lossy_storage_quality cls
@@ -149,6 +185,11 @@ get_lossy_storage_quality cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImageTexture "get_lossy_storage_quality" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ImageTexture.get_lossy_storage_quality
 
 {-# NOINLINE bindImageTexture_get_storage #-}
 
@@ -173,9 +214,12 @@ get_storage cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "get_storage" '[] (IO Int) where
+        nodeMethod = Godot.Core.ImageTexture.get_storage
+
 {-# NOINLINE bindImageTexture_load #-}
 
--- | Load an [ImageTexture] from a file path.
+-- | Load an @ImageTexture@ from a file path.
 bindImageTexture_load :: MethodBind
 bindImageTexture_load
   = unsafePerformIO $
@@ -185,7 +229,7 @@ bindImageTexture_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Load an [ImageTexture] from a file path.
+-- | Load an @ImageTexture@ from a file path.
 load ::
        (ImageTexture :< cls, Object :< cls) =>
        cls -> GodotString -> IO Int
@@ -196,9 +240,13 @@ load cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "load" '[GodotString] (IO Int)
+         where
+        nodeMethod = Godot.Core.ImageTexture.load
+
 {-# NOINLINE bindImageTexture_set_data #-}
 
--- | Sets the [Image] of this [ImageTexture].
+-- | Sets the @Image@ of this @ImageTexture@.
 bindImageTexture_set_data :: MethodBind
 bindImageTexture_set_data
   = unsafePerformIO $
@@ -208,7 +256,7 @@ bindImageTexture_set_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [Image] of this [ImageTexture].
+-- | Sets the @Image@ of this @ImageTexture@.
 set_data ::
            (ImageTexture :< cls, Object :< cls) => cls -> Image -> IO ()
 set_data cls arg1
@@ -219,9 +267,12 @@ set_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "set_data" '[Image] (IO ()) where
+        nodeMethod = Godot.Core.ImageTexture.set_data
+
 {-# NOINLINE bindImageTexture_set_lossy_storage_quality #-}
 
--- | The storage quality for [constant STORAGE_COMPRESS_LOSSY].
+-- | The storage quality for @STORAGE_COMPRESS_LOSSY@.
 bindImageTexture_set_lossy_storage_quality :: MethodBind
 bindImageTexture_set_lossy_storage_quality
   = unsafePerformIO $
@@ -231,7 +282,7 @@ bindImageTexture_set_lossy_storage_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The storage quality for [constant STORAGE_COMPRESS_LOSSY].
+-- | The storage quality for @STORAGE_COMPRESS_LOSSY@.
 set_lossy_storage_quality ::
                             (ImageTexture :< cls, Object :< cls) => cls -> Float -> IO ()
 set_lossy_storage_quality cls arg1
@@ -243,9 +294,15 @@ set_lossy_storage_quality cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImageTexture "set_lossy_storage_quality"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImageTexture.set_lossy_storage_quality
+
 {-# NOINLINE bindImageTexture_set_size_override #-}
 
--- | Resizes the [ImageTexture] to the specified dimensions.
+-- | Resizes the @ImageTexture@ to the specified dimensions.
 bindImageTexture_set_size_override :: MethodBind
 bindImageTexture_set_size_override
   = unsafePerformIO $
@@ -255,7 +312,7 @@ bindImageTexture_set_size_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Resizes the [ImageTexture] to the specified dimensions.
+-- | Resizes the @ImageTexture@ to the specified dimensions.
 set_size_override ::
                     (ImageTexture :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_size_override cls arg1
@@ -266,6 +323,11 @@ set_size_override cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImageTexture "set_size_override" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImageTexture.set_size_override
 
 {-# NOINLINE bindImageTexture_set_storage #-}
 
@@ -289,3 +351,6 @@ set_storage cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImageTexture "set_storage" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.ImageTexture.set_storage

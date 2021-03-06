@@ -32,9 +32,89 @@ module Godot.Core.AudioEffectDelay
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
+
+instance NodeProperty AudioEffectDelay "dry" Float 'False where
+        nodeProperty = (get_dry, wrapDroppingSetter set_dry, Nothing)
+
+instance NodeProperty AudioEffectDelay "feedback/active" Bool
+           'False
+         where
+        nodeProperty
+          = (is_feedback_active, wrapDroppingSetter set_feedback_active,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "feedback/delay_ms" Float
+           'False
+         where
+        nodeProperty
+          = (get_feedback_delay_ms, wrapDroppingSetter set_feedback_delay_ms,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "feedback/level_db" Float
+           'False
+         where
+        nodeProperty
+          = (get_feedback_level_db, wrapDroppingSetter set_feedback_level_db,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "feedback/lowpass" Float
+           'False
+         where
+        nodeProperty
+          = (get_feedback_lowpass, wrapDroppingSetter set_feedback_lowpass,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "tap1/active" Bool 'False
+         where
+        nodeProperty
+          = (is_tap1_active, wrapDroppingSetter set_tap1_active, Nothing)
+
+instance NodeProperty AudioEffectDelay "tap1/delay_ms" Float 'False
+         where
+        nodeProperty
+          = (get_tap1_delay_ms, wrapDroppingSetter set_tap1_delay_ms,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "tap1/level_db" Float 'False
+         where
+        nodeProperty
+          = (get_tap1_level_db, wrapDroppingSetter set_tap1_level_db,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "tap1/pan" Float 'False
+         where
+        nodeProperty
+          = (get_tap1_pan, wrapDroppingSetter set_tap1_pan, Nothing)
+
+instance NodeProperty AudioEffectDelay "tap2/active" Bool 'False
+         where
+        nodeProperty
+          = (is_tap2_active, wrapDroppingSetter set_tap2_active, Nothing)
+
+instance NodeProperty AudioEffectDelay "tap2/delay_ms" Float 'False
+         where
+        nodeProperty
+          = (get_tap2_delay_ms, wrapDroppingSetter set_tap2_delay_ms,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "tap2/level_db" Float 'False
+         where
+        nodeProperty
+          = (get_tap2_level_db, wrapDroppingSetter set_tap2_level_db,
+             Nothing)
+
+instance NodeProperty AudioEffectDelay "tap2/pan" Float 'False
+         where
+        nodeProperty
+          = (get_tap2_pan, wrapDroppingSetter set_tap2_pan, Nothing)
 
 {-# NOINLINE bindAudioEffectDelay_get_dry #-}
 
@@ -58,6 +138,9 @@ get_dry cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDelay "get_dry" '[] (IO Float) where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_dry
 
 {-# NOINLINE bindAudioEffectDelay_get_feedback_delay_ms #-}
 
@@ -83,9 +166,14 @@ get_feedback_delay_ms cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_feedback_delay_ms" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_feedback_delay_ms
+
 {-# NOINLINE bindAudioEffectDelay_get_feedback_level_db #-}
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 bindAudioEffectDelay_get_feedback_level_db :: MethodBind
 bindAudioEffectDelay_get_feedback_level_db
   = unsafePerformIO $
@@ -95,7 +183,7 @@ bindAudioEffectDelay_get_feedback_level_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 get_feedback_level_db ::
                         (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Float
 get_feedback_level_db cls
@@ -106,6 +194,11 @@ get_feedback_level_db cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDelay "get_feedback_level_db" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_feedback_level_db
 
 {-# NOINLINE bindAudioEffectDelay_get_feedback_lowpass #-}
 
@@ -131,9 +224,14 @@ get_feedback_lowpass cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_feedback_lowpass" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_feedback_lowpass
+
 {-# NOINLINE bindAudioEffectDelay_get_tap1_delay_ms #-}
 
--- | [code]tap1[/code] delay time in milliseconds.
+-- | @tap1@ delay time in milliseconds.
 bindAudioEffectDelay_get_tap1_delay_ms :: MethodBind
 bindAudioEffectDelay_get_tap1_delay_ms
   = unsafePerformIO $
@@ -143,7 +241,7 @@ bindAudioEffectDelay_get_tap1_delay_ms
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [code]tap1[/code] delay time in milliseconds.
+-- | @tap1@ delay time in milliseconds.
 get_tap1_delay_ms ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Float
 get_tap1_delay_ms cls
@@ -155,9 +253,14 @@ get_tap1_delay_ms cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_tap1_delay_ms" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_tap1_delay_ms
+
 {-# NOINLINE bindAudioEffectDelay_get_tap1_level_db #-}
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 bindAudioEffectDelay_get_tap1_level_db :: MethodBind
 bindAudioEffectDelay_get_tap1_level_db
   = unsafePerformIO $
@@ -167,7 +270,7 @@ bindAudioEffectDelay_get_tap1_level_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 get_tap1_level_db ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Float
 get_tap1_level_db cls
@@ -179,9 +282,14 @@ get_tap1_level_db cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_tap1_level_db" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_tap1_level_db
+
 {-# NOINLINE bindAudioEffectDelay_get_tap1_pan #-}
 
--- | Pan position for [code]tap1[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap1@. Value can range from -1 (fully left) to 1 (fully right).
 bindAudioEffectDelay_get_tap1_pan :: MethodBind
 bindAudioEffectDelay_get_tap1_pan
   = unsafePerformIO $
@@ -191,7 +299,7 @@ bindAudioEffectDelay_get_tap1_pan
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Pan position for [code]tap1[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap1@. Value can range from -1 (fully left) to 1 (fully right).
 get_tap1_pan ::
                (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Float
 get_tap1_pan cls
@@ -203,9 +311,13 @@ get_tap1_pan cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_tap1_pan" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_tap1_pan
+
 {-# NOINLINE bindAudioEffectDelay_get_tap2_delay_ms #-}
 
--- | [b]Tap2[/b] delay time in milliseconds.
+-- | __Tap2__ delay time in milliseconds.
 bindAudioEffectDelay_get_tap2_delay_ms :: MethodBind
 bindAudioEffectDelay_get_tap2_delay_ms
   = unsafePerformIO $
@@ -215,7 +327,7 @@ bindAudioEffectDelay_get_tap2_delay_ms
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [b]Tap2[/b] delay time in milliseconds.
+-- | __Tap2__ delay time in milliseconds.
 get_tap2_delay_ms ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Float
 get_tap2_delay_ms cls
@@ -227,9 +339,14 @@ get_tap2_delay_ms cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_tap2_delay_ms" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_tap2_delay_ms
+
 {-# NOINLINE bindAudioEffectDelay_get_tap2_level_db #-}
 
--- | Sound level for [code]tap2[/code].
+-- | Sound level for @tap2@.
 bindAudioEffectDelay_get_tap2_level_db :: MethodBind
 bindAudioEffectDelay_get_tap2_level_db
   = unsafePerformIO $
@@ -239,7 +356,7 @@ bindAudioEffectDelay_get_tap2_level_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sound level for [code]tap2[/code].
+-- | Sound level for @tap2@.
 get_tap2_level_db ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Float
 get_tap2_level_db cls
@@ -251,9 +368,14 @@ get_tap2_level_db cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_tap2_level_db" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_tap2_level_db
+
 {-# NOINLINE bindAudioEffectDelay_get_tap2_pan #-}
 
--- | Pan position for [code]tap2[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap2@. Value can range from -1 (fully left) to 1 (fully right).
 bindAudioEffectDelay_get_tap2_pan :: MethodBind
 bindAudioEffectDelay_get_tap2_pan
   = unsafePerformIO $
@@ -263,7 +385,7 @@ bindAudioEffectDelay_get_tap2_pan
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Pan position for [code]tap2[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap2@. Value can range from -1 (fully left) to 1 (fully right).
 get_tap2_pan ::
                (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Float
 get_tap2_pan cls
@@ -275,9 +397,13 @@ get_tap2_pan cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "get_tap2_pan" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.get_tap2_pan
+
 {-# NOINLINE bindAudioEffectDelay_is_feedback_active #-}
 
--- | If [code]true[/code], feedback is enabled.
+-- | If @true@, feedback is enabled.
 bindAudioEffectDelay_is_feedback_active :: MethodBind
 bindAudioEffectDelay_is_feedback_active
   = unsafePerformIO $
@@ -287,7 +413,7 @@ bindAudioEffectDelay_is_feedback_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], feedback is enabled.
+-- | If @true@, feedback is enabled.
 is_feedback_active ::
                      (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Bool
 is_feedback_active cls
@@ -299,9 +425,14 @@ is_feedback_active cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "is_feedback_active" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.is_feedback_active
+
 {-# NOINLINE bindAudioEffectDelay_is_tap1_active #-}
 
--- | If [code]true[/code], [code]tap1[/code] will be enabled.
+-- | If @true@, @tap1@ will be enabled.
 bindAudioEffectDelay_is_tap1_active :: MethodBind
 bindAudioEffectDelay_is_tap1_active
   = unsafePerformIO $
@@ -311,7 +442,7 @@ bindAudioEffectDelay_is_tap1_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [code]tap1[/code] will be enabled.
+-- | If @true@, @tap1@ will be enabled.
 is_tap1_active ::
                  (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Bool
 is_tap1_active cls
@@ -323,9 +454,13 @@ is_tap1_active cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "is_tap1_active" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.is_tap1_active
+
 {-# NOINLINE bindAudioEffectDelay_is_tap2_active #-}
 
--- | If [code]true[/code], [code]tap2[/code] will be enabled.
+-- | If @true@, @tap2@ will be enabled.
 bindAudioEffectDelay_is_tap2_active :: MethodBind
 bindAudioEffectDelay_is_tap2_active
   = unsafePerformIO $
@@ -335,7 +470,7 @@ bindAudioEffectDelay_is_tap2_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [code]tap2[/code] will be enabled.
+-- | If @true@, @tap2@ will be enabled.
 is_tap2_active ::
                  (AudioEffectDelay :< cls, Object :< cls) => cls -> IO Bool
 is_tap2_active cls
@@ -346,6 +481,10 @@ is_tap2_active cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDelay "is_tap2_active" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.is_tap2_active
 
 {-# NOINLINE bindAudioEffectDelay_set_dry #-}
 
@@ -370,9 +509,13 @@ set_dry cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_dry" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_dry
+
 {-# NOINLINE bindAudioEffectDelay_set_feedback_active #-}
 
--- | If [code]true[/code], feedback is enabled.
+-- | If @true@, feedback is enabled.
 bindAudioEffectDelay_set_feedback_active :: MethodBind
 bindAudioEffectDelay_set_feedback_active
   = unsafePerformIO $
@@ -382,7 +525,7 @@ bindAudioEffectDelay_set_feedback_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], feedback is enabled.
+-- | If @true@, feedback is enabled.
 set_feedback_active ::
                       (AudioEffectDelay :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_feedback_active cls arg1
@@ -393,6 +536,11 @@ set_feedback_active cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDelay "set_feedback_active" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_feedback_active
 
 {-# NOINLINE bindAudioEffectDelay_set_feedback_delay_ms #-}
 
@@ -418,9 +566,15 @@ set_feedback_delay_ms cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_feedback_delay_ms"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_feedback_delay_ms
+
 {-# NOINLINE bindAudioEffectDelay_set_feedback_level_db #-}
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 bindAudioEffectDelay_set_feedback_level_db :: MethodBind
 bindAudioEffectDelay_set_feedback_level_db
   = unsafePerformIO $
@@ -430,7 +584,7 @@ bindAudioEffectDelay_set_feedback_level_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 set_feedback_level_db ::
                         (AudioEffectDelay :< cls, Object :< cls) => cls -> Float -> IO ()
 set_feedback_level_db cls arg1
@@ -441,6 +595,12 @@ set_feedback_level_db cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDelay "set_feedback_level_db"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_feedback_level_db
 
 {-# NOINLINE bindAudioEffectDelay_set_feedback_lowpass #-}
 
@@ -466,9 +626,15 @@ set_feedback_lowpass cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_feedback_lowpass"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_feedback_lowpass
+
 {-# NOINLINE bindAudioEffectDelay_set_tap1_active #-}
 
--- | If [code]true[/code], [code]tap1[/code] will be enabled.
+-- | If @true@, @tap1@ will be enabled.
 bindAudioEffectDelay_set_tap1_active :: MethodBind
 bindAudioEffectDelay_set_tap1_active
   = unsafePerformIO $
@@ -478,7 +644,7 @@ bindAudioEffectDelay_set_tap1_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [code]tap1[/code] will be enabled.
+-- | If @true@, @tap1@ will be enabled.
 set_tap1_active ::
                   (AudioEffectDelay :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_tap1_active cls arg1
@@ -490,9 +656,14 @@ set_tap1_active cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_tap1_active" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap1_active
+
 {-# NOINLINE bindAudioEffectDelay_set_tap1_delay_ms #-}
 
--- | [code]tap1[/code] delay time in milliseconds.
+-- | @tap1@ delay time in milliseconds.
 bindAudioEffectDelay_set_tap1_delay_ms :: MethodBind
 bindAudioEffectDelay_set_tap1_delay_ms
   = unsafePerformIO $
@@ -502,7 +673,7 @@ bindAudioEffectDelay_set_tap1_delay_ms
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [code]tap1[/code] delay time in milliseconds.
+-- | @tap1@ delay time in milliseconds.
 set_tap1_delay_ms ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tap1_delay_ms cls arg1
@@ -514,9 +685,14 @@ set_tap1_delay_ms cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_tap1_delay_ms" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap1_delay_ms
+
 {-# NOINLINE bindAudioEffectDelay_set_tap1_level_db #-}
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 bindAudioEffectDelay_set_tap1_level_db :: MethodBind
 bindAudioEffectDelay_set_tap1_level_db
   = unsafePerformIO $
@@ -526,7 +702,7 @@ bindAudioEffectDelay_set_tap1_level_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sound level for [code]tap1[/code].
+-- | Sound level for @tap1@.
 set_tap1_level_db ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tap1_level_db cls arg1
@@ -538,9 +714,14 @@ set_tap1_level_db cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_tap1_level_db" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap1_level_db
+
 {-# NOINLINE bindAudioEffectDelay_set_tap1_pan #-}
 
--- | Pan position for [code]tap1[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap1@. Value can range from -1 (fully left) to 1 (fully right).
 bindAudioEffectDelay_set_tap1_pan :: MethodBind
 bindAudioEffectDelay_set_tap1_pan
   = unsafePerformIO $
@@ -550,7 +731,7 @@ bindAudioEffectDelay_set_tap1_pan
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Pan position for [code]tap1[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap1@. Value can range from -1 (fully left) to 1 (fully right).
 set_tap1_pan ::
                (AudioEffectDelay :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tap1_pan cls arg1
@@ -562,9 +743,14 @@ set_tap1_pan cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_tap1_pan" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap1_pan
+
 {-# NOINLINE bindAudioEffectDelay_set_tap2_active #-}
 
--- | If [code]true[/code], [code]tap2[/code] will be enabled.
+-- | If @true@, @tap2@ will be enabled.
 bindAudioEffectDelay_set_tap2_active :: MethodBind
 bindAudioEffectDelay_set_tap2_active
   = unsafePerformIO $
@@ -574,7 +760,7 @@ bindAudioEffectDelay_set_tap2_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], [code]tap2[/code] will be enabled.
+-- | If @true@, @tap2@ will be enabled.
 set_tap2_active ::
                   (AudioEffectDelay :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_tap2_active cls arg1
@@ -586,9 +772,14 @@ set_tap2_active cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_tap2_active" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap2_active
+
 {-# NOINLINE bindAudioEffectDelay_set_tap2_delay_ms #-}
 
--- | [b]Tap2[/b] delay time in milliseconds.
+-- | __Tap2__ delay time in milliseconds.
 bindAudioEffectDelay_set_tap2_delay_ms :: MethodBind
 bindAudioEffectDelay_set_tap2_delay_ms
   = unsafePerformIO $
@@ -598,7 +789,7 @@ bindAudioEffectDelay_set_tap2_delay_ms
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [b]Tap2[/b] delay time in milliseconds.
+-- | __Tap2__ delay time in milliseconds.
 set_tap2_delay_ms ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tap2_delay_ms cls arg1
@@ -610,9 +801,14 @@ set_tap2_delay_ms cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_tap2_delay_ms" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap2_delay_ms
+
 {-# NOINLINE bindAudioEffectDelay_set_tap2_level_db #-}
 
--- | Sound level for [code]tap2[/code].
+-- | Sound level for @tap2@.
 bindAudioEffectDelay_set_tap2_level_db :: MethodBind
 bindAudioEffectDelay_set_tap2_level_db
   = unsafePerformIO $
@@ -622,7 +818,7 @@ bindAudioEffectDelay_set_tap2_level_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sound level for [code]tap2[/code].
+-- | Sound level for @tap2@.
 set_tap2_level_db ::
                     (AudioEffectDelay :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tap2_level_db cls arg1
@@ -634,9 +830,14 @@ set_tap2_level_db cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDelay "set_tap2_level_db" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap2_level_db
+
 {-# NOINLINE bindAudioEffectDelay_set_tap2_pan #-}
 
--- | Pan position for [code]tap2[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap2@. Value can range from -1 (fully left) to 1 (fully right).
 bindAudioEffectDelay_set_tap2_pan :: MethodBind
 bindAudioEffectDelay_set_tap2_pan
   = unsafePerformIO $
@@ -646,7 +847,7 @@ bindAudioEffectDelay_set_tap2_pan
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Pan position for [code]tap2[/code]. Value can range from -1 (fully left) to 1 (fully right).
+-- | Pan position for @tap2@. Value can range from -1 (fully left) to 1 (fully right).
 set_tap2_pan ::
                (AudioEffectDelay :< cls, Object :< cls) => cls -> Float -> IO ()
 set_tap2_pan cls arg1
@@ -657,3 +858,8 @@ set_tap2_pan cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDelay "set_tap2_pan" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDelay.set_tap2_pan

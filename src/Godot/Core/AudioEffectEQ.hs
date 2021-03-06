@@ -9,9 +9,14 @@ module Godot.Core.AudioEffectEQ
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
 
 {-# NOINLINE bindAudioEffectEQ_get_band_count #-}
 
@@ -37,6 +42,10 @@ get_band_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectEQ "get_band_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioEffectEQ.get_band_count
+
 {-# NOINLINE bindAudioEffectEQ_get_band_gain_db #-}
 
 -- | Returns the band's gain at the specified index, in dB.
@@ -60,6 +69,11 @@ get_band_gain_db cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectEQ "get_band_gain_db" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectEQ.get_band_gain_db
 
 {-# NOINLINE bindAudioEffectEQ_set_band_gain_db #-}
 
@@ -85,3 +99,8 @@ set_band_gain_db cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectEQ "set_band_gain_db" '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectEQ.set_band_gain_db

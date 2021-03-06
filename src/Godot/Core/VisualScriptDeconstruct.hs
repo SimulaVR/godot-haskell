@@ -10,9 +10,26 @@ module Godot.Core.VisualScriptDeconstruct
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptDeconstruct "elem_cache" Array
+           'False
+         where
+        nodeProperty
+          = (_get_elem_cache, wrapDroppingSetter _set_elem_cache, Nothing)
+
+instance NodeProperty VisualScriptDeconstruct "type" Int 'False
+         where
+        nodeProperty
+          = (get_deconstruct_type, wrapDroppingSetter set_deconstruct_type,
+             Nothing)
 
 {-# NOINLINE bindVisualScriptDeconstruct__get_elem_cache #-}
 
@@ -35,6 +52,11 @@ _get_elem_cache cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptDeconstruct "_get_elem_cache" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.VisualScriptDeconstruct._get_elem_cache
 
 {-# NOINLINE bindVisualScriptDeconstruct__set_elem_cache #-}
 
@@ -59,6 +81,12 @@ _set_elem_cache cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptDeconstruct "_set_elem_cache"
+           '[Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptDeconstruct._set_elem_cache
+
 {-# NOINLINE bindVisualScriptDeconstruct_get_deconstruct_type #-}
 
 bindVisualScriptDeconstruct_get_deconstruct_type :: MethodBind
@@ -81,6 +109,13 @@ get_deconstruct_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptDeconstruct "get_deconstruct_type"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptDeconstruct.get_deconstruct_type
 
 {-# NOINLINE bindVisualScriptDeconstruct_set_deconstruct_type #-}
 
@@ -105,3 +140,10 @@ set_deconstruct_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptDeconstruct "set_deconstruct_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptDeconstruct.set_deconstruct_type

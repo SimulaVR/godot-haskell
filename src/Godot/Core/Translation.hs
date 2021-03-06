@@ -15,9 +15,22 @@ module Godot.Core.Translation
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty Translation "locale" GodotString 'False where
+        nodeProperty = (get_locale, wrapDroppingSetter set_locale, Nothing)
+
+instance NodeProperty Translation "messages" PoolStringArray 'False
+         where
+        nodeProperty
+          = (_get_messages, wrapDroppingSetter _set_messages, Nothing)
 
 {-# NOINLINE bindTranslation__get_messages #-}
 
@@ -40,6 +53,11 @@ _get_messages cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Translation "_get_messages" '[]
+           (IO PoolStringArray)
+         where
+        nodeMethod = Godot.Core.Translation._get_messages
+
 {-# NOINLINE bindTranslation__set_messages #-}
 
 bindTranslation__set_messages :: MethodBind
@@ -61,6 +79,11 @@ _set_messages cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Translation "_set_messages" '[PoolStringArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Translation._set_messages
 
 {-# NOINLINE bindTranslation_add_message #-}
 
@@ -86,6 +109,12 @@ add_message cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Translation "add_message"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Translation.add_message
+
 {-# NOINLINE bindTranslation_erase_message #-}
 
 -- | Erases a message.
@@ -109,6 +138,11 @@ erase_message cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Translation "erase_message" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Translation.erase_message
+
 {-# NOINLINE bindTranslation_get_locale #-}
 
 -- | The locale of the translation.
@@ -131,6 +165,10 @@ get_locale cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Translation "get_locale" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.Translation.get_locale
 
 {-# NOINLINE bindTranslation_get_message #-}
 
@@ -156,6 +194,11 @@ get_message cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Translation "get_message" '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.Translation.get_message
+
 {-# NOINLINE bindTranslation_get_message_count #-}
 
 -- | Returns the number of existing messages.
@@ -179,6 +222,10 @@ get_message_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Translation "get_message_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Translation.get_message_count
 
 {-# NOINLINE bindTranslation_get_message_list #-}
 
@@ -204,6 +251,11 @@ get_message_list cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Translation "get_message_list" '[]
+           (IO PoolStringArray)
+         where
+        nodeMethod = Godot.Core.Translation.get_message_list
+
 {-# NOINLINE bindTranslation_set_locale #-}
 
 -- | The locale of the translation.
@@ -226,3 +278,7 @@ set_locale cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Translation "set_locale" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.Translation.set_locale

@@ -12,9 +12,33 @@ module Godot.Core.AudioEffectStereoEnhance
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
+
+instance NodeProperty AudioEffectStereoEnhance "pan_pullout" Float
+           'False
+         where
+        nodeProperty
+          = (get_pan_pullout, wrapDroppingSetter set_pan_pullout, Nothing)
+
+instance NodeProperty AudioEffectStereoEnhance "surround" Float
+           'False
+         where
+        nodeProperty
+          = (get_surround, wrapDroppingSetter set_surround, Nothing)
+
+instance NodeProperty AudioEffectStereoEnhance "time_pullout_ms"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_time_pullout, wrapDroppingSetter set_time_pullout, Nothing)
 
 {-# NOINLINE bindAudioEffectStereoEnhance_get_pan_pullout #-}
 
@@ -38,6 +62,11 @@ get_pan_pullout cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectStereoEnhance "get_pan_pullout" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectStereoEnhance.get_pan_pullout
+
 {-# NOINLINE bindAudioEffectStereoEnhance_get_surround #-}
 
 bindAudioEffectStereoEnhance_get_surround :: MethodBind
@@ -59,6 +88,11 @@ get_surround cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectStereoEnhance "get_surround" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectStereoEnhance.get_surround
 
 {-# NOINLINE bindAudioEffectStereoEnhance_get_time_pullout #-}
 
@@ -83,6 +117,11 @@ get_time_pullout cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectStereoEnhance "get_time_pullout" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectStereoEnhance.get_time_pullout
+
 {-# NOINLINE bindAudioEffectStereoEnhance_set_pan_pullout #-}
 
 bindAudioEffectStereoEnhance_set_pan_pullout :: MethodBind
@@ -105,6 +144,12 @@ set_pan_pullout cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectStereoEnhance "set_pan_pullout"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectStereoEnhance.set_pan_pullout
 
 {-# NOINLINE bindAudioEffectStereoEnhance_set_surround #-}
 
@@ -129,6 +174,12 @@ set_surround cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectStereoEnhance "set_surround"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectStereoEnhance.set_surround
+
 {-# NOINLINE bindAudioEffectStereoEnhance_set_time_pullout #-}
 
 bindAudioEffectStereoEnhance_set_time_pullout :: MethodBind
@@ -152,3 +203,9 @@ set_time_pullout cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectStereoEnhance "set_time_pullout"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectStereoEnhance.set_time_pullout

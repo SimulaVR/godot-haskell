@@ -22,9 +22,49 @@ module Godot.Core.CharFXTransform
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
+
+instance NodeProperty CharFXTransform "absolute_index" Int 'False
+         where
+        nodeProperty
+          = (get_absolute_index, wrapDroppingSetter set_absolute_index,
+             Nothing)
+
+instance NodeProperty CharFXTransform "character" Int 'False where
+        nodeProperty
+          = (get_character, wrapDroppingSetter set_character, Nothing)
+
+instance NodeProperty CharFXTransform "color" Color 'False where
+        nodeProperty = (get_color, wrapDroppingSetter set_color, Nothing)
+
+instance NodeProperty CharFXTransform "elapsed_time" Float 'False
+         where
+        nodeProperty
+          = (get_elapsed_time, wrapDroppingSetter set_elapsed_time, Nothing)
+
+instance NodeProperty CharFXTransform "env" Dictionary 'False where
+        nodeProperty
+          = (get_environment, wrapDroppingSetter set_environment, Nothing)
+
+instance NodeProperty CharFXTransform "offset" Vector2 'False where
+        nodeProperty = (get_offset, wrapDroppingSetter set_offset, Nothing)
+
+instance NodeProperty CharFXTransform "relative_index" Int 'False
+         where
+        nodeProperty
+          = (get_relative_index, wrapDroppingSetter set_relative_index,
+             Nothing)
+
+instance NodeProperty CharFXTransform "visible" Bool 'False where
+        nodeProperty
+          = (is_visible, wrapDroppingSetter set_visibility, Nothing)
 
 {-# NOINLINE bindCharFXTransform_get_absolute_index #-}
 
@@ -50,14 +90,22 @@ get_absolute_index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "get_absolute_index" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.get_absolute_index
+
 {-# NOINLINE bindCharFXTransform_get_character #-}
 
--- | The Unicode codepoint the character will use. This only affects non-whitespace characters. [method @GDScript.ord] can be useful here. For example, the following will replace all characters with asterisks:
---   			[codeblock]
+-- | The Unicode codepoint the character will use. This only affects non-whitespace characters. @method @GDScript.ord@ can be useful here. For example, the following will replace all characters with asterisks:
+--   			
+--   @
+--   
 --   			# `char_fx` is the CharFXTransform parameter from `_process_custom_fx()`.
 --   			# See the RichTextEffect documentation for details.
 --   			char_fx.character = ord("*")
---   			[/codeblock]
+--   			
+--   @
 bindCharFXTransform_get_character :: MethodBind
 bindCharFXTransform_get_character
   = unsafePerformIO $
@@ -67,12 +115,15 @@ bindCharFXTransform_get_character
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The Unicode codepoint the character will use. This only affects non-whitespace characters. [method @GDScript.ord] can be useful here. For example, the following will replace all characters with asterisks:
---   			[codeblock]
+-- | The Unicode codepoint the character will use. This only affects non-whitespace characters. @method @GDScript.ord@ can be useful here. For example, the following will replace all characters with asterisks:
+--   			
+--   @
+--   
 --   			# `char_fx` is the CharFXTransform parameter from `_process_custom_fx()`.
 --   			# See the RichTextEffect documentation for details.
 --   			char_fx.character = ord("*")
---   			[/codeblock]
+--   			
+--   @
 get_character ::
                 (CharFXTransform :< cls, Object :< cls) => cls -> IO Int
 get_character cls
@@ -83,6 +134,10 @@ get_character cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "get_character" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.get_character
 
 {-# NOINLINE bindCharFXTransform_get_color #-}
 
@@ -107,10 +162,14 @@ get_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "get_color" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.get_color
+
 {-# NOINLINE bindCharFXTransform_get_elapsed_time #-}
 
--- | The time elapsed since the [RichTextLabel] was added to the scene tree (in seconds). Time stops when the project is paused, unless the [RichTextLabel]'s [member Node.pause_mode] is set to [constant Node.PAUSE_MODE_PROCESS].
---   			[b]Note:[/b] Time still passes while the [RichTextLabel] is hidden.
+-- | The time elapsed since the @RichTextLabel@ was added to the scene tree (in seconds). Time stops when the project is paused, unless the @RichTextLabel@'s @Node.pause_mode@ is set to @Node.PAUSE_MODE_PROCESS@.
+--   			__Note:__ Time still passes while the @RichTextLabel@ is hidden.
 bindCharFXTransform_get_elapsed_time :: MethodBind
 bindCharFXTransform_get_elapsed_time
   = unsafePerformIO $
@@ -120,8 +179,8 @@ bindCharFXTransform_get_elapsed_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The time elapsed since the [RichTextLabel] was added to the scene tree (in seconds). Time stops when the project is paused, unless the [RichTextLabel]'s [member Node.pause_mode] is set to [constant Node.PAUSE_MODE_PROCESS].
---   			[b]Note:[/b] Time still passes while the [RichTextLabel] is hidden.
+-- | The time elapsed since the @RichTextLabel@ was added to the scene tree (in seconds). Time stops when the project is paused, unless the @RichTextLabel@'s @Node.pause_mode@ is set to @Node.PAUSE_MODE_PROCESS@.
+--   			__Note:__ Time still passes while the @RichTextLabel@ is hidden.
 get_elapsed_time ::
                    (CharFXTransform :< cls, Object :< cls) => cls -> IO Float
 get_elapsed_time cls
@@ -133,13 +192,21 @@ get_elapsed_time cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "get_elapsed_time" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.get_elapsed_time
+
 {-# NOINLINE bindCharFXTransform_get_environment #-}
 
--- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as [bool], [int] or [float], they will be converted automatically. Color codes in the form [code]#rrggbb[/code] or [code]#rgb[/code] will be converted to an opaque [Color]. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
---   			For example, the opening BBCode tag [code][example foo=hello bar=true baz=42 color=#ffffff][/code] will map to the following [Dictionary]:
---   			[codeblock]
+-- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as @bool@, @int@ or @float@, they will be converted automatically. Color codes in the form @#rrggbb@ or @#rgb@ will be converted to an opaque @Color@. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
+--   			For example, the opening BBCode tag @@example foo=hello bar=true baz=42 color=#ffffff@@ will map to the following @Dictionary@:
+--   			
+--   @
+--   
 --   			{"foo": "hello", "bar": true, "baz": 42, "color": Color(1, 1, 1, 1)}
---   			[/codeblock]
+--   			
+--   @
 bindCharFXTransform_get_environment :: MethodBind
 bindCharFXTransform_get_environment
   = unsafePerformIO $
@@ -149,11 +216,14 @@ bindCharFXTransform_get_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as [bool], [int] or [float], they will be converted automatically. Color codes in the form [code]#rrggbb[/code] or [code]#rgb[/code] will be converted to an opaque [Color]. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
---   			For example, the opening BBCode tag [code][example foo=hello bar=true baz=42 color=#ffffff][/code] will map to the following [Dictionary]:
---   			[codeblock]
+-- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as @bool@, @int@ or @float@, they will be converted automatically. Color codes in the form @#rrggbb@ or @#rgb@ will be converted to an opaque @Color@. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
+--   			For example, the opening BBCode tag @@example foo=hello bar=true baz=42 color=#ffffff@@ will map to the following @Dictionary@:
+--   			
+--   @
+--   
 --   			{"foo": "hello", "bar": true, "baz": 42, "color": Color(1, 1, 1, 1)}
---   			[/codeblock]
+--   			
+--   @
 get_environment ::
                   (CharFXTransform :< cls, Object :< cls) => cls -> IO Dictionary
 get_environment cls
@@ -164,6 +234,11 @@ get_environment cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "get_environment" '[]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.get_environment
 
 {-# NOINLINE bindCharFXTransform_get_offset #-}
 
@@ -187,6 +262,10 @@ get_offset cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "get_offset" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.get_offset
 
 {-# NOINLINE bindCharFXTransform_get_relative_index #-}
 
@@ -212,9 +291,14 @@ get_relative_index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "get_relative_index" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.get_relative_index
+
 {-# NOINLINE bindCharFXTransform_is_visible #-}
 
--- | If [code]true[/code], the character will be drawn. If [code]false[/code], the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their [member color] to [code]Color(1, 1, 1, 0)[/code] instead.
+-- | If @true@, the character will be drawn. If @false@, the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their @color@ to @Color(1, 1, 1, 0)@ instead.
 bindCharFXTransform_is_visible :: MethodBind
 bindCharFXTransform_is_visible
   = unsafePerformIO $
@@ -224,7 +308,7 @@ bindCharFXTransform_is_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the character will be drawn. If [code]false[/code], the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their [member color] to [code]Color(1, 1, 1, 0)[/code] instead.
+-- | If @true@, the character will be drawn. If @false@, the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their @color@ to @Color(1, 1, 1, 0)@ instead.
 is_visible ::
              (CharFXTransform :< cls, Object :< cls) => cls -> IO Bool
 is_visible cls
@@ -234,6 +318,10 @@ is_visible cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "is_visible" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CharFXTransform.is_visible
 
 {-# NOINLINE bindCharFXTransform_set_absolute_index #-}
 
@@ -259,14 +347,22 @@ set_absolute_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "set_absolute_index" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_absolute_index
+
 {-# NOINLINE bindCharFXTransform_set_character #-}
 
--- | The Unicode codepoint the character will use. This only affects non-whitespace characters. [method @GDScript.ord] can be useful here. For example, the following will replace all characters with asterisks:
---   			[codeblock]
+-- | The Unicode codepoint the character will use. This only affects non-whitespace characters. @method @GDScript.ord@ can be useful here. For example, the following will replace all characters with asterisks:
+--   			
+--   @
+--   
 --   			# `char_fx` is the CharFXTransform parameter from `_process_custom_fx()`.
 --   			# See the RichTextEffect documentation for details.
 --   			char_fx.character = ord("*")
---   			[/codeblock]
+--   			
+--   @
 bindCharFXTransform_set_character :: MethodBind
 bindCharFXTransform_set_character
   = unsafePerformIO $
@@ -276,12 +372,15 @@ bindCharFXTransform_set_character
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The Unicode codepoint the character will use. This only affects non-whitespace characters. [method @GDScript.ord] can be useful here. For example, the following will replace all characters with asterisks:
---   			[codeblock]
+-- | The Unicode codepoint the character will use. This only affects non-whitespace characters. @method @GDScript.ord@ can be useful here. For example, the following will replace all characters with asterisks:
+--   			
+--   @
+--   
 --   			# `char_fx` is the CharFXTransform parameter from `_process_custom_fx()`.
 --   			# See the RichTextEffect documentation for details.
 --   			char_fx.character = ord("*")
---   			[/codeblock]
+--   			
+--   @
 set_character ::
                 (CharFXTransform :< cls, Object :< cls) => cls -> Int -> IO ()
 set_character cls arg1
@@ -292,6 +391,10 @@ set_character cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "set_character" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_character
 
 {-# NOINLINE bindCharFXTransform_set_color #-}
 
@@ -316,10 +419,14 @@ set_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "set_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_color
+
 {-# NOINLINE bindCharFXTransform_set_elapsed_time #-}
 
--- | The time elapsed since the [RichTextLabel] was added to the scene tree (in seconds). Time stops when the project is paused, unless the [RichTextLabel]'s [member Node.pause_mode] is set to [constant Node.PAUSE_MODE_PROCESS].
---   			[b]Note:[/b] Time still passes while the [RichTextLabel] is hidden.
+-- | The time elapsed since the @RichTextLabel@ was added to the scene tree (in seconds). Time stops when the project is paused, unless the @RichTextLabel@'s @Node.pause_mode@ is set to @Node.PAUSE_MODE_PROCESS@.
+--   			__Note:__ Time still passes while the @RichTextLabel@ is hidden.
 bindCharFXTransform_set_elapsed_time :: MethodBind
 bindCharFXTransform_set_elapsed_time
   = unsafePerformIO $
@@ -329,8 +436,8 @@ bindCharFXTransform_set_elapsed_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The time elapsed since the [RichTextLabel] was added to the scene tree (in seconds). Time stops when the project is paused, unless the [RichTextLabel]'s [member Node.pause_mode] is set to [constant Node.PAUSE_MODE_PROCESS].
---   			[b]Note:[/b] Time still passes while the [RichTextLabel] is hidden.
+-- | The time elapsed since the @RichTextLabel@ was added to the scene tree (in seconds). Time stops when the project is paused, unless the @RichTextLabel@'s @Node.pause_mode@ is set to @Node.PAUSE_MODE_PROCESS@.
+--   			__Note:__ Time still passes while the @RichTextLabel@ is hidden.
 set_elapsed_time ::
                    (CharFXTransform :< cls, Object :< cls) => cls -> Float -> IO ()
 set_elapsed_time cls arg1
@@ -342,13 +449,21 @@ set_elapsed_time cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "set_elapsed_time" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_elapsed_time
+
 {-# NOINLINE bindCharFXTransform_set_environment #-}
 
--- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as [bool], [int] or [float], they will be converted automatically. Color codes in the form [code]#rrggbb[/code] or [code]#rgb[/code] will be converted to an opaque [Color]. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
---   			For example, the opening BBCode tag [code][example foo=hello bar=true baz=42 color=#ffffff][/code] will map to the following [Dictionary]:
---   			[codeblock]
+-- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as @bool@, @int@ or @float@, they will be converted automatically. Color codes in the form @#rrggbb@ or @#rgb@ will be converted to an opaque @Color@. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
+--   			For example, the opening BBCode tag @@example foo=hello bar=true baz=42 color=#ffffff@@ will map to the following @Dictionary@:
+--   			
+--   @
+--   
 --   			{"foo": "hello", "bar": true, "baz": 42, "color": Color(1, 1, 1, 1)}
---   			[/codeblock]
+--   			
+--   @
 bindCharFXTransform_set_environment :: MethodBind
 bindCharFXTransform_set_environment
   = unsafePerformIO $
@@ -358,11 +473,14 @@ bindCharFXTransform_set_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as [bool], [int] or [float], they will be converted automatically. Color codes in the form [code]#rrggbb[/code] or [code]#rgb[/code] will be converted to an opaque [Color]. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
---   			For example, the opening BBCode tag [code][example foo=hello bar=true baz=42 color=#ffffff][/code] will map to the following [Dictionary]:
---   			[codeblock]
+-- | Contains the arguments passed in the opening BBCode tag. By default, arguments are strings; if their contents match a type such as @bool@, @int@ or @float@, they will be converted automatically. Color codes in the form @#rrggbb@ or @#rgb@ will be converted to an opaque @Color@. String arguments may not contain spaces, even if they're quoted. If present, quotes will also be present in the final string.
+--   			For example, the opening BBCode tag @@example foo=hello bar=true baz=42 color=#ffffff@@ will map to the following @Dictionary@:
+--   			
+--   @
+--   
 --   			{"foo": "hello", "bar": true, "baz": 42, "color": Color(1, 1, 1, 1)}
---   			[/codeblock]
+--   			
+--   @
 set_environment ::
                   (CharFXTransform :< cls, Object :< cls) =>
                   cls -> Dictionary -> IO ()
@@ -374,6 +492,11 @@ set_environment cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "set_environment" '[Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_environment
 
 {-# NOINLINE bindCharFXTransform_set_offset #-}
 
@@ -397,6 +520,10 @@ set_offset cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "set_offset" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_offset
 
 {-# NOINLINE bindCharFXTransform_set_relative_index #-}
 
@@ -422,9 +549,14 @@ set_relative_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CharFXTransform "set_relative_index" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_relative_index
+
 {-# NOINLINE bindCharFXTransform_set_visibility #-}
 
--- | If [code]true[/code], the character will be drawn. If [code]false[/code], the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their [member color] to [code]Color(1, 1, 1, 0)[/code] instead.
+-- | If @true@, the character will be drawn. If @false@, the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their @color@ to @Color(1, 1, 1, 0)@ instead.
 bindCharFXTransform_set_visibility :: MethodBind
 bindCharFXTransform_set_visibility
   = unsafePerformIO $
@@ -434,7 +566,7 @@ bindCharFXTransform_set_visibility
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the character will be drawn. If [code]false[/code], the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their [member color] to [code]Color(1, 1, 1, 0)[/code] instead.
+-- | If @true@, the character will be drawn. If @false@, the character will be hidden. Characters around hidden characters will reflow to take the space of hidden characters. If this is not desired, set their @color@ to @Color(1, 1, 1, 0)@ instead.
 set_visibility ::
                  (CharFXTransform :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_visibility cls arg1
@@ -445,3 +577,8 @@ set_visibility cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CharFXTransform "set_visibility" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CharFXTransform.set_visibility

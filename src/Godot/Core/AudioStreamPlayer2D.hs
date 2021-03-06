@@ -34,15 +34,74 @@ module Godot.Core.AudioStreamPlayer2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
 
 -- | Emitted when the audio stops playing.
 sig_finished :: Godot.Internal.Dispatch.Signal AudioStreamPlayer2D
 sig_finished = Godot.Internal.Dispatch.Signal "finished"
 
 instance NodeSignal AudioStreamPlayer2D "finished" '[]
+
+instance NodeProperty AudioStreamPlayer2D "area_mask" Int 'False
+         where
+        nodeProperty
+          = (get_area_mask, wrapDroppingSetter set_area_mask, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "attenuation" Float
+           'False
+         where
+        nodeProperty
+          = (get_attenuation, wrapDroppingSetter set_attenuation, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "autoplay" Bool 'False
+         where
+        nodeProperty
+          = (is_autoplay_enabled, wrapDroppingSetter set_autoplay, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "bus" GodotString 'False
+         where
+        nodeProperty = (get_bus, wrapDroppingSetter set_bus, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "max_distance" Float
+           'False
+         where
+        nodeProperty
+          = (get_max_distance, wrapDroppingSetter set_max_distance, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "pitch_scale" Float
+           'False
+         where
+        nodeProperty
+          = (get_pitch_scale, wrapDroppingSetter set_pitch_scale, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "playing" Bool 'False
+         where
+        nodeProperty
+          = (is_playing, wrapDroppingSetter _set_playing, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "stream" AudioStream
+           'False
+         where
+        nodeProperty = (get_stream, wrapDroppingSetter set_stream, Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "stream_paused" Bool
+           'False
+         where
+        nodeProperty
+          = (get_stream_paused, wrapDroppingSetter set_stream_paused,
+             Nothing)
+
+instance NodeProperty AudioStreamPlayer2D "volume_db" Float 'False
+         where
+        nodeProperty
+          = (get_volume_db, wrapDroppingSetter set_volume_db, Nothing)
 
 {-# NOINLINE bindAudioStreamPlayer2D__bus_layout_changed #-}
 
@@ -66,6 +125,11 @@ _bus_layout_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "_bus_layout_changed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D._bus_layout_changed
+
 {-# NOINLINE bindAudioStreamPlayer2D__is_active #-}
 
 bindAudioStreamPlayer2D__is_active :: MethodBind
@@ -88,9 +152,13 @@ _is_active cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "_is_active" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D._is_active
+
 {-# NOINLINE bindAudioStreamPlayer2D__set_playing #-}
 
--- | If [code]true[/code], audio is playing.
+-- | If @true@, audio is playing.
 bindAudioStreamPlayer2D__set_playing :: MethodBind
 bindAudioStreamPlayer2D__set_playing
   = unsafePerformIO $
@@ -100,7 +168,7 @@ bindAudioStreamPlayer2D__set_playing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio is playing.
+-- | If @true@, audio is playing.
 _set_playing ::
                (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 _set_playing cls arg1
@@ -111,6 +179,11 @@ _set_playing cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "_set_playing" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D._set_playing
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_area_mask #-}
 
@@ -136,6 +209,11 @@ get_area_mask cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "get_area_mask" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_area_mask
+
 {-# NOINLINE bindAudioStreamPlayer2D_get_attenuation #-}
 
 -- | Dampens audio over distance with this as an exponent.
@@ -159,6 +237,11 @@ get_attenuation cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "get_attenuation" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_attenuation
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_bus #-}
 
@@ -184,6 +267,11 @@ get_bus cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "get_bus" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_bus
+
 {-# NOINLINE bindAudioStreamPlayer2D_get_max_distance #-}
 
 -- | Maximum distance from which audio is still hearable.
@@ -207,6 +295,11 @@ get_max_distance cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "get_max_distance" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_max_distance
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_pitch_scale #-}
 
@@ -232,9 +325,14 @@ get_pitch_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "get_pitch_scale" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_pitch_scale
+
 {-# NOINLINE bindAudioStreamPlayer2D_get_playback_position #-}
 
--- | Returns the position in the [AudioStream].
+-- | Returns the position in the @AudioStream@.
 bindAudioStreamPlayer2D_get_playback_position :: MethodBind
 bindAudioStreamPlayer2D_get_playback_position
   = unsafePerformIO $
@@ -244,7 +342,7 @@ bindAudioStreamPlayer2D_get_playback_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position in the [AudioStream].
+-- | Returns the position in the @AudioStream@.
 get_playback_position ::
                         (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Float
 get_playback_position cls
@@ -257,9 +355,14 @@ get_playback_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "get_playback_position" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_playback_position
+
 {-# NOINLINE bindAudioStreamPlayer2D_get_stream #-}
 
--- | The [AudioStream] object to be played.
+-- | The @AudioStream@ object to be played.
 bindAudioStreamPlayer2D_get_stream :: MethodBind
 bindAudioStreamPlayer2D_get_stream
   = unsafePerformIO $
@@ -269,7 +372,7 @@ bindAudioStreamPlayer2D_get_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [AudioStream] object to be played.
+-- | The @AudioStream@ object to be played.
 get_stream ::
              (AudioStreamPlayer2D :< cls, Object :< cls) =>
              cls -> IO AudioStream
@@ -282,9 +385,14 @@ get_stream cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "get_stream" '[]
+           (IO AudioStream)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_stream
+
 {-# NOINLINE bindAudioStreamPlayer2D_get_stream_paused #-}
 
--- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
+-- | If @true@, the playback is paused. You can resume it by setting @stream_paused@ to @false@.
 bindAudioStreamPlayer2D_get_stream_paused :: MethodBind
 bindAudioStreamPlayer2D_get_stream_paused
   = unsafePerformIO $
@@ -294,7 +402,7 @@ bindAudioStreamPlayer2D_get_stream_paused
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
+-- | If @true@, the playback is paused. You can resume it by setting @stream_paused@ to @false@.
 get_stream_paused ::
                     (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Bool
 get_stream_paused cls
@@ -306,9 +414,14 @@ get_stream_paused cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "get_stream_paused" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_stream_paused
+
 {-# NOINLINE bindAudioStreamPlayer2D_get_stream_playback #-}
 
--- | Returns the [AudioStreamPlayback] object associated with this [AudioStreamPlayer2D].
+-- | Returns the @AudioStreamPlayback@ object associated with this @AudioStreamPlayer2D@.
 bindAudioStreamPlayer2D_get_stream_playback :: MethodBind
 bindAudioStreamPlayer2D_get_stream_playback
   = unsafePerformIO $
@@ -318,7 +431,7 @@ bindAudioStreamPlayer2D_get_stream_playback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [AudioStreamPlayback] object associated with this [AudioStreamPlayer2D].
+-- | Returns the @AudioStreamPlayback@ object associated with this @AudioStreamPlayer2D@.
 get_stream_playback ::
                       (AudioStreamPlayer2D :< cls, Object :< cls) =>
                       cls -> IO AudioStreamPlayback
@@ -330,6 +443,11 @@ get_stream_playback cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "get_stream_playback" '[]
+           (IO AudioStreamPlayback)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_stream_playback
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_volume_db #-}
 
@@ -355,9 +473,14 @@ get_volume_db cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "get_volume_db" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.get_volume_db
+
 {-# NOINLINE bindAudioStreamPlayer2D_is_autoplay_enabled #-}
 
--- | If [code]true[/code], audio plays when added to scene tree.
+-- | If @true@, audio plays when added to scene tree.
 bindAudioStreamPlayer2D_is_autoplay_enabled :: MethodBind
 bindAudioStreamPlayer2D_is_autoplay_enabled
   = unsafePerformIO $
@@ -367,7 +490,7 @@ bindAudioStreamPlayer2D_is_autoplay_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio plays when added to scene tree.
+-- | If @true@, audio plays when added to scene tree.
 is_autoplay_enabled ::
                       (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Bool
 is_autoplay_enabled cls
@@ -379,9 +502,14 @@ is_autoplay_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "is_autoplay_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.is_autoplay_enabled
+
 {-# NOINLINE bindAudioStreamPlayer2D_is_playing #-}
 
--- | If [code]true[/code], audio is playing.
+-- | If @true@, audio is playing.
 bindAudioStreamPlayer2D_is_playing :: MethodBind
 bindAudioStreamPlayer2D_is_playing
   = unsafePerformIO $
@@ -391,7 +519,7 @@ bindAudioStreamPlayer2D_is_playing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio is playing.
+-- | If @true@, audio is playing.
 is_playing ::
              (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Bool
 is_playing cls
@@ -403,9 +531,13 @@ is_playing cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "is_playing" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.is_playing
+
 {-# NOINLINE bindAudioStreamPlayer2D_play #-}
 
--- | Plays the audio from the given position [code]from_position[/code], in seconds.
+-- | Plays the audio from the given position @from_position@, in seconds.
 bindAudioStreamPlayer2D_play :: MethodBind
 bindAudioStreamPlayer2D_play
   = unsafePerformIO $
@@ -415,17 +547,22 @@ bindAudioStreamPlayer2D_play
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Plays the audio from the given position [code]from_position[/code], in seconds.
+-- | Plays the audio from the given position @from_position@, in seconds.
 play ::
        (AudioStreamPlayer2D :< cls, Object :< cls) =>
-       cls -> Float -> IO ()
+       cls -> Maybe Float -> IO ()
 play cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantReal (0)) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAudioStreamPlayer2D_play (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "play" '[Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.play
 
 {-# NOINLINE bindAudioStreamPlayer2D_seek #-}
 
@@ -451,6 +588,10 @@ seek cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "seek" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.seek
+
 {-# NOINLINE bindAudioStreamPlayer2D_set_area_mask #-}
 
 -- | Areas in which this sound plays.
@@ -474,6 +615,11 @@ set_area_mask cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "set_area_mask" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_area_mask
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_attenuation #-}
 
@@ -500,9 +646,14 @@ set_attenuation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "set_attenuation" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_attenuation
+
 {-# NOINLINE bindAudioStreamPlayer2D_set_autoplay #-}
 
--- | If [code]true[/code], audio plays when added to scene tree.
+-- | If @true@, audio plays when added to scene tree.
 bindAudioStreamPlayer2D_set_autoplay :: MethodBind
 bindAudioStreamPlayer2D_set_autoplay
   = unsafePerformIO $
@@ -512,7 +663,7 @@ bindAudioStreamPlayer2D_set_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], audio plays when added to scene tree.
+-- | If @true@, audio plays when added to scene tree.
 set_autoplay ::
                (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autoplay cls arg1
@@ -523,6 +674,11 @@ set_autoplay cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "set_autoplay" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_autoplay
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_bus #-}
 
@@ -547,6 +703,11 @@ set_bus cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "set_bus" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_bus
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_max_distance #-}
 
@@ -573,6 +734,11 @@ set_max_distance cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "set_max_distance" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_max_distance
+
 {-# NOINLINE bindAudioStreamPlayer2D_set_pitch_scale #-}
 
 -- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
@@ -598,9 +764,14 @@ set_pitch_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "set_pitch_scale" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_pitch_scale
+
 {-# NOINLINE bindAudioStreamPlayer2D_set_stream #-}
 
--- | The [AudioStream] object to be played.
+-- | The @AudioStream@ object to be played.
 bindAudioStreamPlayer2D_set_stream :: MethodBind
 bindAudioStreamPlayer2D_set_stream
   = unsafePerformIO $
@@ -610,7 +781,7 @@ bindAudioStreamPlayer2D_set_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [AudioStream] object to be played.
+-- | The @AudioStream@ object to be played.
 set_stream ::
              (AudioStreamPlayer2D :< cls, Object :< cls) =>
              cls -> AudioStream -> IO ()
@@ -623,9 +794,14 @@ set_stream cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "set_stream" '[AudioStream]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_stream
+
 {-# NOINLINE bindAudioStreamPlayer2D_set_stream_paused #-}
 
--- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
+-- | If @true@, the playback is paused. You can resume it by setting @stream_paused@ to @false@.
 bindAudioStreamPlayer2D_set_stream_paused :: MethodBind
 bindAudioStreamPlayer2D_set_stream_paused
   = unsafePerformIO $
@@ -635,7 +811,7 @@ bindAudioStreamPlayer2D_set_stream_paused
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the playback is paused. You can resume it by setting [code]stream_paused[/code] to [code]false[/code].
+-- | If @true@, the playback is paused. You can resume it by setting @stream_paused@ to @false@.
 set_stream_paused ::
                     (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_stream_paused cls arg1
@@ -646,6 +822,11 @@ set_stream_paused cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "set_stream_paused" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_stream_paused
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_volume_db #-}
 
@@ -672,6 +853,11 @@ set_volume_db cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamPlayer2D "set_volume_db" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.set_volume_db
+
 {-# NOINLINE bindAudioStreamPlayer2D_stop #-}
 
 -- | Stops the audio.
@@ -693,3 +879,6 @@ stop cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamPlayer2D "stop" '[] (IO ()) where
+        nodeMethod = Godot.Core.AudioStreamPlayer2D.stop

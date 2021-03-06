@@ -17,9 +17,14 @@ module Godot.Core.ProximityGroup
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
 
 _MODE_SIGNAL :: Int
 _MODE_SIGNAL = 1
@@ -32,6 +37,23 @@ sig_broadcast = Godot.Internal.Dispatch.Signal "broadcast"
 
 instance NodeSignal ProximityGroup "broadcast"
            '[GodotString, Array]
+
+instance NodeProperty ProximityGroup "dispatch_mode" Int 'False
+         where
+        nodeProperty
+          = (get_dispatch_mode, wrapDroppingSetter set_dispatch_mode,
+             Nothing)
+
+instance NodeProperty ProximityGroup "grid_radius" Vector3 'False
+         where
+        nodeProperty
+          = (get_grid_radius, wrapDroppingSetter set_grid_radius, Nothing)
+
+instance NodeProperty ProximityGroup "group_name" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_group_name, wrapDroppingSetter set_group_name, Nothing)
 
 {-# NOINLINE bindProximityGroup__proximity_group_broadcast #-}
 
@@ -57,6 +79,12 @@ _proximity_group_broadcast cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProximityGroup "_proximity_group_broadcast"
+           '[GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProximityGroup._proximity_group_broadcast
+
 {-# NOINLINE bindProximityGroup_broadcast #-}
 
 bindProximityGroup_broadcast :: MethodBind
@@ -78,6 +106,12 @@ broadcast cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProximityGroup "broadcast"
+           '[GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProximityGroup.broadcast
 
 {-# NOINLINE bindProximityGroup_get_dispatch_mode #-}
 
@@ -101,6 +135,10 @@ get_dispatch_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProximityGroup "get_dispatch_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ProximityGroup.get_dispatch_mode
+
 {-# NOINLINE bindProximityGroup_get_grid_radius #-}
 
 bindProximityGroup_get_grid_radius :: MethodBind
@@ -122,6 +160,11 @@ get_grid_radius cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProximityGroup "get_grid_radius" '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.ProximityGroup.get_grid_radius
 
 {-# NOINLINE bindProximityGroup_get_group_name #-}
 
@@ -145,6 +188,11 @@ get_group_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProximityGroup "get_group_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.ProximityGroup.get_group_name
+
 {-# NOINLINE bindProximityGroup_set_dispatch_mode #-}
 
 bindProximityGroup_set_dispatch_mode :: MethodBind
@@ -166,6 +214,11 @@ set_dispatch_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProximityGroup "set_dispatch_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProximityGroup.set_dispatch_mode
 
 {-# NOINLINE bindProximityGroup_set_grid_radius #-}
 
@@ -189,6 +242,11 @@ set_grid_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProximityGroup "set_grid_radius" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProximityGroup.set_grid_radius
+
 {-# NOINLINE bindProximityGroup_set_group_name #-}
 
 bindProximityGroup_set_group_name :: MethodBind
@@ -211,3 +269,8 @@ set_group_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProximityGroup "set_group_name" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProximityGroup.set_group_name

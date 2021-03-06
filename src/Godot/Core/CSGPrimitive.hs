@@ -8,9 +8,19 @@ module Godot.Core.CSGPrimitive
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.CSGShape()
+
+instance NodeProperty CSGPrimitive "invert_faces" Bool 'False where
+        nodeProperty
+          = (is_inverting_faces, wrapDroppingSetter set_invert_faces,
+             Nothing)
 
 {-# NOINLINE bindCSGPrimitive_is_inverting_faces #-}
 
@@ -34,6 +44,10 @@ is_inverting_faces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPrimitive "is_inverting_faces" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGPrimitive.is_inverting_faces
+
 {-# NOINLINE bindCSGPrimitive_set_invert_faces #-}
 
 bindCSGPrimitive_set_invert_faces :: MethodBind
@@ -55,3 +69,7 @@ set_invert_faces cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPrimitive "set_invert_faces" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPrimitive.set_invert_faces

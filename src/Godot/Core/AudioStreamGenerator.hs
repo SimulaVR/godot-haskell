@@ -10,9 +10,26 @@ module Godot.Core.AudioStreamGenerator
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioStream()
+
+instance NodeProperty AudioStreamGenerator "buffer_length" Float
+           'False
+         where
+        nodeProperty
+          = (get_buffer_length, wrapDroppingSetter set_buffer_length,
+             Nothing)
+
+instance NodeProperty AudioStreamGenerator "mix_rate" Float 'False
+         where
+        nodeProperty
+          = (get_mix_rate, wrapDroppingSetter set_mix_rate, Nothing)
 
 {-# NOINLINE bindAudioStreamGenerator_get_buffer_length #-}
 
@@ -36,6 +53,11 @@ get_buffer_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamGenerator "get_buffer_length" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamGenerator.get_buffer_length
+
 {-# NOINLINE bindAudioStreamGenerator_get_mix_rate #-}
 
 bindAudioStreamGenerator_get_mix_rate :: MethodBind
@@ -57,6 +79,11 @@ get_mix_rate cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamGenerator "get_mix_rate" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamGenerator.get_mix_rate
 
 {-# NOINLINE bindAudioStreamGenerator_set_buffer_length #-}
 
@@ -81,6 +108,12 @@ set_buffer_length cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamGenerator "set_buffer_length"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamGenerator.set_buffer_length
+
 {-# NOINLINE bindAudioStreamGenerator_set_mix_rate #-}
 
 bindAudioStreamGenerator_set_mix_rate :: MethodBind
@@ -103,3 +136,8 @@ set_mix_rate cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamGenerator "set_mix_rate" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamGenerator.set_mix_rate

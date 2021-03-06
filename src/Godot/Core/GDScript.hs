@@ -7,9 +7,14 @@ module Godot.Core.GDScript
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Script()
 
 {-# NOINLINE bindGDScript_get_as_byte_code #-}
 
@@ -32,6 +37,11 @@ get_as_byte_code cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDScript "get_as_byte_code" '[]
+           (IO PoolByteArray)
+         where
+        nodeMethod = Godot.Core.GDScript.get_as_byte_code
+
 {-# NOINLINE bindGDScript_new #-}
 
 bindGDScript_new :: MethodBind
@@ -51,3 +61,8 @@ new cls varargs
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGDScript_new (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDScript "new" '[[Variant 'GodotTy]]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.GDScript.new

@@ -41,14 +41,92 @@ module Godot.Core.PhysicsDirectBodyState
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
+
+instance NodeProperty PhysicsDirectBodyState "angular_velocity"
+           Vector3
+           'False
+         where
+        nodeProperty
+          = (get_angular_velocity, wrapDroppingSetter set_angular_velocity,
+             Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "center_of_mass"
+           Vector3
+           'True
+         where
+        nodeProperty = (get_center_of_mass, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "inverse_inertia"
+           Vector3
+           'True
+         where
+        nodeProperty = (get_inverse_inertia, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "inverse_mass" Float
+           'True
+         where
+        nodeProperty = (get_inverse_mass, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "linear_velocity"
+           Vector3
+           'False
+         where
+        nodeProperty
+          = (get_linear_velocity, wrapDroppingSetter set_linear_velocity,
+             Nothing)
+
+instance NodeProperty PhysicsDirectBodyState
+           "principal_inertia_axes"
+           Basis
+           'True
+         where
+        nodeProperty = (get_principal_inertia_axes, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "sleeping" Bool 'False
+         where
+        nodeProperty
+          = (is_sleeping, wrapDroppingSetter set_sleep_state, Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "step" Float 'True
+         where
+        nodeProperty = (get_step, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "total_angular_damp"
+           Float
+           'True
+         where
+        nodeProperty = (get_total_angular_damp, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "total_gravity"
+           Vector3
+           'True
+         where
+        nodeProperty = (get_total_gravity, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "total_linear_damp"
+           Float
+           'True
+         where
+        nodeProperty = (get_total_linear_damp, (), Nothing)
+
+instance NodeProperty PhysicsDirectBodyState "transform" Transform
+           'False
+         where
+        nodeProperty
+          = (get_transform, wrapDroppingSetter set_transform, Nothing)
 
 {-# NOINLINE bindPhysicsDirectBodyState_add_central_force #-}
 
 -- | Adds a constant directional force without affecting rotation.
---   				This is equivalent to [code]add_force(force, Vector3(0,0,0))[/code].
+--   				This is equivalent to @add_force(force, Vector3(0,0,0))@.
 bindPhysicsDirectBodyState_add_central_force :: MethodBind
 bindPhysicsDirectBodyState_add_central_force
   = unsafePerformIO $
@@ -59,7 +137,7 @@ bindPhysicsDirectBodyState_add_central_force
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds a constant directional force without affecting rotation.
---   				This is equivalent to [code]add_force(force, Vector3(0,0,0))[/code].
+--   				This is equivalent to @add_force(force, Vector3(0,0,0))@.
 add_central_force ::
                     (PhysicsDirectBodyState :< cls, Object :< cls) =>
                     cls -> Vector3 -> IO ()
@@ -71,6 +149,12 @@ add_central_force cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "add_central_force"
+           '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.add_central_force
 
 {-# NOINLINE bindPhysicsDirectBodyState_add_force #-}
 
@@ -97,6 +181,12 @@ add_force cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "add_force"
+           '[Vector3, Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.add_force
+
 {-# NOINLINE bindPhysicsDirectBodyState_add_torque #-}
 
 -- | Adds a constant rotational force without affecting position.
@@ -122,10 +212,15 @@ add_torque cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "add_torque" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.add_torque
+
 {-# NOINLINE bindPhysicsDirectBodyState_apply_central_impulse #-}
 
 -- | Applies a single directional impulse without affecting rotation.
---   				This is equivalent to [code]apply_impulse(Vector3(0, 0, 0), impulse)[/code].
+--   				This is equivalent to @apply_impulse(Vector3(0, 0, 0), impulse)@.
 bindPhysicsDirectBodyState_apply_central_impulse :: MethodBind
 bindPhysicsDirectBodyState_apply_central_impulse
   = unsafePerformIO $
@@ -136,7 +231,7 @@ bindPhysicsDirectBodyState_apply_central_impulse
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Applies a single directional impulse without affecting rotation.
---   				This is equivalent to [code]apply_impulse(Vector3(0, 0, 0), impulse)[/code].
+--   				This is equivalent to @apply_impulse(Vector3(0, 0, 0), impulse)@.
 apply_central_impulse ::
                         (PhysicsDirectBodyState :< cls, Object :< cls) =>
                         cls -> Vector3 -> IO ()
@@ -149,6 +244,13 @@ apply_central_impulse cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "apply_central_impulse"
+           '[Vector3]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.apply_central_impulse
 
 {-# NOINLINE bindPhysicsDirectBodyState_apply_impulse #-}
 
@@ -175,9 +277,15 @@ apply_impulse cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "apply_impulse"
+           '[Vector3, Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.apply_impulse
+
 {-# NOINLINE bindPhysicsDirectBodyState_apply_torque_impulse #-}
 
--- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the vector [code]j[/code] passed as parameter.
+-- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the vector @j@ passed as parameter.
 bindPhysicsDirectBodyState_apply_torque_impulse :: MethodBind
 bindPhysicsDirectBodyState_apply_torque_impulse
   = unsafePerformIO $
@@ -187,7 +295,7 @@ bindPhysicsDirectBodyState_apply_torque_impulse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the vector [code]j[/code] passed as parameter.
+-- | Apply a torque impulse (which will be affected by the body mass and shape). This will rotate the body around the vector @j@ passed as parameter.
 apply_torque_impulse ::
                        (PhysicsDirectBodyState :< cls, Object :< cls) =>
                        cls -> Vector3 -> IO ()
@@ -200,6 +308,12 @@ apply_torque_impulse cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "apply_torque_impulse"
+           '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.apply_torque_impulse
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_angular_velocity #-}
 
@@ -226,6 +340,12 @@ get_angular_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_angular_velocity"
+           '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_angular_velocity
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_center_of_mass #-}
 
 bindPhysicsDirectBodyState_get_center_of_mass :: MethodBind
@@ -249,9 +369,14 @@ get_center_of_mass cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_center_of_mass" '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_center_of_mass
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_collider #-}
 
--- | Returns the collider's [RID].
+-- | Returns the collider's @RID@.
 bindPhysicsDirectBodyState_get_contact_collider :: MethodBind
 bindPhysicsDirectBodyState_get_contact_collider
   = unsafePerformIO $
@@ -261,7 +386,7 @@ bindPhysicsDirectBodyState_get_contact_collider
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the collider's [RID].
+-- | Returns the collider's @RID@.
 get_contact_collider ::
                        (PhysicsDirectBodyState :< cls, Object :< cls) =>
                        cls -> Int -> IO Rid
@@ -274,6 +399,12 @@ get_contact_collider cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "get_contact_collider"
+           '[Int]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_contact_collider
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_collider_id #-}
 
@@ -300,6 +431,14 @@ get_contact_collider_id cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_collider_id"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_collider_id
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_collider_object
              #-}
@@ -329,6 +468,14 @@ get_contact_collider_object cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_collider_object"
+           '[Int]
+           (IO Object)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_collider_object
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_collider_position
              #-}
 
@@ -357,6 +504,14 @@ get_contact_collider_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_collider_position"
+           '[Int]
+           (IO Vector3)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_collider_position
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_collider_shape
              #-}
 
@@ -383,6 +538,14 @@ get_contact_collider_shape cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_collider_shape"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_collider_shape
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_collider_velocity_at_position
              #-}
@@ -412,10 +575,18 @@ get_contact_collider_velocity_at_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_collider_velocity_at_position"
+           '[Int]
+           (IO Vector3)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_collider_velocity_at_position
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_count #-}
 
 -- | Returns the number of contacts this body has with other bodies.
---   				[b]Note:[/b] By default, this returns 0 unless bodies are configured to monitor contacts. See [member RigidBody.contact_monitor].
+--   				__Note:__ By default, this returns 0 unless bodies are configured to monitor contacts. See @RigidBody.contact_monitor@.
 bindPhysicsDirectBodyState_get_contact_count :: MethodBind
 bindPhysicsDirectBodyState_get_contact_count
   = unsafePerformIO $
@@ -426,7 +597,7 @@ bindPhysicsDirectBodyState_get_contact_count
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the number of contacts this body has with other bodies.
---   				[b]Note:[/b] By default, this returns 0 unless bodies are configured to monitor contacts. See [member RigidBody.contact_monitor].
+--   				__Note:__ By default, this returns 0 unless bodies are configured to monitor contacts. See @RigidBody.contact_monitor@.
 get_contact_count ::
                     (PhysicsDirectBodyState :< cls, Object :< cls) => cls -> IO Int
 get_contact_count cls
@@ -437,6 +608,11 @@ get_contact_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "get_contact_count" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_contact_count
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_impulse #-}
 
@@ -463,6 +639,12 @@ get_contact_impulse cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "get_contact_impulse"
+           '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_contact_impulse
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_local_normal
              #-}
@@ -491,6 +673,14 @@ get_contact_local_normal cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_local_normal"
+           '[Int]
+           (IO Vector3)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_local_normal
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_local_position
              #-}
 
@@ -518,6 +708,14 @@ get_contact_local_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_local_position"
+           '[Int]
+           (IO Vector3)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_local_position
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_contact_local_shape #-}
 
 -- | Returns the local shape index of the collision.
@@ -544,6 +742,14 @@ get_contact_local_shape cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState
+           "get_contact_local_shape"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_contact_local_shape
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_inverse_inertia #-}
 
 -- | The inverse of the inertia of the body.
@@ -569,6 +775,12 @@ get_inverse_inertia cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_inverse_inertia"
+           '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_inverse_inertia
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_inverse_mass #-}
 
 -- | The inverse of the mass of the body.
@@ -592,6 +804,11 @@ get_inverse_mass cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "get_inverse_mass" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_inverse_mass
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_linear_velocity #-}
 
@@ -618,6 +835,12 @@ get_linear_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_linear_velocity"
+           '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_linear_velocity
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_principal_inertia_axes
              #-}
 
@@ -641,6 +864,14 @@ get_principal_inertia_axes cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState
+           "get_principal_inertia_axes"
+           '[]
+           (IO Basis)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_principal_inertia_axes
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_space_state #-}
 
@@ -667,6 +898,11 @@ get_space_state cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_space_state" '[]
+           (IO PhysicsDirectSpaceState)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_space_state
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_step #-}
 
 -- | The timestep (delta) used for the simulation.
@@ -690,6 +926,11 @@ get_step cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "get_step" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_step
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_total_angular_damp #-}
 
@@ -716,6 +957,13 @@ get_total_angular_damp cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_total_angular_damp"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_total_angular_damp
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_total_gravity #-}
 
 -- | The total gravity vector being currently applied to this body.
@@ -739,6 +987,11 @@ get_total_gravity cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "get_total_gravity" '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_total_gravity
 
 {-# NOINLINE bindPhysicsDirectBodyState_get_total_linear_damp #-}
 
@@ -765,6 +1018,13 @@ get_total_linear_damp cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_total_linear_damp"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsDirectBodyState.get_total_linear_damp
+
 {-# NOINLINE bindPhysicsDirectBodyState_get_transform #-}
 
 -- | The body's transformation matrix.
@@ -790,6 +1050,11 @@ get_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "get_transform" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.get_transform
+
 {-# NOINLINE bindPhysicsDirectBodyState_integrate_forces #-}
 
 -- | Calls the built-in force integration code.
@@ -814,9 +1079,14 @@ integrate_forces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "integrate_forces" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.integrate_forces
+
 {-# NOINLINE bindPhysicsDirectBodyState_is_sleeping #-}
 
--- | If [code]true[/code], this body is currently sleeping (not active).
+-- | If @true@, this body is currently sleeping (not active).
 bindPhysicsDirectBodyState_is_sleeping :: MethodBind
 bindPhysicsDirectBodyState_is_sleeping
   = unsafePerformIO $
@@ -826,7 +1096,7 @@ bindPhysicsDirectBodyState_is_sleeping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this body is currently sleeping (not active).
+-- | If @true@, this body is currently sleeping (not active).
 is_sleeping ::
               (PhysicsDirectBodyState :< cls, Object :< cls) => cls -> IO Bool
 is_sleeping cls
@@ -837,6 +1107,11 @@ is_sleeping cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "is_sleeping" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.is_sleeping
 
 {-# NOINLINE bindPhysicsDirectBodyState_set_angular_velocity #-}
 
@@ -864,6 +1139,12 @@ set_angular_velocity cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "set_angular_velocity"
+           '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.set_angular_velocity
+
 {-# NOINLINE bindPhysicsDirectBodyState_set_linear_velocity #-}
 
 -- | The body's linear velocity.
@@ -890,9 +1171,15 @@ set_linear_velocity cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsDirectBodyState "set_linear_velocity"
+           '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.set_linear_velocity
+
 {-# NOINLINE bindPhysicsDirectBodyState_set_sleep_state #-}
 
--- | If [code]true[/code], this body is currently sleeping (not active).
+-- | If @true@, this body is currently sleeping (not active).
 bindPhysicsDirectBodyState_set_sleep_state :: MethodBind
 bindPhysicsDirectBodyState_set_sleep_state
   = unsafePerformIO $
@@ -902,7 +1189,7 @@ bindPhysicsDirectBodyState_set_sleep_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this body is currently sleeping (not active).
+-- | If @true@, this body is currently sleeping (not active).
 set_sleep_state ::
                   (PhysicsDirectBodyState :< cls, Object :< cls) =>
                   cls -> Bool -> IO ()
@@ -914,6 +1201,12 @@ set_sleep_state cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "set_sleep_state"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.set_sleep_state
 
 {-# NOINLINE bindPhysicsDirectBodyState_set_transform #-}
 
@@ -939,3 +1232,9 @@ set_transform cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsDirectBodyState "set_transform"
+           '[Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicsDirectBodyState.set_transform

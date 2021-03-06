@@ -25,9 +25,22 @@ module Godot.Core.SpriteFrames
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty SpriteFrames "animations" Array 'False where
+        nodeProperty
+          = (_get_animations, wrapDroppingSetter _set_animations, Nothing)
+
+instance NodeProperty SpriteFrames "frames" Array 'False where
+        nodeProperty
+          = (_get_frames, wrapDroppingSetter _set_frames, Nothing)
 
 {-# NOINLINE bindSpriteFrames__get_animations #-}
 
@@ -50,6 +63,10 @@ _get_animations cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "_get_animations" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.SpriteFrames._get_animations
 
 {-# NOINLINE bindSpriteFrames__get_frames #-}
 
@@ -74,6 +91,9 @@ _get_frames cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "_get_frames" '[] (IO Array) where
+        nodeMethod = Godot.Core.SpriteFrames._get_frames
+
 {-# NOINLINE bindSpriteFrames__set_animations #-}
 
 bindSpriteFrames__set_animations :: MethodBind
@@ -95,6 +115,10 @@ _set_animations cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "_set_animations" '[Array] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames._set_animations
 
 {-# NOINLINE bindSpriteFrames__set_frames #-}
 
@@ -119,6 +143,10 @@ _set_frames cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "_set_frames" '[Array] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames._set_frames
+
 {-# NOINLINE bindSpriteFrames_add_animation #-}
 
 -- | Adds a new animation to the library.
@@ -142,6 +170,11 @@ add_animation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "add_animation" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.add_animation
+
 {-# NOINLINE bindSpriteFrames_add_frame #-}
 
 -- | Adds a frame to the given animation.
@@ -157,14 +190,22 @@ bindSpriteFrames_add_frame
 -- | Adds a frame to the given animation.
 add_frame ::
             (SpriteFrames :< cls, Object :< cls) =>
-            cls -> GodotString -> Texture -> Int -> IO ()
+            cls -> GodotString -> Texture -> Maybe Int -> IO ()
 add_frame cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantInt (-1)) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSpriteFrames_add_frame (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "add_frame"
+           '[GodotString, Texture, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.add_frame
 
 {-# NOINLINE bindSpriteFrames_clear #-}
 
@@ -188,6 +229,10 @@ clear cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "clear" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.clear
+
 {-# NOINLINE bindSpriteFrames_clear_all #-}
 
 -- | Removes all animations. A "default" animation will be created.
@@ -210,9 +255,12 @@ clear_all cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "clear_all" '[] (IO ()) where
+        nodeMethod = Godot.Core.SpriteFrames.clear_all
+
 {-# NOINLINE bindSpriteFrames_get_animation_loop #-}
 
--- | If [code]true[/code], the given animation will loop.
+-- | If @true@, the given animation will loop.
 bindSpriteFrames_get_animation_loop :: MethodBind
 bindSpriteFrames_get_animation_loop
   = unsafePerformIO $
@@ -222,7 +270,7 @@ bindSpriteFrames_get_animation_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the given animation will loop.
+-- | If @true@, the given animation will loop.
 get_animation_loop ::
                      (SpriteFrames :< cls, Object :< cls) =>
                      cls -> GodotString -> IO Bool
@@ -234,6 +282,12 @@ get_animation_loop cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "get_animation_loop"
+           '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.SpriteFrames.get_animation_loop
 
 {-# NOINLINE bindSpriteFrames_get_animation_names #-}
 
@@ -258,6 +312,11 @@ get_animation_names cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "get_animation_names" '[]
+           (IO PoolStringArray)
+         where
+        nodeMethod = Godot.Core.SpriteFrames.get_animation_names
 
 {-# NOINLINE bindSpriteFrames_get_animation_speed #-}
 
@@ -284,6 +343,12 @@ get_animation_speed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "get_animation_speed"
+           '[GodotString]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.SpriteFrames.get_animation_speed
+
 {-# NOINLINE bindSpriteFrames_get_frame #-}
 
 -- | Returns the animation's selected frame.
@@ -307,6 +372,11 @@ get_frame cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "get_frame" '[GodotString, Int]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.SpriteFrames.get_frame
 
 {-# NOINLINE bindSpriteFrames_get_frame_count #-}
 
@@ -333,9 +403,14 @@ get_frame_count cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "get_frame_count" '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.SpriteFrames.get_frame_count
+
 {-# NOINLINE bindSpriteFrames_has_animation #-}
 
--- | If [code]true[/code], the named animation exists.
+-- | If @true@, the named animation exists.
 bindSpriteFrames_has_animation :: MethodBind
 bindSpriteFrames_has_animation
   = unsafePerformIO $
@@ -345,7 +420,7 @@ bindSpriteFrames_has_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the named animation exists.
+-- | If @true@, the named animation exists.
 has_animation ::
                 (SpriteFrames :< cls, Object :< cls) =>
                 cls -> GodotString -> IO Bool
@@ -356,6 +431,11 @@ has_animation cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "has_animation" '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.SpriteFrames.has_animation
 
 {-# NOINLINE bindSpriteFrames_remove_animation #-}
 
@@ -381,6 +461,11 @@ remove_animation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "remove_animation" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.remove_animation
+
 {-# NOINLINE bindSpriteFrames_remove_frame #-}
 
 -- | Removes the animation's selected frame.
@@ -405,9 +490,14 @@ remove_frame cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "remove_frame" '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.remove_frame
+
 {-# NOINLINE bindSpriteFrames_rename_animation #-}
 
--- | Changes the animation's name to [code]newname[/code].
+-- | Changes the animation's name to @newname@.
 bindSpriteFrames_rename_animation :: MethodBind
 bindSpriteFrames_rename_animation
   = unsafePerformIO $
@@ -417,7 +507,7 @@ bindSpriteFrames_rename_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the animation's name to [code]newname[/code].
+-- | Changes the animation's name to @newname@.
 rename_animation ::
                    (SpriteFrames :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotString -> IO ()
@@ -430,9 +520,15 @@ rename_animation cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "rename_animation"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.rename_animation
+
 {-# NOINLINE bindSpriteFrames_set_animation_loop #-}
 
--- | If [code]true[/code], the animation will loop.
+-- | If @true@, the animation will loop.
 bindSpriteFrames_set_animation_loop :: MethodBind
 bindSpriteFrames_set_animation_loop
   = unsafePerformIO $
@@ -442,7 +538,7 @@ bindSpriteFrames_set_animation_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the animation will loop.
+-- | If @true@, the animation will loop.
 set_animation_loop ::
                      (SpriteFrames :< cls, Object :< cls) =>
                      cls -> GodotString -> Bool -> IO ()
@@ -454,6 +550,12 @@ set_animation_loop cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "set_animation_loop"
+           '[GodotString, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.set_animation_loop
 
 {-# NOINLINE bindSpriteFrames_set_animation_speed #-}
 
@@ -480,6 +582,12 @@ set_animation_speed cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteFrames "set_animation_speed"
+           '[GodotString, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.set_animation_speed
+
 {-# NOINLINE bindSpriteFrames_set_frame #-}
 
 -- | Sets the texture of the given frame.
@@ -503,3 +611,9 @@ set_frame cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteFrames "set_frame"
+           '[GodotString, Int, Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteFrames.set_frame

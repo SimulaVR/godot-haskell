@@ -18,9 +18,14 @@ module Godot.Core.AudioEffectSpectrumAnalyzer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
 
 _FFT_SIZE_2048 :: Int
 _FFT_SIZE_2048 = 3
@@ -39,6 +44,27 @@ _FFT_SIZE_256 = 0
 
 _FFT_SIZE_1024 :: Int
 _FFT_SIZE_1024 = 2
+
+instance NodeProperty AudioEffectSpectrumAnalyzer "buffer_length"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_buffer_length, wrapDroppingSetter set_buffer_length,
+             Nothing)
+
+instance NodeProperty AudioEffectSpectrumAnalyzer "fft_size" Int
+           'False
+         where
+        nodeProperty
+          = (get_fft_size, wrapDroppingSetter set_fft_size, Nothing)
+
+instance NodeProperty AudioEffectSpectrumAnalyzer "tap_back_pos"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_tap_back_pos, wrapDroppingSetter set_tap_back_pos, Nothing)
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_get_buffer_length #-}
 
@@ -64,6 +90,13 @@ get_buffer_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectSpectrumAnalyzer "get_buffer_length"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.AudioEffectSpectrumAnalyzer.get_buffer_length
+
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_get_fft_size #-}
 
 bindAudioEffectSpectrumAnalyzer_get_fft_size :: MethodBind
@@ -86,6 +119,11 @@ get_fft_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectSpectrumAnalyzer "get_fft_size" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioEffectSpectrumAnalyzer.get_fft_size
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_get_tap_back_pos #-}
 
@@ -111,6 +149,13 @@ get_tap_back_pos cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectSpectrumAnalyzer "get_tap_back_pos"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.AudioEffectSpectrumAnalyzer.get_tap_back_pos
+
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_set_buffer_length #-}
 
 bindAudioEffectSpectrumAnalyzer_set_buffer_length :: MethodBind
@@ -135,6 +180,13 @@ set_buffer_length cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectSpectrumAnalyzer "set_buffer_length"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.AudioEffectSpectrumAnalyzer.set_buffer_length
+
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_set_fft_size #-}
 
 bindAudioEffectSpectrumAnalyzer_set_fft_size :: MethodBind
@@ -157,6 +209,12 @@ set_fft_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectSpectrumAnalyzer "set_fft_size"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectSpectrumAnalyzer.set_fft_size
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_set_tap_back_pos #-}
 
@@ -181,3 +239,10 @@ set_tap_back_pos cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectSpectrumAnalyzer "set_tap_back_pos"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.AudioEffectSpectrumAnalyzer.set_tap_back_pos

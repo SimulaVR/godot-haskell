@@ -12,9 +12,29 @@ module Godot.Core.VisualScriptComment
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptComment "description" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_description, wrapDroppingSetter set_description, Nothing)
+
+instance NodeProperty VisualScriptComment "size" Vector2 'False
+         where
+        nodeProperty = (get_size, wrapDroppingSetter set_size, Nothing)
+
+instance NodeProperty VisualScriptComment "title" GodotString
+           'False
+         where
+        nodeProperty = (get_title, wrapDroppingSetter set_title, Nothing)
 
 {-# NOINLINE bindVisualScriptComment_get_description #-}
 
@@ -39,6 +59,11 @@ get_description cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptComment "get_description" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptComment.get_description
+
 {-# NOINLINE bindVisualScriptComment_get_size #-}
 
 bindVisualScriptComment_get_size :: MethodBind
@@ -60,6 +85,10 @@ get_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptComment "get_size" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.VisualScriptComment.get_size
 
 {-# NOINLINE bindVisualScriptComment_get_title #-}
 
@@ -84,6 +113,11 @@ get_title cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptComment "get_title" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptComment.get_title
+
 {-# NOINLINE bindVisualScriptComment_set_description #-}
 
 bindVisualScriptComment_set_description :: MethodBind
@@ -106,6 +140,12 @@ set_description cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptComment "set_description"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptComment.set_description
 
 {-# NOINLINE bindVisualScriptComment_set_size #-}
 
@@ -130,6 +170,11 @@ set_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptComment "set_size" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptComment.set_size
+
 {-# NOINLINE bindVisualScriptComment_set_title #-}
 
 bindVisualScriptComment_set_title :: MethodBind
@@ -152,3 +197,8 @@ set_title cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptComment "set_title" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptComment.set_title

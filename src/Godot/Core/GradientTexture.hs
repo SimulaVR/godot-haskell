@@ -11,13 +11,23 @@ module Godot.Core.GradientTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Texture()
+
+instance NodeProperty GradientTexture "gradient" Gradient 'False
+         where
+        nodeProperty
+          = (get_gradient, wrapDroppingSetter set_gradient, Nothing)
 
 {-# NOINLINE bindGradientTexture_get_width #-}
 
--- | The number of color samples that will be obtained from the [Gradient].
+-- | The number of color samples that will be obtained from the @Gradient@.
 bindGradientTexture_get_width :: MethodBind
 bindGradientTexture_get_width
   = unsafePerformIO $
@@ -27,7 +37,7 @@ bindGradientTexture_get_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of color samples that will be obtained from the [Gradient].
+-- | The number of color samples that will be obtained from the @Gradient@.
 get_width ::
             (GradientTexture :< cls, Object :< cls) => cls -> IO Int
 get_width cls
@@ -37,6 +47,12 @@ get_width cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GradientTexture "get_width" '[] (IO Int) where
+        nodeMethod = Godot.Core.GradientTexture.get_width
+
+instance NodeProperty GradientTexture "width" Int 'False where
+        nodeProperty = (get_width, wrapDroppingSetter set_width, Nothing)
 
 {-# NOINLINE bindGradientTexture__update #-}
 
@@ -58,9 +74,12 @@ _update cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GradientTexture "_update" '[] (IO ()) where
+        nodeMethod = Godot.Core.GradientTexture._update
+
 {-# NOINLINE bindGradientTexture_get_gradient #-}
 
--- | The [Gradient] that will be used to fill the texture.
+-- | The @Gradient@ that will be used to fill the texture.
 bindGradientTexture_get_gradient :: MethodBind
 bindGradientTexture_get_gradient
   = unsafePerformIO $
@@ -70,7 +89,7 @@ bindGradientTexture_get_gradient
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Gradient] that will be used to fill the texture.
+-- | The @Gradient@ that will be used to fill the texture.
 get_gradient ::
                (GradientTexture :< cls, Object :< cls) => cls -> IO Gradient
 get_gradient cls
@@ -82,9 +101,14 @@ get_gradient cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GradientTexture "get_gradient" '[]
+           (IO Gradient)
+         where
+        nodeMethod = Godot.Core.GradientTexture.get_gradient
+
 {-# NOINLINE bindGradientTexture_set_gradient #-}
 
--- | The [Gradient] that will be used to fill the texture.
+-- | The @Gradient@ that will be used to fill the texture.
 bindGradientTexture_set_gradient :: MethodBind
 bindGradientTexture_set_gradient
   = unsafePerformIO $
@@ -94,7 +118,7 @@ bindGradientTexture_set_gradient
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Gradient] that will be used to fill the texture.
+-- | The @Gradient@ that will be used to fill the texture.
 set_gradient ::
                (GradientTexture :< cls, Object :< cls) => cls -> Gradient -> IO ()
 set_gradient cls arg1
@@ -106,9 +130,14 @@ set_gradient cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GradientTexture "set_gradient" '[Gradient]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GradientTexture.set_gradient
+
 {-# NOINLINE bindGradientTexture_set_width #-}
 
--- | The number of color samples that will be obtained from the [Gradient].
+-- | The number of color samples that will be obtained from the @Gradient@.
 bindGradientTexture_set_width :: MethodBind
 bindGradientTexture_set_width
   = unsafePerformIO $
@@ -118,7 +147,7 @@ bindGradientTexture_set_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of color samples that will be obtained from the [Gradient].
+-- | The number of color samples that will be obtained from the @Gradient@.
 set_width ::
             (GradientTexture :< cls, Object :< cls) => cls -> Int -> IO ()
 set_width cls arg1
@@ -128,3 +157,7 @@ set_width cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GradientTexture "set_width" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.GradientTexture.set_width

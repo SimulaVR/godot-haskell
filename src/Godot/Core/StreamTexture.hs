@@ -8,13 +8,22 @@ module Godot.Core.StreamTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Texture()
+
+instance NodeProperty StreamTexture "load_path" GodotString 'False
+         where
+        nodeProperty = (get_load_path, wrapDroppingSetter load, Nothing)
 
 {-# NOINLINE bindStreamTexture_get_load_path #-}
 
--- | The StreamTexture's file path to a [code].stex[/code] file.
+-- | The StreamTexture's file path to a @.stex@ file.
 bindStreamTexture_get_load_path :: MethodBind
 bindStreamTexture_get_load_path
   = unsafePerformIO $
@@ -24,7 +33,7 @@ bindStreamTexture_get_load_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The StreamTexture's file path to a [code].stex[/code] file.
+-- | The StreamTexture's file path to a @.stex@ file.
 get_load_path ::
                 (StreamTexture :< cls, Object :< cls) => cls -> IO GodotString
 get_load_path cls
@@ -34,6 +43,11 @@ get_load_path cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StreamTexture "get_load_path" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.StreamTexture.get_load_path
 
 {-# NOINLINE bindStreamTexture_load #-}
 
@@ -57,3 +71,7 @@ load cls arg1
          godot_method_bind_call bindStreamTexture_load (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StreamTexture "load" '[GodotString] (IO Int)
+         where
+        nodeMethod = Godot.Core.StreamTexture.load

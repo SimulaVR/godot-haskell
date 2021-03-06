@@ -8,16 +8,28 @@ module Godot.Core.ColorRect
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
+
+instance NodeProperty ColorRect "color" Color 'False where
+        nodeProperty
+          = (get_frame_color, wrapDroppingSetter set_frame_color, Nothing)
 
 {-# NOINLINE bindColorRect_get_frame_color #-}
 
 -- | The fill color.
---   			[codeblock]
+--   			
+--   @
+--   
 --   			$ColorRect.color = Color(1, 0, 0, 1) # Set ColorRect's color to red.
---   			[/codeblock]
+--   			
+--   @
 bindColorRect_get_frame_color :: MethodBind
 bindColorRect_get_frame_color
   = unsafePerformIO $
@@ -28,9 +40,12 @@ bindColorRect_get_frame_color
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The fill color.
---   			[codeblock]
+--   			
+--   @
+--   
 --   			$ColorRect.color = Color(1, 0, 0, 1) # Set ColorRect's color to red.
---   			[/codeblock]
+--   			
+--   @
 get_frame_color ::
                   (ColorRect :< cls, Object :< cls) => cls -> IO Color
 get_frame_color cls
@@ -41,12 +56,19 @@ get_frame_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorRect "get_frame_color" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.ColorRect.get_frame_color
+
 {-# NOINLINE bindColorRect_set_frame_color #-}
 
 -- | The fill color.
---   			[codeblock]
+--   			
+--   @
+--   
 --   			$ColorRect.color = Color(1, 0, 0, 1) # Set ColorRect's color to red.
---   			[/codeblock]
+--   			
+--   @
 bindColorRect_set_frame_color :: MethodBind
 bindColorRect_set_frame_color
   = unsafePerformIO $
@@ -57,9 +79,12 @@ bindColorRect_set_frame_color
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The fill color.
---   			[codeblock]
+--   			
+--   @
+--   
 --   			$ColorRect.color = Color(1, 0, 0, 1) # Set ColorRect's color to red.
---   			[/codeblock]
+--   			
+--   @
 set_frame_color ::
                   (ColorRect :< cls, Object :< cls) => cls -> Color -> IO ()
 set_frame_color cls arg1
@@ -69,3 +94,7 @@ set_frame_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorRect "set_frame_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorRect.set_frame_color

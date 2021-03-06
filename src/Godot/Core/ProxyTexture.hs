@@ -8,9 +8,17 @@ module Godot.Core.ProxyTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Texture()
+
+instance NodeProperty ProxyTexture "base" Texture 'False where
+        nodeProperty = (get_base, wrapDroppingSetter set_base, Nothing)
 
 {-# NOINLINE bindProxyTexture_get_base #-}
 
@@ -33,6 +41,9 @@ get_base cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProxyTexture "get_base" '[] (IO Texture) where
+        nodeMethod = Godot.Core.ProxyTexture.get_base
+
 {-# NOINLINE bindProxyTexture_set_base #-}
 
 bindProxyTexture_set_base :: MethodBind
@@ -53,3 +64,7 @@ set_base cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProxyTexture "set_base" '[Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.ProxyTexture.set_base

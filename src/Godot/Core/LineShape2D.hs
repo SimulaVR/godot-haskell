@@ -8,9 +8,20 @@ module Godot.Core.LineShape2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape2D()
+
+instance NodeProperty LineShape2D "d" Float 'False where
+        nodeProperty = (get_d, wrapDroppingSetter set_d, Nothing)
+
+instance NodeProperty LineShape2D "normal" Vector2 'False where
+        nodeProperty = (get_normal, wrapDroppingSetter set_normal, Nothing)
 
 {-# NOINLINE bindLineShape2D_get_d #-}
 
@@ -32,6 +43,9 @@ get_d cls
          godot_method_bind_call bindLineShape2D_get_d (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineShape2D "get_d" '[] (IO Float) where
+        nodeMethod = Godot.Core.LineShape2D.get_d
 
 {-# NOINLINE bindLineShape2D_get_normal #-}
 
@@ -56,6 +70,9 @@ get_normal cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LineShape2D "get_normal" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.LineShape2D.get_normal
+
 {-# NOINLINE bindLineShape2D_set_d #-}
 
 -- | The line's distance from the origin.
@@ -77,6 +94,9 @@ set_d cls arg1
          godot_method_bind_call bindLineShape2D_set_d (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineShape2D "set_d" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.LineShape2D.set_d
 
 {-# NOINLINE bindLineShape2D_set_normal #-}
 
@@ -100,3 +120,7 @@ set_normal cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LineShape2D "set_normal" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.LineShape2D.set_normal

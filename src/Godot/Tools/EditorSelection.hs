@@ -14,9 +14,14 @@ module Godot.Tools.EditorSelection
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 -- | Emitted when the selection changes.
 sig_selection_changed ::
@@ -48,6 +53,10 @@ _emit_change cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSelection "_emit_change" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSelection._emit_change
+
 {-# NOINLINE bindEditorSelection__node_removed #-}
 
 bindEditorSelection__node_removed :: MethodBind
@@ -69,6 +78,10 @@ _node_removed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSelection "_node_removed" '[Node] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSelection._node_removed
 
 {-# NOINLINE bindEditorSelection_add_node #-}
 
@@ -93,6 +106,10 @@ add_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSelection "add_node" '[Node] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSelection.add_node
+
 {-# NOINLINE bindEditorSelection_clear #-}
 
 -- | Clear the selection.
@@ -114,6 +131,9 @@ clear cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSelection "clear" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorSelection.clear
 
 {-# NOINLINE bindEditorSelection_get_selected_nodes #-}
 
@@ -138,6 +158,11 @@ get_selected_nodes cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSelection "get_selected_nodes" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Tools.EditorSelection.get_selected_nodes
 
 {-# NOINLINE bindEditorSelection_get_transformable_selected_nodes
              #-}
@@ -165,6 +190,14 @@ get_transformable_selected_nodes cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSelection
+           "get_transformable_selected_nodes"
+           '[]
+           (IO Array)
+         where
+        nodeMethod
+          = Godot.Tools.EditorSelection.get_transformable_selected_nodes
+
 {-# NOINLINE bindEditorSelection_remove_node #-}
 
 -- | Removes a node from the selection.
@@ -187,3 +220,7 @@ remove_node cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSelection "remove_node" '[Node] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSelection.remove_node

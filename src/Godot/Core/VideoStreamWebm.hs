@@ -8,9 +8,18 @@ module Godot.Core.VideoStreamWebm
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VideoStream()
+
+instance NodeProperty VideoStreamWebm "file" GodotString 'False
+         where
+        nodeProperty = (get_file, wrapDroppingSetter set_file, Nothing)
 
 {-# NOINLINE bindVideoStreamWebm_get_file #-}
 
@@ -33,6 +42,10 @@ get_file cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoStreamWebm "get_file" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VideoStreamWebm.get_file
+
 {-# NOINLINE bindVideoStreamWebm_set_file #-}
 
 bindVideoStreamWebm_set_file :: MethodBind
@@ -54,3 +67,8 @@ set_file cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoStreamWebm "set_file" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VideoStreamWebm.set_file

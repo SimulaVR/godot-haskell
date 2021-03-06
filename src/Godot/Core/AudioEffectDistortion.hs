@@ -21,9 +21,14 @@ module Godot.Core.AudioEffectDistortion
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
 
 _MODE_CLIP :: Int
 _MODE_CLIP = 0
@@ -39,6 +44,30 @@ _MODE_WAVESHAPE = 4
 
 _MODE_ATAN :: Int
 _MODE_ATAN = 1
+
+instance NodeProperty AudioEffectDistortion "drive" Float 'False
+         where
+        nodeProperty = (get_drive, wrapDroppingSetter set_drive, Nothing)
+
+instance NodeProperty AudioEffectDistortion "keep_hf_hz" Float
+           'False
+         where
+        nodeProperty
+          = (get_keep_hf_hz, wrapDroppingSetter set_keep_hf_hz, Nothing)
+
+instance NodeProperty AudioEffectDistortion "mode" Int 'False where
+        nodeProperty = (get_mode, wrapDroppingSetter set_mode, Nothing)
+
+instance NodeProperty AudioEffectDistortion "post_gain" Float
+           'False
+         where
+        nodeProperty
+          = (get_post_gain, wrapDroppingSetter set_post_gain, Nothing)
+
+instance NodeProperty AudioEffectDistortion "pre_gain" Float 'False
+         where
+        nodeProperty
+          = (get_pre_gain, wrapDroppingSetter set_pre_gain, Nothing)
 
 {-# NOINLINE bindAudioEffectDistortion_get_drive #-}
 
@@ -64,6 +93,11 @@ get_drive cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDistortion "get_drive" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.get_drive
+
 {-# NOINLINE bindAudioEffectDistortion_get_keep_hf_hz #-}
 
 -- | High-pass filter, in Hz. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000.
@@ -87,6 +121,11 @@ get_keep_hf_hz cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDistortion "get_keep_hf_hz" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.get_keep_hf_hz
 
 {-# NOINLINE bindAudioEffectDistortion_get_mode #-}
 
@@ -112,6 +151,10 @@ get_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDistortion "get_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.get_mode
+
 {-# NOINLINE bindAudioEffectDistortion_get_post_gain #-}
 
 -- | Increases or decreases the volume after the effect. Value can range from -80 to 24.
@@ -136,6 +179,11 @@ get_post_gain cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDistortion "get_post_gain" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.get_post_gain
+
 {-# NOINLINE bindAudioEffectDistortion_get_pre_gain #-}
 
 -- | Increases or decreases the volume before the effect. Value can range from -60 to 60.
@@ -159,6 +207,11 @@ get_pre_gain cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDistortion "get_pre_gain" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.get_pre_gain
 
 {-# NOINLINE bindAudioEffectDistortion_set_drive #-}
 
@@ -185,6 +238,11 @@ set_drive cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDistortion "set_drive" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.set_drive
+
 {-# NOINLINE bindAudioEffectDistortion_set_keep_hf_hz #-}
 
 -- | High-pass filter, in Hz. Frequencies higher than this value will not be affected by the distortion. Value can range from 1 to 20000.
@@ -209,6 +267,11 @@ set_keep_hf_hz cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDistortion "set_keep_hf_hz" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.set_keep_hf_hz
 
 {-# NOINLINE bindAudioEffectDistortion_set_mode #-}
 
@@ -235,6 +298,10 @@ set_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDistortion "set_mode" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.set_mode
+
 {-# NOINLINE bindAudioEffectDistortion_set_post_gain #-}
 
 -- | Increases or decreases the volume after the effect. Value can range from -80 to 24.
@@ -260,6 +327,11 @@ set_post_gain cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectDistortion "set_post_gain" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.set_post_gain
+
 {-# NOINLINE bindAudioEffectDistortion_set_pre_gain #-}
 
 -- | Increases or decreases the volume before the effect. Value can range from -60 to 60.
@@ -284,3 +356,8 @@ set_pre_gain cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectDistortion "set_pre_gain" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectDistortion.set_pre_gain

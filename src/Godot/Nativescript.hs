@@ -10,9 +10,9 @@ module Godot.Nativescript
   , GFunc
   , GdnativeHandle
   , NativeScript(..)
-  , ClassMethod
-  , ClassProperty
-  , ClassSignal
+  , ClassMethod(..)
+  , ClassProperty(..)
+  , ClassSignal(..)
   , RPC(..)
   , Registerer(..)
   , PropertyAttributes(..)
@@ -23,6 +23,9 @@ module Godot.Nativescript
   , method0
   , method1
   , method2
+  , method3
+  , method4
+  , method5
   , nameOf
   , registerClass
   , registerProperty
@@ -30,6 +33,7 @@ module Godot.Nativescript
   , registerMethod
   , signal
   , tryCast
+  , tryCast'
   , tryObjectCast
   , asNativeScript
   , convertClassName
@@ -46,6 +50,9 @@ module Godot.Nativescript
   , await
   , WrapperStablePtr(..)
   , createMVarProperty
+  , guardError
+  , getError
+  , GodotError(..)
   )
 where
 
@@ -65,6 +72,7 @@ import           Control.Concurrent.MVar
 import           Foreign                           hiding (void,new)
 import           Foreign.C                         hiding (new)
 
+import           System.Environment
 import           System.IO.Unsafe
 
 import qualified Godot.Gdnative.Internal as GNI
@@ -79,6 +87,7 @@ import qualified Godot.Api                     as Api
 import qualified Data.Map.Strict as M
 import           Data.Coerce
 import qualified Godot.Core.NativeScript as NativeScript
+import           Godot.Core.GlobalConstants
 import           Godot.Core.ClassDB
 import           Godot.Core.Engine
 import           Godot.Core.Node
@@ -87,8 +96,117 @@ import           Godot.Core.Reference
 import           Data.IORef
 import           Foreign.StablePtr
 import           Control.Monad.Extra
+import           Control.Exception
+import           Data.Maybe
 
 type GdnativeHandle = Ptr ()
+
+data GodotError = GFailed -- ^ Generic error.
+                | GUnavailable -- ^ Unavailable error.
+                | GUnconfigured -- ^ Unconfigured error.
+                | GUnauthorized -- ^ Unauthorized error.
+                | GParameterRangeError -- ^ Parameter range error.
+                | GOutOfMemory -- ^ Out of memory (OOM) error.
+                | GFileNotFound -- ^ File: Not found error.
+                | GFileBadDrive -- ^ File: Bad drive error.
+                | GFileBadPath -- ^ File: Bad path error.
+                | GFileNoPermission -- ^ File: No permission error.
+                | GFileAlreadyInUse -- ^ File: Already in use error.
+                | GFileCantOpen -- ^ File: Can't open error.
+                | GFileCantWrite -- ^ File: Can't write error.
+                | GFileCantRead -- ^ File: Can't read error.
+                | GFileUnrecognized -- ^ File: Unrecognized error.
+                | GFileCorrupt -- ^ File: Corrupt error.
+                | GFileMissingDependencies -- ^ File: Missing dependencies error.
+                | GFileEof -- ^ File: End of file (EOF) error.
+                | GCantOpen -- ^ Can't open error.
+                | GCantCreate -- ^ Can't create error.
+                | GQueryFailed -- ^ Query failed error.
+                | GAlreadyInUse -- ^ Already in use error.
+                | GLocked -- ^ Locked error.
+                | GTimeout -- ^ Timeout error.
+                | GCantConnect -- ^ Can't connect error.
+                | GCantResolve -- ^ Can't resolve error.
+                | GConnectionError -- ^ Connection error.
+                | GCantAcquireResource -- ^ Can't acquire resource error.
+                | GCantFork -- ^ Can't fork process error.
+                | GInvalidData -- ^ Invalid data error.
+                | GInvalidParameter -- ^ Invalid parameter error.
+                | GAlreadyExists -- ^ Already exists error.
+                | GDoesNotExist -- ^ Does not exist error.
+                | GDatabaseCantRead -- ^ Database: Read error.
+                | GDatabaseCantWrite -- ^ Database: Write error.
+                | GCompilationFailed -- ^ Compilation failed error.
+                | GMethodNotFound -- ^ Method not found error.
+                | GLinkFailed -- ^ Linking failed error.
+                | GScriptFailed -- ^ Script failed error.
+                | GCyclicLink -- ^ Cycling link (import cycle) error.
+                | GInvalidDeclaration -- ^ Invalid declaration error.
+                | GDuplicateSymbol -- ^ Duplicate symbol error.
+                | GParseError -- ^ Parse error.
+                | GBusy -- ^ Busy error.
+                | GSkip -- ^ Skip error.
+                | GHelp -- ^ Help error.
+                | GBug -- ^ Bug error.
+                | GPrinterOnFire -- ^ Printer on fire error. (This is an easter egg, no engine methods return this error code.)
+                deriving (Show, Eq, Typeable)
+
+instance Exception GodotError
+
+getError :: Int -> Maybe GodotError
+getError e | e == _OK                             = Nothing
+           | e == _FAILED                         = Just GFailed                   
+           | e == _ERR_UNAVAILABLE                = Just GUnavailable              
+           | e == _ERR_UNCONFIGURED               = Just GUnconfigured             
+           | e == _ERR_UNAUTHORIZED               = Just GUnauthorized             
+           | e == _ERR_PARAMETER_RANGE_ERROR      = Just GParameterRangeError      
+           | e == _ERR_OUT_OF_MEMORY              = Just GOutOfMemory              
+           | e == _ERR_FILE_NOT_FOUND             = Just GFileNotFound             
+           | e == _ERR_FILE_BAD_DRIVE             = Just GFileBadDrive             
+           | e == _ERR_FILE_BAD_PATH              = Just GFileBadPath              
+           | e == _ERR_FILE_NO_PERMISSION         = Just GFileNoPermission         
+           | e == _ERR_FILE_ALREADY_IN_USE        = Just GFileAlreadyInUse         
+           | e == _ERR_FILE_CANT_OPEN             = Just GFileCantOpen             
+           | e == _ERR_FILE_CANT_WRITE            = Just GFileCantWrite            
+           | e == _ERR_FILE_CANT_READ             = Just GFileCantRead             
+           | e == _ERR_FILE_UNRECOGNIZED          = Just GFileUnrecognized         
+           | e == _ERR_FILE_CORRUPT               = Just GFileCorrupt              
+           | e == _ERR_FILE_MISSING_DEPENDENCIES  = Just GFileMissingDependencies  
+           | e == _ERR_FILE_EOF                   = Just GFileEof                  
+           | e == _ERR_CANT_OPEN                  = Just GCantOpen                 
+           | e == _ERR_CANT_CREATE                = Just GCantCreate               
+           | e == _ERR_QUERY_FAILED               = Just GQueryFailed              
+           | e == _ERR_ALREADY_IN_USE             = Just GAlreadyInUse             
+           | e == _ERR_LOCKED                     = Just GLocked                   
+           | e == _ERR_TIMEOUT                    = Just GTimeout                  
+           | e == _ERR_CANT_CONNECT               = Just GCantConnect              
+           | e == _ERR_CANT_RESOLVE               = Just GCantResolve              
+           | e == _ERR_CONNECTION_ERROR           = Just GConnectionError          
+           | e == _ERR_CANT_ACQUIRE_RESOURCE      = Just GCantAcquireResource      
+           | e == _ERR_CANT_FORK                  = Just GCantFork                 
+           | e == _ERR_INVALID_DATA               = Just GInvalidData              
+           | e == _ERR_INVALID_PARAMETER          = Just GInvalidParameter         
+           | e == _ERR_ALREADY_EXISTS             = Just GAlreadyExists            
+           | e == _ERR_DOES_NOT_EXIST             = Just GDoesNotExist             
+           | e == _ERR_DATABASE_CANT_READ         = Just GDatabaseCantRead         
+           | e == _ERR_DATABASE_CANT_WRITE        = Just GDatabaseCantWrite        
+           | e == _ERR_COMPILATION_FAILED         = Just GCompilationFailed        
+           | e == _ERR_METHOD_NOT_FOUND           = Just GMethodNotFound           
+           | e == _ERR_LINK_FAILED                = Just GLinkFailed               
+           | e == _ERR_SCRIPT_FAILED              = Just GScriptFailed             
+           | e == _ERR_CYCLIC_LINK                = Just GCyclicLink               
+           | e == _ERR_INVALID_DECLARATION        = Just GInvalidDeclaration       
+           | e == _ERR_DUPLICATE_SYMBOL           = Just GDuplicateSymbol          
+           | e == _ERR_PARSE_ERROR                = Just GParseError               
+           | e == _ERR_BUSY                       = Just GBusy                     
+           | e == _ERR_SKIP                       = Just GSkip                     
+           | e == _ERR_HELP                       = Just GHelp                     
+           | e == _ERR_BUG                        = Just GBug                      
+           | e == _ERR_PRINTER_ON_FIRE            = Just GPrinterOnFire            
+           | otherwise                            = error $ "Unknown Godot error; this is a bug in the Haskell bindings: " ++ show e
+
+guardError :: Int -> ()
+guardError = maybe () throw . getError
 
 {-| 'NativeScript' defines a new Godot class.
 First you must create an instance of 'HasBaseClass' for inheritance and
@@ -142,12 +260,6 @@ class (HasBaseClass cls, Typeable cls, Typeable (BaseClass cls), Object :< cls)
   asObj = upcast
 
 type ClassSignal = (Text, [SignalArgument])
-data ClassProperty cls = ClassProperty
-  { propertyName :: Text
-  , propertyAttrs :: PropertyAttributes
-  , propertySetter :: Object -> cls -> GodotVariant -> IO ()
-  , propertyGetter :: Object -> cls -> IO GodotVariant
-  }
 
 type ClassName a = Text
 nameOf :: forall a . Typeable a => ClassName a
@@ -225,17 +337,20 @@ registerClass (RegClass desc constr) = do
 
   regMtd mtd@ClassMethod {..} = do
     registerMethod (RegMethod desc mtd :: Registerer 'GMethod a)
-    putStrLn $ T.unpack $ T.unwords
+    d <- isJust <$> lookupEnv "HS_GODOT_DEBUG"
+    when d $ putStrLn $ T.unpack $ T.unwords
       ["Registering method", methodName, "to class", clsName]
 
   regSignal sgn@(signalName, _) = do
     registerSignal (RegSignal desc sgn :: Registerer 'GSignal a)
-    putStrLn $ T.unpack $ T.unwords
+    d <- isJust <$> lookupEnv "HS_GODOT_DEBUG"
+    when d $ putStrLn $ T.unpack $ T.unwords
       ["Registering signal", signalName, "to class", clsName]
 
   regProperty prp = do
     registerProperty (RegProperty desc prp :: Registerer 'GProperty a)
-    putStrLn $ T.unpack $ T.unwords
+    d <- isJust <$> lookupEnv "HS_GODOT_DEBUG"
+    when d $ putStrLn $ T.unpack $ T.unwords
       ["Registering property", propertyName prp, "to class", clsName]
 
   regClass pHandle base create destroy = do
@@ -258,7 +373,8 @@ registerClass (RegClass desc constr) = do
     let tyFingerprint = typeRepFingerprint $ typeRep (Proxy @a)
     tyPtr <- F.new tyFingerprint
 
-    putStrLn $ T.unpack $ T.unwords ["Registering class", clsName]
+    d <- isJust <$> lookupEnv "HS_GODOT_DEBUG"
+    when d $ putStrLn $ T.unpack $ T.unwords ["Registering class", clsName]
     withCString (T.unpack clsName)
       $ \namePtr -> withCString (T.unpack base) $ \basePtr -> do
           godot_nativescript_register_class pHandle
@@ -273,6 +389,9 @@ registerClass (RegClass desc constr) = do
 tryCast
   :: forall b a. (Object :< a, a :< b, Typeable b, AsVariant b) => a -> IO (Maybe b)
 tryCast = tryObjectCast . upcast
+
+tryCast' :: forall out x. (Typeable out, AsVariant out, Object :< x, x :< out) => x -> IO out
+tryCast' o = fromJust <$> tryCast o
 
 convertClassName name =
   case name of
@@ -318,7 +437,9 @@ getSingleton = do
     Just o -> tryCast o
     Nothing -> do
       ge <- getEngine
-      o <- get_singleton ge =<< toLowLevel (convertClassName name)
+      -- FIXME ANDREI I don't understand what convertClassName is doing here? It seems wrong.
+      -- o <- get_singleton ge =<< toLowLevel (convertClassName name)
+      o <- get_singleton ge =<< toLowLevel name
       modifyMVar_ singletonTable (\m -> pure (M.insert name o m))
       tryCast o
 
@@ -411,6 +532,41 @@ method2 name fn = func NoRPC name (\s [o1,o2] -> do
                                       a2 <- fromGodotVariant o2
                                       fn s a1 a2)
 
+-- | Quick shortcut to make a new local method that takes 3 arguments, 'Variant's
+-- are unwrapped into their types before being passed in.
+method3 :: (NativeScript cls, AsVariant a, AsVariant o1, Typeable o1, AsVariant o2, Typeable o2, AsVariant o3, Typeable o3)
+        => Text -> (cls -> o1 -> o2 -> o3 -> IO a) -> ClassMethod cls
+method3 name fn = func NoRPC name (\s [o1,o2,o3] -> do
+                                      a1 <- fromGodotVariant o1
+                                      a2 <- fromGodotVariant o2
+                                      a3 <- fromGodotVariant o3
+                                      fn s a1 a2 a3)
+
+-- | Quick shortcut to make a new local method that takes 4 arguments, 'Variant's
+-- are unwrapped into their types before being passed in.
+method4 :: (NativeScript cls, AsVariant a, AsVariant o1, Typeable o1, AsVariant o2, Typeable o2
+          , AsVariant o3, Typeable o3, AsVariant o4, Typeable o4)
+        => Text -> (cls -> o1 -> o2 -> o3 -> o4 -> IO a) -> ClassMethod cls
+method4 name fn = func NoRPC name (\s [o1,o2,o3,o4] -> do
+                                      a1 <- fromGodotVariant o1
+                                      a2 <- fromGodotVariant o2
+                                      a3 <- fromGodotVariant o3
+                                      a4 <- fromGodotVariant o4
+                                      fn s a1 a2 a3 a4)
+
+-- | Quick shortcut to make a new local method that takes 5 arguments, 'Variant's
+-- are unwrapped into their types before being passed in.
+method5 :: (NativeScript cls, AsVariant a, AsVariant o1, Typeable o1, AsVariant o2, Typeable o2
+          , AsVariant o3, Typeable o3, AsVariant o4, Typeable o4, AsVariant o5, Typeable o5)
+        => Text -> (cls -> o1 -> o2 -> o3 -> o4 -> o5 -> IO a) -> ClassMethod cls
+method5 name fn = func NoRPC name (\s [o1,o2,o3,o4,o5] -> do
+                                      a1 <- fromGodotVariant o1
+                                      a2 <- fromGodotVariant o2
+                                      a3 <- fromGodotVariant o3
+                                      a4 <- fromGodotVariant o4
+                                      a5 <- fromGodotVariant o5
+                                      fn s a1 a2 a3 a4 a5)
+
 
 registerMethod :: forall a . NativeScript a => Registerer 'GMethod a -> IO ()
 registerMethod (RegMethod desc ClassMethod {..}) = do
@@ -444,15 +600,6 @@ registerMethod (RegMethod desc ClassMethod {..}) = do
     Sync   -> MethodRpcModeSync
     Master -> MethodRpcModeMaster
     Slave  -> MethodRpcModeSlave
-
-data PropertyAttributes = PropertyAttributes
-  { propertySetType :: !MethodRpcMode
-  , propertyType :: !VariantType
-  , propertyHint :: !PropertyHint
-  , propertyHintString :: !Text
-  , propertyUsage :: !PropertyUsageFlags
-  , propertyDefaultValue :: !(Variant 'GodotTy)
-  }
 
 asPropertyAttributes :: PropertyAttributes -> IO GNI.PropertyAttributes
 asPropertyAttributes PropertyAttributes {..} = do
@@ -568,7 +715,9 @@ asSignalArgument SignalArgument {..} = do
 
 
 -- | Example usage:
+-- @
 -- signal "on_pulse" [("source", VariantTypeVector3), ("affected", VariantTypeObject)]
+-- @
 signal :: Text -> [(Text, VariantType)] -> (Text, [SignalArgument])
 signal sigName sigArgs = (sigName, uncurry toSigArg <$> sigArgs)
  where
@@ -615,14 +764,13 @@ registerSignal (RegSignal desc (signalName, signalArgs)) = do
 foreign import ccall "dynamic"
   call_godot_class_constructor_ :: FunPtr (IO (Object)) -> IO (Object)
 
+-- | Instantiate an object
 new :: forall o. (Object :< o, Typeable o, AsVariant o) => IO (Maybe o)
 new = do
-  con <- Foreign.withCString (T.unpack $ nameOf @o) (\str -> godot_get_class_constructor str)
+  con <- Foreign.withCString (T.unpack $ nameOf @o) godot_get_class_constructor
   if con == nullFunPtr then
     pure Nothing else
-    do
-      o <- call_godot_class_constructor_ con
-      tryCast o
+    tryCast =<< call_godot_class_constructor_ con
 
 newNativeScript :: forall a. NativeScript a => IO (Maybe a)
 newNativeScript = do
@@ -672,7 +820,7 @@ defaultExports desc = do
 -- For example, to get a callback when a timer fires you could do something like
 -- @ await self timer "timeout" (\self -> print "Timer fired!") @
 await :: forall cls source target a. (NativeScript cls, Object :< cls, Object :< target, AsVariant a)
-      => cls -> target -> Text -> (cls -> IO a) -> IO Int
+      => cls -> target -> Text -> (cls -> IO a) -> IO ()
 await self target signal fn = do
   desc <- readMVar scriptDesc
   (Just w) <- newNativeScript @WrapperStablePtr
@@ -691,12 +839,12 @@ await self target signal fn = do
   fnptr <- newStablePtr fn
   putMVar (_wrapperStablePtr w) (castPtrToStablePtr (castStablePtrToPtr fnptr))
   fnBind <- toGodotVariant (upcast @Object w)
-  join $ connect target
+  guardError <$> (join $ connect target
     <$> toLowLevel signal
     <*> pure (upcast self)
     <*> toLowLevel "__script_callback"
-    <*> toLowLevel (V.singleton fnBind)
-    <*> pure _CONNECT_ONESHOT
+    <*> (Just <$> toLowLevel (V.singleton fnBind))
+    <*> pure (Just _CONNECT_ONESHOT))
 
 -- | Sometimes we really have to pass in a Haskell pointer to Godot,
 -- particularly for callbacks.

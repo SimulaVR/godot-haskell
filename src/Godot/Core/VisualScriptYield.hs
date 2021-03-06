@@ -13,9 +13,14 @@ module Godot.Core.VisualScriptYield
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _YIELD_FRAME :: Int
 _YIELD_FRAME = 1
@@ -25,6 +30,15 @@ _YIELD_PHYSICS_FRAME = 2
 
 _YIELD_WAIT :: Int
 _YIELD_WAIT = 3
+
+instance NodeProperty VisualScriptYield "mode" Int 'False where
+        nodeProperty
+          = (get_yield_mode, wrapDroppingSetter set_yield_mode, Nothing)
+
+instance NodeProperty VisualScriptYield "wait_time" Float 'False
+         where
+        nodeProperty
+          = (get_wait_time, wrapDroppingSetter set_wait_time, Nothing)
 
 {-# NOINLINE bindVisualScriptYield_get_wait_time #-}
 
@@ -48,6 +62,11 @@ get_wait_time cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptYield "get_wait_time" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.VisualScriptYield.get_wait_time
+
 {-# NOINLINE bindVisualScriptYield_get_yield_mode #-}
 
 bindVisualScriptYield_get_yield_mode :: MethodBind
@@ -69,6 +88,10 @@ get_yield_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptYield "get_yield_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptYield.get_yield_mode
 
 {-# NOINLINE bindVisualScriptYield_set_wait_time #-}
 
@@ -92,6 +115,11 @@ set_wait_time cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptYield "set_wait_time" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptYield.set_wait_time
+
 {-# NOINLINE bindVisualScriptYield_set_yield_mode #-}
 
 bindVisualScriptYield_set_yield_mode :: MethodBind
@@ -113,3 +141,8 @@ set_yield_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptYield "set_yield_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptYield.set_yield_mode

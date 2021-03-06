@@ -13,9 +13,17 @@ module Godot.Core.BitMap
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty BitMap "data" Dictionary 'False where
+        nodeProperty = (_get_data, wrapDroppingSetter _set_data, Nothing)
 
 {-# NOINLINE bindBitMap__get_data #-}
 
@@ -34,6 +42,9 @@ _get_data cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindBitMap__get_data (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitMap "_get_data" '[] (IO Dictionary) where
+        nodeMethod = Godot.Core.BitMap._get_data
 
 {-# NOINLINE bindBitMap__set_data #-}
 
@@ -54,9 +65,12 @@ _set_data cls arg1
          godot_method_bind_call bindBitMap__set_data (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitMap "_set_data" '[Dictionary] (IO ()) where
+        nodeMethod = Godot.Core.BitMap._set_data
+
 {-# NOINLINE bindBitMap_create #-}
 
--- | Creates a bitmap with the specified size, filled with [code]false[/code].
+-- | Creates a bitmap with the specified size, filled with @false@.
 bindBitMap_create :: MethodBind
 bindBitMap_create
   = unsafePerformIO $
@@ -66,7 +80,7 @@ bindBitMap_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a bitmap with the specified size, filled with [code]false[/code].
+-- | Creates a bitmap with the specified size, filled with @false@.
 create :: (BitMap :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 create cls arg1
   = withVariantArray [toVariant arg1]
@@ -74,9 +88,12 @@ create cls arg1
          godot_method_bind_call bindBitMap_create (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitMap "create" '[Vector2] (IO ()) where
+        nodeMethod = Godot.Core.BitMap.create
+
 {-# NOINLINE bindBitMap_create_from_image_alpha #-}
 
--- | Creates a bitmap that matches the given image dimensions, every element of the bitmap is set to [code]false[/code] if the alpha value of the image at that position is equal to [code]threshold[/code] or less, and [code]true[/code] in other case.
+-- | Creates a bitmap that matches the given image dimensions, every element of the bitmap is set to @false@ if the alpha value of the image at that position is equal to @threshold@ or less, and @true@ in other case.
 bindBitMap_create_from_image_alpha :: MethodBind
 bindBitMap_create_from_image_alpha
   = unsafePerformIO $
@@ -86,17 +103,25 @@ bindBitMap_create_from_image_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a bitmap that matches the given image dimensions, every element of the bitmap is set to [code]false[/code] if the alpha value of the image at that position is equal to [code]threshold[/code] or less, and [code]true[/code] in other case.
+-- | Creates a bitmap that matches the given image dimensions, every element of the bitmap is set to @false@ if the alpha value of the image at that position is equal to @threshold@ or less, and @true@ in other case.
 create_from_image_alpha ::
-                          (BitMap :< cls, Object :< cls) => cls -> Image -> Float -> IO ()
+                          (BitMap :< cls, Object :< cls) =>
+                          cls -> Image -> Maybe Float -> IO ()
 create_from_image_alpha cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantReal (0.1)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindBitMap_create_from_image_alpha
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitMap "create_from_image_alpha"
+           '[Image, Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BitMap.create_from_image_alpha
 
 {-# NOINLINE bindBitMap_get_bit #-}
 
@@ -119,6 +144,9 @@ get_bit cls arg1
          godot_method_bind_call bindBitMap_get_bit (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitMap "get_bit" '[Vector2] (IO Bool) where
+        nodeMethod = Godot.Core.BitMap.get_bit
+
 {-# NOINLINE bindBitMap_get_size #-}
 
 -- | Returns bitmap's dimensions.
@@ -139,9 +167,12 @@ get_size cls
          godot_method_bind_call bindBitMap_get_size (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitMap "get_size" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.BitMap.get_size
+
 {-# NOINLINE bindBitMap_get_true_bit_count #-}
 
--- | Returns the amount of bitmap elements that are set to [code]true[/code].
+-- | Returns the amount of bitmap elements that are set to @true@.
 bindBitMap_get_true_bit_count :: MethodBind
 bindBitMap_get_true_bit_count
   = unsafePerformIO $
@@ -151,7 +182,7 @@ bindBitMap_get_true_bit_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the amount of bitmap elements that are set to [code]true[/code].
+-- | Returns the amount of bitmap elements that are set to @true@.
 get_true_bit_count ::
                      (BitMap :< cls, Object :< cls) => cls -> IO Int
 get_true_bit_count cls
@@ -161,6 +192,9 @@ get_true_bit_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitMap "get_true_bit_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.BitMap.get_true_bit_count
 
 {-# NOINLINE bindBitMap_grow_mask #-}
 
@@ -183,6 +217,9 @@ grow_mask cls arg1 arg2
          godot_method_bind_call bindBitMap_grow_mask (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitMap "grow_mask" '[Int, Rect2] (IO ()) where
+        nodeMethod = Godot.Core.BitMap.grow_mask
+
 {-# NOINLINE bindBitMap_opaque_to_polygons #-}
 
 bindBitMap_opaque_to_polygons :: MethodBind
@@ -195,14 +232,22 @@ bindBitMap_opaque_to_polygons
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 opaque_to_polygons ::
-                     (BitMap :< cls, Object :< cls) => cls -> Rect2 -> Float -> IO Array
+                     (BitMap :< cls, Object :< cls) =>
+                     cls -> Rect2 -> Maybe Float -> IO Array
 opaque_to_polygons cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantReal (2)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindBitMap_opaque_to_polygons (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitMap "opaque_to_polygons"
+           '[Rect2, Maybe Float]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.BitMap.opaque_to_polygons
 
 {-# NOINLINE bindBitMap_set_bit #-}
 
@@ -225,6 +270,9 @@ set_bit cls arg1 arg2
          godot_method_bind_call bindBitMap_set_bit (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitMap "set_bit" '[Vector2, Bool] (IO ()) where
+        nodeMethod = Godot.Core.BitMap.set_bit
+
 {-# NOINLINE bindBitMap_set_bit_rect #-}
 
 -- | Sets a rectangular portion of the bitmap to the specified value.
@@ -246,3 +294,7 @@ set_bit_rect cls arg1 arg2
          godot_method_bind_call bindBitMap_set_bit_rect (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitMap "set_bit_rect" '[Rect2, Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.BitMap.set_bit_rect

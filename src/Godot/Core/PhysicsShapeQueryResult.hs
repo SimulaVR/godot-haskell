@@ -11,9 +11,14 @@ module Godot.Core.PhysicsShapeQueryResult
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_count #-}
 
@@ -39,9 +44,14 @@ get_result_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsShapeQueryResult "get_result_count" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.PhysicsShapeQueryResult.get_result_count
+
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_object #-}
 
--- | Returns the [Object] that intersected with the shape at index [code]idx[/code].
+-- | Returns the @Object@ that intersected with the shape at index @idx@.
 bindPhysicsShapeQueryResult_get_result_object :: MethodBind
 bindPhysicsShapeQueryResult_get_result_object
   = unsafePerformIO $
@@ -51,7 +61,7 @@ bindPhysicsShapeQueryResult_get_result_object
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Object] that intersected with the shape at index [code]idx[/code].
+-- | Returns the @Object@ that intersected with the shape at index @idx@.
 get_result_object ::
                     (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                     cls -> Int -> IO Object
@@ -65,9 +75,15 @@ get_result_object cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsShapeQueryResult "get_result_object"
+           '[Int]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.PhysicsShapeQueryResult.get_result_object
+
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_object_id #-}
 
--- | Returns the instance ID of the [Object] that intersected with the shape at index [code]idx[/code].
+-- | Returns the instance ID of the @Object@ that intersected with the shape at index @idx@.
 bindPhysicsShapeQueryResult_get_result_object_id :: MethodBind
 bindPhysicsShapeQueryResult_get_result_object_id
   = unsafePerformIO $
@@ -77,7 +93,7 @@ bindPhysicsShapeQueryResult_get_result_object_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the instance ID of the [Object] that intersected with the shape at index [code]idx[/code].
+-- | Returns the instance ID of the @Object@ that intersected with the shape at index @idx@.
 get_result_object_id ::
                        (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                        cls -> Int -> IO Int
@@ -91,10 +107,17 @@ get_result_object_id cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsShapeQueryResult "get_result_object_id"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsShapeQueryResult.get_result_object_id
+
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_object_shape
              #-}
 
--- | Returns the child index of the object's [Shape] that intersected with the shape at index [code]idx[/code].
+-- | Returns the child index of the object's @Shape@ that intersected with the shape at index @idx@.
 bindPhysicsShapeQueryResult_get_result_object_shape :: MethodBind
 bindPhysicsShapeQueryResult_get_result_object_shape
   = unsafePerformIO $
@@ -104,7 +127,7 @@ bindPhysicsShapeQueryResult_get_result_object_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the child index of the object's [Shape] that intersected with the shape at index [code]idx[/code].
+-- | Returns the child index of the object's @Shape@ that intersected with the shape at index @idx@.
 get_result_object_shape ::
                           (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                           cls -> Int -> IO Int
@@ -118,9 +141,17 @@ get_result_object_shape cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicsShapeQueryResult
+           "get_result_object_shape"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.PhysicsShapeQueryResult.get_result_object_shape
+
 {-# NOINLINE bindPhysicsShapeQueryResult_get_result_rid #-}
 
--- | Returns the [RID] of the object that intersected with the shape at index [code]idx[/code].
+-- | Returns the @RID@ of the object that intersected with the shape at index @idx@.
 bindPhysicsShapeQueryResult_get_result_rid :: MethodBind
 bindPhysicsShapeQueryResult_get_result_rid
   = unsafePerformIO $
@@ -130,7 +161,7 @@ bindPhysicsShapeQueryResult_get_result_rid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [RID] of the object that intersected with the shape at index [code]idx[/code].
+-- | Returns the @RID@ of the object that intersected with the shape at index @idx@.
 get_result_rid ::
                  (PhysicsShapeQueryResult :< cls, Object :< cls) =>
                  cls -> Int -> IO Rid
@@ -142,3 +173,8 @@ get_result_rid cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicsShapeQueryResult "get_result_rid" '[Int]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.PhysicsShapeQueryResult.get_result_rid

@@ -13,15 +13,17 @@ import Data.Colour.SRGB
 import Data.Function ((&))
 
 import Data.Typeable
+import Data.Coerce
 
 import Foreign
 import Foreign.C
 
 import Linear
 import qualified Data.Vector as V
+import qualified Data.Map as M
 
-import Godot.Gdnative.Internal.Api as I hiding (Rect2,Basis,Transform,Color) 
-import Godot.Gdnative.Internal.Gdnative as I hiding (Rect2,Basis,Transform,Color) 
+import Godot.Gdnative.Internal.Api as I hiding (Rect2,Basis,Transform,Transform2d,Color) 
+import Godot.Gdnative.Internal.Gdnative as I hiding (Rect2,Basis,Transform,Transform2d,Color) 
 import qualified Godot.Gdnative.Internal.Api as G
 import qualified Godot.Gdnative.Internal.Gdnative as G
 import Godot.Gdnative.Internal.TH
@@ -40,14 +42,14 @@ class GodotFFI low high | low -> high where
   fromLowLevel :: low -> IO high
   toLowLevel :: high -> IO low
 
-type instance TypeOf 'HaskellTy Array = V.Vector GodotVariant
-instance GodotFFI Array (V.Vector GodotVariant) where
+type instance TypeOf 'HaskellTy G.Array = V.Vector GodotVariant
+instance GodotFFI G.Array (V.Vector GodotVariant) where
   fromLowLevel arr = do
     len <- fromIntegral <$> godot_array_size arr
-    V.generateM len (\i -> godot_array_get arr (fromIntegral i))
+    V.generateM len (godot_array_get arr . fromIntegral)
   toLowLevel vec = do
     arr <- godot_array_new
-    V.mapM_ (\e -> godot_array_append arr e) vec
+    V.mapM_ (godot_array_append arr) vec
     pure arr
 
 type instance TypeOf 'HaskellTy GodotString = Text
@@ -137,6 +139,19 @@ instance GodotFFI G.Transform Transform where
                                   orig'  <- toLowLevel orig
                                   godot_transform_new basis' orig'
 
+type Basis2d = M22 Float
+data Transform2d = TF2d { _tf2dX :: V2 Float, _tf2dY :: V2 Float, _tf2dOrigin :: V2 Float }
+type instance TypeOf 'HaskellTy G.Transform2d = Transform2d
+instance GodotFFI G.Transform2d Transform2d where
+  fromLowLevel tf = do
+    x <- godot_transform2d_xform_vector2 tf =<< toLowLevel (V2 1 0)
+    y <- godot_transform2d_xform_vector2 tf =<< toLowLevel (V2 0 1)
+    TF2d <$> fromLowLevel x <*> fromLowLevel y <*> (fromLowLevel =<< godot_transform2d_get_origin tf)
+  toLowLevel (TF2d x y o) = do x' <- toLowLevel x
+                               y'  <- toLowLevel y
+                               o'  <- toLowLevel o
+                               godot_transform2d_new_axis_origin x' o' y'
+
 -- This should perhaps be better modeled - FilePath?
 type instance TypeOf 'HaskellTy G.NodePath = Text
 instance GodotFFI G.NodePath Text where
@@ -159,6 +174,84 @@ instance GodotFFI G.Color (AlphaColour Double) where
                           (realToFrac b)
                           (realToFrac $ alphaChannel rgba)
 
+type instance TypeOf 'HaskellTy G.PoolStringArray = V.Vector Text
+instance GodotFFI G.PoolStringArray (V.Vector Text) where
+  fromLowLevel a = do
+    sz <- godot_pool_string_array_size a
+    V.generateM (fromIntegral sz) (\x -> fromLowLevel =<< godot_pool_string_array_get a (fromIntegral x))
+  toLowLevel v = do
+    p <- godot_pool_string_array_new
+    V.mapM_ (\e -> do
+               s <- toLowLevel e
+               godot_pool_string_array_append p s) v
+    pure p
+
+type instance TypeOf 'HaskellTy G.PoolVector2Array = V.Vector (V2 Float)
+instance GodotFFI G.PoolVector2Array (V.Vector (V2 Float)) where
+  fromLowLevel a = do
+    sz <- godot_pool_vector2_array_size a
+    V.generateM (fromIntegral sz) (\x -> fromLowLevel =<< godot_pool_vector2_array_get a (fromIntegral x))
+  toLowLevel v = do
+    p <- godot_pool_vector2_array_new
+    V.mapM_ (\e -> do
+               s <- toLowLevel e
+               godot_pool_vector2_array_append p s) v
+    pure p
+
+type instance TypeOf 'HaskellTy G.PoolVector3Array = V.Vector (V3 Float)
+instance GodotFFI G.PoolVector3Array (V.Vector (V3 Float)) where
+  fromLowLevel a = do
+    sz <- godot_pool_vector3_array_size a
+    V.generateM (fromIntegral sz) (\x -> fromLowLevel =<< godot_pool_vector3_array_get a (fromIntegral x))
+  toLowLevel v = do
+    p <- godot_pool_vector3_array_new
+    V.mapM_ (\e -> do
+               s <- toLowLevel e
+               godot_pool_vector3_array_append p s) v
+    pure p
+
+type instance TypeOf 'HaskellTy G.PoolIntArray = V.Vector Int
+instance GodotFFI G.PoolIntArray (V.Vector Int) where
+  fromLowLevel a = do
+    sz <- godot_pool_int_array_size a
+    V.generateM (fromIntegral sz) (\x -> fromIntegral <$> godot_pool_int_array_get a (fromIntegral x))
+  toLowLevel v = do
+    p <- godot_pool_int_array_new
+    V.mapM_ (godot_pool_int_array_append p . fromIntegral) v
+    pure p
+
+type instance TypeOf 'HaskellTy G.PoolRealArray = V.Vector Float
+instance GodotFFI G.PoolRealArray (V.Vector Float) where
+  fromLowLevel a = do
+    sz <- godot_pool_real_array_size a
+    V.generateM (fromIntegral sz) (\x -> coerce <$> godot_pool_real_array_get a (fromIntegral x))
+  toLowLevel v = do
+    p <- godot_pool_real_array_new
+    V.mapM_ (godot_pool_real_array_append p . coerce) v
+    pure p
+
+type instance TypeOf 'HaskellTy G.PoolColorArray = V.Vector (AlphaColour Double)
+instance GodotFFI G.PoolColorArray (V.Vector (AlphaColour Double)) where
+  fromLowLevel a = do
+    sz <- godot_pool_color_array_size a
+    V.generateM (fromIntegral sz) (\x -> fromLowLevel =<< godot_pool_color_array_get a (fromIntegral x))
+  toLowLevel v = do
+    p <- godot_pool_color_array_new
+    V.mapM_ (\e -> do
+               s <- toLowLevel e
+               godot_pool_color_array_append p s) v
+    pure p
+
+type instance TypeOf 'HaskellTy G.Dictionary = V.Vector (GodotVariant, GodotVariant)
+instance GodotFFI G.Dictionary (V.Vector (GodotVariant, GodotVariant)) where
+  fromLowLevel a = do
+    k <- fromLowLevel =<< godot_dictionary_keys a
+    v <- fromLowLevel =<< godot_dictionary_values a
+    pure $ V.zipWith (,) k v
+  toLowLevel v = do
+    d <- godot_dictionary_new
+    V.mapM_ (\(k,v) -> godot_dictionary_set d k v) v
+    pure d
 
 -- Variants
 
@@ -194,9 +287,9 @@ data Variant (ty :: LibType)
 instance GodotFFI GodotVariant (Variant 'GodotTy) where
   fromLowLevel var = godot_variant_get_type var >>= \case
       VariantTypeNil -> return VariantNil
-      VariantTypeBool -> (VariantBool . (/= 0)) <$> godot_variant_as_bool var
-      VariantTypeInt -> (VariantInt . fromIntegral) <$> godot_variant_as_int var
-      VariantTypeReal -> (VariantReal . realToFrac) <$> godot_variant_as_real var
+      VariantTypeBool -> VariantBool . (/= 0) <$> godot_variant_as_bool var
+      VariantTypeInt -> VariantInt . fromIntegral <$> godot_variant_as_int var
+      VariantTypeReal -> VariantReal . realToFrac <$> godot_variant_as_real var
       VariantTypeString -> VariantString <$> godot_variant_as_string var
       VariantTypeVector2 -> VariantVector2 <$> godot_variant_as_vector2 var
       VariantTypeRect2 -> VariantRect2 <$> godot_variant_as_rect2 var
@@ -261,6 +354,10 @@ withVariantArray vars mtd =  allocaArray (length vars) $
       godot_variant_destroy vt
       return res
     withVars [] n arrPtr mtd = mtd (arrPtr, fromIntegral n)
+
+defaultedVariant :: (GodotFFI t high, AsVariant a) => (t -> Variant 'GodotTy) -> high -> Maybe a -> Variant 'GodotTy
+defaultedVariant ty o = maybe (ty $ unsafePerformIO $ toLowLevel o) toVariant
+{-# NOINLINE defaultedVariant #-}
 
 throwIfErr :: VariantCallError -> IO ()
 throwIfErr err = case variantCallErrorError err of

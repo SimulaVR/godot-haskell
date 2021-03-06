@@ -17,9 +17,45 @@ module Godot.Core.StaticBody2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PhysicsBody2D()
+
+instance NodeProperty StaticBody2D "bounce" Float 'False where
+        nodeProperty = (get_bounce, wrapDroppingSetter set_bounce, Nothing)
+
+instance NodeProperty StaticBody2D "constant_angular_velocity"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_constant_angular_velocity,
+             wrapDroppingSetter set_constant_angular_velocity, Nothing)
+
+instance NodeProperty StaticBody2D "constant_linear_velocity"
+           Vector2
+           'False
+         where
+        nodeProperty
+          = (get_constant_linear_velocity,
+             wrapDroppingSetter set_constant_linear_velocity, Nothing)
+
+instance NodeProperty StaticBody2D "friction" Float 'False where
+        nodeProperty
+          = (get_friction, wrapDroppingSetter set_friction, Nothing)
+
+instance NodeProperty StaticBody2D "physics_material_override"
+           PhysicsMaterial
+           'False
+         where
+        nodeProperty
+          = (get_physics_material_override,
+             wrapDroppingSetter set_physics_material_override, Nothing)
 
 {-# NOINLINE bindStaticBody2D__reload_physics_characteristics #-}
 
@@ -44,10 +80,17 @@ _reload_physics_characteristics cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StaticBody2D "_reload_physics_characteristics"
+           '[]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.StaticBody2D._reload_physics_characteristics
+
 {-# NOINLINE bindStaticBody2D_get_bounce #-}
 
--- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
---   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
+-- | The body's bounciness. Values range from @0@ (no bounce) to @1@ (full bounciness).
+--   			Deprecated, use @PhysicsMaterial.bounce@ instead via @physics_material_override@.
 bindStaticBody2D_get_bounce :: MethodBind
 bindStaticBody2D_get_bounce
   = unsafePerformIO $
@@ -57,8 +100,8 @@ bindStaticBody2D_get_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
---   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
+-- | The body's bounciness. Values range from @0@ (no bounce) to @1@ (full bounciness).
+--   			Deprecated, use @PhysicsMaterial.bounce@ instead via @physics_material_override@.
 get_bounce ::
              (StaticBody2D :< cls, Object :< cls) => cls -> IO Float
 get_bounce cls
@@ -68,6 +111,9 @@ get_bounce cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StaticBody2D "get_bounce" '[] (IO Float) where
+        nodeMethod = Godot.Core.StaticBody2D.get_bounce
 
 {-# NOINLINE bindStaticBody2D_get_constant_angular_velocity #-}
 
@@ -94,6 +140,12 @@ get_constant_angular_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StaticBody2D "get_constant_angular_velocity"
+           '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.StaticBody2D.get_constant_angular_velocity
+
 {-# NOINLINE bindStaticBody2D_get_constant_linear_velocity #-}
 
 -- | The body's constant linear velocity. This does not move the body, but affects colliding bodies, as if it were moving.
@@ -119,10 +171,15 @@ get_constant_linear_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StaticBody2D "get_constant_linear_velocity" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.StaticBody2D.get_constant_linear_velocity
+
 {-# NOINLINE bindStaticBody2D_get_friction #-}
 
--- | The body's friction. Values range from [code]0[/code] (no friction) to [code]1[/code] (full friction).
---   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
+-- | The body's friction. Values range from @0@ (no friction) to @1@ (full friction).
+--   			Deprecated, use @PhysicsMaterial.friction@ instead via @physics_material_override@.
 bindStaticBody2D_get_friction :: MethodBind
 bindStaticBody2D_get_friction
   = unsafePerformIO $
@@ -132,8 +189,8 @@ bindStaticBody2D_get_friction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's friction. Values range from [code]0[/code] (no friction) to [code]1[/code] (full friction).
---   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
+-- | The body's friction. Values range from @0@ (no friction) to @1@ (full friction).
+--   			Deprecated, use @PhysicsMaterial.friction@ instead via @physics_material_override@.
 get_friction ::
                (StaticBody2D :< cls, Object :< cls) => cls -> IO Float
 get_friction cls
@@ -143,6 +200,10 @@ get_friction cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StaticBody2D "get_friction" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.StaticBody2D.get_friction
 
 {-# NOINLINE bindStaticBody2D_get_physics_material_override #-}
 
@@ -171,10 +232,16 @@ get_physics_material_override cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StaticBody2D "get_physics_material_override"
+           '[]
+           (IO PhysicsMaterial)
+         where
+        nodeMethod = Godot.Core.StaticBody2D.get_physics_material_override
+
 {-# NOINLINE bindStaticBody2D_set_bounce #-}
 
--- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
---   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
+-- | The body's bounciness. Values range from @0@ (no bounce) to @1@ (full bounciness).
+--   			Deprecated, use @PhysicsMaterial.bounce@ instead via @physics_material_override@.
 bindStaticBody2D_set_bounce :: MethodBind
 bindStaticBody2D_set_bounce
   = unsafePerformIO $
@@ -184,8 +251,8 @@ bindStaticBody2D_set_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's bounciness. Values range from [code]0[/code] (no bounce) to [code]1[/code] (full bounciness).
---   			Deprecated, use [member PhysicsMaterial.bounce] instead via [member physics_material_override].
+-- | The body's bounciness. Values range from @0@ (no bounce) to @1@ (full bounciness).
+--   			Deprecated, use @PhysicsMaterial.bounce@ instead via @physics_material_override@.
 set_bounce ::
              (StaticBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bounce cls arg1
@@ -195,6 +262,10 @@ set_bounce cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StaticBody2D "set_bounce" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.StaticBody2D.set_bounce
 
 {-# NOINLINE bindStaticBody2D_set_constant_angular_velocity #-}
 
@@ -221,6 +292,12 @@ set_constant_angular_velocity cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StaticBody2D "set_constant_angular_velocity"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StaticBody2D.set_constant_angular_velocity
+
 {-# NOINLINE bindStaticBody2D_set_constant_linear_velocity #-}
 
 -- | The body's constant linear velocity. This does not move the body, but affects colliding bodies, as if it were moving.
@@ -246,10 +323,16 @@ set_constant_linear_velocity cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StaticBody2D "set_constant_linear_velocity"
+           '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StaticBody2D.set_constant_linear_velocity
+
 {-# NOINLINE bindStaticBody2D_set_friction #-}
 
--- | The body's friction. Values range from [code]0[/code] (no friction) to [code]1[/code] (full friction).
---   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
+-- | The body's friction. Values range from @0@ (no friction) to @1@ (full friction).
+--   			Deprecated, use @PhysicsMaterial.friction@ instead via @physics_material_override@.
 bindStaticBody2D_set_friction :: MethodBind
 bindStaticBody2D_set_friction
   = unsafePerformIO $
@@ -259,8 +342,8 @@ bindStaticBody2D_set_friction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's friction. Values range from [code]0[/code] (no friction) to [code]1[/code] (full friction).
---   			Deprecated, use [member PhysicsMaterial.friction] instead via [member physics_material_override].
+-- | The body's friction. Values range from @0@ (no friction) to @1@ (full friction).
+--   			Deprecated, use @PhysicsMaterial.friction@ instead via @physics_material_override@.
 set_friction ::
                (StaticBody2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_friction cls arg1
@@ -270,6 +353,10 @@ set_friction cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StaticBody2D "set_friction" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.StaticBody2D.set_friction
 
 {-# NOINLINE bindStaticBody2D_set_physics_material_override #-}
 
@@ -298,3 +385,9 @@ set_physics_material_override cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StaticBody2D "set_physics_material_override"
+           '[PhysicsMaterial]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StaticBody2D.set_physics_material_override

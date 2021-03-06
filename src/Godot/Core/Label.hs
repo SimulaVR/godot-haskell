@@ -27,9 +27,14 @@ module Godot.Core.Label
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 _VALIGN_TOP :: Int
 _VALIGN_TOP = 0
@@ -55,9 +60,50 @@ _ALIGN_LEFT = 0
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
 
+instance NodeProperty Label "align" Int 'False where
+        nodeProperty = (get_align, wrapDroppingSetter set_align, Nothing)
+
+instance NodeProperty Label "autowrap" Bool 'False where
+        nodeProperty
+          = (has_autowrap, wrapDroppingSetter set_autowrap, Nothing)
+
+instance NodeProperty Label "clip_text" Bool 'False where
+        nodeProperty
+          = (is_clipping_text, wrapDroppingSetter set_clip_text, Nothing)
+
+instance NodeProperty Label "lines_skipped" Int 'False where
+        nodeProperty
+          = (get_lines_skipped, wrapDroppingSetter set_lines_skipped,
+             Nothing)
+
+instance NodeProperty Label "max_lines_visible" Int 'False where
+        nodeProperty
+          = (get_max_lines_visible, wrapDroppingSetter set_max_lines_visible,
+             Nothing)
+
+instance NodeProperty Label "percent_visible" Float 'False where
+        nodeProperty
+          = (get_percent_visible, wrapDroppingSetter set_percent_visible,
+             Nothing)
+
+instance NodeProperty Label "text" GodotString 'False where
+        nodeProperty = (get_text, wrapDroppingSetter set_text, Nothing)
+
+instance NodeProperty Label "uppercase" Bool 'False where
+        nodeProperty
+          = (is_uppercase, wrapDroppingSetter set_uppercase, Nothing)
+
+instance NodeProperty Label "valign" Int 'False where
+        nodeProperty = (get_valign, wrapDroppingSetter set_valign, Nothing)
+
+instance NodeProperty Label "visible_characters" Int 'False where
+        nodeProperty
+          = (get_visible_characters,
+             wrapDroppingSetter set_visible_characters, Nothing)
+
 {-# NOINLINE bindLabel_get_align #-}
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the @enum Align@ constants.
 bindLabel_get_align :: MethodBind
 bindLabel_get_align
   = unsafePerformIO $
@@ -67,13 +113,16 @@ bindLabel_get_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the @enum Align@ constants.
 get_align :: (Label :< cls, Object :< cls) => cls -> IO Int
 get_align cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLabel_get_align (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "get_align" '[] (IO Int) where
+        nodeMethod = Godot.Core.Label.get_align
 
 {-# NOINLINE bindLabel_get_line_count #-}
 
@@ -95,6 +144,9 @@ get_line_count cls
          godot_method_bind_call bindLabel_get_line_count (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "get_line_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.Label.get_line_count
 
 {-# NOINLINE bindLabel_get_line_height #-}
 
@@ -118,9 +170,12 @@ get_line_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "get_line_height" '[] (IO Int) where
+        nodeMethod = Godot.Core.Label.get_line_height
+
 {-# NOINLINE bindLabel_get_lines_skipped #-}
 
--- | The node ignores the first [code]lines_skipped[/code] lines before it starts to display text.
+-- | The node ignores the first @lines_skipped@ lines before it starts to display text.
 bindLabel_get_lines_skipped :: MethodBind
 bindLabel_get_lines_skipped
   = unsafePerformIO $
@@ -130,7 +185,7 @@ bindLabel_get_lines_skipped
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node ignores the first [code]lines_skipped[/code] lines before it starts to display text.
+-- | The node ignores the first @lines_skipped@ lines before it starts to display text.
 get_lines_skipped :: (Label :< cls, Object :< cls) => cls -> IO Int
 get_lines_skipped cls
   = withVariantArray []
@@ -139,6 +194,9 @@ get_lines_skipped cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "get_lines_skipped" '[] (IO Int) where
+        nodeMethod = Godot.Core.Label.get_lines_skipped
 
 {-# NOINLINE bindLabel_get_max_lines_visible #-}
 
@@ -163,9 +221,13 @@ get_max_lines_visible cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "get_max_lines_visible" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Label.get_max_lines_visible
+
 {-# NOINLINE bindLabel_get_percent_visible #-}
 
--- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 bindLabel_get_percent_visible :: MethodBind
 bindLabel_get_percent_visible
   = unsafePerformIO $
@@ -175,7 +237,7 @@ bindLabel_get_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 get_percent_visible ::
                       (Label :< cls, Object :< cls) => cls -> IO Float
 get_percent_visible cls
@@ -185,6 +247,10 @@ get_percent_visible cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "get_percent_visible" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.Label.get_percent_visible
 
 {-# NOINLINE bindLabel_get_text #-}
 
@@ -205,6 +271,9 @@ get_text cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLabel_get_text (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "get_text" '[] (IO GodotString) where
+        nodeMethod = Godot.Core.Label.get_text
 
 {-# NOINLINE bindLabel_get_total_character_count #-}
 
@@ -230,9 +299,13 @@ get_total_character_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "get_total_character_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Label.get_total_character_count
+
 {-# NOINLINE bindLabel_get_valign #-}
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the @enum VAlign@ constants.
 bindLabel_get_valign :: MethodBind
 bindLabel_get_valign
   = unsafePerformIO $
@@ -242,13 +315,16 @@ bindLabel_get_valign
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the @enum VAlign@ constants.
 get_valign :: (Label :< cls, Object :< cls) => cls -> IO Int
 get_valign cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLabel_get_valign (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "get_valign" '[] (IO Int) where
+        nodeMethod = Godot.Core.Label.get_valign
 
 {-# NOINLINE bindLabel_get_visible_characters #-}
 
@@ -274,9 +350,13 @@ get_visible_characters cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "get_visible_characters" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Label.get_visible_characters
+
 {-# NOINLINE bindLabel_get_visible_line_count #-}
 
--- | Returns the number of lines shown. Useful if the [Label]'s height cannot currently display all lines.
+-- | Returns the number of lines shown. Useful if the @Label@'s height cannot currently display all lines.
 bindLabel_get_visible_line_count :: MethodBind
 bindLabel_get_visible_line_count
   = unsafePerformIO $
@@ -286,7 +366,7 @@ bindLabel_get_visible_line_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of lines shown. Useful if the [Label]'s height cannot currently display all lines.
+-- | Returns the number of lines shown. Useful if the @Label@'s height cannot currently display all lines.
 get_visible_line_count ::
                          (Label :< cls, Object :< cls) => cls -> IO Int
 get_visible_line_count cls
@@ -298,9 +378,13 @@ get_visible_line_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "get_visible_line_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Label.get_visible_line_count
+
 {-# NOINLINE bindLabel_has_autowrap #-}
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
+-- | If @true@, wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 bindLabel_has_autowrap :: MethodBind
 bindLabel_has_autowrap
   = unsafePerformIO $
@@ -310,7 +394,7 @@ bindLabel_has_autowrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
+-- | If @true@, wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 has_autowrap :: (Label :< cls, Object :< cls) => cls -> IO Bool
 has_autowrap cls
   = withVariantArray []
@@ -319,9 +403,12 @@ has_autowrap cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "has_autowrap" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Label.has_autowrap
+
 {-# NOINLINE bindLabel_is_clipping_text #-}
 
--- | If [code]true[/code], the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
+-- | If @true@, the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
 bindLabel_is_clipping_text :: MethodBind
 bindLabel_is_clipping_text
   = unsafePerformIO $
@@ -331,7 +418,7 @@ bindLabel_is_clipping_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
+-- | If @true@, the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
 is_clipping_text :: (Label :< cls, Object :< cls) => cls -> IO Bool
 is_clipping_text cls
   = withVariantArray []
@@ -341,9 +428,12 @@ is_clipping_text cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "is_clipping_text" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Label.is_clipping_text
+
 {-# NOINLINE bindLabel_is_uppercase #-}
 
--- | If [code]true[/code], all the text displays as UPPERCASE.
+-- | If @true@, all the text displays as UPPERCASE.
 bindLabel_is_uppercase :: MethodBind
 bindLabel_is_uppercase
   = unsafePerformIO $
@@ -353,7 +443,7 @@ bindLabel_is_uppercase
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], all the text displays as UPPERCASE.
+-- | If @true@, all the text displays as UPPERCASE.
 is_uppercase :: (Label :< cls, Object :< cls) => cls -> IO Bool
 is_uppercase cls
   = withVariantArray []
@@ -362,9 +452,12 @@ is_uppercase cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "is_uppercase" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Label.is_uppercase
+
 {-# NOINLINE bindLabel_set_align #-}
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the @enum Align@ constants.
 bindLabel_set_align :: MethodBind
 bindLabel_set_align
   = unsafePerformIO $
@@ -374,7 +467,7 @@ bindLabel_set_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the [enum Align] constants.
+-- | Controls the text's horizontal align. Supports left, center, right, and fill, or justify. Set it to one of the @enum Align@ constants.
 set_align :: (Label :< cls, Object :< cls) => cls -> Int -> IO ()
 set_align cls arg1
   = withVariantArray [toVariant arg1]
@@ -382,9 +475,12 @@ set_align cls arg1
          godot_method_bind_call bindLabel_set_align (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "set_align" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Label.set_align
+
 {-# NOINLINE bindLabel_set_autowrap #-}
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
+-- | If @true@, wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 bindLabel_set_autowrap :: MethodBind
 bindLabel_set_autowrap
   = unsafePerformIO $
@@ -394,7 +490,7 @@ bindLabel_set_autowrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
+-- | If @true@, wraps the text inside the node's bounding rectangle. If you resize the node, it will change its height automatically to show all the text.
 set_autowrap ::
                (Label :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autowrap cls arg1
@@ -404,9 +500,12 @@ set_autowrap cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "set_autowrap" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Label.set_autowrap
+
 {-# NOINLINE bindLabel_set_clip_text #-}
 
--- | If [code]true[/code], the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
+-- | If @true@, the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
 bindLabel_set_clip_text :: MethodBind
 bindLabel_set_clip_text
   = unsafePerformIO $
@@ -416,7 +515,7 @@ bindLabel_set_clip_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
+-- | If @true@, the Label only shows the text that fits inside its bounding rectangle. It also lets you scale the node down freely.
 set_clip_text ::
                 (Label :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_clip_text cls arg1
@@ -426,9 +525,12 @@ set_clip_text cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "set_clip_text" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Label.set_clip_text
+
 {-# NOINLINE bindLabel_set_lines_skipped #-}
 
--- | The node ignores the first [code]lines_skipped[/code] lines before it starts to display text.
+-- | The node ignores the first @lines_skipped@ lines before it starts to display text.
 bindLabel_set_lines_skipped :: MethodBind
 bindLabel_set_lines_skipped
   = unsafePerformIO $
@@ -438,7 +540,7 @@ bindLabel_set_lines_skipped
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node ignores the first [code]lines_skipped[/code] lines before it starts to display text.
+-- | The node ignores the first @lines_skipped@ lines before it starts to display text.
 set_lines_skipped ::
                     (Label :< cls, Object :< cls) => cls -> Int -> IO ()
 set_lines_skipped cls arg1
@@ -448,6 +550,9 @@ set_lines_skipped cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "set_lines_skipped" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Label.set_lines_skipped
 
 {-# NOINLINE bindLabel_set_max_lines_visible #-}
 
@@ -472,9 +577,13 @@ set_max_lines_visible cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "set_max_lines_visible" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Label.set_max_lines_visible
+
 {-# NOINLINE bindLabel_set_percent_visible #-}
 
--- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 bindLabel_set_percent_visible :: MethodBind
 bindLabel_set_percent_visible
   = unsafePerformIO $
@@ -484,7 +593,7 @@ bindLabel_set_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Limits the amount of visible characters. If you set [code]percent_visible[/code] to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 set_percent_visible ::
                       (Label :< cls, Object :< cls) => cls -> Float -> IO ()
 set_percent_visible cls arg1
@@ -494,6 +603,10 @@ set_percent_visible cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "set_percent_visible" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.Label.set_percent_visible
 
 {-# NOINLINE bindLabel_set_text #-}
 
@@ -516,9 +629,12 @@ set_text cls arg1
          godot_method_bind_call bindLabel_set_text (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "set_text" '[GodotString] (IO ()) where
+        nodeMethod = Godot.Core.Label.set_text
+
 {-# NOINLINE bindLabel_set_uppercase #-}
 
--- | If [code]true[/code], all the text displays as UPPERCASE.
+-- | If @true@, all the text displays as UPPERCASE.
 bindLabel_set_uppercase :: MethodBind
 bindLabel_set_uppercase
   = unsafePerformIO $
@@ -528,7 +644,7 @@ bindLabel_set_uppercase
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], all the text displays as UPPERCASE.
+-- | If @true@, all the text displays as UPPERCASE.
 set_uppercase ::
                 (Label :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_uppercase cls arg1
@@ -538,9 +654,12 @@ set_uppercase cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Label "set_uppercase" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Label.set_uppercase
+
 {-# NOINLINE bindLabel_set_valign #-}
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the @enum VAlign@ constants.
 bindLabel_set_valign :: MethodBind
 bindLabel_set_valign
   = unsafePerformIO $
@@ -550,13 +669,16 @@ bindLabel_set_valign
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the [enum VAlign] constants.
+-- | Controls the text's vertical align. Supports top, center, bottom, and fill. Set it to one of the @enum VAlign@ constants.
 set_valign :: (Label :< cls, Object :< cls) => cls -> Int -> IO ()
 set_valign cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLabel_set_valign (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "set_valign" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Label.set_valign
 
 {-# NOINLINE bindLabel_set_visible_characters #-}
 
@@ -581,3 +703,7 @@ set_visible_characters cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Label "set_visible_characters" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Label.set_visible_characters

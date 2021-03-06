@@ -12,9 +12,28 @@ module Godot.Core.AudioStreamOGGVorbis
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioStream()
+
+instance NodeProperty AudioStreamOGGVorbis "data" PoolByteArray
+           'False
+         where
+        nodeProperty = (get_data, wrapDroppingSetter set_data, Nothing)
+
+instance NodeProperty AudioStreamOGGVorbis "loop" Bool 'False where
+        nodeProperty = (has_loop, wrapDroppingSetter set_loop, Nothing)
+
+instance NodeProperty AudioStreamOGGVorbis "loop_offset" Float
+           'False
+         where
+        nodeProperty
+          = (get_loop_offset, wrapDroppingSetter set_loop_offset, Nothing)
 
 {-# NOINLINE bindAudioStreamOGGVorbis_get_data #-}
 
@@ -39,6 +58,11 @@ get_data cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamOGGVorbis "get_data" '[]
+           (IO PoolByteArray)
+         where
+        nodeMethod = Godot.Core.AudioStreamOGGVorbis.get_data
+
 {-# NOINLINE bindAudioStreamOGGVorbis_get_loop_offset #-}
 
 bindAudioStreamOGGVorbis_get_loop_offset :: MethodBind
@@ -61,6 +85,11 @@ get_loop_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamOGGVorbis "get_loop_offset" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioStreamOGGVorbis.get_loop_offset
+
 {-# NOINLINE bindAudioStreamOGGVorbis_has_loop #-}
 
 bindAudioStreamOGGVorbis_has_loop :: MethodBind
@@ -82,6 +111,10 @@ has_loop cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamOGGVorbis "has_loop" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioStreamOGGVorbis.has_loop
 
 {-# NOINLINE bindAudioStreamOGGVorbis_set_data #-}
 
@@ -106,6 +139,12 @@ set_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamOGGVorbis "set_data"
+           '[PoolByteArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamOGGVorbis.set_data
+
 {-# NOINLINE bindAudioStreamOGGVorbis_set_loop #-}
 
 bindAudioStreamOGGVorbis_set_loop :: MethodBind
@@ -129,6 +168,10 @@ set_loop cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamOGGVorbis "set_loop" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamOGGVorbis.set_loop
+
 {-# NOINLINE bindAudioStreamOGGVorbis_set_loop_offset #-}
 
 bindAudioStreamOGGVorbis_set_loop_offset :: MethodBind
@@ -151,3 +194,8 @@ set_loop_offset cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamOGGVorbis "set_loop_offset" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamOGGVorbis.set_loop_offset

@@ -9,15 +9,24 @@ module Godot.Core.SceneTreeTimer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 -- | Emitted when the timer reaches 0.
 sig_timeout :: Godot.Internal.Dispatch.Signal SceneTreeTimer
 sig_timeout = Godot.Internal.Dispatch.Signal "timeout"
 
 instance NodeSignal SceneTreeTimer "timeout" '[]
+
+instance NodeProperty SceneTreeTimer "time_left" Float 'False where
+        nodeProperty
+          = (get_time_left, wrapDroppingSetter set_time_left, Nothing)
 
 {-# NOINLINE bindSceneTreeTimer_get_time_left #-}
 
@@ -43,6 +52,10 @@ get_time_left cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTreeTimer "get_time_left" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.SceneTreeTimer.get_time_left
+
 {-# NOINLINE bindSceneTreeTimer_set_time_left #-}
 
 -- | The time remaining.
@@ -66,3 +79,7 @@ set_time_left cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTreeTimer "set_time_left" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTreeTimer.set_time_left

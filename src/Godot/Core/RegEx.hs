@@ -11,9 +11,14 @@ module Godot.Core.RegEx
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindRegEx_clear #-}
 
@@ -33,6 +38,9 @@ clear cls
          godot_method_bind_call bindRegEx_clear (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RegEx "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.RegEx.clear
+
 {-# NOINLINE bindRegEx_compile #-}
 
 bindRegEx_compile :: MethodBind
@@ -51,6 +59,9 @@ compile cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegEx_compile (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegEx "compile" '[GodotString] (IO Int) where
+        nodeMethod = Godot.Core.RegEx.compile
 
 {-# NOINLINE bindRegEx_get_group_count #-}
 
@@ -72,6 +83,9 @@ get_group_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RegEx "get_group_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.RegEx.get_group_count
+
 {-# NOINLINE bindRegEx_get_names #-}
 
 bindRegEx_get_names :: MethodBind
@@ -89,6 +103,9 @@ get_names cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegEx_get_names (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegEx "get_names" '[] (IO Array) where
+        nodeMethod = Godot.Core.RegEx.get_names
 
 {-# NOINLINE bindRegEx_get_pattern #-}
 
@@ -110,6 +127,9 @@ get_pattern cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RegEx "get_pattern" '[] (IO GodotString) where
+        nodeMethod = Godot.Core.RegEx.get_pattern
+
 {-# NOINLINE bindRegEx_is_valid #-}
 
 bindRegEx_is_valid :: MethodBind
@@ -128,6 +148,9 @@ is_valid cls
          godot_method_bind_call bindRegEx_is_valid (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RegEx "is_valid" '[] (IO Bool) where
+        nodeMethod = Godot.Core.RegEx.is_valid
+
 {-# NOINLINE bindRegEx_search #-}
 
 bindRegEx_search :: MethodBind
@@ -141,12 +164,20 @@ bindRegEx_search
 
 search ::
          (RegEx :< cls, Object :< cls) =>
-         cls -> GodotString -> Int -> Int -> IO RegExMatch
+         cls -> GodotString -> Maybe Int -> Maybe Int -> IO RegExMatch
 search cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (0)) toVariant arg2,
+       maybe (VariantInt (-1)) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegEx_search (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegEx "search"
+           '[GodotString, Maybe Int, Maybe Int]
+           (IO RegExMatch)
+         where
+        nodeMethod = Godot.Core.RegEx.search
 
 {-# NOINLINE bindRegEx_search_all #-}
 
@@ -161,12 +192,20 @@ bindRegEx_search_all
 
 search_all ::
              (RegEx :< cls, Object :< cls) =>
-             cls -> GodotString -> Int -> Int -> IO Array
+             cls -> GodotString -> Maybe Int -> Maybe Int -> IO Array
 search_all cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (0)) toVariant arg2,
+       maybe (VariantInt (-1)) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegEx_search_all (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegEx "search_all"
+           '[GodotString, Maybe Int, Maybe Int]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.RegEx.search_all
 
 {-# NOINLINE bindRegEx_sub #-}
 
@@ -182,11 +221,21 @@ bindRegEx_sub
 sub ::
       (RegEx :< cls, Object :< cls) =>
       cls ->
-        GodotString -> GodotString -> Bool -> Int -> Int -> IO GodotString
+        GodotString ->
+          GodotString ->
+            Maybe Bool -> Maybe Int -> Maybe Int -> IO GodotString
 sub cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantBool False) toVariant arg3,
+       maybe (VariantInt (0)) toVariant arg4,
+       maybe (VariantInt (-1)) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegEx_sub (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegEx "sub"
+           '[GodotString, GodotString, Maybe Bool, Maybe Int, Maybe Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.RegEx.sub

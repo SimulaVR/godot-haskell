@@ -82,9 +82,14 @@ module Godot.Core.TileSet
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _BITMASK_2X2 :: Int
 _BITMASK_2X2 = 0
@@ -154,6 +159,12 @@ _forward_atlas_subtile_selection cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "_forward_atlas_subtile_selection"
+           '[Int, Object, Vector2]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet._forward_atlas_subtile_selection
+
 {-# NOINLINE bindTileSet__forward_subtile_selection #-}
 
 bindTileSet__forward_subtile_selection :: MethodBind
@@ -178,10 +189,16 @@ _forward_subtile_selection cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "_forward_subtile_selection"
+           '[Int, Int, Object, Vector2]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet._forward_subtile_selection
+
 {-# NOINLINE bindTileSet__is_tile_bound #-}
 
 -- | Determines when the auto-tiler should consider two different auto-tile IDs to be bound together.
---   				[b]Note:[/b] [code]neighbor_id[/code] will be [code]-1[/code] ([constant TileMap.INVALID_CELL]) when checking a tile against an empty neighbor tile.
+--   				__Note:__ @neighbor_id@ will be @-1@ (@TileMap.INVALID_CELL@) when checking a tile against an empty neighbor tile.
 bindTileSet__is_tile_bound :: MethodBind
 bindTileSet__is_tile_bound
   = unsafePerformIO $
@@ -192,7 +209,7 @@ bindTileSet__is_tile_bound
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Determines when the auto-tiler should consider two different auto-tile IDs to be bound together.
---   				[b]Note:[/b] [code]neighbor_id[/code] will be [code]-1[/code] ([constant TileMap.INVALID_CELL]) when checking a tile against an empty neighbor tile.
+--   				__Note:__ @neighbor_id@ will be @-1@ (@TileMap.INVALID_CELL@) when checking a tile against an empty neighbor tile.
 _is_tile_bound ::
                  (TileSet :< cls, Object :< cls) => cls -> Int -> Int -> IO Bool
 _is_tile_bound cls arg1 arg2
@@ -202,6 +219,10 @@ _is_tile_bound cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "_is_tile_bound" '[Int, Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileSet._is_tile_bound
 
 {-# NOINLINE bindTileSet_autotile_clear_bitmask_map #-}
 
@@ -227,10 +248,15 @@ autotile_clear_bitmask_map cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_clear_bitmask_map" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_clear_bitmask_map
+
 {-# NOINLINE bindTileSet_autotile_get_bitmask #-}
 
 -- | Returns the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in @enum AutotileBindings@ present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 bindTileSet_autotile_get_bitmask :: MethodBind
 bindTileSet_autotile_get_bitmask
   = unsafePerformIO $
@@ -241,7 +267,7 @@ bindTileSet_autotile_get_bitmask
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in @enum AutotileBindings@ present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 autotile_get_bitmask ::
                        (TileSet :< cls, Object :< cls) => cls -> Int -> Vector2 -> IO Int
 autotile_get_bitmask cls arg1 arg2
@@ -253,9 +279,14 @@ autotile_get_bitmask cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_get_bitmask" '[Int, Vector2]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_bitmask
+
 {-# NOINLINE bindTileSet_autotile_get_bitmask_mode #-}
 
--- | Returns the [enum BitmaskMode] of the autotile.
+-- | Returns the @enum BitmaskMode@ of the autotile.
 bindTileSet_autotile_get_bitmask_mode :: MethodBind
 bindTileSet_autotile_get_bitmask_mode
   = unsafePerformIO $
@@ -265,7 +296,7 @@ bindTileSet_autotile_get_bitmask_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [enum BitmaskMode] of the autotile.
+-- | Returns the @enum BitmaskMode@ of the autotile.
 autotile_get_bitmask_mode ::
                             (TileSet :< cls, Object :< cls) => cls -> Int -> IO Int
 autotile_get_bitmask_mode cls arg1
@@ -276,6 +307,11 @@ autotile_get_bitmask_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_get_bitmask_mode" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_bitmask_mode
 
 {-# NOINLINE bindTileSet_autotile_get_icon_coordinate #-}
 
@@ -303,6 +339,11 @@ autotile_get_icon_coordinate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_get_icon_coordinate" '[Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_icon_coordinate
+
 {-# NOINLINE bindTileSet_autotile_get_light_occluder #-}
 
 -- | Returns the light occluder of the subtile from an atlas/autotile given its coordinates.
@@ -327,6 +368,12 @@ autotile_get_light_occluder cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_get_light_occluder"
+           '[Int, Vector2]
+           (IO OccluderPolygon2D)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_light_occluder
 
 {-# NOINLINE bindTileSet_autotile_get_navigation_polygon #-}
 
@@ -353,6 +400,12 @@ autotile_get_navigation_polygon cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_get_navigation_polygon"
+           '[Int, Vector2]
+           (IO NavigationPolygon)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_navigation_polygon
+
 {-# NOINLINE bindTileSet_autotile_get_size #-}
 
 -- | Returns the size of the subtiles in an atlas/autotile.
@@ -375,6 +428,10 @@ autotile_get_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_get_size" '[Int] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_size
 
 {-# NOINLINE bindTileSet_autotile_get_spacing #-}
 
@@ -399,6 +456,10 @@ autotile_get_spacing cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_get_spacing" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_spacing
 
 {-# NOINLINE bindTileSet_autotile_get_subtile_priority #-}
 
@@ -426,6 +487,12 @@ autotile_get_subtile_priority cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_get_subtile_priority"
+           '[Int, Vector2]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_subtile_priority
+
 {-# NOINLINE bindTileSet_autotile_get_z_index #-}
 
 -- | Returns the drawing index of the subtile from an atlas/autotile given its coordinates.
@@ -450,10 +517,15 @@ autotile_get_z_index cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_get_z_index" '[Int, Vector2]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_get_z_index
+
 {-# NOINLINE bindTileSet_autotile_set_bitmask #-}
 
 -- | Sets the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in @enum AutotileBindings@ present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 bindTileSet_autotile_set_bitmask :: MethodBind
 bindTileSet_autotile_set_bitmask
   = unsafePerformIO $
@@ -464,7 +536,7 @@ bindTileSet_autotile_set_bitmask
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the bitmask of the subtile from an autotile given its coordinates.
---   				The value is the sum of the values in [enum AutotileBindings] present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
+--   				The value is the sum of the values in @enum AutotileBindings@ present in the subtile (e.g. a value of 5 means the bitmask has bindings in both the top left and top right).
 autotile_set_bitmask ::
                        (TileSet :< cls, Object :< cls) =>
                        cls -> Int -> Vector2 -> Int -> IO ()
@@ -477,9 +549,15 @@ autotile_set_bitmask cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_set_bitmask"
+           '[Int, Vector2, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_bitmask
+
 {-# NOINLINE bindTileSet_autotile_set_bitmask_mode #-}
 
--- | Sets the [enum BitmaskMode] of the autotile.
+-- | Sets the @enum BitmaskMode@ of the autotile.
 bindTileSet_autotile_set_bitmask_mode :: MethodBind
 bindTileSet_autotile_set_bitmask_mode
   = unsafePerformIO $
@@ -489,7 +567,7 @@ bindTileSet_autotile_set_bitmask_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [enum BitmaskMode] of the autotile.
+-- | Sets the @enum BitmaskMode@ of the autotile.
 autotile_set_bitmask_mode ::
                             (TileSet :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 autotile_set_bitmask_mode cls arg1 arg2
@@ -500,6 +578,11 @@ autotile_set_bitmask_mode cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_set_bitmask_mode" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_bitmask_mode
 
 {-# NOINLINE bindTileSet_autotile_set_icon_coordinate #-}
 
@@ -527,6 +610,12 @@ autotile_set_icon_coordinate cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_set_icon_coordinate"
+           '[Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_icon_coordinate
+
 {-# NOINLINE bindTileSet_autotile_set_light_occluder #-}
 
 -- | Sets the light occluder of the subtile from an atlas/autotile given its coordinates.
@@ -551,6 +640,12 @@ autotile_set_light_occluder cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_set_light_occluder"
+           '[Int, OccluderPolygon2D, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_light_occluder
 
 {-# NOINLINE bindTileSet_autotile_set_navigation_polygon #-}
 
@@ -577,6 +672,12 @@ autotile_set_navigation_polygon cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_set_navigation_polygon"
+           '[Int, NavigationPolygon, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_navigation_polygon
+
 {-# NOINLINE bindTileSet_autotile_set_size #-}
 
 -- | Sets the size of the subtiles in an atlas/autotile.
@@ -599,6 +700,11 @@ autotile_set_size cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_set_size" '[Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_size
 
 {-# NOINLINE bindTileSet_autotile_set_spacing #-}
 
@@ -623,6 +729,11 @@ autotile_set_spacing cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "autotile_set_spacing" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_spacing
 
 {-# NOINLINE bindTileSet_autotile_set_subtile_priority #-}
 
@@ -651,6 +762,12 @@ autotile_set_subtile_priority cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_set_subtile_priority"
+           '[Int, Vector2, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_subtile_priority
+
 {-# NOINLINE bindTileSet_autotile_set_z_index #-}
 
 -- | Sets the drawing index of the subtile from an atlas/autotile given its coordinates.
@@ -676,6 +793,12 @@ autotile_set_z_index cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "autotile_set_z_index"
+           '[Int, Vector2, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.autotile_set_z_index
+
 {-# NOINLINE bindTileSet_clear #-}
 
 -- | Clears all tiles.
@@ -695,6 +818,9 @@ clear cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileSet_clear (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.TileSet.clear
 
 {-# NOINLINE bindTileSet_create_tile #-}
 
@@ -718,6 +844,9 @@ create_tile cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "create_tile" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.TileSet.create_tile
+
 {-# NOINLINE bindTileSet_find_tile_by_name #-}
 
 -- | Returns the first tile matching the given name.
@@ -740,6 +869,11 @@ find_tile_by_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "find_tile_by_name" '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.find_tile_by_name
 
 {-# NOINLINE bindTileSet_get_last_unused_tile_id #-}
 
@@ -765,6 +899,10 @@ get_last_unused_tile_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "get_last_unused_tile_id" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.get_last_unused_tile_id
+
 {-# NOINLINE bindTileSet_get_tiles_ids #-}
 
 -- | Returns an array of all currently used tile IDs.
@@ -786,6 +924,9 @@ get_tiles_ids cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "get_tiles_ids" '[] (IO Array) where
+        nodeMethod = Godot.Core.TileSet.get_tiles_ids
 
 {-# NOINLINE bindTileSet_remove_tile #-}
 
@@ -809,6 +950,9 @@ remove_tile cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "remove_tile" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.TileSet.remove_tile
+
 {-# NOINLINE bindTileSet_tile_add_shape #-}
 
 -- | Adds a shape to the tile.
@@ -824,16 +968,25 @@ bindTileSet_tile_add_shape
 -- | Adds a shape to the tile.
 tile_add_shape ::
                  (TileSet :< cls, Object :< cls) =>
-                 cls -> Int -> Shape2D -> Transform2d -> Bool -> Vector2 -> IO ()
+                 cls ->
+                   Int ->
+                     Shape2D -> Transform2d -> Maybe Bool -> Maybe Vector2 -> IO ()
 tile_add_shape cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantBool False) toVariant arg4,
+       defaultedVariant VariantVector2 (V2 0 0) arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileSet_tile_add_shape (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_add_shape"
+           '[Int, Shape2D, Transform2d, Maybe Bool, Maybe Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_add_shape
 
 {-# NOINLINE bindTileSet_tile_get_light_occluder #-}
 
@@ -860,6 +1013,11 @@ tile_get_light_occluder cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_light_occluder" '[Int]
+           (IO OccluderPolygon2D)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_light_occluder
+
 {-# NOINLINE bindTileSet_tile_get_material #-}
 
 -- | Returns the tile's material.
@@ -882,6 +1040,11 @@ tile_get_material cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_material" '[Int]
+           (IO ShaderMaterial)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_material
 
 {-# NOINLINE bindTileSet_tile_get_modulate #-}
 
@@ -906,6 +1069,10 @@ tile_get_modulate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_modulate" '[Int] (IO Color)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_modulate
+
 {-# NOINLINE bindTileSet_tile_get_name #-}
 
 -- | Returns the tile's name.
@@ -928,6 +1095,10 @@ tile_get_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_name" '[Int] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_name
 
 {-# NOINLINE bindTileSet_tile_get_navigation_polygon #-}
 
@@ -954,6 +1125,11 @@ tile_get_navigation_polygon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_navigation_polygon" '[Int]
+           (IO NavigationPolygon)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_navigation_polygon
+
 {-# NOINLINE bindTileSet_tile_get_navigation_polygon_offset #-}
 
 -- | Returns the offset of the tile's navigation polygon.
@@ -979,6 +1155,12 @@ tile_get_navigation_polygon_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_navigation_polygon_offset"
+           '[Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_navigation_polygon_offset
+
 {-# NOINLINE bindTileSet_tile_get_normal_map #-}
 
 -- | Returns the tile's normal map texture.
@@ -1001,6 +1183,11 @@ tile_get_normal_map cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_normal_map" '[Int]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_normal_map
 
 {-# NOINLINE bindTileSet_tile_get_occluder_offset #-}
 
@@ -1026,6 +1213,11 @@ tile_get_occluder_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_occluder_offset" '[Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_occluder_offset
+
 {-# NOINLINE bindTileSet_tile_get_region #-}
 
 -- | Returns the tile sub-region in the texture.
@@ -1049,6 +1241,10 @@ tile_get_region cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_region" '[Int] (IO Rect2)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_region
+
 {-# NOINLINE bindTileSet_tile_get_shape #-}
 
 -- | Returns a tile's given shape.
@@ -1071,6 +1267,11 @@ tile_get_shape cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_shape" '[Int, Int]
+           (IO Shape2D)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_shape
 
 {-# NOINLINE bindTileSet_tile_get_shape_count #-}
 
@@ -1096,6 +1297,10 @@ tile_get_shape_count cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_shape_count" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_shape_count
+
 {-# NOINLINE bindTileSet_tile_get_shape_offset #-}
 
 -- | Returns the offset of a tile's shape.
@@ -1119,6 +1324,11 @@ tile_get_shape_offset cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_shape_offset" '[Int, Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_shape_offset
 
 {-# NOINLINE bindTileSet_tile_get_shape_one_way #-}
 
@@ -1144,6 +1354,11 @@ tile_get_shape_one_way cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_shape_one_way" '[Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_shape_one_way
+
 {-# NOINLINE bindTileSet_tile_get_shape_one_way_margin #-}
 
 bindTileSet_tile_get_shape_one_way_margin :: MethodBind
@@ -1166,9 +1381,15 @@ tile_get_shape_one_way_margin cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_shape_one_way_margin"
+           '[Int, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_shape_one_way_margin
+
 {-# NOINLINE bindTileSet_tile_get_shape_transform #-}
 
--- | Returns the [Transform2D] of a tile's shape.
+-- | Returns the @Transform2D@ of a tile's shape.
 bindTileSet_tile_get_shape_transform :: MethodBind
 bindTileSet_tile_get_shape_transform
   = unsafePerformIO $
@@ -1178,7 +1399,7 @@ bindTileSet_tile_get_shape_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Transform2D] of a tile's shape.
+-- | Returns the @Transform2D@ of a tile's shape.
 tile_get_shape_transform ::
                            (TileSet :< cls, Object :< cls) =>
                            cls -> Int -> Int -> IO Transform2d
@@ -1191,11 +1412,18 @@ tile_get_shape_transform cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_shape_transform" '[Int, Int]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_shape_transform
+
 {-# NOINLINE bindTileSet_tile_get_shapes #-}
 
 -- | Returns an array of dictionaries describing the tile's shapes.
---   				[b]Dictionary structure in the array returned by this method:[/b]
---   				[codeblock]
+--   				__Dictionary structure in the array returned by this method:__
+--   				
+--   @
+--   
 --   				{
 --   				    "autotile_coord": Vector2,
 --   				    "one_way": bool,
@@ -1203,7 +1431,8 @@ tile_get_shape_transform cls arg1 arg2
 --   				    "shape": CollisionShape2D,
 --   				    "shape_transform": Transform2D,
 --   				}
---   				[/codeblock]
+--   				
+--   @
 bindTileSet_tile_get_shapes :: MethodBind
 bindTileSet_tile_get_shapes
   = unsafePerformIO $
@@ -1214,8 +1443,10 @@ bindTileSet_tile_get_shapes
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns an array of dictionaries describing the tile's shapes.
---   				[b]Dictionary structure in the array returned by this method:[/b]
---   				[codeblock]
+--   				__Dictionary structure in the array returned by this method:__
+--   				
+--   @
+--   
 --   				{
 --   				    "autotile_coord": Vector2,
 --   				    "one_way": bool,
@@ -1223,7 +1454,8 @@ bindTileSet_tile_get_shapes
 --   				    "shape": CollisionShape2D,
 --   				    "shape_transform": Transform2D,
 --   				}
---   				[/codeblock]
+--   				
+--   @
 tile_get_shapes ::
                   (TileSet :< cls, Object :< cls) => cls -> Int -> IO Array
 tile_get_shapes cls arg1
@@ -1233,6 +1465,10 @@ tile_get_shapes cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_shapes" '[Int] (IO Array)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_shapes
 
 {-# NOINLINE bindTileSet_tile_get_texture #-}
 
@@ -1256,6 +1492,10 @@ tile_get_texture cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_texture" '[Int] (IO Texture)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_texture
 
 {-# NOINLINE bindTileSet_tile_get_texture_offset #-}
 
@@ -1281,9 +1521,14 @@ tile_get_texture_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_get_texture_offset" '[Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_texture_offset
+
 {-# NOINLINE bindTileSet_tile_get_tile_mode #-}
 
--- | Returns the tile's [enum TileMode].
+-- | Returns the tile's @enum TileMode@.
 bindTileSet_tile_get_tile_mode :: MethodBind
 bindTileSet_tile_get_tile_mode
   = unsafePerformIO $
@@ -1293,7 +1538,7 @@ bindTileSet_tile_get_tile_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the tile's [enum TileMode].
+-- | Returns the tile's @enum TileMode@.
 tile_get_tile_mode ::
                      (TileSet :< cls, Object :< cls) => cls -> Int -> IO Int
 tile_get_tile_mode cls arg1
@@ -1303,6 +1548,10 @@ tile_get_tile_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_tile_mode" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_tile_mode
 
 {-# NOINLINE bindTileSet_tile_get_z_index #-}
 
@@ -1326,6 +1575,10 @@ tile_get_z_index cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_get_z_index" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.TileSet.tile_get_z_index
 
 {-# NOINLINE bindTileSet_tile_set_light_occluder #-}
 
@@ -1352,6 +1605,12 @@ tile_set_light_occluder cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_light_occluder"
+           '[Int, OccluderPolygon2D]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_light_occluder
+
 {-# NOINLINE bindTileSet_tile_set_material #-}
 
 -- | Sets the tile's material.
@@ -1376,6 +1635,12 @@ tile_set_material cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_material"
+           '[Int, ShaderMaterial]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_material
+
 {-# NOINLINE bindTileSet_tile_set_modulate #-}
 
 -- | Sets the tile's modulation color.
@@ -1398,6 +1663,11 @@ tile_set_modulate cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_modulate" '[Int, Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_modulate
 
 {-# NOINLINE bindTileSet_tile_set_name #-}
 
@@ -1423,6 +1693,11 @@ tile_set_name cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_name" '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_name
+
 {-# NOINLINE bindTileSet_tile_set_navigation_polygon #-}
 
 -- | Sets the tile's navigation polygon.
@@ -1447,6 +1722,12 @@ tile_set_navigation_polygon cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_navigation_polygon"
+           '[Int, NavigationPolygon]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_navigation_polygon
 
 {-# NOINLINE bindTileSet_tile_set_navigation_polygon_offset #-}
 
@@ -1474,10 +1755,16 @@ tile_set_navigation_polygon_offset cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_navigation_polygon_offset"
+           '[Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_navigation_polygon_offset
+
 {-# NOINLINE bindTileSet_tile_set_normal_map #-}
 
 -- | Sets the tile's normal map texture.
---   				[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+--   				__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindTileSet_tile_set_normal_map :: MethodBind
 bindTileSet_tile_set_normal_map
   = unsafePerformIO $
@@ -1488,7 +1775,7 @@ bindTileSet_tile_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the tile's normal map texture.
---   				[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+--   				__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 tile_set_normal_map ::
                       (TileSet :< cls, Object :< cls) => cls -> Int -> Texture -> IO ()
 tile_set_normal_map cls arg1 arg2
@@ -1498,6 +1785,11 @@ tile_set_normal_map cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_normal_map" '[Int, Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_normal_map
 
 {-# NOINLINE bindTileSet_tile_set_occluder_offset #-}
 
@@ -1523,6 +1815,12 @@ tile_set_occluder_offset cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_occluder_offset"
+           '[Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_occluder_offset
+
 {-# NOINLINE bindTileSet_tile_set_region #-}
 
 -- | Sets the tile's sub-region in the texture. This is common in texture atlases.
@@ -1545,6 +1843,10 @@ tile_set_region cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_region" '[Int, Rect2] (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_region
 
 {-# NOINLINE bindTileSet_tile_set_shape #-}
 
@@ -1569,6 +1871,11 @@ tile_set_shape cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_shape" '[Int, Int, Shape2D]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_shape
 
 {-# NOINLINE bindTileSet_tile_set_shape_offset #-}
 
@@ -1595,6 +1902,12 @@ tile_set_shape_offset cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_shape_offset"
+           '[Int, Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_shape_offset
+
 {-# NOINLINE bindTileSet_tile_set_shape_one_way #-}
 
 -- | Enables one-way collision on a tile's shape.
@@ -1620,6 +1933,12 @@ tile_set_shape_one_way cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_shape_one_way"
+           '[Int, Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_shape_one_way
+
 {-# NOINLINE bindTileSet_tile_set_shape_one_way_margin #-}
 
 bindTileSet_tile_set_shape_one_way_margin :: MethodBind
@@ -1643,9 +1962,15 @@ tile_set_shape_one_way_margin cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_shape_one_way_margin"
+           '[Int, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_shape_one_way_margin
+
 {-# NOINLINE bindTileSet_tile_set_shape_transform #-}
 
--- | Sets a [Transform2D] on a tile's shape.
+-- | Sets a @Transform2D@ on a tile's shape.
 bindTileSet_tile_set_shape_transform :: MethodBind
 bindTileSet_tile_set_shape_transform
   = unsafePerformIO $
@@ -1655,7 +1980,7 @@ bindTileSet_tile_set_shape_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a [Transform2D] on a tile's shape.
+-- | Sets a @Transform2D@ on a tile's shape.
 tile_set_shape_transform ::
                            (TileSet :< cls, Object :< cls) =>
                            cls -> Int -> Int -> Transform2d -> IO ()
@@ -1667,6 +1992,12 @@ tile_set_shape_transform cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_shape_transform"
+           '[Int, Int, Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_shape_transform
 
 {-# NOINLINE bindTileSet_tile_set_shapes #-}
 
@@ -1691,6 +2022,10 @@ tile_set_shapes cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_shapes" '[Int, Array] (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_shapes
+
 {-# NOINLINE bindTileSet_tile_set_texture #-}
 
 -- | Sets the tile's texture.
@@ -1713,6 +2048,11 @@ tile_set_texture cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_texture" '[Int, Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_texture
 
 {-# NOINLINE bindTileSet_tile_set_texture_offset #-}
 
@@ -1738,9 +2078,15 @@ tile_set_texture_offset cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileSet "tile_set_texture_offset"
+           '[Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_texture_offset
+
 {-# NOINLINE bindTileSet_tile_set_tile_mode #-}
 
--- | Sets the tile's [enum TileMode].
+-- | Sets the tile's @enum TileMode@.
 bindTileSet_tile_set_tile_mode :: MethodBind
 bindTileSet_tile_set_tile_mode
   = unsafePerformIO $
@@ -1750,7 +2096,7 @@ bindTileSet_tile_set_tile_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the tile's [enum TileMode].
+-- | Sets the tile's @enum TileMode@.
 tile_set_tile_mode ::
                      (TileSet :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 tile_set_tile_mode cls arg1 arg2
@@ -1760,6 +2106,11 @@ tile_set_tile_mode cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_tile_mode" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_tile_mode
 
 {-# NOINLINE bindTileSet_tile_set_z_index #-}
 
@@ -1783,3 +2134,7 @@ tile_set_z_index cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileSet "tile_set_z_index" '[Int, Int] (IO ())
+         where
+        nodeMethod = Godot.Core.TileSet.tile_set_z_index

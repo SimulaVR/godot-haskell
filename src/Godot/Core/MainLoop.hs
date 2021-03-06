@@ -28,9 +28,14 @@ module Godot.Core.MainLoop
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 _NOTIFICATION_WM_ABOUT :: Int
 _NOTIFICATION_WM_ABOUT = 1011
@@ -106,6 +111,11 @@ _drop_files cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "_drop_files" '[PoolStringArray, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MainLoop._drop_files
+
 {-# NOINLINE bindMainLoop__finalize #-}
 
 -- | Called before the program exits.
@@ -126,6 +136,9 @@ _finalize cls
          godot_method_bind_call bindMainLoop__finalize (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MainLoop "_finalize" '[] (IO ()) where
+        nodeMethod = Godot.Core.MainLoop._finalize
 
 {-# NOINLINE bindMainLoop__global_menu_action #-}
 
@@ -152,10 +165,16 @@ _global_menu_action cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "_global_menu_action"
+           '[GodotVariant, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MainLoop._global_menu_action
+
 {-# NOINLINE bindMainLoop__idle #-}
 
--- | Called each idle frame with the time since the last idle frame as argument (in seconds). Equivalent to [method Node._process].
---   				If implemented, the method must return a boolean value. [code]true[/code] ends the main loop, while [code]false[/code] lets it proceed to the next frame.
+-- | Called each idle frame with the time since the last idle frame as argument (in seconds). Equivalent to @method Node._process@.
+--   				If implemented, the method must return a boolean value. @true@ ends the main loop, while @false@ lets it proceed to the next frame.
 bindMainLoop__idle :: MethodBind
 bindMainLoop__idle
   = unsafePerformIO $
@@ -165,8 +184,8 @@ bindMainLoop__idle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called each idle frame with the time since the last idle frame as argument (in seconds). Equivalent to [method Node._process].
---   				If implemented, the method must return a boolean value. [code]true[/code] ends the main loop, while [code]false[/code] lets it proceed to the next frame.
+-- | Called each idle frame with the time since the last idle frame as argument (in seconds). Equivalent to @method Node._process@.
+--   				If implemented, the method must return a boolean value. @true@ ends the main loop, while @false@ lets it proceed to the next frame.
 _idle ::
         (MainLoop :< cls, Object :< cls) => cls -> Float -> IO Bool
 _idle cls arg1
@@ -174,6 +193,9 @@ _idle cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindMainLoop__idle (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MainLoop "_idle" '[Float] (IO Bool) where
+        nodeMethod = Godot.Core.MainLoop._idle
 
 {-# NOINLINE bindMainLoop__initialize #-}
 
@@ -196,9 +218,12 @@ _initialize cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "_initialize" '[] (IO ()) where
+        nodeMethod = Godot.Core.MainLoop._initialize
+
 {-# NOINLINE bindMainLoop__input_event #-}
 
--- | Called whenever an [InputEvent] is received by the main loop.
+-- | Called whenever an @InputEvent@ is received by the main loop.
 bindMainLoop__input_event :: MethodBind
 bindMainLoop__input_event
   = unsafePerformIO $
@@ -208,7 +233,7 @@ bindMainLoop__input_event
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called whenever an [InputEvent] is received by the main loop.
+-- | Called whenever an @InputEvent@ is received by the main loop.
 _input_event ::
                (MainLoop :< cls, Object :< cls) => cls -> InputEvent -> IO ()
 _input_event cls arg1
@@ -219,9 +244,13 @@ _input_event cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "_input_event" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.MainLoop._input_event
+
 {-# NOINLINE bindMainLoop__input_text #-}
 
--- | Deprecated callback, does not do anything. Use [method _input_event] to parse text input. Will be removed in Godot 4.0.
+-- | Deprecated callback, does not do anything. Use @method _input_event@ to parse text input. Will be removed in Godot 4.0.
 bindMainLoop__input_text :: MethodBind
 bindMainLoop__input_text
   = unsafePerformIO $
@@ -231,7 +260,7 @@ bindMainLoop__input_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deprecated callback, does not do anything. Use [method _input_event] to parse text input. Will be removed in Godot 4.0.
+-- | Deprecated callback, does not do anything. Use @method _input_event@ to parse text input. Will be removed in Godot 4.0.
 _input_text ::
               (MainLoop :< cls, Object :< cls) => cls -> GodotString -> IO ()
 _input_text cls arg1
@@ -241,10 +270,14 @@ _input_text cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "_input_text" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.MainLoop._input_text
+
 {-# NOINLINE bindMainLoop__iteration #-}
 
--- | Called each physics frame with the time since the last physics frame as argument (in seconds). Equivalent to [method Node._physics_process].
---   				If implemented, the method must return a boolean value. [code]true[/code] ends the main loop, while [code]false[/code] lets it proceed to the next frame.
+-- | Called each physics frame with the time since the last physics frame as argument (in seconds). Equivalent to @method Node._physics_process@.
+--   				If implemented, the method must return a boolean value. @true@ ends the main loop, while @false@ lets it proceed to the next frame.
 bindMainLoop__iteration :: MethodBind
 bindMainLoop__iteration
   = unsafePerformIO $
@@ -254,8 +287,8 @@ bindMainLoop__iteration
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called each physics frame with the time since the last physics frame as argument (in seconds). Equivalent to [method Node._physics_process].
---   				If implemented, the method must return a boolean value. [code]true[/code] ends the main loop, while [code]false[/code] lets it proceed to the next frame.
+-- | Called each physics frame with the time since the last physics frame as argument (in seconds). Equivalent to @method Node._physics_process@.
+--   				If implemented, the method must return a boolean value. @true@ ends the main loop, while @false@ lets it proceed to the next frame.
 _iteration ::
              (MainLoop :< cls, Object :< cls) => cls -> Float -> IO Bool
 _iteration cls arg1
@@ -265,9 +298,12 @@ _iteration cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "_iteration" '[Float] (IO Bool) where
+        nodeMethod = Godot.Core.MainLoop._iteration
+
 {-# NOINLINE bindMainLoop_finish #-}
 
--- | Should not be called manually, override [method _finalize] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _finalize@ instead. Will be removed in Godot 4.0.
 bindMainLoop_finish :: MethodBind
 bindMainLoop_finish
   = unsafePerformIO $
@@ -277,7 +313,7 @@ bindMainLoop_finish
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Should not be called manually, override [method _finalize] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _finalize@ instead. Will be removed in Godot 4.0.
 finish :: (MainLoop :< cls, Object :< cls) => cls -> IO ()
 finish cls
   = withVariantArray []
@@ -285,9 +321,12 @@ finish cls
          godot_method_bind_call bindMainLoop_finish (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "finish" '[] (IO ()) where
+        nodeMethod = Godot.Core.MainLoop.finish
+
 {-# NOINLINE bindMainLoop_idle #-}
 
--- | Should not be called manually, override [method _idle] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _idle@ instead. Will be removed in Godot 4.0.
 bindMainLoop_idle :: MethodBind
 bindMainLoop_idle
   = unsafePerformIO $
@@ -297,7 +336,7 @@ bindMainLoop_idle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Should not be called manually, override [method _idle] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _idle@ instead. Will be removed in Godot 4.0.
 idle :: (MainLoop :< cls, Object :< cls) => cls -> Float -> IO Bool
 idle cls arg1
   = withVariantArray [toVariant arg1]
@@ -305,9 +344,12 @@ idle cls arg1
          godot_method_bind_call bindMainLoop_idle (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "idle" '[Float] (IO Bool) where
+        nodeMethod = Godot.Core.MainLoop.idle
+
 {-# NOINLINE bindMainLoop_init #-}
 
--- | Should not be called manually, override [method _initialize] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _initialize@ instead. Will be removed in Godot 4.0.
 bindMainLoop_init :: MethodBind
 bindMainLoop_init
   = unsafePerformIO $
@@ -317,7 +359,7 @@ bindMainLoop_init
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Should not be called manually, override [method _initialize] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _initialize@ instead. Will be removed in Godot 4.0.
 init :: (MainLoop :< cls, Object :< cls) => cls -> IO ()
 init cls
   = withVariantArray []
@@ -325,9 +367,12 @@ init cls
          godot_method_bind_call bindMainLoop_init (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "init" '[] (IO ()) where
+        nodeMethod = Godot.Core.MainLoop.init
+
 {-# NOINLINE bindMainLoop_input_event #-}
 
--- | Should not be called manually, override [method _input_event] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _input_event@ instead. Will be removed in Godot 4.0.
 bindMainLoop_input_event :: MethodBind
 bindMainLoop_input_event
   = unsafePerformIO $
@@ -337,7 +382,7 @@ bindMainLoop_input_event
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Should not be called manually, override [method _input_event] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _input_event@ instead. Will be removed in Godot 4.0.
 input_event ::
               (MainLoop :< cls, Object :< cls) => cls -> InputEvent -> IO ()
 input_event cls arg1
@@ -347,9 +392,13 @@ input_event cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "input_event" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.MainLoop.input_event
+
 {-# NOINLINE bindMainLoop_input_text #-}
 
--- | Should not be called manually, override [method _input_text] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _input_text@ instead. Will be removed in Godot 4.0.
 bindMainLoop_input_text :: MethodBind
 bindMainLoop_input_text
   = unsafePerformIO $
@@ -359,7 +408,7 @@ bindMainLoop_input_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Should not be called manually, override [method _input_text] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _input_text@ instead. Will be removed in Godot 4.0.
 input_text ::
              (MainLoop :< cls, Object :< cls) => cls -> GodotString -> IO ()
 input_text cls arg1
@@ -369,9 +418,13 @@ input_text cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MainLoop "input_text" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.MainLoop.input_text
+
 {-# NOINLINE bindMainLoop_iteration #-}
 
--- | Should not be called manually, override [method _iteration] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _iteration@ instead. Will be removed in Godot 4.0.
 bindMainLoop_iteration :: MethodBind
 bindMainLoop_iteration
   = unsafePerformIO $
@@ -381,7 +434,7 @@ bindMainLoop_iteration
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Should not be called manually, override [method _iteration] instead. Will be removed in Godot 4.0.
+-- | Should not be called manually, override @method _iteration@ instead. Will be removed in Godot 4.0.
 iteration ::
             (MainLoop :< cls, Object :< cls) => cls -> Float -> IO Bool
 iteration cls arg1
@@ -390,3 +443,6 @@ iteration cls arg1
          godot_method_bind_call bindMainLoop_iteration (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MainLoop "iteration" '[Float] (IO Bool) where
+        nodeMethod = Godot.Core.MainLoop.iteration

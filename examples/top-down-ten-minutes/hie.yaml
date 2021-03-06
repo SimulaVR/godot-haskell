@@ -1,0 +1,7 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "top-down-ten-minutes:lib"
+
+    - path: "./game"
+      component: "top-down-ten-minutes:lib"

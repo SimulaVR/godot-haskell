@@ -11,6 +11,10 @@ import           Godot.Internal.Dispatch       as M
                                                           , HasBaseClass(..)
                                                           -- Needed for up-casting objects
                                                           , upcast
+                                                          -- 
+                                                          , NodeMethod(..)
+                                                          , NodeSignal(..)
+                                                          , NodeProperty(..)
                                                           )
 
 -- Better to export these now than to inevitably have the user dig through the

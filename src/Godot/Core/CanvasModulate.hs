@@ -8,9 +8,17 @@ module Godot.Core.CanvasModulate
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
+
+instance NodeProperty CanvasModulate "color" Color 'False where
+        nodeProperty = (get_color, wrapDroppingSetter set_color, Nothing)
 
 {-# NOINLINE bindCanvasModulate_get_color #-}
 
@@ -35,6 +43,9 @@ get_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasModulate "get_color" '[] (IO Color) where
+        nodeMethod = Godot.Core.CanvasModulate.get_color
+
 {-# NOINLINE bindCanvasModulate_set_color #-}
 
 -- | The tint color to apply.
@@ -57,3 +68,7 @@ set_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasModulate "set_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasModulate.set_color

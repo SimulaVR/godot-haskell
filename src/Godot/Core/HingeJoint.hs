@@ -23,9 +23,14 @@ module Godot.Core.HingeJoint
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Joint()
 
 _PARAM_MOTOR_MAX_IMPULSE :: Int
 _PARAM_MOTOR_MAX_IMPULSE = 7
@@ -63,9 +68,68 @@ _PARAM_LIMIT_LOWER = 2
 _PARAM_BIAS :: Int
 _PARAM_BIAS = 0
 
+instance NodeProperty HingeJoint "angular_limit/bias" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_param, wrapIndexedSetter 3 set_param,
+             Nothing)
+
+instance NodeProperty HingeJoint "angular_limit/enable" Bool 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_flag, wrapIndexedSetter 0 set_flag,
+             Nothing)
+
+instance NodeProperty HingeJoint "angular_limit/lower" Float 'False
+         where
+        nodeProperty
+          = (_get_lower_limit, wrapDroppingSetter _set_lower_limit, Nothing)
+
+instance NodeProperty HingeJoint "angular_limit/relaxation" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 5 get_param, wrapIndexedSetter 5 set_param,
+             Nothing)
+
+instance NodeProperty HingeJoint "angular_limit/softness" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_param, wrapIndexedSetter 4 set_param,
+             Nothing)
+
+instance NodeProperty HingeJoint "angular_limit/upper" Float 'False
+         where
+        nodeProperty
+          = (_get_upper_limit, wrapDroppingSetter _set_upper_limit, Nothing)
+
+instance NodeProperty HingeJoint "motor/enable" Bool 'False where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_flag, wrapIndexedSetter 1 set_flag,
+             Nothing)
+
+instance NodeProperty HingeJoint "motor/max_impulse" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 7 get_param, wrapIndexedSetter 7 set_param,
+             Nothing)
+
+instance NodeProperty HingeJoint "motor/target_velocity" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 6 get_param, wrapIndexedSetter 6 set_param,
+             Nothing)
+
+instance NodeProperty HingeJoint "params/bias" Float 'False where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_param, wrapIndexedSetter 0 set_param,
+             Nothing)
+
 {-# NOINLINE bindHingeJoint__get_lower_limit #-}
 
--- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if @angular_limit/enable@ is @true@.
 bindHingeJoint__get_lower_limit :: MethodBind
 bindHingeJoint__get_lower_limit
   = unsafePerformIO $
@@ -75,7 +139,7 @@ bindHingeJoint__get_lower_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if @angular_limit/enable@ is @true@.
 _get_lower_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> IO Float
 _get_lower_limit cls
@@ -86,9 +150,13 @@ _get_lower_limit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HingeJoint "_get_lower_limit" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.HingeJoint._get_lower_limit
+
 {-# NOINLINE bindHingeJoint__get_upper_limit #-}
 
--- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if @angular_limit/enable@ is @true@.
 bindHingeJoint__get_upper_limit :: MethodBind
 bindHingeJoint__get_upper_limit
   = unsafePerformIO $
@@ -98,7 +166,7 @@ bindHingeJoint__get_upper_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if @angular_limit/enable@ is @true@.
 _get_upper_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> IO Float
 _get_upper_limit cls
@@ -109,9 +177,13 @@ _get_upper_limit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HingeJoint "_get_upper_limit" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.HingeJoint._get_upper_limit
+
 {-# NOINLINE bindHingeJoint__set_lower_limit #-}
 
--- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if @angular_limit/enable@ is @true@.
 bindHingeJoint__set_lower_limit :: MethodBind
 bindHingeJoint__set_lower_limit
   = unsafePerformIO $
@@ -121,7 +193,7 @@ bindHingeJoint__set_lower_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The minimum rotation. Only active if @angular_limit/enable@ is @true@.
 _set_lower_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_lower_limit cls arg1
@@ -132,9 +204,13 @@ _set_lower_limit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HingeJoint "_set_lower_limit" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.HingeJoint._set_lower_limit
+
 {-# NOINLINE bindHingeJoint__set_upper_limit #-}
 
--- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if @angular_limit/enable@ is @true@.
 bindHingeJoint__set_upper_limit :: MethodBind
 bindHingeJoint__set_upper_limit
   = unsafePerformIO $
@@ -144,7 +220,7 @@ bindHingeJoint__set_upper_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum rotation. Only active if [member angular_limit/enable] is [code]true[/code].
+-- | The maximum rotation. Only active if @angular_limit/enable@ is @true@.
 _set_upper_limit ::
                    (HingeJoint :< cls, Object :< cls) => cls -> Float -> IO ()
 _set_upper_limit cls arg1
@@ -154,6 +230,10 @@ _set_upper_limit cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HingeJoint "_set_upper_limit" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.HingeJoint._set_upper_limit
 
 {-# NOINLINE bindHingeJoint_get_flag #-}
 
@@ -177,6 +257,9 @@ get_flag cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HingeJoint "get_flag" '[Int] (IO Bool) where
+        nodeMethod = Godot.Core.HingeJoint.get_flag
+
 {-# NOINLINE bindHingeJoint_get_param #-}
 
 -- | Returns the value of the specified parameter.
@@ -199,9 +282,12 @@ get_param cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HingeJoint "get_param" '[Int] (IO Float) where
+        nodeMethod = Godot.Core.HingeJoint.get_param
+
 {-# NOINLINE bindHingeJoint_set_flag #-}
 
--- | If [code]true[/code], enables the specified flag.
+-- | If @true@, enables the specified flag.
 bindHingeJoint_set_flag :: MethodBind
 bindHingeJoint_set_flag
   = unsafePerformIO $
@@ -211,7 +297,7 @@ bindHingeJoint_set_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables the specified flag.
+-- | If @true@, enables the specified flag.
 set_flag ::
            (HingeJoint :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_flag cls arg1 arg2
@@ -220,6 +306,10 @@ set_flag cls arg1 arg2
          godot_method_bind_call bindHingeJoint_set_flag (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HingeJoint "set_flag" '[Int, Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.HingeJoint.set_flag
 
 {-# NOINLINE bindHingeJoint_set_param #-}
 
@@ -242,3 +332,7 @@ set_param cls arg1 arg2
          godot_method_bind_call bindHingeJoint_set_param (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HingeJoint "set_param" '[Int, Float] (IO ())
+         where
+        nodeMethod = Godot.Core.HingeJoint.set_param

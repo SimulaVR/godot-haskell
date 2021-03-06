@@ -39,9 +39,14 @@ module Godot.Core.BakedLightmap
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualInstance()
 
 _BAKE_QUALITY_LOW :: Int
 _BAKE_QUALITY_LOW = 0
@@ -73,9 +78,66 @@ _BAKE_ERROR_USER_ABORTED = 4
 _BAKE_QUALITY_HIGH :: Int
 _BAKE_QUALITY_HIGH = 2
 
+instance NodeProperty BakedLightmap "bake_cell_size" Float 'False
+         where
+        nodeProperty
+          = (get_bake_cell_size, wrapDroppingSetter set_bake_cell_size,
+             Nothing)
+
+instance NodeProperty BakedLightmap "bake_default_texels_per_unit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_bake_default_texels_per_unit,
+             wrapDroppingSetter set_bake_default_texels_per_unit, Nothing)
+
+instance NodeProperty BakedLightmap "bake_energy" Float 'False
+         where
+        nodeProperty = (get_energy, wrapDroppingSetter set_energy, Nothing)
+
+instance NodeProperty BakedLightmap "bake_extents" Vector3 'False
+         where
+        nodeProperty
+          = (get_extents, wrapDroppingSetter set_extents, Nothing)
+
+instance NodeProperty BakedLightmap "bake_hdr" Bool 'False where
+        nodeProperty = (is_hdr, wrapDroppingSetter set_hdr, Nothing)
+
+instance NodeProperty BakedLightmap "bake_mode" Int 'False where
+        nodeProperty
+          = (get_bake_mode, wrapDroppingSetter set_bake_mode, Nothing)
+
+instance NodeProperty BakedLightmap "bake_propagation" Float 'False
+         where
+        nodeProperty
+          = (get_propagation, wrapDroppingSetter set_propagation, Nothing)
+
+instance NodeProperty BakedLightmap "bake_quality" Int 'False where
+        nodeProperty
+          = (get_bake_quality, wrapDroppingSetter set_bake_quality, Nothing)
+
+instance NodeProperty BakedLightmap "capture_cell_size" Float
+           'False
+         where
+        nodeProperty
+          = (get_capture_cell_size, wrapDroppingSetter set_capture_cell_size,
+             Nothing)
+
+instance NodeProperty BakedLightmap "image_path" GodotString 'False
+         where
+        nodeProperty
+          = (get_image_path, wrapDroppingSetter set_image_path, Nothing)
+
+instance NodeProperty BakedLightmap "light_data" BakedLightmapData
+           'False
+         where
+        nodeProperty
+          = (get_light_data, wrapDroppingSetter set_light_data, Nothing)
+
 {-# NOINLINE bindBakedLightmap_bake #-}
 
--- | Bakes the lightmaps within the currently edited scene. Returns a [enum BakeError] to signify if the bake was successful, or if unsuccessful, how the bake failed.
+-- | Bakes the lightmaps within the currently edited scene. Returns a @enum BakeError@ to signify if the bake was successful, or if unsuccessful, how the bake failed.
 bindBakedLightmap_bake :: MethodBind
 bindBakedLightmap_bake
   = unsafePerformIO $
@@ -85,16 +147,23 @@ bindBakedLightmap_bake
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bakes the lightmaps within the currently edited scene. Returns a [enum BakeError] to signify if the bake was successful, or if unsuccessful, how the bake failed.
+-- | Bakes the lightmaps within the currently edited scene. Returns a @enum BakeError@ to signify if the bake was successful, or if unsuccessful, how the bake failed.
 bake ::
        (BakedLightmap :< cls, Object :< cls) =>
-       cls -> Node -> Bool -> IO Int
+       cls -> Maybe Node -> Maybe Bool -> IO Int
 bake cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [maybe VariantNil toVariant arg1,
+       maybe (VariantBool False) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindBakedLightmap_bake (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "bake" '[Maybe Node, Maybe Bool]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.bake
 
 {-# NOINLINE bindBakedLightmap_debug_bake #-}
 
@@ -117,6 +186,9 @@ debug_bake cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "debug_bake" '[] (IO ()) where
+        nodeMethod = Godot.Core.BakedLightmap.debug_bake
 
 {-# NOINLINE bindBakedLightmap_get_bake_cell_size #-}
 
@@ -142,9 +214,14 @@ get_bake_cell_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "get_bake_cell_size" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_bake_cell_size
+
 {-# NOINLINE bindBakedLightmap_get_bake_default_texels_per_unit #-}
 
--- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
+-- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 bindBakedLightmap_get_bake_default_texels_per_unit :: MethodBind
 bindBakedLightmap_get_bake_default_texels_per_unit
   = unsafePerformIO $
@@ -154,7 +231,7 @@ bindBakedLightmap_get_bake_default_texels_per_unit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
+-- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 get_bake_default_texels_per_unit ::
                                    (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_bake_default_texels_per_unit cls
@@ -167,9 +244,17 @@ get_bake_default_texels_per_unit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap
+           "get_bake_default_texels_per_unit"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.BakedLightmap.get_bake_default_texels_per_unit
+
 {-# NOINLINE bindBakedLightmap_get_bake_mode #-}
 
--- | Lightmapping mode. See [enum BakeMode].
+-- | Lightmapping mode. See @enum BakeMode@.
 bindBakedLightmap_get_bake_mode :: MethodBind
 bindBakedLightmap_get_bake_mode
   = unsafePerformIO $
@@ -179,7 +264,7 @@ bindBakedLightmap_get_bake_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Lightmapping mode. See [enum BakeMode].
+-- | Lightmapping mode. See @enum BakeMode@.
 get_bake_mode ::
                 (BakedLightmap :< cls, Object :< cls) => cls -> IO Int
 get_bake_mode cls
@@ -190,9 +275,13 @@ get_bake_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "get_bake_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_bake_mode
+
 {-# NOINLINE bindBakedLightmap_get_bake_quality #-}
 
--- | Three quality modes are available. Higher quality requires more rendering time. See [enum BakeQuality].
+-- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
 bindBakedLightmap_get_bake_quality :: MethodBind
 bindBakedLightmap_get_bake_quality
   = unsafePerformIO $
@@ -202,7 +291,7 @@ bindBakedLightmap_get_bake_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Three quality modes are available. Higher quality requires more rendering time. See [enum BakeQuality].
+-- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
 get_bake_quality ::
                    (BakedLightmap :< cls, Object :< cls) => cls -> IO Int
 get_bake_quality cls
@@ -214,9 +303,13 @@ get_bake_quality cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "get_bake_quality" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_bake_quality
+
 {-# NOINLINE bindBakedLightmap_get_capture_cell_size #-}
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than [member bake_cell_size].
+-- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
 bindBakedLightmap_get_capture_cell_size :: MethodBind
 bindBakedLightmap_get_capture_cell_size
   = unsafePerformIO $
@@ -226,7 +319,7 @@ bindBakedLightmap_get_capture_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than [member bake_cell_size].
+-- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
 get_capture_cell_size ::
                         (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_capture_cell_size cls
@@ -237,6 +330,11 @@ get_capture_cell_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "get_capture_cell_size" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_capture_cell_size
 
 {-# NOINLINE bindBakedLightmap_get_energy #-}
 
@@ -261,6 +359,9 @@ get_energy cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "get_energy" '[] (IO Float) where
+        nodeMethod = Godot.Core.BakedLightmap.get_energy
+
 {-# NOINLINE bindBakedLightmap_get_extents #-}
 
 -- | The size of the affected area.
@@ -283,6 +384,10 @@ get_extents cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "get_extents" '[] (IO Vector3)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_extents
 
 {-# NOINLINE bindBakedLightmap_get_image_path #-}
 
@@ -307,6 +412,11 @@ get_image_path cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "get_image_path" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_image_path
 
 {-# NOINLINE bindBakedLightmap_get_light_data #-}
 
@@ -333,6 +443,11 @@ get_light_data cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "get_light_data" '[]
+           (IO BakedLightmapData)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_light_data
+
 {-# NOINLINE bindBakedLightmap_get_propagation #-}
 
 -- | Defines how far the light will travel before it is no longer effective. The higher the number, the farther the light will travel. For instance, if the value is set to 2, the light will go twice as far. If the value is set to 0.5, the light will only go half as far.
@@ -357,9 +472,13 @@ get_propagation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "get_propagation" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.BakedLightmap.get_propagation
+
 {-# NOINLINE bindBakedLightmap_is_hdr #-}
 
--- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
+-- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 bindBakedLightmap_is_hdr :: MethodBind
 bindBakedLightmap_is_hdr
   = unsafePerformIO $
@@ -369,7 +488,7 @@ bindBakedLightmap_is_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
+-- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 is_hdr :: (BakedLightmap :< cls, Object :< cls) => cls -> IO Bool
 is_hdr cls
   = withVariantArray []
@@ -377,6 +496,9 @@ is_hdr cls
          godot_method_bind_call bindBakedLightmap_is_hdr (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "is_hdr" '[] (IO Bool) where
+        nodeMethod = Godot.Core.BakedLightmap.is_hdr
 
 {-# NOINLINE bindBakedLightmap_set_bake_cell_size #-}
 
@@ -402,9 +524,14 @@ set_bake_cell_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "set_bake_cell_size" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_bake_cell_size
+
 {-# NOINLINE bindBakedLightmap_set_bake_default_texels_per_unit #-}
 
--- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
+-- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 bindBakedLightmap_set_bake_default_texels_per_unit :: MethodBind
 bindBakedLightmap_set_bake_default_texels_per_unit
   = unsafePerformIO $
@@ -414,7 +541,7 @@ bindBakedLightmap_set_bake_default_texels_per_unit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If a [member Mesh.lightmap_size_hint] isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
+-- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 set_bake_default_texels_per_unit ::
                                    (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bake_default_texels_per_unit cls arg1
@@ -427,9 +554,17 @@ set_bake_default_texels_per_unit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap
+           "set_bake_default_texels_per_unit"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.BakedLightmap.set_bake_default_texels_per_unit
+
 {-# NOINLINE bindBakedLightmap_set_bake_mode #-}
 
--- | Lightmapping mode. See [enum BakeMode].
+-- | Lightmapping mode. See @enum BakeMode@.
 bindBakedLightmap_set_bake_mode :: MethodBind
 bindBakedLightmap_set_bake_mode
   = unsafePerformIO $
@@ -439,7 +574,7 @@ bindBakedLightmap_set_bake_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Lightmapping mode. See [enum BakeMode].
+-- | Lightmapping mode. See @enum BakeMode@.
 set_bake_mode ::
                 (BakedLightmap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_bake_mode cls arg1
@@ -450,9 +585,13 @@ set_bake_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "set_bake_mode" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_bake_mode
+
 {-# NOINLINE bindBakedLightmap_set_bake_quality #-}
 
--- | Three quality modes are available. Higher quality requires more rendering time. See [enum BakeQuality].
+-- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
 bindBakedLightmap_set_bake_quality :: MethodBind
 bindBakedLightmap_set_bake_quality
   = unsafePerformIO $
@@ -462,7 +601,7 @@ bindBakedLightmap_set_bake_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Three quality modes are available. Higher quality requires more rendering time. See [enum BakeQuality].
+-- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
 set_bake_quality ::
                    (BakedLightmap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_bake_quality cls arg1
@@ -474,9 +613,13 @@ set_bake_quality cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "set_bake_quality" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_bake_quality
+
 {-# NOINLINE bindBakedLightmap_set_capture_cell_size #-}
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than [member bake_cell_size].
+-- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
 bindBakedLightmap_set_capture_cell_size :: MethodBind
 bindBakedLightmap_set_capture_cell_size
   = unsafePerformIO $
@@ -486,7 +629,7 @@ bindBakedLightmap_set_capture_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than [member bake_cell_size].
+-- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
 set_capture_cell_size ::
                         (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_capture_cell_size cls arg1
@@ -497,6 +640,11 @@ set_capture_cell_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "set_capture_cell_size" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_capture_cell_size
 
 {-# NOINLINE bindBakedLightmap_set_energy #-}
 
@@ -521,6 +669,10 @@ set_energy cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "set_energy" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_energy
+
 {-# NOINLINE bindBakedLightmap_set_extents #-}
 
 -- | The size of the affected area.
@@ -544,9 +696,13 @@ set_extents cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "set_extents" '[Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_extents
+
 {-# NOINLINE bindBakedLightmap_set_hdr #-}
 
--- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
+-- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 bindBakedLightmap_set_hdr :: MethodBind
 bindBakedLightmap_set_hdr
   = unsafePerformIO $
@@ -556,7 +712,7 @@ bindBakedLightmap_set_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the lightmap can capture light values greater than [code]1.0[/code]. Turning this off will result in a smaller file size.
+-- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 set_hdr ::
           (BakedLightmap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hdr cls arg1
@@ -566,6 +722,9 @@ set_hdr cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "set_hdr" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.BakedLightmap.set_hdr
 
 {-# NOINLINE bindBakedLightmap_set_image_path #-}
 
@@ -592,6 +751,11 @@ set_image_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "set_image_path" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_image_path
+
 {-# NOINLINE bindBakedLightmap_set_light_data #-}
 
 -- | The calculated light data.
@@ -617,6 +781,12 @@ set_light_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmap "set_light_data"
+           '[BakedLightmapData]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_light_data
+
 {-# NOINLINE bindBakedLightmap_set_propagation #-}
 
 -- | Defines how far the light will travel before it is no longer effective. The higher the number, the farther the light will travel. For instance, if the value is set to 2, the light will go twice as far. If the value is set to 0.5, the light will only go half as far.
@@ -640,3 +810,8 @@ set_propagation cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmap "set_propagation" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmap.set_propagation

@@ -13,9 +13,14 @@ module Godot.Core.LinkButton
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.BaseButton()
 
 _UNDERLINE_MODE_ALWAYS :: Int
 _UNDERLINE_MODE_ALWAYS = 0
@@ -25,6 +30,14 @@ _UNDERLINE_MODE_NEVER = 2
 
 _UNDERLINE_MODE_ON_HOVER :: Int
 _UNDERLINE_MODE_ON_HOVER = 1
+
+instance NodeProperty LinkButton "text" GodotString 'False where
+        nodeProperty = (get_text, wrapDroppingSetter set_text, Nothing)
+
+instance NodeProperty LinkButton "underline" Int 'False where
+        nodeProperty
+          = (get_underline_mode, wrapDroppingSetter set_underline_mode,
+             Nothing)
 
 {-# NOINLINE bindLinkButton_get_text #-}
 
@@ -48,9 +61,13 @@ get_text cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LinkButton "get_text" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.LinkButton.get_text
+
 {-# NOINLINE bindLinkButton_get_underline_mode #-}
 
--- | Determines when to show the underline. See [enum UnderlineMode] for options.
+-- | Determines when to show the underline. See @enum UnderlineMode@ for options.
 bindLinkButton_get_underline_mode :: MethodBind
 bindLinkButton_get_underline_mode
   = unsafePerformIO $
@@ -60,7 +77,7 @@ bindLinkButton_get_underline_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines when to show the underline. See [enum UnderlineMode] for options.
+-- | Determines when to show the underline. See @enum UnderlineMode@ for options.
 get_underline_mode ::
                      (LinkButton :< cls, Object :< cls) => cls -> IO Int
 get_underline_mode cls
@@ -71,6 +88,10 @@ get_underline_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LinkButton "get_underline_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.LinkButton.get_underline_mode
 
 {-# NOINLINE bindLinkButton_set_text #-}
 
@@ -94,9 +115,13 @@ set_text cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LinkButton "set_text" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.LinkButton.set_text
+
 {-# NOINLINE bindLinkButton_set_underline_mode #-}
 
--- | Determines when to show the underline. See [enum UnderlineMode] for options.
+-- | Determines when to show the underline. See @enum UnderlineMode@ for options.
 bindLinkButton_set_underline_mode :: MethodBind
 bindLinkButton_set_underline_mode
   = unsafePerformIO $
@@ -106,7 +131,7 @@ bindLinkButton_set_underline_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines when to show the underline. See [enum UnderlineMode] for options.
+-- | Determines when to show the underline. See @enum UnderlineMode@ for options.
 set_underline_mode ::
                      (LinkButton :< cls, Object :< cls) => cls -> Int -> IO ()
 set_underline_mode cls arg1
@@ -117,3 +142,7 @@ set_underline_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LinkButton "set_underline_mode" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.LinkButton.set_underline_mode

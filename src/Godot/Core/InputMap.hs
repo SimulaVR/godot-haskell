@@ -16,13 +16,18 @@ module Godot.Core.InputMap
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 {-# NOINLINE bindInputMap_action_add_event #-}
 
--- | Adds an [InputEvent] to an action. This [InputEvent] will trigger the action.
+-- | Adds an @InputEvent@ to an action. This @InputEvent@ will trigger the action.
 bindInputMap_action_add_event :: MethodBind
 bindInputMap_action_add_event
   = unsafePerformIO $
@@ -32,7 +37,7 @@ bindInputMap_action_add_event
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an [InputEvent] to an action. This [InputEvent] will trigger the action.
+-- | Adds an @InputEvent@ to an action. This @InputEvent@ will trigger the action.
 action_add_event ::
                    (InputMap :< cls, Object :< cls) =>
                    cls -> GodotString -> InputEvent -> IO ()
@@ -44,9 +49,15 @@ action_add_event cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "action_add_event"
+           '[GodotString, InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputMap.action_add_event
+
 {-# NOINLINE bindInputMap_action_erase_event #-}
 
--- | Removes an [InputEvent] from an action.
+-- | Removes an @InputEvent@ from an action.
 bindInputMap_action_erase_event :: MethodBind
 bindInputMap_action_erase_event
   = unsafePerformIO $
@@ -56,7 +67,7 @@ bindInputMap_action_erase_event
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes an [InputEvent] from an action.
+-- | Removes an @InputEvent@ from an action.
 action_erase_event ::
                      (InputMap :< cls, Object :< cls) =>
                      cls -> GodotString -> InputEvent -> IO ()
@@ -67,6 +78,12 @@ action_erase_event cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputMap "action_erase_event"
+           '[GodotString, InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputMap.action_erase_event
 
 {-# NOINLINE bindInputMap_action_erase_events #-}
 
@@ -92,9 +109,14 @@ action_erase_events cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "action_erase_events" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputMap.action_erase_events
+
 {-# NOINLINE bindInputMap_action_has_event #-}
 
--- | Returns [code]true[/code] if the action has the given [InputEvent] associated with it.
+-- | Returns @true@ if the action has the given @InputEvent@ associated with it.
 bindInputMap_action_has_event :: MethodBind
 bindInputMap_action_has_event
   = unsafePerformIO $
@@ -104,7 +126,7 @@ bindInputMap_action_has_event
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the action has the given [InputEvent] associated with it.
+-- | Returns @true@ if the action has the given @InputEvent@ associated with it.
 action_has_event ::
                    (InputMap :< cls, Object :< cls) =>
                    cls -> GodotString -> InputEvent -> IO Bool
@@ -115,6 +137,12 @@ action_has_event cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputMap "action_has_event"
+           '[GodotString, InputEvent]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.InputMap.action_has_event
 
 {-# NOINLINE bindInputMap_action_set_deadzone #-}
 
@@ -141,10 +169,16 @@ action_set_deadzone cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "action_set_deadzone"
+           '[GodotString, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputMap.action_set_deadzone
+
 {-# NOINLINE bindInputMap_add_action #-}
 
--- | Adds an empty action to the [InputMap] with a configurable [code]deadzone[/code].
---   				An [InputEvent] can then be added to this action with [method action_add_event].
+-- | Adds an empty action to the @InputMap@ with a configurable @deadzone@.
+--   				An @InputEvent@ can then be added to this action with @method action_add_event@.
 bindInputMap_add_action :: MethodBind
 bindInputMap_add_action
   = unsafePerformIO $
@@ -154,21 +188,28 @@ bindInputMap_add_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an empty action to the [InputMap] with a configurable [code]deadzone[/code].
---   				An [InputEvent] can then be added to this action with [method action_add_event].
+-- | Adds an empty action to the @InputMap@ with a configurable @deadzone@.
+--   				An @InputEvent@ can then be added to this action with @method action_add_event@.
 add_action ::
              (InputMap :< cls, Object :< cls) =>
-             cls -> GodotString -> Float -> IO ()
+             cls -> GodotString -> Maybe Float -> IO ()
 add_action cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantReal (0.5)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindInputMap_add_action (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "add_action"
+           '[GodotString, Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputMap.add_action
+
 {-# NOINLINE bindInputMap_erase_action #-}
 
--- | Removes an action from the [InputMap].
+-- | Removes an action from the @InputMap@.
 bindInputMap_erase_action :: MethodBind
 bindInputMap_erase_action
   = unsafePerformIO $
@@ -178,7 +219,7 @@ bindInputMap_erase_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes an action from the [InputMap].
+-- | Removes an action from the @InputMap@.
 erase_action ::
                (InputMap :< cls, Object :< cls) => cls -> GodotString -> IO ()
 erase_action cls arg1
@@ -189,9 +230,13 @@ erase_action cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "erase_action" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.InputMap.erase_action
+
 {-# NOINLINE bindInputMap_event_is_action #-}
 
--- | Returns [code]true[/code] if the given event is part of an existing action. This method ignores keyboard modifiers if the given [InputEvent] is not pressed (for proper release detection). See [method action_has_event] if you don't want this behavior.
+-- | Returns @true@ if the given event is part of an existing action. This method ignores keyboard modifiers if the given @InputEvent@ is not pressed (for proper release detection). See @method action_has_event@ if you don't want this behavior.
 bindInputMap_event_is_action :: MethodBind
 bindInputMap_event_is_action
   = unsafePerformIO $
@@ -201,7 +246,7 @@ bindInputMap_event_is_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given event is part of an existing action. This method ignores keyboard modifiers if the given [InputEvent] is not pressed (for proper release detection). See [method action_has_event] if you don't want this behavior.
+-- | Returns @true@ if the given event is part of an existing action. This method ignores keyboard modifiers if the given @InputEvent@ is not pressed (for proper release detection). See @method action_has_event@ if you don't want this behavior.
 event_is_action ::
                   (InputMap :< cls, Object :< cls) =>
                   cls -> InputEvent -> GodotString -> IO Bool
@@ -213,9 +258,15 @@ event_is_action cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "event_is_action"
+           '[InputEvent, GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.InputMap.event_is_action
+
 {-# NOINLINE bindInputMap_get_action_list #-}
 
--- | Returns an array of [InputEvent]s associated with a given action.
+-- | Returns an array of @InputEvent@s associated with a given action.
 bindInputMap_get_action_list :: MethodBind
 bindInputMap_get_action_list
   = unsafePerformIO $
@@ -225,7 +276,7 @@ bindInputMap_get_action_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of [InputEvent]s associated with a given action.
+-- | Returns an array of @InputEvent@s associated with a given action.
 get_action_list ::
                   (InputMap :< cls, Object :< cls) => cls -> GodotString -> IO Array
 get_action_list cls arg1
@@ -236,9 +287,14 @@ get_action_list cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "get_action_list" '[GodotString]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.InputMap.get_action_list
+
 {-# NOINLINE bindInputMap_get_actions #-}
 
--- | Returns an array of all actions in the [InputMap].
+-- | Returns an array of all actions in the @InputMap@.
 bindInputMap_get_actions :: MethodBind
 bindInputMap_get_actions
   = unsafePerformIO $
@@ -248,7 +304,7 @@ bindInputMap_get_actions
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of all actions in the [InputMap].
+-- | Returns an array of all actions in the @InputMap@.
 get_actions :: (InputMap :< cls, Object :< cls) => cls -> IO Array
 get_actions cls
   = withVariantArray []
@@ -257,9 +313,12 @@ get_actions cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "get_actions" '[] (IO Array) where
+        nodeMethod = Godot.Core.InputMap.get_actions
+
 {-# NOINLINE bindInputMap_has_action #-}
 
--- | Returns [code]true[/code] if the [InputMap] has a registered action with the given name.
+-- | Returns @true@ if the @InputMap@ has a registered action with the given name.
 bindInputMap_has_action :: MethodBind
 bindInputMap_has_action
   = unsafePerformIO $
@@ -269,7 +328,7 @@ bindInputMap_has_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the [InputMap] has a registered action with the given name.
+-- | Returns @true@ if the @InputMap@ has a registered action with the given name.
 has_action ::
              (InputMap :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_action cls arg1
@@ -279,9 +338,13 @@ has_action cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputMap "has_action" '[GodotString] (IO Bool)
+         where
+        nodeMethod = Godot.Core.InputMap.has_action
+
 {-# NOINLINE bindInputMap_load_from_globals #-}
 
--- | Clears all [InputEventAction] in the [InputMap] and load it anew from [ProjectSettings].
+-- | Clears all @InputEventAction@ in the @InputMap@ and load it anew from @ProjectSettings@.
 bindInputMap_load_from_globals :: MethodBind
 bindInputMap_load_from_globals
   = unsafePerformIO $
@@ -291,7 +354,7 @@ bindInputMap_load_from_globals
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Clears all [InputEventAction] in the [InputMap] and load it anew from [ProjectSettings].
+-- | Clears all @InputEventAction@ in the @InputMap@ and load it anew from @ProjectSettings@.
 load_from_globals ::
                     (InputMap :< cls, Object :< cls) => cls -> IO ()
 load_from_globals cls
@@ -301,3 +364,6 @@ load_from_globals cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputMap "load_from_globals" '[] (IO ()) where
+        nodeMethod = Godot.Core.InputMap.load_from_globals

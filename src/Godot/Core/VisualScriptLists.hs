@@ -14,9 +14,14 @@ module Godot.Core.VisualScriptLists
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 {-# NOINLINE bindVisualScriptLists_add_input_data_port #-}
 
@@ -41,6 +46,12 @@ add_input_data_port cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptLists "add_input_data_port"
+           '[Int, GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.add_input_data_port
+
 {-# NOINLINE bindVisualScriptLists_add_output_data_port #-}
 
 bindVisualScriptLists_add_output_data_port :: MethodBind
@@ -64,6 +75,12 @@ add_output_data_port cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptLists "add_output_data_port"
+           '[Int, GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.add_output_data_port
+
 {-# NOINLINE bindVisualScriptLists_remove_input_data_port #-}
 
 bindVisualScriptLists_remove_input_data_port :: MethodBind
@@ -85,6 +102,12 @@ remove_input_data_port cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptLists "remove_input_data_port"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.remove_input_data_port
 
 {-# NOINLINE bindVisualScriptLists_remove_output_data_port #-}
 
@@ -108,6 +131,12 @@ remove_output_data_port cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptLists "remove_output_data_port"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.remove_output_data_port
 
 {-# NOINLINE bindVisualScriptLists_set_input_data_port_name #-}
 
@@ -133,6 +162,12 @@ set_input_data_port_name cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptLists "set_input_data_port_name"
+           '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.set_input_data_port_name
+
 {-# NOINLINE bindVisualScriptLists_set_input_data_port_type #-}
 
 bindVisualScriptLists_set_input_data_port_type :: MethodBind
@@ -156,6 +191,12 @@ set_input_data_port_type cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptLists "set_input_data_port_type"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.set_input_data_port_type
 
 {-# NOINLINE bindVisualScriptLists_set_output_data_port_name #-}
 
@@ -181,6 +222,12 @@ set_output_data_port_name cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptLists "set_output_data_port_name"
+           '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.set_output_data_port_name
+
 {-# NOINLINE bindVisualScriptLists_set_output_data_port_type #-}
 
 bindVisualScriptLists_set_output_data_port_type :: MethodBind
@@ -204,3 +251,9 @@ set_output_data_port_type cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptLists "set_output_data_port_type"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptLists.set_output_data_port_type

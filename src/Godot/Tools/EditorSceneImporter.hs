@@ -22,9 +22,14 @@ module Godot.Tools.EditorSceneImporter
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 _IMPORT_MATERIALS_IN_INSTANCES :: Int
 _IMPORT_MATERIALS_IN_INSTANCES = 1024
@@ -78,6 +83,11 @@ _get_extensions cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSceneImporter "_get_extensions" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Tools.EditorSceneImporter._get_extensions
+
 {-# NOINLINE bindEditorSceneImporter__get_import_flags #-}
 
 bindEditorSceneImporter__get_import_flags :: MethodBind
@@ -99,6 +109,11 @@ _get_import_flags cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSceneImporter "_get_import_flags" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Tools.EditorSceneImporter._get_import_flags
 
 {-# NOINLINE bindEditorSceneImporter__import_animation #-}
 
@@ -123,6 +138,12 @@ _import_animation cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSceneImporter "_import_animation"
+           '[GodotString, Int, Int]
+           (IO Animation)
+         where
+        nodeMethod = Godot.Tools.EditorSceneImporter._import_animation
+
 {-# NOINLINE bindEditorSceneImporter__import_scene #-}
 
 bindEditorSceneImporter__import_scene :: MethodBind
@@ -145,6 +166,12 @@ _import_scene cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSceneImporter "_import_scene"
+           '[GodotString, Int, Int]
+           (IO Node)
+         where
+        nodeMethod = Godot.Tools.EditorSceneImporter._import_scene
 
 {-# NOINLINE bindEditorSceneImporter_import_animation_from_other_importer
              #-}
@@ -172,6 +199,14 @@ import_animation_from_other_importer cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSceneImporter
+           "import_animation_from_other_importer"
+           '[GodotString, Int, Int]
+           (IO Animation)
+         where
+        nodeMethod
+          = Godot.Tools.EditorSceneImporter.import_animation_from_other_importer
+
 {-# NOINLINE bindEditorSceneImporter_import_scene_from_other_importer
              #-}
 
@@ -197,3 +232,11 @@ import_scene_from_other_importer cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSceneImporter
+           "import_scene_from_other_importer"
+           '[GodotString, Int, Int]
+           (IO Node)
+         where
+        nodeMethod
+          = Godot.Tools.EditorSceneImporter.import_scene_from_other_importer

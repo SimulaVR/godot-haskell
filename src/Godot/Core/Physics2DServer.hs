@@ -172,9 +172,14 @@ module Godot.Core.Physics2DServer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 _SPACE_PARAM_CONSTRAINT_DEFAULT_BIAS :: Int
 _SPACE_PARAM_CONSTRAINT_DEFAULT_BIAS = 6
@@ -383,16 +388,26 @@ bindPhysics2DServer_area_add_shape
 -- | Adds a shape to the area, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
 area_add_shape ::
                  (Physics2DServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Rid -> Transform2d -> Bool -> IO ()
+                 cls -> Rid -> Rid -> Maybe Transform2d -> Maybe Bool -> IO ()
 area_add_shape cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantTransform2d
+         (TF2d (V2 1 0) (V2 0 1) (V2 0 0))
+         arg3,
+       maybe (VariantBool False) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysics2DServer_area_add_shape
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_add_shape"
+           '[Rid, Rid, Maybe Transform2d, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_add_shape
 
 {-# NOINLINE bindPhysics2DServer_area_attach_canvas_instance_id #-}
 
@@ -418,9 +433,17 @@ area_attach_canvas_instance_id cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "area_attach_canvas_instance_id"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.area_attach_canvas_instance_id
+
 {-# NOINLINE bindPhysics2DServer_area_attach_object_instance_id #-}
 
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+-- | Assigns the area to a descendant of @Object@, so it can exist in the node tree.
 bindPhysics2DServer_area_attach_object_instance_id :: MethodBind
 bindPhysics2DServer_area_attach_object_instance_id
   = unsafePerformIO $
@@ -430,7 +453,7 @@ bindPhysics2DServer_area_attach_object_instance_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+-- | Assigns the area to a descendant of @Object@, so it can exist in the node tree.
 area_attach_object_instance_id ::
                                  (Physics2DServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Int -> IO ()
@@ -443,6 +466,14 @@ area_attach_object_instance_id cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer
+           "area_attach_object_instance_id"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.area_attach_object_instance_id
 
 {-# NOINLINE bindPhysics2DServer_area_clear_shapes #-}
 
@@ -468,9 +499,14 @@ area_clear_shapes cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_clear_shapes" '[Rid]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_clear_shapes
+
 {-# NOINLINE bindPhysics2DServer_area_create #-}
 
--- | Creates an [Area2D].
+-- | Creates an @Area2D@.
 bindPhysics2DServer_area_create :: MethodBind
 bindPhysics2DServer_area_create
   = unsafePerformIO $
@@ -480,7 +516,7 @@ bindPhysics2DServer_area_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an [Area2D].
+-- | Creates an @Area2D@.
 area_create ::
               (Physics2DServer :< cls, Object :< cls) => cls -> IO Rid
 area_create cls
@@ -490,6 +526,10 @@ area_create cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_create" '[] (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_create
 
 {-# NOINLINE bindPhysics2DServer_area_get_canvas_instance_id #-}
 
@@ -513,6 +553,12 @@ area_get_canvas_instance_id cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_get_canvas_instance_id"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_canvas_instance_id
 
 {-# NOINLINE bindPhysics2DServer_area_get_object_instance_id #-}
 
@@ -539,9 +585,15 @@ area_get_object_instance_id cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_get_object_instance_id"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_object_instance_id
+
 {-# NOINLINE bindPhysics2DServer_area_get_param #-}
 
--- | Returns an area parameter value. See [enum AreaParameter] for a list of available parameters.
+-- | Returns an area parameter value. See @enum AreaParameter@ for a list of available parameters.
 bindPhysics2DServer_area_get_param :: MethodBind
 bindPhysics2DServer_area_get_param
   = unsafePerformIO $
@@ -551,7 +603,7 @@ bindPhysics2DServer_area_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an area parameter value. See [enum AreaParameter] for a list of available parameters.
+-- | Returns an area parameter value. See @enum AreaParameter@ for a list of available parameters.
 area_get_param ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> IO GodotVariant
@@ -564,9 +616,14 @@ area_get_param cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_get_param" '[Rid, Int]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_param
+
 {-# NOINLINE bindPhysics2DServer_area_get_shape #-}
 
--- | Returns the [RID] of the nth shape of an area.
+-- | Returns the @RID@ of the nth shape of an area.
 bindPhysics2DServer_area_get_shape :: MethodBind
 bindPhysics2DServer_area_get_shape
   = unsafePerformIO $
@@ -576,7 +633,7 @@ bindPhysics2DServer_area_get_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [RID] of the nth shape of an area.
+-- | Returns the @RID@ of the nth shape of an area.
 area_get_shape ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> IO Rid
@@ -588,6 +645,11 @@ area_get_shape cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_get_shape" '[Rid, Int]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_shape
 
 {-# NOINLINE bindPhysics2DServer_area_get_shape_count #-}
 
@@ -612,6 +674,11 @@ area_get_shape_count cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_get_shape_count" '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_shape_count
 
 {-# NOINLINE bindPhysics2DServer_area_get_shape_transform #-}
 
@@ -638,6 +705,12 @@ area_get_shape_transform cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_get_shape_transform"
+           '[Rid, Int]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_shape_transform
+
 {-# NOINLINE bindPhysics2DServer_area_get_space #-}
 
 -- | Returns the space assigned to the area.
@@ -661,6 +734,11 @@ area_get_space cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_get_space" '[Rid]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_space
 
 {-# NOINLINE bindPhysics2DServer_area_get_space_override_mode #-}
 
@@ -687,6 +765,13 @@ area_get_space_override_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_get_space_override_mode"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.area_get_space_override_mode
+
 {-# NOINLINE bindPhysics2DServer_area_get_transform #-}
 
 -- | Returns the transform matrix for an area.
@@ -711,6 +796,11 @@ area_get_transform cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_get_transform" '[Rid]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_get_transform
 
 {-# NOINLINE bindPhysics2DServer_area_remove_shape #-}
 
@@ -737,6 +827,11 @@ area_remove_shape cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_remove_shape" '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_remove_shape
+
 {-# NOINLINE bindPhysics2DServer_area_set_area_monitor_callback #-}
 
 bindPhysics2DServer_area_set_area_monitor_callback :: MethodBind
@@ -760,6 +855,14 @@ area_set_area_monitor_callback cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer
+           "area_set_area_monitor_callback"
+           '[Rid, Object, GodotString]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.area_set_area_monitor_callback
 
 {-# NOINLINE bindPhysics2DServer_area_set_collision_layer #-}
 
@@ -786,6 +889,12 @@ area_set_collision_layer cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_set_collision_layer"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_collision_layer
+
 {-# NOINLINE bindPhysics2DServer_area_set_collision_mask #-}
 
 -- | Sets which physics layers the area will monitor.
@@ -811,11 +920,17 @@ area_set_collision_mask cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_set_collision_mask"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_collision_mask
+
 {-# NOINLINE bindPhysics2DServer_area_set_monitor_callback #-}
 
 -- | Sets the function to call when any body/area enters or exits the area. This callback will be called for any object interacting with the area, and takes five parameters:
---   				1: [constant AREA_BODY_ADDED] or [constant AREA_BODY_REMOVED], depending on whether the object entered or exited the area.
---   				2: [RID] of the object that entered/exited the area.
+--   				1: @AREA_BODY_ADDED@ or @AREA_BODY_REMOVED@, depending on whether the object entered or exited the area.
+--   				2: @RID@ of the object that entered/exited the area.
 --   				3: Instance ID of the object that entered/exited the area.
 --   				4: The shape index of the object that entered/exited the area.
 --   				5: The shape index of the area where the object entered/exited.
@@ -829,8 +944,8 @@ bindPhysics2DServer_area_set_monitor_callback
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the function to call when any body/area enters or exits the area. This callback will be called for any object interacting with the area, and takes five parameters:
---   				1: [constant AREA_BODY_ADDED] or [constant AREA_BODY_REMOVED], depending on whether the object entered or exited the area.
---   				2: [RID] of the object that entered/exited the area.
+--   				1: @AREA_BODY_ADDED@ or @AREA_BODY_REMOVED@, depending on whether the object entered or exited the area.
+--   				2: @RID@ of the object that entered/exited the area.
 --   				3: Instance ID of the object that entered/exited the area.
 --   				4: The shape index of the object that entered/exited the area.
 --   				5: The shape index of the area where the object entered/exited.
@@ -846,6 +961,12 @@ area_set_monitor_callback cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_set_monitor_callback"
+           '[Rid, Object, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_monitor_callback
 
 {-# NOINLINE bindPhysics2DServer_area_set_monitorable #-}
 
@@ -870,9 +991,15 @@ area_set_monitorable cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_set_monitorable"
+           '[Rid, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_monitorable
+
 {-# NOINLINE bindPhysics2DServer_area_set_param #-}
 
--- | Sets the value for an area parameter. See [enum AreaParameter] for a list of available parameters.
+-- | Sets the value for an area parameter. See @enum AreaParameter@ for a list of available parameters.
 bindPhysics2DServer_area_set_param :: MethodBind
 bindPhysics2DServer_area_set_param
   = unsafePerformIO $
@@ -882,7 +1009,7 @@ bindPhysics2DServer_area_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the value for an area parameter. See [enum AreaParameter] for a list of available parameters.
+-- | Sets the value for an area parameter. See @enum AreaParameter@ for a list of available parameters.
 area_set_param ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> GodotVariant -> IO ()
@@ -895,9 +1022,15 @@ area_set_param cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_set_param"
+           '[Rid, Int, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_param
+
 {-# NOINLINE bindPhysics2DServer_area_set_shape #-}
 
--- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its [RID].
+-- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its @RID@.
 bindPhysics2DServer_area_set_shape :: MethodBind
 bindPhysics2DServer_area_set_shape
   = unsafePerformIO $
@@ -907,7 +1040,7 @@ bindPhysics2DServer_area_set_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its [RID].
+-- | Substitutes a given area shape by another. The old shape is selected by its index, the new one by its @RID@.
 area_set_shape ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> Rid -> IO ()
@@ -919,6 +1052,12 @@ area_set_shape cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_set_shape"
+           '[Rid, Int, Rid]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_shape
 
 {-# NOINLINE bindPhysics2DServer_area_set_shape_disabled #-}
 
@@ -945,6 +1084,12 @@ area_set_shape_disabled cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_set_shape_disabled"
+           '[Rid, Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_shape_disabled
+
 {-# NOINLINE bindPhysics2DServer_area_set_shape_transform #-}
 
 -- | Sets the transform matrix for an area shape.
@@ -969,6 +1114,12 @@ area_set_shape_transform cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_set_shape_transform"
+           '[Rid, Int, Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_shape_transform
 
 {-# NOINLINE bindPhysics2DServer_area_set_space #-}
 
@@ -995,9 +1146,14 @@ area_set_space cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_set_space" '[Rid, Rid]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_space
+
 {-# NOINLINE bindPhysics2DServer_area_set_space_override_mode #-}
 
--- | Sets the space override mode for the area. See [enum AreaSpaceOverrideMode] for a list of available modes.
+-- | Sets the space override mode for the area. See @enum AreaSpaceOverrideMode@ for a list of available modes.
 bindPhysics2DServer_area_set_space_override_mode :: MethodBind
 bindPhysics2DServer_area_set_space_override_mode
   = unsafePerformIO $
@@ -1007,7 +1163,7 @@ bindPhysics2DServer_area_set_space_override_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the space override mode for the area. See [enum AreaSpaceOverrideMode] for a list of available modes.
+-- | Sets the space override mode for the area. See @enum AreaSpaceOverrideMode@ for a list of available modes.
 area_set_space_override_mode ::
                                (Physics2DServer :< cls, Object :< cls) =>
                                cls -> Rid -> Int -> IO ()
@@ -1020,6 +1176,13 @@ area_set_space_override_mode cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "area_set_space_override_mode"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.area_set_space_override_mode
 
 {-# NOINLINE bindPhysics2DServer_area_set_transform #-}
 
@@ -1046,6 +1209,12 @@ area_set_transform cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "area_set_transform"
+           '[Rid, Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.area_set_transform
+
 {-# NOINLINE bindPhysics2DServer_body_add_central_force #-}
 
 bindPhysics2DServer_body_add_central_force :: MethodBind
@@ -1068,6 +1237,12 @@ body_add_central_force cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_add_central_force"
+           '[Rid, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_add_central_force
 
 {-# NOINLINE bindPhysics2DServer_body_add_collision_exception #-}
 
@@ -1095,9 +1270,16 @@ body_add_collision_exception cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_add_collision_exception"
+           '[Rid, Rid]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_add_collision_exception
+
 {-# NOINLINE bindPhysics2DServer_body_add_force #-}
 
--- | Adds a positioned force to the applied force and torque. As with [method body_apply_impulse], both the force and the offset from the body origin are in global coordinates. A force differs from an impulse in that, while the two are forces, the impulse clears itself after being applied.
+-- | Adds a positioned force to the applied force and torque. As with @method body_apply_impulse@, both the force and the offset from the body origin are in global coordinates. A force differs from an impulse in that, while the two are forces, the impulse clears itself after being applied.
 bindPhysics2DServer_body_add_force :: MethodBind
 bindPhysics2DServer_body_add_force
   = unsafePerformIO $
@@ -1107,7 +1289,7 @@ bindPhysics2DServer_body_add_force
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a positioned force to the applied force and torque. As with [method body_apply_impulse], both the force and the offset from the body origin are in global coordinates. A force differs from an impulse in that, while the two are forces, the impulse clears itself after being applied.
+-- | Adds a positioned force to the applied force and torque. As with @method body_apply_impulse@, both the force and the offset from the body origin are in global coordinates. A force differs from an impulse in that, while the two are forces, the impulse clears itself after being applied.
 body_add_force ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Vector2 -> Vector2 -> IO ()
@@ -1119,6 +1301,12 @@ body_add_force cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_add_force"
+           '[Rid, Vector2, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_add_force
 
 {-# NOINLINE bindPhysics2DServer_body_add_shape #-}
 
@@ -1135,16 +1323,26 @@ bindPhysics2DServer_body_add_shape
 -- | Adds a shape to the body, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
 body_add_shape ::
                  (Physics2DServer :< cls, Object :< cls) =>
-                 cls -> Rid -> Rid -> Transform2d -> Bool -> IO ()
+                 cls -> Rid -> Rid -> Maybe Transform2d -> Maybe Bool -> IO ()
 body_add_shape cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantTransform2d
+         (TF2d (V2 1 0) (V2 0 1) (V2 0 0))
+         arg3,
+       maybe (VariantBool False) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysics2DServer_body_add_shape
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_add_shape"
+           '[Rid, Rid, Maybe Transform2d, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_add_shape
 
 {-# NOINLINE bindPhysics2DServer_body_add_torque #-}
 
@@ -1169,6 +1367,11 @@ body_add_torque cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_add_torque" '[Rid, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_add_torque
+
 {-# NOINLINE bindPhysics2DServer_body_apply_central_impulse #-}
 
 bindPhysics2DServer_body_apply_central_impulse :: MethodBind
@@ -1192,6 +1395,12 @@ body_apply_central_impulse cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_apply_central_impulse"
+           '[Rid, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_apply_central_impulse
 
 {-# NOINLINE bindPhysics2DServer_body_apply_impulse #-}
 
@@ -1218,6 +1427,12 @@ body_apply_impulse cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_apply_impulse"
+           '[Rid, Vector2, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_apply_impulse
+
 {-# NOINLINE bindPhysics2DServer_body_apply_torque_impulse #-}
 
 bindPhysics2DServer_body_apply_torque_impulse :: MethodBind
@@ -1241,6 +1456,12 @@ body_apply_torque_impulse cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_apply_torque_impulse"
+           '[Rid, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_apply_torque_impulse
 
 {-# NOINLINE bindPhysics2DServer_body_attach_canvas_instance_id #-}
 
@@ -1266,9 +1487,17 @@ body_attach_canvas_instance_id cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "body_attach_canvas_instance_id"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_attach_canvas_instance_id
+
 {-# NOINLINE bindPhysics2DServer_body_attach_object_instance_id #-}
 
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+-- | Assigns the area to a descendant of @Object@, so it can exist in the node tree.
 bindPhysics2DServer_body_attach_object_instance_id :: MethodBind
 bindPhysics2DServer_body_attach_object_instance_id
   = unsafePerformIO $
@@ -1278,7 +1507,7 @@ bindPhysics2DServer_body_attach_object_instance_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns the area to a descendant of [Object], so it can exist in the node tree.
+-- | Assigns the area to a descendant of @Object@, so it can exist in the node tree.
 body_attach_object_instance_id ::
                                  (Physics2DServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Int -> IO ()
@@ -1291,6 +1520,14 @@ body_attach_object_instance_id cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer
+           "body_attach_object_instance_id"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_attach_object_instance_id
 
 {-# NOINLINE bindPhysics2DServer_body_clear_shapes #-}
 
@@ -1316,6 +1553,11 @@ body_clear_shapes cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_clear_shapes" '[Rid]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_clear_shapes
+
 {-# NOINLINE bindPhysics2DServer_body_create #-}
 
 -- | Creates a physics body.
@@ -1339,6 +1581,10 @@ body_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_create" '[] (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_create
+
 {-# NOINLINE bindPhysics2DServer_body_get_canvas_instance_id #-}
 
 bindPhysics2DServer_body_get_canvas_instance_id :: MethodBind
@@ -1361,6 +1607,12 @@ body_get_canvas_instance_id cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_get_canvas_instance_id"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_canvas_instance_id
 
 {-# NOINLINE bindPhysics2DServer_body_get_collision_layer #-}
 
@@ -1386,6 +1638,12 @@ body_get_collision_layer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_get_collision_layer"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_collision_layer
+
 {-# NOINLINE bindPhysics2DServer_body_get_collision_mask #-}
 
 -- | Returns the physics layer or layers a body can collide with.
@@ -1409,6 +1667,12 @@ body_get_collision_mask cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_get_collision_mask"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_collision_mask
 
 {-# NOINLINE bindPhysics2DServer_body_get_continuous_collision_detection_mode
              #-}
@@ -1438,9 +1702,17 @@ body_get_continuous_collision_detection_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "body_get_continuous_collision_detection_mode"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_get_continuous_collision_detection_mode
+
 {-# NOINLINE bindPhysics2DServer_body_get_direct_state #-}
 
--- | Returns the [Physics2DDirectBodyState] of the body.
+-- | Returns the @Physics2DDirectBodyState@ of the body.
 bindPhysics2DServer_body_get_direct_state :: MethodBind
 bindPhysics2DServer_body_get_direct_state
   = unsafePerformIO $
@@ -1450,7 +1722,7 @@ bindPhysics2DServer_body_get_direct_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Physics2DDirectBodyState] of the body.
+-- | Returns the @Physics2DDirectBodyState@ of the body.
 body_get_direct_state ::
                         (Physics2DServer :< cls, Object :< cls) =>
                         cls -> Rid -> IO Physics2DDirectBodyState
@@ -1463,9 +1735,14 @@ body_get_direct_state cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_get_direct_state" '[Rid]
+           (IO Physics2DDirectBodyState)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_direct_state
+
 {-# NOINLINE bindPhysics2DServer_body_get_max_contacts_reported #-}
 
--- | Returns the maximum contacts that can be reported. See [method body_set_max_contacts_reported].
+-- | Returns the maximum contacts that can be reported. See @method body_set_max_contacts_reported@.
 bindPhysics2DServer_body_get_max_contacts_reported :: MethodBind
 bindPhysics2DServer_body_get_max_contacts_reported
   = unsafePerformIO $
@@ -1475,7 +1752,7 @@ bindPhysics2DServer_body_get_max_contacts_reported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the maximum contacts that can be reported. See [method body_set_max_contacts_reported].
+-- | Returns the maximum contacts that can be reported. See @method body_set_max_contacts_reported@.
 body_get_max_contacts_reported ::
                                  (Physics2DServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 body_get_max_contacts_reported cls arg1
@@ -1487,6 +1764,14 @@ body_get_max_contacts_reported cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer
+           "body_get_max_contacts_reported"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_get_max_contacts_reported
 
 {-# NOINLINE bindPhysics2DServer_body_get_mode #-}
 
@@ -1511,6 +1796,10 @@ body_get_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_get_mode" '[Rid] (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_mode
 
 {-# NOINLINE bindPhysics2DServer_body_get_object_instance_id #-}
 
@@ -1537,9 +1826,15 @@ body_get_object_instance_id cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_get_object_instance_id"
+           '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_object_instance_id
+
 {-# NOINLINE bindPhysics2DServer_body_get_param #-}
 
--- | Returns the value of a body parameter. See [enum BodyParameter] for a list of available parameters.
+-- | Returns the value of a body parameter. See @enum BodyParameter@ for a list of available parameters.
 bindPhysics2DServer_body_get_param :: MethodBind
 bindPhysics2DServer_body_get_param
   = unsafePerformIO $
@@ -1549,7 +1844,7 @@ bindPhysics2DServer_body_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of a body parameter. See [enum BodyParameter] for a list of available parameters.
+-- | Returns the value of a body parameter. See @enum BodyParameter@ for a list of available parameters.
 body_get_param ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> IO Float
@@ -1562,9 +1857,14 @@ body_get_param cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_get_param" '[Rid, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_param
+
 {-# NOINLINE bindPhysics2DServer_body_get_shape #-}
 
--- | Returns the [RID] of the nth shape of a body.
+-- | Returns the @RID@ of the nth shape of a body.
 bindPhysics2DServer_body_get_shape :: MethodBind
 bindPhysics2DServer_body_get_shape
   = unsafePerformIO $
@@ -1574,7 +1874,7 @@ bindPhysics2DServer_body_get_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [RID] of the nth shape of a body.
+-- | Returns the @RID@ of the nth shape of a body.
 body_get_shape ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> IO Rid
@@ -1586,6 +1886,11 @@ body_get_shape cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_get_shape" '[Rid, Int]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_shape
 
 {-# NOINLINE bindPhysics2DServer_body_get_shape_count #-}
 
@@ -1610,6 +1915,11 @@ body_get_shape_count cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_get_shape_count" '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_shape_count
 
 {-# NOINLINE bindPhysics2DServer_body_get_shape_metadata #-}
 
@@ -1636,6 +1946,12 @@ body_get_shape_metadata cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_get_shape_metadata"
+           '[Rid, Int]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_shape_metadata
+
 {-# NOINLINE bindPhysics2DServer_body_get_shape_transform #-}
 
 -- | Returns the transform matrix of a body shape.
@@ -1661,9 +1977,15 @@ body_get_shape_transform cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_get_shape_transform"
+           '[Rid, Int]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_shape_transform
+
 {-# NOINLINE bindPhysics2DServer_body_get_space #-}
 
--- | Returns the [RID] of the space assigned to a body.
+-- | Returns the @RID@ of the space assigned to a body.
 bindPhysics2DServer_body_get_space :: MethodBind
 bindPhysics2DServer_body_get_space
   = unsafePerformIO $
@@ -1673,7 +1995,7 @@ bindPhysics2DServer_body_get_space
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [RID] of the space assigned to a body.
+-- | Returns the @RID@ of the space assigned to a body.
 body_get_space ::
                  (Physics2DServer :< cls, Object :< cls) => cls -> Rid -> IO Rid
 body_get_space cls arg1
@@ -1684,6 +2006,11 @@ body_get_space cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_get_space" '[Rid]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_space
 
 {-# NOINLINE bindPhysics2DServer_body_get_state #-}
 
@@ -1710,10 +2037,15 @@ body_get_state cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_get_state" '[Rid, Int]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_get_state
+
 {-# NOINLINE bindPhysics2DServer_body_is_omitting_force_integration
              #-}
 
--- | Returns whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+-- | Returns whether a body uses a callback function to calculate its own physics (see @method body_set_force_integration_callback@).
 bindPhysics2DServer_body_is_omitting_force_integration ::
                                                        MethodBind
 bindPhysics2DServer_body_is_omitting_force_integration
@@ -1724,7 +2056,7 @@ bindPhysics2DServer_body_is_omitting_force_integration
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+-- | Returns whether a body uses a callback function to calculate its own physics (see @method body_set_force_integration_callback@).
 body_is_omitting_force_integration ::
                                      (Physics2DServer :< cls, Object :< cls) =>
                                      cls -> Rid -> IO Bool
@@ -1737,6 +2069,14 @@ body_is_omitting_force_integration cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer
+           "body_is_omitting_force_integration"
+           '[Rid]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_is_omitting_force_integration
 
 {-# NOINLINE bindPhysics2DServer_body_remove_collision_exception
              #-}
@@ -1765,6 +2105,14 @@ body_remove_collision_exception cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "body_remove_collision_exception"
+           '[Rid, Rid]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_remove_collision_exception
+
 {-# NOINLINE bindPhysics2DServer_body_remove_shape #-}
 
 -- | Removes a shape from a body. The shape is not deleted, so it can be reused afterwards.
@@ -1789,6 +2137,11 @@ body_remove_shape cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_remove_shape" '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_remove_shape
 
 {-# NOINLINE bindPhysics2DServer_body_set_axis_velocity #-}
 
@@ -1815,6 +2168,12 @@ body_set_axis_velocity cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_axis_velocity"
+           '[Rid, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_axis_velocity
+
 {-# NOINLINE bindPhysics2DServer_body_set_collision_layer #-}
 
 -- | Sets the physics layer or layers a body belongs to.
@@ -1839,6 +2198,12 @@ body_set_collision_layer cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_set_collision_layer"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_collision_layer
 
 {-# NOINLINE bindPhysics2DServer_body_set_collision_mask #-}
 
@@ -1865,10 +2230,16 @@ body_set_collision_mask cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_collision_mask"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_collision_mask
+
 {-# NOINLINE bindPhysics2DServer_body_set_continuous_collision_detection_mode
              #-}
 
--- | Sets the continuous collision detection mode using one of the [enum CCDMode] constants.
+-- | Sets the continuous collision detection mode using one of the @enum CCDMode@ constants.
 --   				Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided.
 bindPhysics2DServer_body_set_continuous_collision_detection_mode ::
                                                                  MethodBind
@@ -1880,7 +2251,7 @@ bindPhysics2DServer_body_set_continuous_collision_detection_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the continuous collision detection mode using one of the [enum CCDMode] constants.
+-- | Sets the continuous collision detection mode using one of the @enum CCDMode@ constants.
 --   				Continuous collision detection tries to predict where a moving body will collide, instead of moving it and correcting its movement if it collided.
 body_set_continuous_collision_detection_mode ::
                                                (Physics2DServer :< cls, Object :< cls) =>
@@ -1895,10 +2266,18 @@ body_set_continuous_collision_detection_mode cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "body_set_continuous_collision_detection_mode"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_set_continuous_collision_detection_mode
+
 {-# NOINLINE bindPhysics2DServer_body_set_force_integration_callback
              #-}
 
--- | Sets the function used to calculate physics for an object, if that object allows it (see [method body_set_omit_force_integration]).
+-- | Sets the function used to calculate physics for an object, if that object allows it (see @method body_set_omit_force_integration@).
 bindPhysics2DServer_body_set_force_integration_callback ::
                                                         MethodBind
 bindPhysics2DServer_body_set_force_integration_callback
@@ -1909,13 +2288,15 @@ bindPhysics2DServer_body_set_force_integration_callback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the function used to calculate physics for an object, if that object allows it (see [method body_set_omit_force_integration]).
+-- | Sets the function used to calculate physics for an object, if that object allows it (see @method body_set_omit_force_integration@).
 body_set_force_integration_callback ::
                                       (Physics2DServer :< cls, Object :< cls) =>
-                                      cls -> Rid -> Object -> GodotString -> GodotVariant -> IO ()
+                                      cls ->
+                                        Rid -> Object -> GodotString -> Maybe GodotVariant -> IO ()
 body_set_force_integration_callback cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe VariantNil toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindPhysics2DServer_body_set_force_integration_callback
@@ -1923,6 +2304,14 @@ body_set_force_integration_callback cls arg1 arg2 arg3 arg4
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer
+           "body_set_force_integration_callback"
+           '[Rid, Object, GodotString, Maybe GodotVariant]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_set_force_integration_callback
 
 {-# NOINLINE bindPhysics2DServer_body_set_max_contacts_reported #-}
 
@@ -1950,9 +2339,17 @@ body_set_max_contacts_reported cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "body_set_max_contacts_reported"
+           '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_set_max_contacts_reported
+
 {-# NOINLINE bindPhysics2DServer_body_set_mode #-}
 
--- | Sets the body mode using one of the [enum BodyMode] constants.
+-- | Sets the body mode using one of the @enum BodyMode@ constants.
 bindPhysics2DServer_body_set_mode :: MethodBind
 bindPhysics2DServer_body_set_mode
   = unsafePerformIO $
@@ -1962,7 +2359,7 @@ bindPhysics2DServer_body_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the body mode using one of the [enum BodyMode] constants.
+-- | Sets the body mode using one of the @enum BodyMode@ constants.
 body_set_mode ::
                 (Physics2DServer :< cls, Object :< cls) =>
                 cls -> Rid -> Int -> IO ()
@@ -1975,10 +2372,15 @@ body_set_mode cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_mode" '[Rid, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_mode
+
 {-# NOINLINE bindPhysics2DServer_body_set_omit_force_integration
              #-}
 
--- | Sets whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+-- | Sets whether a body uses a callback function to calculate its own physics (see @method body_set_force_integration_callback@).
 bindPhysics2DServer_body_set_omit_force_integration :: MethodBind
 bindPhysics2DServer_body_set_omit_force_integration
   = unsafePerformIO $
@@ -1988,7 +2390,7 @@ bindPhysics2DServer_body_set_omit_force_integration
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether a body uses a callback function to calculate its own physics (see [method body_set_force_integration_callback]).
+-- | Sets whether a body uses a callback function to calculate its own physics (see @method body_set_force_integration_callback@).
 body_set_omit_force_integration ::
                                   (Physics2DServer :< cls, Object :< cls) =>
                                   cls -> Rid -> Bool -> IO ()
@@ -2002,9 +2404,17 @@ body_set_omit_force_integration cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "body_set_omit_force_integration"
+           '[Rid, Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_set_omit_force_integration
+
 {-# NOINLINE bindPhysics2DServer_body_set_param #-}
 
--- | Sets a body parameter. See [enum BodyParameter] for a list of available parameters.
+-- | Sets a body parameter. See @enum BodyParameter@ for a list of available parameters.
 bindPhysics2DServer_body_set_param :: MethodBind
 bindPhysics2DServer_body_set_param
   = unsafePerformIO $
@@ -2014,7 +2424,7 @@ bindPhysics2DServer_body_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a body parameter. See [enum BodyParameter] for a list of available parameters.
+-- | Sets a body parameter. See @enum BodyParameter@ for a list of available parameters.
 body_set_param ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> Float -> IO ()
@@ -2027,9 +2437,15 @@ body_set_param cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_param"
+           '[Rid, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_param
+
 {-# NOINLINE bindPhysics2DServer_body_set_shape #-}
 
--- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its [RID].
+-- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its @RID@.
 bindPhysics2DServer_body_set_shape :: MethodBind
 bindPhysics2DServer_body_set_shape
   = unsafePerformIO $
@@ -2039,7 +2455,7 @@ bindPhysics2DServer_body_set_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its [RID].
+-- | Substitutes a given body shape by another. The old shape is selected by its index, the new one by its @RID@.
 body_set_shape ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Int -> Rid -> IO ()
@@ -2052,10 +2468,16 @@ body_set_shape cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_shape"
+           '[Rid, Int, Rid]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_shape
+
 {-# NOINLINE bindPhysics2DServer_body_set_shape_as_one_way_collision
              #-}
 
--- | Enables one way collision on body if [code]enable[/code] is [code]true[/code].
+-- | Enables one way collision on body if @enable@ is @true@.
 bindPhysics2DServer_body_set_shape_as_one_way_collision ::
                                                         MethodBind
 bindPhysics2DServer_body_set_shape_as_one_way_collision
@@ -2066,7 +2488,7 @@ bindPhysics2DServer_body_set_shape_as_one_way_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables one way collision on body if [code]enable[/code] is [code]true[/code].
+-- | Enables one way collision on body if @enable@ is @true@.
 body_set_shape_as_one_way_collision ::
                                       (Physics2DServer :< cls, Object :< cls) =>
                                       cls -> Rid -> Int -> Bool -> Float -> IO ()
@@ -2081,9 +2503,17 @@ body_set_shape_as_one_way_collision cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer
+           "body_set_shape_as_one_way_collision"
+           '[Rid, Int, Bool, Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.body_set_shape_as_one_way_collision
+
 {-# NOINLINE bindPhysics2DServer_body_set_shape_disabled #-}
 
--- | Disables shape in body if [code]disable[/code] is [code]true[/code].
+-- | Disables shape in body if @disable@ is @true@.
 bindPhysics2DServer_body_set_shape_disabled :: MethodBind
 bindPhysics2DServer_body_set_shape_disabled
   = unsafePerformIO $
@@ -2093,7 +2523,7 @@ bindPhysics2DServer_body_set_shape_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disables shape in body if [code]disable[/code] is [code]true[/code].
+-- | Disables shape in body if @disable@ is @true@.
 body_set_shape_disabled ::
                           (Physics2DServer :< cls, Object :< cls) =>
                           cls -> Rid -> Int -> Bool -> IO ()
@@ -2106,9 +2536,15 @@ body_set_shape_disabled cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_shape_disabled"
+           '[Rid, Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_shape_disabled
+
 {-# NOINLINE bindPhysics2DServer_body_set_shape_metadata #-}
 
--- | Sets metadata of a shape within a body. This metadata is different from [method Object.set_meta], and can be retrieved on shape queries.
+-- | Sets metadata of a shape within a body. This metadata is different from @method Object.set_meta@, and can be retrieved on shape queries.
 bindPhysics2DServer_body_set_shape_metadata :: MethodBind
 bindPhysics2DServer_body_set_shape_metadata
   = unsafePerformIO $
@@ -2118,7 +2554,7 @@ bindPhysics2DServer_body_set_shape_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets metadata of a shape within a body. This metadata is different from [method Object.set_meta], and can be retrieved on shape queries.
+-- | Sets metadata of a shape within a body. This metadata is different from @method Object.set_meta@, and can be retrieved on shape queries.
 body_set_shape_metadata ::
                           (Physics2DServer :< cls, Object :< cls) =>
                           cls -> Rid -> Int -> GodotVariant -> IO ()
@@ -2130,6 +2566,12 @@ body_set_shape_metadata cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_set_shape_metadata"
+           '[Rid, Int, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_shape_metadata
 
 {-# NOINLINE bindPhysics2DServer_body_set_shape_transform #-}
 
@@ -2156,9 +2598,15 @@ body_set_shape_transform cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_shape_transform"
+           '[Rid, Int, Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_shape_transform
+
 {-# NOINLINE bindPhysics2DServer_body_set_space #-}
 
--- | Assigns a space to the body (see [method space_create]).
+-- | Assigns a space to the body (see @method space_create@).
 bindPhysics2DServer_body_set_space :: MethodBind
 bindPhysics2DServer_body_set_space
   = unsafePerformIO $
@@ -2168,7 +2616,7 @@ bindPhysics2DServer_body_set_space
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns a space to the body (see [method space_create]).
+-- | Assigns a space to the body (see @method space_create@).
 body_set_space ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> Rid -> IO ()
@@ -2181,9 +2629,14 @@ body_set_space cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_space" '[Rid, Rid]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_space
+
 {-# NOINLINE bindPhysics2DServer_body_set_state #-}
 
--- | Sets a body state using one of the [enum BodyState] constants.
+-- | Sets a body state using one of the @enum BodyState@ constants.
 --   				Note that the method doesn't take effect immediately. The state will change on the next physics frame.
 bindPhysics2DServer_body_set_state :: MethodBind
 bindPhysics2DServer_body_set_state
@@ -2194,7 +2647,7 @@ bindPhysics2DServer_body_set_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a body state using one of the [enum BodyState] constants.
+-- | Sets a body state using one of the @enum BodyState@ constants.
 --   				Note that the method doesn't take effect immediately. The state will change on the next physics frame.
 body_set_state ::
                  (Physics2DServer :< cls, Object :< cls) =>
@@ -2208,9 +2661,15 @@ body_set_state cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "body_set_state"
+           '[Rid, Int, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_set_state
+
 {-# NOINLINE bindPhysics2DServer_body_test_motion #-}
 
--- | Returns [code]true[/code] if a collision would result from moving in the given direction from a given point in space. Margin increases the size of the shapes involved in the collision detection. [Physics2DTestMotionResult] can be passed to return additional information in.
+-- | Returns @true@ if a collision would result from moving in the given direction from a given point in space. Margin increases the size of the shapes involved in the collision detection. @Physics2DTestMotionResult@ can be passed to return additional information in.
 bindPhysics2DServer_body_test_motion :: MethodBind
 bindPhysics2DServer_body_test_motion
   = unsafePerformIO $
@@ -2220,23 +2679,32 @@ bindPhysics2DServer_body_test_motion
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if a collision would result from moving in the given direction from a given point in space. Margin increases the size of the shapes involved in the collision detection. [Physics2DTestMotionResult] can be passed to return additional information in.
+-- | Returns @true@ if a collision would result from moving in the given direction from a given point in space. Margin increases the size of the shapes involved in the collision detection. @Physics2DTestMotionResult@ can be passed to return additional information in.
 body_test_motion ::
                    (Physics2DServer :< cls, Object :< cls) =>
                    cls ->
                      Rid ->
                        Transform2d ->
-                         Vector2 -> Bool -> Float -> Physics2DTestMotionResult -> IO Bool
+                         Vector2 ->
+                           Bool -> Maybe Float -> Maybe Physics2DTestMotionResult -> IO Bool
 body_test_motion cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+       maybe (VariantReal (0.08)) toVariant arg5,
+       maybe VariantNil toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysics2DServer_body_test_motion
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "body_test_motion"
+           '[Rid, Transform2d, Vector2, Bool, Maybe Float,
+             Maybe Physics2DTestMotionResult]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.body_test_motion
 
 {-# NOINLINE bindPhysics2DServer_capsule_shape_create #-}
 
@@ -2260,6 +2728,11 @@ capsule_shape_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "capsule_shape_create" '[]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.capsule_shape_create
+
 {-# NOINLINE bindPhysics2DServer_circle_shape_create #-}
 
 bindPhysics2DServer_circle_shape_create :: MethodBind
@@ -2281,6 +2754,11 @@ circle_shape_create cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "circle_shape_create" '[]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.circle_shape_create
 
 {-# NOINLINE bindPhysics2DServer_concave_polygon_shape_create #-}
 
@@ -2305,6 +2783,13 @@ concave_polygon_shape_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "concave_polygon_shape_create"
+           '[]
+           (IO Rid)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.concave_polygon_shape_create
+
 {-# NOINLINE bindPhysics2DServer_convex_polygon_shape_create #-}
 
 bindPhysics2DServer_convex_polygon_shape_create :: MethodBind
@@ -2328,6 +2813,12 @@ convex_polygon_shape_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "convex_polygon_shape_create"
+           '[]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.convex_polygon_shape_create
+
 {-# NOINLINE bindPhysics2DServer_damped_spring_joint_create #-}
 
 -- | Creates a damped spring joint between two bodies. If not specified, the second body is assumed to be the joint itself.
@@ -2343,10 +2834,11 @@ bindPhysics2DServer_damped_spring_joint_create
 -- | Creates a damped spring joint between two bodies. If not specified, the second body is assumed to be the joint itself.
 damped_spring_joint_create ::
                              (Physics2DServer :< cls, Object :< cls) =>
-                             cls -> Vector2 -> Vector2 -> Rid -> Rid -> IO Rid
+                             cls -> Vector2 -> Vector2 -> Rid -> Maybe Rid -> IO Rid
 damped_spring_joint_create cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe VariantNil toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindPhysics2DServer_damped_spring_joint_create
@@ -2354,6 +2846,12 @@ damped_spring_joint_create cls arg1 arg2 arg3 arg4
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "damped_spring_joint_create"
+           '[Vector2, Vector2, Rid, Maybe Rid]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.damped_spring_joint_create
 
 {-# NOINLINE bindPhysics2DServer_damped_string_joint_get_param #-}
 
@@ -2381,9 +2879,16 @@ damped_string_joint_get_param cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "damped_string_joint_get_param"
+           '[Rid, Int]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.damped_string_joint_get_param
+
 {-# NOINLINE bindPhysics2DServer_damped_string_joint_set_param #-}
 
--- | Sets a damped spring joint parameter. See [enum DampedStringParam] for a list of available parameters.
+-- | Sets a damped spring joint parameter. See @enum DampedStringParam@ for a list of available parameters.
 bindPhysics2DServer_damped_string_joint_set_param :: MethodBind
 bindPhysics2DServer_damped_string_joint_set_param
   = unsafePerformIO $
@@ -2393,7 +2898,7 @@ bindPhysics2DServer_damped_string_joint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a damped spring joint parameter. See [enum DampedStringParam] for a list of available parameters.
+-- | Sets a damped spring joint parameter. See @enum DampedStringParam@ for a list of available parameters.
 damped_string_joint_set_param ::
                                 (Physics2DServer :< cls, Object :< cls) =>
                                 cls -> Rid -> Int -> Float -> IO ()
@@ -2407,9 +2912,16 @@ damped_string_joint_set_param cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "damped_string_joint_set_param"
+           '[Rid, Int, Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.Physics2DServer.damped_string_joint_set_param
+
 {-# NOINLINE bindPhysics2DServer_free_rid #-}
 
--- | Destroys any of the objects created by Physics2DServer. If the [RID] passed is not one of the objects that can be created by Physics2DServer, an error will be sent to the console.
+-- | Destroys any of the objects created by Physics2DServer. If the @RID@ passed is not one of the objects that can be created by Physics2DServer, an error will be sent to the console.
 bindPhysics2DServer_free_rid :: MethodBind
 bindPhysics2DServer_free_rid
   = unsafePerformIO $
@@ -2419,7 +2931,7 @@ bindPhysics2DServer_free_rid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Destroys any of the objects created by Physics2DServer. If the [RID] passed is not one of the objects that can be created by Physics2DServer, an error will be sent to the console.
+-- | Destroys any of the objects created by Physics2DServer. If the @RID@ passed is not one of the objects that can be created by Physics2DServer, an error will be sent to the console.
 free_rid ::
            (Physics2DServer :< cls, Object :< cls) => cls -> Rid -> IO ()
 free_rid cls arg1
@@ -2430,9 +2942,12 @@ free_rid cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "free_rid" '[Rid] (IO ()) where
+        nodeMethod = Godot.Core.Physics2DServer.free_rid
+
 {-# NOINLINE bindPhysics2DServer_get_process_info #-}
 
--- | Returns information about the current state of the 2D physics engine. See [enum ProcessInfo] for a list of available states.
+-- | Returns information about the current state of the 2D physics engine. See @enum ProcessInfo@ for a list of available states.
 bindPhysics2DServer_get_process_info :: MethodBind
 bindPhysics2DServer_get_process_info
   = unsafePerformIO $
@@ -2442,7 +2957,7 @@ bindPhysics2DServer_get_process_info
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns information about the current state of the 2D physics engine. See [enum ProcessInfo] for a list of available states.
+-- | Returns information about the current state of the 2D physics engine. See @enum ProcessInfo@ for a list of available states.
 get_process_info ::
                    (Physics2DServer :< cls, Object :< cls) => cls -> Int -> IO Int
 get_process_info cls arg1
@@ -2453,6 +2968,11 @@ get_process_info cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "get_process_info" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.get_process_info
 
 {-# NOINLINE bindPhysics2DServer_groove_joint_create #-}
 
@@ -2469,17 +2989,24 @@ bindPhysics2DServer_groove_joint_create
 -- | Creates a groove joint between two bodies. If not specified, the bodies are assumed to be the joint itself.
 groove_joint_create ::
                       (Physics2DServer :< cls, Object :< cls) =>
-                      cls -> Vector2 -> Vector2 -> Vector2 -> Rid -> Rid -> IO Rid
+                      cls ->
+                        Vector2 -> Vector2 -> Vector2 -> Maybe Rid -> Maybe Rid -> IO Rid
 groove_joint_create cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe VariantNil toVariant arg4, maybe VariantNil toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysics2DServer_groove_joint_create
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "groove_joint_create"
+           '[Vector2, Vector2, Vector2, Maybe Rid, Maybe Rid]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.groove_joint_create
 
 {-# NOINLINE bindPhysics2DServer_joint_get_param #-}
 
@@ -2506,9 +3033,14 @@ joint_get_param cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "joint_get_param" '[Rid, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.joint_get_param
+
 {-# NOINLINE bindPhysics2DServer_joint_get_type #-}
 
--- | Returns a joint's type (see [enum JointType]).
+-- | Returns a joint's type (see @enum JointType@).
 bindPhysics2DServer_joint_get_type :: MethodBind
 bindPhysics2DServer_joint_get_type
   = unsafePerformIO $
@@ -2518,7 +3050,7 @@ bindPhysics2DServer_joint_get_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a joint's type (see [enum JointType]).
+-- | Returns a joint's type (see @enum JointType@).
 joint_get_type ::
                  (Physics2DServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 joint_get_type cls arg1
@@ -2530,9 +3062,14 @@ joint_get_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "joint_get_type" '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.joint_get_type
+
 {-# NOINLINE bindPhysics2DServer_joint_set_param #-}
 
--- | Sets a joint parameter. See [enum JointParam] for a list of available parameters.
+-- | Sets a joint parameter. See @enum JointParam@ for a list of available parameters.
 bindPhysics2DServer_joint_set_param :: MethodBind
 bindPhysics2DServer_joint_set_param
   = unsafePerformIO $
@@ -2542,7 +3079,7 @@ bindPhysics2DServer_joint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a joint parameter. See [enum JointParam] for a list of available parameters.
+-- | Sets a joint parameter. See @enum JointParam@ for a list of available parameters.
 joint_set_param ::
                   (Physics2DServer :< cls, Object :< cls) =>
                   cls -> Rid -> Int -> Float -> IO ()
@@ -2554,6 +3091,12 @@ joint_set_param cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "joint_set_param"
+           '[Rid, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.joint_set_param
 
 {-# NOINLINE bindPhysics2DServer_line_shape_create #-}
 
@@ -2577,6 +3120,11 @@ line_shape_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "line_shape_create" '[]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.line_shape_create
+
 {-# NOINLINE bindPhysics2DServer_pin_joint_create #-}
 
 -- | Creates a pin joint between two bodies. If not specified, the second body is assumed to be the joint itself.
@@ -2592,15 +3140,22 @@ bindPhysics2DServer_pin_joint_create
 -- | Creates a pin joint between two bodies. If not specified, the second body is assumed to be the joint itself.
 pin_joint_create ::
                    (Physics2DServer :< cls, Object :< cls) =>
-                   cls -> Vector2 -> Rid -> Rid -> IO Rid
+                   cls -> Vector2 -> Rid -> Maybe Rid -> IO Rid
 pin_joint_create cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, maybe VariantNil toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindPhysics2DServer_pin_joint_create
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "pin_joint_create"
+           '[Vector2, Rid, Maybe Rid]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.pin_joint_create
 
 {-# NOINLINE bindPhysics2DServer_ray_shape_create #-}
 
@@ -2624,6 +3179,10 @@ ray_shape_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "ray_shape_create" '[] (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.ray_shape_create
+
 {-# NOINLINE bindPhysics2DServer_rectangle_shape_create #-}
 
 bindPhysics2DServer_rectangle_shape_create :: MethodBind
@@ -2645,6 +3204,11 @@ rectangle_shape_create cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "rectangle_shape_create" '[]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.rectangle_shape_create
 
 {-# NOINLINE bindPhysics2DServer_segment_shape_create #-}
 
@@ -2668,6 +3232,11 @@ segment_shape_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "segment_shape_create" '[]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.segment_shape_create
+
 {-# NOINLINE bindPhysics2DServer_set_active #-}
 
 -- | Activates or deactivates the 2D physics engine.
@@ -2690,6 +3259,10 @@ set_active cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "set_active" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.set_active
 
 {-# NOINLINE bindPhysics2DServer_shape_get_data #-}
 
@@ -2716,9 +3289,14 @@ shape_get_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "shape_get_data" '[Rid]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.shape_get_data
+
 {-# NOINLINE bindPhysics2DServer_shape_get_type #-}
 
--- | Returns a shape's type (see [enum ShapeType]).
+-- | Returns a shape's type (see @enum ShapeType@).
 bindPhysics2DServer_shape_get_type :: MethodBind
 bindPhysics2DServer_shape_get_type
   = unsafePerformIO $
@@ -2728,7 +3306,7 @@ bindPhysics2DServer_shape_get_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a shape's type (see [enum ShapeType]).
+-- | Returns a shape's type (see @enum ShapeType@).
 shape_get_type ::
                  (Physics2DServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 shape_get_type cls arg1
@@ -2740,9 +3318,14 @@ shape_get_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "shape_get_type" '[Rid]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.shape_get_type
+
 {-# NOINLINE bindPhysics2DServer_shape_set_data #-}
 
--- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created [method shape_get_type].
+-- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created @method shape_get_type@.
 bindPhysics2DServer_shape_set_data :: MethodBind
 bindPhysics2DServer_shape_set_data
   = unsafePerformIO $
@@ -2752,7 +3335,7 @@ bindPhysics2DServer_shape_set_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created [method shape_get_type].
+-- | Sets the shape data that defines its shape and size. The data to be passed depends on the kind of shape created @method shape_get_type@.
 shape_set_data ::
                  (Physics2DServer :< cls, Object :< cls) =>
                  cls -> Rid -> GodotVariant -> IO ()
@@ -2765,9 +3348,15 @@ shape_set_data cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "shape_set_data"
+           '[Rid, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.shape_set_data
+
 {-# NOINLINE bindPhysics2DServer_space_create #-}
 
--- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with [method area_set_space], or to a body with [method body_set_space].
+-- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with @method area_set_space@, or to a body with @method body_set_space@.
 bindPhysics2DServer_space_create :: MethodBind
 bindPhysics2DServer_space_create
   = unsafePerformIO $
@@ -2777,7 +3366,7 @@ bindPhysics2DServer_space_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with [method area_set_space], or to a body with [method body_set_space].
+-- | Creates a space. A space is a collection of parameters for the physics engine that can be assigned to an area or a body. It can be assigned to an area with @method area_set_space@, or to a body with @method body_set_space@.
 space_create ::
                (Physics2DServer :< cls, Object :< cls) => cls -> IO Rid
 space_create cls
@@ -2789,9 +3378,13 @@ space_create cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "space_create" '[] (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.space_create
+
 {-# NOINLINE bindPhysics2DServer_space_get_direct_state #-}
 
--- | Returns the state of a space, a [Physics2DDirectSpaceState]. This object can be used to make collision/intersection queries.
+-- | Returns the state of a space, a @Physics2DDirectSpaceState@. This object can be used to make collision/intersection queries.
 bindPhysics2DServer_space_get_direct_state :: MethodBind
 bindPhysics2DServer_space_get_direct_state
   = unsafePerformIO $
@@ -2801,7 +3394,7 @@ bindPhysics2DServer_space_get_direct_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the state of a space, a [Physics2DDirectSpaceState]. This object can be used to make collision/intersection queries.
+-- | Returns the state of a space, a @Physics2DDirectSpaceState@. This object can be used to make collision/intersection queries.
 space_get_direct_state ::
                          (Physics2DServer :< cls, Object :< cls) =>
                          cls -> Rid -> IO Physics2DDirectSpaceState
@@ -2813,6 +3406,11 @@ space_get_direct_state cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "space_get_direct_state" '[Rid]
+           (IO Physics2DDirectSpaceState)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.space_get_direct_state
 
 {-# NOINLINE bindPhysics2DServer_space_get_param #-}
 
@@ -2839,6 +3437,11 @@ space_get_param cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "space_get_param" '[Rid, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.space_get_param
+
 {-# NOINLINE bindPhysics2DServer_space_is_active #-}
 
 -- | Returns whether the space is active.
@@ -2862,6 +3465,11 @@ space_is_active cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "space_is_active" '[Rid]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Physics2DServer.space_is_active
 
 {-# NOINLINE bindPhysics2DServer_space_set_active #-}
 
@@ -2888,9 +3496,14 @@ space_set_active cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DServer "space_set_active" '[Rid, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.space_set_active
+
 {-# NOINLINE bindPhysics2DServer_space_set_param #-}
 
--- | Sets the value for a space parameter. See [enum SpaceParameter] for a list of available parameters.
+-- | Sets the value for a space parameter. See @enum SpaceParameter@ for a list of available parameters.
 bindPhysics2DServer_space_set_param :: MethodBind
 bindPhysics2DServer_space_set_param
   = unsafePerformIO $
@@ -2900,7 +3513,7 @@ bindPhysics2DServer_space_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the value for a space parameter. See [enum SpaceParameter] for a list of available parameters.
+-- | Sets the value for a space parameter. See @enum SpaceParameter@ for a list of available parameters.
 space_set_param ::
                   (Physics2DServer :< cls, Object :< cls) =>
                   cls -> Rid -> Int -> Float -> IO ()
@@ -2912,3 +3525,9 @@ space_set_param cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DServer "space_set_param"
+           '[Rid, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Physics2DServer.space_set_param

@@ -13,9 +13,14 @@ module Godot.Core.Shader
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _MODE_CANVAS_ITEM :: Int
 _MODE_CANVAS_ITEM = 1
@@ -25,6 +30,9 @@ _MODE_PARTICLES = 2
 
 _MODE_SPATIAL :: Int
 _MODE_SPATIAL = 0
+
+instance NodeProperty Shader "code" GodotString 'False where
+        nodeProperty = (get_code, wrapDroppingSetter set_code, Nothing)
 
 {-# NOINLINE bindShader_get_code #-}
 
@@ -46,10 +54,13 @@ get_code cls
          godot_method_bind_call bindShader_get_code (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Shader "get_code" '[] (IO GodotString) where
+        nodeMethod = Godot.Core.Shader.get_code
+
 {-# NOINLINE bindShader_get_default_texture_param #-}
 
 -- | Returns the texture that is set as default for the specified parameter.
---   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 bindShader_get_default_texture_param :: MethodBind
 bindShader_get_default_texture_param
   = unsafePerformIO $
@@ -60,7 +71,7 @@ bindShader_get_default_texture_param
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the texture that is set as default for the specified parameter.
---   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 get_default_texture_param ::
                             (Shader :< cls, Object :< cls) => cls -> GodotString -> IO Texture
 get_default_texture_param cls arg1
@@ -72,9 +83,15 @@ get_default_texture_param cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Shader "get_default_texture_param"
+           '[GodotString]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.Shader.get_default_texture_param
+
 {-# NOINLINE bindShader_get_mode #-}
 
--- | Returns the shader mode for the shader, either [constant MODE_CANVAS_ITEM], [constant MODE_SPATIAL] or [constant MODE_PARTICLES].
+-- | Returns the shader mode for the shader, either @MODE_CANVAS_ITEM@, @MODE_SPATIAL@ or @MODE_PARTICLES@.
 bindShader_get_mode :: MethodBind
 bindShader_get_mode
   = unsafePerformIO $
@@ -84,7 +101,7 @@ bindShader_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the shader mode for the shader, either [constant MODE_CANVAS_ITEM], [constant MODE_SPATIAL] or [constant MODE_PARTICLES].
+-- | Returns the shader mode for the shader, either @MODE_CANVAS_ITEM@, @MODE_SPATIAL@ or @MODE_PARTICLES@.
 get_mode :: (Shader :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
@@ -92,10 +109,13 @@ get_mode cls
          godot_method_bind_call bindShader_get_mode (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Shader "get_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.Shader.get_mode
+
 {-# NOINLINE bindShader_has_param #-}
 
--- | Returns [code]true[/code] if the shader has this param defined as a uniform in its code.
---   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
+-- | Returns @true@ if the shader has this param defined as a uniform in its code.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 bindShader_has_param :: MethodBind
 bindShader_has_param
   = unsafePerformIO $
@@ -105,8 +125,8 @@ bindShader_has_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the shader has this param defined as a uniform in its code.
---   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
+-- | Returns @true@ if the shader has this param defined as a uniform in its code.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 has_param ::
             (Shader :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_param cls arg1
@@ -114,6 +134,10 @@ has_param cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindShader_has_param (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Shader "has_param" '[GodotString] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Shader.has_param
 
 {-# NOINLINE bindShader_set_code #-}
 
@@ -136,10 +160,13 @@ set_code cls arg1
          godot_method_bind_call bindShader_set_code (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Shader "set_code" '[GodotString] (IO ()) where
+        nodeMethod = Godot.Core.Shader.set_code
+
 {-# NOINLINE bindShader_set_default_texture_param #-}
 
--- | Sets the default texture to be used with a texture uniform. The default is used if a texture is not set in the [ShaderMaterial].
---   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
+-- | Sets the default texture to be used with a texture uniform. The default is used if a texture is not set in the @ShaderMaterial@.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 bindShader_set_default_texture_param :: MethodBind
 bindShader_set_default_texture_param
   = unsafePerformIO $
@@ -149,8 +176,8 @@ bindShader_set_default_texture_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default texture to be used with a texture uniform. The default is used if a texture is not set in the [ShaderMaterial].
---   				[b]Note:[/b] [code]param[/code] must match the name of the uniform in the code exactly.
+-- | Sets the default texture to be used with a texture uniform. The default is used if a texture is not set in the @ShaderMaterial@.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 set_default_texture_param ::
                             (Shader :< cls, Object :< cls) =>
                             cls -> GodotString -> Texture -> IO ()
@@ -162,3 +189,9 @@ set_default_texture_param cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Shader "set_default_texture_param"
+           '[GodotString, Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Shader.set_default_texture_param

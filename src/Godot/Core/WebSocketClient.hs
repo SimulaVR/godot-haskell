@@ -19,9 +19,14 @@ module Godot.Core.WebSocketClient
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.WebSocketMultiplayerPeer()
 
 sig_connection_closed ::
                       Godot.Internal.Dispatch.Signal WebSocketClient
@@ -58,6 +63,20 @@ sig_server_close_request
 instance NodeSignal WebSocketClient "server_close_request"
            '[Int, GodotString]
 
+instance NodeProperty WebSocketClient "trusted_ssl_certificate"
+           X509Certificate
+           'False
+         where
+        nodeProperty
+          = (get_trusted_ssl_certificate,
+             wrapDroppingSetter set_trusted_ssl_certificate, Nothing)
+
+instance NodeProperty WebSocketClient "verify_ssl" Bool 'False
+         where
+        nodeProperty
+          = (is_verify_ssl_enabled,
+             wrapDroppingSetter set_verify_ssl_enabled, Nothing)
+
 {-# NOINLINE bindWebSocketClient_connect_to_url #-}
 
 bindWebSocketClient_connect_to_url :: MethodBind
@@ -72,16 +91,28 @@ bindWebSocketClient_connect_to_url
 connect_to_url ::
                  (WebSocketClient :< cls, Object :< cls) =>
                  cls ->
-                   GodotString -> PoolStringArray -> Bool -> PoolStringArray -> IO Int
+                   GodotString ->
+                     Maybe PoolStringArray ->
+                       Maybe Bool -> Maybe PoolStringArray -> IO Int
 connect_to_url cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1,
+       defaultedVariant VariantPoolStringArray V.empty arg2,
+       maybe (VariantBool False) toVariant arg3,
+       defaultedVariant VariantPoolStringArray V.empty arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindWebSocketClient_connect_to_url
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketClient "connect_to_url"
+           '[GodotString, Maybe PoolStringArray, Maybe Bool,
+             Maybe PoolStringArray]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebSocketClient.connect_to_url
 
 {-# NOINLINE bindWebSocketClient_disconnect_from_host #-}
 
@@ -96,15 +127,23 @@ bindWebSocketClient_disconnect_from_host
 
 disconnect_from_host ::
                        (WebSocketClient :< cls, Object :< cls) =>
-                       cls -> Int -> GodotString -> IO ()
+                       cls -> Maybe Int -> Maybe GodotString -> IO ()
 disconnect_from_host cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [maybe (VariantInt (1000)) toVariant arg1,
+       defaultedVariant VariantString "" arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindWebSocketClient_disconnect_from_host
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketClient "disconnect_from_host"
+           '[Maybe Int, Maybe GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.WebSocketClient.disconnect_from_host
 
 {-# NOINLINE bindWebSocketClient_get_connected_host #-}
 
@@ -128,6 +167,11 @@ get_connected_host cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketClient "get_connected_host" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.WebSocketClient.get_connected_host
+
 {-# NOINLINE bindWebSocketClient_get_connected_port #-}
 
 bindWebSocketClient_get_connected_port :: MethodBind
@@ -149,6 +193,11 @@ get_connected_port cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketClient "get_connected_port" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebSocketClient.get_connected_port
 
 {-# NOINLINE bindWebSocketClient_get_trusted_ssl_certificate #-}
 
@@ -174,6 +223,12 @@ get_trusted_ssl_certificate cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketClient "get_trusted_ssl_certificate"
+           '[]
+           (IO X509Certificate)
+         where
+        nodeMethod = Godot.Core.WebSocketClient.get_trusted_ssl_certificate
+
 {-# NOINLINE bindWebSocketClient_is_verify_ssl_enabled #-}
 
 bindWebSocketClient_is_verify_ssl_enabled :: MethodBind
@@ -195,6 +250,11 @@ is_verify_ssl_enabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketClient "is_verify_ssl_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.WebSocketClient.is_verify_ssl_enabled
 
 {-# NOINLINE bindWebSocketClient_set_trusted_ssl_certificate #-}
 
@@ -220,6 +280,12 @@ set_trusted_ssl_certificate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketClient "set_trusted_ssl_certificate"
+           '[X509Certificate]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.WebSocketClient.set_trusted_ssl_certificate
+
 {-# NOINLINE bindWebSocketClient_set_verify_ssl_enabled #-}
 
 bindWebSocketClient_set_verify_ssl_enabled :: MethodBind
@@ -241,3 +307,9 @@ set_verify_ssl_enabled cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketClient "set_verify_ssl_enabled"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.WebSocketClient.set_verify_ssl_enabled

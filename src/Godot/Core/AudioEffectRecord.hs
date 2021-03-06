@@ -11,13 +11,21 @@ module Godot.Core.AudioEffectRecord
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
+
+instance NodeProperty AudioEffectRecord "format" Int 'False where
+        nodeProperty = (get_format, wrapDroppingSetter set_format, Nothing)
 
 {-# NOINLINE bindAudioEffectRecord_get_format #-}
 
--- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
+-- | Specifies the format in which the sample will be recorded. See @enum AudioStreamSample.Format@ for available formats.
 bindAudioEffectRecord_get_format :: MethodBind
 bindAudioEffectRecord_get_format
   = unsafePerformIO $
@@ -27,7 +35,7 @@ bindAudioEffectRecord_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
+-- | Specifies the format in which the sample will be recorded. See @enum AudioStreamSample.Format@ for available formats.
 get_format ::
              (AudioEffectRecord :< cls, Object :< cls) => cls -> IO Int
 get_format cls
@@ -38,6 +46,10 @@ get_format cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectRecord "get_format" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioEffectRecord.get_format
 
 {-# NOINLINE bindAudioEffectRecord_get_recording #-}
 
@@ -64,6 +76,11 @@ get_recording cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectRecord "get_recording" '[]
+           (IO AudioStreamSample)
+         where
+        nodeMethod = Godot.Core.AudioEffectRecord.get_recording
+
 {-# NOINLINE bindAudioEffectRecord_is_recording_active #-}
 
 -- | Returns whether the recording is active or not.
@@ -88,9 +105,14 @@ is_recording_active cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectRecord "is_recording_active" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioEffectRecord.is_recording_active
+
 {-# NOINLINE bindAudioEffectRecord_set_format #-}
 
--- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
+-- | Specifies the format in which the sample will be recorded. See @enum AudioStreamSample.Format@ for available formats.
 bindAudioEffectRecord_set_format :: MethodBind
 bindAudioEffectRecord_set_format
   = unsafePerformIO $
@@ -100,7 +122,7 @@ bindAudioEffectRecord_set_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies the format in which the sample will be recorded. See [enum AudioStreamSample.Format] for available formats.
+-- | Specifies the format in which the sample will be recorded. See @enum AudioStreamSample.Format@ for available formats.
 set_format ::
              (AudioEffectRecord :< cls, Object :< cls) => cls -> Int -> IO ()
 set_format cls arg1
@@ -112,9 +134,13 @@ set_format cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectRecord "set_format" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectRecord.set_format
+
 {-# NOINLINE bindAudioEffectRecord_set_recording_active #-}
 
--- | If [code]true[/code], the sound will be recorded. Note that restarting the recording will remove the previously recorded sample.
+-- | If @true@, the sound will be recorded. Note that restarting the recording will remove the previously recorded sample.
 bindAudioEffectRecord_set_recording_active :: MethodBind
 bindAudioEffectRecord_set_recording_active
   = unsafePerformIO $
@@ -124,7 +150,7 @@ bindAudioEffectRecord_set_recording_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the sound will be recorded. Note that restarting the recording will remove the previously recorded sample.
+-- | If @true@, the sound will be recorded. Note that restarting the recording will remove the previously recorded sample.
 set_recording_active ::
                        (AudioEffectRecord :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_recording_active cls arg1
@@ -135,3 +161,9 @@ set_recording_active cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectRecord "set_recording_active"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectRecord.set_recording_active

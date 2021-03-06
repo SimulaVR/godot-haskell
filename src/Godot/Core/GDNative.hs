@@ -9,9 +9,19 @@ module Godot.Core.GDNative
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
+
+instance NodeProperty GDNative "library" GDNativeLibrary 'False
+         where
+        nodeProperty
+          = (get_library, wrapDroppingSetter set_library, Nothing)
 
 {-# NOINLINE bindGDNative_call_native #-}
 
@@ -34,6 +44,12 @@ call_native cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNative "call_native"
+           '[GodotString, GodotString, Array]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.GDNative.call_native
+
 {-# NOINLINE bindGDNative_get_library #-}
 
 bindGDNative_get_library :: MethodBind
@@ -54,6 +70,10 @@ get_library cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNative "get_library" '[] (IO GDNativeLibrary)
+         where
+        nodeMethod = Godot.Core.GDNative.get_library
+
 {-# NOINLINE bindGDNative_initialize #-}
 
 bindGDNative_initialize :: MethodBind
@@ -72,6 +92,9 @@ initialize cls
          godot_method_bind_call bindGDNative_initialize (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNative "initialize" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GDNative.initialize
 
 {-# NOINLINE bindGDNative_set_library #-}
 
@@ -93,6 +116,11 @@ set_library cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNative "set_library" '[GDNativeLibrary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GDNative.set_library
+
 {-# NOINLINE bindGDNative_terminate #-}
 
 bindGDNative_terminate :: MethodBind
@@ -111,3 +139,6 @@ terminate cls
          godot_method_bind_call bindGDNative_terminate (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNative "terminate" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GDNative.terminate

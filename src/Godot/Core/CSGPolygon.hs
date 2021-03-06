@@ -40,9 +40,14 @@ module Godot.Core.CSGPolygon
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.CSGPrimitive()
 
 _MODE_PATH :: Int
 _MODE_PATH = 2
@@ -61,6 +66,61 @@ _MODE_SPIN = 1
 
 _MODE_DEPTH :: Int
 _MODE_DEPTH = 0
+
+instance NodeProperty CSGPolygon "depth" Float 'False where
+        nodeProperty = (get_depth, wrapDroppingSetter set_depth, Nothing)
+
+instance NodeProperty CSGPolygon "material" Material 'False where
+        nodeProperty
+          = (get_material, wrapDroppingSetter set_material, Nothing)
+
+instance NodeProperty CSGPolygon "mode" Int 'False where
+        nodeProperty = (get_mode, wrapDroppingSetter set_mode, Nothing)
+
+instance NodeProperty CSGPolygon "path_continuous_u" Bool 'False
+         where
+        nodeProperty
+          = (is_path_continuous_u, wrapDroppingSetter set_path_continuous_u,
+             Nothing)
+
+instance NodeProperty CSGPolygon "path_interval" Float 'False where
+        nodeProperty
+          = (get_path_interval, wrapDroppingSetter set_path_interval,
+             Nothing)
+
+instance NodeProperty CSGPolygon "path_joined" Bool 'False where
+        nodeProperty
+          = (is_path_joined, wrapDroppingSetter set_path_joined, Nothing)
+
+instance NodeProperty CSGPolygon "path_local" Bool 'False where
+        nodeProperty
+          = (is_path_local, wrapDroppingSetter set_path_local, Nothing)
+
+instance NodeProperty CSGPolygon "path_node" NodePath 'False where
+        nodeProperty
+          = (get_path_node, wrapDroppingSetter set_path_node, Nothing)
+
+instance NodeProperty CSGPolygon "path_rotation" Int 'False where
+        nodeProperty
+          = (get_path_rotation, wrapDroppingSetter set_path_rotation,
+             Nothing)
+
+instance NodeProperty CSGPolygon "polygon" PoolVector2Array 'False
+         where
+        nodeProperty
+          = (get_polygon, wrapDroppingSetter set_polygon, Nothing)
+
+instance NodeProperty CSGPolygon "smooth_faces" Bool 'False where
+        nodeProperty
+          = (get_smooth_faces, wrapDroppingSetter set_smooth_faces, Nothing)
+
+instance NodeProperty CSGPolygon "spin_degrees" Float 'False where
+        nodeProperty
+          = (get_spin_degrees, wrapDroppingSetter set_spin_degrees, Nothing)
+
+instance NodeProperty CSGPolygon "spin_sides" Int 'False where
+        nodeProperty
+          = (get_spin_sides, wrapDroppingSetter set_spin_sides, Nothing)
 
 {-# NOINLINE bindCSGPolygon__has_editable_3d_polygon_no_depth #-}
 
@@ -85,6 +145,13 @@ _has_editable_3d_polygon_no_depth cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "_has_editable_3d_polygon_no_depth"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.CSGPolygon._has_editable_3d_polygon_no_depth
+
 {-# NOINLINE bindCSGPolygon__is_editable_3d_polygon #-}
 
 bindCSGPolygon__is_editable_3d_polygon :: MethodBind
@@ -107,6 +174,11 @@ _is_editable_3d_polygon cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "_is_editable_3d_polygon" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGPolygon._is_editable_3d_polygon
+
 {-# NOINLINE bindCSGPolygon__path_changed #-}
 
 bindCSGPolygon__path_changed :: MethodBind
@@ -126,6 +198,9 @@ _path_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "_path_changed" '[] (IO ()) where
+        nodeMethod = Godot.Core.CSGPolygon._path_changed
 
 {-# NOINLINE bindCSGPolygon__path_exited #-}
 
@@ -147,6 +222,9 @@ _path_exited cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "_path_exited" '[] (IO ()) where
+        nodeMethod = Godot.Core.CSGPolygon._path_exited
+
 {-# NOINLINE bindCSGPolygon_get_depth #-}
 
 bindCSGPolygon_get_depth :: MethodBind
@@ -165,6 +243,9 @@ get_depth cls
          godot_method_bind_call bindCSGPolygon_get_depth (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "get_depth" '[] (IO Float) where
+        nodeMethod = Godot.Core.CSGPolygon.get_depth
 
 {-# NOINLINE bindCSGPolygon_get_material #-}
 
@@ -187,6 +268,10 @@ get_material cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "get_material" '[] (IO Material)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.get_material
+
 {-# NOINLINE bindCSGPolygon_get_mode #-}
 
 bindCSGPolygon_get_mode :: MethodBind
@@ -205,6 +290,9 @@ get_mode cls
          godot_method_bind_call bindCSGPolygon_get_mode (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "get_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.CSGPolygon.get_mode
 
 {-# NOINLINE bindCSGPolygon_get_path_interval #-}
 
@@ -228,6 +316,10 @@ get_path_interval cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "get_path_interval" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.get_path_interval
+
 {-# NOINLINE bindCSGPolygon_get_path_node #-}
 
 bindCSGPolygon_get_path_node :: MethodBind
@@ -248,6 +340,10 @@ get_path_node cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "get_path_node" '[] (IO NodePath)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.get_path_node
 
 {-# NOINLINE bindCSGPolygon_get_path_rotation #-}
 
@@ -271,6 +367,10 @@ get_path_rotation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "get_path_rotation" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.get_path_rotation
+
 {-# NOINLINE bindCSGPolygon_get_polygon #-}
 
 bindCSGPolygon_get_polygon :: MethodBind
@@ -291,6 +391,11 @@ get_polygon cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "get_polygon" '[]
+           (IO PoolVector2Array)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.get_polygon
 
 {-# NOINLINE bindCSGPolygon_get_smooth_faces #-}
 
@@ -313,6 +418,10 @@ get_smooth_faces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "get_smooth_faces" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.get_smooth_faces
+
 {-# NOINLINE bindCSGPolygon_get_spin_degrees #-}
 
 bindCSGPolygon_get_spin_degrees :: MethodBind
@@ -334,6 +443,10 @@ get_spin_degrees cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "get_spin_degrees" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.get_spin_degrees
+
 {-# NOINLINE bindCSGPolygon_get_spin_sides #-}
 
 bindCSGPolygon_get_spin_sides :: MethodBind
@@ -354,6 +467,9 @@ get_spin_sides cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "get_spin_sides" '[] (IO Int) where
+        nodeMethod = Godot.Core.CSGPolygon.get_spin_sides
 
 {-# NOINLINE bindCSGPolygon_is_path_continuous_u #-}
 
@@ -377,6 +493,10 @@ is_path_continuous_u cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "is_path_continuous_u" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGPolygon.is_path_continuous_u
+
 {-# NOINLINE bindCSGPolygon_is_path_joined #-}
 
 bindCSGPolygon_is_path_joined :: MethodBind
@@ -397,6 +517,9 @@ is_path_joined cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "is_path_joined" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CSGPolygon.is_path_joined
 
 {-# NOINLINE bindCSGPolygon_is_path_local #-}
 
@@ -419,6 +542,9 @@ is_path_local cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "is_path_local" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CSGPolygon.is_path_local
+
 {-# NOINLINE bindCSGPolygon_set_depth #-}
 
 bindCSGPolygon_set_depth :: MethodBind
@@ -438,6 +564,9 @@ set_depth cls arg1
          godot_method_bind_call bindCSGPolygon_set_depth (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "set_depth" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.CSGPolygon.set_depth
 
 {-# NOINLINE bindCSGPolygon_set_material #-}
 
@@ -460,6 +589,10 @@ set_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "set_material" '[Material] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_material
+
 {-# NOINLINE bindCSGPolygon_set_mode #-}
 
 bindCSGPolygon_set_mode :: MethodBind
@@ -479,6 +612,9 @@ set_mode cls arg1
          godot_method_bind_call bindCSGPolygon_set_mode (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "set_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CSGPolygon.set_mode
 
 {-# NOINLINE bindCSGPolygon_set_path_continuous_u #-}
 
@@ -502,6 +638,11 @@ set_path_continuous_u cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "set_path_continuous_u" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_path_continuous_u
+
 {-# NOINLINE bindCSGPolygon_set_path_interval #-}
 
 bindCSGPolygon_set_path_interval :: MethodBind
@@ -524,6 +665,10 @@ set_path_interval cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "set_path_interval" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_path_interval
+
 {-# NOINLINE bindCSGPolygon_set_path_joined #-}
 
 bindCSGPolygon_set_path_joined :: MethodBind
@@ -544,6 +689,10 @@ set_path_joined cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "set_path_joined" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_path_joined
 
 {-# NOINLINE bindCSGPolygon_set_path_local #-}
 
@@ -566,6 +715,10 @@ set_path_local cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "set_path_local" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_path_local
+
 {-# NOINLINE bindCSGPolygon_set_path_node #-}
 
 bindCSGPolygon_set_path_node :: MethodBind
@@ -586,6 +739,10 @@ set_path_node cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "set_path_node" '[NodePath] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_path_node
 
 {-# NOINLINE bindCSGPolygon_set_path_rotation #-}
 
@@ -609,6 +766,10 @@ set_path_rotation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "set_path_rotation" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_path_rotation
+
 {-# NOINLINE bindCSGPolygon_set_polygon #-}
 
 bindCSGPolygon_set_polygon :: MethodBind
@@ -631,6 +792,11 @@ set_polygon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "set_polygon" '[PoolVector2Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_polygon
+
 {-# NOINLINE bindCSGPolygon_set_smooth_faces #-}
 
 bindCSGPolygon_set_smooth_faces :: MethodBind
@@ -651,6 +817,10 @@ set_smooth_faces cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "set_smooth_faces" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_smooth_faces
 
 {-# NOINLINE bindCSGPolygon_set_spin_degrees #-}
 
@@ -673,6 +843,10 @@ set_spin_degrees cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGPolygon "set_spin_degrees" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_spin_degrees
+
 {-# NOINLINE bindCSGPolygon_set_spin_sides #-}
 
 bindCSGPolygon_set_spin_sides :: MethodBind
@@ -693,3 +867,7 @@ set_spin_sides cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGPolygon "set_spin_sides" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGPolygon.set_spin_sides

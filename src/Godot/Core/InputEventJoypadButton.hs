@@ -12,13 +12,24 @@ module Godot.Core.InputEventJoypadButton
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEvent()
+
+instance NodeProperty InputEventJoypadButton "button_index" Int
+           'False
+         where
+        nodeProperty
+          = (get_button_index, wrapDroppingSetter set_button_index, Nothing)
 
 {-# NOINLINE bindInputEventJoypadButton_is_pressed #-}
 
--- | If [code]true[/code], the button's state is pressed. If [code]false[/code], the button's state is released.
+-- | If @true@, the button's state is pressed. If @false@, the button's state is released.
 bindInputEventJoypadButton_is_pressed :: MethodBind
 bindInputEventJoypadButton_is_pressed
   = unsafePerformIO $
@@ -28,7 +39,7 @@ bindInputEventJoypadButton_is_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's state is pressed. If [code]false[/code], the button's state is released.
+-- | If @true@, the button's state is pressed. If @false@, the button's state is released.
 is_pressed ::
              (InputEventJoypadButton :< cls, Object :< cls) => cls -> IO Bool
 is_pressed cls
@@ -40,9 +51,25 @@ is_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventJoypadButton "is_pressed" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.InputEventJoypadButton.is_pressed
+
+instance NodeProperty InputEventJoypadButton "pressed" Bool 'False
+         where
+        nodeProperty
+          = (is_pressed, wrapDroppingSetter set_pressed, Nothing)
+
+instance NodeProperty InputEventJoypadButton "pressure" Float
+           'False
+         where
+        nodeProperty
+          = (get_pressure, wrapDroppingSetter set_pressure, Nothing)
+
 {-# NOINLINE bindInputEventJoypadButton_get_button_index #-}
 
--- | Button identifier. One of the [enum JoystickList] button constants.
+-- | Button identifier. One of the @enum JoystickList@ button constants.
 bindInputEventJoypadButton_get_button_index :: MethodBind
 bindInputEventJoypadButton_get_button_index
   = unsafePerformIO $
@@ -52,7 +79,7 @@ bindInputEventJoypadButton_get_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Button identifier. One of the [enum JoystickList] button constants.
+-- | Button identifier. One of the @enum JoystickList@ button constants.
 get_button_index ::
                    (InputEventJoypadButton :< cls, Object :< cls) => cls -> IO Int
 get_button_index cls
@@ -64,9 +91,14 @@ get_button_index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventJoypadButton "get_button_index" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventJoypadButton.get_button_index
+
 {-# NOINLINE bindInputEventJoypadButton_get_pressure #-}
 
--- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from [code]0[/code] to [code]1[/code].
+-- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from @0@ to @1@.
 bindInputEventJoypadButton_get_pressure :: MethodBind
 bindInputEventJoypadButton_get_pressure
   = unsafePerformIO $
@@ -76,7 +108,7 @@ bindInputEventJoypadButton_get_pressure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from [code]0[/code] to [code]1[/code].
+-- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from @0@ to @1@.
 get_pressure ::
                (InputEventJoypadButton :< cls, Object :< cls) => cls -> IO Float
 get_pressure cls
@@ -88,9 +120,14 @@ get_pressure cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventJoypadButton "get_pressure" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.InputEventJoypadButton.get_pressure
+
 {-# NOINLINE bindInputEventJoypadButton_set_button_index #-}
 
--- | Button identifier. One of the [enum JoystickList] button constants.
+-- | Button identifier. One of the @enum JoystickList@ button constants.
 bindInputEventJoypadButton_set_button_index :: MethodBind
 bindInputEventJoypadButton_set_button_index
   = unsafePerformIO $
@@ -100,7 +137,7 @@ bindInputEventJoypadButton_set_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Button identifier. One of the [enum JoystickList] button constants.
+-- | Button identifier. One of the @enum JoystickList@ button constants.
 set_button_index ::
                    (InputEventJoypadButton :< cls, Object :< cls) =>
                    cls -> Int -> IO ()
@@ -113,9 +150,15 @@ set_button_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventJoypadButton "set_button_index"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventJoypadButton.set_button_index
+
 {-# NOINLINE bindInputEventJoypadButton_set_pressed #-}
 
--- | If [code]true[/code], the button's state is pressed. If [code]false[/code], the button's state is released.
+-- | If @true@, the button's state is pressed. If @false@, the button's state is released.
 bindInputEventJoypadButton_set_pressed :: MethodBind
 bindInputEventJoypadButton_set_pressed
   = unsafePerformIO $
@@ -125,7 +168,7 @@ bindInputEventJoypadButton_set_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's state is pressed. If [code]false[/code], the button's state is released.
+-- | If @true@, the button's state is pressed. If @false@, the button's state is released.
 set_pressed ::
               (InputEventJoypadButton :< cls, Object :< cls) =>
               cls -> Bool -> IO ()
@@ -138,9 +181,14 @@ set_pressed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventJoypadButton "set_pressed" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventJoypadButton.set_pressed
+
 {-# NOINLINE bindInputEventJoypadButton_set_pressure #-}
 
--- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from [code]0[/code] to [code]1[/code].
+-- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from @0@ to @1@.
 bindInputEventJoypadButton_set_pressure :: MethodBind
 bindInputEventJoypadButton_set_pressure
   = unsafePerformIO $
@@ -150,7 +198,7 @@ bindInputEventJoypadButton_set_pressure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from [code]0[/code] to [code]1[/code].
+-- | Represents the pressure the user puts on the button with his finger, if the controller supports it. Ranges from @0@ to @1@.
 set_pressure ::
                (InputEventJoypadButton :< cls, Object :< cls) =>
                cls -> Float -> IO ()
@@ -162,3 +210,8 @@ set_pressure cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventJoypadButton "set_pressure" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventJoypadButton.set_pressure

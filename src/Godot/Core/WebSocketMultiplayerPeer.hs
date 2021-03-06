@@ -9,9 +9,14 @@ module Godot.Core.WebSocketMultiplayerPeer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.NetworkedMultiplayerPeer()
 
 sig_peer_packet ::
                 Godot.Internal.Dispatch.Signal WebSocketMultiplayerPeer
@@ -42,6 +47,11 @@ get_peer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketMultiplayerPeer "get_peer" '[Int]
+           (IO WebSocketPeer)
+         where
+        nodeMethod = Godot.Core.WebSocketMultiplayerPeer.get_peer
+
 {-# NOINLINE bindWebSocketMultiplayerPeer_set_buffers #-}
 
 bindWebSocketMultiplayerPeer_set_buffers :: MethodBind
@@ -65,3 +75,9 @@ set_buffers cls arg1 arg2 arg3 arg4
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketMultiplayerPeer "set_buffers"
+           '[Int, Int, Int, Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebSocketMultiplayerPeer.set_buffers

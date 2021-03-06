@@ -15,9 +15,14 @@ module Godot.Core.ResourceSaver
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 _FLAG_REPLACE_SUBRESOURCE_PATHS :: Int
 _FLAG_REPLACE_SUBRESOURCE_PATHS = 64
@@ -65,11 +70,17 @@ get_recognized_extensions cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourceSaver "get_recognized_extensions"
+           '[Resource]
+           (IO PoolStringArray)
+         where
+        nodeMethod = Godot.Core.ResourceSaver.get_recognized_extensions
+
 {-# NOINLINE bindResourceSaver_save #-}
 
--- | Saves a resource to disk to the given path, using a [ResourceFormatSaver] that recognizes the resource object.
---   				The [code]flags[/code] bitmask can be specified to customize the save behavior.
---   				Returns [constant OK] on success.
+-- | Saves a resource to disk to the given path, using a @ResourceFormatSaver@ that recognizes the resource object.
+--   				The @flags@ bitmask can be specified to customize the save behavior.
+--   				Returns @OK@ on success.
 bindResourceSaver_save :: MethodBind
 bindResourceSaver_save
   = unsafePerformIO $
@@ -79,15 +90,23 @@ bindResourceSaver_save
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves a resource to disk to the given path, using a [ResourceFormatSaver] that recognizes the resource object.
---   				The [code]flags[/code] bitmask can be specified to customize the save behavior.
---   				Returns [constant OK] on success.
+-- | Saves a resource to disk to the given path, using a @ResourceFormatSaver@ that recognizes the resource object.
+--   				The @flags@ bitmask can be specified to customize the save behavior.
+--   				Returns @OK@ on success.
 save ::
        (ResourceSaver :< cls, Object :< cls) =>
-       cls -> GodotString -> Resource -> Int -> IO Int
+       cls -> GodotString -> Resource -> Maybe Int -> IO Int
 save cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantInt (0)) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindResourceSaver_save (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ResourceSaver "save"
+           '[GodotString, Resource, Maybe Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.ResourceSaver.save

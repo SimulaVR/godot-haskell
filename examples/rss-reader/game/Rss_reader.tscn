@@ -1,0 +1,121 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Rss_reader.gdns" type="Script" id=1]
+
+[node name="RSSReader" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1102.0
+margin_bottom = 168.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OpenButton" type="Button" parent="."]
+margin_left = 34.48
+margin_top = 65.522
+margin_right = 179.48
+margin_bottom = 106.522
+text = "Open"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="TextEdit" parent="."]
+visible = false
+margin_left = 20.9119
+margin_top = 575.146
+margin_right = 585.912
+margin_bottom = 868.146
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="ItemList" type="ItemList" parent="."]
+margin_left = 25.0
+margin_top = 137.0
+margin_right = 850.0
+margin_bottom = 490.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DescriptionField" type="TextEdit" parent="."]
+margin_left = 882.0
+margin_top = 137.0
+margin_right = 1555.0
+margin_bottom = 489.0
+readonly = true
+wrap_enabled = true
+
+[node name="LinkButton" type="LinkButton" parent="."]
+margin_left = 29.8409
+margin_top = 496.385
+margin_right = 1289.84
+margin_bottom = 554.385
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SettingsButton" type="Button" parent="."]
+margin_left = 1416.23
+margin_top = 67.6134
+margin_right = 1549.23
+margin_bottom = 108.613
+text = "Settings"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SettingsDialog" type="WindowDialog" parent="."]
+margin_left = 352.0
+margin_top = 256.0
+margin_right = 1340.0
+margin_bottom = 538.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RSSURLText" type="LineEdit" parent="SettingsDialog"]
+margin_left = 136.409
+margin_top = 89.8409
+margin_right = 847.409
+margin_bottom = 131.841
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsDialog"]
+margin_left = 135.431
+margin_top = 42.4543
+margin_right = 436.431
+margin_bottom = 80.4543
+text = "The RSS feed URL "
+
+[node name="Button" type="Button" parent="SettingsDialog"]
+margin_left = 134.283
+margin_top = 161.682
+margin_right = 200.283
+margin_bottom = 196.682
+text = "Clear"
+
+[node name="SaveButton" type="Button" parent="SettingsDialog"]
+margin_left = 784.273
+margin_top = 159.841
+margin_right = 845.273
+margin_bottom = 197.841
+text = "Save"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="ready" from="." to="." method="_on_RSSReader_ready"]
+[connection signal="pressed" from="OpenButton" to="." method="_on_OpenButton_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
+[connection signal="item_selected" from="ItemList" to="." method="_on_ItemList_item_selected"]
+[connection signal="pressed" from="LinkButton" to="." method="_on_LinkButton_pressed"]
+[connection signal="pressed" from="SettingsButton" to="." method="_on_SettingsButton_pressed"]
+[connection signal="pressed" from="SettingsDialog/Button" to="." method="_on_Settings_Clear_Button_pressed"]
+[connection signal="pressed" from="SettingsDialog/SaveButton" to="." method="_on_SaveButton_pressed"]

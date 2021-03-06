@@ -8,9 +8,20 @@ module Godot.Core.VisualScriptSceneNode
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptSceneNode "node_path" NodePath
+           'False
+         where
+        nodeProperty
+          = (get_node_path, wrapDroppingSetter set_node_path, Nothing)
 
 {-# NOINLINE bindVisualScriptSceneNode_get_node_path #-}
 
@@ -34,6 +45,11 @@ get_node_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptSceneNode "get_node_path" '[]
+           (IO NodePath)
+         where
+        nodeMethod = Godot.Core.VisualScriptSceneNode.get_node_path
+
 {-# NOINLINE bindVisualScriptSceneNode_set_node_path #-}
 
 bindVisualScriptSceneNode_set_node_path :: MethodBind
@@ -56,3 +72,9 @@ set_node_path cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptSceneNode "set_node_path"
+           '[NodePath]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptSceneNode.set_node_path

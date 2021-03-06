@@ -37,9 +37,14 @@ module Godot.Core.Tween
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
 
 _TRANS_SINE :: Int
 _TRANS_SINE = 1
@@ -119,6 +124,19 @@ sig_tween_step = Godot.Internal.Dispatch.Signal "tween_step"
 instance NodeSignal Tween "tween_step"
            '[Object, NodePath, Float, Object]
 
+instance NodeProperty Tween "playback_process_mode" Int 'False
+         where
+        nodeProperty
+          = (get_tween_process_mode,
+             wrapDroppingSetter set_tween_process_mode, Nothing)
+
+instance NodeProperty Tween "playback_speed" Float 'False where
+        nodeProperty
+          = (get_speed_scale, wrapDroppingSetter set_speed_scale, Nothing)
+
+instance NodeProperty Tween "repeat" Bool 'False where
+        nodeProperty = (is_repeat, wrapDroppingSetter set_repeat, Nothing)
+
 {-# NOINLINE bindTween__remove_by_uid #-}
 
 bindTween__remove_by_uid :: MethodBind
@@ -139,10 +157,13 @@ _remove_by_uid cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "_remove_by_uid" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Tween._remove_by_uid
+
 {-# NOINLINE bindTween_follow_method #-}
 
--- | Follows [code]method[/code] of [code]object[/code] and applies the returned value on [code]target_method[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Follows @method@ of @object@ and applies the returned value on @target_method@ of @target@, beginning from @initial_val@ for @duration@ seconds, @delay@ later. Methods are called with consecutive values.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_follow_method :: MethodBind
 bindTween_follow_method
   = unsafePerformIO $
@@ -152,29 +173,40 @@ bindTween_follow_method
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Follows [code]method[/code] of [code]object[/code] and applies the returned value on [code]target_method[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Follows @method@ of @object@ and applies the returned value on @target_method@ of @target@, beginning from @initial_val@ for @duration@ seconds, @delay@ later. Methods are called with consecutive values.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 follow_method ::
                 (Tween :< cls, Object :< cls) =>
                 cls ->
                   Object ->
                     GodotString ->
                       GodotVariant ->
-                        Object -> GodotString -> Float -> Int -> Int -> Float -> IO Bool
+                        Object ->
+                          GodotString ->
+                            Float -> Maybe Int -> Maybe Int -> Maybe Float -> IO Bool
 follow_method cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8,
-       toVariant arg9]
+       toVariant arg5, toVariant arg6,
+       maybe (VariantInt (0)) toVariant arg7,
+       maybe (VariantInt (2)) toVariant arg8,
+       maybe (VariantReal (0)) toVariant arg9]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_follow_method (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "follow_method"
+           '[Object, GodotString, GodotVariant, Object, GodotString, Float,
+             Maybe Int, Maybe Int, Maybe Float]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.follow_method
+
 {-# NOINLINE bindTween_follow_property #-}
 
--- | Follows [code]property[/code] of [code]object[/code] and applies it on [code]target_property[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Follows @property@ of @object@ and applies it on @target_property@ of @target@, beginning from @initial_val@ for @duration@ seconds, @delay@ seconds later.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_follow_property :: MethodBind
 bindTween_follow_property
   = unsafePerformIO $
@@ -184,25 +216,36 @@ bindTween_follow_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Follows [code]property[/code] of [code]object[/code] and applies it on [code]target_property[/code] of [code]target[/code], beginning from [code]initial_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Follows @property@ of @object@ and applies it on @target_property@ of @target@, beginning from @initial_val@ for @duration@ seconds, @delay@ seconds later.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 follow_property ::
                   (Tween :< cls, Object :< cls) =>
                   cls ->
                     Object ->
                       NodePath ->
                         GodotVariant ->
-                          Object -> NodePath -> Float -> Int -> Int -> Float -> IO Bool
+                          Object ->
+                            NodePath ->
+                              Float -> Maybe Int -> Maybe Int -> Maybe Float -> IO Bool
 follow_property cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8,
-       toVariant arg9]
+       toVariant arg5, toVariant arg6,
+       maybe (VariantInt (0)) toVariant arg7,
+       maybe (VariantInt (2)) toVariant arg8,
+       maybe (VariantReal (0)) toVariant arg9]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_follow_property (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "follow_property"
+           '[Object, NodePath, GodotVariant, Object, NodePath, Float,
+             Maybe Int, Maybe Int, Maybe Float]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.follow_property
 
 {-# NOINLINE bindTween_get_runtime #-}
 
@@ -225,9 +268,12 @@ get_runtime cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "get_runtime" '[] (IO Float) where
+        nodeMethod = Godot.Core.Tween.get_runtime
+
 {-# NOINLINE bindTween_get_speed_scale #-}
 
--- | The tween's speed multiplier. For example, set it to [code]1.0[/code] for normal speed, [code]2.0[/code] for two times normal speed, or [code]0.5[/code] for half of the normal speed. A value of [code]0[/code] pauses the animation, but see also [method set_active] or [method stop_all] for this.
+-- | The tween's speed multiplier. For example, set it to @1.0@ for normal speed, @2.0@ for two times normal speed, or @0.5@ for half of the normal speed. A value of @0@ pauses the animation, but see also @method set_active@ or @method stop_all@ for this.
 bindTween_get_speed_scale :: MethodBind
 bindTween_get_speed_scale
   = unsafePerformIO $
@@ -237,7 +283,7 @@ bindTween_get_speed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The tween's speed multiplier. For example, set it to [code]1.0[/code] for normal speed, [code]2.0[/code] for two times normal speed, or [code]0.5[/code] for half of the normal speed. A value of [code]0[/code] pauses the animation, but see also [method set_active] or [method stop_all] for this.
+-- | The tween's speed multiplier. For example, set it to @1.0@ for normal speed, @2.0@ for two times normal speed, or @0.5@ for half of the normal speed. A value of @0@ pauses the animation, but see also @method set_active@ or @method stop_all@ for this.
 get_speed_scale :: (Tween :< cls, Object :< cls) => cls -> IO Float
 get_speed_scale cls
   = withVariantArray []
@@ -247,9 +293,12 @@ get_speed_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "get_speed_scale" '[] (IO Float) where
+        nodeMethod = Godot.Core.Tween.get_speed_scale
+
 {-# NOINLINE bindTween_get_tween_process_mode #-}
 
--- | The tween's animation process thread. See [enum TweenProcessMode].
+-- | The tween's animation process thread. See @enum TweenProcessMode@.
 bindTween_get_tween_process_mode :: MethodBind
 bindTween_get_tween_process_mode
   = unsafePerformIO $
@@ -259,7 +308,7 @@ bindTween_get_tween_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The tween's animation process thread. See [enum TweenProcessMode].
+-- | The tween's animation process thread. See @enum TweenProcessMode@.
 get_tween_process_mode ::
                          (Tween :< cls, Object :< cls) => cls -> IO Int
 get_tween_process_mode cls
@@ -271,9 +320,13 @@ get_tween_process_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "get_tween_process_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Tween.get_tween_process_mode
+
 {-# NOINLINE bindTween_interpolate_callback #-}
 
--- | Calls [code]callback[/code] of [code]object[/code] after [code]duration[/code]. [code]arg1[/code]-[code]arg5[/code] are arguments to be passed to the callback.
+-- | Calls @callback@ of @object@ after @duration@. @arg1@-@arg5@ are arguments to be passed to the callback.
 bindTween_interpolate_callback :: MethodBind
 bindTween_interpolate_callback
   = unsafePerformIO $
@@ -283,29 +336,40 @@ bindTween_interpolate_callback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls [code]callback[/code] of [code]object[/code] after [code]duration[/code]. [code]arg1[/code]-[code]arg5[/code] are arguments to be passed to the callback.
+-- | Calls @callback@ of @object@ after @duration@. @arg1@-@arg5@ are arguments to be passed to the callback.
 interpolate_callback ::
                        (Tween :< cls, Object :< cls) =>
                        cls ->
                          Object ->
                            Float ->
                              GodotString ->
-                               GodotVariant ->
-                                 GodotVariant ->
-                                   GodotVariant -> GodotVariant -> GodotVariant -> IO Bool
+                               Maybe GodotVariant ->
+                                 Maybe GodotVariant ->
+                                   Maybe GodotVariant ->
+                                     Maybe GodotVariant -> Maybe GodotVariant -> IO Bool
 interpolate_callback cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe VariantNil toVariant arg4, maybe VariantNil toVariant arg5,
+       maybe VariantNil toVariant arg6, maybe VariantNil toVariant arg7,
+       maybe VariantNil toVariant arg8]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_interpolate_callback (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "interpolate_callback"
+           '[Object, Float, GodotString, Maybe GodotVariant,
+             Maybe GodotVariant, Maybe GodotVariant, Maybe GodotVariant,
+             Maybe GodotVariant]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.interpolate_callback
+
 {-# NOINLINE bindTween_interpolate_deferred_callback #-}
 
--- | Calls [code]callback[/code] of [code]object[/code] after [code]duration[/code] on the main thread (similar to [method Object.call_deferred]). [code]arg1[/code]-[code]arg5[/code] are arguments to be passed to the callback.
+-- | Calls @callback@ of @object@ after @duration@ on the main thread (similar to @method Object.call_deferred@). @arg1@-@arg5@ are arguments to be passed to the callback.
 bindTween_interpolate_deferred_callback :: MethodBind
 bindTween_interpolate_deferred_callback
   = unsafePerformIO $
@@ -315,21 +379,24 @@ bindTween_interpolate_deferred_callback
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls [code]callback[/code] of [code]object[/code] after [code]duration[/code] on the main thread (similar to [method Object.call_deferred]). [code]arg1[/code]-[code]arg5[/code] are arguments to be passed to the callback.
+-- | Calls @callback@ of @object@ after @duration@ on the main thread (similar to @method Object.call_deferred@). @arg1@-@arg5@ are arguments to be passed to the callback.
 interpolate_deferred_callback ::
                                 (Tween :< cls, Object :< cls) =>
                                 cls ->
                                   Object ->
                                     Float ->
                                       GodotString ->
-                                        GodotVariant ->
-                                          GodotVariant ->
-                                            GodotVariant -> GodotVariant -> GodotVariant -> IO Bool
+                                        Maybe GodotVariant ->
+                                          Maybe GodotVariant ->
+                                            Maybe GodotVariant ->
+                                              Maybe GodotVariant -> Maybe GodotVariant -> IO Bool
 interpolate_deferred_callback cls arg1 arg2 arg3 arg4 arg5 arg6
   arg7 arg8
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe VariantNil toVariant arg4, maybe VariantNil toVariant arg5,
+       maybe VariantNil toVariant arg6, maybe VariantNil toVariant arg7,
+       maybe VariantNil toVariant arg8]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_interpolate_deferred_callback
            (upcast cls)
@@ -337,10 +404,18 @@ interpolate_deferred_callback cls arg1 arg2 arg3 arg4 arg5 arg6
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "interpolate_deferred_callback"
+           '[Object, Float, GodotString, Maybe GodotVariant,
+             Maybe GodotVariant, Maybe GodotVariant, Maybe GodotVariant,
+             Maybe GodotVariant]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.interpolate_deferred_callback
+
 {-# NOINLINE bindTween_interpolate_method #-}
 
--- | Animates [code]method[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @method@ of @object@ from @initial_val@ to @final_val@ for @duration@ seconds, @delay@ seconds later. Methods are called with consecutive values.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_interpolate_method :: MethodBind
 bindTween_interpolate_method
   = unsafePerformIO $
@@ -350,29 +425,39 @@ bindTween_interpolate_method
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Animates [code]method[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are called with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @method@ of @object@ from @initial_val@ to @final_val@ for @duration@ seconds, @delay@ seconds later. Methods are called with consecutive values.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 interpolate_method ::
                      (Tween :< cls, Object :< cls) =>
                      cls ->
                        Object ->
                          GodotString ->
                            GodotVariant ->
-                             GodotVariant -> Float -> Int -> Int -> Float -> IO Bool
+                             GodotVariant ->
+                               Float -> Maybe Int -> Maybe Int -> Maybe Float -> IO Bool
 interpolate_method cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8]
+       toVariant arg5, maybe (VariantInt (0)) toVariant arg6,
+       maybe (VariantInt (2)) toVariant arg7,
+       maybe (VariantReal (0)) toVariant arg8]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_interpolate_method (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "interpolate_method"
+           '[Object, GodotString, GodotVariant, GodotVariant, Float,
+             Maybe Int, Maybe Int, Maybe Float]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.interpolate_method
+
 {-# NOINLINE bindTween_interpolate_property #-}
 
--- | Animates [code]property[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Setting the initial value to [code]null[/code] uses the current value of the property.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @property@ of @object@ from @initial_val@ to @final_val@ for @duration@ seconds, @delay@ seconds later. Setting the initial value to @null@ uses the current value of the property.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_interpolate_property :: MethodBind
 bindTween_interpolate_property
   = unsafePerformIO $
@@ -382,29 +467,39 @@ bindTween_interpolate_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Animates [code]property[/code] of [code]object[/code] from [code]initial_val[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Setting the initial value to [code]null[/code] uses the current value of the property.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @property@ of @object@ from @initial_val@ to @final_val@ for @duration@ seconds, @delay@ seconds later. Setting the initial value to @null@ uses the current value of the property.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 interpolate_property ::
                        (Tween :< cls, Object :< cls) =>
                        cls ->
                          Object ->
                            NodePath ->
                              GodotVariant ->
-                               GodotVariant -> Float -> Int -> Int -> Float -> IO Bool
+                               GodotVariant ->
+                                 Float -> Maybe Int -> Maybe Int -> Maybe Float -> IO Bool
 interpolate_property cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8]
+       toVariant arg5, maybe (VariantInt (0)) toVariant arg6,
+       maybe (VariantInt (2)) toVariant arg7,
+       maybe (VariantReal (0)) toVariant arg8]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_interpolate_property (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "interpolate_property"
+           '[Object, NodePath, GodotVariant, GodotVariant, Float, Maybe Int,
+             Maybe Int, Maybe Float]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.interpolate_property
+
 {-# NOINLINE bindTween_is_active #-}
 
--- | Returns [code]true[/code] if any tweens are currently running.
---   				[b]Note:[/b] This method doesn't consider tweens that have ended.
+-- | Returns @true@ if any tweens are currently running.
+--   				__Note:__ This method doesn't consider tweens that have ended.
 bindTween_is_active :: MethodBind
 bindTween_is_active
   = unsafePerformIO $
@@ -414,8 +509,8 @@ bindTween_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if any tweens are currently running.
---   				[b]Note:[/b] This method doesn't consider tweens that have ended.
+-- | Returns @true@ if any tweens are currently running.
+--   				__Note:__ This method doesn't consider tweens that have ended.
 is_active :: (Tween :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
   = withVariantArray []
@@ -423,9 +518,12 @@ is_active cls
          godot_method_bind_call bindTween_is_active (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "is_active" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.is_active
+
 {-# NOINLINE bindTween_is_repeat #-}
 
--- | If [code]true[/code], the tween loops.
+-- | If @true@, the tween loops.
 bindTween_is_repeat :: MethodBind
 bindTween_is_repeat
   = unsafePerformIO $
@@ -435,7 +533,7 @@ bindTween_is_repeat
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the tween loops.
+-- | If @true@, the tween loops.
 is_repeat :: (Tween :< cls, Object :< cls) => cls -> IO Bool
 is_repeat cls
   = withVariantArray []
@@ -443,9 +541,12 @@ is_repeat cls
          godot_method_bind_call bindTween_is_repeat (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "is_repeat" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.is_repeat
+
 {-# NOINLINE bindTween_remove #-}
 
--- | Stops animation and removes a tween, given its object and property/method pair. By default, all tweens are removed, unless [code]key[/code] is specified.
+-- | Stops animation and removes a tween, given its object and property/method pair. By default, all tweens are removed, unless @key@ is specified.
 bindTween_remove :: MethodBind
 bindTween_remove
   = unsafePerformIO $
@@ -455,15 +556,21 @@ bindTween_remove
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stops animation and removes a tween, given its object and property/method pair. By default, all tweens are removed, unless [code]key[/code] is specified.
+-- | Stops animation and removes a tween, given its object and property/method pair. By default, all tweens are removed, unless @key@ is specified.
 remove ::
          (Tween :< cls, Object :< cls) =>
-         cls -> Object -> GodotString -> IO Bool
+         cls -> Object -> Maybe GodotString -> IO Bool
 remove cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, defaultedVariant VariantString "" arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_remove (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "remove" '[Object, Maybe GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.remove
 
 {-# NOINLINE bindTween_remove_all #-}
 
@@ -485,9 +592,12 @@ remove_all cls
          godot_method_bind_call bindTween_remove_all (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "remove_all" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.remove_all
+
 {-# NOINLINE bindTween_reset #-}
 
--- | Resets a tween to its initial value (the one given, not the one before the tween), given its object and property/method pair. By default, all tweens are removed, unless [code]key[/code] is specified.
+-- | Resets a tween to its initial value (the one given, not the one before the tween), given its object and property/method pair. By default, all tweens are removed, unless @key@ is specified.
 bindTween_reset :: MethodBind
 bindTween_reset
   = unsafePerformIO $
@@ -497,15 +607,21 @@ bindTween_reset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Resets a tween to its initial value (the one given, not the one before the tween), given its object and property/method pair. By default, all tweens are removed, unless [code]key[/code] is specified.
+-- | Resets a tween to its initial value (the one given, not the one before the tween), given its object and property/method pair. By default, all tweens are removed, unless @key@ is specified.
 reset ::
         (Tween :< cls, Object :< cls) =>
-        cls -> Object -> GodotString -> IO Bool
+        cls -> Object -> Maybe GodotString -> IO Bool
 reset cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, defaultedVariant VariantString "" arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_reset (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "reset" '[Object, Maybe GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.reset
 
 {-# NOINLINE bindTween_reset_all #-}
 
@@ -527,9 +643,12 @@ reset_all cls
          godot_method_bind_call bindTween_reset_all (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "reset_all" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.reset_all
+
 {-# NOINLINE bindTween_resume #-}
 
--- | Continues animating a stopped tween, given its object and property/method pair. By default, all tweens are resumed, unless [code]key[/code] is specified.
+-- | Continues animating a stopped tween, given its object and property/method pair. By default, all tweens are resumed, unless @key@ is specified.
 bindTween_resume :: MethodBind
 bindTween_resume
   = unsafePerformIO $
@@ -539,15 +658,21 @@ bindTween_resume
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Continues animating a stopped tween, given its object and property/method pair. By default, all tweens are resumed, unless [code]key[/code] is specified.
+-- | Continues animating a stopped tween, given its object and property/method pair. By default, all tweens are resumed, unless @key@ is specified.
 resume ::
          (Tween :< cls, Object :< cls) =>
-         cls -> Object -> GodotString -> IO Bool
+         cls -> Object -> Maybe GodotString -> IO Bool
 resume cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, defaultedVariant VariantString "" arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_resume (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "resume" '[Object, Maybe GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.resume
 
 {-# NOINLINE bindTween_resume_all #-}
 
@@ -569,9 +694,12 @@ resume_all cls
          godot_method_bind_call bindTween_resume_all (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "resume_all" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.resume_all
+
 {-# NOINLINE bindTween_seek #-}
 
--- | Sets the interpolation to the given [code]time[/code] in seconds.
+-- | Sets the interpolation to the given @time@ in seconds.
 bindTween_seek :: MethodBind
 bindTween_seek
   = unsafePerformIO $
@@ -581,7 +709,7 @@ bindTween_seek
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the interpolation to the given [code]time[/code] in seconds.
+-- | Sets the interpolation to the given @time@ in seconds.
 seek :: (Tween :< cls, Object :< cls) => cls -> Float -> IO Bool
 seek cls arg1
   = withVariantArray [toVariant arg1]
@@ -589,9 +717,12 @@ seek cls arg1
          godot_method_bind_call bindTween_seek (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "seek" '[Float] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.seek
+
 {-# NOINLINE bindTween_set_active #-}
 
--- | Activates/deactivates the tween. See also [method stop_all] and [method resume_all].
+-- | Activates/deactivates the tween. See also @method stop_all@ and @method resume_all@.
 bindTween_set_active :: MethodBind
 bindTween_set_active
   = unsafePerformIO $
@@ -601,7 +732,7 @@ bindTween_set_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Activates/deactivates the tween. See also [method stop_all] and [method resume_all].
+-- | Activates/deactivates the tween. See also @method stop_all@ and @method resume_all@.
 set_active :: (Tween :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_active cls arg1
   = withVariantArray [toVariant arg1]
@@ -609,9 +740,12 @@ set_active cls arg1
          godot_method_bind_call bindTween_set_active (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "set_active" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Tween.set_active
+
 {-# NOINLINE bindTween_set_repeat #-}
 
--- | If [code]true[/code], the tween loops.
+-- | If @true@, the tween loops.
 bindTween_set_repeat :: MethodBind
 bindTween_set_repeat
   = unsafePerformIO $
@@ -621,7 +755,7 @@ bindTween_set_repeat
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the tween loops.
+-- | If @true@, the tween loops.
 set_repeat :: (Tween :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_repeat cls arg1
   = withVariantArray [toVariant arg1]
@@ -629,9 +763,12 @@ set_repeat cls arg1
          godot_method_bind_call bindTween_set_repeat (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "set_repeat" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Tween.set_repeat
+
 {-# NOINLINE bindTween_set_speed_scale #-}
 
--- | The tween's speed multiplier. For example, set it to [code]1.0[/code] for normal speed, [code]2.0[/code] for two times normal speed, or [code]0.5[/code] for half of the normal speed. A value of [code]0[/code] pauses the animation, but see also [method set_active] or [method stop_all] for this.
+-- | The tween's speed multiplier. For example, set it to @1.0@ for normal speed, @2.0@ for two times normal speed, or @0.5@ for half of the normal speed. A value of @0@ pauses the animation, but see also @method set_active@ or @method stop_all@ for this.
 bindTween_set_speed_scale :: MethodBind
 bindTween_set_speed_scale
   = unsafePerformIO $
@@ -641,7 +778,7 @@ bindTween_set_speed_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The tween's speed multiplier. For example, set it to [code]1.0[/code] for normal speed, [code]2.0[/code] for two times normal speed, or [code]0.5[/code] for half of the normal speed. A value of [code]0[/code] pauses the animation, but see also [method set_active] or [method stop_all] for this.
+-- | The tween's speed multiplier. For example, set it to @1.0@ for normal speed, @2.0@ for two times normal speed, or @0.5@ for half of the normal speed. A value of @0@ pauses the animation, but see also @method set_active@ or @method stop_all@ for this.
 set_speed_scale ::
                   (Tween :< cls, Object :< cls) => cls -> Float -> IO ()
 set_speed_scale cls arg1
@@ -652,9 +789,12 @@ set_speed_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "set_speed_scale" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Tween.set_speed_scale
+
 {-# NOINLINE bindTween_set_tween_process_mode #-}
 
--- | The tween's animation process thread. See [enum TweenProcessMode].
+-- | The tween's animation process thread. See @enum TweenProcessMode@.
 bindTween_set_tween_process_mode :: MethodBind
 bindTween_set_tween_process_mode
   = unsafePerformIO $
@@ -664,7 +804,7 @@ bindTween_set_tween_process_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The tween's animation process thread. See [enum TweenProcessMode].
+-- | The tween's animation process thread. See @enum TweenProcessMode@.
 set_tween_process_mode ::
                          (Tween :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tween_process_mode cls arg1
@@ -675,6 +815,10 @@ set_tween_process_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "set_tween_process_mode" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Tween.set_tween_process_mode
 
 {-# NOINLINE bindTween_start #-}
 
@@ -696,9 +840,12 @@ start cls
          godot_method_bind_call bindTween_start (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "start" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.start
+
 {-# NOINLINE bindTween_stop #-}
 
--- | Stops a tween, given its object and property/method pair. By default, all tweens are stopped, unless [code]key[/code] is specified.
+-- | Stops a tween, given its object and property/method pair. By default, all tweens are stopped, unless @key@ is specified.
 bindTween_stop :: MethodBind
 bindTween_stop
   = unsafePerformIO $
@@ -708,15 +855,21 @@ bindTween_stop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Stops a tween, given its object and property/method pair. By default, all tweens are stopped, unless [code]key[/code] is specified.
+-- | Stops a tween, given its object and property/method pair. By default, all tweens are stopped, unless @key@ is specified.
 stop ::
        (Tween :< cls, Object :< cls) =>
-       cls -> Object -> GodotString -> IO Bool
+       cls -> Object -> Maybe GodotString -> IO Bool
 stop cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, defaultedVariant VariantString "" arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_stop (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "stop" '[Object, Maybe GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.stop
 
 {-# NOINLINE bindTween_stop_all #-}
 
@@ -738,10 +891,13 @@ stop_all cls
          godot_method_bind_call bindTween_stop_all (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "stop_all" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tween.stop_all
+
 {-# NOINLINE bindTween_targeting_method #-}
 
--- | Animates [code]method[/code] of [code]object[/code] from the value returned by [code]initial_method[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are animated by calling them with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @method@ of @object@ from the value returned by @initial_method@ to @final_val@ for @duration@ seconds, @delay@ seconds later. Methods are animated by calling them with consecutive values.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_targeting_method :: MethodBind
 bindTween_targeting_method
   = unsafePerformIO $
@@ -751,8 +907,8 @@ bindTween_targeting_method
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Animates [code]method[/code] of [code]object[/code] from the value returned by [code]initial_method[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later. Methods are animated by calling them with consecutive values.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @method@ of @object@ from the value returned by @initial_method@ to @final_val@ for @duration@ seconds, @delay@ seconds later. Methods are animated by calling them with consecutive values.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 targeting_method ::
                    (Tween :< cls, Object :< cls) =>
                    cls ->
@@ -760,22 +916,32 @@ targeting_method ::
                        GodotString ->
                          Object ->
                            GodotString ->
-                             GodotVariant -> Float -> Int -> Int -> Float -> IO Bool
+                             GodotVariant ->
+                               Float -> Maybe Int -> Maybe Int -> Maybe Float -> IO Bool
 targeting_method cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8,
-       toVariant arg9]
+       toVariant arg5, toVariant arg6,
+       maybe (VariantInt (0)) toVariant arg7,
+       maybe (VariantInt (2)) toVariant arg8,
+       maybe (VariantReal (0)) toVariant arg9]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_targeting_method (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tween "targeting_method"
+           '[Object, GodotString, Object, GodotString, GodotVariant, Float,
+             Maybe Int, Maybe Int, Maybe Float]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.targeting_method
+
 {-# NOINLINE bindTween_targeting_property #-}
 
--- | Animates [code]property[/code] of [code]object[/code] from the current value of the [code]initial_val[/code] property of [code]initial[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @property@ of @object@ from the current value of the @initial_val@ property of @initial@ to @final_val@ for @duration@ seconds, @delay@ seconds later.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 bindTween_targeting_property :: MethodBind
 bindTween_targeting_property
   = unsafePerformIO $
@@ -785,25 +951,36 @@ bindTween_targeting_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Animates [code]property[/code] of [code]object[/code] from the current value of the [code]initial_val[/code] property of [code]initial[/code] to [code]final_val[/code] for [code]duration[/code] seconds, [code]delay[/code] seconds later.
---   				Use [enum TransitionType] for [code]trans_type[/code] and [enum EaseType] for [code]ease_type[/code] parameters. These values control the timing and direction of the interpolation. See the class description for more information.
+-- | Animates @property@ of @object@ from the current value of the @initial_val@ property of @initial@ to @final_val@ for @duration@ seconds, @delay@ seconds later.
+--   				Use @enum TransitionType@ for @trans_type@ and @enum EaseType@ for @ease_type@ parameters. These values control the timing and direction of the interpolation. See the class description for more information.
 targeting_property ::
                      (Tween :< cls, Object :< cls) =>
                      cls ->
                        Object ->
                          NodePath ->
                            Object ->
-                             NodePath -> GodotVariant -> Float -> Int -> Int -> Float -> IO Bool
+                             NodePath ->
+                               GodotVariant ->
+                                 Float -> Maybe Int -> Maybe Int -> Maybe Float -> IO Bool
 targeting_property cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8,
-       toVariant arg9]
+       toVariant arg5, toVariant arg6,
+       maybe (VariantInt (0)) toVariant arg7,
+       maybe (VariantInt (2)) toVariant arg8,
+       maybe (VariantReal (0)) toVariant arg9]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_targeting_property (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "targeting_property"
+           '[Object, NodePath, Object, NodePath, GodotVariant, Float,
+             Maybe Int, Maybe Int, Maybe Float]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tween.targeting_property
 
 {-# NOINLINE bindTween_tell #-}
 
@@ -824,3 +1001,6 @@ tell cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTween_tell (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tween "tell" '[] (IO Float) where
+        nodeMethod = Godot.Core.Tween.tell

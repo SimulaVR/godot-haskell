@@ -9,9 +9,14 @@ module Godot.Core.Listener
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
 
 {-# NOINLINE bindListener_clear_current #-}
 
@@ -35,9 +40,12 @@ clear_current cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Listener "clear_current" '[] (IO ()) where
+        nodeMethod = Godot.Core.Listener.clear_current
+
 {-# NOINLINE bindListener_get_listener_transform #-}
 
--- | Returns the listener's global orthonormalized [Transform].
+-- | Returns the listener's global orthonormalized @Transform@.
 bindListener_get_listener_transform :: MethodBind
 bindListener_get_listener_transform
   = unsafePerformIO $
@@ -47,7 +55,7 @@ bindListener_get_listener_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the listener's global orthonormalized [Transform].
+-- | Returns the listener's global orthonormalized @Transform@.
 get_listener_transform ::
                          (Listener :< cls, Object :< cls) => cls -> IO Transform
 get_listener_transform cls
@@ -59,10 +67,15 @@ get_listener_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Listener "get_listener_transform" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.Listener.get_listener_transform
+
 {-# NOINLINE bindListener_is_current #-}
 
--- | Returns [code]true[/code] if the listener was made current using [method make_current], [code]false[/code] otherwise.
---   				[b]Note:[/b] There may be more than one Listener marked as "current" in the scene tree, but only the one that was made current last will be used.
+-- | Returns @true@ if the listener was made current using @method make_current@, @false@ otherwise.
+--   				__Note:__ There may be more than one Listener marked as "current" in the scene tree, but only the one that was made current last will be used.
 bindListener_is_current :: MethodBind
 bindListener_is_current
   = unsafePerformIO $
@@ -72,8 +85,8 @@ bindListener_is_current
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the listener was made current using [method make_current], [code]false[/code] otherwise.
---   				[b]Note:[/b] There may be more than one Listener marked as "current" in the scene tree, but only the one that was made current last will be used.
+-- | Returns @true@ if the listener was made current using @method make_current@, @false@ otherwise.
+--   				__Note:__ There may be more than one Listener marked as "current" in the scene tree, but only the one that was made current last will be used.
 is_current :: (Listener :< cls, Object :< cls) => cls -> IO Bool
 is_current cls
   = withVariantArray []
@@ -81,6 +94,9 @@ is_current cls
          godot_method_bind_call bindListener_is_current (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Listener "is_current" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Listener.is_current
 
 {-# NOINLINE bindListener_make_current #-}
 
@@ -103,3 +119,6 @@ make_current cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Listener "make_current" '[] (IO ()) where
+        nodeMethod = Godot.Core.Listener.make_current

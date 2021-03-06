@@ -17,9 +17,14 @@ module Godot.Core.VisualScriptYieldSignal
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _CALL_MODE_NODE_PATH :: Int
 _CALL_MODE_NODE_PATH = 1
@@ -29,6 +34,30 @@ _CALL_MODE_SELF = 0
 
 _CALL_MODE_INSTANCE :: Int
 _CALL_MODE_INSTANCE = 2
+
+instance NodeProperty VisualScriptYieldSignal "base_type"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_base_type, wrapDroppingSetter set_base_type, Nothing)
+
+instance NodeProperty VisualScriptYieldSignal "call_mode" Int
+           'False
+         where
+        nodeProperty
+          = (get_call_mode, wrapDroppingSetter set_call_mode, Nothing)
+
+instance NodeProperty VisualScriptYieldSignal "node_path" NodePath
+           'False
+         where
+        nodeProperty
+          = (get_base_path, wrapDroppingSetter set_base_path, Nothing)
+
+instance NodeProperty VisualScriptYieldSignal "signal" GodotString
+           'False
+         where
+        nodeProperty = (get_signal, wrapDroppingSetter set_signal, Nothing)
 
 {-# NOINLINE bindVisualScriptYieldSignal_get_base_path #-}
 
@@ -53,6 +82,11 @@ get_base_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptYieldSignal "get_base_path" '[]
+           (IO NodePath)
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.get_base_path
+
 {-# NOINLINE bindVisualScriptYieldSignal_get_base_type #-}
 
 bindVisualScriptYieldSignal_get_base_type :: MethodBind
@@ -76,6 +110,11 @@ get_base_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptYieldSignal "get_base_type" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.get_base_type
+
 {-# NOINLINE bindVisualScriptYieldSignal_get_call_mode #-}
 
 bindVisualScriptYieldSignal_get_call_mode :: MethodBind
@@ -97,6 +136,11 @@ get_call_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptYieldSignal "get_call_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.get_call_mode
 
 {-# NOINLINE bindVisualScriptYieldSignal_get_signal #-}
 
@@ -121,6 +165,11 @@ get_signal cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptYieldSignal "get_signal" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.get_signal
+
 {-# NOINLINE bindVisualScriptYieldSignal_set_base_path #-}
 
 bindVisualScriptYieldSignal_set_base_path :: MethodBind
@@ -143,6 +192,12 @@ set_base_path cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptYieldSignal "set_base_path"
+           '[NodePath]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.set_base_path
 
 {-# NOINLINE bindVisualScriptYieldSignal_set_base_type #-}
 
@@ -167,6 +222,12 @@ set_base_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptYieldSignal "set_base_type"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.set_base_type
+
 {-# NOINLINE bindVisualScriptYieldSignal_set_call_mode #-}
 
 bindVisualScriptYieldSignal_set_call_mode :: MethodBind
@@ -190,6 +251,11 @@ set_call_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptYieldSignal "set_call_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.set_call_mode
+
 {-# NOINLINE bindVisualScriptYieldSignal_set_signal #-}
 
 bindVisualScriptYieldSignal_set_signal :: MethodBind
@@ -212,3 +278,9 @@ set_signal cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptYieldSignal "set_signal"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptYieldSignal.set_signal

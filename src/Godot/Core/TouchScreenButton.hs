@@ -30,9 +30,14 @@ module Godot.Core.TouchScreenButton
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
 
 _VISIBILITY_ALWAYS :: Int
 _VISIBILITY_ALWAYS = 0
@@ -51,6 +56,55 @@ sig_released :: Godot.Internal.Dispatch.Signal TouchScreenButton
 sig_released = Godot.Internal.Dispatch.Signal "released"
 
 instance NodeSignal TouchScreenButton "released" '[]
+
+instance NodeProperty TouchScreenButton "action" GodotString 'False
+         where
+        nodeProperty = (get_action, wrapDroppingSetter set_action, Nothing)
+
+instance NodeProperty TouchScreenButton "bitmask" BitMap 'False
+         where
+        nodeProperty
+          = (get_bitmask, wrapDroppingSetter set_bitmask, Nothing)
+
+instance NodeProperty TouchScreenButton "normal" Texture 'False
+         where
+        nodeProperty
+          = (get_texture, wrapDroppingSetter set_texture, Nothing)
+
+instance NodeProperty TouchScreenButton "passby_press" Bool 'False
+         where
+        nodeProperty
+          = (is_passby_press_enabled, wrapDroppingSetter set_passby_press,
+             Nothing)
+
+instance NodeProperty TouchScreenButton "pressed" Texture 'False
+         where
+        nodeProperty
+          = (get_texture_pressed, wrapDroppingSetter set_texture_pressed,
+             Nothing)
+
+instance NodeProperty TouchScreenButton "shape" Shape2D 'False
+         where
+        nodeProperty = (get_shape, wrapDroppingSetter set_shape, Nothing)
+
+instance NodeProperty TouchScreenButton "shape_centered" Bool
+           'False
+         where
+        nodeProperty
+          = (is_shape_centered, wrapDroppingSetter set_shape_centered,
+             Nothing)
+
+instance NodeProperty TouchScreenButton "shape_visible" Bool 'False
+         where
+        nodeProperty
+          = (is_shape_visible, wrapDroppingSetter set_shape_visible, Nothing)
+
+instance NodeProperty TouchScreenButton "visibility_mode" Int
+           'False
+         where
+        nodeProperty
+          = (get_visibility_mode, wrapDroppingSetter set_visibility_mode,
+             Nothing)
 
 {-# NOINLINE bindTouchScreenButton__input #-}
 
@@ -74,9 +128,14 @@ _input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton._input
+
 {-# NOINLINE bindTouchScreenButton_get_action #-}
 
--- | The button's action. Actions can be handled with [InputEventAction].
+-- | The button's action. Actions can be handled with @InputEventAction@.
 bindTouchScreenButton_get_action :: MethodBind
 bindTouchScreenButton_get_action
   = unsafePerformIO $
@@ -86,7 +145,7 @@ bindTouchScreenButton_get_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The button's action. Actions can be handled with [InputEventAction].
+-- | The button's action. Actions can be handled with @InputEventAction@.
 get_action ::
              (TouchScreenButton :< cls, Object :< cls) => cls -> IO GodotString
 get_action cls
@@ -97,6 +156,11 @@ get_action cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TouchScreenButton "get_action" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.get_action
 
 {-# NOINLINE bindTouchScreenButton_get_bitmask #-}
 
@@ -122,6 +186,10 @@ get_bitmask cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "get_bitmask" '[] (IO BitMap)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.get_bitmask
+
 {-# NOINLINE bindTouchScreenButton_get_shape #-}
 
 -- | The button's shape.
@@ -144,6 +212,10 @@ get_shape cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TouchScreenButton "get_shape" '[] (IO Shape2D)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.get_shape
 
 {-# NOINLINE bindTouchScreenButton_get_texture #-}
 
@@ -169,6 +241,11 @@ get_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "get_texture" '[]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.get_texture
+
 {-# NOINLINE bindTouchScreenButton_get_texture_pressed #-}
 
 -- | The button's texture for the pressed state.
@@ -193,9 +270,14 @@ get_texture_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "get_texture_pressed" '[]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.get_texture_pressed
+
 {-# NOINLINE bindTouchScreenButton_get_visibility_mode #-}
 
--- | The button's visibility mode. See [enum VisibilityMode] for possible values.
+-- | The button's visibility mode. See @enum VisibilityMode@ for possible values.
 bindTouchScreenButton_get_visibility_mode :: MethodBind
 bindTouchScreenButton_get_visibility_mode
   = unsafePerformIO $
@@ -205,7 +287,7 @@ bindTouchScreenButton_get_visibility_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The button's visibility mode. See [enum VisibilityMode] for possible values.
+-- | The button's visibility mode. See @enum VisibilityMode@ for possible values.
 get_visibility_mode ::
                       (TouchScreenButton :< cls, Object :< cls) => cls -> IO Int
 get_visibility_mode cls
@@ -217,9 +299,14 @@ get_visibility_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "get_visibility_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.get_visibility_mode
+
 {-# NOINLINE bindTouchScreenButton_is_passby_press_enabled #-}
 
--- | If [code]true[/code], pass-by presses are enabled.
+-- | If @true@, pass-by presses are enabled.
 bindTouchScreenButton_is_passby_press_enabled :: MethodBind
 bindTouchScreenButton_is_passby_press_enabled
   = unsafePerformIO $
@@ -229,7 +316,7 @@ bindTouchScreenButton_is_passby_press_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], pass-by presses are enabled.
+-- | If @true@, pass-by presses are enabled.
 is_passby_press_enabled ::
                           (TouchScreenButton :< cls, Object :< cls) => cls -> IO Bool
 is_passby_press_enabled cls
@@ -242,9 +329,14 @@ is_passby_press_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "is_passby_press_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.is_passby_press_enabled
+
 {-# NOINLINE bindTouchScreenButton_is_pressed #-}
 
--- | Returns [code]true[/code] if this button is currently pressed.
+-- | Returns @true@ if this button is currently pressed.
 bindTouchScreenButton_is_pressed :: MethodBind
 bindTouchScreenButton_is_pressed
   = unsafePerformIO $
@@ -254,7 +346,7 @@ bindTouchScreenButton_is_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if this button is currently pressed.
+-- | Returns @true@ if this button is currently pressed.
 is_pressed ::
              (TouchScreenButton :< cls, Object :< cls) => cls -> IO Bool
 is_pressed cls
@@ -266,9 +358,13 @@ is_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "is_pressed" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.is_pressed
+
 {-# NOINLINE bindTouchScreenButton_is_shape_centered #-}
 
--- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
+-- | If @true@, the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 bindTouchScreenButton_is_shape_centered :: MethodBind
 bindTouchScreenButton_is_shape_centered
   = unsafePerformIO $
@@ -278,7 +374,7 @@ bindTouchScreenButton_is_shape_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
+-- | If @true@, the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 is_shape_centered ::
                     (TouchScreenButton :< cls, Object :< cls) => cls -> IO Bool
 is_shape_centered cls
@@ -290,9 +386,14 @@ is_shape_centered cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "is_shape_centered" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.is_shape_centered
+
 {-# NOINLINE bindTouchScreenButton_is_shape_visible #-}
 
--- | If [code]true[/code], the button's shape is visible.
+-- | If @true@, the button's shape is visible.
 bindTouchScreenButton_is_shape_visible :: MethodBind
 bindTouchScreenButton_is_shape_visible
   = unsafePerformIO $
@@ -302,7 +403,7 @@ bindTouchScreenButton_is_shape_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's shape is visible.
+-- | If @true@, the button's shape is visible.
 is_shape_visible ::
                    (TouchScreenButton :< cls, Object :< cls) => cls -> IO Bool
 is_shape_visible cls
@@ -314,9 +415,14 @@ is_shape_visible cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "is_shape_visible" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.is_shape_visible
+
 {-# NOINLINE bindTouchScreenButton_set_action #-}
 
--- | The button's action. Actions can be handled with [InputEventAction].
+-- | The button's action. Actions can be handled with @InputEventAction@.
 bindTouchScreenButton_set_action :: MethodBind
 bindTouchScreenButton_set_action
   = unsafePerformIO $
@@ -326,7 +432,7 @@ bindTouchScreenButton_set_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The button's action. Actions can be handled with [InputEventAction].
+-- | The button's action. Actions can be handled with @InputEventAction@.
 set_action ::
              (TouchScreenButton :< cls, Object :< cls) =>
              cls -> GodotString -> IO ()
@@ -338,6 +444,11 @@ set_action cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TouchScreenButton "set_action" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_action
 
 {-# NOINLINE bindTouchScreenButton_set_bitmask #-}
 
@@ -363,9 +474,14 @@ set_bitmask cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "set_bitmask" '[BitMap]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_bitmask
+
 {-# NOINLINE bindTouchScreenButton_set_passby_press #-}
 
--- | If [code]true[/code], pass-by presses are enabled.
+-- | If @true@, pass-by presses are enabled.
 bindTouchScreenButton_set_passby_press :: MethodBind
 bindTouchScreenButton_set_passby_press
   = unsafePerformIO $
@@ -375,7 +491,7 @@ bindTouchScreenButton_set_passby_press
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], pass-by presses are enabled.
+-- | If @true@, pass-by presses are enabled.
 set_passby_press ::
                    (TouchScreenButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_passby_press cls arg1
@@ -386,6 +502,11 @@ set_passby_press cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TouchScreenButton "set_passby_press" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_passby_press
 
 {-# NOINLINE bindTouchScreenButton_set_shape #-}
 
@@ -411,9 +532,14 @@ set_shape cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "set_shape" '[Shape2D]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_shape
+
 {-# NOINLINE bindTouchScreenButton_set_shape_centered #-}
 
--- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
+-- | If @true@, the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 bindTouchScreenButton_set_shape_centered :: MethodBind
 bindTouchScreenButton_set_shape_centered
   = unsafePerformIO $
@@ -423,7 +549,7 @@ bindTouchScreenButton_set_shape_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
+-- | If @true@, the button's shape is centered in the provided texture. If no texture is used, this property has no effect.
 set_shape_centered ::
                      (TouchScreenButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shape_centered cls arg1
@@ -435,9 +561,14 @@ set_shape_centered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "set_shape_centered" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_shape_centered
+
 {-# NOINLINE bindTouchScreenButton_set_shape_visible #-}
 
--- | If [code]true[/code], the button's shape is visible.
+-- | If @true@, the button's shape is visible.
 bindTouchScreenButton_set_shape_visible :: MethodBind
 bindTouchScreenButton_set_shape_visible
   = unsafePerformIO $
@@ -447,7 +578,7 @@ bindTouchScreenButton_set_shape_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the button's shape is visible.
+-- | If @true@, the button's shape is visible.
 set_shape_visible ::
                     (TouchScreenButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shape_visible cls arg1
@@ -458,6 +589,11 @@ set_shape_visible cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TouchScreenButton "set_shape_visible" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_shape_visible
 
 {-# NOINLINE bindTouchScreenButton_set_texture #-}
 
@@ -484,6 +620,11 @@ set_texture cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "set_texture" '[Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_texture
+
 {-# NOINLINE bindTouchScreenButton_set_texture_pressed #-}
 
 -- | The button's texture for the pressed state.
@@ -509,9 +650,15 @@ set_texture_pressed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TouchScreenButton "set_texture_pressed"
+           '[Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_texture_pressed
+
 {-# NOINLINE bindTouchScreenButton_set_visibility_mode #-}
 
--- | The button's visibility mode. See [enum VisibilityMode] for possible values.
+-- | The button's visibility mode. See @enum VisibilityMode@ for possible values.
 bindTouchScreenButton_set_visibility_mode :: MethodBind
 bindTouchScreenButton_set_visibility_mode
   = unsafePerformIO $
@@ -521,7 +668,7 @@ bindTouchScreenButton_set_visibility_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The button's visibility mode. See [enum VisibilityMode] for possible values.
+-- | The button's visibility mode. See @enum VisibilityMode@ for possible values.
 set_visibility_mode ::
                       (TouchScreenButton :< cls, Object :< cls) => cls -> Int -> IO ()
 set_visibility_mode cls arg1
@@ -532,3 +679,8 @@ set_visibility_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TouchScreenButton "set_visibility_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TouchScreenButton.set_visibility_mode

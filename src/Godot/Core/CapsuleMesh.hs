@@ -14,9 +14,30 @@ module Godot.Core.CapsuleMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PrimitiveMesh()
+
+instance NodeProperty CapsuleMesh "mid_height" Float 'False where
+        nodeProperty
+          = (get_mid_height, wrapDroppingSetter set_mid_height, Nothing)
+
+instance NodeProperty CapsuleMesh "radial_segments" Int 'False
+         where
+        nodeProperty
+          = (get_radial_segments, wrapDroppingSetter set_radial_segments,
+             Nothing)
+
+instance NodeProperty CapsuleMesh "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
+
+instance NodeProperty CapsuleMesh "rings" Int 'False where
+        nodeProperty = (get_rings, wrapDroppingSetter set_rings, Nothing)
 
 {-# NOINLINE bindCapsuleMesh_get_mid_height #-}
 
@@ -40,6 +61,10 @@ get_mid_height cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CapsuleMesh "get_mid_height" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CapsuleMesh.get_mid_height
 
 {-# NOINLINE bindCapsuleMesh_get_radial_segments #-}
 
@@ -65,6 +90,10 @@ get_radial_segments cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CapsuleMesh "get_radial_segments" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CapsuleMesh.get_radial_segments
+
 {-# NOINLINE bindCapsuleMesh_get_radius #-}
 
 -- | Radius of the capsule mesh.
@@ -88,6 +117,9 @@ get_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CapsuleMesh "get_radius" '[] (IO Float) where
+        nodeMethod = Godot.Core.CapsuleMesh.get_radius
+
 {-# NOINLINE bindCapsuleMesh_get_rings #-}
 
 -- | Number of rings along the height of the capsule.
@@ -109,6 +141,9 @@ get_rings cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CapsuleMesh "get_rings" '[] (IO Int) where
+        nodeMethod = Godot.Core.CapsuleMesh.get_rings
 
 {-# NOINLINE bindCapsuleMesh_set_mid_height #-}
 
@@ -132,6 +167,10 @@ set_mid_height cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CapsuleMesh "set_mid_height" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CapsuleMesh.set_mid_height
 
 {-# NOINLINE bindCapsuleMesh_set_radial_segments #-}
 
@@ -157,6 +196,11 @@ set_radial_segments cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CapsuleMesh "set_radial_segments" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CapsuleMesh.set_radial_segments
+
 {-# NOINLINE bindCapsuleMesh_set_radius #-}
 
 -- | Radius of the capsule mesh.
@@ -180,6 +224,9 @@ set_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CapsuleMesh "set_radius" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.CapsuleMesh.set_radius
+
 {-# NOINLINE bindCapsuleMesh_set_rings #-}
 
 -- | Number of rings along the height of the capsule.
@@ -202,3 +249,6 @@ set_rings cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CapsuleMesh "set_rings" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CapsuleMesh.set_rings

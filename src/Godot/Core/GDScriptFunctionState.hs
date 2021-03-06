@@ -10,9 +10,14 @@ module Godot.Core.GDScriptFunctionState
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 sig_completed ::
               Godot.Internal.Dispatch.Signal GDScriptFunctionState
@@ -44,6 +49,12 @@ _signal_callback cls varargs
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDScriptFunctionState "_signal_callback"
+           '[[Variant 'GodotTy]]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.GDScriptFunctionState._signal_callback
+
 {-# NOINLINE bindGDScriptFunctionState_is_valid #-}
 
 bindGDScriptFunctionState_is_valid :: MethodBind
@@ -57,15 +68,20 @@ bindGDScriptFunctionState_is_valid
 
 is_valid ::
            (GDScriptFunctionState :< cls, Object :< cls) =>
-           cls -> Bool -> IO Bool
+           cls -> Maybe Bool -> IO Bool
 is_valid cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantBool False) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGDScriptFunctionState_is_valid
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDScriptFunctionState "is_valid" '[Maybe Bool]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.GDScriptFunctionState.is_valid
 
 {-# NOINLINE bindGDScriptFunctionState_resume #-}
 
@@ -80,12 +96,18 @@ bindGDScriptFunctionState_resume
 
 resume ::
          (GDScriptFunctionState :< cls, Object :< cls) =>
-         cls -> GodotVariant -> IO GodotVariant
+         cls -> Maybe GodotVariant -> IO GodotVariant
 resume cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe VariantNil toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGDScriptFunctionState_resume
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDScriptFunctionState "resume"
+           '[Maybe GodotVariant]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.GDScriptFunctionState.resume

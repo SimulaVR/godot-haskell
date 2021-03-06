@@ -6,9 +6,14 @@ module Godot.Core.VisualScriptSubCall
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 {-# NOINLINE bindVisualScriptSubCall__subcall #-}
 
@@ -32,3 +37,8 @@ _subcall cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptSubCall "_subcall" '[GodotVariant]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.VisualScriptSubCall._subcall

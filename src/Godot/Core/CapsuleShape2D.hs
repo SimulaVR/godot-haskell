@@ -10,9 +10,20 @@ module Godot.Core.CapsuleShape2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape2D()
+
+instance NodeProperty CapsuleShape2D "height" Float 'False where
+        nodeProperty = (get_height, wrapDroppingSetter set_height, Nothing)
+
+instance NodeProperty CapsuleShape2D "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
 
 {-# NOINLINE bindCapsuleShape2D_get_height #-}
 
@@ -37,6 +48,10 @@ get_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CapsuleShape2D "get_height" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CapsuleShape2D.get_height
+
 {-# NOINLINE bindCapsuleShape2D_get_radius #-}
 
 -- | The capsule's radius.
@@ -59,6 +74,10 @@ get_radius cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CapsuleShape2D "get_radius" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CapsuleShape2D.get_radius
 
 {-# NOINLINE bindCapsuleShape2D_set_height #-}
 
@@ -83,6 +102,10 @@ set_height cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CapsuleShape2D "set_height" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CapsuleShape2D.set_height
+
 {-# NOINLINE bindCapsuleShape2D_set_radius #-}
 
 -- | The capsule's radius.
@@ -105,3 +128,7 @@ set_radius cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CapsuleShape2D "set_radius" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CapsuleShape2D.set_radius

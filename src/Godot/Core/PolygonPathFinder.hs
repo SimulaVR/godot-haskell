@@ -16,9 +16,18 @@ module Godot.Core.PolygonPathFinder
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty PolygonPathFinder "data" Dictionary 'False
+         where
+        nodeProperty = (_get_data, wrapDroppingSetter _set_data, Nothing)
 
 {-# NOINLINE bindPolygonPathFinder__get_data #-}
 
@@ -40,6 +49,11 @@ _get_data cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PolygonPathFinder "_get_data" '[]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder._get_data
 
 {-# NOINLINE bindPolygonPathFinder__set_data #-}
 
@@ -63,6 +77,11 @@ _set_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PolygonPathFinder "_set_data" '[Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder._set_data
+
 {-# NOINLINE bindPolygonPathFinder_find_path #-}
 
 bindPolygonPathFinder_find_path :: MethodBind
@@ -85,6 +104,12 @@ find_path cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PolygonPathFinder "find_path"
+           '[Vector2, Vector2]
+           (IO PoolVector2Array)
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.find_path
+
 {-# NOINLINE bindPolygonPathFinder_get_bounds #-}
 
 bindPolygonPathFinder_get_bounds :: MethodBind
@@ -106,6 +131,10 @@ get_bounds cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PolygonPathFinder "get_bounds" '[] (IO Rect2)
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.get_bounds
 
 {-# NOINLINE bindPolygonPathFinder_get_closest_point #-}
 
@@ -130,6 +159,12 @@ get_closest_point cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PolygonPathFinder "get_closest_point"
+           '[Vector2]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.get_closest_point
+
 {-# NOINLINE bindPolygonPathFinder_get_intersections #-}
 
 bindPolygonPathFinder_get_intersections :: MethodBind
@@ -153,6 +188,12 @@ get_intersections cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PolygonPathFinder "get_intersections"
+           '[Vector2, Vector2]
+           (IO PoolVector2Array)
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.get_intersections
+
 {-# NOINLINE bindPolygonPathFinder_get_point_penalty #-}
 
 bindPolygonPathFinder_get_point_penalty :: MethodBind
@@ -174,6 +215,11 @@ get_point_penalty cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PolygonPathFinder "get_point_penalty" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.get_point_penalty
 
 {-# NOINLINE bindPolygonPathFinder_is_point_inside #-}
 
@@ -198,6 +244,11 @@ is_point_inside cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PolygonPathFinder "is_point_inside" '[Vector2]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.is_point_inside
+
 {-# NOINLINE bindPolygonPathFinder_set_point_penalty #-}
 
 bindPolygonPathFinder_set_point_penalty :: MethodBind
@@ -221,6 +272,12 @@ set_point_penalty cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PolygonPathFinder "set_point_penalty"
+           '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.set_point_penalty
+
 {-# NOINLINE bindPolygonPathFinder_setup #-}
 
 bindPolygonPathFinder_setup :: MethodBind
@@ -242,3 +299,9 @@ setup cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PolygonPathFinder "setup"
+           '[PoolVector2Array, PoolIntArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PolygonPathFinder.setup

@@ -25,9 +25,58 @@ module Godot.Core.CanvasLayer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
+
+instance NodeProperty CanvasLayer "custom_viewport" Node 'False
+         where
+        nodeProperty
+          = (get_custom_viewport, wrapDroppingSetter set_custom_viewport,
+             Nothing)
+
+instance NodeProperty CanvasLayer "follow_viewport_enable" Bool
+           'False
+         where
+        nodeProperty
+          = (is_following_viewport, wrapDroppingSetter set_follow_viewport,
+             Nothing)
+
+instance NodeProperty CanvasLayer "follow_viewport_scale" Float
+           'False
+         where
+        nodeProperty
+          = (get_follow_viewport_scale,
+             wrapDroppingSetter set_follow_viewport_scale, Nothing)
+
+instance NodeProperty CanvasLayer "layer" Int 'False where
+        nodeProperty = (get_layer, wrapDroppingSetter set_layer, Nothing)
+
+instance NodeProperty CanvasLayer "offset" Vector2 'False where
+        nodeProperty = (get_offset, wrapDroppingSetter set_offset, Nothing)
+
+instance NodeProperty CanvasLayer "rotation" Float 'False where
+        nodeProperty
+          = (get_rotation, wrapDroppingSetter set_rotation, Nothing)
+
+instance NodeProperty CanvasLayer "rotation_degrees" Float 'False
+         where
+        nodeProperty
+          = (get_rotation_degrees, wrapDroppingSetter set_rotation_degrees,
+             Nothing)
+
+instance NodeProperty CanvasLayer "scale" Vector2 'False where
+        nodeProperty = (get_scale, wrapDroppingSetter set_scale, Nothing)
+
+instance NodeProperty CanvasLayer "transform" Transform2d 'False
+         where
+        nodeProperty
+          = (get_transform, wrapDroppingSetter set_transform, Nothing)
 
 {-# NOINLINE bindCanvasLayer_get_canvas #-}
 
@@ -51,9 +100,12 @@ get_canvas cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "get_canvas" '[] (IO Rid) where
+        nodeMethod = Godot.Core.CanvasLayer.get_canvas
+
 {-# NOINLINE bindCanvasLayer_get_custom_viewport #-}
 
--- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
+-- | The custom @Viewport@ node assigned to the @CanvasLayer@. If @null@, uses the default viewport instead.
 bindCanvasLayer_get_custom_viewport :: MethodBind
 bindCanvasLayer_get_custom_viewport
   = unsafePerformIO $
@@ -63,7 +115,7 @@ bindCanvasLayer_get_custom_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
+-- | The custom @Viewport@ node assigned to the @CanvasLayer@. If @null@, uses the default viewport instead.
 get_custom_viewport ::
                       (CanvasLayer :< cls, Object :< cls) => cls -> IO Node
 get_custom_viewport cls
@@ -75,9 +127,13 @@ get_custom_viewport cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "get_custom_viewport" '[] (IO Node)
+         where
+        nodeMethod = Godot.Core.CanvasLayer.get_custom_viewport
+
 {-# NOINLINE bindCanvasLayer_get_follow_viewport_scale #-}
 
--- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
+-- | Scales the layer when using @follow_viewport_enable@. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 bindCanvasLayer_get_follow_viewport_scale :: MethodBind
 bindCanvasLayer_get_follow_viewport_scale
   = unsafePerformIO $
@@ -87,7 +143,7 @@ bindCanvasLayer_get_follow_viewport_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
+-- | Scales the layer when using @follow_viewport_enable@. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 get_follow_viewport_scale ::
                             (CanvasLayer :< cls, Object :< cls) => cls -> IO Float
 get_follow_viewport_scale cls
@@ -98,6 +154,11 @@ get_follow_viewport_scale cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "get_follow_viewport_scale" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.CanvasLayer.get_follow_viewport_scale
 
 {-# NOINLINE bindCanvasLayer_get_layer #-}
 
@@ -120,6 +181,9 @@ get_layer cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "get_layer" '[] (IO Int) where
+        nodeMethod = Godot.Core.CanvasLayer.get_layer
 
 {-# NOINLINE bindCanvasLayer_get_offset #-}
 
@@ -144,6 +208,9 @@ get_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "get_offset" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.CanvasLayer.get_offset
+
 {-# NOINLINE bindCanvasLayer_get_rotation #-}
 
 -- | The layer's rotation in radians.
@@ -166,6 +233,9 @@ get_rotation cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "get_rotation" '[] (IO Float) where
+        nodeMethod = Godot.Core.CanvasLayer.get_rotation
 
 {-# NOINLINE bindCanvasLayer_get_rotation_degrees #-}
 
@@ -191,6 +261,11 @@ get_rotation_degrees cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "get_rotation_degrees" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.CanvasLayer.get_rotation_degrees
+
 {-# NOINLINE bindCanvasLayer_get_scale #-}
 
 -- | The layer's scale.
@@ -214,6 +289,9 @@ get_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "get_scale" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.CanvasLayer.get_scale
+
 {-# NOINLINE bindCanvasLayer_get_transform #-}
 
 -- | The layer's transform.
@@ -236,6 +314,11 @@ get_transform cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "get_transform" '[]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CanvasLayer.get_transform
 
 {-# NOINLINE bindCanvasLayer_is_following_viewport #-}
 
@@ -261,9 +344,14 @@ is_following_viewport cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "is_following_viewport" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CanvasLayer.is_following_viewport
+
 {-# NOINLINE bindCanvasLayer_set_custom_viewport #-}
 
--- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
+-- | The custom @Viewport@ node assigned to the @CanvasLayer@. If @null@, uses the default viewport instead.
 bindCanvasLayer_set_custom_viewport :: MethodBind
 bindCanvasLayer_set_custom_viewport
   = unsafePerformIO $
@@ -273,7 +361,7 @@ bindCanvasLayer_set_custom_viewport
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Viewport] node assigned to the [CanvasLayer]. If [code]null[/code], uses the default viewport instead.
+-- | The custom @Viewport@ node assigned to the @CanvasLayer@. If @null@, uses the default viewport instead.
 set_custom_viewport ::
                       (CanvasLayer :< cls, Object :< cls) => cls -> Node -> IO ()
 set_custom_viewport cls arg1
@@ -284,6 +372,11 @@ set_custom_viewport cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "set_custom_viewport" '[Node]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_custom_viewport
 
 {-# NOINLINE bindCanvasLayer_set_follow_viewport #-}
 
@@ -309,9 +402,14 @@ set_follow_viewport cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "set_follow_viewport" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_follow_viewport
+
 {-# NOINLINE bindCanvasLayer_set_follow_viewport_scale #-}
 
--- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
+-- | Scales the layer when using @follow_viewport_enable@. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 bindCanvasLayer_set_follow_viewport_scale :: MethodBind
 bindCanvasLayer_set_follow_viewport_scale
   = unsafePerformIO $
@@ -321,7 +419,7 @@ bindCanvasLayer_set_follow_viewport_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Scales the layer when using [member follow_viewport_enable]. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
+-- | Scales the layer when using @follow_viewport_enable@. Layers moving into the foreground should have increasing scales, while layers moving into the background should have decreasing scales.
 set_follow_viewport_scale ::
                             (CanvasLayer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_follow_viewport_scale cls arg1
@@ -332,6 +430,12 @@ set_follow_viewport_scale cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "set_follow_viewport_scale"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_follow_viewport_scale
 
 {-# NOINLINE bindCanvasLayer_set_layer #-}
 
@@ -356,6 +460,9 @@ set_layer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "set_layer" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CanvasLayer.set_layer
+
 {-# NOINLINE bindCanvasLayer_set_offset #-}
 
 -- | The layer's base offset.
@@ -379,6 +486,10 @@ set_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "set_offset" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_offset
+
 {-# NOINLINE bindCanvasLayer_set_rotation #-}
 
 -- | The layer's rotation in radians.
@@ -401,6 +512,10 @@ set_rotation cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "set_rotation" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_rotation
 
 {-# NOINLINE bindCanvasLayer_set_rotation_degrees #-}
 
@@ -426,6 +541,11 @@ set_rotation_degrees cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "set_rotation_degrees" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_rotation_degrees
+
 {-# NOINLINE bindCanvasLayer_set_scale #-}
 
 -- | The layer's scale.
@@ -449,6 +569,10 @@ set_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasLayer "set_scale" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_scale
+
 {-# NOINLINE bindCanvasLayer_set_transform #-}
 
 -- | The layer's transform.
@@ -471,3 +595,8 @@ set_transform cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasLayer "set_transform" '[Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasLayer.set_transform

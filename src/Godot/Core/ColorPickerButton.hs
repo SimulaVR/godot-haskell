@@ -17,9 +17,14 @@ module Godot.Core.ColorPickerButton
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Button()
 
 -- | Emitted when the color changes.
 sig_color_changed ::
@@ -28,7 +33,7 @@ sig_color_changed = Godot.Internal.Dispatch.Signal "color_changed"
 
 instance NodeSignal ColorPickerButton "color_changed" '[Color]
 
--- | Emitted when the [ColorPicker] is created (the button is pressed for the first time).
+-- | Emitted when the @ColorPicker@ is created (the button is pressed for the first time).
 sig_picker_created ::
                    Godot.Internal.Dispatch.Signal ColorPickerButton
 sig_picker_created
@@ -36,12 +41,21 @@ sig_picker_created
 
 instance NodeSignal ColorPickerButton "picker_created" '[]
 
--- | Emitted when the [ColorPicker] is closed.
+-- | Emitted when the @ColorPicker@ is closed.
 sig_popup_closed ::
                  Godot.Internal.Dispatch.Signal ColorPickerButton
 sig_popup_closed = Godot.Internal.Dispatch.Signal "popup_closed"
 
 instance NodeSignal ColorPickerButton "popup_closed" '[]
+
+instance NodeProperty ColorPickerButton "color" Color 'False where
+        nodeProperty
+          = (get_pick_color, wrapDroppingSetter set_pick_color, Nothing)
+
+instance NodeProperty ColorPickerButton "edit_alpha" Bool 'False
+         where
+        nodeProperty
+          = (is_editing_alpha, wrapDroppingSetter set_edit_alpha, Nothing)
 
 {-# NOINLINE bindColorPickerButton__color_changed #-}
 
@@ -65,6 +79,11 @@ _color_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPickerButton "_color_changed" '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPickerButton._color_changed
+
 {-# NOINLINE bindColorPickerButton__modal_closed #-}
 
 bindColorPickerButton__modal_closed :: MethodBind
@@ -86,6 +105,10 @@ _modal_closed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPickerButton "_modal_closed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPickerButton._modal_closed
 
 {-# NOINLINE bindColorPickerButton_get_pick_color #-}
 
@@ -111,9 +134,14 @@ get_pick_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPickerButton "get_pick_color" '[]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ColorPickerButton.get_pick_color
+
 {-# NOINLINE bindColorPickerButton_get_picker #-}
 
--- | Returns the [ColorPicker] that this node toggles.
+-- | Returns the @ColorPicker@ that this node toggles.
 bindColorPickerButton_get_picker :: MethodBind
 bindColorPickerButton_get_picker
   = unsafePerformIO $
@@ -123,7 +151,7 @@ bindColorPickerButton_get_picker
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [ColorPicker] that this node toggles.
+-- | Returns the @ColorPicker@ that this node toggles.
 get_picker ::
              (ColorPickerButton :< cls, Object :< cls) => cls -> IO ColorPicker
 get_picker cls
@@ -135,9 +163,14 @@ get_picker cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPickerButton "get_picker" '[]
+           (IO ColorPicker)
+         where
+        nodeMethod = Godot.Core.ColorPickerButton.get_picker
+
 {-# NOINLINE bindColorPickerButton_get_popup #-}
 
--- | Returns the control's [PopupPanel] which allows you to connect to popup signals. This allows you to handle events when the ColorPicker is shown or hidden.
+-- | Returns the control's @PopupPanel@ which allows you to connect to popup signals. This allows you to handle events when the ColorPicker is shown or hidden.
 bindColorPickerButton_get_popup :: MethodBind
 bindColorPickerButton_get_popup
   = unsafePerformIO $
@@ -147,7 +180,7 @@ bindColorPickerButton_get_popup
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the control's [PopupPanel] which allows you to connect to popup signals. This allows you to handle events when the ColorPicker is shown or hidden.
+-- | Returns the control's @PopupPanel@ which allows you to connect to popup signals. This allows you to handle events when the ColorPicker is shown or hidden.
 get_popup ::
             (ColorPickerButton :< cls, Object :< cls) => cls -> IO PopupPanel
 get_popup cls
@@ -158,9 +191,14 @@ get_popup cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPickerButton "get_popup" '[]
+           (IO PopupPanel)
+         where
+        nodeMethod = Godot.Core.ColorPickerButton.get_popup
+
 {-# NOINLINE bindColorPickerButton_is_editing_alpha #-}
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
+-- | If @true@, the alpha channel in the displayed @ColorPicker@ will be visible.
 bindColorPickerButton_is_editing_alpha :: MethodBind
 bindColorPickerButton_is_editing_alpha
   = unsafePerformIO $
@@ -170,7 +208,7 @@ bindColorPickerButton_is_editing_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
+-- | If @true@, the alpha channel in the displayed @ColorPicker@ will be visible.
 is_editing_alpha ::
                    (ColorPickerButton :< cls, Object :< cls) => cls -> IO Bool
 is_editing_alpha cls
@@ -182,9 +220,14 @@ is_editing_alpha cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPickerButton "is_editing_alpha" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ColorPickerButton.is_editing_alpha
+
 {-# NOINLINE bindColorPickerButton_set_edit_alpha #-}
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
+-- | If @true@, the alpha channel in the displayed @ColorPicker@ will be visible.
 bindColorPickerButton_set_edit_alpha :: MethodBind
 bindColorPickerButton_set_edit_alpha
   = unsafePerformIO $
@@ -194,7 +237,7 @@ bindColorPickerButton_set_edit_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the alpha channel in the displayed [ColorPicker] will be visible.
+-- | If @true@, the alpha channel in the displayed @ColorPicker@ will be visible.
 set_edit_alpha ::
                  (ColorPickerButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_edit_alpha cls arg1
@@ -205,6 +248,11 @@ set_edit_alpha cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPickerButton "set_edit_alpha" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPickerButton.set_edit_alpha
 
 {-# NOINLINE bindColorPickerButton_set_pick_color #-}
 
@@ -229,3 +277,8 @@ set_pick_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPickerButton "set_pick_color" '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPickerButton.set_pick_color

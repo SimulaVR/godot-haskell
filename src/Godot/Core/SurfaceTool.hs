@@ -24,13 +24,18 @@ module Godot.Core.SurfaceTool
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindSurfaceTool_add_bones #-}
 
--- | Adds an array of bones for the next vertex to use. [code]bones[/code] must contain 4 integers.
+-- | Adds an array of bones for the next vertex to use. @bones@ must contain 4 integers.
 bindSurfaceTool_add_bones :: MethodBind
 bindSurfaceTool_add_bones
   = unsafePerformIO $
@@ -40,7 +45,7 @@ bindSurfaceTool_add_bones
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an array of bones for the next vertex to use. [code]bones[/code] must contain 4 integers.
+-- | Adds an array of bones for the next vertex to use. @bones@ must contain 4 integers.
 add_bones ::
             (SurfaceTool :< cls, Object :< cls) => cls -> PoolIntArray -> IO ()
 add_bones cls arg1
@@ -51,9 +56,13 @@ add_bones cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "add_bones" '[PoolIntArray] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.add_bones
+
 {-# NOINLINE bindSurfaceTool_add_color #-}
 
--- | Specifies a [Color] for the next vertex to use.
+-- | Specifies a @Color@ for the next vertex to use.
 bindSurfaceTool_add_color :: MethodBind
 bindSurfaceTool_add_color
   = unsafePerformIO $
@@ -63,7 +72,7 @@ bindSurfaceTool_add_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies a [Color] for the next vertex to use.
+-- | Specifies a @Color@ for the next vertex to use.
 add_color ::
             (SurfaceTool :< cls, Object :< cls) => cls -> Color -> IO ()
 add_color cls arg1
@@ -73,6 +82,9 @@ add_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "add_color" '[Color] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.add_color
 
 {-# NOINLINE bindSurfaceTool_add_index #-}
 
@@ -97,6 +109,9 @@ add_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "add_index" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.add_index
+
 {-# NOINLINE bindSurfaceTool_add_normal #-}
 
 -- | Specifies a normal for the next vertex to use.
@@ -119,6 +134,10 @@ add_normal cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "add_normal" '[Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.add_normal
 
 {-# NOINLINE bindSurfaceTool_add_smooth_group #-}
 
@@ -144,6 +163,10 @@ add_smooth_group cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "add_smooth_group" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.add_smooth_group
+
 {-# NOINLINE bindSurfaceTool_add_tangent #-}
 
 -- | Specifies a tangent for the next vertex to use.
@@ -167,10 +190,14 @@ add_tangent cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "add_tangent" '[Plane] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.add_tangent
+
 {-# NOINLINE bindSurfaceTool_add_triangle_fan #-}
 
--- | Inserts a triangle fan made of array data into [Mesh] being constructed.
---   				Requires the primitive type be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Inserts a triangle fan made of array data into @Mesh@ being constructed.
+--   				Requires the primitive type be set to @Mesh.PRIMITIVE_TRIANGLES@.
 bindSurfaceTool_add_triangle_fan :: MethodBind
 bindSurfaceTool_add_triangle_fan
   = unsafePerformIO $
@@ -180,25 +207,37 @@ bindSurfaceTool_add_triangle_fan
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Inserts a triangle fan made of array data into [Mesh] being constructed.
---   				Requires the primitive type be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Inserts a triangle fan made of array data into @Mesh@ being constructed.
+--   				Requires the primitive type be set to @Mesh.PRIMITIVE_TRIANGLES@.
 add_triangle_fan ::
                    (SurfaceTool :< cls, Object :< cls) =>
                    cls ->
                      PoolVector3Array ->
-                       PoolVector2Array ->
-                         PoolColorArray ->
-                           PoolVector2Array -> PoolVector3Array -> Array -> IO ()
+                       Maybe PoolVector2Array ->
+                         Maybe PoolColorArray ->
+                           Maybe PoolVector2Array ->
+                             Maybe PoolVector3Array -> Maybe Array -> IO ()
 add_triangle_fan cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+      [toVariant arg1,
+       defaultedVariant VariantPoolVector2Array V.empty arg2,
+       defaultedVariant VariantPoolColorArray V.empty arg3,
+       defaultedVariant VariantPoolVector2Array V.empty arg4,
+       defaultedVariant VariantPoolVector3Array V.empty arg5,
+       defaultedVariant VariantArray V.empty arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSurfaceTool_add_triangle_fan
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "add_triangle_fan"
+           '[PoolVector3Array, Maybe PoolVector2Array, Maybe PoolColorArray,
+             Maybe PoolVector2Array, Maybe PoolVector3Array, Maybe Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.add_triangle_fan
 
 {-# NOINLINE bindSurfaceTool_add_uv #-}
 
@@ -222,6 +261,9 @@ add_uv cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "add_uv" '[Vector2] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.add_uv
+
 {-# NOINLINE bindSurfaceTool_add_uv2 #-}
 
 -- | Specifies an optional second set of UV coordinates to use for the next vertex.
@@ -243,6 +285,9 @@ add_uv2 cls arg1
          godot_method_bind_call bindSurfaceTool_add_uv2 (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "add_uv2" '[Vector2] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.add_uv2
 
 {-# NOINLINE bindSurfaceTool_add_vertex #-}
 
@@ -267,9 +312,13 @@ add_vertex cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "add_vertex" '[Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.add_vertex
+
 {-# NOINLINE bindSurfaceTool_add_weights #-}
 
--- | Specifies weight values for next vertex to use. [code]weights[/code] must contain 4 values.
+-- | Specifies weight values for next vertex to use. @weights@ must contain 4 values.
 bindSurfaceTool_add_weights :: MethodBind
 bindSurfaceTool_add_weights
   = unsafePerformIO $
@@ -279,7 +328,7 @@ bindSurfaceTool_add_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies weight values for next vertex to use. [code]weights[/code] must contain 4 values.
+-- | Specifies weight values for next vertex to use. @weights@ must contain 4 values.
 add_weights ::
               (SurfaceTool :< cls, Object :< cls) =>
               cls -> PoolRealArray -> IO ()
@@ -291,9 +340,14 @@ add_weights cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "add_weights" '[PoolRealArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.add_weights
+
 {-# NOINLINE bindSurfaceTool_append_from #-}
 
--- | Append vertices from a given [Mesh] surface onto the current vertex array with specified [Transform].
+-- | Append vertices from a given @Mesh@ surface onto the current vertex array with specified @Transform@.
 bindSurfaceTool_append_from :: MethodBind
 bindSurfaceTool_append_from
   = unsafePerformIO $
@@ -303,7 +357,7 @@ bindSurfaceTool_append_from
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Append vertices from a given [Mesh] surface onto the current vertex array with specified [Transform].
+-- | Append vertices from a given @Mesh@ surface onto the current vertex array with specified @Transform@.
 append_from ::
               (SurfaceTool :< cls, Object :< cls) =>
               cls -> Mesh -> Int -> Transform -> IO ()
@@ -315,9 +369,15 @@ append_from cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "append_from"
+           '[Mesh, Int, Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.append_from
+
 {-# NOINLINE bindSurfaceTool_begin #-}
 
--- | Called before adding any vertices. Takes the primitive type as an argument (e.g. [constant Mesh.PRIMITIVE_TRIANGLES]).
+-- | Called before adding any vertices. Takes the primitive type as an argument (e.g. @Mesh.PRIMITIVE_TRIANGLES@).
 bindSurfaceTool_begin :: MethodBind
 bindSurfaceTool_begin
   = unsafePerformIO $
@@ -327,7 +387,7 @@ bindSurfaceTool_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called before adding any vertices. Takes the primitive type as an argument (e.g. [constant Mesh.PRIMITIVE_TRIANGLES]).
+-- | Called before adding any vertices. Takes the primitive type as an argument (e.g. @Mesh.PRIMITIVE_TRIANGLES@).
 begin :: (SurfaceTool :< cls, Object :< cls) => cls -> Int -> IO ()
 begin cls arg1
   = withVariantArray [toVariant arg1]
@@ -335,6 +395,9 @@ begin cls arg1
          godot_method_bind_call bindSurfaceTool_begin (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "begin" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.begin
 
 {-# NOINLINE bindSurfaceTool_clear #-}
 
@@ -357,10 +420,13 @@ clear cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.clear
+
 {-# NOINLINE bindSurfaceTool_commit #-}
 
--- | Returns a constructed [ArrayMesh] from current information passed in. If an existing [ArrayMesh] is passed in as an argument, will add an extra surface to the existing [ArrayMesh].
---   				Default flag is [constant Mesh.ARRAY_COMPRESS_DEFAULT]. See [code]ARRAY_COMPRESS_*[/code] constants in [enum Mesh.ArrayFormat] for other flags.
+-- | Returns a constructed @ArrayMesh@ from current information passed in. If an existing @ArrayMesh@ is passed in as an argument, will add an extra surface to the existing @ArrayMesh@.
+--   				Default flag is @Mesh.ARRAY_COMPRESS_DEFAULT@. See @ARRAY_COMPRESS_*@ constants in @enum Mesh.ArrayFormat@ for other flags.
 bindSurfaceTool_commit :: MethodBind
 bindSurfaceTool_commit
   = unsafePerformIO $
@@ -370,21 +436,29 @@ bindSurfaceTool_commit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a constructed [ArrayMesh] from current information passed in. If an existing [ArrayMesh] is passed in as an argument, will add an extra surface to the existing [ArrayMesh].
---   				Default flag is [constant Mesh.ARRAY_COMPRESS_DEFAULT]. See [code]ARRAY_COMPRESS_*[/code] constants in [enum Mesh.ArrayFormat] for other flags.
+-- | Returns a constructed @ArrayMesh@ from current information passed in. If an existing @ArrayMesh@ is passed in as an argument, will add an extra surface to the existing @ArrayMesh@.
+--   				Default flag is @Mesh.ARRAY_COMPRESS_DEFAULT@. See @ARRAY_COMPRESS_*@ constants in @enum Mesh.ArrayFormat@ for other flags.
 commit ::
          (SurfaceTool :< cls, Object :< cls) =>
-         cls -> ArrayMesh -> Int -> IO ArrayMesh
+         cls -> Maybe ArrayMesh -> Maybe Int -> IO ArrayMesh
 commit cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [maybe VariantNil toVariant arg1,
+       maybe (VariantInt (97280)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSurfaceTool_commit (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "commit"
+           '[Maybe ArrayMesh, Maybe Int]
+           (IO ArrayMesh)
+         where
+        nodeMethod = Godot.Core.SurfaceTool.commit
+
 {-# NOINLINE bindSurfaceTool_commit_to_arrays #-}
 
--- | Commits the data to the same format used by [method ArrayMesh.add_surface_from_arrays]. This way you can further process the mesh data using the [ArrayMesh] API.
+-- | Commits the data to the same format used by @method ArrayMesh.add_surface_from_arrays@. This way you can further process the mesh data using the @ArrayMesh@ API.
 bindSurfaceTool_commit_to_arrays :: MethodBind
 bindSurfaceTool_commit_to_arrays
   = unsafePerformIO $
@@ -394,7 +468,7 @@ bindSurfaceTool_commit_to_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Commits the data to the same format used by [method ArrayMesh.add_surface_from_arrays]. This way you can further process the mesh data using the [ArrayMesh] API.
+-- | Commits the data to the same format used by @method ArrayMesh.add_surface_from_arrays@. This way you can further process the mesh data using the @ArrayMesh@ API.
 commit_to_arrays ::
                    (SurfaceTool :< cls, Object :< cls) => cls -> IO Array
 commit_to_arrays cls
@@ -406,9 +480,13 @@ commit_to_arrays cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "commit_to_arrays" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.SurfaceTool.commit_to_arrays
+
 {-# NOINLINE bindSurfaceTool_create_from #-}
 
--- | Creates a vertex array from an existing [Mesh].
+-- | Creates a vertex array from an existing @Mesh@.
 bindSurfaceTool_create_from :: MethodBind
 bindSurfaceTool_create_from
   = unsafePerformIO $
@@ -418,7 +496,7 @@ bindSurfaceTool_create_from
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a vertex array from an existing [Mesh].
+-- | Creates a vertex array from an existing @Mesh@.
 create_from ::
               (SurfaceTool :< cls, Object :< cls) => cls -> Mesh -> Int -> IO ()
 create_from cls arg1 arg2
@@ -429,9 +507,13 @@ create_from cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "create_from" '[Mesh, Int] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.create_from
+
 {-# NOINLINE bindSurfaceTool_create_from_blend_shape #-}
 
--- | Creates a vertex array from the specified blend shape of an existing [Mesh]. This can be used to extract a specific pose from a blend shape.
+-- | Creates a vertex array from the specified blend shape of an existing @Mesh@. This can be used to extract a specific pose from a blend shape.
 bindSurfaceTool_create_from_blend_shape :: MethodBind
 bindSurfaceTool_create_from_blend_shape
   = unsafePerformIO $
@@ -441,7 +523,7 @@ bindSurfaceTool_create_from_blend_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a vertex array from the specified blend shape of an existing [Mesh]. This can be used to extract a specific pose from a blend shape.
+-- | Creates a vertex array from the specified blend shape of an existing @Mesh@. This can be used to extract a specific pose from a blend shape.
 create_from_blend_shape ::
                           (SurfaceTool :< cls, Object :< cls) =>
                           cls -> Mesh -> Int -> GodotString -> IO ()
@@ -453,6 +535,12 @@ create_from_blend_shape cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "create_from_blend_shape"
+           '[Mesh, Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.create_from_blend_shape
 
 {-# NOINLINE bindSurfaceTool_deindex #-}
 
@@ -475,10 +563,13 @@ deindex cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "deindex" '[] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.deindex
+
 {-# NOINLINE bindSurfaceTool_generate_normals #-}
 
--- | Generates normals from vertices so you do not have to do it manually. If [code]flip[/code] is [code]true[/code], the resulting normals will be inverted.
---   				Requires the primitive type to be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Generates normals from vertices so you do not have to do it manually. If @flip@ is @true@, the resulting normals will be inverted.
+--   				Requires the primitive type to be set to @Mesh.PRIMITIVE_TRIANGLES@.
 bindSurfaceTool_generate_normals :: MethodBind
 bindSurfaceTool_generate_normals
   = unsafePerformIO $
@@ -488,18 +579,23 @@ bindSurfaceTool_generate_normals
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates normals from vertices so you do not have to do it manually. If [code]flip[/code] is [code]true[/code], the resulting normals will be inverted.
---   				Requires the primitive type to be set to [constant Mesh.PRIMITIVE_TRIANGLES].
+-- | Generates normals from vertices so you do not have to do it manually. If @flip@ is @true@, the resulting normals will be inverted.
+--   				Requires the primitive type to be set to @Mesh.PRIMITIVE_TRIANGLES@.
 generate_normals ::
-                   (SurfaceTool :< cls, Object :< cls) => cls -> Bool -> IO ()
+                   (SurfaceTool :< cls, Object :< cls) => cls -> Maybe Bool -> IO ()
 generate_normals cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantBool False) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSurfaceTool_generate_normals
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "generate_normals" '[Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.generate_normals
 
 {-# NOINLINE bindSurfaceTool_generate_tangents #-}
 
@@ -525,6 +621,10 @@ generate_tangents cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "generate_tangents" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.generate_tangents
+
 {-# NOINLINE bindSurfaceTool_index #-}
 
 -- | Shrinks the vertex array by creating an index array (avoids reusing vertices).
@@ -546,9 +646,12 @@ index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SurfaceTool "index" '[] (IO ()) where
+        nodeMethod = Godot.Core.SurfaceTool.index
+
 {-# NOINLINE bindSurfaceTool_set_material #-}
 
--- | Sets [Material] to be used by the [Mesh] you are constructing.
+-- | Sets @Material@ to be used by the @Mesh@ you are constructing.
 bindSurfaceTool_set_material :: MethodBind
 bindSurfaceTool_set_material
   = unsafePerformIO $
@@ -558,7 +661,7 @@ bindSurfaceTool_set_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets [Material] to be used by the [Mesh] you are constructing.
+-- | Sets @Material@ to be used by the @Mesh@ you are constructing.
 set_material ::
                (SurfaceTool :< cls, Object :< cls) => cls -> Material -> IO ()
 set_material cls arg1
@@ -568,3 +671,7 @@ set_material cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SurfaceTool "set_material" '[Material] (IO ())
+         where
+        nodeMethod = Godot.Core.SurfaceTool.set_material

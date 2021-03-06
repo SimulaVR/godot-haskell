@@ -11,13 +11,18 @@ module Godot.Core.ResourceInteractiveLoader
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindResourceInteractiveLoader_get_resource #-}
 
--- | Returns the loaded resource if the load operation completed successfully, [code]null[/code] otherwise.
+-- | Returns the loaded resource if the load operation completed successfully, @null@ otherwise.
 bindResourceInteractiveLoader_get_resource :: MethodBind
 bindResourceInteractiveLoader_get_resource
   = unsafePerformIO $
@@ -27,7 +32,7 @@ bindResourceInteractiveLoader_get_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the loaded resource if the load operation completed successfully, [code]null[/code] otherwise.
+-- | Returns the loaded resource if the load operation completed successfully, @null@ otherwise.
 get_resource ::
                (ResourceInteractiveLoader :< cls, Object :< cls) =>
                cls -> IO Resource
@@ -40,9 +45,14 @@ get_resource cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourceInteractiveLoader "get_resource" '[]
+           (IO Resource)
+         where
+        nodeMethod = Godot.Core.ResourceInteractiveLoader.get_resource
+
 {-# NOINLINE bindResourceInteractiveLoader_get_stage #-}
 
--- | Returns the load stage. The total amount of stages can be queried with [method get_stage_count].
+-- | Returns the load stage. The total amount of stages can be queried with @method get_stage_count@.
 bindResourceInteractiveLoader_get_stage :: MethodBind
 bindResourceInteractiveLoader_get_stage
   = unsafePerformIO $
@@ -52,7 +62,7 @@ bindResourceInteractiveLoader_get_stage
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the load stage. The total amount of stages can be queried with [method get_stage_count].
+-- | Returns the load stage. The total amount of stages can be queried with @method get_stage_count@.
 get_stage ::
             (ResourceInteractiveLoader :< cls, Object :< cls) => cls -> IO Int
 get_stage cls
@@ -64,9 +74,14 @@ get_stage cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourceInteractiveLoader "get_stage" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.ResourceInteractiveLoader.get_stage
+
 {-# NOINLINE bindResourceInteractiveLoader_get_stage_count #-}
 
--- | Returns the total amount of stages (calls to [method poll]) needed to completely load this resource.
+-- | Returns the total amount of stages (calls to @method poll@) needed to completely load this resource.
 bindResourceInteractiveLoader_get_stage_count :: MethodBind
 bindResourceInteractiveLoader_get_stage_count
   = unsafePerformIO $
@@ -76,7 +91,7 @@ bindResourceInteractiveLoader_get_stage_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the total amount of stages (calls to [method poll]) needed to completely load this resource.
+-- | Returns the total amount of stages (calls to @method poll@) needed to completely load this resource.
 get_stage_count ::
                   (ResourceInteractiveLoader :< cls, Object :< cls) => cls -> IO Int
 get_stage_count cls
@@ -89,12 +104,17 @@ get_stage_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourceInteractiveLoader "get_stage_count" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.ResourceInteractiveLoader.get_stage_count
+
 {-# NOINLINE bindResourceInteractiveLoader_poll #-}
 
 -- | Polls the loading operation, i.e. loads a data chunk up to the next stage.
---   				Returns [constant OK] if the poll is successful but the load operation has not finished yet (intermediate stage). This means [method poll] will have to be called again until the last stage is completed.
---   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum Error] code if the poll has failed.
+--   				Returns @OK@ if the poll is successful but the load operation has not finished yet (intermediate stage). This means @method poll@ will have to be called again until the last stage is completed.
+--   				Returns @ERR_FILE_EOF@ if the load operation has completed successfully. The loaded resource can be obtained by calling @method get_resource@.
+--   				Returns another @enum Error@ code if the poll has failed.
 bindResourceInteractiveLoader_poll :: MethodBind
 bindResourceInteractiveLoader_poll
   = unsafePerformIO $
@@ -105,9 +125,9 @@ bindResourceInteractiveLoader_poll
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Polls the loading operation, i.e. loads a data chunk up to the next stage.
---   				Returns [constant OK] if the poll is successful but the load operation has not finished yet (intermediate stage). This means [method poll] will have to be called again until the last stage is completed.
---   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum Error] code if the poll has failed.
+--   				Returns @OK@ if the poll is successful but the load operation has not finished yet (intermediate stage). This means @method poll@ will have to be called again until the last stage is completed.
+--   				Returns @ERR_FILE_EOF@ if the load operation has completed successfully. The loaded resource can be obtained by calling @method get_resource@.
+--   				Returns another @enum Error@ code if the poll has failed.
 poll ::
        (ResourceInteractiveLoader :< cls, Object :< cls) => cls -> IO Int
 poll cls
@@ -119,11 +139,15 @@ poll cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourceInteractiveLoader "poll" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ResourceInteractiveLoader.poll
+
 {-# NOINLINE bindResourceInteractiveLoader_wait #-}
 
--- | Polls the loading operation successively until the resource is completely loaded or a [method poll] fails.
---   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum Error] code if a poll has failed, aborting the operation.
+-- | Polls the loading operation successively until the resource is completely loaded or a @method poll@ fails.
+--   				Returns @ERR_FILE_EOF@ if the load operation has completed successfully. The loaded resource can be obtained by calling @method get_resource@.
+--   				Returns another @enum Error@ code if a poll has failed, aborting the operation.
 bindResourceInteractiveLoader_wait :: MethodBind
 bindResourceInteractiveLoader_wait
   = unsafePerformIO $
@@ -133,9 +157,9 @@ bindResourceInteractiveLoader_wait
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Polls the loading operation successively until the resource is completely loaded or a [method poll] fails.
---   				Returns [constant ERR_FILE_EOF] if the load operation has completed successfully. The loaded resource can be obtained by calling [method get_resource].
---   				Returns another [enum Error] code if a poll has failed, aborting the operation.
+-- | Polls the loading operation successively until the resource is completely loaded or a @method poll@ fails.
+--   				Returns @ERR_FILE_EOF@ if the load operation has completed successfully. The loaded resource can be obtained by calling @method get_resource@.
+--   				Returns another @enum Error@ code if a poll has failed, aborting the operation.
 wait ::
        (ResourceInteractiveLoader :< cls, Object :< cls) => cls -> IO Int
 wait cls
@@ -146,3 +170,7 @@ wait cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ResourceInteractiveLoader "wait" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ResourceInteractiveLoader.wait

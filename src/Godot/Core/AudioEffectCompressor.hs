@@ -20,9 +20,50 @@ module Godot.Core.AudioEffectCompressor
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
+
+instance NodeProperty AudioEffectCompressor "attack_us" Float
+           'False
+         where
+        nodeProperty
+          = (get_attack_us, wrapDroppingSetter set_attack_us, Nothing)
+
+instance NodeProperty AudioEffectCompressor "gain" Float 'False
+         where
+        nodeProperty = (get_gain, wrapDroppingSetter set_gain, Nothing)
+
+instance NodeProperty AudioEffectCompressor "mix" Float 'False
+         where
+        nodeProperty = (get_mix, wrapDroppingSetter set_mix, Nothing)
+
+instance NodeProperty AudioEffectCompressor "ratio" Float 'False
+         where
+        nodeProperty = (get_ratio, wrapDroppingSetter set_ratio, Nothing)
+
+instance NodeProperty AudioEffectCompressor "release_ms" Float
+           'False
+         where
+        nodeProperty
+          = (get_release_ms, wrapDroppingSetter set_release_ms, Nothing)
+
+instance NodeProperty AudioEffectCompressor "sidechain" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_sidechain, wrapDroppingSetter set_sidechain, Nothing)
+
+instance NodeProperty AudioEffectCompressor "threshold" Float
+           'False
+         where
+        nodeProperty
+          = (get_threshold, wrapDroppingSetter set_threshold, Nothing)
 
 {-# NOINLINE bindAudioEffectCompressor_get_attack_us #-}
 
@@ -48,6 +89,11 @@ get_attack_us cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "get_attack_us" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.get_attack_us
+
 {-# NOINLINE bindAudioEffectCompressor_get_gain #-}
 
 -- | Gain applied to the output signal.
@@ -71,6 +117,10 @@ get_gain cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectCompressor "get_gain" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.get_gain
 
 {-# NOINLINE bindAudioEffectCompressor_get_mix #-}
 
@@ -96,6 +146,10 @@ get_mix cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "get_mix" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.get_mix
+
 {-# NOINLINE bindAudioEffectCompressor_get_ratio #-}
 
 -- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio, the more the loud parts of the audio will be compressed. Value can range from 1 to 48.
@@ -120,6 +174,11 @@ get_ratio cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "get_ratio" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.get_ratio
+
 {-# NOINLINE bindAudioEffectCompressor_get_release_ms #-}
 
 -- | Compressor's delay time to stop reducing the signal after the signal level falls below the threshold, in milliseconds. Value can range from 20 to 2000.
@@ -143,6 +202,11 @@ get_release_ms cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectCompressor "get_release_ms" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.get_release_ms
 
 {-# NOINLINE bindAudioEffectCompressor_get_sidechain #-}
 
@@ -169,6 +233,11 @@ get_sidechain cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "get_sidechain" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.get_sidechain
+
 {-# NOINLINE bindAudioEffectCompressor_get_threshold #-}
 
 -- | The level above which compression is applied to the audio. Value can range from -60 to 0.
@@ -192,6 +261,11 @@ get_threshold cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectCompressor "get_threshold" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.get_threshold
 
 {-# NOINLINE bindAudioEffectCompressor_set_attack_us #-}
 
@@ -218,6 +292,11 @@ set_attack_us cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "set_attack_us" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.set_attack_us
+
 {-# NOINLINE bindAudioEffectCompressor_set_gain #-}
 
 -- | Gain applied to the output signal.
@@ -242,6 +321,11 @@ set_gain cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectCompressor "set_gain" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.set_gain
 
 {-# NOINLINE bindAudioEffectCompressor_set_mix #-}
 
@@ -268,6 +352,11 @@ set_mix cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "set_mix" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.set_mix
+
 {-# NOINLINE bindAudioEffectCompressor_set_ratio #-}
 
 -- | Amount of compression applied to the audio once it passes the threshold level. The higher the ratio, the more the loud parts of the audio will be compressed. Value can range from 1 to 48.
@@ -292,6 +381,11 @@ set_ratio cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectCompressor "set_ratio" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.set_ratio
 
 {-# NOINLINE bindAudioEffectCompressor_set_release_ms #-}
 
@@ -318,6 +412,11 @@ set_release_ms cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "set_release_ms" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.set_release_ms
+
 {-# NOINLINE bindAudioEffectCompressor_set_sidechain #-}
 
 -- | Reduce the sound level using another audio bus for threshold detection.
@@ -343,6 +442,12 @@ set_sidechain cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectCompressor "set_sidechain"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.set_sidechain
+
 {-# NOINLINE bindAudioEffectCompressor_set_threshold #-}
 
 -- | The level above which compression is applied to the audio. Value can range from -60 to 0.
@@ -367,3 +472,8 @@ set_threshold cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectCompressor "set_threshold" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectCompressor.set_threshold

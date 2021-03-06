@@ -184,3 +184,10 @@ concat <$> mapM (deriveFromJSON defaultOptions { fieldLabelModifier = quietSnake
   , ''GodotConstant
   , ''GodotSignal
   , ''GodotMethod ]
+
+convertDoc = T.replace "]" "@" . T.replace "[" "@"
+           . T.replace "[/code]" "@" . T.replace "[code]" "@"
+           . T.replace "[/codeblock]" "\n@\n" . T.replace "[codeblock]" "\n@\n"
+           . T.replace "[b]" "__" . T.replace "[/b]" "__"
+           . T.replace "[constant " "@"
+           . T.replace "[member " "@"

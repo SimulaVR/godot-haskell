@@ -14,9 +14,21 @@ module Godot.Core.CollisionShape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
+
+instance NodeProperty CollisionShape "disabled" Bool 'False where
+        nodeProperty
+          = (is_disabled, wrapDroppingSetter set_disabled, Nothing)
+
+instance NodeProperty CollisionShape "shape" Shape 'False where
+        nodeProperty = (get_shape, wrapDroppingSetter set_shape, Nothing)
 
 {-# NOINLINE bindCollisionShape__shape_changed #-}
 
@@ -40,6 +52,10 @@ _shape_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape "_shape_changed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape._shape_changed
+
 {-# NOINLINE bindCollisionShape__update_debug_shape #-}
 
 bindCollisionShape__update_debug_shape :: MethodBind
@@ -61,6 +77,11 @@ _update_debug_shape cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape "_update_debug_shape" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape._update_debug_shape
 
 {-# NOINLINE bindCollisionShape_get_shape #-}
 
@@ -85,6 +106,9 @@ get_shape cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape "get_shape" '[] (IO Shape) where
+        nodeMethod = Godot.Core.CollisionShape.get_shape
+
 {-# NOINLINE bindCollisionShape_is_disabled #-}
 
 -- | A disabled collision shape has no effect in the world.
@@ -108,9 +132,13 @@ is_disabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape "is_disabled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CollisionShape.is_disabled
+
 {-# NOINLINE bindCollisionShape_make_convex_from_brothers #-}
 
--- | Sets the collision shape's shape to the addition of all its convexed [MeshInstance] siblings geometry.
+-- | Sets the collision shape's shape to the addition of all its convexed @MeshInstance@ siblings geometry.
 bindCollisionShape_make_convex_from_brothers :: MethodBind
 bindCollisionShape_make_convex_from_brothers
   = unsafePerformIO $
@@ -120,7 +148,7 @@ bindCollisionShape_make_convex_from_brothers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the collision shape's shape to the addition of all its convexed [MeshInstance] siblings geometry.
+-- | Sets the collision shape's shape to the addition of all its convexed @MeshInstance@ siblings geometry.
 make_convex_from_brothers ::
                             (CollisionShape :< cls, Object :< cls) => cls -> IO ()
 make_convex_from_brothers cls
@@ -131,6 +159,11 @@ make_convex_from_brothers cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape "make_convex_from_brothers" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape.make_convex_from_brothers
 
 {-# NOINLINE bindCollisionShape_resource_changed #-}
 
@@ -156,6 +189,11 @@ resource_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape "resource_changed" '[Resource]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape.resource_changed
+
 {-# NOINLINE bindCollisionShape_set_disabled #-}
 
 -- | A disabled collision shape has no effect in the world.
@@ -179,6 +217,10 @@ set_disabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape "set_disabled" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape.set_disabled
+
 {-# NOINLINE bindCollisionShape_set_shape #-}
 
 -- | The actual shape owned by this collision shape.
@@ -201,3 +243,7 @@ set_shape cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape "set_shape" '[Shape] (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape.set_shape

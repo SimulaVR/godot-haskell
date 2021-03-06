@@ -32,9 +32,14 @@ module Godot.Core.ReflectionProbe
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualInstance()
 
 _UPDATE_ALWAYS :: Int
 _UPDATE_ALWAYS = 1
@@ -42,9 +47,82 @@ _UPDATE_ALWAYS = 1
 _UPDATE_ONCE :: Int
 _UPDATE_ONCE = 0
 
+instance NodeProperty ReflectionProbe "box_projection" Bool 'False
+         where
+        nodeProperty
+          = (is_box_projection_enabled,
+             wrapDroppingSetter set_enable_box_projection, Nothing)
+
+instance NodeProperty ReflectionProbe "cull_mask" Int 'False where
+        nodeProperty
+          = (get_cull_mask, wrapDroppingSetter set_cull_mask, Nothing)
+
+instance NodeProperty ReflectionProbe "enable_shadows" Bool 'False
+         where
+        nodeProperty
+          = (are_shadows_enabled, wrapDroppingSetter set_enable_shadows,
+             Nothing)
+
+instance NodeProperty ReflectionProbe "extents" Vector3 'False
+         where
+        nodeProperty
+          = (get_extents, wrapDroppingSetter set_extents, Nothing)
+
+instance NodeProperty ReflectionProbe "intensity" Float 'False
+         where
+        nodeProperty
+          = (get_intensity, wrapDroppingSetter set_intensity, Nothing)
+
+instance NodeProperty ReflectionProbe "interior_ambient_color"
+           Color
+           'False
+         where
+        nodeProperty
+          = (get_interior_ambient, wrapDroppingSetter set_interior_ambient,
+             Nothing)
+
+instance NodeProperty ReflectionProbe "interior_ambient_contrib"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_interior_ambient_probe_contribution,
+             wrapDroppingSetter set_interior_ambient_probe_contribution,
+             Nothing)
+
+instance NodeProperty ReflectionProbe "interior_ambient_energy"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_interior_ambient_energy,
+             wrapDroppingSetter set_interior_ambient_energy, Nothing)
+
+instance NodeProperty ReflectionProbe "interior_enable" Bool 'False
+         where
+        nodeProperty
+          = (is_set_as_interior, wrapDroppingSetter set_as_interior, Nothing)
+
+instance NodeProperty ReflectionProbe "max_distance" Float 'False
+         where
+        nodeProperty
+          = (get_max_distance, wrapDroppingSetter set_max_distance, Nothing)
+
+instance NodeProperty ReflectionProbe "origin_offset" Vector3
+           'False
+         where
+        nodeProperty
+          = (get_origin_offset, wrapDroppingSetter set_origin_offset,
+             Nothing)
+
+instance NodeProperty ReflectionProbe "update_mode" Int 'False
+         where
+        nodeProperty
+          = (get_update_mode, wrapDroppingSetter set_update_mode, Nothing)
+
 {-# NOINLINE bindReflectionProbe_are_shadows_enabled #-}
 
--- | If [code]true[/code], computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the [constant UPDATE_ALWAYS] [member update_mode].
+-- | If @true@, computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the @UPDATE_ALWAYS@ @update_mode@.
 bindReflectionProbe_are_shadows_enabled :: MethodBind
 bindReflectionProbe_are_shadows_enabled
   = unsafePerformIO $
@@ -54,7 +132,7 @@ bindReflectionProbe_are_shadows_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the [constant UPDATE_ALWAYS] [member update_mode].
+-- | If @true@, computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the @UPDATE_ALWAYS@ @update_mode@.
 are_shadows_enabled ::
                       (ReflectionProbe :< cls, Object :< cls) => cls -> IO Bool
 are_shadows_enabled cls
@@ -66,9 +144,14 @@ are_shadows_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "are_shadows_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.are_shadows_enabled
+
 {-# NOINLINE bindReflectionProbe_get_cull_mask #-}
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every [VisualInstance] with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
 bindReflectionProbe_get_cull_mask :: MethodBind
 bindReflectionProbe_get_cull_mask
   = unsafePerformIO $
@@ -78,7 +161,7 @@ bindReflectionProbe_get_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every [VisualInstance] with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
 get_cull_mask ::
                 (ReflectionProbe :< cls, Object :< cls) => cls -> IO Int
 get_cull_mask cls
@@ -89,6 +172,10 @@ get_cull_mask cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ReflectionProbe "get_cull_mask" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_cull_mask
 
 {-# NOINLINE bindReflectionProbe_get_extents #-}
 
@@ -112,6 +199,10 @@ get_extents cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ReflectionProbe "get_extents" '[] (IO Vector3)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_extents
 
 {-# NOINLINE bindReflectionProbe_get_intensity #-}
 
@@ -137,9 +228,13 @@ get_intensity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "get_intensity" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_intensity
+
 {-# NOINLINE bindReflectionProbe_get_interior_ambient #-}
 
--- | Sets the ambient light color to be used when this probe is set to [member interior_enable].
+-- | Sets the ambient light color to be used when this probe is set to @interior_enable@.
 bindReflectionProbe_get_interior_ambient :: MethodBind
 bindReflectionProbe_get_interior_ambient
   = unsafePerformIO $
@@ -149,7 +244,7 @@ bindReflectionProbe_get_interior_ambient
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the ambient light color to be used when this probe is set to [member interior_enable].
+-- | Sets the ambient light color to be used when this probe is set to @interior_enable@.
 get_interior_ambient ::
                        (ReflectionProbe :< cls, Object :< cls) => cls -> IO Color
 get_interior_ambient cls
@@ -161,9 +256,14 @@ get_interior_ambient cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "get_interior_ambient" '[]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_interior_ambient
+
 {-# NOINLINE bindReflectionProbe_get_interior_ambient_energy #-}
 
--- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to [member interior_enable].
+-- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to @interior_enable@.
 bindReflectionProbe_get_interior_ambient_energy :: MethodBind
 bindReflectionProbe_get_interior_ambient_energy
   = unsafePerformIO $
@@ -173,7 +273,7 @@ bindReflectionProbe_get_interior_ambient_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to [member interior_enable].
+-- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to @interior_enable@.
 get_interior_ambient_energy ::
                               (ReflectionProbe :< cls, Object :< cls) => cls -> IO Float
 get_interior_ambient_energy cls
@@ -186,10 +286,16 @@ get_interior_ambient_energy cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "get_interior_ambient_energy"
+           '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_interior_ambient_energy
+
 {-# NOINLINE bindReflectionProbe_get_interior_ambient_probe_contribution
              #-}
 
--- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to [member interior_enable]. Useful so that ambient light matches the color of the room.
+-- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to @interior_enable@. Useful so that ambient light matches the color of the room.
 bindReflectionProbe_get_interior_ambient_probe_contribution ::
                                                             MethodBind
 bindReflectionProbe_get_interior_ambient_probe_contribution
@@ -200,7 +306,7 @@ bindReflectionProbe_get_interior_ambient_probe_contribution
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to [member interior_enable]. Useful so that ambient light matches the color of the room.
+-- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to @interior_enable@. Useful so that ambient light matches the color of the room.
 get_interior_ambient_probe_contribution ::
                                           (ReflectionProbe :< cls, Object :< cls) => cls -> IO Float
 get_interior_ambient_probe_contribution cls
@@ -212,6 +318,14 @@ get_interior_ambient_probe_contribution cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ReflectionProbe
+           "get_interior_ambient_probe_contribution"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.ReflectionProbe.get_interior_ambient_probe_contribution
 
 {-# NOINLINE bindReflectionProbe_get_max_distance #-}
 
@@ -237,6 +351,11 @@ get_max_distance cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "get_max_distance" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_max_distance
+
 {-# NOINLINE bindReflectionProbe_get_origin_offset #-}
 
 -- | Sets the origin offset to be used when this reflection probe is in box project mode.
@@ -261,9 +380,14 @@ get_origin_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "get_origin_offset" '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_origin_offset
+
 {-# NOINLINE bindReflectionProbe_get_update_mode #-}
 
--- | Sets how frequently the probe is updated. Can be [constant UPDATE_ONCE] or [constant UPDATE_ALWAYS].
+-- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 bindReflectionProbe_get_update_mode :: MethodBind
 bindReflectionProbe_get_update_mode
   = unsafePerformIO $
@@ -273,7 +397,7 @@ bindReflectionProbe_get_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets how frequently the probe is updated. Can be [constant UPDATE_ONCE] or [constant UPDATE_ALWAYS].
+-- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 get_update_mode ::
                   (ReflectionProbe :< cls, Object :< cls) => cls -> IO Int
 get_update_mode cls
@@ -285,9 +409,13 @@ get_update_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "get_update_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.get_update_mode
+
 {-# NOINLINE bindReflectionProbe_is_box_projection_enabled #-}
 
--- | If [code]true[/code], enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+-- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
 bindReflectionProbe_is_box_projection_enabled :: MethodBind
 bindReflectionProbe_is_box_projection_enabled
   = unsafePerformIO $
@@ -297,7 +425,7 @@ bindReflectionProbe_is_box_projection_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+-- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
 is_box_projection_enabled ::
                             (ReflectionProbe :< cls, Object :< cls) => cls -> IO Bool
 is_box_projection_enabled cls
@@ -310,9 +438,14 @@ is_box_projection_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "is_box_projection_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.is_box_projection_enabled
+
 {-# NOINLINE bindReflectionProbe_is_set_as_interior #-}
 
--- | If [code]true[/code], reflections will ignore sky contribution. Ambient lighting is then controlled by the [code]interior_ambient_*[/code] properties.
+-- | If @true@, reflections will ignore sky contribution. Ambient lighting is then controlled by the @interior_ambient_*@ properties.
 bindReflectionProbe_is_set_as_interior :: MethodBind
 bindReflectionProbe_is_set_as_interior
   = unsafePerformIO $
@@ -322,7 +455,7 @@ bindReflectionProbe_is_set_as_interior
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], reflections will ignore sky contribution. Ambient lighting is then controlled by the [code]interior_ambient_*[/code] properties.
+-- | If @true@, reflections will ignore sky contribution. Ambient lighting is then controlled by the @interior_ambient_*@ properties.
 is_set_as_interior ::
                      (ReflectionProbe :< cls, Object :< cls) => cls -> IO Bool
 is_set_as_interior cls
@@ -334,9 +467,14 @@ is_set_as_interior cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "is_set_as_interior" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.is_set_as_interior
+
 {-# NOINLINE bindReflectionProbe_set_as_interior #-}
 
--- | If [code]true[/code], reflections will ignore sky contribution. Ambient lighting is then controlled by the [code]interior_ambient_*[/code] properties.
+-- | If @true@, reflections will ignore sky contribution. Ambient lighting is then controlled by the @interior_ambient_*@ properties.
 bindReflectionProbe_set_as_interior :: MethodBind
 bindReflectionProbe_set_as_interior
   = unsafePerformIO $
@@ -346,7 +484,7 @@ bindReflectionProbe_set_as_interior
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], reflections will ignore sky contribution. Ambient lighting is then controlled by the [code]interior_ambient_*[/code] properties.
+-- | If @true@, reflections will ignore sky contribution. Ambient lighting is then controlled by the @interior_ambient_*@ properties.
 set_as_interior ::
                   (ReflectionProbe :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_as_interior cls arg1
@@ -358,9 +496,14 @@ set_as_interior cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_as_interior" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_as_interior
+
 {-# NOINLINE bindReflectionProbe_set_cull_mask #-}
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every [VisualInstance] with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
 bindReflectionProbe_set_cull_mask :: MethodBind
 bindReflectionProbe_set_cull_mask
   = unsafePerformIO $
@@ -370,7 +513,7 @@ bindReflectionProbe_set_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every [VisualInstance] with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
 set_cull_mask ::
                 (ReflectionProbe :< cls, Object :< cls) => cls -> Int -> IO ()
 set_cull_mask cls arg1
@@ -382,9 +525,13 @@ set_cull_mask cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_cull_mask" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_cull_mask
+
 {-# NOINLINE bindReflectionProbe_set_enable_box_projection #-}
 
--- | If [code]true[/code], enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+-- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
 bindReflectionProbe_set_enable_box_projection :: MethodBind
 bindReflectionProbe_set_enable_box_projection
   = unsafePerformIO $
@@ -394,7 +541,7 @@ bindReflectionProbe_set_enable_box_projection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+-- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
 set_enable_box_projection ::
                             (ReflectionProbe :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enable_box_projection cls arg1
@@ -407,9 +554,15 @@ set_enable_box_projection cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_enable_box_projection"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_enable_box_projection
+
 {-# NOINLINE bindReflectionProbe_set_enable_shadows #-}
 
--- | If [code]true[/code], computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the [constant UPDATE_ALWAYS] [member update_mode].
+-- | If @true@, computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the @UPDATE_ALWAYS@ @update_mode@.
 bindReflectionProbe_set_enable_shadows :: MethodBind
 bindReflectionProbe_set_enable_shadows
   = unsafePerformIO $
@@ -419,7 +572,7 @@ bindReflectionProbe_set_enable_shadows
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the [constant UPDATE_ALWAYS] [member update_mode].
+-- | If @true@, computes shadows in the reflection probe. This makes the reflection probe slower to render; you may want to disable this if using the @UPDATE_ALWAYS@ @update_mode@.
 set_enable_shadows ::
                      (ReflectionProbe :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enable_shadows cls arg1
@@ -430,6 +583,11 @@ set_enable_shadows cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ReflectionProbe "set_enable_shadows" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_enable_shadows
 
 {-# NOINLINE bindReflectionProbe_set_extents #-}
 
@@ -453,6 +611,11 @@ set_extents cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ReflectionProbe "set_extents" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_extents
 
 {-# NOINLINE bindReflectionProbe_set_intensity #-}
 
@@ -478,9 +641,14 @@ set_intensity cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_intensity" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_intensity
+
 {-# NOINLINE bindReflectionProbe_set_interior_ambient #-}
 
--- | Sets the ambient light color to be used when this probe is set to [member interior_enable].
+-- | Sets the ambient light color to be used when this probe is set to @interior_enable@.
 bindReflectionProbe_set_interior_ambient :: MethodBind
 bindReflectionProbe_set_interior_ambient
   = unsafePerformIO $
@@ -490,7 +658,7 @@ bindReflectionProbe_set_interior_ambient
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the ambient light color to be used when this probe is set to [member interior_enable].
+-- | Sets the ambient light color to be used when this probe is set to @interior_enable@.
 set_interior_ambient ::
                        (ReflectionProbe :< cls, Object :< cls) => cls -> Color -> IO ()
 set_interior_ambient cls arg1
@@ -502,9 +670,14 @@ set_interior_ambient cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_interior_ambient" '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_interior_ambient
+
 {-# NOINLINE bindReflectionProbe_set_interior_ambient_energy #-}
 
--- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to [member interior_enable].
+-- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to @interior_enable@.
 bindReflectionProbe_set_interior_ambient_energy :: MethodBind
 bindReflectionProbe_set_interior_ambient_energy
   = unsafePerformIO $
@@ -514,7 +687,7 @@ bindReflectionProbe_set_interior_ambient_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to [member interior_enable].
+-- | Sets the energy multiplier for this reflection probe's ambient light contribution when set to @interior_enable@.
 set_interior_ambient_energy ::
                               (ReflectionProbe :< cls, Object :< cls) => cls -> Float -> IO ()
 set_interior_ambient_energy cls arg1
@@ -527,10 +700,16 @@ set_interior_ambient_energy cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_interior_ambient_energy"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_interior_ambient_energy
+
 {-# NOINLINE bindReflectionProbe_set_interior_ambient_probe_contribution
              #-}
 
--- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to [member interior_enable]. Useful so that ambient light matches the color of the room.
+-- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to @interior_enable@. Useful so that ambient light matches the color of the room.
 bindReflectionProbe_set_interior_ambient_probe_contribution ::
                                                             MethodBind
 bindReflectionProbe_set_interior_ambient_probe_contribution
@@ -541,7 +720,7 @@ bindReflectionProbe_set_interior_ambient_probe_contribution
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to [member interior_enable]. Useful so that ambient light matches the color of the room.
+-- | Sets the contribution value for how much the reflection affects the ambient light for this reflection probe when set to @interior_enable@. Useful so that ambient light matches the color of the room.
 set_interior_ambient_probe_contribution ::
                                           (ReflectionProbe :< cls, Object :< cls) =>
                                           cls -> Float -> IO ()
@@ -554,6 +733,14 @@ set_interior_ambient_probe_contribution cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ReflectionProbe
+           "set_interior_ambient_probe_contribution"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.ReflectionProbe.set_interior_ambient_probe_contribution
 
 {-# NOINLINE bindReflectionProbe_set_max_distance #-}
 
@@ -579,6 +766,11 @@ set_max_distance cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_max_distance" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_max_distance
+
 {-# NOINLINE bindReflectionProbe_set_origin_offset #-}
 
 -- | Sets the origin offset to be used when this reflection probe is in box project mode.
@@ -603,9 +795,14 @@ set_origin_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ReflectionProbe "set_origin_offset" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_origin_offset
+
 {-# NOINLINE bindReflectionProbe_set_update_mode #-}
 
--- | Sets how frequently the probe is updated. Can be [constant UPDATE_ONCE] or [constant UPDATE_ALWAYS].
+-- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 bindReflectionProbe_set_update_mode :: MethodBind
 bindReflectionProbe_set_update_mode
   = unsafePerformIO $
@@ -615,7 +812,7 @@ bindReflectionProbe_set_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets how frequently the probe is updated. Can be [constant UPDATE_ONCE] or [constant UPDATE_ALWAYS].
+-- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 set_update_mode ::
                   (ReflectionProbe :< cls, Object :< cls) => cls -> Int -> IO ()
 set_update_mode cls arg1
@@ -626,3 +823,8 @@ set_update_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ReflectionProbe "set_update_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ReflectionProbe.set_update_mode

@@ -29,9 +29,14 @@ module Godot.Core.AnimationNodeStateMachine
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AnimationRootNode()
 
 {-# NOINLINE bindAnimationNodeStateMachine__tree_changed #-}
 
@@ -55,9 +60,14 @@ _tree_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "_tree_changed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine._tree_changed
+
 {-# NOINLINE bindAnimationNodeStateMachine_add_node #-}
 
--- | Adds a new node to the graph. The [code]position[/code] is used for display in the editor.
+-- | Adds a new node to the graph. The @position@ is used for display in the editor.
 bindAnimationNodeStateMachine_add_node :: MethodBind
 bindAnimationNodeStateMachine_add_node
   = unsafePerformIO $
@@ -67,18 +77,26 @@ bindAnimationNodeStateMachine_add_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a new node to the graph. The [code]position[/code] is used for display in the editor.
+-- | Adds a new node to the graph. The @position@ is used for display in the editor.
 add_node ::
            (AnimationNodeStateMachine :< cls, Object :< cls) =>
-           cls -> GodotString -> AnimationNode -> Vector2 -> IO ()
+           cls -> GodotString -> AnimationNode -> Maybe Vector2 -> IO ()
 add_node cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantVector2 (V2 0 0) arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimationNodeStateMachine_add_node
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "add_node"
+           '[GodotString, AnimationNode, Maybe Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.add_node
 
 {-# NOINLINE bindAnimationNodeStateMachine_add_transition #-}
 
@@ -107,6 +125,12 @@ add_transition cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "add_transition"
+           '[GodotString, GodotString, AnimationNodeStateMachineTransition]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.add_transition
+
 {-# NOINLINE bindAnimationNodeStateMachine_get_end_node #-}
 
 -- | Returns the graph's end node.
@@ -131,6 +155,11 @@ get_end_node cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "get_end_node" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_end_node
 
 {-# NOINLINE bindAnimationNodeStateMachine_get_graph_offset #-}
 
@@ -158,6 +187,12 @@ get_graph_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "get_graph_offset"
+           '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_graph_offset
+
 {-# NOINLINE bindAnimationNodeStateMachine_get_node #-}
 
 -- | Returns the animation node with the given name.
@@ -183,6 +218,12 @@ get_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "get_node"
+           '[GodotString]
+           (IO AnimationNode)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_node
+
 {-# NOINLINE bindAnimationNodeStateMachine_get_node_name #-}
 
 -- | Returns the given animation node's name.
@@ -207,6 +248,12 @@ get_node_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "get_node_name"
+           '[AnimationNode]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_node_name
 
 {-# NOINLINE bindAnimationNodeStateMachine_get_node_position #-}
 
@@ -234,6 +281,12 @@ get_node_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "get_node_position"
+           '[GodotString]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_node_position
+
 {-# NOINLINE bindAnimationNodeStateMachine_get_start_node #-}
 
 -- | Returns the graph's end node.
@@ -258,6 +311,11 @@ get_start_node cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "get_start_node" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_start_node
 
 {-# NOINLINE bindAnimationNodeStateMachine_get_transition #-}
 
@@ -284,6 +342,12 @@ get_transition cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "get_transition"
+           '[Int]
+           (IO AnimationNodeStateMachineTransition)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_transition
+
 {-# NOINLINE bindAnimationNodeStateMachine_get_transition_count #-}
 
 -- | Returns the number of connections in the graph.
@@ -308,6 +372,14 @@ get_transition_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine
+           "get_transition_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeStateMachine.get_transition_count
 
 {-# NOINLINE bindAnimationNodeStateMachine_get_transition_from #-}
 
@@ -335,6 +407,13 @@ get_transition_from cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "get_transition_from"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeStateMachine.get_transition_from
+
 {-# NOINLINE bindAnimationNodeStateMachine_get_transition_to #-}
 
 -- | Returns the given transition's end node.
@@ -361,9 +440,15 @@ get_transition_to cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "get_transition_to"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.get_transition_to
+
 {-# NOINLINE bindAnimationNodeStateMachine_has_node #-}
 
--- | Returns [code]true[/code] if the graph contains the given node.
+-- | Returns @true@ if the graph contains the given node.
 bindAnimationNodeStateMachine_has_node :: MethodBind
 bindAnimationNodeStateMachine_has_node
   = unsafePerformIO $
@@ -373,7 +458,7 @@ bindAnimationNodeStateMachine_has_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the graph contains the given node.
+-- | Returns @true@ if the graph contains the given node.
 has_node ::
            (AnimationNodeStateMachine :< cls, Object :< cls) =>
            cls -> GodotString -> IO Bool
@@ -386,9 +471,15 @@ has_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "has_node"
+           '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.has_node
+
 {-# NOINLINE bindAnimationNodeStateMachine_has_transition #-}
 
--- | Returns [code]true[/code] if there is a transition between the given nodes.
+-- | Returns @true@ if there is a transition between the given nodes.
 bindAnimationNodeStateMachine_has_transition :: MethodBind
 bindAnimationNodeStateMachine_has_transition
   = unsafePerformIO $
@@ -398,7 +489,7 @@ bindAnimationNodeStateMachine_has_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if there is a transition between the given nodes.
+-- | Returns @true@ if there is a transition between the given nodes.
 has_transition ::
                  (AnimationNodeStateMachine :< cls, Object :< cls) =>
                  cls -> GodotString -> GodotString -> IO Bool
@@ -410,6 +501,12 @@ has_transition cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "has_transition"
+           '[GodotString, GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.has_transition
 
 {-# NOINLINE bindAnimationNodeStateMachine_remove_node #-}
 
@@ -436,6 +533,12 @@ remove_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "remove_node"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.remove_node
+
 {-# NOINLINE bindAnimationNodeStateMachine_remove_transition #-}
 
 -- | Deletes the transition between the two specified nodes.
@@ -461,6 +564,12 @@ remove_transition cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "remove_transition"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.remove_transition
 
 {-# NOINLINE bindAnimationNodeStateMachine_remove_transition_by_index
              #-}
@@ -490,6 +599,14 @@ remove_transition_by_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine
+           "remove_transition_by_index"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeStateMachine.remove_transition_by_index
+
 {-# NOINLINE bindAnimationNodeStateMachine_rename_node #-}
 
 -- | Renames the given node.
@@ -515,6 +632,12 @@ rename_node cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "rename_node"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.rename_node
+
 {-# NOINLINE bindAnimationNodeStateMachine_set_end_node #-}
 
 -- | Sets the given node as the graph end point.
@@ -539,6 +662,12 @@ set_end_node cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "set_end_node"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.set_end_node
 
 {-# NOINLINE bindAnimationNodeStateMachine_set_graph_offset #-}
 
@@ -566,6 +695,12 @@ set_graph_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "set_graph_offset"
+           '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.set_graph_offset
+
 {-# NOINLINE bindAnimationNodeStateMachine_set_node_position #-}
 
 -- | Sets the node's coordinates. Used for display in the editor.
@@ -592,6 +727,12 @@ set_node_position cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachine "set_node_position"
+           '[GodotString, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.set_node_position
+
 {-# NOINLINE bindAnimationNodeStateMachine_set_start_node #-}
 
 -- | Sets the given node as the graph start point.
@@ -616,3 +757,9 @@ set_start_node cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachine "set_start_node"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachine.set_start_node

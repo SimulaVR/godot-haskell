@@ -75,9 +75,14 @@ module Godot.Core.TileMap
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
 
 _MODE_CUSTOM :: Int
 _MODE_CUSTOM = 2
@@ -122,6 +127,96 @@ sig_settings_changed
 
 instance NodeSignal TileMap "settings_changed" '[]
 
+instance NodeProperty TileMap "cell_clip_uv" Bool 'False where
+        nodeProperty
+          = (get_clip_uv, wrapDroppingSetter set_clip_uv, Nothing)
+
+instance NodeProperty TileMap "cell_custom_transform" Transform2d
+           'False
+         where
+        nodeProperty
+          = (get_custom_transform, wrapDroppingSetter set_custom_transform,
+             Nothing)
+
+instance NodeProperty TileMap "cell_half_offset" Int 'False where
+        nodeProperty
+          = (get_half_offset, wrapDroppingSetter set_half_offset, Nothing)
+
+instance NodeProperty TileMap "cell_quadrant_size" Int 'False where
+        nodeProperty
+          = (get_quadrant_size, wrapDroppingSetter set_quadrant_size,
+             Nothing)
+
+instance NodeProperty TileMap "cell_size" Vector2 'False where
+        nodeProperty
+          = (get_cell_size, wrapDroppingSetter set_cell_size, Nothing)
+
+instance NodeProperty TileMap "cell_tile_origin" Int 'False where
+        nodeProperty
+          = (get_tile_origin, wrapDroppingSetter set_tile_origin, Nothing)
+
+instance NodeProperty TileMap "cell_y_sort" Bool 'False where
+        nodeProperty
+          = (is_y_sort_mode_enabled, wrapDroppingSetter set_y_sort_mode,
+             Nothing)
+
+instance NodeProperty TileMap "centered_textures" Bool 'False where
+        nodeProperty
+          = (is_centered_textures_enabled,
+             wrapDroppingSetter set_centered_textures, Nothing)
+
+instance NodeProperty TileMap "collision_bounce" Float 'False where
+        nodeProperty
+          = (get_collision_bounce, wrapDroppingSetter set_collision_bounce,
+             Nothing)
+
+instance NodeProperty TileMap "collision_friction" Float 'False
+         where
+        nodeProperty
+          = (get_collision_friction,
+             wrapDroppingSetter set_collision_friction, Nothing)
+
+instance NodeProperty TileMap "collision_layer" Int 'False where
+        nodeProperty
+          = (get_collision_layer, wrapDroppingSetter set_collision_layer,
+             Nothing)
+
+instance NodeProperty TileMap "collision_mask" Int 'False where
+        nodeProperty
+          = (get_collision_mask, wrapDroppingSetter set_collision_mask,
+             Nothing)
+
+instance NodeProperty TileMap "collision_use_kinematic" Bool 'False
+         where
+        nodeProperty
+          = (get_collision_use_kinematic,
+             wrapDroppingSetter set_collision_use_kinematic, Nothing)
+
+instance NodeProperty TileMap "collision_use_parent" Bool 'False
+         where
+        nodeProperty
+          = (get_collision_use_parent,
+             wrapDroppingSetter set_collision_use_parent, Nothing)
+
+instance NodeProperty TileMap "compatibility_mode" Bool 'False
+         where
+        nodeProperty
+          = (is_compatibility_mode_enabled,
+             wrapDroppingSetter set_compatibility_mode, Nothing)
+
+instance NodeProperty TileMap "mode" Int 'False where
+        nodeProperty = (get_mode, wrapDroppingSetter set_mode, Nothing)
+
+instance NodeProperty TileMap "occluder_light_mask" Int 'False
+         where
+        nodeProperty
+          = (get_occluder_light_mask,
+             wrapDroppingSetter set_occluder_light_mask, Nothing)
+
+instance NodeProperty TileMap "tile_set" TileSet 'False where
+        nodeProperty
+          = (get_tileset, wrapDroppingSetter set_tileset, Nothing)
+
 {-# NOINLINE bindTileMap__clear_quadrants #-}
 
 bindTileMap__clear_quadrants :: MethodBind
@@ -141,6 +236,9 @@ _clear_quadrants cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "_clear_quadrants" '[] (IO ()) where
+        nodeMethod = Godot.Core.TileMap._clear_quadrants
 
 {-# NOINLINE bindTileMap__get_old_cell_size #-}
 
@@ -163,6 +261,9 @@ _get_old_cell_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "_get_old_cell_size" '[] (IO Int) where
+        nodeMethod = Godot.Core.TileMap._get_old_cell_size
+
 {-# NOINLINE bindTileMap__get_tile_data #-}
 
 bindTileMap__get_tile_data :: MethodBind
@@ -183,6 +284,10 @@ _get_tile_data cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "_get_tile_data" '[] (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.TileMap._get_tile_data
 
 {-# NOINLINE bindTileMap__recreate_quadrants #-}
 
@@ -205,6 +310,9 @@ _recreate_quadrants cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "_recreate_quadrants" '[] (IO ()) where
+        nodeMethod = Godot.Core.TileMap._recreate_quadrants
+
 {-# NOINLINE bindTileMap__set_celld #-}
 
 bindTileMap__set_celld :: MethodBind
@@ -225,6 +333,11 @@ _set_celld cls arg1 arg2
          godot_method_bind_call bindTileMap__set_celld (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "_set_celld" '[Vector2, Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap._set_celld
 
 {-# NOINLINE bindTileMap__set_old_cell_size #-}
 
@@ -247,6 +360,10 @@ _set_old_cell_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "_set_old_cell_size" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap._set_old_cell_size
+
 {-# NOINLINE bindTileMap__set_tile_data #-}
 
 bindTileMap__set_tile_data :: MethodBind
@@ -268,6 +385,11 @@ _set_tile_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "_set_tile_data" '[PoolIntArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap._set_tile_data
+
 {-# NOINLINE bindTileMap_clear #-}
 
 -- | Clears all cells.
@@ -287,6 +409,9 @@ clear cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_clear (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.clear
 
 {-# NOINLINE bindTileMap_fix_invalid_tiles #-}
 
@@ -311,9 +436,12 @@ fix_invalid_tiles cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "fix_invalid_tiles" '[] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.fix_invalid_tiles
+
 {-# NOINLINE bindTileMap_get_cell #-}
 
--- | Returns the tile index of the given cell. If no tile exists in the cell, returns [constant INVALID_CELL].
+-- | Returns the tile index of the given cell. If no tile exists in the cell, returns @INVALID_CELL@.
 bindTileMap_get_cell :: MethodBind
 bindTileMap_get_cell
   = unsafePerformIO $
@@ -323,7 +451,7 @@ bindTileMap_get_cell
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the tile index of the given cell. If no tile exists in the cell, returns [constant INVALID_CELL].
+-- | Returns the tile index of the given cell. If no tile exists in the cell, returns @INVALID_CELL@.
 get_cell ::
            (TileMap :< cls, Object :< cls) => cls -> Int -> Int -> IO Int
 get_cell cls arg1 arg2
@@ -331,6 +459,9 @@ get_cell cls arg1 arg2
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_get_cell (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "get_cell" '[Int, Int] (IO Int) where
+        nodeMethod = Godot.Core.TileMap.get_cell
 
 {-# NOINLINE bindTileMap_get_cell_autotile_coord #-}
 
@@ -356,6 +487,11 @@ get_cell_autotile_coord cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_cell_autotile_coord" '[Int, Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileMap.get_cell_autotile_coord
+
 {-# NOINLINE bindTileMap_get_cell_size #-}
 
 -- | The TileMap's cell size.
@@ -379,9 +515,12 @@ get_cell_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_cell_size" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.TileMap.get_cell_size
+
 {-# NOINLINE bindTileMap_get_cellv #-}
 
--- | Returns the tile index of the cell given by a Vector2. If no tile exists in the cell, returns [constant INVALID_CELL].
+-- | Returns the tile index of the cell given by a Vector2. If no tile exists in the cell, returns @INVALID_CELL@.
 bindTileMap_get_cellv :: MethodBind
 bindTileMap_get_cellv
   = unsafePerformIO $
@@ -391,7 +530,7 @@ bindTileMap_get_cellv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the tile index of the cell given by a Vector2. If no tile exists in the cell, returns [constant INVALID_CELL].
+-- | Returns the tile index of the cell given by a Vector2. If no tile exists in the cell, returns @INVALID_CELL@.
 get_cellv ::
             (TileMap :< cls, Object :< cls) => cls -> Vector2 -> IO Int
 get_cellv cls arg1
@@ -401,9 +540,12 @@ get_cellv cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_cellv" '[Vector2] (IO Int) where
+        nodeMethod = Godot.Core.TileMap.get_cellv
+
 {-# NOINLINE bindTileMap_get_clip_uv #-}
 
--- | If [code]true[/code], the cell's UVs will be clipped.
+-- | If @true@, the cell's UVs will be clipped.
 bindTileMap_get_clip_uv :: MethodBind
 bindTileMap_get_clip_uv
   = unsafePerformIO $
@@ -413,7 +555,7 @@ bindTileMap_get_clip_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the cell's UVs will be clipped.
+-- | If @true@, the cell's UVs will be clipped.
 get_clip_uv :: (TileMap :< cls, Object :< cls) => cls -> IO Bool
 get_clip_uv cls
   = withVariantArray []
@@ -422,9 +564,12 @@ get_clip_uv cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_clip_uv" '[] (IO Bool) where
+        nodeMethod = Godot.Core.TileMap.get_clip_uv
+
 {-# NOINLINE bindTileMap_get_collision_bounce #-}
 
--- | Bounce value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Bounce value for static body collisions (see @collision_use_kinematic@).
 bindTileMap_get_collision_bounce :: MethodBind
 bindTileMap_get_collision_bounce
   = unsafePerformIO $
@@ -434,7 +579,7 @@ bindTileMap_get_collision_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bounce value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Bounce value for static body collisions (see @collision_use_kinematic@).
 get_collision_bounce ::
                        (TileMap :< cls, Object :< cls) => cls -> IO Float
 get_collision_bounce cls
@@ -446,9 +591,13 @@ get_collision_bounce cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_bounce" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.TileMap.get_collision_bounce
+
 {-# NOINLINE bindTileMap_get_collision_friction #-}
 
--- | Friction value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Friction value for static body collisions (see @collision_use_kinematic@).
 bindTileMap_get_collision_friction :: MethodBind
 bindTileMap_get_collision_friction
   = unsafePerformIO $
@@ -458,7 +607,7 @@ bindTileMap_get_collision_friction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Friction value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Friction value for static body collisions (see @collision_use_kinematic@).
 get_collision_friction ::
                          (TileMap :< cls, Object :< cls) => cls -> IO Float
 get_collision_friction cls
@@ -470,9 +619,13 @@ get_collision_friction cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_friction" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.TileMap.get_collision_friction
+
 {-# NOINLINE bindTileMap_get_collision_layer #-}
 
--- | The collision layer(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindTileMap_get_collision_layer :: MethodBind
 bindTileMap_get_collision_layer
   = unsafePerformIO $
@@ -482,7 +635,7 @@ bindTileMap_get_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision layer(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 get_collision_layer ::
                       (TileMap :< cls, Object :< cls) => cls -> IO Int
 get_collision_layer cls
@@ -493,9 +646,13 @@ get_collision_layer cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_layer" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.TileMap.get_collision_layer
+
 {-# NOINLINE bindTileMap_get_collision_layer_bit #-}
 
--- | Returns [code]true[/code] if the given collision layer bit is set.
+-- | Returns @true@ if the given collision layer bit is set.
 bindTileMap_get_collision_layer_bit :: MethodBind
 bindTileMap_get_collision_layer_bit
   = unsafePerformIO $
@@ -505,7 +662,7 @@ bindTileMap_get_collision_layer_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given collision layer bit is set.
+-- | Returns @true@ if the given collision layer bit is set.
 get_collision_layer_bit ::
                           (TileMap :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_collision_layer_bit cls arg1
@@ -517,9 +674,14 @@ get_collision_layer_bit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_layer_bit" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.get_collision_layer_bit
+
 {-# NOINLINE bindTileMap_get_collision_mask #-}
 
--- | The collision mask(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindTileMap_get_collision_mask :: MethodBind
 bindTileMap_get_collision_mask
   = unsafePerformIO $
@@ -529,7 +691,7 @@ bindTileMap_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision mask(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 get_collision_mask ::
                      (TileMap :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -540,9 +702,12 @@ get_collision_mask cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_mask" '[] (IO Int) where
+        nodeMethod = Godot.Core.TileMap.get_collision_mask
+
 {-# NOINLINE bindTileMap_get_collision_mask_bit #-}
 
--- | Returns [code]true[/code] if the given collision mask bit is set.
+-- | Returns @true@ if the given collision mask bit is set.
 bindTileMap_get_collision_mask_bit :: MethodBind
 bindTileMap_get_collision_mask_bit
   = unsafePerformIO $
@@ -552,7 +717,7 @@ bindTileMap_get_collision_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given collision mask bit is set.
+-- | Returns @true@ if the given collision mask bit is set.
 get_collision_mask_bit ::
                          (TileMap :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_collision_mask_bit cls arg1
@@ -564,9 +729,14 @@ get_collision_mask_bit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_mask_bit" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.get_collision_mask_bit
+
 {-# NOINLINE bindTileMap_get_collision_use_kinematic #-}
 
--- | If [code]true[/code], TileMap collisions will be handled as a kinematic body. If [code]false[/code], collisions will be handled as static body.
+-- | If @true@, TileMap collisions will be handled as a kinematic body. If @false@, collisions will be handled as static body.
 bindTileMap_get_collision_use_kinematic :: MethodBind
 bindTileMap_get_collision_use_kinematic
   = unsafePerformIO $
@@ -576,7 +746,7 @@ bindTileMap_get_collision_use_kinematic
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], TileMap collisions will be handled as a kinematic body. If [code]false[/code], collisions will be handled as static body.
+-- | If @true@, TileMap collisions will be handled as a kinematic body. If @false@, collisions will be handled as static body.
 get_collision_use_kinematic ::
                               (TileMap :< cls, Object :< cls) => cls -> IO Bool
 get_collision_use_kinematic cls
@@ -588,9 +758,14 @@ get_collision_use_kinematic cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_use_kinematic" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.get_collision_use_kinematic
+
 {-# NOINLINE bindTileMap_get_collision_use_parent #-}
 
--- | If [code]true[/code], this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a [CollisionObject2D].
+-- | If @true@, this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a @CollisionObject2D@.
 bindTileMap_get_collision_use_parent :: MethodBind
 bindTileMap_get_collision_use_parent
   = unsafePerformIO $
@@ -600,7 +775,7 @@ bindTileMap_get_collision_use_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a [CollisionObject2D].
+-- | If @true@, this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a @CollisionObject2D@.
 get_collision_use_parent ::
                            (TileMap :< cls, Object :< cls) => cls -> IO Bool
 get_collision_use_parent cls
@@ -612,9 +787,14 @@ get_collision_use_parent cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_collision_use_parent" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.get_collision_use_parent
+
 {-# NOINLINE bindTileMap_get_custom_transform #-}
 
--- | The custom [Transform2D] to be applied to the TileMap's cells.
+-- | The custom @Transform2D@ to be applied to the TileMap's cells.
 bindTileMap_get_custom_transform :: MethodBind
 bindTileMap_get_custom_transform
   = unsafePerformIO $
@@ -624,7 +804,7 @@ bindTileMap_get_custom_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Transform2D] to be applied to the TileMap's cells.
+-- | The custom @Transform2D@ to be applied to the TileMap's cells.
 get_custom_transform ::
                        (TileMap :< cls, Object :< cls) => cls -> IO Transform2d
 get_custom_transform cls
@@ -636,9 +816,14 @@ get_custom_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_custom_transform" '[]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.TileMap.get_custom_transform
+
 {-# NOINLINE bindTileMap_get_half_offset #-}
 
--- | Amount to offset alternating tiles. See [enum HalfOffset] for possible values.
+-- | Amount to offset alternating tiles. See @enum HalfOffset@ for possible values.
 bindTileMap_get_half_offset :: MethodBind
 bindTileMap_get_half_offset
   = unsafePerformIO $
@@ -648,7 +833,7 @@ bindTileMap_get_half_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount to offset alternating tiles. See [enum HalfOffset] for possible values.
+-- | Amount to offset alternating tiles. See @enum HalfOffset@ for possible values.
 get_half_offset :: (TileMap :< cls, Object :< cls) => cls -> IO Int
 get_half_offset cls
   = withVariantArray []
@@ -658,9 +843,12 @@ get_half_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_half_offset" '[] (IO Int) where
+        nodeMethod = Godot.Core.TileMap.get_half_offset
+
 {-# NOINLINE bindTileMap_get_mode #-}
 
--- | The TileMap orientation mode. See [enum Mode] for possible values.
+-- | The TileMap orientation mode. See @enum Mode@ for possible values.
 bindTileMap_get_mode :: MethodBind
 bindTileMap_get_mode
   = unsafePerformIO $
@@ -670,13 +858,16 @@ bindTileMap_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The TileMap orientation mode. See [enum Mode] for possible values.
+-- | The TileMap orientation mode. See @enum Mode@ for possible values.
 get_mode :: (TileMap :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_get_mode (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "get_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.TileMap.get_mode
 
 {-# NOINLINE bindTileMap_get_occluder_light_mask #-}
 
@@ -702,6 +893,10 @@ get_occluder_light_mask cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_occluder_light_mask" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.TileMap.get_occluder_light_mask
+
 {-# NOINLINE bindTileMap_get_quadrant_size #-}
 
 -- | The TileMap's quadrant size. Optimizes drawing by batching, using chunks of this size.
@@ -725,9 +920,12 @@ get_quadrant_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_quadrant_size" '[] (IO Int) where
+        nodeMethod = Godot.Core.TileMap.get_quadrant_size
+
 {-# NOINLINE bindTileMap_get_tile_origin #-}
 
--- | Position for tile origin. See [enum TileOrigin] for possible values.
+-- | Position for tile origin. See @enum TileOrigin@ for possible values.
 bindTileMap_get_tile_origin :: MethodBind
 bindTileMap_get_tile_origin
   = unsafePerformIO $
@@ -737,7 +935,7 @@ bindTileMap_get_tile_origin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Position for tile origin. See [enum TileOrigin] for possible values.
+-- | Position for tile origin. See @enum TileOrigin@ for possible values.
 get_tile_origin :: (TileMap :< cls, Object :< cls) => cls -> IO Int
 get_tile_origin cls
   = withVariantArray []
@@ -747,9 +945,12 @@ get_tile_origin cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_tile_origin" '[] (IO Int) where
+        nodeMethod = Godot.Core.TileMap.get_tile_origin
+
 {-# NOINLINE bindTileMap_get_tileset #-}
 
--- | The assigned [TileSet].
+-- | The assigned @TileSet@.
 bindTileMap_get_tileset :: MethodBind
 bindTileMap_get_tileset
   = unsafePerformIO $
@@ -759,7 +960,7 @@ bindTileMap_get_tileset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The assigned [TileSet].
+-- | The assigned @TileSet@.
 get_tileset :: (TileMap :< cls, Object :< cls) => cls -> IO TileSet
 get_tileset cls
   = withVariantArray []
@@ -768,9 +969,12 @@ get_tileset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_tileset" '[] (IO TileSet) where
+        nodeMethod = Godot.Core.TileMap.get_tileset
+
 {-# NOINLINE bindTileMap_get_used_cells #-}
 
--- | Returns a [Vector2] array with the positions of all cells containing a tile from the tileset (i.e. a tile index different from [code]-1[/code]).
+-- | Returns a @Vector2@ array with the positions of all cells containing a tile from the tileset (i.e. a tile index different from @-1@).
 bindTileMap_get_used_cells :: MethodBind
 bindTileMap_get_used_cells
   = unsafePerformIO $
@@ -780,7 +984,7 @@ bindTileMap_get_used_cells
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [Vector2] array with the positions of all cells containing a tile from the tileset (i.e. a tile index different from [code]-1[/code]).
+-- | Returns a @Vector2@ array with the positions of all cells containing a tile from the tileset (i.e. a tile index different from @-1@).
 get_used_cells ::
                  (TileMap :< cls, Object :< cls) => cls -> IO Array
 get_used_cells cls
@@ -791,9 +995,12 @@ get_used_cells cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_used_cells" '[] (IO Array) where
+        nodeMethod = Godot.Core.TileMap.get_used_cells
+
 {-# NOINLINE bindTileMap_get_used_cells_by_id #-}
 
--- | Returns an array of all cells with the given tile index specified in [code]id[/code].
+-- | Returns an array of all cells with the given tile index specified in @id@.
 bindTileMap_get_used_cells_by_id :: MethodBind
 bindTileMap_get_used_cells_by_id
   = unsafePerformIO $
@@ -803,7 +1010,7 @@ bindTileMap_get_used_cells_by_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of all cells with the given tile index specified in [code]id[/code].
+-- | Returns an array of all cells with the given tile index specified in @id@.
 get_used_cells_by_id ::
                        (TileMap :< cls, Object :< cls) => cls -> Int -> IO Array
 get_used_cells_by_id cls arg1
@@ -814,6 +1021,11 @@ get_used_cells_by_id cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "get_used_cells_by_id" '[Int]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.TileMap.get_used_cells_by_id
 
 {-# NOINLINE bindTileMap_get_used_rect #-}
 
@@ -837,9 +1049,12 @@ get_used_rect cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "get_used_rect" '[] (IO Rect2) where
+        nodeMethod = Godot.Core.TileMap.get_used_rect
+
 {-# NOINLINE bindTileMap_is_cell_transposed #-}
 
--- | Returns [code]true[/code] if the given cell is transposed, i.e. the X and Y axes are swapped.
+-- | Returns @true@ if the given cell is transposed, i.e. the X and Y axes are swapped.
 bindTileMap_is_cell_transposed :: MethodBind
 bindTileMap_is_cell_transposed
   = unsafePerformIO $
@@ -849,7 +1064,7 @@ bindTileMap_is_cell_transposed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given cell is transposed, i.e. the X and Y axes are swapped.
+-- | Returns @true@ if the given cell is transposed, i.e. the X and Y axes are swapped.
 is_cell_transposed ::
                      (TileMap :< cls, Object :< cls) => cls -> Int -> Int -> IO Bool
 is_cell_transposed cls arg1 arg2
@@ -860,9 +1075,14 @@ is_cell_transposed cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "is_cell_transposed" '[Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.is_cell_transposed
+
 {-# NOINLINE bindTileMap_is_cell_x_flipped #-}
 
--- | Returns [code]true[/code] if the given cell is flipped in the X axis.
+-- | Returns @true@ if the given cell is flipped in the X axis.
 bindTileMap_is_cell_x_flipped :: MethodBind
 bindTileMap_is_cell_x_flipped
   = unsafePerformIO $
@@ -872,7 +1092,7 @@ bindTileMap_is_cell_x_flipped
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given cell is flipped in the X axis.
+-- | Returns @true@ if the given cell is flipped in the X axis.
 is_cell_x_flipped ::
                     (TileMap :< cls, Object :< cls) => cls -> Int -> Int -> IO Bool
 is_cell_x_flipped cls arg1 arg2
@@ -883,9 +1103,14 @@ is_cell_x_flipped cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "is_cell_x_flipped" '[Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.is_cell_x_flipped
+
 {-# NOINLINE bindTileMap_is_cell_y_flipped #-}
 
--- | Returns [code]true[/code] if the given cell is flipped in the Y axis.
+-- | Returns @true@ if the given cell is flipped in the Y axis.
 bindTileMap_is_cell_y_flipped :: MethodBind
 bindTileMap_is_cell_y_flipped
   = unsafePerformIO $
@@ -895,7 +1120,7 @@ bindTileMap_is_cell_y_flipped
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given cell is flipped in the Y axis.
+-- | Returns @true@ if the given cell is flipped in the Y axis.
 is_cell_y_flipped ::
                     (TileMap :< cls, Object :< cls) => cls -> Int -> Int -> IO Bool
 is_cell_y_flipped cls arg1 arg2
@@ -906,10 +1131,15 @@ is_cell_y_flipped cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "is_cell_y_flipped" '[Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.is_cell_y_flipped
+
 {-# NOINLINE bindTileMap_is_centered_textures_enabled #-}
 
--- | If [code]true[/code], the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, [member compatibility_mode] is ignored.
---   			If [code]false[/code], the texture position start in the top-left corner unless [member compatibility_mode] is enabled.
+-- | If @true@, the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, @compatibility_mode@ is ignored.
+--   			If @false@, the texture position start in the top-left corner unless @compatibility_mode@ is enabled.
 bindTileMap_is_centered_textures_enabled :: MethodBind
 bindTileMap_is_centered_textures_enabled
   = unsafePerformIO $
@@ -919,8 +1149,8 @@ bindTileMap_is_centered_textures_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, [member compatibility_mode] is ignored.
---   			If [code]false[/code], the texture position start in the top-left corner unless [member compatibility_mode] is enabled.
+-- | If @true@, the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, @compatibility_mode@ is ignored.
+--   			If @false@, the texture position start in the top-left corner unless @compatibility_mode@ is enabled.
 is_centered_textures_enabled ::
                                (TileMap :< cls, Object :< cls) => cls -> IO Bool
 is_centered_textures_enabled cls
@@ -932,11 +1162,16 @@ is_centered_textures_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "is_centered_textures_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.is_centered_textures_enabled
+
 {-# NOINLINE bindTileMap_is_compatibility_mode_enabled #-}
 
--- | If [code]true[/code], the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing [code]flip_h[/code], [code]flip_v[/code] and [code]transpose[/code] tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
---   			If [code]false[/code], the textures do not move when doing [code]flip_h[/code], [code]flip_v[/code] operations if no offset is used, nor when changing the tile origin.
---   			The compatibility mode doesn't work with the [member centered_textures] option, because displacing textures with the [member cell_tile_origin] option or in irregular tiles is not relevant when centering those textures.
+-- | If @true@, the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing @flip_h@, @flip_v@ and @transpose@ tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
+--   			If @false@, the textures do not move when doing @flip_h@, @flip_v@ operations if no offset is used, nor when changing the tile origin.
+--   			The compatibility mode doesn't work with the @centered_textures@ option, because displacing textures with the @cell_tile_origin@ option or in irregular tiles is not relevant when centering those textures.
 bindTileMap_is_compatibility_mode_enabled :: MethodBind
 bindTileMap_is_compatibility_mode_enabled
   = unsafePerformIO $
@@ -946,9 +1181,9 @@ bindTileMap_is_compatibility_mode_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing [code]flip_h[/code], [code]flip_v[/code] and [code]transpose[/code] tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
---   			If [code]false[/code], the textures do not move when doing [code]flip_h[/code], [code]flip_v[/code] operations if no offset is used, nor when changing the tile origin.
---   			The compatibility mode doesn't work with the [member centered_textures] option, because displacing textures with the [member cell_tile_origin] option or in irregular tiles is not relevant when centering those textures.
+-- | If @true@, the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing @flip_h@, @flip_v@ and @transpose@ tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
+--   			If @false@, the textures do not move when doing @flip_h@, @flip_v@ operations if no offset is used, nor when changing the tile origin.
+--   			The compatibility mode doesn't work with the @centered_textures@ option, because displacing textures with the @cell_tile_origin@ option or in irregular tiles is not relevant when centering those textures.
 is_compatibility_mode_enabled ::
                                 (TileMap :< cls, Object :< cls) => cls -> IO Bool
 is_compatibility_mode_enabled cls
@@ -960,9 +1195,14 @@ is_compatibility_mode_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "is_compatibility_mode_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.is_compatibility_mode_enabled
+
 {-# NOINLINE bindTileMap_is_y_sort_mode_enabled #-}
 
--- | If [code]true[/code], the TileMap's children will be drawn in order of their Y coordinate.
+-- | If @true@, the TileMap's children will be drawn in order of their Y coordinate.
 bindTileMap_is_y_sort_mode_enabled :: MethodBind
 bindTileMap_is_y_sort_mode_enabled
   = unsafePerformIO $
@@ -972,7 +1212,7 @@ bindTileMap_is_y_sort_mode_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the TileMap's children will be drawn in order of their Y coordinate.
+-- | If @true@, the TileMap's children will be drawn in order of their Y coordinate.
 is_y_sort_mode_enabled ::
                          (TileMap :< cls, Object :< cls) => cls -> IO Bool
 is_y_sort_mode_enabled cls
@@ -983,6 +1223,10 @@ is_y_sort_mode_enabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "is_y_sort_mode_enabled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.TileMap.is_y_sort_mode_enabled
 
 {-# NOINLINE bindTileMap_map_to_world #-}
 
@@ -1001,28 +1245,37 @@ bindTileMap_map_to_world
 --   				Optionally, the tilemap's half offset can be ignored.
 map_to_world ::
                (TileMap :< cls, Object :< cls) =>
-               cls -> Vector2 -> Bool -> IO Vector2
+               cls -> Vector2 -> Maybe Bool -> IO Vector2
 map_to_world cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool False) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_map_to_world (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "map_to_world" '[Vector2, Maybe Bool]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileMap.map_to_world
+
 {-# NOINLINE bindTileMap_set_cell #-}
 
 -- | Sets the tile index for the cell given by a Vector2.
---   				An index of [code]-1[/code] clears the cell.
+--   				An index of @-1@ clears the cell.
 --   				Optionally, the tile can also be flipped, transposed, or given autotile coordinates. The autotile coordinate refers to the column and row of the subtile.
---   				[b]Note:[/b] Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
---   				If you need these to be immediately updated, you can call [method update_dirty_quadrants].
+--   				__Note:__ Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
+--   				If you need these to be immediately updated, you can call @method update_dirty_quadrants@.
 --   				Overriding this method also overrides it internally, allowing custom logic to be implemented when tiles are placed/removed:
---   				[codeblock]
+--   				
+--   @
+--   
 --   				func set_cell(x, y, tile, flip_x=false, flip_y=false, transpose=false, autotile_coord=Vector2())
 --   				    # Write your custom logic here.
 --   				    # To call the default method:
 --   				    .set_cell(x, y, tile, flip_x, flip_y, transpose, autotile_coord)
---   				[/codeblock]
+--   				
+--   @
 bindTileMap_set_cell :: MethodBind
 bindTileMap_set_cell
   = unsafePerformIO $
@@ -1033,28 +1286,43 @@ bindTileMap_set_cell
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the tile index for the cell given by a Vector2.
---   				An index of [code]-1[/code] clears the cell.
+--   				An index of @-1@ clears the cell.
 --   				Optionally, the tile can also be flipped, transposed, or given autotile coordinates. The autotile coordinate refers to the column and row of the subtile.
---   				[b]Note:[/b] Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
---   				If you need these to be immediately updated, you can call [method update_dirty_quadrants].
+--   				__Note:__ Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
+--   				If you need these to be immediately updated, you can call @method update_dirty_quadrants@.
 --   				Overriding this method also overrides it internally, allowing custom logic to be implemented when tiles are placed/removed:
---   				[codeblock]
+--   				
+--   @
+--   
 --   				func set_cell(x, y, tile, flip_x=false, flip_y=false, transpose=false, autotile_coord=Vector2())
 --   				    # Write your custom logic here.
 --   				    # To call the default method:
 --   				    .set_cell(x, y, tile, flip_x, flip_y, transpose, autotile_coord)
---   				[/codeblock]
+--   				
+--   @
 set_cell ::
            (TileMap :< cls, Object :< cls) =>
            cls ->
-             Int -> Int -> Int -> Bool -> Bool -> Bool -> Vector2 -> IO ()
+             Int ->
+               Int ->
+                 Int ->
+                   Maybe Bool -> Maybe Bool -> Maybe Bool -> Maybe Vector2 -> IO ()
 set_cell cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantBool False) toVariant arg4,
+       maybe (VariantBool False) toVariant arg5,
+       maybe (VariantBool False) toVariant arg6,
+       defaultedVariant VariantVector2 (V2 0 0) arg7]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_set_cell (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "set_cell"
+           '[Int, Int, Int, Maybe Bool, Maybe Bool, Maybe Bool, Maybe Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_cell
 
 {-# NOINLINE bindTileMap_set_cell_size #-}
 
@@ -1079,13 +1347,17 @@ set_cell_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_cell_size" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_cell_size
+
 {-# NOINLINE bindTileMap_set_cellv #-}
 
 -- | Sets the tile index for the given cell.
---   				An index of [code]-1[/code] clears the cell.
+--   				An index of @-1@ clears the cell.
 --   				Optionally, the tile can also be flipped or transposed.
---   				[b]Note:[/b] Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
---   				If you need these to be immediately updated, you can call [method update_dirty_quadrants].
+--   				__Note:__ Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
+--   				If you need these to be immediately updated, you can call @method update_dirty_quadrants@.
 bindTileMap_set_cellv :: MethodBind
 bindTileMap_set_cellv
   = unsafePerformIO $
@@ -1096,26 +1368,35 @@ bindTileMap_set_cellv
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the tile index for the given cell.
---   				An index of [code]-1[/code] clears the cell.
+--   				An index of @-1@ clears the cell.
 --   				Optionally, the tile can also be flipped or transposed.
---   				[b]Note:[/b] Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
---   				If you need these to be immediately updated, you can call [method update_dirty_quadrants].
+--   				__Note:__ Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
+--   				If you need these to be immediately updated, you can call @method update_dirty_quadrants@.
 set_cellv ::
             (TileMap :< cls, Object :< cls) =>
-            cls -> Vector2 -> Int -> Bool -> Bool -> Bool -> IO ()
+            cls ->
+              Vector2 -> Int -> Maybe Bool -> Maybe Bool -> Maybe Bool -> IO ()
 set_cellv cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantBool False) toVariant arg3,
+       maybe (VariantBool False) toVariant arg4,
+       maybe (VariantBool False) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_set_cellv (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_cellv"
+           '[Vector2, Int, Maybe Bool, Maybe Bool, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_cellv
+
 {-# NOINLINE bindTileMap_set_centered_textures #-}
 
--- | If [code]true[/code], the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, [member compatibility_mode] is ignored.
---   			If [code]false[/code], the texture position start in the top-left corner unless [member compatibility_mode] is enabled.
+-- | If @true@, the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, @compatibility_mode@ is ignored.
+--   			If @false@, the texture position start in the top-left corner unless @compatibility_mode@ is enabled.
 bindTileMap_set_centered_textures :: MethodBind
 bindTileMap_set_centered_textures
   = unsafePerformIO $
@@ -1125,8 +1406,8 @@ bindTileMap_set_centered_textures
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, [member compatibility_mode] is ignored.
---   			If [code]false[/code], the texture position start in the top-left corner unless [member compatibility_mode] is enabled.
+-- | If @true@, the textures will be centered in the middle of each tile. This is useful for certain isometric or top-down modes when textures are made larger or smaller than the tiles (e.g. to avoid flickering on tile edges). The offset is still applied, but from the center of the tile. If used, @compatibility_mode@ is ignored.
+--   			If @false@, the texture position start in the top-left corner unless @compatibility_mode@ is enabled.
 set_centered_textures ::
                         (TileMap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_centered_textures cls arg1
@@ -1138,9 +1419,13 @@ set_centered_textures cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_centered_textures" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_centered_textures
+
 {-# NOINLINE bindTileMap_set_clip_uv #-}
 
--- | If [code]true[/code], the cell's UVs will be clipped.
+-- | If @true@, the cell's UVs will be clipped.
 bindTileMap_set_clip_uv :: MethodBind
 bindTileMap_set_clip_uv
   = unsafePerformIO $
@@ -1150,7 +1435,7 @@ bindTileMap_set_clip_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the cell's UVs will be clipped.
+-- | If @true@, the cell's UVs will be clipped.
 set_clip_uv ::
               (TileMap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_clip_uv cls arg1
@@ -1160,9 +1445,12 @@ set_clip_uv cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_clip_uv" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.set_clip_uv
+
 {-# NOINLINE bindTileMap_set_collision_bounce #-}
 
--- | Bounce value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Bounce value for static body collisions (see @collision_use_kinematic@).
 bindTileMap_set_collision_bounce :: MethodBind
 bindTileMap_set_collision_bounce
   = unsafePerformIO $
@@ -1172,7 +1460,7 @@ bindTileMap_set_collision_bounce
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bounce value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Bounce value for static body collisions (see @collision_use_kinematic@).
 set_collision_bounce ::
                        (TileMap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_collision_bounce cls arg1
@@ -1184,9 +1472,13 @@ set_collision_bounce cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_collision_bounce" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_bounce
+
 {-# NOINLINE bindTileMap_set_collision_friction #-}
 
--- | Friction value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Friction value for static body collisions (see @collision_use_kinematic@).
 bindTileMap_set_collision_friction :: MethodBind
 bindTileMap_set_collision_friction
   = unsafePerformIO $
@@ -1196,7 +1488,7 @@ bindTileMap_set_collision_friction
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Friction value for static body collisions (see [code]collision_use_kinematic[/code]).
+-- | Friction value for static body collisions (see @collision_use_kinematic@).
 set_collision_friction ::
                          (TileMap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_collision_friction cls arg1
@@ -1208,9 +1500,14 @@ set_collision_friction cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_collision_friction" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_friction
+
 {-# NOINLINE bindTileMap_set_collision_layer #-}
 
--- | The collision layer(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindTileMap_set_collision_layer :: MethodBind
 bindTileMap_set_collision_layer
   = unsafePerformIO $
@@ -1220,7 +1517,7 @@ bindTileMap_set_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision layer(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 set_collision_layer ::
                       (TileMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_layer cls arg1
@@ -1230,6 +1527,10 @@ set_collision_layer cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "set_collision_layer" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_layer
 
 {-# NOINLINE bindTileMap_set_collision_layer_bit #-}
 
@@ -1255,9 +1556,14 @@ set_collision_layer_bit cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_collision_layer_bit" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_layer_bit
+
 {-# NOINLINE bindTileMap_set_collision_mask #-}
 
--- | The collision mask(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindTileMap_set_collision_mask :: MethodBind
 bindTileMap_set_collision_mask
   = unsafePerformIO $
@@ -1267,7 +1573,7 @@ bindTileMap_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision mask(s) for all colliders in the TileMap. See [url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks]Collision layers and masks[/url] in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 set_collision_mask ::
                      (TileMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1
@@ -1277,6 +1583,10 @@ set_collision_mask cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "set_collision_mask" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_mask
 
 {-# NOINLINE bindTileMap_set_collision_mask_bit #-}
 
@@ -1302,9 +1612,14 @@ set_collision_mask_bit cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_collision_mask_bit" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_mask_bit
+
 {-# NOINLINE bindTileMap_set_collision_use_kinematic #-}
 
--- | If [code]true[/code], TileMap collisions will be handled as a kinematic body. If [code]false[/code], collisions will be handled as static body.
+-- | If @true@, TileMap collisions will be handled as a kinematic body. If @false@, collisions will be handled as static body.
 bindTileMap_set_collision_use_kinematic :: MethodBind
 bindTileMap_set_collision_use_kinematic
   = unsafePerformIO $
@@ -1314,7 +1629,7 @@ bindTileMap_set_collision_use_kinematic
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], TileMap collisions will be handled as a kinematic body. If [code]false[/code], collisions will be handled as static body.
+-- | If @true@, TileMap collisions will be handled as a kinematic body. If @false@, collisions will be handled as static body.
 set_collision_use_kinematic ::
                               (TileMap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_collision_use_kinematic cls arg1
@@ -1326,9 +1641,14 @@ set_collision_use_kinematic cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_collision_use_kinematic" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_use_kinematic
+
 {-# NOINLINE bindTileMap_set_collision_use_parent #-}
 
--- | If [code]true[/code], this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a [CollisionObject2D].
+-- | If @true@, this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a @CollisionObject2D@.
 bindTileMap_set_collision_use_parent :: MethodBind
 bindTileMap_set_collision_use_parent
   = unsafePerformIO $
@@ -1338,7 +1658,7 @@ bindTileMap_set_collision_use_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a [CollisionObject2D].
+-- | If @true@, this tilemap's collision shape will be added to the collision shape of the parent. The parent has to be a @CollisionObject2D@.
 set_collision_use_parent ::
                            (TileMap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_collision_use_parent cls arg1
@@ -1350,11 +1670,16 @@ set_collision_use_parent cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_collision_use_parent" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_collision_use_parent
+
 {-# NOINLINE bindTileMap_set_compatibility_mode #-}
 
--- | If [code]true[/code], the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing [code]flip_h[/code], [code]flip_v[/code] and [code]transpose[/code] tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
---   			If [code]false[/code], the textures do not move when doing [code]flip_h[/code], [code]flip_v[/code] operations if no offset is used, nor when changing the tile origin.
---   			The compatibility mode doesn't work with the [member centered_textures] option, because displacing textures with the [member cell_tile_origin] option or in irregular tiles is not relevant when centering those textures.
+-- | If @true@, the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing @flip_h@, @flip_v@ and @transpose@ tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
+--   			If @false@, the textures do not move when doing @flip_h@, @flip_v@ operations if no offset is used, nor when changing the tile origin.
+--   			The compatibility mode doesn't work with the @centered_textures@ option, because displacing textures with the @cell_tile_origin@ option or in irregular tiles is not relevant when centering those textures.
 bindTileMap_set_compatibility_mode :: MethodBind
 bindTileMap_set_compatibility_mode
   = unsafePerformIO $
@@ -1364,9 +1689,9 @@ bindTileMap_set_compatibility_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing [code]flip_h[/code], [code]flip_v[/code] and [code]transpose[/code] tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
---   			If [code]false[/code], the textures do not move when doing [code]flip_h[/code], [code]flip_v[/code] operations if no offset is used, nor when changing the tile origin.
---   			The compatibility mode doesn't work with the [member centered_textures] option, because displacing textures with the [member cell_tile_origin] option or in irregular tiles is not relevant when centering those textures.
+-- | If @true@, the compatibility with the tilemaps made in Godot 3.1 or earlier is maintained (textures move when the tile origin changes and rotate if the texture size is not homogeneous). This mode presents problems when doing @flip_h@, @flip_v@ and @transpose@ tile operations on non-homogeneous isometric tiles (e.g. 2:1), in which the texture could not coincide with the collision, thus it is not recommended for isometric or non-square tiles.
+--   			If @false@, the textures do not move when doing @flip_h@, @flip_v@ operations if no offset is used, nor when changing the tile origin.
+--   			The compatibility mode doesn't work with the @centered_textures@ option, because displacing textures with the @cell_tile_origin@ option or in irregular tiles is not relevant when centering those textures.
 set_compatibility_mode ::
                          (TileMap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_compatibility_mode cls arg1
@@ -1378,9 +1703,14 @@ set_compatibility_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_compatibility_mode" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_compatibility_mode
+
 {-# NOINLINE bindTileMap_set_custom_transform #-}
 
--- | The custom [Transform2D] to be applied to the TileMap's cells.
+-- | The custom @Transform2D@ to be applied to the TileMap's cells.
 bindTileMap_set_custom_transform :: MethodBind
 bindTileMap_set_custom_transform
   = unsafePerformIO $
@@ -1390,7 +1720,7 @@ bindTileMap_set_custom_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The custom [Transform2D] to be applied to the TileMap's cells.
+-- | The custom @Transform2D@ to be applied to the TileMap's cells.
 set_custom_transform ::
                        (TileMap :< cls, Object :< cls) => cls -> Transform2d -> IO ()
 set_custom_transform cls arg1
@@ -1402,9 +1732,14 @@ set_custom_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_custom_transform" '[Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_custom_transform
+
 {-# NOINLINE bindTileMap_set_half_offset #-}
 
--- | Amount to offset alternating tiles. See [enum HalfOffset] for possible values.
+-- | Amount to offset alternating tiles. See @enum HalfOffset@ for possible values.
 bindTileMap_set_half_offset :: MethodBind
 bindTileMap_set_half_offset
   = unsafePerformIO $
@@ -1414,7 +1749,7 @@ bindTileMap_set_half_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount to offset alternating tiles. See [enum HalfOffset] for possible values.
+-- | Amount to offset alternating tiles. See @enum HalfOffset@ for possible values.
 set_half_offset ::
                   (TileMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_half_offset cls arg1
@@ -1425,9 +1760,12 @@ set_half_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_half_offset" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.set_half_offset
+
 {-# NOINLINE bindTileMap_set_mode #-}
 
--- | The TileMap orientation mode. See [enum Mode] for possible values.
+-- | The TileMap orientation mode. See @enum Mode@ for possible values.
 bindTileMap_set_mode :: MethodBind
 bindTileMap_set_mode
   = unsafePerformIO $
@@ -1437,13 +1775,16 @@ bindTileMap_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The TileMap orientation mode. See [enum Mode] for possible values.
+-- | The TileMap orientation mode. See @enum Mode@ for possible values.
 set_mode :: (TileMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_set_mode (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "set_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.set_mode
 
 {-# NOINLINE bindTileMap_set_occluder_light_mask #-}
 
@@ -1469,6 +1810,11 @@ set_occluder_light_mask cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_occluder_light_mask" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_occluder_light_mask
+
 {-# NOINLINE bindTileMap_set_quadrant_size #-}
 
 -- | The TileMap's quadrant size. Optimizes drawing by batching, using chunks of this size.
@@ -1492,9 +1838,13 @@ set_quadrant_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_quadrant_size" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.set_quadrant_size
+
 {-# NOINLINE bindTileMap_set_tile_origin #-}
 
--- | Position for tile origin. See [enum TileOrigin] for possible values.
+-- | Position for tile origin. See @enum TileOrigin@ for possible values.
 bindTileMap_set_tile_origin :: MethodBind
 bindTileMap_set_tile_origin
   = unsafePerformIO $
@@ -1504,7 +1854,7 @@ bindTileMap_set_tile_origin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Position for tile origin. See [enum TileOrigin] for possible values.
+-- | Position for tile origin. See @enum TileOrigin@ for possible values.
 set_tile_origin ::
                   (TileMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tile_origin cls arg1
@@ -1515,9 +1865,12 @@ set_tile_origin cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_tile_origin" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.set_tile_origin
+
 {-# NOINLINE bindTileMap_set_tileset #-}
 
--- | The assigned [TileSet].
+-- | The assigned @TileSet@.
 bindTileMap_set_tileset :: MethodBind
 bindTileMap_set_tileset
   = unsafePerformIO $
@@ -1527,7 +1880,7 @@ bindTileMap_set_tileset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The assigned [TileSet].
+-- | The assigned @TileSet@.
 set_tileset ::
               (TileMap :< cls, Object :< cls) => cls -> TileSet -> IO ()
 set_tileset cls arg1
@@ -1537,9 +1890,12 @@ set_tileset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "set_tileset" '[TileSet] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.set_tileset
+
 {-# NOINLINE bindTileMap_set_y_sort_mode #-}
 
--- | If [code]true[/code], the TileMap's children will be drawn in order of their Y coordinate.
+-- | If @true@, the TileMap's children will be drawn in order of their Y coordinate.
 bindTileMap_set_y_sort_mode :: MethodBind
 bindTileMap_set_y_sort_mode
   = unsafePerformIO $
@@ -1549,7 +1905,7 @@ bindTileMap_set_y_sort_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the TileMap's children will be drawn in order of their Y coordinate.
+-- | If @true@, the TileMap's children will be drawn in order of their Y coordinate.
 set_y_sort_mode ::
                   (TileMap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_y_sort_mode cls arg1
@@ -1559,6 +1915,9 @@ set_y_sort_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "set_y_sort_mode" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.TileMap.set_y_sort_mode
 
 {-# NOINLINE bindTileMap_update_bitmask_area #-}
 
@@ -1583,6 +1942,11 @@ update_bitmask_area cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "update_bitmask_area" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.update_bitmask_area
+
 {-# NOINLINE bindTileMap_update_bitmask_region #-}
 
 -- | Applies autotiling rules to the cells in the given region (specified by grid-based X and Y coordinates).
@@ -1600,15 +1964,23 @@ bindTileMap_update_bitmask_region
 --   				Calling with invalid (or missing) parameters applies autotiling rules for the entire tilemap.
 update_bitmask_region ::
                         (TileMap :< cls, Object :< cls) =>
-                        cls -> Vector2 -> Vector2 -> IO ()
+                        cls -> Maybe Vector2 -> Maybe Vector2 -> IO ()
 update_bitmask_region cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [defaultedVariant VariantVector2 (V2 0 0) arg1,
+       defaultedVariant VariantVector2 (V2 0 0) arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTileMap_update_bitmask_region
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "update_bitmask_region"
+           '[Maybe Vector2, Maybe Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.update_bitmask_region
 
 {-# NOINLINE bindTileMap_update_dirty_quadrants #-}
 
@@ -1634,6 +2006,10 @@ update_dirty_quadrants cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TileMap "update_dirty_quadrants" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.TileMap.update_dirty_quadrants
+
 {-# NOINLINE bindTileMap_world_to_map #-}
 
 -- | Returns the tilemap (grid-based) coordinates corresponding to the given local position.
@@ -1655,3 +2031,7 @@ world_to_map cls arg1
          godot_method_bind_call bindTileMap_world_to_map (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TileMap "world_to_map" '[Vector2] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.TileMap.world_to_map

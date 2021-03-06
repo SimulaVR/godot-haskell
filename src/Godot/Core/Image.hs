@@ -73,9 +73,14 @@ module Godot.Core.Image
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _FORMAT_RGBAF :: Int
 _FORMAT_RGBAF = 11
@@ -245,9 +250,12 @@ _FORMAT_RG8 = 3
 _FORMAT_RGH :: Int
 _FORMAT_RGH = 13
 
+instance NodeProperty Image "data" Dictionary 'False where
+        nodeProperty = (_get_data, wrapDroppingSetter _set_data, Nothing)
+
 {-# NOINLINE bindImage__get_data #-}
 
--- | Holds all of the image's color data in a given format. See [enum Format] constants.
+-- | Holds all of the image's color data in a given format. See @enum Format@ constants.
 bindImage__get_data :: MethodBind
 bindImage__get_data
   = unsafePerformIO $
@@ -257,7 +265,7 @@ bindImage__get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Holds all of the image's color data in a given format. See [enum Format] constants.
+-- | Holds all of the image's color data in a given format. See @enum Format@ constants.
 _get_data :: (Image :< cls, Object :< cls) => cls -> IO Dictionary
 _get_data cls
   = withVariantArray []
@@ -265,9 +273,12 @@ _get_data cls
          godot_method_bind_call bindImage__get_data (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "_get_data" '[] (IO Dictionary) where
+        nodeMethod = Godot.Core.Image._get_data
+
 {-# NOINLINE bindImage__set_data #-}
 
--- | Holds all of the image's color data in a given format. See [enum Format] constants.
+-- | Holds all of the image's color data in a given format. See @enum Format@ constants.
 bindImage__set_data :: MethodBind
 bindImage__set_data
   = unsafePerformIO $
@@ -277,7 +288,7 @@ bindImage__set_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Holds all of the image's color data in a given format. See [enum Format] constants.
+-- | Holds all of the image's color data in a given format. See @enum Format@ constants.
 _set_data ::
             (Image :< cls, Object :< cls) => cls -> Dictionary -> IO ()
 _set_data cls arg1
@@ -286,9 +297,12 @@ _set_data cls arg1
          godot_method_bind_call bindImage__set_data (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "_set_data" '[Dictionary] (IO ()) where
+        nodeMethod = Godot.Core.Image._set_data
+
 {-# NOINLINE bindImage_blend_rect #-}
 
--- | Alpha-blends [code]src_rect[/code] from [code]src[/code] image to this image at coordinates [code]dest[/code].
+-- | Alpha-blends @src_rect@ from @src@ image to this image at coordinates @dest@.
 bindImage_blend_rect :: MethodBind
 bindImage_blend_rect
   = unsafePerformIO $
@@ -298,7 +312,7 @@ bindImage_blend_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Alpha-blends [code]src_rect[/code] from [code]src[/code] image to this image at coordinates [code]dest[/code].
+-- | Alpha-blends @src_rect@ from @src@ image to this image at coordinates @dest@.
 blend_rect ::
              (Image :< cls, Object :< cls) =>
              cls -> Image -> Rect2 -> Vector2 -> IO ()
@@ -308,9 +322,14 @@ blend_rect cls arg1 arg2 arg3
          godot_method_bind_call bindImage_blend_rect (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "blend_rect" '[Image, Rect2, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Image.blend_rect
+
 {-# NOINLINE bindImage_blend_rect_mask #-}
 
--- | Alpha-blends [code]src_rect[/code] from [code]src[/code] image to this image using [code]mask[/code] image at coordinates [code]dst[/code]. Alpha channels are required for both [code]src[/code] and [code]mask[/code]. [code]dst[/code] pixels and [code]src[/code] pixels will blend if the corresponding mask pixel's alpha value is not 0. [code]src[/code] image and [code]mask[/code] image [b]must[/b] have the same size (width and height) but they can have different formats.
+-- | Alpha-blends @src_rect@ from @src@ image to this image using @mask@ image at coordinates @dst@. Alpha channels are required for both @src@ and @mask@. @dst@ pixels and @src@ pixels will blend if the corresponding mask pixel's alpha value is not 0. @src@ image and @mask@ image __must__ have the same size (width and height) but they can have different formats.
 bindImage_blend_rect_mask :: MethodBind
 bindImage_blend_rect_mask
   = unsafePerformIO $
@@ -320,7 +339,7 @@ bindImage_blend_rect_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Alpha-blends [code]src_rect[/code] from [code]src[/code] image to this image using [code]mask[/code] image at coordinates [code]dst[/code]. Alpha channels are required for both [code]src[/code] and [code]mask[/code]. [code]dst[/code] pixels and [code]src[/code] pixels will blend if the corresponding mask pixel's alpha value is not 0. [code]src[/code] image and [code]mask[/code] image [b]must[/b] have the same size (width and height) but they can have different formats.
+-- | Alpha-blends @src_rect@ from @src@ image to this image using @mask@ image at coordinates @dst@. Alpha channels are required for both @src@ and @mask@. @dst@ pixels and @src@ pixels will blend if the corresponding mask pixel's alpha value is not 0. @src@ image and @mask@ image __must__ have the same size (width and height) but they can have different formats.
 blend_rect_mask ::
                   (Image :< cls, Object :< cls) =>
                   cls -> Image -> Image -> Rect2 -> Vector2 -> IO ()
@@ -333,9 +352,15 @@ blend_rect_mask cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "blend_rect_mask"
+           '[Image, Image, Rect2, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Image.blend_rect_mask
+
 {-# NOINLINE bindImage_blit_rect #-}
 
--- | Copies [code]src_rect[/code] from [code]src[/code] image to this image at coordinates [code]dst[/code].
+-- | Copies @src_rect@ from @src@ image to this image at coordinates @dst@.
 bindImage_blit_rect :: MethodBind
 bindImage_blit_rect
   = unsafePerformIO $
@@ -345,7 +370,7 @@ bindImage_blit_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Copies [code]src_rect[/code] from [code]src[/code] image to this image at coordinates [code]dst[/code].
+-- | Copies @src_rect@ from @src@ image to this image at coordinates @dst@.
 blit_rect ::
             (Image :< cls, Object :< cls) =>
             cls -> Image -> Rect2 -> Vector2 -> IO ()
@@ -355,9 +380,14 @@ blit_rect cls arg1 arg2 arg3
          godot_method_bind_call bindImage_blit_rect (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "blit_rect" '[Image, Rect2, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Image.blit_rect
+
 {-# NOINLINE bindImage_blit_rect_mask #-}
 
--- | Blits [code]src_rect[/code] area from [code]src[/code] image to this image at the coordinates given by [code]dst[/code]. [code]src[/code] pixel is copied onto [code]dst[/code] if the corresponding [code]mask[/code] pixel's alpha value is not 0. [code]src[/code] image and [code]mask[/code] image [b]must[/b] have the same size (width and height) but they can have different formats.
+-- | Blits @src_rect@ area from @src@ image to this image at the coordinates given by @dst@. @src@ pixel is copied onto @dst@ if the corresponding @mask@ pixel's alpha value is not 0. @src@ image and @mask@ image __must__ have the same size (width and height) but they can have different formats.
 bindImage_blit_rect_mask :: MethodBind
 bindImage_blit_rect_mask
   = unsafePerformIO $
@@ -367,7 +397,7 @@ bindImage_blit_rect_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Blits [code]src_rect[/code] area from [code]src[/code] image to this image at the coordinates given by [code]dst[/code]. [code]src[/code] pixel is copied onto [code]dst[/code] if the corresponding [code]mask[/code] pixel's alpha value is not 0. [code]src[/code] image and [code]mask[/code] image [b]must[/b] have the same size (width and height) but they can have different formats.
+-- | Blits @src_rect@ area from @src@ image to this image at the coordinates given by @dst@. @src@ pixel is copied onto @dst@ if the corresponding @mask@ pixel's alpha value is not 0. @src@ image and @mask@ image __must__ have the same size (width and height) but they can have different formats.
 blit_rect_mask ::
                  (Image :< cls, Object :< cls) =>
                  cls -> Image -> Image -> Rect2 -> Vector2 -> IO ()
@@ -378,6 +408,12 @@ blit_rect_mask cls arg1 arg2 arg3 arg4
          godot_method_bind_call bindImage_blit_rect_mask (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "blit_rect_mask"
+           '[Image, Image, Rect2, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Image.blit_rect_mask
 
 {-# NOINLINE bindImage_bumpmap_to_normalmap #-}
 
@@ -393,14 +429,19 @@ bindImage_bumpmap_to_normalmap
 
 -- | Converts a bumpmap to a normalmap. A bumpmap provides a height offset per-pixel, while a normalmap provides a normal direction per pixel.
 bumpmap_to_normalmap ::
-                       (Image :< cls, Object :< cls) => cls -> Float -> IO ()
+                       (Image :< cls, Object :< cls) => cls -> Maybe Float -> IO ()
 bumpmap_to_normalmap cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantReal (1)) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_bumpmap_to_normalmap (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "bumpmap_to_normalmap" '[Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Image.bumpmap_to_normalmap
 
 {-# NOINLINE bindImage_clear_mipmaps #-}
 
@@ -423,9 +464,12 @@ clear_mipmaps cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "clear_mipmaps" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.clear_mipmaps
+
 {-# NOINLINE bindImage_compress #-}
 
--- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See [enum CompressMode] and [enum CompressSource] constants.
+-- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See @enum CompressMode@ and @enum CompressSource@ constants.
 bindImage_compress :: MethodBind
 bindImage_compress
   = unsafePerformIO $
@@ -435,7 +479,7 @@ bindImage_compress
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See [enum CompressMode] and [enum CompressSource] constants.
+-- | Compresses the image to use less memory. Can not directly access pixel data while the image is compressed. Returns error if the chosen compression mode is not available. See @enum CompressMode@ and @enum CompressSource@ constants.
 compress ::
            (Image :< cls, Object :< cls) =>
            cls -> Int -> Int -> Float -> IO Int
@@ -445,9 +489,13 @@ compress cls arg1 arg2 arg3
          godot_method_bind_call bindImage_compress (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "compress" '[Int, Int, Float] (IO Int)
+         where
+        nodeMethod = Godot.Core.Image.compress
+
 {-# NOINLINE bindImage_convert #-}
 
--- | Converts the image's format. See [enum Format] constants.
+-- | Converts the image's format. See @enum Format@ constants.
 bindImage_convert :: MethodBind
 bindImage_convert
   = unsafePerformIO $
@@ -457,7 +505,7 @@ bindImage_convert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Converts the image's format. See [enum Format] constants.
+-- | Converts the image's format. See @enum Format@ constants.
 convert :: (Image :< cls, Object :< cls) => cls -> Int -> IO ()
 convert cls arg1
   = withVariantArray [toVariant arg1]
@@ -465,9 +513,12 @@ convert cls arg1
          godot_method_bind_call bindImage_convert (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "convert" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Image.convert
+
 {-# NOINLINE bindImage_copy_from #-}
 
--- | Copies [code]src[/code] image to this image.
+-- | Copies @src@ image to this image.
 bindImage_copy_from :: MethodBind
 bindImage_copy_from
   = unsafePerformIO $
@@ -477,7 +528,7 @@ bindImage_copy_from
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Copies [code]src[/code] image to this image.
+-- | Copies @src@ image to this image.
 copy_from :: (Image :< cls, Object :< cls) => cls -> Image -> IO ()
 copy_from cls arg1
   = withVariantArray [toVariant arg1]
@@ -485,9 +536,12 @@ copy_from cls arg1
          godot_method_bind_call bindImage_copy_from (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "copy_from" '[Image] (IO ()) where
+        nodeMethod = Godot.Core.Image.copy_from
+
 {-# NOINLINE bindImage_create #-}
 
--- | Creates an empty image of given size and format. See [enum Format] constants. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [method generate_mipmaps].
+-- | Creates an empty image of given size and format. See @enum Format@ constants. If @use_mipmaps@ is @true@ then generate mipmaps for this image. See the @method generate_mipmaps@.
 bindImage_create :: MethodBind
 bindImage_create
   = unsafePerformIO $
@@ -497,7 +551,7 @@ bindImage_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an empty image of given size and format. See [enum Format] constants. If [code]use_mipmaps[/code] is [code]true[/code] then generate mipmaps for this image. See the [method generate_mipmaps].
+-- | Creates an empty image of given size and format. See @enum Format@ constants. If @use_mipmaps@ is @true@ then generate mipmaps for this image. See the @method generate_mipmaps@.
 create ::
          (Image :< cls, Object :< cls) =>
          cls -> Int -> Int -> Bool -> Int -> IO ()
@@ -508,9 +562,13 @@ create cls arg1 arg2 arg3 arg4
          godot_method_bind_call bindImage_create (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "create" '[Int, Int, Bool, Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Image.create
+
 {-# NOINLINE bindImage_create_from_data #-}
 
--- | Creates a new image of given size and format. See [enum Format] constants. Fills the image with the given raw data. If [code]use_mipmaps[/code] is [code]true[/code] then loads mipmaps for this image from [code]data[/code]. See [method generate_mipmaps].
+-- | Creates a new image of given size and format. See @enum Format@ constants. Fills the image with the given raw data. If @use_mipmaps@ is @true@ then loads mipmaps for this image from @data@. See @method generate_mipmaps@.
 bindImage_create_from_data :: MethodBind
 bindImage_create_from_data
   = unsafePerformIO $
@@ -520,7 +578,7 @@ bindImage_create_from_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new image of given size and format. See [enum Format] constants. Fills the image with the given raw data. If [code]use_mipmaps[/code] is [code]true[/code] then loads mipmaps for this image from [code]data[/code]. See [method generate_mipmaps].
+-- | Creates a new image of given size and format. See @enum Format@ constants. Fills the image with the given raw data. If @use_mipmaps@ is @true@ then loads mipmaps for this image from @data@. See @method generate_mipmaps@.
 create_from_data ::
                    (Image :< cls, Object :< cls) =>
                    cls -> Int -> Int -> Bool -> Int -> PoolByteArray -> IO ()
@@ -534,9 +592,15 @@ create_from_data cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "create_from_data"
+           '[Int, Int, Bool, Int, PoolByteArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Image.create_from_data
+
 {-# NOINLINE bindImage_crop #-}
 
--- | Crops the image to the given [code]width[/code] and [code]height[/code]. If the specified size is larger than the current size, the extra area is filled with black pixels.
+-- | Crops the image to the given @width@ and @height@. If the specified size is larger than the current size, the extra area is filled with black pixels.
 bindImage_crop :: MethodBind
 bindImage_crop
   = unsafePerformIO $
@@ -546,13 +610,16 @@ bindImage_crop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Crops the image to the given [code]width[/code] and [code]height[/code]. If the specified size is larger than the current size, the extra area is filled with black pixels.
+-- | Crops the image to the given @width@ and @height@. If the specified size is larger than the current size, the extra area is filled with black pixels.
 crop :: (Image :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 crop cls arg1 arg2
   = withVariantArray [toVariant arg1, toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_crop (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "crop" '[Int, Int] (IO ()) where
+        nodeMethod = Godot.Core.Image.crop
 
 {-# NOINLINE bindImage_decompress #-}
 
@@ -574,9 +641,12 @@ decompress cls
          godot_method_bind_call bindImage_decompress (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "decompress" '[] (IO Int) where
+        nodeMethod = Godot.Core.Image.decompress
+
 {-# NOINLINE bindImage_detect_alpha #-}
 
--- | Returns [constant ALPHA_BLEND] if the image has data for alpha values. Returns [constant ALPHA_BIT] if all the alpha values are stored in a single bit. Returns [constant ALPHA_NONE] if no data for alpha values is found.
+-- | Returns @ALPHA_BLEND@ if the image has data for alpha values. Returns @ALPHA_BIT@ if all the alpha values are stored in a single bit. Returns @ALPHA_NONE@ if no data for alpha values is found.
 bindImage_detect_alpha :: MethodBind
 bindImage_detect_alpha
   = unsafePerformIO $
@@ -586,7 +656,7 @@ bindImage_detect_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [constant ALPHA_BLEND] if the image has data for alpha values. Returns [constant ALPHA_BIT] if all the alpha values are stored in a single bit. Returns [constant ALPHA_NONE] if no data for alpha values is found.
+-- | Returns @ALPHA_BLEND@ if the image has data for alpha values. Returns @ALPHA_BIT@ if all the alpha values are stored in a single bit. Returns @ALPHA_NONE@ if no data for alpha values is found.
 detect_alpha :: (Image :< cls, Object :< cls) => cls -> IO Int
 detect_alpha cls
   = withVariantArray []
@@ -594,6 +664,9 @@ detect_alpha cls
          godot_method_bind_call bindImage_detect_alpha (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "detect_alpha" '[] (IO Int) where
+        nodeMethod = Godot.Core.Image.detect_alpha
 
 {-# NOINLINE bindImage_expand_x2_hq2x #-}
 
@@ -616,9 +689,12 @@ expand_x2_hq2x cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "expand_x2_hq2x" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.expand_x2_hq2x
+
 {-# NOINLINE bindImage_fill #-}
 
--- | Fills the image with a given [Color].
+-- | Fills the image with a given @Color@.
 bindImage_fill :: MethodBind
 bindImage_fill
   = unsafePerformIO $
@@ -628,13 +704,16 @@ bindImage_fill
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Fills the image with a given [Color].
+-- | Fills the image with a given @Color@.
 fill :: (Image :< cls, Object :< cls) => cls -> Color -> IO ()
 fill cls arg1
   = withVariantArray [toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_fill (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "fill" '[Color] (IO ()) where
+        nodeMethod = Godot.Core.Image.fill
 
 {-# NOINLINE bindImage_fix_alpha_edges #-}
 
@@ -658,6 +737,9 @@ fix_alpha_edges cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "fix_alpha_edges" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.fix_alpha_edges
+
 {-# NOINLINE bindImage_flip_x #-}
 
 -- | Flips the image horizontally.
@@ -677,6 +759,9 @@ flip_x cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_flip_x (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "flip_x" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.flip_x
 
 {-# NOINLINE bindImage_flip_y #-}
 
@@ -698,6 +783,9 @@ flip_y cls
          godot_method_bind_call bindImage_flip_y (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "flip_y" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.flip_y
+
 {-# NOINLINE bindImage_generate_mipmaps #-}
 
 -- | Generates mipmaps for the image. Mipmaps are pre-calculated and lower resolution copies of the image. Mipmaps are automatically used if the image needs to be scaled down when rendered. This improves image quality and the performance of the rendering. Returns an error if the image is compressed, in a custom format or if the image's width/height is 0.
@@ -712,14 +800,18 @@ bindImage_generate_mipmaps
 
 -- | Generates mipmaps for the image. Mipmaps are pre-calculated and lower resolution copies of the image. Mipmaps are automatically used if the image needs to be scaled down when rendered. This improves image quality and the performance of the rendering. Returns an error if the image is compressed, in a custom format or if the image's width/height is 0.
 generate_mipmaps ::
-                   (Image :< cls, Object :< cls) => cls -> Bool -> IO Int
+                   (Image :< cls, Object :< cls) => cls -> Maybe Bool -> IO Int
 generate_mipmaps cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantBool False) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_generate_mipmaps (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "generate_mipmaps" '[Maybe Bool] (IO Int)
+         where
+        nodeMethod = Godot.Core.Image.generate_mipmaps
 
 {-# NOINLINE bindImage_get_data #-}
 
@@ -742,9 +834,12 @@ get_data cls
          godot_method_bind_call bindImage_get_data (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "get_data" '[] (IO PoolByteArray) where
+        nodeMethod = Godot.Core.Image.get_data
+
 {-# NOINLINE bindImage_get_format #-}
 
--- | Returns the image's format. See [enum Format] constants.
+-- | Returns the image's format. See @enum Format@ constants.
 bindImage_get_format :: MethodBind
 bindImage_get_format
   = unsafePerformIO $
@@ -754,13 +849,16 @@ bindImage_get_format
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the image's format. See [enum Format] constants.
+-- | Returns the image's format. See @enum Format@ constants.
 get_format :: (Image :< cls, Object :< cls) => cls -> IO Int
 get_format cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_get_format (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "get_format" '[] (IO Int) where
+        nodeMethod = Godot.Core.Image.get_format
 
 {-# NOINLINE bindImage_get_height #-}
 
@@ -782,9 +880,12 @@ get_height cls
          godot_method_bind_call bindImage_get_height (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "get_height" '[] (IO Int) where
+        nodeMethod = Godot.Core.Image.get_height
+
 {-# NOINLINE bindImage_get_mipmap_offset #-}
 
--- | Returns the offset where the image's mipmap with index [code]mipmap[/code] is stored in the [code]data[/code] dictionary.
+-- | Returns the offset where the image's mipmap with index @mipmap@ is stored in the @data@ dictionary.
 bindImage_get_mipmap_offset :: MethodBind
 bindImage_get_mipmap_offset
   = unsafePerformIO $
@@ -794,7 +895,7 @@ bindImage_get_mipmap_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the offset where the image's mipmap with index [code]mipmap[/code] is stored in the [code]data[/code] dictionary.
+-- | Returns the offset where the image's mipmap with index @mipmap@ is stored in the @data@ dictionary.
 get_mipmap_offset ::
                     (Image :< cls, Object :< cls) => cls -> Int -> IO Int
 get_mipmap_offset cls arg1
@@ -805,9 +906,12 @@ get_mipmap_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "get_mipmap_offset" '[Int] (IO Int) where
+        nodeMethod = Godot.Core.Image.get_mipmap_offset
+
 {-# NOINLINE bindImage_get_pixel #-}
 
--- | Returns the color of the pixel at [code](x, y)[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixelv], but two integer arguments instead of a Vector2 argument.
+-- | Returns the color of the pixel at @(x, y)@ if the image is locked. If the image is unlocked, it always returns a @Color@ with the value @(0, 0, 0, 1.0)@. This is the same as @method get_pixelv@, but two integer arguments instead of a Vector2 argument.
 bindImage_get_pixel :: MethodBind
 bindImage_get_pixel
   = unsafePerformIO $
@@ -817,7 +921,7 @@ bindImage_get_pixel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color of the pixel at [code](x, y)[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixelv], but two integer arguments instead of a Vector2 argument.
+-- | Returns the color of the pixel at @(x, y)@ if the image is locked. If the image is unlocked, it always returns a @Color@ with the value @(0, 0, 0, 1.0)@. This is the same as @method get_pixelv@, but two integer arguments instead of a Vector2 argument.
 get_pixel ::
             (Image :< cls, Object :< cls) => cls -> Int -> Int -> IO Color
 get_pixel cls arg1 arg2
@@ -826,9 +930,12 @@ get_pixel cls arg1 arg2
          godot_method_bind_call bindImage_get_pixel (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "get_pixel" '[Int, Int] (IO Color) where
+        nodeMethod = Godot.Core.Image.get_pixel
+
 {-# NOINLINE bindImage_get_pixelv #-}
 
--- | Returns the color of the pixel at [code]src[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixel], but with a Vector2 argument instead of two integer arguments.
+-- | Returns the color of the pixel at @src@ if the image is locked. If the image is unlocked, it always returns a @Color@ with the value @(0, 0, 0, 1.0)@. This is the same as @method get_pixel@, but with a Vector2 argument instead of two integer arguments.
 bindImage_get_pixelv :: MethodBind
 bindImage_get_pixelv
   = unsafePerformIO $
@@ -838,7 +945,7 @@ bindImage_get_pixelv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the color of the pixel at [code]src[/code] if the image is locked. If the image is unlocked, it always returns a [Color] with the value [code](0, 0, 0, 1.0)[/code]. This is the same as [method get_pixel], but with a Vector2 argument instead of two integer arguments.
+-- | Returns the color of the pixel at @src@ if the image is locked. If the image is unlocked, it always returns a @Color@ with the value @(0, 0, 0, 1.0)@. This is the same as @method get_pixel@, but with a Vector2 argument instead of two integer arguments.
 get_pixelv ::
              (Image :< cls, Object :< cls) => cls -> Vector2 -> IO Color
 get_pixelv cls arg1
@@ -847,9 +954,12 @@ get_pixelv cls arg1
          godot_method_bind_call bindImage_get_pixelv (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "get_pixelv" '[Vector2] (IO Color) where
+        nodeMethod = Godot.Core.Image.get_pixelv
+
 {-# NOINLINE bindImage_get_rect #-}
 
--- | Returns a new image that is a copy of the image's area specified with [code]rect[/code].
+-- | Returns a new image that is a copy of the image's area specified with @rect@.
 bindImage_get_rect :: MethodBind
 bindImage_get_rect
   = unsafePerformIO $
@@ -859,7 +969,7 @@ bindImage_get_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a new image that is a copy of the image's area specified with [code]rect[/code].
+-- | Returns a new image that is a copy of the image's area specified with @rect@.
 get_rect ::
            (Image :< cls, Object :< cls) => cls -> Rect2 -> IO Image
 get_rect cls arg1
@@ -867,6 +977,9 @@ get_rect cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_get_rect (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "get_rect" '[Rect2] (IO Image) where
+        nodeMethod = Godot.Core.Image.get_rect
 
 {-# NOINLINE bindImage_get_size #-}
 
@@ -888,9 +1001,12 @@ get_size cls
          godot_method_bind_call bindImage_get_size (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "get_size" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.Image.get_size
+
 {-# NOINLINE bindImage_get_used_rect #-}
 
--- | Returns a [Rect2] enclosing the visible portion of the image, considering each pixel with a non-zero alpha channel as visible.
+-- | Returns a @Rect2@ enclosing the visible portion of the image, considering each pixel with a non-zero alpha channel as visible.
 bindImage_get_used_rect :: MethodBind
 bindImage_get_used_rect
   = unsafePerformIO $
@@ -900,7 +1016,7 @@ bindImage_get_used_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [Rect2] enclosing the visible portion of the image, considering each pixel with a non-zero alpha channel as visible.
+-- | Returns a @Rect2@ enclosing the visible portion of the image, considering each pixel with a non-zero alpha channel as visible.
 get_used_rect :: (Image :< cls, Object :< cls) => cls -> IO Rect2
 get_used_rect cls
   = withVariantArray []
@@ -908,6 +1024,9 @@ get_used_rect cls
          godot_method_bind_call bindImage_get_used_rect (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "get_used_rect" '[] (IO Rect2) where
+        nodeMethod = Godot.Core.Image.get_used_rect
 
 {-# NOINLINE bindImage_get_width #-}
 
@@ -929,9 +1048,12 @@ get_width cls
          godot_method_bind_call bindImage_get_width (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "get_width" '[] (IO Int) where
+        nodeMethod = Godot.Core.Image.get_width
+
 {-# NOINLINE bindImage_has_mipmaps #-}
 
--- | Returns [code]true[/code] if the image has generated mipmaps.
+-- | Returns @true@ if the image has generated mipmaps.
 bindImage_has_mipmaps :: MethodBind
 bindImage_has_mipmaps
   = unsafePerformIO $
@@ -941,7 +1063,7 @@ bindImage_has_mipmaps
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the image has generated mipmaps.
+-- | Returns @true@ if the image has generated mipmaps.
 has_mipmaps :: (Image :< cls, Object :< cls) => cls -> IO Bool
 has_mipmaps cls
   = withVariantArray []
@@ -950,9 +1072,12 @@ has_mipmaps cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "has_mipmaps" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Image.has_mipmaps
+
 {-# NOINLINE bindImage_is_compressed #-}
 
--- | Returns [code]true[/code] if the image is compressed.
+-- | Returns @true@ if the image is compressed.
 bindImage_is_compressed :: MethodBind
 bindImage_is_compressed
   = unsafePerformIO $
@@ -962,7 +1087,7 @@ bindImage_is_compressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the image is compressed.
+-- | Returns @true@ if the image is compressed.
 is_compressed :: (Image :< cls, Object :< cls) => cls -> IO Bool
 is_compressed cls
   = withVariantArray []
@@ -971,9 +1096,12 @@ is_compressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "is_compressed" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Image.is_compressed
+
 {-# NOINLINE bindImage_is_empty #-}
 
--- | Returns [code]true[/code] if the image has no data.
+-- | Returns @true@ if the image has no data.
 bindImage_is_empty :: MethodBind
 bindImage_is_empty
   = unsafePerformIO $
@@ -983,7 +1111,7 @@ bindImage_is_empty
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the image has no data.
+-- | Returns @true@ if the image has no data.
 is_empty :: (Image :< cls, Object :< cls) => cls -> IO Bool
 is_empty cls
   = withVariantArray []
@@ -991,9 +1119,12 @@ is_empty cls
          godot_method_bind_call bindImage_is_empty (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "is_empty" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Image.is_empty
+
 {-# NOINLINE bindImage_is_invisible #-}
 
--- | Returns [code]true[/code] if all the image's pixels have an alpha value of 0. Returns [code]false[/code] if any pixel has an alpha value higher than 0.
+-- | Returns @true@ if all the image's pixels have an alpha value of 0. Returns @false@ if any pixel has an alpha value higher than 0.
 bindImage_is_invisible :: MethodBind
 bindImage_is_invisible
   = unsafePerformIO $
@@ -1003,7 +1134,7 @@ bindImage_is_invisible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if all the image's pixels have an alpha value of 0. Returns [code]false[/code] if any pixel has an alpha value higher than 0.
+-- | Returns @true@ if all the image's pixels have an alpha value of 0. Returns @false@ if any pixel has an alpha value higher than 0.
 is_invisible :: (Image :< cls, Object :< cls) => cls -> IO Bool
 is_invisible cls
   = withVariantArray []
@@ -1012,9 +1143,12 @@ is_invisible cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "is_invisible" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Image.is_invisible
+
 {-# NOINLINE bindImage_load #-}
 
--- | Loads an image from file [code]path[/code]. See [url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats]Supported image formats[/url] for a list of supported image formats and limitations.
+-- | Loads an image from file @path@. See @url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats@Supported image formats@/url@ for a list of supported image formats and limitations.
 bindImage_load :: MethodBind
 bindImage_load
   = unsafePerformIO $
@@ -1024,7 +1158,7 @@ bindImage_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads an image from file [code]path[/code]. See [url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats]Supported image formats[/url] for a list of supported image formats and limitations.
+-- | Loads an image from file @path@. See @url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats@Supported image formats@/url@ for a list of supported image formats and limitations.
 load ::
        (Image :< cls, Object :< cls) => cls -> GodotString -> IO Int
 load cls arg1
@@ -1032,6 +1166,9 @@ load cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_load (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "load" '[GodotString] (IO Int) where
+        nodeMethod = Godot.Core.Image.load
 
 {-# NOINLINE bindImage_load_jpg_from_buffer #-}
 
@@ -1056,6 +1193,11 @@ load_jpg_from_buffer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "load_jpg_from_buffer" '[PoolByteArray]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Image.load_jpg_from_buffer
+
 {-# NOINLINE bindImage_load_png_from_buffer #-}
 
 -- | Loads an image from the binary contents of a PNG file.
@@ -1078,6 +1220,11 @@ load_png_from_buffer cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "load_png_from_buffer" '[PoolByteArray]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Image.load_png_from_buffer
 
 {-# NOINLINE bindImage_load_webp_from_buffer #-}
 
@@ -1102,6 +1249,11 @@ load_webp_from_buffer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "load_webp_from_buffer" '[PoolByteArray]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Image.load_webp_from_buffer
+
 {-# NOINLINE bindImage_lock #-}
 
 -- | Locks the data for reading and writing access. Sends an error to the console if the image is not locked when reading or writing a pixel.
@@ -1121,6 +1273,9 @@ lock cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_lock (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "lock" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.lock
 
 {-# NOINLINE bindImage_normalmap_to_xy #-}
 
@@ -1144,9 +1299,12 @@ normalmap_to_xy cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "normalmap_to_xy" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.normalmap_to_xy
+
 {-# NOINLINE bindImage_premultiply_alpha #-}
 
--- | Multiplies color values with alpha values. Resulting color values for a pixel are [code](color * alpha)/256[/code].
+-- | Multiplies color values with alpha values. Resulting color values for a pixel are @(color * alpha)/256@.
 bindImage_premultiply_alpha :: MethodBind
 bindImage_premultiply_alpha
   = unsafePerformIO $
@@ -1156,7 +1314,7 @@ bindImage_premultiply_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies color values with alpha values. Resulting color values for a pixel are [code](color * alpha)/256[/code].
+-- | Multiplies color values with alpha values. Resulting color values for a pixel are @(color * alpha)/256@.
 premultiply_alpha :: (Image :< cls, Object :< cls) => cls -> IO ()
 premultiply_alpha cls
   = withVariantArray []
@@ -1166,9 +1324,12 @@ premultiply_alpha cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "premultiply_alpha" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.premultiply_alpha
+
 {-# NOINLINE bindImage_resize #-}
 
--- | Resizes the image to the given [code]width[/code] and [code]height[/code]. New pixels are calculated using [code]interpolation[/code]. See [code]interpolation[/code] constants.
+-- | Resizes the image to the given @width@ and @height@. New pixels are calculated using @interpolation@. See @interpolation@ constants.
 bindImage_resize :: MethodBind
 bindImage_resize
   = unsafePerformIO $
@@ -1178,18 +1339,25 @@ bindImage_resize
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Resizes the image to the given [code]width[/code] and [code]height[/code]. New pixels are calculated using [code]interpolation[/code]. See [code]interpolation[/code] constants.
+-- | Resizes the image to the given @width@ and @height@. New pixels are calculated using @interpolation@. See @interpolation@ constants.
 resize ::
-         (Image :< cls, Object :< cls) => cls -> Int -> Int -> Int -> IO ()
+         (Image :< cls, Object :< cls) =>
+         cls -> Int -> Int -> Maybe Int -> IO ()
 resize cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantInt (1)) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_resize (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "resize" '[Int, Int, Maybe Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Image.resize
+
 {-# NOINLINE bindImage_resize_to_po2 #-}
 
--- | Resizes the image to the nearest power of 2 for the width and height. If [code]square[/code] is [code]true[/code] then set width and height to be the same.
+-- | Resizes the image to the nearest power of 2 for the width and height. If @square@ is @true@ then set width and height to be the same.
 bindImage_resize_to_po2 :: MethodBind
 bindImage_resize_to_po2
   = unsafePerformIO $
@@ -1199,15 +1367,19 @@ bindImage_resize_to_po2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Resizes the image to the nearest power of 2 for the width and height. If [code]square[/code] is [code]true[/code] then set width and height to be the same.
+-- | Resizes the image to the nearest power of 2 for the width and height. If @square@ is @true@ then set width and height to be the same.
 resize_to_po2 ::
-                (Image :< cls, Object :< cls) => cls -> Bool -> IO ()
+                (Image :< cls, Object :< cls) => cls -> Maybe Bool -> IO ()
 resize_to_po2 cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantBool False) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_resize_to_po2 (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "resize_to_po2" '[Maybe Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Image.resize_to_po2
 
 {-# NOINLINE bindImage_rgbe_to_srgb #-}
 
@@ -1230,9 +1402,12 @@ rgbe_to_srgb cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "rgbe_to_srgb" '[] (IO Image) where
+        nodeMethod = Godot.Core.Image.rgbe_to_srgb
+
 {-# NOINLINE bindImage_save_exr #-}
 
--- | Saves the image as an EXR file to [code]path[/code]. If [code]grayscale[/code] is [code]true[/code] and the image has only one channel, it will be saved explicitly as monochrome rather than one red channel. This function will return [constant ERR_UNAVAILABLE] if Godot was compiled without the TinyEXR module.
+-- | Saves the image as an EXR file to @path@. If @grayscale@ is @true@ and the image has only one channel, it will be saved explicitly as monochrome rather than one red channel. This function will return @ERR_UNAVAILABLE@ if Godot was compiled without the TinyEXR module.
 bindImage_save_exr :: MethodBind
 bindImage_save_exr
   = unsafePerformIO $
@@ -1242,19 +1417,25 @@ bindImage_save_exr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the image as an EXR file to [code]path[/code]. If [code]grayscale[/code] is [code]true[/code] and the image has only one channel, it will be saved explicitly as monochrome rather than one red channel. This function will return [constant ERR_UNAVAILABLE] if Godot was compiled without the TinyEXR module.
+-- | Saves the image as an EXR file to @path@. If @grayscale@ is @true@ and the image has only one channel, it will be saved explicitly as monochrome rather than one red channel. This function will return @ERR_UNAVAILABLE@ if Godot was compiled without the TinyEXR module.
 save_exr ::
            (Image :< cls, Object :< cls) =>
-           cls -> GodotString -> Bool -> IO Int
+           cls -> GodotString -> Maybe Bool -> IO Int
 save_exr cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool False) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_save_exr (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "save_exr" '[GodotString, Maybe Bool]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Image.save_exr
+
 {-# NOINLINE bindImage_save_png #-}
 
--- | Saves the image as a PNG file to [code]path[/code].
+-- | Saves the image as a PNG file to @path@.
 bindImage_save_png :: MethodBind
 bindImage_save_png
   = unsafePerformIO $
@@ -1264,7 +1445,7 @@ bindImage_save_png
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the image as a PNG file to [code]path[/code].
+-- | Saves the image as a PNG file to @path@.
 save_png ::
            (Image :< cls, Object :< cls) => cls -> GodotString -> IO Int
 save_png cls arg1
@@ -1273,17 +1454,23 @@ save_png cls arg1
          godot_method_bind_call bindImage_save_png (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "save_png" '[GodotString] (IO Int) where
+        nodeMethod = Godot.Core.Image.save_png
+
 {-# NOINLINE bindImage_set_pixel #-}
 
--- | Sets the [Color] of the pixel at [code](x, y)[/code] if the image is locked. Example:
---   				[codeblock]
+-- | Sets the @Color@ of the pixel at @(x, y)@ if the image is locked. Example:
+--   				
+--   @
+--   
 --   				var img = Image.new()
 --   				img.create(img_width, img_height, false, Image.FORMAT_RGBA8)
 --   				img.lock()
 --   				img.set_pixel(x, y, color) # Works
 --   				img.unlock()
 --   				img.set_pixel(x, y, color) # Does not have an effect
---   				[/codeblock]
+--   				
+--   @
 bindImage_set_pixel :: MethodBind
 bindImage_set_pixel
   = unsafePerformIO $
@@ -1293,15 +1480,18 @@ bindImage_set_pixel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [Color] of the pixel at [code](x, y)[/code] if the image is locked. Example:
---   				[codeblock]
+-- | Sets the @Color@ of the pixel at @(x, y)@ if the image is locked. Example:
+--   				
+--   @
+--   
 --   				var img = Image.new()
 --   				img.create(img_width, img_height, false, Image.FORMAT_RGBA8)
 --   				img.lock()
 --   				img.set_pixel(x, y, color) # Works
 --   				img.unlock()
 --   				img.set_pixel(x, y, color) # Does not have an effect
---   				[/codeblock]
+--   				
+--   @
 set_pixel ::
             (Image :< cls, Object :< cls) =>
             cls -> Int -> Int -> Color -> IO ()
@@ -1311,17 +1501,24 @@ set_pixel cls arg1 arg2 arg3
          godot_method_bind_call bindImage_set_pixel (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "set_pixel" '[Int, Int, Color] (IO ())
+         where
+        nodeMethod = Godot.Core.Image.set_pixel
+
 {-# NOINLINE bindImage_set_pixelv #-}
 
--- | Sets the [Color] of the pixel at [code](dst.x, dst.y)[/code] if the image is locked. Note that the [code]dst[/code] values must be integers. Example:
---   				[codeblock]
+-- | Sets the @Color@ of the pixel at @(dst.x, dst.y)@ if the image is locked. Note that the @dst@ values must be integers. Example:
+--   				
+--   @
+--   
 --   				var img = Image.new()
 --   				img.create(img_width, img_height, false, Image.FORMAT_RGBA8)
 --   				img.lock()
 --   				img.set_pixelv(Vector2(x, y), color) # Works
 --   				img.unlock()
 --   				img.set_pixelv(Vector2(x, y), color) # Does not have an effect
---   				[/codeblock]
+--   				
+--   @
 bindImage_set_pixelv :: MethodBind
 bindImage_set_pixelv
   = unsafePerformIO $
@@ -1331,15 +1528,18 @@ bindImage_set_pixelv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [Color] of the pixel at [code](dst.x, dst.y)[/code] if the image is locked. Note that the [code]dst[/code] values must be integers. Example:
---   				[codeblock]
+-- | Sets the @Color@ of the pixel at @(dst.x, dst.y)@ if the image is locked. Note that the @dst@ values must be integers. Example:
+--   				
+--   @
+--   
 --   				var img = Image.new()
 --   				img.create(img_width, img_height, false, Image.FORMAT_RGBA8)
 --   				img.lock()
 --   				img.set_pixelv(Vector2(x, y), color) # Works
 --   				img.unlock()
 --   				img.set_pixelv(Vector2(x, y), color) # Does not have an effect
---   				[/codeblock]
+--   				
+--   @
 set_pixelv ::
              (Image :< cls, Object :< cls) => cls -> Vector2 -> Color -> IO ()
 set_pixelv cls arg1 arg2
@@ -1347,6 +1547,10 @@ set_pixelv cls arg1 arg2
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_set_pixelv (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "set_pixelv" '[Vector2, Color] (IO ())
+         where
+        nodeMethod = Godot.Core.Image.set_pixelv
 
 {-# NOINLINE bindImage_shrink_x2 #-}
 
@@ -1367,6 +1571,9 @@ shrink_x2 cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_shrink_x2 (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "shrink_x2" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.shrink_x2
 
 {-# NOINLINE bindImage_srgb_to_linear #-}
 
@@ -1389,6 +1596,9 @@ srgb_to_linear cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Image "srgb_to_linear" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.srgb_to_linear
+
 {-# NOINLINE bindImage_unlock #-}
 
 -- | Unlocks the data and prevents changes.
@@ -1408,3 +1618,6 @@ unlock cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImage_unlock (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Image "unlock" '[] (IO ()) where
+        nodeMethod = Godot.Core.Image.unlock

@@ -8,9 +8,21 @@ module Godot.Core.VisualShaderNodeBooleanConstant
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
+
+instance NodeProperty VisualShaderNodeBooleanConstant "constant"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (get_constant, wrapDroppingSetter set_constant, Nothing)
 
 {-# NOINLINE bindVisualShaderNodeBooleanConstant_get_constant #-}
 
@@ -38,6 +50,13 @@ get_constant cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeBooleanConstant "get_constant"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeBooleanConstant.get_constant
+
 {-# NOINLINE bindVisualShaderNodeBooleanConstant_set_constant #-}
 
 -- | A boolean constant which represents a state of this node.
@@ -63,3 +82,10 @@ set_constant cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeBooleanConstant "set_constant"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeBooleanConstant.set_constant

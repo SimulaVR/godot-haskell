@@ -17,9 +17,14 @@ module Godot.Tools.EditorExportPlugin
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindEditorExportPlugin__export_begin #-}
 
@@ -47,6 +52,12 @@ _export_begin cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorExportPlugin "_export_begin"
+           '[PoolStringArray, Bool, GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin._export_begin
+
 {-# NOINLINE bindEditorExportPlugin__export_end #-}
 
 -- | Virtual method to be overridden by the user. Called when the export is finished.
@@ -71,6 +82,10 @@ _export_end cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorExportPlugin "_export_end" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin._export_end
+
 {-# NOINLINE bindEditorExportPlugin__export_file #-}
 
 bindEditorExportPlugin__export_file :: MethodBind
@@ -94,6 +109,12 @@ _export_file cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorExportPlugin "_export_file"
+           '[GodotString, GodotString, PoolStringArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin._export_file
+
 {-# NOINLINE bindEditorExportPlugin_add_file #-}
 
 bindEditorExportPlugin_add_file :: MethodBind
@@ -115,6 +136,12 @@ add_file cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorExportPlugin "add_file"
+           '[GodotString, PoolByteArray, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin.add_file
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_bundle_file #-}
 
@@ -139,6 +166,12 @@ add_ios_bundle_file cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorExportPlugin "add_ios_bundle_file"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin.add_ios_bundle_file
+
 {-# NOINLINE bindEditorExportPlugin_add_ios_cpp_code #-}
 
 bindEditorExportPlugin_add_ios_cpp_code :: MethodBind
@@ -161,6 +194,12 @@ add_ios_cpp_code cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorExportPlugin "add_ios_cpp_code"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin.add_ios_cpp_code
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_framework #-}
 
@@ -187,6 +226,12 @@ add_ios_framework cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorExportPlugin "add_ios_framework"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin.add_ios_framework
+
 {-# NOINLINE bindEditorExportPlugin_add_ios_linker_flags #-}
 
 bindEditorExportPlugin_add_ios_linker_flags :: MethodBind
@@ -209,6 +254,12 @@ add_ios_linker_flags cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorExportPlugin "add_ios_linker_flags"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin.add_ios_linker_flags
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_plist_content #-}
 
@@ -233,6 +284,12 @@ add_ios_plist_content cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorExportPlugin "add_ios_plist_content"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin.add_ios_plist_content
+
 {-# NOINLINE bindEditorExportPlugin_add_shared_object #-}
 
 bindEditorExportPlugin_add_shared_object :: MethodBind
@@ -256,6 +313,12 @@ add_shared_object cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorExportPlugin "add_shared_object"
+           '[GodotString, PoolStringArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorExportPlugin.add_shared_object
+
 {-# NOINLINE bindEditorExportPlugin_skip #-}
 
 bindEditorExportPlugin_skip :: MethodBind
@@ -275,3 +338,6 @@ skip cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorExportPlugin "skip" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorExportPlugin.skip

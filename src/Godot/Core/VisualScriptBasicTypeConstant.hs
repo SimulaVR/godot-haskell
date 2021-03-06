@@ -10,9 +10,29 @@ module Godot.Core.VisualScriptBasicTypeConstant
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptBasicTypeConstant "basic_type"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_basic_type, wrapDroppingSetter set_basic_type, Nothing)
+
+instance NodeProperty VisualScriptBasicTypeConstant "constant"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_basic_type_constant,
+             wrapDroppingSetter set_basic_type_constant, Nothing)
 
 {-# NOINLINE bindVisualScriptBasicTypeConstant_get_basic_type #-}
 
@@ -37,6 +57,13 @@ get_basic_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptBasicTypeConstant "get_basic_type"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptBasicTypeConstant.get_basic_type
 
 {-# NOINLINE bindVisualScriptBasicTypeConstant_get_basic_type_constant
              #-}
@@ -64,6 +91,14 @@ get_basic_type_constant cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptBasicTypeConstant
+           "get_basic_type_constant"
+           '[]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptBasicTypeConstant.get_basic_type_constant
+
 {-# NOINLINE bindVisualScriptBasicTypeConstant_set_basic_type #-}
 
 bindVisualScriptBasicTypeConstant_set_basic_type :: MethodBind
@@ -87,6 +122,13 @@ set_basic_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptBasicTypeConstant "set_basic_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptBasicTypeConstant.set_basic_type
 
 {-# NOINLINE bindVisualScriptBasicTypeConstant_set_basic_type_constant
              #-}
@@ -113,3 +155,11 @@ set_basic_type_constant cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptBasicTypeConstant
+           "set_basic_type_constant"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptBasicTypeConstant.set_basic_type_constant

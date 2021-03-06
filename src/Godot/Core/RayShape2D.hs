@@ -10,9 +10,22 @@ module Godot.Core.RayShape2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape2D()
+
+instance NodeProperty RayShape2D "length" Float 'False where
+        nodeProperty = (get_length, wrapDroppingSetter set_length, Nothing)
+
+instance NodeProperty RayShape2D "slips_on_slope" Bool 'False where
+        nodeProperty
+          = (get_slips_on_slope, wrapDroppingSetter set_slips_on_slope,
+             Nothing)
 
 {-# NOINLINE bindRayShape2D_get_length #-}
 
@@ -36,9 +49,12 @@ get_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RayShape2D "get_length" '[] (IO Float) where
+        nodeMethod = Godot.Core.RayShape2D.get_length
+
 {-# NOINLINE bindRayShape2D_get_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 bindRayShape2D_get_slips_on_slope :: MethodBind
 bindRayShape2D_get_slips_on_slope
   = unsafePerformIO $
@@ -48,7 +64,7 @@ bindRayShape2D_get_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 get_slips_on_slope ::
                      (RayShape2D :< cls, Object :< cls) => cls -> IO Bool
 get_slips_on_slope cls
@@ -59,6 +75,10 @@ get_slips_on_slope cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RayShape2D "get_slips_on_slope" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.RayShape2D.get_slips_on_slope
 
 {-# NOINLINE bindRayShape2D_set_length #-}
 
@@ -83,9 +103,12 @@ set_length cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RayShape2D "set_length" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.RayShape2D.set_length
+
 {-# NOINLINE bindRayShape2D_set_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 bindRayShape2D_set_slips_on_slope :: MethodBind
 bindRayShape2D_set_slips_on_slope
   = unsafePerformIO $
@@ -95,7 +118,7 @@ bindRayShape2D_set_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 set_slips_on_slope ::
                      (RayShape2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_slips_on_slope cls arg1
@@ -106,3 +129,7 @@ set_slips_on_slope cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RayShape2D "set_slips_on_slope" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.RayShape2D.set_slips_on_slope

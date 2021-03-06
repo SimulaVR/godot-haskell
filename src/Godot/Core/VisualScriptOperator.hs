@@ -10,9 +10,22 @@ module Godot.Core.VisualScriptOperator
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptOperator "operator" Int 'False
+         where
+        nodeProperty
+          = (get_operator, wrapDroppingSetter set_operator, Nothing)
+
+instance NodeProperty VisualScriptOperator "type" Int 'False where
+        nodeProperty = (get_typed, wrapDroppingSetter set_typed, Nothing)
 
 {-# NOINLINE bindVisualScriptOperator_get_operator #-}
 
@@ -36,6 +49,11 @@ get_operator cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptOperator "get_operator" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptOperator.get_operator
+
 {-# NOINLINE bindVisualScriptOperator_get_typed #-}
 
 bindVisualScriptOperator_get_typed :: MethodBind
@@ -57,6 +75,10 @@ get_typed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptOperator "get_typed" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptOperator.get_typed
 
 {-# NOINLINE bindVisualScriptOperator_set_operator #-}
 
@@ -80,6 +102,11 @@ set_operator cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptOperator "set_operator" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptOperator.set_operator
+
 {-# NOINLINE bindVisualScriptOperator_set_typed #-}
 
 bindVisualScriptOperator_set_typed :: MethodBind
@@ -101,3 +128,7 @@ set_typed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptOperator "set_typed" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptOperator.set_typed

@@ -11,9 +11,14 @@ module Godot.Core.PackedDataContainerRef
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindPackedDataContainerRef__is_dictionary #-}
 
@@ -36,6 +41,11 @@ _is_dictionary cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PackedDataContainerRef "_is_dictionary" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.PackedDataContainerRef._is_dictionary
 
 {-# NOINLINE bindPackedDataContainerRef__iter_get #-}
 
@@ -60,6 +70,12 @@ _iter_get cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PackedDataContainerRef "_iter_get"
+           '[GodotVariant]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.PackedDataContainerRef._iter_get
+
 {-# NOINLINE bindPackedDataContainerRef__iter_init #-}
 
 bindPackedDataContainerRef__iter_init :: MethodBind
@@ -82,6 +98,11 @@ _iter_init cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PackedDataContainerRef "_iter_init" '[Array]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.PackedDataContainerRef._iter_init
 
 {-# NOINLINE bindPackedDataContainerRef__iter_next #-}
 
@@ -106,6 +127,11 @@ _iter_next cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PackedDataContainerRef "_iter_next" '[Array]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.PackedDataContainerRef._iter_next
+
 {-# NOINLINE bindPackedDataContainerRef_size #-}
 
 bindPackedDataContainerRef_size :: MethodBind
@@ -126,3 +152,7 @@ size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PackedDataContainerRef "size" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.PackedDataContainerRef.size

@@ -18,9 +18,14 @@ module Godot.Core.AudioEffectPitchShift
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
 
 _FFT_SIZE_2048 :: Int
 _FFT_SIZE_2048 = 3
@@ -39,6 +44,23 @@ _FFT_SIZE_256 = 0
 
 _FFT_SIZE_1024 :: Int
 _FFT_SIZE_1024 = 2
+
+instance NodeProperty AudioEffectPitchShift "fft_size" Int 'False
+         where
+        nodeProperty
+          = (get_fft_size, wrapDroppingSetter set_fft_size, Nothing)
+
+instance NodeProperty AudioEffectPitchShift "oversampling" Int
+           'False
+         where
+        nodeProperty
+          = (get_oversampling, wrapDroppingSetter set_oversampling, Nothing)
+
+instance NodeProperty AudioEffectPitchShift "pitch_scale" Float
+           'False
+         where
+        nodeProperty
+          = (get_pitch_scale, wrapDroppingSetter set_pitch_scale, Nothing)
 
 {-# NOINLINE bindAudioEffectPitchShift_get_fft_size #-}
 
@@ -62,6 +84,11 @@ get_fft_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectPitchShift "get_fft_size" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioEffectPitchShift.get_fft_size
+
 {-# NOINLINE bindAudioEffectPitchShift_get_oversampling #-}
 
 bindAudioEffectPitchShift_get_oversampling :: MethodBind
@@ -83,6 +110,11 @@ get_oversampling cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectPitchShift "get_oversampling" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioEffectPitchShift.get_oversampling
 
 {-# NOINLINE bindAudioEffectPitchShift_get_pitch_scale #-}
 
@@ -108,6 +140,11 @@ get_pitch_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectPitchShift "get_pitch_scale" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectPitchShift.get_pitch_scale
+
 {-# NOINLINE bindAudioEffectPitchShift_set_fft_size #-}
 
 bindAudioEffectPitchShift_set_fft_size :: MethodBind
@@ -131,6 +168,11 @@ set_fft_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectPitchShift "set_fft_size" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectPitchShift.set_fft_size
+
 {-# NOINLINE bindAudioEffectPitchShift_set_oversampling #-}
 
 bindAudioEffectPitchShift_set_oversampling :: MethodBind
@@ -153,6 +195,11 @@ set_oversampling cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectPitchShift "set_oversampling" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectPitchShift.set_oversampling
 
 {-# NOINLINE bindAudioEffectPitchShift_set_pitch_scale #-}
 
@@ -178,3 +225,9 @@ set_pitch_scale cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectPitchShift "set_pitch_scale"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectPitchShift.set_pitch_scale

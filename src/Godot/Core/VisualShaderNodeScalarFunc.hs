@@ -40,9 +40,14 @@ module Godot.Core.VisualShaderNodeScalarFunc
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
 
 _FUNC_ASINH :: Int
 _FUNC_ASINH = 21
@@ -140,6 +145,12 @@ _FUNC_ABS = 12
 _FUNC_FLOOR :: Int
 _FUNC_FLOOR = 14
 
+instance NodeProperty VisualShaderNodeScalarFunc "function" Int
+           'False
+         where
+        nodeProperty
+          = (get_function, wrapDroppingSetter set_function, Nothing)
+
 {-# NOINLINE bindVisualShaderNodeScalarFunc_get_function #-}
 
 bindVisualShaderNodeScalarFunc_get_function :: MethodBind
@@ -161,6 +172,11 @@ get_function cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeScalarFunc "get_function" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeScalarFunc.get_function
 
 {-# NOINLINE bindVisualShaderNodeScalarFunc_set_function #-}
 
@@ -184,3 +200,9 @@ set_function cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeScalarFunc "set_function"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeScalarFunc.set_function

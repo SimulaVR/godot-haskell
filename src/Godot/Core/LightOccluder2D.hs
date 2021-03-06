@@ -11,9 +11,26 @@ module Godot.Core.LightOccluder2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
+
+instance NodeProperty LightOccluder2D "light_mask" Int 'False where
+        nodeProperty
+          = (get_occluder_light_mask,
+             wrapDroppingSetter set_occluder_light_mask, Nothing)
+
+instance NodeProperty LightOccluder2D "occluder" OccluderPolygon2D
+           'False
+         where
+        nodeProperty
+          = (get_occluder_polygon, wrapDroppingSetter set_occluder_polygon,
+             Nothing)
 
 {-# NOINLINE bindLightOccluder2D__poly_changed #-}
 
@@ -36,6 +53,10 @@ _poly_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LightOccluder2D "_poly_changed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.LightOccluder2D._poly_changed
 
 {-# NOINLINE bindLightOccluder2D_get_occluder_light_mask #-}
 
@@ -61,9 +82,14 @@ get_occluder_light_mask cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LightOccluder2D "get_occluder_light_mask" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.LightOccluder2D.get_occluder_light_mask
+
 {-# NOINLINE bindLightOccluder2D_get_occluder_polygon #-}
 
--- | The [OccluderPolygon2D] used to compute the shadow.
+-- | The @OccluderPolygon2D@ used to compute the shadow.
 bindLightOccluder2D_get_occluder_polygon :: MethodBind
 bindLightOccluder2D_get_occluder_polygon
   = unsafePerformIO $
@@ -73,7 +99,7 @@ bindLightOccluder2D_get_occluder_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [OccluderPolygon2D] used to compute the shadow.
+-- | The @OccluderPolygon2D@ used to compute the shadow.
 get_occluder_polygon ::
                        (LightOccluder2D :< cls, Object :< cls) =>
                        cls -> IO OccluderPolygon2D
@@ -85,6 +111,11 @@ get_occluder_polygon cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LightOccluder2D "get_occluder_polygon" '[]
+           (IO OccluderPolygon2D)
+         where
+        nodeMethod = Godot.Core.LightOccluder2D.get_occluder_polygon
 
 {-# NOINLINE bindLightOccluder2D_set_occluder_light_mask #-}
 
@@ -110,9 +141,15 @@ set_occluder_light_mask cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod LightOccluder2D "set_occluder_light_mask"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LightOccluder2D.set_occluder_light_mask
+
 {-# NOINLINE bindLightOccluder2D_set_occluder_polygon #-}
 
--- | The [OccluderPolygon2D] used to compute the shadow.
+-- | The @OccluderPolygon2D@ used to compute the shadow.
 bindLightOccluder2D_set_occluder_polygon :: MethodBind
 bindLightOccluder2D_set_occluder_polygon
   = unsafePerformIO $
@@ -122,7 +159,7 @@ bindLightOccluder2D_set_occluder_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [OccluderPolygon2D] used to compute the shadow.
+-- | The @OccluderPolygon2D@ used to compute the shadow.
 set_occluder_polygon ::
                        (LightOccluder2D :< cls, Object :< cls) =>
                        cls -> OccluderPolygon2D -> IO ()
@@ -134,3 +171,9 @@ set_occluder_polygon cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod LightOccluder2D "set_occluder_polygon"
+           '[OccluderPolygon2D]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.LightOccluder2D.set_occluder_polygon

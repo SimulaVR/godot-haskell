@@ -77,9 +77,14 @@ module Godot.Core.VisualScriptBuiltinFunc
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _MATH_RAD2DEG :: Int
 _MATH_RAD2DEG = 38
@@ -288,6 +293,10 @@ _MATH_ACOS = 7
 _MATH_RANDSEED :: Int
 _MATH_RANDSEED = 36
 
+instance NodeProperty VisualScriptBuiltinFunc "function" Int 'False
+         where
+        nodeProperty = (get_func, wrapDroppingSetter set_func, Nothing)
+
 {-# NOINLINE bindVisualScriptBuiltinFunc_get_func #-}
 
 bindVisualScriptBuiltinFunc_get_func :: MethodBind
@@ -309,6 +318,10 @@ get_func cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptBuiltinFunc "get_func" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptBuiltinFunc.get_func
 
 {-# NOINLINE bindVisualScriptBuiltinFunc_set_func #-}
 
@@ -332,3 +345,8 @@ set_func cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptBuiltinFunc "set_func" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptBuiltinFunc.set_func

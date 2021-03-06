@@ -21,18 +21,25 @@ module Godot.Core.ProjectSettings
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 {-# NOINLINE bindProjectSettings_add_property_info #-}
 
 -- | Adds a custom property info to a property. The dictionary must contain:
---   				- [code]name[/code]: [String] (the property's name)
---   				- [code]type[/code]: [int] (see [enum Variant.Type])
---   				- optionally [code]hint[/code]: [int] (see [enum PropertyHint]) and [code]hint_string[/code]: [String]
---   				[b]Example:[/b]
---   				[codeblock]
+--   				- @name@: @String@ (the property's name)
+--   				- @type@: @int@ (see @enum Variant.Type@)
+--   				- optionally @hint@: @int@ (see @enum PropertyHint@) and @hint_string@: @String@
+--   				__Example:__
+--   				
+--   @
+--   
 --   				ProjectSettings.set("category/property_name", 0)
 --   
 --   				var property_info = {
@@ -43,7 +50,8 @@ import Godot.Api.Types
 --   				}
 --   
 --   				ProjectSettings.add_property_info(property_info)
---   				[/codeblock]
+--   				
+--   @
 bindProjectSettings_add_property_info :: MethodBind
 bindProjectSettings_add_property_info
   = unsafePerformIO $
@@ -54,11 +62,13 @@ bindProjectSettings_add_property_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds a custom property info to a property. The dictionary must contain:
---   				- [code]name[/code]: [String] (the property's name)
---   				- [code]type[/code]: [int] (see [enum Variant.Type])
---   				- optionally [code]hint[/code]: [int] (see [enum PropertyHint]) and [code]hint_string[/code]: [String]
---   				[b]Example:[/b]
---   				[codeblock]
+--   				- @name@: @String@ (the property's name)
+--   				- @type@: @int@ (see @enum Variant.Type@)
+--   				- optionally @hint@: @int@ (see @enum PropertyHint@) and @hint_string@: @String@
+--   				__Example:__
+--   				
+--   @
+--   
 --   				ProjectSettings.set("category/property_name", 0)
 --   
 --   				var property_info = {
@@ -69,7 +79,8 @@ bindProjectSettings_add_property_info
 --   				}
 --   
 --   				ProjectSettings.add_property_info(property_info)
---   				[/codeblock]
+--   				
+--   @
 add_property_info ::
                     (ProjectSettings :< cls, Object :< cls) =>
                     cls -> Dictionary -> IO ()
@@ -81,6 +92,12 @@ add_property_info cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProjectSettings "add_property_info"
+           '[Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProjectSettings.add_property_info
 
 {-# NOINLINE bindProjectSettings_clear #-}
 
@@ -106,6 +123,10 @@ clear cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "clear" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.ProjectSettings.clear
+
 {-# NOINLINE bindProjectSettings_get_order #-}
 
 -- | Returns the order of a configuration value (influences when saved to the config file).
@@ -130,13 +151,21 @@ get_order cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "get_order" '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.get_order
+
 {-# NOINLINE bindProjectSettings_get_setting #-}
 
 -- | Returns the value of a setting.
---   				[b]Example:[/b]
---   				[codeblock]
+--   				__Example:__
+--   				
+--   @
+--   
 --   				print(ProjectSettings.get_setting("application/config/name"))
---   				[/codeblock]
+--   				
+--   @
 bindProjectSettings_get_setting :: MethodBind
 bindProjectSettings_get_setting
   = unsafePerformIO $
@@ -147,10 +176,13 @@ bindProjectSettings_get_setting
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the value of a setting.
---   				[b]Example:[/b]
---   				[codeblock]
+--   				__Example:__
+--   				
+--   @
+--   
 --   				print(ProjectSettings.get_setting("application/config/name"))
---   				[/codeblock]
+--   				
+--   @
 get_setting ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO GodotVariant
@@ -162,9 +194,14 @@ get_setting cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "get_setting" '[GodotString]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.get_setting
+
 {-# NOINLINE bindProjectSettings_globalize_path #-}
 
--- | Converts a localized path ([code]res://[/code]) to a full native OS path.
+-- | Converts a localized path (@res://@) to a full native OS path.
 bindProjectSettings_globalize_path :: MethodBind
 bindProjectSettings_globalize_path
   = unsafePerformIO $
@@ -174,7 +211,7 @@ bindProjectSettings_globalize_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Converts a localized path ([code]res://[/code]) to a full native OS path.
+-- | Converts a localized path (@res://@) to a full native OS path.
 globalize_path ::
                  (ProjectSettings :< cls, Object :< cls) =>
                  cls -> GodotString -> IO GodotString
@@ -187,9 +224,14 @@ globalize_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "globalize_path" '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.globalize_path
+
 {-# NOINLINE bindProjectSettings_has_setting #-}
 
--- | Returns [code]true[/code] if a configuration value is present.
+-- | Returns @true@ if a configuration value is present.
 bindProjectSettings_has_setting :: MethodBind
 bindProjectSettings_has_setting
   = unsafePerformIO $
@@ -199,7 +241,7 @@ bindProjectSettings_has_setting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if a configuration value is present.
+-- | Returns @true@ if a configuration value is present.
 has_setting ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO Bool
@@ -211,10 +253,15 @@ has_setting cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "has_setting" '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.has_setting
+
 {-# NOINLINE bindProjectSettings_load_resource_pack #-}
 
--- | Loads the contents of the .pck or .zip file specified by [code]pack[/code] into the resource filesystem ([code]res://[/code]). Returns [code]true[/code] on success.
---   				[b]Note:[/b] If a file from [code]pack[/code] shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from [code]pack[/code] unless [code]replace_files[/code] is set to [code]false[/code].
+-- | Loads the contents of the .pck or .zip file specified by @pack@ into the resource filesystem (@res://@). Returns @true@ on success.
+--   				__Note:__ If a file from @pack@ shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from @pack@ unless @replace_files@ is set to @false@.
 bindProjectSettings_load_resource_pack :: MethodBind
 bindProjectSettings_load_resource_pack
   = unsafePerformIO $
@@ -224,13 +271,14 @@ bindProjectSettings_load_resource_pack
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads the contents of the .pck or .zip file specified by [code]pack[/code] into the resource filesystem ([code]res://[/code]). Returns [code]true[/code] on success.
---   				[b]Note:[/b] If a file from [code]pack[/code] shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from [code]pack[/code] unless [code]replace_files[/code] is set to [code]false[/code].
+-- | Loads the contents of the .pck or .zip file specified by @pack@ into the resource filesystem (@res://@). Returns @true@ on success.
+--   				__Note:__ If a file from @pack@ shares the same path as a file already in the resource filesystem, any attempts to load that file will use the file from @pack@ unless @replace_files@ is set to @false@.
 load_resource_pack ::
                      (ProjectSettings :< cls, Object :< cls) =>
-                     cls -> GodotString -> Bool -> IO Bool
+                     cls -> GodotString -> Maybe Bool -> IO Bool
 load_resource_pack cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool True) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindProjectSettings_load_resource_pack
            (upcast cls)
@@ -238,9 +286,15 @@ load_resource_pack cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "load_resource_pack"
+           '[GodotString, Maybe Bool]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.load_resource_pack
+
 {-# NOINLINE bindProjectSettings_localize_path #-}
 
--- | Convert a path to a localized path ([code]res://[/code] path).
+-- | Convert a path to a localized path (@res://@ path).
 bindProjectSettings_localize_path :: MethodBind
 bindProjectSettings_localize_path
   = unsafePerformIO $
@@ -250,7 +304,7 @@ bindProjectSettings_localize_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Convert a path to a localized path ([code]res://[/code] path).
+-- | Convert a path to a localized path (@res://@ path).
 localize_path ::
                 (ProjectSettings :< cls, Object :< cls) =>
                 cls -> GodotString -> IO GodotString
@@ -263,9 +317,14 @@ localize_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "localize_path" '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.localize_path
+
 {-# NOINLINE bindProjectSettings_property_can_revert #-}
 
--- | Returns [code]true[/code] if the specified property exists and its initial value differs from the current value.
+-- | Returns @true@ if the specified property exists and its initial value differs from the current value.
 bindProjectSettings_property_can_revert :: MethodBind
 bindProjectSettings_property_can_revert
   = unsafePerformIO $
@@ -275,7 +334,7 @@ bindProjectSettings_property_can_revert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the specified property exists and its initial value differs from the current value.
+-- | Returns @true@ if the specified property exists and its initial value differs from the current value.
 property_can_revert ::
                       (ProjectSettings :< cls, Object :< cls) =>
                       cls -> GodotString -> IO Bool
@@ -288,9 +347,15 @@ property_can_revert cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "property_can_revert"
+           '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.property_can_revert
+
 {-# NOINLINE bindProjectSettings_property_get_revert #-}
 
--- | Returns the specified property's initial value. Returns [code]null[/code] if the property does not exist.
+-- | Returns the specified property's initial value. Returns @null@ if the property does not exist.
 bindProjectSettings_property_get_revert :: MethodBind
 bindProjectSettings_property_get_revert
   = unsafePerformIO $
@@ -300,7 +365,7 @@ bindProjectSettings_property_get_revert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the specified property's initial value. Returns [code]null[/code] if the property does not exist.
+-- | Returns the specified property's initial value. Returns @null@ if the property does not exist.
 property_get_revert ::
                       (ProjectSettings :< cls, Object :< cls) =>
                       cls -> GodotString -> IO GodotVariant
@@ -313,9 +378,15 @@ property_get_revert cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "property_get_revert"
+           '[GodotString]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.property_get_revert
+
 {-# NOINLINE bindProjectSettings_save #-}
 
--- | Saves the configuration to the [code]project.godot[/code] file.
+-- | Saves the configuration to the @project.godot@ file.
 bindProjectSettings_save :: MethodBind
 bindProjectSettings_save
   = unsafePerformIO $
@@ -325,7 +396,7 @@ bindProjectSettings_save
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the configuration to the [code]project.godot[/code] file.
+-- | Saves the configuration to the @project.godot@ file.
 save :: (ProjectSettings :< cls, Object :< cls) => cls -> IO Int
 save cls
   = withVariantArray []
@@ -334,9 +405,12 @@ save cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "save" '[] (IO Int) where
+        nodeMethod = Godot.Core.ProjectSettings.save
+
 {-# NOINLINE bindProjectSettings_save_custom #-}
 
--- | Saves the configuration to a custom file. The file extension must be [code].godot[/code] (to save in text-based [ConfigFile] format) or [code].binary[/code] (to save in binary format).
+-- | Saves the configuration to a custom file. The file extension must be @.godot@ (to save in text-based @ConfigFile@ format) or @.binary@ (to save in binary format).
 bindProjectSettings_save_custom :: MethodBind
 bindProjectSettings_save_custom
   = unsafePerformIO $
@@ -346,7 +420,7 @@ bindProjectSettings_save_custom
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the configuration to a custom file. The file extension must be [code].godot[/code] (to save in text-based [ConfigFile] format) or [code].binary[/code] (to save in binary format).
+-- | Saves the configuration to a custom file. The file extension must be @.godot@ (to save in text-based @ConfigFile@ format) or @.binary@ (to save in binary format).
 save_custom ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO Int
@@ -357,6 +431,11 @@ save_custom cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProjectSettings "save_custom" '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.ProjectSettings.save_custom
 
 {-# NOINLINE bindProjectSettings_set_initial_value #-}
 
@@ -383,6 +462,12 @@ set_initial_value cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "set_initial_value"
+           '[GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProjectSettings.set_initial_value
+
 {-# NOINLINE bindProjectSettings_set_order #-}
 
 -- | Sets the order of a configuration value (influences when saved to the config file).
@@ -407,13 +492,21 @@ set_order cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProjectSettings "set_order" '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProjectSettings.set_order
+
 {-# NOINLINE bindProjectSettings_set_setting #-}
 
 -- | Sets the value of a setting.
---   				[b]Example:[/b]
---   				[codeblock]
+--   				__Example:__
+--   				
+--   @
+--   
 --   				ProjectSettings.set_setting("application/config/name", "Example")
---   				[/codeblock]
+--   				
+--   @
 bindProjectSettings_set_setting :: MethodBind
 bindProjectSettings_set_setting
   = unsafePerformIO $
@@ -424,10 +517,13 @@ bindProjectSettings_set_setting
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the value of a setting.
---   				[b]Example:[/b]
---   				[codeblock]
+--   				__Example:__
+--   				
+--   @
+--   
 --   				ProjectSettings.set_setting("application/config/name", "Example")
---   				[/codeblock]
+--   				
+--   @
 set_setting ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> GodotVariant -> IO ()
@@ -438,3 +534,9 @@ set_setting cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProjectSettings "set_setting"
+           '[GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProjectSettings.set_setting

@@ -62,7 +62,6 @@ executables:
 
 library:
   source-dirs: src
-  generated-other-modules: Paths_godot_haskell
   build-tools:
   - c2hs
   include-dirs:

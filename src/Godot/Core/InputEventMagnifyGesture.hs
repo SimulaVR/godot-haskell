@@ -8,9 +8,19 @@ module Godot.Core.InputEventMagnifyGesture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEventGesture()
+
+instance NodeProperty InputEventMagnifyGesture "factor" Float
+           'False
+         where
+        nodeProperty = (get_factor, wrapDroppingSetter set_factor, Nothing)
 
 {-# NOINLINE bindInputEventMagnifyGesture_get_factor #-}
 
@@ -34,6 +44,11 @@ get_factor cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMagnifyGesture "get_factor" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.InputEventMagnifyGesture.get_factor
+
 {-# NOINLINE bindInputEventMagnifyGesture_set_factor #-}
 
 bindInputEventMagnifyGesture_set_factor :: MethodBind
@@ -56,3 +71,8 @@ set_factor cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMagnifyGesture "set_factor" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMagnifyGesture.set_factor

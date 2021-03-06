@@ -14,9 +14,27 @@ module Godot.Core.PrimitiveMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Mesh()
+
+instance NodeProperty PrimitiveMesh "custom_aabb" Aabb 'False where
+        nodeProperty
+          = (get_custom_aabb, wrapDroppingSetter set_custom_aabb, Nothing)
+
+instance NodeProperty PrimitiveMesh "flip_faces" Bool 'False where
+        nodeProperty
+          = (get_flip_faces, wrapDroppingSetter set_flip_faces, Nothing)
+
+instance NodeProperty PrimitiveMesh "material" Material 'False
+         where
+        nodeProperty
+          = (get_material, wrapDroppingSetter set_material, Nothing)
 
 {-# NOINLINE bindPrimitiveMesh__update #-}
 
@@ -38,9 +56,12 @@ _update cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrimitiveMesh "_update" '[] (IO ()) where
+        nodeMethod = Godot.Core.PrimitiveMesh._update
+
 {-# NOINLINE bindPrimitiveMesh_get_custom_aabb #-}
 
--- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
 bindPrimitiveMesh_get_custom_aabb :: MethodBind
 bindPrimitiveMesh_get_custom_aabb
   = unsafePerformIO $
@@ -50,7 +71,7 @@ bindPrimitiveMesh_get_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
 get_custom_aabb ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Aabb
 get_custom_aabb cls
@@ -62,10 +83,14 @@ get_custom_aabb cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrimitiveMesh "get_custom_aabb" '[] (IO Aabb)
+         where
+        nodeMethod = Godot.Core.PrimitiveMesh.get_custom_aabb
+
 {-# NOINLINE bindPrimitiveMesh_get_flip_faces #-}
 
 -- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
---   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
+--   			This gives the same result as using @SpatialMaterial.CULL_BACK@ in @SpatialMaterial.params_cull_mode@.
 bindPrimitiveMesh_get_flip_faces :: MethodBind
 bindPrimitiveMesh_get_flip_faces
   = unsafePerformIO $
@@ -76,7 +101,7 @@ bindPrimitiveMesh_get_flip_faces
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
---   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
+--   			This gives the same result as using @SpatialMaterial.CULL_BACK@ in @SpatialMaterial.params_cull_mode@.
 get_flip_faces ::
                  (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Bool
 get_flip_faces cls
@@ -88,9 +113,13 @@ get_flip_faces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrimitiveMesh "get_flip_faces" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.PrimitiveMesh.get_flip_faces
+
 {-# NOINLINE bindPrimitiveMesh_get_material #-}
 
--- | The current [Material] of the primitive mesh.
+-- | The current @Material@ of the primitive mesh.
 bindPrimitiveMesh_get_material :: MethodBind
 bindPrimitiveMesh_get_material
   = unsafePerformIO $
@@ -100,7 +129,7 @@ bindPrimitiveMesh_get_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The current [Material] of the primitive mesh.
+-- | The current @Material@ of the primitive mesh.
 get_material ::
                (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Material
 get_material cls
@@ -111,14 +140,21 @@ get_material cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrimitiveMesh "get_material" '[] (IO Material)
+         where
+        nodeMethod = Godot.Core.PrimitiveMesh.get_material
+
 {-# NOINLINE bindPrimitiveMesh_get_mesh_arrays #-}
 
--- | Returns mesh arrays used to constitute surface of [Mesh]. The result can be passed to [method ArrayMesh.add_surface_from_arrays] to create a new surface. For example:
---   				[codeblock]
+-- | Returns mesh arrays used to constitute surface of @Mesh@. The result can be passed to @method ArrayMesh.add_surface_from_arrays@ to create a new surface. For example:
+--   				
+--   @
+--   
 --   				var c := CylinderMesh.new()
 --   				var arr_mesh := ArrayMesh.new()
 --   				arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, c.get_mesh_arrays())
---   				[/codeblock]
+--   				
+--   @
 bindPrimitiveMesh_get_mesh_arrays :: MethodBind
 bindPrimitiveMesh_get_mesh_arrays
   = unsafePerformIO $
@@ -128,12 +164,15 @@ bindPrimitiveMesh_get_mesh_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns mesh arrays used to constitute surface of [Mesh]. The result can be passed to [method ArrayMesh.add_surface_from_arrays] to create a new surface. For example:
---   				[codeblock]
+-- | Returns mesh arrays used to constitute surface of @Mesh@. The result can be passed to @method ArrayMesh.add_surface_from_arrays@ to create a new surface. For example:
+--   				
+--   @
+--   
 --   				var c := CylinderMesh.new()
 --   				var arr_mesh := ArrayMesh.new()
 --   				arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, c.get_mesh_arrays())
---   				[/codeblock]
+--   				
+--   @
 get_mesh_arrays ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Array
 get_mesh_arrays cls
@@ -145,9 +184,13 @@ get_mesh_arrays cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrimitiveMesh "get_mesh_arrays" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.PrimitiveMesh.get_mesh_arrays
+
 {-# NOINLINE bindPrimitiveMesh_set_custom_aabb #-}
 
--- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
 bindPrimitiveMesh_set_custom_aabb :: MethodBind
 bindPrimitiveMesh_set_custom_aabb
   = unsafePerformIO $
@@ -157,7 +200,7 @@ bindPrimitiveMesh_set_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the [AABB] with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
 set_custom_aabb ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> Aabb -> IO ()
 set_custom_aabb cls arg1
@@ -169,10 +212,14 @@ set_custom_aabb cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrimitiveMesh "set_custom_aabb" '[Aabb] (IO ())
+         where
+        nodeMethod = Godot.Core.PrimitiveMesh.set_custom_aabb
+
 {-# NOINLINE bindPrimitiveMesh_set_flip_faces #-}
 
 -- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
---   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
+--   			This gives the same result as using @SpatialMaterial.CULL_BACK@ in @SpatialMaterial.params_cull_mode@.
 bindPrimitiveMesh_set_flip_faces :: MethodBind
 bindPrimitiveMesh_set_flip_faces
   = unsafePerformIO $
@@ -183,7 +230,7 @@ bindPrimitiveMesh_set_flip_faces
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If set, the order of the vertices in each triangle are reversed resulting in the backside of the mesh being drawn.
---   			This gives the same result as using [constant SpatialMaterial.CULL_BACK] in [member SpatialMaterial.params_cull_mode].
+--   			This gives the same result as using @SpatialMaterial.CULL_BACK@ in @SpatialMaterial.params_cull_mode@.
 set_flip_faces ::
                  (PrimitiveMesh :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_faces cls arg1
@@ -195,9 +242,13 @@ set_flip_faces cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrimitiveMesh "set_flip_faces" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.PrimitiveMesh.set_flip_faces
+
 {-# NOINLINE bindPrimitiveMesh_set_material #-}
 
--- | The current [Material] of the primitive mesh.
+-- | The current @Material@ of the primitive mesh.
 bindPrimitiveMesh_set_material :: MethodBind
 bindPrimitiveMesh_set_material
   = unsafePerformIO $
@@ -207,7 +258,7 @@ bindPrimitiveMesh_set_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The current [Material] of the primitive mesh.
+-- | The current @Material@ of the primitive mesh.
 set_material ::
                (PrimitiveMesh :< cls, Object :< cls) => cls -> Material -> IO ()
 set_material cls arg1
@@ -217,3 +268,8 @@ set_material cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PrimitiveMesh "set_material" '[Material]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PrimitiveMesh.set_material

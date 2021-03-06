@@ -8,9 +8,21 @@ module Godot.Core.VisualScriptEngineSingleton
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptEngineSingleton "constant"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_singleton, wrapDroppingSetter set_singleton, Nothing)
 
 {-# NOINLINE bindVisualScriptEngineSingleton_get_singleton #-}
 
@@ -36,6 +48,11 @@ get_singleton cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptEngineSingleton "get_singleton" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptEngineSingleton.get_singleton
+
 {-# NOINLINE bindVisualScriptEngineSingleton_set_singleton #-}
 
 bindVisualScriptEngineSingleton_set_singleton :: MethodBind
@@ -59,3 +76,9 @@ set_singleton cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptEngineSingleton "set_singleton"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptEngineSingleton.set_singleton

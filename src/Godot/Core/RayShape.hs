@@ -10,9 +10,22 @@ module Godot.Core.RayShape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape()
+
+instance NodeProperty RayShape "length" Float 'False where
+        nodeProperty = (get_length, wrapDroppingSetter set_length, Nothing)
+
+instance NodeProperty RayShape "slips_on_slope" Bool 'False where
+        nodeProperty
+          = (get_slips_on_slope, wrapDroppingSetter set_slips_on_slope,
+             Nothing)
 
 {-# NOINLINE bindRayShape_get_length #-}
 
@@ -35,9 +48,12 @@ get_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RayShape "get_length" '[] (IO Float) where
+        nodeMethod = Godot.Core.RayShape.get_length
+
 {-# NOINLINE bindRayShape_get_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 bindRayShape_get_slips_on_slope :: MethodBind
 bindRayShape_get_slips_on_slope
   = unsafePerformIO $
@@ -47,7 +63,7 @@ bindRayShape_get_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 get_slips_on_slope ::
                      (RayShape :< cls, Object :< cls) => cls -> IO Bool
 get_slips_on_slope cls
@@ -57,6 +73,10 @@ get_slips_on_slope cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RayShape "get_slips_on_slope" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.RayShape.get_slips_on_slope
 
 {-# NOINLINE bindRayShape_set_length #-}
 
@@ -80,9 +100,12 @@ set_length cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RayShape "set_length" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.RayShape.set_length
+
 {-# NOINLINE bindRayShape_set_slips_on_slope #-}
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 bindRayShape_set_slips_on_slope :: MethodBind
 bindRayShape_set_slips_on_slope
   = unsafePerformIO $
@@ -92,7 +115,7 @@ bindRayShape_set_slips_on_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allow the shape to return the correct normal.
+-- | If @true@, allow the shape to return the correct normal.
 set_slips_on_slope ::
                      (RayShape :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_slips_on_slope cls arg1
@@ -102,3 +125,7 @@ set_slips_on_slope cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RayShape "set_slips_on_slope" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.RayShape.set_slips_on_slope

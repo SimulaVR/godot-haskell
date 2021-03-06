@@ -9,9 +9,14 @@ module Godot.Tools.VisualScriptEditor
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 sig_custom_nodes_updated ::
                          Godot.Internal.Dispatch.Signal VisualScriptEditor
@@ -43,6 +48,12 @@ add_custom_node cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptEditor "add_custom_node"
+           '[GodotString, GodotString, Script]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.VisualScriptEditor.add_custom_node
+
 {-# NOINLINE bindVisualScriptEditor_remove_custom_node #-}
 
 bindVisualScriptEditor_remove_custom_node :: MethodBind
@@ -65,3 +76,9 @@ remove_custom_node cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptEditor "remove_custom_node"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.VisualScriptEditor.remove_custom_node

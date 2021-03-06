@@ -16,9 +16,14 @@ module Godot.Core.JSONRPC
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 _METHOD_NOT_FOUND :: Int
 _METHOD_NOT_FOUND = -32601
@@ -57,6 +62,12 @@ make_notification cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONRPC "make_notification"
+           '[GodotString, GodotVariant]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.JSONRPC.make_notification
+
 {-# NOINLINE bindJSONRPC_make_request #-}
 
 bindJSONRPC_make_request :: MethodBind
@@ -77,6 +88,12 @@ make_request cls arg1 arg2 arg3
          godot_method_bind_call bindJSONRPC_make_request (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod JSONRPC "make_request"
+           '[GodotString, GodotVariant, GodotVariant]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.JSONRPC.make_request
 
 {-# NOINLINE bindJSONRPC_make_response #-}
 
@@ -100,6 +117,12 @@ make_response cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONRPC "make_response"
+           '[GodotVariant, GodotVariant]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.JSONRPC.make_response
+
 {-# NOINLINE bindJSONRPC_make_response_error #-}
 
 bindJSONRPC_make_response_error :: MethodBind
@@ -113,14 +136,21 @@ bindJSONRPC_make_response_error
 
 make_response_error ::
                       (JSONRPC :< cls, Object :< cls) =>
-                      cls -> Int -> GodotString -> GodotVariant -> IO Dictionary
+                      cls -> Int -> GodotString -> Maybe GodotVariant -> IO Dictionary
 make_response_error cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, maybe VariantNil toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindJSONRPC_make_response_error (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod JSONRPC "make_response_error"
+           '[Int, GodotString, Maybe GodotVariant]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.JSONRPC.make_response_error
 
 {-# NOINLINE bindJSONRPC_process_action #-}
 
@@ -135,14 +165,21 @@ bindJSONRPC_process_action
 
 process_action ::
                  (JSONRPC :< cls, Object :< cls) =>
-                 cls -> GodotVariant -> Bool -> IO GodotVariant
+                 cls -> GodotVariant -> Maybe Bool -> IO GodotVariant
 process_action cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool False) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindJSONRPC_process_action (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod JSONRPC "process_action"
+           '[GodotVariant, Maybe Bool]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.JSONRPC.process_action
 
 {-# NOINLINE bindJSONRPC_process_string #-}
 
@@ -166,6 +203,11 @@ process_string cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONRPC "process_string" '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.JSONRPC.process_string
+
 {-# NOINLINE bindJSONRPC_set_scope #-}
 
 bindJSONRPC_set_scope :: MethodBind
@@ -186,3 +228,8 @@ set_scope cls arg1 arg2
          godot_method_bind_call bindJSONRPC_set_scope (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod JSONRPC "set_scope" '[GodotString, Object]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.JSONRPC.set_scope

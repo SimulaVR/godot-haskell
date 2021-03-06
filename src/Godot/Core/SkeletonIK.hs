@@ -29,9 +29,63 @@ module Godot.Core.SkeletonIK
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
+
+instance NodeProperty SkeletonIK "interpolation" Float 'False where
+        nodeProperty
+          = (get_interpolation, wrapDroppingSetter set_interpolation,
+             Nothing)
+
+instance NodeProperty SkeletonIK "magnet" Vector3 'False where
+        nodeProperty
+          = (get_magnet_position, wrapDroppingSetter set_magnet_position,
+             Nothing)
+
+instance NodeProperty SkeletonIK "max_iterations" Int 'False where
+        nodeProperty
+          = (get_max_iterations, wrapDroppingSetter set_max_iterations,
+             Nothing)
+
+instance NodeProperty SkeletonIK "min_distance" Float 'False where
+        nodeProperty
+          = (get_min_distance, wrapDroppingSetter set_min_distance, Nothing)
+
+instance NodeProperty SkeletonIK "override_tip_basis" Bool 'False
+         where
+        nodeProperty
+          = (is_override_tip_basis,
+             wrapDroppingSetter set_override_tip_basis, Nothing)
+
+instance NodeProperty SkeletonIK "root_bone" GodotString 'False
+         where
+        nodeProperty
+          = (get_root_bone, wrapDroppingSetter set_root_bone, Nothing)
+
+instance NodeProperty SkeletonIK "target" Transform 'False where
+        nodeProperty
+          = (get_target_transform, wrapDroppingSetter set_target_transform,
+             Nothing)
+
+instance NodeProperty SkeletonIK "target_node" NodePath 'False
+         where
+        nodeProperty
+          = (get_target_node, wrapDroppingSetter set_target_node, Nothing)
+
+instance NodeProperty SkeletonIK "tip_bone" GodotString 'False
+         where
+        nodeProperty
+          = (get_tip_bone, wrapDroppingSetter set_tip_bone, Nothing)
+
+instance NodeProperty SkeletonIK "use_magnet" Bool 'False where
+        nodeProperty
+          = (is_using_magnet, wrapDroppingSetter set_use_magnet, Nothing)
 
 {-# NOINLINE bindSkeletonIK_get_interpolation #-}
 
@@ -55,6 +109,10 @@ get_interpolation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "get_interpolation" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_interpolation
+
 {-# NOINLINE bindSkeletonIK_get_magnet_position #-}
 
 bindSkeletonIK_get_magnet_position :: MethodBind
@@ -76,6 +134,11 @@ get_magnet_position cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "get_magnet_position" '[]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_magnet_position
 
 {-# NOINLINE bindSkeletonIK_get_max_iterations #-}
 
@@ -99,6 +162,10 @@ get_max_iterations cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "get_max_iterations" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_max_iterations
+
 {-# NOINLINE bindSkeletonIK_get_min_distance #-}
 
 bindSkeletonIK_get_min_distance :: MethodBind
@@ -119,6 +186,10 @@ get_min_distance cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "get_min_distance" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_min_distance
 
 {-# NOINLINE bindSkeletonIK_get_parent_skeleton #-}
 
@@ -142,6 +213,11 @@ get_parent_skeleton cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "get_parent_skeleton" '[]
+           (IO Skeleton)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_parent_skeleton
+
 {-# NOINLINE bindSkeletonIK_get_root_bone #-}
 
 bindSkeletonIK_get_root_bone :: MethodBind
@@ -163,6 +239,10 @@ get_root_bone cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "get_root_bone" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_root_bone
+
 {-# NOINLINE bindSkeletonIK_get_target_node #-}
 
 bindSkeletonIK_get_target_node :: MethodBind
@@ -183,6 +263,10 @@ get_target_node cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "get_target_node" '[] (IO NodePath)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_target_node
 
 {-# NOINLINE bindSkeletonIK_get_target_transform #-}
 
@@ -206,6 +290,11 @@ get_target_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "get_target_transform" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_target_transform
+
 {-# NOINLINE bindSkeletonIK_get_tip_bone #-}
 
 bindSkeletonIK_get_tip_bone :: MethodBind
@@ -226,6 +315,10 @@ get_tip_bone cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "get_tip_bone" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.get_tip_bone
 
 {-# NOINLINE bindSkeletonIK_is_override_tip_basis #-}
 
@@ -249,6 +342,11 @@ is_override_tip_basis cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "is_override_tip_basis" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.is_override_tip_basis
+
 {-# NOINLINE bindSkeletonIK_is_running #-}
 
 bindSkeletonIK_is_running :: MethodBind
@@ -268,6 +366,9 @@ is_running cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "is_running" '[] (IO Bool) where
+        nodeMethod = Godot.Core.SkeletonIK.is_running
 
 {-# NOINLINE bindSkeletonIK_is_using_magnet #-}
 
@@ -289,6 +390,10 @@ is_using_magnet cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "is_using_magnet" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.SkeletonIK.is_using_magnet
 
 {-# NOINLINE bindSkeletonIK_set_interpolation #-}
 
@@ -312,6 +417,10 @@ set_interpolation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "set_interpolation" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_interpolation
+
 {-# NOINLINE bindSkeletonIK_set_magnet_position #-}
 
 bindSkeletonIK_set_magnet_position :: MethodBind
@@ -333,6 +442,11 @@ set_magnet_position cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "set_magnet_position" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_magnet_position
 
 {-# NOINLINE bindSkeletonIK_set_max_iterations #-}
 
@@ -356,6 +470,10 @@ set_max_iterations cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "set_max_iterations" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_max_iterations
+
 {-# NOINLINE bindSkeletonIK_set_min_distance #-}
 
 bindSkeletonIK_set_min_distance :: MethodBind
@@ -376,6 +494,10 @@ set_min_distance cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "set_min_distance" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_min_distance
 
 {-# NOINLINE bindSkeletonIK_set_override_tip_basis #-}
 
@@ -399,6 +521,11 @@ set_override_tip_basis cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "set_override_tip_basis" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_override_tip_basis
+
 {-# NOINLINE bindSkeletonIK_set_root_bone #-}
 
 bindSkeletonIK_set_root_bone :: MethodBind
@@ -420,6 +547,11 @@ set_root_bone cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "set_root_bone" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_root_bone
+
 {-# NOINLINE bindSkeletonIK_set_target_node #-}
 
 bindSkeletonIK_set_target_node :: MethodBind
@@ -440,6 +572,11 @@ set_target_node cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "set_target_node" '[NodePath]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_target_node
 
 {-# NOINLINE bindSkeletonIK_set_target_transform #-}
 
@@ -463,6 +600,11 @@ set_target_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "set_target_transform" '[Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_target_transform
+
 {-# NOINLINE bindSkeletonIK_set_tip_bone #-}
 
 bindSkeletonIK_set_tip_bone :: MethodBind
@@ -483,6 +625,11 @@ set_tip_bone cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "set_tip_bone" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_tip_bone
 
 {-# NOINLINE bindSkeletonIK_set_use_magnet #-}
 
@@ -505,6 +652,10 @@ set_use_magnet cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkeletonIK "set_use_magnet" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.SkeletonIK.set_use_magnet
+
 {-# NOINLINE bindSkeletonIK_start #-}
 
 bindSkeletonIK_start :: MethodBind
@@ -516,12 +667,16 @@ bindSkeletonIK_start
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
-start :: (SkeletonIK :< cls, Object :< cls) => cls -> Bool -> IO ()
+start ::
+        (SkeletonIK :< cls, Object :< cls) => cls -> Maybe Bool -> IO ()
 start cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantBool False) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSkeletonIK_start (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "start" '[Maybe Bool] (IO ()) where
+        nodeMethod = Godot.Core.SkeletonIK.start
 
 {-# NOINLINE bindSkeletonIK_stop #-}
 
@@ -540,3 +695,6 @@ stop cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSkeletonIK_stop (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkeletonIK "stop" '[] (IO ()) where
+        nodeMethod = Godot.Core.SkeletonIK.stop

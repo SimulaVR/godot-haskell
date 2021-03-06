@@ -12,13 +12,28 @@ module Godot.Core.InputEventScreenTouch
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEvent()
+
+instance NodeProperty InputEventScreenTouch "index" Int 'False
+         where
+        nodeProperty = (get_index, wrapDroppingSetter set_index, Nothing)
+
+instance NodeProperty InputEventScreenTouch "position" Vector2
+           'False
+         where
+        nodeProperty
+          = (get_position, wrapDroppingSetter set_position, Nothing)
 
 {-# NOINLINE bindInputEventScreenTouch_is_pressed #-}
 
--- | If [code]true[/code], the touch's state is pressed. If [code]false[/code], the touch's state is released.
+-- | If @true@, the touch's state is pressed. If @false@, the touch's state is released.
 bindInputEventScreenTouch_is_pressed :: MethodBind
 bindInputEventScreenTouch_is_pressed
   = unsafePerformIO $
@@ -28,7 +43,7 @@ bindInputEventScreenTouch_is_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the touch's state is pressed. If [code]false[/code], the touch's state is released.
+-- | If @true@, the touch's state is pressed. If @false@, the touch's state is released.
 is_pressed ::
              (InputEventScreenTouch :< cls, Object :< cls) => cls -> IO Bool
 is_pressed cls
@@ -39,6 +54,16 @@ is_pressed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventScreenTouch "is_pressed" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.InputEventScreenTouch.is_pressed
+
+instance NodeProperty InputEventScreenTouch "pressed" Bool 'False
+         where
+        nodeProperty
+          = (is_pressed, wrapDroppingSetter set_pressed, Nothing)
 
 {-# NOINLINE bindInputEventScreenTouch_get_index #-}
 
@@ -64,6 +89,10 @@ get_index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenTouch "get_index" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventScreenTouch.get_index
+
 {-# NOINLINE bindInputEventScreenTouch_get_position #-}
 
 -- | The touch position.
@@ -87,6 +116,11 @@ get_position cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventScreenTouch "get_position" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventScreenTouch.get_position
 
 {-# NOINLINE bindInputEventScreenTouch_set_index #-}
 
@@ -113,6 +147,11 @@ set_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenTouch "set_index" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventScreenTouch.set_index
+
 {-# NOINLINE bindInputEventScreenTouch_set_position #-}
 
 -- | The touch position.
@@ -138,9 +177,14 @@ set_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenTouch "set_position" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventScreenTouch.set_position
+
 {-# NOINLINE bindInputEventScreenTouch_set_pressed #-}
 
--- | If [code]true[/code], the touch's state is pressed. If [code]false[/code], the touch's state is released.
+-- | If @true@, the touch's state is pressed. If @false@, the touch's state is released.
 bindInputEventScreenTouch_set_pressed :: MethodBind
 bindInputEventScreenTouch_set_pressed
   = unsafePerformIO $
@@ -150,7 +194,7 @@ bindInputEventScreenTouch_set_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the touch's state is pressed. If [code]false[/code], the touch's state is released.
+-- | If @true@, the touch's state is pressed. If @false@, the touch's state is released.
 set_pressed ::
               (InputEventScreenTouch :< cls, Object :< cls) =>
               cls -> Bool -> IO ()
@@ -162,3 +206,8 @@ set_pressed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventScreenTouch "set_pressed" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventScreenTouch.set_pressed

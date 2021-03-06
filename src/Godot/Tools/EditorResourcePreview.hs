@@ -13,11 +13,16 @@ module Godot.Tools.EditorResourcePreview
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
 
--- | Emitted if a preview was invalidated (changed). [code]path[/code] corresponds to the path of the preview.
+-- | Emitted if a preview was invalidated (changed). @path@ corresponds to the path of the preview.
 sig_preview_invalidated ::
                         Godot.Internal.Dispatch.Signal EditorResourcePreview
 sig_preview_invalidated
@@ -53,6 +58,12 @@ _preview_ready cls arg1 arg2 arg3 arg4 arg5 arg6
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorResourcePreview "_preview_ready"
+           '[GodotString, Texture, Texture, Int, GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorResourcePreview._preview_ready
+
 {-# NOINLINE bindEditorResourcePreview_add_preview_generator #-}
 
 -- | Create an own, custom preview generator.
@@ -79,6 +90,13 @@ add_preview_generator cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorResourcePreview "add_preview_generator"
+           '[EditorResourcePreviewGenerator]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorResourcePreview.add_preview_generator
+
 {-# NOINLINE bindEditorResourcePreview_check_for_invalidation #-}
 
 -- | Check if the resource changed, if so, it will be invalidated and the corresponding signal emitted.
@@ -104,6 +122,13 @@ check_for_invalidation cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorResourcePreview "check_for_invalidation"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorResourcePreview.check_for_invalidation
 
 {-# NOINLINE bindEditorResourcePreview_queue_edited_resource_preview
              #-}
@@ -134,6 +159,14 @@ queue_edited_resource_preview cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorResourcePreview
+           "queue_edited_resource_preview"
+           '[Resource, Object, GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorResourcePreview.queue_edited_resource_preview
+
 {-# NOINLINE bindEditorResourcePreview_queue_resource_preview #-}
 
 -- | Queue a resource file for preview (using a path). Once the preview is ready, your receiver.receiver_func will be called either containing the preview texture or an empty texture (if no preview was possible). Callback must have the format: (path,texture,userdata). Userdata can be anything.
@@ -162,6 +195,13 @@ queue_resource_preview cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorResourcePreview "queue_resource_preview"
+           '[GodotString, Object, GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorResourcePreview.queue_resource_preview
+
 {-# NOINLINE bindEditorResourcePreview_remove_preview_generator #-}
 
 -- | Removes a custom preview generator.
@@ -187,3 +227,11 @@ remove_preview_generator cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorResourcePreview
+           "remove_preview_generator"
+           '[EditorResourcePreviewGenerator]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorResourcePreview.remove_preview_generator

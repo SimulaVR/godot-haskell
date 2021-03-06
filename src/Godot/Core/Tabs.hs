@@ -37,9 +37,14 @@ module Godot.Core.Tabs
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 _ALIGN_RIGHT :: Int
 _ALIGN_RIGHT = 2
@@ -65,7 +70,7 @@ _ALIGN_LEFT = 0
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
 
--- | Emitted when the active tab is rearranged via mouse drag. See [member drag_to_rearrange_enabled].
+-- | Emitted when the active tab is rearranged via mouse drag. See @drag_to_rearrange_enabled@.
 sig_reposition_active_tab_request ::
                                   Godot.Internal.Dispatch.Signal Tabs
 sig_reposition_active_tab_request
@@ -104,6 +109,31 @@ sig_tab_hover = Godot.Internal.Dispatch.Signal "tab_hover"
 
 instance NodeSignal Tabs "tab_hover" '[Int]
 
+instance NodeProperty Tabs "current_tab" Int 'False where
+        nodeProperty
+          = (get_current_tab, wrapDroppingSetter set_current_tab, Nothing)
+
+instance NodeProperty Tabs "drag_to_rearrange_enabled" Bool 'False
+         where
+        nodeProperty
+          = (get_drag_to_rearrange_enabled,
+             wrapDroppingSetter set_drag_to_rearrange_enabled, Nothing)
+
+instance NodeProperty Tabs "scrolling_enabled" Bool 'False where
+        nodeProperty
+          = (get_scrolling_enabled, wrapDroppingSetter set_scrolling_enabled,
+             Nothing)
+
+instance NodeProperty Tabs "tab_align" Int 'False where
+        nodeProperty
+          = (get_tab_align, wrapDroppingSetter set_tab_align, Nothing)
+
+instance NodeProperty Tabs "tab_close_display_policy" Int 'False
+         where
+        nodeProperty
+          = (get_tab_close_display_policy,
+             wrapDroppingSetter set_tab_close_display_policy, Nothing)
+
 {-# NOINLINE bindTabs__gui_input #-}
 
 bindTabs__gui_input :: MethodBind
@@ -122,6 +152,9 @@ _gui_input cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTabs__gui_input (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tabs "_gui_input" '[InputEvent] (IO ()) where
+        nodeMethod = Godot.Core.Tabs._gui_input
 
 {-# NOINLINE bindTabs__on_mouse_exited #-}
 
@@ -143,6 +176,9 @@ _on_mouse_exited cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "_on_mouse_exited" '[] (IO ()) where
+        nodeMethod = Godot.Core.Tabs._on_mouse_exited
+
 {-# NOINLINE bindTabs__update_hover #-}
 
 bindTabs__update_hover :: MethodBind
@@ -162,6 +198,9 @@ _update_hover cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "_update_hover" '[] (IO ()) where
+        nodeMethod = Godot.Core.Tabs._update_hover
+
 {-# NOINLINE bindTabs_add_tab #-}
 
 -- | Adds a new tab.
@@ -177,12 +216,20 @@ bindTabs_add_tab
 -- | Adds a new tab.
 add_tab ::
           (Tabs :< cls, Object :< cls) =>
-          cls -> GodotString -> Texture -> IO ()
+          cls -> Maybe GodotString -> Maybe Texture -> IO ()
 add_tab cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [defaultedVariant VariantString "" arg1,
+       maybe VariantNil toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindTabs_add_tab (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tabs "add_tab"
+           '[Maybe GodotString, Maybe Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.add_tab
 
 {-# NOINLINE bindTabs_ensure_tab_visible #-}
 
@@ -207,9 +254,12 @@ ensure_tab_visible cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "ensure_tab_visible" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Tabs.ensure_tab_visible
+
 {-# NOINLINE bindTabs_get_current_tab #-}
 
--- | Select tab at index [code]tab_idx[/code].
+-- | Select tab at index @tab_idx@.
 bindTabs_get_current_tab :: MethodBind
 bindTabs_get_current_tab
   = unsafePerformIO $
@@ -219,7 +269,7 @@ bindTabs_get_current_tab
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Select tab at index [code]tab_idx[/code].
+-- | Select tab at index @tab_idx@.
 get_current_tab :: (Tabs :< cls, Object :< cls) => cls -> IO Int
 get_current_tab cls
   = withVariantArray []
@@ -228,9 +278,12 @@ get_current_tab cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_current_tab" '[] (IO Int) where
+        nodeMethod = Godot.Core.Tabs.get_current_tab
+
 {-# NOINLINE bindTabs_get_drag_to_rearrange_enabled #-}
 
--- | If [code]true[/code], tabs can be rearranged with mouse drag.
+-- | If @true@, tabs can be rearranged with mouse drag.
 bindTabs_get_drag_to_rearrange_enabled :: MethodBind
 bindTabs_get_drag_to_rearrange_enabled
   = unsafePerformIO $
@@ -240,7 +293,7 @@ bindTabs_get_drag_to_rearrange_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], tabs can be rearranged with mouse drag.
+-- | If @true@, tabs can be rearranged with mouse drag.
 get_drag_to_rearrange_enabled ::
                                 (Tabs :< cls, Object :< cls) => cls -> IO Bool
 get_drag_to_rearrange_enabled cls
@@ -252,9 +305,14 @@ get_drag_to_rearrange_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_drag_to_rearrange_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tabs.get_drag_to_rearrange_enabled
+
 {-# NOINLINE bindTabs_get_offset_buttons_visible #-}
 
--- | Returns [code]true[/code] if the offset buttons (the ones that appear when there's not enough space for all tabs) are visible.
+-- | Returns @true@ if the offset buttons (the ones that appear when there's not enough space for all tabs) are visible.
 bindTabs_get_offset_buttons_visible :: MethodBind
 bindTabs_get_offset_buttons_visible
   = unsafePerformIO $
@@ -264,7 +322,7 @@ bindTabs_get_offset_buttons_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the offset buttons (the ones that appear when there's not enough space for all tabs) are visible.
+-- | Returns @true@ if the offset buttons (the ones that appear when there's not enough space for all tabs) are visible.
 get_offset_buttons_visible ::
                              (Tabs :< cls, Object :< cls) => cls -> IO Bool
 get_offset_buttons_visible cls
@@ -276,9 +334,13 @@ get_offset_buttons_visible cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_offset_buttons_visible" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tabs.get_offset_buttons_visible
+
 {-# NOINLINE bindTabs_get_scrolling_enabled #-}
 
--- | if [code]true[/code], the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
 bindTabs_get_scrolling_enabled :: MethodBind
 bindTabs_get_scrolling_enabled
   = unsafePerformIO $
@@ -288,7 +350,7 @@ bindTabs_get_scrolling_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | if [code]true[/code], the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
 get_scrolling_enabled ::
                         (Tabs :< cls, Object :< cls) => cls -> IO Bool
 get_scrolling_enabled cls
@@ -299,9 +361,13 @@ get_scrolling_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_scrolling_enabled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Tabs.get_scrolling_enabled
+
 {-# NOINLINE bindTabs_get_select_with_rmb #-}
 
--- | Returns [code]true[/code] if select with right mouse button is enabled.
+-- | Returns @true@ if select with right mouse button is enabled.
 bindTabs_get_select_with_rmb :: MethodBind
 bindTabs_get_select_with_rmb
   = unsafePerformIO $
@@ -311,7 +377,7 @@ bindTabs_get_select_with_rmb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if select with right mouse button is enabled.
+-- | Returns @true@ if select with right mouse button is enabled.
 get_select_with_rmb ::
                       (Tabs :< cls, Object :< cls) => cls -> IO Bool
 get_select_with_rmb cls
@@ -322,9 +388,12 @@ get_select_with_rmb cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_select_with_rmb" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Tabs.get_select_with_rmb
+
 {-# NOINLINE bindTabs_get_tab_align #-}
 
--- | The alignment of all tabs. See [enum TabAlign] for details.
+-- | The alignment of all tabs. See @enum TabAlign@ for details.
 bindTabs_get_tab_align :: MethodBind
 bindTabs_get_tab_align
   = unsafePerformIO $
@@ -334,7 +403,7 @@ bindTabs_get_tab_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The alignment of all tabs. See [enum TabAlign] for details.
+-- | The alignment of all tabs. See @enum TabAlign@ for details.
 get_tab_align :: (Tabs :< cls, Object :< cls) => cls -> IO Int
 get_tab_align cls
   = withVariantArray []
@@ -343,9 +412,12 @@ get_tab_align cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_tab_align" '[] (IO Int) where
+        nodeMethod = Godot.Core.Tabs.get_tab_align
+
 {-# NOINLINE bindTabs_get_tab_close_display_policy #-}
 
--- | Sets when the close button will appear on the tabs. See [enum CloseButtonDisplayPolicy] for details.
+-- | Sets when the close button will appear on the tabs. See @enum CloseButtonDisplayPolicy@ for details.
 bindTabs_get_tab_close_display_policy :: MethodBind
 bindTabs_get_tab_close_display_policy
   = unsafePerformIO $
@@ -355,7 +427,7 @@ bindTabs_get_tab_close_display_policy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets when the close button will appear on the tabs. See [enum CloseButtonDisplayPolicy] for details.
+-- | Sets when the close button will appear on the tabs. See @enum CloseButtonDisplayPolicy@ for details.
 get_tab_close_display_policy ::
                                (Tabs :< cls, Object :< cls) => cls -> IO Int
 get_tab_close_display_policy cls
@@ -366,6 +438,11 @@ get_tab_close_display_policy cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tabs "get_tab_close_display_policy" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Tabs.get_tab_close_display_policy
 
 {-# NOINLINE bindTabs_get_tab_count #-}
 
@@ -388,9 +465,12 @@ get_tab_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_tab_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.Tabs.get_tab_count
+
 {-# NOINLINE bindTabs_get_tab_disabled #-}
 
--- | Returns [code]true[/code] if the tab at index [code]tab_idx[/code] is disabled.
+-- | Returns @true@ if the tab at index @tab_idx@ is disabled.
 bindTabs_get_tab_disabled :: MethodBind
 bindTabs_get_tab_disabled
   = unsafePerformIO $
@@ -400,7 +480,7 @@ bindTabs_get_tab_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the tab at index [code]tab_idx[/code] is disabled.
+-- | Returns @true@ if the tab at index @tab_idx@ is disabled.
 get_tab_disabled ::
                    (Tabs :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_tab_disabled cls arg1
@@ -411,9 +491,12 @@ get_tab_disabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_tab_disabled" '[Int] (IO Bool) where
+        nodeMethod = Godot.Core.Tabs.get_tab_disabled
+
 {-# NOINLINE bindTabs_get_tab_icon #-}
 
--- | Returns the [Texture] for the tab at index [code]tab_idx[/code] or [code]null[/code] if the tab has no [Texture].
+-- | Returns the @Texture@ for the tab at index @tab_idx@ or @null@ if the tab has no @Texture@.
 bindTabs_get_tab_icon :: MethodBind
 bindTabs_get_tab_icon
   = unsafePerformIO $
@@ -423,7 +506,7 @@ bindTabs_get_tab_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Texture] for the tab at index [code]tab_idx[/code] or [code]null[/code] if the tab has no [Texture].
+-- | Returns the @Texture@ for the tab at index @tab_idx@ or @null@ if the tab has no @Texture@.
 get_tab_icon ::
                (Tabs :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_tab_icon cls arg1
@@ -432,6 +515,9 @@ get_tab_icon cls arg1
          godot_method_bind_call bindTabs_get_tab_icon (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tabs "get_tab_icon" '[Int] (IO Texture) where
+        nodeMethod = Godot.Core.Tabs.get_tab_icon
 
 {-# NOINLINE bindTabs_get_tab_offset #-}
 
@@ -454,9 +540,12 @@ get_tab_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_tab_offset" '[] (IO Int) where
+        nodeMethod = Godot.Core.Tabs.get_tab_offset
+
 {-# NOINLINE bindTabs_get_tab_rect #-}
 
--- | Returns tab [Rect2] with local position and size.
+-- | Returns tab @Rect2@ with local position and size.
 bindTabs_get_tab_rect :: MethodBind
 bindTabs_get_tab_rect
   = unsafePerformIO $
@@ -466,7 +555,7 @@ bindTabs_get_tab_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns tab [Rect2] with local position and size.
+-- | Returns tab @Rect2@ with local position and size.
 get_tab_rect ::
                (Tabs :< cls, Object :< cls) => cls -> Int -> IO Rect2
 get_tab_rect cls arg1
@@ -476,9 +565,12 @@ get_tab_rect cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_tab_rect" '[Int] (IO Rect2) where
+        nodeMethod = Godot.Core.Tabs.get_tab_rect
+
 {-# NOINLINE bindTabs_get_tab_title #-}
 
--- | Returns the title of the tab at index [code]tab_idx[/code]. Tab titles default to the name of the indexed child node, but this can be overridden with [method set_tab_title].
+-- | Returns the title of the tab at index @tab_idx@. Tab titles default to the name of the indexed child node, but this can be overridden with @method set_tab_title@.
 bindTabs_get_tab_title :: MethodBind
 bindTabs_get_tab_title
   = unsafePerformIO $
@@ -488,7 +580,7 @@ bindTabs_get_tab_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the title of the tab at index [code]tab_idx[/code]. Tab titles default to the name of the indexed child node, but this can be overridden with [method set_tab_title].
+-- | Returns the title of the tab at index @tab_idx@. Tab titles default to the name of the indexed child node, but this can be overridden with @method set_tab_title@.
 get_tab_title ::
                 (Tabs :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_tab_title cls arg1
@@ -498,9 +590,13 @@ get_tab_title cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_tab_title" '[Int] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.Tabs.get_tab_title
+
 {-# NOINLINE bindTabs_get_tabs_rearrange_group #-}
 
--- | Returns the [Tabs]' rearrange group ID.
+-- | Returns the @Tabs@' rearrange group ID.
 bindTabs_get_tabs_rearrange_group :: MethodBind
 bindTabs_get_tabs_rearrange_group
   = unsafePerformIO $
@@ -510,7 +606,7 @@ bindTabs_get_tabs_rearrange_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Tabs]' rearrange group ID.
+-- | Returns the @Tabs@' rearrange group ID.
 get_tabs_rearrange_group ::
                            (Tabs :< cls, Object :< cls) => cls -> IO Int
 get_tabs_rearrange_group cls
@@ -522,9 +618,13 @@ get_tabs_rearrange_group cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "get_tabs_rearrange_group" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Tabs.get_tabs_rearrange_group
+
 {-# NOINLINE bindTabs_move_tab #-}
 
--- | Moves a tab from [code]from[/code] to [code]to[/code].
+-- | Moves a tab from @from@ to @to@.
 bindTabs_move_tab :: MethodBind
 bindTabs_move_tab
   = unsafePerformIO $
@@ -534,7 +634,7 @@ bindTabs_move_tab
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Moves a tab from [code]from[/code] to [code]to[/code].
+-- | Moves a tab from @from@ to @to@.
 move_tab ::
            (Tabs :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 move_tab cls arg1 arg2
@@ -543,9 +643,12 @@ move_tab cls arg1 arg2
          godot_method_bind_call bindTabs_move_tab (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "move_tab" '[Int, Int] (IO ()) where
+        nodeMethod = Godot.Core.Tabs.move_tab
+
 {-# NOINLINE bindTabs_remove_tab #-}
 
--- | Removes the tab at index [code]tab_idx[/code].
+-- | Removes the tab at index @tab_idx@.
 bindTabs_remove_tab :: MethodBind
 bindTabs_remove_tab
   = unsafePerformIO $
@@ -555,7 +658,7 @@ bindTabs_remove_tab
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the tab at index [code]tab_idx[/code].
+-- | Removes the tab at index @tab_idx@.
 remove_tab :: (Tabs :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_tab cls arg1
   = withVariantArray [toVariant arg1]
@@ -563,9 +666,12 @@ remove_tab cls arg1
          godot_method_bind_call bindTabs_remove_tab (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "remove_tab" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Tabs.remove_tab
+
 {-# NOINLINE bindTabs_set_current_tab #-}
 
--- | Select tab at index [code]tab_idx[/code].
+-- | Select tab at index @tab_idx@.
 bindTabs_set_current_tab :: MethodBind
 bindTabs_set_current_tab
   = unsafePerformIO $
@@ -575,7 +681,7 @@ bindTabs_set_current_tab
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Select tab at index [code]tab_idx[/code].
+-- | Select tab at index @tab_idx@.
 set_current_tab ::
                   (Tabs :< cls, Object :< cls) => cls -> Int -> IO ()
 set_current_tab cls arg1
@@ -585,9 +691,12 @@ set_current_tab cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_current_tab" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Tabs.set_current_tab
+
 {-# NOINLINE bindTabs_set_drag_to_rearrange_enabled #-}
 
--- | If [code]true[/code], tabs can be rearranged with mouse drag.
+-- | If @true@, tabs can be rearranged with mouse drag.
 bindTabs_set_drag_to_rearrange_enabled :: MethodBind
 bindTabs_set_drag_to_rearrange_enabled
   = unsafePerformIO $
@@ -597,7 +706,7 @@ bindTabs_set_drag_to_rearrange_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], tabs can be rearranged with mouse drag.
+-- | If @true@, tabs can be rearranged with mouse drag.
 set_drag_to_rearrange_enabled ::
                                 (Tabs :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_drag_to_rearrange_enabled cls arg1
@@ -609,9 +718,14 @@ set_drag_to_rearrange_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_drag_to_rearrange_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_drag_to_rearrange_enabled
+
 {-# NOINLINE bindTabs_set_scrolling_enabled #-}
 
--- | if [code]true[/code], the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
 bindTabs_set_scrolling_enabled :: MethodBind
 bindTabs_set_scrolling_enabled
   = unsafePerformIO $
@@ -621,7 +735,7 @@ bindTabs_set_scrolling_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | if [code]true[/code], the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
 set_scrolling_enabled ::
                         (Tabs :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_scrolling_enabled cls arg1
@@ -632,9 +746,13 @@ set_scrolling_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_scrolling_enabled" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_scrolling_enabled
+
 {-# NOINLINE bindTabs_set_select_with_rmb #-}
 
--- | If [code]true[/code], enables selecting a tab with the right mouse button.
+-- | If @true@, enables selecting a tab with the right mouse button.
 bindTabs_set_select_with_rmb :: MethodBind
 bindTabs_set_select_with_rmb
   = unsafePerformIO $
@@ -644,7 +762,7 @@ bindTabs_set_select_with_rmb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables selecting a tab with the right mouse button.
+-- | If @true@, enables selecting a tab with the right mouse button.
 set_select_with_rmb ::
                       (Tabs :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_select_with_rmb cls arg1
@@ -655,9 +773,13 @@ set_select_with_rmb cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_select_with_rmb" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_select_with_rmb
+
 {-# NOINLINE bindTabs_set_tab_align #-}
 
--- | The alignment of all tabs. See [enum TabAlign] for details.
+-- | The alignment of all tabs. See @enum TabAlign@ for details.
 bindTabs_set_tab_align :: MethodBind
 bindTabs_set_tab_align
   = unsafePerformIO $
@@ -667,7 +789,7 @@ bindTabs_set_tab_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The alignment of all tabs. See [enum TabAlign] for details.
+-- | The alignment of all tabs. See @enum TabAlign@ for details.
 set_tab_align ::
                 (Tabs :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tab_align cls arg1
@@ -677,9 +799,12 @@ set_tab_align cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_tab_align" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Tabs.set_tab_align
+
 {-# NOINLINE bindTabs_set_tab_close_display_policy #-}
 
--- | Sets when the close button will appear on the tabs. See [enum CloseButtonDisplayPolicy] for details.
+-- | Sets when the close button will appear on the tabs. See @enum CloseButtonDisplayPolicy@ for details.
 bindTabs_set_tab_close_display_policy :: MethodBind
 bindTabs_set_tab_close_display_policy
   = unsafePerformIO $
@@ -689,7 +814,7 @@ bindTabs_set_tab_close_display_policy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets when the close button will appear on the tabs. See [enum CloseButtonDisplayPolicy] for details.
+-- | Sets when the close button will appear on the tabs. See @enum CloseButtonDisplayPolicy@ for details.
 set_tab_close_display_policy ::
                                (Tabs :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tab_close_display_policy cls arg1
@@ -701,10 +826,15 @@ set_tab_close_display_policy cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_tab_close_display_policy" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_tab_close_display_policy
+
 {-# NOINLINE bindTabs_set_tab_disabled #-}
 
--- | If [code]disabled[/code] is [code]false[/code], hides the tab at index [code]tab_idx[/code].
---   				[b]Note:[/b] Its title text will remain unless it is also removed with [method set_tab_title].
+-- | If @disabled@ is @false@, hides the tab at index @tab_idx@.
+--   				__Note:__ Its title text will remain unless it is also removed with @method set_tab_title@.
 bindTabs_set_tab_disabled :: MethodBind
 bindTabs_set_tab_disabled
   = unsafePerformIO $
@@ -714,8 +844,8 @@ bindTabs_set_tab_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]disabled[/code] is [code]false[/code], hides the tab at index [code]tab_idx[/code].
---   				[b]Note:[/b] Its title text will remain unless it is also removed with [method set_tab_title].
+-- | If @disabled@ is @false@, hides the tab at index @tab_idx@.
+--   				__Note:__ Its title text will remain unless it is also removed with @method set_tab_title@.
 set_tab_disabled ::
                    (Tabs :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_tab_disabled cls arg1 arg2
@@ -726,9 +856,13 @@ set_tab_disabled cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_tab_disabled" '[Int, Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_tab_disabled
+
 {-# NOINLINE bindTabs_set_tab_icon #-}
 
--- | Sets an [code]icon[/code] for the tab at index [code]tab_idx[/code].
+-- | Sets an @icon@ for the tab at index @tab_idx@.
 bindTabs_set_tab_icon :: MethodBind
 bindTabs_set_tab_icon
   = unsafePerformIO $
@@ -738,7 +872,7 @@ bindTabs_set_tab_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets an [code]icon[/code] for the tab at index [code]tab_idx[/code].
+-- | Sets an @icon@ for the tab at index @tab_idx@.
 set_tab_icon ::
                (Tabs :< cls, Object :< cls) => cls -> Int -> Texture -> IO ()
 set_tab_icon cls arg1 arg2
@@ -748,9 +882,13 @@ set_tab_icon cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_tab_icon" '[Int, Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_tab_icon
+
 {-# NOINLINE bindTabs_set_tab_title #-}
 
--- | Sets a [code]title[/code] for the tab at index [code]tab_idx[/code].
+-- | Sets a @title@ for the tab at index @tab_idx@.
 bindTabs_set_tab_title :: MethodBind
 bindTabs_set_tab_title
   = unsafePerformIO $
@@ -760,7 +898,7 @@ bindTabs_set_tab_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a [code]title[/code] for the tab at index [code]tab_idx[/code].
+-- | Sets a @title@ for the tab at index @tab_idx@.
 set_tab_title ::
                 (Tabs :< cls, Object :< cls) => cls -> Int -> GodotString -> IO ()
 set_tab_title cls arg1 arg2
@@ -770,9 +908,14 @@ set_tab_title cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Tabs "set_tab_title" '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_tab_title
+
 {-# NOINLINE bindTabs_set_tabs_rearrange_group #-}
 
--- | Defines the rearrange group ID. Choose for each [Tabs] the same value to dragging tabs between [Tabs]. Enable drag with [code]set_drag_to_rearrange_enabled(true)[/code].
+-- | Defines the rearrange group ID. Choose for each @Tabs@ the same value to dragging tabs between @Tabs@. Enable drag with @set_drag_to_rearrange_enabled(true)@.
 bindTabs_set_tabs_rearrange_group :: MethodBind
 bindTabs_set_tabs_rearrange_group
   = unsafePerformIO $
@@ -782,7 +925,7 @@ bindTabs_set_tabs_rearrange_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the rearrange group ID. Choose for each [Tabs] the same value to dragging tabs between [Tabs]. Enable drag with [code]set_drag_to_rearrange_enabled(true)[/code].
+-- | Defines the rearrange group ID. Choose for each @Tabs@ the same value to dragging tabs between @Tabs@. Enable drag with @set_drag_to_rearrange_enabled(true)@.
 set_tabs_rearrange_group ::
                            (Tabs :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tabs_rearrange_group cls arg1
@@ -793,3 +936,7 @@ set_tabs_rearrange_group cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Tabs "set_tabs_rearrange_group" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Tabs.set_tabs_rearrange_group

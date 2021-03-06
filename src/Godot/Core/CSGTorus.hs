@@ -16,9 +16,37 @@ module Godot.Core.CSGTorus
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.CSGPrimitive()
+
+instance NodeProperty CSGTorus "inner_radius" Float 'False where
+        nodeProperty
+          = (get_inner_radius, wrapDroppingSetter set_inner_radius, Nothing)
+
+instance NodeProperty CSGTorus "material" Material 'False where
+        nodeProperty
+          = (get_material, wrapDroppingSetter set_material, Nothing)
+
+instance NodeProperty CSGTorus "outer_radius" Float 'False where
+        nodeProperty
+          = (get_outer_radius, wrapDroppingSetter set_outer_radius, Nothing)
+
+instance NodeProperty CSGTorus "ring_sides" Int 'False where
+        nodeProperty
+          = (get_ring_sides, wrapDroppingSetter set_ring_sides, Nothing)
+
+instance NodeProperty CSGTorus "sides" Int 'False where
+        nodeProperty = (get_sides, wrapDroppingSetter set_sides, Nothing)
+
+instance NodeProperty CSGTorus "smooth_faces" Bool 'False where
+        nodeProperty
+          = (get_smooth_faces, wrapDroppingSetter set_smooth_faces, Nothing)
 
 {-# NOINLINE bindCSGTorus_get_inner_radius #-}
 
@@ -41,6 +69,10 @@ get_inner_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGTorus "get_inner_radius" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CSGTorus.get_inner_radius
+
 {-# NOINLINE bindCSGTorus_get_material #-}
 
 bindCSGTorus_get_material :: MethodBind
@@ -61,6 +93,9 @@ get_material cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGTorus "get_material" '[] (IO Material) where
+        nodeMethod = Godot.Core.CSGTorus.get_material
 
 {-# NOINLINE bindCSGTorus_get_outer_radius #-}
 
@@ -83,6 +118,10 @@ get_outer_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGTorus "get_outer_radius" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CSGTorus.get_outer_radius
+
 {-# NOINLINE bindCSGTorus_get_ring_sides #-}
 
 bindCSGTorus_get_ring_sides :: MethodBind
@@ -103,6 +142,9 @@ get_ring_sides cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGTorus "get_ring_sides" '[] (IO Int) where
+        nodeMethod = Godot.Core.CSGTorus.get_ring_sides
+
 {-# NOINLINE bindCSGTorus_get_sides #-}
 
 bindCSGTorus_get_sides :: MethodBind
@@ -121,6 +163,9 @@ get_sides cls
          godot_method_bind_call bindCSGTorus_get_sides (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGTorus "get_sides" '[] (IO Int) where
+        nodeMethod = Godot.Core.CSGTorus.get_sides
 
 {-# NOINLINE bindCSGTorus_get_smooth_faces #-}
 
@@ -143,6 +188,9 @@ get_smooth_faces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGTorus "get_smooth_faces" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CSGTorus.get_smooth_faces
+
 {-# NOINLINE bindCSGTorus_set_inner_radius #-}
 
 bindCSGTorus_set_inner_radius :: MethodBind
@@ -163,6 +211,10 @@ set_inner_radius cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGTorus "set_inner_radius" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGTorus.set_inner_radius
 
 {-# NOINLINE bindCSGTorus_set_material #-}
 
@@ -185,6 +237,10 @@ set_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGTorus "set_material" '[Material] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGTorus.set_material
+
 {-# NOINLINE bindCSGTorus_set_outer_radius #-}
 
 bindCSGTorus_set_outer_radius :: MethodBind
@@ -205,6 +261,10 @@ set_outer_radius cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGTorus "set_outer_radius" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGTorus.set_outer_radius
 
 {-# NOINLINE bindCSGTorus_set_ring_sides #-}
 
@@ -227,6 +287,9 @@ set_ring_sides cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGTorus "set_ring_sides" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CSGTorus.set_ring_sides
+
 {-# NOINLINE bindCSGTorus_set_sides #-}
 
 bindCSGTorus_set_sides :: MethodBind
@@ -246,6 +309,9 @@ set_sides cls arg1
          godot_method_bind_call bindCSGTorus_set_sides (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGTorus "set_sides" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CSGTorus.set_sides
 
 {-# NOINLINE bindCSGTorus_set_smooth_faces #-}
 
@@ -267,3 +333,7 @@ set_smooth_faces cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGTorus "set_smooth_faces" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGTorus.set_smooth_faces

@@ -25,9 +25,14 @@ module Godot.Core.AnimationNodeBlendTree
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AnimationRootNode()
 
 _CONNECTION_ERROR_NO_INPUT_INDEX :: Int
 _CONNECTION_ERROR_NO_INPUT_INDEX = 2
@@ -46,6 +51,12 @@ _CONNECTION_ERROR_CONNECTION_EXISTS = 5
 
 _CONNECTION_ERROR_NO_INPUT :: Int
 _CONNECTION_ERROR_NO_INPUT = 1
+
+instance NodeProperty AnimationNodeBlendTree "graph_offset" Vector2
+           'False
+         where
+        nodeProperty
+          = (get_graph_offset, wrapDroppingSetter set_graph_offset, Nothing)
 
 {-# NOINLINE bindAnimationNodeBlendTree__node_changed #-}
 
@@ -70,6 +81,12 @@ _node_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "_node_changed"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree._node_changed
+
 {-# NOINLINE bindAnimationNodeBlendTree__tree_changed #-}
 
 bindAnimationNodeBlendTree__tree_changed :: MethodBind
@@ -92,9 +109,14 @@ _tree_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "_tree_changed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree._tree_changed
+
 {-# NOINLINE bindAnimationNodeBlendTree_add_node #-}
 
--- | Adds an [AnimationNode] at the given [code]position[/code]. The [code]name[/code] is used to identify the created sub-node later.
+-- | Adds an @AnimationNode@ at the given @position@. The @name@ is used to identify the created sub-node later.
 bindAnimationNodeBlendTree_add_node :: MethodBind
 bindAnimationNodeBlendTree_add_node
   = unsafePerformIO $
@@ -104,12 +126,14 @@ bindAnimationNodeBlendTree_add_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an [AnimationNode] at the given [code]position[/code]. The [code]name[/code] is used to identify the created sub-node later.
+-- | Adds an @AnimationNode@ at the given @position@. The @name@ is used to identify the created sub-node later.
 add_node ::
            (AnimationNodeBlendTree :< cls, Object :< cls) =>
-           cls -> GodotString -> AnimationNode -> Vector2 -> IO ()
+           cls -> GodotString -> AnimationNode -> Maybe Vector2 -> IO ()
 add_node cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantVector2 (V2 0 0) arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimationNodeBlendTree_add_node
            (upcast cls)
@@ -117,9 +141,15 @@ add_node cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "add_node"
+           '[GodotString, AnimationNode, Maybe Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.add_node
+
 {-# NOINLINE bindAnimationNodeBlendTree_connect_node #-}
 
--- | Connects the output of an [AnimationNode] as input for another [AnimationNode], at the input port specified by [code]input_index[/code].
+-- | Connects the output of an @AnimationNode@ as input for another @AnimationNode@, at the input port specified by @input_index@.
 bindAnimationNodeBlendTree_connect_node :: MethodBind
 bindAnimationNodeBlendTree_connect_node
   = unsafePerformIO $
@@ -129,7 +159,7 @@ bindAnimationNodeBlendTree_connect_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connects the output of an [AnimationNode] as input for another [AnimationNode], at the input port specified by [code]input_index[/code].
+-- | Connects the output of an @AnimationNode@ as input for another @AnimationNode@, at the input port specified by @input_index@.
 connect_node ::
                (AnimationNodeBlendTree :< cls, Object :< cls) =>
                cls -> GodotString -> Int -> GodotString -> IO ()
@@ -141,6 +171,12 @@ connect_node cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeBlendTree "connect_node"
+           '[GodotString, Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.connect_node
 
 {-# NOINLINE bindAnimationNodeBlendTree_disconnect_node #-}
 
@@ -167,6 +203,12 @@ disconnect_node cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "disconnect_node"
+           '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.disconnect_node
+
 {-# NOINLINE bindAnimationNodeBlendTree_get_graph_offset #-}
 
 -- | The global offset of all sub-nodes.
@@ -191,9 +233,14 @@ get_graph_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "get_graph_offset" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.get_graph_offset
+
 {-# NOINLINE bindAnimationNodeBlendTree_get_node #-}
 
--- | Returns the sub-node with the specified [code]name[/code].
+-- | Returns the sub-node with the specified @name@.
 bindAnimationNodeBlendTree_get_node :: MethodBind
 bindAnimationNodeBlendTree_get_node
   = unsafePerformIO $
@@ -203,7 +250,7 @@ bindAnimationNodeBlendTree_get_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the sub-node with the specified [code]name[/code].
+-- | Returns the sub-node with the specified @name@.
 get_node ::
            (AnimationNodeBlendTree :< cls, Object :< cls) =>
            cls -> GodotString -> IO AnimationNode
@@ -216,9 +263,15 @@ get_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "get_node"
+           '[GodotString]
+           (IO AnimationNode)
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.get_node
+
 {-# NOINLINE bindAnimationNodeBlendTree_get_node_position #-}
 
--- | Returns the position of the sub-node with the specified [code]name[/code].
+-- | Returns the position of the sub-node with the specified @name@.
 bindAnimationNodeBlendTree_get_node_position :: MethodBind
 bindAnimationNodeBlendTree_get_node_position
   = unsafePerformIO $
@@ -228,7 +281,7 @@ bindAnimationNodeBlendTree_get_node_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the sub-node with the specified [code]name[/code].
+-- | Returns the position of the sub-node with the specified @name@.
 get_node_position ::
                     (AnimationNodeBlendTree :< cls, Object :< cls) =>
                     cls -> GodotString -> IO Vector2
@@ -241,9 +294,15 @@ get_node_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "get_node_position"
+           '[GodotString]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.get_node_position
+
 {-# NOINLINE bindAnimationNodeBlendTree_has_node #-}
 
--- | Returns [code]true[/code] if a sub-node with specified [code]name[/code] exists.
+-- | Returns @true@ if a sub-node with specified @name@ exists.
 bindAnimationNodeBlendTree_has_node :: MethodBind
 bindAnimationNodeBlendTree_has_node
   = unsafePerformIO $
@@ -253,7 +312,7 @@ bindAnimationNodeBlendTree_has_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if a sub-node with specified [code]name[/code] exists.
+-- | Returns @true@ if a sub-node with specified @name@ exists.
 has_node ::
            (AnimationNodeBlendTree :< cls, Object :< cls) =>
            cls -> GodotString -> IO Bool
@@ -265,6 +324,12 @@ has_node cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeBlendTree "has_node"
+           '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.has_node
 
 {-# NOINLINE bindAnimationNodeBlendTree_remove_node #-}
 
@@ -291,6 +356,12 @@ remove_node cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "remove_node"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.remove_node
+
 {-# NOINLINE bindAnimationNodeBlendTree_rename_node #-}
 
 -- | Changes the name of a sub-node.
@@ -315,6 +386,12 @@ rename_node cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeBlendTree "rename_node"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.rename_node
 
 {-# NOINLINE bindAnimationNodeBlendTree_set_graph_offset #-}
 
@@ -341,6 +418,12 @@ set_graph_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeBlendTree "set_graph_offset"
+           '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.set_graph_offset
+
 {-# NOINLINE bindAnimationNodeBlendTree_set_node_position #-}
 
 -- | Modifies the position of a sub-node.
@@ -365,3 +448,9 @@ set_node_position cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeBlendTree "set_node_position"
+           '[GodotString, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeBlendTree.set_node_position

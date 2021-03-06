@@ -14,13 +14,37 @@ module Godot.Core.InputEventMouseMotion
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEventMouse()
+
+instance NodeProperty InputEventMouseMotion "pressure" Float 'False
+         where
+        nodeProperty
+          = (get_pressure, wrapDroppingSetter set_pressure, Nothing)
+
+instance NodeProperty InputEventMouseMotion "relative" Vector2
+           'False
+         where
+        nodeProperty
+          = (get_relative, wrapDroppingSetter set_relative, Nothing)
+
+instance NodeProperty InputEventMouseMotion "speed" Vector2 'False
+         where
+        nodeProperty = (get_speed, wrapDroppingSetter set_speed, Nothing)
+
+instance NodeProperty InputEventMouseMotion "tilt" Vector2 'False
+         where
+        nodeProperty = (get_tilt, wrapDroppingSetter set_tilt, Nothing)
 
 {-# NOINLINE bindInputEventMouseMotion_get_pressure #-}
 
--- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
+-- | Represents the pressure the user puts on the pen. Ranges from @0.0@ to @1.0@.
 bindInputEventMouseMotion_get_pressure :: MethodBind
 bindInputEventMouseMotion_get_pressure
   = unsafePerformIO $
@@ -30,7 +54,7 @@ bindInputEventMouseMotion_get_pressure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
+-- | Represents the pressure the user puts on the pen. Ranges from @0.0@ to @1.0@.
 get_pressure ::
                (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Float
 get_pressure cls
@@ -42,10 +66,15 @@ get_pressure cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseMotion "get_pressure" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.get_pressure
+
 {-# NOINLINE bindInputEventMouseMotion_get_relative #-}
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
+--   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 bindInputEventMouseMotion_get_relative :: MethodBind
 bindInputEventMouseMotion_get_relative
   = unsafePerformIO $
@@ -56,7 +85,7 @@ bindInputEventMouseMotion_get_relative
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
+--   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 get_relative ::
                (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Vector2
 get_relative cls
@@ -67,6 +96,11 @@ get_relative cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMouseMotion "get_relative" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.get_relative
 
 {-# NOINLINE bindInputEventMouseMotion_get_speed #-}
 
@@ -92,9 +126,14 @@ get_speed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseMotion "get_speed" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.get_speed
+
 {-# NOINLINE bindInputEventMouseMotion_get_tilt #-}
 
--- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from @-1.0@ to @1.0@ for both axes.
 bindInputEventMouseMotion_get_tilt :: MethodBind
 bindInputEventMouseMotion_get_tilt
   = unsafePerformIO $
@@ -104,7 +143,7 @@ bindInputEventMouseMotion_get_tilt
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from @-1.0@ to @1.0@ for both axes.
 get_tilt ::
            (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Vector2
 get_tilt cls
@@ -116,9 +155,14 @@ get_tilt cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseMotion "get_tilt" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.get_tilt
+
 {-# NOINLINE bindInputEventMouseMotion_set_pressure #-}
 
--- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
+-- | Represents the pressure the user puts on the pen. Ranges from @0.0@ to @1.0@.
 bindInputEventMouseMotion_set_pressure :: MethodBind
 bindInputEventMouseMotion_set_pressure
   = unsafePerformIO $
@@ -128,7 +172,7 @@ bindInputEventMouseMotion_set_pressure
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Represents the pressure the user puts on the pen. Ranges from [code]0.0[/code] to [code]1.0[/code].
+-- | Represents the pressure the user puts on the pen. Ranges from @0.0@ to @1.0@.
 set_pressure ::
                (InputEventMouseMotion :< cls, Object :< cls) =>
                cls -> Float -> IO ()
@@ -141,10 +185,15 @@ set_pressure cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseMotion "set_pressure" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.set_pressure
+
 {-# NOINLINE bindInputEventMouseMotion_set_relative #-}
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
+--   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 bindInputEventMouseMotion_set_relative :: MethodBind
 bindInputEventMouseMotion_set_relative
   = unsafePerformIO $
@@ -155,7 +204,7 @@ bindInputEventMouseMotion_set_relative
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			[b]Note:[/b] Since [InputEventMouseMotion] is only emitted when the mouse moves, the last event won't have a relative position of [code]Vector2(0, 0)[/code] when the user stops moving the mouse.
+--   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 set_relative ::
                (InputEventMouseMotion :< cls, Object :< cls) =>
                cls -> Vector2 -> IO ()
@@ -167,6 +216,11 @@ set_relative cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMouseMotion "set_relative" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.set_relative
 
 {-# NOINLINE bindInputEventMouseMotion_set_speed #-}
 
@@ -193,9 +247,14 @@ set_speed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseMotion "set_speed" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.set_speed
+
 {-# NOINLINE bindInputEventMouseMotion_set_tilt #-}
 
--- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from @-1.0@ to @1.0@ for both axes.
 bindInputEventMouseMotion_set_tilt :: MethodBind
 bindInputEventMouseMotion_set_tilt
   = unsafePerformIO $
@@ -205,7 +264,7 @@ bindInputEventMouseMotion_set_tilt
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from [code]-1.0[/code] to [code]1.0[/code] for both axes.
+-- | Represents the angles of tilt of the pen. Positive X-coordinate value indicates a tilt to the right. Positive Y-coordinate value indicates a tilt toward the user. Ranges from @-1.0@ to @1.0@ for both axes.
 set_tilt ::
            (InputEventMouseMotion :< cls, Object :< cls) =>
            cls -> Vector2 -> IO ()
@@ -217,3 +276,8 @@ set_tilt cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMouseMotion "set_tilt" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseMotion.set_tilt

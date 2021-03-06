@@ -11,9 +11,14 @@ module Godot.Core.VisualShaderNodeVectorDerivativeFunc
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
 
 _FUNC_SUM :: Int
 _FUNC_SUM = 0
@@ -24,10 +29,18 @@ _FUNC_Y = 2
 _FUNC_X :: Int
 _FUNC_X = 1
 
+instance NodeProperty VisualShaderNodeVectorDerivativeFunc
+           "function"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_function, wrapDroppingSetter set_function, Nothing)
+
 {-# NOINLINE bindVisualShaderNodeVectorDerivativeFunc_get_function
              #-}
 
--- | A derivative type. See [enum Function] for options.
+-- | A derivative type. See @enum Function@ for options.
 bindVisualShaderNodeVectorDerivativeFunc_get_function :: MethodBind
 bindVisualShaderNodeVectorDerivativeFunc_get_function
   = unsafePerformIO $
@@ -37,7 +50,7 @@ bindVisualShaderNodeVectorDerivativeFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A derivative type. See [enum Function] for options.
+-- | A derivative type. See @enum Function@ for options.
 get_function ::
                (VisualShaderNodeVectorDerivativeFunc :< cls, Object :< cls) =>
                cls -> IO Int
@@ -51,10 +64,18 @@ get_function cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeVectorDerivativeFunc
+           "get_function"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeVectorDerivativeFunc.get_function
+
 {-# NOINLINE bindVisualShaderNodeVectorDerivativeFunc_set_function
              #-}
 
--- | A derivative type. See [enum Function] for options.
+-- | A derivative type. See @enum Function@ for options.
 bindVisualShaderNodeVectorDerivativeFunc_set_function :: MethodBind
 bindVisualShaderNodeVectorDerivativeFunc_set_function
   = unsafePerformIO $
@@ -64,7 +85,7 @@ bindVisualShaderNodeVectorDerivativeFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A derivative type. See [enum Function] for options.
+-- | A derivative type. See @enum Function@ for options.
 set_function ::
                (VisualShaderNodeVectorDerivativeFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()
@@ -77,3 +98,11 @@ set_function cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeVectorDerivativeFunc
+           "set_function"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeVectorDerivativeFunc.set_function

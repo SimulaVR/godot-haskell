@@ -12,9 +12,14 @@ module Godot.Core.AnimationNodeStateMachinePlayback
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 {-# NOINLINE bindAnimationNodeStateMachinePlayback_get_current_node
              #-}
@@ -44,6 +49,14 @@ get_current_node cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachinePlayback
+           "get_current_node"
+           '[]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeStateMachinePlayback.get_current_node
+
 {-# NOINLINE bindAnimationNodeStateMachinePlayback_get_travel_path
              #-}
 
@@ -71,9 +84,17 @@ get_travel_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachinePlayback
+           "get_travel_path"
+           '[]
+           (IO PoolStringArray)
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeStateMachinePlayback.get_travel_path
+
 {-# NOINLINE bindAnimationNodeStateMachinePlayback_is_playing #-}
 
--- | Returns [code]true[/code] if an animation is playing.
+-- | Returns @true@ if an animation is playing.
 bindAnimationNodeStateMachinePlayback_is_playing :: MethodBind
 bindAnimationNodeStateMachinePlayback_is_playing
   = unsafePerformIO $
@@ -83,7 +104,7 @@ bindAnimationNodeStateMachinePlayback_is_playing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if an animation is playing.
+-- | Returns @true@ if an animation is playing.
 is_playing ::
              (AnimationNodeStateMachinePlayback :< cls, Object :< cls) =>
              cls -> IO Bool
@@ -96,6 +117,13 @@ is_playing cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachinePlayback "is_playing"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeStateMachinePlayback.is_playing
 
 {-# NOINLINE bindAnimationNodeStateMachinePlayback_start #-}
 
@@ -122,6 +150,12 @@ start cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachinePlayback "start"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachinePlayback.start
+
 {-# NOINLINE bindAnimationNodeStateMachinePlayback_stop #-}
 
 -- | Stops the currently playing animation.
@@ -147,6 +181,11 @@ stop cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeStateMachinePlayback "stop" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachinePlayback.stop
+
 {-# NOINLINE bindAnimationNodeStateMachinePlayback_travel #-}
 
 -- | Transitions from the current state to another one, following the shortest path.
@@ -171,3 +210,9 @@ travel cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeStateMachinePlayback "travel"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeStateMachinePlayback.travel

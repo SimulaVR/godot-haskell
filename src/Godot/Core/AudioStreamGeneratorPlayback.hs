@@ -12,9 +12,14 @@ module Godot.Core.AudioStreamGeneratorPlayback
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioStreamPlaybackResampled()
 
 {-# NOINLINE bindAudioStreamGeneratorPlayback_can_push_buffer #-}
 
@@ -40,6 +45,13 @@ can_push_buffer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamGeneratorPlayback "can_push_buffer"
+           '[Int]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.AudioStreamGeneratorPlayback.can_push_buffer
+
 {-# NOINLINE bindAudioStreamGeneratorPlayback_clear_buffer #-}
 
 bindAudioStreamGeneratorPlayback_clear_buffer :: MethodBind
@@ -63,6 +75,11 @@ clear_buffer cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamGeneratorPlayback "clear_buffer" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioStreamGeneratorPlayback.clear_buffer
 
 {-# NOINLINE bindAudioStreamGeneratorPlayback_get_frames_available
              #-}
@@ -89,6 +106,14 @@ get_frames_available cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamGeneratorPlayback
+           "get_frames_available"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.AudioStreamGeneratorPlayback.get_frames_available
+
 {-# NOINLINE bindAudioStreamGeneratorPlayback_get_skips #-}
 
 bindAudioStreamGeneratorPlayback_get_skips :: MethodBind
@@ -111,6 +136,11 @@ get_skips cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamGeneratorPlayback "get_skips" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioStreamGeneratorPlayback.get_skips
 
 {-# NOINLINE bindAudioStreamGeneratorPlayback_push_buffer #-}
 
@@ -135,6 +165,12 @@ push_buffer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioStreamGeneratorPlayback "push_buffer"
+           '[PoolVector2Array]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioStreamGeneratorPlayback.push_buffer
+
 {-# NOINLINE bindAudioStreamGeneratorPlayback_push_frame #-}
 
 bindAudioStreamGeneratorPlayback_push_frame :: MethodBind
@@ -157,3 +193,9 @@ push_frame cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioStreamGeneratorPlayback "push_frame"
+           '[Vector2]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AudioStreamGeneratorPlayback.push_frame

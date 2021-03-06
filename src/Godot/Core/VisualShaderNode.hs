@@ -19,9 +19,14 @@ module Godot.Core.VisualShaderNode
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _PORT_TYPE_MAX :: Int
 _PORT_TYPE_MAX = 5
@@ -41,7 +46,7 @@ _PORT_TYPE_SAMPLER = 4
 _PORT_TYPE_BOOLEAN :: Int
 _PORT_TYPE_BOOLEAN = 2
 
--- | Emitted when the node requests an editor refresh. Currently called only in setter of [member VisualShaderNodeTexture.source], [VisualShaderNodeTexture], and [VisualShaderNodeCubeMap] (and their derivatives).
+-- | Emitted when the node requests an editor refresh. Currently called only in setter of @VisualShaderNodeTexture.source@, @VisualShaderNodeTexture@, and @VisualShaderNodeCubeMap@ (and their derivatives).
 sig_editor_refresh_request ::
                            Godot.Internal.Dispatch.Signal VisualShaderNode
 sig_editor_refresh_request
@@ -49,9 +54,24 @@ sig_editor_refresh_request
 
 instance NodeSignal VisualShaderNode "editor_refresh_request" '[]
 
+instance NodeProperty VisualShaderNode "default_input_values" Array
+           'False
+         where
+        nodeProperty
+          = (get_default_input_values,
+             wrapDroppingSetter set_default_input_values, Nothing)
+
+instance NodeProperty VisualShaderNode "output_port_for_preview"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_output_port_for_preview,
+             wrapDroppingSetter set_output_port_for_preview, Nothing)
+
 {-# NOINLINE bindVisualShaderNode_get_default_input_values #-}
 
--- | Returns an [Array] containing default values for all of the input ports of the node in the form [code][index0, value0, index1, value1, ...][/code].
+-- | Returns an @Array@ containing default values for all of the input ports of the node in the form @@index0, value0, index1, value1, ...@@.
 bindVisualShaderNode_get_default_input_values :: MethodBind
 bindVisualShaderNode_get_default_input_values
   = unsafePerformIO $
@@ -61,7 +81,7 @@ bindVisualShaderNode_get_default_input_values
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an [Array] containing default values for all of the input ports of the node in the form [code][index0, value0, index1, value1, ...][/code].
+-- | Returns an @Array@ containing default values for all of the input ports of the node in the form @@index0, value0, index1, value1, ...@@.
 get_default_input_values ::
                            (VisualShaderNode :< cls, Object :< cls) => cls -> IO Array
 get_default_input_values cls
@@ -74,9 +94,14 @@ get_default_input_values cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNode "get_default_input_values" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.VisualShaderNode.get_default_input_values
+
 {-# NOINLINE bindVisualShaderNode_get_input_port_default_value #-}
 
--- | Returns the default value of the input [code]port[/code].
+-- | Returns the default value of the input @port@.
 bindVisualShaderNode_get_input_port_default_value :: MethodBind
 bindVisualShaderNode_get_input_port_default_value
   = unsafePerformIO $
@@ -86,7 +111,7 @@ bindVisualShaderNode_get_input_port_default_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the default value of the input [code]port[/code].
+-- | Returns the default value of the input @port@.
 get_input_port_default_value ::
                                (VisualShaderNode :< cls, Object :< cls) =>
                                cls -> Int -> IO GodotVariant
@@ -100,9 +125,16 @@ get_input_port_default_value cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNode "get_input_port_default_value"
+           '[Int]
+           (IO GodotVariant)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNode.get_input_port_default_value
+
 {-# NOINLINE bindVisualShaderNode_get_output_port_for_preview #-}
 
--- | Sets the output port index which will be showed for preview. If set to [code]-1[/code] no port will be open for preview.
+-- | Sets the output port index which will be showed for preview. If set to @-1@ no port will be open for preview.
 bindVisualShaderNode_get_output_port_for_preview :: MethodBind
 bindVisualShaderNode_get_output_port_for_preview
   = unsafePerformIO $
@@ -112,7 +144,7 @@ bindVisualShaderNode_get_output_port_for_preview
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the output port index which will be showed for preview. If set to [code]-1[/code] no port will be open for preview.
+-- | Sets the output port index which will be showed for preview. If set to @-1@ no port will be open for preview.
 get_output_port_for_preview ::
                               (VisualShaderNode :< cls, Object :< cls) => cls -> IO Int
 get_output_port_for_preview cls
@@ -125,9 +157,16 @@ get_output_port_for_preview cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNode "get_output_port_for_preview"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNode.get_output_port_for_preview
+
 {-# NOINLINE bindVisualShaderNode_set_default_input_values #-}
 
--- | Sets the default input ports values using an [Array] of the form [code][index0, value0, index1, value1, ...][/code]. For example: [code][0, Vector3(0, 0, 0), 1, Vector3(0, 0, 0)][/code].
+-- | Sets the default input ports values using an @Array@ of the form @@index0, value0, index1, value1, ...@@. For example: @@0, Vector3(0, 0, 0), 1, Vector3(0, 0, 0)@@.
 bindVisualShaderNode_set_default_input_values :: MethodBind
 bindVisualShaderNode_set_default_input_values
   = unsafePerformIO $
@@ -137,7 +176,7 @@ bindVisualShaderNode_set_default_input_values
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default input ports values using an [Array] of the form [code][index0, value0, index1, value1, ...][/code]. For example: [code][0, Vector3(0, 0, 0), 1, Vector3(0, 0, 0)][/code].
+-- | Sets the default input ports values using an @Array@ of the form @@index0, value0, index1, value1, ...@@. For example: @@0, Vector3(0, 0, 0), 1, Vector3(0, 0, 0)@@.
 set_default_input_values ::
                            (VisualShaderNode :< cls, Object :< cls) => cls -> Array -> IO ()
 set_default_input_values cls arg1
@@ -150,9 +189,15 @@ set_default_input_values cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNode "set_default_input_values"
+           '[Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNode.set_default_input_values
+
 {-# NOINLINE bindVisualShaderNode_set_input_port_default_value #-}
 
--- | Sets the default value for the selected input [code]port[/code].
+-- | Sets the default value for the selected input @port@.
 bindVisualShaderNode_set_input_port_default_value :: MethodBind
 bindVisualShaderNode_set_input_port_default_value
   = unsafePerformIO $
@@ -162,7 +207,7 @@ bindVisualShaderNode_set_input_port_default_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default value for the selected input [code]port[/code].
+-- | Sets the default value for the selected input @port@.
 set_input_port_default_value ::
                                (VisualShaderNode :< cls, Object :< cls) =>
                                cls -> Int -> GodotVariant -> IO ()
@@ -176,9 +221,16 @@ set_input_port_default_value cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNode "set_input_port_default_value"
+           '[Int, GodotVariant]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNode.set_input_port_default_value
+
 {-# NOINLINE bindVisualShaderNode_set_output_port_for_preview #-}
 
--- | Sets the output port index which will be showed for preview. If set to [code]-1[/code] no port will be open for preview.
+-- | Sets the output port index which will be showed for preview. If set to @-1@ no port will be open for preview.
 bindVisualShaderNode_set_output_port_for_preview :: MethodBind
 bindVisualShaderNode_set_output_port_for_preview
   = unsafePerformIO $
@@ -188,7 +240,7 @@ bindVisualShaderNode_set_output_port_for_preview
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the output port index which will be showed for preview. If set to [code]-1[/code] no port will be open for preview.
+-- | Sets the output port index which will be showed for preview. If set to @-1@ no port will be open for preview.
 set_output_port_for_preview ::
                               (VisualShaderNode :< cls, Object :< cls) => cls -> Int -> IO ()
 set_output_port_for_preview cls arg1
@@ -200,3 +252,10 @@ set_output_port_for_preview cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNode "set_output_port_for_preview"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNode.set_output_port_for_preview

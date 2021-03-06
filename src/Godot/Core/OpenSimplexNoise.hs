@@ -24,9 +24,34 @@ module Godot.Core.OpenSimplexNoise
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty OpenSimplexNoise "lacunarity" Float 'False
+         where
+        nodeProperty
+          = (get_lacunarity, wrapDroppingSetter set_lacunarity, Nothing)
+
+instance NodeProperty OpenSimplexNoise "octaves" Int 'False where
+        nodeProperty
+          = (get_octaves, wrapDroppingSetter set_octaves, Nothing)
+
+instance NodeProperty OpenSimplexNoise "period" Float 'False where
+        nodeProperty = (get_period, wrapDroppingSetter set_period, Nothing)
+
+instance NodeProperty OpenSimplexNoise "persistence" Float 'False
+         where
+        nodeProperty
+          = (get_persistence, wrapDroppingSetter set_persistence, Nothing)
+
+instance NodeProperty OpenSimplexNoise "seed" Int 'False where
+        nodeProperty = (get_seed, wrapDroppingSetter set_seed, Nothing)
 
 {-# NOINLINE bindOpenSimplexNoise_get_image #-}
 
@@ -50,6 +75,11 @@ get_image cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_image" '[Int, Int]
+           (IO Image)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_image
+
 {-# NOINLINE bindOpenSimplexNoise_get_lacunarity #-}
 
 bindOpenSimplexNoise_get_lacunarity :: MethodBind
@@ -71,6 +101,11 @@ get_lacunarity cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod OpenSimplexNoise "get_lacunarity" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_lacunarity
 
 {-# NOINLINE bindOpenSimplexNoise_get_noise_1d #-}
 
@@ -95,6 +130,11 @@ get_noise_1d cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_noise_1d" '[Float]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_noise_1d
+
 {-# NOINLINE bindOpenSimplexNoise_get_noise_2d #-}
 
 bindOpenSimplexNoise_get_noise_2d :: MethodBind
@@ -117,6 +157,11 @@ get_noise_2d cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod OpenSimplexNoise "get_noise_2d" '[Float, Float]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_noise_2d
 
 {-# NOINLINE bindOpenSimplexNoise_get_noise_2dv #-}
 
@@ -141,6 +186,11 @@ get_noise_2dv cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_noise_2dv" '[Vector2]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_noise_2dv
+
 {-# NOINLINE bindOpenSimplexNoise_get_noise_3d #-}
 
 bindOpenSimplexNoise_get_noise_3d :: MethodBind
@@ -164,6 +214,12 @@ get_noise_3d cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_noise_3d"
+           '[Float, Float, Float]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_noise_3d
+
 {-# NOINLINE bindOpenSimplexNoise_get_noise_3dv #-}
 
 bindOpenSimplexNoise_get_noise_3dv :: MethodBind
@@ -186,6 +242,11 @@ get_noise_3dv cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod OpenSimplexNoise "get_noise_3dv" '[Vector3]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_noise_3dv
 
 {-# NOINLINE bindOpenSimplexNoise_get_noise_4d #-}
 
@@ -211,6 +272,12 @@ get_noise_4d cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_noise_4d"
+           '[Float, Float, Float, Float]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_noise_4d
+
 {-# NOINLINE bindOpenSimplexNoise_get_octaves #-}
 
 bindOpenSimplexNoise_get_octaves :: MethodBind
@@ -233,6 +300,10 @@ get_octaves cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_octaves" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_octaves
+
 {-# NOINLINE bindOpenSimplexNoise_get_period #-}
 
 bindOpenSimplexNoise_get_period :: MethodBind
@@ -253,6 +324,10 @@ get_period cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod OpenSimplexNoise "get_period" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_period
 
 {-# NOINLINE bindOpenSimplexNoise_get_persistence #-}
 
@@ -276,6 +351,11 @@ get_persistence cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_persistence" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_persistence
+
 {-# NOINLINE bindOpenSimplexNoise_get_seamless_image #-}
 
 bindOpenSimplexNoise_get_seamless_image :: MethodBind
@@ -298,6 +378,11 @@ get_seamless_image cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "get_seamless_image" '[Int]
+           (IO Image)
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_seamless_image
+
 {-# NOINLINE bindOpenSimplexNoise_get_seed #-}
 
 bindOpenSimplexNoise_get_seed :: MethodBind
@@ -318,6 +403,9 @@ get_seed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod OpenSimplexNoise "get_seed" '[] (IO Int) where
+        nodeMethod = Godot.Core.OpenSimplexNoise.get_seed
 
 {-# NOINLINE bindOpenSimplexNoise_set_lacunarity #-}
 
@@ -341,6 +429,11 @@ set_lacunarity cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "set_lacunarity" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.set_lacunarity
+
 {-# NOINLINE bindOpenSimplexNoise_set_octaves #-}
 
 bindOpenSimplexNoise_set_octaves :: MethodBind
@@ -363,6 +456,10 @@ set_octaves cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "set_octaves" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.set_octaves
+
 {-# NOINLINE bindOpenSimplexNoise_set_period #-}
 
 bindOpenSimplexNoise_set_period :: MethodBind
@@ -383,6 +480,10 @@ set_period cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod OpenSimplexNoise "set_period" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.set_period
 
 {-# NOINLINE bindOpenSimplexNoise_set_persistence #-}
 
@@ -406,6 +507,11 @@ set_persistence cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod OpenSimplexNoise "set_persistence" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.set_persistence
+
 {-# NOINLINE bindOpenSimplexNoise_set_seed #-}
 
 bindOpenSimplexNoise_set_seed :: MethodBind
@@ -426,3 +532,7 @@ set_seed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod OpenSimplexNoise "set_seed" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.OpenSimplexNoise.set_seed

@@ -18,9 +18,14 @@ module Godot.Core.VisualShaderNodeScalarOp
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
 
 _OP_MUL :: Int
 _OP_MUL = 2
@@ -52,6 +57,12 @@ _OP_ATAN2 = 8
 _OP_DIV :: Int
 _OP_DIV = 3
 
+instance NodeProperty VisualShaderNodeScalarOp "operator" Int
+           'False
+         where
+        nodeProperty
+          = (get_operator, wrapDroppingSetter set_operator, Nothing)
+
 {-# NOINLINE bindVisualShaderNodeScalarOp_get_operator #-}
 
 bindVisualShaderNodeScalarOp_get_operator :: MethodBind
@@ -73,6 +84,11 @@ get_operator cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeScalarOp "get_operator" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeScalarOp.get_operator
 
 {-# NOINLINE bindVisualShaderNodeScalarOp_set_operator #-}
 
@@ -96,3 +112,8 @@ set_operator cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeScalarOp "set_operator" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeScalarOp.set_operator

@@ -18,9 +18,14 @@ module Godot.Core.ConeTwistJoint
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Joint()
 
 _PARAM_SWING_SPAN :: Int
 _PARAM_SWING_SPAN = 0
@@ -40,11 +45,37 @@ _PARAM_RELAXATION = 4
 _PARAM_BIAS :: Int
 _PARAM_BIAS = 2
 
+instance NodeProperty ConeTwistJoint "bias" Float 'False where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_param, wrapIndexedSetter 2 set_param,
+             Nothing)
+
+instance NodeProperty ConeTwistJoint "relaxation" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_param, wrapIndexedSetter 4 set_param,
+             Nothing)
+
+instance NodeProperty ConeTwistJoint "softness" Float 'False where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_param, wrapIndexedSetter 3 set_param,
+             Nothing)
+
+instance NodeProperty ConeTwistJoint "swing_span" Float 'False
+         where
+        nodeProperty
+          = (_get_swing_span, wrapDroppingSetter _set_swing_span, Nothing)
+
+instance NodeProperty ConeTwistJoint "twist_span" Float 'False
+         where
+        nodeProperty
+          = (_get_twist_span, wrapDroppingSetter _set_twist_span, Nothing)
+
 {-# NOINLINE bindConeTwistJoint__get_swing_span #-}
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [ConeTwistJoint].
+--   			Could be defined as looseness in the @ConeTwistJoint@.
 --   			If below 0.05, this behavior is locked.
 bindConeTwistJoint__get_swing_span :: MethodBind
 bindConeTwistJoint__get_swing_span
@@ -57,7 +88,7 @@ bindConeTwistJoint__get_swing_span
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [ConeTwistJoint].
+--   			Could be defined as looseness in the @ConeTwistJoint@.
 --   			If below 0.05, this behavior is locked.
 _get_swing_span ::
                   (ConeTwistJoint :< cls, Object :< cls) => cls -> IO Float
@@ -69,6 +100,10 @@ _get_swing_span cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ConeTwistJoint "_get_swing_span" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ConeTwistJoint._get_swing_span
 
 {-# NOINLINE bindConeTwistJoint__get_twist_span #-}
 
@@ -96,11 +131,15 @@ _get_twist_span cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ConeTwistJoint "_get_twist_span" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ConeTwistJoint._get_twist_span
+
 {-# NOINLINE bindConeTwistJoint__set_swing_span #-}
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [ConeTwistJoint].
+--   			Could be defined as looseness in the @ConeTwistJoint@.
 --   			If below 0.05, this behavior is locked.
 bindConeTwistJoint__set_swing_span :: MethodBind
 bindConeTwistJoint__set_swing_span
@@ -113,7 +152,7 @@ bindConeTwistJoint__set_swing_span
 
 -- | Swing is rotation from side to side, around the axis perpendicular to the twist axis.
 --   			The swing span defines, how much rotation will not get corrected along the swing axis.
---   			Could be defined as looseness in the [ConeTwistJoint].
+--   			Could be defined as looseness in the @ConeTwistJoint@.
 --   			If below 0.05, this behavior is locked.
 _set_swing_span ::
                   (ConeTwistJoint :< cls, Object :< cls) => cls -> Float -> IO ()
@@ -125,6 +164,11 @@ _set_swing_span cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ConeTwistJoint "_set_swing_span" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ConeTwistJoint._set_swing_span
 
 {-# NOINLINE bindConeTwistJoint__set_twist_span #-}
 
@@ -152,6 +196,11 @@ _set_twist_span cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ConeTwistJoint "_set_twist_span" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ConeTwistJoint._set_twist_span
+
 {-# NOINLINE bindConeTwistJoint_get_param #-}
 
 -- | The speed with which the swing or twist will take place.
@@ -176,6 +225,10 @@ get_param cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ConeTwistJoint "get_param" '[Int] (IO Float)
+         where
+        nodeMethod = Godot.Core.ConeTwistJoint.get_param
 
 {-# NOINLINE bindConeTwistJoint_set_param #-}
 
@@ -202,3 +255,8 @@ set_param cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ConeTwistJoint "set_param" '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ConeTwistJoint.set_param

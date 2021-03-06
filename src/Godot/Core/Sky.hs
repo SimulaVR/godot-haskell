@@ -14,9 +14,14 @@ module Godot.Core.Sky
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _RADIANCE_SIZE_128 :: Int
 _RADIANCE_SIZE_128 = 2
@@ -42,11 +47,16 @@ _RADIANCE_SIZE_256 = 3
 _RADIANCE_SIZE_MAX :: Int
 _RADIANCE_SIZE_MAX = 7
 
+instance NodeProperty Sky "radiance_size" Int 'False where
+        nodeProperty
+          = (get_radiance_size, wrapDroppingSetter set_radiance_size,
+             Nothing)
+
 {-# NOINLINE bindSky_get_radiance_size #-}
 
--- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values.
---   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
+-- | The @Sky@'s radiance map size. The higher the radiance map size, the more detailed the lighting from the @Sky@ will be.
+--   			See @enum RadianceSize@ constants for values.
+--   			__Note:__ Some hardware will have trouble with higher radiance sizes, especially @RADIANCE_SIZE_512@ and above. Only use such high values on high-end hardware.
 bindSky_get_radiance_size :: MethodBind
 bindSky_get_radiance_size
   = unsafePerformIO $
@@ -56,9 +66,9 @@ bindSky_get_radiance_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values.
---   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
+-- | The @Sky@'s radiance map size. The higher the radiance map size, the more detailed the lighting from the @Sky@ will be.
+--   			See @enum RadianceSize@ constants for values.
+--   			__Note:__ Some hardware will have trouble with higher radiance sizes, especially @RADIANCE_SIZE_512@ and above. Only use such high values on high-end hardware.
 get_radiance_size :: (Sky :< cls, Object :< cls) => cls -> IO Int
 get_radiance_size cls
   = withVariantArray []
@@ -68,11 +78,14 @@ get_radiance_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sky "get_radiance_size" '[] (IO Int) where
+        nodeMethod = Godot.Core.Sky.get_radiance_size
+
 {-# NOINLINE bindSky_set_radiance_size #-}
 
--- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values.
---   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
+-- | The @Sky@'s radiance map size. The higher the radiance map size, the more detailed the lighting from the @Sky@ will be.
+--   			See @enum RadianceSize@ constants for values.
+--   			__Note:__ Some hardware will have trouble with higher radiance sizes, especially @RADIANCE_SIZE_512@ and above. Only use such high values on high-end hardware.
 bindSky_set_radiance_size :: MethodBind
 bindSky_set_radiance_size
   = unsafePerformIO $
@@ -82,9 +95,9 @@ bindSky_set_radiance_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Sky]'s radiance map size. The higher the radiance map size, the more detailed the lighting from the [Sky] will be.
---   			See [enum RadianceSize] constants for values.
---   			[b]Note:[/b] Some hardware will have trouble with higher radiance sizes, especially [constant RADIANCE_SIZE_512] and above. Only use such high values on high-end hardware.
+-- | The @Sky@'s radiance map size. The higher the radiance map size, the more detailed the lighting from the @Sky@ will be.
+--   			See @enum RadianceSize@ constants for values.
+--   			__Note:__ Some hardware will have trouble with higher radiance sizes, especially @RADIANCE_SIZE_512@ and above. Only use such high values on high-end hardware.
 set_radiance_size ::
                     (Sky :< cls, Object :< cls) => cls -> Int -> IO ()
 set_radiance_size cls arg1
@@ -94,3 +107,6 @@ set_radiance_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sky "set_radiance_size" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Sky.set_radiance_size

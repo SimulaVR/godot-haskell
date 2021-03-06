@@ -8,9 +8,17 @@ module Godot.Core.VisualScriptSelect
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptSelect "type" Int 'False where
+        nodeProperty = (get_typed, wrapDroppingSetter set_typed, Nothing)
 
 {-# NOINLINE bindVisualScriptSelect_get_typed #-}
 
@@ -34,6 +42,10 @@ get_typed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptSelect "get_typed" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptSelect.get_typed
+
 {-# NOINLINE bindVisualScriptSelect_set_typed #-}
 
 bindVisualScriptSelect_set_typed :: MethodBind
@@ -55,3 +67,7 @@ set_typed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptSelect "set_typed" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptSelect.set_typed

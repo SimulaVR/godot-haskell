@@ -14,9 +14,14 @@ module Godot.Tools.EditorInspectorPlugin
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindEditorInspectorPlugin_add_custom_control #-}
 
@@ -43,9 +48,15 @@ add_custom_control cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspectorPlugin "add_custom_control"
+           '[Control]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspectorPlugin.add_custom_control
+
 {-# NOINLINE bindEditorInspectorPlugin_add_property_editor #-}
 
--- | Adds a property editor, this must inherit [EditorProperty].
+-- | Adds a property editor, this must inherit @EditorProperty@.
 bindEditorInspectorPlugin_add_property_editor :: MethodBind
 bindEditorInspectorPlugin_add_property_editor
   = unsafePerformIO $
@@ -55,7 +66,7 @@ bindEditorInspectorPlugin_add_property_editor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a property editor, this must inherit [EditorProperty].
+-- | Adds a property editor, this must inherit @EditorProperty@.
 add_property_editor ::
                       (EditorInspectorPlugin :< cls, Object :< cls) =>
                       cls -> GodotString -> Control -> IO ()
@@ -69,10 +80,16 @@ add_property_editor cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspectorPlugin "add_property_editor"
+           '[GodotString, Control]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspectorPlugin.add_property_editor
+
 {-# NOINLINE bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
              #-}
 
--- | Adds an editor that allows modifying multiple properties, this must inherit [EditorProperty].
+-- | Adds an editor that allows modifying multiple properties, this must inherit @EditorProperty@.
 bindEditorInspectorPlugin_add_property_editor_for_multiple_properties ::
                                                                       MethodBind
 bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
@@ -83,7 +100,7 @@ bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an editor that allows modifying multiple properties, this must inherit [EditorProperty].
+-- | Adds an editor that allows modifying multiple properties, this must inherit @EditorProperty@.
 add_property_editor_for_multiple_properties ::
                                               (EditorInspectorPlugin :< cls, Object :< cls) =>
                                               cls ->
@@ -98,9 +115,17 @@ add_property_editor_for_multiple_properties cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspectorPlugin
+           "add_property_editor_for_multiple_properties"
+           '[GodotString, PoolStringArray, Control]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorInspectorPlugin.add_property_editor_for_multiple_properties
+
 {-# NOINLINE bindEditorInspectorPlugin_can_handle #-}
 
--- | Returns [code]true[/code] if this object can be handled by this plugin.
+-- | Returns @true@ if this object can be handled by this plugin.
 bindEditorInspectorPlugin_can_handle :: MethodBind
 bindEditorInspectorPlugin_can_handle
   = unsafePerformIO $
@@ -110,7 +135,7 @@ bindEditorInspectorPlugin_can_handle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if this object can be handled by this plugin.
+-- | Returns @true@ if this object can be handled by this plugin.
 can_handle ::
              (EditorInspectorPlugin :< cls, Object :< cls) =>
              cls -> Object -> IO Bool
@@ -122,6 +147,11 @@ can_handle cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspectorPlugin "can_handle" '[Object]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Tools.EditorInspectorPlugin.can_handle
 
 {-# NOINLINE bindEditorInspectorPlugin_parse_begin #-}
 
@@ -148,6 +178,11 @@ parse_begin cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspectorPlugin "parse_begin" '[Object]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspectorPlugin.parse_begin
+
 {-# NOINLINE bindEditorInspectorPlugin_parse_category #-}
 
 -- | Called to allow adding controls at the beginning of the category.
@@ -173,6 +208,12 @@ parse_category cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspectorPlugin "parse_category"
+           '[Object, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspectorPlugin.parse_category
+
 {-# NOINLINE bindEditorInspectorPlugin_parse_end #-}
 
 -- | Called to allow adding controls at the end of the list.
@@ -197,9 +238,13 @@ parse_end cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspectorPlugin "parse_end" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspectorPlugin.parse_end
+
 {-# NOINLINE bindEditorInspectorPlugin_parse_property #-}
 
--- | Called to allow adding property specific editors to the inspector. Usually these inherit [EditorProperty]. Returning [code]true[/code] removes the built-in editor for this property, otherwise allows to insert a custom editor before the built-in one.
+-- | Called to allow adding property specific editors to the inspector. Usually these inherit @EditorProperty@. Returning @true@ removes the built-in editor for this property, otherwise allows to insert a custom editor before the built-in one.
 bindEditorInspectorPlugin_parse_property :: MethodBind
 bindEditorInspectorPlugin_parse_property
   = unsafePerformIO $
@@ -209,7 +254,7 @@ bindEditorInspectorPlugin_parse_property
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called to allow adding property specific editors to the inspector. Usually these inherit [EditorProperty]. Returning [code]true[/code] removes the built-in editor for this property, otherwise allows to insert a custom editor before the built-in one.
+-- | Called to allow adding property specific editors to the inspector. Usually these inherit @EditorProperty@. Returning @true@ removes the built-in editor for this property, otherwise allows to insert a custom editor before the built-in one.
 parse_property ::
                  (EditorInspectorPlugin :< cls, Object :< cls) =>
                  cls ->
@@ -225,3 +270,9 @@ parse_property cls arg1 arg2 arg3 arg4 arg5 arg6
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspectorPlugin "parse_property"
+           '[Object, Int, GodotString, Int, GodotString, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Tools.EditorInspectorPlugin.parse_property

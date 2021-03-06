@@ -14,9 +14,33 @@ module Godot.Core.SphereMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PrimitiveMesh()
+
+instance NodeProperty SphereMesh "height" Float 'False where
+        nodeProperty = (get_height, wrapDroppingSetter set_height, Nothing)
+
+instance NodeProperty SphereMesh "is_hemisphere" Bool 'False where
+        nodeProperty
+          = (get_is_hemisphere, wrapDroppingSetter set_is_hemisphere,
+             Nothing)
+
+instance NodeProperty SphereMesh "radial_segments" Int 'False where
+        nodeProperty
+          = (get_radial_segments, wrapDroppingSetter set_radial_segments,
+             Nothing)
+
+instance NodeProperty SphereMesh "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
+
+instance NodeProperty SphereMesh "rings" Int 'False where
+        nodeProperty = (get_rings, wrapDroppingSetter set_rings, Nothing)
 
 {-# NOINLINE bindSphereMesh_get_height #-}
 
@@ -40,10 +64,13 @@ get_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SphereMesh "get_height" '[] (IO Float) where
+        nodeMethod = Godot.Core.SphereMesh.get_height
+
 {-# NOINLINE bindSphereMesh_get_is_hemisphere #-}
 
--- | If [code]true[/code], a hemisphere is created rather than a full sphere.
---   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
+-- | If @true@, a hemisphere is created rather than a full sphere.
+--   			__Note:__ To get a regular hemisphere, the height and radius of the sphere must be equal.
 bindSphereMesh_get_is_hemisphere :: MethodBind
 bindSphereMesh_get_is_hemisphere
   = unsafePerformIO $
@@ -53,8 +80,8 @@ bindSphereMesh_get_is_hemisphere
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], a hemisphere is created rather than a full sphere.
---   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
+-- | If @true@, a hemisphere is created rather than a full sphere.
+--   			__Note:__ To get a regular hemisphere, the height and radius of the sphere must be equal.
 get_is_hemisphere ::
                     (SphereMesh :< cls, Object :< cls) => cls -> IO Bool
 get_is_hemisphere cls
@@ -65,6 +92,10 @@ get_is_hemisphere cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SphereMesh "get_is_hemisphere" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.SphereMesh.get_is_hemisphere
 
 {-# NOINLINE bindSphereMesh_get_radial_segments #-}
 
@@ -90,6 +121,10 @@ get_radial_segments cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SphereMesh "get_radial_segments" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.SphereMesh.get_radial_segments
+
 {-# NOINLINE bindSphereMesh_get_radius #-}
 
 -- | Radius of sphere.
@@ -112,6 +147,9 @@ get_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SphereMesh "get_radius" '[] (IO Float) where
+        nodeMethod = Godot.Core.SphereMesh.get_radius
+
 {-# NOINLINE bindSphereMesh_get_rings #-}
 
 -- | Number of segments along the height of the sphere.
@@ -132,6 +170,9 @@ get_rings cls
          godot_method_bind_call bindSphereMesh_get_rings (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SphereMesh "get_rings" '[] (IO Int) where
+        nodeMethod = Godot.Core.SphereMesh.get_rings
 
 {-# NOINLINE bindSphereMesh_set_height #-}
 
@@ -156,10 +197,13 @@ set_height cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SphereMesh "set_height" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.SphereMesh.set_height
+
 {-# NOINLINE bindSphereMesh_set_is_hemisphere #-}
 
--- | If [code]true[/code], a hemisphere is created rather than a full sphere.
---   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
+-- | If @true@, a hemisphere is created rather than a full sphere.
+--   			__Note:__ To get a regular hemisphere, the height and radius of the sphere must be equal.
 bindSphereMesh_set_is_hemisphere :: MethodBind
 bindSphereMesh_set_is_hemisphere
   = unsafePerformIO $
@@ -169,8 +213,8 @@ bindSphereMesh_set_is_hemisphere
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], a hemisphere is created rather than a full sphere.
---   			[b]Note:[/b] To get a regular hemisphere, the height and radius of the sphere must be equal.
+-- | If @true@, a hemisphere is created rather than a full sphere.
+--   			__Note:__ To get a regular hemisphere, the height and radius of the sphere must be equal.
 set_is_hemisphere ::
                     (SphereMesh :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_is_hemisphere cls arg1
@@ -181,6 +225,10 @@ set_is_hemisphere cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SphereMesh "set_is_hemisphere" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.SphereMesh.set_is_hemisphere
 
 {-# NOINLINE bindSphereMesh_set_radial_segments #-}
 
@@ -206,6 +254,10 @@ set_radial_segments cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SphereMesh "set_radial_segments" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.SphereMesh.set_radial_segments
+
 {-# NOINLINE bindSphereMesh_set_radius #-}
 
 -- | Radius of sphere.
@@ -229,6 +281,9 @@ set_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SphereMesh "set_radius" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.SphereMesh.set_radius
+
 {-# NOINLINE bindSphereMesh_set_rings #-}
 
 -- | Number of segments along the height of the sphere.
@@ -250,3 +305,6 @@ set_rings cls arg1
          godot_method_bind_call bindSphereMesh_set_rings (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SphereMesh "set_rings" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.SphereMesh.set_rings

@@ -20,9 +20,14 @@ module Godot.Tools.ScriptCreateDialog
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.ConfirmationDialog()
 
 -- | Emitted when the user clicks the OK button.
 sig_script_created ::
@@ -54,6 +59,11 @@ _browse_class_in_tree cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptCreateDialog "_browse_class_in_tree" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._browse_class_in_tree
+
 {-# NOINLINE bindScriptCreateDialog__browse_path #-}
 
 bindScriptCreateDialog__browse_path :: MethodBind
@@ -77,6 +87,11 @@ _browse_path cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptCreateDialog "_browse_path" '[Bool, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._browse_path
+
 {-# NOINLINE bindScriptCreateDialog__built_in_pressed #-}
 
 bindScriptCreateDialog__built_in_pressed :: MethodBind
@@ -98,6 +113,11 @@ _built_in_pressed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptCreateDialog "_built_in_pressed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._built_in_pressed
 
 {-# NOINLINE bindScriptCreateDialog__class_name_changed #-}
 
@@ -122,6 +142,12 @@ _class_name_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptCreateDialog "_class_name_changed"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._class_name_changed
+
 {-# NOINLINE bindScriptCreateDialog__create #-}
 
 bindScriptCreateDialog__create :: MethodBind
@@ -142,6 +168,9 @@ _create cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptCreateDialog "_create" '[] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._create
 
 {-# NOINLINE bindScriptCreateDialog__file_selected #-}
 
@@ -166,6 +195,12 @@ _file_selected cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptCreateDialog "_file_selected"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._file_selected
+
 {-# NOINLINE bindScriptCreateDialog__lang_changed #-}
 
 bindScriptCreateDialog__lang_changed :: MethodBind
@@ -187,6 +222,11 @@ _lang_changed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptCreateDialog "_lang_changed" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._lang_changed
 
 {-# NOINLINE bindScriptCreateDialog__parent_name_changed #-}
 
@@ -211,6 +251,12 @@ _parent_name_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptCreateDialog "_parent_name_changed"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._parent_name_changed
+
 {-# NOINLINE bindScriptCreateDialog__path_changed #-}
 
 bindScriptCreateDialog__path_changed :: MethodBind
@@ -233,6 +279,12 @@ _path_changed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptCreateDialog "_path_changed"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._path_changed
 
 {-# NOINLINE bindScriptCreateDialog__path_entered #-}
 
@@ -257,6 +309,12 @@ _path_entered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptCreateDialog "_path_entered"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._path_entered
+
 {-# NOINLINE bindScriptCreateDialog__path_hbox_sorted #-}
 
 bindScriptCreateDialog__path_hbox_sorted :: MethodBind
@@ -278,6 +336,11 @@ _path_hbox_sorted cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptCreateDialog "_path_hbox_sorted" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._path_hbox_sorted
 
 {-# NOINLINE bindScriptCreateDialog__template_changed #-}
 
@@ -301,6 +364,11 @@ _template_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptCreateDialog "_template_changed" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog._template_changed
+
 {-# NOINLINE bindScriptCreateDialog_config #-}
 
 -- | Prefills required fields to configure the ScriptCreateDialog for use.
@@ -316,12 +384,21 @@ bindScriptCreateDialog_config
 -- | Prefills required fields to configure the ScriptCreateDialog for use.
 config ::
          (ScriptCreateDialog :< cls, Object :< cls) =>
-         cls -> GodotString -> GodotString -> Bool -> Bool -> IO ()
+         cls ->
+           GodotString -> GodotString -> Maybe Bool -> Maybe Bool -> IO ()
 config cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantBool True) toVariant arg3,
+       maybe (VariantBool True) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindScriptCreateDialog_config (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptCreateDialog "config"
+           '[GodotString, GodotString, Maybe Bool, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptCreateDialog.config

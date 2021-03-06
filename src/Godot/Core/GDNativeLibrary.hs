@@ -18,9 +18,40 @@ module Godot.Core.GDNativeLibrary
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty GDNativeLibrary "config_file" ConfigFile
+           'False
+         where
+        nodeProperty
+          = (get_config_file, wrapDroppingSetter set_config_file, Nothing)
+
+instance NodeProperty GDNativeLibrary "load_once" Bool 'False where
+        nodeProperty
+          = (should_load_once, wrapDroppingSetter set_load_once, Nothing)
+
+instance NodeProperty GDNativeLibrary "reloadable" Bool 'False
+         where
+        nodeProperty
+          = (is_reloadable, wrapDroppingSetter set_reloadable, Nothing)
+
+instance NodeProperty GDNativeLibrary "singleton" Bool 'False where
+        nodeProperty
+          = (is_singleton, wrapDroppingSetter set_singleton, Nothing)
+
+instance NodeProperty GDNativeLibrary "symbol_prefix" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_symbol_prefix, wrapDroppingSetter set_symbol_prefix,
+             Nothing)
 
 {-# NOINLINE bindGDNativeLibrary_get_config_file #-}
 
@@ -43,6 +74,11 @@ get_config_file cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNativeLibrary "get_config_file" '[]
+           (IO ConfigFile)
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.get_config_file
 
 {-# NOINLINE bindGDNativeLibrary_get_current_dependencies #-}
 
@@ -67,6 +103,11 @@ get_current_dependencies cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNativeLibrary "get_current_dependencies" '[]
+           (IO PoolStringArray)
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.get_current_dependencies
+
 {-# NOINLINE bindGDNativeLibrary_get_current_library_path #-}
 
 bindGDNativeLibrary_get_current_library_path :: MethodBind
@@ -88,6 +129,11 @@ get_current_library_path cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNativeLibrary "get_current_library_path" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.get_current_library_path
 
 {-# NOINLINE bindGDNativeLibrary_get_symbol_prefix #-}
 
@@ -111,6 +157,11 @@ get_symbol_prefix cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNativeLibrary "get_symbol_prefix" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.get_symbol_prefix
+
 {-# NOINLINE bindGDNativeLibrary_is_reloadable #-}
 
 bindGDNativeLibrary_is_reloadable :: MethodBind
@@ -133,6 +184,10 @@ is_reloadable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNativeLibrary "is_reloadable" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.is_reloadable
+
 {-# NOINLINE bindGDNativeLibrary_is_singleton #-}
 
 bindGDNativeLibrary_is_singleton :: MethodBind
@@ -154,6 +209,10 @@ is_singleton cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNativeLibrary "is_singleton" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.is_singleton
 
 {-# NOINLINE bindGDNativeLibrary_set_config_file #-}
 
@@ -178,6 +237,11 @@ set_config_file cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNativeLibrary "set_config_file" '[ConfigFile]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.set_config_file
+
 {-# NOINLINE bindGDNativeLibrary_set_load_once #-}
 
 bindGDNativeLibrary_set_load_once :: MethodBind
@@ -199,6 +263,10 @@ set_load_once cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNativeLibrary "set_load_once" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.set_load_once
 
 {-# NOINLINE bindGDNativeLibrary_set_reloadable #-}
 
@@ -222,6 +290,11 @@ set_reloadable cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNativeLibrary "set_reloadable" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.set_reloadable
+
 {-# NOINLINE bindGDNativeLibrary_set_singleton #-}
 
 bindGDNativeLibrary_set_singleton :: MethodBind
@@ -243,6 +316,10 @@ set_singleton cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNativeLibrary "set_singleton" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.set_singleton
 
 {-# NOINLINE bindGDNativeLibrary_set_symbol_prefix #-}
 
@@ -267,6 +344,12 @@ set_symbol_prefix cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GDNativeLibrary "set_symbol_prefix"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.set_symbol_prefix
+
 {-# NOINLINE bindGDNativeLibrary_should_load_once #-}
 
 bindGDNativeLibrary_should_load_once :: MethodBind
@@ -288,3 +371,8 @@ should_load_once cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GDNativeLibrary "should_load_once" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.GDNativeLibrary.should_load_once

@@ -10,9 +10,26 @@ module Godot.Core.VisualScriptConstant
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptConstant "type" Int 'False where
+        nodeProperty
+          = (get_constant_type, wrapDroppingSetter set_constant_type,
+             Nothing)
+
+instance NodeProperty VisualScriptConstant "value" GodotVariant
+           'False
+         where
+        nodeProperty
+          = (get_constant_value, wrapDroppingSetter set_constant_value,
+             Nothing)
 
 {-# NOINLINE bindVisualScriptConstant_get_constant_type #-}
 
@@ -35,6 +52,11 @@ get_constant_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptConstant "get_constant_type" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptConstant.get_constant_type
 
 {-# NOINLINE bindVisualScriptConstant_get_constant_value #-}
 
@@ -59,6 +81,11 @@ get_constant_value cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptConstant "get_constant_value" '[]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.VisualScriptConstant.get_constant_value
+
 {-# NOINLINE bindVisualScriptConstant_set_constant_type #-}
 
 bindVisualScriptConstant_set_constant_type :: MethodBind
@@ -80,6 +107,11 @@ set_constant_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptConstant "set_constant_type" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptConstant.set_constant_type
 
 {-# NOINLINE bindVisualScriptConstant_set_constant_value #-}
 
@@ -103,3 +135,9 @@ set_constant_value cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptConstant "set_constant_value"
+           '[GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptConstant.set_constant_value

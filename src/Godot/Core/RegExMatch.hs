@@ -12,9 +12,23 @@ module Godot.Core.RegExMatch
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
+
+instance NodeProperty RegExMatch "names" Dictionary 'True where
+        nodeProperty = (get_names, (), Nothing)
+
+instance NodeProperty RegExMatch "strings" Array 'True where
+        nodeProperty = (get_strings, (), Nothing)
+
+instance NodeProperty RegExMatch "subject" GodotString 'True where
+        nodeProperty = (get_subject, (), Nothing)
 
 {-# NOINLINE bindRegExMatch_get_end #-}
 
@@ -28,13 +42,19 @@ bindRegExMatch_get_end
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 get_end ::
-          (RegExMatch :< cls, Object :< cls) => cls -> GodotVariant -> IO Int
+          (RegExMatch :< cls, Object :< cls) =>
+          cls -> Maybe GodotVariant -> IO Int
 get_end cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantInt 0) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegExMatch_get_end (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegExMatch "get_end" '[Maybe GodotVariant]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.RegExMatch.get_end
 
 {-# NOINLINE bindRegExMatch_get_group_count #-}
 
@@ -57,6 +77,9 @@ get_group_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RegExMatch "get_group_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.RegExMatch.get_group_count
+
 {-# NOINLINE bindRegExMatch_get_names #-}
 
 bindRegExMatch_get_names :: MethodBind
@@ -77,6 +100,10 @@ get_names cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RegExMatch "get_names" '[] (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.RegExMatch.get_names
+
 {-# NOINLINE bindRegExMatch_get_start #-}
 
 bindRegExMatch_get_start :: MethodBind
@@ -89,13 +116,19 @@ bindRegExMatch_get_start
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 get_start ::
-            (RegExMatch :< cls, Object :< cls) => cls -> GodotVariant -> IO Int
+            (RegExMatch :< cls, Object :< cls) =>
+            cls -> Maybe GodotVariant -> IO Int
 get_start cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantInt 0) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegExMatch_get_start (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegExMatch "get_start" '[Maybe GodotVariant]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.RegExMatch.get_start
 
 {-# NOINLINE bindRegExMatch_get_string #-}
 
@@ -110,14 +143,19 @@ bindRegExMatch_get_string
 
 get_string ::
              (RegExMatch :< cls, Object :< cls) =>
-             cls -> GodotVariant -> IO GodotString
+             cls -> Maybe GodotVariant -> IO GodotString
 get_string cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantInt 0) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindRegExMatch_get_string (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegExMatch "get_string" '[Maybe GodotVariant]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.RegExMatch.get_string
 
 {-# NOINLINE bindRegExMatch_get_strings #-}
 
@@ -140,6 +178,9 @@ get_strings cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RegExMatch "get_strings" '[] (IO Array) where
+        nodeMethod = Godot.Core.RegExMatch.get_strings
+
 {-# NOINLINE bindRegExMatch_get_subject #-}
 
 bindRegExMatch_get_subject :: MethodBind
@@ -160,3 +201,7 @@ get_subject cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RegExMatch "get_subject" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.RegExMatch.get_subject

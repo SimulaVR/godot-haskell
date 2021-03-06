@@ -39,7 +39,7 @@ main = do
                                                      <|> (T.stripPrefix "_"  (cls ^. Classgen.Spec.name)
                                                           >>= \r -> H.lookup r docTable)
                                                      <|> (H.lookup  ("_" <> (cls ^. Classgen.Spec.name)) docTable)
-                                                    )) classes)
+                                                    ) classes) classes)
                         (ClassgenState mempty mempty mempty)
   writeModule godotHaskellRootDir $ godotApiTypes (state ^. tyDecls)
   mapM_ (writeModule godotHaskellRootDir) (HM.elems (state ^. modules))

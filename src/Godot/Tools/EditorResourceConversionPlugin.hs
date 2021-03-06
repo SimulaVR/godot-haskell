@@ -8,9 +8,14 @@ module Godot.Tools.EditorResourceConversionPlugin
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindEditorResourceConversionPlugin__convert #-}
 
@@ -35,6 +40,12 @@ _convert cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorResourceConversionPlugin "_convert"
+           '[Resource]
+           (IO Resource)
+         where
+        nodeMethod = Godot.Tools.EditorResourceConversionPlugin._convert
+
 {-# NOINLINE bindEditorResourceConversionPlugin__converts_to #-}
 
 bindEditorResourceConversionPlugin__converts_to :: MethodBind
@@ -58,3 +69,10 @@ _converts_to cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorResourceConversionPlugin "_converts_to"
+           '[]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Tools.EditorResourceConversionPlugin._converts_to

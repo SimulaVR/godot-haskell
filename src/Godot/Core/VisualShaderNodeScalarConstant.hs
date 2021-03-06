@@ -8,9 +8,21 @@ module Godot.Core.VisualShaderNodeScalarConstant
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
+
+instance NodeProperty VisualShaderNodeScalarConstant "constant"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_constant, wrapDroppingSetter set_constant, Nothing)
 
 {-# NOINLINE bindVisualShaderNodeScalarConstant_get_constant #-}
 
@@ -36,6 +48,12 @@ get_constant cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeScalarConstant "get_constant"
+           '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeScalarConstant.get_constant
+
 {-# NOINLINE bindVisualShaderNodeScalarConstant_set_constant #-}
 
 bindVisualShaderNodeScalarConstant_set_constant :: MethodBind
@@ -59,3 +77,9 @@ set_constant cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeScalarConstant "set_constant"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeScalarConstant.set_constant

@@ -14,9 +14,38 @@ module Godot.Core.AudioEffectLimiter
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
+
+instance NodeProperty AudioEffectLimiter "ceiling_db" Float 'False
+         where
+        nodeProperty
+          = (get_ceiling_db, wrapDroppingSetter set_ceiling_db, Nothing)
+
+instance NodeProperty AudioEffectLimiter "soft_clip_db" Float
+           'False
+         where
+        nodeProperty
+          = (get_soft_clip_db, wrapDroppingSetter set_soft_clip_db, Nothing)
+
+instance NodeProperty AudioEffectLimiter "soft_clip_ratio" Float
+           'False
+         where
+        nodeProperty
+          = (get_soft_clip_ratio, wrapDroppingSetter set_soft_clip_ratio,
+             Nothing)
+
+instance NodeProperty AudioEffectLimiter "threshold_db" Float
+           'False
+         where
+        nodeProperty
+          = (get_threshold_db, wrapDroppingSetter set_threshold_db, Nothing)
 
 {-# NOINLINE bindAudioEffectLimiter_get_ceiling_db #-}
 
@@ -42,6 +71,11 @@ get_ceiling_db cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectLimiter "get_ceiling_db" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.get_ceiling_db
+
 {-# NOINLINE bindAudioEffectLimiter_get_soft_clip_db #-}
 
 -- | Applies a gain to the limited waves, in decibels. Value can range from 0 to 6.
@@ -66,6 +100,11 @@ get_soft_clip_db cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectLimiter "get_soft_clip_db" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.get_soft_clip_db
+
 {-# NOINLINE bindAudioEffectLimiter_get_soft_clip_ratio #-}
 
 bindAudioEffectLimiter_get_soft_clip_ratio :: MethodBind
@@ -87,6 +126,11 @@ get_soft_clip_ratio cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectLimiter "get_soft_clip_ratio" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.get_soft_clip_ratio
 
 {-# NOINLINE bindAudioEffectLimiter_get_threshold_db #-}
 
@@ -112,6 +156,11 @@ get_threshold_db cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectLimiter "get_threshold_db" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.get_threshold_db
+
 {-# NOINLINE bindAudioEffectLimiter_set_ceiling_db #-}
 
 -- | The waveform's maximum allowed value, in decibels. Value can range from -20 to -0.1.
@@ -135,6 +184,11 @@ set_ceiling_db cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectLimiter "set_ceiling_db" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.set_ceiling_db
 
 {-# NOINLINE bindAudioEffectLimiter_set_soft_clip_db #-}
 
@@ -160,6 +214,11 @@ set_soft_clip_db cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectLimiter "set_soft_clip_db" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.set_soft_clip_db
+
 {-# NOINLINE bindAudioEffectLimiter_set_soft_clip_ratio #-}
 
 bindAudioEffectLimiter_set_soft_clip_ratio :: MethodBind
@@ -181,6 +240,12 @@ set_soft_clip_ratio cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectLimiter "set_soft_clip_ratio"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.set_soft_clip_ratio
 
 {-# NOINLINE bindAudioEffectLimiter_set_threshold_db #-}
 
@@ -205,3 +270,8 @@ set_threshold_db cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectLimiter "set_threshold_db" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectLimiter.set_threshold_db

@@ -6,9 +6,17 @@ module Godot.Core.QuadMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PrimitiveMesh()
+
+instance NodeProperty QuadMesh "size" Vector2 'False where
+        nodeProperty = (get_size, wrapDroppingSetter set_size, Nothing)
 
 {-# NOINLINE bindQuadMesh_get_size #-}
 
@@ -31,6 +39,9 @@ get_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod QuadMesh "get_size" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.QuadMesh.get_size
+
 {-# NOINLINE bindQuadMesh_set_size #-}
 
 -- | Size on the X and Y axes.
@@ -52,3 +63,6 @@ set_size cls arg1
          godot_method_bind_call bindQuadMesh_set_size (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod QuadMesh "set_size" '[Vector2] (IO ()) where
+        nodeMethod = Godot.Core.QuadMesh.set_size

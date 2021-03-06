@@ -1,0 +1,7 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "myproject:lib"
+
+    - path: "./game"
+      component: "myproject:lib"

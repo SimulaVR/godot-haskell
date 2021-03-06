@@ -16,9 +16,14 @@ module Godot.Core.VisualShaderNodeTextureUniform
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNodeUniform()
 
 _TYPE_DATA :: Int
 _TYPE_DATA = 0
@@ -37,6 +42,22 @@ _TYPE_NORMALMAP = 2
 
 _COLOR_DEFAULT_BLACK :: Int
 _COLOR_DEFAULT_BLACK = 1
+
+instance NodeProperty VisualShaderNodeTextureUniform
+           "color_default"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_color_default, wrapDroppingSetter set_color_default,
+             Nothing)
+
+instance NodeProperty VisualShaderNodeTextureUniform "texture_type"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_texture_type, wrapDroppingSetter set_texture_type, Nothing)
 
 {-# NOINLINE bindVisualShaderNodeTextureUniform_get_color_default
              #-}
@@ -65,10 +86,18 @@ get_color_default cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTextureUniform
+           "get_color_default"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeTextureUniform.get_color_default
+
 {-# NOINLINE bindVisualShaderNodeTextureUniform_get_texture_type
              #-}
 
--- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
+-- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 bindVisualShaderNodeTextureUniform_get_texture_type :: MethodBind
 bindVisualShaderNodeTextureUniform_get_texture_type
   = unsafePerformIO $
@@ -78,7 +107,7 @@ bindVisualShaderNodeTextureUniform_get_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
+-- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 get_texture_type ::
                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                    cls -> IO Int
@@ -91,6 +120,14 @@ get_texture_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeTextureUniform
+           "get_texture_type"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeTextureUniform.get_texture_type
 
 {-# NOINLINE bindVisualShaderNodeTextureUniform_set_color_default
              #-}
@@ -119,10 +156,18 @@ set_color_default cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTextureUniform
+           "set_color_default"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeTextureUniform.set_color_default
+
 {-# NOINLINE bindVisualShaderNodeTextureUniform_set_texture_type
              #-}
 
--- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
+-- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 bindVisualShaderNodeTextureUniform_set_texture_type :: MethodBind
 bindVisualShaderNodeTextureUniform_set_texture_type
   = unsafePerformIO $
@@ -132,7 +177,7 @@ bindVisualShaderNodeTextureUniform_set_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the type of data provided by the source texture. See [enum TextureType] for options.
+-- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 set_texture_type ::
                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                    cls -> Int -> IO ()
@@ -145,3 +190,11 @@ set_texture_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeTextureUniform
+           "set_texture_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeTextureUniform.set_texture_type

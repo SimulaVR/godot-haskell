@@ -35,9 +35,14 @@ module Godot.Core.PhysicalBone
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PhysicsBody()
 
 _JOINT_TYPE_6DOF :: Int
 _JOINT_TYPE_6DOF = 5
@@ -56,6 +61,39 @@ _JOINT_TYPE_SLIDER = 4
 
 _JOINT_TYPE_HINGE :: Int
 _JOINT_TYPE_HINGE = 3
+
+instance NodeProperty PhysicalBone "body_offset" Transform 'False
+         where
+        nodeProperty
+          = (get_body_offset, wrapDroppingSetter set_body_offset, Nothing)
+
+instance NodeProperty PhysicalBone "bounce" Float 'False where
+        nodeProperty = (get_bounce, wrapDroppingSetter set_bounce, Nothing)
+
+instance NodeProperty PhysicalBone "friction" Float 'False where
+        nodeProperty
+          = (get_friction, wrapDroppingSetter set_friction, Nothing)
+
+instance NodeProperty PhysicalBone "gravity_scale" Float 'False
+         where
+        nodeProperty
+          = (get_gravity_scale, wrapDroppingSetter set_gravity_scale,
+             Nothing)
+
+instance NodeProperty PhysicalBone "joint_offset" Transform 'False
+         where
+        nodeProperty
+          = (get_joint_offset, wrapDroppingSetter set_joint_offset, Nothing)
+
+instance NodeProperty PhysicalBone "joint_type" Int 'False where
+        nodeProperty
+          = (get_joint_type, wrapDroppingSetter set_joint_type, Nothing)
+
+instance NodeProperty PhysicalBone "mass" Float 'False where
+        nodeProperty = (get_mass, wrapDroppingSetter set_mass, Nothing)
+
+instance NodeProperty PhysicalBone "weight" Float 'False where
+        nodeProperty = (get_weight, wrapDroppingSetter set_weight, Nothing)
 
 {-# NOINLINE bindPhysicalBone__direct_state_changed #-}
 
@@ -79,6 +117,11 @@ _direct_state_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "_direct_state_changed" '[Object]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone._direct_state_changed
+
 {-# NOINLINE bindPhysicalBone_apply_central_impulse #-}
 
 bindPhysicalBone_apply_central_impulse :: MethodBind
@@ -100,6 +143,11 @@ apply_central_impulse cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "apply_central_impulse" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.apply_central_impulse
 
 {-# NOINLINE bindPhysicalBone_apply_impulse #-}
 
@@ -123,6 +171,12 @@ apply_impulse cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "apply_impulse"
+           '[Vector3, Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.apply_impulse
+
 {-# NOINLINE bindPhysicalBone_get_body_offset #-}
 
 bindPhysicalBone_get_body_offset :: MethodBind
@@ -145,6 +199,11 @@ get_body_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "get_body_offset" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.get_body_offset
+
 {-# NOINLINE bindPhysicalBone_get_bone_id #-}
 
 bindPhysicalBone_get_bone_id :: MethodBind
@@ -165,6 +224,9 @@ get_bone_id cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "get_bone_id" '[] (IO Int) where
+        nodeMethod = Godot.Core.PhysicalBone.get_bone_id
 
 {-# NOINLINE bindPhysicalBone_get_bounce #-}
 
@@ -187,6 +249,9 @@ get_bounce cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "get_bounce" '[] (IO Float) where
+        nodeMethod = Godot.Core.PhysicalBone.get_bounce
+
 {-# NOINLINE bindPhysicalBone_get_friction #-}
 
 bindPhysicalBone_get_friction :: MethodBind
@@ -207,6 +272,10 @@ get_friction cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "get_friction" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.get_friction
 
 {-# NOINLINE bindPhysicalBone_get_gravity_scale #-}
 
@@ -230,6 +299,10 @@ get_gravity_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "get_gravity_scale" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.get_gravity_scale
+
 {-# NOINLINE bindPhysicalBone_get_joint_offset #-}
 
 bindPhysicalBone_get_joint_offset :: MethodBind
@@ -252,6 +325,11 @@ get_joint_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "get_joint_offset" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.get_joint_offset
+
 {-# NOINLINE bindPhysicalBone_get_joint_type #-}
 
 bindPhysicalBone_get_joint_type :: MethodBind
@@ -273,6 +351,10 @@ get_joint_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "get_joint_type" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.get_joint_type
+
 {-# NOINLINE bindPhysicalBone_get_mass #-}
 
 bindPhysicalBone_get_mass :: MethodBind
@@ -292,6 +374,9 @@ get_mass cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "get_mass" '[] (IO Float) where
+        nodeMethod = Godot.Core.PhysicalBone.get_mass
 
 {-# NOINLINE bindPhysicalBone_get_simulate_physics #-}
 
@@ -315,6 +400,11 @@ get_simulate_physics cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "get_simulate_physics" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.get_simulate_physics
+
 {-# NOINLINE bindPhysicalBone_get_weight #-}
 
 bindPhysicalBone_get_weight :: MethodBind
@@ -335,6 +425,9 @@ get_weight cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "get_weight" '[] (IO Float) where
+        nodeMethod = Godot.Core.PhysicalBone.get_weight
 
 {-# NOINLINE bindPhysicalBone_is_simulating_physics #-}
 
@@ -358,6 +451,11 @@ is_simulating_physics cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "is_simulating_physics" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.is_simulating_physics
+
 {-# NOINLINE bindPhysicalBone_is_static_body #-}
 
 bindPhysicalBone_is_static_body :: MethodBind
@@ -378,6 +476,10 @@ is_static_body cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "is_static_body" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.PhysicalBone.is_static_body
 
 {-# NOINLINE bindPhysicalBone_set_body_offset #-}
 
@@ -401,6 +503,11 @@ set_body_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "set_body_offset" '[Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.set_body_offset
+
 {-# NOINLINE bindPhysicalBone_set_bounce #-}
 
 bindPhysicalBone_set_bounce :: MethodBind
@@ -422,6 +529,10 @@ set_bounce cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "set_bounce" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.set_bounce
+
 {-# NOINLINE bindPhysicalBone_set_friction #-}
 
 bindPhysicalBone_set_friction :: MethodBind
@@ -442,6 +553,10 @@ set_friction cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "set_friction" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.set_friction
 
 {-# NOINLINE bindPhysicalBone_set_gravity_scale #-}
 
@@ -465,6 +580,11 @@ set_gravity_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "set_gravity_scale" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.set_gravity_scale
+
 {-# NOINLINE bindPhysicalBone_set_joint_offset #-}
 
 bindPhysicalBone_set_joint_offset :: MethodBind
@@ -487,6 +607,11 @@ set_joint_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "set_joint_offset" '[Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.set_joint_offset
+
 {-# NOINLINE bindPhysicalBone_set_joint_type #-}
 
 bindPhysicalBone_set_joint_type :: MethodBind
@@ -507,6 +632,10 @@ set_joint_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "set_joint_type" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.set_joint_type
 
 {-# NOINLINE bindPhysicalBone_set_mass #-}
 
@@ -529,6 +658,9 @@ set_mass cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PhysicalBone "set_mass" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.PhysicalBone.set_mass
+
 {-# NOINLINE bindPhysicalBone_set_weight #-}
 
 bindPhysicalBone_set_weight :: MethodBind
@@ -549,3 +681,7 @@ set_weight cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PhysicalBone "set_weight" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PhysicalBone.set_weight

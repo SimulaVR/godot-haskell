@@ -30,11 +30,16 @@ module Godot.Core.CollisionObject
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
 
--- | Emitted when [method _input_event] receives an event. See its description for details.
+-- | Emitted when @method _input_event@ receives an event. See its description for details.
 sig_input_event :: Godot.Internal.Dispatch.Signal CollisionObject
 sig_input_event = Godot.Internal.Dispatch.Signal "input_event"
 
@@ -53,9 +58,22 @@ sig_mouse_exited = Godot.Internal.Dispatch.Signal "mouse_exited"
 
 instance NodeSignal CollisionObject "mouse_exited" '[]
 
+instance NodeProperty CollisionObject "input_capture_on_drag" Bool
+           'False
+         where
+        nodeProperty
+          = (get_capture_input_on_drag,
+             wrapDroppingSetter set_capture_input_on_drag, Nothing)
+
+instance NodeProperty CollisionObject "input_ray_pickable" Bool
+           'False
+         where
+        nodeProperty
+          = (is_ray_pickable, wrapDroppingSetter set_ray_pickable, Nothing)
+
 {-# NOINLINE bindCollisionObject__input_event #-}
 
--- | Accepts unhandled [InputEvent]s. [code]click_position[/code] is the clicked location in world space and [code]click_normal[/code] is the normal vector extending from the clicked surface of the [Shape] at [code]shape_idx[/code]. Connect to the [code]input_event[/code] signal to easily pick up these events.
+-- | Accepts unhandled @InputEvent@s. @click_position@ is the clicked location in world space and @click_normal@ is the normal vector extending from the clicked surface of the @Shape@ at @shape_idx@. Connect to the @input_event@ signal to easily pick up these events.
 bindCollisionObject__input_event :: MethodBind
 bindCollisionObject__input_event
   = unsafePerformIO $
@@ -65,7 +83,7 @@ bindCollisionObject__input_event
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Accepts unhandled [InputEvent]s. [code]click_position[/code] is the clicked location in world space and [code]click_normal[/code] is the normal vector extending from the clicked surface of the [Shape] at [code]shape_idx[/code]. Connect to the [code]input_event[/code] signal to easily pick up these events.
+-- | Accepts unhandled @InputEvent@s. @click_position@ is the clicked location in world space and @click_normal@ is the normal vector extending from the clicked surface of the @Shape@ at @shape_idx@. Connect to the @input_event@ signal to easily pick up these events.
 _input_event ::
                (CollisionObject :< cls, Object :< cls) =>
                cls -> Object -> InputEvent -> Vector3 -> Vector3 -> Int -> IO ()
@@ -80,9 +98,15 @@ _input_event cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "_input_event"
+           '[Object, InputEvent, Vector3, Vector3, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject._input_event
+
 {-# NOINLINE bindCollisionObject_create_shape_owner #-}
 
--- | Creates a new shape owner for the given object. Returns [code]owner_id[/code] of the new owner for future reference.
+-- | Creates a new shape owner for the given object. Returns @owner_id@ of the new owner for future reference.
 bindCollisionObject_create_shape_owner :: MethodBind
 bindCollisionObject_create_shape_owner
   = unsafePerformIO $
@@ -92,7 +116,7 @@ bindCollisionObject_create_shape_owner
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new shape owner for the given object. Returns [code]owner_id[/code] of the new owner for future reference.
+-- | Creates a new shape owner for the given object. Returns @owner_id@ of the new owner for future reference.
 create_shape_owner ::
                      (CollisionObject :< cls, Object :< cls) => cls -> Object -> IO Int
 create_shape_owner cls arg1
@@ -104,9 +128,14 @@ create_shape_owner cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "create_shape_owner" '[Object]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.CollisionObject.create_shape_owner
+
 {-# NOINLINE bindCollisionObject_get_capture_input_on_drag #-}
 
--- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
+-- | If @true@, the @CollisionObject@ will continue to receive input events as the mouse is dragged across its shapes.
 bindCollisionObject_get_capture_input_on_drag :: MethodBind
 bindCollisionObject_get_capture_input_on_drag
   = unsafePerformIO $
@@ -116,7 +145,7 @@ bindCollisionObject_get_capture_input_on_drag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
+-- | If @true@, the @CollisionObject@ will continue to receive input events as the mouse is dragged across its shapes.
 get_capture_input_on_drag ::
                             (CollisionObject :< cls, Object :< cls) => cls -> IO Bool
 get_capture_input_on_drag cls
@@ -129,9 +158,14 @@ get_capture_input_on_drag cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "get_capture_input_on_drag" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CollisionObject.get_capture_input_on_drag
+
 {-# NOINLINE bindCollisionObject_get_rid #-}
 
--- | Returns the object's [RID].
+-- | Returns the object's @RID@.
 bindCollisionObject_get_rid :: MethodBind
 bindCollisionObject_get_rid
   = unsafePerformIO $
@@ -141,7 +175,7 @@ bindCollisionObject_get_rid
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the object's [RID].
+-- | Returns the object's @RID@.
 get_rid :: (CollisionObject :< cls, Object :< cls) => cls -> IO Rid
 get_rid cls
   = withVariantArray []
@@ -151,9 +185,12 @@ get_rid cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "get_rid" '[] (IO Rid) where
+        nodeMethod = Godot.Core.CollisionObject.get_rid
+
 {-# NOINLINE bindCollisionObject_get_shape_owners #-}
 
--- | Returns an [Array] of [code]owner_id[/code] identifiers. You can use these ids in other methods that take [code]owner_id[/code] as an argument.
+-- | Returns an @Array@ of @owner_id@ identifiers. You can use these ids in other methods that take @owner_id@ as an argument.
 bindCollisionObject_get_shape_owners :: MethodBind
 bindCollisionObject_get_shape_owners
   = unsafePerformIO $
@@ -163,7 +200,7 @@ bindCollisionObject_get_shape_owners
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an [Array] of [code]owner_id[/code] identifiers. You can use these ids in other methods that take [code]owner_id[/code] as an argument.
+-- | Returns an @Array@ of @owner_id@ identifiers. You can use these ids in other methods that take @owner_id@ as an argument.
 get_shape_owners ::
                    (CollisionObject :< cls, Object :< cls) => cls -> IO Array
 get_shape_owners cls
@@ -175,9 +212,14 @@ get_shape_owners cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "get_shape_owners" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.CollisionObject.get_shape_owners
+
 {-# NOINLINE bindCollisionObject_is_ray_pickable #-}
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
+-- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
 bindCollisionObject_is_ray_pickable :: MethodBind
 bindCollisionObject_is_ray_pickable
   = unsafePerformIO $
@@ -187,7 +229,7 @@ bindCollisionObject_is_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
+-- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
 is_ray_pickable ::
                   (CollisionObject :< cls, Object :< cls) => cls -> IO Bool
 is_ray_pickable cls
@@ -199,9 +241,13 @@ is_ray_pickable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "is_ray_pickable" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CollisionObject.is_ray_pickable
+
 {-# NOINLINE bindCollisionObject_is_shape_owner_disabled #-}
 
--- | If [code]true[/code], the shape owner and its shapes are disabled.
+-- | If @true@, the shape owner and its shapes are disabled.
 bindCollisionObject_is_shape_owner_disabled :: MethodBind
 bindCollisionObject_is_shape_owner_disabled
   = unsafePerformIO $
@@ -211,7 +257,7 @@ bindCollisionObject_is_shape_owner_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the shape owner and its shapes are disabled.
+-- | If @true@, the shape owner and its shapes are disabled.
 is_shape_owner_disabled ::
                           (CollisionObject :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_shape_owner_disabled cls arg1
@@ -222,6 +268,12 @@ is_shape_owner_disabled cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionObject "is_shape_owner_disabled"
+           '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CollisionObject.is_shape_owner_disabled
 
 {-# NOINLINE bindCollisionObject_remove_shape_owner #-}
 
@@ -247,9 +299,14 @@ remove_shape_owner cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "remove_shape_owner" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.remove_shape_owner
+
 {-# NOINLINE bindCollisionObject_set_capture_input_on_drag #-}
 
--- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
+-- | If @true@, the @CollisionObject@ will continue to receive input events as the mouse is dragged across its shapes.
 bindCollisionObject_set_capture_input_on_drag :: MethodBind
 bindCollisionObject_set_capture_input_on_drag
   = unsafePerformIO $
@@ -259,7 +316,7 @@ bindCollisionObject_set_capture_input_on_drag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [CollisionObject] will continue to receive input events as the mouse is dragged across its shapes.
+-- | If @true@, the @CollisionObject@ will continue to receive input events as the mouse is dragged across its shapes.
 set_capture_input_on_drag ::
                             (CollisionObject :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_capture_input_on_drag cls arg1
@@ -272,9 +329,15 @@ set_capture_input_on_drag cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "set_capture_input_on_drag"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.set_capture_input_on_drag
+
 {-# NOINLINE bindCollisionObject_set_ray_pickable #-}
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
+-- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
 bindCollisionObject_set_ray_pickable :: MethodBind
 bindCollisionObject_set_ray_pickable
   = unsafePerformIO $
@@ -284,7 +347,7 @@ bindCollisionObject_set_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [CollisionObject]'s shapes will respond to [RayCast]s.
+-- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
 set_ray_pickable ::
                    (CollisionObject :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ray_pickable cls arg1
@@ -296,9 +359,14 @@ set_ray_pickable cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "set_ray_pickable" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.set_ray_pickable
+
 {-# NOINLINE bindCollisionObject_shape_find_owner #-}
 
--- | Returns the [code]owner_id[/code] of the given shape.
+-- | Returns the @owner_id@ of the given shape.
 bindCollisionObject_shape_find_owner :: MethodBind
 bindCollisionObject_shape_find_owner
   = unsafePerformIO $
@@ -308,7 +376,7 @@ bindCollisionObject_shape_find_owner
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]owner_id[/code] of the given shape.
+-- | Returns the @owner_id@ of the given shape.
 shape_find_owner ::
                    (CollisionObject :< cls, Object :< cls) => cls -> Int -> IO Int
 shape_find_owner cls arg1
@@ -320,9 +388,14 @@ shape_find_owner cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "shape_find_owner" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_find_owner
+
 {-# NOINLINE bindCollisionObject_shape_owner_add_shape #-}
 
--- | Adds a [Shape] to the shape owner.
+-- | Adds a @Shape@ to the shape owner.
 bindCollisionObject_shape_owner_add_shape :: MethodBind
 bindCollisionObject_shape_owner_add_shape
   = unsafePerformIO $
@@ -332,7 +405,7 @@ bindCollisionObject_shape_owner_add_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a [Shape] to the shape owner.
+-- | Adds a @Shape@ to the shape owner.
 shape_owner_add_shape ::
                         (CollisionObject :< cls, Object :< cls) =>
                         cls -> Int -> Shape -> IO ()
@@ -344,6 +417,12 @@ shape_owner_add_shape cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionObject "shape_owner_add_shape"
+           '[Int, Shape]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_add_shape
 
 {-# NOINLINE bindCollisionObject_shape_owner_clear_shapes #-}
 
@@ -369,6 +448,12 @@ shape_owner_clear_shapes cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "shape_owner_clear_shapes"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_clear_shapes
+
 {-# NOINLINE bindCollisionObject_shape_owner_get_owner #-}
 
 -- | Returns the parent object of the given shape owner.
@@ -393,9 +478,14 @@ shape_owner_get_owner cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "shape_owner_get_owner" '[Int]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_get_owner
+
 {-# NOINLINE bindCollisionObject_shape_owner_get_shape #-}
 
--- | Returns the [Shape] with the given id from the given shape owner.
+-- | Returns the @Shape@ with the given id from the given shape owner.
 bindCollisionObject_shape_owner_get_shape :: MethodBind
 bindCollisionObject_shape_owner_get_shape
   = unsafePerformIO $
@@ -405,7 +495,7 @@ bindCollisionObject_shape_owner_get_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Shape] with the given id from the given shape owner.
+-- | Returns the @Shape@ with the given id from the given shape owner.
 shape_owner_get_shape ::
                         (CollisionObject :< cls, Object :< cls) =>
                         cls -> Int -> Int -> IO Shape
@@ -417,6 +507,12 @@ shape_owner_get_shape cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionObject "shape_owner_get_shape"
+           '[Int, Int]
+           (IO Shape)
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_get_shape
 
 {-# NOINLINE bindCollisionObject_shape_owner_get_shape_count #-}
 
@@ -443,9 +539,15 @@ shape_owner_get_shape_count cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "shape_owner_get_shape_count"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_get_shape_count
+
 {-# NOINLINE bindCollisionObject_shape_owner_get_shape_index #-}
 
--- | Returns the child index of the [Shape] with the given id from the given shape owner.
+-- | Returns the child index of the @Shape@ with the given id from the given shape owner.
 bindCollisionObject_shape_owner_get_shape_index :: MethodBind
 bindCollisionObject_shape_owner_get_shape_index
   = unsafePerformIO $
@@ -455,7 +557,7 @@ bindCollisionObject_shape_owner_get_shape_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the child index of the [Shape] with the given id from the given shape owner.
+-- | Returns the child index of the @Shape@ with the given id from the given shape owner.
 shape_owner_get_shape_index ::
                               (CollisionObject :< cls, Object :< cls) =>
                               cls -> Int -> Int -> IO Int
@@ -469,9 +571,15 @@ shape_owner_get_shape_index cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "shape_owner_get_shape_index"
+           '[Int, Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_get_shape_index
+
 {-# NOINLINE bindCollisionObject_shape_owner_get_transform #-}
 
--- | Returns the shape owner's [Transform].
+-- | Returns the shape owner's @Transform@.
 bindCollisionObject_shape_owner_get_transform :: MethodBind
 bindCollisionObject_shape_owner_get_transform
   = unsafePerformIO $
@@ -481,7 +589,7 @@ bindCollisionObject_shape_owner_get_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the shape owner's [Transform].
+-- | Returns the shape owner's @Transform@.
 shape_owner_get_transform ::
                             (CollisionObject :< cls, Object :< cls) =>
                             cls -> Int -> IO Transform
@@ -494,6 +602,12 @@ shape_owner_get_transform cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionObject "shape_owner_get_transform"
+           '[Int]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_get_transform
 
 {-# NOINLINE bindCollisionObject_shape_owner_remove_shape #-}
 
@@ -520,9 +634,15 @@ shape_owner_remove_shape cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "shape_owner_remove_shape"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_remove_shape
+
 {-# NOINLINE bindCollisionObject_shape_owner_set_disabled #-}
 
--- | If [code]true[/code], disables the given shape owner.
+-- | If @true@, disables the given shape owner.
 bindCollisionObject_shape_owner_set_disabled :: MethodBind
 bindCollisionObject_shape_owner_set_disabled
   = unsafePerformIO $
@@ -532,7 +652,7 @@ bindCollisionObject_shape_owner_set_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], disables the given shape owner.
+-- | If @true@, disables the given shape owner.
 shape_owner_set_disabled ::
                            (CollisionObject :< cls, Object :< cls) =>
                            cls -> Int -> Bool -> IO ()
@@ -545,9 +665,15 @@ shape_owner_set_disabled cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionObject "shape_owner_set_disabled"
+           '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_set_disabled
+
 {-# NOINLINE bindCollisionObject_shape_owner_set_transform #-}
 
--- | Sets the [Transform] of the given shape owner.
+-- | Sets the @Transform@ of the given shape owner.
 bindCollisionObject_shape_owner_set_transform :: MethodBind
 bindCollisionObject_shape_owner_set_transform
   = unsafePerformIO $
@@ -557,7 +683,7 @@ bindCollisionObject_shape_owner_set_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the [Transform] of the given shape owner.
+-- | Sets the @Transform@ of the given shape owner.
 shape_owner_set_transform ::
                             (CollisionObject :< cls, Object :< cls) =>
                             cls -> Int -> Transform -> IO ()
@@ -570,3 +696,9 @@ shape_owner_set_transform cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionObject "shape_owner_set_transform"
+           '[Int, Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionObject.shape_owner_set_transform

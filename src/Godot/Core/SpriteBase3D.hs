@@ -39,9 +39,14 @@ module Godot.Core.SpriteBase3D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.GeometryInstance()
 
 _FLAG_SHADED :: Int
 _FLAG_SHADED = 1
@@ -64,6 +69,61 @@ _FLAG_MAX = 3
 _FLAG_TRANSPARENT :: Int
 _FLAG_TRANSPARENT = 0
 
+instance NodeProperty SpriteBase3D "alpha_cut" Int 'False where
+        nodeProperty
+          = (get_alpha_cut_mode, wrapDroppingSetter set_alpha_cut_mode,
+             Nothing)
+
+instance NodeProperty SpriteBase3D "axis" Int 'False where
+        nodeProperty = (get_axis, wrapDroppingSetter set_axis, Nothing)
+
+instance NodeProperty SpriteBase3D "billboard" Int 'False where
+        nodeProperty
+          = (get_billboard_mode, wrapDroppingSetter set_billboard_mode,
+             Nothing)
+
+instance NodeProperty SpriteBase3D "centered" Bool 'False where
+        nodeProperty
+          = (is_centered, wrapDroppingSetter set_centered, Nothing)
+
+instance NodeProperty SpriteBase3D "double_sided" Bool 'False where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_draw_flag,
+             wrapIndexedSetter 2 set_draw_flag, Nothing)
+
+instance NodeProperty SpriteBase3D "flip_h" Bool 'False where
+        nodeProperty
+          = (is_flipped_h, wrapDroppingSetter set_flip_h, Nothing)
+
+instance NodeProperty SpriteBase3D "flip_v" Bool 'False where
+        nodeProperty
+          = (is_flipped_v, wrapDroppingSetter set_flip_v, Nothing)
+
+instance NodeProperty SpriteBase3D "modulate" Color 'False where
+        nodeProperty
+          = (get_modulate, wrapDroppingSetter set_modulate, Nothing)
+
+instance NodeProperty SpriteBase3D "offset" Vector2 'False where
+        nodeProperty = (get_offset, wrapDroppingSetter set_offset, Nothing)
+
+instance NodeProperty SpriteBase3D "opacity" Float 'False where
+        nodeProperty
+          = (get_opacity, wrapDroppingSetter set_opacity, Nothing)
+
+instance NodeProperty SpriteBase3D "pixel_size" Float 'False where
+        nodeProperty
+          = (get_pixel_size, wrapDroppingSetter set_pixel_size, Nothing)
+
+instance NodeProperty SpriteBase3D "shaded" Bool 'False where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_draw_flag,
+             wrapIndexedSetter 1 set_draw_flag, Nothing)
+
+instance NodeProperty SpriteBase3D "transparent" Bool 'False where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_draw_flag,
+             wrapIndexedSetter 0 set_draw_flag, Nothing)
+
 {-# NOINLINE bindSpriteBase3D__im_update #-}
 
 bindSpriteBase3D__im_update :: MethodBind
@@ -83,6 +143,9 @@ _im_update cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "_im_update" '[] (IO ()) where
+        nodeMethod = Godot.Core.SpriteBase3D._im_update
 
 {-# NOINLINE bindSpriteBase3D__queue_update #-}
 
@@ -104,6 +167,9 @@ _queue_update cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "_queue_update" '[] (IO ()) where
+        nodeMethod = Godot.Core.SpriteBase3D._queue_update
 
 {-# NOINLINE bindSpriteBase3D_generate_triangle_mesh #-}
 
@@ -127,6 +193,11 @@ generate_triangle_mesh cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "generate_triangle_mesh" '[]
+           (IO TriangleMesh)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.generate_triangle_mesh
+
 {-# NOINLINE bindSpriteBase3D_get_alpha_cut_mode #-}
 
 bindSpriteBase3D_get_alpha_cut_mode :: MethodBind
@@ -148,6 +219,10 @@ get_alpha_cut_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "get_alpha_cut_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.get_alpha_cut_mode
 
 {-# NOINLINE bindSpriteBase3D_get_axis #-}
 
@@ -171,6 +246,9 @@ get_axis cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "get_axis" '[] (IO Int) where
+        nodeMethod = Godot.Core.SpriteBase3D.get_axis
+
 {-# NOINLINE bindSpriteBase3D_get_billboard_mode #-}
 
 bindSpriteBase3D_get_billboard_mode :: MethodBind
@@ -192,6 +270,10 @@ get_billboard_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "get_billboard_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.get_billboard_mode
 
 {-# NOINLINE bindSpriteBase3D_get_draw_flag #-}
 
@@ -216,6 +298,10 @@ get_draw_flag cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "get_draw_flag" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.get_draw_flag
+
 {-# NOINLINE bindSpriteBase3D_get_item_rect #-}
 
 -- | Returns the rectangle representing this sprite.
@@ -238,6 +324,10 @@ get_item_rect cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "get_item_rect" '[] (IO Rect2)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.get_item_rect
 
 {-# NOINLINE bindSpriteBase3D_get_modulate #-}
 
@@ -262,6 +352,10 @@ get_modulate cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "get_modulate" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.get_modulate
+
 {-# NOINLINE bindSpriteBase3D_get_offset #-}
 
 -- | The texture's drawing offset.
@@ -285,9 +379,13 @@ get_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "get_offset" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.get_offset
+
 {-# NOINLINE bindSpriteBase3D_get_opacity #-}
 
--- | The objects visibility on a scale from [code]0[/code] fully invisible to [code]1[/code] fully visible.
+-- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
 bindSpriteBase3D_get_opacity :: MethodBind
 bindSpriteBase3D_get_opacity
   = unsafePerformIO $
@@ -297,7 +395,7 @@ bindSpriteBase3D_get_opacity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The objects visibility on a scale from [code]0[/code] fully invisible to [code]1[/code] fully visible.
+-- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
 get_opacity ::
               (SpriteBase3D :< cls, Object :< cls) => cls -> IO Float
 get_opacity cls
@@ -307,6 +405,9 @@ get_opacity cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "get_opacity" '[] (IO Float) where
+        nodeMethod = Godot.Core.SpriteBase3D.get_opacity
 
 {-# NOINLINE bindSpriteBase3D_get_pixel_size #-}
 
@@ -331,9 +432,13 @@ get_pixel_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "get_pixel_size" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.get_pixel_size
+
 {-# NOINLINE bindSpriteBase3D_is_centered #-}
 
--- | If [code]true[/code], texture will be centered.
+-- | If @true@, texture will be centered.
 bindSpriteBase3D_is_centered :: MethodBind
 bindSpriteBase3D_is_centered
   = unsafePerformIO $
@@ -343,7 +448,7 @@ bindSpriteBase3D_is_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be centered.
+-- | If @true@, texture will be centered.
 is_centered ::
               (SpriteBase3D :< cls, Object :< cls) => cls -> IO Bool
 is_centered cls
@@ -354,9 +459,12 @@ is_centered cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "is_centered" '[] (IO Bool) where
+        nodeMethod = Godot.Core.SpriteBase3D.is_centered
+
 {-# NOINLINE bindSpriteBase3D_is_flipped_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 bindSpriteBase3D_is_flipped_h :: MethodBind
 bindSpriteBase3D_is_flipped_h
   = unsafePerformIO $
@@ -366,7 +474,7 @@ bindSpriteBase3D_is_flipped_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 is_flipped_h ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_h cls
@@ -377,9 +485,12 @@ is_flipped_h cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "is_flipped_h" '[] (IO Bool) where
+        nodeMethod = Godot.Core.SpriteBase3D.is_flipped_h
+
 {-# NOINLINE bindSpriteBase3D_is_flipped_v #-}
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 bindSpriteBase3D_is_flipped_v :: MethodBind
 bindSpriteBase3D_is_flipped_v
   = unsafePerformIO $
@@ -389,7 +500,7 @@ bindSpriteBase3D_is_flipped_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 is_flipped_v ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_v cls
@@ -399,6 +510,9 @@ is_flipped_v cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "is_flipped_v" '[] (IO Bool) where
+        nodeMethod = Godot.Core.SpriteBase3D.is_flipped_v
 
 {-# NOINLINE bindSpriteBase3D_set_alpha_cut_mode #-}
 
@@ -421,6 +535,11 @@ set_alpha_cut_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "set_alpha_cut_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_alpha_cut_mode
 
 {-# NOINLINE bindSpriteBase3D_set_axis #-}
 
@@ -445,6 +564,9 @@ set_axis cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "set_axis" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.SpriteBase3D.set_axis
+
 {-# NOINLINE bindSpriteBase3D_set_billboard_mode #-}
 
 bindSpriteBase3D_set_billboard_mode :: MethodBind
@@ -467,9 +589,14 @@ set_billboard_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "set_billboard_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_billboard_mode
+
 {-# NOINLINE bindSpriteBase3D_set_centered #-}
 
--- | If [code]true[/code], texture will be centered.
+-- | If @true@, texture will be centered.
 bindSpriteBase3D_set_centered :: MethodBind
 bindSpriteBase3D_set_centered
   = unsafePerformIO $
@@ -479,7 +606,7 @@ bindSpriteBase3D_set_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture will be centered.
+-- | If @true@, texture will be centered.
 set_centered ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_centered cls arg1
@@ -490,9 +617,13 @@ set_centered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "set_centered" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_centered
+
 {-# NOINLINE bindSpriteBase3D_set_draw_flag #-}
 
--- | If [code]true[/code], the specified flag will be enabled.
+-- | If @true@, the specified flag will be enabled.
 bindSpriteBase3D_set_draw_flag :: MethodBind
 bindSpriteBase3D_set_draw_flag
   = unsafePerformIO $
@@ -502,7 +633,7 @@ bindSpriteBase3D_set_draw_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the specified flag will be enabled.
+-- | If @true@, the specified flag will be enabled.
 set_draw_flag ::
                 (SpriteBase3D :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_draw_flag cls arg1 arg2
@@ -513,9 +644,14 @@ set_draw_flag cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "set_draw_flag" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_draw_flag
+
 {-# NOINLINE bindSpriteBase3D_set_flip_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 bindSpriteBase3D_set_flip_h :: MethodBind
 bindSpriteBase3D_set_flip_h
   = unsafePerformIO $
@@ -525,7 +661,7 @@ bindSpriteBase3D_set_flip_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 set_flip_h ::
              (SpriteBase3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_h cls arg1
@@ -536,9 +672,12 @@ set_flip_h cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "set_flip_h" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.SpriteBase3D.set_flip_h
+
 {-# NOINLINE bindSpriteBase3D_set_flip_v #-}
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 bindSpriteBase3D_set_flip_v :: MethodBind
 bindSpriteBase3D_set_flip_v
   = unsafePerformIO $
@@ -548,7 +687,7 @@ bindSpriteBase3D_set_flip_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 set_flip_v ::
              (SpriteBase3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_v cls arg1
@@ -558,6 +697,9 @@ set_flip_v cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "set_flip_v" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.SpriteBase3D.set_flip_v
 
 {-# NOINLINE bindSpriteBase3D_set_modulate #-}
 
@@ -582,6 +724,10 @@ set_modulate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "set_modulate" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_modulate
+
 {-# NOINLINE bindSpriteBase3D_set_offset #-}
 
 -- | The texture's drawing offset.
@@ -605,9 +751,13 @@ set_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpriteBase3D "set_offset" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_offset
+
 {-# NOINLINE bindSpriteBase3D_set_opacity #-}
 
--- | The objects visibility on a scale from [code]0[/code] fully invisible to [code]1[/code] fully visible.
+-- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
 bindSpriteBase3D_set_opacity :: MethodBind
 bindSpriteBase3D_set_opacity
   = unsafePerformIO $
@@ -617,7 +767,7 @@ bindSpriteBase3D_set_opacity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The objects visibility on a scale from [code]0[/code] fully invisible to [code]1[/code] fully visible.
+-- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
 set_opacity ::
               (SpriteBase3D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_opacity cls arg1
@@ -627,6 +777,10 @@ set_opacity cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "set_opacity" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_opacity
 
 {-# NOINLINE bindSpriteBase3D_set_pixel_size #-}
 
@@ -650,3 +804,7 @@ set_pixel_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpriteBase3D "set_pixel_size" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.SpriteBase3D.set_pixel_size

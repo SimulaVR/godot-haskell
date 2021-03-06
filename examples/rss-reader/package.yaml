@@ -1,0 +1,61 @@
+name: myproject
+version: '0.0.0.0'
+description: Please see the README on Github at <https://github.com/SimulaVR/godot-haskell/tree/master/demo#readme>
+author: Andrei Barbu
+maintainer: andrei@0xab.com
+copyright: Andrei Barbu 2019, 2021
+license: BSD3
+github: SimulaVR/godot-haskell
+extra-source-files:
+  - ChangeLog.md
+  - README.md
+dependencies:
+  - base >=4.12 && <5
+  - godot-haskell
+  - linear
+  - random
+  - text
+  - vector
+  - strict-concurrency
+  - lens
+  - template-haskell
+  - th-abstraction
+  - containers
+  - extra
+  - monad-loops
+  - xeno
+  - aeson
+  - directory
+library:
+  source-dirs:
+    - src
+    - game
+  default-extensions:
+    - FlexibleContexts
+    - MultiParamTypeClasses
+    - OverloadedStrings
+    - TemplateHaskell
+    - TypeApplications
+    - TypeFamilies
+    - DataKinds
+    - FlexibleInstances
+    - ScopedTypeVariables
+    - AllowAmbiguousTypes
+    - TypeOperators
+    - TupleSections
+  exposed-modules:
+    - Lib
+  ghc-options: -Wall -Wno-orphans -O0
+
+verbatim: |
+  foreign-library myproject
+    type: native-shared
+    other-modules: FLib
+    hs-source-dirs: ffi/flib
+    c-sources: ffi/cbits/flib.c
+    build-depends:
+        base >= 4.12 && <5
+      , godot-haskell
+      , myproject
+      , text
+    default-language: Haskell2010

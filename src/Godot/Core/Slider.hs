@@ -12,9 +12,30 @@ module Godot.Core.Slider
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Range()
+
+instance NodeProperty Slider "editable" Bool 'False where
+        nodeProperty
+          = (is_editable, wrapDroppingSetter set_editable, Nothing)
+
+instance NodeProperty Slider "scrollable" Bool 'False where
+        nodeProperty
+          = (is_scrollable, wrapDroppingSetter set_scrollable, Nothing)
+
+instance NodeProperty Slider "tick_count" Int 'False where
+        nodeProperty = (get_ticks, wrapDroppingSetter set_ticks, Nothing)
+
+instance NodeProperty Slider "ticks_on_borders" Bool 'False where
+        nodeProperty
+          = (get_ticks_on_borders, wrapDroppingSetter set_ticks_on_borders,
+             Nothing)
 
 {-# NOINLINE bindSlider__gui_input #-}
 
@@ -36,6 +57,9 @@ _gui_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Slider "_gui_input" '[InputEvent] (IO ()) where
+        nodeMethod = Godot.Core.Slider._gui_input
+
 {-# NOINLINE bindSlider_get_ticks #-}
 
 -- | Number of ticks displayed on the slider, including border ticks. Ticks are uniformly-distributed value markers.
@@ -56,9 +80,12 @@ get_ticks cls
          godot_method_bind_call bindSlider_get_ticks (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Slider "get_ticks" '[] (IO Int) where
+        nodeMethod = Godot.Core.Slider.get_ticks
+
 {-# NOINLINE bindSlider_get_ticks_on_borders #-}
 
--- | If [code]true[/code], the slider will display ticks for minimum and maximum values.
+-- | If @true@, the slider will display ticks for minimum and maximum values.
 bindSlider_get_ticks_on_borders :: MethodBind
 bindSlider_get_ticks_on_borders
   = unsafePerformIO $
@@ -68,7 +95,7 @@ bindSlider_get_ticks_on_borders
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the slider will display ticks for minimum and maximum values.
+-- | If @true@, the slider will display ticks for minimum and maximum values.
 get_ticks_on_borders ::
                        (Slider :< cls, Object :< cls) => cls -> IO Bool
 get_ticks_on_borders cls
@@ -79,9 +106,13 @@ get_ticks_on_borders cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Slider "get_ticks_on_borders" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Slider.get_ticks_on_borders
+
 {-# NOINLINE bindSlider_is_editable #-}
 
--- | If [code]true[/code], the slider can be interacted with. If [code]false[/code], the value can be changed only by code.
+-- | If @true@, the slider can be interacted with. If @false@, the value can be changed only by code.
 bindSlider_is_editable :: MethodBind
 bindSlider_is_editable
   = unsafePerformIO $
@@ -91,7 +122,7 @@ bindSlider_is_editable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the slider can be interacted with. If [code]false[/code], the value can be changed only by code.
+-- | If @true@, the slider can be interacted with. If @false@, the value can be changed only by code.
 is_editable :: (Slider :< cls, Object :< cls) => cls -> IO Bool
 is_editable cls
   = withVariantArray []
@@ -100,9 +131,12 @@ is_editable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Slider "is_editable" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Slider.is_editable
+
 {-# NOINLINE bindSlider_is_scrollable #-}
 
--- | If [code]true[/code], the value can be changed using the mouse wheel.
+-- | If @true@, the value can be changed using the mouse wheel.
 bindSlider_is_scrollable :: MethodBind
 bindSlider_is_scrollable
   = unsafePerformIO $
@@ -112,7 +146,7 @@ bindSlider_is_scrollable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the value can be changed using the mouse wheel.
+-- | If @true@, the value can be changed using the mouse wheel.
 is_scrollable :: (Slider :< cls, Object :< cls) => cls -> IO Bool
 is_scrollable cls
   = withVariantArray []
@@ -121,9 +155,12 @@ is_scrollable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Slider "is_scrollable" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Slider.is_scrollable
+
 {-# NOINLINE bindSlider_set_editable #-}
 
--- | If [code]true[/code], the slider can be interacted with. If [code]false[/code], the value can be changed only by code.
+-- | If @true@, the slider can be interacted with. If @false@, the value can be changed only by code.
 bindSlider_set_editable :: MethodBind
 bindSlider_set_editable
   = unsafePerformIO $
@@ -133,7 +170,7 @@ bindSlider_set_editable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the slider can be interacted with. If [code]false[/code], the value can be changed only by code.
+-- | If @true@, the slider can be interacted with. If @false@, the value can be changed only by code.
 set_editable ::
                (Slider :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_editable cls arg1
@@ -143,9 +180,12 @@ set_editable cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Slider "set_editable" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Slider.set_editable
+
 {-# NOINLINE bindSlider_set_scrollable #-}
 
--- | If [code]true[/code], the value can be changed using the mouse wheel.
+-- | If @true@, the value can be changed using the mouse wheel.
 bindSlider_set_scrollable :: MethodBind
 bindSlider_set_scrollable
   = unsafePerformIO $
@@ -155,7 +195,7 @@ bindSlider_set_scrollable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the value can be changed using the mouse wheel.
+-- | If @true@, the value can be changed using the mouse wheel.
 set_scrollable ::
                  (Slider :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_scrollable cls arg1
@@ -165,6 +205,9 @@ set_scrollable cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Slider "set_scrollable" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Slider.set_scrollable
 
 {-# NOINLINE bindSlider_set_ticks #-}
 
@@ -186,9 +229,12 @@ set_ticks cls arg1
          godot_method_bind_call bindSlider_set_ticks (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Slider "set_ticks" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Slider.set_ticks
+
 {-# NOINLINE bindSlider_set_ticks_on_borders #-}
 
--- | If [code]true[/code], the slider will display ticks for minimum and maximum values.
+-- | If @true@, the slider will display ticks for minimum and maximum values.
 bindSlider_set_ticks_on_borders :: MethodBind
 bindSlider_set_ticks_on_borders
   = unsafePerformIO $
@@ -198,7 +244,7 @@ bindSlider_set_ticks_on_borders
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the slider will display ticks for minimum and maximum values.
+-- | If @true@, the slider will display ticks for minimum and maximum values.
 set_ticks_on_borders ::
                        (Slider :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ticks_on_borders cls arg1
@@ -208,3 +254,7 @@ set_ticks_on_borders cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Slider "set_ticks_on_borders" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Slider.set_ticks_on_borders
