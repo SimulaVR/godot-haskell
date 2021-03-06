@@ -6,9 +6,17 @@ module Godot.Core.Shape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty Shape "margin" Float 'False where
+        nodeProperty = (get_margin, wrapDroppingSetter set_margin, Nothing)
 
 {-# NOINLINE bindShape_get_margin #-}
 
@@ -30,6 +38,9 @@ get_margin cls
          godot_method_bind_call bindShape_get_margin (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Shape "get_margin" '[] (IO Float) where
+        nodeMethod = Godot.Core.Shape.get_margin
+
 {-# NOINLINE bindShape_set_margin #-}
 
 -- | The collision margin for the shape.
@@ -50,3 +61,6 @@ set_margin cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindShape_set_margin (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Shape "set_margin" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Shape.set_margin

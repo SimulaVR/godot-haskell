@@ -28,15 +28,58 @@ module Godot.Core.VideoPlayer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 -- | Emitted when playback is finished.
 sig_finished :: Godot.Internal.Dispatch.Signal VideoPlayer
 sig_finished = Godot.Internal.Dispatch.Signal "finished"
 
 instance NodeSignal VideoPlayer "finished" '[]
+
+instance NodeProperty VideoPlayer "audio_track" Int 'False where
+        nodeProperty
+          = (get_audio_track, wrapDroppingSetter set_audio_track, Nothing)
+
+instance NodeProperty VideoPlayer "autoplay" Bool 'False where
+        nodeProperty
+          = (has_autoplay, wrapDroppingSetter set_autoplay, Nothing)
+
+instance NodeProperty VideoPlayer "buffering_msec" Int 'False where
+        nodeProperty
+          = (get_buffering_msec, wrapDroppingSetter set_buffering_msec,
+             Nothing)
+
+instance NodeProperty VideoPlayer "bus" GodotString 'False where
+        nodeProperty = (get_bus, wrapDroppingSetter set_bus, Nothing)
+
+instance NodeProperty VideoPlayer "expand" Bool 'False where
+        nodeProperty = (has_expand, wrapDroppingSetter set_expand, Nothing)
+
+instance NodeProperty VideoPlayer "paused" Bool 'False where
+        nodeProperty = (is_paused, wrapDroppingSetter set_paused, Nothing)
+
+instance NodeProperty VideoPlayer "stream" VideoStream 'False where
+        nodeProperty = (get_stream, wrapDroppingSetter set_stream, Nothing)
+
+instance NodeProperty VideoPlayer "stream_position" Float 'False
+         where
+        nodeProperty
+          = (get_stream_position, wrapDroppingSetter set_stream_position,
+             Nothing)
+
+instance NodeProperty VideoPlayer "volume" Float 'False where
+        nodeProperty = (get_volume, wrapDroppingSetter set_volume, Nothing)
+
+instance NodeProperty VideoPlayer "volume_db" Float 'False where
+        nodeProperty
+          = (get_volume_db, wrapDroppingSetter set_volume_db, Nothing)
 
 {-# NOINLINE bindVideoPlayer_get_audio_track #-}
 
@@ -60,6 +103,10 @@ get_audio_track cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "get_audio_track" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_audio_track
 
 {-# NOINLINE bindVideoPlayer_get_buffering_msec #-}
 
@@ -85,6 +132,10 @@ get_buffering_msec cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "get_buffering_msec" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_buffering_msec
+
 {-# NOINLINE bindVideoPlayer_get_bus #-}
 
 -- | Audio bus to use for sound playback.
@@ -106,6 +157,10 @@ get_bus cls
          godot_method_bind_call bindVideoPlayer_get_bus (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "get_bus" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_bus
 
 {-# NOINLINE bindVideoPlayer_get_stream #-}
 
@@ -130,9 +185,13 @@ get_stream cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "get_stream" '[] (IO VideoStream)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_stream
+
 {-# NOINLINE bindVideoPlayer_get_stream_name #-}
 
--- | Returns the video stream's name, or [code]"<No Stream>"[/code] if no video stream is assigned.
+-- | Returns the video stream's name, or @"<No Stream>"@ if no video stream is assigned.
 bindVideoPlayer_get_stream_name :: MethodBind
 bindVideoPlayer_get_stream_name
   = unsafePerformIO $
@@ -142,7 +201,7 @@ bindVideoPlayer_get_stream_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the video stream's name, or [code]"<No Stream>"[/code] if no video stream is assigned.
+-- | Returns the video stream's name, or @"<No Stream>"@ if no video stream is assigned.
 get_stream_name ::
                   (VideoPlayer :< cls, Object :< cls) => cls -> IO GodotString
 get_stream_name cls
@@ -152,6 +211,11 @@ get_stream_name cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "get_stream_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_stream_name
 
 {-# NOINLINE bindVideoPlayer_get_stream_position #-}
 
@@ -177,9 +241,14 @@ get_stream_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "get_stream_position" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_stream_position
+
 {-# NOINLINE bindVideoPlayer_get_video_texture #-}
 
--- | Returns the current frame as a [Texture].
+-- | Returns the current frame as a @Texture@.
 bindVideoPlayer_get_video_texture :: MethodBind
 bindVideoPlayer_get_video_texture
   = unsafePerformIO $
@@ -189,7 +258,7 @@ bindVideoPlayer_get_video_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current frame as a [Texture].
+-- | Returns the current frame as a @Texture@.
 get_video_texture ::
                     (VideoPlayer :< cls, Object :< cls) => cls -> IO Texture
 get_video_texture cls
@@ -200,6 +269,11 @@ get_video_texture cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "get_video_texture" '[]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_video_texture
 
 {-# NOINLINE bindVideoPlayer_get_volume #-}
 
@@ -224,6 +298,9 @@ get_volume cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "get_volume" '[] (IO Float) where
+        nodeMethod = Godot.Core.VideoPlayer.get_volume
+
 {-# NOINLINE bindVideoPlayer_get_volume_db #-}
 
 -- | Audio volume in dB.
@@ -247,9 +324,13 @@ get_volume_db cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "get_volume_db" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.VideoPlayer.get_volume_db
+
 {-# NOINLINE bindVideoPlayer_has_autoplay #-}
 
--- | If [code]true[/code], playback starts when the scene loads.
+-- | If @true@, playback starts when the scene loads.
 bindVideoPlayer_has_autoplay :: MethodBind
 bindVideoPlayer_has_autoplay
   = unsafePerformIO $
@@ -259,7 +340,7 @@ bindVideoPlayer_has_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], playback starts when the scene loads.
+-- | If @true@, playback starts when the scene loads.
 has_autoplay ::
                (VideoPlayer :< cls, Object :< cls) => cls -> IO Bool
 has_autoplay cls
@@ -270,9 +351,12 @@ has_autoplay cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "has_autoplay" '[] (IO Bool) where
+        nodeMethod = Godot.Core.VideoPlayer.has_autoplay
+
 {-# NOINLINE bindVideoPlayer_has_expand #-}
 
--- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
+-- | If @true@, the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 bindVideoPlayer_has_expand :: MethodBind
 bindVideoPlayer_has_expand
   = unsafePerformIO $
@@ -282,7 +366,7 @@ bindVideoPlayer_has_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
+-- | If @true@, the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 has_expand :: (VideoPlayer :< cls, Object :< cls) => cls -> IO Bool
 has_expand cls
   = withVariantArray []
@@ -292,9 +376,12 @@ has_expand cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "has_expand" '[] (IO Bool) where
+        nodeMethod = Godot.Core.VideoPlayer.has_expand
+
 {-# NOINLINE bindVideoPlayer_is_paused #-}
 
--- | If [code]true[/code], the video is paused.
+-- | If @true@, the video is paused.
 bindVideoPlayer_is_paused :: MethodBind
 bindVideoPlayer_is_paused
   = unsafePerformIO $
@@ -304,7 +391,7 @@ bindVideoPlayer_is_paused
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the video is paused.
+-- | If @true@, the video is paused.
 is_paused :: (VideoPlayer :< cls, Object :< cls) => cls -> IO Bool
 is_paused cls
   = withVariantArray []
@@ -314,10 +401,13 @@ is_paused cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "is_paused" '[] (IO Bool) where
+        nodeMethod = Godot.Core.VideoPlayer.is_paused
+
 {-# NOINLINE bindVideoPlayer_is_playing #-}
 
--- | Returns [code]true[/code] if the video is playing.
---   				[b]Note:[/b] The video is still considered playing if paused during playback.
+-- | Returns @true@ if the video is playing.
+--   				__Note:__ The video is still considered playing if paused during playback.
 bindVideoPlayer_is_playing :: MethodBind
 bindVideoPlayer_is_playing
   = unsafePerformIO $
@@ -327,8 +417,8 @@ bindVideoPlayer_is_playing
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the video is playing.
---   				[b]Note:[/b] The video is still considered playing if paused during playback.
+-- | Returns @true@ if the video is playing.
+--   				__Note:__ The video is still considered playing if paused during playback.
 is_playing :: (VideoPlayer :< cls, Object :< cls) => cls -> IO Bool
 is_playing cls
   = withVariantArray []
@@ -337,6 +427,9 @@ is_playing cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "is_playing" '[] (IO Bool) where
+        nodeMethod = Godot.Core.VideoPlayer.is_playing
 
 {-# NOINLINE bindVideoPlayer_play #-}
 
@@ -357,6 +450,9 @@ play cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVideoPlayer_play (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "play" '[] (IO ()) where
+        nodeMethod = Godot.Core.VideoPlayer.play
 
 {-# NOINLINE bindVideoPlayer_set_audio_track #-}
 
@@ -381,9 +477,13 @@ set_audio_track cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "set_audio_track" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.VideoPlayer.set_audio_track
+
 {-# NOINLINE bindVideoPlayer_set_autoplay #-}
 
--- | If [code]true[/code], playback starts when the scene loads.
+-- | If @true@, playback starts when the scene loads.
 bindVideoPlayer_set_autoplay :: MethodBind
 bindVideoPlayer_set_autoplay
   = unsafePerformIO $
@@ -393,7 +493,7 @@ bindVideoPlayer_set_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], playback starts when the scene loads.
+-- | If @true@, playback starts when the scene loads.
 set_autoplay ::
                (VideoPlayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autoplay cls arg1
@@ -403,6 +503,10 @@ set_autoplay cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "set_autoplay" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.VideoPlayer.set_autoplay
 
 {-# NOINLINE bindVideoPlayer_set_buffering_msec #-}
 
@@ -428,6 +532,10 @@ set_buffering_msec cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "set_buffering_msec" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.VideoPlayer.set_buffering_msec
+
 {-# NOINLINE bindVideoPlayer_set_bus #-}
 
 -- | Audio bus to use for sound playback.
@@ -450,9 +558,13 @@ set_bus cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "set_bus" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.VideoPlayer.set_bus
+
 {-# NOINLINE bindVideoPlayer_set_expand #-}
 
--- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
+-- | If @true@, the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 bindVideoPlayer_set_expand :: MethodBind
 bindVideoPlayer_set_expand
   = unsafePerformIO $
@@ -462,7 +574,7 @@ bindVideoPlayer_set_expand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
+-- | If @true@, the video scales to the control size. Otherwise, the control minimum size will be automatically adjusted to match the video stream's dimensions.
 set_expand ::
              (VideoPlayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_expand cls arg1
@@ -473,9 +585,12 @@ set_expand cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "set_expand" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.VideoPlayer.set_expand
+
 {-# NOINLINE bindVideoPlayer_set_paused #-}
 
--- | If [code]true[/code], the video is paused.
+-- | If @true@, the video is paused.
 bindVideoPlayer_set_paused :: MethodBind
 bindVideoPlayer_set_paused
   = unsafePerformIO $
@@ -485,7 +600,7 @@ bindVideoPlayer_set_paused
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the video is paused.
+-- | If @true@, the video is paused.
 set_paused ::
              (VideoPlayer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_paused cls arg1
@@ -495,6 +610,9 @@ set_paused cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "set_paused" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.VideoPlayer.set_paused
 
 {-# NOINLINE bindVideoPlayer_set_stream #-}
 
@@ -518,6 +636,10 @@ set_stream cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "set_stream" '[VideoStream] (IO ())
+         where
+        nodeMethod = Godot.Core.VideoPlayer.set_stream
 
 {-# NOINLINE bindVideoPlayer_set_stream_position #-}
 
@@ -543,6 +665,11 @@ set_stream_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "set_stream_position" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VideoPlayer.set_stream_position
+
 {-# NOINLINE bindVideoPlayer_set_volume #-}
 
 -- | Audio volume as a linear value.
@@ -565,6 +692,9 @@ set_volume cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "set_volume" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.VideoPlayer.set_volume
 
 {-# NOINLINE bindVideoPlayer_set_volume_db #-}
 
@@ -589,10 +719,14 @@ set_volume_db cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoPlayer "set_volume_db" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.VideoPlayer.set_volume_db
+
 {-# NOINLINE bindVideoPlayer_stop #-}
 
 -- | Stops the video playback and sets the stream position to 0.
---   				[b]Note:[/b] Although the stream position will be set to 0, the first frame of the video stream won't become the current frame.
+--   				__Note:__ Although the stream position will be set to 0, the first frame of the video stream won't become the current frame.
 bindVideoPlayer_stop :: MethodBind
 bindVideoPlayer_stop
   = unsafePerformIO $
@@ -603,10 +737,13 @@ bindVideoPlayer_stop
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stops the video playback and sets the stream position to 0.
---   				[b]Note:[/b] Although the stream position will be set to 0, the first frame of the video stream won't become the current frame.
+--   				__Note:__ Although the stream position will be set to 0, the first frame of the video stream won't become the current frame.
 stop :: (VideoPlayer :< cls, Object :< cls) => cls -> IO ()
 stop cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVideoPlayer_stop (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoPlayer "stop" '[] (IO ()) where
+        nodeMethod = Godot.Core.VideoPlayer.stop

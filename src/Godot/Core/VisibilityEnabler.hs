@@ -12,9 +12,14 @@ module Godot.Core.VisibilityEnabler
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisibilityNotifier()
 
 _ENABLER_MAX :: Int
 _ENABLER_MAX = 2
@@ -24,6 +29,19 @@ _ENABLER_PAUSE_ANIMATIONS = 0
 
 _ENABLER_FREEZE_BODIES :: Int
 _ENABLER_FREEZE_BODIES = 1
+
+instance NodeProperty VisibilityEnabler "freeze_bodies" Bool 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 is_enabler_enabled,
+             wrapIndexedSetter 1 set_enabler, Nothing)
+
+instance NodeProperty VisibilityEnabler "pause_animations" Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 is_enabler_enabled,
+             wrapIndexedSetter 0 set_enabler, Nothing)
 
 {-# NOINLINE bindVisibilityEnabler__node_removed #-}
 
@@ -47,9 +65,14 @@ _node_removed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisibilityEnabler "_node_removed" '[Node]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisibilityEnabler._node_removed
+
 {-# NOINLINE bindVisibilityEnabler_is_enabler_enabled #-}
 
--- | Returns whether the enabler identified by given [enum Enabler] constant is active.
+-- | Returns whether the enabler identified by given @enum Enabler@ constant is active.
 bindVisibilityEnabler_is_enabler_enabled :: MethodBind
 bindVisibilityEnabler_is_enabler_enabled
   = unsafePerformIO $
@@ -59,7 +82,7 @@ bindVisibilityEnabler_is_enabler_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns whether the enabler identified by given [enum Enabler] constant is active.
+-- | Returns whether the enabler identified by given @enum Enabler@ constant is active.
 is_enabler_enabled ::
                      (VisibilityEnabler :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_enabler_enabled cls arg1
@@ -71,9 +94,14 @@ is_enabler_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisibilityEnabler "is_enabler_enabled" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisibilityEnabler.is_enabler_enabled
+
 {-# NOINLINE bindVisibilityEnabler_set_enabler #-}
 
--- | Sets active state of the enabler identified by given [enum Enabler] constant.
+-- | Sets active state of the enabler identified by given @enum Enabler@ constant.
 bindVisibilityEnabler_set_enabler :: MethodBind
 bindVisibilityEnabler_set_enabler
   = unsafePerformIO $
@@ -83,7 +111,7 @@ bindVisibilityEnabler_set_enabler
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets active state of the enabler identified by given [enum Enabler] constant.
+-- | Sets active state of the enabler identified by given @enum Enabler@ constant.
 set_enabler ::
               (VisibilityEnabler :< cls, Object :< cls) =>
               cls -> Int -> Bool -> IO ()
@@ -95,3 +123,8 @@ set_enabler cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisibilityEnabler "set_enabler" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisibilityEnabler.set_enabler

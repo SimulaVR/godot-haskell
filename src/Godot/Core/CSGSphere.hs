@@ -14,9 +14,33 @@ module Godot.Core.CSGSphere
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.CSGPrimitive()
+
+instance NodeProperty CSGSphere "material" Material 'False where
+        nodeProperty
+          = (get_material, wrapDroppingSetter set_material, Nothing)
+
+instance NodeProperty CSGSphere "radial_segments" Int 'False where
+        nodeProperty
+          = (get_radial_segments, wrapDroppingSetter set_radial_segments,
+             Nothing)
+
+instance NodeProperty CSGSphere "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
+
+instance NodeProperty CSGSphere "rings" Int 'False where
+        nodeProperty = (get_rings, wrapDroppingSetter set_rings, Nothing)
+
+instance NodeProperty CSGSphere "smooth_faces" Bool 'False where
+        nodeProperty
+          = (get_smooth_faces, wrapDroppingSetter set_smooth_faces, Nothing)
 
 {-# NOINLINE bindCSGSphere_get_material #-}
 
@@ -38,6 +62,10 @@ get_material cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGSphere "get_material" '[] (IO Material)
+         where
+        nodeMethod = Godot.Core.CSGSphere.get_material
 
 {-# NOINLINE bindCSGSphere_get_radial_segments #-}
 
@@ -61,6 +89,10 @@ get_radial_segments cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGSphere "get_radial_segments" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CSGSphere.get_radial_segments
+
 {-# NOINLINE bindCSGSphere_get_radius #-}
 
 bindCSGSphere_get_radius :: MethodBind
@@ -80,6 +112,9 @@ get_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGSphere "get_radius" '[] (IO Float) where
+        nodeMethod = Godot.Core.CSGSphere.get_radius
+
 {-# NOINLINE bindCSGSphere_get_rings #-}
 
 bindCSGSphere_get_rings :: MethodBind
@@ -98,6 +133,9 @@ get_rings cls
          godot_method_bind_call bindCSGSphere_get_rings (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGSphere "get_rings" '[] (IO Int) where
+        nodeMethod = Godot.Core.CSGSphere.get_rings
 
 {-# NOINLINE bindCSGSphere_get_smooth_faces #-}
 
@@ -120,6 +158,10 @@ get_smooth_faces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGSphere "get_smooth_faces" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGSphere.get_smooth_faces
+
 {-# NOINLINE bindCSGSphere_set_material #-}
 
 bindCSGSphere_set_material :: MethodBind
@@ -140,6 +182,10 @@ set_material cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGSphere "set_material" '[Material] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGSphere.set_material
 
 {-# NOINLINE bindCSGSphere_set_radial_segments #-}
 
@@ -163,6 +209,10 @@ set_radial_segments cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGSphere "set_radial_segments" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGSphere.set_radial_segments
+
 {-# NOINLINE bindCSGSphere_set_radius #-}
 
 bindCSGSphere_set_radius :: MethodBind
@@ -182,6 +232,9 @@ set_radius cls arg1
          godot_method_bind_call bindCSGSphere_set_radius (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGSphere "set_radius" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.CSGSphere.set_radius
 
 {-# NOINLINE bindCSGSphere_set_rings #-}
 
@@ -203,6 +256,9 @@ set_rings cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGSphere "set_rings" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CSGSphere.set_rings
+
 {-# NOINLINE bindCSGSphere_set_smooth_faces #-}
 
 bindCSGSphere_set_smooth_faces :: MethodBind
@@ -223,3 +279,7 @@ set_smooth_faces cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGSphere "set_smooth_faces" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGSphere.set_smooth_faces

@@ -22,9 +22,14 @@ module Godot.Core.NinePatchRect
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 _AXIS_STRETCH_MODE_TILE_FIT :: Int
 _AXIS_STRETCH_MODE_TILE_FIT = 2
@@ -41,6 +46,59 @@ sig_texture_changed
   = Godot.Internal.Dispatch.Signal "texture_changed"
 
 instance NodeSignal NinePatchRect "texture_changed" '[]
+
+instance NodeProperty NinePatchRect "axis_stretch_horizontal" Int
+           'False
+         where
+        nodeProperty
+          = (get_h_axis_stretch_mode,
+             wrapDroppingSetter set_h_axis_stretch_mode, Nothing)
+
+instance NodeProperty NinePatchRect "axis_stretch_vertical" Int
+           'False
+         where
+        nodeProperty
+          = (get_v_axis_stretch_mode,
+             wrapDroppingSetter set_v_axis_stretch_mode, Nothing)
+
+instance NodeProperty NinePatchRect "draw_center" Bool 'False where
+        nodeProperty
+          = (is_draw_center_enabled, wrapDroppingSetter set_draw_center,
+             Nothing)
+
+instance NodeProperty NinePatchRect "patch_margin_bottom" Int
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_patch_margin,
+             wrapIndexedSetter 3 set_patch_margin, Nothing)
+
+instance NodeProperty NinePatchRect "patch_margin_left" Int 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_patch_margin,
+             wrapIndexedSetter 0 set_patch_margin, Nothing)
+
+instance NodeProperty NinePatchRect "patch_margin_right" Int 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_patch_margin,
+             wrapIndexedSetter 2 set_patch_margin, Nothing)
+
+instance NodeProperty NinePatchRect "patch_margin_top" Int 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_patch_margin,
+             wrapIndexedSetter 1 set_patch_margin, Nothing)
+
+instance NodeProperty NinePatchRect "region_rect" Rect2 'False
+         where
+        nodeProperty
+          = (get_region_rect, wrapDroppingSetter set_region_rect, Nothing)
+
+instance NodeProperty NinePatchRect "texture" Texture 'False where
+        nodeProperty
+          = (get_texture, wrapDroppingSetter set_texture, Nothing)
 
 {-# NOINLINE bindNinePatchRect_get_h_axis_stretch_mode #-}
 
@@ -66,9 +124,14 @@ get_h_axis_stretch_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NinePatchRect "get_h_axis_stretch_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NinePatchRect.get_h_axis_stretch_mode
+
 {-# NOINLINE bindNinePatchRect_get_patch_margin #-}
 
--- | Returns the size of the margin identified by the given [enum Margin] constant.
+-- | Returns the size of the margin identified by the given @enum Margin@ constant.
 bindNinePatchRect_get_patch_margin :: MethodBind
 bindNinePatchRect_get_patch_margin
   = unsafePerformIO $
@@ -78,7 +141,7 @@ bindNinePatchRect_get_patch_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the size of the margin identified by the given [enum Margin] constant.
+-- | Returns the size of the margin identified by the given @enum Margin@ constant.
 get_patch_margin ::
                    (NinePatchRect :< cls, Object :< cls) => cls -> Int -> IO Int
 get_patch_margin cls arg1
@@ -89,6 +152,11 @@ get_patch_margin cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NinePatchRect "get_patch_margin" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NinePatchRect.get_patch_margin
 
 {-# NOINLINE bindNinePatchRect_get_region_rect #-}
 
@@ -114,6 +182,10 @@ get_region_rect cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NinePatchRect "get_region_rect" '[] (IO Rect2)
+         where
+        nodeMethod = Godot.Core.NinePatchRect.get_region_rect
+
 {-# NOINLINE bindNinePatchRect_get_texture #-}
 
 -- | The node's texture resource.
@@ -136,6 +208,10 @@ get_texture cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NinePatchRect "get_texture" '[] (IO Texture)
+         where
+        nodeMethod = Godot.Core.NinePatchRect.get_texture
 
 {-# NOINLINE bindNinePatchRect_get_v_axis_stretch_mode #-}
 
@@ -161,9 +237,14 @@ get_v_axis_stretch_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NinePatchRect "get_v_axis_stretch_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NinePatchRect.get_v_axis_stretch_mode
+
 {-# NOINLINE bindNinePatchRect_is_draw_center_enabled #-}
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
+-- | If @true@, draw the panel's center. Else, only draw the 9-slice's borders.
 bindNinePatchRect_is_draw_center_enabled :: MethodBind
 bindNinePatchRect_is_draw_center_enabled
   = unsafePerformIO $
@@ -173,7 +254,7 @@ bindNinePatchRect_is_draw_center_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
+-- | If @true@, draw the panel's center. Else, only draw the 9-slice's borders.
 is_draw_center_enabled ::
                          (NinePatchRect :< cls, Object :< cls) => cls -> IO Bool
 is_draw_center_enabled cls
@@ -185,9 +266,14 @@ is_draw_center_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NinePatchRect "is_draw_center_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.NinePatchRect.is_draw_center_enabled
+
 {-# NOINLINE bindNinePatchRect_set_draw_center #-}
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
+-- | If @true@, draw the panel's center. Else, only draw the 9-slice's borders.
 bindNinePatchRect_set_draw_center :: MethodBind
 bindNinePatchRect_set_draw_center
   = unsafePerformIO $
@@ -197,7 +283,7 @@ bindNinePatchRect_set_draw_center
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], draw the panel's center. Else, only draw the 9-slice's borders.
+-- | If @true@, draw the panel's center. Else, only draw the 9-slice's borders.
 set_draw_center ::
                   (NinePatchRect :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_center cls arg1
@@ -208,6 +294,10 @@ set_draw_center cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NinePatchRect "set_draw_center" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.NinePatchRect.set_draw_center
 
 {-# NOINLINE bindNinePatchRect_set_h_axis_stretch_mode #-}
 
@@ -233,9 +323,14 @@ set_h_axis_stretch_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NinePatchRect "set_h_axis_stretch_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NinePatchRect.set_h_axis_stretch_mode
+
 {-# NOINLINE bindNinePatchRect_set_patch_margin #-}
 
--- | Sets the size of the margin identified by the given [enum Margin] constant to [code]value[/code] in pixels.
+-- | Sets the size of the margin identified by the given @enum Margin@ constant to @value@ in pixels.
 bindNinePatchRect_set_patch_margin :: MethodBind
 bindNinePatchRect_set_patch_margin
   = unsafePerformIO $
@@ -245,7 +340,7 @@ bindNinePatchRect_set_patch_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the size of the margin identified by the given [enum Margin] constant to [code]value[/code] in pixels.
+-- | Sets the size of the margin identified by the given @enum Margin@ constant to @value@ in pixels.
 set_patch_margin ::
                    (NinePatchRect :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_patch_margin cls arg1 arg2
@@ -256,6 +351,11 @@ set_patch_margin cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NinePatchRect "set_patch_margin" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NinePatchRect.set_patch_margin
 
 {-# NOINLINE bindNinePatchRect_set_region_rect #-}
 
@@ -281,6 +381,11 @@ set_region_rect cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NinePatchRect "set_region_rect" '[Rect2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NinePatchRect.set_region_rect
+
 {-# NOINLINE bindNinePatchRect_set_texture #-}
 
 -- | The node's texture resource.
@@ -303,6 +408,10 @@ set_texture cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NinePatchRect "set_texture" '[Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.NinePatchRect.set_texture
 
 {-# NOINLINE bindNinePatchRect_set_v_axis_stretch_mode #-}
 
@@ -327,3 +436,8 @@ set_v_axis_stretch_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NinePatchRect "set_v_axis_stretch_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NinePatchRect.set_v_axis_stretch_mode

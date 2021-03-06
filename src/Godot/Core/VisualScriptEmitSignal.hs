@@ -8,9 +8,19 @@ module Godot.Core.VisualScriptEmitSignal
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptEmitSignal "signal" GodotString
+           'False
+         where
+        nodeProperty = (get_signal, wrapDroppingSetter set_signal, Nothing)
 
 {-# NOINLINE bindVisualScriptEmitSignal_get_signal #-}
 
@@ -35,6 +45,11 @@ get_signal cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptEmitSignal "get_signal" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptEmitSignal.get_signal
+
 {-# NOINLINE bindVisualScriptEmitSignal_set_signal #-}
 
 bindVisualScriptEmitSignal_set_signal :: MethodBind
@@ -57,3 +72,9 @@ set_signal cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptEmitSignal "set_signal"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptEmitSignal.set_signal

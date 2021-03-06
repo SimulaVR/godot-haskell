@@ -21,9 +21,14 @@ module Godot.Core.VisualShaderNodeTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
 
 _SOURCE_DEPTH :: Int
 _SOURCE_DEPTH = 4
@@ -52,9 +57,25 @@ _SOURCE_TEXTURE = 0
 _TYPE_NORMALMAP :: Int
 _TYPE_NORMALMAP = 2
 
+instance NodeProperty VisualShaderNodeTexture "source" Int 'False
+         where
+        nodeProperty = (get_source, wrapDroppingSetter set_source, Nothing)
+
+instance NodeProperty VisualShaderNodeTexture "texture" Texture
+           'False
+         where
+        nodeProperty
+          = (get_texture, wrapDroppingSetter set_texture, Nothing)
+
+instance NodeProperty VisualShaderNodeTexture "texture_type" Int
+           'False
+         where
+        nodeProperty
+          = (get_texture_type, wrapDroppingSetter set_texture_type, Nothing)
+
 {-# NOINLINE bindVisualShaderNodeTexture_get_source #-}
 
--- | Determines the source for the lookup. See [enum Source] for options.
+-- | Determines the source for the lookup. See @enum Source@ for options.
 bindVisualShaderNodeTexture_get_source :: MethodBind
 bindVisualShaderNodeTexture_get_source
   = unsafePerformIO $
@@ -64,7 +85,7 @@ bindVisualShaderNodeTexture_get_source
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines the source for the lookup. See [enum Source] for options.
+-- | Determines the source for the lookup. See @enum Source@ for options.
 get_source ::
              (VisualShaderNodeTexture :< cls, Object :< cls) => cls -> IO Int
 get_source cls
@@ -76,9 +97,14 @@ get_source cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTexture "get_source" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeTexture.get_source
+
 {-# NOINLINE bindVisualShaderNodeTexture_get_texture #-}
 
--- | The source texture, if needed for the selected [member source].
+-- | The source texture, if needed for the selected @source@.
 bindVisualShaderNodeTexture_get_texture :: MethodBind
 bindVisualShaderNodeTexture_get_texture
   = unsafePerformIO $
@@ -88,7 +114,7 @@ bindVisualShaderNodeTexture_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The source texture, if needed for the selected [member source].
+-- | The source texture, if needed for the selected @source@.
 get_texture ::
               (VisualShaderNodeTexture :< cls, Object :< cls) =>
               cls -> IO Texture
@@ -101,9 +127,14 @@ get_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTexture "get_texture" '[]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeTexture.get_texture
+
 {-# NOINLINE bindVisualShaderNodeTexture_get_texture_type #-}
 
--- | Specifies the type of the texture if [member source] is set to [constant SOURCE_TEXTURE]. See [enum TextureType] for options.
+-- | Specifies the type of the texture if @source@ is set to @SOURCE_TEXTURE@. See @enum TextureType@ for options.
 bindVisualShaderNodeTexture_get_texture_type :: MethodBind
 bindVisualShaderNodeTexture_get_texture_type
   = unsafePerformIO $
@@ -113,7 +144,7 @@ bindVisualShaderNodeTexture_get_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies the type of the texture if [member source] is set to [constant SOURCE_TEXTURE]. See [enum TextureType] for options.
+-- | Specifies the type of the texture if @source@ is set to @SOURCE_TEXTURE@. See @enum TextureType@ for options.
 get_texture_type ::
                    (VisualShaderNodeTexture :< cls, Object :< cls) => cls -> IO Int
 get_texture_type cls
@@ -125,9 +156,14 @@ get_texture_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTexture "get_texture_type" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeTexture.get_texture_type
+
 {-# NOINLINE bindVisualShaderNodeTexture_set_source #-}
 
--- | Determines the source for the lookup. See [enum Source] for options.
+-- | Determines the source for the lookup. See @enum Source@ for options.
 bindVisualShaderNodeTexture_set_source :: MethodBind
 bindVisualShaderNodeTexture_set_source
   = unsafePerformIO $
@@ -137,7 +173,7 @@ bindVisualShaderNodeTexture_set_source
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines the source for the lookup. See [enum Source] for options.
+-- | Determines the source for the lookup. See @enum Source@ for options.
 set_source ::
              (VisualShaderNodeTexture :< cls, Object :< cls) =>
              cls -> Int -> IO ()
@@ -150,9 +186,14 @@ set_source cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTexture "set_source" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeTexture.set_source
+
 {-# NOINLINE bindVisualShaderNodeTexture_set_texture #-}
 
--- | The source texture, if needed for the selected [member source].
+-- | The source texture, if needed for the selected @source@.
 bindVisualShaderNodeTexture_set_texture :: MethodBind
 bindVisualShaderNodeTexture_set_texture
   = unsafePerformIO $
@@ -162,7 +203,7 @@ bindVisualShaderNodeTexture_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The source texture, if needed for the selected [member source].
+-- | The source texture, if needed for the selected @source@.
 set_texture ::
               (VisualShaderNodeTexture :< cls, Object :< cls) =>
               cls -> Texture -> IO ()
@@ -175,9 +216,15 @@ set_texture cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeTexture "set_texture"
+           '[Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeTexture.set_texture
+
 {-# NOINLINE bindVisualShaderNodeTexture_set_texture_type #-}
 
--- | Specifies the type of the texture if [member source] is set to [constant SOURCE_TEXTURE]. See [enum TextureType] for options.
+-- | Specifies the type of the texture if @source@ is set to @SOURCE_TEXTURE@. See @enum TextureType@ for options.
 bindVisualShaderNodeTexture_set_texture_type :: MethodBind
 bindVisualShaderNodeTexture_set_texture_type
   = unsafePerformIO $
@@ -187,7 +234,7 @@ bindVisualShaderNodeTexture_set_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies the type of the texture if [member source] is set to [constant SOURCE_TEXTURE]. See [enum TextureType] for options.
+-- | Specifies the type of the texture if @source@ is set to @SOURCE_TEXTURE@. See @enum TextureType@ for options.
 set_texture_type ::
                    (VisualShaderNodeTexture :< cls, Object :< cls) =>
                    cls -> Int -> IO ()
@@ -199,3 +246,9 @@ set_texture_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeTexture "set_texture_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeTexture.set_texture_type

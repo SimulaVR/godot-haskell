@@ -29,9 +29,14 @@ module Godot.Core.VisualScriptCustomNode
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _STEP_PUSH_STACK_BIT :: Int
 _STEP_PUSH_STACK_BIT = 16777216
@@ -80,6 +85,11 @@ _get_caption cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode "_get_caption" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptCustomNode._get_caption
+
 {-# NOINLINE bindVisualScriptCustomNode__get_category #-}
 
 bindVisualScriptCustomNode__get_category :: MethodBind
@@ -102,6 +112,11 @@ _get_category cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptCustomNode "_get_category" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptCustomNode._get_category
 
 {-# NOINLINE bindVisualScriptCustomNode__get_input_value_port_count
              #-}
@@ -128,6 +143,14 @@ _get_input_value_port_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode
+           "_get_input_value_port_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_input_value_port_count
+
 {-# NOINLINE bindVisualScriptCustomNode__get_input_value_port_name
              #-}
 
@@ -152,6 +175,14 @@ _get_input_value_port_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptCustomNode
+           "_get_input_value_port_name"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_input_value_port_name
 
 {-# NOINLINE bindVisualScriptCustomNode__get_input_value_port_type
              #-}
@@ -178,6 +209,14 @@ _get_input_value_port_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode
+           "_get_input_value_port_type"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_input_value_port_type
+
 {-# NOINLINE bindVisualScriptCustomNode__get_output_sequence_port_count
              #-}
 
@@ -202,6 +241,14 @@ _get_output_sequence_port_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptCustomNode
+           "_get_output_sequence_port_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_output_sequence_port_count
 
 {-# NOINLINE bindVisualScriptCustomNode__get_output_sequence_port_text
              #-}
@@ -229,6 +276,14 @@ _get_output_sequence_port_text cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode
+           "_get_output_sequence_port_text"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_output_sequence_port_text
+
 {-# NOINLINE bindVisualScriptCustomNode__get_output_value_port_count
              #-}
 
@@ -253,6 +308,14 @@ _get_output_value_port_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptCustomNode
+           "_get_output_value_port_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_output_value_port_count
 
 {-# NOINLINE bindVisualScriptCustomNode__get_output_value_port_name
              #-}
@@ -280,6 +343,14 @@ _get_output_value_port_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode
+           "_get_output_value_port_name"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_output_value_port_name
+
 {-# NOINLINE bindVisualScriptCustomNode__get_output_value_port_type
              #-}
 
@@ -306,6 +377,14 @@ _get_output_value_port_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode
+           "_get_output_value_port_type"
+           '[Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_output_value_port_type
+
 {-# NOINLINE bindVisualScriptCustomNode__get_text #-}
 
 bindVisualScriptCustomNode__get_text :: MethodBind
@@ -328,6 +407,11 @@ _get_text cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptCustomNode "_get_text" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptCustomNode._get_text
 
 {-# NOINLINE bindVisualScriptCustomNode__get_working_memory_size
              #-}
@@ -353,6 +437,14 @@ _get_working_memory_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode
+           "_get_working_memory_size"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._get_working_memory_size
+
 {-# NOINLINE bindVisualScriptCustomNode__has_input_sequence_port
              #-}
 
@@ -377,6 +469,14 @@ _has_input_sequence_port cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptCustomNode
+           "_has_input_sequence_port"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptCustomNode._has_input_sequence_port
+
 {-# NOINLINE bindVisualScriptCustomNode__script_changed #-}
 
 bindVisualScriptCustomNode__script_changed :: MethodBind
@@ -398,6 +498,11 @@ _script_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptCustomNode "_script_changed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptCustomNode._script_changed
 
 {-# NOINLINE bindVisualScriptCustomNode__step #-}
 
@@ -422,3 +527,9 @@ _step cls arg1 arg2 arg3 arg4
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptCustomNode "_step"
+           '[Array, Array, Int, Array]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.VisualScriptCustomNode._step

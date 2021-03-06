@@ -23,9 +23,14 @@ module Godot.Core.CameraFeed
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 _FEED_FRONT :: Int
 _FEED_FRONT = 1
@@ -47,6 +52,15 @@ _FEED_NOIMAGE = 0
 
 _FEED_BACK :: Int
 _FEED_BACK = 2
+
+instance NodeProperty CameraFeed "feed_is_active" Bool 'False where
+        nodeProperty = (is_active, wrapDroppingSetter set_active, Nothing)
+
+instance NodeProperty CameraFeed "feed_transform" Transform2d
+           'False
+         where
+        nodeProperty
+          = (get_transform, wrapDroppingSetter set_transform, Nothing)
 
 {-# NOINLINE bindCameraFeed__allocate_texture #-}
 
@@ -73,6 +87,12 @@ _allocate_texture cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CameraFeed "_allocate_texture"
+           '[Int, Int, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CameraFeed._allocate_texture
+
 {-# NOINLINE bindCameraFeed__set_RGB_img #-}
 
 bindCameraFeed__set_RGB_img :: MethodBind
@@ -94,6 +114,10 @@ _set_RGB_img cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CameraFeed "_set_RGB_img" '[Image] (IO ())
+         where
+        nodeMethod = Godot.Core.CameraFeed._set_RGB_img
+
 {-# NOINLINE bindCameraFeed__set_YCbCr_img #-}
 
 bindCameraFeed__set_YCbCr_img :: MethodBind
@@ -114,6 +138,10 @@ _set_YCbCr_img cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CameraFeed "_set_YCbCr_img" '[Image] (IO ())
+         where
+        nodeMethod = Godot.Core.CameraFeed._set_YCbCr_img
 
 {-# NOINLINE bindCameraFeed__set_YCbCr_imgs #-}
 
@@ -137,6 +165,11 @@ _set_YCbCr_imgs cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CameraFeed "_set_YCbCr_imgs" '[Image, Image]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CameraFeed._set_YCbCr_imgs
+
 {-# NOINLINE bindCameraFeed__set_name #-}
 
 bindCameraFeed__set_name :: MethodBind
@@ -156,6 +189,10 @@ _set_name cls arg1
          godot_method_bind_call bindCameraFeed__set_name (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CameraFeed "_set_name" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.CameraFeed._set_name
 
 {-# NOINLINE bindCameraFeed__set_position #-}
 
@@ -178,6 +215,9 @@ _set_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CameraFeed "_set_position" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CameraFeed._set_position
+
 {-# NOINLINE bindCameraFeed_get_id #-}
 
 -- | Returns the unique ID for this feed.
@@ -198,6 +238,9 @@ get_id cls
          godot_method_bind_call bindCameraFeed_get_id (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CameraFeed "get_id" '[] (IO Int) where
+        nodeMethod = Godot.Core.CameraFeed.get_id
 
 {-# NOINLINE bindCameraFeed_get_name #-}
 
@@ -221,6 +264,10 @@ get_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CameraFeed "get_name" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.CameraFeed.get_name
+
 {-# NOINLINE bindCameraFeed_get_position #-}
 
 -- | Returns the position of camera on the device.
@@ -242,6 +289,9 @@ get_position cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CameraFeed "get_position" '[] (IO Int) where
+        nodeMethod = Godot.Core.CameraFeed.get_position
 
 {-# NOINLINE bindCameraFeed_get_transform #-}
 
@@ -266,9 +316,13 @@ get_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CameraFeed "get_transform" '[] (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CameraFeed.get_transform
+
 {-# NOINLINE bindCameraFeed_is_active #-}
 
--- | If [code]true[/code], the feed is active.
+-- | If @true@, the feed is active.
 bindCameraFeed_is_active :: MethodBind
 bindCameraFeed_is_active
   = unsafePerformIO $
@@ -278,7 +332,7 @@ bindCameraFeed_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the feed is active.
+-- | If @true@, the feed is active.
 is_active :: (CameraFeed :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
   = withVariantArray []
@@ -287,9 +341,12 @@ is_active cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CameraFeed "is_active" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CameraFeed.is_active
+
 {-# NOINLINE bindCameraFeed_set_active #-}
 
--- | If [code]true[/code], the feed is active.
+-- | If @true@, the feed is active.
 bindCameraFeed_set_active :: MethodBind
 bindCameraFeed_set_active
   = unsafePerformIO $
@@ -299,7 +356,7 @@ bindCameraFeed_set_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the feed is active.
+-- | If @true@, the feed is active.
 set_active ::
              (CameraFeed :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_active cls arg1
@@ -309,6 +366,9 @@ set_active cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CameraFeed "set_active" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.CameraFeed.set_active
 
 {-# NOINLINE bindCameraFeed_set_transform #-}
 
@@ -332,3 +392,8 @@ set_transform cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CameraFeed "set_transform" '[Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CameraFeed.set_transform

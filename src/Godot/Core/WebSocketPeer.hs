@@ -16,9 +16,14 @@ module Godot.Core.WebSocketPeer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PacketPeer()
 
 _WRITE_MODE_TEXT :: Int
 _WRITE_MODE_TEXT = 0
@@ -39,13 +44,21 @@ bindWebSocketPeer_close
 
 close ::
         (WebSocketPeer :< cls, Object :< cls) =>
-        cls -> Int -> GodotString -> IO ()
+        cls -> Maybe Int -> Maybe GodotString -> IO ()
 close cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [maybe (VariantInt (1000)) toVariant arg1,
+       defaultedVariant VariantString "" arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindWebSocketPeer_close (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketPeer "close"
+           '[Maybe Int, Maybe GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.close
 
 {-# NOINLINE bindWebSocketPeer_get_connected_host #-}
 
@@ -69,6 +82,11 @@ get_connected_host cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketPeer "get_connected_host" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.get_connected_host
+
 {-# NOINLINE bindWebSocketPeer_get_connected_port #-}
 
 bindWebSocketPeer_get_connected_port :: MethodBind
@@ -90,6 +108,10 @@ get_connected_port cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketPeer "get_connected_port" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.get_connected_port
 
 {-# NOINLINE bindWebSocketPeer_get_write_mode #-}
 
@@ -113,6 +135,10 @@ get_write_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketPeer "get_write_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.get_write_mode
+
 {-# NOINLINE bindWebSocketPeer_is_connected_to_host #-}
 
 bindWebSocketPeer_is_connected_to_host :: MethodBind
@@ -135,6 +161,11 @@ is_connected_to_host cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketPeer "is_connected_to_host" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.is_connected_to_host
+
 {-# NOINLINE bindWebSocketPeer_set_no_delay #-}
 
 bindWebSocketPeer_set_no_delay :: MethodBind
@@ -155,6 +186,10 @@ set_no_delay cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketPeer "set_no_delay" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.set_no_delay
 
 {-# NOINLINE bindWebSocketPeer_set_write_mode #-}
 
@@ -178,6 +213,10 @@ set_write_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebSocketPeer "set_write_mode" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.set_write_mode
+
 {-# NOINLINE bindWebSocketPeer_was_string_packet #-}
 
 bindWebSocketPeer_was_string_packet :: MethodBind
@@ -199,3 +238,7 @@ was_string_packet cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebSocketPeer "was_string_packet" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.WebSocketPeer.was_string_packet

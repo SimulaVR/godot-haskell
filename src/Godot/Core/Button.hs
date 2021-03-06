@@ -14,9 +14,14 @@ module Godot.Core.Button
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.BaseButton()
 
 _ALIGN_RIGHT :: Int
 _ALIGN_RIGHT = 2
@@ -26,6 +31,28 @@ _ALIGN_LEFT = 0
 
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
+
+instance NodeProperty Button "align" Int 'False where
+        nodeProperty
+          = (get_text_align, wrapDroppingSetter set_text_align, Nothing)
+
+instance NodeProperty Button "clip_text" Bool 'False where
+        nodeProperty
+          = (get_clip_text, wrapDroppingSetter set_clip_text, Nothing)
+
+instance NodeProperty Button "expand_icon" Bool 'False where
+        nodeProperty
+          = (is_expand_icon, wrapDroppingSetter set_expand_icon, Nothing)
+
+instance NodeProperty Button "flat" Bool 'False where
+        nodeProperty = (is_flat, wrapDroppingSetter set_flat, Nothing)
+
+instance NodeProperty Button "icon" Texture 'False where
+        nodeProperty
+          = (get_button_icon, wrapDroppingSetter set_button_icon, Nothing)
+
+instance NodeProperty Button "text" GodotString 'False where
+        nodeProperty = (get_text, wrapDroppingSetter set_text, Nothing)
 
 {-# NOINLINE bindButton_get_button_icon #-}
 
@@ -50,6 +77,9 @@ get_button_icon cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Button "get_button_icon" '[] (IO Texture) where
+        nodeMethod = Godot.Core.Button.get_button_icon
+
 {-# NOINLINE bindButton_get_clip_text #-}
 
 -- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text.
@@ -71,6 +101,9 @@ get_clip_text cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Button "get_clip_text" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Button.get_clip_text
+
 {-# NOINLINE bindButton_get_text #-}
 
 -- | The button's text that will be displayed inside the button's area.
@@ -91,9 +124,12 @@ get_text cls
          godot_method_bind_call bindButton_get_text (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Button "get_text" '[] (IO GodotString) where
+        nodeMethod = Godot.Core.Button.get_text
+
 {-# NOINLINE bindButton_get_text_align #-}
 
--- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
+-- | Text alignment policy for the button's text, use one of the @enum TextAlign@ constants.
 bindButton_get_text_align :: MethodBind
 bindButton_get_text_align
   = unsafePerformIO $
@@ -103,7 +139,7 @@ bindButton_get_text_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
+-- | Text alignment policy for the button's text, use one of the @enum TextAlign@ constants.
 get_text_align :: (Button :< cls, Object :< cls) => cls -> IO Int
 get_text_align cls
   = withVariantArray []
@@ -112,6 +148,9 @@ get_text_align cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Button "get_text_align" '[] (IO Int) where
+        nodeMethod = Godot.Core.Button.get_text_align
 
 {-# NOINLINE bindButton_is_expand_icon #-}
 
@@ -135,6 +174,9 @@ is_expand_icon cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Button "is_expand_icon" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Button.is_expand_icon
+
 {-# NOINLINE bindButton_is_flat #-}
 
 -- | Flat buttons don't display decoration.
@@ -154,6 +196,9 @@ is_flat cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindButton_is_flat (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Button "is_flat" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Button.is_flat
 
 {-# NOINLINE bindButton_set_button_icon #-}
 
@@ -178,6 +223,10 @@ set_button_icon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Button "set_button_icon" '[Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.Button.set_button_icon
+
 {-# NOINLINE bindButton_set_clip_text #-}
 
 -- | When this property is enabled, text that is too large to fit the button is clipped, when disabled the Button will always be wide enough to hold the text.
@@ -199,6 +248,9 @@ set_clip_text cls arg1
          godot_method_bind_call bindButton_set_clip_text (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Button "set_clip_text" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Button.set_clip_text
 
 {-# NOINLINE bindButton_set_expand_icon #-}
 
@@ -223,6 +275,9 @@ set_expand_icon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Button "set_expand_icon" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Button.set_expand_icon
+
 {-# NOINLINE bindButton_set_flat #-}
 
 -- | Flat buttons don't display decoration.
@@ -242,6 +297,9 @@ set_flat cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindButton_set_flat (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Button "set_flat" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Button.set_flat
 
 {-# NOINLINE bindButton_set_text #-}
 
@@ -264,9 +322,12 @@ set_text cls arg1
          godot_method_bind_call bindButton_set_text (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Button "set_text" '[GodotString] (IO ()) where
+        nodeMethod = Godot.Core.Button.set_text
+
 {-# NOINLINE bindButton_set_text_align #-}
 
--- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
+-- | Text alignment policy for the button's text, use one of the @enum TextAlign@ constants.
 bindButton_set_text_align :: MethodBind
 bindButton_set_text_align
   = unsafePerformIO $
@@ -276,7 +337,7 @@ bindButton_set_text_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Text alignment policy for the button's text, use one of the [enum TextAlign] constants.
+-- | Text alignment policy for the button's text, use one of the @enum TextAlign@ constants.
 set_text_align ::
                  (Button :< cls, Object :< cls) => cls -> Int -> IO ()
 set_text_align cls arg1
@@ -286,3 +347,6 @@ set_text_align cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Button "set_text_align" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Button.set_text_align

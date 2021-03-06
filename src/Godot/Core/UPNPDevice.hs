@@ -32,9 +32,14 @@ module Godot.Core.UPNPDevice
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 _IGD_STATUS_INVALID_CONTROL :: Int
 _IGD_STATUS_INVALID_CONTROL = 7
@@ -66,6 +71,41 @@ _IGD_STATUS_UNKNOWN_DEVICE = 6
 _IGD_STATUS_HTTP_ERROR :: Int
 _IGD_STATUS_HTTP_ERROR = 1
 
+instance NodeProperty UPNPDevice "description_url" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_description_url, wrapDroppingSetter set_description_url,
+             Nothing)
+
+instance NodeProperty UPNPDevice "igd_control_url" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_igd_control_url, wrapDroppingSetter set_igd_control_url,
+             Nothing)
+
+instance NodeProperty UPNPDevice "igd_our_addr" GodotString 'False
+         where
+        nodeProperty
+          = (get_igd_our_addr, wrapDroppingSetter set_igd_our_addr, Nothing)
+
+instance NodeProperty UPNPDevice "igd_service_type" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_igd_service_type, wrapDroppingSetter set_igd_service_type,
+             Nothing)
+
+instance NodeProperty UPNPDevice "igd_status" Int 'False where
+        nodeProperty
+          = (get_igd_status, wrapDroppingSetter set_igd_status, Nothing)
+
+instance NodeProperty UPNPDevice "service_type" GodotString 'False
+         where
+        nodeProperty
+          = (get_service_type, wrapDroppingSetter set_service_type, Nothing)
+
 {-# NOINLINE bindUPNPDevice_add_port_mapping #-}
 
 bindUPNPDevice_add_port_mapping :: MethodBind
@@ -79,16 +119,27 @@ bindUPNPDevice_add_port_mapping
 
 add_port_mapping ::
                    (UPNPDevice :< cls, Object :< cls) =>
-                   cls -> Int -> Int -> GodotString -> GodotString -> Int -> IO Int
+                   cls ->
+                     Int ->
+                       Maybe Int ->
+                         Maybe GodotString -> Maybe GodotString -> Maybe Int -> IO Int
 add_port_mapping cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, maybe (VariantInt (0)) toVariant arg2,
+       defaultedVariant VariantString "" arg3,
+       defaultedVariant VariantString "UDP" arg4,
+       maybe (VariantInt (0)) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindUPNPDevice_add_port_mapping (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "add_port_mapping"
+           '[Int, Maybe Int, Maybe GodotString, Maybe GodotString, Maybe Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.add_port_mapping
 
 {-# NOINLINE bindUPNPDevice_delete_port_mapping #-}
 
@@ -103,15 +154,22 @@ bindUPNPDevice_delete_port_mapping
 
 delete_port_mapping ::
                       (UPNPDevice :< cls, Object :< cls) =>
-                      cls -> Int -> GodotString -> IO Int
+                      cls -> Int -> Maybe GodotString -> IO Int
 delete_port_mapping cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, defaultedVariant VariantString "UDP" arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindUPNPDevice_delete_port_mapping
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "delete_port_mapping"
+           '[Int, Maybe GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.delete_port_mapping
 
 {-# NOINLINE bindUPNPDevice_get_description_url #-}
 
@@ -135,6 +193,11 @@ get_description_url cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "get_description_url" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.get_description_url
+
 {-# NOINLINE bindUPNPDevice_get_igd_control_url #-}
 
 bindUPNPDevice_get_igd_control_url :: MethodBind
@@ -157,6 +220,11 @@ get_igd_control_url cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "get_igd_control_url" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.get_igd_control_url
+
 {-# NOINLINE bindUPNPDevice_get_igd_our_addr #-}
 
 bindUPNPDevice_get_igd_our_addr :: MethodBind
@@ -177,6 +245,11 @@ get_igd_our_addr cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "get_igd_our_addr" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.get_igd_our_addr
 
 {-# NOINLINE bindUPNPDevice_get_igd_service_type #-}
 
@@ -200,6 +273,11 @@ get_igd_service_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "get_igd_service_type" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.get_igd_service_type
+
 {-# NOINLINE bindUPNPDevice_get_igd_status #-}
 
 bindUPNPDevice_get_igd_status :: MethodBind
@@ -220,6 +298,9 @@ get_igd_status cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "get_igd_status" '[] (IO Int) where
+        nodeMethod = Godot.Core.UPNPDevice.get_igd_status
 
 {-# NOINLINE bindUPNPDevice_get_service_type #-}
 
@@ -242,6 +323,11 @@ get_service_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "get_service_type" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.get_service_type
+
 {-# NOINLINE bindUPNPDevice_is_valid_gateway #-}
 
 bindUPNPDevice_is_valid_gateway :: MethodBind
@@ -262,6 +348,10 @@ is_valid_gateway cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "is_valid_gateway" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.is_valid_gateway
 
 {-# NOINLINE bindUPNPDevice_query_external_address #-}
 
@@ -285,6 +375,11 @@ query_external_address cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "query_external_address" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.UPNPDevice.query_external_address
+
 {-# NOINLINE bindUPNPDevice_set_description_url #-}
 
 bindUPNPDevice_set_description_url :: MethodBind
@@ -306,6 +401,11 @@ set_description_url cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "set_description_url" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.UPNPDevice.set_description_url
 
 {-# NOINLINE bindUPNPDevice_set_igd_control_url #-}
 
@@ -329,6 +429,11 @@ set_igd_control_url cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "set_igd_control_url" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.UPNPDevice.set_igd_control_url
+
 {-# NOINLINE bindUPNPDevice_set_igd_our_addr #-}
 
 bindUPNPDevice_set_igd_our_addr :: MethodBind
@@ -349,6 +454,11 @@ set_igd_our_addr cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "set_igd_our_addr" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.UPNPDevice.set_igd_our_addr
 
 {-# NOINLINE bindUPNPDevice_set_igd_service_type #-}
 
@@ -372,6 +482,12 @@ set_igd_service_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "set_igd_service_type"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.UPNPDevice.set_igd_service_type
+
 {-# NOINLINE bindUPNPDevice_set_igd_status #-}
 
 bindUPNPDevice_set_igd_status :: MethodBind
@@ -393,6 +509,10 @@ set_igd_status cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod UPNPDevice "set_igd_status" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.UPNPDevice.set_igd_status
+
 {-# NOINLINE bindUPNPDevice_set_service_type #-}
 
 bindUPNPDevice_set_service_type :: MethodBind
@@ -413,3 +533,8 @@ set_service_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod UPNPDevice "set_service_type" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.UPNPDevice.set_service_type

@@ -22,9 +22,24 @@ module Godot.Core.NoiseTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Texture()
+
+instance NodeProperty NoiseTexture "as_normalmap" Bool 'False where
+        nodeProperty
+          = (is_normalmap, wrapDroppingSetter set_as_normalmap, Nothing)
+
+instance NodeProperty NoiseTexture "bump_strength" Float 'False
+         where
+        nodeProperty
+          = (get_bump_strength, wrapDroppingSetter set_bump_strength,
+             Nothing)
 
 {-# NOINLINE bindNoiseTexture_get_height #-}
 
@@ -46,6 +61,20 @@ get_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "get_height" '[] (IO Int) where
+        nodeMethod = Godot.Core.NoiseTexture.get_height
+
+instance NodeProperty NoiseTexture "height" Int 'False where
+        nodeProperty = (get_height, wrapDroppingSetter set_height, Nothing)
+
+instance NodeProperty NoiseTexture "noise" OpenSimplexNoise 'False
+         where
+        nodeProperty = (get_noise, wrapDroppingSetter set_noise, Nothing)
+
+instance NodeProperty NoiseTexture "seamless" Bool 'False where
+        nodeProperty
+          = (get_seamless, wrapDroppingSetter set_seamless, Nothing)
+
 {-# NOINLINE bindNoiseTexture_get_width #-}
 
 bindNoiseTexture_get_width :: MethodBind
@@ -65,6 +94,12 @@ get_width cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NoiseTexture "get_width" '[] (IO Int) where
+        nodeMethod = Godot.Core.NoiseTexture.get_width
+
+instance NodeProperty NoiseTexture "width" Int 'False where
+        nodeProperty = (get_width, wrapDroppingSetter set_width, Nothing)
 
 {-# NOINLINE bindNoiseTexture__generate_texture #-}
 
@@ -88,6 +123,10 @@ _generate_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "_generate_texture" '[] (IO Image)
+         where
+        nodeMethod = Godot.Core.NoiseTexture._generate_texture
+
 {-# NOINLINE bindNoiseTexture__queue_update #-}
 
 bindNoiseTexture__queue_update :: MethodBind
@@ -109,6 +148,9 @@ _queue_update cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "_queue_update" '[] (IO ()) where
+        nodeMethod = Godot.Core.NoiseTexture._queue_update
+
 {-# NOINLINE bindNoiseTexture__thread_done #-}
 
 bindNoiseTexture__thread_done :: MethodBind
@@ -129,6 +171,10 @@ _thread_done cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NoiseTexture "_thread_done" '[Image] (IO ())
+         where
+        nodeMethod = Godot.Core.NoiseTexture._thread_done
 
 {-# NOINLINE bindNoiseTexture__update_texture #-}
 
@@ -152,6 +198,10 @@ _update_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "_update_texture" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.NoiseTexture._update_texture
+
 {-# NOINLINE bindNoiseTexture_get_bump_strength #-}
 
 bindNoiseTexture_get_bump_strength :: MethodBind
@@ -174,6 +224,10 @@ get_bump_strength cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "get_bump_strength" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.NoiseTexture.get_bump_strength
+
 {-# NOINLINE bindNoiseTexture_get_noise #-}
 
 bindNoiseTexture_get_noise :: MethodBind
@@ -194,6 +248,11 @@ get_noise cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NoiseTexture "get_noise" '[]
+           (IO OpenSimplexNoise)
+         where
+        nodeMethod = Godot.Core.NoiseTexture.get_noise
 
 {-# NOINLINE bindNoiseTexture_get_seamless #-}
 
@@ -216,6 +275,9 @@ get_seamless cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "get_seamless" '[] (IO Bool) where
+        nodeMethod = Godot.Core.NoiseTexture.get_seamless
+
 {-# NOINLINE bindNoiseTexture_is_normalmap #-}
 
 bindNoiseTexture_is_normalmap :: MethodBind
@@ -236,6 +298,9 @@ is_normalmap cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NoiseTexture "is_normalmap" '[] (IO Bool) where
+        nodeMethod = Godot.Core.NoiseTexture.is_normalmap
 
 {-# NOINLINE bindNoiseTexture_set_as_normalmap #-}
 
@@ -259,6 +324,10 @@ set_as_normalmap cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "set_as_normalmap" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.NoiseTexture.set_as_normalmap
+
 {-# NOINLINE bindNoiseTexture_set_bump_strength #-}
 
 bindNoiseTexture_set_bump_strength :: MethodBind
@@ -281,6 +350,11 @@ set_bump_strength cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "set_bump_strength" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NoiseTexture.set_bump_strength
+
 {-# NOINLINE bindNoiseTexture_set_height #-}
 
 bindNoiseTexture_set_height :: MethodBind
@@ -301,6 +375,9 @@ set_height cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NoiseTexture "set_height" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.NoiseTexture.set_height
 
 {-# NOINLINE bindNoiseTexture_set_noise #-}
 
@@ -324,6 +401,11 @@ set_noise cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "set_noise" '[OpenSimplexNoise]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NoiseTexture.set_noise
+
 {-# NOINLINE bindNoiseTexture_set_seamless #-}
 
 bindNoiseTexture_set_seamless :: MethodBind
@@ -345,6 +427,10 @@ set_seamless cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NoiseTexture "set_seamless" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.NoiseTexture.set_seamless
+
 {-# NOINLINE bindNoiseTexture_set_width #-}
 
 bindNoiseTexture_set_width :: MethodBind
@@ -365,3 +451,6 @@ set_width cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NoiseTexture "set_width" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.NoiseTexture.set_width

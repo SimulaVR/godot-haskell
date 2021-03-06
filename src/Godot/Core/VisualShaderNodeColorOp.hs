@@ -17,9 +17,14 @@ module Godot.Core.VisualShaderNodeColorOp
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
 
 _OP_SCREEN :: Int
 _OP_SCREEN = 0
@@ -48,9 +53,14 @@ _OP_OVERLAY = 4
 _OP_LIGHTEN :: Int
 _OP_LIGHTEN = 3
 
+instance NodeProperty VisualShaderNodeColorOp "operator" Int 'False
+         where
+        nodeProperty
+          = (get_operator, wrapDroppingSetter set_operator, Nothing)
+
 {-# NOINLINE bindVisualShaderNodeColorOp_get_operator #-}
 
--- | An operator to be applied to the inputs. See [enum Operator] for options.
+-- | An operator to be applied to the inputs. See @enum Operator@ for options.
 bindVisualShaderNodeColorOp_get_operator :: MethodBind
 bindVisualShaderNodeColorOp_get_operator
   = unsafePerformIO $
@@ -60,7 +70,7 @@ bindVisualShaderNodeColorOp_get_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | An operator to be applied to the inputs. See [enum Operator] for options.
+-- | An operator to be applied to the inputs. See @enum Operator@ for options.
 get_operator ::
                (VisualShaderNodeColorOp :< cls, Object :< cls) => cls -> IO Int
 get_operator cls
@@ -72,9 +82,14 @@ get_operator cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeColorOp "get_operator" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeColorOp.get_operator
+
 {-# NOINLINE bindVisualShaderNodeColorOp_set_operator #-}
 
--- | An operator to be applied to the inputs. See [enum Operator] for options.
+-- | An operator to be applied to the inputs. See @enum Operator@ for options.
 bindVisualShaderNodeColorOp_set_operator :: MethodBind
 bindVisualShaderNodeColorOp_set_operator
   = unsafePerformIO $
@@ -84,7 +99,7 @@ bindVisualShaderNodeColorOp_set_operator
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | An operator to be applied to the inputs. See [enum Operator] for options.
+-- | An operator to be applied to the inputs. See @enum Operator@ for options.
 set_operator ::
                (VisualShaderNodeColorOp :< cls, Object :< cls) =>
                cls -> Int -> IO ()
@@ -96,3 +111,8 @@ set_operator cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeColorOp "set_operator" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeColorOp.set_operator

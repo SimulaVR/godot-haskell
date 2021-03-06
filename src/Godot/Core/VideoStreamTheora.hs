@@ -8,9 +8,18 @@ module Godot.Core.VideoStreamTheora
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VideoStream()
+
+instance NodeProperty VideoStreamTheora "file" GodotString 'False
+         where
+        nodeProperty = (get_file, wrapDroppingSetter set_file, Nothing)
 
 {-# NOINLINE bindVideoStreamTheora_get_file #-}
 
@@ -33,6 +42,11 @@ get_file cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VideoStreamTheora "get_file" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VideoStreamTheora.get_file
+
 {-# NOINLINE bindVideoStreamTheora_set_file #-}
 
 bindVideoStreamTheora_set_file :: MethodBind
@@ -54,3 +68,8 @@ set_file cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VideoStreamTheora "set_file" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VideoStreamTheora.set_file

@@ -9,9 +9,21 @@ module Godot.Core.CSGMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.CSGPrimitive()
+
+instance NodeProperty CSGMesh "material" Material 'False where
+        nodeProperty
+          = (get_material, wrapDroppingSetter set_material, Nothing)
+
+instance NodeProperty CSGMesh "mesh" Mesh 'False where
+        nodeProperty = (get_mesh, wrapDroppingSetter set_mesh, Nothing)
 
 {-# NOINLINE bindCSGMesh__mesh_changed #-}
 
@@ -33,6 +45,9 @@ _mesh_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGMesh "_mesh_changed" '[] (IO ()) where
+        nodeMethod = Godot.Core.CSGMesh._mesh_changed
+
 {-# NOINLINE bindCSGMesh_get_material #-}
 
 bindCSGMesh_get_material :: MethodBind
@@ -53,6 +68,9 @@ get_material cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGMesh "get_material" '[] (IO Material) where
+        nodeMethod = Godot.Core.CSGMesh.get_material
+
 {-# NOINLINE bindCSGMesh_get_mesh #-}
 
 bindCSGMesh_get_mesh :: MethodBind
@@ -70,6 +88,9 @@ get_mesh cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCSGMesh_get_mesh (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGMesh "get_mesh" '[] (IO Mesh) where
+        nodeMethod = Godot.Core.CSGMesh.get_mesh
 
 {-# NOINLINE bindCSGMesh_set_material #-}
 
@@ -91,6 +112,10 @@ set_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGMesh "set_material" '[Material] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGMesh.set_material
+
 {-# NOINLINE bindCSGMesh_set_mesh #-}
 
 bindCSGMesh_set_mesh :: MethodBind
@@ -108,3 +133,6 @@ set_mesh cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCSGMesh_set_mesh (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGMesh "set_mesh" '[Mesh] (IO ()) where
+        nodeMethod = Godot.Core.CSGMesh.set_mesh

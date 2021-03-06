@@ -15,9 +15,64 @@ module Godot.Core.Physics2DTestMotionResult
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
+
+instance NodeProperty Physics2DTestMotionResult "collider" Object
+           'True
+         where
+        nodeProperty = (get_collider, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "collider_id" Int
+           'True
+         where
+        nodeProperty = (get_collider_id, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "collider_rid" Rid
+           'True
+         where
+        nodeProperty = (get_collider_rid, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "collider_shape"
+           Int
+           'True
+         where
+        nodeProperty = (get_collider_shape, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "collider_velocity"
+           Vector2
+           'True
+         where
+        nodeProperty = (get_collider_velocity, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "collision_normal"
+           Vector2
+           'True
+         where
+        nodeProperty = (get_collision_normal, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "collision_point"
+           Vector2
+           'True
+         where
+        nodeProperty = (get_collision_point, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "motion" Vector2
+           'True
+         where
+        nodeProperty = (get_motion, (), Nothing)
+
+instance NodeProperty Physics2DTestMotionResult "motion_remainder"
+           Vector2
+           'True
+         where
+        nodeProperty = (get_motion_remainder, (), Nothing)
 
 {-# NOINLINE bindPhysics2DTestMotionResult_get_collider #-}
 
@@ -42,6 +97,11 @@ get_collider cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DTestMotionResult "get_collider" '[]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.Physics2DTestMotionResult.get_collider
+
 {-# NOINLINE bindPhysics2DTestMotionResult_get_collider_id #-}
 
 bindPhysics2DTestMotionResult_get_collider_id :: MethodBind
@@ -64,6 +124,11 @@ get_collider_id cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DTestMotionResult "get_collider_id" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Physics2DTestMotionResult.get_collider_id
 
 {-# NOINLINE bindPhysics2DTestMotionResult_get_collider_rid #-}
 
@@ -88,6 +153,12 @@ get_collider_rid cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DTestMotionResult "get_collider_rid"
+           '[]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.Physics2DTestMotionResult.get_collider_rid
+
 {-# NOINLINE bindPhysics2DTestMotionResult_get_collider_shape #-}
 
 bindPhysics2DTestMotionResult_get_collider_shape :: MethodBind
@@ -110,6 +181,13 @@ get_collider_shape cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DTestMotionResult "get_collider_shape"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DTestMotionResult.get_collider_shape
 
 {-# NOINLINE bindPhysics2DTestMotionResult_get_collider_velocity
              #-}
@@ -136,6 +214,14 @@ get_collider_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DTestMotionResult
+           "get_collider_velocity"
+           '[]
+           (IO Vector2)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DTestMotionResult.get_collider_velocity
+
 {-# NOINLINE bindPhysics2DTestMotionResult_get_collision_normal #-}
 
 bindPhysics2DTestMotionResult_get_collision_normal :: MethodBind
@@ -159,6 +245,14 @@ get_collision_normal cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DTestMotionResult
+           "get_collision_normal"
+           '[]
+           (IO Vector2)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DTestMotionResult.get_collision_normal
 
 {-# NOINLINE bindPhysics2DTestMotionResult_get_collision_point #-}
 
@@ -184,6 +278,13 @@ get_collision_point cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Physics2DTestMotionResult "get_collision_point"
+           '[]
+           (IO Vector2)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DTestMotionResult.get_collision_point
+
 {-# NOINLINE bindPhysics2DTestMotionResult_get_motion #-}
 
 bindPhysics2DTestMotionResult_get_motion :: MethodBind
@@ -206,6 +307,11 @@ get_motion cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DTestMotionResult "get_motion" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Physics2DTestMotionResult.get_motion
 
 {-# NOINLINE bindPhysics2DTestMotionResult_get_motion_remainder #-}
 
@@ -230,3 +336,11 @@ get_motion_remainder cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Physics2DTestMotionResult
+           "get_motion_remainder"
+           '[]
+           (IO Vector2)
+         where
+        nodeMethod
+          = Godot.Core.Physics2DTestMotionResult.get_motion_remainder

@@ -13,11 +13,16 @@ module Godot.Core.VisibilityNotifier
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
 
--- | Emitted when the VisibilityNotifier enters a [Camera]'s view.
+-- | Emitted when the VisibilityNotifier enters a @Camera@'s view.
 sig_camera_entered ::
                    Godot.Internal.Dispatch.Signal VisibilityNotifier
 sig_camera_entered
@@ -25,7 +30,7 @@ sig_camera_entered
 
 instance NodeSignal VisibilityNotifier "camera_entered" '[Camera]
 
--- | Emitted when the VisibilityNotifier exits a [Camera]'s view.
+-- | Emitted when the VisibilityNotifier exits a @Camera@'s view.
 sig_camera_exited ::
                   Godot.Internal.Dispatch.Signal VisibilityNotifier
 sig_camera_exited = Godot.Internal.Dispatch.Signal "camera_exited"
@@ -46,6 +51,9 @@ sig_screen_exited ::
 sig_screen_exited = Godot.Internal.Dispatch.Signal "screen_exited"
 
 instance NodeSignal VisibilityNotifier "screen_exited" '[]
+
+instance NodeProperty VisibilityNotifier "aabb" Aabb 'False where
+        nodeProperty = (get_aabb, wrapDroppingSetter set_aabb, Nothing)
 
 {-# NOINLINE bindVisibilityNotifier_get_aabb #-}
 
@@ -70,10 +78,14 @@ get_aabb cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisibilityNotifier "get_aabb" '[] (IO Aabb)
+         where
+        nodeMethod = Godot.Core.VisibilityNotifier.get_aabb
+
 {-# NOINLINE bindVisibilityNotifier_is_on_screen #-}
 
--- | If [code]true[/code], the bounding box is on the screen.
---   				[b]Note:[/b] It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
+-- | If @true@, the bounding box is on the screen.
+--   				__Note:__ It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return @false@ right after it is instantiated, even if it will be on screen in the draw pass.
 bindVisibilityNotifier_is_on_screen :: MethodBind
 bindVisibilityNotifier_is_on_screen
   = unsafePerformIO $
@@ -83,8 +95,8 @@ bindVisibilityNotifier_is_on_screen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the bounding box is on the screen.
---   				[b]Note:[/b] It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
+-- | If @true@, the bounding box is on the screen.
+--   				__Note:__ It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return @false@ right after it is instantiated, even if it will be on screen in the draw pass.
 is_on_screen ::
                (VisibilityNotifier :< cls, Object :< cls) => cls -> IO Bool
 is_on_screen cls
@@ -95,6 +107,10 @@ is_on_screen cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisibilityNotifier "is_on_screen" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisibilityNotifier.is_on_screen
 
 {-# NOINLINE bindVisibilityNotifier_set_aabb #-}
 
@@ -118,3 +134,7 @@ set_aabb cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisibilityNotifier "set_aabb" '[Aabb] (IO ())
+         where
+        nodeMethod = Godot.Core.VisibilityNotifier.set_aabb

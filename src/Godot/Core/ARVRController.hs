@@ -20,9 +20,14 @@ module Godot.Core.ARVRController
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
 
 -- | Emitted when a button on this controller is pressed.
 sig_button_pressed :: Godot.Internal.Dispatch.Signal ARVRController
@@ -44,11 +49,20 @@ sig_mesh_updated = Godot.Internal.Dispatch.Signal "mesh_updated"
 
 instance NodeSignal ARVRController "mesh_updated" '[Mesh]
 
+instance NodeProperty ARVRController "controller_id" Int 'False
+         where
+        nodeProperty
+          = (get_controller_id, wrapDroppingSetter set_controller_id,
+             Nothing)
+
+instance NodeProperty ARVRController "rumble" Float 'False where
+        nodeProperty = (get_rumble, wrapDroppingSetter set_rumble, Nothing)
+
 {-# NOINLINE bindARVRController_get_controller_id #-}
 
 -- | The controller's ID.
 --   			A controller ID of 0 is unbound and will always result in an inactive node. Controller ID 1 is reserved for the first controller that identifies itself as the left-hand controller and ID 2 is reserved for the first controller that identifies itself as the right-hand controller.
---   			For any other controller that the [ARVRServer] detects, we continue with controller ID 3.
+--   			For any other controller that the @ARVRServer@ detects, we continue with controller ID 3.
 --   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same ID even when controllers with lower IDs are turned off.
 bindARVRController_get_controller_id :: MethodBind
 bindARVRController_get_controller_id
@@ -61,7 +75,7 @@ bindARVRController_get_controller_id
 
 -- | The controller's ID.
 --   			A controller ID of 0 is unbound and will always result in an inactive node. Controller ID 1 is reserved for the first controller that identifies itself as the left-hand controller and ID 2 is reserved for the first controller that identifies itself as the right-hand controller.
---   			For any other controller that the [ARVRServer] detects, we continue with controller ID 3.
+--   			For any other controller that the @ARVRServer@ detects, we continue with controller ID 3.
 --   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same ID even when controllers with lower IDs are turned off.
 get_controller_id ::
                     (ARVRController :< cls, Object :< cls) => cls -> IO Int
@@ -73,6 +87,10 @@ get_controller_id cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRController "get_controller_id" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRController.get_controller_id
 
 {-# NOINLINE bindARVRController_get_controller_name #-}
 
@@ -98,9 +116,14 @@ get_controller_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "get_controller_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.ARVRController.get_controller_name
+
 {-# NOINLINE bindARVRController_get_hand #-}
 
--- | Returns the hand holding this controller, if known. See [enum ARVRPositionalTracker.TrackerHand].
+-- | Returns the hand holding this controller, if known. See @enum ARVRPositionalTracker.TrackerHand@.
 bindARVRController_get_hand :: MethodBind
 bindARVRController_get_hand
   = unsafePerformIO $
@@ -110,7 +133,7 @@ bindARVRController_get_hand
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the hand holding this controller, if known. See [enum ARVRPositionalTracker.TrackerHand].
+-- | Returns the hand holding this controller, if known. See @enum ARVRPositionalTracker.TrackerHand@.
 get_hand :: (ARVRController :< cls, Object :< cls) => cls -> IO Int
 get_hand cls
   = withVariantArray []
@@ -120,9 +143,12 @@ get_hand cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "get_hand" '[] (IO Int) where
+        nodeMethod = Godot.Core.ARVRController.get_hand
+
 {-# NOINLINE bindARVRController_get_is_active #-}
 
--- | Returns [code]true[/code] if the bound controller is active. ARVR systems attempt to track active controllers.
+-- | Returns @true@ if the bound controller is active. ARVR systems attempt to track active controllers.
 bindARVRController_get_is_active :: MethodBind
 bindARVRController_get_is_active
   = unsafePerformIO $
@@ -132,7 +158,7 @@ bindARVRController_get_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the bound controller is active. ARVR systems attempt to track active controllers.
+-- | Returns @true@ if the bound controller is active. ARVR systems attempt to track active controllers.
 get_is_active ::
                 (ARVRController :< cls, Object :< cls) => cls -> IO Bool
 get_is_active cls
@@ -143,6 +169,10 @@ get_is_active cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRController "get_is_active" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ARVRController.get_is_active
 
 {-# NOINLINE bindARVRController_get_joystick_axis #-}
 
@@ -168,9 +198,14 @@ get_joystick_axis cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "get_joystick_axis" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ARVRController.get_joystick_axis
+
 {-# NOINLINE bindARVRController_get_joystick_id #-}
 
--- | Returns the ID of the joystick object bound to this. Every controller tracked by the [ARVRServer] that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
+-- | Returns the ID of the joystick object bound to this. Every controller tracked by the @ARVRServer@ that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
 bindARVRController_get_joystick_id :: MethodBind
 bindARVRController_get_joystick_id
   = unsafePerformIO $
@@ -180,7 +215,7 @@ bindARVRController_get_joystick_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the ID of the joystick object bound to this. Every controller tracked by the [ARVRServer] that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
+-- | Returns the ID of the joystick object bound to this. Every controller tracked by the @ARVRServer@ that has buttons and axis will also be registered as a joystick within Godot. This means that all the normal joystick tracking and input mapping will work for buttons and axis found on the AR/VR controllers. This ID is purely offered as information so you can link up the controller with its joystick entry.
 get_joystick_id ::
                   (ARVRController :< cls, Object :< cls) => cls -> IO Int
 get_joystick_id cls
@@ -192,9 +227,13 @@ get_joystick_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "get_joystick_id" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRController.get_joystick_id
+
 {-# NOINLINE bindARVRController_get_mesh #-}
 
--- | If provided by the [ARVRInterface], this returns a mesh associated with the controller. This can be used to visualize the controller.
+-- | If provided by the @ARVRInterface@, this returns a mesh associated with the controller. This can be used to visualize the controller.
 bindARVRController_get_mesh :: MethodBind
 bindARVRController_get_mesh
   = unsafePerformIO $
@@ -204,7 +243,7 @@ bindARVRController_get_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If provided by the [ARVRInterface], this returns a mesh associated with the controller. This can be used to visualize the controller.
+-- | If provided by the @ARVRInterface@, this returns a mesh associated with the controller. This can be used to visualize the controller.
 get_mesh ::
            (ARVRController :< cls, Object :< cls) => cls -> IO Mesh
 get_mesh cls
@@ -215,9 +254,12 @@ get_mesh cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "get_mesh" '[] (IO Mesh) where
+        nodeMethod = Godot.Core.ARVRController.get_mesh
+
 {-# NOINLINE bindARVRController_get_rumble #-}
 
--- | The degree to which the controller vibrates. Ranges from [code]0.0[/code] to [code]1.0[/code] with precision [code].01[/code]. If changed, updates [member ARVRPositionalTracker.rumble] accordingly.
+-- | The degree to which the controller vibrates. Ranges from @0.0@ to @1.0@ with precision @.01@. If changed, updates @ARVRPositionalTracker.rumble@ accordingly.
 --   			This is a useful property to animate if you want the controller to vibrate for a limited duration.
 bindARVRController_get_rumble :: MethodBind
 bindARVRController_get_rumble
@@ -228,7 +270,7 @@ bindARVRController_get_rumble
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The degree to which the controller vibrates. Ranges from [code]0.0[/code] to [code]1.0[/code] with precision [code].01[/code]. If changed, updates [member ARVRPositionalTracker.rumble] accordingly.
+-- | The degree to which the controller vibrates. Ranges from @0.0@ to @1.0@ with precision @.01@. If changed, updates @ARVRPositionalTracker.rumble@ accordingly.
 --   			This is a useful property to animate if you want the controller to vibrate for a limited duration.
 get_rumble ::
              (ARVRController :< cls, Object :< cls) => cls -> IO Float
@@ -240,9 +282,13 @@ get_rumble cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "get_rumble" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ARVRController.get_rumble
+
 {-# NOINLINE bindARVRController_is_button_pressed #-}
 
--- | Returns [code]true[/code] if the button at index [code]button[/code] is pressed. See [enum JoystickList], in particular the [code]JOY_VR_*[/code] constants.
+-- | Returns @true@ if the button at index @button@ is pressed. See @enum JoystickList@, in particular the @JOY_VR_*@ constants.
 bindARVRController_is_button_pressed :: MethodBind
 bindARVRController_is_button_pressed
   = unsafePerformIO $
@@ -252,7 +298,7 @@ bindARVRController_is_button_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the button at index [code]button[/code] is pressed. See [enum JoystickList], in particular the [code]JOY_VR_*[/code] constants.
+-- | Returns @true@ if the button at index @button@ is pressed. See @enum JoystickList@, in particular the @JOY_VR_*@ constants.
 is_button_pressed ::
                     (ARVRController :< cls, Object :< cls) => cls -> Int -> IO Int
 is_button_pressed cls arg1
@@ -264,11 +310,16 @@ is_button_pressed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "is_button_pressed" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRController.is_button_pressed
+
 {-# NOINLINE bindARVRController_set_controller_id #-}
 
 -- | The controller's ID.
 --   			A controller ID of 0 is unbound and will always result in an inactive node. Controller ID 1 is reserved for the first controller that identifies itself as the left-hand controller and ID 2 is reserved for the first controller that identifies itself as the right-hand controller.
---   			For any other controller that the [ARVRServer] detects, we continue with controller ID 3.
+--   			For any other controller that the @ARVRServer@ detects, we continue with controller ID 3.
 --   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same ID even when controllers with lower IDs are turned off.
 bindARVRController_set_controller_id :: MethodBind
 bindARVRController_set_controller_id
@@ -281,7 +332,7 @@ bindARVRController_set_controller_id
 
 -- | The controller's ID.
 --   			A controller ID of 0 is unbound and will always result in an inactive node. Controller ID 1 is reserved for the first controller that identifies itself as the left-hand controller and ID 2 is reserved for the first controller that identifies itself as the right-hand controller.
---   			For any other controller that the [ARVRServer] detects, we continue with controller ID 3.
+--   			For any other controller that the @ARVRServer@ detects, we continue with controller ID 3.
 --   			When a controller is turned off, its slot is freed. This ensures controllers will keep the same ID even when controllers with lower IDs are turned off.
 set_controller_id ::
                     (ARVRController :< cls, Object :< cls) => cls -> Int -> IO ()
@@ -294,9 +345,14 @@ set_controller_id cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRController "set_controller_id" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ARVRController.set_controller_id
+
 {-# NOINLINE bindARVRController_set_rumble #-}
 
--- | The degree to which the controller vibrates. Ranges from [code]0.0[/code] to [code]1.0[/code] with precision [code].01[/code]. If changed, updates [member ARVRPositionalTracker.rumble] accordingly.
+-- | The degree to which the controller vibrates. Ranges from @0.0@ to @1.0@ with precision @.01@. If changed, updates @ARVRPositionalTracker.rumble@ accordingly.
 --   			This is a useful property to animate if you want the controller to vibrate for a limited duration.
 bindARVRController_set_rumble :: MethodBind
 bindARVRController_set_rumble
@@ -307,7 +363,7 @@ bindARVRController_set_rumble
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The degree to which the controller vibrates. Ranges from [code]0.0[/code] to [code]1.0[/code] with precision [code].01[/code]. If changed, updates [member ARVRPositionalTracker.rumble] accordingly.
+-- | The degree to which the controller vibrates. Ranges from @0.0@ to @1.0@ with precision @.01@. If changed, updates @ARVRPositionalTracker.rumble@ accordingly.
 --   			This is a useful property to animate if you want the controller to vibrate for a limited duration.
 set_rumble ::
              (ARVRController :< cls, Object :< cls) => cls -> Float -> IO ()
@@ -318,3 +374,7 @@ set_rumble cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRController "set_rumble" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ARVRController.set_rumble

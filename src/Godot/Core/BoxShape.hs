@@ -7,9 +7,18 @@ module Godot.Core.BoxShape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape()
+
+instance NodeProperty BoxShape "extents" Vector3 'False where
+        nodeProperty
+          = (get_extents, wrapDroppingSetter set_extents, Nothing)
 
 {-# NOINLINE bindBoxShape_get_extents #-}
 
@@ -33,6 +42,9 @@ get_extents cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BoxShape "get_extents" '[] (IO Vector3) where
+        nodeMethod = Godot.Core.BoxShape.get_extents
+
 {-# NOINLINE bindBoxShape_set_extents #-}
 
 -- | The box's half extents. The width, height and depth of this shape is twice the half extents.
@@ -54,3 +66,6 @@ set_extents cls arg1
          godot_method_bind_call bindBoxShape_set_extents (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BoxShape "set_extents" '[Vector3] (IO ()) where
+        nodeMethod = Godot.Core.BoxShape.set_extents

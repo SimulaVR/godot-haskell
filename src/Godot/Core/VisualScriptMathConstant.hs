@@ -17,9 +17,14 @@ module Godot.Core.VisualScriptMathConstant
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _MATH_CONSTANT_INF :: Int
 _MATH_CONSTANT_INF = 6
@@ -48,6 +53,13 @@ _MATH_CONSTANT_SQRT2 = 5
 _MATH_CONSTANT_E :: Int
 _MATH_CONSTANT_E = 4
 
+instance NodeProperty VisualScriptMathConstant "constant" Int
+           'False
+         where
+        nodeProperty
+          = (get_math_constant, wrapDroppingSetter set_math_constant,
+             Nothing)
+
 {-# NOINLINE bindVisualScriptMathConstant_get_math_constant #-}
 
 bindVisualScriptMathConstant_get_math_constant :: MethodBind
@@ -70,6 +82,12 @@ get_math_constant cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptMathConstant "get_math_constant"
+           '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptMathConstant.get_math_constant
 
 {-# NOINLINE bindVisualScriptMathConstant_set_math_constant #-}
 
@@ -94,3 +112,9 @@ set_math_constant cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptMathConstant "set_math_constant"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptMathConstant.set_math_constant

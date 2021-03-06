@@ -19,9 +19,39 @@ module Godot.Core.NativeScript
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Script()
+
+instance NodeProperty NativeScript "class_name" GodotString 'False
+         where
+        nodeProperty
+          = (get_class_name, wrapDroppingSetter set_class_name, Nothing)
+
+instance NodeProperty NativeScript "library" GDNativeLibrary 'False
+         where
+        nodeProperty
+          = (get_library, wrapDroppingSetter set_library, Nothing)
+
+instance NodeProperty NativeScript "script_class_icon_path"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_script_class_icon_path,
+             wrapDroppingSetter set_script_class_icon_path, Nothing)
+
+instance NodeProperty NativeScript "script_class_name" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_script_class_name, wrapDroppingSetter set_script_class_name,
+             Nothing)
 
 {-# NOINLINE bindNativeScript_get_class_documentation #-}
 
@@ -45,6 +75,11 @@ get_class_documentation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "get_class_documentation" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_class_documentation
+
 {-# NOINLINE bindNativeScript_get_class_name #-}
 
 bindNativeScript_get_class_name :: MethodBind
@@ -66,6 +101,11 @@ get_class_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "get_class_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_class_name
+
 {-# NOINLINE bindNativeScript_get_library #-}
 
 bindNativeScript_get_library :: MethodBind
@@ -86,6 +126,11 @@ get_library cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NativeScript "get_library" '[]
+           (IO GDNativeLibrary)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_library
 
 {-# NOINLINE bindNativeScript_get_method_documentation #-}
 
@@ -110,6 +155,12 @@ get_method_documentation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "get_method_documentation"
+           '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_method_documentation
+
 {-# NOINLINE bindNativeScript_get_property_documentation #-}
 
 bindNativeScript_get_property_documentation :: MethodBind
@@ -133,6 +184,12 @@ get_property_documentation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "get_property_documentation"
+           '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_property_documentation
+
 {-# NOINLINE bindNativeScript_get_script_class_icon_path #-}
 
 bindNativeScript_get_script_class_icon_path :: MethodBind
@@ -155,6 +212,11 @@ get_script_class_icon_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "get_script_class_icon_path" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_script_class_icon_path
+
 {-# NOINLINE bindNativeScript_get_script_class_name #-}
 
 bindNativeScript_get_script_class_name :: MethodBind
@@ -176,6 +238,11 @@ get_script_class_name cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NativeScript "get_script_class_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_script_class_name
 
 {-# NOINLINE bindNativeScript_get_signal_documentation #-}
 
@@ -200,6 +267,12 @@ get_signal_documentation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "get_signal_documentation"
+           '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NativeScript.get_signal_documentation
+
 {-# NOINLINE bindNativeScript_new #-}
 
 bindNativeScript_new :: MethodBind
@@ -219,6 +292,11 @@ new cls varargs
       (\ (arrPtr, len) ->
          godot_method_bind_call bindNativeScript_new (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NativeScript "new" '[[Variant 'GodotTy]]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.NativeScript.new
 
 {-# NOINLINE bindNativeScript_set_class_name #-}
 
@@ -240,6 +318,11 @@ set_class_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NativeScript "set_class_name" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NativeScript.set_class_name
 
 {-# NOINLINE bindNativeScript_set_library #-}
 
@@ -263,6 +346,11 @@ set_library cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "set_library" '[GDNativeLibrary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NativeScript.set_library
+
 {-# NOINLINE bindNativeScript_set_script_class_icon_path #-}
 
 bindNativeScript_set_script_class_icon_path :: MethodBind
@@ -285,6 +373,12 @@ set_script_class_icon_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NativeScript "set_script_class_icon_path"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NativeScript.set_script_class_icon_path
+
 {-# NOINLINE bindNativeScript_set_script_class_name #-}
 
 bindNativeScript_set_script_class_name :: MethodBind
@@ -306,3 +400,9 @@ set_script_class_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NativeScript "set_script_class_name"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NativeScript.set_script_class_name

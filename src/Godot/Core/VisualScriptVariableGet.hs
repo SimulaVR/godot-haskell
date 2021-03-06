@@ -8,9 +8,21 @@ module Godot.Core.VisualScriptVariableGet
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptVariableGet "var_name"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_variable, wrapDroppingSetter set_variable, Nothing)
 
 {-# NOINLINE bindVisualScriptVariableGet_get_variable #-}
 
@@ -35,6 +47,11 @@ get_variable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptVariableGet "get_variable" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptVariableGet.get_variable
+
 {-# NOINLINE bindVisualScriptVariableGet_set_variable #-}
 
 bindVisualScriptVariableGet_set_variable :: MethodBind
@@ -57,3 +74,9 @@ set_variable cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptVariableGet "set_variable"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptVariableGet.set_variable

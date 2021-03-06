@@ -71,11 +71,16 @@ module Godot.Tools.ScriptEditor
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PanelContainer()
 
--- | Emitted when user changed active script. Argument is a freshly activated [Script].
+-- | Emitted when user changed active script. Argument is a freshly activated @Script@.
 sig_editor_script_changed ::
                           Godot.Internal.Dispatch.Signal ScriptEditor
 sig_editor_script_changed
@@ -83,7 +88,7 @@ sig_editor_script_changed
 
 instance NodeSignal ScriptEditor "editor_script_changed" '[Script]
 
--- | Emitted when editor is about to close the active script. Argument is a [Script] that is going to be closed.
+-- | Emitted when editor is about to close the active script. Argument is a @Script@ that is going to be closed.
 sig_script_close :: Godot.Internal.Dispatch.Signal ScriptEditor
 sig_script_close = Godot.Internal.Dispatch.Signal "script_close"
 
@@ -111,6 +116,12 @@ _add_callback cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_add_callback"
+           '[Object, GodotString, PoolStringArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._add_callback
+
 {-# NOINLINE bindScriptEditor__autosave_scripts #-}
 
 bindScriptEditor__autosave_scripts :: MethodBind
@@ -132,6 +143,10 @@ _autosave_scripts cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_autosave_scripts" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._autosave_scripts
 
 {-# NOINLINE bindScriptEditor__breaked #-}
 
@@ -155,6 +170,10 @@ _breaked cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_breaked" '[Bool, Bool] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._breaked
+
 {-# NOINLINE bindScriptEditor__clear_execution #-}
 
 bindScriptEditor__clear_execution :: MethodBind
@@ -176,6 +195,11 @@ _clear_execution cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_clear_execution" '[Reference]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._clear_execution
 
 {-# NOINLINE bindScriptEditor__close_all_tabs #-}
 
@@ -199,6 +223,10 @@ _close_all_tabs cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_close_all_tabs" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._close_all_tabs
+
 {-# NOINLINE bindScriptEditor__close_current_tab #-}
 
 bindScriptEditor__close_current_tab :: MethodBind
@@ -220,6 +248,10 @@ _close_current_tab cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_close_current_tab" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._close_current_tab
 
 {-# NOINLINE bindScriptEditor__close_discard_current_tab #-}
 
@@ -243,6 +275,12 @@ _close_discard_current_tab cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_close_discard_current_tab"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._close_discard_current_tab
+
 {-# NOINLINE bindScriptEditor__close_docs_tab #-}
 
 bindScriptEditor__close_docs_tab :: MethodBind
@@ -264,6 +302,10 @@ _close_docs_tab cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_close_docs_tab" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._close_docs_tab
 
 {-# NOINLINE bindScriptEditor__close_other_tabs #-}
 
@@ -287,6 +329,10 @@ _close_other_tabs cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_close_other_tabs" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._close_other_tabs
+
 {-# NOINLINE bindScriptEditor__copy_script_path #-}
 
 bindScriptEditor__copy_script_path :: MethodBind
@@ -309,6 +355,10 @@ _copy_script_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_copy_script_path" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._copy_script_path
+
 {-# NOINLINE bindScriptEditor__editor_pause #-}
 
 bindScriptEditor__editor_pause :: MethodBind
@@ -330,6 +380,9 @@ _editor_pause cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_editor_pause" '[] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptEditor._editor_pause
+
 {-# NOINLINE bindScriptEditor__editor_play #-}
 
 bindScriptEditor__editor_play :: MethodBind
@@ -350,6 +403,9 @@ _editor_play cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_editor_play" '[] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptEditor._editor_play
 
 {-# NOINLINE bindScriptEditor__editor_settings_changed #-}
 
@@ -373,6 +429,11 @@ _editor_settings_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_editor_settings_changed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._editor_settings_changed
+
 {-# NOINLINE bindScriptEditor__editor_stop #-}
 
 bindScriptEditor__editor_stop :: MethodBind
@@ -393,6 +454,9 @@ _editor_stop cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_editor_stop" '[] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptEditor._editor_stop
 
 {-# NOINLINE bindScriptEditor__file_dialog_action #-}
 
@@ -415,6 +479,12 @@ _file_dialog_action cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_file_dialog_action"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._file_dialog_action
 
 {-# NOINLINE bindScriptEditor__filter_methods_text_changed #-}
 
@@ -439,6 +509,12 @@ _filter_methods_text_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_filter_methods_text_changed"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._filter_methods_text_changed
+
 {-# NOINLINE bindScriptEditor__filter_scripts_text_changed #-}
 
 bindScriptEditor__filter_scripts_text_changed :: MethodBind
@@ -461,6 +537,12 @@ _filter_scripts_text_changed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_filter_scripts_text_changed"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._filter_scripts_text_changed
 
 {-# NOINLINE bindScriptEditor__get_debug_tooltip #-}
 
@@ -485,6 +567,12 @@ _get_debug_tooltip cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_get_debug_tooltip"
+           '[GodotString, Node]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._get_debug_tooltip
+
 {-# NOINLINE bindScriptEditor__goto_script_line #-}
 
 bindScriptEditor__goto_script_line :: MethodBind
@@ -508,6 +596,12 @@ _goto_script_line cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_goto_script_line"
+           '[Reference, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._goto_script_line
+
 {-# NOINLINE bindScriptEditor__goto_script_line2 #-}
 
 bindScriptEditor__goto_script_line2 :: MethodBind
@@ -529,6 +623,11 @@ _goto_script_line2 cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_goto_script_line2" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._goto_script_line2
 
 {-# NOINLINE bindScriptEditor__help_class_goto #-}
 
@@ -552,6 +651,11 @@ _help_class_goto cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_help_class_goto" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._help_class_goto
+
 {-# NOINLINE bindScriptEditor__help_class_open #-}
 
 bindScriptEditor__help_class_open :: MethodBind
@@ -573,6 +677,11 @@ _help_class_open cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_help_class_open" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._help_class_open
 
 {-# NOINLINE bindScriptEditor__help_overview_selected #-}
 
@@ -596,6 +705,11 @@ _help_overview_selected cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_help_overview_selected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._help_overview_selected
+
 {-# NOINLINE bindScriptEditor__help_search #-}
 
 bindScriptEditor__help_search :: MethodBind
@@ -616,6 +730,11 @@ _help_search cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_help_search" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._help_search
 
 {-# NOINLINE bindScriptEditor__history_back #-}
 
@@ -638,6 +757,9 @@ _history_back cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_history_back" '[] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptEditor._history_back
+
 {-# NOINLINE bindScriptEditor__history_forward #-}
 
 bindScriptEditor__history_forward :: MethodBind
@@ -659,6 +781,10 @@ _history_forward cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_history_forward" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._history_forward
 
 {-# NOINLINE bindScriptEditor__live_auto_reload_running_scripts #-}
 
@@ -683,6 +809,14 @@ _live_auto_reload_running_scripts cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor
+           "_live_auto_reload_running_scripts"
+           '[]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.ScriptEditor._live_auto_reload_running_scripts
+
 {-# NOINLINE bindScriptEditor__members_overview_selected #-}
 
 bindScriptEditor__members_overview_selected :: MethodBind
@@ -705,6 +839,12 @@ _members_overview_selected cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_members_overview_selected"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._members_overview_selected
+
 {-# NOINLINE bindScriptEditor__menu_option #-}
 
 bindScriptEditor__menu_option :: MethodBind
@@ -725,6 +865,10 @@ _menu_option cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_menu_option" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._menu_option
 
 {-# NOINLINE bindScriptEditor__on_find_in_files_modified_files #-}
 
@@ -750,6 +894,13 @@ _on_find_in_files_modified_files cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_on_find_in_files_modified_files"
+           '[PoolStringArray]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.ScriptEditor._on_find_in_files_modified_files
+
 {-# NOINLINE bindScriptEditor__on_find_in_files_requested #-}
 
 bindScriptEditor__on_find_in_files_requested :: MethodBind
@@ -771,6 +922,12 @@ _on_find_in_files_requested cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_on_find_in_files_requested"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._on_find_in_files_requested
 
 {-# NOINLINE bindScriptEditor__on_find_in_files_result_selected #-}
 
@@ -797,6 +954,14 @@ _on_find_in_files_result_selected cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor
+           "_on_find_in_files_result_selected"
+           '[GodotString, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.ScriptEditor._on_find_in_files_result_selected
+
 {-# NOINLINE bindScriptEditor__open_recent_script #-}
 
 bindScriptEditor__open_recent_script :: MethodBind
@@ -818,6 +983,11 @@ _open_recent_script cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_open_recent_script" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._open_recent_script
 
 {-# NOINLINE bindScriptEditor__reload_scripts #-}
 
@@ -841,6 +1011,10 @@ _reload_scripts cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_reload_scripts" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._reload_scripts
+
 {-# NOINLINE bindScriptEditor__request_help #-}
 
 bindScriptEditor__request_help :: MethodBind
@@ -861,6 +1035,11 @@ _request_help cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_request_help" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._request_help
 
 {-# NOINLINE bindScriptEditor__res_saved_callback #-}
 
@@ -884,6 +1063,11 @@ _res_saved_callback cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_res_saved_callback" '[Resource]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._res_saved_callback
+
 {-# NOINLINE bindScriptEditor__resave_scripts #-}
 
 bindScriptEditor__resave_scripts :: MethodBind
@@ -906,6 +1090,11 @@ _resave_scripts cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_resave_scripts" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._resave_scripts
+
 {-# NOINLINE bindScriptEditor__save_history #-}
 
 bindScriptEditor__save_history :: MethodBind
@@ -926,6 +1115,9 @@ _save_history cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_save_history" '[] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptEditor._save_history
 
 {-# NOINLINE bindScriptEditor__script_changed #-}
 
@@ -949,6 +1141,10 @@ _script_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_script_changed" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._script_changed
+
 {-# NOINLINE bindScriptEditor__script_created #-}
 
 bindScriptEditor__script_created :: MethodBind
@@ -970,6 +1166,11 @@ _script_created cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_script_created" '[Script]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._script_created
 
 {-# NOINLINE bindScriptEditor__script_list_gui_input #-}
 
@@ -993,6 +1194,12 @@ _script_list_gui_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_script_list_gui_input"
+           '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._script_list_gui_input
+
 {-# NOINLINE bindScriptEditor__script_selected #-}
 
 bindScriptEditor__script_selected :: MethodBind
@@ -1014,6 +1221,10 @@ _script_selected cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_script_selected" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._script_selected
 
 {-# NOINLINE bindScriptEditor__script_split_dragged #-}
 
@@ -1037,6 +1248,11 @@ _script_split_dragged cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_script_split_dragged" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._script_split_dragged
+
 {-# NOINLINE bindScriptEditor__set_execution #-}
 
 bindScriptEditor__set_execution :: MethodBind
@@ -1059,6 +1275,11 @@ _set_execution cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_set_execution" '[Reference, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._set_execution
+
 {-# NOINLINE bindScriptEditor__show_debugger #-}
 
 bindScriptEditor__show_debugger :: MethodBind
@@ -1079,6 +1300,10 @@ _show_debugger cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_show_debugger" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._show_debugger
 
 {-# NOINLINE bindScriptEditor__start_find_in_files #-}
 
@@ -1102,6 +1327,11 @@ _start_find_in_files cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_start_find_in_files" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._start_find_in_files
+
 {-# NOINLINE bindScriptEditor__tab_changed #-}
 
 bindScriptEditor__tab_changed :: MethodBind
@@ -1123,6 +1353,10 @@ _tab_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_tab_changed" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._tab_changed
+
 {-# NOINLINE bindScriptEditor__theme_option #-}
 
 bindScriptEditor__theme_option :: MethodBind
@@ -1143,6 +1377,10 @@ _theme_option cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_theme_option" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._theme_option
 
 {-# NOINLINE bindScriptEditor__toggle_members_overview_alpha_sort
              #-}
@@ -1168,6 +1406,14 @@ _toggle_members_overview_alpha_sort cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor
+           "_toggle_members_overview_alpha_sort"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.ScriptEditor._toggle_members_overview_alpha_sort
+
 {-# NOINLINE bindScriptEditor__tree_changed #-}
 
 bindScriptEditor__tree_changed :: MethodBind
@@ -1188,6 +1434,9 @@ _tree_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_tree_changed" '[] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptEditor._tree_changed
 
 {-# NOINLINE bindScriptEditor__unhandled_input #-}
 
@@ -1211,6 +1460,11 @@ _unhandled_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_unhandled_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._unhandled_input
+
 {-# NOINLINE bindScriptEditor__update_autosave_timer #-}
 
 bindScriptEditor__update_autosave_timer :: MethodBind
@@ -1232,6 +1486,11 @@ _update_autosave_timer cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_update_autosave_timer" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._update_autosave_timer
 
 {-# NOINLINE bindScriptEditor__update_members_overview #-}
 
@@ -1255,6 +1514,11 @@ _update_members_overview cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_update_members_overview" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._update_members_overview
+
 {-# NOINLINE bindScriptEditor__update_recent_scripts #-}
 
 bindScriptEditor__update_recent_scripts :: MethodBind
@@ -1276,6 +1540,11 @@ _update_recent_scripts cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_update_recent_scripts" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._update_recent_scripts
 
 {-# NOINLINE bindScriptEditor__update_script_connections #-}
 
@@ -1299,6 +1568,11 @@ _update_script_connections cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "_update_script_connections" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._update_script_connections
+
 {-# NOINLINE bindScriptEditor__update_script_names #-}
 
 bindScriptEditor__update_script_names :: MethodBind
@@ -1320,6 +1594,10 @@ _update_script_names cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "_update_script_names" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor._update_script_names
 
 {-# NOINLINE bindScriptEditor_can_drop_data_fw #-}
 
@@ -1344,6 +1622,12 @@ can_drop_data_fw cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "can_drop_data_fw"
+           '[Vector2, GodotVariant, Control]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Tools.ScriptEditor.can_drop_data_fw
+
 {-# NOINLINE bindScriptEditor_drop_data_fw #-}
 
 bindScriptEditor_drop_data_fw :: MethodBind
@@ -1366,9 +1650,15 @@ drop_data_fw cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "drop_data_fw"
+           '[Vector2, GodotVariant, Control]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor.drop_data_fw
+
 {-# NOINLINE bindScriptEditor_get_current_script #-}
 
--- | Returns a [Script] that is currently active in editor.
+-- | Returns a @Script@ that is currently active in editor.
 bindScriptEditor_get_current_script :: MethodBind
 bindScriptEditor_get_current_script
   = unsafePerformIO $
@@ -1378,7 +1668,7 @@ bindScriptEditor_get_current_script
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [Script] that is currently active in editor.
+-- | Returns a @Script@ that is currently active in editor.
 get_current_script ::
                      (ScriptEditor :< cls, Object :< cls) => cls -> IO Script
 get_current_script cls
@@ -1389,6 +1679,11 @@ get_current_script cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "get_current_script" '[]
+           (IO Script)
+         where
+        nodeMethod = Godot.Tools.ScriptEditor.get_current_script
 
 {-# NOINLINE bindScriptEditor_get_drag_data_fw #-}
 
@@ -1413,9 +1708,15 @@ get_drag_data_fw cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "get_drag_data_fw"
+           '[Vector2, Control]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Tools.ScriptEditor.get_drag_data_fw
+
 {-# NOINLINE bindScriptEditor_get_open_scripts #-}
 
--- | Returns an array with all [Script] objects which are currently open in editor.
+-- | Returns an array with all @Script@ objects which are currently open in editor.
 bindScriptEditor_get_open_scripts :: MethodBind
 bindScriptEditor_get_open_scripts
   = unsafePerformIO $
@@ -1425,7 +1726,7 @@ bindScriptEditor_get_open_scripts
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array with all [Script] objects which are currently open in editor.
+-- | Returns an array with all @Script@ objects which are currently open in editor.
 get_open_scripts ::
                    (ScriptEditor :< cls, Object :< cls) => cls -> IO Array
 get_open_scripts cls
@@ -1436,6 +1737,10 @@ get_open_scripts cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "get_open_scripts" '[] (IO Array)
+         where
+        nodeMethod = Godot.Tools.ScriptEditor.get_open_scripts
 
 {-# NOINLINE bindScriptEditor_goto_line #-}
 
@@ -1460,6 +1765,9 @@ goto_line cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScriptEditor "goto_line" '[Int] (IO ()) where
+        nodeMethod = Godot.Tools.ScriptEditor.goto_line
+
 {-# NOINLINE bindScriptEditor_open_script_create_dialog #-}
 
 bindScriptEditor_open_script_create_dialog :: MethodBind
@@ -1482,3 +1790,9 @@ open_script_create_dialog cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScriptEditor "open_script_create_dialog"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.ScriptEditor.open_script_create_dialog

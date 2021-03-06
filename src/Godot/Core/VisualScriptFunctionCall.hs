@@ -38,9 +38,14 @@ module Godot.Core.VisualScriptFunctionCall
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _CALL_MODE_BASIC_TYPE :: Int
 _CALL_MODE_BASIC_TYPE = 3
@@ -72,6 +77,81 @@ _RPC_DISABLED = 0
 _RPC_RELIABLE :: Int
 _RPC_RELIABLE = 1
 
+instance NodeProperty VisualScriptFunctionCall "argument_cache"
+           Dictionary
+           'False
+         where
+        nodeProperty
+          = (_get_argument_cache, wrapDroppingSetter _set_argument_cache,
+             Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "base_script"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_base_script, wrapDroppingSetter set_base_script, Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "base_type"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_base_type, wrapDroppingSetter set_base_type, Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "basic_type" Int
+           'False
+         where
+        nodeProperty
+          = (get_basic_type, wrapDroppingSetter set_basic_type, Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "call_mode" Int
+           'False
+         where
+        nodeProperty
+          = (get_call_mode, wrapDroppingSetter set_call_mode, Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "function"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_function, wrapDroppingSetter set_function, Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "node_path" NodePath
+           'False
+         where
+        nodeProperty
+          = (get_base_path, wrapDroppingSetter set_base_path, Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "rpc_call_mode" Int
+           'False
+         where
+        nodeProperty
+          = (get_rpc_call_mode, wrapDroppingSetter set_rpc_call_mode,
+             Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "singleton"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_singleton, wrapDroppingSetter set_singleton, Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "use_default_args"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_use_default_args, wrapDroppingSetter set_use_default_args,
+             Nothing)
+
+instance NodeProperty VisualScriptFunctionCall "validate" Bool
+           'False
+         where
+        nodeProperty
+          = (get_validate, wrapDroppingSetter set_validate, Nothing)
+
 {-# NOINLINE bindVisualScriptFunctionCall__get_argument_cache #-}
 
 bindVisualScriptFunctionCall__get_argument_cache :: MethodBind
@@ -95,6 +175,13 @@ _get_argument_cache cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "_get_argument_cache"
+           '[]
+           (IO Dictionary)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptFunctionCall._get_argument_cache
 
 {-# NOINLINE bindVisualScriptFunctionCall__set_argument_cache #-}
 
@@ -120,6 +207,13 @@ _set_argument_cache cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "_set_argument_cache"
+           '[Dictionary]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptFunctionCall._set_argument_cache
+
 {-# NOINLINE bindVisualScriptFunctionCall_get_base_path #-}
 
 bindVisualScriptFunctionCall_get_base_path :: MethodBind
@@ -142,6 +236,11 @@ get_base_path cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "get_base_path" '[]
+           (IO NodePath)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_base_path
 
 {-# NOINLINE bindVisualScriptFunctionCall_get_base_script #-}
 
@@ -166,6 +265,11 @@ get_base_script cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "get_base_script" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_base_script
+
 {-# NOINLINE bindVisualScriptFunctionCall_get_base_type #-}
 
 bindVisualScriptFunctionCall_get_base_type :: MethodBind
@@ -189,6 +293,11 @@ get_base_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "get_base_type" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_base_type
+
 {-# NOINLINE bindVisualScriptFunctionCall_get_basic_type #-}
 
 bindVisualScriptFunctionCall_get_basic_type :: MethodBind
@@ -211,6 +320,11 @@ get_basic_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "get_basic_type" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_basic_type
+
 {-# NOINLINE bindVisualScriptFunctionCall_get_call_mode #-}
 
 bindVisualScriptFunctionCall_get_call_mode :: MethodBind
@@ -232,6 +346,11 @@ get_call_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "get_call_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_call_mode
 
 {-# NOINLINE bindVisualScriptFunctionCall_get_function #-}
 
@@ -256,6 +375,11 @@ get_function cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "get_function" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_function
+
 {-# NOINLINE bindVisualScriptFunctionCall_get_rpc_call_mode #-}
 
 bindVisualScriptFunctionCall_get_rpc_call_mode :: MethodBind
@@ -278,6 +402,12 @@ get_rpc_call_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "get_rpc_call_mode"
+           '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_rpc_call_mode
 
 {-# NOINLINE bindVisualScriptFunctionCall_get_singleton #-}
 
@@ -302,6 +432,11 @@ get_singleton cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "get_singleton" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_singleton
+
 {-# NOINLINE bindVisualScriptFunctionCall_get_use_default_args #-}
 
 bindVisualScriptFunctionCall_get_use_default_args :: MethodBind
@@ -325,6 +460,13 @@ get_use_default_args cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "get_use_default_args"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptFunctionCall.get_use_default_args
+
 {-# NOINLINE bindVisualScriptFunctionCall_get_validate #-}
 
 bindVisualScriptFunctionCall_get_validate :: MethodBind
@@ -346,6 +488,11 @@ get_validate cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "get_validate" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.get_validate
 
 {-# NOINLINE bindVisualScriptFunctionCall_set_base_path #-}
 
@@ -370,6 +517,12 @@ set_base_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "set_base_path"
+           '[NodePath]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_base_path
+
 {-# NOINLINE bindVisualScriptFunctionCall_set_base_script #-}
 
 bindVisualScriptFunctionCall_set_base_script :: MethodBind
@@ -392,6 +545,12 @@ set_base_script cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "set_base_script"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_base_script
 
 {-# NOINLINE bindVisualScriptFunctionCall_set_base_type #-}
 
@@ -416,6 +575,12 @@ set_base_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "set_base_type"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_base_type
+
 {-# NOINLINE bindVisualScriptFunctionCall_set_basic_type #-}
 
 bindVisualScriptFunctionCall_set_basic_type :: MethodBind
@@ -438,6 +603,12 @@ set_basic_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "set_basic_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_basic_type
 
 {-# NOINLINE bindVisualScriptFunctionCall_set_call_mode #-}
 
@@ -462,6 +633,11 @@ set_call_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "set_call_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_call_mode
+
 {-# NOINLINE bindVisualScriptFunctionCall_set_function #-}
 
 bindVisualScriptFunctionCall_set_function :: MethodBind
@@ -484,6 +660,12 @@ set_function cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "set_function"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_function
 
 {-# NOINLINE bindVisualScriptFunctionCall_set_rpc_call_mode #-}
 
@@ -509,6 +691,12 @@ set_rpc_call_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "set_rpc_call_mode"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_rpc_call_mode
+
 {-# NOINLINE bindVisualScriptFunctionCall_set_singleton #-}
 
 bindVisualScriptFunctionCall_set_singleton :: MethodBind
@@ -531,6 +719,12 @@ set_singleton cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "set_singleton"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_singleton
 
 {-# NOINLINE bindVisualScriptFunctionCall_set_use_default_args #-}
 
@@ -556,6 +750,13 @@ set_use_default_args cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionCall "set_use_default_args"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptFunctionCall.set_use_default_args
+
 {-# NOINLINE bindVisualScriptFunctionCall_set_validate #-}
 
 bindVisualScriptFunctionCall_set_validate :: MethodBind
@@ -578,3 +779,8 @@ set_validate cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionCall "set_validate" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionCall.set_validate

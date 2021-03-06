@@ -27,9 +27,14 @@ module Godot.Core.BitmapFont
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Font()
 
 {-# NOINLINE bindBitmapFont_get_ascent #-}
 
@@ -53,9 +58,18 @@ get_ascent cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "get_ascent" '[] (IO Float) where
+        nodeMethod = Godot.Core.BitmapFont.get_ascent
+
+instance NodeProperty BitmapFont "ascent" Float 'False where
+        nodeProperty = (get_ascent, wrapDroppingSetter set_ascent, Nothing)
+
+instance NodeProperty BitmapFont "chars" PoolIntArray 'False where
+        nodeProperty = (_get_chars, wrapDroppingSetter _set_chars, Nothing)
+
 {-# NOINLINE bindBitmapFont_is_distance_field_hint #-}
 
--- | If [code]true[/code], distance field hint is enabled.
+-- | If @true@, distance field hint is enabled.
 bindBitmapFont_is_distance_field_hint :: MethodBind
 bindBitmapFont_is_distance_field_hint
   = unsafePerformIO $
@@ -65,7 +79,7 @@ bindBitmapFont_is_distance_field_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], distance field hint is enabled.
+-- | If @true@, distance field hint is enabled.
 is_distance_field_hint ::
                          (BitmapFont :< cls, Object :< cls) => cls -> IO Bool
 is_distance_field_hint cls
@@ -76,6 +90,20 @@ is_distance_field_hint cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "is_distance_field_hint" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.BitmapFont.is_distance_field_hint
+
+instance NodeProperty BitmapFont "distance_field" Bool 'False where
+        nodeProperty
+          = (is_distance_field_hint,
+             wrapDroppingSetter set_distance_field_hint, Nothing)
+
+instance NodeProperty BitmapFont "fallback" BitmapFont 'False where
+        nodeProperty
+          = (get_fallback, wrapDroppingSetter set_fallback, Nothing)
 
 {-# NOINLINE bindBitmapFont_get_height #-}
 
@@ -99,6 +127,21 @@ get_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "get_height" '[] (IO Float) where
+        nodeMethod = Godot.Core.BitmapFont.get_height
+
+instance NodeProperty BitmapFont "height" Float 'False where
+        nodeProperty = (get_height, wrapDroppingSetter set_height, Nothing)
+
+instance NodeProperty BitmapFont "kernings" PoolIntArray 'False
+         where
+        nodeProperty
+          = (_get_kernings, wrapDroppingSetter _set_kernings, Nothing)
+
+instance NodeProperty BitmapFont "textures" Array 'False where
+        nodeProperty
+          = (_get_textures, wrapDroppingSetter _set_textures, Nothing)
+
 {-# NOINLINE bindBitmapFont__get_chars #-}
 
 bindBitmapFont__get_chars :: MethodBind
@@ -119,6 +162,10 @@ _get_chars cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "_get_chars" '[] (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.BitmapFont._get_chars
 
 {-# NOINLINE bindBitmapFont__get_kernings #-}
 
@@ -141,6 +188,11 @@ _get_kernings cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "_get_kernings" '[]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.BitmapFont._get_kernings
+
 {-# NOINLINE bindBitmapFont__get_textures #-}
 
 bindBitmapFont__get_textures :: MethodBind
@@ -161,6 +213,9 @@ _get_textures cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "_get_textures" '[] (IO Array) where
+        nodeMethod = Godot.Core.BitmapFont._get_textures
 
 {-# NOINLINE bindBitmapFont__set_chars #-}
 
@@ -183,6 +238,10 @@ _set_chars cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "_set_chars" '[PoolIntArray] (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont._set_chars
+
 {-# NOINLINE bindBitmapFont__set_kernings #-}
 
 bindBitmapFont__set_kernings :: MethodBind
@@ -203,6 +262,11 @@ _set_kernings cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "_set_kernings" '[PoolIntArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont._set_kernings
 
 {-# NOINLINE bindBitmapFont__set_textures #-}
 
@@ -225,9 +289,13 @@ _set_textures cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "_set_textures" '[Array] (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont._set_textures
+
 {-# NOINLINE bindBitmapFont_add_char #-}
 
--- | Adds a character to the font, where [code]character[/code] is the Unicode value, [code]texture[/code] is the texture index, [code]rect[/code] is the region in the texture (in pixels!), [code]align[/code] is the (optional) alignment for the character and [code]advance[/code] is the (optional) advance.
+-- | Adds a character to the font, where @character@ is the Unicode value, @texture@ is the texture index, @rect@ is the region in the texture (in pixels!), @align@ is the (optional) alignment for the character and @advance@ is the (optional) advance.
 bindBitmapFont_add_char :: MethodBind
 bindBitmapFont_add_char
   = unsafePerformIO $
@@ -237,22 +305,29 @@ bindBitmapFont_add_char
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a character to the font, where [code]character[/code] is the Unicode value, [code]texture[/code] is the texture index, [code]rect[/code] is the region in the texture (in pixels!), [code]align[/code] is the (optional) alignment for the character and [code]advance[/code] is the (optional) advance.
+-- | Adds a character to the font, where @character@ is the Unicode value, @texture@ is the texture index, @rect@ is the region in the texture (in pixels!), @align@ is the (optional) alignment for the character and @advance@ is the (optional) advance.
 add_char ::
            (BitmapFont :< cls, Object :< cls) =>
-           cls -> Int -> Int -> Rect2 -> Vector2 -> Float -> IO ()
+           cls -> Int -> Int -> Rect2 -> Maybe Vector2 -> Maybe Float -> IO ()
 add_char cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       defaultedVariant VariantVector2 (V2 0 0) arg4,
+       maybe (VariantReal (-1)) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindBitmapFont_add_char (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "add_char"
+           '[Int, Int, Rect2, Maybe Vector2, Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont.add_char
+
 {-# NOINLINE bindBitmapFont_add_kerning_pair #-}
 
--- | Adds a kerning pair to the [BitmapFont] as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
+-- | Adds a kerning pair to the @BitmapFont@ as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
 bindBitmapFont_add_kerning_pair :: MethodBind
 bindBitmapFont_add_kerning_pair
   = unsafePerformIO $
@@ -262,7 +337,7 @@ bindBitmapFont_add_kerning_pair
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a kerning pair to the [BitmapFont] as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
+-- | Adds a kerning pair to the @BitmapFont@ as a difference. Kerning pairs are special cases where a typeface advance is determined by the next character.
 add_kerning_pair ::
                    (BitmapFont :< cls, Object :< cls) =>
                    cls -> Int -> Int -> Int -> IO ()
@@ -274,9 +349,14 @@ add_kerning_pair cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "add_kerning_pair" '[Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont.add_kerning_pair
+
 {-# NOINLINE bindBitmapFont_add_texture #-}
 
--- | Adds a texture to the [BitmapFont].
+-- | Adds a texture to the @BitmapFont@.
 bindBitmapFont_add_texture :: MethodBind
 bindBitmapFont_add_texture
   = unsafePerformIO $
@@ -286,7 +366,7 @@ bindBitmapFont_add_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a texture to the [BitmapFont].
+-- | Adds a texture to the @BitmapFont@.
 add_texture ::
               (BitmapFont :< cls, Object :< cls) => cls -> Texture -> IO ()
 add_texture cls arg1
@@ -296,6 +376,10 @@ add_texture cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "add_texture" '[Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont.add_texture
 
 {-# NOINLINE bindBitmapFont_clear #-}
 
@@ -317,9 +401,12 @@ clear cls
          godot_method_bind_call bindBitmapFont_clear (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.BitmapFont.clear
+
 {-# NOINLINE bindBitmapFont_create_from_fnt #-}
 
--- | Creates a BitmapFont from the [code]*.fnt[/code] file at [code]path[/code].
+-- | Creates a BitmapFont from the @*.fnt@ file at @path@.
 bindBitmapFont_create_from_fnt :: MethodBind
 bindBitmapFont_create_from_fnt
   = unsafePerformIO $
@@ -329,7 +416,7 @@ bindBitmapFont_create_from_fnt
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a BitmapFont from the [code]*.fnt[/code] file at [code]path[/code].
+-- | Creates a BitmapFont from the @*.fnt@ file at @path@.
 create_from_fnt ::
                   (BitmapFont :< cls, Object :< cls) => cls -> GodotString -> IO Int
 create_from_fnt cls arg1
@@ -339,6 +426,11 @@ create_from_fnt cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "create_from_fnt" '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.BitmapFont.create_from_fnt
 
 {-# NOINLINE bindBitmapFont_get_char_size #-}
 
@@ -353,14 +445,20 @@ bindBitmapFont_get_char_size
 
 get_char_size ::
                 (BitmapFont :< cls, Object :< cls) =>
-                cls -> Int -> Int -> IO Vector2
+                cls -> Int -> Maybe Int -> IO Vector2
 get_char_size cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (0)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindBitmapFont_get_char_size (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "get_char_size" '[Int, Maybe Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.BitmapFont.get_char_size
 
 {-# NOINLINE bindBitmapFont_get_fallback #-}
 
@@ -385,6 +483,10 @@ get_fallback cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "get_fallback" '[] (IO BitmapFont)
+         where
+        nodeMethod = Godot.Core.BitmapFont.get_fallback
+
 {-# NOINLINE bindBitmapFont_get_kerning_pair #-}
 
 -- | Returns a kerning pair as a difference.
@@ -408,9 +510,14 @@ get_kerning_pair cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "get_kerning_pair" '[Int, Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.BitmapFont.get_kerning_pair
+
 {-# NOINLINE bindBitmapFont_get_texture #-}
 
--- | Returns the font atlas texture at index [code]idx[/code].
+-- | Returns the font atlas texture at index @idx@.
 bindBitmapFont_get_texture :: MethodBind
 bindBitmapFont_get_texture
   = unsafePerformIO $
@@ -420,7 +527,7 @@ bindBitmapFont_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the font atlas texture at index [code]idx[/code].
+-- | Returns the font atlas texture at index @idx@.
 get_texture ::
               (BitmapFont :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_texture cls arg1
@@ -430,6 +537,10 @@ get_texture cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "get_texture" '[Int] (IO Texture)
+         where
+        nodeMethod = Godot.Core.BitmapFont.get_texture
 
 {-# NOINLINE bindBitmapFont_get_texture_count #-}
 
@@ -455,6 +566,10 @@ get_texture_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "get_texture_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.BitmapFont.get_texture_count
+
 {-# NOINLINE bindBitmapFont_set_ascent #-}
 
 -- | Ascent (number of pixels above the baseline).
@@ -478,9 +593,12 @@ set_ascent cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "set_ascent" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.BitmapFont.set_ascent
+
 {-# NOINLINE bindBitmapFont_set_distance_field_hint #-}
 
--- | If [code]true[/code], distance field hint is enabled.
+-- | If @true@, distance field hint is enabled.
 bindBitmapFont_set_distance_field_hint :: MethodBind
 bindBitmapFont_set_distance_field_hint
   = unsafePerformIO $
@@ -490,7 +608,7 @@ bindBitmapFont_set_distance_field_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], distance field hint is enabled.
+-- | If @true@, distance field hint is enabled.
 set_distance_field_hint ::
                           (BitmapFont :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_distance_field_hint cls arg1
@@ -501,6 +619,11 @@ set_distance_field_hint cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "set_distance_field_hint" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont.set_distance_field_hint
 
 {-# NOINLINE bindBitmapFont_set_fallback #-}
 
@@ -525,6 +648,10 @@ set_fallback cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BitmapFont "set_fallback" '[BitmapFont] (IO ())
+         where
+        nodeMethod = Godot.Core.BitmapFont.set_fallback
+
 {-# NOINLINE bindBitmapFont_set_height #-}
 
 -- | Total font height (ascent plus descent) in pixels.
@@ -547,3 +674,6 @@ set_height cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BitmapFont "set_height" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.BitmapFont.set_height

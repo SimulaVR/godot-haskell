@@ -16,9 +16,33 @@ module Godot.Core.StyleBoxLine
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.StyleBox()
+
+instance NodeProperty StyleBoxLine "color" Color 'False where
+        nodeProperty = (get_color, wrapDroppingSetter set_color, Nothing)
+
+instance NodeProperty StyleBoxLine "grow_begin" Float 'False where
+        nodeProperty
+          = (get_grow_begin, wrapDroppingSetter set_grow_begin, Nothing)
+
+instance NodeProperty StyleBoxLine "grow_end" Float 'False where
+        nodeProperty
+          = (get_grow_end, wrapDroppingSetter set_grow_end, Nothing)
+
+instance NodeProperty StyleBoxLine "thickness" Int 'False where
+        nodeProperty
+          = (get_thickness, wrapDroppingSetter set_thickness, Nothing)
+
+instance NodeProperty StyleBoxLine "vertical" Bool 'False where
+        nodeProperty
+          = (is_vertical, wrapDroppingSetter set_vertical, Nothing)
 
 {-# NOINLINE bindStyleBoxLine_get_color #-}
 
@@ -43,9 +67,12 @@ get_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxLine "get_color" '[] (IO Color) where
+        nodeMethod = Godot.Core.StyleBoxLine.get_color
+
 {-# NOINLINE bindStyleBoxLine_get_grow_begin #-}
 
--- | The number of pixels the line will extend before the [StyleBoxLine]'s bounds. If set to a negative value, the line will begin inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend before the @StyleBoxLine@'s bounds. If set to a negative value, the line will begin inside the @StyleBoxLine@'s bounds.
 bindStyleBoxLine_get_grow_begin :: MethodBind
 bindStyleBoxLine_get_grow_begin
   = unsafePerformIO $
@@ -55,7 +82,7 @@ bindStyleBoxLine_get_grow_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of pixels the line will extend before the [StyleBoxLine]'s bounds. If set to a negative value, the line will begin inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend before the @StyleBoxLine@'s bounds. If set to a negative value, the line will begin inside the @StyleBoxLine@'s bounds.
 get_grow_begin ::
                  (StyleBoxLine :< cls, Object :< cls) => cls -> IO Float
 get_grow_begin cls
@@ -66,9 +93,13 @@ get_grow_begin cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxLine "get_grow_begin" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.StyleBoxLine.get_grow_begin
+
 {-# NOINLINE bindStyleBoxLine_get_grow_end #-}
 
--- | The number of pixels the line will extend past the [StyleBoxLine]'s bounds. If set to a negative value, the line will end inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend past the @StyleBoxLine@'s bounds. If set to a negative value, the line will end inside the @StyleBoxLine@'s bounds.
 bindStyleBoxLine_get_grow_end :: MethodBind
 bindStyleBoxLine_get_grow_end
   = unsafePerformIO $
@@ -78,7 +109,7 @@ bindStyleBoxLine_get_grow_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of pixels the line will extend past the [StyleBoxLine]'s bounds. If set to a negative value, the line will end inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend past the @StyleBoxLine@'s bounds. If set to a negative value, the line will end inside the @StyleBoxLine@'s bounds.
 get_grow_end ::
                (StyleBoxLine :< cls, Object :< cls) => cls -> IO Float
 get_grow_end cls
@@ -88,6 +119,10 @@ get_grow_end cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxLine "get_grow_end" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.StyleBoxLine.get_grow_end
 
 {-# NOINLINE bindStyleBoxLine_get_thickness #-}
 
@@ -112,9 +147,12 @@ get_thickness cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxLine "get_thickness" '[] (IO Int) where
+        nodeMethod = Godot.Core.StyleBoxLine.get_thickness
+
 {-# NOINLINE bindStyleBoxLine_is_vertical #-}
 
--- | If [code]true[/code], the line will be vertical. If [code]false[/code], the line will be horizontal.
+-- | If @true@, the line will be vertical. If @false@, the line will be horizontal.
 bindStyleBoxLine_is_vertical :: MethodBind
 bindStyleBoxLine_is_vertical
   = unsafePerformIO $
@@ -124,7 +162,7 @@ bindStyleBoxLine_is_vertical
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the line will be vertical. If [code]false[/code], the line will be horizontal.
+-- | If @true@, the line will be vertical. If @false@, the line will be horizontal.
 is_vertical ::
               (StyleBoxLine :< cls, Object :< cls) => cls -> IO Bool
 is_vertical cls
@@ -134,6 +172,9 @@ is_vertical cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxLine "is_vertical" '[] (IO Bool) where
+        nodeMethod = Godot.Core.StyleBoxLine.is_vertical
 
 {-# NOINLINE bindStyleBoxLine_set_color #-}
 
@@ -158,9 +199,12 @@ set_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxLine "set_color" '[Color] (IO ()) where
+        nodeMethod = Godot.Core.StyleBoxLine.set_color
+
 {-# NOINLINE bindStyleBoxLine_set_grow_begin #-}
 
--- | The number of pixels the line will extend before the [StyleBoxLine]'s bounds. If set to a negative value, the line will begin inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend before the @StyleBoxLine@'s bounds. If set to a negative value, the line will begin inside the @StyleBoxLine@'s bounds.
 bindStyleBoxLine_set_grow_begin :: MethodBind
 bindStyleBoxLine_set_grow_begin
   = unsafePerformIO $
@@ -170,7 +214,7 @@ bindStyleBoxLine_set_grow_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of pixels the line will extend before the [StyleBoxLine]'s bounds. If set to a negative value, the line will begin inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend before the @StyleBoxLine@'s bounds. If set to a negative value, the line will begin inside the @StyleBoxLine@'s bounds.
 set_grow_begin ::
                  (StyleBoxLine :< cls, Object :< cls) => cls -> Float -> IO ()
 set_grow_begin cls arg1
@@ -181,9 +225,13 @@ set_grow_begin cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxLine "set_grow_begin" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxLine.set_grow_begin
+
 {-# NOINLINE bindStyleBoxLine_set_grow_end #-}
 
--- | The number of pixels the line will extend past the [StyleBoxLine]'s bounds. If set to a negative value, the line will end inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend past the @StyleBoxLine@'s bounds. If set to a negative value, the line will end inside the @StyleBoxLine@'s bounds.
 bindStyleBoxLine_set_grow_end :: MethodBind
 bindStyleBoxLine_set_grow_end
   = unsafePerformIO $
@@ -193,7 +241,7 @@ bindStyleBoxLine_set_grow_end
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of pixels the line will extend past the [StyleBoxLine]'s bounds. If set to a negative value, the line will end inside the [StyleBoxLine]'s bounds.
+-- | The number of pixels the line will extend past the @StyleBoxLine@'s bounds. If set to a negative value, the line will end inside the @StyleBoxLine@'s bounds.
 set_grow_end ::
                (StyleBoxLine :< cls, Object :< cls) => cls -> Float -> IO ()
 set_grow_end cls arg1
@@ -203,6 +251,10 @@ set_grow_end cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxLine "set_grow_end" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxLine.set_grow_end
 
 {-# NOINLINE bindStyleBoxLine_set_thickness #-}
 
@@ -227,9 +279,13 @@ set_thickness cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxLine "set_thickness" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxLine.set_thickness
+
 {-# NOINLINE bindStyleBoxLine_set_vertical #-}
 
--- | If [code]true[/code], the line will be vertical. If [code]false[/code], the line will be horizontal.
+-- | If @true@, the line will be vertical. If @false@, the line will be horizontal.
 bindStyleBoxLine_set_vertical :: MethodBind
 bindStyleBoxLine_set_vertical
   = unsafePerformIO $
@@ -239,7 +295,7 @@ bindStyleBoxLine_set_vertical
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the line will be vertical. If [code]false[/code], the line will be horizontal.
+-- | If @true@, the line will be vertical. If @false@, the line will be horizontal.
 set_vertical ::
                (StyleBoxLine :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_vertical cls arg1
@@ -249,3 +305,7 @@ set_vertical cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxLine "set_vertical" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxLine.set_vertical

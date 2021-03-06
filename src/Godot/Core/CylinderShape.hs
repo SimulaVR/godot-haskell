@@ -10,9 +10,20 @@ module Godot.Core.CylinderShape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape()
+
+instance NodeProperty CylinderShape "height" Float 'False where
+        nodeProperty = (get_height, wrapDroppingSetter set_height, Nothing)
+
+instance NodeProperty CylinderShape "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
 
 {-# NOINLINE bindCylinderShape_get_height #-}
 
@@ -37,6 +48,9 @@ get_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CylinderShape "get_height" '[] (IO Float) where
+        nodeMethod = Godot.Core.CylinderShape.get_height
+
 {-# NOINLINE bindCylinderShape_get_radius #-}
 
 -- | The cylinder's radius.
@@ -59,6 +73,9 @@ get_radius cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CylinderShape "get_radius" '[] (IO Float) where
+        nodeMethod = Godot.Core.CylinderShape.get_radius
 
 {-# NOINLINE bindCylinderShape_set_height #-}
 
@@ -83,6 +100,10 @@ set_height cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CylinderShape "set_height" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CylinderShape.set_height
+
 {-# NOINLINE bindCylinderShape_set_radius #-}
 
 -- | The cylinder's radius.
@@ -105,3 +126,7 @@ set_radius cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CylinderShape "set_radius" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CylinderShape.set_radius

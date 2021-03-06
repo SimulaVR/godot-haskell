@@ -52,9 +52,14 @@ module Godot.Core.GraphEdit
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 -- | Emitted at the beginning of a GraphNode movement.
 sig__begin_node_move :: Godot.Internal.Dispatch.Signal GraphEdit
@@ -79,7 +84,7 @@ sig_connection_from_empty
 instance NodeSignal GraphEdit "connection_from_empty"
            '[GodotString, Int, Vector2]
 
--- | Emitted to the GraphEdit when the connection between the [code]from_slot[/code] slot of the [code]from[/code] GraphNode and the [code]to_slot[/code] slot of the [code]to[/code] GraphNode is attempted to be created.
+-- | Emitted to the GraphEdit when the connection between the @from_slot@ slot of the @from@ GraphNode and the @to_slot@ slot of the @to@ GraphNode is attempted to be created.
 sig_connection_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_connection_request
   = Godot.Internal.Dispatch.Signal "connection_request"
@@ -95,7 +100,7 @@ sig_connection_to_empty
 instance NodeSignal GraphEdit "connection_to_empty"
            '[GodotString, Int, Vector2]
 
--- | Emitted when the user presses [code]Ctrl + C[/code].
+-- | Emitted when the user presses @Ctrl + C@.
 sig_copy_nodes_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_copy_nodes_request
   = Godot.Internal.Dispatch.Signal "copy_nodes_request"
@@ -110,7 +115,7 @@ sig_delete_nodes_request
 
 instance NodeSignal GraphEdit "delete_nodes_request" '[]
 
--- | Emitted to the GraphEdit when the connection between [code]from_slot[/code] slot of [code]from[/code] GraphNode and [code]to_slot[/code] slot of [code]to[/code] GraphNode is attempted to be removed.
+-- | Emitted to the GraphEdit when the connection between @from_slot@ slot of @from@ GraphNode and @to_slot@ slot of @to@ GraphNode is attempted to be removed.
 sig_disconnection_request ::
                           Godot.Internal.Dispatch.Signal GraphEdit
 sig_disconnection_request
@@ -133,14 +138,14 @@ sig_node_selected = Godot.Internal.Dispatch.Signal "node_selected"
 
 instance NodeSignal GraphEdit "node_selected" '[Node]
 
--- | Emitted when the user presses [code]Ctrl + V[/code].
+-- | Emitted when the user presses @Ctrl + V@.
 sig_paste_nodes_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_paste_nodes_request
   = Godot.Internal.Dispatch.Signal "paste_nodes_request"
 
 instance NodeSignal GraphEdit "paste_nodes_request" '[]
 
--- | Emitted when a popup is requested. Happens on right-clicking in the GraphEdit. [code]position[/code] is the position of the mouse pointer when the signal is sent.
+-- | Emitted when a popup is requested. Happens on right-clicking in the GraphEdit. @position@ is the position of the mouse pointer when the signal is sent.
 sig_popup_request :: Godot.Internal.Dispatch.Signal GraphEdit
 sig_popup_request = Godot.Internal.Dispatch.Signal "popup_request"
 
@@ -153,6 +158,27 @@ sig_scroll_offset_changed
   = Godot.Internal.Dispatch.Signal "scroll_offset_changed"
 
 instance NodeSignal GraphEdit "scroll_offset_changed" '[Vector2]
+
+instance NodeProperty GraphEdit "right_disconnects" Bool 'False
+         where
+        nodeProperty
+          = (is_right_disconnects_enabled,
+             wrapDroppingSetter set_right_disconnects, Nothing)
+
+instance NodeProperty GraphEdit "scroll_offset" Vector2 'False
+         where
+        nodeProperty
+          = (get_scroll_ofs, wrapDroppingSetter set_scroll_ofs, Nothing)
+
+instance NodeProperty GraphEdit "snap_distance" Int 'False where
+        nodeProperty = (get_snap, wrapDroppingSetter set_snap, Nothing)
+
+instance NodeProperty GraphEdit "use_snap" Bool 'False where
+        nodeProperty
+          = (is_using_snap, wrapDroppingSetter set_use_snap, Nothing)
+
+instance NodeProperty GraphEdit "zoom" Float 'False where
+        nodeProperty = (get_zoom, wrapDroppingSetter set_zoom, Nothing)
 
 {-# NOINLINE bindGraphEdit__connections_layer_draw #-}
 
@@ -176,6 +202,10 @@ _connections_layer_draw cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_connections_layer_draw" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._connections_layer_draw
+
 {-# NOINLINE bindGraphEdit__graph_node_moved #-}
 
 bindGraphEdit__graph_node_moved :: MethodBind
@@ -196,6 +226,10 @@ _graph_node_moved cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "_graph_node_moved" '[Node] (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._graph_node_moved
 
 {-# NOINLINE bindGraphEdit__graph_node_raised #-}
 
@@ -219,6 +253,10 @@ _graph_node_raised cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_graph_node_raised" '[Node] (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._graph_node_raised
+
 {-# NOINLINE bindGraphEdit__gui_input #-}
 
 bindGraphEdit__gui_input :: MethodBind
@@ -238,6 +276,10 @@ _gui_input cls arg1
          godot_method_bind_call bindGraphEdit__gui_input (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "_gui_input" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._gui_input
 
 {-# NOINLINE bindGraphEdit__scroll_moved #-}
 
@@ -260,6 +302,10 @@ _scroll_moved cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_scroll_moved" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._scroll_moved
+
 {-# NOINLINE bindGraphEdit__snap_toggled #-}
 
 bindGraphEdit__snap_toggled :: MethodBind
@@ -279,6 +325,9 @@ _snap_toggled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "_snap_toggled" '[] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit._snap_toggled
 
 {-# NOINLINE bindGraphEdit__snap_value_changed #-}
 
@@ -302,6 +351,11 @@ _snap_value_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_snap_value_changed" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._snap_value_changed
+
 {-# NOINLINE bindGraphEdit__top_layer_draw #-}
 
 bindGraphEdit__top_layer_draw :: MethodBind
@@ -323,6 +377,9 @@ _top_layer_draw cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_top_layer_draw" '[] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit._top_layer_draw
+
 {-# NOINLINE bindGraphEdit__top_layer_input #-}
 
 bindGraphEdit__top_layer_input :: MethodBind
@@ -343,6 +400,11 @@ _top_layer_input cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "_top_layer_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._top_layer_input
 
 {-# NOINLINE bindGraphEdit__update_scroll_offset #-}
 
@@ -366,6 +428,10 @@ _update_scroll_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_update_scroll_offset" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit._update_scroll_offset
+
 {-# NOINLINE bindGraphEdit__zoom_minus #-}
 
 bindGraphEdit__zoom_minus :: MethodBind
@@ -386,6 +452,9 @@ _zoom_minus cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_zoom_minus" '[] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit._zoom_minus
+
 {-# NOINLINE bindGraphEdit__zoom_plus #-}
 
 bindGraphEdit__zoom_plus :: MethodBind
@@ -404,6 +473,9 @@ _zoom_plus cls
          godot_method_bind_call bindGraphEdit__zoom_plus (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "_zoom_plus" '[] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit._zoom_plus
 
 {-# NOINLINE bindGraphEdit__zoom_reset #-}
 
@@ -425,9 +497,12 @@ _zoom_reset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "_zoom_reset" '[] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit._zoom_reset
+
 {-# NOINLINE bindGraphEdit_add_valid_connection_type #-}
 
--- | Makes possible the connection between two different slot types. The type is defined with the [method GraphNode.set_slot] method.
+-- | Makes possible the connection between two different slot types. The type is defined with the @method GraphNode.set_slot@ method.
 bindGraphEdit_add_valid_connection_type :: MethodBind
 bindGraphEdit_add_valid_connection_type
   = unsafePerformIO $
@@ -437,7 +512,7 @@ bindGraphEdit_add_valid_connection_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Makes possible the connection between two different slot types. The type is defined with the [method GraphNode.set_slot] method.
+-- | Makes possible the connection between two different slot types. The type is defined with the @method GraphNode.set_slot@ method.
 add_valid_connection_type ::
                             (GraphEdit :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 add_valid_connection_type cls arg1 arg2
@@ -448,6 +523,12 @@ add_valid_connection_type cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "add_valid_connection_type"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.add_valid_connection_type
 
 {-# NOINLINE bindGraphEdit_add_valid_left_disconnect_type #-}
 
@@ -472,6 +553,12 @@ add_valid_left_disconnect_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "add_valid_left_disconnect_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.add_valid_left_disconnect_type
 
 {-# NOINLINE bindGraphEdit_add_valid_right_disconnect_type #-}
 
@@ -498,6 +585,12 @@ add_valid_right_disconnect_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "add_valid_right_disconnect_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.add_valid_right_disconnect_type
+
 {-# NOINLINE bindGraphEdit_clear_connections #-}
 
 -- | Removes all connections between nodes.
@@ -521,9 +614,12 @@ clear_connections cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "clear_connections" '[] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit.clear_connections
+
 {-# NOINLINE bindGraphEdit_connect_node #-}
 
--- | Create a connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection already exists, no connection is created.
+-- | Create a connection between the @from_port@ slot of the @from@ GraphNode and the @to_port@ slot of the @to@ GraphNode. If the connection already exists, no connection is created.
 bindGraphEdit_connect_node :: MethodBind
 bindGraphEdit_connect_node
   = unsafePerformIO $
@@ -533,7 +629,7 @@ bindGraphEdit_connect_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Create a connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection already exists, no connection is created.
+-- | Create a connection between the @from_port@ slot of the @from@ GraphNode and the @to_port@ slot of the @to@ GraphNode. If the connection already exists, no connection is created.
 connect_node ::
                (GraphEdit :< cls, Object :< cls) =>
                cls -> GodotString -> Int -> GodotString -> Int -> IO Int
@@ -546,9 +642,15 @@ connect_node cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "connect_node"
+           '[GodotString, Int, GodotString, Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.GraphEdit.connect_node
+
 {-# NOINLINE bindGraphEdit_disconnect_node #-}
 
--- | Removes the connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection does not exist, no connection is removed.
+-- | Removes the connection between the @from_port@ slot of the @from@ GraphNode and the @to_port@ slot of the @to@ GraphNode. If the connection does not exist, no connection is removed.
 bindGraphEdit_disconnect_node :: MethodBind
 bindGraphEdit_disconnect_node
   = unsafePerformIO $
@@ -558,7 +660,7 @@ bindGraphEdit_disconnect_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the connection between the [code]from_port[/code] slot of the [code]from[/code] GraphNode and the [code]to_port[/code] slot of the [code]to[/code] GraphNode. If the connection does not exist, no connection is removed.
+-- | Removes the connection between the @from_port@ slot of the @from@ GraphNode and the @to_port@ slot of the @to@ GraphNode. If the connection does not exist, no connection is removed.
 disconnect_node ::
                   (GraphEdit :< cls, Object :< cls) =>
                   cls -> GodotString -> Int -> GodotString -> Int -> IO ()
@@ -571,9 +673,15 @@ disconnect_node cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "disconnect_node"
+           '[GodotString, Int, GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.disconnect_node
+
 {-# NOINLINE bindGraphEdit_get_connection_list #-}
 
--- | Returns an Array containing the list of connections. A connection consists in a structure of the form [code]{ from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }[/code].
+-- | Returns an Array containing the list of connections. A connection consists in a structure of the form @{ from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }@.
 bindGraphEdit_get_connection_list :: MethodBind
 bindGraphEdit_get_connection_list
   = unsafePerformIO $
@@ -583,7 +691,7 @@ bindGraphEdit_get_connection_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an Array containing the list of connections. A connection consists in a structure of the form [code]{ from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }[/code].
+-- | Returns an Array containing the list of connections. A connection consists in a structure of the form @{ from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }@.
 get_connection_list ::
                       (GraphEdit :< cls, Object :< cls) => cls -> IO Array
 get_connection_list cls
@@ -594,6 +702,10 @@ get_connection_list cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "get_connection_list" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.GraphEdit.get_connection_list
 
 {-# NOINLINE bindGraphEdit_get_scroll_ofs #-}
 
@@ -618,6 +730,10 @@ get_scroll_ofs cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "get_scroll_ofs" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.GraphEdit.get_scroll_ofs
+
 {-# NOINLINE bindGraphEdit_get_snap #-}
 
 -- | The snapping distance in pixels.
@@ -638,6 +754,9 @@ get_snap cls
          godot_method_bind_call bindGraphEdit_get_snap (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "get_snap" '[] (IO Int) where
+        nodeMethod = Godot.Core.GraphEdit.get_snap
 
 {-# NOINLINE bindGraphEdit_get_zoom #-}
 
@@ -660,10 +779,13 @@ get_zoom cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "get_zoom" '[] (IO Float) where
+        nodeMethod = Godot.Core.GraphEdit.get_zoom
+
 {-# NOINLINE bindGraphEdit_get_zoom_hbox #-}
 
--- | Gets the [HBoxContainer] that contains the zooming and grid snap controls in the top left of the graph.
---   				Warning: The intended usage of this function is to allow you to reposition or add your own custom controls to the container. This is an internal control and as such should not be freed. If you wish to hide this or any of it's children use their [member CanvasItem.visible] property instead.
+-- | Gets the @HBoxContainer@ that contains the zooming and grid snap controls in the top left of the graph.
+--   				Warning: The intended usage of this function is to allow you to reposition or add your own custom controls to the container. This is an internal control and as such should not be freed. If you wish to hide this or any of it's children use their @CanvasItem.visible@ property instead.
 bindGraphEdit_get_zoom_hbox :: MethodBind
 bindGraphEdit_get_zoom_hbox
   = unsafePerformIO $
@@ -673,8 +795,8 @@ bindGraphEdit_get_zoom_hbox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the [HBoxContainer] that contains the zooming and grid snap controls in the top left of the graph.
---   				Warning: The intended usage of this function is to allow you to reposition or add your own custom controls to the container. This is an internal control and as such should not be freed. If you wish to hide this or any of it's children use their [member CanvasItem.visible] property instead.
+-- | Gets the @HBoxContainer@ that contains the zooming and grid snap controls in the top left of the graph.
+--   				Warning: The intended usage of this function is to allow you to reposition or add your own custom controls to the container. This is an internal control and as such should not be freed. If you wish to hide this or any of it's children use their @CanvasItem.visible@ property instead.
 get_zoom_hbox ::
                 (GraphEdit :< cls, Object :< cls) => cls -> IO HBoxContainer
 get_zoom_hbox cls
@@ -685,9 +807,14 @@ get_zoom_hbox cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "get_zoom_hbox" '[]
+           (IO HBoxContainer)
+         where
+        nodeMethod = Godot.Core.GraphEdit.get_zoom_hbox
+
 {-# NOINLINE bindGraphEdit_is_node_connected #-}
 
--- | Returns [code]true[/code] if the [code]from_port[/code] slot of the [code]from[/code] GraphNode is connected to the [code]to_port[/code] slot of the [code]to[/code] GraphNode.
+-- | Returns @true@ if the @from_port@ slot of the @from@ GraphNode is connected to the @to_port@ slot of the @to@ GraphNode.
 bindGraphEdit_is_node_connected :: MethodBind
 bindGraphEdit_is_node_connected
   = unsafePerformIO $
@@ -697,7 +824,7 @@ bindGraphEdit_is_node_connected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the [code]from_port[/code] slot of the [code]from[/code] GraphNode is connected to the [code]to_port[/code] slot of the [code]to[/code] GraphNode.
+-- | Returns @true@ if the @from_port@ slot of the @from@ GraphNode is connected to the @to_port@ slot of the @to@ GraphNode.
 is_node_connected ::
                     (GraphEdit :< cls, Object :< cls) =>
                     cls -> GodotString -> Int -> GodotString -> Int -> IO Bool
@@ -710,9 +837,15 @@ is_node_connected cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "is_node_connected"
+           '[GodotString, Int, GodotString, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.GraphEdit.is_node_connected
+
 {-# NOINLINE bindGraphEdit_is_right_disconnects_enabled #-}
 
--- | If [code]true[/code], enables disconnection of existing connections in the GraphEdit by dragging the right end.
+-- | If @true@, enables disconnection of existing connections in the GraphEdit by dragging the right end.
 bindGraphEdit_is_right_disconnects_enabled :: MethodBind
 bindGraphEdit_is_right_disconnects_enabled
   = unsafePerformIO $
@@ -722,7 +855,7 @@ bindGraphEdit_is_right_disconnects_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables disconnection of existing connections in the GraphEdit by dragging the right end.
+-- | If @true@, enables disconnection of existing connections in the GraphEdit by dragging the right end.
 is_right_disconnects_enabled ::
                                (GraphEdit :< cls, Object :< cls) => cls -> IO Bool
 is_right_disconnects_enabled cls
@@ -734,9 +867,14 @@ is_right_disconnects_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "is_right_disconnects_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.GraphEdit.is_right_disconnects_enabled
+
 {-# NOINLINE bindGraphEdit_is_using_snap #-}
 
--- | If [code]true[/code], enables snapping.
+-- | If @true@, enables snapping.
 bindGraphEdit_is_using_snap :: MethodBind
 bindGraphEdit_is_using_snap
   = unsafePerformIO $
@@ -746,7 +884,7 @@ bindGraphEdit_is_using_snap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables snapping.
+-- | If @true@, enables snapping.
 is_using_snap ::
                 (GraphEdit :< cls, Object :< cls) => cls -> IO Bool
 is_using_snap cls
@@ -756,6 +894,9 @@ is_using_snap cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "is_using_snap" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GraphEdit.is_using_snap
 
 {-# NOINLINE bindGraphEdit_is_valid_connection_type #-}
 
@@ -781,9 +922,15 @@ is_valid_connection_type cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "is_valid_connection_type"
+           '[Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.GraphEdit.is_valid_connection_type
+
 {-# NOINLINE bindGraphEdit_remove_valid_connection_type #-}
 
--- | Makes it not possible to connect between two different slot types. The type is defined with the [method GraphNode.set_slot] method.
+-- | Makes it not possible to connect between two different slot types. The type is defined with the @method GraphNode.set_slot@ method.
 bindGraphEdit_remove_valid_connection_type :: MethodBind
 bindGraphEdit_remove_valid_connection_type
   = unsafePerformIO $
@@ -793,7 +940,7 @@ bindGraphEdit_remove_valid_connection_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Makes it not possible to connect between two different slot types. The type is defined with the [method GraphNode.set_slot] method.
+-- | Makes it not possible to connect between two different slot types. The type is defined with the @method GraphNode.set_slot@ method.
 remove_valid_connection_type ::
                                (GraphEdit :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 remove_valid_connection_type cls arg1 arg2
@@ -804,6 +951,12 @@ remove_valid_connection_type cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "remove_valid_connection_type"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.remove_valid_connection_type
 
 {-# NOINLINE bindGraphEdit_remove_valid_left_disconnect_type #-}
 
@@ -830,6 +983,12 @@ remove_valid_left_disconnect_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "remove_valid_left_disconnect_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.remove_valid_left_disconnect_type
+
 {-# NOINLINE bindGraphEdit_remove_valid_right_disconnect_type #-}
 
 -- | Removes the possibility to disconnect nodes when dragging from the slot at the right if it has the specified type.
@@ -855,9 +1014,16 @@ remove_valid_right_disconnect_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "remove_valid_right_disconnect_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.GraphEdit.remove_valid_right_disconnect_type
+
 {-# NOINLINE bindGraphEdit_set_connection_activity #-}
 
--- | Sets the coloration of the connection between [code]from[/code]'s [code]from_port[/code] and [code]to[/code]'s [code]to_port[/code] with the color provided in the [code]activity[/code] theme property.
+-- | Sets the coloration of the connection between @from@'s @from_port@ and @to@'s @to_port@ with the color provided in the @activity@ theme property.
 bindGraphEdit_set_connection_activity :: MethodBind
 bindGraphEdit_set_connection_activity
   = unsafePerformIO $
@@ -867,7 +1033,7 @@ bindGraphEdit_set_connection_activity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the coloration of the connection between [code]from[/code]'s [code]from_port[/code] and [code]to[/code]'s [code]to_port[/code] with the color provided in the [code]activity[/code] theme property.
+-- | Sets the coloration of the connection between @from@'s @from_port@ and @to@'s @to_port@ with the color provided in the @activity@ theme property.
 set_connection_activity ::
                           (GraphEdit :< cls, Object :< cls) =>
                           cls -> GodotString -> Int -> GodotString -> Int -> Float -> IO ()
@@ -882,9 +1048,15 @@ set_connection_activity cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "set_connection_activity"
+           '[GodotString, Int, GodotString, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.set_connection_activity
+
 {-# NOINLINE bindGraphEdit_set_right_disconnects #-}
 
--- | If [code]true[/code], enables disconnection of existing connections in the GraphEdit by dragging the right end.
+-- | If @true@, enables disconnection of existing connections in the GraphEdit by dragging the right end.
 bindGraphEdit_set_right_disconnects :: MethodBind
 bindGraphEdit_set_right_disconnects
   = unsafePerformIO $
@@ -894,7 +1066,7 @@ bindGraphEdit_set_right_disconnects
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables disconnection of existing connections in the GraphEdit by dragging the right end.
+-- | If @true@, enables disconnection of existing connections in the GraphEdit by dragging the right end.
 set_right_disconnects ::
                         (GraphEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_right_disconnects cls arg1
@@ -905,6 +1077,11 @@ set_right_disconnects cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "set_right_disconnects" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.set_right_disconnects
 
 {-# NOINLINE bindGraphEdit_set_scroll_ofs #-}
 
@@ -929,9 +1106,13 @@ set_scroll_ofs cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "set_scroll_ofs" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.GraphEdit.set_scroll_ofs
+
 {-# NOINLINE bindGraphEdit_set_selected #-}
 
--- | Sets the specified [code]node[/code] as the one selected.
+-- | Sets the specified @node@ as the one selected.
 bindGraphEdit_set_selected :: MethodBind
 bindGraphEdit_set_selected
   = unsafePerformIO $
@@ -941,7 +1122,7 @@ bindGraphEdit_set_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the specified [code]node[/code] as the one selected.
+-- | Sets the specified @node@ as the one selected.
 set_selected ::
                (GraphEdit :< cls, Object :< cls) => cls -> Node -> IO ()
 set_selected cls arg1
@@ -951,6 +1132,9 @@ set_selected cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "set_selected" '[Node] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit.set_selected
 
 {-# NOINLINE bindGraphEdit_set_snap #-}
 
@@ -974,9 +1158,12 @@ set_snap cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GraphEdit "set_snap" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit.set_snap
+
 {-# NOINLINE bindGraphEdit_set_use_snap #-}
 
--- | If [code]true[/code], enables snapping.
+-- | If @true@, enables snapping.
 bindGraphEdit_set_use_snap :: MethodBind
 bindGraphEdit_set_use_snap
   = unsafePerformIO $
@@ -986,7 +1173,7 @@ bindGraphEdit_set_use_snap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables snapping.
+-- | If @true@, enables snapping.
 set_use_snap ::
                (GraphEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_snap cls arg1
@@ -996,6 +1183,9 @@ set_use_snap cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "set_use_snap" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit.set_use_snap
 
 {-# NOINLINE bindGraphEdit_set_zoom #-}
 
@@ -1018,3 +1208,6 @@ set_zoom cls arg1
          godot_method_bind_call bindGraphEdit_set_zoom (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GraphEdit "set_zoom" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.GraphEdit.set_zoom

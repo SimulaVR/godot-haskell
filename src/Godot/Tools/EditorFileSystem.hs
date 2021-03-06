@@ -19,9 +19,14 @@ module Godot.Tools.EditorFileSystem
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
 
 -- | Emitted if the filesystem changed.
 sig_filesystem_changed ::
@@ -82,6 +87,11 @@ get_file_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystem "get_file_type" '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.get_file_type
+
 {-# NOINLINE bindEditorFileSystem_get_filesystem #-}
 
 -- | Gets the root directory object.
@@ -107,9 +117,14 @@ get_filesystem cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystem "get_filesystem" '[]
+           (IO EditorFileSystemDirectory)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.get_filesystem
+
 {-# NOINLINE bindEditorFileSystem_get_filesystem_path #-}
 
--- | Returns a view into the filesystem at [code]path[/code].
+-- | Returns a view into the filesystem at @path@.
 bindEditorFileSystem_get_filesystem_path :: MethodBind
 bindEditorFileSystem_get_filesystem_path
   = unsafePerformIO $
@@ -119,7 +134,7 @@ bindEditorFileSystem_get_filesystem_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a view into the filesystem at [code]path[/code].
+-- | Returns a view into the filesystem at @path@.
 get_filesystem_path ::
                       (EditorFileSystem :< cls, Object :< cls) =>
                       cls -> GodotString -> IO EditorFileSystemDirectory
@@ -131,6 +146,12 @@ get_filesystem_path cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystem "get_filesystem_path"
+           '[GodotString]
+           (IO EditorFileSystemDirectory)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.get_filesystem_path
 
 {-# NOINLINE bindEditorFileSystem_get_scanning_progress #-}
 
@@ -156,9 +177,14 @@ get_scanning_progress cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystem "get_scanning_progress" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.get_scanning_progress
+
 {-# NOINLINE bindEditorFileSystem_is_scanning #-}
 
--- | Returns [code]true[/code] of the filesystem is being scanned.
+-- | Returns @true@ of the filesystem is being scanned.
 bindEditorFileSystem_is_scanning :: MethodBind
 bindEditorFileSystem_is_scanning
   = unsafePerformIO $
@@ -168,7 +194,7 @@ bindEditorFileSystem_is_scanning
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] of the filesystem is being scanned.
+-- | Returns @true@ of the filesystem is being scanned.
 is_scanning ::
               (EditorFileSystem :< cls, Object :< cls) => cls -> IO Bool
 is_scanning cls
@@ -179,6 +205,10 @@ is_scanning cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystem "is_scanning" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.is_scanning
 
 {-# NOINLINE bindEditorFileSystem_scan #-}
 
@@ -201,6 +231,9 @@ scan cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystem "scan" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorFileSystem.scan
 
 {-# NOINLINE bindEditorFileSystem_scan_sources #-}
 
@@ -225,6 +258,10 @@ scan_sources cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystem "scan_sources" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.scan_sources
 
 {-# NOINLINE bindEditorFileSystem_update_file #-}
 
@@ -251,6 +288,11 @@ update_file cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileSystem "update_file" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.update_file
+
 {-# NOINLINE bindEditorFileSystem_update_script_classes #-}
 
 -- | Scans the script files and updates the list of custom class names.
@@ -274,3 +316,8 @@ update_script_classes cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileSystem "update_script_classes" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileSystem.update_script_classes

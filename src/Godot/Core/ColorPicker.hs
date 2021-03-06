@@ -40,9 +40,14 @@ module Godot.Core.ColorPicker
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.BoxContainer()
 
 -- | Emitted when the color is changed.
 sig_color_changed :: Godot.Internal.Dispatch.Signal ColorPicker
@@ -62,6 +67,38 @@ sig_preset_removed
   = Godot.Internal.Dispatch.Signal "preset_removed"
 
 instance NodeSignal ColorPicker "preset_removed" '[Color]
+
+instance NodeProperty ColorPicker "color" Color 'False where
+        nodeProperty
+          = (get_pick_color, wrapDroppingSetter set_pick_color, Nothing)
+
+instance NodeProperty ColorPicker "deferred_mode" Bool 'False where
+        nodeProperty
+          = (is_deferred_mode, wrapDroppingSetter set_deferred_mode, Nothing)
+
+instance NodeProperty ColorPicker "edit_alpha" Bool 'False where
+        nodeProperty
+          = (is_editing_alpha, wrapDroppingSetter set_edit_alpha, Nothing)
+
+instance NodeProperty ColorPicker "hsv_mode" Bool 'False where
+        nodeProperty
+          = (is_hsv_mode, wrapDroppingSetter set_hsv_mode, Nothing)
+
+instance NodeProperty ColorPicker "presets_enabled" Bool 'False
+         where
+        nodeProperty
+          = (are_presets_enabled, wrapDroppingSetter set_presets_enabled,
+             Nothing)
+
+instance NodeProperty ColorPicker "presets_visible" Bool 'False
+         where
+        nodeProperty
+          = (are_presets_visible, wrapDroppingSetter set_presets_visible,
+             Nothing)
+
+instance NodeProperty ColorPicker "raw_mode" Bool 'False where
+        nodeProperty
+          = (is_raw_mode, wrapDroppingSetter set_raw_mode, Nothing)
 
 {-# NOINLINE bindColorPicker__add_preset_pressed #-}
 
@@ -85,6 +122,10 @@ _add_preset_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_add_preset_pressed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._add_preset_pressed
+
 {-# NOINLINE bindColorPicker__focus_enter #-}
 
 bindColorPicker__focus_enter :: MethodBind
@@ -105,6 +146,9 @@ _focus_enter cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_focus_enter" '[] (IO ()) where
+        nodeMethod = Godot.Core.ColorPicker._focus_enter
+
 {-# NOINLINE bindColorPicker__focus_exit #-}
 
 bindColorPicker__focus_exit :: MethodBind
@@ -124,6 +168,9 @@ _focus_exit cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "_focus_exit" '[] (IO ()) where
+        nodeMethod = Godot.Core.ColorPicker._focus_exit
 
 {-# NOINLINE bindColorPicker__hsv_draw #-}
 
@@ -147,6 +194,10 @@ _hsv_draw cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_hsv_draw" '[Int, Control] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._hsv_draw
+
 {-# NOINLINE bindColorPicker__html_entered #-}
 
 bindColorPicker__html_entered :: MethodBind
@@ -167,6 +218,11 @@ _html_entered cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "_html_entered" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._html_entered
 
 {-# NOINLINE bindColorPicker__html_focus_exit #-}
 
@@ -190,6 +246,10 @@ _html_focus_exit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_html_focus_exit" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._html_focus_exit
+
 {-# NOINLINE bindColorPicker__preset_input #-}
 
 bindColorPicker__preset_input :: MethodBind
@@ -211,6 +271,11 @@ _preset_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_preset_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._preset_input
+
 {-# NOINLINE bindColorPicker__sample_draw #-}
 
 bindColorPicker__sample_draw :: MethodBind
@@ -230,6 +295,9 @@ _sample_draw cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "_sample_draw" '[] (IO ()) where
+        nodeMethod = Godot.Core.ColorPicker._sample_draw
 
 {-# NOINLINE bindColorPicker__screen_input #-}
 
@@ -251,6 +319,11 @@ _screen_input cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "_screen_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._screen_input
 
 {-# NOINLINE bindColorPicker__screen_pick_pressed #-}
 
@@ -274,6 +347,10 @@ _screen_pick_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_screen_pick_pressed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._screen_pick_pressed
+
 {-# NOINLINE bindColorPicker__text_type_toggled #-}
 
 bindColorPicker__text_type_toggled :: MethodBind
@@ -296,6 +373,10 @@ _text_type_toggled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_text_type_toggled" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._text_type_toggled
+
 {-# NOINLINE bindColorPicker__update_presets #-}
 
 bindColorPicker__update_presets :: MethodBind
@@ -316,6 +397,9 @@ _update_presets cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "_update_presets" '[] (IO ()) where
+        nodeMethod = Godot.Core.ColorPicker._update_presets
 
 {-# NOINLINE bindColorPicker__uv_input #-}
 
@@ -338,6 +422,10 @@ _uv_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_uv_input" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._uv_input
+
 {-# NOINLINE bindColorPicker__value_changed #-}
 
 bindColorPicker__value_changed :: MethodBind
@@ -359,6 +447,10 @@ _value_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_value_changed" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._value_changed
+
 {-# NOINLINE bindColorPicker__w_input #-}
 
 bindColorPicker__w_input :: MethodBind
@@ -379,10 +471,14 @@ _w_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "_w_input" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker._w_input
+
 {-# NOINLINE bindColorPicker_add_preset #-}
 
 -- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them.
---   				[b]Note:[/b] the presets list is only for [i]this[/i] color picker.
+--   				__Note:__ the presets list is only for @i@this@/i@ color picker.
 bindColorPicker_add_preset :: MethodBind
 bindColorPicker_add_preset
   = unsafePerformIO $
@@ -393,7 +489,7 @@ bindColorPicker_add_preset
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them.
---   				[b]Note:[/b] the presets list is only for [i]this[/i] color picker.
+--   				__Note:__ the presets list is only for @i@this@/i@ color picker.
 add_preset ::
              (ColorPicker :< cls, Object :< cls) => cls -> Color -> IO ()
 add_preset cls arg1
@@ -404,9 +500,12 @@ add_preset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "add_preset" '[Color] (IO ()) where
+        nodeMethod = Godot.Core.ColorPicker.add_preset
+
 {-# NOINLINE bindColorPicker_are_presets_enabled #-}
 
--- | If [code]true[/code], the "add preset" button is enabled.
+-- | If @true@, the "add preset" button is enabled.
 bindColorPicker_are_presets_enabled :: MethodBind
 bindColorPicker_are_presets_enabled
   = unsafePerformIO $
@@ -416,7 +515,7 @@ bindColorPicker_are_presets_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the "add preset" button is enabled.
+-- | If @true@, the "add preset" button is enabled.
 are_presets_enabled ::
                       (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 are_presets_enabled cls
@@ -428,9 +527,13 @@ are_presets_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "are_presets_enabled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ColorPicker.are_presets_enabled
+
 {-# NOINLINE bindColorPicker_are_presets_visible #-}
 
--- | If [code]true[/code], saved color presets are visible.
+-- | If @true@, saved color presets are visible.
 bindColorPicker_are_presets_visible :: MethodBind
 bindColorPicker_are_presets_visible
   = unsafePerformIO $
@@ -440,7 +543,7 @@ bindColorPicker_are_presets_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], saved color presets are visible.
+-- | If @true@, saved color presets are visible.
 are_presets_visible ::
                       (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 are_presets_visible cls
@@ -451,6 +554,10 @@ are_presets_visible cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "are_presets_visible" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ColorPicker.are_presets_visible
 
 {-# NOINLINE bindColorPicker_erase_preset #-}
 
@@ -475,6 +582,10 @@ erase_preset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "erase_preset" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.erase_preset
+
 {-# NOINLINE bindColorPicker_get_pick_color #-}
 
 -- | The currently selected color.
@@ -497,6 +608,10 @@ get_pick_color cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "get_pick_color" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.ColorPicker.get_pick_color
 
 {-# NOINLINE bindColorPicker_get_presets #-}
 
@@ -521,9 +636,14 @@ get_presets cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "get_presets" '[]
+           (IO PoolColorArray)
+         where
+        nodeMethod = Godot.Core.ColorPicker.get_presets
+
 {-# NOINLINE bindColorPicker_is_deferred_mode #-}
 
--- | If [code]true[/code], the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
+-- | If @true@, the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
 bindColorPicker_is_deferred_mode :: MethodBind
 bindColorPicker_is_deferred_mode
   = unsafePerformIO $
@@ -533,7 +653,7 @@ bindColorPicker_is_deferred_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
+-- | If @true@, the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
 is_deferred_mode ::
                    (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 is_deferred_mode cls
@@ -545,9 +665,13 @@ is_deferred_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "is_deferred_mode" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ColorPicker.is_deferred_mode
+
 {-# NOINLINE bindColorPicker_is_editing_alpha #-}
 
--- | If [code]true[/code], shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (transparency).
 bindColorPicker_is_editing_alpha :: MethodBind
 bindColorPicker_is_editing_alpha
   = unsafePerformIO $
@@ -557,7 +681,7 @@ bindColorPicker_is_editing_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (transparency).
 is_editing_alpha ::
                    (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 is_editing_alpha cls
@@ -569,10 +693,14 @@ is_editing_alpha cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "is_editing_alpha" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ColorPicker.is_editing_alpha
+
 {-# NOINLINE bindColorPicker_is_hsv_mode #-}
 
--- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
---   			[b]Note:[/b] Cannot be enabled if raw mode is on.
+-- | If @true@, allows editing the color with Hue/Saturation/Value sliders.
+--   			__Note:__ Cannot be enabled if raw mode is on.
 bindColorPicker_is_hsv_mode :: MethodBind
 bindColorPicker_is_hsv_mode
   = unsafePerformIO $
@@ -582,8 +710,8 @@ bindColorPicker_is_hsv_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
---   			[b]Note:[/b] Cannot be enabled if raw mode is on.
+-- | If @true@, allows editing the color with Hue/Saturation/Value sliders.
+--   			__Note:__ Cannot be enabled if raw mode is on.
 is_hsv_mode ::
               (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 is_hsv_mode cls
@@ -594,10 +722,13 @@ is_hsv_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "is_hsv_mode" '[] (IO Bool) where
+        nodeMethod = Godot.Core.ColorPicker.is_hsv_mode
+
 {-# NOINLINE bindColorPicker_is_raw_mode #-}
 
--- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
---   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
+-- | If @true@, allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			__Note:__ Cannot be enabled if HSV mode is on.
 bindColorPicker_is_raw_mode :: MethodBind
 bindColorPicker_is_raw_mode
   = unsafePerformIO $
@@ -607,8 +738,8 @@ bindColorPicker_is_raw_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
---   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
+-- | If @true@, allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			__Note:__ Cannot be enabled if HSV mode is on.
 is_raw_mode ::
               (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 is_raw_mode cls
@@ -619,9 +750,12 @@ is_raw_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "is_raw_mode" '[] (IO Bool) where
+        nodeMethod = Godot.Core.ColorPicker.is_raw_mode
+
 {-# NOINLINE bindColorPicker_set_deferred_mode #-}
 
--- | If [code]true[/code], the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
+-- | If @true@, the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
 bindColorPicker_set_deferred_mode :: MethodBind
 bindColorPicker_set_deferred_mode
   = unsafePerformIO $
@@ -631,7 +765,7 @@ bindColorPicker_set_deferred_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
+-- | If @true@, the color will apply only after the user releases the mouse button, otherwise it will apply immediately even in mouse motion event (which can cause performance issues).
 set_deferred_mode ::
                     (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_deferred_mode cls arg1
@@ -643,9 +777,13 @@ set_deferred_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "set_deferred_mode" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.set_deferred_mode
+
 {-# NOINLINE bindColorPicker_set_edit_alpha #-}
 
--- | If [code]true[/code], shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (transparency).
 bindColorPicker_set_edit_alpha :: MethodBind
 bindColorPicker_set_edit_alpha
   = unsafePerformIO $
@@ -655,7 +793,7 @@ bindColorPicker_set_edit_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (transparency).
 set_edit_alpha ::
                  (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_edit_alpha cls arg1
@@ -666,10 +804,14 @@ set_edit_alpha cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "set_edit_alpha" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.set_edit_alpha
+
 {-# NOINLINE bindColorPicker_set_hsv_mode #-}
 
--- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
---   			[b]Note:[/b] Cannot be enabled if raw mode is on.
+-- | If @true@, allows editing the color with Hue/Saturation/Value sliders.
+--   			__Note:__ Cannot be enabled if raw mode is on.
 bindColorPicker_set_hsv_mode :: MethodBind
 bindColorPicker_set_hsv_mode
   = unsafePerformIO $
@@ -679,8 +821,8 @@ bindColorPicker_set_hsv_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allows editing the color with Hue/Saturation/Value sliders.
---   			[b]Note:[/b] Cannot be enabled if raw mode is on.
+-- | If @true@, allows editing the color with Hue/Saturation/Value sliders.
+--   			__Note:__ Cannot be enabled if raw mode is on.
 set_hsv_mode ::
                (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hsv_mode cls arg1
@@ -690,6 +832,10 @@ set_hsv_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "set_hsv_mode" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.set_hsv_mode
 
 {-# NOINLINE bindColorPicker_set_pick_color #-}
 
@@ -714,9 +860,13 @@ set_pick_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "set_pick_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.set_pick_color
+
 {-# NOINLINE bindColorPicker_set_presets_enabled #-}
 
--- | If [code]true[/code], the "add preset" button is enabled.
+-- | If @true@, the "add preset" button is enabled.
 bindColorPicker_set_presets_enabled :: MethodBind
 bindColorPicker_set_presets_enabled
   = unsafePerformIO $
@@ -726,7 +876,7 @@ bindColorPicker_set_presets_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the "add preset" button is enabled.
+-- | If @true@, the "add preset" button is enabled.
 set_presets_enabled ::
                       (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_presets_enabled cls arg1
@@ -738,9 +888,14 @@ set_presets_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "set_presets_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.set_presets_enabled
+
 {-# NOINLINE bindColorPicker_set_presets_visible #-}
 
--- | If [code]true[/code], saved color presets are visible.
+-- | If @true@, saved color presets are visible.
 bindColorPicker_set_presets_visible :: MethodBind
 bindColorPicker_set_presets_visible
   = unsafePerformIO $
@@ -750,7 +905,7 @@ bindColorPicker_set_presets_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], saved color presets are visible.
+-- | If @true@, saved color presets are visible.
 set_presets_visible ::
                       (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_presets_visible cls arg1
@@ -762,10 +917,15 @@ set_presets_visible cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ColorPicker "set_presets_visible" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.set_presets_visible
+
 {-# NOINLINE bindColorPicker_set_raw_mode #-}
 
--- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
---   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
+-- | If @true@, allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			__Note:__ Cannot be enabled if HSV mode is on.
 bindColorPicker_set_raw_mode :: MethodBind
 bindColorPicker_set_raw_mode
   = unsafePerformIO $
@@ -775,8 +935,8 @@ bindColorPicker_set_raw_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
---   			[b]Note:[/b] Cannot be enabled if HSV mode is on.
+-- | If @true@, allows the color R, G, B component values to go beyond 1.0, which can be used for certain special operations that require it (like tinting without darkening or rendering sprites in HDR).
+--   			__Note:__ Cannot be enabled if HSV mode is on.
 set_raw_mode ::
                (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_raw_mode cls arg1
@@ -786,3 +946,7 @@ set_raw_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ColorPicker "set_raw_mode" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ColorPicker.set_raw_mode

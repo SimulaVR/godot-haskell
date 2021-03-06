@@ -85,9 +85,14 @@ module Godot.Core.SceneTree
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.MainLoop()
 
 _STRETCH_ASPECT_KEEP :: Int
 _STRETCH_ASPECT_KEEP = 1
@@ -125,14 +130,14 @@ _GROUP_CALL_DEFAULT = 0
 _STRETCH_ASPECT_EXPAND :: Int
 _STRETCH_ASPECT_EXPAND = 4
 
--- | Emitted whenever this [SceneTree]'s [member network_peer] successfully connected to a server. Only emitted on clients.
+-- | Emitted whenever this @SceneTree@'s @network_peer@ successfully connected to a server. Only emitted on clients.
 sig_connected_to_server :: Godot.Internal.Dispatch.Signal SceneTree
 sig_connected_to_server
   = Godot.Internal.Dispatch.Signal "connected_to_server"
 
 instance NodeSignal SceneTree "connected_to_server" '[]
 
--- | Emitted whenever this [SceneTree]'s [member network_peer] fails to establish a connection to a server. Only emitted on clients.
+-- | Emitted whenever this @SceneTree@'s @network_peer@ fails to establish a connection to a server. Only emitted on clients.
 sig_connection_failed :: Godot.Internal.Dispatch.Signal SceneTree
 sig_connection_failed
   = Godot.Internal.Dispatch.Signal "connection_failed"
@@ -153,13 +158,13 @@ sig_global_menu_action
 
 instance NodeSignal SceneTree "global_menu_action" '[(), ()]
 
--- | Emitted immediately before [method Node._process] is called on every node in the [SceneTree].
+-- | Emitted immediately before @method Node._process@ is called on every node in the @SceneTree@.
 sig_idle_frame :: Godot.Internal.Dispatch.Signal SceneTree
 sig_idle_frame = Godot.Internal.Dispatch.Signal "idle_frame"
 
 instance NodeSignal SceneTree "idle_frame" '[]
 
--- | Emitted whenever this [SceneTree]'s [member network_peer] connects with a new peer. ID is the peer ID of the new peer. Clients get notified when other clients connect to the same server. Upon connecting to a server, a client also receives this signal for the server (with ID being 1).
+-- | Emitted whenever this @SceneTree@'s @network_peer@ connects with a new peer. ID is the peer ID of the new peer. Clients get notified when other clients connect to the same server. Upon connecting to a server, a client also receives this signal for the server (with ID being 1).
 sig_network_peer_connected ::
                            Godot.Internal.Dispatch.Signal SceneTree
 sig_network_peer_connected
@@ -167,7 +172,7 @@ sig_network_peer_connected
 
 instance NodeSignal SceneTree "network_peer_connected" '[Int]
 
--- | Emitted whenever this [SceneTree]'s [member network_peer] disconnects from a peer. Clients get notified when other clients disconnect from the same server.
+-- | Emitted whenever this @SceneTree@'s @network_peer@ disconnects from a peer. Clients get notified when other clients disconnect from the same server.
 sig_network_peer_disconnected ::
                               Godot.Internal.Dispatch.Signal SceneTree
 sig_network_peer_disconnected
@@ -175,13 +180,13 @@ sig_network_peer_disconnected
 
 instance NodeSignal SceneTree "network_peer_disconnected" '[Int]
 
--- | Emitted whenever a node is added to the [SceneTree].
+-- | Emitted whenever a node is added to the @SceneTree@.
 sig_node_added :: Godot.Internal.Dispatch.Signal SceneTree
 sig_node_added = Godot.Internal.Dispatch.Signal "node_added"
 
 instance NodeSignal SceneTree "node_added" '[Node]
 
--- | Emitted when a node's configuration changed. Only emitted in [code]tool[/code] mode.
+-- | Emitted when a node's configuration changed. Only emitted in @tool@ mode.
 sig_node_configuration_warning_changed ::
                                        Godot.Internal.Dispatch.Signal SceneTree
 sig_node_configuration_warning_changed
@@ -191,7 +196,7 @@ sig_node_configuration_warning_changed
 instance NodeSignal SceneTree "node_configuration_warning_changed"
            '[Node]
 
--- | Emitted whenever a node is removed from the [SceneTree].
+-- | Emitted whenever a node is removed from the @SceneTree@.
 sig_node_removed :: Godot.Internal.Dispatch.Signal SceneTree
 sig_node_removed = Godot.Internal.Dispatch.Signal "node_removed"
 
@@ -203,7 +208,7 @@ sig_node_renamed = Godot.Internal.Dispatch.Signal "node_renamed"
 
 instance NodeSignal SceneTree "node_renamed" '[Node]
 
--- | Emitted immediately before [method Node._physics_process] is called on every node in the [SceneTree].
+-- | Emitted immediately before @method Node._physics_process@ is called on every node in the @SceneTree@.
 sig_physics_frame :: Godot.Internal.Dispatch.Signal SceneTree
 sig_physics_frame = Godot.Internal.Dispatch.Signal "physics_frame"
 
@@ -216,18 +221,79 @@ sig_screen_resized
 
 instance NodeSignal SceneTree "screen_resized" '[]
 
--- | Emitted whenever this [SceneTree]'s [member network_peer] disconnected from server. Only emitted on clients.
+-- | Emitted whenever this @SceneTree@'s @network_peer@ disconnected from server. Only emitted on clients.
 sig_server_disconnected :: Godot.Internal.Dispatch.Signal SceneTree
 sig_server_disconnected
   = Godot.Internal.Dispatch.Signal "server_disconnected"
 
 instance NodeSignal SceneTree "server_disconnected" '[]
 
--- | Emitted whenever the [SceneTree] hierarchy changed (children being moved or renamed, etc.).
+-- | Emitted whenever the @SceneTree@ hierarchy changed (children being moved or renamed, etc.).
 sig_tree_changed :: Godot.Internal.Dispatch.Signal SceneTree
 sig_tree_changed = Godot.Internal.Dispatch.Signal "tree_changed"
 
 instance NodeSignal SceneTree "tree_changed" '[]
+
+instance NodeProperty SceneTree "current_scene" Node 'False where
+        nodeProperty
+          = (get_current_scene, wrapDroppingSetter set_current_scene,
+             Nothing)
+
+instance NodeProperty SceneTree "debug_collisions_hint" Bool 'False
+         where
+        nodeProperty
+          = (is_debugging_collisions_hint,
+             wrapDroppingSetter set_debug_collisions_hint, Nothing)
+
+instance NodeProperty SceneTree "debug_navigation_hint" Bool 'False
+         where
+        nodeProperty
+          = (is_debugging_navigation_hint,
+             wrapDroppingSetter set_debug_navigation_hint, Nothing)
+
+instance NodeProperty SceneTree "edited_scene_root" Node 'False
+         where
+        nodeProperty
+          = (get_edited_scene_root, wrapDroppingSetter set_edited_scene_root,
+             Nothing)
+
+instance NodeProperty SceneTree "multiplayer" MultiplayerAPI 'False
+         where
+        nodeProperty
+          = (get_multiplayer, wrapDroppingSetter set_multiplayer, Nothing)
+
+instance NodeProperty SceneTree "multiplayer_poll" Bool 'False
+         where
+        nodeProperty
+          = (is_multiplayer_poll_enabled,
+             wrapDroppingSetter set_multiplayer_poll_enabled, Nothing)
+
+instance NodeProperty SceneTree "network_peer"
+           NetworkedMultiplayerPeer
+           'False
+         where
+        nodeProperty
+          = (get_network_peer, wrapDroppingSetter set_network_peer, Nothing)
+
+instance NodeProperty SceneTree "paused" Bool 'False where
+        nodeProperty = (is_paused, wrapDroppingSetter set_pause, Nothing)
+
+instance NodeProperty SceneTree "refuse_new_network_connections"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (is_refusing_new_network_connections,
+             wrapDroppingSetter set_refuse_new_network_connections, Nothing)
+
+instance NodeProperty SceneTree "root" Viewport 'True where
+        nodeProperty = (get_root, (), Nothing)
+
+instance NodeProperty SceneTree "use_font_oversampling" Bool 'False
+         where
+        nodeProperty
+          = (is_using_font_oversampling,
+             wrapDroppingSetter set_use_font_oversampling, Nothing)
 
 {-# NOINLINE bindSceneTree__change_scene #-}
 
@@ -249,6 +315,9 @@ _change_scene cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "_change_scene" '[Node] (IO ()) where
+        nodeMethod = Godot.Core.SceneTree._change_scene
 
 {-# NOINLINE bindSceneTree__connected_to_server #-}
 
@@ -272,6 +341,10 @@ _connected_to_server cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "_connected_to_server" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree._connected_to_server
+
 {-# NOINLINE bindSceneTree__connection_failed #-}
 
 bindSceneTree__connection_failed :: MethodBind
@@ -293,6 +366,10 @@ _connection_failed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "_connection_failed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree._connection_failed
 
 {-# NOINLINE bindSceneTree__network_peer_connected #-}
 
@@ -316,6 +393,11 @@ _network_peer_connected cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "_network_peer_connected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree._network_peer_connected
+
 {-# NOINLINE bindSceneTree__network_peer_disconnected #-}
 
 bindSceneTree__network_peer_disconnected :: MethodBind
@@ -337,6 +419,11 @@ _network_peer_disconnected cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "_network_peer_disconnected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree._network_peer_disconnected
 
 {-# NOINLINE bindSceneTree__server_disconnected #-}
 
@@ -360,9 +447,13 @@ _server_disconnected cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "_server_disconnected" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree._server_disconnected
+
 {-# NOINLINE bindSceneTree_call_group #-}
 
--- | Calls [code]method[/code] on each member of the given group.
+-- | Calls @method@ on each member of the given group.
 bindSceneTree_call_group :: MethodBind
 bindSceneTree_call_group
   = unsafePerformIO $
@@ -372,7 +463,7 @@ bindSceneTree_call_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls [code]method[/code] on each member of the given group.
+-- | Calls @method@ on each member of the given group.
 call_group ::
              (SceneTree :< cls, Object :< cls) =>
              cls ->
@@ -384,9 +475,15 @@ call_group cls arg1 arg2 varargs
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "call_group"
+           '[GodotString, GodotString, [Variant 'GodotTy]]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.SceneTree.call_group
+
 {-# NOINLINE bindSceneTree_call_group_flags #-}
 
--- | Calls [code]method[/code] on each member of the given group, respecting the given [enum GroupCallFlags].
+-- | Calls @method@ on each member of the given group, respecting the given @enum GroupCallFlags@.
 bindSceneTree_call_group_flags :: MethodBind
 bindSceneTree_call_group_flags
   = unsafePerformIO $
@@ -396,7 +493,7 @@ bindSceneTree_call_group_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls [code]method[/code] on each member of the given group, respecting the given [enum GroupCallFlags].
+-- | Calls @method@ on each member of the given group, respecting the given @enum GroupCallFlags@.
 call_group_flags ::
                    (SceneTree :< cls, Object :< cls) =>
                    cls ->
@@ -411,10 +508,16 @@ call_group_flags cls arg1 arg2 arg3 varargs
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "call_group_flags"
+           '[Int, GodotString, GodotString, [Variant 'GodotTy]]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.SceneTree.call_group_flags
+
 {-# NOINLINE bindSceneTree_change_scene #-}
 
--- | Changes the running scene to the one at the given [code]path[/code], after loading it into a [PackedScene] and creating a new instance.
---   				Returns [constant OK] on success, [constant ERR_CANT_OPEN] if the [code]path[/code] cannot be loaded into a [PackedScene], or [constant ERR_CANT_CREATE] if that scene cannot be instantiated.
+-- | Changes the running scene to the one at the given @path@, after loading it into a @PackedScene@ and creating a new instance.
+--   				Returns @OK@ on success, @ERR_CANT_OPEN@ if the @path@ cannot be loaded into a @PackedScene@, or @ERR_CANT_CREATE@ if that scene cannot be instantiated.
 bindSceneTree_change_scene :: MethodBind
 bindSceneTree_change_scene
   = unsafePerformIO $
@@ -424,8 +527,8 @@ bindSceneTree_change_scene
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the running scene to the one at the given [code]path[/code], after loading it into a [PackedScene] and creating a new instance.
---   				Returns [constant OK] on success, [constant ERR_CANT_OPEN] if the [code]path[/code] cannot be loaded into a [PackedScene], or [constant ERR_CANT_CREATE] if that scene cannot be instantiated.
+-- | Changes the running scene to the one at the given @path@, after loading it into a @PackedScene@ and creating a new instance.
+--   				Returns @OK@ on success, @ERR_CANT_OPEN@ if the @path@ cannot be loaded into a @PackedScene@, or @ERR_CANT_CREATE@ if that scene cannot be instantiated.
 change_scene ::
                (SceneTree :< cls, Object :< cls) => cls -> GodotString -> IO Int
 change_scene cls arg1
@@ -436,10 +539,15 @@ change_scene cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "change_scene" '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.SceneTree.change_scene
+
 {-# NOINLINE bindSceneTree_change_scene_to #-}
 
--- | Changes the running scene to a new instance of the given [PackedScene].
---   				Returns [constant OK] on success or [constant ERR_CANT_CREATE] if the scene cannot be instantiated.
+-- | Changes the running scene to a new instance of the given @PackedScene@.
+--   				Returns @OK@ on success or @ERR_CANT_CREATE@ if the scene cannot be instantiated.
 bindSceneTree_change_scene_to :: MethodBind
 bindSceneTree_change_scene_to
   = unsafePerformIO $
@@ -449,8 +557,8 @@ bindSceneTree_change_scene_to
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the running scene to a new instance of the given [PackedScene].
---   				Returns [constant OK] on success or [constant ERR_CANT_CREATE] if the scene cannot be instantiated.
+-- | Changes the running scene to a new instance of the given @PackedScene@.
+--   				Returns @OK@ on success or @ERR_CANT_CREATE@ if the scene cannot be instantiated.
 change_scene_to ::
                   (SceneTree :< cls, Object :< cls) => cls -> PackedScene -> IO Int
 change_scene_to cls arg1
@@ -461,16 +569,24 @@ change_scene_to cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "change_scene_to" '[PackedScene]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.SceneTree.change_scene_to
+
 {-# NOINLINE bindSceneTree_create_timer #-}
 
--- | Returns a [SceneTreeTimer] which will [signal SceneTreeTimer.timeout] after the given time in seconds elapsed in this [SceneTree]. If [code]pause_mode_process[/code] is set to [code]false[/code], pausing the [SceneTree] will also pause the timer.
+-- | Returns a @SceneTreeTimer@ which will @signal SceneTreeTimer.timeout@ after the given time in seconds elapsed in this @SceneTree@. If @pause_mode_process@ is set to @false@, pausing the @SceneTree@ will also pause the timer.
 --   				Commonly used to create a one-shot delay timer as in the following example:
---   				[codeblock]
+--   				
+--   @
+--   
 --   				func some_function():
 --   				    print("start")
 --   				    yield(get_tree().create_timer(1.0), "timeout")
 --   				    print("end")
---   				[/codeblock]
+--   				
+--   @
 bindSceneTree_create_timer :: MethodBind
 bindSceneTree_create_timer
   = unsafePerformIO $
@@ -480,24 +596,33 @@ bindSceneTree_create_timer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [SceneTreeTimer] which will [signal SceneTreeTimer.timeout] after the given time in seconds elapsed in this [SceneTree]. If [code]pause_mode_process[/code] is set to [code]false[/code], pausing the [SceneTree] will also pause the timer.
+-- | Returns a @SceneTreeTimer@ which will @signal SceneTreeTimer.timeout@ after the given time in seconds elapsed in this @SceneTree@. If @pause_mode_process@ is set to @false@, pausing the @SceneTree@ will also pause the timer.
 --   				Commonly used to create a one-shot delay timer as in the following example:
---   				[codeblock]
+--   				
+--   @
+--   
 --   				func some_function():
 --   				    print("start")
 --   				    yield(get_tree().create_timer(1.0), "timeout")
 --   				    print("end")
---   				[/codeblock]
+--   				
+--   @
 create_timer ::
                (SceneTree :< cls, Object :< cls) =>
-               cls -> Float -> Bool -> IO SceneTreeTimer
+               cls -> Float -> Maybe Bool -> IO SceneTreeTimer
 create_timer cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool True) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSceneTree_create_timer (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "create_timer" '[Float, Maybe Bool]
+           (IO SceneTreeTimer)
+         where
+        nodeMethod = Godot.Core.SceneTree.create_timer
 
 {-# NOINLINE bindSceneTree_get_current_scene #-}
 
@@ -521,6 +646,10 @@ get_current_scene cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "get_current_scene" '[] (IO Node)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_current_scene
 
 {-# NOINLINE bindSceneTree_get_edited_scene_root #-}
 
@@ -546,6 +675,10 @@ get_edited_scene_root cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_edited_scene_root" '[] (IO Node)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_edited_scene_root
+
 {-# NOINLINE bindSceneTree_get_frame #-}
 
 -- | Returns the current frame number, i.e. the total frame count since the application started.
@@ -567,9 +700,12 @@ get_frame cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_frame" '[] (IO Int) where
+        nodeMethod = Godot.Core.SceneTree.get_frame
+
 {-# NOINLINE bindSceneTree_get_multiplayer #-}
 
--- | The default [MultiplayerAPI] instance for this [SceneTree].
+-- | The default @MultiplayerAPI@ instance for this @SceneTree@.
 bindSceneTree_get_multiplayer :: MethodBind
 bindSceneTree_get_multiplayer
   = unsafePerformIO $
@@ -579,7 +715,7 @@ bindSceneTree_get_multiplayer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The default [MultiplayerAPI] instance for this [SceneTree].
+-- | The default @MultiplayerAPI@ instance for this @SceneTree@.
 get_multiplayer ::
                   (SceneTree :< cls, Object :< cls) => cls -> IO MultiplayerAPI
 get_multiplayer cls
@@ -590,9 +726,14 @@ get_multiplayer cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_multiplayer" '[]
+           (IO MultiplayerAPI)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_multiplayer
+
 {-# NOINLINE bindSceneTree_get_network_connected_peers #-}
 
--- | Returns the peer IDs of all connected peers of this [SceneTree]'s [member network_peer].
+-- | Returns the peer IDs of all connected peers of this @SceneTree@'s @network_peer@.
 bindSceneTree_get_network_connected_peers :: MethodBind
 bindSceneTree_get_network_connected_peers
   = unsafePerformIO $
@@ -602,7 +743,7 @@ bindSceneTree_get_network_connected_peers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the peer IDs of all connected peers of this [SceneTree]'s [member network_peer].
+-- | Returns the peer IDs of all connected peers of this @SceneTree@'s @network_peer@.
 get_network_connected_peers ::
                               (SceneTree :< cls, Object :< cls) => cls -> IO PoolIntArray
 get_network_connected_peers cls
@@ -614,9 +755,14 @@ get_network_connected_peers cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_network_connected_peers" '[]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_network_connected_peers
+
 {-# NOINLINE bindSceneTree_get_network_peer #-}
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the [SceneTree] will become a network server (check with [method is_network_server]) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to [SceneTree]'s signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the @SceneTree@ will become a network server (check with @method is_network_server@) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to @SceneTree@'s signals.
 bindSceneTree_get_network_peer :: MethodBind
 bindSceneTree_get_network_peer
   = unsafePerformIO $
@@ -626,7 +772,7 @@ bindSceneTree_get_network_peer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the [SceneTree] will become a network server (check with [method is_network_server]) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to [SceneTree]'s signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the @SceneTree@ will become a network server (check with @method is_network_server@) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to @SceneTree@'s signals.
 get_network_peer ::
                    (SceneTree :< cls, Object :< cls) =>
                    cls -> IO NetworkedMultiplayerPeer
@@ -638,9 +784,14 @@ get_network_peer cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_network_peer" '[]
+           (IO NetworkedMultiplayerPeer)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_network_peer
+
 {-# NOINLINE bindSceneTree_get_network_unique_id #-}
 
--- | Returns the unique peer ID of this [SceneTree]'s [member network_peer].
+-- | Returns the unique peer ID of this @SceneTree@'s @network_peer@.
 bindSceneTree_get_network_unique_id :: MethodBind
 bindSceneTree_get_network_unique_id
   = unsafePerformIO $
@@ -650,7 +801,7 @@ bindSceneTree_get_network_unique_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the unique peer ID of this [SceneTree]'s [member network_peer].
+-- | Returns the unique peer ID of this @SceneTree@'s @network_peer@.
 get_network_unique_id ::
                         (SceneTree :< cls, Object :< cls) => cls -> IO Int
 get_network_unique_id cls
@@ -662,9 +813,13 @@ get_network_unique_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_network_unique_id" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_network_unique_id
+
 {-# NOINLINE bindSceneTree_get_node_count #-}
 
--- | Returns the number of nodes in this [SceneTree].
+-- | Returns the number of nodes in this @SceneTree@.
 bindSceneTree_get_node_count :: MethodBind
 bindSceneTree_get_node_count
   = unsafePerformIO $
@@ -674,7 +829,7 @@ bindSceneTree_get_node_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of nodes in this [SceneTree].
+-- | Returns the number of nodes in this @SceneTree@.
 get_node_count ::
                  (SceneTree :< cls, Object :< cls) => cls -> IO Int
 get_node_count cls
@@ -684,6 +839,9 @@ get_node_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "get_node_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.SceneTree.get_node_count
 
 {-# NOINLINE bindSceneTree_get_nodes_in_group #-}
 
@@ -709,9 +867,14 @@ get_nodes_in_group cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_nodes_in_group" '[GodotString]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_nodes_in_group
+
 {-# NOINLINE bindSceneTree_get_root #-}
 
--- | The [SceneTree]'s root [Viewport].
+-- | The @SceneTree@'s root @Viewport@.
 bindSceneTree_get_root :: MethodBind
 bindSceneTree_get_root
   = unsafePerformIO $
@@ -721,7 +884,7 @@ bindSceneTree_get_root
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [SceneTree]'s root [Viewport].
+-- | The @SceneTree@'s root @Viewport@.
 get_root :: (SceneTree :< cls, Object :< cls) => cls -> IO Viewport
 get_root cls
   = withVariantArray []
@@ -729,6 +892,9 @@ get_root cls
          godot_method_bind_call bindSceneTree_get_root (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "get_root" '[] (IO Viewport) where
+        nodeMethod = Godot.Core.SceneTree.get_root
 
 {-# NOINLINE bindSceneTree_get_rpc_sender_id #-}
 
@@ -753,9 +919,13 @@ get_rpc_sender_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "get_rpc_sender_id" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.SceneTree.get_rpc_sender_id
+
 {-# NOINLINE bindSceneTree_has_group #-}
 
--- | Returns [code]true[/code] if the given group exists.
+-- | Returns @true@ if the given group exists.
 bindSceneTree_has_group :: MethodBind
 bindSceneTree_has_group
   = unsafePerformIO $
@@ -765,7 +935,7 @@ bindSceneTree_has_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given group exists.
+-- | Returns @true@ if the given group exists.
 has_group ::
             (SceneTree :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_group cls arg1
@@ -775,9 +945,13 @@ has_group cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "has_group" '[GodotString] (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.has_group
+
 {-# NOINLINE bindSceneTree_has_network_peer #-}
 
--- | Returns [code]true[/code] if there is a [member network_peer] set.
+-- | Returns @true@ if there is a @network_peer@ set.
 bindSceneTree_has_network_peer :: MethodBind
 bindSceneTree_has_network_peer
   = unsafePerformIO $
@@ -787,7 +961,7 @@ bindSceneTree_has_network_peer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if there is a [member network_peer] set.
+-- | Returns @true@ if there is a @network_peer@ set.
 has_network_peer ::
                    (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 has_network_peer cls
@@ -798,9 +972,13 @@ has_network_peer cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "has_network_peer" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.has_network_peer
+
 {-# NOINLINE bindSceneTree_is_debugging_collisions_hint #-}
 
--- | If [code]true[/code], collision shapes will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, collision shapes will be visible when running the game from the editor for debugging purposes.
 bindSceneTree_is_debugging_collisions_hint :: MethodBind
 bindSceneTree_is_debugging_collisions_hint
   = unsafePerformIO $
@@ -810,7 +988,7 @@ bindSceneTree_is_debugging_collisions_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collision shapes will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, collision shapes will be visible when running the game from the editor for debugging purposes.
 is_debugging_collisions_hint ::
                                (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_debugging_collisions_hint cls
@@ -822,9 +1000,14 @@ is_debugging_collisions_hint cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_debugging_collisions_hint" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.is_debugging_collisions_hint
+
 {-# NOINLINE bindSceneTree_is_debugging_navigation_hint #-}
 
--- | If [code]true[/code], navigation polygons will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, navigation polygons will be visible when running the game from the editor for debugging purposes.
 bindSceneTree_is_debugging_navigation_hint :: MethodBind
 bindSceneTree_is_debugging_navigation_hint
   = unsafePerformIO $
@@ -834,7 +1017,7 @@ bindSceneTree_is_debugging_navigation_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], navigation polygons will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, navigation polygons will be visible when running the game from the editor for debugging purposes.
 is_debugging_navigation_hint ::
                                (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_debugging_navigation_hint cls
@@ -846,9 +1029,14 @@ is_debugging_navigation_hint cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_debugging_navigation_hint" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.is_debugging_navigation_hint
+
 {-# NOINLINE bindSceneTree_is_input_handled #-}
 
--- | Returns [code]true[/code] if the most recent [InputEvent] was marked as handled with [method set_input_as_handled].
+-- | Returns @true@ if the most recent @InputEvent@ was marked as handled with @method set_input_as_handled@.
 bindSceneTree_is_input_handled :: MethodBind
 bindSceneTree_is_input_handled
   = unsafePerformIO $
@@ -858,7 +1046,7 @@ bindSceneTree_is_input_handled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the most recent [InputEvent] was marked as handled with [method set_input_as_handled].
+-- | Returns @true@ if the most recent @InputEvent@ was marked as handled with @method set_input_as_handled@.
 is_input_handled ::
                    (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_input_handled cls
@@ -869,10 +1057,14 @@ is_input_handled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_input_handled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.is_input_handled
+
 {-# NOINLINE bindSceneTree_is_multiplayer_poll_enabled #-}
 
--- | If [code]true[/code] (default value), enables automatic polling of the [MultiplayerAPI] for this SceneTree during [signal idle_frame].
---   			If [code]false[/code], you need to manually call [method MultiplayerAPI.poll] to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual [Mutex] protection when accessing the [MultiplayerAPI] from threads.
+-- | If @true@ (default value), enables automatic polling of the @MultiplayerAPI@ for this SceneTree during @signal idle_frame@.
+--   			If @false@, you need to manually call @method MultiplayerAPI.poll@ to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual @Mutex@ protection when accessing the @MultiplayerAPI@ from threads.
 bindSceneTree_is_multiplayer_poll_enabled :: MethodBind
 bindSceneTree_is_multiplayer_poll_enabled
   = unsafePerformIO $
@@ -882,8 +1074,8 @@ bindSceneTree_is_multiplayer_poll_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] (default value), enables automatic polling of the [MultiplayerAPI] for this SceneTree during [signal idle_frame].
---   			If [code]false[/code], you need to manually call [method MultiplayerAPI.poll] to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual [Mutex] protection when accessing the [MultiplayerAPI] from threads.
+-- | If @true@ (default value), enables automatic polling of the @MultiplayerAPI@ for this SceneTree during @signal idle_frame@.
+--   			If @false@, you need to manually call @method MultiplayerAPI.poll@ to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual @Mutex@ protection when accessing the @MultiplayerAPI@ from threads.
 is_multiplayer_poll_enabled ::
                               (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_multiplayer_poll_enabled cls
@@ -895,9 +1087,14 @@ is_multiplayer_poll_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_multiplayer_poll_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.is_multiplayer_poll_enabled
+
 {-# NOINLINE bindSceneTree_is_network_server #-}
 
--- | Returns [code]true[/code] if this [SceneTree]'s [member network_peer] is in server mode (listening for connections).
+-- | Returns @true@ if this @SceneTree@'s @network_peer@ is in server mode (listening for connections).
 bindSceneTree_is_network_server :: MethodBind
 bindSceneTree_is_network_server
   = unsafePerformIO $
@@ -907,7 +1104,7 @@ bindSceneTree_is_network_server
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if this [SceneTree]'s [member network_peer] is in server mode (listening for connections).
+-- | Returns @true@ if this @SceneTree@'s @network_peer@ is in server mode (listening for connections).
 is_network_server ::
                     (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_network_server cls
@@ -918,11 +1115,15 @@ is_network_server cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_network_server" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.is_network_server
+
 {-# NOINLINE bindSceneTree_is_paused #-}
 
--- | If [code]true[/code], the [SceneTree] is paused. Doing so will have the following behavior:
+-- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
 --   			- 2D and 3D physics will be stopped.
---   			- [method Node._process], [method Node._physics_process] and [method Node._input] will not be called anymore in nodes.
+--   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 bindSceneTree_is_paused :: MethodBind
 bindSceneTree_is_paused
   = unsafePerformIO $
@@ -932,9 +1133,9 @@ bindSceneTree_is_paused
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [SceneTree] is paused. Doing so will have the following behavior:
+-- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
 --   			- 2D and 3D physics will be stopped.
---   			- [method Node._process], [method Node._physics_process] and [method Node._input] will not be called anymore in nodes.
+--   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 is_paused :: (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_paused cls
   = withVariantArray []
@@ -943,9 +1144,12 @@ is_paused cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_paused" '[] (IO Bool) where
+        nodeMethod = Godot.Core.SceneTree.is_paused
+
 {-# NOINLINE bindSceneTree_is_refusing_new_network_connections #-}
 
--- | If [code]true[/code], the [SceneTree]'s [member network_peer] refuses new incoming connections.
+-- | If @true@, the @SceneTree@'s @network_peer@ refuses new incoming connections.
 bindSceneTree_is_refusing_new_network_connections :: MethodBind
 bindSceneTree_is_refusing_new_network_connections
   = unsafePerformIO $
@@ -955,7 +1159,7 @@ bindSceneTree_is_refusing_new_network_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [SceneTree]'s [member network_peer] refuses new incoming connections.
+-- | If @true@, the @SceneTree@'s @network_peer@ refuses new incoming connections.
 is_refusing_new_network_connections ::
                                       (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_refusing_new_network_connections cls
@@ -968,9 +1172,16 @@ is_refusing_new_network_connections cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_refusing_new_network_connections"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.SceneTree.is_refusing_new_network_connections
+
 {-# NOINLINE bindSceneTree_is_using_font_oversampling #-}
 
--- | If [code]true[/code], font oversampling is used.
+-- | If @true@, font oversampling is used.
 bindSceneTree_is_using_font_oversampling :: MethodBind
 bindSceneTree_is_using_font_oversampling
   = unsafePerformIO $
@@ -980,7 +1191,7 @@ bindSceneTree_is_using_font_oversampling
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], font oversampling is used.
+-- | If @true@, font oversampling is used.
 is_using_font_oversampling ::
                              (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_using_font_oversampling cls
@@ -992,9 +1203,14 @@ is_using_font_oversampling cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "is_using_font_oversampling" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.SceneTree.is_using_font_oversampling
+
 {-# NOINLINE bindSceneTree_notify_group #-}
 
--- | Sends the given notification to all members of the [code]group[/code].
+-- | Sends the given notification to all members of the @group@.
 bindSceneTree_notify_group :: MethodBind
 bindSceneTree_notify_group
   = unsafePerformIO $
@@ -1004,7 +1220,7 @@ bindSceneTree_notify_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends the given notification to all members of the [code]group[/code].
+-- | Sends the given notification to all members of the @group@.
 notify_group ::
                (SceneTree :< cls, Object :< cls) =>
                cls -> GodotString -> Int -> IO ()
@@ -1016,9 +1232,14 @@ notify_group cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "notify_group" '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.notify_group
+
 {-# NOINLINE bindSceneTree_notify_group_flags #-}
 
--- | Sends the given notification to all members of the [code]group[/code], respecting the given [enum GroupCallFlags].
+-- | Sends the given notification to all members of the @group@, respecting the given @enum GroupCallFlags@.
 bindSceneTree_notify_group_flags :: MethodBind
 bindSceneTree_notify_group_flags
   = unsafePerformIO $
@@ -1028,7 +1249,7 @@ bindSceneTree_notify_group_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends the given notification to all members of the [code]group[/code], respecting the given [enum GroupCallFlags].
+-- | Sends the given notification to all members of the @group@, respecting the given @enum GroupCallFlags@.
 notify_group_flags ::
                      (SceneTree :< cls, Object :< cls) =>
                      cls -> Int -> GodotString -> Int -> IO ()
@@ -1041,9 +1262,15 @@ notify_group_flags cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "notify_group_flags"
+           '[Int, GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.notify_group_flags
+
 {-# NOINLINE bindSceneTree_queue_delete #-}
 
--- | Queues the given object for deletion, delaying the call to [method Object.free] to after the current frame.
+-- | Queues the given object for deletion, delaying the call to @method Object.free@ to after the current frame.
 bindSceneTree_queue_delete :: MethodBind
 bindSceneTree_queue_delete
   = unsafePerformIO $
@@ -1053,7 +1280,7 @@ bindSceneTree_queue_delete
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Queues the given object for deletion, delaying the call to [method Object.free] to after the current frame.
+-- | Queues the given object for deletion, delaying the call to @method Object.free@ to after the current frame.
 queue_delete ::
                (SceneTree :< cls, Object :< cls) => cls -> Object -> IO ()
 queue_delete cls arg1
@@ -1064,9 +1291,13 @@ queue_delete cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "queue_delete" '[Object] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.queue_delete
+
 {-# NOINLINE bindSceneTree_quit #-}
 
--- | Quits the application. A process [code]exit_code[/code] can optionally be passed as an argument. If this argument is [code]0[/code] or greater, it will override the [member OS.exit_code] defined before quitting the application.
+-- | Quits the application. A process @exit_code@ can optionally be passed as an argument. If this argument is @0@ or greater, it will override the @OS.exit_code@ defined before quitting the application.
 bindSceneTree_quit :: MethodBind
 bindSceneTree_quit
   = unsafePerformIO $
@@ -1076,18 +1307,22 @@ bindSceneTree_quit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Quits the application. A process [code]exit_code[/code] can optionally be passed as an argument. If this argument is [code]0[/code] or greater, it will override the [member OS.exit_code] defined before quitting the application.
-quit :: (SceneTree :< cls, Object :< cls) => cls -> Int -> IO ()
+-- | Quits the application. A process @exit_code@ can optionally be passed as an argument. If this argument is @0@ or greater, it will override the @OS.exit_code@ defined before quitting the application.
+quit ::
+       (SceneTree :< cls, Object :< cls) => cls -> Maybe Int -> IO ()
 quit cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantInt (-1)) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSceneTree_quit (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "quit" '[Maybe Int] (IO ()) where
+        nodeMethod = Godot.Core.SceneTree.quit
+
 {-# NOINLINE bindSceneTree_reload_current_scene #-}
 
 -- | Reloads the currently active scene.
---   				Returns [constant OK] on success, [constant ERR_UNCONFIGURED] if no [member current_scene] was defined yet, [constant ERR_CANT_OPEN] if [member current_scene] cannot be loaded into a [PackedScene], or [constant ERR_CANT_CREATE] if the scene cannot be instantiated.
+--   				Returns @OK@ on success, @ERR_UNCONFIGURED@ if no @current_scene@ was defined yet, @ERR_CANT_OPEN@ if @current_scene@ cannot be loaded into a @PackedScene@, or @ERR_CANT_CREATE@ if the scene cannot be instantiated.
 bindSceneTree_reload_current_scene :: MethodBind
 bindSceneTree_reload_current_scene
   = unsafePerformIO $
@@ -1098,7 +1333,7 @@ bindSceneTree_reload_current_scene
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Reloads the currently active scene.
---   				Returns [constant OK] on success, [constant ERR_UNCONFIGURED] if no [member current_scene] was defined yet, [constant ERR_CANT_OPEN] if [member current_scene] cannot be loaded into a [PackedScene], or [constant ERR_CANT_CREATE] if the scene cannot be instantiated.
+--   				Returns @OK@ on success, @ERR_UNCONFIGURED@ if no @current_scene@ was defined yet, @ERR_CANT_OPEN@ if @current_scene@ cannot be loaded into a @PackedScene@, or @ERR_CANT_CREATE@ if the scene cannot be instantiated.
 reload_current_scene ::
                        (SceneTree :< cls, Object :< cls) => cls -> IO Int
 reload_current_scene cls
@@ -1110,10 +1345,14 @@ reload_current_scene cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "reload_current_scene" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.SceneTree.reload_current_scene
+
 {-# NOINLINE bindSceneTree_set_auto_accept_quit #-}
 
--- | If [code]true[/code], the application automatically accepts quitting. Enabled by default.
---   				For mobile platforms, see [method set_quit_on_go_back].
+-- | If @true@, the application automatically accepts quitting. Enabled by default.
+--   				For mobile platforms, see @method set_quit_on_go_back@.
 bindSceneTree_set_auto_accept_quit :: MethodBind
 bindSceneTree_set_auto_accept_quit
   = unsafePerformIO $
@@ -1123,8 +1362,8 @@ bindSceneTree_set_auto_accept_quit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the application automatically accepts quitting. Enabled by default.
---   				For mobile platforms, see [method set_quit_on_go_back].
+-- | If @true@, the application automatically accepts quitting. Enabled by default.
+--   				For mobile platforms, see @method set_quit_on_go_back@.
 set_auto_accept_quit ::
                        (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_auto_accept_quit cls arg1
@@ -1135,6 +1374,11 @@ set_auto_accept_quit cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "set_auto_accept_quit" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_auto_accept_quit
 
 {-# NOINLINE bindSceneTree_set_current_scene #-}
 
@@ -1159,9 +1403,13 @@ set_current_scene cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_current_scene" '[Node] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_current_scene
+
 {-# NOINLINE bindSceneTree_set_debug_collisions_hint #-}
 
--- | If [code]true[/code], collision shapes will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, collision shapes will be visible when running the game from the editor for debugging purposes.
 bindSceneTree_set_debug_collisions_hint :: MethodBind
 bindSceneTree_set_debug_collisions_hint
   = unsafePerformIO $
@@ -1171,7 +1419,7 @@ bindSceneTree_set_debug_collisions_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], collision shapes will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, collision shapes will be visible when running the game from the editor for debugging purposes.
 set_debug_collisions_hint ::
                             (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_debug_collisions_hint cls arg1
@@ -1183,9 +1431,14 @@ set_debug_collisions_hint cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_debug_collisions_hint" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_debug_collisions_hint
+
 {-# NOINLINE bindSceneTree_set_debug_navigation_hint #-}
 
--- | If [code]true[/code], navigation polygons will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, navigation polygons will be visible when running the game from the editor for debugging purposes.
 bindSceneTree_set_debug_navigation_hint :: MethodBind
 bindSceneTree_set_debug_navigation_hint
   = unsafePerformIO $
@@ -1195,7 +1448,7 @@ bindSceneTree_set_debug_navigation_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], navigation polygons will be visible when running the game from the editor for debugging purposes.
+-- | If @true@, navigation polygons will be visible when running the game from the editor for debugging purposes.
 set_debug_navigation_hint ::
                             (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_debug_navigation_hint cls arg1
@@ -1206,6 +1459,11 @@ set_debug_navigation_hint cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "set_debug_navigation_hint" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_debug_navigation_hint
 
 {-# NOINLINE bindSceneTree_set_edited_scene_root #-}
 
@@ -1231,9 +1489,14 @@ set_edited_scene_root cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_edited_scene_root" '[Node]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_edited_scene_root
+
 {-# NOINLINE bindSceneTree_set_group #-}
 
--- | Sets the given [code]property[/code] to [code]value[/code] on all members of the given group.
+-- | Sets the given @property@ to @value@ on all members of the given group.
 bindSceneTree_set_group :: MethodBind
 bindSceneTree_set_group
   = unsafePerformIO $
@@ -1243,7 +1506,7 @@ bindSceneTree_set_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the given [code]property[/code] to [code]value[/code] on all members of the given group.
+-- | Sets the given @property@ to @value@ on all members of the given group.
 set_group ::
             (SceneTree :< cls, Object :< cls) =>
             cls -> GodotString -> GodotString -> GodotVariant -> IO ()
@@ -1254,9 +1517,15 @@ set_group cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_group"
+           '[GodotString, GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_group
+
 {-# NOINLINE bindSceneTree_set_group_flags #-}
 
--- | Sets the given [code]property[/code] to [code]value[/code] on all members of the given group, respecting the given [enum GroupCallFlags].
+-- | Sets the given @property@ to @value@ on all members of the given group, respecting the given @enum GroupCallFlags@.
 bindSceneTree_set_group_flags :: MethodBind
 bindSceneTree_set_group_flags
   = unsafePerformIO $
@@ -1266,7 +1535,7 @@ bindSceneTree_set_group_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the given [code]property[/code] to [code]value[/code] on all members of the given group, respecting the given [enum GroupCallFlags].
+-- | Sets the given @property@ to @value@ on all members of the given group, respecting the given @enum GroupCallFlags@.
 set_group_flags ::
                   (SceneTree :< cls, Object :< cls) =>
                   cls -> Int -> GodotString -> GodotString -> GodotVariant -> IO ()
@@ -1279,9 +1548,15 @@ set_group_flags cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_group_flags"
+           '[Int, GodotString, GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_group_flags
+
 {-# NOINLINE bindSceneTree_set_input_as_handled #-}
 
--- | Marks the most recent [InputEvent] as handled.
+-- | Marks the most recent @InputEvent@ as handled.
 bindSceneTree_set_input_as_handled :: MethodBind
 bindSceneTree_set_input_as_handled
   = unsafePerformIO $
@@ -1291,7 +1566,7 @@ bindSceneTree_set_input_as_handled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Marks the most recent [InputEvent] as handled.
+-- | Marks the most recent @InputEvent@ as handled.
 set_input_as_handled ::
                        (SceneTree :< cls, Object :< cls) => cls -> IO ()
 set_input_as_handled cls
@@ -1303,9 +1578,13 @@ set_input_as_handled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_input_as_handled" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_input_as_handled
+
 {-# NOINLINE bindSceneTree_set_multiplayer #-}
 
--- | The default [MultiplayerAPI] instance for this [SceneTree].
+-- | The default @MultiplayerAPI@ instance for this @SceneTree@.
 bindSceneTree_set_multiplayer :: MethodBind
 bindSceneTree_set_multiplayer
   = unsafePerformIO $
@@ -1315,7 +1594,7 @@ bindSceneTree_set_multiplayer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The default [MultiplayerAPI] instance for this [SceneTree].
+-- | The default @MultiplayerAPI@ instance for this @SceneTree@.
 set_multiplayer ::
                   (SceneTree :< cls, Object :< cls) => cls -> MultiplayerAPI -> IO ()
 set_multiplayer cls arg1
@@ -1326,10 +1605,15 @@ set_multiplayer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_multiplayer" '[MultiplayerAPI]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_multiplayer
+
 {-# NOINLINE bindSceneTree_set_multiplayer_poll_enabled #-}
 
--- | If [code]true[/code] (default value), enables automatic polling of the [MultiplayerAPI] for this SceneTree during [signal idle_frame].
---   			If [code]false[/code], you need to manually call [method MultiplayerAPI.poll] to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual [Mutex] protection when accessing the [MultiplayerAPI] from threads.
+-- | If @true@ (default value), enables automatic polling of the @MultiplayerAPI@ for this SceneTree during @signal idle_frame@.
+--   			If @false@, you need to manually call @method MultiplayerAPI.poll@ to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual @Mutex@ protection when accessing the @MultiplayerAPI@ from threads.
 bindSceneTree_set_multiplayer_poll_enabled :: MethodBind
 bindSceneTree_set_multiplayer_poll_enabled
   = unsafePerformIO $
@@ -1339,8 +1623,8 @@ bindSceneTree_set_multiplayer_poll_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code] (default value), enables automatic polling of the [MultiplayerAPI] for this SceneTree during [signal idle_frame].
---   			If [code]false[/code], you need to manually call [method MultiplayerAPI.poll] to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual [Mutex] protection when accessing the [MultiplayerAPI] from threads.
+-- | If @true@ (default value), enables automatic polling of the @MultiplayerAPI@ for this SceneTree during @signal idle_frame@.
+--   			If @false@, you need to manually call @method MultiplayerAPI.poll@ to process network packets and deliver RPCs/RSETs. This allows running RPCs/RSETs in a different loop (e.g. physics, thread, specific time step) and for manual @Mutex@ protection when accessing the @MultiplayerAPI@ from threads.
 set_multiplayer_poll_enabled ::
                                (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_multiplayer_poll_enabled cls arg1
@@ -1352,9 +1636,15 @@ set_multiplayer_poll_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_multiplayer_poll_enabled"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_multiplayer_poll_enabled
+
 {-# NOINLINE bindSceneTree_set_network_peer #-}
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the [SceneTree] will become a network server (check with [method is_network_server]) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to [SceneTree]'s signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the @SceneTree@ will become a network server (check with @method is_network_server@) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to @SceneTree@'s signals.
 bindSceneTree_set_network_peer :: MethodBind
 bindSceneTree_set_network_peer
   = unsafePerformIO $
@@ -1364,7 +1654,7 @@ bindSceneTree_set_network_peer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the [SceneTree] will become a network server (check with [method is_network_server]) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to [SceneTree]'s signals.
+-- | The peer object to handle the RPC system (effectively enabling networking when set). Depending on the peer itself, the @SceneTree@ will become a network server (check with @method is_network_server@) and will set the root node's network mode to master, or it will become a regular peer with the root node set to puppet. All child nodes are set to inherit the network mode by default. Handling of networking-related events (connection, disconnection, new clients) is done by connecting to @SceneTree@'s signals.
 set_network_peer ::
                    (SceneTree :< cls, Object :< cls) =>
                    cls -> NetworkedMultiplayerPeer -> IO ()
@@ -1376,11 +1666,17 @@ set_network_peer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_network_peer"
+           '[NetworkedMultiplayerPeer]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_network_peer
+
 {-# NOINLINE bindSceneTree_set_pause #-}
 
--- | If [code]true[/code], the [SceneTree] is paused. Doing so will have the following behavior:
+-- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
 --   			- 2D and 3D physics will be stopped.
---   			- [method Node._process], [method Node._physics_process] and [method Node._input] will not be called anymore in nodes.
+--   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 bindSceneTree_set_pause :: MethodBind
 bindSceneTree_set_pause
   = unsafePerformIO $
@@ -1390,9 +1686,9 @@ bindSceneTree_set_pause
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [SceneTree] is paused. Doing so will have the following behavior:
+-- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
 --   			- 2D and 3D physics will be stopped.
---   			- [method Node._process], [method Node._physics_process] and [method Node._input] will not be called anymore in nodes.
+--   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 set_pause ::
             (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_pause cls arg1
@@ -1402,10 +1698,13 @@ set_pause cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_pause" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.SceneTree.set_pause
+
 {-# NOINLINE bindSceneTree_set_quit_on_go_back #-}
 
--- | If [code]true[/code], the application quits automatically on going back (e.g. on Android). Enabled by default.
---   				To handle 'Go Back' button when this option is disabled, use [constant MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST].
+-- | If @true@, the application quits automatically on going back (e.g. on Android). Enabled by default.
+--   				To handle 'Go Back' button when this option is disabled, use @MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST@.
 bindSceneTree_set_quit_on_go_back :: MethodBind
 bindSceneTree_set_quit_on_go_back
   = unsafePerformIO $
@@ -1415,8 +1714,8 @@ bindSceneTree_set_quit_on_go_back
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the application quits automatically on going back (e.g. on Android). Enabled by default.
---   				To handle 'Go Back' button when this option is disabled, use [constant MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST].
+-- | If @true@, the application quits automatically on going back (e.g. on Android). Enabled by default.
+--   				To handle 'Go Back' button when this option is disabled, use @MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST@.
 set_quit_on_go_back ::
                       (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_quit_on_go_back cls arg1
@@ -1428,9 +1727,13 @@ set_quit_on_go_back cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_quit_on_go_back" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_quit_on_go_back
+
 {-# NOINLINE bindSceneTree_set_refuse_new_network_connections #-}
 
--- | If [code]true[/code], the [SceneTree]'s [member network_peer] refuses new incoming connections.
+-- | If @true@, the @SceneTree@'s @network_peer@ refuses new incoming connections.
 bindSceneTree_set_refuse_new_network_connections :: MethodBind
 bindSceneTree_set_refuse_new_network_connections
   = unsafePerformIO $
@@ -1440,7 +1743,7 @@ bindSceneTree_set_refuse_new_network_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [SceneTree]'s [member network_peer] refuses new incoming connections.
+-- | If @true@, the @SceneTree@'s @network_peer@ refuses new incoming connections.
 set_refuse_new_network_connections ::
                                      (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_refuse_new_network_connections cls arg1
@@ -1453,9 +1756,16 @@ set_refuse_new_network_connections cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_refuse_new_network_connections"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.SceneTree.set_refuse_new_network_connections
+
 {-# NOINLINE bindSceneTree_set_screen_stretch #-}
 
--- | Configures screen stretching to the given [enum StretchMode], [enum StretchAspect], minimum size and [code]shrink[/code] ratio.
+-- | Configures screen stretching to the given @enum StretchMode@, @enum StretchAspect@, minimum size and @shrink@ ratio.
 bindSceneTree_set_screen_stretch :: MethodBind
 bindSceneTree_set_screen_stretch
   = unsafePerformIO $
@@ -1465,13 +1775,14 @@ bindSceneTree_set_screen_stretch
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Configures screen stretching to the given [enum StretchMode], [enum StretchAspect], minimum size and [code]shrink[/code] ratio.
+-- | Configures screen stretching to the given @enum StretchMode@, @enum StretchAspect@, minimum size and @shrink@ ratio.
 set_screen_stretch ::
                      (SceneTree :< cls, Object :< cls) =>
-                     cls -> Int -> Int -> Vector2 -> Float -> IO ()
+                     cls -> Int -> Int -> Vector2 -> Maybe Float -> IO ()
 set_screen_stretch cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantReal (1)) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindSceneTree_set_screen_stretch
            (upcast cls)
@@ -1479,9 +1790,15 @@ set_screen_stretch cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SceneTree "set_screen_stretch"
+           '[Int, Int, Vector2, Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_screen_stretch
+
 {-# NOINLINE bindSceneTree_set_use_font_oversampling #-}
 
--- | If [code]true[/code], font oversampling is used.
+-- | If @true@, font oversampling is used.
 bindSceneTree_set_use_font_oversampling :: MethodBind
 bindSceneTree_set_use_font_oversampling
   = unsafePerformIO $
@@ -1491,7 +1808,7 @@ bindSceneTree_set_use_font_oversampling
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], font oversampling is used.
+-- | If @true@, font oversampling is used.
 set_use_font_oversampling ::
                             (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_font_oversampling cls arg1
@@ -1502,3 +1819,8 @@ set_use_font_oversampling cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SceneTree "set_use_font_oversampling" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SceneTree.set_use_font_oversampling

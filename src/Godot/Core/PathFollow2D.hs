@@ -22,14 +22,50 @@ module Godot.Core.PathFollow2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
+
+instance NodeProperty PathFollow2D "cubic_interp" Bool 'False where
+        nodeProperty
+          = (get_cubic_interpolation,
+             wrapDroppingSetter set_cubic_interpolation, Nothing)
+
+instance NodeProperty PathFollow2D "h_offset" Float 'False where
+        nodeProperty
+          = (get_h_offset, wrapDroppingSetter set_h_offset, Nothing)
+
+instance NodeProperty PathFollow2D "lookahead" Float 'False where
+        nodeProperty
+          = (get_lookahead, wrapDroppingSetter set_lookahead, Nothing)
+
+instance NodeProperty PathFollow2D "loop" Bool 'False where
+        nodeProperty = (has_loop, wrapDroppingSetter set_loop, Nothing)
+
+instance NodeProperty PathFollow2D "offset" Float 'False where
+        nodeProperty = (get_offset, wrapDroppingSetter set_offset, Nothing)
+
+instance NodeProperty PathFollow2D "rotate" Bool 'False where
+        nodeProperty
+          = (is_rotating, wrapDroppingSetter set_rotate, Nothing)
+
+instance NodeProperty PathFollow2D "unit_offset" Float 'False where
+        nodeProperty
+          = (get_unit_offset, wrapDroppingSetter set_unit_offset, Nothing)
+
+instance NodeProperty PathFollow2D "v_offset" Float 'False where
+        nodeProperty
+          = (get_v_offset, wrapDroppingSetter set_v_offset, Nothing)
 
 {-# NOINLINE bindPathFollow2D_get_cubic_interpolation #-}
 
--- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
---   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
+-- | If @true@, the position between two cached points is interpolated cubically, and linearly otherwise.
+--   			The points along the @Curve2D@ of the @Path2D@ are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
 --   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 bindPathFollow2D_get_cubic_interpolation :: MethodBind
 bindPathFollow2D_get_cubic_interpolation
@@ -40,8 +76,8 @@ bindPathFollow2D_get_cubic_interpolation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
---   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
+-- | If @true@, the position between two cached points is interpolated cubically, and linearly otherwise.
+--   			The points along the @Curve2D@ of the @Path2D@ are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
 --   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 get_cubic_interpolation ::
                           (PathFollow2D :< cls, Object :< cls) => cls -> IO Bool
@@ -53,6 +89,11 @@ get_cubic_interpolation cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PathFollow2D "get_cubic_interpolation" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.PathFollow2D.get_cubic_interpolation
 
 {-# NOINLINE bindPathFollow2D_get_h_offset #-}
 
@@ -77,6 +118,10 @@ get_h_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "get_h_offset" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.PathFollow2D.get_h_offset
+
 {-# NOINLINE bindPathFollow2D_get_lookahead #-}
 
 -- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations.
@@ -100,6 +145,10 @@ get_lookahead cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "get_lookahead" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.PathFollow2D.get_lookahead
+
 {-# NOINLINE bindPathFollow2D_get_offset #-}
 
 -- | The distance along the path in pixels.
@@ -122,6 +171,9 @@ get_offset cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PathFollow2D "get_offset" '[] (IO Float) where
+        nodeMethod = Godot.Core.PathFollow2D.get_offset
 
 {-# NOINLINE bindPathFollow2D_get_unit_offset #-}
 
@@ -147,6 +199,10 @@ get_unit_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "get_unit_offset" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.PathFollow2D.get_unit_offset
+
 {-# NOINLINE bindPathFollow2D_get_v_offset #-}
 
 -- | The node's offset perpendicular to the curve.
@@ -170,9 +226,13 @@ get_v_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "get_v_offset" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.PathFollow2D.get_v_offset
+
 {-# NOINLINE bindPathFollow2D_has_loop #-}
 
--- | If [code]true[/code], any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
+-- | If @true@, any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
 bindPathFollow2D_has_loop :: MethodBind
 bindPathFollow2D_has_loop
   = unsafePerformIO $
@@ -182,7 +242,7 @@ bindPathFollow2D_has_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
+-- | If @true@, any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
 has_loop :: (PathFollow2D :< cls, Object :< cls) => cls -> IO Bool
 has_loop cls
   = withVariantArray []
@@ -192,9 +252,12 @@ has_loop cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "has_loop" '[] (IO Bool) where
+        nodeMethod = Godot.Core.PathFollow2D.has_loop
+
 {-# NOINLINE bindPathFollow2D_is_rotating #-}
 
--- | If [code]true[/code], this node rotates to follow the path, making its descendants rotate.
+-- | If @true@, this node rotates to follow the path, making its descendants rotate.
 bindPathFollow2D_is_rotating :: MethodBind
 bindPathFollow2D_is_rotating
   = unsafePerformIO $
@@ -204,7 +267,7 @@ bindPathFollow2D_is_rotating
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this node rotates to follow the path, making its descendants rotate.
+-- | If @true@, this node rotates to follow the path, making its descendants rotate.
 is_rotating ::
               (PathFollow2D :< cls, Object :< cls) => cls -> IO Bool
 is_rotating cls
@@ -215,10 +278,13 @@ is_rotating cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "is_rotating" '[] (IO Bool) where
+        nodeMethod = Godot.Core.PathFollow2D.is_rotating
+
 {-# NOINLINE bindPathFollow2D_set_cubic_interpolation #-}
 
--- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
---   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
+-- | If @true@, the position between two cached points is interpolated cubically, and linearly otherwise.
+--   			The points along the @Curve2D@ of the @Path2D@ are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
 --   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 bindPathFollow2D_set_cubic_interpolation :: MethodBind
 bindPathFollow2D_set_cubic_interpolation
@@ -229,8 +295,8 @@ bindPathFollow2D_set_cubic_interpolation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the position between two cached points is interpolated cubically, and linearly otherwise.
---   			The points along the [Curve2D] of the [Path2D] are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
+-- | If @true@, the position between two cached points is interpolated cubically, and linearly otherwise.
+--   			The points along the @Curve2D@ of the @Path2D@ are precomputed before use, for faster calculations. The point at the requested offset is then calculated interpolating between two adjacent cached points. This may present a problem if the curve makes sharp turns, as the cached points may not follow the curve closely enough.
 --   			There are two answers to this problem: either increase the number of cached points and increase memory consumption, or make a cubic interpolation between two points at the cost of (slightly) slower calculations.
 set_cubic_interpolation ::
                           (PathFollow2D :< cls, Object :< cls) => cls -> Bool -> IO ()
@@ -242,6 +308,11 @@ set_cubic_interpolation cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PathFollow2D "set_cubic_interpolation" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.PathFollow2D.set_cubic_interpolation
 
 {-# NOINLINE bindPathFollow2D_set_h_offset #-}
 
@@ -266,6 +337,10 @@ set_h_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "set_h_offset" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PathFollow2D.set_h_offset
+
 {-# NOINLINE bindPathFollow2D_set_lookahead #-}
 
 -- | How far to look ahead of the curve to calculate the tangent if the node is rotating. E.g. shorter lookaheads will lead to faster rotations.
@@ -289,9 +364,13 @@ set_lookahead cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "set_lookahead" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PathFollow2D.set_lookahead
+
 {-# NOINLINE bindPathFollow2D_set_loop #-}
 
--- | If [code]true[/code], any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
+-- | If @true@, any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
 bindPathFollow2D_set_loop :: MethodBind
 bindPathFollow2D_set_loop
   = unsafePerformIO $
@@ -301,7 +380,7 @@ bindPathFollow2D_set_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
+-- | If @true@, any offset outside the path's length will wrap around, instead of stopping at the ends. Use it for cyclic paths.
 set_loop ::
            (PathFollow2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_loop cls arg1
@@ -311,6 +390,9 @@ set_loop cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PathFollow2D "set_loop" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.PathFollow2D.set_loop
 
 {-# NOINLINE bindPathFollow2D_set_offset #-}
 
@@ -335,9 +417,13 @@ set_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "set_offset" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PathFollow2D.set_offset
+
 {-# NOINLINE bindPathFollow2D_set_rotate #-}
 
--- | If [code]true[/code], this node rotates to follow the path, making its descendants rotate.
+-- | If @true@, this node rotates to follow the path, making its descendants rotate.
 bindPathFollow2D_set_rotate :: MethodBind
 bindPathFollow2D_set_rotate
   = unsafePerformIO $
@@ -347,7 +433,7 @@ bindPathFollow2D_set_rotate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this node rotates to follow the path, making its descendants rotate.
+-- | If @true@, this node rotates to follow the path, making its descendants rotate.
 set_rotate ::
              (PathFollow2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_rotate cls arg1
@@ -357,6 +443,9 @@ set_rotate cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PathFollow2D "set_rotate" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.PathFollow2D.set_rotate
 
 {-# NOINLINE bindPathFollow2D_set_unit_offset #-}
 
@@ -382,6 +471,10 @@ set_unit_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PathFollow2D "set_unit_offset" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PathFollow2D.set_unit_offset
+
 {-# NOINLINE bindPathFollow2D_set_v_offset #-}
 
 -- | The node's offset perpendicular to the curve.
@@ -404,3 +497,7 @@ set_v_offset cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PathFollow2D "set_v_offset" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PathFollow2D.set_v_offset

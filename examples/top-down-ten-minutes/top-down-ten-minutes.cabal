@@ -1,0 +1,71 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 10ec9e894d9fdb50a0b9d9dcb3b406e33d320e82e151cfe5d0ef335c059e3aad
+
+name:           top-down-ten-minutes
+version:        0.0.0.0
+description:    Please see the README on Github at <https://github.com/SimulaVR/godot-haskell/tree/master/demo#readme>
+homepage:       https://github.com/SimulaVR/godot-haskell#readme
+bug-reports:    https://github.com/SimulaVR/godot-haskell/issues
+author:         Andrei Barbu
+maintainer:     andrei@0xab.com
+copyright:      Andrei Barbu 2019, 2021
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    ChangeLog.md
+    README.md
+foreign-library top-down-ten-minutes
+  type: native-shared
+  other-modules: FLib
+  hs-source-dirs: ffi/flib
+  c-sources: ffi/cbits/flib.c
+  build-depends:
+      base >= 4.12 && <5
+    , godot-haskell
+    , top-down-ten-minutes
+    , text
+  default-language: Haskell2010
+
+source-repository head
+  type: git
+  location: https://github.com/SimulaVR/godot-haskell
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Game.World
+      Project.Requirements
+      Project.Scenes
+      Project.Scenes.Bullet
+      Project.Scenes.Enemy
+      Project.Scenes.Explosion
+      Project.Scenes.World
+      Project.Support
+      Paths_top_down_ten_minutes
+  hs-source-dirs:
+      src
+      game
+  default-extensions: FlexibleContexts MultiParamTypeClasses OverloadedStrings TemplateHaskell TypeApplications TypeFamilies DataKinds FlexibleInstances ScopedTypeVariables AllowAmbiguousTypes TupleSections FunctionalDependencies LambdaCase TypeOperators
+  ghc-options: -Wall -Wno-orphans -O0 -Wno-name-shadowing
+  build-depends:
+      base >=4.12 && <5
+    , containers
+    , extra
+    , godot-haskell
+    , lens
+    , linear
+    , mono-traversable
+    , random
+    , strict-concurrency
+    , template-haskell
+    , text
+    , th-abstraction
+    , vector
+  default-language: Haskell2010

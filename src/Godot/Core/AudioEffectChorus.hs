@@ -24,9 +24,189 @@ module Godot.Core.AudioEffectChorus
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
+
+instance NodeProperty AudioEffectChorus "dry" Float 'False where
+        nodeProperty = (get_dry, wrapDroppingSetter set_dry, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/1/cutoff_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_voice_cutoff_hz,
+             wrapIndexedSetter 0 set_voice_cutoff_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/1/delay_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_voice_delay_ms,
+             wrapIndexedSetter 0 set_voice_delay_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/1/depth_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_voice_depth_ms,
+             wrapIndexedSetter 0 set_voice_depth_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/1/level_db" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_voice_level_db,
+             wrapIndexedSetter 0 set_voice_level_db, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/1/pan" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_voice_pan,
+             wrapIndexedSetter 0 set_voice_pan, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/1/rate_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_voice_rate_hz,
+             wrapIndexedSetter 0 set_voice_rate_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/2/cutoff_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_voice_cutoff_hz,
+             wrapIndexedSetter 1 set_voice_cutoff_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/2/delay_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_voice_delay_ms,
+             wrapIndexedSetter 1 set_voice_delay_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/2/depth_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_voice_depth_ms,
+             wrapIndexedSetter 1 set_voice_depth_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/2/level_db" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_voice_level_db,
+             wrapIndexedSetter 1 set_voice_level_db, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/2/pan" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_voice_pan,
+             wrapIndexedSetter 1 set_voice_pan, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/2/rate_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_voice_rate_hz,
+             wrapIndexedSetter 1 set_voice_rate_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/3/cutoff_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_voice_cutoff_hz,
+             wrapIndexedSetter 2 set_voice_cutoff_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/3/delay_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_voice_delay_ms,
+             wrapIndexedSetter 2 set_voice_delay_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/3/depth_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_voice_depth_ms,
+             wrapIndexedSetter 2 set_voice_depth_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/3/level_db" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_voice_level_db,
+             wrapIndexedSetter 2 set_voice_level_db, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/3/pan" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_voice_pan,
+             wrapIndexedSetter 2 set_voice_pan, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/3/rate_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_voice_rate_hz,
+             wrapIndexedSetter 2 set_voice_rate_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/4/cutoff_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_voice_cutoff_hz,
+             wrapIndexedSetter 3 set_voice_cutoff_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/4/delay_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_voice_delay_ms,
+             wrapIndexedSetter 3 set_voice_delay_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/4/depth_ms" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_voice_depth_ms,
+             wrapIndexedSetter 3 set_voice_depth_ms, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/4/level_db" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_voice_level_db,
+             wrapIndexedSetter 3 set_voice_level_db, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/4/pan" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_voice_pan,
+             wrapIndexedSetter 3 set_voice_pan, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice/4/rate_hz" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_voice_rate_hz,
+             wrapIndexedSetter 3 set_voice_rate_hz, Nothing)
+
+instance NodeProperty AudioEffectChorus "voice_count" Int 'False
+         where
+        nodeProperty
+          = (get_voice_count, wrapDroppingSetter set_voice_count, Nothing)
+
+instance NodeProperty AudioEffectChorus "wet" Float 'False where
+        nodeProperty = (get_wet, wrapDroppingSetter set_wet, Nothing)
 
 {-# NOINLINE bindAudioEffectChorus_get_dry #-}
 
@@ -50,6 +230,10 @@ get_dry cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "get_dry" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_dry
 
 {-# NOINLINE bindAudioEffectChorus_get_voice_count #-}
 
@@ -75,6 +259,11 @@ get_voice_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "get_voice_count" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_voice_count
+
 {-# NOINLINE bindAudioEffectChorus_get_voice_cutoff_hz #-}
 
 -- | The voice's cutoff frequency.
@@ -98,6 +287,11 @@ get_voice_cutoff_hz cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "get_voice_cutoff_hz" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_voice_cutoff_hz
 
 {-# NOINLINE bindAudioEffectChorus_get_voice_delay_ms #-}
 
@@ -123,6 +317,11 @@ get_voice_delay_ms cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "get_voice_delay_ms" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_voice_delay_ms
+
 {-# NOINLINE bindAudioEffectChorus_get_voice_depth_ms #-}
 
 -- | The voice filter's depth.
@@ -146,6 +345,11 @@ get_voice_depth_ms cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "get_voice_depth_ms" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_voice_depth_ms
 
 {-# NOINLINE bindAudioEffectChorus_get_voice_level_db #-}
 
@@ -171,6 +375,11 @@ get_voice_level_db cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "get_voice_level_db" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_voice_level_db
+
 {-# NOINLINE bindAudioEffectChorus_get_voice_pan #-}
 
 -- | The voice's pan level.
@@ -194,6 +403,11 @@ get_voice_pan cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "get_voice_pan" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_voice_pan
 
 {-# NOINLINE bindAudioEffectChorus_get_voice_rate_hz #-}
 
@@ -219,6 +433,11 @@ get_voice_rate_hz cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "get_voice_rate_hz" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_voice_rate_hz
+
 {-# NOINLINE bindAudioEffectChorus_get_wet #-}
 
 -- | The effect's processed signal.
@@ -241,6 +460,10 @@ get_wet cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "get_wet" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.get_wet
 
 {-# NOINLINE bindAudioEffectChorus_set_dry #-}
 
@@ -265,6 +488,10 @@ set_dry cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "set_dry" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_dry
+
 {-# NOINLINE bindAudioEffectChorus_set_voice_count #-}
 
 -- | The amount of voices in the effect.
@@ -288,6 +515,11 @@ set_voice_count cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "set_voice_count" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_voice_count
 
 {-# NOINLINE bindAudioEffectChorus_set_voice_cutoff_hz #-}
 
@@ -314,6 +546,12 @@ set_voice_cutoff_hz cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "set_voice_cutoff_hz"
+           '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_voice_cutoff_hz
+
 {-# NOINLINE bindAudioEffectChorus_set_voice_delay_ms #-}
 
 -- | The voice's signal delay.
@@ -338,6 +576,12 @@ set_voice_delay_ms cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "set_voice_delay_ms"
+           '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_voice_delay_ms
 
 {-# NOINLINE bindAudioEffectChorus_set_voice_depth_ms #-}
 
@@ -364,6 +608,12 @@ set_voice_depth_ms cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "set_voice_depth_ms"
+           '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_voice_depth_ms
+
 {-# NOINLINE bindAudioEffectChorus_set_voice_level_db #-}
 
 -- | The voice's volume.
@@ -388,6 +638,12 @@ set_voice_level_db cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "set_voice_level_db"
+           '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_voice_level_db
 
 {-# NOINLINE bindAudioEffectChorus_set_voice_pan #-}
 
@@ -414,6 +670,11 @@ set_voice_pan cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "set_voice_pan" '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_voice_pan
+
 {-# NOINLINE bindAudioEffectChorus_set_voice_rate_hz #-}
 
 -- | The voice's filter rate.
@@ -439,6 +700,12 @@ set_voice_rate_hz cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectChorus "set_voice_rate_hz"
+           '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_voice_rate_hz
+
 {-# NOINLINE bindAudioEffectChorus_set_wet #-}
 
 -- | The effect's processed signal.
@@ -461,3 +728,7 @@ set_wet cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectChorus "set_wet" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectChorus.set_wet

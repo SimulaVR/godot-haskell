@@ -8,9 +8,18 @@ module Godot.Core.PinJoint2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Joint2D()
+
+instance NodeProperty PinJoint2D "softness" Float 'False where
+        nodeProperty
+          = (get_softness, wrapDroppingSetter set_softness, Nothing)
 
 {-# NOINLINE bindPinJoint2D_get_softness #-}
 
@@ -35,6 +44,9 @@ get_softness cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PinJoint2D "get_softness" '[] (IO Float) where
+        nodeMethod = Godot.Core.PinJoint2D.get_softness
+
 {-# NOINLINE bindPinJoint2D_set_softness #-}
 
 -- | The higher this value, the more the bond to the pinned partner can flex.
@@ -57,3 +69,7 @@ set_softness cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PinJoint2D "set_softness" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PinJoint2D.set_softness

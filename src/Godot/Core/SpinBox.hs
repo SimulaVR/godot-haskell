@@ -16,9 +16,27 @@ module Godot.Core.SpinBox
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Range()
+
+instance NodeProperty SpinBox "align" Int 'False where
+        nodeProperty = (get_align, wrapDroppingSetter set_align, Nothing)
+
+instance NodeProperty SpinBox "editable" Bool 'False where
+        nodeProperty
+          = (is_editable, wrapDroppingSetter set_editable, Nothing)
+
+instance NodeProperty SpinBox "prefix" GodotString 'False where
+        nodeProperty = (get_prefix, wrapDroppingSetter set_prefix, Nothing)
+
+instance NodeProperty SpinBox "suffix" GodotString 'False where
+        nodeProperty = (get_suffix, wrapDroppingSetter set_suffix, Nothing)
 
 {-# NOINLINE bindSpinBox__gui_input #-}
 
@@ -39,6 +57,10 @@ _gui_input cls arg1
          godot_method_bind_call bindSpinBox__gui_input (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpinBox "_gui_input" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.SpinBox._gui_input
 
 {-# NOINLINE bindSpinBox__line_edit_focus_exit #-}
 
@@ -62,6 +84,10 @@ _line_edit_focus_exit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "_line_edit_focus_exit" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.SpinBox._line_edit_focus_exit
+
 {-# NOINLINE bindSpinBox__line_edit_input #-}
 
 bindSpinBox__line_edit_input :: MethodBind
@@ -82,6 +108,11 @@ _line_edit_input cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpinBox "_line_edit_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpinBox._line_edit_input
 
 {-# NOINLINE bindSpinBox__range_click_timeout #-}
 
@@ -105,6 +136,10 @@ _range_click_timeout cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "_range_click_timeout" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.SpinBox._range_click_timeout
+
 {-# NOINLINE bindSpinBox__text_entered #-}
 
 bindSpinBox__text_entered :: MethodBind
@@ -126,9 +161,13 @@ _text_entered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "_text_entered" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.SpinBox._text_entered
+
 {-# NOINLINE bindSpinBox_apply #-}
 
--- | Applies the current value of this [SpinBox].
+-- | Applies the current value of this @SpinBox@.
 bindSpinBox_apply :: MethodBind
 bindSpinBox_apply
   = unsafePerformIO $
@@ -138,7 +177,7 @@ bindSpinBox_apply
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies the current value of this [SpinBox].
+-- | Applies the current value of this @SpinBox@.
 apply :: (SpinBox :< cls, Object :< cls) => cls -> IO ()
 apply cls
   = withVariantArray []
@@ -146,9 +185,12 @@ apply cls
          godot_method_bind_call bindSpinBox_apply (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "apply" '[] (IO ()) where
+        nodeMethod = Godot.Core.SpinBox.apply
+
 {-# NOINLINE bindSpinBox_get_align #-}
 
--- | Sets the text alignment of the [SpinBox].
+-- | Sets the text alignment of the @SpinBox@.
 bindSpinBox_get_align :: MethodBind
 bindSpinBox_get_align
   = unsafePerformIO $
@@ -158,7 +200,7 @@ bindSpinBox_get_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the text alignment of the [SpinBox].
+-- | Sets the text alignment of the @SpinBox@.
 get_align :: (SpinBox :< cls, Object :< cls) => cls -> IO Int
 get_align cls
   = withVariantArray []
@@ -167,9 +209,12 @@ get_align cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "get_align" '[] (IO Int) where
+        nodeMethod = Godot.Core.SpinBox.get_align
+
 {-# NOINLINE bindSpinBox_get_line_edit #-}
 
--- | Returns the [LineEdit] instance from this [SpinBox]. You can use it to access properties and methods of [LineEdit].
+-- | Returns the @LineEdit@ instance from this @SpinBox@. You can use it to access properties and methods of @LineEdit@.
 bindSpinBox_get_line_edit :: MethodBind
 bindSpinBox_get_line_edit
   = unsafePerformIO $
@@ -179,7 +224,7 @@ bindSpinBox_get_line_edit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [LineEdit] instance from this [SpinBox]. You can use it to access properties and methods of [LineEdit].
+-- | Returns the @LineEdit@ instance from this @SpinBox@. You can use it to access properties and methods of @LineEdit@.
 get_line_edit ::
                 (SpinBox :< cls, Object :< cls) => cls -> IO LineEdit
 get_line_edit cls
@@ -190,9 +235,12 @@ get_line_edit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "get_line_edit" '[] (IO LineEdit) where
+        nodeMethod = Godot.Core.SpinBox.get_line_edit
+
 {-# NOINLINE bindSpinBox_get_prefix #-}
 
--- | Adds the specified [code]prefix[/code] string before the numerical value of the [SpinBox].
+-- | Adds the specified @prefix@ string before the numerical value of the @SpinBox@.
 bindSpinBox_get_prefix :: MethodBind
 bindSpinBox_get_prefix
   = unsafePerformIO $
@@ -202,7 +250,7 @@ bindSpinBox_get_prefix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified [code]prefix[/code] string before the numerical value of the [SpinBox].
+-- | Adds the specified @prefix@ string before the numerical value of the @SpinBox@.
 get_prefix ::
              (SpinBox :< cls, Object :< cls) => cls -> IO GodotString
 get_prefix cls
@@ -212,9 +260,12 @@ get_prefix cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "get_prefix" '[] (IO GodotString) where
+        nodeMethod = Godot.Core.SpinBox.get_prefix
+
 {-# NOINLINE bindSpinBox_get_suffix #-}
 
--- | Adds the specified [code]suffix[/code] string after the numerical value of the [SpinBox].
+-- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
 bindSpinBox_get_suffix :: MethodBind
 bindSpinBox_get_suffix
   = unsafePerformIO $
@@ -224,7 +275,7 @@ bindSpinBox_get_suffix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified [code]suffix[/code] string after the numerical value of the [SpinBox].
+-- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
 get_suffix ::
              (SpinBox :< cls, Object :< cls) => cls -> IO GodotString
 get_suffix cls
@@ -234,9 +285,12 @@ get_suffix cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "get_suffix" '[] (IO GodotString) where
+        nodeMethod = Godot.Core.SpinBox.get_suffix
+
 {-# NOINLINE bindSpinBox_is_editable #-}
 
--- | If [code]true[/code], the [SpinBox] will be editable. Otherwise, it will be read only.
+-- | If @true@, the @SpinBox@ will be editable. Otherwise, it will be read only.
 bindSpinBox_is_editable :: MethodBind
 bindSpinBox_is_editable
   = unsafePerformIO $
@@ -246,7 +300,7 @@ bindSpinBox_is_editable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [SpinBox] will be editable. Otherwise, it will be read only.
+-- | If @true@, the @SpinBox@ will be editable. Otherwise, it will be read only.
 is_editable :: (SpinBox :< cls, Object :< cls) => cls -> IO Bool
 is_editable cls
   = withVariantArray []
@@ -255,9 +309,12 @@ is_editable cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "is_editable" '[] (IO Bool) where
+        nodeMethod = Godot.Core.SpinBox.is_editable
+
 {-# NOINLINE bindSpinBox_set_align #-}
 
--- | Sets the text alignment of the [SpinBox].
+-- | Sets the text alignment of the @SpinBox@.
 bindSpinBox_set_align :: MethodBind
 bindSpinBox_set_align
   = unsafePerformIO $
@@ -267,7 +324,7 @@ bindSpinBox_set_align
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the text alignment of the [SpinBox].
+-- | Sets the text alignment of the @SpinBox@.
 set_align :: (SpinBox :< cls, Object :< cls) => cls -> Int -> IO ()
 set_align cls arg1
   = withVariantArray [toVariant arg1]
@@ -276,9 +333,12 @@ set_align cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "set_align" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.SpinBox.set_align
+
 {-# NOINLINE bindSpinBox_set_editable #-}
 
--- | If [code]true[/code], the [SpinBox] will be editable. Otherwise, it will be read only.
+-- | If @true@, the @SpinBox@ will be editable. Otherwise, it will be read only.
 bindSpinBox_set_editable :: MethodBind
 bindSpinBox_set_editable
   = unsafePerformIO $
@@ -288,7 +348,7 @@ bindSpinBox_set_editable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [SpinBox] will be editable. Otherwise, it will be read only.
+-- | If @true@, the @SpinBox@ will be editable. Otherwise, it will be read only.
 set_editable ::
                (SpinBox :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_editable cls arg1
@@ -298,9 +358,12 @@ set_editable cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "set_editable" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.SpinBox.set_editable
+
 {-# NOINLINE bindSpinBox_set_prefix #-}
 
--- | Adds the specified [code]prefix[/code] string before the numerical value of the [SpinBox].
+-- | Adds the specified @prefix@ string before the numerical value of the @SpinBox@.
 bindSpinBox_set_prefix :: MethodBind
 bindSpinBox_set_prefix
   = unsafePerformIO $
@@ -310,7 +373,7 @@ bindSpinBox_set_prefix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified [code]prefix[/code] string before the numerical value of the [SpinBox].
+-- | Adds the specified @prefix@ string before the numerical value of the @SpinBox@.
 set_prefix ::
              (SpinBox :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_prefix cls arg1
@@ -320,9 +383,13 @@ set_prefix cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpinBox "set_prefix" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.SpinBox.set_prefix
+
 {-# NOINLINE bindSpinBox_set_suffix #-}
 
--- | Adds the specified [code]suffix[/code] string after the numerical value of the [SpinBox].
+-- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
 bindSpinBox_set_suffix :: MethodBind
 bindSpinBox_set_suffix
   = unsafePerformIO $
@@ -332,7 +399,7 @@ bindSpinBox_set_suffix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified [code]suffix[/code] string after the numerical value of the [SpinBox].
+-- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
 set_suffix ::
              (SpinBox :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_suffix cls arg1
@@ -341,3 +408,7 @@ set_suffix cls arg1
          godot_method_bind_call bindSpinBox_set_suffix (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpinBox "set_suffix" '[GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.SpinBox.set_suffix

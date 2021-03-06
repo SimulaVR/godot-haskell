@@ -52,9 +52,14 @@ module Godot.Core.VisualScript
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Script()
 
 sig_node_ports_changed ::
                        Godot.Internal.Dispatch.Signal VisualScript
@@ -63,6 +68,9 @@ sig_node_ports_changed
 
 instance NodeSignal VisualScript "node_ports_changed"
            '[GodotString, Int]
+
+instance NodeProperty VisualScript "data" Dictionary 'False where
+        nodeProperty = (_get_data, wrapDroppingSetter _set_data, Nothing)
 
 {-# NOINLINE bindVisualScript__get_data #-}
 
@@ -84,6 +92,10 @@ _get_data cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "_get_data" '[] (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.VisualScript._get_data
 
 {-# NOINLINE bindVisualScript__node_ports_changed #-}
 
@@ -107,6 +119,11 @@ _node_ports_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "_node_ports_changed" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript._node_ports_changed
+
 {-# NOINLINE bindVisualScript__set_data #-}
 
 bindVisualScript__set_data :: MethodBind
@@ -127,6 +144,10 @@ _set_data cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "_set_data" '[Dictionary] (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript._set_data
 
 {-# NOINLINE bindVisualScript_add_custom_signal #-}
 
@@ -150,6 +171,11 @@ add_custom_signal cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "add_custom_signal" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.add_custom_signal
+
 {-# NOINLINE bindVisualScript_add_function #-}
 
 bindVisualScript_add_function :: MethodBind
@@ -171,6 +197,11 @@ add_function cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "add_function" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.add_function
+
 {-# NOINLINE bindVisualScript_add_node #-}
 
 bindVisualScript_add_node :: MethodBind
@@ -184,15 +215,23 @@ bindVisualScript_add_node
 
 add_node ::
            (VisualScript :< cls, Object :< cls) =>
-           cls -> GodotString -> Int -> VisualScriptNode -> Vector2 -> IO ()
+           cls ->
+             GodotString -> Int -> VisualScriptNode -> Maybe Vector2 -> IO ()
 add_node cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       defaultedVariant VariantVector2 (V2 0 0) arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisualScript_add_node (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "add_node"
+           '[GodotString, Int, VisualScriptNode, Maybe Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.add_node
 
 {-# NOINLINE bindVisualScript_add_variable #-}
 
@@ -207,14 +246,22 @@ bindVisualScript_add_variable
 
 add_variable ::
                (VisualScript :< cls, Object :< cls) =>
-               cls -> GodotString -> GodotVariant -> Bool -> IO ()
+               cls -> GodotString -> Maybe GodotVariant -> Maybe Bool -> IO ()
 add_variable cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, maybe VariantNil toVariant arg2,
+       maybe (VariantBool False) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisualScript_add_variable (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "add_variable"
+           '[GodotString, Maybe GodotVariant, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.add_variable
 
 {-# NOINLINE bindVisualScript_custom_signal_add_argument #-}
 
@@ -229,16 +276,23 @@ bindVisualScript_custom_signal_add_argument
 
 custom_signal_add_argument ::
                              (VisualScript :< cls, Object :< cls) =>
-                             cls -> GodotString -> Int -> GodotString -> Int -> IO ()
+                             cls -> GodotString -> Int -> GodotString -> Maybe Int -> IO ()
 custom_signal_add_argument cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantInt (-1)) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisualScript_custom_signal_add_argument
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "custom_signal_add_argument"
+           '[GodotString, Int, GodotString, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.custom_signal_add_argument
 
 {-# NOINLINE bindVisualScript_custom_signal_get_argument_count #-}
 
@@ -264,6 +318,13 @@ custom_signal_get_argument_count cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "custom_signal_get_argument_count"
+           '[GodotString]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScript.custom_signal_get_argument_count
+
 {-# NOINLINE bindVisualScript_custom_signal_get_argument_name #-}
 
 bindVisualScript_custom_signal_get_argument_name :: MethodBind
@@ -287,6 +348,13 @@ custom_signal_get_argument_name cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "custom_signal_get_argument_name"
+           '[GodotString, Int]
+           (IO GodotString)
+         where
+        nodeMethod
+          = Godot.Core.VisualScript.custom_signal_get_argument_name
 
 {-# NOINLINE bindVisualScript_custom_signal_get_argument_type #-}
 
@@ -312,6 +380,13 @@ custom_signal_get_argument_type cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "custom_signal_get_argument_type"
+           '[GodotString, Int]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScript.custom_signal_get_argument_type
+
 {-# NOINLINE bindVisualScript_custom_signal_remove_argument #-}
 
 bindVisualScript_custom_signal_remove_argument :: MethodBind
@@ -335,6 +410,12 @@ custom_signal_remove_argument cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "custom_signal_remove_argument"
+           '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.custom_signal_remove_argument
 
 {-# NOINLINE bindVisualScript_custom_signal_set_argument_name #-}
 
@@ -360,6 +441,13 @@ custom_signal_set_argument_name cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "custom_signal_set_argument_name"
+           '[GodotString, Int, GodotString]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScript.custom_signal_set_argument_name
+
 {-# NOINLINE bindVisualScript_custom_signal_set_argument_type #-}
 
 bindVisualScript_custom_signal_set_argument_type :: MethodBind
@@ -384,6 +472,13 @@ custom_signal_set_argument_type cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "custom_signal_set_argument_type"
+           '[GodotString, Int, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScript.custom_signal_set_argument_type
+
 {-# NOINLINE bindVisualScript_custom_signal_swap_argument #-}
 
 bindVisualScript_custom_signal_swap_argument :: MethodBind
@@ -406,6 +501,12 @@ custom_signal_swap_argument cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "custom_signal_swap_argument"
+           '[GodotString, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.custom_signal_swap_argument
 
 {-# NOINLINE bindVisualScript_data_connect #-}
 
@@ -430,6 +531,12 @@ data_connect cls arg1 arg2 arg3 arg4 arg5
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "data_connect"
+           '[GodotString, Int, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.data_connect
 
 {-# NOINLINE bindVisualScript_data_disconnect #-}
 
@@ -456,6 +563,12 @@ data_disconnect cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "data_disconnect"
+           '[GodotString, Int, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.data_disconnect
+
 {-# NOINLINE bindVisualScript_get_function_node_id #-}
 
 bindVisualScript_get_function_node_id :: MethodBind
@@ -478,6 +591,12 @@ get_function_node_id cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "get_function_node_id"
+           '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScript.get_function_node_id
 
 {-# NOINLINE bindVisualScript_get_function_scroll #-}
 
@@ -502,6 +621,12 @@ get_function_scroll cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "get_function_scroll"
+           '[GodotString]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.VisualScript.get_function_scroll
+
 {-# NOINLINE bindVisualScript_get_node #-}
 
 bindVisualScript_get_node :: MethodBind
@@ -523,6 +648,11 @@ get_node cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "get_node" '[GodotString, Int]
+           (IO VisualScriptNode)
+         where
+        nodeMethod = Godot.Core.VisualScript.get_node
 
 {-# NOINLINE bindVisualScript_get_node_position #-}
 
@@ -547,6 +677,12 @@ get_node_position cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "get_node_position"
+           '[GodotString, Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.VisualScript.get_node_position
+
 {-# NOINLINE bindVisualScript_get_variable_default_value #-}
 
 bindVisualScript_get_variable_default_value :: MethodBind
@@ -569,6 +705,12 @@ get_variable_default_value cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "get_variable_default_value"
+           '[GodotString]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.VisualScript.get_variable_default_value
 
 {-# NOINLINE bindVisualScript_get_variable_export #-}
 
@@ -593,6 +735,12 @@ get_variable_export cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "get_variable_export"
+           '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScript.get_variable_export
+
 {-# NOINLINE bindVisualScript_get_variable_info #-}
 
 bindVisualScript_get_variable_info :: MethodBind
@@ -616,6 +764,11 @@ get_variable_info cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "get_variable_info" '[GodotString]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.VisualScript.get_variable_info
+
 {-# NOINLINE bindVisualScript_has_custom_signal #-}
 
 bindVisualScript_has_custom_signal :: MethodBind
@@ -638,6 +791,11 @@ has_custom_signal cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "has_custom_signal" '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScript.has_custom_signal
 
 {-# NOINLINE bindVisualScript_has_data_connection #-}
 
@@ -664,6 +822,12 @@ has_data_connection cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "has_data_connection"
+           '[GodotString, Int, Int, Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScript.has_data_connection
+
 {-# NOINLINE bindVisualScript_has_function #-}
 
 bindVisualScript_has_function :: MethodBind
@@ -686,6 +850,11 @@ has_function cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "has_function" '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScript.has_function
+
 {-# NOINLINE bindVisualScript_has_node #-}
 
 bindVisualScript_has_node :: MethodBind
@@ -707,6 +876,11 @@ has_node cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "has_node" '[GodotString, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScript.has_node
 
 {-# NOINLINE bindVisualScript_has_sequence_connection #-}
 
@@ -732,6 +906,12 @@ has_sequence_connection cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "has_sequence_connection"
+           '[GodotString, Int, Int, Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScript.has_sequence_connection
+
 {-# NOINLINE bindVisualScript_has_variable #-}
 
 bindVisualScript_has_variable :: MethodBind
@@ -753,6 +933,11 @@ has_variable cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "has_variable" '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScript.has_variable
 
 {-# NOINLINE bindVisualScript_remove_custom_signal #-}
 
@@ -776,6 +961,12 @@ remove_custom_signal cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "remove_custom_signal"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.remove_custom_signal
+
 {-# NOINLINE bindVisualScript_remove_function #-}
 
 bindVisualScript_remove_function :: MethodBind
@@ -797,6 +988,11 @@ remove_function cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "remove_function" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.remove_function
 
 {-# NOINLINE bindVisualScript_remove_node #-}
 
@@ -820,6 +1016,11 @@ remove_node cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "remove_node" '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.remove_node
+
 {-# NOINLINE bindVisualScript_remove_variable #-}
 
 bindVisualScript_remove_variable :: MethodBind
@@ -841,6 +1042,11 @@ remove_variable cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "remove_variable" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.remove_variable
 
 {-# NOINLINE bindVisualScript_rename_custom_signal #-}
 
@@ -865,6 +1071,12 @@ rename_custom_signal cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "rename_custom_signal"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.rename_custom_signal
+
 {-# NOINLINE bindVisualScript_rename_function #-}
 
 bindVisualScript_rename_function :: MethodBind
@@ -888,6 +1100,12 @@ rename_function cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "rename_function"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.rename_function
+
 {-# NOINLINE bindVisualScript_rename_variable #-}
 
 bindVisualScript_rename_variable :: MethodBind
@@ -910,6 +1128,12 @@ rename_variable cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "rename_variable"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.rename_variable
 
 {-# NOINLINE bindVisualScript_sequence_connect #-}
 
@@ -935,6 +1159,12 @@ sequence_connect cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "sequence_connect"
+           '[GodotString, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.sequence_connect
+
 {-# NOINLINE bindVisualScript_sequence_disconnect #-}
 
 bindVisualScript_sequence_disconnect :: MethodBind
@@ -959,6 +1189,12 @@ sequence_disconnect cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "sequence_disconnect"
+           '[GodotString, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.sequence_disconnect
+
 {-# NOINLINE bindVisualScript_set_function_scroll #-}
 
 bindVisualScript_set_function_scroll :: MethodBind
@@ -982,6 +1218,12 @@ set_function_scroll cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "set_function_scroll"
+           '[GodotString, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.set_function_scroll
+
 {-# NOINLINE bindVisualScript_set_instance_base_type #-}
 
 bindVisualScript_set_instance_base_type :: MethodBind
@@ -1003,6 +1245,12 @@ set_instance_base_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "set_instance_base_type"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.set_instance_base_type
 
 {-# NOINLINE bindVisualScript_set_node_position #-}
 
@@ -1027,6 +1275,12 @@ set_node_position cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "set_node_position"
+           '[GodotString, Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.set_node_position
+
 {-# NOINLINE bindVisualScript_set_variable_default_value #-}
 
 bindVisualScript_set_variable_default_value :: MethodBind
@@ -1049,6 +1303,12 @@ set_variable_default_value cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "set_variable_default_value"
+           '[GodotString, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.set_variable_default_value
 
 {-# NOINLINE bindVisualScript_set_variable_export #-}
 
@@ -1073,6 +1333,12 @@ set_variable_export cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScript "set_variable_export"
+           '[GodotString, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.set_variable_export
+
 {-# NOINLINE bindVisualScript_set_variable_info #-}
 
 bindVisualScript_set_variable_info :: MethodBind
@@ -1095,3 +1361,9 @@ set_variable_info cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScript "set_variable_info"
+           '[GodotString, Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScript.set_variable_info

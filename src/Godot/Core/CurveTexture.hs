@@ -10,9 +10,17 @@ module Godot.Core.CurveTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Texture()
+
+instance NodeProperty CurveTexture "curve" Curve 'False where
+        nodeProperty = (get_curve, wrapDroppingSetter set_curve, Nothing)
 
 {-# NOINLINE bindCurveTexture_get_width #-}
 
@@ -36,6 +44,12 @@ get_width cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CurveTexture "get_width" '[] (IO Int) where
+        nodeMethod = Godot.Core.CurveTexture.get_width
+
+instance NodeProperty CurveTexture "width" Int 'False where
+        nodeProperty = (get_width, wrapDroppingSetter set_width, Nothing)
+
 {-# NOINLINE bindCurveTexture__update #-}
 
 bindCurveTexture__update :: MethodBind
@@ -55,9 +69,12 @@ _update cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CurveTexture "_update" '[] (IO ()) where
+        nodeMethod = Godot.Core.CurveTexture._update
+
 {-# NOINLINE bindCurveTexture_get_curve #-}
 
--- | The [code]curve[/code] rendered onto the texture.
+-- | The @curve@ rendered onto the texture.
 bindCurveTexture_get_curve :: MethodBind
 bindCurveTexture_get_curve
   = unsafePerformIO $
@@ -67,7 +84,7 @@ bindCurveTexture_get_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [code]curve[/code] rendered onto the texture.
+-- | The @curve@ rendered onto the texture.
 get_curve ::
             (CurveTexture :< cls, Object :< cls) => cls -> IO Curve
 get_curve cls
@@ -78,9 +95,12 @@ get_curve cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CurveTexture "get_curve" '[] (IO Curve) where
+        nodeMethod = Godot.Core.CurveTexture.get_curve
+
 {-# NOINLINE bindCurveTexture_set_curve #-}
 
--- | The [code]curve[/code] rendered onto the texture.
+-- | The @curve@ rendered onto the texture.
 bindCurveTexture_set_curve :: MethodBind
 bindCurveTexture_set_curve
   = unsafePerformIO $
@@ -90,7 +110,7 @@ bindCurveTexture_set_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [code]curve[/code] rendered onto the texture.
+-- | The @curve@ rendered onto the texture.
 set_curve ::
             (CurveTexture :< cls, Object :< cls) => cls -> Curve -> IO ()
 set_curve cls arg1
@@ -100,6 +120,9 @@ set_curve cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CurveTexture "set_curve" '[Curve] (IO ()) where
+        nodeMethod = Godot.Core.CurveTexture.set_curve
 
 {-# NOINLINE bindCurveTexture_set_width #-}
 
@@ -123,3 +146,6 @@ set_width cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CurveTexture "set_width" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CurveTexture.set_width

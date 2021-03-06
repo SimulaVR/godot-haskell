@@ -6,9 +6,14 @@ module Godot.Core.ConfirmationDialog
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AcceptDialog()
 
 {-# NOINLINE bindConfirmationDialog_get_cancel #-}
 
@@ -33,3 +38,7 @@ get_cancel cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ConfirmationDialog "get_cancel" '[] (IO Button)
+         where
+        nodeMethod = Godot.Core.ConfirmationDialog.get_cancel

@@ -8,9 +8,18 @@ module Godot.Core.InputEventPanGesture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEventGesture()
+
+instance NodeProperty InputEventPanGesture "delta" Vector2 'False
+         where
+        nodeProperty = (get_delta, wrapDroppingSetter set_delta, Nothing)
 
 {-# NOINLINE bindInputEventPanGesture_get_delta #-}
 
@@ -34,6 +43,11 @@ get_delta cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventPanGesture "get_delta" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventPanGesture.get_delta
+
 {-# NOINLINE bindInputEventPanGesture_set_delta #-}
 
 bindInputEventPanGesture_set_delta :: MethodBind
@@ -56,3 +70,8 @@ set_delta cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventPanGesture "set_delta" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventPanGesture.set_delta

@@ -28,11 +28,16 @@ module Godot.Tools.EditorInspector
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.ScrollContainer()
 
--- | Emitted when the Edit button of an [Object] has been pressed in the inspector. This is mainly used in the remote scene tree inspector.
+-- | Emitted when the Edit button of an @Object@ has been pressed in the inspector. This is mainly used in the remote scene tree inspector.
 sig_object_id_selected ::
                        Godot.Internal.Dispatch.Signal EditorInspector
 sig_object_id_selected
@@ -67,7 +72,7 @@ instance NodeSignal EditorInspector "property_selected"
            '[GodotString]
 
 -- | Emitted when a boolean property is toggled in the inspector.
---   				[b]Note:[/b] This signal is never emitted if the internal [code]autoclear[/code] property enabled. Since this property is always enabled in the editor inspector, this signal is never emitted by the editor itself.
+--   				__Note:__ This signal is never emitted if the internal @autoclear@ property enabled. Since this property is always enabled in the editor inspector, this signal is never emitted by the editor itself.
 sig_property_toggled ::
                      Godot.Internal.Dispatch.Signal EditorInspector
 sig_property_toggled
@@ -116,6 +121,12 @@ _edit_request_change cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_edit_request_change"
+           '[Object, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._edit_request_change
+
 {-# NOINLINE bindEditorInspector__feature_profile_changed #-}
 
 bindEditorInspector__feature_profile_changed :: MethodBind
@@ -137,6 +148,11 @@ _feature_profile_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspector "_feature_profile_changed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._feature_profile_changed
 
 {-# NOINLINE bindEditorInspector__filter_changed #-}
 
@@ -160,6 +176,12 @@ _filter_changed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspector "_filter_changed"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._filter_changed
 
 {-# NOINLINE bindEditorInspector__multiple_properties_changed #-}
 
@@ -185,6 +207,13 @@ _multiple_properties_changed cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_multiple_properties_changed"
+           '[PoolStringArray, Array]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorInspector._multiple_properties_changed
+
 {-# NOINLINE bindEditorInspector__node_removed #-}
 
 bindEditorInspector__node_removed :: MethodBind
@@ -206,6 +235,10 @@ _node_removed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspector "_node_removed" '[Node] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._node_removed
 
 {-# NOINLINE bindEditorInspector__object_id_selected #-}
 
@@ -230,6 +263,12 @@ _object_id_selected cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_object_id_selected"
+           '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._object_id_selected
+
 {-# NOINLINE bindEditorInspector__property_changed #-}
 
 bindEditorInspector__property_changed :: MethodBind
@@ -243,16 +282,26 @@ bindEditorInspector__property_changed
 
 _property_changed ::
                     (EditorInspector :< cls, Object :< cls) =>
-                    cls -> GodotString -> GodotVariant -> GodotString -> Bool -> IO ()
+                    cls ->
+                      GodotString ->
+                        GodotVariant -> Maybe GodotString -> Maybe Bool -> IO ()
 _property_changed cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantString "" arg3,
+       maybe (VariantBool False) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindEditorInspector__property_changed
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspector "_property_changed"
+           '[GodotString, GodotVariant, Maybe GodotString, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._property_changed
 
 {-# NOINLINE bindEditorInspector__property_changed_update_all #-}
 
@@ -279,6 +328,13 @@ _property_changed_update_all cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_property_changed_update_all"
+           '[GodotString, GodotVariant, GodotString, Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorInspector._property_changed_update_all
+
 {-# NOINLINE bindEditorInspector__property_checked #-}
 
 bindEditorInspector__property_checked :: MethodBind
@@ -302,6 +358,12 @@ _property_checked cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_property_checked"
+           '[GodotString, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._property_checked
+
 {-# NOINLINE bindEditorInspector__property_keyed #-}
 
 bindEditorInspector__property_keyed :: MethodBind
@@ -324,6 +386,12 @@ _property_keyed cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspector "_property_keyed"
+           '[GodotString, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._property_keyed
 
 {-# NOINLINE bindEditorInspector__property_keyed_with_value #-}
 
@@ -349,6 +417,12 @@ _property_keyed_with_value cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_property_keyed_with_value"
+           '[GodotString, GodotVariant, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._property_keyed_with_value
+
 {-# NOINLINE bindEditorInspector__property_selected #-}
 
 bindEditorInspector__property_selected :: MethodBind
@@ -371,6 +445,12 @@ _property_selected cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspector "_property_selected"
+           '[GodotString, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._property_selected
 
 {-# NOINLINE bindEditorInspector__resource_selected #-}
 
@@ -395,6 +475,12 @@ _resource_selected cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_resource_selected"
+           '[GodotString, Resource]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._resource_selected
+
 {-# NOINLINE bindEditorInspector__vscroll_changed #-}
 
 bindEditorInspector__vscroll_changed :: MethodBind
@@ -417,10 +503,15 @@ _vscroll_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorInspector "_vscroll_changed" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorInspector._vscroll_changed
+
 {-# NOINLINE bindEditorInspector_refresh #-}
 
 -- | Refreshes the inspector.
---   				[b]Note:[/b] To save on CPU resources, calling this method will do nothing if the time specified in [code]docks/property_editor/auto_refresh_interval[/code] editor setting hasn't passed yet since this method was last called. (By default, this interval is set to 0.3 seconds.)
+--   				__Note:__ To save on CPU resources, calling this method will do nothing if the time specified in @docks/property_editor/auto_refresh_interval@ editor setting hasn't passed yet since this method was last called. (By default, this interval is set to 0.3 seconds.)
 bindEditorInspector_refresh :: MethodBind
 bindEditorInspector_refresh
   = unsafePerformIO $
@@ -431,7 +522,7 @@ bindEditorInspector_refresh
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Refreshes the inspector.
---   				[b]Note:[/b] To save on CPU resources, calling this method will do nothing if the time specified in [code]docks/property_editor/auto_refresh_interval[/code] editor setting hasn't passed yet since this method was last called. (By default, this interval is set to 0.3 seconds.)
+--   				__Note:__ To save on CPU resources, calling this method will do nothing if the time specified in @docks/property_editor/auto_refresh_interval@ editor setting hasn't passed yet since this method was last called. (By default, this interval is set to 0.3 seconds.)
 refresh :: (EditorInspector :< cls, Object :< cls) => cls -> IO ()
 refresh cls
   = withVariantArray []
@@ -440,3 +531,6 @@ refresh cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorInspector "refresh" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorInspector.refresh

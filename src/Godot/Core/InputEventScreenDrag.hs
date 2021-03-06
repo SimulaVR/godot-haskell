@@ -14,9 +14,33 @@ module Godot.Core.InputEventScreenDrag
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEvent()
+
+instance NodeProperty InputEventScreenDrag "index" Int 'False where
+        nodeProperty = (get_index, wrapDroppingSetter set_index, Nothing)
+
+instance NodeProperty InputEventScreenDrag "position" Vector2
+           'False
+         where
+        nodeProperty
+          = (get_position, wrapDroppingSetter set_position, Nothing)
+
+instance NodeProperty InputEventScreenDrag "relative" Vector2
+           'False
+         where
+        nodeProperty
+          = (get_relative, wrapDroppingSetter set_relative, Nothing)
+
+instance NodeProperty InputEventScreenDrag "speed" Vector2 'False
+         where
+        nodeProperty = (get_speed, wrapDroppingSetter set_speed, Nothing)
 
 {-# NOINLINE bindInputEventScreenDrag_get_index #-}
 
@@ -42,6 +66,10 @@ get_index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenDrag "get_index" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.get_index
+
 {-# NOINLINE bindInputEventScreenDrag_get_position #-}
 
 -- | The drag position.
@@ -65,6 +93,11 @@ get_position cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventScreenDrag "get_position" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.get_position
 
 {-# NOINLINE bindInputEventScreenDrag_get_relative #-}
 
@@ -90,6 +123,11 @@ get_relative cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenDrag "get_relative" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.get_relative
+
 {-# NOINLINE bindInputEventScreenDrag_get_speed #-}
 
 -- | The drag speed.
@@ -114,6 +152,11 @@ get_speed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenDrag "get_speed" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.get_speed
+
 {-# NOINLINE bindInputEventScreenDrag_set_index #-}
 
 -- | The drag event index in the case of a multi-drag event.
@@ -137,6 +180,10 @@ set_index cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventScreenDrag "set_index" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.set_index
 
 {-# NOINLINE bindInputEventScreenDrag_set_position #-}
 
@@ -163,6 +210,11 @@ set_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenDrag "set_position" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.set_position
+
 {-# NOINLINE bindInputEventScreenDrag_set_relative #-}
 
 -- | The drag position relative to its start position.
@@ -188,6 +240,11 @@ set_relative cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventScreenDrag "set_relative" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.set_relative
+
 {-# NOINLINE bindInputEventScreenDrag_set_speed #-}
 
 -- | The drag speed.
@@ -212,3 +269,8 @@ set_speed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventScreenDrag "set_speed" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventScreenDrag.set_speed

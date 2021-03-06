@@ -14,9 +14,19 @@ module Godot.Core.ResourcePreloader
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
+
+instance NodeProperty ResourcePreloader "resources" Array 'False
+         where
+        nodeProperty
+          = (_get_resources, wrapDroppingSetter _set_resources, Nothing)
 
 {-# NOINLINE bindResourcePreloader__get_resources #-}
 
@@ -40,6 +50,11 @@ _get_resources cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourcePreloader "_get_resources" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.ResourcePreloader._get_resources
+
 {-# NOINLINE bindResourcePreloader__set_resources #-}
 
 bindResourcePreloader__set_resources :: MethodBind
@@ -62,9 +77,14 @@ _set_resources cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourcePreloader "_set_resources" '[Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ResourcePreloader._set_resources
+
 {-# NOINLINE bindResourcePreloader_add_resource #-}
 
--- | Adds a resource to the preloader with the given [code]name[/code]. If a resource with the given [code]name[/code] already exists, the new resource will be renamed to "[code]name[/code] N" where N is an incrementing number starting from 2.
+-- | Adds a resource to the preloader with the given @name@. If a resource with the given @name@ already exists, the new resource will be renamed to "@name@ N" where N is an incrementing number starting from 2.
 bindResourcePreloader_add_resource :: MethodBind
 bindResourcePreloader_add_resource
   = unsafePerformIO $
@@ -74,7 +94,7 @@ bindResourcePreloader_add_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a resource to the preloader with the given [code]name[/code]. If a resource with the given [code]name[/code] already exists, the new resource will be renamed to "[code]name[/code] N" where N is an incrementing number starting from 2.
+-- | Adds a resource to the preloader with the given @name@. If a resource with the given @name@ already exists, the new resource will be renamed to "@name@ N" where N is an incrementing number starting from 2.
 add_resource ::
                (ResourcePreloader :< cls, Object :< cls) =>
                cls -> GodotString -> Resource -> IO ()
@@ -87,9 +107,15 @@ add_resource cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourcePreloader "add_resource"
+           '[GodotString, Resource]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ResourcePreloader.add_resource
+
 {-# NOINLINE bindResourcePreloader_get_resource #-}
 
--- | Returns the resource associated to [code]name[/code].
+-- | Returns the resource associated to @name@.
 bindResourcePreloader_get_resource :: MethodBind
 bindResourcePreloader_get_resource
   = unsafePerformIO $
@@ -99,7 +125,7 @@ bindResourcePreloader_get_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the resource associated to [code]name[/code].
+-- | Returns the resource associated to @name@.
 get_resource ::
                (ResourcePreloader :< cls, Object :< cls) =>
                cls -> GodotString -> IO Resource
@@ -111,6 +137,11 @@ get_resource cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ResourcePreloader "get_resource" '[GodotString]
+           (IO Resource)
+         where
+        nodeMethod = Godot.Core.ResourcePreloader.get_resource
 
 {-# NOINLINE bindResourcePreloader_get_resource_list #-}
 
@@ -137,9 +168,14 @@ get_resource_list cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourcePreloader "get_resource_list" '[]
+           (IO PoolStringArray)
+         where
+        nodeMethod = Godot.Core.ResourcePreloader.get_resource_list
+
 {-# NOINLINE bindResourcePreloader_has_resource #-}
 
--- | Returns [code]true[/code] if the preloader contains a resource associated to [code]name[/code].
+-- | Returns @true@ if the preloader contains a resource associated to @name@.
 bindResourcePreloader_has_resource :: MethodBind
 bindResourcePreloader_has_resource
   = unsafePerformIO $
@@ -149,7 +185,7 @@ bindResourcePreloader_has_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the preloader contains a resource associated to [code]name[/code].
+-- | Returns @true@ if the preloader contains a resource associated to @name@.
 has_resource ::
                (ResourcePreloader :< cls, Object :< cls) =>
                cls -> GodotString -> IO Bool
@@ -162,9 +198,14 @@ has_resource cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourcePreloader "has_resource" '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ResourcePreloader.has_resource
+
 {-# NOINLINE bindResourcePreloader_remove_resource #-}
 
--- | Removes the resource associated to [code]name[/code] from the preloader.
+-- | Removes the resource associated to @name@ from the preloader.
 bindResourcePreloader_remove_resource :: MethodBind
 bindResourcePreloader_remove_resource
   = unsafePerformIO $
@@ -174,7 +215,7 @@ bindResourcePreloader_remove_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the resource associated to [code]name[/code] from the preloader.
+-- | Removes the resource associated to @name@ from the preloader.
 remove_resource ::
                   (ResourcePreloader :< cls, Object :< cls) =>
                   cls -> GodotString -> IO ()
@@ -187,9 +228,15 @@ remove_resource cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ResourcePreloader "remove_resource"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ResourcePreloader.remove_resource
+
 {-# NOINLINE bindResourcePreloader_rename_resource #-}
 
--- | Renames a resource inside the preloader from [code]name[/code] to [code]newname[/code].
+-- | Renames a resource inside the preloader from @name@ to @newname@.
 bindResourcePreloader_rename_resource :: MethodBind
 bindResourcePreloader_rename_resource
   = unsafePerformIO $
@@ -199,7 +246,7 @@ bindResourcePreloader_rename_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Renames a resource inside the preloader from [code]name[/code] to [code]newname[/code].
+-- | Renames a resource inside the preloader from @name@ to @newname@.
 rename_resource ::
                   (ResourcePreloader :< cls, Object :< cls) =>
                   cls -> GodotString -> GodotString -> IO ()
@@ -211,3 +258,9 @@ rename_resource cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ResourcePreloader "rename_resource"
+           '[GodotString, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ResourcePreloader.rename_resource

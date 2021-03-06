@@ -10,9 +10,27 @@ module Godot.Core.VisualScriptTypeCast
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptTypeCast "base_script"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_base_script, wrapDroppingSetter set_base_script, Nothing)
+
+instance NodeProperty VisualScriptTypeCast "base_type" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_base_type, wrapDroppingSetter set_base_type, Nothing)
 
 {-# NOINLINE bindVisualScriptTypeCast_get_base_script #-}
 
@@ -37,6 +55,11 @@ get_base_script cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptTypeCast "get_base_script" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptTypeCast.get_base_script
+
 {-# NOINLINE bindVisualScriptTypeCast_get_base_type #-}
 
 bindVisualScriptTypeCast_get_base_type :: MethodBind
@@ -59,6 +82,11 @@ get_base_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptTypeCast "get_base_type" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptTypeCast.get_base_type
 
 {-# NOINLINE bindVisualScriptTypeCast_set_base_script #-}
 
@@ -83,6 +111,12 @@ set_base_script cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptTypeCast "set_base_script"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptTypeCast.set_base_script
+
 {-# NOINLINE bindVisualScriptTypeCast_set_base_type #-}
 
 bindVisualScriptTypeCast_set_base_type :: MethodBind
@@ -105,3 +139,9 @@ set_base_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptTypeCast "set_base_type"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptTypeCast.set_base_type

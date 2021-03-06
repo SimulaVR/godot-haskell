@@ -4,7 +4,7 @@ cabal-version: 2.0
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b57f253efc4223e59b8e1d2660fc37a43039000b9e9b4484d997a88a8bc85745
+-- hash: 9eee1b834a7b311c2aaf343d7472f4478f3d5840413d415e779ebfd822966642
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -692,8 +692,6 @@ library
       Godot.Tools.ScriptEditor
       Godot.Tools.VisualScriptEditor
   other-modules:
-      Paths_godot_haskell
-  autogen-modules:
       Paths_godot_haskell
   hs-source-dirs:
       src

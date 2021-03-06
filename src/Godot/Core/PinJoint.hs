@@ -10,9 +10,14 @@ module Godot.Core.PinJoint
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Joint()
 
 _PARAM_IMPULSE_CLAMP :: Int
 _PARAM_IMPULSE_CLAMP = 2
@@ -22,6 +27,22 @@ _PARAM_DAMPING = 1
 
 _PARAM_BIAS :: Int
 _PARAM_BIAS = 0
+
+instance NodeProperty PinJoint "params/bias" Float 'False where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_param, wrapIndexedSetter 0 set_param,
+             Nothing)
+
+instance NodeProperty PinJoint "params/damping" Float 'False where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_param, wrapIndexedSetter 1 set_param,
+             Nothing)
+
+instance NodeProperty PinJoint "params/impulse_clamp" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_param, wrapIndexedSetter 2 set_param,
+             Nothing)
 
 {-# NOINLINE bindPinJoint_get_param #-}
 
@@ -45,6 +66,9 @@ get_param cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PinJoint "get_param" '[Int] (IO Float) where
+        nodeMethod = Godot.Core.PinJoint.get_param
+
 {-# NOINLINE bindPinJoint_set_param #-}
 
 -- | Sets the value of the specified parameter.
@@ -66,3 +90,7 @@ set_param cls arg1 arg2
          godot_method_bind_call bindPinJoint_set_param (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PinJoint "set_param" '[Int, Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PinJoint.set_param

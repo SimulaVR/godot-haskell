@@ -22,9 +22,50 @@ module Godot.Core.AudioEffectReverb
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
+
+instance NodeProperty AudioEffectReverb "damping" Float 'False
+         where
+        nodeProperty
+          = (get_damping, wrapDroppingSetter set_damping, Nothing)
+
+instance NodeProperty AudioEffectReverb "dry" Float 'False where
+        nodeProperty = (get_dry, wrapDroppingSetter set_dry, Nothing)
+
+instance NodeProperty AudioEffectReverb "hipass" Float 'False where
+        nodeProperty = (get_hpf, wrapDroppingSetter set_hpf, Nothing)
+
+instance NodeProperty AudioEffectReverb "predelay_feedback" Float
+           'False
+         where
+        nodeProperty
+          = (get_predelay_feedback, wrapDroppingSetter set_predelay_feedback,
+             Nothing)
+
+instance NodeProperty AudioEffectReverb "predelay_msec" Float
+           'False
+         where
+        nodeProperty
+          = (get_predelay_msec, wrapDroppingSetter set_predelay_msec,
+             Nothing)
+
+instance NodeProperty AudioEffectReverb "room_size" Float 'False
+         where
+        nodeProperty
+          = (get_room_size, wrapDroppingSetter set_room_size, Nothing)
+
+instance NodeProperty AudioEffectReverb "spread" Float 'False where
+        nodeProperty = (get_spread, wrapDroppingSetter set_spread, Nothing)
+
+instance NodeProperty AudioEffectReverb "wet" Float 'False where
+        nodeProperty = (get_wet, wrapDroppingSetter set_wet, Nothing)
 
 {-# NOINLINE bindAudioEffectReverb_get_damping #-}
 
@@ -50,6 +91,10 @@ get_damping cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "get_damping" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_damping
+
 {-# NOINLINE bindAudioEffectReverb_get_dry #-}
 
 -- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1.
@@ -73,6 +118,10 @@ get_dry cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "get_dry" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_dry
+
 {-# NOINLINE bindAudioEffectReverb_get_hpf #-}
 
 -- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1.
@@ -95,6 +144,10 @@ get_hpf cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectReverb "get_hpf" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_hpf
 
 {-# NOINLINE bindAudioEffectReverb_get_predelay_feedback #-}
 
@@ -120,6 +173,11 @@ get_predelay_feedback cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "get_predelay_feedback" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_predelay_feedback
+
 {-# NOINLINE bindAudioEffectReverb_get_predelay_msec #-}
 
 -- | Time between the original signal and the early reflections of the reverb signal, in milliseconds.
@@ -143,6 +201,11 @@ get_predelay_msec cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectReverb "get_predelay_msec" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_predelay_msec
 
 {-# NOINLINE bindAudioEffectReverb_get_room_size #-}
 
@@ -168,6 +231,11 @@ get_room_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "get_room_size" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_room_size
+
 {-# NOINLINE bindAudioEffectReverb_get_spread #-}
 
 -- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1.
@@ -192,6 +260,10 @@ get_spread cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "get_spread" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_spread
+
 {-# NOINLINE bindAudioEffectReverb_get_wet #-}
 
 -- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1.
@@ -214,6 +286,10 @@ get_wet cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectReverb "get_wet" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.get_wet
 
 {-# NOINLINE bindAudioEffectReverb_set_damping #-}
 
@@ -239,6 +315,11 @@ set_damping cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "set_damping" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_damping
+
 {-# NOINLINE bindAudioEffectReverb_set_dry #-}
 
 -- | Output percent of original sound. At 0, only modified sound is outputted. Value can range from 0 to 1.
@@ -262,6 +343,10 @@ set_dry cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "set_dry" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_dry
+
 {-# NOINLINE bindAudioEffectReverb_set_hpf #-}
 
 -- | High-pass filter passes signals with a frequency higher than a certain cutoff frequency and attenuates signals with frequencies lower than the cutoff frequency. Value can range from 0 to 1.
@@ -284,6 +369,10 @@ set_hpf cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectReverb "set_hpf" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_hpf
 
 {-# NOINLINE bindAudioEffectReverb_set_predelay_feedback #-}
 
@@ -309,6 +398,12 @@ set_predelay_feedback cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "set_predelay_feedback"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_predelay_feedback
+
 {-# NOINLINE bindAudioEffectReverb_set_predelay_msec #-}
 
 -- | Time between the original signal and the early reflections of the reverb signal, in milliseconds.
@@ -332,6 +427,11 @@ set_predelay_msec cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectReverb "set_predelay_msec" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_predelay_msec
 
 {-# NOINLINE bindAudioEffectReverb_set_room_size #-}
 
@@ -357,6 +457,11 @@ set_room_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "set_room_size" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_room_size
+
 {-# NOINLINE bindAudioEffectReverb_set_spread #-}
 
 -- | Widens or narrows the stereo image of the reverb tail. 1 means fully widens. Value can range from 0 to 1.
@@ -381,6 +486,10 @@ set_spread cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectReverb "set_spread" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_spread
+
 {-# NOINLINE bindAudioEffectReverb_set_wet #-}
 
 -- | Output percent of modified sound. At 0, only original sound is outputted. Value can range from 0 to 1.
@@ -403,3 +512,7 @@ set_wet cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectReverb "set_wet" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectReverb.set_wet

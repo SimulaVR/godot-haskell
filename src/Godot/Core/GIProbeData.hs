@@ -27,9 +27,60 @@ module Godot.Core.GIProbeData
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty GIProbeData "bias" Float 'False where
+        nodeProperty = (get_bias, wrapDroppingSetter set_bias, Nothing)
+
+instance NodeProperty GIProbeData "bounds" Aabb 'False where
+        nodeProperty = (get_bounds, wrapDroppingSetter set_bounds, Nothing)
+
+instance NodeProperty GIProbeData "cell_size" Float 'False where
+        nodeProperty
+          = (get_cell_size, wrapDroppingSetter set_cell_size, Nothing)
+
+instance NodeProperty GIProbeData "compress" Bool 'False where
+        nodeProperty
+          = (is_compressed, wrapDroppingSetter set_compress, Nothing)
+
+instance NodeProperty GIProbeData "dynamic_data" PoolIntArray
+           'False
+         where
+        nodeProperty
+          = (get_dynamic_data, wrapDroppingSetter set_dynamic_data, Nothing)
+
+instance NodeProperty GIProbeData "dynamic_range" Int 'False where
+        nodeProperty
+          = (get_dynamic_range, wrapDroppingSetter set_dynamic_range,
+             Nothing)
+
+instance NodeProperty GIProbeData "energy" Float 'False where
+        nodeProperty = (get_energy, wrapDroppingSetter set_energy, Nothing)
+
+instance NodeProperty GIProbeData "interior" Bool 'False where
+        nodeProperty
+          = (is_interior, wrapDroppingSetter set_interior, Nothing)
+
+instance NodeProperty GIProbeData "normal_bias" Float 'False where
+        nodeProperty
+          = (get_normal_bias, wrapDroppingSetter set_normal_bias, Nothing)
+
+instance NodeProperty GIProbeData "propagation" Float 'False where
+        nodeProperty
+          = (get_propagation, wrapDroppingSetter set_propagation, Nothing)
+
+instance NodeProperty GIProbeData "to_cell_xform" Transform 'False
+         where
+        nodeProperty
+          = (get_to_cell_xform, wrapDroppingSetter set_to_cell_xform,
+             Nothing)
 
 {-# NOINLINE bindGIProbeData_get_bias #-}
 
@@ -49,6 +100,9 @@ get_bias cls
          godot_method_bind_call bindGIProbeData_get_bias (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "get_bias" '[] (IO Float) where
+        nodeMethod = Godot.Core.GIProbeData.get_bias
 
 {-# NOINLINE bindGIProbeData_get_bounds #-}
 
@@ -70,6 +124,9 @@ get_bounds cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "get_bounds" '[] (IO Aabb) where
+        nodeMethod = Godot.Core.GIProbeData.get_bounds
+
 {-# NOINLINE bindGIProbeData_get_cell_size #-}
 
 bindGIProbeData_get_cell_size :: MethodBind
@@ -90,6 +147,10 @@ get_cell_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "get_cell_size" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.GIProbeData.get_cell_size
 
 {-# NOINLINE bindGIProbeData_get_dynamic_data #-}
 
@@ -113,6 +174,11 @@ get_dynamic_data cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "get_dynamic_data" '[]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.GIProbeData.get_dynamic_data
+
 {-# NOINLINE bindGIProbeData_get_dynamic_range #-}
 
 bindGIProbeData_get_dynamic_range :: MethodBind
@@ -135,6 +201,10 @@ get_dynamic_range cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "get_dynamic_range" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.GIProbeData.get_dynamic_range
+
 {-# NOINLINE bindGIProbeData_get_energy #-}
 
 bindGIProbeData_get_energy :: MethodBind
@@ -155,6 +225,9 @@ get_energy cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "get_energy" '[] (IO Float) where
+        nodeMethod = Godot.Core.GIProbeData.get_energy
 
 {-# NOINLINE bindGIProbeData_get_normal_bias #-}
 
@@ -177,6 +250,10 @@ get_normal_bias cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "get_normal_bias" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.GIProbeData.get_normal_bias
+
 {-# NOINLINE bindGIProbeData_get_propagation #-}
 
 bindGIProbeData_get_propagation :: MethodBind
@@ -197,6 +274,10 @@ get_propagation cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "get_propagation" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.GIProbeData.get_propagation
 
 {-# NOINLINE bindGIProbeData_get_to_cell_xform #-}
 
@@ -220,6 +301,11 @@ get_to_cell_xform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "get_to_cell_xform" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.GIProbeData.get_to_cell_xform
+
 {-# NOINLINE bindGIProbeData_is_compressed #-}
 
 bindGIProbeData_is_compressed :: MethodBind
@@ -240,6 +326,9 @@ is_compressed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "is_compressed" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GIProbeData.is_compressed
 
 {-# NOINLINE bindGIProbeData_is_interior #-}
 
@@ -262,6 +351,9 @@ is_interior cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "is_interior" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GIProbeData.is_interior
+
 {-# NOINLINE bindGIProbeData_set_bias #-}
 
 bindGIProbeData_set_bias :: MethodBind
@@ -281,6 +373,9 @@ set_bias cls arg1
          godot_method_bind_call bindGIProbeData_set_bias (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "set_bias" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.GIProbeData.set_bias
 
 {-# NOINLINE bindGIProbeData_set_bounds #-}
 
@@ -303,6 +398,9 @@ set_bounds cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "set_bounds" '[Aabb] (IO ()) where
+        nodeMethod = Godot.Core.GIProbeData.set_bounds
+
 {-# NOINLINE bindGIProbeData_set_cell_size #-}
 
 bindGIProbeData_set_cell_size :: MethodBind
@@ -324,6 +422,10 @@ set_cell_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "set_cell_size" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_cell_size
+
 {-# NOINLINE bindGIProbeData_set_compress #-}
 
 bindGIProbeData_set_compress :: MethodBind
@@ -344,6 +446,10 @@ set_compress cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "set_compress" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_compress
 
 {-# NOINLINE bindGIProbeData_set_dynamic_data #-}
 
@@ -367,6 +473,11 @@ set_dynamic_data cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "set_dynamic_data" '[PoolIntArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_dynamic_data
+
 {-# NOINLINE bindGIProbeData_set_dynamic_range #-}
 
 bindGIProbeData_set_dynamic_range :: MethodBind
@@ -389,6 +500,10 @@ set_dynamic_range cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "set_dynamic_range" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_dynamic_range
+
 {-# NOINLINE bindGIProbeData_set_energy #-}
 
 bindGIProbeData_set_energy :: MethodBind
@@ -409,6 +524,9 @@ set_energy cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "set_energy" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.GIProbeData.set_energy
 
 {-# NOINLINE bindGIProbeData_set_interior #-}
 
@@ -431,6 +549,10 @@ set_interior cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "set_interior" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_interior
+
 {-# NOINLINE bindGIProbeData_set_normal_bias #-}
 
 bindGIProbeData_set_normal_bias :: MethodBind
@@ -451,6 +573,10 @@ set_normal_bias cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "set_normal_bias" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_normal_bias
 
 {-# NOINLINE bindGIProbeData_set_propagation #-}
 
@@ -473,6 +599,10 @@ set_propagation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GIProbeData "set_propagation" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_propagation
+
 {-# NOINLINE bindGIProbeData_set_to_cell_xform #-}
 
 bindGIProbeData_set_to_cell_xform :: MethodBind
@@ -494,3 +624,8 @@ set_to_cell_xform cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GIProbeData "set_to_cell_xform" '[Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GIProbeData.set_to_cell_xform

@@ -13,11 +13,16 @@ module Godot.Core.MeshInstance2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
 
--- | Emitted when the [member texture] is changed.
+-- | Emitted when the @texture@ is changed.
 sig_texture_changed ::
                     Godot.Internal.Dispatch.Signal MeshInstance2D
 sig_texture_changed
@@ -25,9 +30,21 @@ sig_texture_changed
 
 instance NodeSignal MeshInstance2D "texture_changed" '[]
 
+instance NodeProperty MeshInstance2D "mesh" Mesh 'False where
+        nodeProperty = (get_mesh, wrapDroppingSetter set_mesh, Nothing)
+
+instance NodeProperty MeshInstance2D "normal_map" Texture 'False
+         where
+        nodeProperty
+          = (get_normal_map, wrapDroppingSetter set_normal_map, Nothing)
+
+instance NodeProperty MeshInstance2D "texture" Texture 'False where
+        nodeProperty
+          = (get_texture, wrapDroppingSetter set_texture, Nothing)
+
 {-# NOINLINE bindMeshInstance2D_get_mesh #-}
 
--- | The [Mesh] that will be drawn by the [MeshInstance2D].
+-- | The @Mesh@ that will be drawn by the @MeshInstance2D@.
 bindMeshInstance2D_get_mesh :: MethodBind
 bindMeshInstance2D_get_mesh
   = unsafePerformIO $
@@ -37,7 +54,7 @@ bindMeshInstance2D_get_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Mesh] that will be drawn by the [MeshInstance2D].
+-- | The @Mesh@ that will be drawn by the @MeshInstance2D@.
 get_mesh ::
            (MeshInstance2D :< cls, Object :< cls) => cls -> IO Mesh
 get_mesh cls
@@ -48,10 +65,13 @@ get_mesh cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshInstance2D "get_mesh" '[] (IO Mesh) where
+        nodeMethod = Godot.Core.MeshInstance2D.get_mesh
+
 {-# NOINLINE bindMeshInstance2D_get_normal_map #-}
 
--- | The normal map that will be used if using the default [CanvasItemMaterial].
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+-- | The normal map that will be used if using the default @CanvasItemMaterial@.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindMeshInstance2D_get_normal_map :: MethodBind
 bindMeshInstance2D_get_normal_map
   = unsafePerformIO $
@@ -61,8 +81,8 @@ bindMeshInstance2D_get_normal_map
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The normal map that will be used if using the default [CanvasItemMaterial].
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+-- | The normal map that will be used if using the default @CanvasItemMaterial@.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (MeshInstance2D :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -74,9 +94,14 @@ get_normal_map cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshInstance2D "get_normal_map" '[]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.MeshInstance2D.get_normal_map
+
 {-# NOINLINE bindMeshInstance2D_get_texture #-}
 
--- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
+-- | The @Texture@ that will be used if using the default @CanvasItemMaterial@. Can be accessed as @TEXTURE@ in CanvasItem shader.
 bindMeshInstance2D_get_texture :: MethodBind
 bindMeshInstance2D_get_texture
   = unsafePerformIO $
@@ -86,7 +111,7 @@ bindMeshInstance2D_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
+-- | The @Texture@ that will be used if using the default @CanvasItemMaterial@. Can be accessed as @TEXTURE@ in CanvasItem shader.
 get_texture ::
               (MeshInstance2D :< cls, Object :< cls) => cls -> IO Texture
 get_texture cls
@@ -97,9 +122,13 @@ get_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshInstance2D "get_texture" '[] (IO Texture)
+         where
+        nodeMethod = Godot.Core.MeshInstance2D.get_texture
+
 {-# NOINLINE bindMeshInstance2D_set_mesh #-}
 
--- | The [Mesh] that will be drawn by the [MeshInstance2D].
+-- | The @Mesh@ that will be drawn by the @MeshInstance2D@.
 bindMeshInstance2D_set_mesh :: MethodBind
 bindMeshInstance2D_set_mesh
   = unsafePerformIO $
@@ -109,7 +138,7 @@ bindMeshInstance2D_set_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Mesh] that will be drawn by the [MeshInstance2D].
+-- | The @Mesh@ that will be drawn by the @MeshInstance2D@.
 set_mesh ::
            (MeshInstance2D :< cls, Object :< cls) => cls -> Mesh -> IO ()
 set_mesh cls arg1
@@ -120,10 +149,13 @@ set_mesh cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshInstance2D "set_mesh" '[Mesh] (IO ()) where
+        nodeMethod = Godot.Core.MeshInstance2D.set_mesh
+
 {-# NOINLINE bindMeshInstance2D_set_normal_map #-}
 
--- | The normal map that will be used if using the default [CanvasItemMaterial].
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+-- | The normal map that will be used if using the default @CanvasItemMaterial@.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindMeshInstance2D_set_normal_map :: MethodBind
 bindMeshInstance2D_set_normal_map
   = unsafePerformIO $
@@ -133,8 +165,8 @@ bindMeshInstance2D_set_normal_map
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The normal map that will be used if using the default [CanvasItemMaterial].
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+-- | The normal map that will be used if using the default @CanvasItemMaterial@.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (MeshInstance2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1
@@ -146,9 +178,14 @@ set_normal_map cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshInstance2D "set_normal_map" '[Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshInstance2D.set_normal_map
+
 {-# NOINLINE bindMeshInstance2D_set_texture #-}
 
--- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
+-- | The @Texture@ that will be used if using the default @CanvasItemMaterial@. Can be accessed as @TEXTURE@ in CanvasItem shader.
 bindMeshInstance2D_set_texture :: MethodBind
 bindMeshInstance2D_set_texture
   = unsafePerformIO $
@@ -158,7 +195,7 @@ bindMeshInstance2D_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The [Texture] that will be used if using the default [CanvasItemMaterial]. Can be accessed as [code]TEXTURE[/code] in CanvasItem shader.
+-- | The @Texture@ that will be used if using the default @CanvasItemMaterial@. Can be accessed as @TEXTURE@ in CanvasItem shader.
 set_texture ::
               (MeshInstance2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_texture cls arg1
@@ -168,3 +205,7 @@ set_texture cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshInstance2D "set_texture" '[Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.MeshInstance2D.set_texture

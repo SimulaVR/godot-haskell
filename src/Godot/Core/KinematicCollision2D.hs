@@ -17,9 +17,67 @@ module Godot.Core.KinematicCollision2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
+
+instance NodeProperty KinematicCollision2D "collider" Object 'True
+         where
+        nodeProperty = (get_collider, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "collider_id" Int 'True
+         where
+        nodeProperty = (get_collider_id, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "collider_metadata"
+           GodotVariant
+           'True
+         where
+        nodeProperty = (get_collider_metadata, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "collider_shape" Object
+           'True
+         where
+        nodeProperty = (get_collider_shape, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "collider_shape_index"
+           Int
+           'True
+         where
+        nodeProperty = (get_collider_shape_index, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "collider_velocity"
+           Vector2
+           'True
+         where
+        nodeProperty = (get_collider_velocity, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "local_shape" Object
+           'True
+         where
+        nodeProperty = (get_local_shape, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "normal" Vector2 'True
+         where
+        nodeProperty = (get_normal, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "position" Vector2 'True
+         where
+        nodeProperty = (get_position, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "remainder" Vector2
+           'True
+         where
+        nodeProperty = (get_remainder, (), Nothing)
+
+instance NodeProperty KinematicCollision2D "travel" Vector2 'True
+         where
+        nodeProperty = (get_travel, (), Nothing)
 
 {-# NOINLINE bindKinematicCollision2D_get_collider #-}
 
@@ -45,9 +103,14 @@ get_collider cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod KinematicCollision2D "get_collider" '[]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_collider
+
 {-# NOINLINE bindKinematicCollision2D_get_collider_id #-}
 
--- | The colliding body's unique instance ID. See [method Object.get_instance_id].
+-- | The colliding body's unique instance ID. See @method Object.get_instance_id@.
 bindKinematicCollision2D_get_collider_id :: MethodBind
 bindKinematicCollision2D_get_collider_id
   = unsafePerformIO $
@@ -57,7 +120,7 @@ bindKinematicCollision2D_get_collider_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The colliding body's unique instance ID. See [method Object.get_instance_id].
+-- | The colliding body's unique instance ID. See @method Object.get_instance_id@.
 get_collider_id ::
                   (KinematicCollision2D :< cls, Object :< cls) => cls -> IO Int
 get_collider_id cls
@@ -69,9 +132,14 @@ get_collider_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod KinematicCollision2D "get_collider_id" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_collider_id
+
 {-# NOINLINE bindKinematicCollision2D_get_collider_metadata #-}
 
--- | The colliding body's metadata. See [Object].
+-- | The colliding body's metadata. See @Object@.
 bindKinematicCollision2D_get_collider_metadata :: MethodBind
 bindKinematicCollision2D_get_collider_metadata
   = unsafePerformIO $
@@ -81,7 +149,7 @@ bindKinematicCollision2D_get_collider_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The colliding body's metadata. See [Object].
+-- | The colliding body's metadata. See @Object@.
 get_collider_metadata ::
                         (KinematicCollision2D :< cls, Object :< cls) =>
                         cls -> IO GodotVariant
@@ -94,6 +162,12 @@ get_collider_metadata cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod KinematicCollision2D "get_collider_metadata"
+           '[]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_collider_metadata
 
 {-# NOINLINE bindKinematicCollision2D_get_collider_shape #-}
 
@@ -119,9 +193,14 @@ get_collider_shape cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod KinematicCollision2D "get_collider_shape" '[]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_collider_shape
+
 {-# NOINLINE bindKinematicCollision2D_get_collider_shape_index #-}
 
--- | The colliding shape's index. See [CollisionObject2D].
+-- | The colliding shape's index. See @CollisionObject2D@.
 bindKinematicCollision2D_get_collider_shape_index :: MethodBind
 bindKinematicCollision2D_get_collider_shape_index
   = unsafePerformIO $
@@ -131,7 +210,7 @@ bindKinematicCollision2D_get_collider_shape_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The colliding shape's index. See [CollisionObject2D].
+-- | The colliding shape's index. See @CollisionObject2D@.
 get_collider_shape_index ::
                            (KinematicCollision2D :< cls, Object :< cls) => cls -> IO Int
 get_collider_shape_index cls
@@ -143,6 +222,13 @@ get_collider_shape_index cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod KinematicCollision2D "get_collider_shape_index"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.KinematicCollision2D.get_collider_shape_index
 
 {-# NOINLINE bindKinematicCollision2D_get_collider_velocity #-}
 
@@ -169,6 +255,12 @@ get_collider_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod KinematicCollision2D "get_collider_velocity"
+           '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_collider_velocity
+
 {-# NOINLINE bindKinematicCollision2D_get_local_shape #-}
 
 -- | The moving object's colliding shape.
@@ -192,6 +284,11 @@ get_local_shape cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod KinematicCollision2D "get_local_shape" '[]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_local_shape
 
 {-# NOINLINE bindKinematicCollision2D_get_normal #-}
 
@@ -217,6 +314,11 @@ get_normal cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod KinematicCollision2D "get_normal" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_normal
+
 {-# NOINLINE bindKinematicCollision2D_get_position #-}
 
 -- | The point of collision, in global coordinates.
@@ -240,6 +342,11 @@ get_position cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod KinematicCollision2D "get_position" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_position
 
 {-# NOINLINE bindKinematicCollision2D_get_remainder #-}
 
@@ -265,6 +372,11 @@ get_remainder cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod KinematicCollision2D "get_remainder" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_remainder
+
 {-# NOINLINE bindKinematicCollision2D_get_travel #-}
 
 -- | The distance the moving object traveled before collision.
@@ -288,3 +400,8 @@ get_travel cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod KinematicCollision2D "get_travel" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.KinematicCollision2D.get_travel

@@ -14,9 +14,32 @@ module Godot.Core.CubeMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PrimitiveMesh()
+
+instance NodeProperty CubeMesh "size" Vector3 'False where
+        nodeProperty = (get_size, wrapDroppingSetter set_size, Nothing)
+
+instance NodeProperty CubeMesh "subdivide_depth" Int 'False where
+        nodeProperty
+          = (get_subdivide_depth, wrapDroppingSetter set_subdivide_depth,
+             Nothing)
+
+instance NodeProperty CubeMesh "subdivide_height" Int 'False where
+        nodeProperty
+          = (get_subdivide_height, wrapDroppingSetter set_subdivide_height,
+             Nothing)
+
+instance NodeProperty CubeMesh "subdivide_width" Int 'False where
+        nodeProperty
+          = (get_subdivide_width, wrapDroppingSetter set_subdivide_width,
+             Nothing)
 
 {-# NOINLINE bindCubeMesh_get_size #-}
 
@@ -38,6 +61,9 @@ get_size cls
          godot_method_bind_call bindCubeMesh_get_size (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CubeMesh "get_size" '[] (IO Vector3) where
+        nodeMethod = Godot.Core.CubeMesh.get_size
 
 {-# NOINLINE bindCubeMesh_get_subdivide_depth #-}
 
@@ -63,6 +89,10 @@ get_subdivide_depth cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CubeMesh "get_subdivide_depth" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CubeMesh.get_subdivide_depth
+
 {-# NOINLINE bindCubeMesh_get_subdivide_height #-}
 
 -- | Number of extra edge loops inserted along the Y axis.
@@ -86,6 +116,10 @@ get_subdivide_height cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CubeMesh "get_subdivide_height" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CubeMesh.get_subdivide_height
 
 {-# NOINLINE bindCubeMesh_get_subdivide_width #-}
 
@@ -111,6 +145,10 @@ get_subdivide_width cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CubeMesh "get_subdivide_width" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CubeMesh.get_subdivide_width
+
 {-# NOINLINE bindCubeMesh_set_size #-}
 
 -- | Size of the cuboid mesh.
@@ -132,6 +170,9 @@ set_size cls arg1
          godot_method_bind_call bindCubeMesh_set_size (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CubeMesh "set_size" '[Vector3] (IO ()) where
+        nodeMethod = Godot.Core.CubeMesh.set_size
 
 {-# NOINLINE bindCubeMesh_set_subdivide_depth #-}
 
@@ -157,6 +198,10 @@ set_subdivide_depth cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CubeMesh "set_subdivide_depth" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CubeMesh.set_subdivide_depth
+
 {-# NOINLINE bindCubeMesh_set_subdivide_height #-}
 
 -- | Number of extra edge loops inserted along the Y axis.
@@ -181,6 +226,10 @@ set_subdivide_height cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CubeMesh "set_subdivide_height" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CubeMesh.set_subdivide_height
+
 {-# NOINLINE bindCubeMesh_set_subdivide_width #-}
 
 -- | Number of extra edge loops inserted along the X axis.
@@ -204,3 +253,7 @@ set_subdivide_width cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CubeMesh "set_subdivide_width" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CubeMesh.set_subdivide_width

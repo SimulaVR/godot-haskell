@@ -8,9 +8,19 @@ module Godot.Core.RectangleShape2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape2D()
+
+instance NodeProperty RectangleShape2D "extents" Vector2 'False
+         where
+        nodeProperty
+          = (get_extents, wrapDroppingSetter set_extents, Nothing)
 
 {-# NOINLINE bindRectangleShape2D_get_extents #-}
 
@@ -36,6 +46,10 @@ get_extents cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RectangleShape2D "get_extents" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.RectangleShape2D.get_extents
+
 {-# NOINLINE bindRectangleShape2D_set_extents #-}
 
 -- | The rectangle's half extents. The width and height of this shape is twice the half extents.
@@ -59,3 +73,8 @@ set_extents cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RectangleShape2D "set_extents" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.RectangleShape2D.set_extents

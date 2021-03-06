@@ -16,9 +16,14 @@ module Godot.Core.RootMotionView
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualInstance()
 
 {-# NOINLINE bindRootMotionView_get_animation_path #-}
 
@@ -42,6 +47,11 @@ get_animation_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RootMotionView "get_animation_path" '[]
+           (IO NodePath)
+         where
+        nodeMethod = Godot.Core.RootMotionView.get_animation_path
+
 {-# NOINLINE bindRootMotionView_set_animation_path #-}
 
 bindRootMotionView_set_animation_path :: MethodBind
@@ -63,6 +73,18 @@ set_animation_path cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RootMotionView "set_animation_path" '[NodePath]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.RootMotionView.set_animation_path
+
+instance NodeProperty RootMotionView "animation_path" NodePath
+           'False
+         where
+        nodeProperty
+          = (get_animation_path, wrapDroppingSetter set_animation_path,
+             Nothing)
 
 {-# NOINLINE bindRootMotionView_get_cell_size #-}
 
@@ -86,6 +108,10 @@ get_cell_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RootMotionView "get_cell_size" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.RootMotionView.get_cell_size
+
 {-# NOINLINE bindRootMotionView_set_cell_size #-}
 
 bindRootMotionView_set_cell_size :: MethodBind
@@ -108,6 +134,14 @@ set_cell_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RootMotionView "set_cell_size" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.RootMotionView.set_cell_size
+
+instance NodeProperty RootMotionView "cell_size" Float 'False where
+        nodeProperty
+          = (get_cell_size, wrapDroppingSetter set_cell_size, Nothing)
+
 {-# NOINLINE bindRootMotionView_get_color #-}
 
 bindRootMotionView_get_color :: MethodBind
@@ -128,6 +162,9 @@ get_color cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RootMotionView "get_color" '[] (IO Color) where
+        nodeMethod = Godot.Core.RootMotionView.get_color
 
 {-# NOINLINE bindRootMotionView_set_color #-}
 
@@ -150,6 +187,13 @@ set_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RootMotionView "set_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.RootMotionView.set_color
+
+instance NodeProperty RootMotionView "color" Color 'False where
+        nodeProperty = (get_color, wrapDroppingSetter set_color, Nothing)
+
 {-# NOINLINE bindRootMotionView_get_radius #-}
 
 bindRootMotionView_get_radius :: MethodBind
@@ -170,6 +214,10 @@ get_radius cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RootMotionView "get_radius" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.RootMotionView.get_radius
 
 {-# NOINLINE bindRootMotionView_set_radius #-}
 
@@ -192,6 +240,13 @@ set_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RootMotionView "set_radius" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.RootMotionView.set_radius
+
+instance NodeProperty RootMotionView "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
+
 {-# NOINLINE bindRootMotionView_get_zero_y #-}
 
 bindRootMotionView_get_zero_y :: MethodBind
@@ -213,6 +268,9 @@ get_zero_y cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod RootMotionView "get_zero_y" '[] (IO Bool) where
+        nodeMethod = Godot.Core.RootMotionView.get_zero_y
+
 {-# NOINLINE bindRootMotionView_set_zero_y #-}
 
 bindRootMotionView_set_zero_y :: MethodBind
@@ -233,3 +291,10 @@ set_zero_y cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod RootMotionView "set_zero_y" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.RootMotionView.set_zero_y
+
+instance NodeProperty RootMotionView "zero_y" Bool 'False where
+        nodeProperty = (get_zero_y, wrapDroppingSetter set_zero_y, Nothing)

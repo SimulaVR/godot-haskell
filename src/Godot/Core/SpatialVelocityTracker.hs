@@ -11,9 +11,22 @@ module Godot.Core.SpatialVelocityTracker
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
+
+instance NodeProperty SpatialVelocityTracker "track_physics_step"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (is_tracking_physics_step,
+             wrapDroppingSetter set_track_physics_step, Nothing)
 
 {-# NOINLINE bindSpatialVelocityTracker_get_tracked_linear_velocity
              #-}
@@ -40,6 +53,14 @@ get_tracked_linear_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpatialVelocityTracker
+           "get_tracked_linear_velocity"
+           '[]
+           (IO Vector3)
+         where
+        nodeMethod
+          = Godot.Core.SpatialVelocityTracker.get_tracked_linear_velocity
+
 {-# NOINLINE bindSpatialVelocityTracker_is_tracking_physics_step
              #-}
 
@@ -64,6 +85,14 @@ is_tracking_physics_step cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpatialVelocityTracker
+           "is_tracking_physics_step"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.SpatialVelocityTracker.is_tracking_physics_step
+
 {-# NOINLINE bindSpatialVelocityTracker_reset #-}
 
 bindSpatialVelocityTracker_reset :: MethodBind
@@ -86,6 +115,11 @@ reset cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpatialVelocityTracker "reset" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpatialVelocityTracker.reset
 
 {-# NOINLINE bindSpatialVelocityTracker_set_track_physics_step #-}
 
@@ -111,6 +145,13 @@ set_track_physics_step cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SpatialVelocityTracker "set_track_physics_step"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.SpatialVelocityTracker.set_track_physics_step
+
 {-# NOINLINE bindSpatialVelocityTracker_update_position #-}
 
 bindSpatialVelocityTracker_update_position :: MethodBind
@@ -133,3 +174,9 @@ update_position cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SpatialVelocityTracker "update_position"
+           '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.SpatialVelocityTracker.update_position

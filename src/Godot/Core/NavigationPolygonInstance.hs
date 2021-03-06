@@ -11,9 +11,28 @@ module Godot.Core.NavigationPolygonInstance
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
+
+instance NodeProperty NavigationPolygonInstance "enabled" Bool
+           'False
+         where
+        nodeProperty
+          = (is_enabled, wrapDroppingSetter set_enabled, Nothing)
+
+instance NodeProperty NavigationPolygonInstance "navpoly"
+           NavigationPolygon
+           'False
+         where
+        nodeProperty
+          = (get_navigation_polygon,
+             wrapDroppingSetter set_navigation_polygon, Nothing)
 
 {-# NOINLINE bindNavigationPolygonInstance__navpoly_changed #-}
 
@@ -37,6 +56,12 @@ _navpoly_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygonInstance "_navpoly_changed"
+           '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygonInstance._navpoly_changed
 
 {-# NOINLINE bindNavigationPolygonInstance_get_navigation_polygon
              #-}
@@ -63,6 +88,14 @@ get_navigation_polygon cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygonInstance
+           "get_navigation_polygon"
+           '[]
+           (IO NavigationPolygon)
+         where
+        nodeMethod
+          = Godot.Core.NavigationPolygonInstance.get_navigation_polygon
+
 {-# NOINLINE bindNavigationPolygonInstance_is_enabled #-}
 
 bindNavigationPolygonInstance_is_enabled :: MethodBind
@@ -84,6 +117,11 @@ is_enabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygonInstance "is_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.NavigationPolygonInstance.is_enabled
 
 {-# NOINLINE bindNavigationPolygonInstance_set_enabled #-}
 
@@ -107,6 +145,11 @@ set_enabled cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygonInstance "set_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygonInstance.set_enabled
 
 {-# NOINLINE bindNavigationPolygonInstance_set_navigation_polygon
              #-}
@@ -132,3 +175,11 @@ set_navigation_polygon cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygonInstance
+           "set_navigation_polygon"
+           '[NavigationPolygon]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NavigationPolygonInstance.set_navigation_polygon

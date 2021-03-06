@@ -14,9 +14,20 @@ module Godot.Core.StreamPeerBuffer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.StreamPeer()
+
+instance NodeProperty StreamPeerBuffer "data_array" PoolByteArray
+           'False
+         where
+        nodeProperty
+          = (get_data_array, wrapDroppingSetter set_data_array, Nothing)
 
 {-# NOINLINE bindStreamPeerBuffer_clear #-}
 
@@ -37,6 +48,9 @@ clear cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StreamPeerBuffer "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.StreamPeerBuffer.clear
 
 {-# NOINLINE bindStreamPeerBuffer_duplicate #-}
 
@@ -60,6 +74,11 @@ duplicate cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StreamPeerBuffer "duplicate" '[]
+           (IO StreamPeerBuffer)
+         where
+        nodeMethod = Godot.Core.StreamPeerBuffer.duplicate
+
 {-# NOINLINE bindStreamPeerBuffer_get_data_array #-}
 
 bindStreamPeerBuffer_get_data_array :: MethodBind
@@ -81,6 +100,11 @@ get_data_array cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StreamPeerBuffer "get_data_array" '[]
+           (IO PoolByteArray)
+         where
+        nodeMethod = Godot.Core.StreamPeerBuffer.get_data_array
 
 {-# NOINLINE bindStreamPeerBuffer_get_position #-}
 
@@ -104,6 +128,10 @@ get_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StreamPeerBuffer "get_position" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.StreamPeerBuffer.get_position
+
 {-# NOINLINE bindStreamPeerBuffer_get_size #-}
 
 bindStreamPeerBuffer_get_size :: MethodBind
@@ -124,6 +152,9 @@ get_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StreamPeerBuffer "get_size" '[] (IO Int) where
+        nodeMethod = Godot.Core.StreamPeerBuffer.get_size
 
 {-# NOINLINE bindStreamPeerBuffer_resize #-}
 
@@ -146,6 +177,9 @@ resize cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StreamPeerBuffer "resize" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.StreamPeerBuffer.resize
+
 {-# NOINLINE bindStreamPeerBuffer_seek #-}
 
 bindStreamPeerBuffer_seek :: MethodBind
@@ -166,6 +200,9 @@ seek cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StreamPeerBuffer "seek" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.StreamPeerBuffer.seek
 
 {-# NOINLINE bindStreamPeerBuffer_set_data_array #-}
 
@@ -189,3 +226,9 @@ set_data_array cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StreamPeerBuffer "set_data_array"
+           '[PoolByteArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StreamPeerBuffer.set_data_array

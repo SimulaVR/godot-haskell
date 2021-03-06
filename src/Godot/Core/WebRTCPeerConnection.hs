@@ -24,9 +24,14 @@ module Godot.Core.WebRTCPeerConnection
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 _STATE_CONNECTED :: Int
 _STATE_CONNECTED = 2
@@ -94,6 +99,12 @@ add_ice_candidate cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCPeerConnection "add_ice_candidate"
+           '[GodotString, Int, GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.add_ice_candidate
+
 {-# NOINLINE bindWebRTCPeerConnection_close #-}
 
 bindWebRTCPeerConnection_close :: MethodBind
@@ -115,6 +126,9 @@ close cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCPeerConnection "close" '[] (IO ()) where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.close
+
 {-# NOINLINE bindWebRTCPeerConnection_create_data_channel #-}
 
 bindWebRTCPeerConnection_create_data_channel :: MethodBind
@@ -128,15 +142,22 @@ bindWebRTCPeerConnection_create_data_channel
 
 create_data_channel ::
                       (WebRTCPeerConnection :< cls, Object :< cls) =>
-                      cls -> GodotString -> Dictionary -> IO WebRTCDataChannel
+                      cls -> GodotString -> Maybe Dictionary -> IO WebRTCDataChannel
 create_data_channel cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, defaultedVariant VariantDictionary V.empty arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindWebRTCPeerConnection_create_data_channel
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCPeerConnection "create_data_channel"
+           '[GodotString, Maybe Dictionary]
+           (IO WebRTCDataChannel)
+         where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.create_data_channel
 
 {-# NOINLINE bindWebRTCPeerConnection_create_offer #-}
 
@@ -159,6 +180,11 @@ create_offer cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCPeerConnection "create_offer" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.create_offer
 
 {-# NOINLINE bindWebRTCPeerConnection_get_connection_state #-}
 
@@ -183,6 +209,11 @@ get_connection_state cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCPeerConnection "get_connection_state" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.get_connection_state
+
 {-# NOINLINE bindWebRTCPeerConnection_initialize #-}
 
 bindWebRTCPeerConnection_initialize :: MethodBind
@@ -196,15 +227,22 @@ bindWebRTCPeerConnection_initialize
 
 initialize ::
              (WebRTCPeerConnection :< cls, Object :< cls) =>
-             cls -> Dictionary -> IO Int
+             cls -> Maybe Dictionary -> IO Int
 initialize cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray
+      [defaultedVariant VariantDictionary V.empty arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindWebRTCPeerConnection_initialize
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCPeerConnection "initialize"
+           '[Maybe Dictionary]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.initialize
 
 {-# NOINLINE bindWebRTCPeerConnection_poll #-}
 
@@ -226,6 +264,9 @@ poll cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCPeerConnection "poll" '[] (IO Int) where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.poll
 
 {-# NOINLINE bindWebRTCPeerConnection_set_local_description #-}
 
@@ -251,6 +292,12 @@ set_local_description cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCPeerConnection "set_local_description"
+           '[GodotString, GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.set_local_description
+
 {-# NOINLINE bindWebRTCPeerConnection_set_remote_description #-}
 
 bindWebRTCPeerConnection_set_remote_description :: MethodBind
@@ -274,3 +321,9 @@ set_remote_description cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCPeerConnection "set_remote_description"
+           '[GodotString, GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCPeerConnection.set_remote_description

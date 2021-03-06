@@ -22,9 +22,49 @@ module Godot.Core.InputEventMIDI
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEvent()
+
+instance NodeProperty InputEventMIDI "channel" Int 'False where
+        nodeProperty
+          = (get_channel, wrapDroppingSetter set_channel, Nothing)
+
+instance NodeProperty InputEventMIDI "controller_number" Int 'False
+         where
+        nodeProperty
+          = (get_controller_number, wrapDroppingSetter set_controller_number,
+             Nothing)
+
+instance NodeProperty InputEventMIDI "controller_value" Int 'False
+         where
+        nodeProperty
+          = (get_controller_value, wrapDroppingSetter set_controller_value,
+             Nothing)
+
+instance NodeProperty InputEventMIDI "instrument" Int 'False where
+        nodeProperty
+          = (get_instrument, wrapDroppingSetter set_instrument, Nothing)
+
+instance NodeProperty InputEventMIDI "message" Int 'False where
+        nodeProperty
+          = (get_message, wrapDroppingSetter set_message, Nothing)
+
+instance NodeProperty InputEventMIDI "pitch" Int 'False where
+        nodeProperty = (get_pitch, wrapDroppingSetter set_pitch, Nothing)
+
+instance NodeProperty InputEventMIDI "pressure" Int 'False where
+        nodeProperty
+          = (get_pressure, wrapDroppingSetter set_pressure, Nothing)
+
+instance NodeProperty InputEventMIDI "velocity" Int 'False where
+        nodeProperty
+          = (get_velocity, wrapDroppingSetter set_velocity, Nothing)
 
 {-# NOINLINE bindInputEventMIDI_get_channel #-}
 
@@ -46,6 +86,9 @@ get_channel cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "get_channel" '[] (IO Int) where
+        nodeMethod = Godot.Core.InputEventMIDI.get_channel
 
 {-# NOINLINE bindInputEventMIDI_get_controller_number #-}
 
@@ -69,6 +112,11 @@ get_controller_number cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "get_controller_number" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.get_controller_number
+
 {-# NOINLINE bindInputEventMIDI_get_controller_value #-}
 
 bindInputEventMIDI_get_controller_value :: MethodBind
@@ -90,6 +138,11 @@ get_controller_value cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "get_controller_value" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.get_controller_value
 
 {-# NOINLINE bindInputEventMIDI_get_instrument #-}
 
@@ -113,6 +166,10 @@ get_instrument cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "get_instrument" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.get_instrument
+
 {-# NOINLINE bindInputEventMIDI_get_message #-}
 
 bindInputEventMIDI_get_message :: MethodBind
@@ -133,6 +190,9 @@ get_message cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "get_message" '[] (IO Int) where
+        nodeMethod = Godot.Core.InputEventMIDI.get_message
 
 {-# NOINLINE bindInputEventMIDI_get_pitch #-}
 
@@ -155,6 +215,9 @@ get_pitch cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "get_pitch" '[] (IO Int) where
+        nodeMethod = Godot.Core.InputEventMIDI.get_pitch
+
 {-# NOINLINE bindInputEventMIDI_get_pressure #-}
 
 bindInputEventMIDI_get_pressure :: MethodBind
@@ -175,6 +238,10 @@ get_pressure cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "get_pressure" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.get_pressure
 
 {-# NOINLINE bindInputEventMIDI_get_velocity #-}
 
@@ -197,6 +264,10 @@ get_velocity cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "get_velocity" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.get_velocity
+
 {-# NOINLINE bindInputEventMIDI_set_channel #-}
 
 bindInputEventMIDI_set_channel :: MethodBind
@@ -217,6 +288,10 @@ set_channel cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "set_channel" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.set_channel
 
 {-# NOINLINE bindInputEventMIDI_set_controller_number #-}
 
@@ -240,6 +315,11 @@ set_controller_number cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "set_controller_number" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.set_controller_number
+
 {-# NOINLINE bindInputEventMIDI_set_controller_value #-}
 
 bindInputEventMIDI_set_controller_value :: MethodBind
@@ -261,6 +341,11 @@ set_controller_value cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "set_controller_value" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.set_controller_value
 
 {-# NOINLINE bindInputEventMIDI_set_instrument #-}
 
@@ -284,6 +369,10 @@ set_instrument cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "set_instrument" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.set_instrument
+
 {-# NOINLINE bindInputEventMIDI_set_message #-}
 
 bindInputEventMIDI_set_message :: MethodBind
@@ -304,6 +393,10 @@ set_message cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "set_message" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.set_message
 
 {-# NOINLINE bindInputEventMIDI_set_pitch #-}
 
@@ -326,6 +419,9 @@ set_pitch cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "set_pitch" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.InputEventMIDI.set_pitch
+
 {-# NOINLINE bindInputEventMIDI_set_pressure #-}
 
 bindInputEventMIDI_set_pressure :: MethodBind
@@ -347,6 +443,10 @@ set_pressure cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMIDI "set_pressure" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.set_pressure
+
 {-# NOINLINE bindInputEventMIDI_set_velocity #-}
 
 bindInputEventMIDI_set_velocity :: MethodBind
@@ -367,3 +467,7 @@ set_velocity cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMIDI "set_velocity" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMIDI.set_velocity

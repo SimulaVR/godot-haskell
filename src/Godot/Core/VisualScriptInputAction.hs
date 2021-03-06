@@ -14,9 +14,14 @@ module Godot.Core.VisualScriptInputAction
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _MODE_PRESSED :: Int
 _MODE_PRESSED = 0
@@ -29,6 +34,17 @@ _MODE_JUST_RELEASED = 3
 
 _MODE_RELEASED :: Int
 _MODE_RELEASED = 1
+
+instance NodeProperty VisualScriptInputAction "action" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_action_name, wrapDroppingSetter set_action_name, Nothing)
+
+instance NodeProperty VisualScriptInputAction "mode" Int 'False
+         where
+        nodeProperty
+          = (get_action_mode, wrapDroppingSetter set_action_mode, Nothing)
 
 {-# NOINLINE bindVisualScriptInputAction_get_action_mode #-}
 
@@ -51,6 +67,11 @@ get_action_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptInputAction "get_action_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptInputAction.get_action_mode
 
 {-# NOINLINE bindVisualScriptInputAction_get_action_name #-}
 
@@ -75,6 +96,11 @@ get_action_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptInputAction "get_action_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptInputAction.get_action_name
+
 {-# NOINLINE bindVisualScriptInputAction_set_action_mode #-}
 
 bindVisualScriptInputAction_set_action_mode :: MethodBind
@@ -98,6 +124,12 @@ set_action_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptInputAction "set_action_mode"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptInputAction.set_action_mode
+
 {-# NOINLINE bindVisualScriptInputAction_set_action_name #-}
 
 bindVisualScriptInputAction_set_action_name :: MethodBind
@@ -120,3 +152,9 @@ set_action_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptInputAction "set_action_name"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptInputAction.set_action_name

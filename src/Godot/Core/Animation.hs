@@ -80,9 +80,14 @@ module Godot.Core.Animation
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _TYPE_BEZIER :: Int
 _TYPE_BEZIER = 3
@@ -130,6 +135,15 @@ sig_tracks_changed
 
 instance NodeSignal Animation "tracks_changed" '[]
 
+instance NodeProperty Animation "length" Float 'False where
+        nodeProperty = (get_length, wrapDroppingSetter set_length, Nothing)
+
+instance NodeProperty Animation "loop" Bool 'False where
+        nodeProperty = (has_loop, wrapDroppingSetter set_loop, Nothing)
+
+instance NodeProperty Animation "step" Float 'False where
+        nodeProperty = (get_step, wrapDroppingSetter set_step, Nothing)
+
 {-# NOINLINE bindAnimation_add_track #-}
 
 -- | Adds a track to the Animation.
@@ -144,17 +158,24 @@ bindAnimation_add_track
 
 -- | Adds a track to the Animation.
 add_track ::
-            (Animation :< cls, Object :< cls) => cls -> Int -> Int -> IO Int
+            (Animation :< cls, Object :< cls) =>
+            cls -> Int -> Maybe Int -> IO Int
 add_track cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (-1)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimation_add_track (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "add_track" '[Int, Maybe Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.add_track
+
 {-# NOINLINE bindAnimation_animation_track_get_key_animation #-}
 
--- | Returns the animation name at the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Animation Track.
+-- | Returns the animation name at the key identified by @key_idx@. The @track_idx@ must be the index of an Animation Track.
 bindAnimation_animation_track_get_key_animation :: MethodBind
 bindAnimation_animation_track_get_key_animation
   = unsafePerformIO $
@@ -164,7 +185,7 @@ bindAnimation_animation_track_get_key_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the animation name at the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Animation Track.
+-- | Returns the animation name at the key identified by @key_idx@. The @track_idx@ must be the index of an Animation Track.
 animation_track_get_key_animation ::
                                     (Animation :< cls, Object :< cls) =>
                                     cls -> Int -> Int -> IO GodotString
@@ -178,9 +199,15 @@ animation_track_get_key_animation cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "animation_track_get_key_animation"
+           '[Int, Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.Animation.animation_track_get_key_animation
+
 {-# NOINLINE bindAnimation_animation_track_insert_key #-}
 
--- | Inserts a key with value [code]animation[/code] at the given [code]time[/code] (in seconds). The [code]track_idx[/code] must be the index of an Animation Track.
+-- | Inserts a key with value @animation@ at the given @time@ (in seconds). The @track_idx@ must be the index of an Animation Track.
 bindAnimation_animation_track_insert_key :: MethodBind
 bindAnimation_animation_track_insert_key
   = unsafePerformIO $
@@ -190,7 +217,7 @@ bindAnimation_animation_track_insert_key
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Inserts a key with value [code]animation[/code] at the given [code]time[/code] (in seconds). The [code]track_idx[/code] must be the index of an Animation Track.
+-- | Inserts a key with value @animation@ at the given @time@ (in seconds). The @track_idx@ must be the index of an Animation Track.
 animation_track_insert_key ::
                              (Animation :< cls, Object :< cls) =>
                              cls -> Int -> Float -> GodotString -> IO Int
@@ -203,9 +230,15 @@ animation_track_insert_key cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "animation_track_insert_key"
+           '[Int, Float, GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.animation_track_insert_key
+
 {-# NOINLINE bindAnimation_animation_track_set_key_animation #-}
 
--- | Sets the key identified by [code]key_idx[/code] to value [code]animation[/code]. The [code]track_idx[/code] must be the index of an Animation Track.
+-- | Sets the key identified by @key_idx@ to value @animation@. The @track_idx@ must be the index of an Animation Track.
 bindAnimation_animation_track_set_key_animation :: MethodBind
 bindAnimation_animation_track_set_key_animation
   = unsafePerformIO $
@@ -215,7 +248,7 @@ bindAnimation_animation_track_set_key_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the key identified by [code]key_idx[/code] to value [code]animation[/code]. The [code]track_idx[/code] must be the index of an Animation Track.
+-- | Sets the key identified by @key_idx@ to value @animation@. The @track_idx@ must be the index of an Animation Track.
 animation_track_set_key_animation ::
                                     (Animation :< cls, Object :< cls) =>
                                     cls -> Int -> Int -> GodotString -> IO ()
@@ -229,9 +262,15 @@ animation_track_set_key_animation cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "animation_track_set_key_animation"
+           '[Int, Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.animation_track_set_key_animation
+
 {-# NOINLINE bindAnimation_audio_track_get_key_end_offset #-}
 
--- | Returns the end offset of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Returns the end offset of the key identified by @key_idx@. The @track_idx@ must be the index of an Audio Track.
 --   				End offset is the number of seconds cut off at the ending of the audio stream.
 bindAnimation_audio_track_get_key_end_offset :: MethodBind
 bindAnimation_audio_track_get_key_end_offset
@@ -242,7 +281,7 @@ bindAnimation_audio_track_get_key_end_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the end offset of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Returns the end offset of the key identified by @key_idx@. The @track_idx@ must be the index of an Audio Track.
 --   				End offset is the number of seconds cut off at the ending of the audio stream.
 audio_track_get_key_end_offset ::
                                  (Animation :< cls, Object :< cls) => cls -> Int -> Int -> IO Float
@@ -255,9 +294,15 @@ audio_track_get_key_end_offset cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "audio_track_get_key_end_offset"
+           '[Int, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Animation.audio_track_get_key_end_offset
+
 {-# NOINLINE bindAnimation_audio_track_get_key_start_offset #-}
 
--- | Returns the start offset of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Returns the start offset of the key identified by @key_idx@. The @track_idx@ must be the index of an Audio Track.
 --   				Start offset is the number of seconds cut off at the beginning of the audio stream.
 bindAnimation_audio_track_get_key_start_offset :: MethodBind
 bindAnimation_audio_track_get_key_start_offset
@@ -268,7 +313,7 @@ bindAnimation_audio_track_get_key_start_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the start offset of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Returns the start offset of the key identified by @key_idx@. The @track_idx@ must be the index of an Audio Track.
 --   				Start offset is the number of seconds cut off at the beginning of the audio stream.
 audio_track_get_key_start_offset ::
                                    (Animation :< cls, Object :< cls) =>
@@ -283,9 +328,15 @@ audio_track_get_key_start_offset cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "audio_track_get_key_start_offset"
+           '[Int, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Animation.audio_track_get_key_start_offset
+
 {-# NOINLINE bindAnimation_audio_track_get_key_stream #-}
 
--- | Returns the audio stream of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Returns the audio stream of the key identified by @key_idx@. The @track_idx@ must be the index of an Audio Track.
 bindAnimation_audio_track_get_key_stream :: MethodBind
 bindAnimation_audio_track_get_key_stream
   = unsafePerformIO $
@@ -295,7 +346,7 @@ bindAnimation_audio_track_get_key_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the audio stream of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Returns the audio stream of the key identified by @key_idx@. The @track_idx@ must be the index of an Audio Track.
 audio_track_get_key_stream ::
                              (Animation :< cls, Object :< cls) =>
                              cls -> Int -> Int -> IO Resource
@@ -308,10 +359,16 @@ audio_track_get_key_stream cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "audio_track_get_key_stream"
+           '[Int, Int]
+           (IO Resource)
+         where
+        nodeMethod = Godot.Core.Animation.audio_track_get_key_stream
+
 {-# NOINLINE bindAnimation_audio_track_insert_key #-}
 
--- | Inserts an Audio Track key at the given [code]time[/code] in seconds. The [code]track_idx[/code] must be the index of an Audio Track.
---   				[code]stream[/code] is the [AudioStream] resource to play. [code]start_offset[/code] is the number of seconds cut off at the beginning of the audio stream, while [code]end_offset[/code] is at the ending.
+-- | Inserts an Audio Track key at the given @time@ in seconds. The @track_idx@ must be the index of an Audio Track.
+--   				@stream@ is the @AudioStream@ resource to play. @start_offset@ is the number of seconds cut off at the beginning of the audio stream, while @end_offset@ is at the ending.
 bindAnimation_audio_track_insert_key :: MethodBind
 bindAnimation_audio_track_insert_key
   = unsafePerformIO $
@@ -321,15 +378,17 @@ bindAnimation_audio_track_insert_key
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Inserts an Audio Track key at the given [code]time[/code] in seconds. The [code]track_idx[/code] must be the index of an Audio Track.
---   				[code]stream[/code] is the [AudioStream] resource to play. [code]start_offset[/code] is the number of seconds cut off at the beginning of the audio stream, while [code]end_offset[/code] is at the ending.
+-- | Inserts an Audio Track key at the given @time@ in seconds. The @track_idx@ must be the index of an Audio Track.
+--   				@stream@ is the @AudioStream@ resource to play. @start_offset@ is the number of seconds cut off at the beginning of the audio stream, while @end_offset@ is at the ending.
 audio_track_insert_key ::
                          (Animation :< cls, Object :< cls) =>
-                         cls -> Int -> Float -> Resource -> Float -> Float -> IO Int
+                         cls ->
+                           Int -> Float -> Resource -> Maybe Float -> Maybe Float -> IO Int
 audio_track_insert_key cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantReal (0)) toVariant arg4,
+       maybe (VariantReal (0)) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimation_audio_track_insert_key
            (upcast cls)
@@ -337,9 +396,15 @@ audio_track_insert_key cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "audio_track_insert_key"
+           '[Int, Float, Resource, Maybe Float, Maybe Float]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.audio_track_insert_key
+
 {-# NOINLINE bindAnimation_audio_track_set_key_end_offset #-}
 
--- | Sets the end offset of the key identified by [code]key_idx[/code] to value [code]offset[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Sets the end offset of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
 bindAnimation_audio_track_set_key_end_offset :: MethodBind
 bindAnimation_audio_track_set_key_end_offset
   = unsafePerformIO $
@@ -349,7 +414,7 @@ bindAnimation_audio_track_set_key_end_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the end offset of the key identified by [code]key_idx[/code] to value [code]offset[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Sets the end offset of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
 audio_track_set_key_end_offset ::
                                  (Animation :< cls, Object :< cls) =>
                                  cls -> Int -> Int -> Float -> IO ()
@@ -362,9 +427,15 @@ audio_track_set_key_end_offset cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "audio_track_set_key_end_offset"
+           '[Int, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.audio_track_set_key_end_offset
+
 {-# NOINLINE bindAnimation_audio_track_set_key_start_offset #-}
 
--- | Sets the start offset of the key identified by [code]key_idx[/code] to value [code]offset[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Sets the start offset of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
 bindAnimation_audio_track_set_key_start_offset :: MethodBind
 bindAnimation_audio_track_set_key_start_offset
   = unsafePerformIO $
@@ -374,7 +445,7 @@ bindAnimation_audio_track_set_key_start_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the start offset of the key identified by [code]key_idx[/code] to value [code]offset[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Sets the start offset of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
 audio_track_set_key_start_offset ::
                                    (Animation :< cls, Object :< cls) =>
                                    cls -> Int -> Int -> Float -> IO ()
@@ -388,9 +459,15 @@ audio_track_set_key_start_offset cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "audio_track_set_key_start_offset"
+           '[Int, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.audio_track_set_key_start_offset
+
 {-# NOINLINE bindAnimation_audio_track_set_key_stream #-}
 
--- | Sets the stream of the key identified by [code]key_idx[/code] to value [code]offset[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Sets the stream of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
 bindAnimation_audio_track_set_key_stream :: MethodBind
 bindAnimation_audio_track_set_key_stream
   = unsafePerformIO $
@@ -400,7 +477,7 @@ bindAnimation_audio_track_set_key_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the stream of the key identified by [code]key_idx[/code] to value [code]offset[/code]. The [code]track_idx[/code] must be the index of an Audio Track.
+-- | Sets the stream of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
 audio_track_set_key_stream ::
                              (Animation :< cls, Object :< cls) =>
                              cls -> Int -> Int -> Resource -> IO ()
@@ -413,9 +490,15 @@ audio_track_set_key_stream cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "audio_track_set_key_stream"
+           '[Int, Int, Resource]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.audio_track_set_key_stream
+
 {-# NOINLINE bindAnimation_bezier_track_get_key_in_handle #-}
 
--- | Returns the in handle of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the in handle of the key identified by @key_idx@. The @track_idx@ must be the index of a Bezier Track.
 bindAnimation_bezier_track_get_key_in_handle :: MethodBind
 bindAnimation_bezier_track_get_key_in_handle
   = unsafePerformIO $
@@ -425,7 +508,7 @@ bindAnimation_bezier_track_get_key_in_handle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the in handle of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the in handle of the key identified by @key_idx@. The @track_idx@ must be the index of a Bezier Track.
 bezier_track_get_key_in_handle ::
                                  (Animation :< cls, Object :< cls) =>
                                  cls -> Int -> Int -> IO Vector2
@@ -438,9 +521,15 @@ bezier_track_get_key_in_handle cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "bezier_track_get_key_in_handle"
+           '[Int, Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_get_key_in_handle
+
 {-# NOINLINE bindAnimation_bezier_track_get_key_out_handle #-}
 
--- | Returns the out handle of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the out handle of the key identified by @key_idx@. The @track_idx@ must be the index of a Bezier Track.
 bindAnimation_bezier_track_get_key_out_handle :: MethodBind
 bindAnimation_bezier_track_get_key_out_handle
   = unsafePerformIO $
@@ -450,7 +539,7 @@ bindAnimation_bezier_track_get_key_out_handle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the out handle of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the out handle of the key identified by @key_idx@. The @track_idx@ must be the index of a Bezier Track.
 bezier_track_get_key_out_handle ::
                                   (Animation :< cls, Object :< cls) =>
                                   cls -> Int -> Int -> IO Vector2
@@ -464,9 +553,15 @@ bezier_track_get_key_out_handle cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "bezier_track_get_key_out_handle"
+           '[Int, Int]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_get_key_out_handle
+
 {-# NOINLINE bindAnimation_bezier_track_get_key_value #-}
 
--- | Returns the value of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the value of the key identified by @key_idx@. The @track_idx@ must be the index of a Bezier Track.
 bindAnimation_bezier_track_get_key_value :: MethodBind
 bindAnimation_bezier_track_get_key_value
   = unsafePerformIO $
@@ -476,7 +571,7 @@ bindAnimation_bezier_track_get_key_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of the key identified by [code]key_idx[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the value of the key identified by @key_idx@. The @track_idx@ must be the index of a Bezier Track.
 bezier_track_get_key_value ::
                              (Animation :< cls, Object :< cls) => cls -> Int -> Int -> IO Float
 bezier_track_get_key_value cls arg1 arg2
@@ -488,10 +583,16 @@ bezier_track_get_key_value cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "bezier_track_get_key_value"
+           '[Int, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_get_key_value
+
 {-# NOINLINE bindAnimation_bezier_track_insert_key #-}
 
--- | Inserts a Bezier Track key at the given [code]time[/code] in seconds. The [code]track_idx[/code] must be the index of a Bezier Track.
---   				[code]in_handle[/code] is the left-side weight of the added Bezier curve point, [code]out_handle[/code] is the right-side one, while [code]value[/code] is the actual value at this point.
+-- | Inserts a Bezier Track key at the given @time@ in seconds. The @track_idx@ must be the index of a Bezier Track.
+--   				@in_handle@ is the left-side weight of the added Bezier curve point, @out_handle@ is the right-side one, while @value@ is the actual value at this point.
 bindAnimation_bezier_track_insert_key :: MethodBind
 bindAnimation_bezier_track_insert_key
   = unsafePerformIO $
@@ -501,15 +602,17 @@ bindAnimation_bezier_track_insert_key
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Inserts a Bezier Track key at the given [code]time[/code] in seconds. The [code]track_idx[/code] must be the index of a Bezier Track.
---   				[code]in_handle[/code] is the left-side weight of the added Bezier curve point, [code]out_handle[/code] is the right-side one, while [code]value[/code] is the actual value at this point.
+-- | Inserts a Bezier Track key at the given @time@ in seconds. The @track_idx@ must be the index of a Bezier Track.
+--   				@in_handle@ is the left-side weight of the added Bezier curve point, @out_handle@ is the right-side one, while @value@ is the actual value at this point.
 bezier_track_insert_key ::
                           (Animation :< cls, Object :< cls) =>
-                          cls -> Int -> Float -> Float -> Vector2 -> Vector2 -> IO Int
+                          cls ->
+                            Int -> Float -> Float -> Maybe Vector2 -> Maybe Vector2 -> IO Int
 bezier_track_insert_key cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       defaultedVariant VariantVector2 (V2 0 0) arg4,
+       defaultedVariant VariantVector2 (V2 0 0) arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimation_bezier_track_insert_key
            (upcast cls)
@@ -517,9 +620,15 @@ bezier_track_insert_key cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "bezier_track_insert_key"
+           '[Int, Float, Float, Maybe Vector2, Maybe Vector2]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_insert_key
+
 {-# NOINLINE bindAnimation_bezier_track_interpolate #-}
 
--- | Returns the interpolated value at the given [code]time[/code] (in seconds). The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the interpolated value at the given @time@ (in seconds). The @track_idx@ must be the index of a Bezier Track.
 bindAnimation_bezier_track_interpolate :: MethodBind
 bindAnimation_bezier_track_interpolate
   = unsafePerformIO $
@@ -529,7 +638,7 @@ bindAnimation_bezier_track_interpolate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the interpolated value at the given [code]time[/code] (in seconds). The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Returns the interpolated value at the given @time@ (in seconds). The @track_idx@ must be the index of a Bezier Track.
 bezier_track_interpolate ::
                            (Animation :< cls, Object :< cls) =>
                            cls -> Int -> Float -> IO Float
@@ -542,9 +651,15 @@ bezier_track_interpolate cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "bezier_track_interpolate"
+           '[Int, Float]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_interpolate
+
 {-# NOINLINE bindAnimation_bezier_track_set_key_in_handle #-}
 
--- | Sets the in handle of the key identified by [code]key_idx[/code] to value [code]in_handle[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Sets the in handle of the key identified by @key_idx@ to value @in_handle@. The @track_idx@ must be the index of a Bezier Track.
 bindAnimation_bezier_track_set_key_in_handle :: MethodBind
 bindAnimation_bezier_track_set_key_in_handle
   = unsafePerformIO $
@@ -554,7 +669,7 @@ bindAnimation_bezier_track_set_key_in_handle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the in handle of the key identified by [code]key_idx[/code] to value [code]in_handle[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Sets the in handle of the key identified by @key_idx@ to value @in_handle@. The @track_idx@ must be the index of a Bezier Track.
 bezier_track_set_key_in_handle ::
                                  (Animation :< cls, Object :< cls) =>
                                  cls -> Int -> Int -> Vector2 -> IO ()
@@ -567,9 +682,15 @@ bezier_track_set_key_in_handle cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "bezier_track_set_key_in_handle"
+           '[Int, Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_set_key_in_handle
+
 {-# NOINLINE bindAnimation_bezier_track_set_key_out_handle #-}
 
--- | Sets the out handle of the key identified by [code]key_idx[/code] to value [code]out_handle[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Sets the out handle of the key identified by @key_idx@ to value @out_handle@. The @track_idx@ must be the index of a Bezier Track.
 bindAnimation_bezier_track_set_key_out_handle :: MethodBind
 bindAnimation_bezier_track_set_key_out_handle
   = unsafePerformIO $
@@ -579,7 +700,7 @@ bindAnimation_bezier_track_set_key_out_handle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the out handle of the key identified by [code]key_idx[/code] to value [code]out_handle[/code]. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Sets the out handle of the key identified by @key_idx@ to value @out_handle@. The @track_idx@ must be the index of a Bezier Track.
 bezier_track_set_key_out_handle ::
                                   (Animation :< cls, Object :< cls) =>
                                   cls -> Int -> Int -> Vector2 -> IO ()
@@ -593,9 +714,15 @@ bezier_track_set_key_out_handle cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "bezier_track_set_key_out_handle"
+           '[Int, Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_set_key_out_handle
+
 {-# NOINLINE bindAnimation_bezier_track_set_key_value #-}
 
--- | Sets the value of the key identified by [code]key_idx[/code] to the given value. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Sets the value of the key identified by @key_idx@ to the given value. The @track_idx@ must be the index of a Bezier Track.
 bindAnimation_bezier_track_set_key_value :: MethodBind
 bindAnimation_bezier_track_set_key_value
   = unsafePerformIO $
@@ -605,7 +732,7 @@ bindAnimation_bezier_track_set_key_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the value of the key identified by [code]key_idx[/code] to the given value. The [code]track_idx[/code] must be the index of a Bezier Track.
+-- | Sets the value of the key identified by @key_idx@ to the given value. The @track_idx@ must be the index of a Bezier Track.
 bezier_track_set_key_value ::
                              (Animation :< cls, Object :< cls) =>
                              cls -> Int -> Int -> Float -> IO ()
@@ -617,6 +744,12 @@ bezier_track_set_key_value cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "bezier_track_set_key_value"
+           '[Int, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.bezier_track_set_key_value
 
 {-# NOINLINE bindAnimation_clear #-}
 
@@ -638,9 +771,12 @@ clear cls
          godot_method_bind_call bindAnimation_clear (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.Animation.clear
+
 {-# NOINLINE bindAnimation_copy_track #-}
 
--- | Adds a new track that is a copy of the given track from [code]to_animation[/code].
+-- | Adds a new track that is a copy of the given track from @to_animation@.
 bindAnimation_copy_track :: MethodBind
 bindAnimation_copy_track
   = unsafePerformIO $
@@ -650,7 +786,7 @@ bindAnimation_copy_track
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a new track that is a copy of the given track from [code]to_animation[/code].
+-- | Adds a new track that is a copy of the given track from @to_animation@.
 copy_track ::
              (Animation :< cls, Object :< cls) =>
              cls -> Int -> Animation -> IO ()
@@ -660,6 +796,11 @@ copy_track cls arg1 arg2
          godot_method_bind_call bindAnimation_copy_track (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "copy_track" '[Int, Animation]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.copy_track
 
 {-# NOINLINE bindAnimation_find_track #-}
 
@@ -683,10 +824,14 @@ find_track cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "find_track" '[NodePath] (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.find_track
+
 {-# NOINLINE bindAnimation_get_length #-}
 
 -- | The total length of the animation (in seconds).
---   			[b]Note:[/b] Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
+--   			__Note:__ Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
 bindAnimation_get_length :: MethodBind
 bindAnimation_get_length
   = unsafePerformIO $
@@ -697,7 +842,7 @@ bindAnimation_get_length
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The total length of the animation (in seconds).
---   			[b]Note:[/b] Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
+--   			__Note:__ Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
 get_length :: (Animation :< cls, Object :< cls) => cls -> IO Float
 get_length cls
   = withVariantArray []
@@ -705,6 +850,9 @@ get_length cls
          godot_method_bind_call bindAnimation_get_length (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "get_length" '[] (IO Float) where
+        nodeMethod = Godot.Core.Animation.get_length
 
 {-# NOINLINE bindAnimation_get_step #-}
 
@@ -726,6 +874,9 @@ get_step cls
          godot_method_bind_call bindAnimation_get_step (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "get_step" '[] (IO Float) where
+        nodeMethod = Godot.Core.Animation.get_step
 
 {-# NOINLINE bindAnimation_get_track_count #-}
 
@@ -750,6 +901,9 @@ get_track_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "get_track_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.Animation.get_track_count
+
 {-# NOINLINE bindAnimation_has_loop #-}
 
 -- | A flag indicating that the animation must loop. This is uses for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
@@ -770,6 +924,9 @@ has_loop cls
          godot_method_bind_call bindAnimation_has_loop (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "has_loop" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Animation.has_loop
 
 {-# NOINLINE bindAnimation_method_track_get_key_indices #-}
 
@@ -796,6 +953,12 @@ method_track_get_key_indices cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "method_track_get_key_indices"
+           '[Int, Float, Float]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.Animation.method_track_get_key_indices
+
 {-# NOINLINE bindAnimation_method_track_get_name #-}
 
 -- | Returns the method name of a method track.
@@ -821,6 +984,11 @@ method_track_get_name cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "method_track_get_name" '[Int, Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.Animation.method_track_get_name
+
 {-# NOINLINE bindAnimation_method_track_get_params #-}
 
 -- | Returns the arguments values to be called on a method track for a given key in a given track.
@@ -845,6 +1013,11 @@ method_track_get_params cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "method_track_get_params" '[Int, Int]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.Animation.method_track_get_params
+
 {-# NOINLINE bindAnimation_remove_track #-}
 
 -- | Removes a track by specifying the track index.
@@ -868,10 +1041,13 @@ remove_track cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "remove_track" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Animation.remove_track
+
 {-# NOINLINE bindAnimation_set_length #-}
 
 -- | The total length of the animation (in seconds).
---   			[b]Note:[/b] Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
+--   			__Note:__ Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
 bindAnimation_set_length :: MethodBind
 bindAnimation_set_length
   = unsafePerformIO $
@@ -882,7 +1058,7 @@ bindAnimation_set_length
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The total length of the animation (in seconds).
---   			[b]Note:[/b] Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
+--   			__Note:__ Length is not delimited by the last key, as this one may be before or after the end to ensure correct interpolation and looping.
 set_length ::
              (Animation :< cls, Object :< cls) => cls -> Float -> IO ()
 set_length cls arg1
@@ -891,6 +1067,9 @@ set_length cls arg1
          godot_method_bind_call bindAnimation_set_length (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "set_length" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Animation.set_length
 
 {-# NOINLINE bindAnimation_set_loop #-}
 
@@ -914,6 +1093,9 @@ set_loop cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "set_loop" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Animation.set_loop
+
 {-# NOINLINE bindAnimation_set_step #-}
 
 -- | The animation step value.
@@ -936,6 +1118,9 @@ set_step cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "set_step" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Animation.set_step
+
 {-# NOINLINE bindAnimation_track_find_key #-}
 
 -- | Finds the key index by time in a given track. Optionally, only find it if the exact time is given.
@@ -951,18 +1136,26 @@ bindAnimation_track_find_key
 -- | Finds the key index by time in a given track. Optionally, only find it if the exact time is given.
 track_find_key ::
                  (Animation :< cls, Object :< cls) =>
-                 cls -> Int -> Float -> Bool -> IO Int
+                 cls -> Int -> Float -> Maybe Bool -> IO Int
 track_find_key cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantBool False) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimation_track_find_key (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_find_key"
+           '[Int, Float, Maybe Bool]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.track_find_key
+
 {-# NOINLINE bindAnimation_track_get_interpolation_loop_wrap #-}
 
--- | Returns [code]true[/code] if the track at [code]idx[/code] wraps the interpolation loop. New tracks wrap the interpolation loop by default.
+-- | Returns @true@ if the track at @idx@ wraps the interpolation loop. New tracks wrap the interpolation loop by default.
 bindAnimation_track_get_interpolation_loop_wrap :: MethodBind
 bindAnimation_track_get_interpolation_loop_wrap
   = unsafePerformIO $
@@ -972,7 +1165,7 @@ bindAnimation_track_get_interpolation_loop_wrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the track at [code]idx[/code] wraps the interpolation loop. New tracks wrap the interpolation loop by default.
+-- | Returns @true@ if the track at @idx@ wraps the interpolation loop. New tracks wrap the interpolation loop by default.
 track_get_interpolation_loop_wrap ::
                                     (Animation :< cls, Object :< cls) => cls -> Int -> IO Bool
 track_get_interpolation_loop_wrap cls arg1
@@ -984,6 +1177,12 @@ track_get_interpolation_loop_wrap cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_get_interpolation_loop_wrap"
+           '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_interpolation_loop_wrap
 
 {-# NOINLINE bindAnimation_track_get_interpolation_type #-}
 
@@ -1009,6 +1208,11 @@ track_get_interpolation_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_get_interpolation_type" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_interpolation_type
+
 {-# NOINLINE bindAnimation_track_get_key_count #-}
 
 -- | Returns the amount of keys in a given track.
@@ -1032,6 +1236,10 @@ track_get_key_count cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_get_key_count" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_key_count
 
 {-# NOINLINE bindAnimation_track_get_key_time #-}
 
@@ -1057,9 +1265,14 @@ track_get_key_time cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_get_key_time" '[Int, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_key_time
+
 {-# NOINLINE bindAnimation_track_get_key_transition #-}
 
--- | Returns the transition curve (easing) for a specific key (see the built-in math function [method @GDScript.ease]).
+-- | Returns the transition curve (easing) for a specific key (see the built-in math function @method @GDScript.ease@).
 bindAnimation_track_get_key_transition :: MethodBind
 bindAnimation_track_get_key_transition
   = unsafePerformIO $
@@ -1069,7 +1282,7 @@ bindAnimation_track_get_key_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the transition curve (easing) for a specific key (see the built-in math function [method @GDScript.ease]).
+-- | Returns the transition curve (easing) for a specific key (see the built-in math function @method @GDScript.ease@).
 track_get_key_transition ::
                            (Animation :< cls, Object :< cls) => cls -> Int -> Int -> IO Float
 track_get_key_transition cls arg1 arg2
@@ -1080,6 +1293,12 @@ track_get_key_transition cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_get_key_transition"
+           '[Int, Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_key_transition
 
 {-# NOINLINE bindAnimation_track_get_key_value #-}
 
@@ -1106,9 +1325,14 @@ track_get_key_value cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_get_key_value" '[Int, Int]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_key_value
+
 {-# NOINLINE bindAnimation_track_get_path #-}
 
--- | Gets the path of a track. For more information on the path format, see [method track_set_path].
+-- | Gets the path of a track. For more information on the path format, see @method track_set_path@.
 bindAnimation_track_get_path :: MethodBind
 bindAnimation_track_get_path
   = unsafePerformIO $
@@ -1118,7 +1342,7 @@ bindAnimation_track_get_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the path of a track. For more information on the path format, see [method track_set_path].
+-- | Gets the path of a track. For more information on the path format, see @method track_set_path@.
 track_get_path ::
                  (Animation :< cls, Object :< cls) => cls -> Int -> IO NodePath
 track_get_path cls arg1
@@ -1128,6 +1352,10 @@ track_get_path cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_get_path" '[Int] (IO NodePath)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_path
 
 {-# NOINLINE bindAnimation_track_get_type #-}
 
@@ -1152,6 +1380,10 @@ track_get_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_get_type" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.track_get_type
+
 {-# NOINLINE bindAnimation_track_insert_key #-}
 
 -- | Insert a generic key in a given track.
@@ -1167,19 +1399,26 @@ bindAnimation_track_insert_key
 -- | Insert a generic key in a given track.
 track_insert_key ::
                    (Animation :< cls, Object :< cls) =>
-                   cls -> Int -> Float -> GodotVariant -> Float -> IO ()
+                   cls -> Int -> Float -> GodotVariant -> Maybe Float -> IO ()
 track_insert_key cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantReal (1)) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindAnimation_track_insert_key (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_insert_key"
+           '[Int, Float, GodotVariant, Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_insert_key
+
 {-# NOINLINE bindAnimation_track_is_enabled #-}
 
--- | Returns [code]true[/code] if the track at index [code]idx[/code] is enabled.
+-- | Returns @true@ if the track at index @idx@ is enabled.
 bindAnimation_track_is_enabled :: MethodBind
 bindAnimation_track_is_enabled
   = unsafePerformIO $
@@ -1189,7 +1428,7 @@ bindAnimation_track_is_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the track at index [code]idx[/code] is enabled.
+-- | Returns @true@ if the track at index @idx@ is enabled.
 track_is_enabled ::
                    (Animation :< cls, Object :< cls) => cls -> Int -> IO Bool
 track_is_enabled cls arg1
@@ -1200,9 +1439,13 @@ track_is_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_is_enabled" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Animation.track_is_enabled
+
 {-# NOINLINE bindAnimation_track_is_imported #-}
 
--- | Returns [code]true[/code] if the given track is imported. Else, return [code]false[/code].
+-- | Returns @true@ if the given track is imported. Else, return @false@.
 bindAnimation_track_is_imported :: MethodBind
 bindAnimation_track_is_imported
   = unsafePerformIO $
@@ -1212,7 +1455,7 @@ bindAnimation_track_is_imported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the given track is imported. Else, return [code]false[/code].
+-- | Returns @true@ if the given track is imported. Else, return @false@.
 track_is_imported ::
                     (Animation :< cls, Object :< cls) => cls -> Int -> IO Bool
 track_is_imported cls arg1
@@ -1222,6 +1465,10 @@ track_is_imported cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_is_imported" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Animation.track_is_imported
 
 {-# NOINLINE bindAnimation_track_move_down #-}
 
@@ -1246,9 +1493,13 @@ track_move_down cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_move_down" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_move_down
+
 {-# NOINLINE bindAnimation_track_move_to #-}
 
--- | Changes the index position of track [code]idx[/code] to the one defined in [code]to_idx[/code].
+-- | Changes the index position of track @idx@ to the one defined in @to_idx@.
 bindAnimation_track_move_to :: MethodBind
 bindAnimation_track_move_to
   = unsafePerformIO $
@@ -1258,7 +1509,7 @@ bindAnimation_track_move_to
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the index position of track [code]idx[/code] to the one defined in [code]to_idx[/code].
+-- | Changes the index position of track @idx@ to the one defined in @to_idx@.
 track_move_to ::
                 (Animation :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 track_move_to cls arg1 arg2
@@ -1268,6 +1519,10 @@ track_move_to cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_move_to" '[Int, Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_move_to
 
 {-# NOINLINE bindAnimation_track_move_up #-}
 
@@ -1292,6 +1547,9 @@ track_move_up cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_move_up" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Animation.track_move_up
+
 {-# NOINLINE bindAnimation_track_remove_key #-}
 
 -- | Removes a key by index in a given track.
@@ -1314,6 +1572,11 @@ track_remove_key cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_remove_key" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_remove_key
 
 {-# NOINLINE bindAnimation_track_remove_key_at_position #-}
 
@@ -1339,6 +1602,12 @@ track_remove_key_at_position cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_remove_key_at_position"
+           '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_remove_key_at_position
+
 {-# NOINLINE bindAnimation_track_set_enabled #-}
 
 -- | Enables/disables the given track. Tracks are enabled by default.
@@ -1361,6 +1630,11 @@ track_set_enabled cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_set_enabled" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_enabled
 
 {-# NOINLINE bindAnimation_track_set_imported #-}
 
@@ -1386,9 +1660,14 @@ track_set_imported cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_set_imported" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_imported
+
 {-# NOINLINE bindAnimation_track_set_interpolation_loop_wrap #-}
 
--- | If [code]true[/code], the track at [code]idx[/code] wraps the interpolation loop.
+-- | If @true@, the track at @idx@ wraps the interpolation loop.
 bindAnimation_track_set_interpolation_loop_wrap :: MethodBind
 bindAnimation_track_set_interpolation_loop_wrap
   = unsafePerformIO $
@@ -1398,7 +1677,7 @@ bindAnimation_track_set_interpolation_loop_wrap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the track at [code]idx[/code] wraps the interpolation loop.
+-- | If @true@, the track at @idx@ wraps the interpolation loop.
 track_set_interpolation_loop_wrap ::
                                     (Animation :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 track_set_interpolation_loop_wrap cls arg1 arg2
@@ -1410,6 +1689,12 @@ track_set_interpolation_loop_wrap cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_set_interpolation_loop_wrap"
+           '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_interpolation_loop_wrap
 
 {-# NOINLINE bindAnimation_track_set_interpolation_type #-}
 
@@ -1434,6 +1719,12 @@ track_set_interpolation_type cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_set_interpolation_type"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_interpolation_type
 
 {-# NOINLINE bindAnimation_track_set_key_time #-}
 
@@ -1460,9 +1751,15 @@ track_set_key_time cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_set_key_time"
+           '[Int, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_key_time
+
 {-# NOINLINE bindAnimation_track_set_key_transition #-}
 
--- | Sets the transition curve (easing) for a specific key (see the built-in math function [method @GDScript.ease]).
+-- | Sets the transition curve (easing) for a specific key (see the built-in math function @method @GDScript.ease@).
 bindAnimation_track_set_key_transition :: MethodBind
 bindAnimation_track_set_key_transition
   = unsafePerformIO $
@@ -1472,7 +1769,7 @@ bindAnimation_track_set_key_transition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the transition curve (easing) for a specific key (see the built-in math function [method @GDScript.ease]).
+-- | Sets the transition curve (easing) for a specific key (see the built-in math function @method @GDScript.ease@).
 track_set_key_transition ::
                            (Animation :< cls, Object :< cls) =>
                            cls -> Int -> Int -> Float -> IO ()
@@ -1484,6 +1781,12 @@ track_set_key_transition cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_set_key_transition"
+           '[Int, Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_key_transition
 
 {-# NOINLINE bindAnimation_track_set_key_value #-}
 
@@ -1510,10 +1813,16 @@ track_set_key_value cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_set_key_value"
+           '[Int, Int, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_key_value
+
 {-# NOINLINE bindAnimation_track_set_path #-}
 
--- | Sets the path of a track. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by [code]":"[/code].
---   				For example, [code]"character/skeleton:ankle"[/code] or [code]"character/mesh:transform/local"[/code].
+-- | Sets the path of a track. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by @":"@.
+--   				For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
 bindAnimation_track_set_path :: MethodBind
 bindAnimation_track_set_path
   = unsafePerformIO $
@@ -1523,8 +1832,8 @@ bindAnimation_track_set_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the path of a track. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by [code]":"[/code].
---   				For example, [code]"character/skeleton:ankle"[/code] or [code]"character/mesh:transform/local"[/code].
+-- | Sets the path of a track. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by @":"@.
+--   				For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
 track_set_path ::
                  (Animation :< cls, Object :< cls) =>
                  cls -> Int -> NodePath -> IO ()
@@ -1536,9 +1845,14 @@ track_set_path cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "track_set_path" '[Int, NodePath]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_set_path
+
 {-# NOINLINE bindAnimation_track_swap #-}
 
--- | Swaps the track [code]idx[/code]'s index position with the track [code]with_idx[/code].
+-- | Swaps the track @idx@'s index position with the track @with_idx@.
 bindAnimation_track_swap :: MethodBind
 bindAnimation_track_swap
   = unsafePerformIO $
@@ -1548,7 +1862,7 @@ bindAnimation_track_swap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Swaps the track [code]idx[/code]'s index position with the track [code]with_idx[/code].
+-- | Swaps the track @idx@'s index position with the track @with_idx@.
 track_swap ::
              (Animation :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 track_swap cls arg1 arg2
@@ -1557,6 +1871,10 @@ track_swap cls arg1 arg2
          godot_method_bind_call bindAnimation_track_swap (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "track_swap" '[Int, Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.track_swap
 
 {-# NOINLINE bindAnimation_transform_track_insert_key #-}
 
@@ -1585,9 +1903,15 @@ transform_track_insert_key cls arg1 arg2 arg3 arg4 arg5
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "transform_track_insert_key"
+           '[Int, Float, Vector3, Quat, Vector3]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.transform_track_insert_key
+
 {-# NOINLINE bindAnimation_transform_track_interpolate #-}
 
--- | Returns the interpolated value of a transform track at a given time (in seconds). An array consisting of 3 elements: position ([Vector3]), rotation ([Quat]) and scale ([Vector3]).
+-- | Returns the interpolated value of a transform track at a given time (in seconds). An array consisting of 3 elements: position (@Vector3@), rotation (@Quat@) and scale (@Vector3@).
 bindAnimation_transform_track_interpolate :: MethodBind
 bindAnimation_transform_track_interpolate
   = unsafePerformIO $
@@ -1597,7 +1921,7 @@ bindAnimation_transform_track_interpolate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the interpolated value of a transform track at a given time (in seconds). An array consisting of 3 elements: position ([Vector3]), rotation ([Quat]) and scale ([Vector3]).
+-- | Returns the interpolated value of a transform track at a given time (in seconds). An array consisting of 3 elements: position (@Vector3@), rotation (@Quat@) and scale (@Vector3@).
 transform_track_interpolate ::
                               (Animation :< cls, Object :< cls) =>
                               cls -> Int -> Float -> IO Array
@@ -1609,6 +1933,12 @@ transform_track_interpolate cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "transform_track_interpolate"
+           '[Int, Float]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.Animation.transform_track_interpolate
 
 {-# NOINLINE bindAnimation_value_track_get_key_indices #-}
 
@@ -1635,6 +1965,12 @@ value_track_get_key_indices cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "value_track_get_key_indices"
+           '[Int, Float, Float]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.Animation.value_track_get_key_indices
+
 {-# NOINLINE bindAnimation_value_track_get_update_mode #-}
 
 -- | Returns the update mode of a value track.
@@ -1659,9 +1995,14 @@ value_track_get_update_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Animation "value_track_get_update_mode" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.Animation.value_track_get_update_mode
+
 {-# NOINLINE bindAnimation_value_track_set_update_mode #-}
 
--- | Sets the update mode (see [enum UpdateMode]) of a value track.
+-- | Sets the update mode (see @enum UpdateMode@) of a value track.
 bindAnimation_value_track_set_update_mode :: MethodBind
 bindAnimation_value_track_set_update_mode
   = unsafePerformIO $
@@ -1671,7 +2012,7 @@ bindAnimation_value_track_set_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the update mode (see [enum UpdateMode]) of a value track.
+-- | Sets the update mode (see @enum UpdateMode@) of a value track.
 value_track_set_update_mode ::
                               (Animation :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 value_track_set_update_mode cls arg1 arg2
@@ -1682,3 +2023,9 @@ value_track_set_update_mode cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Animation "value_track_set_update_mode"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Animation.value_track_set_update_mode

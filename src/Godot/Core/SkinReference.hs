@@ -9,9 +9,14 @@ module Godot.Core.SkinReference
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindSkinReference__skin_changed #-}
 
@@ -34,6 +39,9 @@ _skin_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkinReference "_skin_changed" '[] (IO ()) where
+        nodeMethod = Godot.Core.SkinReference._skin_changed
+
 {-# NOINLINE bindSkinReference_get_skeleton #-}
 
 bindSkinReference_get_skeleton :: MethodBind
@@ -55,6 +63,9 @@ get_skeleton cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SkinReference "get_skeleton" '[] (IO Rid) where
+        nodeMethod = Godot.Core.SkinReference.get_skeleton
+
 {-# NOINLINE bindSkinReference_get_skin #-}
 
 bindSkinReference_get_skin :: MethodBind
@@ -74,3 +85,6 @@ get_skin cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SkinReference "get_skin" '[] (IO Skin) where
+        nodeMethod = Godot.Core.SkinReference.get_skin

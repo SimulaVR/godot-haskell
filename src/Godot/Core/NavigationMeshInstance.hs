@@ -10,9 +10,27 @@ module Godot.Core.NavigationMeshInstance
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
+
+instance NodeProperty NavigationMeshInstance "enabled" Bool 'False
+         where
+        nodeProperty
+          = (is_enabled, wrapDroppingSetter set_enabled, Nothing)
+
+instance NodeProperty NavigationMeshInstance "navmesh"
+           NavigationMesh
+           'False
+         where
+        nodeProperty
+          = (get_navigation_mesh, wrapDroppingSetter set_navigation_mesh,
+             Nothing)
 
 {-# NOINLINE bindNavigationMeshInstance_get_navigation_mesh #-}
 
@@ -38,6 +56,12 @@ get_navigation_mesh cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMeshInstance "get_navigation_mesh"
+           '[]
+           (IO NavigationMesh)
+         where
+        nodeMethod = Godot.Core.NavigationMeshInstance.get_navigation_mesh
+
 {-# NOINLINE bindNavigationMeshInstance_is_enabled #-}
 
 bindNavigationMeshInstance_is_enabled :: MethodBind
@@ -59,6 +83,11 @@ is_enabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMeshInstance "is_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.NavigationMeshInstance.is_enabled
 
 {-# NOINLINE bindNavigationMeshInstance_set_enabled #-}
 
@@ -83,6 +112,11 @@ set_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMeshInstance "set_enabled" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMeshInstance.set_enabled
+
 {-# NOINLINE bindNavigationMeshInstance_set_navigation_mesh #-}
 
 bindNavigationMeshInstance_set_navigation_mesh :: MethodBind
@@ -106,3 +140,9 @@ set_navigation_mesh cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMeshInstance "set_navigation_mesh"
+           '[NavigationMesh]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMeshInstance.set_navigation_mesh

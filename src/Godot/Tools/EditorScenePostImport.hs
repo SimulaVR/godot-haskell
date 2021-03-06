@@ -9,13 +9,18 @@ module Godot.Tools.EditorScenePostImport
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindEditorScenePostImport_get_source_file #-}
 
--- | Returns the source file path which got imported (e.g. [code]res://scene.dae[/code]).
+-- | Returns the source file path which got imported (e.g. @res://scene.dae@).
 bindEditorScenePostImport_get_source_file :: MethodBind
 bindEditorScenePostImport_get_source_file
   = unsafePerformIO $
@@ -25,7 +30,7 @@ bindEditorScenePostImport_get_source_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the source file path which got imported (e.g. [code]res://scene.dae[/code]).
+-- | Returns the source file path which got imported (e.g. @res://scene.dae@).
 get_source_file ::
                   (EditorScenePostImport :< cls, Object :< cls) =>
                   cls -> IO GodotString
@@ -37,6 +42,11 @@ get_source_file cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorScenePostImport "get_source_file" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorScenePostImport.get_source_file
 
 {-# NOINLINE bindEditorScenePostImport_get_source_folder #-}
 
@@ -63,6 +73,11 @@ get_source_folder cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorScenePostImport "get_source_folder" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorScenePostImport.get_source_folder
+
 {-# NOINLINE bindEditorScenePostImport_post_import #-}
 
 -- | Called after the scene was imported. This method must return the modified version of the scene.
@@ -87,3 +102,8 @@ post_import cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorScenePostImport "post_import" '[Object]
+           (IO Object)
+         where
+        nodeMethod = Godot.Tools.EditorScenePostImport.post_import

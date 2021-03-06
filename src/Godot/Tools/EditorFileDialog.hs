@@ -69,9 +69,14 @@ module Godot.Tools.EditorFileDialog
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.ConfirmationDialog()
 
 _ACCESS_RESOURCES :: Int
 _ACCESS_RESOURCES = 0
@@ -125,6 +130,50 @@ sig_files_selected
 instance NodeSignal EditorFileDialog "files_selected"
            '[PoolStringArray]
 
+instance NodeProperty EditorFileDialog "access" Int 'False where
+        nodeProperty = (get_access, wrapDroppingSetter set_access, Nothing)
+
+instance NodeProperty EditorFileDialog "current_dir" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_current_dir, wrapDroppingSetter set_current_dir, Nothing)
+
+instance NodeProperty EditorFileDialog "current_file" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_current_file, wrapDroppingSetter set_current_file, Nothing)
+
+instance NodeProperty EditorFileDialog "current_path" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_current_path, wrapDroppingSetter set_current_path, Nothing)
+
+instance NodeProperty EditorFileDialog "disable_overwrite_warning"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (is_overwrite_warning_disabled,
+             wrapDroppingSetter set_disable_overwrite_warning, Nothing)
+
+instance NodeProperty EditorFileDialog "display_mode" Int 'False
+         where
+        nodeProperty
+          = (get_display_mode, wrapDroppingSetter set_display_mode, Nothing)
+
+instance NodeProperty EditorFileDialog "mode" Int 'False where
+        nodeProperty = (get_mode, wrapDroppingSetter set_mode, Nothing)
+
+instance NodeProperty EditorFileDialog "show_hidden_files" Bool
+           'False
+         where
+        nodeProperty
+          = (is_showing_hidden_files,
+             wrapDroppingSetter set_show_hidden_files, Nothing)
+
 {-# NOINLINE bindEditorFileDialog__action_pressed #-}
 
 bindEditorFileDialog__action_pressed :: MethodBind
@@ -147,6 +196,10 @@ _action_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_action_pressed" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._action_pressed
+
 {-# NOINLINE bindEditorFileDialog__cancel_pressed #-}
 
 bindEditorFileDialog__cancel_pressed :: MethodBind
@@ -168,6 +221,10 @@ _cancel_pressed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_cancel_pressed" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._cancel_pressed
 
 {-# NOINLINE bindEditorFileDialog__dir_entered #-}
 
@@ -192,6 +249,11 @@ _dir_entered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_dir_entered" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._dir_entered
+
 {-# NOINLINE bindEditorFileDialog__favorite_move_down #-}
 
 bindEditorFileDialog__favorite_move_down :: MethodBind
@@ -213,6 +275,11 @@ _favorite_move_down cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_favorite_move_down" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._favorite_move_down
 
 {-# NOINLINE bindEditorFileDialog__favorite_move_up #-}
 
@@ -236,6 +303,11 @@ _favorite_move_up cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_favorite_move_up" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._favorite_move_up
+
 {-# NOINLINE bindEditorFileDialog__favorite_pressed #-}
 
 bindEditorFileDialog__favorite_pressed :: MethodBind
@@ -258,6 +330,11 @@ _favorite_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_favorite_pressed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._favorite_pressed
+
 {-# NOINLINE bindEditorFileDialog__favorite_selected #-}
 
 bindEditorFileDialog__favorite_selected :: MethodBind
@@ -279,6 +356,11 @@ _favorite_selected cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_favorite_selected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._favorite_selected
 
 {-# NOINLINE bindEditorFileDialog__file_entered #-}
 
@@ -303,6 +385,11 @@ _file_entered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_file_entered" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._file_entered
+
 {-# NOINLINE bindEditorFileDialog__filter_selected #-}
 
 bindEditorFileDialog__filter_selected :: MethodBind
@@ -325,6 +412,11 @@ _filter_selected cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_filter_selected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._filter_selected
+
 {-# NOINLINE bindEditorFileDialog__go_back #-}
 
 bindEditorFileDialog__go_back :: MethodBind
@@ -345,6 +437,9 @@ _go_back cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_go_back" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorFileDialog._go_back
 
 {-# NOINLINE bindEditorFileDialog__go_forward #-}
 
@@ -368,6 +463,10 @@ _go_forward cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_go_forward" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._go_forward
+
 {-# NOINLINE bindEditorFileDialog__go_up #-}
 
 bindEditorFileDialog__go_up :: MethodBind
@@ -387,6 +486,9 @@ _go_up cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_go_up" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorFileDialog._go_up
 
 {-# NOINLINE bindEditorFileDialog__item_db_selected #-}
 
@@ -409,6 +511,11 @@ _item_db_selected cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_item_db_selected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._item_db_selected
 
 {-# NOINLINE bindEditorFileDialog__item_list_item_rmb_selected #-}
 
@@ -434,6 +541,13 @@ _item_list_item_rmb_selected cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_item_list_item_rmb_selected"
+           '[Int, Vector2]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorFileDialog._item_list_item_rmb_selected
+
 {-# NOINLINE bindEditorFileDialog__item_list_rmb_clicked #-}
 
 bindEditorFileDialog__item_list_rmb_clicked :: MethodBind
@@ -455,6 +569,12 @@ _item_list_rmb_clicked cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_item_list_rmb_clicked"
+           '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._item_list_rmb_clicked
 
 {-# NOINLINE bindEditorFileDialog__item_menu_id_pressed #-}
 
@@ -478,6 +598,11 @@ _item_menu_id_pressed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_item_menu_id_pressed" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._item_menu_id_pressed
+
 {-# NOINLINE bindEditorFileDialog__item_selected #-}
 
 bindEditorFileDialog__item_selected :: MethodBind
@@ -499,6 +624,11 @@ _item_selected cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_item_selected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._item_selected
 
 {-# NOINLINE bindEditorFileDialog__items_clear_selection #-}
 
@@ -522,6 +652,11 @@ _items_clear_selection cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_items_clear_selection" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._items_clear_selection
+
 {-# NOINLINE bindEditorFileDialog__make_dir #-}
 
 bindEditorFileDialog__make_dir :: MethodBind
@@ -542,6 +677,9 @@ _make_dir cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_make_dir" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorFileDialog._make_dir
 
 {-# NOINLINE bindEditorFileDialog__make_dir_confirm #-}
 
@@ -564,6 +702,11 @@ _make_dir_confirm cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_make_dir_confirm" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._make_dir_confirm
 
 {-# NOINLINE bindEditorFileDialog__multi_selected #-}
 
@@ -588,6 +731,11 @@ _multi_selected cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_multi_selected" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._multi_selected
+
 {-# NOINLINE bindEditorFileDialog__recent_selected #-}
 
 bindEditorFileDialog__recent_selected :: MethodBind
@@ -609,6 +757,11 @@ _recent_selected cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_recent_selected" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._recent_selected
 
 {-# NOINLINE bindEditorFileDialog__save_confirm_pressed #-}
 
@@ -632,6 +785,11 @@ _save_confirm_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_save_confirm_pressed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._save_confirm_pressed
+
 {-# NOINLINE bindEditorFileDialog__select_drive #-}
 
 bindEditorFileDialog__select_drive :: MethodBind
@@ -653,6 +811,10 @@ _select_drive cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_select_drive" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._select_drive
 
 {-# NOINLINE bindEditorFileDialog__thumbnail_done #-}
 
@@ -678,6 +840,12 @@ _thumbnail_done cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_thumbnail_done"
+           '[GodotString, Texture, Texture, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._thumbnail_done
+
 {-# NOINLINE bindEditorFileDialog__thumbnail_result #-}
 
 bindEditorFileDialog__thumbnail_result :: MethodBind
@@ -702,6 +870,12 @@ _thumbnail_result cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_thumbnail_result"
+           '[GodotString, Texture, Texture, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._thumbnail_result
+
 {-# NOINLINE bindEditorFileDialog__unhandled_input #-}
 
 bindEditorFileDialog__unhandled_input :: MethodBind
@@ -725,6 +899,12 @@ _unhandled_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_unhandled_input"
+           '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._unhandled_input
+
 {-# NOINLINE bindEditorFileDialog__update_dir #-}
 
 bindEditorFileDialog__update_dir :: MethodBind
@@ -746,6 +926,10 @@ _update_dir cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "_update_dir" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._update_dir
 
 {-# NOINLINE bindEditorFileDialog__update_file_list #-}
 
@@ -769,6 +953,11 @@ _update_file_list cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_update_file_list" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._update_file_list
+
 {-# NOINLINE bindEditorFileDialog__update_file_name #-}
 
 bindEditorFileDialog__update_file_name :: MethodBind
@@ -791,10 +980,15 @@ _update_file_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "_update_file_name" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog._update_file_name
+
 {-# NOINLINE bindEditorFileDialog_add_filter #-}
 
--- | Adds a comma-delimited file extension filter option to the [EditorFileDialog] with an optional semi-colon-delimited label.
---   				For example, [code]"*.tscn, *.scn; Scenes"[/code] results in filter text "Scenes (*.tscn, *.scn)".
+-- | Adds a comma-delimited file extension filter option to the @EditorFileDialog@ with an optional semi-colon-delimited label.
+--   				For example, @"*.tscn, *.scn; Scenes"@ results in filter text "Scenes (*.tscn, *.scn)".
 bindEditorFileDialog_add_filter :: MethodBind
 bindEditorFileDialog_add_filter
   = unsafePerformIO $
@@ -804,8 +998,8 @@ bindEditorFileDialog_add_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a comma-delimited file extension filter option to the [EditorFileDialog] with an optional semi-colon-delimited label.
---   				For example, [code]"*.tscn, *.scn; Scenes"[/code] results in filter text "Scenes (*.tscn, *.scn)".
+-- | Adds a comma-delimited file extension filter option to the @EditorFileDialog@ with an optional semi-colon-delimited label.
+--   				For example, @"*.tscn, *.scn; Scenes"@ results in filter text "Scenes (*.tscn, *.scn)".
 add_filter ::
              (EditorFileDialog :< cls, Object :< cls) =>
              cls -> GodotString -> IO ()
@@ -816,6 +1010,11 @@ add_filter cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "add_filter" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.add_filter
 
 {-# NOINLINE bindEditorFileDialog_clear_filters #-}
 
@@ -841,9 +1040,13 @@ clear_filters cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "clear_filters" '[] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.clear_filters
+
 {-# NOINLINE bindEditorFileDialog_get_access #-}
 
--- | The location from which the user may select a file, including [code]res://[/code], [code]user://[/code], and the local file system.
+-- | The location from which the user may select a file, including @res://@, @user://@, and the local file system.
 bindEditorFileDialog_get_access :: MethodBind
 bindEditorFileDialog_get_access
   = unsafePerformIO $
@@ -853,7 +1056,7 @@ bindEditorFileDialog_get_access
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The location from which the user may select a file, including [code]res://[/code], [code]user://[/code], and the local file system.
+-- | The location from which the user may select a file, including @res://@, @user://@, and the local file system.
 get_access ::
              (EditorFileDialog :< cls, Object :< cls) => cls -> IO Int
 get_access cls
@@ -863,6 +1066,10 @@ get_access cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "get_access" '[] (IO Int)
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.get_access
 
 {-# NOINLINE bindEditorFileDialog_get_current_dir #-}
 
@@ -888,6 +1095,11 @@ get_current_dir cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "get_current_dir" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.get_current_dir
+
 {-# NOINLINE bindEditorFileDialog_get_current_file #-}
 
 -- | The currently selected file.
@@ -911,6 +1123,11 @@ get_current_file cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "get_current_file" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.get_current_file
 
 {-# NOINLINE bindEditorFileDialog_get_current_path #-}
 
@@ -936,9 +1153,14 @@ get_current_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "get_current_path" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.get_current_path
+
 {-# NOINLINE bindEditorFileDialog_get_display_mode #-}
 
--- | The view format in which the [EditorFileDialog] displays resources to the user.
+-- | The view format in which the @EditorFileDialog@ displays resources to the user.
 bindEditorFileDialog_get_display_mode :: MethodBind
 bindEditorFileDialog_get_display_mode
   = unsafePerformIO $
@@ -948,7 +1170,7 @@ bindEditorFileDialog_get_display_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The view format in which the [EditorFileDialog] displays resources to the user.
+-- | The view format in which the @EditorFileDialog@ displays resources to the user.
 get_display_mode ::
                    (EditorFileDialog :< cls, Object :< cls) => cls -> IO Int
 get_display_mode cls
@@ -960,9 +1182,14 @@ get_display_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "get_display_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.get_display_mode
+
 {-# NOINLINE bindEditorFileDialog_get_mode #-}
 
--- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
+-- | The purpose of the @EditorFileDialog@, which defines the allowed behaviors.
 bindEditorFileDialog_get_mode :: MethodBind
 bindEditorFileDialog_get_mode
   = unsafePerformIO $
@@ -972,7 +1199,7 @@ bindEditorFileDialog_get_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
+-- | The purpose of the @EditorFileDialog@, which defines the allowed behaviors.
 get_mode ::
            (EditorFileDialog :< cls, Object :< cls) => cls -> IO Int
 get_mode cls
@@ -983,9 +1210,12 @@ get_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "get_mode" '[] (IO Int) where
+        nodeMethod = Godot.Tools.EditorFileDialog.get_mode
+
 {-# NOINLINE bindEditorFileDialog_get_vbox #-}
 
--- | Returns the [code]VBoxContainer[/code] used to display the file system.
+-- | Returns the @VBoxContainer@ used to display the file system.
 bindEditorFileDialog_get_vbox :: MethodBind
 bindEditorFileDialog_get_vbox
   = unsafePerformIO $
@@ -995,7 +1225,7 @@ bindEditorFileDialog_get_vbox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [code]VBoxContainer[/code] used to display the file system.
+-- | Returns the @VBoxContainer@ used to display the file system.
 get_vbox ::
            (EditorFileDialog :< cls, Object :< cls) => cls -> IO VBoxContainer
 get_vbox cls
@@ -1006,9 +1236,14 @@ get_vbox cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "get_vbox" '[]
+           (IO VBoxContainer)
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.get_vbox
+
 {-# NOINLINE bindEditorFileDialog_invalidate #-}
 
--- | Notify the [EditorFileDialog] that its view of the data is no longer accurate. Updates the view contents on next view update.
+-- | Notify the @EditorFileDialog@ that its view of the data is no longer accurate. Updates the view contents on next view update.
 bindEditorFileDialog_invalidate :: MethodBind
 bindEditorFileDialog_invalidate
   = unsafePerformIO $
@@ -1018,7 +1253,7 @@ bindEditorFileDialog_invalidate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Notify the [EditorFileDialog] that its view of the data is no longer accurate. Updates the view contents on next view update.
+-- | Notify the @EditorFileDialog@ that its view of the data is no longer accurate. Updates the view contents on next view update.
 invalidate ::
              (EditorFileDialog :< cls, Object :< cls) => cls -> IO ()
 invalidate cls
@@ -1029,9 +1264,12 @@ invalidate cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "invalidate" '[] (IO ()) where
+        nodeMethod = Godot.Tools.EditorFileDialog.invalidate
+
 {-# NOINLINE bindEditorFileDialog_is_overwrite_warning_disabled #-}
 
--- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
+-- | If @true@, the @EditorFileDialog@ will not warn the user before overwriting files.
 bindEditorFileDialog_is_overwrite_warning_disabled :: MethodBind
 bindEditorFileDialog_is_overwrite_warning_disabled
   = unsafePerformIO $
@@ -1041,7 +1279,7 @@ bindEditorFileDialog_is_overwrite_warning_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
+-- | If @true@, the @EditorFileDialog@ will not warn the user before overwriting files.
 is_overwrite_warning_disabled ::
                                 (EditorFileDialog :< cls, Object :< cls) => cls -> IO Bool
 is_overwrite_warning_disabled cls
@@ -1054,9 +1292,17 @@ is_overwrite_warning_disabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog
+           "is_overwrite_warning_disabled"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Tools.EditorFileDialog.is_overwrite_warning_disabled
+
 {-# NOINLINE bindEditorFileDialog_is_showing_hidden_files #-}
 
--- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
+-- | If @true@, hidden files and directories will be visible in the @EditorFileDialog@.
 bindEditorFileDialog_is_showing_hidden_files :: MethodBind
 bindEditorFileDialog_is_showing_hidden_files
   = unsafePerformIO $
@@ -1066,7 +1312,7 @@ bindEditorFileDialog_is_showing_hidden_files
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
+-- | If @true@, hidden files and directories will be visible in the @EditorFileDialog@.
 is_showing_hidden_files ::
                           (EditorFileDialog :< cls, Object :< cls) => cls -> IO Bool
 is_showing_hidden_files cls
@@ -1078,9 +1324,14 @@ is_showing_hidden_files cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "is_showing_hidden_files" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.is_showing_hidden_files
+
 {-# NOINLINE bindEditorFileDialog_set_access #-}
 
--- | The location from which the user may select a file, including [code]res://[/code], [code]user://[/code], and the local file system.
+-- | The location from which the user may select a file, including @res://@, @user://@, and the local file system.
 bindEditorFileDialog_set_access :: MethodBind
 bindEditorFileDialog_set_access
   = unsafePerformIO $
@@ -1090,7 +1341,7 @@ bindEditorFileDialog_set_access
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The location from which the user may select a file, including [code]res://[/code], [code]user://[/code], and the local file system.
+-- | The location from which the user may select a file, including @res://@, @user://@, and the local file system.
 set_access ::
              (EditorFileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_access cls arg1
@@ -1100,6 +1351,10 @@ set_access cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "set_access" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.set_access
 
 {-# NOINLINE bindEditorFileDialog_set_current_dir #-}
 
@@ -1126,6 +1381,12 @@ set_current_dir cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "set_current_dir"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.set_current_dir
+
 {-# NOINLINE bindEditorFileDialog_set_current_file #-}
 
 -- | The currently selected file.
@@ -1150,6 +1411,12 @@ set_current_file cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "set_current_file"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.set_current_file
 
 {-# NOINLINE bindEditorFileDialog_set_current_path #-}
 
@@ -1176,9 +1443,15 @@ set_current_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "set_current_path"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.set_current_path
+
 {-# NOINLINE bindEditorFileDialog_set_disable_overwrite_warning #-}
 
--- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
+-- | If @true@, the @EditorFileDialog@ will not warn the user before overwriting files.
 bindEditorFileDialog_set_disable_overwrite_warning :: MethodBind
 bindEditorFileDialog_set_disable_overwrite_warning
   = unsafePerformIO $
@@ -1188,7 +1461,7 @@ bindEditorFileDialog_set_disable_overwrite_warning
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the [EditorFileDialog] will not warn the user before overwriting files.
+-- | If @true@, the @EditorFileDialog@ will not warn the user before overwriting files.
 set_disable_overwrite_warning ::
                                 (EditorFileDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disable_overwrite_warning cls arg1
@@ -1201,9 +1474,17 @@ set_disable_overwrite_warning cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog
+           "set_disable_overwrite_warning"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Tools.EditorFileDialog.set_disable_overwrite_warning
+
 {-# NOINLINE bindEditorFileDialog_set_display_mode #-}
 
--- | The view format in which the [EditorFileDialog] displays resources to the user.
+-- | The view format in which the @EditorFileDialog@ displays resources to the user.
 bindEditorFileDialog_set_display_mode :: MethodBind
 bindEditorFileDialog_set_display_mode
   = unsafePerformIO $
@@ -1213,7 +1494,7 @@ bindEditorFileDialog_set_display_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The view format in which the [EditorFileDialog] displays resources to the user.
+-- | The view format in which the @EditorFileDialog@ displays resources to the user.
 set_display_mode ::
                    (EditorFileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_display_mode cls arg1
@@ -1225,9 +1506,14 @@ set_display_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "set_display_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.set_display_mode
+
 {-# NOINLINE bindEditorFileDialog_set_mode #-}
 
--- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
+-- | The purpose of the @EditorFileDialog@, which defines the allowed behaviors.
 bindEditorFileDialog_set_mode :: MethodBind
 bindEditorFileDialog_set_mode
   = unsafePerformIO $
@@ -1237,7 +1523,7 @@ bindEditorFileDialog_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The purpose of the [EditorFileDialog], which defines the allowed behaviors.
+-- | The purpose of the @EditorFileDialog@, which defines the allowed behaviors.
 set_mode ::
            (EditorFileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
@@ -1248,9 +1534,13 @@ set_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorFileDialog "set_mode" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.set_mode
+
 {-# NOINLINE bindEditorFileDialog_set_show_hidden_files #-}
 
--- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
+-- | If @true@, hidden files and directories will be visible in the @EditorFileDialog@.
 bindEditorFileDialog_set_show_hidden_files :: MethodBind
 bindEditorFileDialog_set_show_hidden_files
   = unsafePerformIO $
@@ -1260,7 +1550,7 @@ bindEditorFileDialog_set_show_hidden_files
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], hidden files and directories will be visible in the [EditorFileDialog].
+-- | If @true@, hidden files and directories will be visible in the @EditorFileDialog@.
 set_show_hidden_files ::
                         (EditorFileDialog :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_show_hidden_files cls arg1
@@ -1271,3 +1561,9 @@ set_show_hidden_files cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorFileDialog "set_show_hidden_files"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorFileDialog.set_show_hidden_files

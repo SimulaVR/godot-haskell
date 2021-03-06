@@ -76,9 +76,14 @@ module Godot.Core.ItemList
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 _ICON_MODE_LEFT :: Int
 _ICON_MODE_LEFT = 1
@@ -101,7 +106,7 @@ instance NodeSignal ItemList "item_activated" '[Int]
 
 -- | Triggered when specified list item has been selected via right mouse clicking.
 --   				The click position is also provided to allow appropriate popup of context menus at the correct location.
---   				[member allow_rmb_select] must be enabled.
+--   				@allow_rmb_select@ must be enabled.
 sig_item_rmb_selected :: Godot.Internal.Dispatch.Signal ItemList
 sig_item_rmb_selected
   = Godot.Internal.Dispatch.Signal "item_rmb_selected"
@@ -109,7 +114,7 @@ sig_item_rmb_selected
 instance NodeSignal ItemList "item_rmb_selected" '[Int, Vector2]
 
 -- | Triggered when specified item has been selected.
---   				[member allow_reselect] must be enabled to reselect an item.
+--   				@allow_reselect@ must be enabled to reselect an item.
 sig_item_selected :: Godot.Internal.Dispatch.Signal ItemList
 sig_item_selected = Godot.Internal.Dispatch.Signal "item_selected"
 
@@ -130,11 +135,67 @@ sig_nothing_selected
 instance NodeSignal ItemList "nothing_selected" '[]
 
 -- | Triggered when a right mouse click is issued within the rect of the list but on empty space.
---   				[member allow_rmb_select] must be enabled.
+--   				@allow_rmb_select@ must be enabled.
 sig_rmb_clicked :: Godot.Internal.Dispatch.Signal ItemList
 sig_rmb_clicked = Godot.Internal.Dispatch.Signal "rmb_clicked"
 
 instance NodeSignal ItemList "rmb_clicked" '[Vector2]
+
+instance NodeProperty ItemList "allow_reselect" Bool 'False where
+        nodeProperty
+          = (get_allow_reselect, wrapDroppingSetter set_allow_reselect,
+             Nothing)
+
+instance NodeProperty ItemList "allow_rmb_select" Bool 'False where
+        nodeProperty
+          = (get_allow_rmb_select, wrapDroppingSetter set_allow_rmb_select,
+             Nothing)
+
+instance NodeProperty ItemList "auto_height" Bool 'False where
+        nodeProperty
+          = (has_auto_height, wrapDroppingSetter set_auto_height, Nothing)
+
+instance NodeProperty ItemList "fixed_column_width" Int 'False
+         where
+        nodeProperty
+          = (get_fixed_column_width,
+             wrapDroppingSetter set_fixed_column_width, Nothing)
+
+instance NodeProperty ItemList "fixed_icon_size" Vector2 'False
+         where
+        nodeProperty
+          = (get_fixed_icon_size, wrapDroppingSetter set_fixed_icon_size,
+             Nothing)
+
+instance NodeProperty ItemList "icon_mode" Int 'False where
+        nodeProperty
+          = (get_icon_mode, wrapDroppingSetter set_icon_mode, Nothing)
+
+instance NodeProperty ItemList "icon_scale" Float 'False where
+        nodeProperty
+          = (get_icon_scale, wrapDroppingSetter set_icon_scale, Nothing)
+
+instance NodeProperty ItemList "items" Array 'False where
+        nodeProperty = (_get_items, wrapDroppingSetter _set_items, Nothing)
+
+instance NodeProperty ItemList "max_columns" Int 'False where
+        nodeProperty
+          = (get_max_columns, wrapDroppingSetter set_max_columns, Nothing)
+
+instance NodeProperty ItemList "max_text_lines" Int 'False where
+        nodeProperty
+          = (get_max_text_lines, wrapDroppingSetter set_max_text_lines,
+             Nothing)
+
+instance NodeProperty ItemList "same_column_width" Bool 'False
+         where
+        nodeProperty
+          = (is_same_column_width, wrapDroppingSetter set_same_column_width,
+             Nothing)
+
+instance NodeProperty ItemList "select_mode" Int 'False where
+        nodeProperty
+          = (get_select_mode, wrapDroppingSetter set_select_mode, Nothing)
 
 {-# NOINLINE bindItemList__get_items #-}
 
@@ -155,6 +216,9 @@ _get_items cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "_get_items" '[] (IO Array) where
+        nodeMethod = Godot.Core.ItemList._get_items
+
 {-# NOINLINE bindItemList__gui_input #-}
 
 bindItemList__gui_input :: MethodBind
@@ -174,6 +238,10 @@ _gui_input cls arg1
          godot_method_bind_call bindItemList__gui_input (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "_gui_input" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList._gui_input
 
 {-# NOINLINE bindItemList__scroll_changed #-}
 
@@ -196,6 +264,10 @@ _scroll_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "_scroll_changed" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList._scroll_changed
+
 {-# NOINLINE bindItemList__set_items #-}
 
 bindItemList__set_items :: MethodBind
@@ -216,6 +288,9 @@ _set_items cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "_set_items" '[Array] (IO ()) where
+        nodeMethod = Godot.Core.ItemList._set_items
+
 {-# NOINLINE bindItemList_add_icon_item #-}
 
 -- | Adds an item to the item list with no text, only an icon.
@@ -230,19 +305,26 @@ bindItemList_add_icon_item
 
 -- | Adds an item to the item list with no text, only an icon.
 add_icon_item ::
-                (ItemList :< cls, Object :< cls) => cls -> Texture -> Bool -> IO ()
+                (ItemList :< cls, Object :< cls) =>
+                cls -> Texture -> Maybe Bool -> IO ()
 add_icon_item cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool True) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindItemList_add_icon_item (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "add_icon_item" '[Texture, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.add_icon_item
+
 {-# NOINLINE bindItemList_add_item #-}
 
--- | Adds an item to the item list with specified text. Specify an [code]icon[/code], or use [code]null[/code] as the [code]icon[/code] for a list item with no icon.
---   				If selectable is [code]true[/code], the list item will be selectable.
+-- | Adds an item to the item list with specified text. Specify an @icon@, or use @null@ as the @icon@ for a list item with no icon.
+--   				If selectable is @true@, the list item will be selectable.
 bindItemList_add_item :: MethodBind
 bindItemList_add_item
   = unsafePerformIO $
@@ -252,17 +334,25 @@ bindItemList_add_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an item to the item list with specified text. Specify an [code]icon[/code], or use [code]null[/code] as the [code]icon[/code] for a list item with no icon.
---   				If selectable is [code]true[/code], the list item will be selectable.
+-- | Adds an item to the item list with specified text. Specify an @icon@, or use @null@ as the @icon@ for a list item with no icon.
+--   				If selectable is @true@, the list item will be selectable.
 add_item ::
            (ItemList :< cls, Object :< cls) =>
-           cls -> GodotString -> Texture -> Bool -> IO ()
+           cls -> GodotString -> Maybe Texture -> Maybe Bool -> IO ()
 add_item cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, maybe VariantNil toVariant arg2,
+       maybe (VariantBool True) toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindItemList_add_item (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "add_item"
+           '[GodotString, Maybe Texture, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.add_item
 
 {-# NOINLINE bindItemList_clear #-}
 
@@ -283,6 +373,9 @@ clear cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindItemList_clear (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.clear
 
 {-# NOINLINE bindItemList_ensure_current_is_visible #-}
 
@@ -308,9 +401,14 @@ ensure_current_is_visible cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "ensure_current_is_visible" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.ensure_current_is_visible
+
 {-# NOINLINE bindItemList_get_allow_reselect #-}
 
--- | If [code]true[/code], the currently selected item can be selected again.
+-- | If @true@, the currently selected item can be selected again.
 bindItemList_get_allow_reselect :: MethodBind
 bindItemList_get_allow_reselect
   = unsafePerformIO $
@@ -320,7 +418,7 @@ bindItemList_get_allow_reselect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the currently selected item can be selected again.
+-- | If @true@, the currently selected item can be selected again.
 get_allow_reselect ::
                      (ItemList :< cls, Object :< cls) => cls -> IO Bool
 get_allow_reselect cls
@@ -331,9 +429,13 @@ get_allow_reselect cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_allow_reselect" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.get_allow_reselect
+
 {-# NOINLINE bindItemList_get_allow_rmb_select #-}
 
--- | If [code]true[/code], right mouse button click can select items.
+-- | If @true@, right mouse button click can select items.
 bindItemList_get_allow_rmb_select :: MethodBind
 bindItemList_get_allow_rmb_select
   = unsafePerformIO $
@@ -343,7 +445,7 @@ bindItemList_get_allow_rmb_select
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], right mouse button click can select items.
+-- | If @true@, right mouse button click can select items.
 get_allow_rmb_select ::
                        (ItemList :< cls, Object :< cls) => cls -> IO Bool
 get_allow_rmb_select cls
@@ -354,6 +456,10 @@ get_allow_rmb_select cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "get_allow_rmb_select" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.get_allow_rmb_select
 
 {-# NOINLINE bindItemList_get_fixed_column_width #-}
 
@@ -381,6 +487,10 @@ get_fixed_column_width cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_fixed_column_width" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ItemList.get_fixed_column_width
+
 {-# NOINLINE bindItemList_get_fixed_icon_size #-}
 
 -- | The size all icons will be adjusted to.
@@ -407,9 +517,13 @@ get_fixed_icon_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_fixed_icon_size" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.ItemList.get_fixed_icon_size
+
 {-# NOINLINE bindItemList_get_icon_mode #-}
 
--- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
+-- | The icon position, whether above or to the left of the text. See the @enum IconMode@ constants.
 bindItemList_get_icon_mode :: MethodBind
 bindItemList_get_icon_mode
   = unsafePerformIO $
@@ -419,7 +533,7 @@ bindItemList_get_icon_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
+-- | The icon position, whether above or to the left of the text. See the @enum IconMode@ constants.
 get_icon_mode :: (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_icon_mode cls
   = withVariantArray []
@@ -429,9 +543,12 @@ get_icon_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_icon_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.ItemList.get_icon_mode
+
 {-# NOINLINE bindItemList_get_icon_scale #-}
 
--- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
+-- | The scale of icon applied after @fixed_icon_size@ and transposing takes effect.
 bindItemList_get_icon_scale :: MethodBind
 bindItemList_get_icon_scale
   = unsafePerformIO $
@@ -441,7 +558,7 @@ bindItemList_get_icon_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
+-- | The scale of icon applied after @fixed_icon_size@ and transposing takes effect.
 get_icon_scale ::
                  (ItemList :< cls, Object :< cls) => cls -> IO Float
 get_icon_scale cls
@@ -452,10 +569,13 @@ get_icon_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_icon_scale" '[] (IO Float) where
+        nodeMethod = Godot.Core.ItemList.get_icon_scale
+
 {-# NOINLINE bindItemList_get_item_at_position #-}
 
--- | Returns the item index at the given [code]position[/code].
---   				When there is no item at that point, -1 will be returned if [code]exact[/code] is [code]true[/code], and the closest item index will be returned otherwise.
+-- | Returns the item index at the given @position@.
+--   				When there is no item at that point, -1 will be returned if @exact@ is @true@, and the closest item index will be returned otherwise.
 bindItemList_get_item_at_position :: MethodBind
 bindItemList_get_item_at_position
   = unsafePerformIO $
@@ -465,19 +585,26 @@ bindItemList_get_item_at_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the item index at the given [code]position[/code].
---   				When there is no item at that point, -1 will be returned if [code]exact[/code] is [code]true[/code], and the closest item index will be returned otherwise.
+-- | Returns the item index at the given @position@.
+--   				When there is no item at that point, -1 will be returned if @exact@ is @true@, and the closest item index will be returned otherwise.
 get_item_at_position ::
                        (ItemList :< cls, Object :< cls) =>
-                       cls -> Vector2 -> Bool -> IO Int
+                       cls -> Vector2 -> Maybe Bool -> IO Int
 get_item_at_position cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool False) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindItemList_get_item_at_position
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "get_item_at_position"
+           '[Vector2, Maybe Bool]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_at_position
 
 {-# NOINLINE bindItemList_get_item_count #-}
 
@@ -501,9 +628,12 @@ get_item_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_item_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.ItemList.get_item_count
+
 {-# NOINLINE bindItemList_get_item_custom_bg_color #-}
 
--- | Returns the custom background color of the item specified by [code]idx[/code] index.
+-- | Returns the custom background color of the item specified by @idx@ index.
 bindItemList_get_item_custom_bg_color :: MethodBind
 bindItemList_get_item_custom_bg_color
   = unsafePerformIO $
@@ -513,7 +643,7 @@ bindItemList_get_item_custom_bg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the custom background color of the item specified by [code]idx[/code] index.
+-- | Returns the custom background color of the item specified by @idx@ index.
 get_item_custom_bg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> IO Color
 get_item_custom_bg_color cls arg1
@@ -525,9 +655,14 @@ get_item_custom_bg_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_item_custom_bg_color" '[Int]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_custom_bg_color
+
 {-# NOINLINE bindItemList_get_item_custom_fg_color #-}
 
--- | Returns the custom foreground color of the item specified by [code]idx[/code] index.
+-- | Returns the custom foreground color of the item specified by @idx@ index.
 bindItemList_get_item_custom_fg_color :: MethodBind
 bindItemList_get_item_custom_fg_color
   = unsafePerformIO $
@@ -537,7 +672,7 @@ bindItemList_get_item_custom_fg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the custom foreground color of the item specified by [code]idx[/code] index.
+-- | Returns the custom foreground color of the item specified by @idx@ index.
 get_item_custom_fg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> IO Color
 get_item_custom_fg_color cls arg1
@@ -548,6 +683,11 @@ get_item_custom_fg_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "get_item_custom_fg_color" '[Int]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_custom_fg_color
 
 {-# NOINLINE bindItemList_get_item_icon #-}
 
@@ -572,9 +712,13 @@ get_item_icon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_item_icon" '[Int] (IO Texture)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_icon
+
 {-# NOINLINE bindItemList_get_item_icon_modulate #-}
 
--- | Returns a [Color] modulating item's icon at the specified index.
+-- | Returns a @Color@ modulating item's icon at the specified index.
 bindItemList_get_item_icon_modulate :: MethodBind
 bindItemList_get_item_icon_modulate
   = unsafePerformIO $
@@ -584,7 +728,7 @@ bindItemList_get_item_icon_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [Color] modulating item's icon at the specified index.
+-- | Returns a @Color@ modulating item's icon at the specified index.
 get_item_icon_modulate ::
                          (ItemList :< cls, Object :< cls) => cls -> Int -> IO Color
 get_item_icon_modulate cls arg1
@@ -595,6 +739,11 @@ get_item_icon_modulate cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "get_item_icon_modulate" '[Int]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_icon_modulate
 
 {-# NOINLINE bindItemList_get_item_icon_region #-}
 
@@ -620,6 +769,11 @@ get_item_icon_region cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_item_icon_region" '[Int]
+           (IO Rect2)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_icon_region
+
 {-# NOINLINE bindItemList_get_item_metadata #-}
 
 -- | Returns the metadata value of the specified index.
@@ -642,6 +796,11 @@ get_item_metadata cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "get_item_metadata" '[Int]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_metadata
 
 {-# NOINLINE bindItemList_get_item_text #-}
 
@@ -666,6 +825,11 @@ get_item_text cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_item_text" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_text
+
 {-# NOINLINE bindItemList_get_item_tooltip #-}
 
 -- | Returns the tooltip hint associated with the specified index.
@@ -688,6 +852,11 @@ get_item_tooltip cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "get_item_tooltip" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.ItemList.get_item_tooltip
 
 {-# NOINLINE bindItemList_get_max_columns #-}
 
@@ -716,10 +885,13 @@ get_max_columns cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_max_columns" '[] (IO Int) where
+        nodeMethod = Godot.Core.ItemList.get_max_columns
+
 {-# NOINLINE bindItemList_get_max_text_lines #-}
 
 -- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
---   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
+--   			__Note:__ This property takes effect only when @icon_mode@ is @ICON_MODE_TOP@. To make the text wrap, @fixed_column_width@ should be greater than zero.
 bindItemList_get_max_text_lines :: MethodBind
 bindItemList_get_max_text_lines
   = unsafePerformIO $
@@ -730,7 +902,7 @@ bindItemList_get_max_text_lines
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
---   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
+--   			__Note:__ This property takes effect only when @icon_mode@ is @ICON_MODE_TOP@. To make the text wrap, @fixed_column_width@ should be greater than zero.
 get_max_text_lines ::
                      (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_max_text_lines cls
@@ -741,9 +913,13 @@ get_max_text_lines cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_max_text_lines" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ItemList.get_max_text_lines
+
 {-# NOINLINE bindItemList_get_select_mode #-}
 
--- | Allows single or multiple item selection. See the [enum SelectMode] constants.
+-- | Allows single or multiple item selection. See the @enum SelectMode@ constants.
 bindItemList_get_select_mode :: MethodBind
 bindItemList_get_select_mode
   = unsafePerformIO $
@@ -753,7 +929,7 @@ bindItemList_get_select_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allows single or multiple item selection. See the [enum SelectMode] constants.
+-- | Allows single or multiple item selection. See the @enum SelectMode@ constants.
 get_select_mode ::
                   (ItemList :< cls, Object :< cls) => cls -> IO Int
 get_select_mode cls
@@ -763,6 +939,9 @@ get_select_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "get_select_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.ItemList.get_select_mode
 
 {-# NOINLINE bindItemList_get_selected_items #-}
 
@@ -787,9 +966,14 @@ get_selected_items cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_selected_items" '[]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.ItemList.get_selected_items
+
 {-# NOINLINE bindItemList_get_v_scroll #-}
 
--- | Returns the [Object] ID associated with the list.
+-- | Returns the @Object@ ID associated with the list.
 bindItemList_get_v_scroll :: MethodBind
 bindItemList_get_v_scroll
   = unsafePerformIO $
@@ -799,7 +983,7 @@ bindItemList_get_v_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [Object] ID associated with the list.
+-- | Returns the @Object@ ID associated with the list.
 get_v_scroll ::
                (ItemList :< cls, Object :< cls) => cls -> IO VScrollBar
 get_v_scroll cls
@@ -810,9 +994,13 @@ get_v_scroll cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "get_v_scroll" '[] (IO VScrollBar)
+         where
+        nodeMethod = Godot.Core.ItemList.get_v_scroll
+
 {-# NOINLINE bindItemList_has_auto_height #-}
 
--- | If [code]true[/code], the control will automatically resize the height to fit its content.
+-- | If @true@, the control will automatically resize the height to fit its content.
 bindItemList_has_auto_height :: MethodBind
 bindItemList_has_auto_height
   = unsafePerformIO $
@@ -822,7 +1010,7 @@ bindItemList_has_auto_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the control will automatically resize the height to fit its content.
+-- | If @true@, the control will automatically resize the height to fit its content.
 has_auto_height ::
                   (ItemList :< cls, Object :< cls) => cls -> IO Bool
 has_auto_height cls
@@ -833,9 +1021,12 @@ has_auto_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "has_auto_height" '[] (IO Bool) where
+        nodeMethod = Godot.Core.ItemList.has_auto_height
+
 {-# NOINLINE bindItemList_is_anything_selected #-}
 
--- | Returns [code]true[/code] if one or more items are selected.
+-- | Returns @true@ if one or more items are selected.
 bindItemList_is_anything_selected :: MethodBind
 bindItemList_is_anything_selected
   = unsafePerformIO $
@@ -845,7 +1036,7 @@ bindItemList_is_anything_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if one or more items are selected.
+-- | Returns @true@ if one or more items are selected.
 is_anything_selected ::
                        (ItemList :< cls, Object :< cls) => cls -> IO Bool
 is_anything_selected cls
@@ -857,9 +1048,13 @@ is_anything_selected cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "is_anything_selected" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.is_anything_selected
+
 {-# NOINLINE bindItemList_is_item_disabled #-}
 
--- | Returns [code]true[/code] if the item at the specified index is disabled.
+-- | Returns @true@ if the item at the specified index is disabled.
 bindItemList_is_item_disabled :: MethodBind
 bindItemList_is_item_disabled
   = unsafePerformIO $
@@ -869,7 +1064,7 @@ bindItemList_is_item_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the item at the specified index is disabled.
+-- | Returns @true@ if the item at the specified index is disabled.
 is_item_disabled ::
                    (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_disabled cls arg1
@@ -880,9 +1075,13 @@ is_item_disabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "is_item_disabled" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.is_item_disabled
+
 {-# NOINLINE bindItemList_is_item_icon_transposed #-}
 
--- | Returns [code]true[/code] if the item icon will be drawn transposed, i.e. the X and Y axes are swapped.
+-- | Returns @true@ if the item icon will be drawn transposed, i.e. the X and Y axes are swapped.
 bindItemList_is_item_icon_transposed :: MethodBind
 bindItemList_is_item_icon_transposed
   = unsafePerformIO $
@@ -892,7 +1091,7 @@ bindItemList_is_item_icon_transposed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the item icon will be drawn transposed, i.e. the X and Y axes are swapped.
+-- | Returns @true@ if the item icon will be drawn transposed, i.e. the X and Y axes are swapped.
 is_item_icon_transposed ::
                           (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_icon_transposed cls arg1
@@ -904,9 +1103,14 @@ is_item_icon_transposed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "is_item_icon_transposed" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.is_item_icon_transposed
+
 {-# NOINLINE bindItemList_is_item_selectable #-}
 
--- | Returns [code]true[/code] if the item at the specified index is selectable.
+-- | Returns @true@ if the item at the specified index is selectable.
 bindItemList_is_item_selectable :: MethodBind
 bindItemList_is_item_selectable
   = unsafePerformIO $
@@ -916,7 +1120,7 @@ bindItemList_is_item_selectable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the item at the specified index is selectable.
+-- | Returns @true@ if the item at the specified index is selectable.
 is_item_selectable ::
                      (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_selectable cls arg1
@@ -927,9 +1131,13 @@ is_item_selectable cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "is_item_selectable" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.is_item_selectable
+
 {-# NOINLINE bindItemList_is_item_tooltip_enabled #-}
 
--- | Returns [code]true[/code] if the tooltip is enabled for specified item index.
+-- | Returns @true@ if the tooltip is enabled for specified item index.
 bindItemList_is_item_tooltip_enabled :: MethodBind
 bindItemList_is_item_tooltip_enabled
   = unsafePerformIO $
@@ -939,7 +1147,7 @@ bindItemList_is_item_tooltip_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the tooltip is enabled for specified item index.
+-- | Returns @true@ if the tooltip is enabled for specified item index.
 is_item_tooltip_enabled ::
                           (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_item_tooltip_enabled cls arg1
@@ -951,10 +1159,15 @@ is_item_tooltip_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "is_item_tooltip_enabled" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.is_item_tooltip_enabled
+
 {-# NOINLINE bindItemList_is_same_column_width #-}
 
 -- | Whether all columns will have the same width.
---   			If [code]true[/code], the width is equal to the largest column width of all columns.
+--   			If @true@, the width is equal to the largest column width of all columns.
 bindItemList_is_same_column_width :: MethodBind
 bindItemList_is_same_column_width
   = unsafePerformIO $
@@ -965,7 +1178,7 @@ bindItemList_is_same_column_width
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Whether all columns will have the same width.
---   			If [code]true[/code], the width is equal to the largest column width of all columns.
+--   			If @true@, the width is equal to the largest column width of all columns.
 is_same_column_width ::
                        (ItemList :< cls, Object :< cls) => cls -> IO Bool
 is_same_column_width cls
@@ -977,9 +1190,13 @@ is_same_column_width cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "is_same_column_width" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.ItemList.is_same_column_width
+
 {-# NOINLINE bindItemList_is_selected #-}
 
--- | Returns [code]true[/code] if the item at the specified index is currently selected.
+-- | Returns @true@ if the item at the specified index is currently selected.
 bindItemList_is_selected :: MethodBind
 bindItemList_is_selected
   = unsafePerformIO $
@@ -989,7 +1206,7 @@ bindItemList_is_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the item at the specified index is currently selected.
+-- | Returns @true@ if the item at the specified index is currently selected.
 is_selected ::
               (ItemList :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_selected cls arg1
@@ -999,9 +1216,12 @@ is_selected cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "is_selected" '[Int] (IO Bool) where
+        nodeMethod = Godot.Core.ItemList.is_selected
+
 {-# NOINLINE bindItemList_move_item #-}
 
--- | Moves item from index [code]from_idx[/code] to [code]to_idx[/code].
+-- | Moves item from index @from_idx@ to @to_idx@.
 bindItemList_move_item :: MethodBind
 bindItemList_move_item
   = unsafePerformIO $
@@ -1011,7 +1231,7 @@ bindItemList_move_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Moves item from index [code]from_idx[/code] to [code]to_idx[/code].
+-- | Moves item from index @from_idx@ to @to_idx@.
 move_item ::
             (ItemList :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 move_item cls arg1 arg2
@@ -1021,9 +1241,12 @@ move_item cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "move_item" '[Int, Int] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.move_item
+
 {-# NOINLINE bindItemList_remove_item #-}
 
--- | Removes the item specified by [code]idx[/code] index from the list.
+-- | Removes the item specified by @idx@ index from the list.
 bindItemList_remove_item :: MethodBind
 bindItemList_remove_item
   = unsafePerformIO $
@@ -1033,7 +1256,7 @@ bindItemList_remove_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the item specified by [code]idx[/code] index from the list.
+-- | Removes the item specified by @idx@ index from the list.
 remove_item ::
               (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_item cls arg1
@@ -1043,10 +1266,13 @@ remove_item cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "remove_item" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.remove_item
+
 {-# NOINLINE bindItemList_select #-}
 
 -- | Select the item at the specified index.
---   				[b]Note:[/b] This method does not trigger the item selection signal.
+--   				__Note:__ This method does not trigger the item selection signal.
 bindItemList_select :: MethodBind
 bindItemList_select
   = unsafePerformIO $
@@ -1057,18 +1283,24 @@ bindItemList_select
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Select the item at the specified index.
---   				[b]Note:[/b] This method does not trigger the item selection signal.
+--   				__Note:__ This method does not trigger the item selection signal.
 select ::
-         (ItemList :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
+         (ItemList :< cls, Object :< cls) =>
+         cls -> Int -> Maybe Bool -> IO ()
 select cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool True) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindItemList_select (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "select" '[Int, Maybe Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.select
+
 {-# NOINLINE bindItemList_set_allow_reselect #-}
 
--- | If [code]true[/code], the currently selected item can be selected again.
+-- | If @true@, the currently selected item can be selected again.
 bindItemList_set_allow_reselect :: MethodBind
 bindItemList_set_allow_reselect
   = unsafePerformIO $
@@ -1078,7 +1310,7 @@ bindItemList_set_allow_reselect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the currently selected item can be selected again.
+-- | If @true@, the currently selected item can be selected again.
 set_allow_reselect ::
                      (ItemList :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_allow_reselect cls arg1
@@ -1089,9 +1321,13 @@ set_allow_reselect cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_allow_reselect" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_allow_reselect
+
 {-# NOINLINE bindItemList_set_allow_rmb_select #-}
 
--- | If [code]true[/code], right mouse button click can select items.
+-- | If @true@, right mouse button click can select items.
 bindItemList_set_allow_rmb_select :: MethodBind
 bindItemList_set_allow_rmb_select
   = unsafePerformIO $
@@ -1101,7 +1337,7 @@ bindItemList_set_allow_rmb_select
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], right mouse button click can select items.
+-- | If @true@, right mouse button click can select items.
 set_allow_rmb_select ::
                        (ItemList :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_allow_rmb_select cls arg1
@@ -1113,9 +1349,13 @@ set_allow_rmb_select cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_allow_rmb_select" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_allow_rmb_select
+
 {-# NOINLINE bindItemList_set_auto_height #-}
 
--- | If [code]true[/code], the control will automatically resize the height to fit its content.
+-- | If @true@, the control will automatically resize the height to fit its content.
 bindItemList_set_auto_height :: MethodBind
 bindItemList_set_auto_height
   = unsafePerformIO $
@@ -1125,7 +1365,7 @@ bindItemList_set_auto_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the control will automatically resize the height to fit its content.
+-- | If @true@, the control will automatically resize the height to fit its content.
 set_auto_height ::
                   (ItemList :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_auto_height cls arg1
@@ -1135,6 +1375,10 @@ set_auto_height cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "set_auto_height" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_auto_height
 
 {-# NOINLINE bindItemList_set_fixed_column_width #-}
 
@@ -1162,6 +1406,11 @@ set_fixed_column_width cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_fixed_column_width" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_fixed_column_width
+
 {-# NOINLINE bindItemList_set_fixed_icon_size #-}
 
 -- | The size all icons will be adjusted to.
@@ -1188,9 +1437,14 @@ set_fixed_icon_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_fixed_icon_size" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_fixed_icon_size
+
 {-# NOINLINE bindItemList_set_icon_mode #-}
 
--- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
+-- | The icon position, whether above or to the left of the text. See the @enum IconMode@ constants.
 bindItemList_set_icon_mode :: MethodBind
 bindItemList_set_icon_mode
   = unsafePerformIO $
@@ -1200,7 +1454,7 @@ bindItemList_set_icon_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The icon position, whether above or to the left of the text. See the [enum IconMode] constants.
+-- | The icon position, whether above or to the left of the text. See the @enum IconMode@ constants.
 set_icon_mode ::
                 (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_icon_mode cls arg1
@@ -1211,9 +1465,12 @@ set_icon_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_icon_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.set_icon_mode
+
 {-# NOINLINE bindItemList_set_icon_scale #-}
 
--- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
+-- | The scale of icon applied after @fixed_icon_size@ and transposing takes effect.
 bindItemList_set_icon_scale :: MethodBind
 bindItemList_set_icon_scale
   = unsafePerformIO $
@@ -1223,7 +1480,7 @@ bindItemList_set_icon_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The scale of icon applied after [member fixed_icon_size] and transposing takes effect.
+-- | The scale of icon applied after @fixed_icon_size@ and transposing takes effect.
 set_icon_scale ::
                  (ItemList :< cls, Object :< cls) => cls -> Float -> IO ()
 set_icon_scale cls arg1
@@ -1234,13 +1491,20 @@ set_icon_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_icon_scale" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_icon_scale
+
 {-# NOINLINE bindItemList_set_item_custom_bg_color #-}
 
--- | Sets the background color of the item specified by [code]idx[/code] index to the specified [Color].
---   				[codeblock]
+-- | Sets the background color of the item specified by @idx@ index to the specified @Color@.
+--   				
+--   @
+--   
 --   				var some_string = "Some text"
 --   				some_string.set_item_custom_bg_color(0,Color(1, 0, 0, 1) # This will set the background color of the first item of the control to red.
---   				[/codeblock]
+--   				
+--   @
 bindItemList_set_item_custom_bg_color :: MethodBind
 bindItemList_set_item_custom_bg_color
   = unsafePerformIO $
@@ -1250,11 +1514,14 @@ bindItemList_set_item_custom_bg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the background color of the item specified by [code]idx[/code] index to the specified [Color].
---   				[codeblock]
+-- | Sets the background color of the item specified by @idx@ index to the specified @Color@.
+--   				
+--   @
+--   
 --   				var some_string = "Some text"
 --   				some_string.set_item_custom_bg_color(0,Color(1, 0, 0, 1) # This will set the background color of the first item of the control to red.
---   				[/codeblock]
+--   				
+--   @
 set_item_custom_bg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 set_item_custom_bg_color cls arg1 arg2
@@ -1266,13 +1533,22 @@ set_item_custom_bg_color cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_item_custom_bg_color"
+           '[Int, Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_custom_bg_color
+
 {-# NOINLINE bindItemList_set_item_custom_fg_color #-}
 
--- | Sets the foreground color of the item specified by [code]idx[/code] index to the specified [Color].
---   				[codeblock]
+-- | Sets the foreground color of the item specified by @idx@ index to the specified @Color@.
+--   				
+--   @
+--   
 --   				var some_string = "Some text"
 --   				some_string.set_item_custom_fg_color(0,Color(1, 0, 0, 1) # This will set the foreground color of the first item of the control to red.
---   				[/codeblock]
+--   				
+--   @
 bindItemList_set_item_custom_fg_color :: MethodBind
 bindItemList_set_item_custom_fg_color
   = unsafePerformIO $
@@ -1282,11 +1558,14 @@ bindItemList_set_item_custom_fg_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the foreground color of the item specified by [code]idx[/code] index to the specified [Color].
---   				[codeblock]
+-- | Sets the foreground color of the item specified by @idx@ index to the specified @Color@.
+--   				
+--   @
+--   
 --   				var some_string = "Some text"
 --   				some_string.set_item_custom_fg_color(0,Color(1, 0, 0, 1) # This will set the foreground color of the first item of the control to red.
---   				[/codeblock]
+--   				
+--   @
 set_item_custom_fg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 set_item_custom_fg_color cls arg1 arg2
@@ -1297,6 +1576,12 @@ set_item_custom_fg_color cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "set_item_custom_fg_color"
+           '[Int, Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_custom_fg_color
 
 {-# NOINLINE bindItemList_set_item_disabled #-}
 
@@ -1323,9 +1608,14 @@ set_item_disabled cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_item_disabled" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_disabled
+
 {-# NOINLINE bindItemList_set_item_icon #-}
 
--- | Sets (or replaces) the icon's [Texture] associated with the specified index.
+-- | Sets (or replaces) the icon's @Texture@ associated with the specified index.
 bindItemList_set_item_icon :: MethodBind
 bindItemList_set_item_icon
   = unsafePerformIO $
@@ -1335,7 +1625,7 @@ bindItemList_set_item_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets (or replaces) the icon's [Texture] associated with the specified index.
+-- | Sets (or replaces) the icon's @Texture@ associated with the specified index.
 set_item_icon ::
                 (ItemList :< cls, Object :< cls) => cls -> Int -> Texture -> IO ()
 set_item_icon cls arg1 arg2
@@ -1346,9 +1636,14 @@ set_item_icon cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_item_icon" '[Int, Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_icon
+
 {-# NOINLINE bindItemList_set_item_icon_modulate #-}
 
--- | Sets a modulating [Color] of the item associated with the specified index.
+-- | Sets a modulating @Color@ of the item associated with the specified index.
 bindItemList_set_item_icon_modulate :: MethodBind
 bindItemList_set_item_icon_modulate
   = unsafePerformIO $
@@ -1358,7 +1653,7 @@ bindItemList_set_item_icon_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a modulating [Color] of the item associated with the specified index.
+-- | Sets a modulating @Color@ of the item associated with the specified index.
 set_item_icon_modulate ::
                          (ItemList :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 set_item_icon_modulate cls arg1 arg2
@@ -1369,6 +1664,11 @@ set_item_icon_modulate cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "set_item_icon_modulate" '[Int, Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_icon_modulate
 
 {-# NOINLINE bindItemList_set_item_icon_region #-}
 
@@ -1394,6 +1694,11 @@ set_item_icon_region cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_item_icon_region" '[Int, Rect2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_icon_region
+
 {-# NOINLINE bindItemList_set_item_icon_transposed #-}
 
 -- | Sets whether the item icon will be drawn transposed.
@@ -1417,6 +1722,12 @@ set_item_icon_transposed cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "set_item_icon_transposed"
+           '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_icon_transposed
 
 {-# NOINLINE bindItemList_set_item_metadata #-}
 
@@ -1442,6 +1753,12 @@ set_item_metadata cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_item_metadata"
+           '[Int, GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_metadata
+
 {-# NOINLINE bindItemList_set_item_selectable #-}
 
 -- | Allows or disallows selection of the item associated with the specified index.
@@ -1465,6 +1782,11 @@ set_item_selectable cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "set_item_selectable" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_selectable
 
 {-# NOINLINE bindItemList_set_item_text #-}
 
@@ -1490,6 +1812,11 @@ set_item_text cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_item_text" '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_text
+
 {-# NOINLINE bindItemList_set_item_tooltip #-}
 
 -- | Sets the tooltip hint for the item associated with the specified index.
@@ -1514,6 +1841,11 @@ set_item_tooltip cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_item_tooltip" '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_tooltip
+
 {-# NOINLINE bindItemList_set_item_tooltip_enabled #-}
 
 -- | Sets whether the tooltip hint is enabled for specified item index.
@@ -1537,6 +1869,12 @@ set_item_tooltip_enabled cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "set_item_tooltip_enabled"
+           '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_item_tooltip_enabled
 
 {-# NOINLINE bindItemList_set_max_columns #-}
 
@@ -1565,10 +1903,13 @@ set_max_columns cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_max_columns" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.set_max_columns
+
 {-# NOINLINE bindItemList_set_max_text_lines #-}
 
 -- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
---   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
+--   			__Note:__ This property takes effect only when @icon_mode@ is @ICON_MODE_TOP@. To make the text wrap, @fixed_column_width@ should be greater than zero.
 bindItemList_set_max_text_lines :: MethodBind
 bindItemList_set_max_text_lines
   = unsafePerformIO $
@@ -1579,7 +1920,7 @@ bindItemList_set_max_text_lines
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Maximum lines of text allowed in each item. Space will be reserved even when there is not enough lines of text to display.
---   			[b]Note:[/b] This property takes effect only when [member icon_mode] is [constant ICON_MODE_TOP]. To make the text wrap, [member fixed_column_width] should be greater than zero.
+--   			__Note:__ This property takes effect only when @icon_mode@ is @ICON_MODE_TOP@. To make the text wrap, @fixed_column_width@ should be greater than zero.
 set_max_text_lines ::
                      (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_text_lines cls arg1
@@ -1590,10 +1931,14 @@ set_max_text_lines cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_max_text_lines" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_max_text_lines
+
 {-# NOINLINE bindItemList_set_same_column_width #-}
 
 -- | Whether all columns will have the same width.
---   			If [code]true[/code], the width is equal to the largest column width of all columns.
+--   			If @true@, the width is equal to the largest column width of all columns.
 bindItemList_set_same_column_width :: MethodBind
 bindItemList_set_same_column_width
   = unsafePerformIO $
@@ -1604,7 +1949,7 @@ bindItemList_set_same_column_width
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Whether all columns will have the same width.
---   			If [code]true[/code], the width is equal to the largest column width of all columns.
+--   			If @true@, the width is equal to the largest column width of all columns.
 set_same_column_width ::
                         (ItemList :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_same_column_width cls arg1
@@ -1616,9 +1961,14 @@ set_same_column_width cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "set_same_column_width" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ItemList.set_same_column_width
+
 {-# NOINLINE bindItemList_set_select_mode #-}
 
--- | Allows single or multiple item selection. See the [enum SelectMode] constants.
+-- | Allows single or multiple item selection. See the @enum SelectMode@ constants.
 bindItemList_set_select_mode :: MethodBind
 bindItemList_set_select_mode
   = unsafePerformIO $
@@ -1628,7 +1978,7 @@ bindItemList_set_select_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Allows single or multiple item selection. See the [enum SelectMode] constants.
+-- | Allows single or multiple item selection. See the @enum SelectMode@ constants.
 set_select_mode ::
                   (ItemList :< cls, Object :< cls) => cls -> Int -> IO ()
 set_select_mode cls arg1
@@ -1638,6 +1988,9 @@ set_select_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "set_select_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.set_select_mode
 
 {-# NOINLINE bindItemList_sort_items_by_text #-}
 
@@ -1662,6 +2015,9 @@ sort_items_by_text cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ItemList "sort_items_by_text" '[] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.sort_items_by_text
+
 {-# NOINLINE bindItemList_unselect #-}
 
 -- | Ensures the item associated with the specified index is not selected.
@@ -1682,6 +2038,9 @@ unselect cls arg1
          godot_method_bind_call bindItemList_unselect (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "unselect" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.unselect
 
 {-# NOINLINE bindItemList_unselect_all #-}
 
@@ -1704,3 +2063,6 @@ unselect_all cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ItemList "unselect_all" '[] (IO ()) where
+        nodeMethod = Godot.Core.ItemList.unselect_all

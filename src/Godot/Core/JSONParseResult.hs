@@ -14,13 +14,35 @@ module Godot.Core.JSONParseResult
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
+
+instance NodeProperty JSONParseResult "error" Int 'False where
+        nodeProperty = (get_error, wrapDroppingSetter set_error, Nothing)
+
+instance NodeProperty JSONParseResult "error_line" Int 'False where
+        nodeProperty
+          = (get_error_line, wrapDroppingSetter set_error_line, Nothing)
+
+instance NodeProperty JSONParseResult "error_string" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_error_string, wrapDroppingSetter set_error_string, Nothing)
+
+instance NodeProperty JSONParseResult "result" GodotVariant 'False
+         where
+        nodeProperty = (get_result, wrapDroppingSetter set_result, Nothing)
 
 {-# NOINLINE bindJSONParseResult_get_error #-}
 
--- | The error type if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error type if the JSON source was not successfully parsed. See the @enum Error@ constants.
 bindJSONParseResult_get_error :: MethodBind
 bindJSONParseResult_get_error
   = unsafePerformIO $
@@ -30,7 +52,7 @@ bindJSONParseResult_get_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The error type if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error type if the JSON source was not successfully parsed. See the @enum Error@ constants.
 get_error ::
             (JSONParseResult :< cls, Object :< cls) => cls -> IO Int
 get_error cls
@@ -40,6 +62,9 @@ get_error cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod JSONParseResult "get_error" '[] (IO Int) where
+        nodeMethod = Godot.Core.JSONParseResult.get_error
 
 {-# NOINLINE bindJSONParseResult_get_error_line #-}
 
@@ -65,9 +90,13 @@ get_error_line cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONParseResult "get_error_line" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.JSONParseResult.get_error_line
+
 {-# NOINLINE bindJSONParseResult_get_error_string #-}
 
--- | The error message if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error message if the JSON source was not successfully parsed. See the @enum Error@ constants.
 bindJSONParseResult_get_error_string :: MethodBind
 bindJSONParseResult_get_error_string
   = unsafePerformIO $
@@ -77,7 +106,7 @@ bindJSONParseResult_get_error_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The error message if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error message if the JSON source was not successfully parsed. See the @enum Error@ constants.
 get_error_string ::
                    (JSONParseResult :< cls, Object :< cls) => cls -> IO GodotString
 get_error_string cls
@@ -89,18 +118,26 @@ get_error_string cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONParseResult "get_error_string" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.JSONParseResult.get_error_string
+
 {-# NOINLINE bindJSONParseResult_get_result #-}
 
--- | A [Variant] containing the parsed JSON. Use [method @GDScript.typeof] or the [code]is[/code] keyword to check if it is what you expect. For example, if the JSON source starts with curly braces ([code]{}[/code]), a [Dictionary] will be returned. If the JSON source starts with brackets ([code][][/code]), an [Array] will be returned.
---   			[b]Note:[/b] The JSON specification does not define integer or float types, but only a [i]number[/i] type. Therefore, parsing a JSON text will convert all numerical values to [float] types.
---   			[b]Note:[/b] JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
---   			[codeblock]
---   			var p = JSON.parse('["hello", "world", "!"]')
+-- | A @Variant@ containing the parsed JSON. Use @method @GDScript.typeof@ or the @is@ keyword to check if it is what you expect. For example, if the JSON source starts with curly braces (@{}@), a @Dictionary@ will be returned. If the JSON source starts with brackets (@@@@), an @Array@ will be returned.
+--   			__Note:__ The JSON specification does not define integer or float types, but only a @i@number@/i@ type. Therefore, parsing a JSON text will convert all numerical values to @float@ types.
+--   			__Note:__ JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
+--   			
+--   @
+--   
+--   			var p = JSON.parse('@"hello", "world", "!"@')
 --   			if typeof(p.result) == TYPE_ARRAY:
---   			    print(p.result[0]) # Prints "hello"
+--   			    print(p.result@0@) # Prints "hello"
 --   			else:
 --   			    push_error("Unexpected results.")
---   			[/codeblock]
+--   			
+--   @
 bindJSONParseResult_get_result :: MethodBind
 bindJSONParseResult_get_result
   = unsafePerformIO $
@@ -110,16 +147,19 @@ bindJSONParseResult_get_result
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A [Variant] containing the parsed JSON. Use [method @GDScript.typeof] or the [code]is[/code] keyword to check if it is what you expect. For example, if the JSON source starts with curly braces ([code]{}[/code]), a [Dictionary] will be returned. If the JSON source starts with brackets ([code][][/code]), an [Array] will be returned.
---   			[b]Note:[/b] The JSON specification does not define integer or float types, but only a [i]number[/i] type. Therefore, parsing a JSON text will convert all numerical values to [float] types.
---   			[b]Note:[/b] JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
---   			[codeblock]
---   			var p = JSON.parse('["hello", "world", "!"]')
+-- | A @Variant@ containing the parsed JSON. Use @method @GDScript.typeof@ or the @is@ keyword to check if it is what you expect. For example, if the JSON source starts with curly braces (@{}@), a @Dictionary@ will be returned. If the JSON source starts with brackets (@@@@), an @Array@ will be returned.
+--   			__Note:__ The JSON specification does not define integer or float types, but only a @i@number@/i@ type. Therefore, parsing a JSON text will convert all numerical values to @float@ types.
+--   			__Note:__ JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
+--   			
+--   @
+--   
+--   			var p = JSON.parse('@"hello", "world", "!"@')
 --   			if typeof(p.result) == TYPE_ARRAY:
---   			    print(p.result[0]) # Prints "hello"
+--   			    print(p.result@0@) # Prints "hello"
 --   			else:
 --   			    push_error("Unexpected results.")
---   			[/codeblock]
+--   			
+--   @
 get_result ::
              (JSONParseResult :< cls, Object :< cls) => cls -> IO GodotVariant
 get_result cls
@@ -130,9 +170,14 @@ get_result cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONParseResult "get_result" '[]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.JSONParseResult.get_result
+
 {-# NOINLINE bindJSONParseResult_set_error #-}
 
--- | The error type if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error type if the JSON source was not successfully parsed. See the @enum Error@ constants.
 bindJSONParseResult_set_error :: MethodBind
 bindJSONParseResult_set_error
   = unsafePerformIO $
@@ -142,7 +187,7 @@ bindJSONParseResult_set_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The error type if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error type if the JSON source was not successfully parsed. See the @enum Error@ constants.
 set_error ::
             (JSONParseResult :< cls, Object :< cls) => cls -> Int -> IO ()
 set_error cls arg1
@@ -152,6 +197,10 @@ set_error cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod JSONParseResult "set_error" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.JSONParseResult.set_error
 
 {-# NOINLINE bindJSONParseResult_set_error_line #-}
 
@@ -177,9 +226,13 @@ set_error_line cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONParseResult "set_error_line" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.JSONParseResult.set_error_line
+
 {-# NOINLINE bindJSONParseResult_set_error_string #-}
 
--- | The error message if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error message if the JSON source was not successfully parsed. See the @enum Error@ constants.
 bindJSONParseResult_set_error_string :: MethodBind
 bindJSONParseResult_set_error_string
   = unsafePerformIO $
@@ -189,7 +242,7 @@ bindJSONParseResult_set_error_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The error message if the JSON source was not successfully parsed. See the [enum Error] constants.
+-- | The error message if the JSON source was not successfully parsed. See the @enum Error@ constants.
 set_error_string ::
                    (JSONParseResult :< cls, Object :< cls) =>
                    cls -> GodotString -> IO ()
@@ -202,18 +255,27 @@ set_error_string cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod JSONParseResult "set_error_string"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.JSONParseResult.set_error_string
+
 {-# NOINLINE bindJSONParseResult_set_result #-}
 
--- | A [Variant] containing the parsed JSON. Use [method @GDScript.typeof] or the [code]is[/code] keyword to check if it is what you expect. For example, if the JSON source starts with curly braces ([code]{}[/code]), a [Dictionary] will be returned. If the JSON source starts with brackets ([code][][/code]), an [Array] will be returned.
---   			[b]Note:[/b] The JSON specification does not define integer or float types, but only a [i]number[/i] type. Therefore, parsing a JSON text will convert all numerical values to [float] types.
---   			[b]Note:[/b] JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
---   			[codeblock]
---   			var p = JSON.parse('["hello", "world", "!"]')
+-- | A @Variant@ containing the parsed JSON. Use @method @GDScript.typeof@ or the @is@ keyword to check if it is what you expect. For example, if the JSON source starts with curly braces (@{}@), a @Dictionary@ will be returned. If the JSON source starts with brackets (@@@@), an @Array@ will be returned.
+--   			__Note:__ The JSON specification does not define integer or float types, but only a @i@number@/i@ type. Therefore, parsing a JSON text will convert all numerical values to @float@ types.
+--   			__Note:__ JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
+--   			
+--   @
+--   
+--   			var p = JSON.parse('@"hello", "world", "!"@')
 --   			if typeof(p.result) == TYPE_ARRAY:
---   			    print(p.result[0]) # Prints "hello"
+--   			    print(p.result@0@) # Prints "hello"
 --   			else:
 --   			    push_error("Unexpected results.")
---   			[/codeblock]
+--   			
+--   @
 bindJSONParseResult_set_result :: MethodBind
 bindJSONParseResult_set_result
   = unsafePerformIO $
@@ -223,16 +285,19 @@ bindJSONParseResult_set_result
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A [Variant] containing the parsed JSON. Use [method @GDScript.typeof] or the [code]is[/code] keyword to check if it is what you expect. For example, if the JSON source starts with curly braces ([code]{}[/code]), a [Dictionary] will be returned. If the JSON source starts with brackets ([code][][/code]), an [Array] will be returned.
---   			[b]Note:[/b] The JSON specification does not define integer or float types, but only a [i]number[/i] type. Therefore, parsing a JSON text will convert all numerical values to [float] types.
---   			[b]Note:[/b] JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
---   			[codeblock]
---   			var p = JSON.parse('["hello", "world", "!"]')
+-- | A @Variant@ containing the parsed JSON. Use @method @GDScript.typeof@ or the @is@ keyword to check if it is what you expect. For example, if the JSON source starts with curly braces (@{}@), a @Dictionary@ will be returned. If the JSON source starts with brackets (@@@@), an @Array@ will be returned.
+--   			__Note:__ The JSON specification does not define integer or float types, but only a @i@number@/i@ type. Therefore, parsing a JSON text will convert all numerical values to @float@ types.
+--   			__Note:__ JSON objects do not preserve key order like Godot dictionaries, thus, you should not rely on keys being in a certain order if a dictionary is constructed from JSON. In contrast, JSON arrays retain the order of their elements:
+--   			
+--   @
+--   
+--   			var p = JSON.parse('@"hello", "world", "!"@')
 --   			if typeof(p.result) == TYPE_ARRAY:
---   			    print(p.result[0]) # Prints "hello"
+--   			    print(p.result@0@) # Prints "hello"
 --   			else:
 --   			    push_error("Unexpected results.")
---   			[/codeblock]
+--   			
+--   @
 set_result ::
              (JSONParseResult :< cls, Object :< cls) =>
              cls -> GodotVariant -> IO ()
@@ -243,3 +308,8 @@ set_result cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod JSONParseResult "set_result" '[GodotVariant]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.JSONParseResult.set_result

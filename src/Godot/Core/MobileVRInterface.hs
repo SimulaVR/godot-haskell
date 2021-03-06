@@ -20,9 +20,47 @@ module Godot.Core.MobileVRInterface
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.ARVRInterface()
+
+instance NodeProperty MobileVRInterface "display_to_lens" Float
+           'False
+         where
+        nodeProperty
+          = (get_display_to_lens, wrapDroppingSetter set_display_to_lens,
+             Nothing)
+
+instance NodeProperty MobileVRInterface "display_width" Float
+           'False
+         where
+        nodeProperty
+          = (get_display_width, wrapDroppingSetter set_display_width,
+             Nothing)
+
+instance NodeProperty MobileVRInterface "eye_height" Float 'False
+         where
+        nodeProperty
+          = (get_eye_height, wrapDroppingSetter set_eye_height, Nothing)
+
+instance NodeProperty MobileVRInterface "iod" Float 'False where
+        nodeProperty = (get_iod, wrapDroppingSetter set_iod, Nothing)
+
+instance NodeProperty MobileVRInterface "k1" Float 'False where
+        nodeProperty = (get_k1, wrapDroppingSetter set_k1, Nothing)
+
+instance NodeProperty MobileVRInterface "k2" Float 'False where
+        nodeProperty = (get_k2, wrapDroppingSetter set_k2, Nothing)
+
+instance NodeProperty MobileVRInterface "oversample" Float 'False
+         where
+        nodeProperty
+          = (get_oversample, wrapDroppingSetter set_oversample, Nothing)
 
 {-# NOINLINE bindMobileVRInterface_get_display_to_lens #-}
 
@@ -46,6 +84,11 @@ get_display_to_lens cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MobileVRInterface "get_display_to_lens" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.get_display_to_lens
+
 {-# NOINLINE bindMobileVRInterface_get_display_width #-}
 
 bindMobileVRInterface_get_display_width :: MethodBind
@@ -67,6 +110,11 @@ get_display_width cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MobileVRInterface "get_display_width" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.get_display_width
 
 {-# NOINLINE bindMobileVRInterface_get_eye_height #-}
 
@@ -90,6 +138,11 @@ get_eye_height cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MobileVRInterface "get_eye_height" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.get_eye_height
+
 {-# NOINLINE bindMobileVRInterface_get_iod #-}
 
 bindMobileVRInterface_get_iod :: MethodBind
@@ -110,6 +163,10 @@ get_iod cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MobileVRInterface "get_iod" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.get_iod
 
 {-# NOINLINE bindMobileVRInterface_get_k1 #-}
 
@@ -132,6 +189,9 @@ get_k1 cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MobileVRInterface "get_k1" '[] (IO Float) where
+        nodeMethod = Godot.Core.MobileVRInterface.get_k1
+
 {-# NOINLINE bindMobileVRInterface_get_k2 #-}
 
 bindMobileVRInterface_get_k2 :: MethodBind
@@ -152,6 +212,9 @@ get_k2 cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MobileVRInterface "get_k2" '[] (IO Float) where
+        nodeMethod = Godot.Core.MobileVRInterface.get_k2
 
 {-# NOINLINE bindMobileVRInterface_get_oversample #-}
 
@@ -175,6 +238,11 @@ get_oversample cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MobileVRInterface "get_oversample" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.get_oversample
+
 {-# NOINLINE bindMobileVRInterface_set_display_to_lens #-}
 
 bindMobileVRInterface_set_display_to_lens :: MethodBind
@@ -196,6 +264,12 @@ set_display_to_lens cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MobileVRInterface "set_display_to_lens"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.set_display_to_lens
 
 {-# NOINLINE bindMobileVRInterface_set_display_width #-}
 
@@ -219,6 +293,11 @@ set_display_width cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MobileVRInterface "set_display_width" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.set_display_width
+
 {-# NOINLINE bindMobileVRInterface_set_eye_height #-}
 
 bindMobileVRInterface_set_eye_height :: MethodBind
@@ -241,6 +320,11 @@ set_eye_height cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MobileVRInterface "set_eye_height" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.set_eye_height
+
 {-# NOINLINE bindMobileVRInterface_set_iod #-}
 
 bindMobileVRInterface_set_iod :: MethodBind
@@ -261,6 +345,10 @@ set_iod cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MobileVRInterface "set_iod" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.set_iod
 
 {-# NOINLINE bindMobileVRInterface_set_k1 #-}
 
@@ -283,6 +371,10 @@ set_k1 cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MobileVRInterface "set_k1" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.set_k1
+
 {-# NOINLINE bindMobileVRInterface_set_k2 #-}
 
 bindMobileVRInterface_set_k2 :: MethodBind
@@ -303,6 +395,10 @@ set_k2 cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MobileVRInterface "set_k2" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.set_k2
 
 {-# NOINLINE bindMobileVRInterface_set_oversample #-}
 
@@ -325,3 +421,8 @@ set_oversample cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MobileVRInterface "set_oversample" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MobileVRInterface.set_oversample

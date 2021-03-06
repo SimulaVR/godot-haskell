@@ -37,9 +37,14 @@ module Godot.Core.Performance
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 _PHYSICS_2D_ISLAND_COUNT :: Int
 _PHYSICS_2D_ISLAND_COUNT = 24
@@ -133,10 +138,13 @@ _RENDER_USAGE_VIDEO_MEM_TOTAL = 21
 
 {-# NOINLINE bindPerformance_get_monitor #-}
 
--- | Returns the value of one of the available monitors. You should provide one of the [enum Monitor] constants as the argument, like this:
---   				[codeblock]
+-- | Returns the value of one of the available monitors. You should provide one of the @enum Monitor@ constants as the argument, like this:
+--   				
+--   @
+--   
 --   				print(Performance.get_monitor(Performance.TIME_FPS)) # Prints the FPS to the console
---   				[/codeblock]
+--   				
+--   @
 bindPerformance_get_monitor :: MethodBind
 bindPerformance_get_monitor
   = unsafePerformIO $
@@ -146,10 +154,13 @@ bindPerformance_get_monitor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of one of the available monitors. You should provide one of the [enum Monitor] constants as the argument, like this:
---   				[codeblock]
+-- | Returns the value of one of the available monitors. You should provide one of the @enum Monitor@ constants as the argument, like this:
+--   				
+--   @
+--   
 --   				print(Performance.get_monitor(Performance.TIME_FPS)) # Prints the FPS to the console
---   				[/codeblock]
+--   				
+--   @
 get_monitor ::
               (Performance :< cls, Object :< cls) => cls -> Int -> IO Float
 get_monitor cls arg1
@@ -159,3 +170,7 @@ get_monitor cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Performance "get_monitor" '[Int] (IO Float)
+         where
+        nodeMethod = Godot.Core.Performance.get_monitor

@@ -10,9 +10,27 @@ module Godot.Core.VisualScriptConstructor
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptConstructor "constructor"
+           Dictionary
+           'False
+         where
+        nodeProperty
+          = (get_constructor, wrapDroppingSetter set_constructor, Nothing)
+
+instance NodeProperty VisualScriptConstructor "type" Int 'False
+         where
+        nodeProperty
+          = (get_constructor_type, wrapDroppingSetter set_constructor_type,
+             Nothing)
 
 {-# NOINLINE bindVisualScriptConstructor_get_constructor #-}
 
@@ -37,6 +55,11 @@ get_constructor cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptConstructor "get_constructor" '[]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.VisualScriptConstructor.get_constructor
+
 {-# NOINLINE bindVisualScriptConstructor_get_constructor_type #-}
 
 bindVisualScriptConstructor_get_constructor_type :: MethodBind
@@ -59,6 +82,13 @@ get_constructor_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptConstructor "get_constructor_type"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptConstructor.get_constructor_type
 
 {-# NOINLINE bindVisualScriptConstructor_set_constructor #-}
 
@@ -83,6 +113,12 @@ set_constructor cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptConstructor "set_constructor"
+           '[Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptConstructor.set_constructor
+
 {-# NOINLINE bindVisualScriptConstructor_set_constructor_type #-}
 
 bindVisualScriptConstructor_set_constructor_type :: MethodBind
@@ -106,3 +142,10 @@ set_constructor_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptConstructor "set_constructor_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualScriptConstructor.set_constructor_type

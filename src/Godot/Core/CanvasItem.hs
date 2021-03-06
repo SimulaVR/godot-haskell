@@ -95,9 +95,14 @@ module Godot.Core.CanvasItem
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
 
 _BLEND_MODE_DISABLED :: Int
 _BLEND_MODE_DISABLED = 5
@@ -132,7 +137,7 @@ _BLEND_MODE_SUB = 2
 _NOTIFICATION_VISIBILITY_CHANGED :: Int
 _NOTIFICATION_VISIBILITY_CHANGED = 31
 
--- | Emitted when the [CanvasItem] must redraw. This can only be connected realtime, as deferred will not allow drawing.
+-- | Emitted when the @CanvasItem@ must redraw. This can only be connected realtime, as deferred will not allow drawing.
 sig_draw :: Godot.Internal.Dispatch.Signal CanvasItem
 sig_draw = Godot.Internal.Dispatch.Signal "draw"
 
@@ -158,6 +163,43 @@ sig_visibility_changed
 
 instance NodeSignal CanvasItem "visibility_changed" '[]
 
+instance NodeProperty CanvasItem "light_mask" Int 'False where
+        nodeProperty
+          = (get_light_mask, wrapDroppingSetter set_light_mask, Nothing)
+
+instance NodeProperty CanvasItem "material" Material 'False where
+        nodeProperty
+          = (get_material, wrapDroppingSetter set_material, Nothing)
+
+instance NodeProperty CanvasItem "modulate" Color 'False where
+        nodeProperty
+          = (get_modulate, wrapDroppingSetter set_modulate, Nothing)
+
+instance NodeProperty CanvasItem "self_modulate" Color 'False where
+        nodeProperty
+          = (get_self_modulate, wrapDroppingSetter set_self_modulate,
+             Nothing)
+
+instance NodeProperty CanvasItem "show_behind_parent" Bool 'False
+         where
+        nodeProperty
+          = (is_draw_behind_parent_enabled,
+             wrapDroppingSetter set_draw_behind_parent, Nothing)
+
+instance NodeProperty CanvasItem "show_on_top" Bool 'False where
+        nodeProperty
+          = (_is_on_top, wrapDroppingSetter _set_on_top, Nothing)
+
+instance NodeProperty CanvasItem "use_parent_material" Bool 'False
+         where
+        nodeProperty
+          = (get_use_parent_material,
+             wrapDroppingSetter set_use_parent_material, Nothing)
+
+instance NodeProperty CanvasItem "visible" Bool 'False where
+        nodeProperty
+          = (is_visible, wrapDroppingSetter set_visible, Nothing)
+
 {-# NOINLINE bindCanvasItem__draw #-}
 
 -- | Overridable function called by the engine (if defined) to draw the canvas item.
@@ -177,6 +219,9 @@ _draw cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem__draw (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_draw" '[] (IO ()) where
+        nodeMethod = Godot.Core.CanvasItem._draw
 
 {-# NOINLINE bindCanvasItem__edit_get_pivot #-}
 
@@ -198,6 +243,10 @@ _edit_get_pivot cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_edit_get_pivot" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_get_pivot
 
 {-# NOINLINE bindCanvasItem__edit_get_position #-}
 
@@ -221,6 +270,11 @@ _edit_get_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_get_position" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_get_position
+
 {-# NOINLINE bindCanvasItem__edit_get_rect #-}
 
 bindCanvasItem__edit_get_rect :: MethodBind
@@ -241,6 +295,10 @@ _edit_get_rect cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_edit_get_rect" '[] (IO Rect2)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_get_rect
 
 {-# NOINLINE bindCanvasItem__edit_get_rotation #-}
 
@@ -264,6 +322,10 @@ _edit_get_rotation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_get_rotation" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_get_rotation
+
 {-# NOINLINE bindCanvasItem__edit_get_scale #-}
 
 bindCanvasItem__edit_get_scale :: MethodBind
@@ -285,6 +347,10 @@ _edit_get_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_get_scale" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_get_scale
+
 {-# NOINLINE bindCanvasItem__edit_get_state #-}
 
 bindCanvasItem__edit_get_state :: MethodBind
@@ -305,6 +371,11 @@ _edit_get_state cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_edit_get_state" '[]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_get_state
 
 {-# NOINLINE bindCanvasItem__edit_get_transform #-}
 
@@ -328,6 +399,11 @@ _edit_get_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_get_transform" '[]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_get_transform
+
 {-# NOINLINE bindCanvasItem__edit_set_pivot #-}
 
 bindCanvasItem__edit_set_pivot :: MethodBind
@@ -348,6 +424,10 @@ _edit_set_pivot cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_edit_set_pivot" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_set_pivot
 
 {-# NOINLINE bindCanvasItem__edit_set_position #-}
 
@@ -371,6 +451,11 @@ _edit_set_position cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_set_position" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_set_position
+
 {-# NOINLINE bindCanvasItem__edit_set_rect #-}
 
 bindCanvasItem__edit_set_rect :: MethodBind
@@ -391,6 +476,10 @@ _edit_set_rect cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_edit_set_rect" '[Rect2] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_set_rect
 
 {-# NOINLINE bindCanvasItem__edit_set_rotation #-}
 
@@ -414,6 +503,11 @@ _edit_set_rotation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_set_rotation" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_set_rotation
+
 {-# NOINLINE bindCanvasItem__edit_set_scale #-}
 
 bindCanvasItem__edit_set_scale :: MethodBind
@@ -434,6 +528,10 @@ _edit_set_scale cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_edit_set_scale" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_set_scale
 
 {-# NOINLINE bindCanvasItem__edit_set_state #-}
 
@@ -456,6 +554,11 @@ _edit_set_state cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_set_state" '[Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_set_state
+
 {-# NOINLINE bindCanvasItem__edit_use_pivot #-}
 
 bindCanvasItem__edit_use_pivot :: MethodBind
@@ -477,6 +580,10 @@ _edit_use_pivot cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_use_pivot" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_use_pivot
+
 {-# NOINLINE bindCanvasItem__edit_use_rect #-}
 
 bindCanvasItem__edit_use_rect :: MethodBind
@@ -497,6 +604,9 @@ _edit_use_rect cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_edit_use_rect" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CanvasItem._edit_use_rect
 
 {-# NOINLINE bindCanvasItem__edit_use_rotation #-}
 
@@ -520,9 +630,13 @@ _edit_use_rotation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_edit_use_rotation" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CanvasItem._edit_use_rotation
+
 {-# NOINLINE bindCanvasItem__is_on_top #-}
 
--- | If [code]true[/code], the object draws on top of its parent.
+-- | If @true@, the object draws on top of its parent.
 bindCanvasItem__is_on_top :: MethodBind
 bindCanvasItem__is_on_top
   = unsafePerformIO $
@@ -532,7 +646,7 @@ bindCanvasItem__is_on_top
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the object draws on top of its parent.
+-- | If @true@, the object draws on top of its parent.
 _is_on_top :: (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 _is_on_top cls
   = withVariantArray []
@@ -542,9 +656,12 @@ _is_on_top cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_is_on_top" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CanvasItem._is_on_top
+
 {-# NOINLINE bindCanvasItem__set_on_top #-}
 
--- | If [code]true[/code], the object draws on top of its parent.
+-- | If @true@, the object draws on top of its parent.
 bindCanvasItem__set_on_top :: MethodBind
 bindCanvasItem__set_on_top
   = unsafePerformIO $
@@ -554,7 +671,7 @@ bindCanvasItem__set_on_top
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the object draws on top of its parent.
+-- | If @true@, the object draws on top of its parent.
 _set_on_top ::
               (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 _set_on_top cls arg1
@@ -564,6 +681,9 @@ _set_on_top cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "_set_on_top" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.CanvasItem._set_on_top
 
 {-# NOINLINE bindCanvasItem__toplevel_raise_self #-}
 
@@ -587,6 +707,10 @@ _toplevel_raise_self cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_toplevel_raise_self" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem._toplevel_raise_self
+
 {-# NOINLINE bindCanvasItem__update_callback #-}
 
 bindCanvasItem__update_callback :: MethodBind
@@ -608,9 +732,12 @@ _update_callback cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "_update_callback" '[] (IO ()) where
+        nodeMethod = Godot.Core.CanvasItem._update_callback
+
 {-# NOINLINE bindCanvasItem_draw_arc #-}
 
--- | Draws an arc between the given angles. The larger the value of [code]point_count[/code], the smoother the curve.
+-- | Draws an arc between the given angles. The larger the value of @point_count@, the smoother the curve.
 bindCanvasItem_draw_arc :: MethodBind
 bindCanvasItem_draw_arc
   = unsafePerformIO $
@@ -620,20 +747,31 @@ bindCanvasItem_draw_arc
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws an arc between the given angles. The larger the value of [code]point_count[/code], the smoother the curve.
+-- | Draws an arc between the given angles. The larger the value of @point_count@, the smoother the curve.
 draw_arc ::
            (CanvasItem :< cls, Object :< cls) =>
            cls ->
              Vector2 ->
-               Float -> Float -> Float -> Int -> Color -> Float -> Bool -> IO ()
+               Float ->
+                 Float ->
+                   Float -> Int -> Color -> Maybe Float -> Maybe Bool -> IO ()
 draw_arc cls arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7, toVariant arg8]
+       toVariant arg5, toVariant arg6,
+       maybe (VariantReal (1)) toVariant arg7,
+       maybe (VariantBool False) toVariant arg8]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_arc (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_arc"
+           '[Vector2, Float, Float, Float, Int, Color, Maybe Float,
+             Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_arc
 
 {-# NOINLINE bindCanvasItem_draw_char #-}
 
@@ -651,15 +789,22 @@ bindCanvasItem_draw_char
 draw_char ::
             (CanvasItem :< cls, Object :< cls) =>
             cls ->
-              Font -> Vector2 -> GodotString -> GodotString -> Color -> IO Float
+              Font ->
+                Vector2 -> GodotString -> GodotString -> Maybe Color -> IO Float
 draw_char cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_char (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_char"
+           '[Font, Vector2, GodotString, GodotString, Maybe Color]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_char
 
 {-# NOINLINE bindCanvasItem_draw_circle #-}
 
@@ -685,6 +830,12 @@ draw_circle cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_circle"
+           '[Vector2, Float, Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_circle
+
 {-# NOINLINE bindCanvasItem_draw_colored_polygon #-}
 
 -- | Draws a colored polygon of any amount of points, convex or concave.
@@ -702,17 +853,28 @@ draw_colored_polygon ::
                        (CanvasItem :< cls, Object :< cls) =>
                        cls ->
                          PoolVector2Array ->
-                           Color -> PoolVector2Array -> Texture -> Texture -> Bool -> IO ()
+                           Color ->
+                             Maybe PoolVector2Array ->
+                               Maybe Texture -> Maybe Texture -> Maybe Bool -> IO ()
 draw_colored_polygon cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantPoolVector2Array V.empty arg3,
+       maybe VariantNil toVariant arg4, maybe VariantNil toVariant arg5,
+       maybe (VariantBool False) toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_colored_polygon
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_colored_polygon"
+           '[PoolVector2Array, Color, Maybe PoolVector2Array, Maybe Texture,
+             Maybe Texture, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_colored_polygon
 
 {-# NOINLINE bindCanvasItem_draw_line #-}
 
@@ -729,19 +891,27 @@ bindCanvasItem_draw_line
 -- | Draws a line from a 2D point to another, with a given color and width. It can be optionally antialiased.
 draw_line ::
             (CanvasItem :< cls, Object :< cls) =>
-            cls -> Vector2 -> Vector2 -> Color -> Float -> Bool -> IO ()
+            cls ->
+              Vector2 -> Vector2 -> Color -> Maybe Float -> Maybe Bool -> IO ()
 draw_line cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantReal (1)) toVariant arg4,
+       maybe (VariantBool False) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_line (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_line"
+           '[Vector2, Vector2, Color, Maybe Float, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_line
+
 {-# NOINLINE bindCanvasItem_draw_mesh #-}
 
--- | Draws a [Mesh] in 2D, using the provided texture. See [MeshInstance2D] for related documentation.
+-- | Draws a @Mesh@ in 2D, using the provided texture. See @MeshInstance2D@ for related documentation.
 bindCanvasItem_draw_mesh :: MethodBind
 bindCanvasItem_draw_mesh
   = unsafePerformIO $
@@ -751,23 +921,35 @@ bindCanvasItem_draw_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a [Mesh] in 2D, using the provided texture. See [MeshInstance2D] for related documentation.
+-- | Draws a @Mesh@ in 2D, using the provided texture. See @MeshInstance2D@ for related documentation.
 draw_mesh ::
             (CanvasItem :< cls, Object :< cls) =>
-            cls -> Mesh -> Texture -> Texture -> Transform2d -> Color -> IO ()
+            cls ->
+              Mesh ->
+                Texture ->
+                  Maybe Texture -> Maybe Transform2d -> Maybe Color -> IO ()
 draw_mesh cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, maybe VariantNil toVariant arg3,
+       defaultedVariant VariantTransform2d
+         (TF2d (V2 1 0) (V2 0 1) (V2 0 0))
+         arg4,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_mesh (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_mesh"
+           '[Mesh, Texture, Maybe Texture, Maybe Transform2d, Maybe Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_mesh
+
 {-# NOINLINE bindCanvasItem_draw_multiline #-}
 
--- | Draws multiple, parallel lines with a uniform [code]color[/code].
---   				[b]Note:[/b] [code]width[/code] and [code]antialiased[/code] are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @color@.
+--   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 bindCanvasItem_draw_multiline :: MethodBind
 bindCanvasItem_draw_multiline
   = unsafePerformIO $
@@ -777,24 +959,33 @@ bindCanvasItem_draw_multiline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws multiple, parallel lines with a uniform [code]color[/code].
---   				[b]Note:[/b] [code]width[/code] and [code]antialiased[/code] are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @color@.
+--   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 draw_multiline ::
                  (CanvasItem :< cls, Object :< cls) =>
-                 cls -> PoolVector2Array -> Color -> Float -> Bool -> IO ()
+                 cls ->
+                   PoolVector2Array -> Color -> Maybe Float -> Maybe Bool -> IO ()
 draw_multiline cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantReal (1)) toVariant arg3,
+       maybe (VariantBool False) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_multiline (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_multiline"
+           '[PoolVector2Array, Color, Maybe Float, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_multiline
+
 {-# NOINLINE bindCanvasItem_draw_multiline_colors #-}
 
--- | Draws multiple, parallel lines with a uniform [code]width[/code] and segment-by-segment coloring. Colors assigned to line segments match by index between [code]points[/code] and [code]colors[/code].
---   				[b]Note:[/b] [code]width[/code] and [code]antialiased[/code] are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@.
+--   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 bindCanvasItem_draw_multiline_colors :: MethodBind
 bindCanvasItem_draw_multiline_colors
   = unsafePerformIO $
@@ -804,14 +995,18 @@ bindCanvasItem_draw_multiline_colors
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws multiple, parallel lines with a uniform [code]width[/code] and segment-by-segment coloring. Colors assigned to line segments match by index between [code]points[/code] and [code]colors[/code].
---   				[b]Note:[/b] [code]width[/code] and [code]antialiased[/code] are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@.
+--   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 draw_multiline_colors ::
                         (CanvasItem :< cls, Object :< cls) =>
-                        cls -> PoolVector2Array -> PoolColorArray -> Float -> Bool -> IO ()
+                        cls ->
+                          PoolVector2Array ->
+                            PoolColorArray -> Maybe Float -> Maybe Bool -> IO ()
 draw_multiline_colors cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantReal (1)) toVariant arg3,
+       maybe (VariantBool False) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_multiline_colors
            (upcast cls)
@@ -819,9 +1014,15 @@ draw_multiline_colors cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_multiline_colors"
+           '[PoolVector2Array, PoolColorArray, Maybe Float, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_multiline_colors
+
 {-# NOINLINE bindCanvasItem_draw_multimesh #-}
 
--- | Draws a [MultiMesh] in 2D with the provided texture. See [MultiMeshInstance2D] for related documentation.
+-- | Draws a @MultiMesh@ in 2D with the provided texture. See @MultiMeshInstance2D@ for related documentation.
 bindCanvasItem_draw_multimesh :: MethodBind
 bindCanvasItem_draw_multimesh
   = unsafePerformIO $
@@ -831,17 +1032,24 @@ bindCanvasItem_draw_multimesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a [MultiMesh] in 2D with the provided texture. See [MultiMeshInstance2D] for related documentation.
+-- | Draws a @MultiMesh@ in 2D with the provided texture. See @MultiMeshInstance2D@ for related documentation.
 draw_multimesh ::
                  (CanvasItem :< cls, Object :< cls) =>
-                 cls -> MultiMesh -> Texture -> Texture -> IO ()
+                 cls -> MultiMesh -> Texture -> Maybe Texture -> IO ()
 draw_multimesh cls arg1 arg2 arg3
-  = withVariantArray [toVariant arg1, toVariant arg2, toVariant arg3]
+  = withVariantArray
+      [toVariant arg1, toVariant arg2, maybe VariantNil toVariant arg3]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_multimesh (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_multimesh"
+           '[MultiMesh, Texture, Maybe Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_multimesh
 
 {-# NOINLINE bindCanvasItem_draw_polygon #-}
 
@@ -861,20 +1069,30 @@ draw_polygon ::
                cls ->
                  PoolVector2Array ->
                    PoolColorArray ->
-                     PoolVector2Array -> Texture -> Texture -> Bool -> IO ()
+                     Maybe PoolVector2Array ->
+                       Maybe Texture -> Maybe Texture -> Maybe Bool -> IO ()
 draw_polygon cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantPoolVector2Array V.empty arg3,
+       maybe VariantNil toVariant arg4, maybe VariantNil toVariant arg5,
+       maybe (VariantBool False) toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_polygon (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_polygon"
+           '[PoolVector2Array, PoolColorArray, Maybe PoolVector2Array,
+             Maybe Texture, Maybe Texture, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_polygon
+
 {-# NOINLINE bindCanvasItem_draw_polyline #-}
 
--- | Draws interconnected line segments with a uniform [code]color[/code] and [code]width[/code] and optional antialiasing.
+-- | Draws interconnected line segments with a uniform @color@ and @width@ and optional antialiasing.
 bindCanvasItem_draw_polyline :: MethodBind
 bindCanvasItem_draw_polyline
   = unsafePerformIO $
@@ -884,22 +1102,31 @@ bindCanvasItem_draw_polyline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws interconnected line segments with a uniform [code]color[/code] and [code]width[/code] and optional antialiasing.
+-- | Draws interconnected line segments with a uniform @color@ and @width@ and optional antialiasing.
 draw_polyline ::
                 (CanvasItem :< cls, Object :< cls) =>
-                cls -> PoolVector2Array -> Color -> Float -> Bool -> IO ()
+                cls ->
+                  PoolVector2Array -> Color -> Maybe Float -> Maybe Bool -> IO ()
 draw_polyline cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantReal (1)) toVariant arg3,
+       maybe (VariantBool False) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_polyline (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_polyline"
+           '[PoolVector2Array, Color, Maybe Float, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_polyline
+
 {-# NOINLINE bindCanvasItem_draw_polyline_colors #-}
 
--- | Draws interconnected line segments with a uniform [code]width[/code], segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between [code]points[/code] and [code]colors[/code].
+-- | Draws interconnected line segments with a uniform @width@, segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@.
 bindCanvasItem_draw_polyline_colors :: MethodBind
 bindCanvasItem_draw_polyline_colors
   = unsafePerformIO $
@@ -909,19 +1136,29 @@ bindCanvasItem_draw_polyline_colors
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws interconnected line segments with a uniform [code]width[/code], segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between [code]points[/code] and [code]colors[/code].
+-- | Draws interconnected line segments with a uniform @width@, segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@.
 draw_polyline_colors ::
                        (CanvasItem :< cls, Object :< cls) =>
-                       cls -> PoolVector2Array -> PoolColorArray -> Float -> Bool -> IO ()
+                       cls ->
+                         PoolVector2Array ->
+                           PoolColorArray -> Maybe Float -> Maybe Bool -> IO ()
 draw_polyline_colors cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantReal (1)) toVariant arg3,
+       maybe (VariantBool False) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_polyline_colors
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_polyline_colors"
+           '[PoolVector2Array, PoolColorArray, Maybe Float, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_polyline_colors
 
 {-# NOINLINE bindCanvasItem_draw_primitive #-}
 
@@ -941,21 +1178,31 @@ draw_primitive ::
                  cls ->
                    PoolVector2Array ->
                      PoolColorArray ->
-                       PoolVector2Array -> Texture -> Float -> Texture -> IO ()
+                       PoolVector2Array ->
+                         Maybe Texture -> Maybe Float -> Maybe Texture -> IO ()
 draw_primitive cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe VariantNil toVariant arg4,
+       maybe (VariantReal (1)) toVariant arg5,
+       maybe VariantNil toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_primitive (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_primitive"
+           '[PoolVector2Array, PoolColorArray, PoolVector2Array,
+             Maybe Texture, Maybe Float, Maybe Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_primitive
+
 {-# NOINLINE bindCanvasItem_draw_rect #-}
 
--- | Draws a rectangle. If [code]filled[/code] is [code]true[/code], the rectangle will be filled with the [code]color[/code] specified. If [code]filled[/code] is [code]false[/code], the rectangle will be drawn as a stroke with the [code]color[/code] and [code]width[/code] specified. If [code]antialiased[/code] is [code]true[/code], the lines will be antialiased.
---   				[b]Note:[/b] [code]width[/code] and [code]antialiased[/code] are only effective if [code]filled[/code] is [code]false[/code].
+-- | Draws a rectangle. If @filled@ is @true@, the rectangle will be filled with the @color@ specified. If @filled@ is @false@, the rectangle will be drawn as a stroke with the @color@ and @width@ specified. If @antialiased@ is @true@, the lines will be antialiased.
+--   				__Note:__ @width@ and @antialiased@ are only effective if @filled@ is @false@.
 bindCanvasItem_draw_rect :: MethodBind
 bindCanvasItem_draw_rect
   = unsafePerformIO $
@@ -965,19 +1212,28 @@ bindCanvasItem_draw_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a rectangle. If [code]filled[/code] is [code]true[/code], the rectangle will be filled with the [code]color[/code] specified. If [code]filled[/code] is [code]false[/code], the rectangle will be drawn as a stroke with the [code]color[/code] and [code]width[/code] specified. If [code]antialiased[/code] is [code]true[/code], the lines will be antialiased.
---   				[b]Note:[/b] [code]width[/code] and [code]antialiased[/code] are only effective if [code]filled[/code] is [code]false[/code].
+-- | Draws a rectangle. If @filled@ is @true@, the rectangle will be filled with the @color@ specified. If @filled@ is @false@, the rectangle will be drawn as a stroke with the @color@ and @width@ specified. If @antialiased@ is @true@, the lines will be antialiased.
+--   				__Note:__ @width@ and @antialiased@ are only effective if @filled@ is @false@.
 draw_rect ::
             (CanvasItem :< cls, Object :< cls) =>
-            cls -> Rect2 -> Color -> Bool -> Float -> Bool -> IO ()
+            cls ->
+              Rect2 -> Color -> Maybe Bool -> Maybe Float -> Maybe Bool -> IO ()
 draw_rect cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantBool True) toVariant arg3,
+       maybe (VariantReal (1)) toVariant arg4,
+       maybe (VariantBool False) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_rect (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_rect"
+           '[Rect2, Color, Maybe Bool, Maybe Float, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_rect
 
 {-# NOINLINE bindCanvasItem_draw_set_transform #-}
 
@@ -1004,6 +1260,12 @@ draw_set_transform cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_set_transform"
+           '[Vector2, Float, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_set_transform
+
 {-# NOINLINE bindCanvasItem_draw_set_transform_matrix #-}
 
 -- | Sets a custom transform for drawing via matrix. Anything drawn afterwards will be transformed by this.
@@ -1028,18 +1290,28 @@ draw_set_transform_matrix cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_set_transform_matrix"
+           '[Transform2d]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_set_transform_matrix
+
 {-# NOINLINE bindCanvasItem_draw_string #-}
 
--- | Draws [code]text[/code] using the specified [code]font[/code] at the [code]position[/code] (top-left corner). The text will have its color multiplied by [code]modulate[/code]. If [code]clip_w[/code] is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
---   				[b]Example using the default project font:[/b]
---   				[codeblock]
+-- | Draws @text@ using the specified @font@ at the @position@ (top-left corner). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
+--   				__Example using the default project font:__
+--   				
+--   @
+--   
 --   				# If using this method in a script that redraws constantly, move the
 --   				# `default_font` declaration to a member variable assigned in `_ready()`
 --   				# so the Control is only created once.
 --   				var default_font = Control.new().get_font("font")
 --   				draw_string(default_font, Vector2(64, 64), "Hello world")
---   				[/codeblock]
---   				See also [method Font.draw].
+--   				
+--   @
+--   
+--   				See also @method Font.draw@.
 bindCanvasItem_draw_string :: MethodBind
 bindCanvasItem_draw_string
   = unsafePerformIO $
@@ -1049,28 +1321,40 @@ bindCanvasItem_draw_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws [code]text[/code] using the specified [code]font[/code] at the [code]position[/code] (top-left corner). The text will have its color multiplied by [code]modulate[/code]. If [code]clip_w[/code] is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
---   				[b]Example using the default project font:[/b]
---   				[codeblock]
+-- | Draws @text@ using the specified @font@ at the @position@ (top-left corner). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
+--   				__Example using the default project font:__
+--   				
+--   @
+--   
 --   				# If using this method in a script that redraws constantly, move the
 --   				# `default_font` declaration to a member variable assigned in `_ready()`
 --   				# so the Control is only created once.
 --   				var default_font = Control.new().get_font("font")
 --   				draw_string(default_font, Vector2(64, 64), "Hello world")
---   				[/codeblock]
---   				See also [method Font.draw].
+--   				
+--   @
+--   
+--   				See also @method Font.draw@.
 draw_string ::
               (CanvasItem :< cls, Object :< cls) =>
-              cls -> Font -> Vector2 -> GodotString -> Color -> Int -> IO ()
+              cls ->
+                Font -> Vector2 -> GodotString -> Maybe Color -> Maybe Int -> IO ()
 draw_string cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg4,
+       maybe (VariantInt (-1)) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_string (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_string"
+           '[Font, Vector2, GodotString, Maybe Color, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_string
 
 {-# NOINLINE bindCanvasItem_draw_style_box #-}
 
@@ -1096,6 +1380,11 @@ draw_style_box cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_style_box" '[StyleBox, Rect2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_style_box
+
 {-# NOINLINE bindCanvasItem_draw_texture #-}
 
 -- | Draws a texture at a given position.
@@ -1111,19 +1400,27 @@ bindCanvasItem_draw_texture
 -- | Draws a texture at a given position.
 draw_texture ::
                (CanvasItem :< cls, Object :< cls) =>
-               cls -> Texture -> Vector2 -> Color -> Texture -> IO ()
+               cls -> Texture -> Vector2 -> Maybe Color -> Maybe Texture -> IO ()
 draw_texture cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg3,
+       maybe VariantNil toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_texture (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_texture"
+           '[Texture, Vector2, Maybe Color, Maybe Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_texture
+
 {-# NOINLINE bindCanvasItem_draw_texture_rect #-}
 
--- | Draws a textured rectangle at a given position, optionally modulated by a color. If [code]transpose[/code] is [code]true[/code], the texture will have its X and Y coordinates swapped.
+-- | Draws a textured rectangle at a given position, optionally modulated by a color. If @transpose@ is @true@, the texture will have its X and Y coordinates swapped.
 bindCanvasItem_draw_texture_rect :: MethodBind
 bindCanvasItem_draw_texture_rect
   = unsafePerformIO $
@@ -1133,15 +1430,19 @@ bindCanvasItem_draw_texture_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a textured rectangle at a given position, optionally modulated by a color. If [code]transpose[/code] is [code]true[/code], the texture will have its X and Y coordinates swapped.
+-- | Draws a textured rectangle at a given position, optionally modulated by a color. If @transpose@ is @true@, the texture will have its X and Y coordinates swapped.
 draw_texture_rect ::
                     (CanvasItem :< cls, Object :< cls) =>
                     cls ->
-                      Texture -> Rect2 -> Bool -> Color -> Bool -> Texture -> IO ()
+                      Texture ->
+                        Rect2 ->
+                          Bool -> Maybe Color -> Maybe Bool -> Maybe Texture -> IO ()
 draw_texture_rect cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg4,
+       maybe (VariantBool False) toVariant arg5,
+       maybe VariantNil toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_texture_rect
            (upcast cls)
@@ -1149,9 +1450,15 @@ draw_texture_rect cls arg1 arg2 arg3 arg4 arg5 arg6
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "draw_texture_rect"
+           '[Texture, Rect2, Bool, Maybe Color, Maybe Bool, Maybe Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_texture_rect
+
 {-# NOINLINE bindCanvasItem_draw_texture_rect_region #-}
 
--- | Draws a textured rectangle region at a given position, optionally modulated by a color. If [code]transpose[/code] is [code]true[/code], the texture will have its X and Y coordinates swapped.
+-- | Draws a textured rectangle region at a given position, optionally modulated by a color. If @transpose@ is @true@, the texture will have its X and Y coordinates swapped.
 bindCanvasItem_draw_texture_rect_region :: MethodBind
 bindCanvasItem_draw_texture_rect_region
   = unsafePerformIO $
@@ -1161,22 +1468,34 @@ bindCanvasItem_draw_texture_rect_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a textured rectangle region at a given position, optionally modulated by a color. If [code]transpose[/code] is [code]true[/code], the texture will have its X and Y coordinates swapped.
+-- | Draws a textured rectangle region at a given position, optionally modulated by a color. If @transpose@ is @true@, the texture will have its X and Y coordinates swapped.
 draw_texture_rect_region ::
                            (CanvasItem :< cls, Object :< cls) =>
                            cls ->
                              Texture ->
-                               Rect2 -> Rect2 -> Color -> Bool -> Texture -> Bool -> IO ()
+                               Rect2 ->
+                                 Rect2 ->
+                                   Maybe Color -> Maybe Bool -> Maybe Texture -> Maybe Bool -> IO ()
 draw_texture_rect_region cls arg1 arg2 arg3 arg4 arg5 arg6 arg7
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6, toVariant arg7]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg4,
+       maybe (VariantBool False) toVariant arg5,
+       maybe VariantNil toVariant arg6,
+       maybe (VariantBool True) toVariant arg7]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindCanvasItem_draw_texture_rect_region
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "draw_texture_rect_region"
+           '[Texture, Rect2, Rect2, Maybe Color, Maybe Bool, Maybe Texture,
+             Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.draw_texture_rect_region
 
 {-# NOINLINE bindCanvasItem_force_update_transform #-}
 
@@ -1202,9 +1521,13 @@ force_update_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "force_update_transform" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.force_update_transform
+
 {-# NOINLINE bindCanvasItem_get_canvas #-}
 
--- | Returns the [RID] of the [World2D] canvas where this item is in.
+-- | Returns the @RID@ of the @World2D@ canvas where this item is in.
 bindCanvasItem_get_canvas :: MethodBind
 bindCanvasItem_get_canvas
   = unsafePerformIO $
@@ -1214,7 +1537,7 @@ bindCanvasItem_get_canvas
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [RID] of the [World2D] canvas where this item is in.
+-- | Returns the @RID@ of the @World2D@ canvas where this item is in.
 get_canvas :: (CanvasItem :< cls, Object :< cls) => cls -> IO Rid
 get_canvas cls
   = withVariantArray []
@@ -1224,9 +1547,12 @@ get_canvas cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_canvas" '[] (IO Rid) where
+        nodeMethod = Godot.Core.CanvasItem.get_canvas
+
 {-# NOINLINE bindCanvasItem_get_canvas_item #-}
 
--- | Returns the canvas item RID used by [VisualServer] for this item.
+-- | Returns the canvas item RID used by @VisualServer@ for this item.
 bindCanvasItem_get_canvas_item :: MethodBind
 bindCanvasItem_get_canvas_item
   = unsafePerformIO $
@@ -1236,7 +1562,7 @@ bindCanvasItem_get_canvas_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the canvas item RID used by [VisualServer] for this item.
+-- | Returns the canvas item RID used by @VisualServer@ for this item.
 get_canvas_item ::
                   (CanvasItem :< cls, Object :< cls) => cls -> IO Rid
 get_canvas_item cls
@@ -1246,6 +1572,9 @@ get_canvas_item cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "get_canvas_item" '[] (IO Rid) where
+        nodeMethod = Godot.Core.CanvasItem.get_canvas_item
 
 {-# NOINLINE bindCanvasItem_get_canvas_transform #-}
 
@@ -1271,6 +1600,11 @@ get_canvas_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_canvas_transform" '[]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_canvas_transform
+
 {-# NOINLINE bindCanvasItem_get_global_mouse_position #-}
 
 -- | Returns the global position of the mouse.
@@ -1295,6 +1629,11 @@ get_global_mouse_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_global_mouse_position" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_global_mouse_position
+
 {-# NOINLINE bindCanvasItem_get_global_transform #-}
 
 -- | Returns the global transform matrix of this item.
@@ -1318,6 +1657,11 @@ get_global_transform cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "get_global_transform" '[]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_global_transform
 
 {-# NOINLINE bindCanvasItem_get_global_transform_with_canvas #-}
 
@@ -1344,9 +1688,15 @@ get_global_transform_with_canvas cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_global_transform_with_canvas"
+           '[]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_global_transform_with_canvas
+
 {-# NOINLINE bindCanvasItem_get_light_mask #-}
 
--- | The rendering layers in which this [CanvasItem] responds to [Light2D] nodes.
+-- | The rendering layers in which this @CanvasItem@ responds to @Light2D@ nodes.
 bindCanvasItem_get_light_mask :: MethodBind
 bindCanvasItem_get_light_mask
   = unsafePerformIO $
@@ -1356,7 +1706,7 @@ bindCanvasItem_get_light_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The rendering layers in which this [CanvasItem] responds to [Light2D] nodes.
+-- | The rendering layers in which this @CanvasItem@ responds to @Light2D@ nodes.
 get_light_mask ::
                  (CanvasItem :< cls, Object :< cls) => cls -> IO Int
 get_light_mask cls
@@ -1366,6 +1716,9 @@ get_light_mask cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "get_light_mask" '[] (IO Int) where
+        nodeMethod = Godot.Core.CanvasItem.get_light_mask
 
 {-# NOINLINE bindCanvasItem_get_local_mouse_position #-}
 
@@ -1391,9 +1744,14 @@ get_local_mouse_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_local_mouse_position" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_local_mouse_position
+
 {-# NOINLINE bindCanvasItem_get_material #-}
 
--- | The material applied to textures on this [CanvasItem].
+-- | The material applied to textures on this @CanvasItem@.
 bindCanvasItem_get_material :: MethodBind
 bindCanvasItem_get_material
   = unsafePerformIO $
@@ -1403,7 +1761,7 @@ bindCanvasItem_get_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The material applied to textures on this [CanvasItem].
+-- | The material applied to textures on this @CanvasItem@.
 get_material ::
                (CanvasItem :< cls, Object :< cls) => cls -> IO Material
 get_material cls
@@ -1414,9 +1772,13 @@ get_material cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_material" '[] (IO Material)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_material
+
 {-# NOINLINE bindCanvasItem_get_modulate #-}
 
--- | The color applied to textures on this [CanvasItem].
+-- | The color applied to textures on this @CanvasItem@.
 bindCanvasItem_get_modulate :: MethodBind
 bindCanvasItem_get_modulate
   = unsafePerformIO $
@@ -1426,7 +1788,7 @@ bindCanvasItem_get_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The color applied to textures on this [CanvasItem].
+-- | The color applied to textures on this @CanvasItem@.
 get_modulate ::
                (CanvasItem :< cls, Object :< cls) => cls -> IO Color
 get_modulate cls
@@ -1437,9 +1799,12 @@ get_modulate cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_modulate" '[] (IO Color) where
+        nodeMethod = Godot.Core.CanvasItem.get_modulate
+
 {-# NOINLINE bindCanvasItem_get_self_modulate #-}
 
--- | The color applied to textures on this [CanvasItem]. This is not inherited by children [CanvasItem]s.
+-- | The color applied to textures on this @CanvasItem@. This is not inherited by children @CanvasItem@s.
 bindCanvasItem_get_self_modulate :: MethodBind
 bindCanvasItem_get_self_modulate
   = unsafePerformIO $
@@ -1449,7 +1814,7 @@ bindCanvasItem_get_self_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The color applied to textures on this [CanvasItem]. This is not inherited by children [CanvasItem]s.
+-- | The color applied to textures on this @CanvasItem@. This is not inherited by children @CanvasItem@s.
 get_self_modulate ::
                     (CanvasItem :< cls, Object :< cls) => cls -> IO Color
 get_self_modulate cls
@@ -1460,6 +1825,10 @@ get_self_modulate cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "get_self_modulate" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_self_modulate
 
 {-# NOINLINE bindCanvasItem_get_transform #-}
 
@@ -1484,9 +1853,13 @@ get_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_transform" '[] (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_transform
+
 {-# NOINLINE bindCanvasItem_get_use_parent_material #-}
 
--- | If [code]true[/code], the parent [CanvasItem]'s [member material] property is used as this one's material.
+-- | If @true@, the parent @CanvasItem@'s @material@ property is used as this one's material.
 bindCanvasItem_get_use_parent_material :: MethodBind
 bindCanvasItem_get_use_parent_material
   = unsafePerformIO $
@@ -1496,7 +1869,7 @@ bindCanvasItem_get_use_parent_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the parent [CanvasItem]'s [member material] property is used as this one's material.
+-- | If @true@, the parent @CanvasItem@'s @material@ property is used as this one's material.
 get_use_parent_material ::
                           (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 get_use_parent_material cls
@@ -1508,9 +1881,14 @@ get_use_parent_material cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_use_parent_material" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_use_parent_material
+
 {-# NOINLINE bindCanvasItem_get_viewport_rect #-}
 
--- | Returns the viewport's boundaries as a [Rect2].
+-- | Returns the viewport's boundaries as a @Rect2@.
 bindCanvasItem_get_viewport_rect :: MethodBind
 bindCanvasItem_get_viewport_rect
   = unsafePerformIO $
@@ -1520,7 +1898,7 @@ bindCanvasItem_get_viewport_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the viewport's boundaries as a [Rect2].
+-- | Returns the viewport's boundaries as a @Rect2@.
 get_viewport_rect ::
                     (CanvasItem :< cls, Object :< cls) => cls -> IO Rect2
 get_viewport_rect cls
@@ -1531,6 +1909,10 @@ get_viewport_rect cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "get_viewport_rect" '[] (IO Rect2)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_viewport_rect
 
 {-# NOINLINE bindCanvasItem_get_viewport_transform #-}
 
@@ -1556,9 +1938,14 @@ get_viewport_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_viewport_transform" '[]
+           (IO Transform2d)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_viewport_transform
+
 {-# NOINLINE bindCanvasItem_get_world_2d #-}
 
--- | Returns the [World2D] where this item is in.
+-- | Returns the @World2D@ where this item is in.
 bindCanvasItem_get_world_2d :: MethodBind
 bindCanvasItem_get_world_2d
   = unsafePerformIO $
@@ -1568,7 +1955,7 @@ bindCanvasItem_get_world_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the [World2D] where this item is in.
+-- | Returns the @World2D@ where this item is in.
 get_world_2d ::
                (CanvasItem :< cls, Object :< cls) => cls -> IO World2D
 get_world_2d cls
@@ -1579,9 +1966,13 @@ get_world_2d cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "get_world_2d" '[] (IO World2D)
+         where
+        nodeMethod = Godot.Core.CanvasItem.get_world_2d
+
 {-# NOINLINE bindCanvasItem_hide #-}
 
--- | Hide the [CanvasItem] if it's currently visible.
+-- | Hide the @CanvasItem@ if it's currently visible.
 bindCanvasItem_hide :: MethodBind
 bindCanvasItem_hide
   = unsafePerformIO $
@@ -1591,7 +1982,7 @@ bindCanvasItem_hide
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Hide the [CanvasItem] if it's currently visible.
+-- | Hide the @CanvasItem@ if it's currently visible.
 hide :: (CanvasItem :< cls, Object :< cls) => cls -> IO ()
 hide cls
   = withVariantArray []
@@ -1599,9 +1990,12 @@ hide cls
          godot_method_bind_call bindCanvasItem_hide (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "hide" '[] (IO ()) where
+        nodeMethod = Godot.Core.CanvasItem.hide
+
 {-# NOINLINE bindCanvasItem_is_draw_behind_parent_enabled #-}
 
--- | If [code]true[/code], the object draws behind its parent.
+-- | If @true@, the object draws behind its parent.
 bindCanvasItem_is_draw_behind_parent_enabled :: MethodBind
 bindCanvasItem_is_draw_behind_parent_enabled
   = unsafePerformIO $
@@ -1611,7 +2005,7 @@ bindCanvasItem_is_draw_behind_parent_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the object draws behind its parent.
+-- | If @true@, the object draws behind its parent.
 is_draw_behind_parent_enabled ::
                                 (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_draw_behind_parent_enabled cls
@@ -1623,10 +2017,15 @@ is_draw_behind_parent_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "is_draw_behind_parent_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CanvasItem.is_draw_behind_parent_enabled
+
 {-# NOINLINE bindCanvasItem_is_local_transform_notification_enabled
              #-}
 
--- | Returns [code]true[/code] if local transform notifications are communicated to children.
+-- | Returns @true@ if local transform notifications are communicated to children.
 bindCanvasItem_is_local_transform_notification_enabled ::
                                                        MethodBind
 bindCanvasItem_is_local_transform_notification_enabled
@@ -1637,7 +2036,7 @@ bindCanvasItem_is_local_transform_notification_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if local transform notifications are communicated to children.
+-- | Returns @true@ if local transform notifications are communicated to children.
 is_local_transform_notification_enabled ::
                                           (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_local_transform_notification_enabled cls
@@ -1650,9 +2049,17 @@ is_local_transform_notification_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem
+           "is_local_transform_notification_enabled"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.CanvasItem.is_local_transform_notification_enabled
+
 {-# NOINLINE bindCanvasItem_is_set_as_toplevel #-}
 
--- | Returns [code]true[/code] if the node is set as top-level. See [method set_as_toplevel].
+-- | Returns @true@ if the node is set as top-level. See @method set_as_toplevel@.
 bindCanvasItem_is_set_as_toplevel :: MethodBind
 bindCanvasItem_is_set_as_toplevel
   = unsafePerformIO $
@@ -1662,7 +2069,7 @@ bindCanvasItem_is_set_as_toplevel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the node is set as top-level. See [method set_as_toplevel].
+-- | Returns @true@ if the node is set as top-level. See @method set_as_toplevel@.
 is_set_as_toplevel ::
                      (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_set_as_toplevel cls
@@ -1674,9 +2081,13 @@ is_set_as_toplevel cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "is_set_as_toplevel" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CanvasItem.is_set_as_toplevel
+
 {-# NOINLINE bindCanvasItem_is_transform_notification_enabled #-}
 
--- | Returns [code]true[/code] if global transform notifications are communicated to children.
+-- | Returns @true@ if global transform notifications are communicated to children.
 bindCanvasItem_is_transform_notification_enabled :: MethodBind
 bindCanvasItem_is_transform_notification_enabled
   = unsafePerformIO $
@@ -1686,7 +2097,7 @@ bindCanvasItem_is_transform_notification_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if global transform notifications are communicated to children.
+-- | Returns @true@ if global transform notifications are communicated to children.
 is_transform_notification_enabled ::
                                     (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_transform_notification_enabled cls
@@ -1699,10 +2110,17 @@ is_transform_notification_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "is_transform_notification_enabled"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.CanvasItem.is_transform_notification_enabled
+
 {-# NOINLINE bindCanvasItem_is_visible #-}
 
--- | If [code]true[/code], this [CanvasItem] is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
---   			[b]Note:[/b] For controls that inherit [Popup], the correct way to make them visible is to call one of the multiple [code]popup*()[/code] functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+--   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 bindCanvasItem_is_visible :: MethodBind
 bindCanvasItem_is_visible
   = unsafePerformIO $
@@ -1712,8 +2130,8 @@ bindCanvasItem_is_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [CanvasItem] is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
---   			[b]Note:[/b] For controls that inherit [Popup], the correct way to make them visible is to call one of the multiple [code]popup*()[/code] functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+--   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 is_visible :: (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_visible cls
   = withVariantArray []
@@ -1723,9 +2141,12 @@ is_visible cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "is_visible" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CanvasItem.is_visible
+
 {-# NOINLINE bindCanvasItem_is_visible_in_tree #-}
 
--- | Returns [code]true[/code] if the node is present in the [SceneTree], its [member visible] property is [code]true[/code] and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
 bindCanvasItem_is_visible_in_tree :: MethodBind
 bindCanvasItem_is_visible_in_tree
   = unsafePerformIO $
@@ -1735,7 +2156,7 @@ bindCanvasItem_is_visible_in_tree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the node is present in the [SceneTree], its [member visible] property is [code]true[/code] and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
 is_visible_in_tree ::
                      (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_visible_in_tree cls
@@ -1747,9 +2168,13 @@ is_visible_in_tree cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "is_visible_in_tree" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CanvasItem.is_visible_in_tree
+
 {-# NOINLINE bindCanvasItem_make_canvas_position_local #-}
 
--- | Assigns [code]screen_point[/code] as this node's new local transform.
+-- | Assigns @screen_point@ as this node's new local transform.
 bindCanvasItem_make_canvas_position_local :: MethodBind
 bindCanvasItem_make_canvas_position_local
   = unsafePerformIO $
@@ -1759,7 +2184,7 @@ bindCanvasItem_make_canvas_position_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns [code]screen_point[/code] as this node's new local transform.
+-- | Assigns @screen_point@ as this node's new local transform.
 make_canvas_position_local ::
                              (CanvasItem :< cls, Object :< cls) => cls -> Vector2 -> IO Vector2
 make_canvas_position_local cls arg1
@@ -1771,9 +2196,15 @@ make_canvas_position_local cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "make_canvas_position_local"
+           '[Vector2]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.CanvasItem.make_canvas_position_local
+
 {-# NOINLINE bindCanvasItem_make_input_local #-}
 
--- | Transformations issued by [code]event[/code]'s inputs are applied in local space instead of global space.
+-- | Transformations issued by @event@'s inputs are applied in local space instead of global space.
 bindCanvasItem_make_input_local :: MethodBind
 bindCanvasItem_make_input_local
   = unsafePerformIO $
@@ -1783,7 +2214,7 @@ bindCanvasItem_make_input_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transformations issued by [code]event[/code]'s inputs are applied in local space instead of global space.
+-- | Transformations issued by @event@'s inputs are applied in local space instead of global space.
 make_input_local ::
                    (CanvasItem :< cls, Object :< cls) =>
                    cls -> InputEvent -> IO InputEvent
@@ -1795,9 +2226,14 @@ make_input_local cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "make_input_local" '[InputEvent]
+           (IO InputEvent)
+         where
+        nodeMethod = Godot.Core.CanvasItem.make_input_local
+
 {-# NOINLINE bindCanvasItem_set_as_toplevel #-}
 
--- | If [code]enable[/code] is [code]true[/code], the node won't inherit its transform from parent canvas items.
+-- | If @enable@ is @true@, the node won't inherit its transform from parent canvas items.
 bindCanvasItem_set_as_toplevel :: MethodBind
 bindCanvasItem_set_as_toplevel
   = unsafePerformIO $
@@ -1807,7 +2243,7 @@ bindCanvasItem_set_as_toplevel
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]enable[/code] is [code]true[/code], the node won't inherit its transform from parent canvas items.
+-- | If @enable@ is @true@, the node won't inherit its transform from parent canvas items.
 set_as_toplevel ::
                   (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_as_toplevel cls arg1
@@ -1818,9 +2254,13 @@ set_as_toplevel cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_as_toplevel" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_as_toplevel
+
 {-# NOINLINE bindCanvasItem_set_draw_behind_parent #-}
 
--- | If [code]true[/code], the object draws behind its parent.
+-- | If @true@, the object draws behind its parent.
 bindCanvasItem_set_draw_behind_parent :: MethodBind
 bindCanvasItem_set_draw_behind_parent
   = unsafePerformIO $
@@ -1830,7 +2270,7 @@ bindCanvasItem_set_draw_behind_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the object draws behind its parent.
+-- | If @true@, the object draws behind its parent.
 set_draw_behind_parent ::
                          (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_behind_parent cls arg1
@@ -1842,9 +2282,14 @@ set_draw_behind_parent cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_draw_behind_parent" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_draw_behind_parent
+
 {-# NOINLINE bindCanvasItem_set_light_mask #-}
 
--- | The rendering layers in which this [CanvasItem] responds to [Light2D] nodes.
+-- | The rendering layers in which this @CanvasItem@ responds to @Light2D@ nodes.
 bindCanvasItem_set_light_mask :: MethodBind
 bindCanvasItem_set_light_mask
   = unsafePerformIO $
@@ -1854,7 +2299,7 @@ bindCanvasItem_set_light_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The rendering layers in which this [CanvasItem] responds to [Light2D] nodes.
+-- | The rendering layers in which this @CanvasItem@ responds to @Light2D@ nodes.
 set_light_mask ::
                  (CanvasItem :< cls, Object :< cls) => cls -> Int -> IO ()
 set_light_mask cls arg1
@@ -1865,9 +2310,13 @@ set_light_mask cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_light_mask" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_light_mask
+
 {-# NOINLINE bindCanvasItem_set_material #-}
 
--- | The material applied to textures on this [CanvasItem].
+-- | The material applied to textures on this @CanvasItem@.
 bindCanvasItem_set_material :: MethodBind
 bindCanvasItem_set_material
   = unsafePerformIO $
@@ -1877,7 +2326,7 @@ bindCanvasItem_set_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The material applied to textures on this [CanvasItem].
+-- | The material applied to textures on this @CanvasItem@.
 set_material ::
                (CanvasItem :< cls, Object :< cls) => cls -> Material -> IO ()
 set_material cls arg1
@@ -1888,9 +2337,13 @@ set_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_material" '[Material] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_material
+
 {-# NOINLINE bindCanvasItem_set_modulate #-}
 
--- | The color applied to textures on this [CanvasItem].
+-- | The color applied to textures on this @CanvasItem@.
 bindCanvasItem_set_modulate :: MethodBind
 bindCanvasItem_set_modulate
   = unsafePerformIO $
@@ -1900,7 +2353,7 @@ bindCanvasItem_set_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The color applied to textures on this [CanvasItem].
+-- | The color applied to textures on this @CanvasItem@.
 set_modulate ::
                (CanvasItem :< cls, Object :< cls) => cls -> Color -> IO ()
 set_modulate cls arg1
@@ -1911,9 +2364,13 @@ set_modulate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_modulate" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_modulate
+
 {-# NOINLINE bindCanvasItem_set_notify_local_transform #-}
 
--- | If [code]enable[/code] is [code]true[/code], children will be updated with local transform data.
+-- | If @enable@ is @true@, children will be updated with local transform data.
 bindCanvasItem_set_notify_local_transform :: MethodBind
 bindCanvasItem_set_notify_local_transform
   = unsafePerformIO $
@@ -1923,7 +2380,7 @@ bindCanvasItem_set_notify_local_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]enable[/code] is [code]true[/code], children will be updated with local transform data.
+-- | If @enable@ is @true@, children will be updated with local transform data.
 set_notify_local_transform ::
                              (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_notify_local_transform cls arg1
@@ -1935,9 +2392,14 @@ set_notify_local_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_notify_local_transform" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_notify_local_transform
+
 {-# NOINLINE bindCanvasItem_set_notify_transform #-}
 
--- | If [code]enable[/code] is [code]true[/code], children will be updated with global transform data.
+-- | If @enable@ is @true@, children will be updated with global transform data.
 bindCanvasItem_set_notify_transform :: MethodBind
 bindCanvasItem_set_notify_transform
   = unsafePerformIO $
@@ -1947,7 +2409,7 @@ bindCanvasItem_set_notify_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]enable[/code] is [code]true[/code], children will be updated with global transform data.
+-- | If @enable@ is @true@, children will be updated with global transform data.
 set_notify_transform ::
                        (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_notify_transform cls arg1
@@ -1959,9 +2421,14 @@ set_notify_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_notify_transform" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_notify_transform
+
 {-# NOINLINE bindCanvasItem_set_self_modulate #-}
 
--- | The color applied to textures on this [CanvasItem]. This is not inherited by children [CanvasItem]s.
+-- | The color applied to textures on this @CanvasItem@. This is not inherited by children @CanvasItem@s.
 bindCanvasItem_set_self_modulate :: MethodBind
 bindCanvasItem_set_self_modulate
   = unsafePerformIO $
@@ -1971,7 +2438,7 @@ bindCanvasItem_set_self_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The color applied to textures on this [CanvasItem]. This is not inherited by children [CanvasItem]s.
+-- | The color applied to textures on this @CanvasItem@. This is not inherited by children @CanvasItem@s.
 set_self_modulate ::
                     (CanvasItem :< cls, Object :< cls) => cls -> Color -> IO ()
 set_self_modulate cls arg1
@@ -1983,9 +2450,13 @@ set_self_modulate cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_self_modulate" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_self_modulate
+
 {-# NOINLINE bindCanvasItem_set_use_parent_material #-}
 
--- | If [code]true[/code], the parent [CanvasItem]'s [member material] property is used as this one's material.
+-- | If @true@, the parent @CanvasItem@'s @material@ property is used as this one's material.
 bindCanvasItem_set_use_parent_material :: MethodBind
 bindCanvasItem_set_use_parent_material
   = unsafePerformIO $
@@ -1995,7 +2466,7 @@ bindCanvasItem_set_use_parent_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the parent [CanvasItem]'s [member material] property is used as this one's material.
+-- | If @true@, the parent @CanvasItem@'s @material@ property is used as this one's material.
 set_use_parent_material ::
                           (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_parent_material cls arg1
@@ -2007,10 +2478,15 @@ set_use_parent_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_use_parent_material" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CanvasItem.set_use_parent_material
+
 {-# NOINLINE bindCanvasItem_set_visible #-}
 
--- | If [code]true[/code], this [CanvasItem] is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
---   			[b]Note:[/b] For controls that inherit [Popup], the correct way to make them visible is to call one of the multiple [code]popup*()[/code] functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+--   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 bindCanvasItem_set_visible :: MethodBind
 bindCanvasItem_set_visible
   = unsafePerformIO $
@@ -2020,8 +2496,8 @@ bindCanvasItem_set_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [CanvasItem] is drawn. The node is only visible if all of its antecedents are visible as well (in other words, [method is_visible_in_tree] must return [code]true[/code]).
---   			[b]Note:[/b] For controls that inherit [Popup], the correct way to make them visible is to call one of the multiple [code]popup*()[/code] functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+--   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 set_visible ::
               (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_visible cls arg1
@@ -2032,9 +2508,12 @@ set_visible cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "set_visible" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.CanvasItem.set_visible
+
 {-# NOINLINE bindCanvasItem_show #-}
 
--- | Show the [CanvasItem] if it's currently hidden. For controls that inherit [Popup], the correct way to make them visible is to call one of the multiple [code]popup*()[/code] functions instead.
+-- | Show the @CanvasItem@ if it's currently hidden. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 bindCanvasItem_show :: MethodBind
 bindCanvasItem_show
   = unsafePerformIO $
@@ -2044,7 +2523,7 @@ bindCanvasItem_show
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Show the [CanvasItem] if it's currently hidden. For controls that inherit [Popup], the correct way to make them visible is to call one of the multiple [code]popup*()[/code] functions instead.
+-- | Show the @CanvasItem@ if it's currently hidden. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 show :: (CanvasItem :< cls, Object :< cls) => cls -> IO ()
 show cls
   = withVariantArray []
@@ -2052,9 +2531,12 @@ show cls
          godot_method_bind_call bindCanvasItem_show (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CanvasItem "show" '[] (IO ()) where
+        nodeMethod = Godot.Core.CanvasItem.show
+
 {-# NOINLINE bindCanvasItem_update #-}
 
--- | Queue the [CanvasItem] for update. [constant NOTIFICATION_DRAW] will be called on idle time to request redraw.
+-- | Queue the @CanvasItem@ for update. @NOTIFICATION_DRAW@ will be called on idle time to request redraw.
 bindCanvasItem_update :: MethodBind
 bindCanvasItem_update
   = unsafePerformIO $
@@ -2064,7 +2546,7 @@ bindCanvasItem_update
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Queue the [CanvasItem] for update. [constant NOTIFICATION_DRAW] will be called on idle time to request redraw.
+-- | Queue the @CanvasItem@ for update. @NOTIFICATION_DRAW@ will be called on idle time to request redraw.
 update :: (CanvasItem :< cls, Object :< cls) => cls -> IO ()
 update cls
   = withVariantArray []
@@ -2072,3 +2554,6 @@ update cls
          godot_method_bind_call bindCanvasItem_update (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CanvasItem "update" '[] (IO ()) where
+        nodeMethod = Godot.Core.CanvasItem.update

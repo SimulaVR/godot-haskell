@@ -19,9 +19,26 @@ module Godot.Tools.EditorSpinSlider
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Range()
+
+instance NodeProperty EditorSpinSlider "flat" Bool 'False where
+        nodeProperty = (is_flat, wrapDroppingSetter set_flat, Nothing)
+
+instance NodeProperty EditorSpinSlider "label" GodotString 'False
+         where
+        nodeProperty = (get_label, wrapDroppingSetter set_label, Nothing)
+
+instance NodeProperty EditorSpinSlider "read_only" Bool 'False
+         where
+        nodeProperty
+          = (is_read_only, wrapDroppingSetter set_read_only, Nothing)
 
 {-# NOINLINE bindEditorSpinSlider__grabber_gui_input #-}
 
@@ -46,6 +63,12 @@ _grabber_gui_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSpinSlider "_grabber_gui_input"
+           '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider._grabber_gui_input
+
 {-# NOINLINE bindEditorSpinSlider__grabber_mouse_entered #-}
 
 bindEditorSpinSlider__grabber_mouse_entered :: MethodBind
@@ -67,6 +90,11 @@ _grabber_mouse_entered cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSpinSlider "_grabber_mouse_entered" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider._grabber_mouse_entered
 
 {-# NOINLINE bindEditorSpinSlider__grabber_mouse_exited #-}
 
@@ -90,6 +118,11 @@ _grabber_mouse_exited cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSpinSlider "_grabber_mouse_exited" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider._grabber_mouse_exited
+
 {-# NOINLINE bindEditorSpinSlider__gui_input #-}
 
 bindEditorSpinSlider__gui_input :: MethodBind
@@ -111,6 +144,11 @@ _gui_input cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSpinSlider "_gui_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider._gui_input
 
 {-# NOINLINE bindEditorSpinSlider__value_focus_exited #-}
 
@@ -134,6 +172,11 @@ _value_focus_exited cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSpinSlider "_value_focus_exited" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider._value_focus_exited
+
 {-# NOINLINE bindEditorSpinSlider__value_input_closed #-}
 
 bindEditorSpinSlider__value_input_closed :: MethodBind
@@ -155,6 +198,11 @@ _value_input_closed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSpinSlider "_value_input_closed" '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider._value_input_closed
 
 {-# NOINLINE bindEditorSpinSlider__value_input_entered #-}
 
@@ -179,6 +227,12 @@ _value_input_entered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSpinSlider "_value_input_entered"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider._value_input_entered
+
 {-# NOINLINE bindEditorSpinSlider_get_label #-}
 
 bindEditorSpinSlider_get_label :: MethodBind
@@ -200,6 +254,11 @@ get_label cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSpinSlider "get_label" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider.get_label
+
 {-# NOINLINE bindEditorSpinSlider_is_flat #-}
 
 bindEditorSpinSlider_is_flat :: MethodBind
@@ -220,6 +279,9 @@ is_flat cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSpinSlider "is_flat" '[] (IO Bool) where
+        nodeMethod = Godot.Tools.EditorSpinSlider.is_flat
 
 {-# NOINLINE bindEditorSpinSlider_is_read_only #-}
 
@@ -243,6 +305,10 @@ is_read_only cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSpinSlider "is_read_only" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider.is_read_only
+
 {-# NOINLINE bindEditorSpinSlider_set_flat #-}
 
 bindEditorSpinSlider_set_flat :: MethodBind
@@ -263,6 +329,10 @@ set_flat cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSpinSlider "set_flat" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider.set_flat
 
 {-# NOINLINE bindEditorSpinSlider_set_label #-}
 
@@ -286,6 +356,11 @@ set_label cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorSpinSlider "set_label" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider.set_label
+
 {-# NOINLINE bindEditorSpinSlider_set_read_only #-}
 
 bindEditorSpinSlider_set_read_only :: MethodBind
@@ -307,3 +382,8 @@ set_read_only cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorSpinSlider "set_read_only" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorSpinSlider.set_read_only

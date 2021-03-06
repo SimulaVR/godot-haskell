@@ -26,9 +26,14 @@ module Godot.Core.XMLParser
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 _NODE_UNKNOWN :: Int
 _NODE_UNKNOWN = 6
@@ -75,9 +80,13 @@ get_attribute_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "get_attribute_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.XMLParser.get_attribute_count
+
 {-# NOINLINE bindXMLParser_get_attribute_name #-}
 
--- | Gets the name of the attribute specified by the index in [code]idx[/code] argument.
+-- | Gets the name of the attribute specified by the index in @idx@ argument.
 bindXMLParser_get_attribute_name :: MethodBind
 bindXMLParser_get_attribute_name
   = unsafePerformIO $
@@ -87,7 +96,7 @@ bindXMLParser_get_attribute_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the name of the attribute specified by the index in [code]idx[/code] argument.
+-- | Gets the name of the attribute specified by the index in @idx@ argument.
 get_attribute_name ::
                      (XMLParser :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_attribute_name cls arg1
@@ -99,9 +108,14 @@ get_attribute_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "get_attribute_name" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.XMLParser.get_attribute_name
+
 {-# NOINLINE bindXMLParser_get_attribute_value #-}
 
--- | Gets the value of the attribute specified by the index in [code]idx[/code] argument.
+-- | Gets the value of the attribute specified by the index in @idx@ argument.
 bindXMLParser_get_attribute_value :: MethodBind
 bindXMLParser_get_attribute_value
   = unsafePerformIO $
@@ -111,7 +125,7 @@ bindXMLParser_get_attribute_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the value of the attribute specified by the index in [code]idx[/code] argument.
+-- | Gets the value of the attribute specified by the index in @idx@ argument.
 get_attribute_value ::
                       (XMLParser :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_attribute_value cls arg1
@@ -122,6 +136,11 @@ get_attribute_value cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "get_attribute_value" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.XMLParser.get_attribute_value
 
 {-# NOINLINE bindXMLParser_get_current_line #-}
 
@@ -145,6 +164,9 @@ get_current_line cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "get_current_line" '[] (IO Int) where
+        nodeMethod = Godot.Core.XMLParser.get_current_line
 
 {-# NOINLINE bindXMLParser_get_named_attribute_value #-}
 
@@ -171,9 +193,15 @@ get_named_attribute_value cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "get_named_attribute_value"
+           '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.XMLParser.get_named_attribute_value
+
 {-# NOINLINE bindXMLParser_get_named_attribute_value_safe #-}
 
--- | Gets the value of a certain attribute of the current element by name. This will return an empty [String] if the attribute is not found.
+-- | Gets the value of a certain attribute of the current element by name. This will return an empty @String@ if the attribute is not found.
 bindXMLParser_get_named_attribute_value_safe :: MethodBind
 bindXMLParser_get_named_attribute_value_safe
   = unsafePerformIO $
@@ -183,7 +211,7 @@ bindXMLParser_get_named_attribute_value_safe
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the value of a certain attribute of the current element by name. This will return an empty [String] if the attribute is not found.
+-- | Gets the value of a certain attribute of the current element by name. This will return an empty @String@ if the attribute is not found.
 get_named_attribute_value_safe ::
                                  (XMLParser :< cls, Object :< cls) =>
                                  cls -> GodotString -> IO GodotString
@@ -195,6 +223,12 @@ get_named_attribute_value_safe cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "get_named_attribute_value_safe"
+           '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.XMLParser.get_named_attribute_value_safe
 
 {-# NOINLINE bindXMLParser_get_node_data #-}
 
@@ -219,9 +253,13 @@ get_node_data cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "get_node_data" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.XMLParser.get_node_data
+
 {-# NOINLINE bindXMLParser_get_node_name #-}
 
--- | Gets the name of the current element node. This will raise an error if the current node type is neither [constant NODE_ELEMENT] nor [constant NODE_ELEMENT_END].
+-- | Gets the name of the current element node. This will raise an error if the current node type is neither @NODE_ELEMENT@ nor @NODE_ELEMENT_END@.
 bindXMLParser_get_node_name :: MethodBind
 bindXMLParser_get_node_name
   = unsafePerformIO $
@@ -231,7 +269,7 @@ bindXMLParser_get_node_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the name of the current element node. This will raise an error if the current node type is neither [constant NODE_ELEMENT] nor [constant NODE_ELEMENT_END].
+-- | Gets the name of the current element node. This will raise an error if the current node type is neither @NODE_ELEMENT@ nor @NODE_ELEMENT_END@.
 get_node_name ::
                 (XMLParser :< cls, Object :< cls) => cls -> IO GodotString
 get_node_name cls
@@ -241,6 +279,10 @@ get_node_name cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "get_node_name" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.XMLParser.get_node_name
 
 {-# NOINLINE bindXMLParser_get_node_offset #-}
 
@@ -265,9 +307,12 @@ get_node_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "get_node_offset" '[] (IO Int) where
+        nodeMethod = Godot.Core.XMLParser.get_node_offset
+
 {-# NOINLINE bindXMLParser_get_node_type #-}
 
--- | Gets the type of the current node. Compare with [enum NodeType] constants.
+-- | Gets the type of the current node. Compare with @enum NodeType@ constants.
 bindXMLParser_get_node_type :: MethodBind
 bindXMLParser_get_node_type
   = unsafePerformIO $
@@ -277,7 +322,7 @@ bindXMLParser_get_node_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the type of the current node. Compare with [enum NodeType] constants.
+-- | Gets the type of the current node. Compare with @enum NodeType@ constants.
 get_node_type :: (XMLParser :< cls, Object :< cls) => cls -> IO Int
 get_node_type cls
   = withVariantArray []
@@ -286,6 +331,9 @@ get_node_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "get_node_type" '[] (IO Int) where
+        nodeMethod = Godot.Core.XMLParser.get_node_type
 
 {-# NOINLINE bindXMLParser_has_attribute #-}
 
@@ -310,9 +358,14 @@ has_attribute cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "has_attribute" '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.XMLParser.has_attribute
+
 {-# NOINLINE bindXMLParser_is_empty #-}
 
--- | Check whether the current element is empty (this only works for completely empty tags, e.g. [code]<element \>[/code]).
+-- | Check whether the current element is empty (this only works for completely empty tags, e.g. @<element \>@).
 bindXMLParser_is_empty :: MethodBind
 bindXMLParser_is_empty
   = unsafePerformIO $
@@ -322,7 +375,7 @@ bindXMLParser_is_empty
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Check whether the current element is empty (this only works for completely empty tags, e.g. [code]<element \>[/code]).
+-- | Check whether the current element is empty (this only works for completely empty tags, e.g. @<element \>@).
 is_empty :: (XMLParser :< cls, Object :< cls) => cls -> IO Bool
 is_empty cls
   = withVariantArray []
@@ -330,6 +383,9 @@ is_empty cls
          godot_method_bind_call bindXMLParser_is_empty (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "is_empty" '[] (IO Bool) where
+        nodeMethod = Godot.Core.XMLParser.is_empty
 
 {-# NOINLINE bindXMLParser_open #-}
 
@@ -351,6 +407,9 @@ open cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindXMLParser_open (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "open" '[GodotString] (IO Int) where
+        nodeMethod = Godot.Core.XMLParser.open
 
 {-# NOINLINE bindXMLParser_open_buffer #-}
 
@@ -375,6 +434,11 @@ open_buffer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "open_buffer" '[PoolByteArray]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.XMLParser.open_buffer
+
 {-# NOINLINE bindXMLParser_read #-}
 
 -- | Reads the next node of the file. This returns an error code.
@@ -395,6 +459,9 @@ read cls
          godot_method_bind_call bindXMLParser_read (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod XMLParser "read" '[] (IO Int) where
+        nodeMethod = Godot.Core.XMLParser.read
+
 {-# NOINLINE bindXMLParser_seek #-}
 
 -- | Moves the buffer cursor to a certain offset (since the beginning) and read the next node there. This returns an error code.
@@ -414,6 +481,9 @@ seek cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindXMLParser_seek (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "seek" '[Int] (IO Int) where
+        nodeMethod = Godot.Core.XMLParser.seek
 
 {-# NOINLINE bindXMLParser_skip_section #-}
 
@@ -436,3 +506,6 @@ skip_section cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod XMLParser "skip_section" '[] (IO ()) where
+        nodeMethod = Godot.Core.XMLParser.skip_section

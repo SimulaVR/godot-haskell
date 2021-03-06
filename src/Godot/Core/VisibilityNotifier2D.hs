@@ -13,9 +13,14 @@ module Godot.Core.VisibilityNotifier2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
 
 -- | Emitted when the VisibilityNotifier2D enters the screen.
 sig_screen_entered ::
@@ -32,7 +37,7 @@ sig_screen_exited = Godot.Internal.Dispatch.Signal "screen_exited"
 
 instance NodeSignal VisibilityNotifier2D "screen_exited" '[]
 
--- | Emitted when the VisibilityNotifier2D enters a [Viewport]'s view.
+-- | Emitted when the VisibilityNotifier2D enters a @Viewport@'s view.
 sig_viewport_entered ::
                      Godot.Internal.Dispatch.Signal VisibilityNotifier2D
 sig_viewport_entered
@@ -41,7 +46,7 @@ sig_viewport_entered
 instance NodeSignal VisibilityNotifier2D "viewport_entered"
            '[Viewport]
 
--- | Emitted when the VisibilityNotifier2D exits a [Viewport]'s view.
+-- | Emitted when the VisibilityNotifier2D exits a @Viewport@'s view.
 sig_viewport_exited ::
                     Godot.Internal.Dispatch.Signal VisibilityNotifier2D
 sig_viewport_exited
@@ -49,6 +54,10 @@ sig_viewport_exited
 
 instance NodeSignal VisibilityNotifier2D "viewport_exited"
            '[Viewport]
+
+instance NodeProperty VisibilityNotifier2D "rect" Rect2 'False
+         where
+        nodeProperty = (get_rect, wrapDroppingSetter set_rect, Nothing)
 
 {-# NOINLINE bindVisibilityNotifier2D_get_rect #-}
 
@@ -74,10 +83,14 @@ get_rect cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisibilityNotifier2D "get_rect" '[] (IO Rect2)
+         where
+        nodeMethod = Godot.Core.VisibilityNotifier2D.get_rect
+
 {-# NOINLINE bindVisibilityNotifier2D_is_on_screen #-}
 
--- | If [code]true[/code], the bounding rectangle is on the screen.
---   				[b]Note:[/b] It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
+-- | If @true@, the bounding rectangle is on the screen.
+--   				__Note:__ It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return @false@ right after it is instantiated, even if it will be on screen in the draw pass.
 bindVisibilityNotifier2D_is_on_screen :: MethodBind
 bindVisibilityNotifier2D_is_on_screen
   = unsafePerformIO $
@@ -87,8 +100,8 @@ bindVisibilityNotifier2D_is_on_screen
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the bounding rectangle is on the screen.
---   				[b]Note:[/b] It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return [code]false[/code] right after it is instantiated, even if it will be on screen in the draw pass.
+-- | If @true@, the bounding rectangle is on the screen.
+--   				__Note:__ It takes one frame for the node's visibility to be assessed once added to the scene tree, so this method will return @false@ right after it is instantiated, even if it will be on screen in the draw pass.
 is_on_screen ::
                (VisibilityNotifier2D :< cls, Object :< cls) => cls -> IO Bool
 is_on_screen cls
@@ -99,6 +112,11 @@ is_on_screen cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisibilityNotifier2D "is_on_screen" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisibilityNotifier2D.is_on_screen
 
 {-# NOINLINE bindVisibilityNotifier2D_set_rect #-}
 
@@ -124,3 +142,8 @@ set_rect cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisibilityNotifier2D "set_rect" '[Rect2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisibilityNotifier2D.set_rect

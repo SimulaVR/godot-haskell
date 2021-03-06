@@ -18,9 +18,14 @@ module Godot.Core.AudioEffectFilter
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AudioEffect()
 
 _FILTER_24DB :: Int
 _FILTER_24DB = 3
@@ -33,6 +38,21 @@ _FILTER_18DB = 2
 
 _FILTER_6DB :: Int
 _FILTER_6DB = 0
+
+instance NodeProperty AudioEffectFilter "cutoff_hz" Float 'False
+         where
+        nodeProperty = (get_cutoff, wrapDroppingSetter set_cutoff, Nothing)
+
+instance NodeProperty AudioEffectFilter "db" Int 'False where
+        nodeProperty = (get_db, wrapDroppingSetter set_db, Nothing)
+
+instance NodeProperty AudioEffectFilter "gain" Float 'False where
+        nodeProperty = (get_gain, wrapDroppingSetter set_gain, Nothing)
+
+instance NodeProperty AudioEffectFilter "resonance" Float 'False
+         where
+        nodeProperty
+          = (get_resonance, wrapDroppingSetter set_resonance, Nothing)
 
 {-# NOINLINE bindAudioEffectFilter_get_cutoff #-}
 
@@ -58,6 +78,10 @@ get_cutoff cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectFilter "get_cutoff" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectFilter.get_cutoff
+
 {-# NOINLINE bindAudioEffectFilter_get_db #-}
 
 bindAudioEffectFilter_get_db :: MethodBind
@@ -78,6 +102,9 @@ get_db cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectFilter "get_db" '[] (IO Int) where
+        nodeMethod = Godot.Core.AudioEffectFilter.get_db
 
 {-# NOINLINE bindAudioEffectFilter_get_gain #-}
 
@@ -101,6 +128,10 @@ get_gain cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectFilter "get_gain" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectFilter.get_gain
 
 {-# NOINLINE bindAudioEffectFilter_get_resonance #-}
 
@@ -126,6 +157,11 @@ get_resonance cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectFilter "get_resonance" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AudioEffectFilter.get_resonance
+
 {-# NOINLINE bindAudioEffectFilter_set_cutoff #-}
 
 -- | Threshold frequency for the filter, in Hz.
@@ -150,6 +186,10 @@ set_cutoff cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectFilter "set_cutoff" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectFilter.set_cutoff
+
 {-# NOINLINE bindAudioEffectFilter_set_db #-}
 
 bindAudioEffectFilter_set_db :: MethodBind
@@ -170,6 +210,9 @@ set_db cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectFilter "set_db" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.AudioEffectFilter.set_db
 
 {-# NOINLINE bindAudioEffectFilter_set_gain #-}
 
@@ -194,6 +237,10 @@ set_gain cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AudioEffectFilter "set_gain" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectFilter.set_gain
+
 {-# NOINLINE bindAudioEffectFilter_set_resonance #-}
 
 -- | Amount of boost in the frequency range near the cutoff frequency.
@@ -217,3 +264,8 @@ set_resonance cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AudioEffectFilter "set_resonance" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AudioEffectFilter.set_resonance

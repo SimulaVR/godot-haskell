@@ -28,9 +28,14 @@ module Godot.Core.NetworkedMultiplayerPeer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PacketPeer()
 
 _CONNECTION_DISCONNECTED :: Int
 _CONNECTION_DISCONNECTED = 0
@@ -101,9 +106,25 @@ sig_server_disconnected
 instance NodeSignal NetworkedMultiplayerPeer "server_disconnected"
            '[]
 
+instance NodeProperty NetworkedMultiplayerPeer
+           "refuse_new_connections"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (is_refusing_new_connections,
+             wrapDroppingSetter set_refuse_new_connections, Nothing)
+
+instance NodeProperty NetworkedMultiplayerPeer "transfer_mode" Int
+           'False
+         where
+        nodeProperty
+          = (get_transfer_mode, wrapDroppingSetter set_transfer_mode,
+             Nothing)
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_get_connection_status #-}
 
--- | Returns the current state of the connection. See [enum ConnectionStatus].
+-- | Returns the current state of the connection. See @enum ConnectionStatus@.
 bindNetworkedMultiplayerPeer_get_connection_status :: MethodBind
 bindNetworkedMultiplayerPeer_get_connection_status
   = unsafePerformIO $
@@ -113,7 +134,7 @@ bindNetworkedMultiplayerPeer_get_connection_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current state of the connection. See [enum ConnectionStatus].
+-- | Returns the current state of the connection. See @enum ConnectionStatus@.
 get_connection_status ::
                         (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Int
 get_connection_status cls
@@ -126,9 +147,17 @@ get_connection_status cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerPeer
+           "get_connection_status"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerPeer.get_connection_status
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_get_packet_peer #-}
 
--- | Returns the ID of the [NetworkedMultiplayerPeer] who sent the most recent packet.
+-- | Returns the ID of the @NetworkedMultiplayerPeer@ who sent the most recent packet.
 bindNetworkedMultiplayerPeer_get_packet_peer :: MethodBind
 bindNetworkedMultiplayerPeer_get_packet_peer
   = unsafePerformIO $
@@ -138,7 +167,7 @@ bindNetworkedMultiplayerPeer_get_packet_peer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the ID of the [NetworkedMultiplayerPeer] who sent the most recent packet.
+-- | Returns the ID of the @NetworkedMultiplayerPeer@ who sent the most recent packet.
 get_packet_peer ::
                   (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Int
 get_packet_peer cls
@@ -150,9 +179,14 @@ get_packet_peer cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerPeer "get_packet_peer" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerPeer.get_packet_peer
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_get_transfer_mode #-}
 
--- | The manner in which to send packets to the [code]target_peer[/code]. See [enum TransferMode].
+-- | The manner in which to send packets to the @target_peer@. See @enum TransferMode@.
 bindNetworkedMultiplayerPeer_get_transfer_mode :: MethodBind
 bindNetworkedMultiplayerPeer_get_transfer_mode
   = unsafePerformIO $
@@ -162,7 +196,7 @@ bindNetworkedMultiplayerPeer_get_transfer_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The manner in which to send packets to the [code]target_peer[/code]. See [enum TransferMode].
+-- | The manner in which to send packets to the @target_peer@. See @enum TransferMode@.
 get_transfer_mode ::
                     (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Int
 get_transfer_mode cls
@@ -175,9 +209,15 @@ get_transfer_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerPeer "get_transfer_mode"
+           '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerPeer.get_transfer_mode
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_get_unique_id #-}
 
--- | Returns the ID of this [NetworkedMultiplayerPeer].
+-- | Returns the ID of this @NetworkedMultiplayerPeer@.
 bindNetworkedMultiplayerPeer_get_unique_id :: MethodBind
 bindNetworkedMultiplayerPeer_get_unique_id
   = unsafePerformIO $
@@ -187,7 +227,7 @@ bindNetworkedMultiplayerPeer_get_unique_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the ID of this [NetworkedMultiplayerPeer].
+-- | Returns the ID of this @NetworkedMultiplayerPeer@.
 get_unique_id ::
                 (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Int
 get_unique_id cls
@@ -199,10 +239,15 @@ get_unique_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerPeer "get_unique_id" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerPeer.get_unique_id
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_is_refusing_new_connections
              #-}
 
--- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
+-- | If @true@, this @NetworkedMultiplayerPeer@ refuses new connections.
 bindNetworkedMultiplayerPeer_is_refusing_new_connections ::
                                                          MethodBind
 bindNetworkedMultiplayerPeer_is_refusing_new_connections
@@ -213,7 +258,7 @@ bindNetworkedMultiplayerPeer_is_refusing_new_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
+-- | If @true@, this @NetworkedMultiplayerPeer@ refuses new connections.
 is_refusing_new_connections ::
                               (NetworkedMultiplayerPeer :< cls, Object :< cls) => cls -> IO Bool
 is_refusing_new_connections cls
@@ -225,6 +270,14 @@ is_refusing_new_connections cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerPeer
+           "is_refusing_new_connections"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerPeer.is_refusing_new_connections
 
 {-# NOINLINE bindNetworkedMultiplayerPeer_poll #-}
 
@@ -250,10 +303,14 @@ poll cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerPeer "poll" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerPeer.poll
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_set_refuse_new_connections
              #-}
 
--- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
+-- | If @true@, this @NetworkedMultiplayerPeer@ refuses new connections.
 bindNetworkedMultiplayerPeer_set_refuse_new_connections ::
                                                         MethodBind
 bindNetworkedMultiplayerPeer_set_refuse_new_connections
@@ -264,7 +321,7 @@ bindNetworkedMultiplayerPeer_set_refuse_new_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], this [NetworkedMultiplayerPeer] refuses new connections.
+-- | If @true@, this @NetworkedMultiplayerPeer@ refuses new connections.
 set_refuse_new_connections ::
                              (NetworkedMultiplayerPeer :< cls, Object :< cls) =>
                              cls -> Bool -> IO ()
@@ -278,10 +335,18 @@ set_refuse_new_connections cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerPeer
+           "set_refuse_new_connections"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerPeer.set_refuse_new_connections
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_set_target_peer #-}
 
 -- | Sets the peer to which packets will be sent.
---   				The [code]id[/code] can be one of: [constant TARGET_PEER_BROADCAST] to send to all connected peers, [constant TARGET_PEER_SERVER] to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. By default, the target peer is [constant TARGET_PEER_BROADCAST].
+--   				The @id@ can be one of: @TARGET_PEER_BROADCAST@ to send to all connected peers, @TARGET_PEER_SERVER@ to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. By default, the target peer is @TARGET_PEER_BROADCAST@.
 bindNetworkedMultiplayerPeer_set_target_peer :: MethodBind
 bindNetworkedMultiplayerPeer_set_target_peer
   = unsafePerformIO $
@@ -292,7 +357,7 @@ bindNetworkedMultiplayerPeer_set_target_peer
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the peer to which packets will be sent.
---   				The [code]id[/code] can be one of: [constant TARGET_PEER_BROADCAST] to send to all connected peers, [constant TARGET_PEER_SERVER] to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. By default, the target peer is [constant TARGET_PEER_BROADCAST].
+--   				The @id@ can be one of: @TARGET_PEER_BROADCAST@ to send to all connected peers, @TARGET_PEER_SERVER@ to send to the peer acting as server, a valid peer ID to send to that specific peer, a negative peer ID to send to all peers except that one. By default, the target peer is @TARGET_PEER_BROADCAST@.
 set_target_peer ::
                   (NetworkedMultiplayerPeer :< cls, Object :< cls) =>
                   cls -> Int -> IO ()
@@ -305,9 +370,15 @@ set_target_peer cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerPeer "set_target_peer"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerPeer.set_target_peer
+
 {-# NOINLINE bindNetworkedMultiplayerPeer_set_transfer_mode #-}
 
--- | The manner in which to send packets to the [code]target_peer[/code]. See [enum TransferMode].
+-- | The manner in which to send packets to the @target_peer@. See @enum TransferMode@.
 bindNetworkedMultiplayerPeer_set_transfer_mode :: MethodBind
 bindNetworkedMultiplayerPeer_set_transfer_mode
   = unsafePerformIO $
@@ -317,7 +388,7 @@ bindNetworkedMultiplayerPeer_set_transfer_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The manner in which to send packets to the [code]target_peer[/code]. See [enum TransferMode].
+-- | The manner in which to send packets to the @target_peer@. See @enum TransferMode@.
 set_transfer_mode ::
                     (NetworkedMultiplayerPeer :< cls, Object :< cls) =>
                     cls -> Int -> IO ()
@@ -330,3 +401,9 @@ set_transfer_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerPeer "set_transfer_mode"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerPeer.set_transfer_mode

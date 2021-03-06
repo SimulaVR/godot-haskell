@@ -39,9 +39,14 @@ module Godot.Core.GridMap
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
 
 _INVALID_CELL_ITEM :: Int
 _INVALID_CELL_ITEM = -1
@@ -51,6 +56,45 @@ sig_cell_size_changed
   = Godot.Internal.Dispatch.Signal "cell_size_changed"
 
 instance NodeSignal GridMap "cell_size_changed" '[Vector3]
+
+instance NodeProperty GridMap "cell_center_x" Bool 'False where
+        nodeProperty
+          = (get_center_x, wrapDroppingSetter set_center_x, Nothing)
+
+instance NodeProperty GridMap "cell_center_y" Bool 'False where
+        nodeProperty
+          = (get_center_y, wrapDroppingSetter set_center_y, Nothing)
+
+instance NodeProperty GridMap "cell_center_z" Bool 'False where
+        nodeProperty
+          = (get_center_z, wrapDroppingSetter set_center_z, Nothing)
+
+instance NodeProperty GridMap "cell_octant_size" Int 'False where
+        nodeProperty
+          = (get_octant_size, wrapDroppingSetter set_octant_size, Nothing)
+
+instance NodeProperty GridMap "cell_scale" Float 'False where
+        nodeProperty
+          = (get_cell_scale, wrapDroppingSetter set_cell_scale, Nothing)
+
+instance NodeProperty GridMap "cell_size" Vector3 'False where
+        nodeProperty
+          = (get_cell_size, wrapDroppingSetter set_cell_size, Nothing)
+
+instance NodeProperty GridMap "collision_layer" Int 'False where
+        nodeProperty
+          = (get_collision_layer, wrapDroppingSetter set_collision_layer,
+             Nothing)
+
+instance NodeProperty GridMap "collision_mask" Int 'False where
+        nodeProperty
+          = (get_collision_mask, wrapDroppingSetter set_collision_mask,
+             Nothing)
+
+instance NodeProperty GridMap "mesh_library" MeshLibrary 'False
+         where
+        nodeProperty
+          = (get_mesh_library, wrapDroppingSetter set_mesh_library, Nothing)
 
 {-# NOINLINE bindGridMap__update_octants_callback #-}
 
@@ -74,6 +118,10 @@ _update_octants_callback cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "_update_octants_callback" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap._update_octants_callback
+
 {-# NOINLINE bindGridMap_clear #-}
 
 bindGridMap_clear :: MethodBind
@@ -91,6 +139,9 @@ clear cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGridMap_clear (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.GridMap.clear
 
 {-# NOINLINE bindGridMap_clear_baked_meshes #-}
 
@@ -112,6 +163,9 @@ clear_baked_meshes cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "clear_baked_meshes" '[] (IO ()) where
+        nodeMethod = Godot.Core.GridMap.clear_baked_meshes
 
 {-# NOINLINE bindGridMap_get_bake_mesh_instance #-}
 
@@ -135,6 +189,11 @@ get_bake_mesh_instance cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_bake_mesh_instance" '[Int]
+           (IO Rid)
+         where
+        nodeMethod = Godot.Core.GridMap.get_bake_mesh_instance
+
 {-# NOINLINE bindGridMap_get_bake_meshes #-}
 
 bindGridMap_get_bake_meshes :: MethodBind
@@ -155,6 +214,9 @@ get_bake_meshes cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_bake_meshes" '[] (IO Array) where
+        nodeMethod = Godot.Core.GridMap.get_bake_meshes
 
 {-# NOINLINE bindGridMap_get_cell_item #-}
 
@@ -177,6 +239,11 @@ get_cell_item cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_cell_item" '[Int, Int, Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.GridMap.get_cell_item
 
 {-# NOINLINE bindGridMap_get_cell_item_orientation #-}
 
@@ -201,6 +268,12 @@ get_cell_item_orientation cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_cell_item_orientation"
+           '[Int, Int, Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.GridMap.get_cell_item_orientation
+
 {-# NOINLINE bindGridMap_get_cell_scale #-}
 
 bindGridMap_get_cell_scale :: MethodBind
@@ -221,6 +294,9 @@ get_cell_scale cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_cell_scale" '[] (IO Float) where
+        nodeMethod = Godot.Core.GridMap.get_cell_scale
 
 {-# NOINLINE bindGridMap_get_cell_size #-}
 
@@ -243,6 +319,9 @@ get_cell_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_cell_size" '[] (IO Vector3) where
+        nodeMethod = Godot.Core.GridMap.get_cell_size
+
 {-# NOINLINE bindGridMap_get_center_x #-}
 
 bindGridMap_get_center_x :: MethodBind
@@ -261,6 +340,9 @@ get_center_x cls
          godot_method_bind_call bindGridMap_get_center_x (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_center_x" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GridMap.get_center_x
 
 {-# NOINLINE bindGridMap_get_center_y #-}
 
@@ -281,6 +363,9 @@ get_center_y cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_center_y" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GridMap.get_center_y
+
 {-# NOINLINE bindGridMap_get_center_z #-}
 
 bindGridMap_get_center_z :: MethodBind
@@ -299,6 +384,9 @@ get_center_z cls
          godot_method_bind_call bindGridMap_get_center_z (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_center_z" '[] (IO Bool) where
+        nodeMethod = Godot.Core.GridMap.get_center_z
 
 {-# NOINLINE bindGridMap_get_collision_layer #-}
 
@@ -320,6 +408,10 @@ get_collision_layer cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_collision_layer" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.GridMap.get_collision_layer
 
 {-# NOINLINE bindGridMap_get_collision_layer_bit #-}
 
@@ -343,6 +435,11 @@ get_collision_layer_bit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_collision_layer_bit" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.GridMap.get_collision_layer_bit
+
 {-# NOINLINE bindGridMap_get_collision_mask #-}
 
 bindGridMap_get_collision_mask :: MethodBind
@@ -363,6 +460,9 @@ get_collision_mask cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_collision_mask" '[] (IO Int) where
+        nodeMethod = Godot.Core.GridMap.get_collision_mask
 
 {-# NOINLINE bindGridMap_get_collision_mask_bit #-}
 
@@ -386,6 +486,11 @@ get_collision_mask_bit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_collision_mask_bit" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.GridMap.get_collision_mask_bit
+
 {-# NOINLINE bindGridMap_get_mesh_library #-}
 
 bindGridMap_get_mesh_library :: MethodBind
@@ -407,6 +512,10 @@ get_mesh_library cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_mesh_library" '[] (IO MeshLibrary)
+         where
+        nodeMethod = Godot.Core.GridMap.get_mesh_library
+
 {-# NOINLINE bindGridMap_get_meshes #-}
 
 bindGridMap_get_meshes :: MethodBind
@@ -425,6 +534,9 @@ get_meshes cls
          godot_method_bind_call bindGridMap_get_meshes (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_meshes" '[] (IO Array) where
+        nodeMethod = Godot.Core.GridMap.get_meshes
 
 {-# NOINLINE bindGridMap_get_octant_size #-}
 
@@ -445,6 +557,9 @@ get_octant_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "get_octant_size" '[] (IO Int) where
+        nodeMethod = Godot.Core.GridMap.get_octant_size
 
 {-# NOINLINE bindGridMap_get_used_cells #-}
 
@@ -467,6 +582,9 @@ get_used_cells cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "get_used_cells" '[] (IO Array) where
+        nodeMethod = Godot.Core.GridMap.get_used_cells
+
 {-# NOINLINE bindGridMap_make_baked_meshes #-}
 
 bindGridMap_make_baked_meshes :: MethodBind
@@ -479,14 +597,23 @@ bindGridMap_make_baked_meshes
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 make_baked_meshes ::
-                    (GridMap :< cls, Object :< cls) => cls -> Bool -> Float -> IO ()
+                    (GridMap :< cls, Object :< cls) =>
+                    cls -> Maybe Bool -> Maybe Float -> IO ()
 make_baked_meshes cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [maybe (VariantBool False) toVariant arg1,
+       maybe (VariantReal (0.1)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGridMap_make_baked_meshes (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "make_baked_meshes"
+           '[Maybe Bool, Maybe Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.make_baked_meshes
 
 {-# NOINLINE bindGridMap_map_to_world #-}
 
@@ -509,6 +636,11 @@ map_to_world cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "map_to_world" '[Int, Int, Int]
+           (IO Vector3)
+         where
+        nodeMethod = Godot.Core.GridMap.map_to_world
+
 {-# NOINLINE bindGridMap_resource_changed #-}
 
 bindGridMap_resource_changed :: MethodBind
@@ -530,6 +662,10 @@ resource_changed cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "resource_changed" '[Resource] (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.resource_changed
+
 {-# NOINLINE bindGridMap_set_cell_item #-}
 
 bindGridMap_set_cell_item :: MethodBind
@@ -543,16 +679,22 @@ bindGridMap_set_cell_item
 
 set_cell_item ::
                 (GridMap :< cls, Object :< cls) =>
-                cls -> Int -> Int -> Int -> Int -> Int -> IO ()
+                cls -> Int -> Int -> Int -> Int -> Maybe Int -> IO ()
 set_cell_item cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
       [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+       maybe (VariantInt (0)) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGridMap_set_cell_item (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "set_cell_item"
+           '[Int, Int, Int, Int, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_cell_item
 
 {-# NOINLINE bindGridMap_set_cell_scale #-}
 
@@ -575,6 +717,9 @@ set_cell_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "set_cell_scale" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.GridMap.set_cell_scale
+
 {-# NOINLINE bindGridMap_set_cell_size #-}
 
 bindGridMap_set_cell_size :: MethodBind
@@ -596,6 +741,10 @@ set_cell_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "set_cell_size" '[Vector3] (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_cell_size
+
 {-# NOINLINE bindGridMap_set_center_x #-}
 
 bindGridMap_set_center_x :: MethodBind
@@ -615,6 +764,9 @@ set_center_x cls arg1
          godot_method_bind_call bindGridMap_set_center_x (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "set_center_x" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.GridMap.set_center_x
 
 {-# NOINLINE bindGridMap_set_center_y #-}
 
@@ -636,6 +788,9 @@ set_center_y cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "set_center_y" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.GridMap.set_center_y
+
 {-# NOINLINE bindGridMap_set_center_z #-}
 
 bindGridMap_set_center_z :: MethodBind
@@ -656,6 +811,9 @@ set_center_z cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "set_center_z" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.GridMap.set_center_z
+
 {-# NOINLINE bindGridMap_set_clip #-}
 
 bindGridMap_set_clip :: MethodBind
@@ -669,13 +827,21 @@ bindGridMap_set_clip
 
 set_clip ::
            (GridMap :< cls, Object :< cls) =>
-           cls -> Bool -> Bool -> Int -> Int -> IO ()
+           cls -> Bool -> Maybe Bool -> Maybe Int -> Maybe Int -> IO ()
 set_clip cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, maybe (VariantBool True) toVariant arg2,
+       maybe (VariantInt (0)) toVariant arg3,
+       maybe (VariantInt (0)) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindGridMap_set_clip (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "set_clip"
+           '[Bool, Maybe Bool, Maybe Int, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_clip
 
 {-# NOINLINE bindGridMap_set_collision_layer #-}
 
@@ -697,6 +863,10 @@ set_collision_layer cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "set_collision_layer" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_collision_layer
 
 {-# NOINLINE bindGridMap_set_collision_layer_bit #-}
 
@@ -720,6 +890,11 @@ set_collision_layer_bit cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "set_collision_layer_bit" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_collision_layer_bit
+
 {-# NOINLINE bindGridMap_set_collision_mask #-}
 
 bindGridMap_set_collision_mask :: MethodBind
@@ -740,6 +915,10 @@ set_collision_mask cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "set_collision_mask" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_collision_mask
 
 {-# NOINLINE bindGridMap_set_collision_mask_bit #-}
 
@@ -763,6 +942,11 @@ set_collision_mask_bit cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "set_collision_mask_bit" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_collision_mask_bit
+
 {-# NOINLINE bindGridMap_set_mesh_library #-}
 
 bindGridMap_set_mesh_library :: MethodBind
@@ -783,6 +967,11 @@ set_mesh_library cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "set_mesh_library" '[MeshLibrary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.GridMap.set_mesh_library
 
 {-# NOINLINE bindGridMap_set_octant_size #-}
 
@@ -805,6 +994,9 @@ set_octant_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod GridMap "set_octant_size" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.GridMap.set_octant_size
+
 {-# NOINLINE bindGridMap_world_to_map #-}
 
 bindGridMap_world_to_map :: MethodBind
@@ -824,3 +1016,7 @@ world_to_map cls arg1
          godot_method_bind_call bindGridMap_world_to_map (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod GridMap "world_to_map" '[Vector3] (IO Vector3)
+         where
+        nodeMethod = Godot.Core.GridMap.world_to_map

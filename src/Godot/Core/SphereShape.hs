@@ -8,9 +8,17 @@ module Godot.Core.SphereShape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape()
+
+instance NodeProperty SphereShape "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
 
 {-# NOINLINE bindSphereShape_get_radius #-}
 
@@ -35,6 +43,9 @@ get_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod SphereShape "get_radius" '[] (IO Float) where
+        nodeMethod = Godot.Core.SphereShape.get_radius
+
 {-# NOINLINE bindSphereShape_set_radius #-}
 
 -- | The sphere's radius. The shape's diameter is double the radius.
@@ -57,3 +68,6 @@ set_radius cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod SphereShape "set_radius" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.SphereShape.set_radius

@@ -30,9 +30,14 @@ module Godot.Core.NetworkedMultiplayerENet
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.NetworkedMultiplayerPeer()
 
 _COMPRESS_NONE :: Int
 _COMPRESS_NONE = 0
@@ -49,6 +54,44 @@ _COMPRESS_FASTLZ = 2
 _COMPRESS_ZSTD :: Int
 _COMPRESS_ZSTD = 4
 
+instance NodeProperty NetworkedMultiplayerENet "always_ordered"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (is_always_ordered, wrapDroppingSetter set_always_ordered,
+             Nothing)
+
+instance NodeProperty NetworkedMultiplayerENet "channel_count" Int
+           'False
+         where
+        nodeProperty
+          = (get_channel_count, wrapDroppingSetter set_channel_count,
+             Nothing)
+
+instance NodeProperty NetworkedMultiplayerENet "compression_mode"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_compression_mode, wrapDroppingSetter set_compression_mode,
+             Nothing)
+
+instance NodeProperty NetworkedMultiplayerENet "server_relay" Bool
+           'False
+         where
+        nodeProperty
+          = (is_server_relay_enabled,
+             wrapDroppingSetter set_server_relay_enabled, Nothing)
+
+instance NodeProperty NetworkedMultiplayerENet "transfer_channel"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_transfer_channel, wrapDroppingSetter set_transfer_channel,
+             Nothing)
+
 {-# NOINLINE bindNetworkedMultiplayerENet_close_connection #-}
 
 bindNetworkedMultiplayerENet_close_connection :: MethodBind
@@ -62,9 +105,9 @@ bindNetworkedMultiplayerENet_close_connection
 
 close_connection ::
                    (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                   cls -> Int -> IO ()
+                   cls -> Maybe Int -> IO ()
 close_connection cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe (VariantInt (100)) toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call
            bindNetworkedMultiplayerENet_close_connection
@@ -72,6 +115,12 @@ close_connection cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "close_connection"
+           '[Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.close_connection
 
 {-# NOINLINE bindNetworkedMultiplayerENet_create_client #-}
 
@@ -86,17 +135,26 @@ bindNetworkedMultiplayerENet_create_client
 
 create_client ::
                 (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                cls -> GodotString -> Int -> Int -> Int -> Int -> IO Int
+                cls ->
+                  GodotString -> Int -> Maybe Int -> Maybe Int -> Maybe Int -> IO Int
 create_client cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1, toVariant arg2,
+       maybe (VariantInt (0)) toVariant arg3,
+       maybe (VariantInt (0)) toVariant arg4,
+       maybe (VariantInt (0)) toVariant arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindNetworkedMultiplayerENet_create_client
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "create_client"
+           '[GodotString, Int, Maybe Int, Maybe Int, Maybe Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.create_client
 
 {-# NOINLINE bindNetworkedMultiplayerENet_create_server #-}
 
@@ -111,16 +169,24 @@ bindNetworkedMultiplayerENet_create_server
 
 create_server ::
                 (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                cls -> Int -> Int -> Int -> Int -> IO Int
+                cls -> Int -> Maybe Int -> Maybe Int -> Maybe Int -> IO Int
 create_server cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, maybe (VariantInt (32)) toVariant arg2,
+       maybe (VariantInt (0)) toVariant arg3,
+       maybe (VariantInt (0)) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindNetworkedMultiplayerENet_create_server
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "create_server"
+           '[Int, Maybe Int, Maybe Int, Maybe Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.create_server
 
 {-# NOINLINE bindNetworkedMultiplayerENet_disconnect_peer #-}
 
@@ -135,15 +201,22 @@ bindNetworkedMultiplayerENet_disconnect_peer
 
 disconnect_peer ::
                   (NetworkedMultiplayerENet :< cls, Object :< cls) =>
-                  cls -> Int -> Bool -> IO ()
+                  cls -> Int -> Maybe Bool -> IO ()
 disconnect_peer cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantBool False) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindNetworkedMultiplayerENet_disconnect_peer
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "disconnect_peer"
+           '[Int, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.disconnect_peer
 
 {-# NOINLINE bindNetworkedMultiplayerENet_get_channel_count #-}
 
@@ -168,6 +241,12 @@ get_channel_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet "get_channel_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.get_channel_count
+
 {-# NOINLINE bindNetworkedMultiplayerENet_get_compression_mode #-}
 
 bindNetworkedMultiplayerENet_get_compression_mode :: MethodBind
@@ -190,6 +269,13 @@ get_compression_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "get_compression_mode"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerENet.get_compression_mode
 
 {-# NOINLINE bindNetworkedMultiplayerENet_get_last_packet_channel
              #-}
@@ -215,6 +301,14 @@ get_last_packet_channel cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet
+           "get_last_packet_channel"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerENet.get_last_packet_channel
+
 {-# NOINLINE bindNetworkedMultiplayerENet_get_packet_channel #-}
 
 bindNetworkedMultiplayerENet_get_packet_channel :: MethodBind
@@ -237,6 +331,12 @@ get_packet_channel cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "get_packet_channel"
+           '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.get_packet_channel
 
 {-# NOINLINE bindNetworkedMultiplayerENet_get_peer_address #-}
 
@@ -262,6 +362,12 @@ get_peer_address cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet "get_peer_address"
+           '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.get_peer_address
+
 {-# NOINLINE bindNetworkedMultiplayerENet_get_peer_port #-}
 
 bindNetworkedMultiplayerENet_get_peer_port :: MethodBind
@@ -284,6 +390,11 @@ get_peer_port cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "get_peer_port" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.get_peer_port
 
 {-# NOINLINE bindNetworkedMultiplayerENet_get_transfer_channel #-}
 
@@ -308,6 +419,13 @@ get_transfer_channel cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet "get_transfer_channel"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerENet.get_transfer_channel
+
 {-# NOINLINE bindNetworkedMultiplayerENet_is_always_ordered #-}
 
 bindNetworkedMultiplayerENet_is_always_ordered :: MethodBind
@@ -330,6 +448,12 @@ is_always_ordered cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "is_always_ordered"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.is_always_ordered
 
 {-# NOINLINE bindNetworkedMultiplayerENet_is_server_relay_enabled
              #-}
@@ -355,6 +479,14 @@ is_server_relay_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet
+           "is_server_relay_enabled"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerENet.is_server_relay_enabled
+
 {-# NOINLINE bindNetworkedMultiplayerENet_set_always_ordered #-}
 
 bindNetworkedMultiplayerENet_set_always_ordered :: MethodBind
@@ -379,6 +511,12 @@ set_always_ordered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet "set_always_ordered"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.set_always_ordered
+
 {-# NOINLINE bindNetworkedMultiplayerENet_set_bind_ip #-}
 
 bindNetworkedMultiplayerENet_set_bind_ip :: MethodBind
@@ -401,6 +539,12 @@ set_bind_ip cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "set_bind_ip"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.set_bind_ip
 
 {-# NOINLINE bindNetworkedMultiplayerENet_set_channel_count #-}
 
@@ -426,6 +570,12 @@ set_channel_count cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet "set_channel_count"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NetworkedMultiplayerENet.set_channel_count
+
 {-# NOINLINE bindNetworkedMultiplayerENet_set_compression_mode #-}
 
 bindNetworkedMultiplayerENet_set_compression_mode :: MethodBind
@@ -449,6 +599,13 @@ set_compression_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "set_compression_mode"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerENet.set_compression_mode
 
 {-# NOINLINE bindNetworkedMultiplayerENet_set_server_relay_enabled
              #-}
@@ -475,6 +632,14 @@ set_server_relay_enabled cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NetworkedMultiplayerENet
+           "set_server_relay_enabled"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerENet.set_server_relay_enabled
+
 {-# NOINLINE bindNetworkedMultiplayerENet_set_transfer_channel #-}
 
 bindNetworkedMultiplayerENet_set_transfer_channel :: MethodBind
@@ -498,3 +663,10 @@ set_transfer_channel cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NetworkedMultiplayerENet "set_transfer_channel"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NetworkedMultiplayerENet.set_transfer_channel

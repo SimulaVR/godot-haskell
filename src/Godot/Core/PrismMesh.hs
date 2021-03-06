@@ -16,9 +16,37 @@ module Godot.Core.PrismMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PrimitiveMesh()
+
+instance NodeProperty PrismMesh "left_to_right" Float 'False where
+        nodeProperty
+          = (get_left_to_right, wrapDroppingSetter set_left_to_right,
+             Nothing)
+
+instance NodeProperty PrismMesh "size" Vector3 'False where
+        nodeProperty = (get_size, wrapDroppingSetter set_size, Nothing)
+
+instance NodeProperty PrismMesh "subdivide_depth" Int 'False where
+        nodeProperty
+          = (get_subdivide_depth, wrapDroppingSetter set_subdivide_depth,
+             Nothing)
+
+instance NodeProperty PrismMesh "subdivide_height" Int 'False where
+        nodeProperty
+          = (get_subdivide_height, wrapDroppingSetter set_subdivide_height,
+             Nothing)
+
+instance NodeProperty PrismMesh "subdivide_width" Int 'False where
+        nodeProperty
+          = (get_subdivide_width, wrapDroppingSetter set_subdivide_width,
+             Nothing)
 
 {-# NOINLINE bindPrismMesh_get_left_to_right #-}
 
@@ -43,6 +71,10 @@ get_left_to_right cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrismMesh "get_left_to_right" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.PrismMesh.get_left_to_right
+
 {-# NOINLINE bindPrismMesh_get_size #-}
 
 -- | Size of the prism.
@@ -63,6 +95,9 @@ get_size cls
          godot_method_bind_call bindPrismMesh_get_size (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PrismMesh "get_size" '[] (IO Vector3) where
+        nodeMethod = Godot.Core.PrismMesh.get_size
 
 {-# NOINLINE bindPrismMesh_get_subdivide_depth #-}
 
@@ -88,6 +123,10 @@ get_subdivide_depth cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrismMesh "get_subdivide_depth" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.PrismMesh.get_subdivide_depth
+
 {-# NOINLINE bindPrismMesh_get_subdivide_height #-}
 
 -- | Number of added edge loops along the Y axis.
@@ -111,6 +150,10 @@ get_subdivide_height cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PrismMesh "get_subdivide_height" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.PrismMesh.get_subdivide_height
 
 {-# NOINLINE bindPrismMesh_get_subdivide_width #-}
 
@@ -136,6 +179,10 @@ get_subdivide_width cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrismMesh "get_subdivide_width" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.PrismMesh.get_subdivide_width
+
 {-# NOINLINE bindPrismMesh_set_left_to_right #-}
 
 -- | Displacement of the upper edge along the X axis. 0.0 positions edge straight above the bottom-left edge.
@@ -159,6 +206,10 @@ set_left_to_right cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrismMesh "set_left_to_right" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.PrismMesh.set_left_to_right
+
 {-# NOINLINE bindPrismMesh_set_size #-}
 
 -- | Size of the prism.
@@ -180,6 +231,9 @@ set_size cls arg1
          godot_method_bind_call bindPrismMesh_set_size (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PrismMesh "set_size" '[Vector3] (IO ()) where
+        nodeMethod = Godot.Core.PrismMesh.set_size
 
 {-# NOINLINE bindPrismMesh_set_subdivide_depth #-}
 
@@ -205,6 +259,10 @@ set_subdivide_depth cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrismMesh "set_subdivide_depth" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.PrismMesh.set_subdivide_depth
+
 {-# NOINLINE bindPrismMesh_set_subdivide_height #-}
 
 -- | Number of added edge loops along the Y axis.
@@ -229,6 +287,10 @@ set_subdivide_height cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PrismMesh "set_subdivide_height" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.PrismMesh.set_subdivide_height
+
 {-# NOINLINE bindPrismMesh_set_subdivide_width #-}
 
 -- | Number of added edge loops along the X axis.
@@ -252,3 +314,7 @@ set_subdivide_width cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PrismMesh "set_subdivide_width" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.PrismMesh.set_subdivide_width

@@ -26,9 +26,14 @@ module Godot.Core.CSGShape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.GeometryInstance()
 
 _OPERATION_SUBTRACTION :: Int
 _OPERATION_SUBTRACTION = 2
@@ -38,6 +43,34 @@ _OPERATION_UNION = 0
 
 _OPERATION_INTERSECTION :: Int
 _OPERATION_INTERSECTION = 1
+
+instance NodeProperty CSGShape "calculate_tangents" Bool 'False
+         where
+        nodeProperty
+          = (is_calculating_tangents,
+             wrapDroppingSetter set_calculate_tangents, Nothing)
+
+instance NodeProperty CSGShape "collision_layer" Int 'False where
+        nodeProperty
+          = (get_collision_layer, wrapDroppingSetter set_collision_layer,
+             Nothing)
+
+instance NodeProperty CSGShape "collision_mask" Int 'False where
+        nodeProperty
+          = (get_collision_mask, wrapDroppingSetter set_collision_mask,
+             Nothing)
+
+instance NodeProperty CSGShape "operation" Int 'False where
+        nodeProperty
+          = (get_operation, wrapDroppingSetter set_operation, Nothing)
+
+instance NodeProperty CSGShape "snap" Float 'False where
+        nodeProperty = (get_snap, wrapDroppingSetter set_snap, Nothing)
+
+instance NodeProperty CSGShape "use_collision" Bool 'False where
+        nodeProperty
+          = (is_using_collision, wrapDroppingSetter set_use_collision,
+             Nothing)
 
 {-# NOINLINE bindCSGShape__update_shape #-}
 
@@ -58,6 +91,9 @@ _update_shape cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "_update_shape" '[] (IO ()) where
+        nodeMethod = Godot.Core.CSGShape._update_shape
 
 {-# NOINLINE bindCSGShape_get_collision_layer #-}
 
@@ -81,6 +117,10 @@ get_collision_layer cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "get_collision_layer" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CSGShape.get_collision_layer
+
 {-# NOINLINE bindCSGShape_get_collision_layer_bit #-}
 
 bindCSGShape_get_collision_layer_bit :: MethodBind
@@ -103,6 +143,11 @@ get_collision_layer_bit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "get_collision_layer_bit" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGShape.get_collision_layer_bit
+
 {-# NOINLINE bindCSGShape_get_collision_mask #-}
 
 bindCSGShape_get_collision_mask :: MethodBind
@@ -123,6 +168,10 @@ get_collision_mask cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "get_collision_mask" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CSGShape.get_collision_mask
 
 {-# NOINLINE bindCSGShape_get_collision_mask_bit #-}
 
@@ -146,6 +195,11 @@ get_collision_mask_bit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "get_collision_mask_bit" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGShape.get_collision_mask_bit
+
 {-# NOINLINE bindCSGShape_get_meshes #-}
 
 bindCSGShape_get_meshes :: MethodBind
@@ -164,6 +218,9 @@ get_meshes cls
          godot_method_bind_call bindCSGShape_get_meshes (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "get_meshes" '[] (IO Array) where
+        nodeMethod = Godot.Core.CSGShape.get_meshes
 
 {-# NOINLINE bindCSGShape_get_operation #-}
 
@@ -185,6 +242,9 @@ get_operation cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "get_operation" '[] (IO Int) where
+        nodeMethod = Godot.Core.CSGShape.get_operation
+
 {-# NOINLINE bindCSGShape_get_snap #-}
 
 bindCSGShape_get_snap :: MethodBind
@@ -203,6 +263,9 @@ get_snap cls
          godot_method_bind_call bindCSGShape_get_snap (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "get_snap" '[] (IO Float) where
+        nodeMethod = Godot.Core.CSGShape.get_snap
 
 {-# NOINLINE bindCSGShape_is_calculating_tangents #-}
 
@@ -226,6 +289,11 @@ is_calculating_tangents cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "is_calculating_tangents" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGShape.is_calculating_tangents
+
 {-# NOINLINE bindCSGShape_is_root_shape #-}
 
 bindCSGShape_is_root_shape :: MethodBind
@@ -245,6 +313,9 @@ is_root_shape cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "is_root_shape" '[] (IO Bool) where
+        nodeMethod = Godot.Core.CSGShape.is_root_shape
 
 {-# NOINLINE bindCSGShape_is_using_collision #-}
 
@@ -266,6 +337,10 @@ is_using_collision cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "is_using_collision" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CSGShape.is_using_collision
 
 {-# NOINLINE bindCSGShape_set_calculate_tangents #-}
 
@@ -289,6 +364,11 @@ set_calculate_tangents cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "set_calculate_tangents" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CSGShape.set_calculate_tangents
+
 {-# NOINLINE bindCSGShape_set_collision_layer #-}
 
 bindCSGShape_set_collision_layer :: MethodBind
@@ -310,6 +390,10 @@ set_collision_layer cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "set_collision_layer" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGShape.set_collision_layer
 
 {-# NOINLINE bindCSGShape_set_collision_layer_bit #-}
 
@@ -333,6 +417,11 @@ set_collision_layer_bit cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "set_collision_layer_bit" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CSGShape.set_collision_layer_bit
+
 {-# NOINLINE bindCSGShape_set_collision_mask #-}
 
 bindCSGShape_set_collision_mask :: MethodBind
@@ -353,6 +442,10 @@ set_collision_mask cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "set_collision_mask" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGShape.set_collision_mask
 
 {-# NOINLINE bindCSGShape_set_collision_mask_bit #-}
 
@@ -376,6 +469,11 @@ set_collision_mask_bit cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "set_collision_mask_bit" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CSGShape.set_collision_mask_bit
+
 {-# NOINLINE bindCSGShape_set_operation #-}
 
 bindCSGShape_set_operation :: MethodBind
@@ -397,6 +495,9 @@ set_operation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CSGShape "set_operation" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CSGShape.set_operation
+
 {-# NOINLINE bindCSGShape_set_snap #-}
 
 bindCSGShape_set_snap :: MethodBind
@@ -416,6 +517,9 @@ set_snap cls arg1
          godot_method_bind_call bindCSGShape_set_snap (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "set_snap" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.CSGShape.set_snap
 
 {-# NOINLINE bindCSGShape_set_use_collision #-}
 
@@ -437,3 +541,7 @@ set_use_collision cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CSGShape "set_use_collision" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CSGShape.set_use_collision

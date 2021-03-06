@@ -14,13 +14,18 @@ module Godot.Core.TranslationServer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 {-# NOINLINE bindTranslationServer_add_translation #-}
 
--- | Adds a [Translation] resource.
+-- | Adds a @Translation@ resource.
 bindTranslationServer_add_translation :: MethodBind
 bindTranslationServer_add_translation
   = unsafePerformIO $
@@ -30,7 +35,7 @@ bindTranslationServer_add_translation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a [Translation] resource.
+-- | Adds a @Translation@ resource.
 add_translation ::
                   (TranslationServer :< cls, Object :< cls) =>
                   cls -> Translation -> IO ()
@@ -42,6 +47,12 @@ add_translation cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TranslationServer "add_translation"
+           '[Translation]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TranslationServer.add_translation
 
 {-# NOINLINE bindTranslationServer_clear #-}
 
@@ -64,6 +75,9 @@ clear cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TranslationServer "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.TranslationServer.clear
 
 {-# NOINLINE bindTranslationServer_get_loaded_locales #-}
 
@@ -89,6 +103,11 @@ get_loaded_locales cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TranslationServer "get_loaded_locales" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.TranslationServer.get_loaded_locales
+
 {-# NOINLINE bindTranslationServer_get_locale #-}
 
 -- | Returns the current locale of the game.
@@ -113,9 +132,14 @@ get_locale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TranslationServer "get_locale" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.TranslationServer.get_locale
+
 {-# NOINLINE bindTranslationServer_get_locale_name #-}
 
--- | Returns a locale's language and its variant (e.g. [code]"en_US"[/code] would return [code]"English (United States)"[/code]).
+-- | Returns a locale's language and its variant (e.g. @"en_US"@ would return @"English (United States)"@).
 bindTranslationServer_get_locale_name :: MethodBind
 bindTranslationServer_get_locale_name
   = unsafePerformIO $
@@ -125,7 +149,7 @@ bindTranslationServer_get_locale_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a locale's language and its variant (e.g. [code]"en_US"[/code] would return [code]"English (United States)"[/code]).
+-- | Returns a locale's language and its variant (e.g. @"en_US"@ would return @"English (United States)"@).
 get_locale_name ::
                   (TranslationServer :< cls, Object :< cls) =>
                   cls -> GodotString -> IO GodotString
@@ -137,6 +161,12 @@ get_locale_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TranslationServer "get_locale_name"
+           '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.TranslationServer.get_locale_name
 
 {-# NOINLINE bindTranslationServer_remove_translation #-}
 
@@ -163,6 +193,12 @@ remove_translation cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TranslationServer "remove_translation"
+           '[Translation]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TranslationServer.remove_translation
+
 {-# NOINLINE bindTranslationServer_set_locale #-}
 
 -- | Sets the locale of the game.
@@ -188,6 +224,11 @@ set_locale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod TranslationServer "set_locale" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.TranslationServer.set_locale
+
 {-# NOINLINE bindTranslationServer_translate #-}
 
 -- | Returns the current locale's translation for the given message (key).
@@ -211,3 +252,8 @@ translate cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod TranslationServer "translate" '[GodotString]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.TranslationServer.translate

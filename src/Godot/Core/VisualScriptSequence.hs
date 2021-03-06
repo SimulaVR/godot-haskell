@@ -8,9 +8,17 @@ module Godot.Core.VisualScriptSequence
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptSequence "steps" Int 'False where
+        nodeProperty = (get_steps, wrapDroppingSetter set_steps, Nothing)
 
 {-# NOINLINE bindVisualScriptSequence_get_steps #-}
 
@@ -34,6 +42,10 @@ get_steps cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptSequence "get_steps" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptSequence.get_steps
+
 {-# NOINLINE bindVisualScriptSequence_set_steps #-}
 
 bindVisualScriptSequence_set_steps :: MethodBind
@@ -55,3 +67,7 @@ set_steps cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptSequence "set_steps" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptSequence.set_steps

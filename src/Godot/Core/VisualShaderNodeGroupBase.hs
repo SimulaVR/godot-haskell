@@ -29,13 +29,23 @@ module Godot.Core.VisualShaderNodeGroupBase
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
+
+instance NodeProperty VisualShaderNodeGroupBase "size" Vector2
+           'False
+         where
+        nodeProperty = (get_size, wrapDroppingSetter set_size, Nothing)
 
 {-# NOINLINE bindVisualShaderNodeGroupBase_add_input_port #-}
 
--- | Adds an input port with the specified [code]type[/code] (see [enum VisualShaderNode.PortType]) and [code]name[/code].
+-- | Adds an input port with the specified @type@ (see @enum VisualShaderNode.PortType@) and @name@.
 bindVisualShaderNodeGroupBase_add_input_port :: MethodBind
 bindVisualShaderNodeGroupBase_add_input_port
   = unsafePerformIO $
@@ -45,7 +55,7 @@ bindVisualShaderNodeGroupBase_add_input_port
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an input port with the specified [code]type[/code] (see [enum VisualShaderNode.PortType]) and [code]name[/code].
+-- | Adds an input port with the specified @type@ (see @enum VisualShaderNode.PortType@) and @name@.
 add_input_port ::
                  (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
                  cls -> Int -> Int -> GodotString -> IO ()
@@ -58,9 +68,15 @@ add_input_port cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "add_input_port"
+           '[Int, Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.add_input_port
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_add_output_port #-}
 
--- | Adds an output port with the specified [code]type[/code] (see [enum VisualShaderNode.PortType]) and [code]name[/code].
+-- | Adds an output port with the specified @type@ (see @enum VisualShaderNode.PortType@) and @name@.
 bindVisualShaderNodeGroupBase_add_output_port :: MethodBind
 bindVisualShaderNodeGroupBase_add_output_port
   = unsafePerformIO $
@@ -70,7 +86,7 @@ bindVisualShaderNodeGroupBase_add_output_port
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an output port with the specified [code]type[/code] (see [enum VisualShaderNode.PortType]) and [code]name[/code].
+-- | Adds an output port with the specified @type@ (see @enum VisualShaderNode.PortType@) and @name@.
 add_output_port ::
                   (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
                   cls -> Int -> Int -> GodotString -> IO ()
@@ -83,6 +99,12 @@ add_output_port cls arg1 arg2 arg3
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeGroupBase "add_output_port"
+           '[Int, Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.add_output_port
 
 {-# NOINLINE bindVisualShaderNodeGroupBase_clear_input_ports #-}
 
@@ -109,6 +131,12 @@ clear_input_ports cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "clear_input_ports"
+           '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.clear_input_ports
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_clear_output_ports #-}
 
 -- | Removes all previously specified output ports.
@@ -134,10 +162,17 @@ clear_output_ports cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "clear_output_ports"
+           '[]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.clear_output_ports
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_get_free_input_port_id
              #-}
 
--- | Returns a free input port ID which can be used in [method add_input_port].
+-- | Returns a free input port ID which can be used in @method add_input_port@.
 bindVisualShaderNodeGroupBase_get_free_input_port_id :: MethodBind
 bindVisualShaderNodeGroupBase_get_free_input_port_id
   = unsafePerformIO $
@@ -147,7 +182,7 @@ bindVisualShaderNodeGroupBase_get_free_input_port_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a free input port ID which can be used in [method add_input_port].
+-- | Returns a free input port ID which can be used in @method add_input_port@.
 get_free_input_port_id ::
                          (VisualShaderNodeGroupBase :< cls, Object :< cls) => cls -> IO Int
 get_free_input_port_id cls
@@ -160,10 +195,18 @@ get_free_input_port_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase
+           "get_free_input_port_id"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.get_free_input_port_id
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_get_free_output_port_id
              #-}
 
--- | Returns a free output port ID which can be used in [method add_output_port].
+-- | Returns a free output port ID which can be used in @method add_output_port@.
 bindVisualShaderNodeGroupBase_get_free_output_port_id :: MethodBind
 bindVisualShaderNodeGroupBase_get_free_output_port_id
   = unsafePerformIO $
@@ -173,7 +216,7 @@ bindVisualShaderNodeGroupBase_get_free_output_port_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a free output port ID which can be used in [method add_output_port].
+-- | Returns a free output port ID which can be used in @method add_output_port@.
 get_free_output_port_id ::
                           (VisualShaderNodeGroupBase :< cls, Object :< cls) => cls -> IO Int
 get_free_output_port_id cls
@@ -186,9 +229,17 @@ get_free_output_port_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase
+           "get_free_output_port_id"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.get_free_output_port_id
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_get_input_port_count #-}
 
--- | Returns the number of input ports in use. Alternative for [method get_free_input_port_id].
+-- | Returns the number of input ports in use. Alternative for @method get_free_input_port_id@.
 bindVisualShaderNodeGroupBase_get_input_port_count :: MethodBind
 bindVisualShaderNodeGroupBase_get_input_port_count
   = unsafePerformIO $
@@ -198,7 +249,7 @@ bindVisualShaderNodeGroupBase_get_input_port_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of input ports in use. Alternative for [method get_free_input_port_id].
+-- | Returns the number of input ports in use. Alternative for @method get_free_input_port_id@.
 get_input_port_count ::
                        (VisualShaderNodeGroupBase :< cls, Object :< cls) => cls -> IO Int
 get_input_port_count cls
@@ -211,9 +262,17 @@ get_input_port_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase
+           "get_input_port_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.get_input_port_count
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_get_inputs #-}
 
--- | Returns a [String] description of the input ports as as colon-separated list using the format [code]id,type,name;[/code] (see [method add_input_port]).
+-- | Returns a @String@ description of the input ports as as colon-separated list using the format @id,type,name;@ (see @method add_input_port@).
 bindVisualShaderNodeGroupBase_get_inputs :: MethodBind
 bindVisualShaderNodeGroupBase_get_inputs
   = unsafePerformIO $
@@ -223,7 +282,7 @@ bindVisualShaderNodeGroupBase_get_inputs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [String] description of the input ports as as colon-separated list using the format [code]id,type,name;[/code] (see [method add_input_port]).
+-- | Returns a @String@ description of the input ports as as colon-separated list using the format @id,type,name;@ (see @method add_input_port@).
 get_inputs ::
              (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
              cls -> IO GodotString
@@ -236,10 +295,15 @@ get_inputs cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "get_inputs" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.get_inputs
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_get_output_port_count
              #-}
 
--- | Returns the number of output ports in use. Alternative for [method get_free_output_port_id].
+-- | Returns the number of output ports in use. Alternative for @method get_free_output_port_id@.
 bindVisualShaderNodeGroupBase_get_output_port_count :: MethodBind
 bindVisualShaderNodeGroupBase_get_output_port_count
   = unsafePerformIO $
@@ -249,7 +313,7 @@ bindVisualShaderNodeGroupBase_get_output_port_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of output ports in use. Alternative for [method get_free_output_port_id].
+-- | Returns the number of output ports in use. Alternative for @method get_free_output_port_id@.
 get_output_port_count ::
                         (VisualShaderNodeGroupBase :< cls, Object :< cls) => cls -> IO Int
 get_output_port_count cls
@@ -262,9 +326,17 @@ get_output_port_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase
+           "get_output_port_count"
+           '[]
+           (IO Int)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.get_output_port_count
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_get_outputs #-}
 
--- | Returns a [String] description of the output ports as as colon-separated list using the format [code]id,type,name;[/code] (see [method add_output_port]).
+-- | Returns a @String@ description of the output ports as as colon-separated list using the format @id,type,name;@ (see @method add_output_port@).
 bindVisualShaderNodeGroupBase_get_outputs :: MethodBind
 bindVisualShaderNodeGroupBase_get_outputs
   = unsafePerformIO $
@@ -274,7 +346,7 @@ bindVisualShaderNodeGroupBase_get_outputs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [String] description of the output ports as as colon-separated list using the format [code]id,type,name;[/code] (see [method add_output_port]).
+-- | Returns a @String@ description of the output ports as as colon-separated list using the format @id,type,name;@ (see @method add_output_port@).
 get_outputs ::
               (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
               cls -> IO GodotString
@@ -286,6 +358,11 @@ get_outputs cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeGroupBase "get_outputs" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.get_outputs
 
 {-# NOINLINE bindVisualShaderNodeGroupBase_get_size #-}
 
@@ -312,9 +389,14 @@ get_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "get_size" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.get_size
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_has_input_port #-}
 
--- | Returns [code]true[/code] if the specified input port exists.
+-- | Returns @true@ if the specified input port exists.
 bindVisualShaderNodeGroupBase_has_input_port :: MethodBind
 bindVisualShaderNodeGroupBase_has_input_port
   = unsafePerformIO $
@@ -324,7 +406,7 @@ bindVisualShaderNodeGroupBase_has_input_port
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the specified input port exists.
+-- | Returns @true@ if the specified input port exists.
 has_input_port ::
                  (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
                  cls -> Int -> IO Bool
@@ -337,9 +419,15 @@ has_input_port cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "has_input_port"
+           '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.has_input_port
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_has_output_port #-}
 
--- | Returns [code]true[/code] if the specified output port exists.
+-- | Returns @true@ if the specified output port exists.
 bindVisualShaderNodeGroupBase_has_output_port :: MethodBind
 bindVisualShaderNodeGroupBase_has_output_port
   = unsafePerformIO $
@@ -349,7 +437,7 @@ bindVisualShaderNodeGroupBase_has_output_port
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the specified output port exists.
+-- | Returns @true@ if the specified output port exists.
 has_output_port ::
                   (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
                   cls -> Int -> IO Bool
@@ -363,9 +451,15 @@ has_output_port cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "has_output_port"
+           '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.has_output_port
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_is_valid_port_name #-}
 
--- | Returns [code]true[/code] if the specified port name does not override an existed port name and is valid within the shader.
+-- | Returns @true@ if the specified port name does not override an existed port name and is valid within the shader.
 bindVisualShaderNodeGroupBase_is_valid_port_name :: MethodBind
 bindVisualShaderNodeGroupBase_is_valid_port_name
   = unsafePerformIO $
@@ -375,7 +469,7 @@ bindVisualShaderNodeGroupBase_is_valid_port_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the specified port name does not override an existed port name and is valid within the shader.
+-- | Returns @true@ if the specified port name does not override an existed port name and is valid within the shader.
 is_valid_port_name ::
                      (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
                      cls -> GodotString -> IO Bool
@@ -388,6 +482,13 @@ is_valid_port_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeGroupBase "is_valid_port_name"
+           '[GodotString]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.is_valid_port_name
 
 {-# NOINLINE bindVisualShaderNodeGroupBase_remove_input_port #-}
 
@@ -415,6 +516,12 @@ remove_input_port cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "remove_input_port"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.remove_input_port
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_remove_output_port #-}
 
 -- | Removes the specified output port.
@@ -440,6 +547,13 @@ remove_output_port cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeGroupBase "remove_output_port"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.remove_output_port
 
 {-# NOINLINE bindVisualShaderNodeGroupBase_set_input_port_name #-}
 
@@ -467,9 +581,16 @@ set_input_port_name cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "set_input_port_name"
+           '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.set_input_port_name
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_set_input_port_type #-}
 
--- | Sets the specified input port's type (see [enum VisualShaderNode.PortType]).
+-- | Sets the specified input port's type (see @enum VisualShaderNode.PortType@).
 bindVisualShaderNodeGroupBase_set_input_port_type :: MethodBind
 bindVisualShaderNodeGroupBase_set_input_port_type
   = unsafePerformIO $
@@ -479,7 +600,7 @@ bindVisualShaderNodeGroupBase_set_input_port_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the specified input port's type (see [enum VisualShaderNode.PortType]).
+-- | Sets the specified input port's type (see @enum VisualShaderNode.PortType@).
 set_input_port_type ::
                       (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
                       cls -> Int -> Int -> IO ()
@@ -493,9 +614,16 @@ set_input_port_type cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase "set_input_port_type"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.set_input_port_type
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_set_inputs #-}
 
--- | Defines all input ports using a [String] formatted as a colon-separated list: [code]id,type,name;[/code] (see [method add_input_port]).
+-- | Defines all input ports using a @String@ formatted as a colon-separated list: @id,type,name;@ (see @method add_input_port@).
 bindVisualShaderNodeGroupBase_set_inputs :: MethodBind
 bindVisualShaderNodeGroupBase_set_inputs
   = unsafePerformIO $
@@ -505,7 +633,7 @@ bindVisualShaderNodeGroupBase_set_inputs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines all input ports using a [String] formatted as a colon-separated list: [code]id,type,name;[/code] (see [method add_input_port]).
+-- | Defines all input ports using a @String@ formatted as a colon-separated list: @id,type,name;@ (see @method add_input_port@).
 set_inputs ::
              (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
              cls -> GodotString -> IO ()
@@ -517,6 +645,12 @@ set_inputs cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeGroupBase "set_inputs"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.set_inputs
 
 {-# NOINLINE bindVisualShaderNodeGroupBase_set_output_port_name #-}
 
@@ -544,9 +678,17 @@ set_output_port_name cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase
+           "set_output_port_name"
+           '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.set_output_port_name
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_set_output_port_type #-}
 
--- | Sets the specified output port's type (see [enum VisualShaderNode.PortType]).
+-- | Sets the specified output port's type (see @enum VisualShaderNode.PortType@).
 bindVisualShaderNodeGroupBase_set_output_port_type :: MethodBind
 bindVisualShaderNodeGroupBase_set_output_port_type
   = unsafePerformIO $
@@ -556,7 +698,7 @@ bindVisualShaderNodeGroupBase_set_output_port_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the specified output port's type (see [enum VisualShaderNode.PortType]).
+-- | Sets the specified output port's type (see @enum VisualShaderNode.PortType@).
 set_output_port_type ::
                        (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
                        cls -> Int -> Int -> IO ()
@@ -570,9 +712,17 @@ set_output_port_type cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeGroupBase
+           "set_output_port_type"
+           '[Int, Int]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.VisualShaderNodeGroupBase.set_output_port_type
+
 {-# NOINLINE bindVisualShaderNodeGroupBase_set_outputs #-}
 
--- | Defines all output ports using a [String] formatted as a colon-separated list: [code]id,type,name;[/code] (see [method add_output_port]).
+-- | Defines all output ports using a @String@ formatted as a colon-separated list: @id,type,name;@ (see @method add_output_port@).
 bindVisualShaderNodeGroupBase_set_outputs :: MethodBind
 bindVisualShaderNodeGroupBase_set_outputs
   = unsafePerformIO $
@@ -582,7 +732,7 @@ bindVisualShaderNodeGroupBase_set_outputs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines all output ports using a [String] formatted as a colon-separated list: [code]id,type,name;[/code] (see [method add_output_port]).
+-- | Defines all output ports using a @String@ formatted as a colon-separated list: @id,type,name;@ (see @method add_output_port@).
 set_outputs ::
               (VisualShaderNodeGroupBase :< cls, Object :< cls) =>
               cls -> GodotString -> IO ()
@@ -594,6 +744,12 @@ set_outputs cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeGroupBase "set_outputs"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.set_outputs
 
 {-# NOINLINE bindVisualShaderNodeGroupBase_set_size #-}
 
@@ -619,3 +775,8 @@ set_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeGroupBase "set_size" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeGroupBase.set_size

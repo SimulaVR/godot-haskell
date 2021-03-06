@@ -8,9 +8,19 @@ module Godot.Core.ConvexPolygonShape
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape()
+
+instance NodeProperty ConvexPolygonShape "points" PoolVector3Array
+           'False
+         where
+        nodeProperty = (get_points, wrapDroppingSetter set_points, Nothing)
 
 {-# NOINLINE bindConvexPolygonShape_get_points #-}
 
@@ -37,6 +47,11 @@ get_points cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ConvexPolygonShape "get_points" '[]
+           (IO PoolVector3Array)
+         where
+        nodeMethod = Godot.Core.ConvexPolygonShape.get_points
+
 {-# NOINLINE bindConvexPolygonShape_set_points #-}
 
 -- | The list of 3D points forming the convex polygon shape.
@@ -61,3 +76,9 @@ set_points cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ConvexPolygonShape "set_points"
+           '[PoolVector3Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ConvexPolygonShape.set_points

@@ -12,9 +12,27 @@ module Godot.Core.PlaneMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PrimitiveMesh()
+
+instance NodeProperty PlaneMesh "size" Vector2 'False where
+        nodeProperty = (get_size, wrapDroppingSetter set_size, Nothing)
+
+instance NodeProperty PlaneMesh "subdivide_depth" Int 'False where
+        nodeProperty
+          = (get_subdivide_depth, wrapDroppingSetter set_subdivide_depth,
+             Nothing)
+
+instance NodeProperty PlaneMesh "subdivide_width" Int 'False where
+        nodeProperty
+          = (get_subdivide_width, wrapDroppingSetter set_subdivide_width,
+             Nothing)
 
 {-# NOINLINE bindPlaneMesh_get_size #-}
 
@@ -36,6 +54,9 @@ get_size cls
          godot_method_bind_call bindPlaneMesh_get_size (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PlaneMesh "get_size" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.PlaneMesh.get_size
 
 {-# NOINLINE bindPlaneMesh_get_subdivide_depth #-}
 
@@ -61,6 +82,10 @@ get_subdivide_depth cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PlaneMesh "get_subdivide_depth" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.PlaneMesh.get_subdivide_depth
+
 {-# NOINLINE bindPlaneMesh_get_subdivide_width #-}
 
 -- | Number of subdivision along the X axis.
@@ -85,6 +110,10 @@ get_subdivide_width cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PlaneMesh "get_subdivide_width" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.PlaneMesh.get_subdivide_width
+
 {-# NOINLINE bindPlaneMesh_set_size #-}
 
 -- | Size of the generated plane.
@@ -106,6 +135,9 @@ set_size cls arg1
          godot_method_bind_call bindPlaneMesh_set_size (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PlaneMesh "set_size" '[Vector2] (IO ()) where
+        nodeMethod = Godot.Core.PlaneMesh.set_size
 
 {-# NOINLINE bindPlaneMesh_set_subdivide_depth #-}
 
@@ -131,6 +163,10 @@ set_subdivide_depth cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod PlaneMesh "set_subdivide_depth" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.PlaneMesh.set_subdivide_depth
+
 {-# NOINLINE bindPlaneMesh_set_subdivide_width #-}
 
 -- | Number of subdivision along the X axis.
@@ -154,3 +190,7 @@ set_subdivide_width cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod PlaneMesh "set_subdivide_width" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.PlaneMesh.set_subdivide_width

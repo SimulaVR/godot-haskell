@@ -26,9 +26,14 @@ module Godot.Core.ScrollContainer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Container()
 
 -- | Emitted when scrolling stops.
 sig_scroll_ended :: Godot.Internal.Dispatch.Signal ScrollContainer
@@ -43,6 +48,44 @@ sig_scroll_started
   = Godot.Internal.Dispatch.Signal "scroll_started"
 
 instance NodeSignal ScrollContainer "scroll_started" '[]
+
+instance NodeProperty ScrollContainer "follow_focus" Bool 'False
+         where
+        nodeProperty
+          = (is_following_focus, wrapDroppingSetter set_follow_focus,
+             Nothing)
+
+instance NodeProperty ScrollContainer "scroll_deadzone" Int 'False
+         where
+        nodeProperty
+          = (get_deadzone, wrapDroppingSetter set_deadzone, Nothing)
+
+instance NodeProperty ScrollContainer "scroll_horizontal" Int
+           'False
+         where
+        nodeProperty
+          = (get_h_scroll, wrapDroppingSetter set_h_scroll, Nothing)
+
+instance NodeProperty ScrollContainer "scroll_horizontal_enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (is_h_scroll_enabled, wrapDroppingSetter set_enable_h_scroll,
+             Nothing)
+
+instance NodeProperty ScrollContainer "scroll_vertical" Int 'False
+         where
+        nodeProperty
+          = (get_v_scroll, wrapDroppingSetter set_v_scroll, Nothing)
+
+instance NodeProperty ScrollContainer "scroll_vertical_enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (is_v_scroll_enabled, wrapDroppingSetter set_enable_v_scroll,
+             Nothing)
 
 {-# NOINLINE bindScrollContainer__ensure_focused_visible #-}
 
@@ -66,6 +109,12 @@ _ensure_focused_visible cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "_ensure_focused_visible"
+           '[Control]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer._ensure_focused_visible
+
 {-# NOINLINE bindScrollContainer__gui_input #-}
 
 bindScrollContainer__gui_input :: MethodBind
@@ -88,6 +137,11 @@ _gui_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "_gui_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer._gui_input
+
 {-# NOINLINE bindScrollContainer__scroll_moved #-}
 
 bindScrollContainer__scroll_moved :: MethodBind
@@ -109,6 +163,11 @@ _scroll_moved cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScrollContainer "_scroll_moved" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer._scroll_moved
 
 {-# NOINLINE bindScrollContainer__update_scrollbar_position #-}
 
@@ -133,6 +192,12 @@ _update_scrollbar_position cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "_update_scrollbar_position"
+           '[]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer._update_scrollbar_position
+
 {-# NOINLINE bindScrollContainer_get_deadzone #-}
 
 bindScrollContainer_get_deadzone :: MethodBind
@@ -154,6 +219,10 @@ get_deadzone cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScrollContainer "get_deadzone" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.get_deadzone
 
 {-# NOINLINE bindScrollContainer_get_h_scroll #-}
 
@@ -179,9 +248,13 @@ get_h_scroll cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "get_h_scroll" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.get_h_scroll
+
 {-# NOINLINE bindScrollContainer_get_h_scrollbar #-}
 
--- | Returns the horizontal scrollbar [HScrollBar] of this [ScrollContainer].
+-- | Returns the horizontal scrollbar @HScrollBar@ of this @ScrollContainer@.
 bindScrollContainer_get_h_scrollbar :: MethodBind
 bindScrollContainer_get_h_scrollbar
   = unsafePerformIO $
@@ -191,7 +264,7 @@ bindScrollContainer_get_h_scrollbar
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the horizontal scrollbar [HScrollBar] of this [ScrollContainer].
+-- | Returns the horizontal scrollbar @HScrollBar@ of this @ScrollContainer@.
 get_h_scrollbar ::
                   (ScrollContainer :< cls, Object :< cls) => cls -> IO HScrollBar
 get_h_scrollbar cls
@@ -202,6 +275,11 @@ get_h_scrollbar cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScrollContainer "get_h_scrollbar" '[]
+           (IO HScrollBar)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.get_h_scrollbar
 
 {-# NOINLINE bindScrollContainer_get_v_scroll #-}
 
@@ -227,9 +305,13 @@ get_v_scroll cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "get_v_scroll" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.get_v_scroll
+
 {-# NOINLINE bindScrollContainer_get_v_scrollbar #-}
 
--- | Returns the vertical scrollbar [VScrollBar] of this [ScrollContainer].
+-- | Returns the vertical scrollbar @VScrollBar@ of this @ScrollContainer@.
 bindScrollContainer_get_v_scrollbar :: MethodBind
 bindScrollContainer_get_v_scrollbar
   = unsafePerformIO $
@@ -239,7 +321,7 @@ bindScrollContainer_get_v_scrollbar
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the vertical scrollbar [VScrollBar] of this [ScrollContainer].
+-- | Returns the vertical scrollbar @VScrollBar@ of this @ScrollContainer@.
 get_v_scrollbar ::
                   (ScrollContainer :< cls, Object :< cls) => cls -> IO VScrollBar
 get_v_scrollbar cls
@@ -251,9 +333,14 @@ get_v_scrollbar cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "get_v_scrollbar" '[]
+           (IO VScrollBar)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.get_v_scrollbar
+
 {-# NOINLINE bindScrollContainer_is_following_focus #-}
 
--- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
+-- | If @true@, the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 bindScrollContainer_is_following_focus :: MethodBind
 bindScrollContainer_is_following_focus
   = unsafePerformIO $
@@ -263,7 +350,7 @@ bindScrollContainer_is_following_focus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
+-- | If @true@, the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 is_following_focus ::
                      (ScrollContainer :< cls, Object :< cls) => cls -> IO Bool
 is_following_focus cls
@@ -275,9 +362,14 @@ is_following_focus cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "is_following_focus" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.is_following_focus
+
 {-# NOINLINE bindScrollContainer_is_h_scroll_enabled #-}
 
--- | If [code]true[/code], enables horizontal scrolling.
+-- | If @true@, enables horizontal scrolling.
 bindScrollContainer_is_h_scroll_enabled :: MethodBind
 bindScrollContainer_is_h_scroll_enabled
   = unsafePerformIO $
@@ -287,7 +379,7 @@ bindScrollContainer_is_h_scroll_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables horizontal scrolling.
+-- | If @true@, enables horizontal scrolling.
 is_h_scroll_enabled ::
                       (ScrollContainer :< cls, Object :< cls) => cls -> IO Bool
 is_h_scroll_enabled cls
@@ -299,9 +391,14 @@ is_h_scroll_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "is_h_scroll_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.is_h_scroll_enabled
+
 {-# NOINLINE bindScrollContainer_is_v_scroll_enabled #-}
 
--- | If [code]true[/code], enables vertical scrolling.
+-- | If @true@, enables vertical scrolling.
 bindScrollContainer_is_v_scroll_enabled :: MethodBind
 bindScrollContainer_is_v_scroll_enabled
   = unsafePerformIO $
@@ -311,7 +408,7 @@ bindScrollContainer_is_v_scroll_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables vertical scrolling.
+-- | If @true@, enables vertical scrolling.
 is_v_scroll_enabled ::
                       (ScrollContainer :< cls, Object :< cls) => cls -> IO Bool
 is_v_scroll_enabled cls
@@ -322,6 +419,11 @@ is_v_scroll_enabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScrollContainer "is_v_scroll_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.ScrollContainer.is_v_scroll_enabled
 
 {-# NOINLINE bindScrollContainer_set_deadzone #-}
 
@@ -345,9 +447,13 @@ set_deadzone cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "set_deadzone" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer.set_deadzone
+
 {-# NOINLINE bindScrollContainer_set_enable_h_scroll #-}
 
--- | If [code]true[/code], enables horizontal scrolling.
+-- | If @true@, enables horizontal scrolling.
 bindScrollContainer_set_enable_h_scroll :: MethodBind
 bindScrollContainer_set_enable_h_scroll
   = unsafePerformIO $
@@ -357,7 +463,7 @@ bindScrollContainer_set_enable_h_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables horizontal scrolling.
+-- | If @true@, enables horizontal scrolling.
 set_enable_h_scroll ::
                       (ScrollContainer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enable_h_scroll cls arg1
@@ -369,9 +475,14 @@ set_enable_h_scroll cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "set_enable_h_scroll" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer.set_enable_h_scroll
+
 {-# NOINLINE bindScrollContainer_set_enable_v_scroll #-}
 
--- | If [code]true[/code], enables vertical scrolling.
+-- | If @true@, enables vertical scrolling.
 bindScrollContainer_set_enable_v_scroll :: MethodBind
 bindScrollContainer_set_enable_v_scroll
   = unsafePerformIO $
@@ -381,7 +492,7 @@ bindScrollContainer_set_enable_v_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], enables vertical scrolling.
+-- | If @true@, enables vertical scrolling.
 set_enable_v_scroll ::
                       (ScrollContainer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enable_v_scroll cls arg1
@@ -393,9 +504,14 @@ set_enable_v_scroll cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "set_enable_v_scroll" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer.set_enable_v_scroll
+
 {-# NOINLINE bindScrollContainer_set_follow_focus #-}
 
--- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
+-- | If @true@, the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 bindScrollContainer_set_follow_focus :: MethodBind
 bindScrollContainer_set_follow_focus
   = unsafePerformIO $
@@ -405,7 +521,7 @@ bindScrollContainer_set_follow_focus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
+-- | If @true@, the ScrollContainer will automatically scroll to focused children (including indirect children) to make sure they are fully visible.
 set_follow_focus ::
                    (ScrollContainer :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_follow_focus cls arg1
@@ -416,6 +532,11 @@ set_follow_focus cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScrollContainer "set_follow_focus" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer.set_follow_focus
 
 {-# NOINLINE bindScrollContainer_set_h_scroll #-}
 
@@ -441,6 +562,10 @@ set_h_scroll cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollContainer "set_h_scroll" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer.set_h_scroll
+
 {-# NOINLINE bindScrollContainer_set_v_scroll #-}
 
 -- | The current vertical scroll value.
@@ -464,3 +589,7 @@ set_v_scroll cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScrollContainer "set_v_scroll" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollContainer.set_v_scroll

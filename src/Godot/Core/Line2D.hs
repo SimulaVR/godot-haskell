@@ -35,9 +35,14 @@ module Godot.Core.Line2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
 
 _LINE_JOINT_ROUND :: Int
 _LINE_JOINT_ROUND = 2
@@ -66,6 +71,58 @@ _LINE_TEXTURE_STRETCH = 2
 _LINE_CAP_BOX :: Int
 _LINE_CAP_BOX = 1
 
+instance NodeProperty Line2D "antialiased" Bool 'False where
+        nodeProperty
+          = (get_antialiased, wrapDroppingSetter set_antialiased, Nothing)
+
+instance NodeProperty Line2D "begin_cap_mode" Int 'False where
+        nodeProperty
+          = (get_begin_cap_mode, wrapDroppingSetter set_begin_cap_mode,
+             Nothing)
+
+instance NodeProperty Line2D "default_color" Color 'False where
+        nodeProperty
+          = (get_default_color, wrapDroppingSetter set_default_color,
+             Nothing)
+
+instance NodeProperty Line2D "end_cap_mode" Int 'False where
+        nodeProperty
+          = (get_end_cap_mode, wrapDroppingSetter set_end_cap_mode, Nothing)
+
+instance NodeProperty Line2D "gradient" Gradient 'False where
+        nodeProperty
+          = (get_gradient, wrapDroppingSetter set_gradient, Nothing)
+
+instance NodeProperty Line2D "joint_mode" Int 'False where
+        nodeProperty
+          = (get_joint_mode, wrapDroppingSetter set_joint_mode, Nothing)
+
+instance NodeProperty Line2D "points" PoolVector2Array 'False where
+        nodeProperty = (get_points, wrapDroppingSetter set_points, Nothing)
+
+instance NodeProperty Line2D "round_precision" Int 'False where
+        nodeProperty
+          = (get_round_precision, wrapDroppingSetter set_round_precision,
+             Nothing)
+
+instance NodeProperty Line2D "sharp_limit" Float 'False where
+        nodeProperty
+          = (get_sharp_limit, wrapDroppingSetter set_sharp_limit, Nothing)
+
+instance NodeProperty Line2D "texture" Texture 'False where
+        nodeProperty
+          = (get_texture, wrapDroppingSetter set_texture, Nothing)
+
+instance NodeProperty Line2D "texture_mode" Int 'False where
+        nodeProperty
+          = (get_texture_mode, wrapDroppingSetter set_texture_mode, Nothing)
+
+instance NodeProperty Line2D "width" Float 'False where
+        nodeProperty = (get_width, wrapDroppingSetter set_width, Nothing)
+
+instance NodeProperty Line2D "width_curve" Curve 'False where
+        nodeProperty = (get_curve, wrapDroppingSetter set_curve, Nothing)
+
 {-# NOINLINE bindLine2D__curve_changed #-}
 
 bindLine2D__curve_changed :: MethodBind
@@ -85,6 +142,9 @@ _curve_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "_curve_changed" '[] (IO ()) where
+        nodeMethod = Godot.Core.Line2D._curve_changed
 
 {-# NOINLINE bindLine2D__gradient_changed #-}
 
@@ -106,10 +166,13 @@ _gradient_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "_gradient_changed" '[] (IO ()) where
+        nodeMethod = Godot.Core.Line2D._gradient_changed
+
 {-# NOINLINE bindLine2D_add_point #-}
 
--- | Adds a point at the [code]position[/code]. Appends the point at the end of the line.
---   				If [code]at_position[/code] is given, the point is inserted before the point number [code]at_position[/code], moving that point (and every point after) after the inserted point. If [code]at_position[/code] is not given, or is an illegal value ([code]at_position < 0[/code] or [code]at_position >= [method get_point_count][/code]), the point will be appended at the end of the point list.
+-- | Adds a point at the @position@. Appends the point at the end of the line.
+--   				If @at_position@ is given, the point is inserted before the point number @at_position@, moving that point (and every point after) after the inserted point. If @at_position@ is not given, or is an illegal value (@at_position < 0@ or @at_position >= @method get_point_count@@), the point will be appended at the end of the point list.
 bindLine2D_add_point :: MethodBind
 bindLine2D_add_point
   = unsafePerformIO $
@@ -119,15 +182,22 @@ bindLine2D_add_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a point at the [code]position[/code]. Appends the point at the end of the line.
---   				If [code]at_position[/code] is given, the point is inserted before the point number [code]at_position[/code], moving that point (and every point after) after the inserted point. If [code]at_position[/code] is not given, or is an illegal value ([code]at_position < 0[/code] or [code]at_position >= [method get_point_count][/code]), the point will be appended at the end of the point list.
+-- | Adds a point at the @position@. Appends the point at the end of the line.
+--   				If @at_position@ is given, the point is inserted before the point number @at_position@, moving that point (and every point after) after the inserted point. If @at_position@ is not given, or is an illegal value (@at_position < 0@ or @at_position >= @method get_point_count@@), the point will be appended at the end of the point list.
 add_point ::
-            (Line2D :< cls, Object :< cls) => cls -> Vector2 -> Int -> IO ()
+            (Line2D :< cls, Object :< cls) =>
+            cls -> Vector2 -> Maybe Int -> IO ()
 add_point cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (-1)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLine2D_add_point (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "add_point" '[Vector2, Maybe Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Line2D.add_point
 
 {-# NOINLINE bindLine2D_clear_points #-}
 
@@ -150,9 +220,12 @@ clear_points cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "clear_points" '[] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.clear_points
+
 {-# NOINLINE bindLine2D_get_antialiased #-}
 
--- | If [code]true[/code], the line's border will be anti-aliased.
+-- | If @true@, the line's border will be anti-aliased.
 bindLine2D_get_antialiased :: MethodBind
 bindLine2D_get_antialiased
   = unsafePerformIO $
@@ -162,7 +235,7 @@ bindLine2D_get_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the line's border will be anti-aliased.
+-- | If @true@, the line's border will be anti-aliased.
 get_antialiased :: (Line2D :< cls, Object :< cls) => cls -> IO Bool
 get_antialiased cls
   = withVariantArray []
@@ -172,9 +245,12 @@ get_antialiased cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_antialiased" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Line2D.get_antialiased
+
 {-# NOINLINE bindLine2D_get_begin_cap_mode #-}
 
--- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's first point. Use @enum LineCapMode@ constants.
 bindLine2D_get_begin_cap_mode :: MethodBind
 bindLine2D_get_begin_cap_mode
   = unsafePerformIO $
@@ -184,7 +260,7 @@ bindLine2D_get_begin_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's first point. Use @enum LineCapMode@ constants.
 get_begin_cap_mode ::
                      (Line2D :< cls, Object :< cls) => cls -> IO Int
 get_begin_cap_mode cls
@@ -194,6 +270,9 @@ get_begin_cap_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "get_begin_cap_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.Line2D.get_begin_cap_mode
 
 {-# NOINLINE bindLine2D_get_curve #-}
 
@@ -214,6 +293,9 @@ get_curve cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLine2D_get_curve (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "get_curve" '[] (IO Curve) where
+        nodeMethod = Godot.Core.Line2D.get_curve
 
 {-# NOINLINE bindLine2D_get_default_color #-}
 
@@ -238,9 +320,12 @@ get_default_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_default_color" '[] (IO Color) where
+        nodeMethod = Godot.Core.Line2D.get_default_color
+
 {-# NOINLINE bindLine2D_get_end_cap_mode #-}
 
--- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's last point. Use @enum LineCapMode@ constants.
 bindLine2D_get_end_cap_mode :: MethodBind
 bindLine2D_get_end_cap_mode
   = unsafePerformIO $
@@ -250,7 +335,7 @@ bindLine2D_get_end_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's last point. Use @enum LineCapMode@ constants.
 get_end_cap_mode :: (Line2D :< cls, Object :< cls) => cls -> IO Int
 get_end_cap_mode cls
   = withVariantArray []
@@ -259,6 +344,9 @@ get_end_cap_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "get_end_cap_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.Line2D.get_end_cap_mode
 
 {-# NOINLINE bindLine2D_get_gradient #-}
 
@@ -282,6 +370,9 @@ get_gradient cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_gradient" '[] (IO Gradient) where
+        nodeMethod = Godot.Core.Line2D.get_gradient
+
 {-# NOINLINE bindLine2D_get_joint_mode #-}
 
 -- | The style for the points between the start and the end.
@@ -303,6 +394,9 @@ get_joint_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "get_joint_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.Line2D.get_joint_mode
 
 {-# NOINLINE bindLine2D_get_point_count #-}
 
@@ -326,9 +420,12 @@ get_point_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_point_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.Line2D.get_point_count
+
 {-# NOINLINE bindLine2D_get_point_position #-}
 
--- | Returns point [code]i[/code]'s position.
+-- | Returns point @i@'s position.
 bindLine2D_get_point_position :: MethodBind
 bindLine2D_get_point_position
   = unsafePerformIO $
@@ -338,7 +435,7 @@ bindLine2D_get_point_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns point [code]i[/code]'s position.
+-- | Returns point @i@'s position.
 get_point_position ::
                      (Line2D :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_point_position cls arg1
@@ -348,6 +445,10 @@ get_point_position cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "get_point_position" '[Int] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Line2D.get_point_position
 
 {-# NOINLINE bindLine2D_get_points #-}
 
@@ -370,6 +471,10 @@ get_points cls
          godot_method_bind_call bindLine2D_get_points (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "get_points" '[] (IO PoolVector2Array)
+         where
+        nodeMethod = Godot.Core.Line2D.get_points
 
 {-# NOINLINE bindLine2D_get_round_precision #-}
 
@@ -394,9 +499,12 @@ get_round_precision cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_round_precision" '[] (IO Int) where
+        nodeMethod = Godot.Core.Line2D.get_round_precision
+
 {-# NOINLINE bindLine2D_get_sharp_limit #-}
 
--- | The direction difference in radians between vector points. This value is only used if [code]joint mode[/code] is set to [constant LINE_JOINT_SHARP].
+-- | The direction difference in radians between vector points. This value is only used if @joint mode@ is set to @LINE_JOINT_SHARP@.
 bindLine2D_get_sharp_limit :: MethodBind
 bindLine2D_get_sharp_limit
   = unsafePerformIO $
@@ -406,7 +514,7 @@ bindLine2D_get_sharp_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The direction difference in radians between vector points. This value is only used if [code]joint mode[/code] is set to [constant LINE_JOINT_SHARP].
+-- | The direction difference in radians between vector points. This value is only used if @joint mode@ is set to @LINE_JOINT_SHARP@.
 get_sharp_limit ::
                   (Line2D :< cls, Object :< cls) => cls -> IO Float
 get_sharp_limit cls
@@ -417,9 +525,12 @@ get_sharp_limit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_sharp_limit" '[] (IO Float) where
+        nodeMethod = Godot.Core.Line2D.get_sharp_limit
+
 {-# NOINLINE bindLine2D_get_texture #-}
 
--- | The texture used for the line's texture. Uses [code]texture_mode[/code] for drawing style.
+-- | The texture used for the line's texture. Uses @texture_mode@ for drawing style.
 bindLine2D_get_texture :: MethodBind
 bindLine2D_get_texture
   = unsafePerformIO $
@@ -429,7 +540,7 @@ bindLine2D_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The texture used for the line's texture. Uses [code]texture_mode[/code] for drawing style.
+-- | The texture used for the line's texture. Uses @texture_mode@ for drawing style.
 get_texture :: (Line2D :< cls, Object :< cls) => cls -> IO Texture
 get_texture cls
   = withVariantArray []
@@ -438,9 +549,12 @@ get_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_texture" '[] (IO Texture) where
+        nodeMethod = Godot.Core.Line2D.get_texture
+
 {-# NOINLINE bindLine2D_get_texture_mode #-}
 
--- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
+-- | The style to render the @texture@ on the line. Use @enum LineTextureMode@ constants.
 bindLine2D_get_texture_mode :: MethodBind
 bindLine2D_get_texture_mode
   = unsafePerformIO $
@@ -450,7 +564,7 @@ bindLine2D_get_texture_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
+-- | The style to render the @texture@ on the line. Use @enum LineTextureMode@ constants.
 get_texture_mode :: (Line2D :< cls, Object :< cls) => cls -> IO Int
 get_texture_mode cls
   = withVariantArray []
@@ -459,6 +573,9 @@ get_texture_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "get_texture_mode" '[] (IO Int) where
+        nodeMethod = Godot.Core.Line2D.get_texture_mode
 
 {-# NOINLINE bindLine2D_get_width #-}
 
@@ -480,9 +597,12 @@ get_width cls
          godot_method_bind_call bindLine2D_get_width (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "get_width" '[] (IO Float) where
+        nodeMethod = Godot.Core.Line2D.get_width
+
 {-# NOINLINE bindLine2D_remove_point #-}
 
--- | Removes the point at index [code]i[/code] from the line.
+-- | Removes the point at index @i@ from the line.
 bindLine2D_remove_point :: MethodBind
 bindLine2D_remove_point
   = unsafePerformIO $
@@ -492,7 +612,7 @@ bindLine2D_remove_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the point at index [code]i[/code] from the line.
+-- | Removes the point at index @i@ from the line.
 remove_point ::
                (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_point cls arg1
@@ -502,9 +622,12 @@ remove_point cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "remove_point" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.remove_point
+
 {-# NOINLINE bindLine2D_set_antialiased #-}
 
--- | If [code]true[/code], the line's border will be anti-aliased.
+-- | If @true@, the line's border will be anti-aliased.
 bindLine2D_set_antialiased :: MethodBind
 bindLine2D_set_antialiased
   = unsafePerformIO $
@@ -514,7 +637,7 @@ bindLine2D_set_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the line's border will be anti-aliased.
+-- | If @true@, the line's border will be anti-aliased.
 set_antialiased ::
                   (Line2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_antialiased cls arg1
@@ -525,9 +648,12 @@ set_antialiased cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "set_antialiased" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_antialiased
+
 {-# NOINLINE bindLine2D_set_begin_cap_mode #-}
 
--- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's first point. Use @enum LineCapMode@ constants.
 bindLine2D_set_begin_cap_mode :: MethodBind
 bindLine2D_set_begin_cap_mode
   = unsafePerformIO $
@@ -537,7 +663,7 @@ bindLine2D_set_begin_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's first point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's first point. Use @enum LineCapMode@ constants.
 set_begin_cap_mode ::
                      (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_begin_cap_mode cls arg1
@@ -547,6 +673,10 @@ set_begin_cap_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_begin_cap_mode" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Line2D.set_begin_cap_mode
 
 {-# NOINLINE bindLine2D_set_curve #-}
 
@@ -568,6 +698,9 @@ set_curve cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLine2D_set_curve (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_curve" '[Curve] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_curve
 
 {-# NOINLINE bindLine2D_set_default_color #-}
 
@@ -592,9 +725,13 @@ set_default_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "set_default_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.Line2D.set_default_color
+
 {-# NOINLINE bindLine2D_set_end_cap_mode #-}
 
--- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's last point. Use @enum LineCapMode@ constants.
 bindLine2D_set_end_cap_mode :: MethodBind
 bindLine2D_set_end_cap_mode
   = unsafePerformIO $
@@ -604,7 +741,7 @@ bindLine2D_set_end_cap_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Controls the style of the line's last point. Use [enum LineCapMode] constants.
+-- | Controls the style of the line's last point. Use @enum LineCapMode@ constants.
 set_end_cap_mode ::
                    (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_end_cap_mode cls arg1
@@ -614,6 +751,9 @@ set_end_cap_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_end_cap_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_end_cap_mode
 
 {-# NOINLINE bindLine2D_set_gradient #-}
 
@@ -636,6 +776,9 @@ set_gradient cls arg1
          godot_method_bind_call bindLine2D_set_gradient (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_gradient" '[Gradient] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_gradient
 
 {-# NOINLINE bindLine2D_set_joint_mode #-}
 
@@ -660,9 +803,12 @@ set_joint_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "set_joint_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_joint_mode
+
 {-# NOINLINE bindLine2D_set_point_position #-}
 
--- | Overwrites the position in point [code]i[/code] with the supplied [code]position[/code].
+-- | Overwrites the position in point @i@ with the supplied @position@.
 bindLine2D_set_point_position :: MethodBind
 bindLine2D_set_point_position
   = unsafePerformIO $
@@ -672,7 +818,7 @@ bindLine2D_set_point_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overwrites the position in point [code]i[/code] with the supplied [code]position[/code].
+-- | Overwrites the position in point @i@ with the supplied @position@.
 set_point_position ::
                      (Line2D :< cls, Object :< cls) => cls -> Int -> Vector2 -> IO ()
 set_point_position cls arg1 arg2
@@ -682,6 +828,11 @@ set_point_position cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_point_position" '[Int, Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Line2D.set_point_position
 
 {-# NOINLINE bindLine2D_set_points #-}
 
@@ -704,6 +855,10 @@ set_points cls arg1
          godot_method_bind_call bindLine2D_set_points (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_points" '[PoolVector2Array] (IO ())
+         where
+        nodeMethod = Godot.Core.Line2D.set_points
 
 {-# NOINLINE bindLine2D_set_round_precision #-}
 
@@ -728,9 +883,13 @@ set_round_precision cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "set_round_precision" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Line2D.set_round_precision
+
 {-# NOINLINE bindLine2D_set_sharp_limit #-}
 
--- | The direction difference in radians between vector points. This value is only used if [code]joint mode[/code] is set to [constant LINE_JOINT_SHARP].
+-- | The direction difference in radians between vector points. This value is only used if @joint mode@ is set to @LINE_JOINT_SHARP@.
 bindLine2D_set_sharp_limit :: MethodBind
 bindLine2D_set_sharp_limit
   = unsafePerformIO $
@@ -740,7 +899,7 @@ bindLine2D_set_sharp_limit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The direction difference in radians between vector points. This value is only used if [code]joint mode[/code] is set to [constant LINE_JOINT_SHARP].
+-- | The direction difference in radians between vector points. This value is only used if @joint mode@ is set to @LINE_JOINT_SHARP@.
 set_sharp_limit ::
                   (Line2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_sharp_limit cls arg1
@@ -751,9 +910,12 @@ set_sharp_limit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "set_sharp_limit" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_sharp_limit
+
 {-# NOINLINE bindLine2D_set_texture #-}
 
--- | The texture used for the line's texture. Uses [code]texture_mode[/code] for drawing style.
+-- | The texture used for the line's texture. Uses @texture_mode@ for drawing style.
 bindLine2D_set_texture :: MethodBind
 bindLine2D_set_texture
   = unsafePerformIO $
@@ -763,7 +925,7 @@ bindLine2D_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The texture used for the line's texture. Uses [code]texture_mode[/code] for drawing style.
+-- | The texture used for the line's texture. Uses @texture_mode@ for drawing style.
 set_texture ::
               (Line2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_texture cls arg1
@@ -773,9 +935,12 @@ set_texture cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Line2D "set_texture" '[Texture] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_texture
+
 {-# NOINLINE bindLine2D_set_texture_mode #-}
 
--- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
+-- | The style to render the @texture@ on the line. Use @enum LineTextureMode@ constants.
 bindLine2D_set_texture_mode :: MethodBind
 bindLine2D_set_texture_mode
   = unsafePerformIO $
@@ -785,7 +950,7 @@ bindLine2D_set_texture_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The style to render the [code]texture[/code] on the line. Use [enum LineTextureMode] constants.
+-- | The style to render the @texture@ on the line. Use @enum LineTextureMode@ constants.
 set_texture_mode ::
                    (Line2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_texture_mode cls arg1
@@ -795,6 +960,9 @@ set_texture_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_texture_mode" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_texture_mode
 
 {-# NOINLINE bindLine2D_set_width #-}
 
@@ -816,3 +984,6 @@ set_width cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindLine2D_set_width (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Line2D "set_width" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Line2D.set_width

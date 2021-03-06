@@ -14,13 +14,34 @@ module Godot.Core.InputEventMouseButton
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.InputEventMouse()
+
+instance NodeProperty InputEventMouseButton "button_index" Int
+           'False
+         where
+        nodeProperty
+          = (get_button_index, wrapDroppingSetter set_button_index, Nothing)
+
+instance NodeProperty InputEventMouseButton "doubleclick" Bool
+           'False
+         where
+        nodeProperty
+          = (is_doubleclick, wrapDroppingSetter set_doubleclick, Nothing)
+
+instance NodeProperty InputEventMouseButton "factor" Float 'False
+         where
+        nodeProperty = (get_factor, wrapDroppingSetter set_factor, Nothing)
 
 {-# NOINLINE bindInputEventMouseButton_is_pressed #-}
 
--- | If [code]true[/code], the mouse button's state is pressed. If [code]false[/code], the mouse button's state is released.
+-- | If @true@, the mouse button's state is pressed. If @false@, the mouse button's state is released.
 bindInputEventMouseButton_is_pressed :: MethodBind
 bindInputEventMouseButton_is_pressed
   = unsafePerformIO $
@@ -30,7 +51,7 @@ bindInputEventMouseButton_is_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the mouse button's state is pressed. If [code]false[/code], the mouse button's state is released.
+-- | If @true@, the mouse button's state is pressed. If @false@, the mouse button's state is released.
 is_pressed ::
              (InputEventMouseButton :< cls, Object :< cls) => cls -> IO Bool
 is_pressed cls
@@ -42,9 +63,19 @@ is_pressed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseButton "is_pressed" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.is_pressed
+
+instance NodeProperty InputEventMouseButton "pressed" Bool 'False
+         where
+        nodeProperty
+          = (is_pressed, wrapDroppingSetter set_pressed, Nothing)
+
 {-# NOINLINE bindInputEventMouseButton_get_button_index #-}
 
--- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
+-- | The mouse button identifier, one of the @enum ButtonList@ button or button wheel constants.
 bindInputEventMouseButton_get_button_index :: MethodBind
 bindInputEventMouseButton_get_button_index
   = unsafePerformIO $
@@ -54,7 +85,7 @@ bindInputEventMouseButton_get_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
+-- | The mouse button identifier, one of the @enum ButtonList@ button or button wheel constants.
 get_button_index ::
                    (InputEventMouseButton :< cls, Object :< cls) => cls -> IO Int
 get_button_index cls
@@ -66,9 +97,14 @@ get_button_index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseButton "get_button_index" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.get_button_index
+
 {-# NOINLINE bindInputEventMouseButton_get_factor #-}
 
--- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be @0@ if not supported.
 bindInputEventMouseButton_get_factor :: MethodBind
 bindInputEventMouseButton_get_factor
   = unsafePerformIO $
@@ -78,7 +114,7 @@ bindInputEventMouseButton_get_factor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be @0@ if not supported.
 get_factor ::
              (InputEventMouseButton :< cls, Object :< cls) => cls -> IO Float
 get_factor cls
@@ -90,9 +126,14 @@ get_factor cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseButton "get_factor" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.get_factor
+
 {-# NOINLINE bindInputEventMouseButton_is_doubleclick #-}
 
--- | If [code]true[/code], the mouse button's state is a double-click.
+-- | If @true@, the mouse button's state is a double-click.
 bindInputEventMouseButton_is_doubleclick :: MethodBind
 bindInputEventMouseButton_is_doubleclick
   = unsafePerformIO $
@@ -102,7 +143,7 @@ bindInputEventMouseButton_is_doubleclick
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the mouse button's state is a double-click.
+-- | If @true@, the mouse button's state is a double-click.
 is_doubleclick ::
                  (InputEventMouseButton :< cls, Object :< cls) => cls -> IO Bool
 is_doubleclick cls
@@ -114,9 +155,14 @@ is_doubleclick cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseButton "is_doubleclick" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.is_doubleclick
+
 {-# NOINLINE bindInputEventMouseButton_set_button_index #-}
 
--- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
+-- | The mouse button identifier, one of the @enum ButtonList@ button or button wheel constants.
 bindInputEventMouseButton_set_button_index :: MethodBind
 bindInputEventMouseButton_set_button_index
   = unsafePerformIO $
@@ -126,7 +172,7 @@ bindInputEventMouseButton_set_button_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The mouse button identifier, one of the [enum ButtonList] button or button wheel constants.
+-- | The mouse button identifier, one of the @enum ButtonList@ button or button wheel constants.
 set_button_index ::
                    (InputEventMouseButton :< cls, Object :< cls) =>
                    cls -> Int -> IO ()
@@ -139,9 +185,14 @@ set_button_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseButton "set_button_index" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.set_button_index
+
 {-# NOINLINE bindInputEventMouseButton_set_doubleclick #-}
 
--- | If [code]true[/code], the mouse button's state is a double-click.
+-- | If @true@, the mouse button's state is a double-click.
 bindInputEventMouseButton_set_doubleclick :: MethodBind
 bindInputEventMouseButton_set_doubleclick
   = unsafePerformIO $
@@ -151,7 +202,7 @@ bindInputEventMouseButton_set_doubleclick
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the mouse button's state is a double-click.
+-- | If @true@, the mouse button's state is a double-click.
 set_doubleclick ::
                   (InputEventMouseButton :< cls, Object :< cls) =>
                   cls -> Bool -> IO ()
@@ -164,9 +215,14 @@ set_doubleclick cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseButton "set_doubleclick" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.set_doubleclick
+
 {-# NOINLINE bindInputEventMouseButton_set_factor #-}
 
--- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be @0@ if not supported.
 bindInputEventMouseButton_set_factor :: MethodBind
 bindInputEventMouseButton_set_factor
   = unsafePerformIO $
@@ -176,7 +232,7 @@ bindInputEventMouseButton_set_factor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be [code]0[/code] if not supported.
+-- | The amount (or delta) of the event. When used for high-precision scroll events, this indicates the scroll amount (vertical or horizontal). This is only supported on some platforms; the reported sensitivity varies depending on the platform. May be @0@ if not supported.
 set_factor ::
              (InputEventMouseButton :< cls, Object :< cls) =>
              cls -> Float -> IO ()
@@ -189,9 +245,14 @@ set_factor cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod InputEventMouseButton "set_factor" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.set_factor
+
 {-# NOINLINE bindInputEventMouseButton_set_pressed #-}
 
--- | If [code]true[/code], the mouse button's state is pressed. If [code]false[/code], the mouse button's state is released.
+-- | If @true@, the mouse button's state is pressed. If @false@, the mouse button's state is released.
 bindInputEventMouseButton_set_pressed :: MethodBind
 bindInputEventMouseButton_set_pressed
   = unsafePerformIO $
@@ -201,7 +262,7 @@ bindInputEventMouseButton_set_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the mouse button's state is pressed. If [code]false[/code], the mouse button's state is released.
+-- | If @true@, the mouse button's state is pressed. If @false@, the mouse button's state is released.
 set_pressed ::
               (InputEventMouseButton :< cls, Object :< cls) =>
               cls -> Bool -> IO ()
@@ -213,3 +274,8 @@ set_pressed cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod InputEventMouseButton "set_pressed" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.InputEventMouseButton.set_pressed

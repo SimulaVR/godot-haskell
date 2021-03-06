@@ -8,9 +8,14 @@ module Godot.Tools.EditorNavigationMeshGenerator
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 {-# NOINLINE bindEditorNavigationMeshGenerator_bake #-}
 
@@ -35,6 +40,12 @@ bake cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod EditorNavigationMeshGenerator "bake"
+           '[NavigationMesh, Node]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorNavigationMeshGenerator.bake
+
 {-# NOINLINE bindEditorNavigationMeshGenerator_clear #-}
 
 bindEditorNavigationMeshGenerator_clear :: MethodBind
@@ -57,3 +68,9 @@ clear cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod EditorNavigationMeshGenerator "clear"
+           '[NavigationMesh]
+           (IO ())
+         where
+        nodeMethod = Godot.Tools.EditorNavigationMeshGenerator.clear

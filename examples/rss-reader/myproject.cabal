@@ -1,0 +1,71 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: b6a0d2a1fc09513a3765e90723389dc19ec4879f3963404979d2a68731de6d6e
+
+name:           myproject
+version:        0.0.0.0
+description:    Please see the README on Github at <https://github.com/SimulaVR/godot-haskell/tree/master/demo#readme>
+homepage:       https://github.com/SimulaVR/godot-haskell#readme
+bug-reports:    https://github.com/SimulaVR/godot-haskell/issues
+author:         Andrei Barbu
+maintainer:     andrei@0xab.com
+copyright:      Andrei Barbu 2019, 2021
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    ChangeLog.md
+    README.md
+foreign-library myproject
+  type: native-shared
+  other-modules: FLib
+  hs-source-dirs: ffi/flib
+  c-sources: ffi/cbits/flib.c
+  build-depends:
+      base >= 4.12 && <5
+    , godot-haskell
+    , myproject
+    , text
+  default-language: Haskell2010
+
+source-repository head
+  type: git
+  location: https://github.com/SimulaVR/godot-haskell
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Game.RSSReader
+      Project.Requirements
+      Project.Scenes
+      Project.Scenes.Rss_reader
+      Project.Support
+      Paths_myproject
+  hs-source-dirs:
+      src
+      game
+  default-extensions: FlexibleContexts MultiParamTypeClasses OverloadedStrings TemplateHaskell TypeApplications TypeFamilies DataKinds FlexibleInstances ScopedTypeVariables AllowAmbiguousTypes TypeOperators TupleSections
+  ghc-options: -Wall -Wno-orphans -O0
+  build-depends:
+      aeson
+    , base >=4.12 && <5
+    , containers
+    , directory
+    , extra
+    , godot-haskell
+    , lens
+    , linear
+    , monad-loops
+    , random
+    , strict-concurrency
+    , template-haskell
+    , text
+    , th-abstraction
+    , vector
+    , xeno
+  default-language: Haskell2010

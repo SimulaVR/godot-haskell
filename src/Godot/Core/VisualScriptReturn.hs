@@ -10,9 +10,26 @@ module Godot.Core.VisualScriptReturn
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
+
+instance NodeProperty VisualScriptReturn "return_enabled" Bool
+           'False
+         where
+        nodeProperty
+          = (is_return_value_enabled,
+             wrapDroppingSetter set_enable_return_value, Nothing)
+
+instance NodeProperty VisualScriptReturn "return_type" Int 'False
+         where
+        nodeProperty
+          = (get_return_type, wrapDroppingSetter set_return_type, Nothing)
 
 {-# NOINLINE bindVisualScriptReturn_get_return_type #-}
 
@@ -35,6 +52,11 @@ get_return_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptReturn "get_return_type" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptReturn.get_return_type
 
 {-# NOINLINE bindVisualScriptReturn_is_return_value_enabled #-}
 
@@ -59,6 +81,12 @@ is_return_value_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptReturn "is_return_value_enabled"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScriptReturn.is_return_value_enabled
+
 {-# NOINLINE bindVisualScriptReturn_set_enable_return_value #-}
 
 bindVisualScriptReturn_set_enable_return_value :: MethodBind
@@ -82,6 +110,12 @@ set_enable_return_value cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptReturn "set_enable_return_value"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptReturn.set_enable_return_value
+
 {-# NOINLINE bindVisualScriptReturn_set_return_type #-}
 
 bindVisualScriptReturn_set_return_type :: MethodBind
@@ -103,3 +137,8 @@ set_return_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptReturn "set_return_type" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptReturn.set_return_type

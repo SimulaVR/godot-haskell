@@ -38,9 +38,141 @@ module Godot.Core.StyleBoxFlat
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.StyleBox()
+
+instance NodeProperty StyleBoxFlat "anti_aliasing" Bool 'False
+         where
+        nodeProperty
+          = (is_anti_aliased, wrapDroppingSetter set_anti_aliased, Nothing)
+
+instance NodeProperty StyleBoxFlat "anti_aliasing_size" Int 'False
+         where
+        nodeProperty
+          = (get_aa_size, wrapDroppingSetter set_aa_size, Nothing)
+
+instance NodeProperty StyleBoxFlat "bg_color" Color 'False where
+        nodeProperty
+          = (get_bg_color, wrapDroppingSetter set_bg_color, Nothing)
+
+instance NodeProperty StyleBoxFlat "border_blend" Bool 'False where
+        nodeProperty
+          = (get_border_blend, wrapDroppingSetter set_border_blend, Nothing)
+
+instance NodeProperty StyleBoxFlat "border_color" Color 'False
+         where
+        nodeProperty
+          = (get_border_color, wrapDroppingSetter set_border_color, Nothing)
+
+instance NodeProperty StyleBoxFlat "border_width_bottom" Int 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_border_width,
+             wrapIndexedSetter 3 set_border_width, Nothing)
+
+instance NodeProperty StyleBoxFlat "border_width_left" Int 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_border_width,
+             wrapIndexedSetter 0 set_border_width, Nothing)
+
+instance NodeProperty StyleBoxFlat "border_width_right" Int 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_border_width,
+             wrapIndexedSetter 2 set_border_width, Nothing)
+
+instance NodeProperty StyleBoxFlat "border_width_top" Int 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_border_width,
+             wrapIndexedSetter 1 set_border_width, Nothing)
+
+instance NodeProperty StyleBoxFlat "corner_detail" Int 'False where
+        nodeProperty
+          = (get_corner_detail, wrapDroppingSetter set_corner_detail,
+             Nothing)
+
+instance NodeProperty StyleBoxFlat "corner_radius_bottom_left" Int
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_corner_radius,
+             wrapIndexedSetter 3 set_corner_radius, Nothing)
+
+instance NodeProperty StyleBoxFlat "corner_radius_bottom_right" Int
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_corner_radius,
+             wrapIndexedSetter 2 set_corner_radius, Nothing)
+
+instance NodeProperty StyleBoxFlat "corner_radius_top_left" Int
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_corner_radius,
+             wrapIndexedSetter 0 set_corner_radius, Nothing)
+
+instance NodeProperty StyleBoxFlat "corner_radius_top_right" Int
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_corner_radius,
+             wrapIndexedSetter 1 set_corner_radius, Nothing)
+
+instance NodeProperty StyleBoxFlat "draw_center" Bool 'False where
+        nodeProperty
+          = (is_draw_center_enabled, wrapDroppingSetter set_draw_center,
+             Nothing)
+
+instance NodeProperty StyleBoxFlat "expand_margin_bottom" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_expand_margin,
+             wrapIndexedSetter 3 set_expand_margin, Nothing)
+
+instance NodeProperty StyleBoxFlat "expand_margin_left" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_expand_margin,
+             wrapIndexedSetter 0 set_expand_margin, Nothing)
+
+instance NodeProperty StyleBoxFlat "expand_margin_right" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_expand_margin,
+             wrapIndexedSetter 2 set_expand_margin, Nothing)
+
+instance NodeProperty StyleBoxFlat "expand_margin_top" Float 'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_expand_margin,
+             wrapIndexedSetter 1 set_expand_margin, Nothing)
+
+instance NodeProperty StyleBoxFlat "shadow_color" Color 'False
+         where
+        nodeProperty
+          = (get_shadow_color, wrapDroppingSetter set_shadow_color, Nothing)
+
+instance NodeProperty StyleBoxFlat "shadow_offset" Vector2 'False
+         where
+        nodeProperty
+          = (get_shadow_offset, wrapDroppingSetter set_shadow_offset,
+             Nothing)
+
+instance NodeProperty StyleBoxFlat "shadow_size" Int 'False where
+        nodeProperty
+          = (get_shadow_size, wrapDroppingSetter set_shadow_size, Nothing)
 
 {-# NOINLINE bindStyleBoxFlat_get_aa_size #-}
 
@@ -65,6 +197,9 @@ get_aa_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_aa_size" '[] (IO Int) where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_aa_size
+
 {-# NOINLINE bindStyleBoxFlat_get_bg_color #-}
 
 -- | The background color of the stylebox.
@@ -88,9 +223,13 @@ get_bg_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_bg_color" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_bg_color
+
 {-# NOINLINE bindStyleBoxFlat_get_border_blend #-}
 
--- | If [code]true[/code], the border will fade into the background color.
+-- | If @true@, the border will fade into the background color.
 bindStyleBoxFlat_get_border_blend :: MethodBind
 bindStyleBoxFlat_get_border_blend
   = unsafePerformIO $
@@ -100,7 +239,7 @@ bindStyleBoxFlat_get_border_blend
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the border will fade into the background color.
+-- | If @true@, the border will fade into the background color.
 get_border_blend ::
                    (StyleBoxFlat :< cls, Object :< cls) => cls -> IO Bool
 get_border_blend cls
@@ -111,6 +250,10 @@ get_border_blend cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "get_border_blend" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_border_blend
 
 {-# NOINLINE bindStyleBoxFlat_get_border_color #-}
 
@@ -136,9 +279,13 @@ get_border_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_border_color" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_border_color
+
 {-# NOINLINE bindStyleBoxFlat_get_border_width #-}
 
--- | Returns the given [code]margin[/code]'s border width. See [enum Margin] for possible values.
+-- | Returns the given @margin@'s border width. See @enum Margin@ for possible values.
 bindStyleBoxFlat_get_border_width :: MethodBind
 bindStyleBoxFlat_get_border_width
   = unsafePerformIO $
@@ -148,7 +295,7 @@ bindStyleBoxFlat_get_border_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the given [code]margin[/code]'s border width. See [enum Margin] for possible values.
+-- | Returns the given @margin@'s border width. See @enum Margin@ for possible values.
 get_border_width ::
                    (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> IO Int
 get_border_width cls arg1
@@ -159,6 +306,10 @@ get_border_width cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "get_border_width" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_border_width
 
 {-# NOINLINE bindStyleBoxFlat_get_border_width_min #-}
 
@@ -184,11 +335,16 @@ get_border_width_min cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_border_width_min" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_border_width_min
+
 {-# NOINLINE bindStyleBoxFlat_get_corner_detail #-}
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius ([method set_corner_radius_all]) into account.
---   			For corner radii smaller than 10, [code]4[/code] or [code]5[/code] should be enough. For corner radii smaller than 30, values between [code]8[/code] and [code]12[/code] should be enough.
---   			A corner detail of [code]1[/code] will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
+-- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+--   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 bindStyleBoxFlat_get_corner_detail :: MethodBind
 bindStyleBoxFlat_get_corner_detail
   = unsafePerformIO $
@@ -198,9 +354,9 @@ bindStyleBoxFlat_get_corner_detail
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius ([method set_corner_radius_all]) into account.
---   			For corner radii smaller than 10, [code]4[/code] or [code]5[/code] should be enough. For corner radii smaller than 30, values between [code]8[/code] and [code]12[/code] should be enough.
---   			A corner detail of [code]1[/code] will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
+-- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+--   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 get_corner_detail ::
                     (StyleBoxFlat :< cls, Object :< cls) => cls -> IO Int
 get_corner_detail cls
@@ -212,9 +368,13 @@ get_corner_detail cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_corner_detail" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_corner_detail
+
 {-# NOINLINE bindStyleBoxFlat_get_corner_radius #-}
 
--- | Returns the given [code]corner[/code]'s radius. See [enum Corner] for possible values.
+-- | Returns the given @corner@'s radius. See @enum Corner@ for possible values.
 bindStyleBoxFlat_get_corner_radius :: MethodBind
 bindStyleBoxFlat_get_corner_radius
   = unsafePerformIO $
@@ -224,7 +384,7 @@ bindStyleBoxFlat_get_corner_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the given [code]corner[/code]'s radius. See [enum Corner] for possible values.
+-- | Returns the given @corner@'s radius. See @enum Corner@ for possible values.
 get_corner_radius ::
                     (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> IO Int
 get_corner_radius cls arg1
@@ -236,9 +396,14 @@ get_corner_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_corner_radius" '[Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_corner_radius
+
 {-# NOINLINE bindStyleBoxFlat_get_expand_margin #-}
 
--- | Returns the size of the given [code]margin[/code]'s expand margin. See [enum Margin] for possible values.
+-- | Returns the size of the given @margin@'s expand margin. See @enum Margin@ for possible values.
 bindStyleBoxFlat_get_expand_margin :: MethodBind
 bindStyleBoxFlat_get_expand_margin
   = unsafePerformIO $
@@ -248,7 +413,7 @@ bindStyleBoxFlat_get_expand_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the size of the given [code]margin[/code]'s expand margin. See [enum Margin] for possible values.
+-- | Returns the size of the given @margin@'s expand margin. See @enum Margin@ for possible values.
 get_expand_margin ::
                     (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> IO Float
 get_expand_margin cls arg1
@@ -260,9 +425,14 @@ get_expand_margin cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_expand_margin" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_expand_margin
+
 {-# NOINLINE bindStyleBoxFlat_get_shadow_color #-}
 
--- | The color of the shadow. This has no effect if [member shadow_size] is lower than 1.
+-- | The color of the shadow. This has no effect if @shadow_size@ is lower than 1.
 bindStyleBoxFlat_get_shadow_color :: MethodBind
 bindStyleBoxFlat_get_shadow_color
   = unsafePerformIO $
@@ -272,7 +442,7 @@ bindStyleBoxFlat_get_shadow_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The color of the shadow. This has no effect if [member shadow_size] is lower than 1.
+-- | The color of the shadow. This has no effect if @shadow_size@ is lower than 1.
 get_shadow_color ::
                    (StyleBoxFlat :< cls, Object :< cls) => cls -> IO Color
 get_shadow_color cls
@@ -283,6 +453,10 @@ get_shadow_color cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "get_shadow_color" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_shadow_color
 
 {-# NOINLINE bindStyleBoxFlat_get_shadow_offset #-}
 
@@ -308,6 +482,11 @@ get_shadow_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "get_shadow_offset" '[]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_shadow_offset
+
 {-# NOINLINE bindStyleBoxFlat_get_shadow_size #-}
 
 -- | The shadow size in pixels.
@@ -331,6 +510,10 @@ get_shadow_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "get_shadow_size" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.get_shadow_size
 
 {-# NOINLINE bindStyleBoxFlat_is_anti_aliased #-}
 
@@ -356,6 +539,10 @@ is_anti_aliased cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "is_anti_aliased" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.is_anti_aliased
+
 {-# NOINLINE bindStyleBoxFlat_is_draw_center_enabled #-}
 
 -- | Toggles drawing of the inner part of the stylebox.
@@ -380,6 +567,11 @@ is_draw_center_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "is_draw_center_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.is_draw_center_enabled
+
 {-# NOINLINE bindStyleBoxFlat_set_aa_size #-}
 
 -- | This changes the size of the faded ring. Higher values can be used to achieve a "blurry" effect.
@@ -402,6 +594,9 @@ set_aa_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "set_aa_size" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_aa_size
 
 {-# NOINLINE bindStyleBoxFlat_set_anti_aliased #-}
 
@@ -427,6 +622,10 @@ set_anti_aliased cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_anti_aliased" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_anti_aliased
+
 {-# NOINLINE bindStyleBoxFlat_set_bg_color #-}
 
 -- | The background color of the stylebox.
@@ -450,9 +649,13 @@ set_bg_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_bg_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_bg_color
+
 {-# NOINLINE bindStyleBoxFlat_set_border_blend #-}
 
--- | If [code]true[/code], the border will fade into the background color.
+-- | If @true@, the border will fade into the background color.
 bindStyleBoxFlat_set_border_blend :: MethodBind
 bindStyleBoxFlat_set_border_blend
   = unsafePerformIO $
@@ -462,7 +665,7 @@ bindStyleBoxFlat_set_border_blend
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the border will fade into the background color.
+-- | If @true@, the border will fade into the background color.
 set_border_blend ::
                    (StyleBoxFlat :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_border_blend cls arg1
@@ -473,6 +676,10 @@ set_border_blend cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "set_border_blend" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_border_blend
 
 {-# NOINLINE bindStyleBoxFlat_set_border_color #-}
 
@@ -498,9 +705,14 @@ set_border_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_border_color" '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_border_color
+
 {-# NOINLINE bindStyleBoxFlat_set_border_width #-}
 
--- | Sets the border width to [code]width[/code] pixels for the given [code]margin[/code]. See [enum Margin] for possible values.
+-- | Sets the border width to @width@ pixels for the given @margin@. See @enum Margin@ for possible values.
 bindStyleBoxFlat_set_border_width :: MethodBind
 bindStyleBoxFlat_set_border_width
   = unsafePerformIO $
@@ -510,7 +722,7 @@ bindStyleBoxFlat_set_border_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the border width to [code]width[/code] pixels for the given [code]margin[/code]. See [enum Margin] for possible values.
+-- | Sets the border width to @width@ pixels for the given @margin@. See @enum Margin@ for possible values.
 set_border_width ::
                    (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_border_width cls arg1 arg2
@@ -522,9 +734,14 @@ set_border_width cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_border_width" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_border_width
+
 {-# NOINLINE bindStyleBoxFlat_set_border_width_all #-}
 
--- | Sets the border width to [code]width[/code] pixels for all margins.
+-- | Sets the border width to @width@ pixels for all margins.
 bindStyleBoxFlat_set_border_width_all :: MethodBind
 bindStyleBoxFlat_set_border_width_all
   = unsafePerformIO $
@@ -534,7 +751,7 @@ bindStyleBoxFlat_set_border_width_all
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the border width to [code]width[/code] pixels for all margins.
+-- | Sets the border width to @width@ pixels for all margins.
 set_border_width_all ::
                        (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> IO ()
 set_border_width_all cls arg1
@@ -546,11 +763,16 @@ set_border_width_all cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_border_width_all" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_border_width_all
+
 {-# NOINLINE bindStyleBoxFlat_set_corner_detail #-}
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius ([method set_corner_radius_all]) into account.
---   			For corner radii smaller than 10, [code]4[/code] or [code]5[/code] should be enough. For corner radii smaller than 30, values between [code]8[/code] and [code]12[/code] should be enough.
---   			A corner detail of [code]1[/code] will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
+-- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+--   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 bindStyleBoxFlat_set_corner_detail :: MethodBind
 bindStyleBoxFlat_set_corner_detail
   = unsafePerformIO $
@@ -560,9 +782,9 @@ bindStyleBoxFlat_set_corner_detail
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius ([method set_corner_radius_all]) into account.
---   			For corner radii smaller than 10, [code]4[/code] or [code]5[/code] should be enough. For corner radii smaller than 30, values between [code]8[/code] and [code]12[/code] should be enough.
---   			A corner detail of [code]1[/code] will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
+-- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+--   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 set_corner_detail ::
                     (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> IO ()
 set_corner_detail cls arg1
@@ -574,9 +796,13 @@ set_corner_detail cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_corner_detail" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_corner_detail
+
 {-# NOINLINE bindStyleBoxFlat_set_corner_radius #-}
 
--- | Sets the corner radius to [code]radius[/code] pixels for the given [code]corner[/code]. See [enum Corner] for possible values.
+-- | Sets the corner radius to @radius@ pixels for the given @corner@. See @enum Corner@ for possible values.
 bindStyleBoxFlat_set_corner_radius :: MethodBind
 bindStyleBoxFlat_set_corner_radius
   = unsafePerformIO $
@@ -586,7 +812,7 @@ bindStyleBoxFlat_set_corner_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the corner radius to [code]radius[/code] pixels for the given [code]corner[/code]. See [enum Corner] for possible values.
+-- | Sets the corner radius to @radius@ pixels for the given @corner@. See @enum Corner@ for possible values.
 set_corner_radius ::
                     (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 set_corner_radius cls arg1 arg2
@@ -598,9 +824,14 @@ set_corner_radius cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_corner_radius" '[Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_corner_radius
+
 {-# NOINLINE bindStyleBoxFlat_set_corner_radius_all #-}
 
--- | Sets the corner radius to [code]radius[/code] pixels for all corners.
+-- | Sets the corner radius to @radius@ pixels for all corners.
 bindStyleBoxFlat_set_corner_radius_all :: MethodBind
 bindStyleBoxFlat_set_corner_radius_all
   = unsafePerformIO $
@@ -610,7 +841,7 @@ bindStyleBoxFlat_set_corner_radius_all
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the corner radius to [code]radius[/code] pixels for all corners.
+-- | Sets the corner radius to @radius@ pixels for all corners.
 set_corner_radius_all ::
                         (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> IO ()
 set_corner_radius_all cls arg1
@@ -622,9 +853,14 @@ set_corner_radius_all cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_corner_radius_all" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_corner_radius_all
+
 {-# NOINLINE bindStyleBoxFlat_set_corner_radius_individual #-}
 
--- | Sets the corner radius for each corner to [code]radius_top_left[/code], [code]radius_top_right[/code], [code]radius_bottom_right[/code], and [code]radius_bottom_left[/code] pixels.
+-- | Sets the corner radius for each corner to @radius_top_left@, @radius_top_right@, @radius_bottom_right@, and @radius_bottom_left@ pixels.
 bindStyleBoxFlat_set_corner_radius_individual :: MethodBind
 bindStyleBoxFlat_set_corner_radius_individual
   = unsafePerformIO $
@@ -634,7 +870,7 @@ bindStyleBoxFlat_set_corner_radius_individual
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the corner radius for each corner to [code]radius_top_left[/code], [code]radius_top_right[/code], [code]radius_bottom_right[/code], and [code]radius_bottom_left[/code] pixels.
+-- | Sets the corner radius for each corner to @radius_top_left@, @radius_top_right@, @radius_bottom_right@, and @radius_bottom_left@ pixels.
 set_corner_radius_individual ::
                                (StyleBoxFlat :< cls, Object :< cls) =>
                                cls -> Int -> Int -> Int -> Int -> IO ()
@@ -648,6 +884,12 @@ set_corner_radius_individual cls arg1 arg2 arg3 arg4
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "set_corner_radius_individual"
+           '[Int, Int, Int, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_corner_radius_individual
 
 {-# NOINLINE bindStyleBoxFlat_set_draw_center #-}
 
@@ -673,9 +915,13 @@ set_draw_center cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_draw_center" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_draw_center
+
 {-# NOINLINE bindStyleBoxFlat_set_expand_margin #-}
 
--- | Sets the expand margin to [code]size[/code] pixels for the given [code]margin[/code]. See [enum Margin] for possible values.
+-- | Sets the expand margin to @size@ pixels for the given @margin@. See @enum Margin@ for possible values.
 bindStyleBoxFlat_set_expand_margin :: MethodBind
 bindStyleBoxFlat_set_expand_margin
   = unsafePerformIO $
@@ -685,7 +931,7 @@ bindStyleBoxFlat_set_expand_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the expand margin to [code]size[/code] pixels for the given [code]margin[/code]. See [enum Margin] for possible values.
+-- | Sets the expand margin to @size@ pixels for the given @margin@. See @enum Margin@ for possible values.
 set_expand_margin ::
                     (StyleBoxFlat :< cls, Object :< cls) =>
                     cls -> Int -> Float -> IO ()
@@ -698,9 +944,14 @@ set_expand_margin cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_expand_margin" '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_expand_margin
+
 {-# NOINLINE bindStyleBoxFlat_set_expand_margin_all #-}
 
--- | Sets the expand margin to [code]size[/code] pixels for all margins.
+-- | Sets the expand margin to @size@ pixels for all margins.
 bindStyleBoxFlat_set_expand_margin_all :: MethodBind
 bindStyleBoxFlat_set_expand_margin_all
   = unsafePerformIO $
@@ -710,7 +961,7 @@ bindStyleBoxFlat_set_expand_margin_all
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the expand margin to [code]size[/code] pixels for all margins.
+-- | Sets the expand margin to @size@ pixels for all margins.
 set_expand_margin_all ::
                         (StyleBoxFlat :< cls, Object :< cls) => cls -> Float -> IO ()
 set_expand_margin_all cls arg1
@@ -722,9 +973,14 @@ set_expand_margin_all cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_expand_margin_all" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_expand_margin_all
+
 {-# NOINLINE bindStyleBoxFlat_set_expand_margin_individual #-}
 
--- | Sets the expand margin for each margin to [code]size_left[/code], [code]size_top[/code], [code]size_right[/code], and [code]size_bottom[/code] pixels.
+-- | Sets the expand margin for each margin to @size_left@, @size_top@, @size_right@, and @size_bottom@ pixels.
 bindStyleBoxFlat_set_expand_margin_individual :: MethodBind
 bindStyleBoxFlat_set_expand_margin_individual
   = unsafePerformIO $
@@ -734,7 +990,7 @@ bindStyleBoxFlat_set_expand_margin_individual
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the expand margin for each margin to [code]size_left[/code], [code]size_top[/code], [code]size_right[/code], and [code]size_bottom[/code] pixels.
+-- | Sets the expand margin for each margin to @size_left@, @size_top@, @size_right@, and @size_bottom@ pixels.
 set_expand_margin_individual ::
                                (StyleBoxFlat :< cls, Object :< cls) =>
                                cls -> Float -> Float -> Float -> Float -> IO ()
@@ -749,9 +1005,15 @@ set_expand_margin_individual cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_expand_margin_individual"
+           '[Float, Float, Float, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_expand_margin_individual
+
 {-# NOINLINE bindStyleBoxFlat_set_shadow_color #-}
 
--- | The color of the shadow. This has no effect if [member shadow_size] is lower than 1.
+-- | The color of the shadow. This has no effect if @shadow_size@ is lower than 1.
 bindStyleBoxFlat_set_shadow_color :: MethodBind
 bindStyleBoxFlat_set_shadow_color
   = unsafePerformIO $
@@ -761,7 +1023,7 @@ bindStyleBoxFlat_set_shadow_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The color of the shadow. This has no effect if [member shadow_size] is lower than 1.
+-- | The color of the shadow. This has no effect if @shadow_size@ is lower than 1.
 set_shadow_color ::
                    (StyleBoxFlat :< cls, Object :< cls) => cls -> Color -> IO ()
 set_shadow_color cls arg1
@@ -772,6 +1034,11 @@ set_shadow_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "set_shadow_color" '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_shadow_color
 
 {-# NOINLINE bindStyleBoxFlat_set_shadow_offset #-}
 
@@ -797,6 +1064,11 @@ set_shadow_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod StyleBoxFlat "set_shadow_offset" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_shadow_offset
+
 {-# NOINLINE bindStyleBoxFlat_set_shadow_size #-}
 
 -- | The shadow size in pixels.
@@ -820,3 +1092,7 @@ set_shadow_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod StyleBoxFlat "set_shadow_size" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.StyleBoxFlat.set_shadow_size

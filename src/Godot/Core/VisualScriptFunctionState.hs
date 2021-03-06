@@ -10,9 +10,14 @@ module Godot.Core.VisualScriptFunctionState
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 {-# NOINLINE bindVisualScriptFunctionState__signal_callback #-}
 
@@ -38,6 +43,12 @@ _signal_callback cls varargs
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionState "_signal_callback"
+           '[[Variant 'GodotTy]]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionState._signal_callback
+
 {-# NOINLINE bindVisualScriptFunctionState_connect_to_signal #-}
 
 bindVisualScriptFunctionState_connect_to_signal :: MethodBind
@@ -62,6 +73,12 @@ connect_to_signal cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionState "connect_to_signal"
+           '[Object, GodotString, Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionState.connect_to_signal
+
 {-# NOINLINE bindVisualScriptFunctionState_is_valid #-}
 
 bindVisualScriptFunctionState_is_valid :: MethodBind
@@ -84,6 +101,11 @@ is_valid cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptFunctionState "is_valid" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionState.is_valid
+
 {-# NOINLINE bindVisualScriptFunctionState_resume #-}
 
 bindVisualScriptFunctionState_resume :: MethodBind
@@ -97,12 +119,18 @@ bindVisualScriptFunctionState_resume
 
 resume ::
          (VisualScriptFunctionState :< cls, Object :< cls) =>
-         cls -> Array -> IO GodotVariant
+         cls -> Maybe Array -> IO GodotVariant
 resume cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [maybe VariantNil toVariant arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindVisualScriptFunctionState_resume
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptFunctionState "resume"
+           '[Maybe Array]
+           (IO GodotVariant)
+         where
+        nodeMethod = Godot.Core.VisualScriptFunctionState.resume

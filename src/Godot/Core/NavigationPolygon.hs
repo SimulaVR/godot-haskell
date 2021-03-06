@@ -24,9 +24,30 @@ module Godot.Core.NavigationPolygon
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty NavigationPolygon "outlines" Array 'False
+         where
+        nodeProperty
+          = (_get_outlines, wrapDroppingSetter _set_outlines, Nothing)
+
+instance NodeProperty NavigationPolygon "polygons" Array 'False
+         where
+        nodeProperty
+          = (_get_polygons, wrapDroppingSetter _set_polygons, Nothing)
+
+instance NodeProperty NavigationPolygon "vertices" PoolVector2Array
+           'False
+         where
+        nodeProperty
+          = (get_vertices, wrapDroppingSetter set_vertices, Nothing)
 
 {-# NOINLINE bindNavigationPolygon__get_outlines #-}
 
@@ -50,6 +71,11 @@ _get_outlines cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "_get_outlines" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.NavigationPolygon._get_outlines
+
 {-# NOINLINE bindNavigationPolygon__get_polygons #-}
 
 bindNavigationPolygon__get_polygons :: MethodBind
@@ -71,6 +97,11 @@ _get_polygons cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygon "_get_polygons" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.NavigationPolygon._get_polygons
 
 {-# NOINLINE bindNavigationPolygon__set_outlines #-}
 
@@ -94,6 +125,11 @@ _set_outlines cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "_set_outlines" '[Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon._set_outlines
+
 {-# NOINLINE bindNavigationPolygon__set_polygons #-}
 
 bindNavigationPolygon__set_polygons :: MethodBind
@@ -116,9 +152,14 @@ _set_polygons cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "_set_polygons" '[Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon._set_polygons
+
 {-# NOINLINE bindNavigationPolygon_add_outline #-}
 
--- | Appends a [PoolVector2Array] that contains the vertices of an outline to the internal array that contains all the outlines. You have to call [method make_polygons_from_outlines] in order for this array to be converted to polygons that the engine will use.
+-- | Appends a @PoolVector2Array@ that contains the vertices of an outline to the internal array that contains all the outlines. You have to call @method make_polygons_from_outlines@ in order for this array to be converted to polygons that the engine will use.
 bindNavigationPolygon_add_outline :: MethodBind
 bindNavigationPolygon_add_outline
   = unsafePerformIO $
@@ -128,7 +169,7 @@ bindNavigationPolygon_add_outline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Appends a [PoolVector2Array] that contains the vertices of an outline to the internal array that contains all the outlines. You have to call [method make_polygons_from_outlines] in order for this array to be converted to polygons that the engine will use.
+-- | Appends a @PoolVector2Array@ that contains the vertices of an outline to the internal array that contains all the outlines. You have to call @method make_polygons_from_outlines@ in order for this array to be converted to polygons that the engine will use.
 add_outline ::
               (NavigationPolygon :< cls, Object :< cls) =>
               cls -> PoolVector2Array -> IO ()
@@ -141,9 +182,15 @@ add_outline cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "add_outline"
+           '[PoolVector2Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.add_outline
+
 {-# NOINLINE bindNavigationPolygon_add_outline_at_index #-}
 
--- | Adds a [PoolVector2Array] that contains the vertices of an outline to the internal array that contains all the outlines at a fixed position. You have to call [method make_polygons_from_outlines] in order for this array to be converted to polygons that the engine will use.
+-- | Adds a @PoolVector2Array@ that contains the vertices of an outline to the internal array that contains all the outlines at a fixed position. You have to call @method make_polygons_from_outlines@ in order for this array to be converted to polygons that the engine will use.
 bindNavigationPolygon_add_outline_at_index :: MethodBind
 bindNavigationPolygon_add_outline_at_index
   = unsafePerformIO $
@@ -153,7 +200,7 @@ bindNavigationPolygon_add_outline_at_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a [PoolVector2Array] that contains the vertices of an outline to the internal array that contains all the outlines at a fixed position. You have to call [method make_polygons_from_outlines] in order for this array to be converted to polygons that the engine will use.
+-- | Adds a @PoolVector2Array@ that contains the vertices of an outline to the internal array that contains all the outlines at a fixed position. You have to call @method make_polygons_from_outlines@ in order for this array to be converted to polygons that the engine will use.
 add_outline_at_index ::
                        (NavigationPolygon :< cls, Object :< cls) =>
                        cls -> PoolVector2Array -> Int -> IO ()
@@ -166,9 +213,15 @@ add_outline_at_index cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "add_outline_at_index"
+           '[PoolVector2Array, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.add_outline_at_index
+
 {-# NOINLINE bindNavigationPolygon_add_polygon #-}
 
--- | Adds a polygon using the indices of the vertices you get when calling [method get_vertices].
+-- | Adds a polygon using the indices of the vertices you get when calling @method get_vertices@.
 bindNavigationPolygon_add_polygon :: MethodBind
 bindNavigationPolygon_add_polygon
   = unsafePerformIO $
@@ -178,7 +231,7 @@ bindNavigationPolygon_add_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a polygon using the indices of the vertices you get when calling [method get_vertices].
+-- | Adds a polygon using the indices of the vertices you get when calling @method get_vertices@.
 add_polygon ::
               (NavigationPolygon :< cls, Object :< cls) =>
               cls -> PoolIntArray -> IO ()
@@ -190,6 +243,11 @@ add_polygon cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygon "add_polygon" '[PoolIntArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.add_polygon
 
 {-# NOINLINE bindNavigationPolygon_clear_outlines #-}
 
@@ -215,6 +273,10 @@ clear_outlines cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "clear_outlines" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.clear_outlines
+
 {-# NOINLINE bindNavigationPolygon_clear_polygons #-}
 
 -- | Clears the array of polygons, but it doesn't clear the array of outlines and vertices.
@@ -239,9 +301,13 @@ clear_polygons cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "clear_polygons" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.clear_polygons
+
 {-# NOINLINE bindNavigationPolygon_get_outline #-}
 
--- | Returns a [PoolVector2Array] containing the vertices of an outline that was created in the editor or by script.
+-- | Returns a @PoolVector2Array@ containing the vertices of an outline that was created in the editor or by script.
 bindNavigationPolygon_get_outline :: MethodBind
 bindNavigationPolygon_get_outline
   = unsafePerformIO $
@@ -251,7 +317,7 @@ bindNavigationPolygon_get_outline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [PoolVector2Array] containing the vertices of an outline that was created in the editor or by script.
+-- | Returns a @PoolVector2Array@ containing the vertices of an outline that was created in the editor or by script.
 get_outline ::
               (NavigationPolygon :< cls, Object :< cls) =>
               cls -> Int -> IO PoolVector2Array
@@ -263,6 +329,11 @@ get_outline cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygon "get_outline" '[Int]
+           (IO PoolVector2Array)
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.get_outline
 
 {-# NOINLINE bindNavigationPolygon_get_outline_count #-}
 
@@ -288,9 +359,14 @@ get_outline_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "get_outline_count" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.get_outline_count
+
 {-# NOINLINE bindNavigationPolygon_get_polygon #-}
 
--- | Returns a [PoolIntArray] containing the indices of the vertices of a created polygon.
+-- | Returns a @PoolIntArray@ containing the indices of the vertices of a created polygon.
 bindNavigationPolygon_get_polygon :: MethodBind
 bindNavigationPolygon_get_polygon
   = unsafePerformIO $
@@ -300,7 +376,7 @@ bindNavigationPolygon_get_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [PoolIntArray] containing the indices of the vertices of a created polygon.
+-- | Returns a @PoolIntArray@ containing the indices of the vertices of a created polygon.
 get_polygon ::
               (NavigationPolygon :< cls, Object :< cls) =>
               cls -> Int -> IO PoolIntArray
@@ -312,6 +388,11 @@ get_polygon cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygon "get_polygon" '[Int]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.get_polygon
 
 {-# NOINLINE bindNavigationPolygon_get_polygon_count #-}
 
@@ -337,9 +418,14 @@ get_polygon_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "get_polygon_count" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.get_polygon_count
+
 {-# NOINLINE bindNavigationPolygon_get_vertices #-}
 
--- | Returns a [PoolVector2Array] containing all the vertices being used to create the polygons.
+-- | Returns a @PoolVector2Array@ containing all the vertices being used to create the polygons.
 bindNavigationPolygon_get_vertices :: MethodBind
 bindNavigationPolygon_get_vertices
   = unsafePerformIO $
@@ -349,7 +435,7 @@ bindNavigationPolygon_get_vertices
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [PoolVector2Array] containing all the vertices being used to create the polygons.
+-- | Returns a @PoolVector2Array@ containing all the vertices being used to create the polygons.
 get_vertices ::
                (NavigationPolygon :< cls, Object :< cls) =>
                cls -> IO PoolVector2Array
@@ -361,6 +447,11 @@ get_vertices cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygon "get_vertices" '[]
+           (IO PoolVector2Array)
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.get_vertices
 
 {-# NOINLINE bindNavigationPolygon_make_polygons_from_outlines #-}
 
@@ -387,9 +478,16 @@ make_polygons_from_outlines cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "make_polygons_from_outlines"
+           '[]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NavigationPolygon.make_polygons_from_outlines
+
 {-# NOINLINE bindNavigationPolygon_remove_outline #-}
 
--- | Removes an outline created in the editor or by script. You have to call [method make_polygons_from_outlines] for the polygons to update.
+-- | Removes an outline created in the editor or by script. You have to call @method make_polygons_from_outlines@ for the polygons to update.
 bindNavigationPolygon_remove_outline :: MethodBind
 bindNavigationPolygon_remove_outline
   = unsafePerformIO $
@@ -399,7 +497,7 @@ bindNavigationPolygon_remove_outline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes an outline created in the editor or by script. You have to call [method make_polygons_from_outlines] for the polygons to update.
+-- | Removes an outline created in the editor or by script. You have to call @method make_polygons_from_outlines@ for the polygons to update.
 remove_outline ::
                  (NavigationPolygon :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_outline cls arg1
@@ -411,9 +509,14 @@ remove_outline cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "remove_outline" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.remove_outline
+
 {-# NOINLINE bindNavigationPolygon_set_outline #-}
 
--- | Changes an outline created in the editor or by script. You have to call [method make_polygons_from_outlines] for the polygons to update.
+-- | Changes an outline created in the editor or by script. You have to call @method make_polygons_from_outlines@ for the polygons to update.
 bindNavigationPolygon_set_outline :: MethodBind
 bindNavigationPolygon_set_outline
   = unsafePerformIO $
@@ -423,7 +526,7 @@ bindNavigationPolygon_set_outline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes an outline created in the editor or by script. You have to call [method make_polygons_from_outlines] for the polygons to update.
+-- | Changes an outline created in the editor or by script. You have to call @method make_polygons_from_outlines@ for the polygons to update.
 set_outline ::
               (NavigationPolygon :< cls, Object :< cls) =>
               cls -> Int -> PoolVector2Array -> IO ()
@@ -436,9 +539,15 @@ set_outline cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationPolygon "set_outline"
+           '[Int, PoolVector2Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.set_outline
+
 {-# NOINLINE bindNavigationPolygon_set_vertices #-}
 
--- | Sets the vertices that can be then indexed to create polygons with the [method add_polygon] method.
+-- | Sets the vertices that can be then indexed to create polygons with the @method add_polygon@ method.
 bindNavigationPolygon_set_vertices :: MethodBind
 bindNavigationPolygon_set_vertices
   = unsafePerformIO $
@@ -448,7 +557,7 @@ bindNavigationPolygon_set_vertices
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the vertices that can be then indexed to create polygons with the [method add_polygon] method.
+-- | Sets the vertices that can be then indexed to create polygons with the @method add_polygon@ method.
 set_vertices ::
                (NavigationPolygon :< cls, Object :< cls) =>
                cls -> PoolVector2Array -> IO ()
@@ -460,3 +569,9 @@ set_vertices cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationPolygon "set_vertices"
+           '[PoolVector2Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationPolygon.set_vertices

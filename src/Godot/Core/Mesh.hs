@@ -54,9 +54,14 @@ module Godot.Core.Mesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _ARRAY_COMPRESS_WEIGHTS :: Int
 _ARRAY_COMPRESS_WEIGHTS = 65536
@@ -181,9 +186,15 @@ _ARRAY_FORMAT_TANGENT = 4
 _PRIMITIVE_POINTS :: Int
 _PRIMITIVE_POINTS = 0
 
+instance NodeProperty Mesh "lightmap_size_hint" Vector2 'False
+         where
+        nodeProperty
+          = (get_lightmap_size_hint,
+             wrapDroppingSetter set_lightmap_size_hint, Nothing)
+
 {-# NOINLINE bindMesh_create_convex_shape #-}
 
--- | Calculate a [ConvexPolygonShape] from the mesh.
+-- | Calculate a @ConvexPolygonShape@ from the mesh.
 bindMesh_create_convex_shape :: MethodBind
 bindMesh_create_convex_shape
   = unsafePerformIO $
@@ -193,7 +204,7 @@ bindMesh_create_convex_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calculate a [ConvexPolygonShape] from the mesh.
+-- | Calculate a @ConvexPolygonShape@ from the mesh.
 create_convex_shape ::
                       (Mesh :< cls, Object :< cls) => cls -> IO Shape
 create_convex_shape cls
@@ -204,10 +215,13 @@ create_convex_shape cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "create_convex_shape" '[] (IO Shape) where
+        nodeMethod = Godot.Core.Mesh.create_convex_shape
+
 {-# NOINLINE bindMesh_create_outline #-}
 
 -- | Calculate an outline mesh at a defined offset (margin) from the original mesh.
---   				[b]Note:[/b] This method typically returns the vertices in reverse order (e.g. clockwise to counterclockwise).
+--   				__Note:__ This method typically returns the vertices in reverse order (e.g. clockwise to counterclockwise).
 bindMesh_create_outline :: MethodBind
 bindMesh_create_outline
   = unsafePerformIO $
@@ -218,7 +232,7 @@ bindMesh_create_outline
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Calculate an outline mesh at a defined offset (margin) from the original mesh.
---   				[b]Note:[/b] This method typically returns the vertices in reverse order (e.g. clockwise to counterclockwise).
+--   				__Note:__ This method typically returns the vertices in reverse order (e.g. clockwise to counterclockwise).
 create_outline ::
                  (Mesh :< cls, Object :< cls) => cls -> Float -> IO Mesh
 create_outline cls arg1
@@ -228,9 +242,12 @@ create_outline cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "create_outline" '[Float] (IO Mesh) where
+        nodeMethod = Godot.Core.Mesh.create_outline
+
 {-# NOINLINE bindMesh_create_trimesh_shape #-}
 
--- | Calculate a [ConcavePolygonShape] from the mesh.
+-- | Calculate a @ConcavePolygonShape@ from the mesh.
 bindMesh_create_trimesh_shape :: MethodBind
 bindMesh_create_trimesh_shape
   = unsafePerformIO $
@@ -240,7 +257,7 @@ bindMesh_create_trimesh_shape
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calculate a [ConcavePolygonShape] from the mesh.
+-- | Calculate a @ConcavePolygonShape@ from the mesh.
 create_trimesh_shape ::
                        (Mesh :< cls, Object :< cls) => cls -> IO Shape
 create_trimesh_shape cls
@@ -251,9 +268,13 @@ create_trimesh_shape cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "create_trimesh_shape" '[] (IO Shape)
+         where
+        nodeMethod = Godot.Core.Mesh.create_trimesh_shape
+
 {-# NOINLINE bindMesh_generate_triangle_mesh #-}
 
--- | Generate a [TriangleMesh] from the mesh.
+-- | Generate a @TriangleMesh@ from the mesh.
 bindMesh_generate_triangle_mesh :: MethodBind
 bindMesh_generate_triangle_mesh
   = unsafePerformIO $
@@ -263,7 +284,7 @@ bindMesh_generate_triangle_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generate a [TriangleMesh] from the mesh.
+-- | Generate a @TriangleMesh@ from the mesh.
 generate_triangle_mesh ::
                          (Mesh :< cls, Object :< cls) => cls -> IO TriangleMesh
 generate_triangle_mesh cls
@@ -274,10 +295,15 @@ generate_triangle_mesh cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "generate_triangle_mesh" '[]
+           (IO TriangleMesh)
+         where
+        nodeMethod = Godot.Core.Mesh.generate_triangle_mesh
+
 {-# NOINLINE bindMesh_get_aabb #-}
 
--- | Returns the smallest [AABB] enclosing this mesh in local space. Not affected by [code]custom_aabb[/code]. See also [method VisualInstance.get_transformed_aabb].
---   				[b]Note:[/b] This is only implemented for [ArrayMesh] and [PrimitiveMesh].
+-- | Returns the smallest @AABB@ enclosing this mesh in local space. Not affected by @custom_aabb@. See also @method VisualInstance.get_transformed_aabb@.
+--   				__Note:__ This is only implemented for @ArrayMesh@ and @PrimitiveMesh@.
 bindMesh_get_aabb :: MethodBind
 bindMesh_get_aabb
   = unsafePerformIO $
@@ -287,14 +313,17 @@ bindMesh_get_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the smallest [AABB] enclosing this mesh in local space. Not affected by [code]custom_aabb[/code]. See also [method VisualInstance.get_transformed_aabb].
---   				[b]Note:[/b] This is only implemented for [ArrayMesh] and [PrimitiveMesh].
+-- | Returns the smallest @AABB@ enclosing this mesh in local space. Not affected by @custom_aabb@. See also @method VisualInstance.get_transformed_aabb@.
+--   				__Note:__ This is only implemented for @ArrayMesh@ and @PrimitiveMesh@.
 get_aabb :: (Mesh :< cls, Object :< cls) => cls -> IO Aabb
 get_aabb cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindMesh_get_aabb (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Mesh "get_aabb" '[] (IO Aabb) where
+        nodeMethod = Godot.Core.Mesh.get_aabb
 
 {-# NOINLINE bindMesh_get_faces #-}
 
@@ -317,9 +346,13 @@ get_faces cls
          godot_method_bind_call bindMesh_get_faces (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "get_faces" '[] (IO PoolVector3Array)
+         where
+        nodeMethod = Godot.Core.Mesh.get_faces
+
 {-# NOINLINE bindMesh_get_lightmap_size_hint #-}
 
--- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
 bindMesh_get_lightmap_size_hint :: MethodBind
 bindMesh_get_lightmap_size_hint
   = unsafePerformIO $
@@ -329,7 +362,7 @@ bindMesh_get_lightmap_size_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
 get_lightmap_size_hint ::
                          (Mesh :< cls, Object :< cls) => cls -> IO Vector2
 get_lightmap_size_hint cls
@@ -340,9 +373,13 @@ get_lightmap_size_hint cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "get_lightmap_size_hint" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Mesh.get_lightmap_size_hint
+
 {-# NOINLINE bindMesh_get_surface_count #-}
 
--- | Returns the amount of surfaces that the [Mesh] holds.
+-- | Returns the amount of surfaces that the @Mesh@ holds.
 bindMesh_get_surface_count :: MethodBind
 bindMesh_get_surface_count
   = unsafePerformIO $
@@ -352,7 +389,7 @@ bindMesh_get_surface_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the amount of surfaces that the [Mesh] holds.
+-- | Returns the amount of surfaces that the @Mesh@ holds.
 get_surface_count :: (Mesh :< cls, Object :< cls) => cls -> IO Int
 get_surface_count cls
   = withVariantArray []
@@ -362,9 +399,12 @@ get_surface_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "get_surface_count" '[] (IO Int) where
+        nodeMethod = Godot.Core.Mesh.get_surface_count
+
 {-# NOINLINE bindMesh_set_lightmap_size_hint #-}
 
--- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
 bindMesh_set_lightmap_size_hint :: MethodBind
 bindMesh_set_lightmap_size_hint
   = unsafePerformIO $
@@ -374,7 +414,7 @@ bindMesh_set_lightmap_size_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a hint to be used for lightmap resolution in [BakedLightmap]. Overrides [member BakedLightmap.bake_default_texels_per_unit].
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
 set_lightmap_size_hint ::
                          (Mesh :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_lightmap_size_hint cls arg1
@@ -385,9 +425,14 @@ set_lightmap_size_hint cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "set_lightmap_size_hint" '[Vector2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Mesh.set_lightmap_size_hint
+
 {-# NOINLINE bindMesh_surface_get_arrays #-}
 
--- | Returns the arrays for the vertices, normals, uvs, etc. that make up the requested surface (see [method ArrayMesh.add_surface_from_arrays]).
+-- | Returns the arrays for the vertices, normals, uvs, etc. that make up the requested surface (see @method ArrayMesh.add_surface_from_arrays@).
 bindMesh_surface_get_arrays :: MethodBind
 bindMesh_surface_get_arrays
   = unsafePerformIO $
@@ -397,7 +442,7 @@ bindMesh_surface_get_arrays
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the arrays for the vertices, normals, uvs, etc. that make up the requested surface (see [method ArrayMesh.add_surface_from_arrays]).
+-- | Returns the arrays for the vertices, normals, uvs, etc. that make up the requested surface (see @method ArrayMesh.add_surface_from_arrays@).
 surface_get_arrays ::
                      (Mesh :< cls, Object :< cls) => cls -> Int -> IO Array
 surface_get_arrays cls arg1
@@ -407,6 +452,10 @@ surface_get_arrays cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Mesh "surface_get_arrays" '[Int] (IO Array)
+         where
+        nodeMethod = Godot.Core.Mesh.surface_get_arrays
 
 {-# NOINLINE bindMesh_surface_get_blend_shape_arrays #-}
 
@@ -432,9 +481,14 @@ surface_get_blend_shape_arrays cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "surface_get_blend_shape_arrays" '[Int]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.Mesh.surface_get_blend_shape_arrays
+
 {-# NOINLINE bindMesh_surface_get_material #-}
 
--- | Returns a [Material] in a given surface. Surface is rendered using this material.
+-- | Returns a @Material@ in a given surface. Surface is rendered using this material.
 bindMesh_surface_get_material :: MethodBind
 bindMesh_surface_get_material
   = unsafePerformIO $
@@ -444,7 +498,7 @@ bindMesh_surface_get_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [Material] in a given surface. Surface is rendered using this material.
+-- | Returns a @Material@ in a given surface. Surface is rendered using this material.
 surface_get_material ::
                        (Mesh :< cls, Object :< cls) => cls -> Int -> IO Material
 surface_get_material cls arg1
@@ -455,9 +509,14 @@ surface_get_material cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Mesh "surface_get_material" '[Int]
+           (IO Material)
+         where
+        nodeMethod = Godot.Core.Mesh.surface_get_material
+
 {-# NOINLINE bindMesh_surface_set_material #-}
 
--- | Sets a [Material] for a given surface. Surface will be rendered using this material.
+-- | Sets a @Material@ for a given surface. Surface will be rendered using this material.
 bindMesh_surface_set_material :: MethodBind
 bindMesh_surface_set_material
   = unsafePerformIO $
@@ -467,7 +526,7 @@ bindMesh_surface_set_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a [Material] for a given surface. Surface will be rendered using this material.
+-- | Sets a @Material@ for a given surface. Surface will be rendered using this material.
 surface_set_material ::
                        (Mesh :< cls, Object :< cls) => cls -> Int -> Material -> IO ()
 surface_set_material cls arg1 arg2
@@ -477,3 +536,8 @@ surface_set_material cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Mesh "surface_set_material" '[Int, Material]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Mesh.surface_set_material

@@ -23,9 +23,43 @@ module Godot.Core.BakedLightmapData
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
+
+instance NodeProperty BakedLightmapData "bounds" Aabb 'False where
+        nodeProperty = (get_bounds, wrapDroppingSetter set_bounds, Nothing)
+
+instance NodeProperty BakedLightmapData "cell_space_transform"
+           Transform
+           'False
+         where
+        nodeProperty
+          = (get_cell_space_transform,
+             wrapDroppingSetter set_cell_space_transform, Nothing)
+
+instance NodeProperty BakedLightmapData "cell_subdiv" Int 'False
+         where
+        nodeProperty
+          = (get_cell_subdiv, wrapDroppingSetter set_cell_subdiv, Nothing)
+
+instance NodeProperty BakedLightmapData "energy" Float 'False where
+        nodeProperty = (get_energy, wrapDroppingSetter set_energy, Nothing)
+
+instance NodeProperty BakedLightmapData "octree" PoolByteArray
+           'False
+         where
+        nodeProperty = (get_octree, wrapDroppingSetter set_octree, Nothing)
+
+instance NodeProperty BakedLightmapData "user_data" Array 'False
+         where
+        nodeProperty
+          = (_get_user_data, wrapDroppingSetter _set_user_data, Nothing)
 
 {-# NOINLINE bindBakedLightmapData__get_user_data #-}
 
@@ -49,6 +83,11 @@ _get_user_data cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "_get_user_data" '[]
+           (IO Array)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData._get_user_data
+
 {-# NOINLINE bindBakedLightmapData__set_user_data #-}
 
 bindBakedLightmapData__set_user_data :: MethodBind
@@ -70,6 +109,11 @@ _set_user_data cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmapData "_set_user_data" '[Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData._set_user_data
 
 {-# NOINLINE bindBakedLightmapData_add_user #-}
 
@@ -93,6 +137,12 @@ add_user cls arg1 arg2 arg3
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "add_user"
+           '[NodePath, Texture, Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.add_user
+
 {-# NOINLINE bindBakedLightmapData_clear_users #-}
 
 bindBakedLightmapData_clear_users :: MethodBind
@@ -115,6 +165,10 @@ clear_users cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "clear_users" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.clear_users
+
 {-# NOINLINE bindBakedLightmapData_get_bounds #-}
 
 bindBakedLightmapData_get_bounds :: MethodBind
@@ -136,6 +190,10 @@ get_bounds cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmapData "get_bounds" '[] (IO Aabb)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_bounds
 
 {-# NOINLINE bindBakedLightmapData_get_cell_space_transform #-}
 
@@ -160,6 +218,12 @@ get_cell_space_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "get_cell_space_transform"
+           '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_cell_space_transform
+
 {-# NOINLINE bindBakedLightmapData_get_cell_subdiv #-}
 
 bindBakedLightmapData_get_cell_subdiv :: MethodBind
@@ -182,6 +246,11 @@ get_cell_subdiv cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "get_cell_subdiv" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_cell_subdiv
+
 {-# NOINLINE bindBakedLightmapData_get_energy #-}
 
 bindBakedLightmapData_get_energy :: MethodBind
@@ -203,6 +272,10 @@ get_energy cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmapData "get_energy" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_energy
 
 {-# NOINLINE bindBakedLightmapData_get_octree #-}
 
@@ -227,6 +300,11 @@ get_octree cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "get_octree" '[]
+           (IO PoolByteArray)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_octree
+
 {-# NOINLINE bindBakedLightmapData_get_user_count #-}
 
 bindBakedLightmapData_get_user_count :: MethodBind
@@ -248,6 +326,10 @@ get_user_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmapData "get_user_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_user_count
 
 {-# NOINLINE bindBakedLightmapData_get_user_lightmap #-}
 
@@ -272,6 +354,11 @@ get_user_lightmap cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "get_user_lightmap" '[Int]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_user_lightmap
+
 {-# NOINLINE bindBakedLightmapData_get_user_path #-}
 
 bindBakedLightmapData_get_user_path :: MethodBind
@@ -295,6 +382,11 @@ get_user_path cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "get_user_path" '[Int]
+           (IO NodePath)
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.get_user_path
+
 {-# NOINLINE bindBakedLightmapData_set_bounds #-}
 
 bindBakedLightmapData_set_bounds :: MethodBind
@@ -316,6 +408,10 @@ set_bounds cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmapData "set_bounds" '[Aabb] (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.set_bounds
 
 {-# NOINLINE bindBakedLightmapData_set_cell_space_transform #-}
 
@@ -341,6 +437,12 @@ set_cell_space_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "set_cell_space_transform"
+           '[Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.set_cell_space_transform
+
 {-# NOINLINE bindBakedLightmapData_set_cell_subdiv #-}
 
 bindBakedLightmapData_set_cell_subdiv :: MethodBind
@@ -362,6 +464,11 @@ set_cell_subdiv cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmapData "set_cell_subdiv" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.set_cell_subdiv
 
 {-# NOINLINE bindBakedLightmapData_set_energy #-}
 
@@ -385,6 +492,10 @@ set_energy cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BakedLightmapData "set_energy" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.set_energy
+
 {-# NOINLINE bindBakedLightmapData_set_octree #-}
 
 bindBakedLightmapData_set_octree :: MethodBind
@@ -407,3 +518,8 @@ set_octree cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BakedLightmapData "set_octree" '[PoolByteArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BakedLightmapData.set_octree

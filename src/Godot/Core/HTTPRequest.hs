@@ -40,9 +40,14 @@ module Godot.Core.HTTPRequest
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node()
 
 _RESULT_DOWNLOAD_FILE_CANT_OPEN :: Int
 _RESULT_DOWNLOAD_FILE_CANT_OPEN = 9
@@ -91,6 +96,38 @@ sig_request_completed
 instance NodeSignal HTTPRequest "request_completed"
            '[Int, Int, PoolStringArray, PoolByteArray]
 
+instance NodeProperty HTTPRequest "body_size_limit" Int 'False
+         where
+        nodeProperty
+          = (get_body_size_limit, wrapDroppingSetter set_body_size_limit,
+             Nothing)
+
+instance NodeProperty HTTPRequest "download_chunk_size" Int 'False
+         where
+        nodeProperty
+          = (get_download_chunk_size,
+             wrapDroppingSetter set_download_chunk_size, Nothing)
+
+instance NodeProperty HTTPRequest "download_file" GodotString
+           'False
+         where
+        nodeProperty
+          = (get_download_file, wrapDroppingSetter set_download_file,
+             Nothing)
+
+instance NodeProperty HTTPRequest "max_redirects" Int 'False where
+        nodeProperty
+          = (get_max_redirects, wrapDroppingSetter set_max_redirects,
+             Nothing)
+
+instance NodeProperty HTTPRequest "timeout" Int 'False where
+        nodeProperty
+          = (get_timeout, wrapDroppingSetter set_timeout, Nothing)
+
+instance NodeProperty HTTPRequest "use_threads" Bool 'False where
+        nodeProperty
+          = (is_using_threads, wrapDroppingSetter set_use_threads, Nothing)
+
 {-# NOINLINE bindHTTPRequest__redirect_request #-}
 
 bindHTTPRequest__redirect_request :: MethodBind
@@ -112,6 +149,11 @@ _redirect_request cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "_redirect_request" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.HTTPRequest._redirect_request
 
 {-# NOINLINE bindHTTPRequest__request_done #-}
 
@@ -136,6 +178,12 @@ _request_done cls arg1 arg2 arg3 arg4
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "_request_done"
+           '[Int, Int, PoolStringArray, PoolByteArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.HTTPRequest._request_done
+
 {-# NOINLINE bindHTTPRequest__timeout #-}
 
 bindHTTPRequest__timeout :: MethodBind
@@ -154,6 +202,9 @@ _timeout cls
          godot_method_bind_call bindHTTPRequest__timeout (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "_timeout" '[] (IO ()) where
+        nodeMethod = Godot.Core.HTTPRequest._timeout
 
 {-# NOINLINE bindHTTPRequest_cancel_request #-}
 
@@ -178,10 +229,13 @@ cancel_request cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "cancel_request" '[] (IO ()) where
+        nodeMethod = Godot.Core.HTTPRequest.cancel_request
+
 {-# NOINLINE bindHTTPRequest_get_body_size #-}
 
 -- | Returns the response body length.
---   				[b]Note:[/b] Some Web servers may not send a body length. In this case, the value returned will be [code]-1[/code]. If using chunked transfer encoding, the body length will also be [code]-1[/code].
+--   				__Note:__ Some Web servers may not send a body length. In this case, the value returned will be @-1@. If using chunked transfer encoding, the body length will also be @-1@.
 bindHTTPRequest_get_body_size :: MethodBind
 bindHTTPRequest_get_body_size
   = unsafePerformIO $
@@ -192,7 +246,7 @@ bindHTTPRequest_get_body_size
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the response body length.
---   				[b]Note:[/b] Some Web servers may not send a body length. In this case, the value returned will be [code]-1[/code]. If using chunked transfer encoding, the body length will also be [code]-1[/code].
+--   				__Note:__ Some Web servers may not send a body length. In this case, the value returned will be @-1@. If using chunked transfer encoding, the body length will also be @-1@.
 get_body_size ::
                 (HTTPRequest :< cls, Object :< cls) => cls -> IO Int
 get_body_size cls
@@ -202,6 +256,9 @@ get_body_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "get_body_size" '[] (IO Int) where
+        nodeMethod = Godot.Core.HTTPRequest.get_body_size
 
 {-# NOINLINE bindHTTPRequest_get_body_size_limit #-}
 
@@ -227,9 +284,13 @@ get_body_size_limit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "get_body_size_limit" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.get_body_size_limit
+
 {-# NOINLINE bindHTTPRequest_get_download_chunk_size #-}
 
--- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+-- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
 --   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 bindHTTPRequest_get_download_chunk_size :: MethodBind
 bindHTTPRequest_get_download_chunk_size
@@ -240,7 +301,7 @@ bindHTTPRequest_get_download_chunk_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+-- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
 --   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 get_download_chunk_size ::
                           (HTTPRequest :< cls, Object :< cls) => cls -> IO Int
@@ -252,6 +313,11 @@ get_download_chunk_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "get_download_chunk_size" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.get_download_chunk_size
 
 {-# NOINLINE bindHTTPRequest_get_download_file #-}
 
@@ -277,6 +343,11 @@ get_download_file cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "get_download_file" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.get_download_file
+
 {-# NOINLINE bindHTTPRequest_get_downloaded_bytes #-}
 
 -- | Returns the amount of bytes this HTTPRequest downloaded.
@@ -301,9 +372,13 @@ get_downloaded_bytes cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "get_downloaded_bytes" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.get_downloaded_bytes
+
 {-# NOINLINE bindHTTPRequest_get_http_client_status #-}
 
--- | Returns the current status of the underlying [HTTPClient]. See [enum HTTPClient.Status].
+-- | Returns the current status of the underlying @HTTPClient@. See @enum HTTPClient.Status@.
 bindHTTPRequest_get_http_client_status :: MethodBind
 bindHTTPRequest_get_http_client_status
   = unsafePerformIO $
@@ -313,7 +388,7 @@ bindHTTPRequest_get_http_client_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current status of the underlying [HTTPClient]. See [enum HTTPClient.Status].
+-- | Returns the current status of the underlying @HTTPClient@. See @enum HTTPClient.Status@.
 get_http_client_status ::
                          (HTTPRequest :< cls, Object :< cls) => cls -> IO Int
 get_http_client_status cls
@@ -324,6 +399,11 @@ get_http_client_status cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "get_http_client_status" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.get_http_client_status
 
 {-# NOINLINE bindHTTPRequest_get_max_redirects #-}
 
@@ -349,6 +429,10 @@ get_max_redirects cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "get_max_redirects" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.get_max_redirects
+
 {-# NOINLINE bindHTTPRequest_get_timeout #-}
 
 bindHTTPRequest_get_timeout :: MethodBind
@@ -369,9 +453,12 @@ get_timeout cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "get_timeout" '[] (IO Int) where
+        nodeMethod = Godot.Core.HTTPRequest.get_timeout
+
 {-# NOINLINE bindHTTPRequest_is_using_threads #-}
 
--- | If [code]true[/code], multithreading is used to improve performance.
+-- | If @true@, multithreading is used to improve performance.
 bindHTTPRequest_is_using_threads :: MethodBind
 bindHTTPRequest_is_using_threads
   = unsafePerformIO $
@@ -381,7 +468,7 @@ bindHTTPRequest_is_using_threads
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], multithreading is used to improve performance.
+-- | If @true@, multithreading is used to improve performance.
 is_using_threads ::
                    (HTTPRequest :< cls, Object :< cls) => cls -> IO Bool
 is_using_threads cls
@@ -393,11 +480,15 @@ is_using_threads cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "is_using_threads" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.is_using_threads
+
 {-# NOINLINE bindHTTPRequest_request #-}
 
--- | Creates request on the underlying [HTTPClient]. If there is no configuration errors, it tries to connect using [method HTTPClient.connect_to_host] and passes parameters onto [method HTTPClient.request].
---   				Returns [constant OK] if request is successfully created. (Does not imply that the server has responded), [constant ERR_UNCONFIGURED] if not in the tree, [constant ERR_BUSY] if still processing previous request, [constant ERR_INVALID_PARAMETER] if given string is not a valid URL format, or [constant ERR_CANT_CONNECT] if not using thread and the [HTTPClient] cannot connect to host.
---   				[b]Note:[/b] The [code]request_data[/code] parameter is ignored if [code]method[/code] is [constant HTTPClient.METHOD_GET]. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See [method String.http_escape] for an example.
+-- | Creates request on the underlying @HTTPClient@. If there is no configuration errors, it tries to connect using @method HTTPClient.connect_to_host@ and passes parameters onto @method HTTPClient.request@.
+--   				Returns @OK@ if request is successfully created. (Does not imply that the server has responded), @ERR_UNCONFIGURED@ if not in the tree, @ERR_BUSY@ if still processing previous request, @ERR_INVALID_PARAMETER@ if given string is not a valid URL format, or @ERR_CANT_CONNECT@ if not using thread and the @HTTPClient@ cannot connect to host.
+--   				__Note:__ The @request_data@ parameter is ignored if @method@ is @HTTPClient.METHOD_GET@. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See @method String.http_escape@ for an example.
 bindHTTPRequest_request :: MethodBind
 bindHTTPRequest_request
   = unsafePerformIO $
@@ -407,22 +498,33 @@ bindHTTPRequest_request
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates request on the underlying [HTTPClient]. If there is no configuration errors, it tries to connect using [method HTTPClient.connect_to_host] and passes parameters onto [method HTTPClient.request].
---   				Returns [constant OK] if request is successfully created. (Does not imply that the server has responded), [constant ERR_UNCONFIGURED] if not in the tree, [constant ERR_BUSY] if still processing previous request, [constant ERR_INVALID_PARAMETER] if given string is not a valid URL format, or [constant ERR_CANT_CONNECT] if not using thread and the [HTTPClient] cannot connect to host.
---   				[b]Note:[/b] The [code]request_data[/code] parameter is ignored if [code]method[/code] is [constant HTTPClient.METHOD_GET]. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See [method String.http_escape] for an example.
+-- | Creates request on the underlying @HTTPClient@. If there is no configuration errors, it tries to connect using @method HTTPClient.connect_to_host@ and passes parameters onto @method HTTPClient.request@.
+--   				Returns @OK@ if request is successfully created. (Does not imply that the server has responded), @ERR_UNCONFIGURED@ if not in the tree, @ERR_BUSY@ if still processing previous request, @ERR_INVALID_PARAMETER@ if given string is not a valid URL format, or @ERR_CANT_CONNECT@ if not using thread and the @HTTPClient@ cannot connect to host.
+--   				__Note:__ The @request_data@ parameter is ignored if @method@ is @HTTPClient.METHOD_GET@. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See @method String.http_escape@ for an example.
 request ::
           (HTTPRequest :< cls, Object :< cls) =>
           cls ->
             GodotString ->
-              PoolStringArray -> Bool -> Int -> GodotString -> IO Int
+              Maybe PoolStringArray ->
+                Maybe Bool -> Maybe Int -> Maybe GodotString -> IO Int
 request cls arg1 arg2 arg3 arg4 arg5
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5]
+      [toVariant arg1,
+       defaultedVariant VariantPoolStringArray V.empty arg2,
+       maybe (VariantBool True) toVariant arg3,
+       maybe (VariantInt (0)) toVariant arg4,
+       defaultedVariant VariantString "" arg5]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindHTTPRequest_request (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "request"
+           '[GodotString, Maybe PoolStringArray, Maybe Bool, Maybe Int,
+             Maybe GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.HTTPRequest.request
 
 {-# NOINLINE bindHTTPRequest_set_body_size_limit #-}
 
@@ -448,9 +550,14 @@ set_body_size_limit cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "set_body_size_limit" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.HTTPRequest.set_body_size_limit
+
 {-# NOINLINE bindHTTPRequest_set_download_chunk_size #-}
 
--- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+-- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
 --   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 bindHTTPRequest_set_download_chunk_size :: MethodBind
 bindHTTPRequest_set_download_chunk_size
@@ -461,7 +568,7 @@ bindHTTPRequest_set_download_chunk_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The size of the buffer used and maximum bytes to read per iteration. See [member HTTPClient.read_chunk_size].
+-- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
 --   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
 set_download_chunk_size ::
                           (HTTPRequest :< cls, Object :< cls) => cls -> Int -> IO ()
@@ -473,6 +580,11 @@ set_download_chunk_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "set_download_chunk_size" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.HTTPRequest.set_download_chunk_size
 
 {-# NOINLINE bindHTTPRequest_set_download_file #-}
 
@@ -498,6 +610,11 @@ set_download_file cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "set_download_file" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.HTTPRequest.set_download_file
+
 {-# NOINLINE bindHTTPRequest_set_max_redirects #-}
 
 -- | Maximum number of allowed redirects.
@@ -522,6 +639,10 @@ set_max_redirects cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "set_max_redirects" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.HTTPRequest.set_max_redirects
+
 {-# NOINLINE bindHTTPRequest_set_timeout #-}
 
 bindHTTPRequest_set_timeout :: MethodBind
@@ -543,9 +664,12 @@ set_timeout cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HTTPRequest "set_timeout" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.HTTPRequest.set_timeout
+
 {-# NOINLINE bindHTTPRequest_set_use_threads #-}
 
--- | If [code]true[/code], multithreading is used to improve performance.
+-- | If @true@, multithreading is used to improve performance.
 bindHTTPRequest_set_use_threads :: MethodBind
 bindHTTPRequest_set_use_threads
   = unsafePerformIO $
@@ -555,7 +679,7 @@ bindHTTPRequest_set_use_threads
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], multithreading is used to improve performance.
+-- | If @true@, multithreading is used to improve performance.
 set_use_threads ::
                   (HTTPRequest :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_threads cls arg1
@@ -565,3 +689,7 @@ set_use_threads cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HTTPRequest "set_use_threads" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.HTTPRequest.set_use_threads

@@ -35,9 +35,14 @@ module Godot.Core.ARVRServer
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 _RESET_BUT_KEEP_TILT :: Int
 _RESET_BUT_KEEP_TILT = 1
@@ -80,20 +85,31 @@ sig_interface_removed
 
 instance NodeSignal ARVRServer "interface_removed" '[GodotString]
 
--- | Emitted when a new tracker has been added. If you don't use a fixed number of controllers or if you're using [ARVRAnchor]s for an AR solution, it is important to react to this signal to add the appropriate [ARVRController] or [ARVRAnchor] nodes related to this new tracker.
+-- | Emitted when a new tracker has been added. If you don't use a fixed number of controllers or if you're using @ARVRAnchor@s for an AR solution, it is important to react to this signal to add the appropriate @ARVRController@ or @ARVRAnchor@ nodes related to this new tracker.
 sig_tracker_added :: Godot.Internal.Dispatch.Signal ARVRServer
 sig_tracker_added = Godot.Internal.Dispatch.Signal "tracker_added"
 
 instance NodeSignal ARVRServer "tracker_added"
            '[GodotString, Int, Int]
 
--- | Emitted when a tracker is removed. You should remove any [ARVRController] or [ARVRAnchor] points if applicable. This is not mandatory, the nodes simply become inactive and will be made active again when a new tracker becomes available (i.e. a new controller is switched on that takes the place of the previous one).
+-- | Emitted when a tracker is removed. You should remove any @ARVRController@ or @ARVRAnchor@ points if applicable. This is not mandatory, the nodes simply become inactive and will be made active again when a new tracker becomes available (i.e. a new controller is switched on that takes the place of the previous one).
 sig_tracker_removed :: Godot.Internal.Dispatch.Signal ARVRServer
 sig_tracker_removed
   = Godot.Internal.Dispatch.Signal "tracker_removed"
 
 instance NodeSignal ARVRServer "tracker_removed"
            '[GodotString, Int, Int]
+
+instance NodeProperty ARVRServer "primary_interface" ARVRInterface
+           'False
+         where
+        nodeProperty
+          = (get_primary_interface, wrapDroppingSetter set_primary_interface,
+             Nothing)
+
+instance NodeProperty ARVRServer "world_scale" Float 'False where
+        nodeProperty
+          = (get_world_scale, wrapDroppingSetter set_world_scale, Nothing)
 
 {-# NOINLINE bindARVRServer_center_on_hmd #-}
 
@@ -128,6 +144,10 @@ center_on_hmd cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "center_on_hmd" '[Int, Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.ARVRServer.center_on_hmd
+
 {-# NOINLINE bindARVRServer_find_interface #-}
 
 -- | Finds an interface by its name. For instance, if your project uses capabilities of an AR/VR platform, you can find the interface for that platform by name and initialize it.
@@ -151,6 +171,11 @@ find_interface cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRServer "find_interface" '[GodotString]
+           (IO ARVRInterface)
+         where
+        nodeMethod = Godot.Core.ARVRServer.find_interface
 
 {-# NOINLINE bindARVRServer_get_hmd_transform #-}
 
@@ -176,6 +201,11 @@ get_hmd_transform cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_hmd_transform" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_hmd_transform
+
 {-# NOINLINE bindARVRServer_get_interface #-}
 
 -- | Returns the interface registered at a given index in our list of interfaces.
@@ -200,9 +230,14 @@ get_interface cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_interface" '[Int]
+           (IO ARVRInterface)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_interface
+
 {-# NOINLINE bindARVRServer_get_interface_count #-}
 
--- | Returns the number of interfaces currently registered with the AR/VR server. If your project supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try to initialize each interface and use the first one that returns [code]true[/code].
+-- | Returns the number of interfaces currently registered with the AR/VR server. If your project supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try to initialize each interface and use the first one that returns @true@.
 bindARVRServer_get_interface_count :: MethodBind
 bindARVRServer_get_interface_count
   = unsafePerformIO $
@@ -212,7 +247,7 @@ bindARVRServer_get_interface_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of interfaces currently registered with the AR/VR server. If your project supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try to initialize each interface and use the first one that returns [code]true[/code].
+-- | Returns the number of interfaces currently registered with the AR/VR server. If your project supports multiple AR/VR platforms, you can look through the available interface, and either present the user with a selection or simply try to initialize each interface and use the first one that returns @true@.
 get_interface_count ::
                       (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_interface_count cls
@@ -223,6 +258,10 @@ get_interface_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRServer "get_interface_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_interface_count
 
 {-# NOINLINE bindARVRServer_get_interfaces #-}
 
@@ -247,9 +286,13 @@ get_interfaces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_interfaces" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_interfaces
+
 {-# NOINLINE bindARVRServer_get_last_commit_usec #-}
 
--- | Returns the absolute timestamp (in μs) of the last [ARVRServer] commit of the AR/VR eyes to [VisualServer]. The value comes from an internal call to [method OS.get_ticks_usec].
+-- | Returns the absolute timestamp (in μs) of the last @ARVRServer@ commit of the AR/VR eyes to @VisualServer@. The value comes from an internal call to @method OS.get_ticks_usec@.
 bindARVRServer_get_last_commit_usec :: MethodBind
 bindARVRServer_get_last_commit_usec
   = unsafePerformIO $
@@ -259,7 +302,7 @@ bindARVRServer_get_last_commit_usec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the absolute timestamp (in μs) of the last [ARVRServer] commit of the AR/VR eyes to [VisualServer]. The value comes from an internal call to [method OS.get_ticks_usec].
+-- | Returns the absolute timestamp (in μs) of the last @ARVRServer@ commit of the AR/VR eyes to @VisualServer@. The value comes from an internal call to @method OS.get_ticks_usec@.
 get_last_commit_usec ::
                        (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_last_commit_usec cls
@@ -271,9 +314,13 @@ get_last_commit_usec cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_last_commit_usec" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_last_commit_usec
+
 {-# NOINLINE bindARVRServer_get_last_frame_usec #-}
 
--- | Returns the duration (in μs) of the last frame. This is computed as the difference between [method get_last_commit_usec] and [method get_last_process_usec] when committing.
+-- | Returns the duration (in μs) of the last frame. This is computed as the difference between @method get_last_commit_usec@ and @method get_last_process_usec@ when committing.
 bindARVRServer_get_last_frame_usec :: MethodBind
 bindARVRServer_get_last_frame_usec
   = unsafePerformIO $
@@ -283,7 +330,7 @@ bindARVRServer_get_last_frame_usec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the duration (in μs) of the last frame. This is computed as the difference between [method get_last_commit_usec] and [method get_last_process_usec] when committing.
+-- | Returns the duration (in μs) of the last frame. This is computed as the difference between @method get_last_commit_usec@ and @method get_last_process_usec@ when committing.
 get_last_frame_usec ::
                       (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_last_frame_usec cls
@@ -295,9 +342,13 @@ get_last_frame_usec cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_last_frame_usec" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_last_frame_usec
+
 {-# NOINLINE bindARVRServer_get_last_process_usec #-}
 
--- | Returns the absolute timestamp (in μs) of the last [ARVRServer] process callback. The value comes from an internal call to [method OS.get_ticks_usec].
+-- | Returns the absolute timestamp (in μs) of the last @ARVRServer@ process callback. The value comes from an internal call to @method OS.get_ticks_usec@.
 bindARVRServer_get_last_process_usec :: MethodBind
 bindARVRServer_get_last_process_usec
   = unsafePerformIO $
@@ -307,7 +358,7 @@ bindARVRServer_get_last_process_usec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the absolute timestamp (in μs) of the last [ARVRServer] process callback. The value comes from an internal call to [method OS.get_ticks_usec].
+-- | Returns the absolute timestamp (in μs) of the last @ARVRServer@ process callback. The value comes from an internal call to @method OS.get_ticks_usec@.
 get_last_process_usec ::
                         (ARVRServer :< cls, Object :< cls) => cls -> IO Int
 get_last_process_usec cls
@@ -319,9 +370,13 @@ get_last_process_usec cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_last_process_usec" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_last_process_usec
+
 {-# NOINLINE bindARVRServer_get_primary_interface #-}
 
--- | The primary [ARVRInterface] currently bound to the [ARVRServer].
+-- | The primary @ARVRInterface@ currently bound to the @ARVRServer@.
 bindARVRServer_get_primary_interface :: MethodBind
 bindARVRServer_get_primary_interface
   = unsafePerformIO $
@@ -331,7 +386,7 @@ bindARVRServer_get_primary_interface
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The primary [ARVRInterface] currently bound to the [ARVRServer].
+-- | The primary @ARVRInterface@ currently bound to the @ARVRServer@.
 get_primary_interface ::
                         (ARVRServer :< cls, Object :< cls) => cls -> IO ARVRInterface
 get_primary_interface cls
@@ -342,6 +397,11 @@ get_primary_interface cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRServer "get_primary_interface" '[]
+           (IO ARVRInterface)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_primary_interface
 
 {-# NOINLINE bindARVRServer_get_reference_frame #-}
 
@@ -367,6 +427,11 @@ get_reference_frame cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_reference_frame" '[]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_reference_frame
+
 {-# NOINLINE bindARVRServer_get_tracker #-}
 
 -- | Returns the positional tracker at the given ID.
@@ -390,6 +455,11 @@ get_tracker cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRServer "get_tracker" '[Int]
+           (IO ARVRPositionalTracker)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_tracker
 
 {-# NOINLINE bindARVRServer_get_tracker_count #-}
 
@@ -415,6 +485,10 @@ get_tracker_count cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_tracker_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_tracker_count
+
 {-# NOINLINE bindARVRServer_get_world_scale #-}
 
 -- | Allows you to adjust the scale to your game's units. Most AR/VR platforms assume a scale of 1 game world unit = 1 real world meter.
@@ -438,9 +512,13 @@ get_world_scale cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ARVRServer "get_world_scale" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ARVRServer.get_world_scale
+
 {-# NOINLINE bindARVRServer_set_primary_interface #-}
 
--- | The primary [ARVRInterface] currently bound to the [ARVRServer].
+-- | The primary @ARVRInterface@ currently bound to the @ARVRServer@.
 bindARVRServer_set_primary_interface :: MethodBind
 bindARVRServer_set_primary_interface
   = unsafePerformIO $
@@ -450,7 +528,7 @@ bindARVRServer_set_primary_interface
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The primary [ARVRInterface] currently bound to the [ARVRServer].
+-- | The primary @ARVRInterface@ currently bound to the @ARVRServer@.
 set_primary_interface ::
                         (ARVRServer :< cls, Object :< cls) => cls -> ARVRInterface -> IO ()
 set_primary_interface cls arg1
@@ -461,6 +539,12 @@ set_primary_interface cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRServer "set_primary_interface"
+           '[ARVRInterface]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ARVRServer.set_primary_interface
 
 {-# NOINLINE bindARVRServer_set_world_scale #-}
 
@@ -484,3 +568,7 @@ set_world_scale cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ARVRServer "set_world_scale" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ARVRServer.set_world_scale

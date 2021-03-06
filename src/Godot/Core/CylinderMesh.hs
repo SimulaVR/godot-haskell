@@ -16,9 +16,36 @@ module Godot.Core.CylinderMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PrimitiveMesh()
+
+instance NodeProperty CylinderMesh "bottom_radius" Float 'False
+         where
+        nodeProperty
+          = (get_bottom_radius, wrapDroppingSetter set_bottom_radius,
+             Nothing)
+
+instance NodeProperty CylinderMesh "height" Float 'False where
+        nodeProperty = (get_height, wrapDroppingSetter set_height, Nothing)
+
+instance NodeProperty CylinderMesh "radial_segments" Int 'False
+         where
+        nodeProperty
+          = (get_radial_segments, wrapDroppingSetter set_radial_segments,
+             Nothing)
+
+instance NodeProperty CylinderMesh "rings" Int 'False where
+        nodeProperty = (get_rings, wrapDroppingSetter set_rings, Nothing)
+
+instance NodeProperty CylinderMesh "top_radius" Float 'False where
+        nodeProperty
+          = (get_top_radius, wrapDroppingSetter set_top_radius, Nothing)
 
 {-# NOINLINE bindCylinderMesh_get_bottom_radius #-}
 
@@ -44,6 +71,10 @@ get_bottom_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CylinderMesh "get_bottom_radius" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CylinderMesh.get_bottom_radius
+
 {-# NOINLINE bindCylinderMesh_get_height #-}
 
 -- | Full height of the cylinder.
@@ -66,6 +97,9 @@ get_height cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CylinderMesh "get_height" '[] (IO Float) where
+        nodeMethod = Godot.Core.CylinderMesh.get_height
 
 {-# NOINLINE bindCylinderMesh_get_radial_segments #-}
 
@@ -91,6 +125,10 @@ get_radial_segments cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CylinderMesh "get_radial_segments" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.CylinderMesh.get_radial_segments
+
 {-# NOINLINE bindCylinderMesh_get_rings #-}
 
 -- | Number of edge rings along the height of the cylinder.
@@ -112,6 +150,9 @@ get_rings cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CylinderMesh "get_rings" '[] (IO Int) where
+        nodeMethod = Godot.Core.CylinderMesh.get_rings
 
 {-# NOINLINE bindCylinderMesh_get_top_radius #-}
 
@@ -135,6 +176,10 @@ get_top_radius cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CylinderMesh "get_top_radius" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.CylinderMesh.get_top_radius
 
 {-# NOINLINE bindCylinderMesh_set_bottom_radius #-}
 
@@ -160,6 +205,11 @@ set_bottom_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CylinderMesh "set_bottom_radius" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CylinderMesh.set_bottom_radius
+
 {-# NOINLINE bindCylinderMesh_set_height #-}
 
 -- | Full height of the cylinder.
@@ -182,6 +232,10 @@ set_height cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CylinderMesh "set_height" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CylinderMesh.set_height
 
 {-# NOINLINE bindCylinderMesh_set_radial_segments #-}
 
@@ -207,6 +261,11 @@ set_radial_segments cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CylinderMesh "set_radial_segments" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CylinderMesh.set_radial_segments
+
 {-# NOINLINE bindCylinderMesh_set_rings #-}
 
 -- | Number of edge rings along the height of the cylinder.
@@ -230,6 +289,9 @@ set_rings cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CylinderMesh "set_rings" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.CylinderMesh.set_rings
+
 {-# NOINLINE bindCylinderMesh_set_top_radius #-}
 
 -- | Top radius of the cylinder.
@@ -252,3 +314,7 @@ set_top_radius cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CylinderMesh "set_top_radius" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CylinderMesh.set_top_radius

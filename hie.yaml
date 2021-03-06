@@ -8,6 +8,3 @@ cradle:
 
     - path: "./project-generator/Main.hs"
       component: "godot-haskell:exe:godot-haskell-project-generator"
-
-    - path: "./project-generator/Paths_godot_haskell.hs"
-      component: "godot-haskell:exe:godot-haskell-project-generator"

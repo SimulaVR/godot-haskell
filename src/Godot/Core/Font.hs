@@ -13,14 +13,19 @@ module Godot.Core.Font
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 {-# NOINLINE bindFont_draw #-}
 
--- | Draw [code]string[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis.
---   				See also [method CanvasItem.draw_string].
+-- | Draw @string@ into a canvas item using the font at a given position, with @modulate@ color, and optionally clipping the width. @position@ specifies the baseline, not the top. To draw from the top, @i@ascent@/i@ must be added to the Y axis.
+--   				See also @method CanvasItem.draw_string@.
 bindFont_draw :: MethodBind
 bindFont_draw
   = unsafePerformIO $
@@ -30,23 +35,33 @@ bindFont_draw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draw [code]string[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis.
---   				See also [method CanvasItem.draw_string].
+-- | Draw @string@ into a canvas item using the font at a given position, with @modulate@ color, and optionally clipping the width. @position@ specifies the baseline, not the top. To draw from the top, @i@ascent@/i@ must be added to the Y axis.
+--   				See also @method CanvasItem.draw_string@.
 draw ::
        (Font :< cls, Object :< cls) =>
        cls ->
-         Rid -> Vector2 -> GodotString -> Color -> Int -> Color -> IO ()
+         Rid ->
+           Vector2 ->
+             GodotString -> Maybe Color -> Maybe Int -> Maybe Color -> IO ()
 draw cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg4,
+       maybe (VariantInt (-1)) toVariant arg5,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindFont_draw (upcast cls) arrPtr len >>=
            \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Font "draw"
+           '[Rid, Vector2, GodotString, Maybe Color, Maybe Int, Maybe Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Font.draw
+
 {-# NOINLINE bindFont_draw_char #-}
 
--- | Draw character [code]char[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally kerning if [code]next[/code] is passed. clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
+-- | Draw character @char@ into a canvas item using the font at a given position, with @modulate@ color, and optionally kerning if @next@ is passed. clipping the width. @position@ specifies the baseline, not the top. To draw from the top, @i@ascent@/i@ must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
 bindFont_draw_char :: MethodBind
 bindFont_draw_char
   = unsafePerformIO $
@@ -56,17 +71,28 @@ bindFont_draw_char
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draw character [code]char[/code] into a canvas item using the font at a given position, with [code]modulate[/code] color, and optionally kerning if [code]next[/code] is passed. clipping the width. [code]position[/code] specifies the baseline, not the top. To draw from the top, [i]ascent[/i] must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
+-- | Draw character @char@ into a canvas item using the font at a given position, with @modulate@ color, and optionally kerning if @next@ is passed. clipping the width. @position@ specifies the baseline, not the top. To draw from the top, @i@ascent@/i@ must be added to the Y axis. The width used by the character is returned, making this function useful for drawing strings character by character.
 draw_char ::
             (Font :< cls, Object :< cls) =>
-            cls -> Rid -> Vector2 -> Int -> Int -> Color -> Bool -> IO Float
+            cls ->
+              Rid ->
+                Vector2 ->
+                  Int -> Maybe Int -> Maybe Color -> Maybe Bool -> IO Float
 draw_char cls arg1 arg2 arg3 arg4 arg5 arg6
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4,
-       toVariant arg5, toVariant arg6]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantInt (-1)) toVariant arg4,
+       defaultedVariant VariantColor (withOpacity (sRGB 1 1 1) 1) arg5,
+       maybe (VariantBool False) toVariant arg6]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindFont_draw_char (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Font "draw_char"
+           '[Rid, Vector2, Int, Maybe Int, Maybe Color, Maybe Bool]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Font.draw_char
 
 {-# NOINLINE bindFont_get_ascent #-}
 
@@ -88,6 +114,9 @@ get_ascent cls
          godot_method_bind_call bindFont_get_ascent (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Font "get_ascent" '[] (IO Float) where
+        nodeMethod = Godot.Core.Font.get_ascent
+
 {-# NOINLINE bindFont_get_descent #-}
 
 -- | Returns the font descent (number of pixels below the baseline).
@@ -108,6 +137,9 @@ get_descent cls
          godot_method_bind_call bindFont_get_descent (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Font "get_descent" '[] (IO Float) where
+        nodeMethod = Godot.Core.Font.get_descent
+
 {-# NOINLINE bindFont_get_height #-}
 
 -- | Returns the total font height (ascent plus descent) in pixels.
@@ -127,6 +159,9 @@ get_height cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindFont_get_height (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Font "get_height" '[] (IO Float) where
+        nodeMethod = Godot.Core.Font.get_height
 
 {-# NOINLINE bindFont_get_string_size #-}
 
@@ -150,9 +185,14 @@ get_string_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Font "get_string_size" '[GodotString]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Font.get_string_size
+
 {-# NOINLINE bindFont_get_wordwrap_string_size #-}
 
--- | Returns the size that the string would have with word wrapping enabled with a fixed [code]width[/code].
+-- | Returns the size that the string would have with word wrapping enabled with a fixed @width@.
 bindFont_get_wordwrap_string_size :: MethodBind
 bindFont_get_wordwrap_string_size
   = unsafePerformIO $
@@ -162,7 +202,7 @@ bindFont_get_wordwrap_string_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the size that the string would have with word wrapping enabled with a fixed [code]width[/code].
+-- | Returns the size that the string would have with word wrapping enabled with a fixed @width@.
 get_wordwrap_string_size ::
                            (Font :< cls, Object :< cls) =>
                            cls -> GodotString -> Float -> IO Vector2
@@ -175,9 +215,15 @@ get_wordwrap_string_size cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Font "get_wordwrap_string_size"
+           '[GodotString, Float]
+           (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Font.get_wordwrap_string_size
+
 {-# NOINLINE bindFont_has_outline #-}
 
--- | Returns [code]true[/code] if the font has an outline.
+-- | Returns @true@ if the font has an outline.
 bindFont_has_outline :: MethodBind
 bindFont_has_outline
   = unsafePerformIO $
@@ -187,13 +233,16 @@ bindFont_has_outline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the font has an outline.
+-- | Returns @true@ if the font has an outline.
 has_outline :: (Font :< cls, Object :< cls) => cls -> IO Bool
 has_outline cls
   = withVariantArray []
       (\ (arrPtr, len) ->
          godot_method_bind_call bindFont_has_outline (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Font "has_outline" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Font.has_outline
 
 {-# NOINLINE bindFont_is_distance_field_hint #-}
 
@@ -216,6 +265,10 @@ is_distance_field_hint cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Font "is_distance_field_hint" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Font.is_distance_field_hint
+
 {-# NOINLINE bindFont_update_changes #-}
 
 -- | After editing a font (changing size, ascent, char rects, etc.). Call this function to propagate changes to controls that might use it.
@@ -236,3 +289,6 @@ update_changes cls
          godot_method_bind_call bindFont_update_changes (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Font "update_changes" '[] (IO ()) where
+        nodeMethod = Godot.Core.Font.update_changes

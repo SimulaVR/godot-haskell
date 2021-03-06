@@ -12,13 +12,35 @@ module Godot.Core.Joint
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
+
+instance NodeProperty Joint "collision/exclude_nodes" Bool 'False
+         where
+        nodeProperty
+          = (get_exclude_nodes_from_collision,
+             wrapDroppingSetter set_exclude_nodes_from_collision, Nothing)
+
+instance NodeProperty Joint "nodes/node_a" NodePath 'False where
+        nodeProperty = (get_node_a, wrapDroppingSetter set_node_a, Nothing)
+
+instance NodeProperty Joint "nodes/node_b" NodePath 'False where
+        nodeProperty = (get_node_b, wrapDroppingSetter set_node_b, Nothing)
+
+instance NodeProperty Joint "solver/priority" Int 'False where
+        nodeProperty
+          = (get_solver_priority, wrapDroppingSetter set_solver_priority,
+             Nothing)
 
 {-# NOINLINE bindJoint_get_exclude_nodes_from_collision #-}
 
--- | If [code]true[/code], the two bodies of the nodes are not able to collide with each other.
+-- | If @true@, the two bodies of the nodes are not able to collide with each other.
 bindJoint_get_exclude_nodes_from_collision :: MethodBind
 bindJoint_get_exclude_nodes_from_collision
   = unsafePerformIO $
@@ -28,7 +50,7 @@ bindJoint_get_exclude_nodes_from_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the two bodies of the nodes are not able to collide with each other.
+-- | If @true@, the two bodies of the nodes are not able to collide with each other.
 get_exclude_nodes_from_collision ::
                                    (Joint :< cls, Object :< cls) => cls -> IO Bool
 get_exclude_nodes_from_collision cls
@@ -39,6 +61,11 @@ get_exclude_nodes_from_collision cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Joint "get_exclude_nodes_from_collision" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Joint.get_exclude_nodes_from_collision
 
 {-# NOINLINE bindJoint_get_node_a #-}
 
@@ -60,6 +87,9 @@ get_node_a cls
          godot_method_bind_call bindJoint_get_node_a (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Joint "get_node_a" '[] (IO NodePath) where
+        nodeMethod = Godot.Core.Joint.get_node_a
+
 {-# NOINLINE bindJoint_get_node_b #-}
 
 -- | The node attached to the second side (B) of the joint.
@@ -79,6 +109,9 @@ get_node_b cls
       (\ (arrPtr, len) ->
          godot_method_bind_call bindJoint_get_node_b (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Joint "get_node_b" '[] (IO NodePath) where
+        nodeMethod = Godot.Core.Joint.get_node_b
 
 {-# NOINLINE bindJoint_get_solver_priority #-}
 
@@ -103,9 +136,12 @@ get_solver_priority cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Joint "get_solver_priority" '[] (IO Int) where
+        nodeMethod = Godot.Core.Joint.get_solver_priority
+
 {-# NOINLINE bindJoint_set_exclude_nodes_from_collision #-}
 
--- | If [code]true[/code], the two bodies of the nodes are not able to collide with each other.
+-- | If @true@, the two bodies of the nodes are not able to collide with each other.
 bindJoint_set_exclude_nodes_from_collision :: MethodBind
 bindJoint_set_exclude_nodes_from_collision
   = unsafePerformIO $
@@ -115,7 +151,7 @@ bindJoint_set_exclude_nodes_from_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the two bodies of the nodes are not able to collide with each other.
+-- | If @true@, the two bodies of the nodes are not able to collide with each other.
 set_exclude_nodes_from_collision ::
                                    (Joint :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_exclude_nodes_from_collision cls arg1
@@ -126,6 +162,12 @@ set_exclude_nodes_from_collision cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Joint "set_exclude_nodes_from_collision"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Joint.set_exclude_nodes_from_collision
 
 {-# NOINLINE bindJoint_set_node_a #-}
 
@@ -148,6 +190,9 @@ set_node_a cls arg1
          godot_method_bind_call bindJoint_set_node_a (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Joint "set_node_a" '[NodePath] (IO ()) where
+        nodeMethod = Godot.Core.Joint.set_node_a
+
 {-# NOINLINE bindJoint_set_node_b #-}
 
 -- | The node attached to the second side (B) of the joint.
@@ -168,6 +213,9 @@ set_node_b cls arg1
       (\ (arrPtr, len) ->
          godot_method_bind_call bindJoint_set_node_b (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Joint "set_node_b" '[NodePath] (IO ()) where
+        nodeMethod = Godot.Core.Joint.set_node_b
 
 {-# NOINLINE bindJoint_set_solver_priority #-}
 
@@ -191,3 +239,7 @@ set_solver_priority cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Joint "set_solver_priority" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Joint.set_solver_priority

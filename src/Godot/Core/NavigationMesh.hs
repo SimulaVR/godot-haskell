@@ -65,9 +65,14 @@ module Godot.Core.NavigationMesh
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 _SAMPLE_PARTITION_LAYERS :: Int
 _SAMPLE_PARTITION_LAYERS = 2
@@ -86,6 +91,160 @@ _PARSED_GEOMETRY_MESH_INSTANCES = 0
 
 _PARSED_GEOMETRY_STATIC_COLLIDERS :: Int
 _PARSED_GEOMETRY_STATIC_COLLIDERS = 1
+
+instance NodeProperty NavigationMesh "agent/height" Float 'False
+         where
+        nodeProperty
+          = (get_agent_height, wrapDroppingSetter set_agent_height, Nothing)
+
+instance NodeProperty NavigationMesh "agent/max_climb" Float 'False
+         where
+        nodeProperty
+          = (get_agent_max_climb, wrapDroppingSetter set_agent_max_climb,
+             Nothing)
+
+instance NodeProperty NavigationMesh "agent/max_slope" Float 'False
+         where
+        nodeProperty
+          = (get_agent_max_slope, wrapDroppingSetter set_agent_max_slope,
+             Nothing)
+
+instance NodeProperty NavigationMesh "agent/radius" Float 'False
+         where
+        nodeProperty
+          = (get_agent_radius, wrapDroppingSetter set_agent_radius, Nothing)
+
+instance NodeProperty NavigationMesh "cell/height" Float 'False
+         where
+        nodeProperty
+          = (get_cell_height, wrapDroppingSetter set_cell_height, Nothing)
+
+instance NodeProperty NavigationMesh "cell/size" Float 'False where
+        nodeProperty
+          = (get_cell_size, wrapDroppingSetter set_cell_size, Nothing)
+
+instance NodeProperty NavigationMesh "detail/sample_distance" Float
+           'False
+         where
+        nodeProperty
+          = (get_detail_sample_distance,
+             wrapDroppingSetter set_detail_sample_distance, Nothing)
+
+instance NodeProperty NavigationMesh "detail/sample_max_error"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_detail_sample_max_error,
+             wrapDroppingSetter set_detail_sample_max_error, Nothing)
+
+instance NodeProperty NavigationMesh "edge/max_error" Float 'False
+         where
+        nodeProperty
+          = (get_edge_max_error, wrapDroppingSetter set_edge_max_error,
+             Nothing)
+
+instance NodeProperty NavigationMesh "edge/max_length" Float 'False
+         where
+        nodeProperty
+          = (get_edge_max_length, wrapDroppingSetter set_edge_max_length,
+             Nothing)
+
+instance NodeProperty NavigationMesh
+           "filter/filter_walkable_low_height_spans"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (get_filter_walkable_low_height_spans,
+             wrapDroppingSetter set_filter_walkable_low_height_spans, Nothing)
+
+instance NodeProperty NavigationMesh "filter/ledge_spans" Bool
+           'False
+         where
+        nodeProperty
+          = (get_filter_ledge_spans,
+             wrapDroppingSetter set_filter_ledge_spans, Nothing)
+
+instance NodeProperty NavigationMesh "filter/low_hanging_obstacles"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (get_filter_low_hanging_obstacles,
+             wrapDroppingSetter set_filter_low_hanging_obstacles, Nothing)
+
+instance NodeProperty NavigationMesh "geometry/collision_mask" Int
+           'False
+         where
+        nodeProperty
+          = (get_collision_mask, wrapDroppingSetter set_collision_mask,
+             Nothing)
+
+instance NodeProperty NavigationMesh
+           "geometry/parsed_geometry_type"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_parsed_geometry_type,
+             wrapDroppingSetter set_parsed_geometry_type, Nothing)
+
+instance NodeProperty NavigationMesh
+           "geometry/source_geometry_mode"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_source_geometry_mode,
+             wrapDroppingSetter set_source_geometry_mode, Nothing)
+
+instance NodeProperty NavigationMesh "geometry/source_group_name"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_source_group_name, wrapDroppingSetter set_source_group_name,
+             Nothing)
+
+instance NodeProperty NavigationMesh "polygon/verts_per_poly" Float
+           'False
+         where
+        nodeProperty
+          = (get_verts_per_poly, wrapDroppingSetter set_verts_per_poly,
+             Nothing)
+
+instance NodeProperty NavigationMesh "polygons" Array 'False where
+        nodeProperty
+          = (_get_polygons, wrapDroppingSetter _set_polygons, Nothing)
+
+instance NodeProperty NavigationMesh "region/merge_size" Float
+           'False
+         where
+        nodeProperty
+          = (get_region_merge_size, wrapDroppingSetter set_region_merge_size,
+             Nothing)
+
+instance NodeProperty NavigationMesh "region/min_size" Float 'False
+         where
+        nodeProperty
+          = (get_region_min_size, wrapDroppingSetter set_region_min_size,
+             Nothing)
+
+instance NodeProperty NavigationMesh
+           "sample_partition_type/sample_partition_type"
+           Int
+           'False
+         where
+        nodeProperty
+          = (get_sample_partition_type,
+             wrapDroppingSetter set_sample_partition_type, Nothing)
+
+instance NodeProperty NavigationMesh "vertices" PoolVector3Array
+           'False
+         where
+        nodeProperty
+          = (get_vertices, wrapDroppingSetter set_vertices, Nothing)
 
 {-# NOINLINE bindNavigationMesh__get_polygons #-}
 
@@ -109,6 +268,10 @@ _get_polygons cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "_get_polygons" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.NavigationMesh._get_polygons
+
 {-# NOINLINE bindNavigationMesh__set_polygons #-}
 
 bindNavigationMesh__set_polygons :: MethodBind
@@ -130,6 +293,10 @@ _set_polygons cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "_set_polygons" '[Array] (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh._set_polygons
 
 {-# NOINLINE bindNavigationMesh_add_polygon #-}
 
@@ -153,6 +320,11 @@ add_polygon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "add_polygon" '[PoolIntArray]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.add_polygon
+
 {-# NOINLINE bindNavigationMesh_clear_polygons #-}
 
 bindNavigationMesh_clear_polygons :: MethodBind
@@ -174,6 +346,10 @@ clear_polygons cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "clear_polygons" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.clear_polygons
 
 {-# NOINLINE bindNavigationMesh_create_from_mesh #-}
 
@@ -197,6 +373,11 @@ create_from_mesh cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "create_from_mesh" '[Mesh]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.create_from_mesh
+
 {-# NOINLINE bindNavigationMesh_get_agent_height #-}
 
 bindNavigationMesh_get_agent_height :: MethodBind
@@ -218,6 +399,11 @@ get_agent_height cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_agent_height" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_agent_height
 
 {-# NOINLINE bindNavigationMesh_get_agent_max_climb #-}
 
@@ -241,6 +427,11 @@ get_agent_max_climb cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_agent_max_climb" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_agent_max_climb
+
 {-# NOINLINE bindNavigationMesh_get_agent_max_slope #-}
 
 bindNavigationMesh_get_agent_max_slope :: MethodBind
@@ -262,6 +453,11 @@ get_agent_max_slope cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_agent_max_slope" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_agent_max_slope
 
 {-# NOINLINE bindNavigationMesh_get_agent_radius #-}
 
@@ -285,6 +481,11 @@ get_agent_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_agent_radius" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_agent_radius
+
 {-# NOINLINE bindNavigationMesh_get_cell_height #-}
 
 bindNavigationMesh_get_cell_height :: MethodBind
@@ -306,6 +507,10 @@ get_cell_height cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_cell_height" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_cell_height
 
 {-# NOINLINE bindNavigationMesh_get_cell_size #-}
 
@@ -329,6 +534,10 @@ get_cell_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_cell_size" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_cell_size
+
 {-# NOINLINE bindNavigationMesh_get_collision_mask #-}
 
 bindNavigationMesh_get_collision_mask :: MethodBind
@@ -351,6 +560,11 @@ get_collision_mask cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_collision_mask" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_collision_mask
+
 {-# NOINLINE bindNavigationMesh_get_collision_mask_bit #-}
 
 bindNavigationMesh_get_collision_mask_bit :: MethodBind
@@ -372,6 +586,11 @@ get_collision_mask_bit cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_collision_mask_bit" '[Int]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_collision_mask_bit
 
 {-# NOINLINE bindNavigationMesh_get_detail_sample_distance #-}
 
@@ -396,6 +615,11 @@ get_detail_sample_distance cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_detail_sample_distance" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_detail_sample_distance
+
 {-# NOINLINE bindNavigationMesh_get_detail_sample_max_error #-}
 
 bindNavigationMesh_get_detail_sample_max_error :: MethodBind
@@ -419,6 +643,12 @@ get_detail_sample_max_error cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_detail_sample_max_error"
+           '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_detail_sample_max_error
+
 {-# NOINLINE bindNavigationMesh_get_edge_max_error #-}
 
 bindNavigationMesh_get_edge_max_error :: MethodBind
@@ -440,6 +670,11 @@ get_edge_max_error cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_edge_max_error" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_edge_max_error
 
 {-# NOINLINE bindNavigationMesh_get_edge_max_length #-}
 
@@ -463,6 +698,11 @@ get_edge_max_length cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_edge_max_length" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_edge_max_length
+
 {-# NOINLINE bindNavigationMesh_get_filter_ledge_spans #-}
 
 bindNavigationMesh_get_filter_ledge_spans :: MethodBind
@@ -484,6 +724,11 @@ get_filter_ledge_spans cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_filter_ledge_spans" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_filter_ledge_spans
 
 {-# NOINLINE bindNavigationMesh_get_filter_low_hanging_obstacles
              #-}
@@ -508,6 +753,14 @@ get_filter_low_hanging_obstacles cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh
+           "get_filter_low_hanging_obstacles"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.NavigationMesh.get_filter_low_hanging_obstacles
 
 {-# NOINLINE bindNavigationMesh_get_filter_walkable_low_height_spans
              #-}
@@ -534,6 +787,14 @@ get_filter_walkable_low_height_spans cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh
+           "get_filter_walkable_low_height_spans"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.NavigationMesh.get_filter_walkable_low_height_spans
+
 {-# NOINLINE bindNavigationMesh_get_parsed_geometry_type #-}
 
 bindNavigationMesh_get_parsed_geometry_type :: MethodBind
@@ -555,6 +816,11 @@ get_parsed_geometry_type cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_parsed_geometry_type" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_parsed_geometry_type
 
 {-# NOINLINE bindNavigationMesh_get_polygon #-}
 
@@ -578,6 +844,11 @@ get_polygon cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_polygon" '[Int]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_polygon
+
 {-# NOINLINE bindNavigationMesh_get_polygon_count #-}
 
 bindNavigationMesh_get_polygon_count :: MethodBind
@@ -599,6 +870,10 @@ get_polygon_count cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_polygon_count" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_polygon_count
 
 {-# NOINLINE bindNavigationMesh_get_region_merge_size #-}
 
@@ -622,6 +897,11 @@ get_region_merge_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_region_merge_size" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_region_merge_size
+
 {-# NOINLINE bindNavigationMesh_get_region_min_size #-}
 
 bindNavigationMesh_get_region_min_size :: MethodBind
@@ -643,6 +923,11 @@ get_region_min_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_region_min_size" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_region_min_size
 
 {-# NOINLINE bindNavigationMesh_get_sample_partition_type #-}
 
@@ -666,6 +951,11 @@ get_sample_partition_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_sample_partition_type" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_sample_partition_type
+
 {-# NOINLINE bindNavigationMesh_get_source_geometry_mode #-}
 
 bindNavigationMesh_get_source_geometry_mode :: MethodBind
@@ -687,6 +977,11 @@ get_source_geometry_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_source_geometry_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_source_geometry_mode
 
 {-# NOINLINE bindNavigationMesh_get_source_group_name #-}
 
@@ -710,6 +1005,11 @@ get_source_group_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_source_group_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_source_group_name
+
 {-# NOINLINE bindNavigationMesh_get_vertices #-}
 
 bindNavigationMesh_get_vertices :: MethodBind
@@ -731,6 +1031,11 @@ get_vertices cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "get_vertices" '[]
+           (IO PoolVector3Array)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_vertices
 
 {-# NOINLINE bindNavigationMesh_get_verts_per_poly #-}
 
@@ -754,6 +1059,11 @@ get_verts_per_poly cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "get_verts_per_poly" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.NavigationMesh.get_verts_per_poly
+
 {-# NOINLINE bindNavigationMesh_set_agent_height #-}
 
 bindNavigationMesh_set_agent_height :: MethodBind
@@ -775,6 +1085,11 @@ set_agent_height cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_agent_height" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_agent_height
 
 {-# NOINLINE bindNavigationMesh_set_agent_max_climb #-}
 
@@ -798,6 +1113,11 @@ set_agent_max_climb cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_agent_max_climb" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_agent_max_climb
+
 {-# NOINLINE bindNavigationMesh_set_agent_max_slope #-}
 
 bindNavigationMesh_set_agent_max_slope :: MethodBind
@@ -819,6 +1139,11 @@ set_agent_max_slope cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_agent_max_slope" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_agent_max_slope
 
 {-# NOINLINE bindNavigationMesh_set_agent_radius #-}
 
@@ -842,6 +1167,11 @@ set_agent_radius cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_agent_radius" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_agent_radius
+
 {-# NOINLINE bindNavigationMesh_set_cell_height #-}
 
 bindNavigationMesh_set_cell_height :: MethodBind
@@ -863,6 +1193,11 @@ set_cell_height cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_cell_height" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_cell_height
 
 {-# NOINLINE bindNavigationMesh_set_cell_size #-}
 
@@ -886,6 +1221,10 @@ set_cell_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_cell_size" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_cell_size
+
 {-# NOINLINE bindNavigationMesh_set_collision_mask #-}
 
 bindNavigationMesh_set_collision_mask :: MethodBind
@@ -907,6 +1246,11 @@ set_collision_mask cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_collision_mask" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_collision_mask
 
 {-# NOINLINE bindNavigationMesh_set_collision_mask_bit #-}
 
@@ -931,6 +1275,12 @@ set_collision_mask_bit cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_collision_mask_bit"
+           '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_collision_mask_bit
+
 {-# NOINLINE bindNavigationMesh_set_detail_sample_distance #-}
 
 bindNavigationMesh_set_detail_sample_distance :: MethodBind
@@ -953,6 +1303,12 @@ set_detail_sample_distance cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_detail_sample_distance"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_detail_sample_distance
 
 {-# NOINLINE bindNavigationMesh_set_detail_sample_max_error #-}
 
@@ -977,6 +1333,12 @@ set_detail_sample_max_error cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_detail_sample_max_error"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_detail_sample_max_error
+
 {-# NOINLINE bindNavigationMesh_set_edge_max_error #-}
 
 bindNavigationMesh_set_edge_max_error :: MethodBind
@@ -998,6 +1360,11 @@ set_edge_max_error cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_edge_max_error" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_edge_max_error
 
 {-# NOINLINE bindNavigationMesh_set_edge_max_length #-}
 
@@ -1021,6 +1388,11 @@ set_edge_max_length cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_edge_max_length" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_edge_max_length
+
 {-# NOINLINE bindNavigationMesh_set_filter_ledge_spans #-}
 
 bindNavigationMesh_set_filter_ledge_spans :: MethodBind
@@ -1042,6 +1414,11 @@ set_filter_ledge_spans cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_filter_ledge_spans" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_filter_ledge_spans
 
 {-# NOINLINE bindNavigationMesh_set_filter_low_hanging_obstacles
              #-}
@@ -1066,6 +1443,14 @@ set_filter_low_hanging_obstacles cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh
+           "set_filter_low_hanging_obstacles"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NavigationMesh.set_filter_low_hanging_obstacles
 
 {-# NOINLINE bindNavigationMesh_set_filter_walkable_low_height_spans
              #-}
@@ -1093,6 +1478,14 @@ set_filter_walkable_low_height_spans cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh
+           "set_filter_walkable_low_height_spans"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.NavigationMesh.set_filter_walkable_low_height_spans
+
 {-# NOINLINE bindNavigationMesh_set_parsed_geometry_type #-}
 
 bindNavigationMesh_set_parsed_geometry_type :: MethodBind
@@ -1114,6 +1507,12 @@ set_parsed_geometry_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_parsed_geometry_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_parsed_geometry_type
 
 {-# NOINLINE bindNavigationMesh_set_region_merge_size #-}
 
@@ -1137,6 +1536,11 @@ set_region_merge_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_region_merge_size" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_region_merge_size
+
 {-# NOINLINE bindNavigationMesh_set_region_min_size #-}
 
 bindNavigationMesh_set_region_min_size :: MethodBind
@@ -1158,6 +1562,11 @@ set_region_min_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_region_min_size" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_region_min_size
 
 {-# NOINLINE bindNavigationMesh_set_sample_partition_type #-}
 
@@ -1181,6 +1590,12 @@ set_sample_partition_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_sample_partition_type"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_sample_partition_type
+
 {-# NOINLINE bindNavigationMesh_set_source_geometry_mode #-}
 
 bindNavigationMesh_set_source_geometry_mode :: MethodBind
@@ -1202,6 +1617,12 @@ set_source_geometry_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_source_geometry_mode"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_source_geometry_mode
 
 {-# NOINLINE bindNavigationMesh_set_source_group_name #-}
 
@@ -1226,6 +1647,12 @@ set_source_group_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_source_group_name"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_source_group_name
+
 {-# NOINLINE bindNavigationMesh_set_vertices #-}
 
 bindNavigationMesh_set_vertices :: MethodBind
@@ -1248,6 +1675,12 @@ set_vertices cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod NavigationMesh "set_vertices"
+           '[PoolVector3Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_vertices
+
 {-# NOINLINE bindNavigationMesh_set_verts_per_poly #-}
 
 bindNavigationMesh_set_verts_per_poly :: MethodBind
@@ -1269,3 +1702,8 @@ set_verts_per_poly cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod NavigationMesh "set_verts_per_poly" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.NavigationMesh.set_verts_per_poly

@@ -8,9 +8,17 @@ module Godot.Core.CircleShape2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Shape2D()
+
+instance NodeProperty CircleShape2D "radius" Float 'False where
+        nodeProperty = (get_radius, wrapDroppingSetter set_radius, Nothing)
 
 {-# NOINLINE bindCircleShape2D_get_radius #-}
 
@@ -35,6 +43,9 @@ get_radius cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CircleShape2D "get_radius" '[] (IO Float) where
+        nodeMethod = Godot.Core.CircleShape2D.get_radius
+
 {-# NOINLINE bindCircleShape2D_set_radius #-}
 
 -- | The circle's radius.
@@ -57,3 +68,7 @@ set_radius cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CircleShape2D "set_radius" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.CircleShape2D.set_radius

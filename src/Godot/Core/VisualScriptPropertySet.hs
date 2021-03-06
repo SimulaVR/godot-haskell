@@ -39,9 +39,14 @@ module Godot.Core.VisualScriptPropertySet
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualScriptNode()
 
 _CALL_MODE_BASIC_TYPE :: Int
 _CALL_MODE_BASIC_TYPE = 3
@@ -88,6 +93,62 @@ _CALL_MODE_INSTANCE = 2
 _ASSIGN_OP_BIT_XOR :: Int
 _ASSIGN_OP_BIT_XOR = 10
 
+instance NodeProperty VisualScriptPropertySet "assign_op" Int
+           'False
+         where
+        nodeProperty
+          = (get_assign_op, wrapDroppingSetter set_assign_op, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "base_script"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_base_script, wrapDroppingSetter set_base_script, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "base_type"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_base_type, wrapDroppingSetter set_base_type, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "basic_type" Int
+           'False
+         where
+        nodeProperty
+          = (get_basic_type, wrapDroppingSetter set_basic_type, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "index" GodotString
+           'False
+         where
+        nodeProperty = (get_index, wrapDroppingSetter set_index, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "node_path" NodePath
+           'False
+         where
+        nodeProperty
+          = (get_base_path, wrapDroppingSetter set_base_path, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "property"
+           GodotString
+           'False
+         where
+        nodeProperty
+          = (get_property, wrapDroppingSetter set_property, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "set_mode" Int 'False
+         where
+        nodeProperty
+          = (get_call_mode, wrapDroppingSetter set_call_mode, Nothing)
+
+instance NodeProperty VisualScriptPropertySet "type_cache"
+           Dictionary
+           'False
+         where
+        nodeProperty
+          = (_get_type_cache, wrapDroppingSetter _set_type_cache, Nothing)
+
 {-# NOINLINE bindVisualScriptPropertySet__get_type_cache #-}
 
 bindVisualScriptPropertySet__get_type_cache :: MethodBind
@@ -110,6 +171,11 @@ _get_type_cache cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "_get_type_cache" '[]
+           (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet._get_type_cache
 
 {-# NOINLINE bindVisualScriptPropertySet__set_type_cache #-}
 
@@ -134,6 +200,12 @@ _set_type_cache cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "_set_type_cache"
+           '[Dictionary]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet._set_type_cache
+
 {-# NOINLINE bindVisualScriptPropertySet_get_assign_op #-}
 
 bindVisualScriptPropertySet_get_assign_op :: MethodBind
@@ -155,6 +227,11 @@ get_assign_op cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "get_assign_op" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_assign_op
 
 {-# NOINLINE bindVisualScriptPropertySet_get_base_path #-}
 
@@ -179,6 +256,11 @@ get_base_path cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "get_base_path" '[]
+           (IO NodePath)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_base_path
+
 {-# NOINLINE bindVisualScriptPropertySet_get_base_script #-}
 
 bindVisualScriptPropertySet_get_base_script :: MethodBind
@@ -201,6 +283,11 @@ get_base_script cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "get_base_script" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_base_script
 
 {-# NOINLINE bindVisualScriptPropertySet_get_base_type #-}
 
@@ -225,6 +312,11 @@ get_base_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "get_base_type" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_base_type
+
 {-# NOINLINE bindVisualScriptPropertySet_get_basic_type #-}
 
 bindVisualScriptPropertySet_get_basic_type :: MethodBind
@@ -247,6 +339,11 @@ get_basic_type cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "get_basic_type" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_basic_type
+
 {-# NOINLINE bindVisualScriptPropertySet_get_call_mode #-}
 
 bindVisualScriptPropertySet_get_call_mode :: MethodBind
@@ -268,6 +365,11 @@ get_call_mode cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "get_call_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_call_mode
 
 {-# NOINLINE bindVisualScriptPropertySet_get_index #-}
 
@@ -292,6 +394,11 @@ get_index cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "get_index" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_index
+
 {-# NOINLINE bindVisualScriptPropertySet_get_property #-}
 
 bindVisualScriptPropertySet_get_property :: MethodBind
@@ -314,6 +421,11 @@ get_property cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "get_property" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.get_property
 
 {-# NOINLINE bindVisualScriptPropertySet_set_assign_op #-}
 
@@ -338,6 +450,11 @@ set_assign_op cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "set_assign_op" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_assign_op
+
 {-# NOINLINE bindVisualScriptPropertySet_set_base_path #-}
 
 bindVisualScriptPropertySet_set_base_path :: MethodBind
@@ -360,6 +477,12 @@ set_base_path cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "set_base_path"
+           '[NodePath]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_base_path
 
 {-# NOINLINE bindVisualScriptPropertySet_set_base_script #-}
 
@@ -384,6 +507,12 @@ set_base_script cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "set_base_script"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_base_script
+
 {-# NOINLINE bindVisualScriptPropertySet_set_base_type #-}
 
 bindVisualScriptPropertySet_set_base_type :: MethodBind
@@ -406,6 +535,12 @@ set_base_type cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "set_base_type"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_base_type
 
 {-# NOINLINE bindVisualScriptPropertySet_set_basic_type #-}
 
@@ -430,6 +565,11 @@ set_basic_type cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "set_basic_type" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_basic_type
+
 {-# NOINLINE bindVisualScriptPropertySet_set_call_mode #-}
 
 bindVisualScriptPropertySet_set_call_mode :: MethodBind
@@ -452,6 +592,11 @@ set_call_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "set_call_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_call_mode
 
 {-# NOINLINE bindVisualScriptPropertySet_set_index #-}
 
@@ -476,6 +621,12 @@ set_index cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualScriptPropertySet "set_index"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_index
+
 {-# NOINLINE bindVisualScriptPropertySet_set_property #-}
 
 bindVisualScriptPropertySet_set_property :: MethodBind
@@ -498,3 +649,9 @@ set_property cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualScriptPropertySet "set_property"
+           '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualScriptPropertySet.set_property

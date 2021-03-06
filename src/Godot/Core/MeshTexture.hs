@@ -12,9 +12,26 @@ module Godot.Core.MeshTexture
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Texture()
+
+instance NodeProperty MeshTexture "base_texture" Texture 'False
+         where
+        nodeProperty
+          = (get_base_texture, wrapDroppingSetter set_base_texture, Nothing)
+
+instance NodeProperty MeshTexture "image_size" Vector2 'False where
+        nodeProperty
+          = (get_image_size, wrapDroppingSetter set_image_size, Nothing)
+
+instance NodeProperty MeshTexture "mesh" Mesh 'False where
+        nodeProperty = (get_mesh, wrapDroppingSetter set_mesh, Nothing)
 
 {-# NOINLINE bindMeshTexture_get_base_texture #-}
 
@@ -40,6 +57,10 @@ get_base_texture cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshTexture "get_base_texture" '[] (IO Texture)
+         where
+        nodeMethod = Godot.Core.MeshTexture.get_base_texture
+
 {-# NOINLINE bindMeshTexture_get_image_size #-}
 
 -- | Sets the size of the image, needed for reference.
@@ -63,6 +84,10 @@ get_image_size cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshTexture "get_image_size" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.MeshTexture.get_image_size
+
 {-# NOINLINE bindMeshTexture_get_mesh #-}
 
 -- | Sets the mesh used to draw. It must be a mesh using 2D vertices.
@@ -83,6 +108,9 @@ get_mesh cls
          godot_method_bind_call bindMeshTexture_get_mesh (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshTexture "get_mesh" '[] (IO Mesh) where
+        nodeMethod = Godot.Core.MeshTexture.get_mesh
 
 {-# NOINLINE bindMeshTexture_set_base_texture #-}
 
@@ -108,6 +136,11 @@ set_base_texture cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshTexture "set_base_texture" '[Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshTexture.set_base_texture
+
 {-# NOINLINE bindMeshTexture_set_image_size #-}
 
 -- | Sets the size of the image, needed for reference.
@@ -131,6 +164,10 @@ set_image_size cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshTexture "set_image_size" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.MeshTexture.set_image_size
+
 {-# NOINLINE bindMeshTexture_set_mesh #-}
 
 -- | Sets the mesh used to draw. It must be a mesh using 2D vertices.
@@ -152,3 +189,6 @@ set_mesh cls arg1
          godot_method_bind_call bindMeshTexture_set_mesh (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshTexture "set_mesh" '[Mesh] (IO ()) where
+        nodeMethod = Godot.Core.MeshTexture.set_mesh

@@ -46,9 +46,14 @@ module Godot.Core.ProceduralSky
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Sky()
 
 _TEXTURE_SIZE_512 :: Int
 _TEXTURE_SIZE_512 = 1
@@ -67,6 +72,91 @@ _TEXTURE_SIZE_MAX = 5
 
 _TEXTURE_SIZE_4096 :: Int
 _TEXTURE_SIZE_4096 = 4
+
+instance NodeProperty ProceduralSky "ground_bottom_color" Color
+           'False
+         where
+        nodeProperty
+          = (get_ground_bottom_color,
+             wrapDroppingSetter set_ground_bottom_color, Nothing)
+
+instance NodeProperty ProceduralSky "ground_curve" Float 'False
+         where
+        nodeProperty
+          = (get_ground_curve, wrapDroppingSetter set_ground_curve, Nothing)
+
+instance NodeProperty ProceduralSky "ground_energy" Float 'False
+         where
+        nodeProperty
+          = (get_ground_energy, wrapDroppingSetter set_ground_energy,
+             Nothing)
+
+instance NodeProperty ProceduralSky "ground_horizon_color" Color
+           'False
+         where
+        nodeProperty
+          = (get_ground_horizon_color,
+             wrapDroppingSetter set_ground_horizon_color, Nothing)
+
+instance NodeProperty ProceduralSky "sky_curve" Float 'False where
+        nodeProperty
+          = (get_sky_curve, wrapDroppingSetter set_sky_curve, Nothing)
+
+instance NodeProperty ProceduralSky "sky_energy" Float 'False where
+        nodeProperty
+          = (get_sky_energy, wrapDroppingSetter set_sky_energy, Nothing)
+
+instance NodeProperty ProceduralSky "sky_horizon_color" Color
+           'False
+         where
+        nodeProperty
+          = (get_sky_horizon_color, wrapDroppingSetter set_sky_horizon_color,
+             Nothing)
+
+instance NodeProperty ProceduralSky "sky_top_color" Color 'False
+         where
+        nodeProperty
+          = (get_sky_top_color, wrapDroppingSetter set_sky_top_color,
+             Nothing)
+
+instance NodeProperty ProceduralSky "sun_angle_max" Float 'False
+         where
+        nodeProperty
+          = (get_sun_angle_max, wrapDroppingSetter set_sun_angle_max,
+             Nothing)
+
+instance NodeProperty ProceduralSky "sun_angle_min" Float 'False
+         where
+        nodeProperty
+          = (get_sun_angle_min, wrapDroppingSetter set_sun_angle_min,
+             Nothing)
+
+instance NodeProperty ProceduralSky "sun_color" Color 'False where
+        nodeProperty
+          = (get_sun_color, wrapDroppingSetter set_sun_color, Nothing)
+
+instance NodeProperty ProceduralSky "sun_curve" Float 'False where
+        nodeProperty
+          = (get_sun_curve, wrapDroppingSetter set_sun_curve, Nothing)
+
+instance NodeProperty ProceduralSky "sun_energy" Float 'False where
+        nodeProperty
+          = (get_sun_energy, wrapDroppingSetter set_sun_energy, Nothing)
+
+instance NodeProperty ProceduralSky "sun_latitude" Float 'False
+         where
+        nodeProperty
+          = (get_sun_latitude, wrapDroppingSetter set_sun_latitude, Nothing)
+
+instance NodeProperty ProceduralSky "sun_longitude" Float 'False
+         where
+        nodeProperty
+          = (get_sun_longitude, wrapDroppingSetter set_sun_longitude,
+             Nothing)
+
+instance NodeProperty ProceduralSky "texture_size" Int 'False where
+        nodeProperty
+          = (get_texture_size, wrapDroppingSetter set_texture_size, Nothing)
 
 {-# NOINLINE bindProceduralSky__thread_done #-}
 
@@ -89,6 +179,10 @@ _thread_done cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "_thread_done" '[Image] (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky._thread_done
+
 {-# NOINLINE bindProceduralSky__update_sky #-}
 
 bindProceduralSky__update_sky :: MethodBind
@@ -109,6 +203,9 @@ _update_sky cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "_update_sky" '[] (IO ()) where
+        nodeMethod = Godot.Core.ProceduralSky._update_sky
 
 {-# NOINLINE bindProceduralSky_get_ground_bottom_color #-}
 
@@ -134,9 +231,14 @@ get_ground_bottom_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_ground_bottom_color" '[]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_ground_bottom_color
+
 {-# NOINLINE bindProceduralSky_get_ground_curve #-}
 
--- | How quickly the [member ground_horizon_color] fades into the [member ground_bottom_color].
+-- | How quickly the @ground_horizon_color@ fades into the @ground_bottom_color@.
 bindProceduralSky_get_ground_curve :: MethodBind
 bindProceduralSky_get_ground_curve
   = unsafePerformIO $
@@ -146,7 +248,7 @@ bindProceduralSky_get_ground_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How quickly the [member ground_horizon_color] fades into the [member ground_bottom_color].
+-- | How quickly the @ground_horizon_color@ fades into the @ground_bottom_color@.
 get_ground_curve ::
                    (ProceduralSky :< cls, Object :< cls) => cls -> IO Float
 get_ground_curve cls
@@ -157,6 +259,10 @@ get_ground_curve cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "get_ground_curve" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_ground_curve
 
 {-# NOINLINE bindProceduralSky_get_ground_energy #-}
 
@@ -182,6 +288,11 @@ get_ground_energy cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_ground_energy" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_ground_energy
+
 {-# NOINLINE bindProceduralSky_get_ground_horizon_color #-}
 
 -- | Color of the ground at the horizon.
@@ -206,9 +317,14 @@ get_ground_horizon_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_ground_horizon_color" '[]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_ground_horizon_color
+
 {-# NOINLINE bindProceduralSky_get_sky_curve #-}
 
--- | How quickly the [member sky_horizon_color] fades into the [member sky_top_color].
+-- | How quickly the @sky_horizon_color@ fades into the @sky_top_color@.
 bindProceduralSky_get_sky_curve :: MethodBind
 bindProceduralSky_get_sky_curve
   = unsafePerformIO $
@@ -218,7 +334,7 @@ bindProceduralSky_get_sky_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How quickly the [member sky_horizon_color] fades into the [member sky_top_color].
+-- | How quickly the @sky_horizon_color@ fades into the @sky_top_color@.
 get_sky_curve ::
                 (ProceduralSky :< cls, Object :< cls) => cls -> IO Float
 get_sky_curve cls
@@ -228,6 +344,10 @@ get_sky_curve cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "get_sky_curve" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sky_curve
 
 {-# NOINLINE bindProceduralSky_get_sky_energy #-}
 
@@ -253,6 +373,10 @@ get_sky_energy cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_sky_energy" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sky_energy
+
 {-# NOINLINE bindProceduralSky_get_sky_horizon_color #-}
 
 -- | Color of the sky at the horizon.
@@ -276,6 +400,11 @@ get_sky_horizon_color cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "get_sky_horizon_color" '[]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sky_horizon_color
 
 {-# NOINLINE bindProceduralSky_get_sky_top_color #-}
 
@@ -301,6 +430,11 @@ get_sky_top_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_sky_top_color" '[]
+           (IO Color)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sky_top_color
+
 {-# NOINLINE bindProceduralSky_get_sun_angle_max #-}
 
 -- | Distance from center of sun where it fades out completely.
@@ -324,6 +458,11 @@ get_sun_angle_max cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "get_sun_angle_max" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sun_angle_max
 
 {-# NOINLINE bindProceduralSky_get_sun_angle_min #-}
 
@@ -349,6 +488,11 @@ get_sun_angle_min cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_sun_angle_min" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sun_angle_min
+
 {-# NOINLINE bindProceduralSky_get_sun_color #-}
 
 -- | The sun's color.
@@ -372,9 +516,13 @@ get_sun_color cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_sun_color" '[] (IO Color)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sun_color
+
 {-# NOINLINE bindProceduralSky_get_sun_curve #-}
 
--- | How quickly the sun fades away between [member sun_angle_min] and [member sun_angle_max].
+-- | How quickly the sun fades away between @sun_angle_min@ and @sun_angle_max@.
 bindProceduralSky_get_sun_curve :: MethodBind
 bindProceduralSky_get_sun_curve
   = unsafePerformIO $
@@ -384,7 +532,7 @@ bindProceduralSky_get_sun_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How quickly the sun fades away between [member sun_angle_min] and [member sun_angle_max].
+-- | How quickly the sun fades away between @sun_angle_min@ and @sun_angle_max@.
 get_sun_curve ::
                 (ProceduralSky :< cls, Object :< cls) => cls -> IO Float
 get_sun_curve cls
@@ -394,6 +542,10 @@ get_sun_curve cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "get_sun_curve" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sun_curve
 
 {-# NOINLINE bindProceduralSky_get_sun_energy #-}
 
@@ -419,6 +571,10 @@ get_sun_energy cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_sun_energy" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sun_energy
+
 {-# NOINLINE bindProceduralSky_get_sun_latitude #-}
 
 -- | The sun's height using polar coordinates.
@@ -442,6 +598,10 @@ get_sun_latitude cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "get_sun_latitude" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sun_latitude
 
 {-# NOINLINE bindProceduralSky_get_sun_longitude #-}
 
@@ -467,9 +627,14 @@ get_sun_longitude cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "get_sun_longitude" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_sun_longitude
+
 {-# NOINLINE bindProceduralSky_get_texture_size #-}
 
--- | Size of [Texture] that the ProceduralSky will generate. The size is set using [enum TextureSize].
+-- | Size of @Texture@ that the ProceduralSky will generate. The size is set using @enum TextureSize@.
 bindProceduralSky_get_texture_size :: MethodBind
 bindProceduralSky_get_texture_size
   = unsafePerformIO $
@@ -479,7 +644,7 @@ bindProceduralSky_get_texture_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Size of [Texture] that the ProceduralSky will generate. The size is set using [enum TextureSize].
+-- | Size of @Texture@ that the ProceduralSky will generate. The size is set using @enum TextureSize@.
 get_texture_size ::
                    (ProceduralSky :< cls, Object :< cls) => cls -> IO Int
 get_texture_size cls
@@ -490,6 +655,10 @@ get_texture_size cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "get_texture_size" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.ProceduralSky.get_texture_size
 
 {-# NOINLINE bindProceduralSky_set_ground_bottom_color #-}
 
@@ -515,9 +684,15 @@ set_ground_bottom_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_ground_bottom_color"
+           '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_ground_bottom_color
+
 {-# NOINLINE bindProceduralSky_set_ground_curve #-}
 
--- | How quickly the [member ground_horizon_color] fades into the [member ground_bottom_color].
+-- | How quickly the @ground_horizon_color@ fades into the @ground_bottom_color@.
 bindProceduralSky_set_ground_curve :: MethodBind
 bindProceduralSky_set_ground_curve
   = unsafePerformIO $
@@ -527,7 +702,7 @@ bindProceduralSky_set_ground_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How quickly the [member ground_horizon_color] fades into the [member ground_bottom_color].
+-- | How quickly the @ground_horizon_color@ fades into the @ground_bottom_color@.
 set_ground_curve ::
                    (ProceduralSky :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ground_curve cls arg1
@@ -538,6 +713,11 @@ set_ground_curve cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "set_ground_curve" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_ground_curve
 
 {-# NOINLINE bindProceduralSky_set_ground_energy #-}
 
@@ -563,6 +743,11 @@ set_ground_energy cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_ground_energy" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_ground_energy
+
 {-# NOINLINE bindProceduralSky_set_ground_horizon_color #-}
 
 -- | Color of the ground at the horizon.
@@ -587,9 +772,15 @@ set_ground_horizon_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_ground_horizon_color"
+           '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_ground_horizon_color
+
 {-# NOINLINE bindProceduralSky_set_sky_curve #-}
 
--- | How quickly the [member sky_horizon_color] fades into the [member sky_top_color].
+-- | How quickly the @sky_horizon_color@ fades into the @sky_top_color@.
 bindProceduralSky_set_sky_curve :: MethodBind
 bindProceduralSky_set_sky_curve
   = unsafePerformIO $
@@ -599,7 +790,7 @@ bindProceduralSky_set_sky_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How quickly the [member sky_horizon_color] fades into the [member sky_top_color].
+-- | How quickly the @sky_horizon_color@ fades into the @sky_top_color@.
 set_sky_curve ::
                 (ProceduralSky :< cls, Object :< cls) => cls -> Float -> IO ()
 set_sky_curve cls arg1
@@ -609,6 +800,10 @@ set_sky_curve cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "set_sky_curve" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sky_curve
 
 {-# NOINLINE bindProceduralSky_set_sky_energy #-}
 
@@ -634,6 +829,10 @@ set_sky_energy cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_sky_energy" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sky_energy
+
 {-# NOINLINE bindProceduralSky_set_sky_horizon_color #-}
 
 -- | Color of the sky at the horizon.
@@ -657,6 +856,11 @@ set_sky_horizon_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "set_sky_horizon_color" '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sky_horizon_color
 
 {-# NOINLINE bindProceduralSky_set_sky_top_color #-}
 
@@ -682,6 +886,11 @@ set_sky_top_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_sky_top_color" '[Color]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sky_top_color
+
 {-# NOINLINE bindProceduralSky_set_sun_angle_max #-}
 
 -- | Distance from center of sun where it fades out completely.
@@ -705,6 +914,11 @@ set_sun_angle_max cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "set_sun_angle_max" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sun_angle_max
 
 {-# NOINLINE bindProceduralSky_set_sun_angle_min #-}
 
@@ -730,6 +944,11 @@ set_sun_angle_min cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_sun_angle_min" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sun_angle_min
+
 {-# NOINLINE bindProceduralSky_set_sun_color #-}
 
 -- | The sun's color.
@@ -753,9 +972,13 @@ set_sun_color cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_sun_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sun_color
+
 {-# NOINLINE bindProceduralSky_set_sun_curve #-}
 
--- | How quickly the sun fades away between [member sun_angle_min] and [member sun_angle_max].
+-- | How quickly the sun fades away between @sun_angle_min@ and @sun_angle_max@.
 bindProceduralSky_set_sun_curve :: MethodBind
 bindProceduralSky_set_sun_curve
   = unsafePerformIO $
@@ -765,7 +988,7 @@ bindProceduralSky_set_sun_curve
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | How quickly the sun fades away between [member sun_angle_min] and [member sun_angle_max].
+-- | How quickly the sun fades away between @sun_angle_min@ and @sun_angle_max@.
 set_sun_curve ::
                 (ProceduralSky :< cls, Object :< cls) => cls -> Float -> IO ()
 set_sun_curve cls arg1
@@ -775,6 +998,10 @@ set_sun_curve cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "set_sun_curve" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sun_curve
 
 {-# NOINLINE bindProceduralSky_set_sun_energy #-}
 
@@ -800,6 +1027,10 @@ set_sun_energy cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_sun_energy" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sun_energy
+
 {-# NOINLINE bindProceduralSky_set_sun_latitude #-}
 
 -- | The sun's height using polar coordinates.
@@ -823,6 +1054,11 @@ set_sun_latitude cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "set_sun_latitude" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sun_latitude
 
 {-# NOINLINE bindProceduralSky_set_sun_longitude #-}
 
@@ -848,9 +1084,14 @@ set_sun_longitude cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ProceduralSky "set_sun_longitude" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_sun_longitude
+
 {-# NOINLINE bindProceduralSky_set_texture_size #-}
 
--- | Size of [Texture] that the ProceduralSky will generate. The size is set using [enum TextureSize].
+-- | Size of @Texture@ that the ProceduralSky will generate. The size is set using @enum TextureSize@.
 bindProceduralSky_set_texture_size :: MethodBind
 bindProceduralSky_set_texture_size
   = unsafePerformIO $
@@ -860,7 +1101,7 @@ bindProceduralSky_set_texture_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Size of [Texture] that the ProceduralSky will generate. The size is set using [enum TextureSize].
+-- | Size of @Texture@ that the ProceduralSky will generate. The size is set using @enum TextureSize@.
 set_texture_size ::
                    (ProceduralSky :< cls, Object :< cls) => cls -> Int -> IO ()
 set_texture_size cls arg1
@@ -871,3 +1112,7 @@ set_texture_size cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ProceduralSky "set_texture_size" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.ProceduralSky.set_texture_size

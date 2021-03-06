@@ -23,9 +23,14 @@ module Godot.Core.MeshLibrary
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Resource()
 
 {-# NOINLINE bindMeshLibrary_clear #-}
 
@@ -48,10 +53,13 @@ clear cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.MeshLibrary.clear
+
 {-# NOINLINE bindMeshLibrary_create_item #-}
 
 -- | Creates a new item in the library with the given ID.
---   				You can get an unused ID from [method get_last_unused_item_id].
+--   				You can get an unused ID from @method get_last_unused_item_id@.
 bindMeshLibrary_create_item :: MethodBind
 bindMeshLibrary_create_item
   = unsafePerformIO $
@@ -62,7 +70,7 @@ bindMeshLibrary_create_item
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Creates a new item in the library with the given ID.
---   				You can get an unused ID from [method get_last_unused_item_id].
+--   				You can get an unused ID from @method get_last_unused_item_id@.
 create_item ::
               (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO ()
 create_item cls arg1
@@ -72,6 +80,9 @@ create_item cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "create_item" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.MeshLibrary.create_item
 
 {-# NOINLINE bindMeshLibrary_find_item_by_name #-}
 
@@ -97,6 +108,11 @@ find_item_by_name cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "find_item_by_name" '[GodotString]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.find_item_by_name
+
 {-# NOINLINE bindMeshLibrary_get_item_list #-}
 
 -- | Returns the list of item IDs in use.
@@ -119,6 +135,11 @@ get_item_list cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "get_item_list" '[]
+           (IO PoolIntArray)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_item_list
 
 {-# NOINLINE bindMeshLibrary_get_item_mesh #-}
 
@@ -143,6 +164,10 @@ get_item_mesh cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "get_item_mesh" '[Int] (IO Mesh)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_item_mesh
+
 {-# NOINLINE bindMeshLibrary_get_item_name #-}
 
 -- | Returns the item's name.
@@ -165,6 +190,11 @@ get_item_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "get_item_name" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_item_name
 
 {-# NOINLINE bindMeshLibrary_get_item_navmesh #-}
 
@@ -191,6 +221,11 @@ get_item_navmesh cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "get_item_navmesh" '[Int]
+           (IO NavigationMesh)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_item_navmesh
+
 {-# NOINLINE bindMeshLibrary_get_item_navmesh_transform #-}
 
 -- | Returns the transform applied to the item's navigation mesh.
@@ -215,9 +250,14 @@ get_item_navmesh_transform cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "get_item_navmesh_transform" '[Int]
+           (IO Transform)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_item_navmesh_transform
+
 {-# NOINLINE bindMeshLibrary_get_item_preview #-}
 
--- | When running in the editor, returns a generated item preview (a 3D rendering in isometric perspective). When used in a running project, returns the manually-defined item preview which can be set using [method set_item_preview]. Returns an empty [Texture] if no preview was manually set in a running project.
+-- | When running in the editor, returns a generated item preview (a 3D rendering in isometric perspective). When used in a running project, returns the manually-defined item preview which can be set using @method set_item_preview@. Returns an empty @Texture@ if no preview was manually set in a running project.
 bindMeshLibrary_get_item_preview :: MethodBind
 bindMeshLibrary_get_item_preview
   = unsafePerformIO $
@@ -227,7 +267,7 @@ bindMeshLibrary_get_item_preview
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | When running in the editor, returns a generated item preview (a 3D rendering in isometric perspective). When used in a running project, returns the manually-defined item preview which can be set using [method set_item_preview]. Returns an empty [Texture] if no preview was manually set in a running project.
+-- | When running in the editor, returns a generated item preview (a 3D rendering in isometric perspective). When used in a running project, returns the manually-defined item preview which can be set using @method set_item_preview@. Returns an empty @Texture@ if no preview was manually set in a running project.
 get_item_preview ::
                    (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO Texture
 get_item_preview cls arg1
@@ -239,10 +279,15 @@ get_item_preview cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "get_item_preview" '[Int]
+           (IO Texture)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_item_preview
+
 {-# NOINLINE bindMeshLibrary_get_item_shapes #-}
 
 -- | Returns an item's collision shapes.
---   				The array consists of each [Shape] followed by its [Transform].
+--   				The array consists of each @Shape@ followed by its @Transform@.
 bindMeshLibrary_get_item_shapes :: MethodBind
 bindMeshLibrary_get_item_shapes
   = unsafePerformIO $
@@ -253,7 +298,7 @@ bindMeshLibrary_get_item_shapes
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns an item's collision shapes.
---   				The array consists of each [Shape] followed by its [Transform].
+--   				The array consists of each @Shape@ followed by its @Transform@.
 get_item_shapes ::
                   (MeshLibrary :< cls, Object :< cls) => cls -> Int -> IO Array
 get_item_shapes cls arg1
@@ -263,6 +308,10 @@ get_item_shapes cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "get_item_shapes" '[Int] (IO Array)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_item_shapes
 
 {-# NOINLINE bindMeshLibrary_get_last_unused_item_id #-}
 
@@ -288,6 +337,11 @@ get_last_unused_item_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "get_last_unused_item_id" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.MeshLibrary.get_last_unused_item_id
+
 {-# NOINLINE bindMeshLibrary_remove_item #-}
 
 -- | Removes the item.
@@ -310,6 +364,9 @@ remove_item cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "remove_item" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.MeshLibrary.remove_item
 
 {-# NOINLINE bindMeshLibrary_set_item_mesh #-}
 
@@ -334,10 +391,15 @@ set_item_mesh cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "set_item_mesh" '[Int, Mesh]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshLibrary.set_item_mesh
+
 {-# NOINLINE bindMeshLibrary_set_item_name #-}
 
 -- | Sets the item's name.
---   				This name is shown in the editor. It can also be used to look up the item later using [method find_item_by_name].
+--   				This name is shown in the editor. It can also be used to look up the item later using @method find_item_by_name@.
 bindMeshLibrary_set_item_name :: MethodBind
 bindMeshLibrary_set_item_name
   = unsafePerformIO $
@@ -348,7 +410,7 @@ bindMeshLibrary_set_item_name
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the item's name.
---   				This name is shown in the editor. It can also be used to look up the item later using [method find_item_by_name].
+--   				This name is shown in the editor. It can also be used to look up the item later using @method find_item_by_name@.
 set_item_name ::
                 (MeshLibrary :< cls, Object :< cls) =>
                 cls -> Int -> GodotString -> IO ()
@@ -359,6 +421,11 @@ set_item_name cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "set_item_name" '[Int, GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshLibrary.set_item_name
 
 {-# NOINLINE bindMeshLibrary_set_item_navmesh #-}
 
@@ -385,6 +452,12 @@ set_item_navmesh cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "set_item_navmesh"
+           '[Int, NavigationMesh]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshLibrary.set_item_navmesh
+
 {-# NOINLINE bindMeshLibrary_set_item_navmesh_transform #-}
 
 -- | Sets the transform to apply to the item's navigation mesh.
@@ -409,6 +482,12 @@ set_item_navmesh_transform cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "set_item_navmesh_transform"
+           '[Int, Transform]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshLibrary.set_item_navmesh_transform
 
 {-# NOINLINE bindMeshLibrary_set_item_preview #-}
 
@@ -435,10 +514,15 @@ set_item_preview cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod MeshLibrary "set_item_preview" '[Int, Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshLibrary.set_item_preview
+
 {-# NOINLINE bindMeshLibrary_set_item_shapes #-}
 
 -- | Sets an item's collision shapes.
---   				The array should consist of [Shape] objects, each followed by a [Transform] that will be applied to it. For shapes that should not have a transform, use [constant Transform.IDENTITY].
+--   				The array should consist of @Shape@ objects, each followed by a @Transform@ that will be applied to it. For shapes that should not have a transform, use @Transform.IDENTITY@.
 bindMeshLibrary_set_item_shapes :: MethodBind
 bindMeshLibrary_set_item_shapes
   = unsafePerformIO $
@@ -449,7 +533,7 @@ bindMeshLibrary_set_item_shapes
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets an item's collision shapes.
---   				The array should consist of [Shape] objects, each followed by a [Transform] that will be applied to it. For shapes that should not have a transform, use [constant Transform.IDENTITY].
+--   				The array should consist of @Shape@ objects, each followed by a @Transform@ that will be applied to it. For shapes that should not have a transform, use @Transform.IDENTITY@.
 set_item_shapes ::
                   (MeshLibrary :< cls, Object :< cls) => cls -> Int -> Array -> IO ()
 set_item_shapes cls arg1 arg2
@@ -459,3 +543,8 @@ set_item_shapes cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod MeshLibrary "set_item_shapes" '[Int, Array]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.MeshLibrary.set_item_shapes

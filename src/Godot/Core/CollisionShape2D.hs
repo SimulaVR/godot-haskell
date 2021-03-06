@@ -15,9 +15,36 @@ module Godot.Core.CollisionShape2D
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
+
+instance NodeProperty CollisionShape2D "disabled" Bool 'False where
+        nodeProperty
+          = (is_disabled, wrapDroppingSetter set_disabled, Nothing)
+
+instance NodeProperty CollisionShape2D "one_way_collision" Bool
+           'False
+         where
+        nodeProperty
+          = (is_one_way_collision_enabled,
+             wrapDroppingSetter set_one_way_collision, Nothing)
+
+instance NodeProperty CollisionShape2D "one_way_collision_margin"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_one_way_collision_margin,
+             wrapDroppingSetter set_one_way_collision_margin, Nothing)
+
+instance NodeProperty CollisionShape2D "shape" Shape2D 'False where
+        nodeProperty = (get_shape, wrapDroppingSetter set_shape, Nothing)
 
 {-# NOINLINE bindCollisionShape2D__shape_changed #-}
 
@@ -40,6 +67,10 @@ _shape_changed cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape2D "_shape_changed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape2D._shape_changed
 
 {-# NOINLINE bindCollisionShape2D_get_one_way_collision_margin #-}
 
@@ -66,6 +97,13 @@ get_one_way_collision_margin cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape2D "get_one_way_collision_margin"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.CollisionShape2D.get_one_way_collision_margin
+
 {-# NOINLINE bindCollisionShape2D_get_shape #-}
 
 -- | The actual shape owned by this collision shape.
@@ -89,9 +127,13 @@ get_shape cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape2D "get_shape" '[] (IO Shape2D)
+         where
+        nodeMethod = Godot.Core.CollisionShape2D.get_shape
+
 {-# NOINLINE bindCollisionShape2D_is_disabled #-}
 
--- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
+-- | A disabled collision shape has no effect in the world. This property should be changed with @method Object.set_deferred@.
 bindCollisionShape2D_is_disabled :: MethodBind
 bindCollisionShape2D_is_disabled
   = unsafePerformIO $
@@ -101,7 +143,7 @@ bindCollisionShape2D_is_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
+-- | A disabled collision shape has no effect in the world. This property should be changed with @method Object.set_deferred@.
 is_disabled ::
               (CollisionShape2D :< cls, Object :< cls) => cls -> IO Bool
 is_disabled cls
@@ -112,6 +154,10 @@ is_disabled cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape2D "is_disabled" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.CollisionShape2D.is_disabled
 
 {-# NOINLINE bindCollisionShape2D_is_one_way_collision_enabled #-}
 
@@ -138,9 +184,16 @@ is_one_way_collision_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape2D "is_one_way_collision_enabled"
+           '[]
+           (IO Bool)
+         where
+        nodeMethod
+          = Godot.Core.CollisionShape2D.is_one_way_collision_enabled
+
 {-# NOINLINE bindCollisionShape2D_set_disabled #-}
 
--- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
+-- | A disabled collision shape has no effect in the world. This property should be changed with @method Object.set_deferred@.
 bindCollisionShape2D_set_disabled :: MethodBind
 bindCollisionShape2D_set_disabled
   = unsafePerformIO $
@@ -150,7 +203,7 @@ bindCollisionShape2D_set_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A disabled collision shape has no effect in the world. This property should be changed with [method Object.set_deferred].
+-- | A disabled collision shape has no effect in the world. This property should be changed with @method Object.set_deferred@.
 set_disabled ::
                (CollisionShape2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disabled cls arg1
@@ -161,6 +214,10 @@ set_disabled cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape2D "set_disabled" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape2D.set_disabled
 
 {-# NOINLINE bindCollisionShape2D_set_one_way_collision #-}
 
@@ -185,6 +242,12 @@ set_one_way_collision cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape2D "set_one_way_collision"
+           '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape2D.set_one_way_collision
 
 {-# NOINLINE bindCollisionShape2D_set_one_way_collision_margin #-}
 
@@ -211,6 +274,13 @@ set_one_way_collision_margin cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod CollisionShape2D "set_one_way_collision_margin"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.CollisionShape2D.set_one_way_collision_margin
+
 {-# NOINLINE bindCollisionShape2D_set_shape #-}
 
 -- | The actual shape owned by this collision shape.
@@ -233,3 +303,7 @@ set_shape cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod CollisionShape2D "set_shape" '[Shape2D] (IO ())
+         where
+        nodeMethod = Godot.Core.CollisionShape2D.set_shape

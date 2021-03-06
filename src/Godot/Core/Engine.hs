@@ -29,13 +29,18 @@ module Godot.Core.Engine
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 {-# NOINLINE bindEngine_is_editor_hint #-}
 
--- | If [code]true[/code], it is running inside the editor. Useful for tool scripts.
+-- | If @true@, it is running inside the editor. Useful for tool scripts.
 bindEngine_is_editor_hint :: MethodBind
 bindEngine_is_editor_hint
   = unsafePerformIO $
@@ -45,7 +50,7 @@ bindEngine_is_editor_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], it is running inside the editor. Useful for tool scripts.
+-- | If @true@, it is running inside the editor. Useful for tool scripts.
 is_editor_hint :: (Engine :< cls, Object :< cls) => cls -> IO Bool
 is_editor_hint cls
   = withVariantArray []
@@ -55,9 +60,12 @@ is_editor_hint cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "is_editor_hint" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Engine.is_editor_hint
+
 {-# NOINLINE bindEngine_set_editor_hint #-}
 
--- | If [code]true[/code], it is running inside the editor. Useful for tool scripts.
+-- | If @true@, it is running inside the editor. Useful for tool scripts.
 bindEngine_set_editor_hint :: MethodBind
 bindEngine_set_editor_hint
   = unsafePerformIO $
@@ -67,7 +75,7 @@ bindEngine_set_editor_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], it is running inside the editor. Useful for tool scripts.
+-- | If @true@, it is running inside the editor. Useful for tool scripts.
 set_editor_hint ::
                   (Engine :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_editor_hint cls arg1
@@ -78,9 +86,16 @@ set_editor_hint cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "set_editor_hint" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Engine.set_editor_hint
+
+instance NodeProperty Engine "editor_hint" Bool 'False where
+        nodeProperty
+          = (is_editor_hint, wrapDroppingSetter set_editor_hint, Nothing)
+
 {-# NOINLINE bindEngine_get_iterations_per_second #-}
 
--- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
+-- | The number of fixed iterations per second. This controls how often physics simulation and @method Node._physics_process@ methods are run. This value should generally always be set to @60@ or above, as Godot doesn't interpolate the physics step. As a result, values lower than @60@ will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 bindEngine_get_iterations_per_second :: MethodBind
 bindEngine_get_iterations_per_second
   = unsafePerformIO $
@@ -90,7 +105,7 @@ bindEngine_get_iterations_per_second
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
+-- | The number of fixed iterations per second. This controls how often physics simulation and @method Node._physics_process@ methods are run. This value should generally always be set to @60@ or above, as Godot doesn't interpolate the physics step. As a result, values lower than @60@ will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 get_iterations_per_second ::
                             (Engine :< cls, Object :< cls) => cls -> IO Int
 get_iterations_per_second cls
@@ -102,9 +117,13 @@ get_iterations_per_second cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_iterations_per_second" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Engine.get_iterations_per_second
+
 {-# NOINLINE bindEngine_set_iterations_per_second #-}
 
--- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
+-- | The number of fixed iterations per second. This controls how often physics simulation and @method Node._physics_process@ methods are run. This value should generally always be set to @60@ or above, as Godot doesn't interpolate the physics step. As a result, values lower than @60@ will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 bindEngine_set_iterations_per_second :: MethodBind
 bindEngine_set_iterations_per_second
   = unsafePerformIO $
@@ -114,7 +133,7 @@ bindEngine_set_iterations_per_second
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The number of fixed iterations per second. This controls how often physics simulation and [method Node._physics_process] methods are run. This value should generally always be set to [code]60[/code] or above, as Godot doesn't interpolate the physics step. As a result, values lower than [code]60[/code] will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
+-- | The number of fixed iterations per second. This controls how often physics simulation and @method Node._physics_process@ methods are run. This value should generally always be set to @60@ or above, as Godot doesn't interpolate the physics step. As a result, values lower than @60@ will look stuttery. This value can be increased to make input more reactive or work around tunneling issues, but keep in mind doing so will increase CPU usage.
 set_iterations_per_second ::
                             (Engine :< cls, Object :< cls) => cls -> Int -> IO ()
 set_iterations_per_second cls arg1
@@ -125,6 +144,17 @@ set_iterations_per_second cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Engine "set_iterations_per_second" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Engine.set_iterations_per_second
+
+instance NodeProperty Engine "iterations_per_second" Int 'False
+         where
+        nodeProperty
+          = (get_iterations_per_second,
+             wrapDroppingSetter set_iterations_per_second, Nothing)
 
 {-# NOINLINE bindEngine_get_physics_jitter_fix #-}
 
@@ -150,6 +180,10 @@ get_physics_jitter_fix cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_physics_jitter_fix" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.Engine.get_physics_jitter_fix
+
 {-# NOINLINE bindEngine_set_physics_jitter_fix #-}
 
 -- | Controls how much physics ticks are synchronized with real time. For 0 or less, the ticks are synchronized. Such values are recommended for network games, where clock synchronization matters. Higher values cause higher deviation of in-game clock and real clock, but allows to smooth out framerate jitters. The default value of 0.5 should be fine for most; values above 2 could cause the game to react to dropped frames with a noticeable delay and are not recommended.
@@ -174,6 +208,17 @@ set_physics_jitter_fix cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "set_physics_jitter_fix" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Engine.set_physics_jitter_fix
+
+instance NodeProperty Engine "physics_jitter_fix" Float 'False
+         where
+        nodeProperty
+          = (get_physics_jitter_fix,
+             wrapDroppingSetter set_physics_jitter_fix, Nothing)
+
 {-# NOINLINE bindEngine_get_target_fps #-}
 
 -- | The desired frames per second. If the hardware cannot keep up, this setting may not be respected. A value of 0 means no limit.
@@ -195,6 +240,9 @@ get_target_fps cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Engine "get_target_fps" '[] (IO Int) where
+        nodeMethod = Godot.Core.Engine.get_target_fps
 
 {-# NOINLINE bindEngine_set_target_fps #-}
 
@@ -219,6 +267,13 @@ set_target_fps cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "set_target_fps" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Engine.set_target_fps
+
+instance NodeProperty Engine "target_fps" Int 'False where
+        nodeProperty
+          = (get_target_fps, wrapDroppingSetter set_target_fps, Nothing)
+
 {-# NOINLINE bindEngine_get_time_scale #-}
 
 -- | Controls how fast or slow the in-game clock ticks versus the real life one. It defaults to 1.0. A value of 2.0 means the game moves twice as fast as real life, whilst a value of 0.5 means the game moves at half the regular speed.
@@ -240,6 +295,9 @@ get_time_scale cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Engine "get_time_scale" '[] (IO Float) where
+        nodeMethod = Godot.Core.Engine.get_time_scale
 
 {-# NOINLINE bindEngine_set_time_scale #-}
 
@@ -264,13 +322,20 @@ set_time_scale cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "set_time_scale" '[Float] (IO ()) where
+        nodeMethod = Godot.Core.Engine.set_time_scale
+
+instance NodeProperty Engine "time_scale" Float 'False where
+        nodeProperty
+          = (get_time_scale, wrapDroppingSetter set_time_scale, Nothing)
+
 {-# NOINLINE bindEngine_get_author_info #-}
 
 -- | Returns engine author information in a Dictionary.
---   				[code]lead_developers[/code]    - Array of Strings, lead developer names
---   				[code]founders[/code]           - Array of Strings, founder names
---   				[code]project_managers[/code]   - Array of Strings, project manager names
---   				[code]developers[/code]         - Array of Strings, developer names
+--   				@lead_developers@    - Array of Strings, lead developer names
+--   				@founders@           - Array of Strings, founder names
+--   				@project_managers@   - Array of Strings, project manager names
+--   				@developers@         - Array of Strings, developer names
 bindEngine_get_author_info :: MethodBind
 bindEngine_get_author_info
   = unsafePerformIO $
@@ -281,10 +346,10 @@ bindEngine_get_author_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns engine author information in a Dictionary.
---   				[code]lead_developers[/code]    - Array of Strings, lead developer names
---   				[code]founders[/code]           - Array of Strings, founder names
---   				[code]project_managers[/code]   - Array of Strings, project manager names
---   				[code]developers[/code]         - Array of Strings, developer names
+--   				@lead_developers@    - Array of Strings, lead developer names
+--   				@founders@           - Array of Strings, founder names
+--   				@project_managers@   - Array of Strings, project manager names
+--   				@developers@         - Array of Strings, developer names
 get_author_info ::
                   (Engine :< cls, Object :< cls) => cls -> IO Dictionary
 get_author_info cls
@@ -295,11 +360,15 @@ get_author_info cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_author_info" '[] (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.Engine.get_author_info
+
 {-# NOINLINE bindEngine_get_copyright_info #-}
 
 -- | Returns an Array of copyright information Dictionaries.
---   				[code]name[/code]    - String, component name
---   				[code]parts[/code]   - Array of Dictionaries {[code]files[/code], [code]copyright[/code], [code]license[/code]} describing subsections of the component
+--   				@name@    - String, component name
+--   				@parts@   - Array of Dictionaries {@files@, @copyright@, @license@} describing subsections of the component
 bindEngine_get_copyright_info :: MethodBind
 bindEngine_get_copyright_info
   = unsafePerformIO $
@@ -310,8 +379,8 @@ bindEngine_get_copyright_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns an Array of copyright information Dictionaries.
---   				[code]name[/code]    - String, component name
---   				[code]parts[/code]   - Array of Dictionaries {[code]files[/code], [code]copyright[/code], [code]license[/code]} describing subsections of the component
+--   				@name@    - String, component name
+--   				@parts@   - Array of Dictionaries {@files@, @copyright@, @license@} describing subsections of the component
 get_copyright_info ::
                      (Engine :< cls, Object :< cls) => cls -> IO Array
 get_copyright_info cls
@@ -322,10 +391,14 @@ get_copyright_info cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_copyright_info" '[] (IO Array)
+         where
+        nodeMethod = Godot.Core.Engine.get_copyright_info
+
 {-# NOINLINE bindEngine_get_donor_info #-}
 
 -- | Returns a Dictionary of Arrays of donor names.
---   				{[code]platinum_sponsors[/code], [code]gold_sponsors[/code], [code]silver_sponsors[/code], [code]bronze_sponsors[/code], [code]mini_sponsors[/code], [code]gold_donors[/code], [code]silver_donors[/code], [code]bronze_donors[/code]}
+--   				{@platinum_sponsors@, @gold_sponsors@, @silver_sponsors@, @bronze_sponsors@, @mini_sponsors@, @gold_donors@, @silver_donors@, @bronze_donors@}
 bindEngine_get_donor_info :: MethodBind
 bindEngine_get_donor_info
   = unsafePerformIO $
@@ -336,7 +409,7 @@ bindEngine_get_donor_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a Dictionary of Arrays of donor names.
---   				{[code]platinum_sponsors[/code], [code]gold_sponsors[/code], [code]silver_sponsors[/code], [code]bronze_sponsors[/code], [code]mini_sponsors[/code], [code]gold_donors[/code], [code]silver_donors[/code], [code]bronze_donors[/code]}
+--   				{@platinum_sponsors@, @gold_sponsors@, @silver_sponsors@, @bronze_sponsors@, @mini_sponsors@, @gold_donors@, @silver_donors@, @bronze_donors@}
 get_donor_info ::
                  (Engine :< cls, Object :< cls) => cls -> IO Dictionary
 get_donor_info cls
@@ -347,9 +420,13 @@ get_donor_info cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_donor_info" '[] (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.Engine.get_donor_info
+
 {-# NOINLINE bindEngine_get_frames_drawn #-}
 
--- | Returns the total number of frames drawn. If the render loop is disabled with [code]--disable-render-loop[/code] via command line, this returns [code]0[/code]. See also [method get_idle_frames].
+-- | Returns the total number of frames drawn. If the render loop is disabled with @--disable-render-loop@ via command line, this returns @0@. See also @method get_idle_frames@.
 bindEngine_get_frames_drawn :: MethodBind
 bindEngine_get_frames_drawn
   = unsafePerformIO $
@@ -359,7 +436,7 @@ bindEngine_get_frames_drawn
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the total number of frames drawn. If the render loop is disabled with [code]--disable-render-loop[/code] via command line, this returns [code]0[/code]. See also [method get_idle_frames].
+-- | Returns the total number of frames drawn. If the render loop is disabled with @--disable-render-loop@ via command line, this returns @0@. See also @method get_idle_frames@.
 get_frames_drawn :: (Engine :< cls, Object :< cls) => cls -> IO Int
 get_frames_drawn cls
   = withVariantArray []
@@ -368,6 +445,9 @@ get_frames_drawn cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Engine "get_frames_drawn" '[] (IO Int) where
+        nodeMethod = Godot.Core.Engine.get_frames_drawn
 
 {-# NOINLINE bindEngine_get_frames_per_second #-}
 
@@ -393,9 +473,13 @@ get_frames_per_second cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_frames_per_second" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.Engine.get_frames_per_second
+
 {-# NOINLINE bindEngine_get_idle_frames #-}
 
--- | Returns the total number of frames passed since engine initialization which is advanced on each [b]idle frame[/b], regardless of whether the render loop is enabled. See also [method get_frames_drawn].
+-- | Returns the total number of frames passed since engine initialization which is advanced on each __idle frame__, regardless of whether the render loop is enabled. See also @method get_frames_drawn@.
 bindEngine_get_idle_frames :: MethodBind
 bindEngine_get_idle_frames
   = unsafePerformIO $
@@ -405,7 +489,7 @@ bindEngine_get_idle_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the total number of frames passed since engine initialization which is advanced on each [b]idle frame[/b], regardless of whether the render loop is enabled. See also [method get_frames_drawn].
+-- | Returns the total number of frames passed since engine initialization which is advanced on each __idle frame__, regardless of whether the render loop is enabled. See also @method get_frames_drawn@.
 get_idle_frames :: (Engine :< cls, Object :< cls) => cls -> IO Int
 get_idle_frames cls
   = withVariantArray []
@@ -414,6 +498,9 @@ get_idle_frames cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Engine "get_idle_frames" '[] (IO Int) where
+        nodeMethod = Godot.Core.Engine.get_idle_frames
 
 {-# NOINLINE bindEngine_get_license_info #-}
 
@@ -438,6 +525,10 @@ get_license_info cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_license_info" '[] (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.Engine.get_license_info
+
 {-# NOINLINE bindEngine_get_license_text #-}
 
 -- | Returns Godot license text.
@@ -461,9 +552,13 @@ get_license_text cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_license_text" '[] (IO GodotString)
+         where
+        nodeMethod = Godot.Core.Engine.get_license_text
+
 {-# NOINLINE bindEngine_get_main_loop #-}
 
--- | Returns the main loop object (see [MainLoop] and [SceneTree]).
+-- | Returns the main loop object (see @MainLoop@ and @SceneTree@).
 bindEngine_get_main_loop :: MethodBind
 bindEngine_get_main_loop
   = unsafePerformIO $
@@ -473,7 +568,7 @@ bindEngine_get_main_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the main loop object (see [MainLoop] and [SceneTree]).
+-- | Returns the main loop object (see @MainLoop@ and @SceneTree@).
 get_main_loop ::
                 (Engine :< cls, Object :< cls) => cls -> IO MainLoop
 get_main_loop cls
@@ -483,9 +578,12 @@ get_main_loop cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_main_loop" '[] (IO MainLoop) where
+        nodeMethod = Godot.Core.Engine.get_main_loop
+
 {-# NOINLINE bindEngine_get_physics_frames #-}
 
--- | Returns the total number of frames passed since engine initialization which is advanced on each [b]physics frame[/b].
+-- | Returns the total number of frames passed since engine initialization which is advanced on each __physics frame__.
 bindEngine_get_physics_frames :: MethodBind
 bindEngine_get_physics_frames
   = unsafePerformIO $
@@ -495,7 +593,7 @@ bindEngine_get_physics_frames
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the total number of frames passed since engine initialization which is advanced on each [b]physics frame[/b].
+-- | Returns the total number of frames passed since engine initialization which is advanced on each __physics frame__.
 get_physics_frames ::
                      (Engine :< cls, Object :< cls) => cls -> IO Int
 get_physics_frames cls
@@ -505,6 +603,9 @@ get_physics_frames cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Engine "get_physics_frames" '[] (IO Int) where
+        nodeMethod = Godot.Core.Engine.get_physics_frames
 
 {-# NOINLINE bindEngine_get_physics_interpolation_fraction #-}
 
@@ -531,9 +632,14 @@ get_physics_interpolation_fraction cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_physics_interpolation_fraction" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Engine.get_physics_interpolation_fraction
+
 {-# NOINLINE bindEngine_get_singleton #-}
 
--- | Returns a global singleton with given [code]name[/code]. Often used for plugins, e.g. [code]GodotPayment[/code] on Android.
+-- | Returns a global singleton with given @name@. Often used for plugins, e.g. @GodotPayment@ on Android.
 bindEngine_get_singleton :: MethodBind
 bindEngine_get_singleton
   = unsafePerformIO $
@@ -543,7 +649,7 @@ bindEngine_get_singleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a global singleton with given [code]name[/code]. Often used for plugins, e.g. [code]GodotPayment[/code] on Android.
+-- | Returns a global singleton with given @name@. Often used for plugins, e.g. @GodotPayment@ on Android.
 get_singleton ::
                 (Engine :< cls, Object :< cls) => cls -> GodotString -> IO Object
 get_singleton cls arg1
@@ -553,25 +659,33 @@ get_singleton cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_singleton" '[GodotString]
+           (IO Object)
+         where
+        nodeMethod = Godot.Core.Engine.get_singleton
+
 {-# NOINLINE bindEngine_get_version_info #-}
 
 -- | Returns the current engine version information in a Dictionary.
---   				[code]major[/code]    - Holds the major version number as an int
---   				[code]minor[/code]    - Holds the minor version number as an int
---   				[code]patch[/code]    - Holds the patch version number as an int
---   				[code]hex[/code]      - Holds the full version number encoded as a hexadecimal int with one byte (2 places) per number (see example below)
---   				[code]status[/code]   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
---   				[code]build[/code]    - Holds the build name (e.g. "custom_build") as a String
---   				[code]hash[/code]     - Holds the full Git commit hash as a String
---   				[code]year[/code]     - Holds the year the version was released in as an int
---   				[code]string[/code]   - [code]major[/code] + [code]minor[/code] + [code]patch[/code] + [code]status[/code] + [code]build[/code] in a single String
---   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. [b]Note:[/b] It's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
---   				[codeblock]
+--   				@major@    - Holds the major version number as an int
+--   				@minor@    - Holds the minor version number as an int
+--   				@patch@    - Holds the patch version number as an int
+--   				@hex@      - Holds the full version number encoded as a hexadecimal int with one byte (2 places) per number (see example below)
+--   				@status@   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
+--   				@build@    - Holds the build name (e.g. "custom_build") as a String
+--   				@hash@     - Holds the full Git commit hash as a String
+--   				@year@     - Holds the year the version was released in as an int
+--   				@string@   - @major@ + @minor@ + @patch@ + @status@ + @build@ in a single String
+--   				The @hex@ value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be @0x03010C@. __Note:__ It's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
+--   				
+--   @
+--   
 --   				if Engine.get_version_info().hex >= 0x030200:
 --   				    # Do things specific to version 3.2 or later
 --   				else:
 --   				    # Do things specific to versions before 3.2
---   				[/codeblock]
+--   				
+--   @
 bindEngine_get_version_info :: MethodBind
 bindEngine_get_version_info
   = unsafePerformIO $
@@ -582,22 +696,25 @@ bindEngine_get_version_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the current engine version information in a Dictionary.
---   				[code]major[/code]    - Holds the major version number as an int
---   				[code]minor[/code]    - Holds the minor version number as an int
---   				[code]patch[/code]    - Holds the patch version number as an int
---   				[code]hex[/code]      - Holds the full version number encoded as a hexadecimal int with one byte (2 places) per number (see example below)
---   				[code]status[/code]   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
---   				[code]build[/code]    - Holds the build name (e.g. "custom_build") as a String
---   				[code]hash[/code]     - Holds the full Git commit hash as a String
---   				[code]year[/code]     - Holds the year the version was released in as an int
---   				[code]string[/code]   - [code]major[/code] + [code]minor[/code] + [code]patch[/code] + [code]status[/code] + [code]build[/code] in a single String
---   				The [code]hex[/code] value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be [code]0x03010C[/code]. [b]Note:[/b] It's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
---   				[codeblock]
+--   				@major@    - Holds the major version number as an int
+--   				@minor@    - Holds the minor version number as an int
+--   				@patch@    - Holds the patch version number as an int
+--   				@hex@      - Holds the full version number encoded as a hexadecimal int with one byte (2 places) per number (see example below)
+--   				@status@   - Holds the status (e.g. "beta", "rc1", "rc2", ... "stable") as a String
+--   				@build@    - Holds the build name (e.g. "custom_build") as a String
+--   				@hash@     - Holds the full Git commit hash as a String
+--   				@year@     - Holds the year the version was released in as an int
+--   				@string@   - @major@ + @minor@ + @patch@ + @status@ + @build@ in a single String
+--   				The @hex@ value is encoded as follows, from left to right: one byte for the major, one byte for the minor, one byte for the patch version. For example, "3.1.12" would be @0x03010C@. __Note:__ It's still an int internally, and printing it will give you its decimal representation, which is not particularly meaningful. Use hexadecimal literals for easy version comparisons from code:
+--   				
+--   @
+--   
 --   				if Engine.get_version_info().hex >= 0x030200:
 --   				    # Do things specific to version 3.2 or later
 --   				else:
 --   				    # Do things specific to versions before 3.2
---   				[/codeblock]
+--   				
+--   @
 get_version_info ::
                    (Engine :< cls, Object :< cls) => cls -> IO Dictionary
 get_version_info cls
@@ -608,9 +725,13 @@ get_version_info cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "get_version_info" '[] (IO Dictionary)
+         where
+        nodeMethod = Godot.Core.Engine.get_version_info
+
 {-# NOINLINE bindEngine_has_singleton #-}
 
--- | Returns [code]true[/code] if a singleton with given [code]name[/code] exists in global scope.
+-- | Returns @true@ if a singleton with given @name@ exists in global scope.
 bindEngine_has_singleton :: MethodBind
 bindEngine_has_singleton
   = unsafePerformIO $
@@ -620,7 +741,7 @@ bindEngine_has_singleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if a singleton with given [code]name[/code] exists in global scope.
+-- | Returns @true@ if a singleton with given @name@ exists in global scope.
 has_singleton ::
                 (Engine :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_singleton cls arg1
@@ -630,9 +751,13 @@ has_singleton cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Engine "has_singleton" '[GodotString] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Engine.has_singleton
+
 {-# NOINLINE bindEngine_is_in_physics_frame #-}
 
--- | Returns [code]true[/code] if the game is inside the fixed process and physics phase of the game loop.
+-- | Returns @true@ if the game is inside the fixed process and physics phase of the game loop.
 bindEngine_is_in_physics_frame :: MethodBind
 bindEngine_is_in_physics_frame
   = unsafePerformIO $
@@ -642,7 +767,7 @@ bindEngine_is_in_physics_frame
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code] if the game is inside the fixed process and physics phase of the game loop.
+-- | Returns @true@ if the game is inside the fixed process and physics phase of the game loop.
 is_in_physics_frame ::
                       (Engine :< cls, Object :< cls) => cls -> IO Bool
 is_in_physics_frame cls
@@ -652,3 +777,7 @@ is_in_physics_frame cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Engine "is_in_physics_frame" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Engine.is_in_physics_frame

@@ -12,15 +12,24 @@ module Godot.Core.ScrollBar
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Range()
 
 -- | Emitted when the scrollbar is being scrolled.
 sig_scrolling :: Godot.Internal.Dispatch.Signal ScrollBar
 sig_scrolling = Godot.Internal.Dispatch.Signal "scrolling"
 
 instance NodeSignal ScrollBar "scrolling" '[]
+
+instance NodeProperty ScrollBar "custom_step" Float 'False where
+        nodeProperty
+          = (get_custom_step, wrapDroppingSetter set_custom_step, Nothing)
 
 {-# NOINLINE bindScrollBar__drag_node_exit #-}
 
@@ -43,6 +52,9 @@ _drag_node_exit cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollBar "_drag_node_exit" '[] (IO ()) where
+        nodeMethod = Godot.Core.ScrollBar._drag_node_exit
+
 {-# NOINLINE bindScrollBar__drag_node_input #-}
 
 bindScrollBar__drag_node_input :: MethodBind
@@ -64,6 +76,11 @@ _drag_node_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollBar "_drag_node_input" '[InputEvent]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollBar._drag_node_input
+
 {-# NOINLINE bindScrollBar__gui_input #-}
 
 bindScrollBar__gui_input :: MethodBind
@@ -84,9 +101,13 @@ _gui_input cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollBar "_gui_input" '[InputEvent] (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollBar._gui_input
+
 {-# NOINLINE bindScrollBar_get_custom_step #-}
 
--- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the @ScrollBar@ is focused.
 bindScrollBar_get_custom_step :: MethodBind
 bindScrollBar_get_custom_step
   = unsafePerformIO $
@@ -96,7 +117,7 @@ bindScrollBar_get_custom_step
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the @ScrollBar@ is focused.
 get_custom_step ::
                   (ScrollBar :< cls, Object :< cls) => cls -> IO Float
 get_custom_step cls
@@ -107,9 +128,13 @@ get_custom_step cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ScrollBar "get_custom_step" '[] (IO Float)
+         where
+        nodeMethod = Godot.Core.ScrollBar.get_custom_step
+
 {-# NOINLINE bindScrollBar_set_custom_step #-}
 
--- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the @ScrollBar@ is focused.
 bindScrollBar_set_custom_step :: MethodBind
 bindScrollBar_set_custom_step
   = unsafePerformIO $
@@ -119,7 +144,7 @@ bindScrollBar_set_custom_step
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the [ScrollBar] is focused.
+-- | Overrides the step used when clicking increment and decrement buttons or when using arrow keys when the @ScrollBar@ is focused.
 set_custom_step ::
                   (ScrollBar :< cls, Object :< cls) => cls -> Float -> IO ()
 set_custom_step cls arg1
@@ -129,3 +154,7 @@ set_custom_step cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ScrollBar "set_custom_step" '[Float] (IO ())
+         where
+        nodeMethod = Godot.Core.ScrollBar.set_custom_step

@@ -16,9 +16,14 @@ module Godot.Core.ImmediateGeometry
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.GeometryInstance()
 
 {-# NOINLINE bindImmediateGeometry_add_sphere #-}
 
@@ -35,16 +40,23 @@ bindImmediateGeometry_add_sphere
 -- | Simple helper to draw an UV sphere with given latitude, longitude and radius.
 add_sphere ::
              (ImmediateGeometry :< cls, Object :< cls) =>
-             cls -> Int -> Int -> Float -> Bool -> IO ()
+             cls -> Int -> Int -> Float -> Maybe Bool -> IO ()
 add_sphere cls arg1 arg2 arg3 arg4
   = withVariantArray
-      [toVariant arg1, toVariant arg2, toVariant arg3, toVariant arg4]
+      [toVariant arg1, toVariant arg2, toVariant arg3,
+       maybe (VariantBool True) toVariant arg4]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImmediateGeometry_add_sphere
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImmediateGeometry "add_sphere"
+           '[Int, Int, Float, Maybe Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.add_sphere
 
 {-# NOINLINE bindImmediateGeometry_add_vertex #-}
 
@@ -71,10 +83,15 @@ add_vertex cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImmediateGeometry "add_vertex" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.add_vertex
+
 {-# NOINLINE bindImmediateGeometry_begin #-}
 
--- | Begin drawing (and optionally pass a texture override). When done call [method end]. For more information on how this works, search for [code]glBegin()[/code] and [code]glEnd()[/code] references.
---   				For the type of primitive, see the [enum Mesh.PrimitiveType] enum.
+-- | Begin drawing (and optionally pass a texture override). When done call @method end@. For more information on how this works, search for @glBegin()@ and @glEnd()@ references.
+--   				For the type of primitive, see the @enum Mesh.PrimitiveType@ enum.
 bindImmediateGeometry_begin :: MethodBind
 bindImmediateGeometry_begin
   = unsafePerformIO $
@@ -84,18 +101,24 @@ bindImmediateGeometry_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Begin drawing (and optionally pass a texture override). When done call [method end]. For more information on how this works, search for [code]glBegin()[/code] and [code]glEnd()[/code] references.
---   				For the type of primitive, see the [enum Mesh.PrimitiveType] enum.
+-- | Begin drawing (and optionally pass a texture override). When done call @method end@. For more information on how this works, search for @glBegin()@ and @glEnd()@ references.
+--   				For the type of primitive, see the @enum Mesh.PrimitiveType@ enum.
 begin ::
         (ImmediateGeometry :< cls, Object :< cls) =>
-        cls -> Int -> Texture -> IO ()
+        cls -> Int -> Maybe Texture -> IO ()
 begin cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe VariantNil toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindImmediateGeometry_begin (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImmediateGeometry "begin" '[Int, Maybe Texture]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.begin
 
 {-# NOINLINE bindImmediateGeometry_clear #-}
 
@@ -119,6 +142,9 @@ clear cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImmediateGeometry "clear" '[] (IO ()) where
+        nodeMethod = Godot.Core.ImmediateGeometry.clear
+
 {-# NOINLINE bindImmediateGeometry_end #-}
 
 -- | Ends a drawing context and displays the results.
@@ -140,6 +166,9 @@ end cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImmediateGeometry "end" '[] (IO ()) where
+        nodeMethod = Godot.Core.ImmediateGeometry.end
 
 {-# NOINLINE bindImmediateGeometry_set_color #-}
 
@@ -163,6 +192,10 @@ set_color cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImmediateGeometry "set_color" '[Color] (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.set_color
 
 {-# NOINLINE bindImmediateGeometry_set_normal #-}
 
@@ -189,6 +222,11 @@ set_normal cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImmediateGeometry "set_normal" '[Vector3]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.set_normal
+
 {-# NOINLINE bindImmediateGeometry_set_tangent #-}
 
 -- | The next vertex's tangent (and binormal facing).
@@ -212,6 +250,11 @@ set_tangent cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImmediateGeometry "set_tangent" '[Plane]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.set_tangent
 
 {-# NOINLINE bindImmediateGeometry_set_uv #-}
 
@@ -237,6 +280,10 @@ set_uv cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod ImmediateGeometry "set_uv" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.set_uv
+
 {-# NOINLINE bindImmediateGeometry_set_uv2 #-}
 
 -- | The next vertex's second layer UV.
@@ -260,3 +307,7 @@ set_uv2 cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod ImmediateGeometry "set_uv2" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.ImmediateGeometry.set_uv2

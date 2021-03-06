@@ -56,9 +56,14 @@ module Godot.Core.Generic6DOFJoint
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Joint()
 
 _PARAM_ANGULAR_LOWER_LIMIT :: Int
 _PARAM_ANGULAR_LOWER_LIMIT = 10
@@ -132,6 +137,712 @@ _PARAM_LINEAR_MOTOR_FORCE_LIMIT = 6
 _PARAM_ANGULAR_RESTITUTION :: Int
 _PARAM_ANGULAR_RESTITUTION = 14
 
+instance NodeProperty Generic6DOFJoint "angular_limit_x/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 13 get_param_x,
+             wrapIndexedSetter 13 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_x/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_flag_x, wrapIndexedSetter 1 set_flag_x,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_x/erp" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 16 get_param_x,
+             wrapIndexedSetter 16 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_x/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 15 get_param_x,
+             wrapIndexedSetter 15 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_x/lower_angle"
+           Float
+           'False
+         where
+        nodeProperty
+          = (_get_angular_lo_limit_x,
+             wrapDroppingSetter _set_angular_lo_limit_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_x/restitution"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 14 get_param_x,
+             wrapIndexedSetter 14 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_x/softness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 12 get_param_x,
+             wrapIndexedSetter 12 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_x/upper_angle"
+           Float
+           'False
+         where
+        nodeProperty
+          = (_get_angular_hi_limit_x,
+             wrapDroppingSetter _set_angular_hi_limit_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_y/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 13 get_param_y,
+             wrapIndexedSetter 13 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_y/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_flag_y, wrapIndexedSetter 1 set_flag_y,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_y/erp" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 16 get_param_y,
+             wrapIndexedSetter 16 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_y/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 15 get_param_y,
+             wrapIndexedSetter 15 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_y/lower_angle"
+           Float
+           'False
+         where
+        nodeProperty
+          = (_get_angular_lo_limit_y,
+             wrapDroppingSetter _set_angular_lo_limit_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_y/restitution"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 14 get_param_y,
+             wrapIndexedSetter 14 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_y/softness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 12 get_param_y,
+             wrapIndexedSetter 12 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_y/upper_angle"
+           Float
+           'False
+         where
+        nodeProperty
+          = (_get_angular_hi_limit_y,
+             wrapDroppingSetter _set_angular_hi_limit_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_z/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 13 get_param_z,
+             wrapIndexedSetter 13 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_z/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_flag_z, wrapIndexedSetter 1 set_flag_z,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_z/erp" Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 16 get_param_z,
+             wrapIndexedSetter 16 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_z/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 15 get_param_z,
+             wrapIndexedSetter 15 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_z/lower_angle"
+           Float
+           'False
+         where
+        nodeProperty
+          = (_get_angular_lo_limit_z,
+             wrapDroppingSetter _set_angular_lo_limit_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_z/restitution"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 14 get_param_z,
+             wrapIndexedSetter 14 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_limit_z/softness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 12 get_param_z,
+             wrapIndexedSetter 12 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_limit_z/upper_angle"
+           Float
+           'False
+         where
+        nodeProperty
+          = (_get_angular_hi_limit_z,
+             wrapDroppingSetter _set_angular_hi_limit_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_motor_x/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_flag_x, wrapIndexedSetter 4 set_flag_x,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_motor_x/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 18 get_param_x,
+             wrapIndexedSetter 18 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_motor_x/target_velocity"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 17 get_param_x,
+             wrapIndexedSetter 17 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_motor_y/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_flag_y, wrapIndexedSetter 4 set_flag_y,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_motor_y/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 18 get_param_y,
+             wrapIndexedSetter 18 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_motor_y/target_velocity"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 17 get_param_y,
+             wrapIndexedSetter 17 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_motor_z/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_flag_z, wrapIndexedSetter 4 set_flag_z,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_motor_z/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 18 get_param_z,
+             wrapIndexedSetter 18 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_motor_z/target_velocity"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 17 get_param_z,
+             wrapIndexedSetter 17 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_x/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 20 get_param_x,
+             wrapIndexedSetter 20 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_x/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_flag_x, wrapIndexedSetter 2 set_flag_x,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_spring_x/equilibrium_point"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 21 get_param_x,
+             wrapIndexedSetter 21 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_x/stiffness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 19 get_param_x,
+             wrapIndexedSetter 19 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_y/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 20 get_param_y,
+             wrapIndexedSetter 20 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_y/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_flag_y, wrapIndexedSetter 2 set_flag_y,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_spring_y/equilibrium_point"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 21 get_param_y,
+             wrapIndexedSetter 21 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_y/stiffness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 19 get_param_y,
+             wrapIndexedSetter 19 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_z/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 20 get_param_z,
+             wrapIndexedSetter 20 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_z/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_flag_z, wrapIndexedSetter 2 set_flag_z,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "angular_spring_z/equilibrium_point"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 21 get_param_z,
+             wrapIndexedSetter 21 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "angular_spring_z/stiffness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 19 get_param_z,
+             wrapIndexedSetter 19 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_x/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_param_x,
+             wrapIndexedSetter 4 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_x/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_flag_x, wrapIndexedSetter 0 set_flag_x,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_limit_x/lower_distance"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_param_x,
+             wrapIndexedSetter 0 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_x/restitution"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_param_x,
+             wrapIndexedSetter 3 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_x/softness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_param_x,
+             wrapIndexedSetter 2 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_limit_x/upper_distance"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_param_x,
+             wrapIndexedSetter 1 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_y/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_param_y,
+             wrapIndexedSetter 4 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_y/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_flag_y, wrapIndexedSetter 0 set_flag_y,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_limit_y/lower_distance"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_param_y,
+             wrapIndexedSetter 0 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_y/restitution"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_param_y,
+             wrapIndexedSetter 3 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_y/softness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_param_y,
+             wrapIndexedSetter 2 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_limit_y/upper_distance"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_param_y,
+             wrapIndexedSetter 1 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_z/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 4 get_param_z,
+             wrapIndexedSetter 4 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_z/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_flag_z, wrapIndexedSetter 0 set_flag_z,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_limit_z/lower_distance"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 0 get_param_z,
+             wrapIndexedSetter 0 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_z/restitution"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_param_z,
+             wrapIndexedSetter 3 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_limit_z/softness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 2 get_param_z,
+             wrapIndexedSetter 2 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_limit_z/upper_distance"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 1 get_param_z,
+             wrapIndexedSetter 1 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_motor_x/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 5 get_flag_x, wrapIndexedSetter 5 set_flag_x,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_motor_x/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 6 get_param_x,
+             wrapIndexedSetter 6 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_motor_x/target_velocity"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 5 get_param_x,
+             wrapIndexedSetter 5 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_motor_y/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 5 get_flag_y, wrapIndexedSetter 5 set_flag_y,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_motor_y/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 6 get_param_y,
+             wrapIndexedSetter 6 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_motor_y/target_velocity"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 5 get_param_y,
+             wrapIndexedSetter 5 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_motor_z/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 5 get_flag_z, wrapIndexedSetter 5 set_flag_z,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_motor_z/force_limit"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 6 get_param_z,
+             wrapIndexedSetter 6 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_motor_z/target_velocity"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 5 get_param_z,
+             wrapIndexedSetter 5 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_x/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 8 get_param_x,
+             wrapIndexedSetter 8 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_x/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_flag_x, wrapIndexedSetter 3 set_flag_x,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_spring_x/equilibrium_point"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 9 get_param_x,
+             wrapIndexedSetter 9 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_x/stiffness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 7 get_param_x,
+             wrapIndexedSetter 7 set_param_x, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_y/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 8 get_param_y,
+             wrapIndexedSetter 8 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_y/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_flag_y, wrapIndexedSetter 3 set_flag_y,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_spring_y/equilibrium_point"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 9 get_param_y,
+             wrapIndexedSetter 9 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_y/stiffness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 7 get_param_y,
+             wrapIndexedSetter 7 set_param_y, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_z/damping"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 8 get_param_z,
+             wrapIndexedSetter 8 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_z/enabled"
+           Bool
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 3 get_flag_z, wrapIndexedSetter 3 set_flag_z,
+             Nothing)
+
+instance NodeProperty Generic6DOFJoint
+           "linear_spring_z/equilibrium_point"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 9 get_param_z,
+             wrapIndexedSetter 9 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "linear_spring_z/stiffness"
+           Float
+           'False
+         where
+        nodeProperty
+          = (wrapIndexedGetter 7 get_param_z,
+             wrapIndexedSetter 7 set_param_z, Nothing)
+
+instance NodeProperty Generic6DOFJoint "precision" Int 'False where
+        nodeProperty
+          = (get_precision, wrapDroppingSetter set_precision, Nothing)
+
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_hi_limit_x #-}
 
 -- | The minimum rotation in positive direction to break loose and rotate around the X axis.
@@ -155,6 +866,11 @@ _get_angular_hi_limit_x cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "_get_angular_hi_limit_x" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._get_angular_hi_limit_x
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_hi_limit_y #-}
 
@@ -180,6 +896,11 @@ _get_angular_hi_limit_y cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "_get_angular_hi_limit_y" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._get_angular_hi_limit_y
+
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_hi_limit_z #-}
 
 -- | The minimum rotation in positive direction to break loose and rotate around the Z axis.
@@ -203,6 +924,11 @@ _get_angular_hi_limit_z cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "_get_angular_hi_limit_z" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._get_angular_hi_limit_z
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_lo_limit_x #-}
 
@@ -228,6 +954,11 @@ _get_angular_lo_limit_x cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "_get_angular_lo_limit_x" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._get_angular_lo_limit_x
+
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_lo_limit_y #-}
 
 -- | The minimum rotation in negative direction to break loose and rotate around the Y axis.
@@ -251,6 +982,11 @@ _get_angular_lo_limit_y cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "_get_angular_lo_limit_y" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._get_angular_lo_limit_y
 
 {-# NOINLINE bindGeneric6DOFJoint__get_angular_lo_limit_z #-}
 
@@ -276,6 +1012,11 @@ _get_angular_lo_limit_z cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "_get_angular_lo_limit_z" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._get_angular_lo_limit_z
+
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_hi_limit_x #-}
 
 -- | The minimum rotation in positive direction to break loose and rotate around the X axis.
@@ -299,6 +1040,12 @@ _set_angular_hi_limit_x cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "_set_angular_hi_limit_x"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._set_angular_hi_limit_x
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_hi_limit_y #-}
 
@@ -324,6 +1071,12 @@ _set_angular_hi_limit_y cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "_set_angular_hi_limit_y"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._set_angular_hi_limit_y
+
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_hi_limit_z #-}
 
 -- | The minimum rotation in positive direction to break loose and rotate around the Z axis.
@@ -347,6 +1100,12 @@ _set_angular_hi_limit_z cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "_set_angular_hi_limit_z"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._set_angular_hi_limit_z
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_lo_limit_x #-}
 
@@ -372,6 +1131,12 @@ _set_angular_lo_limit_x cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "_set_angular_lo_limit_x"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._set_angular_lo_limit_x
+
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_lo_limit_y #-}
 
 -- | The minimum rotation in negative direction to break loose and rotate around the Y axis.
@@ -395,6 +1160,12 @@ _set_angular_lo_limit_y cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "_set_angular_lo_limit_y"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._set_angular_lo_limit_y
 
 {-# NOINLINE bindGeneric6DOFJoint__set_angular_lo_limit_z #-}
 
@@ -420,9 +1191,15 @@ _set_angular_lo_limit_z cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "_set_angular_lo_limit_z"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint._set_angular_lo_limit_z
+
 {-# NOINLINE bindGeneric6DOFJoint_get_flag_x #-}
 
--- | If [code]true[/code], rotation across the X axis is limited.
+-- | If @true@, rotation across the X axis is limited.
 bindGeneric6DOFJoint_get_flag_x :: MethodBind
 bindGeneric6DOFJoint_get_flag_x
   = unsafePerformIO $
@@ -432,7 +1209,7 @@ bindGeneric6DOFJoint_get_flag_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the X axis is limited.
+-- | If @true@, rotation across the X axis is limited.
 get_flag_x ::
              (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag_x cls arg1
@@ -443,9 +1220,13 @@ get_flag_x cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "get_flag_x" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.get_flag_x
+
 {-# NOINLINE bindGeneric6DOFJoint_get_flag_y #-}
 
--- | If [code]true[/code], rotation across the Y axis is limited.
+-- | If @true@, rotation across the Y axis is limited.
 bindGeneric6DOFJoint_get_flag_y :: MethodBind
 bindGeneric6DOFJoint_get_flag_y
   = unsafePerformIO $
@@ -455,7 +1236,7 @@ bindGeneric6DOFJoint_get_flag_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the Y axis is limited.
+-- | If @true@, rotation across the Y axis is limited.
 get_flag_y ::
              (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag_y cls arg1
@@ -466,9 +1247,13 @@ get_flag_y cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "get_flag_y" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.get_flag_y
+
 {-# NOINLINE bindGeneric6DOFJoint_get_flag_z #-}
 
--- | If [code]true[/code], rotation across the Z axis is limited.
+-- | If @true@, rotation across the Z axis is limited.
 bindGeneric6DOFJoint_get_flag_z :: MethodBind
 bindGeneric6DOFJoint_get_flag_z
   = unsafePerformIO $
@@ -478,7 +1263,7 @@ bindGeneric6DOFJoint_get_flag_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the Z axis is limited.
+-- | If @true@, rotation across the Z axis is limited.
 get_flag_z ::
              (Generic6DOFJoint :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_flag_z cls arg1
@@ -488,6 +1273,10 @@ get_flag_z cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "get_flag_z" '[Int] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.get_flag_z
 
 {-# NOINLINE bindGeneric6DOFJoint_get_param_x #-}
 
@@ -515,6 +1304,11 @@ get_param_x cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "get_param_x" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.get_param_x
+
 {-# NOINLINE bindGeneric6DOFJoint_get_param_y #-}
 
 -- | The amount of rotational damping across the Y axis. The lower, the more dampening occurs.
@@ -538,6 +1332,11 @@ get_param_y cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "get_param_y" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.get_param_y
 
 {-# NOINLINE bindGeneric6DOFJoint_get_param_z #-}
 
@@ -563,6 +1362,11 @@ get_param_z cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "get_param_z" '[Int]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.get_param_z
+
 {-# NOINLINE bindGeneric6DOFJoint_get_precision #-}
 
 bindGeneric6DOFJoint_get_precision :: MethodBind
@@ -585,9 +1389,13 @@ get_precision cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "get_precision" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.get_precision
+
 {-# NOINLINE bindGeneric6DOFJoint_set_flag_x #-}
 
--- | If [code]true[/code], rotation across the X axis is limited.
+-- | If @true@, rotation across the X axis is limited.
 bindGeneric6DOFJoint_set_flag_x :: MethodBind
 bindGeneric6DOFJoint_set_flag_x
   = unsafePerformIO $
@@ -597,7 +1405,7 @@ bindGeneric6DOFJoint_set_flag_x
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the X axis is limited.
+-- | If @true@, rotation across the X axis is limited.
 set_flag_x ::
              (Generic6DOFJoint :< cls, Object :< cls) =>
              cls -> Int -> Bool -> IO ()
@@ -609,9 +1417,14 @@ set_flag_x cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "set_flag_x" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.set_flag_x
+
 {-# NOINLINE bindGeneric6DOFJoint_set_flag_y #-}
 
--- | If [code]true[/code], rotation across the Y axis is limited.
+-- | If @true@, rotation across the Y axis is limited.
 bindGeneric6DOFJoint_set_flag_y :: MethodBind
 bindGeneric6DOFJoint_set_flag_y
   = unsafePerformIO $
@@ -621,7 +1434,7 @@ bindGeneric6DOFJoint_set_flag_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the Y axis is limited.
+-- | If @true@, rotation across the Y axis is limited.
 set_flag_y ::
              (Generic6DOFJoint :< cls, Object :< cls) =>
              cls -> Int -> Bool -> IO ()
@@ -633,9 +1446,14 @@ set_flag_y cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "set_flag_y" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.set_flag_y
+
 {-# NOINLINE bindGeneric6DOFJoint_set_flag_z #-}
 
--- | If [code]true[/code], rotation across the Z axis is limited.
+-- | If @true@, rotation across the Z axis is limited.
 bindGeneric6DOFJoint_set_flag_z :: MethodBind
 bindGeneric6DOFJoint_set_flag_z
   = unsafePerformIO $
@@ -645,7 +1463,7 @@ bindGeneric6DOFJoint_set_flag_z
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], rotation across the Z axis is limited.
+-- | If @true@, rotation across the Z axis is limited.
 set_flag_z ::
              (Generic6DOFJoint :< cls, Object :< cls) =>
              cls -> Int -> Bool -> IO ()
@@ -656,6 +1474,11 @@ set_flag_z cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "set_flag_z" '[Int, Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.set_flag_z
 
 {-# NOINLINE bindGeneric6DOFJoint_set_param_x #-}
 
@@ -684,6 +1507,11 @@ set_param_x cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "set_param_x" '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.set_param_x
+
 {-# NOINLINE bindGeneric6DOFJoint_set_param_y #-}
 
 -- | The amount of rotational damping across the Y axis. The lower, the more dampening occurs.
@@ -708,6 +1536,11 @@ set_param_y cls arg1 arg2
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "set_param_y" '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.set_param_y
 
 {-# NOINLINE bindGeneric6DOFJoint_set_param_z #-}
 
@@ -734,6 +1567,11 @@ set_param_z cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Generic6DOFJoint "set_param_z" '[Int, Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.set_param_z
+
 {-# NOINLINE bindGeneric6DOFJoint_set_precision #-}
 
 bindGeneric6DOFJoint_set_precision :: MethodBind
@@ -755,3 +1593,7 @@ set_precision cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Generic6DOFJoint "set_precision" '[Int] (IO ())
+         where
+        nodeMethod = Godot.Core.Generic6DOFJoint.set_precision

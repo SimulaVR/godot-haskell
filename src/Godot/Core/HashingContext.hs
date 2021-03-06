@@ -11,9 +11,14 @@ module Godot.Core.HashingContext
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Reference()
 
 _HASH_SHA1 :: Int
 _HASH_SHA1 = 1
@@ -47,9 +52,13 @@ finish cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HashingContext "finish" '[] (IO PoolByteArray)
+         where
+        nodeMethod = Godot.Core.HashingContext.finish
+
 {-# NOINLINE bindHashingContext_start #-}
 
--- | Starts a new hash computation of the given [code]type[/code] (e.g. [constant HASH_SHA256] to start computation of a SHA-256).
+-- | Starts a new hash computation of the given @type@ (e.g. @HASH_SHA256@ to start computation of a SHA-256).
 bindHashingContext_start :: MethodBind
 bindHashingContext_start
   = unsafePerformIO $
@@ -59,7 +68,7 @@ bindHashingContext_start
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Starts a new hash computation of the given [code]type[/code] (e.g. [constant HASH_SHA256] to start computation of a SHA-256).
+-- | Starts a new hash computation of the given @type@ (e.g. @HASH_SHA256@ to start computation of a SHA-256).
 start ::
         (HashingContext :< cls, Object :< cls) => cls -> Int -> IO Int
 start cls arg1
@@ -69,9 +78,12 @@ start cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod HashingContext "start" '[Int] (IO Int) where
+        nodeMethod = Godot.Core.HashingContext.start
+
 {-# NOINLINE bindHashingContext_update #-}
 
--- | Updates the computation with the given [code]chunk[/code] of data.
+-- | Updates the computation with the given @chunk@ of data.
 bindHashingContext_update :: MethodBind
 bindHashingContext_update
   = unsafePerformIO $
@@ -81,7 +93,7 @@ bindHashingContext_update
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Updates the computation with the given [code]chunk[/code] of data.
+-- | Updates the computation with the given @chunk@ of data.
 update ::
          (HashingContext :< cls, Object :< cls) =>
          cls -> PoolByteArray -> IO Int
@@ -92,3 +104,8 @@ update cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod HashingContext "update" '[PoolByteArray]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.HashingContext.update

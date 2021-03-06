@@ -19,9 +19,14 @@ module Godot.Core.IP
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Object()
 
 _RESOLVER_INVALID_ID :: Int
 _RESOLVER_INVALID_ID = -1
@@ -55,7 +60,7 @@ _TYPE_ANY = 3
 
 {-# NOINLINE bindIP_clear_cache #-}
 
--- | Removes all of a [code]hostname[/code]'s cached references. If no [code]hostname[/code] is given, all cached IP addresses are removed.
+-- | Removes all of a @hostname@'s cached references. If no @hostname@ is given, all cached IP addresses are removed.
 bindIP_clear_cache :: MethodBind
 bindIP_clear_cache
   = unsafePerformIO $
@@ -65,18 +70,22 @@ bindIP_clear_cache
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes all of a [code]hostname[/code]'s cached references. If no [code]hostname[/code] is given, all cached IP addresses are removed.
+-- | Removes all of a @hostname@'s cached references. If no @hostname@ is given, all cached IP addresses are removed.
 clear_cache ::
-              (IP :< cls, Object :< cls) => cls -> GodotString -> IO ()
+              (IP :< cls, Object :< cls) => cls -> Maybe GodotString -> IO ()
 clear_cache cls arg1
-  = withVariantArray [toVariant arg1]
+  = withVariantArray [defaultedVariant VariantString "" arg1]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindIP_clear_cache (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod IP "clear_cache" '[Maybe GodotString] (IO ())
+         where
+        nodeMethod = Godot.Core.IP.clear_cache
+
 {-# NOINLINE bindIP_erase_resolve_item #-}
 
--- | Removes a given item [code]id[/code] from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
+-- | Removes a given item @id@ from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
 bindIP_erase_resolve_item :: MethodBind
 bindIP_erase_resolve_item
   = unsafePerformIO $
@@ -86,7 +95,7 @@ bindIP_erase_resolve_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes a given item [code]id[/code] from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
+-- | Removes a given item @id@ from the queue. This should be used to free a queue after it has completed to enable more queries to happen.
 erase_resolve_item ::
                      (IP :< cls, Object :< cls) => cls -> Int -> IO ()
 erase_resolve_item cls arg1
@@ -96,6 +105,9 @@ erase_resolve_item cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod IP "erase_resolve_item" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.IP.erase_resolve_item
 
 {-# NOINLINE bindIP_get_local_addresses #-}
 
@@ -120,18 +132,24 @@ get_local_addresses cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod IP "get_local_addresses" '[] (IO Array) where
+        nodeMethod = Godot.Core.IP.get_local_addresses
+
 {-# NOINLINE bindIP_get_local_interfaces #-}
 
 -- | Returns all network adapters as an array.
 --   				Each adapter is a dictionary of the form:
---   				[codeblock]
+--   				
+--   @
+--   
 --   				{
 --   				    "index": "1", # Interface index.
 --   				    "name": "eth0", # Interface name.
 --   				    "friendly": "Ethernet One", # A friendly name (might be empty).
---   				    "addresses": ["192.168.1.101"], # An array of IP addresses associated to this interface.
+--   				    "addresses": @"192.168.1.101"@, # An array of IP addresses associated to this interface.
 --   				}
---   				[/codeblock]
+--   				
+--   @
 bindIP_get_local_interfaces :: MethodBind
 bindIP_get_local_interfaces
   = unsafePerformIO $
@@ -143,14 +161,17 @@ bindIP_get_local_interfaces
 
 -- | Returns all network adapters as an array.
 --   				Each adapter is a dictionary of the form:
---   				[codeblock]
+--   				
+--   @
+--   
 --   				{
 --   				    "index": "1", # Interface index.
 --   				    "name": "eth0", # Interface name.
 --   				    "friendly": "Ethernet One", # A friendly name (might be empty).
---   				    "addresses": ["192.168.1.101"], # An array of IP addresses associated to this interface.
+--   				    "addresses": @"192.168.1.101"@, # An array of IP addresses associated to this interface.
 --   				}
---   				[/codeblock]
+--   				
+--   @
 get_local_interfaces ::
                        (IP :< cls, Object :< cls) => cls -> IO Array
 get_local_interfaces cls
@@ -161,9 +182,12 @@ get_local_interfaces cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod IP "get_local_interfaces" '[] (IO Array) where
+        nodeMethod = Godot.Core.IP.get_local_interfaces
+
 {-# NOINLINE bindIP_get_resolve_item_address #-}
 
--- | Returns a queued hostname's IP address, given its queue [code]id[/code]. Returns an empty string on error or if resolution hasn't happened yet (see [method get_resolve_item_status]).
+-- | Returns a queued hostname's IP address, given its queue @id@. Returns an empty string on error or if resolution hasn't happened yet (see @method get_resolve_item_status@).
 bindIP_get_resolve_item_address :: MethodBind
 bindIP_get_resolve_item_address
   = unsafePerformIO $
@@ -173,7 +197,7 @@ bindIP_get_resolve_item_address
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a queued hostname's IP address, given its queue [code]id[/code]. Returns an empty string on error or if resolution hasn't happened yet (see [method get_resolve_item_status]).
+-- | Returns a queued hostname's IP address, given its queue @id@. Returns an empty string on error or if resolution hasn't happened yet (see @method get_resolve_item_status@).
 get_resolve_item_address ::
                            (IP :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_resolve_item_address cls arg1
@@ -184,9 +208,14 @@ get_resolve_item_address cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod IP "get_resolve_item_address" '[Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.IP.get_resolve_item_address
+
 {-# NOINLINE bindIP_get_resolve_item_status #-}
 
--- | Returns a queued hostname's status as a [enum ResolverStatus] constant, given its queue [code]id[/code].
+-- | Returns a queued hostname's status as a @enum ResolverStatus@ constant, given its queue @id@.
 bindIP_get_resolve_item_status :: MethodBind
 bindIP_get_resolve_item_status
   = unsafePerformIO $
@@ -196,7 +225,7 @@ bindIP_get_resolve_item_status
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a queued hostname's status as a [enum ResolverStatus] constant, given its queue [code]id[/code].
+-- | Returns a queued hostname's status as a @enum ResolverStatus@ constant, given its queue @id@.
 get_resolve_item_status ::
                           (IP :< cls, Object :< cls) => cls -> Int -> IO Int
 get_resolve_item_status cls arg1
@@ -207,9 +236,13 @@ get_resolve_item_status cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod IP "get_resolve_item_status" '[Int] (IO Int)
+         where
+        nodeMethod = Godot.Core.IP.get_resolve_item_status
+
 {-# NOINLINE bindIP_resolve_hostname #-}
 
--- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the [enum Type] constant given as [code]ip_type[/code].
+-- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the @enum Type@ constant given as @ip_type@.
 bindIP_resolve_hostname :: MethodBind
 bindIP_resolve_hostname
   = unsafePerformIO $
@@ -219,20 +252,26 @@ bindIP_resolve_hostname
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the [enum Type] constant given as [code]ip_type[/code].
+-- | Returns a given hostname's IPv4 or IPv6 address when resolved (blocking-type method). The address type returned depends on the @enum Type@ constant given as @ip_type@.
 resolve_hostname ::
                    (IP :< cls, Object :< cls) =>
-                   cls -> GodotString -> Int -> IO GodotString
+                   cls -> GodotString -> Maybe Int -> IO GodotString
 resolve_hostname cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (3)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindIP_resolve_hostname (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod IP "resolve_hostname" '[GodotString, Maybe Int]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.IP.resolve_hostname
+
 {-# NOINLINE bindIP_resolve_hostname_queue_item #-}
 
--- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the [enum Type] constant given as [code]ip_type[/code]. Returns the queue ID if successful, or [constant RESOLVER_INVALID_ID] on error.
+-- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the @enum Type@ constant given as @ip_type@. Returns the queue ID if successful, or @RESOLVER_INVALID_ID@ on error.
 bindIP_resolve_hostname_queue_item :: MethodBind
 bindIP_resolve_hostname_queue_item
   = unsafePerformIO $
@@ -242,14 +281,22 @@ bindIP_resolve_hostname_queue_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the [enum Type] constant given as [code]ip_type[/code]. Returns the queue ID if successful, or [constant RESOLVER_INVALID_ID] on error.
+-- | Creates a queue item to resolve a hostname to an IPv4 or IPv6 address depending on the @enum Type@ constant given as @ip_type@. Returns the queue ID if successful, or @RESOLVER_INVALID_ID@ on error.
 resolve_hostname_queue_item ::
-                              (IP :< cls, Object :< cls) => cls -> GodotString -> Int -> IO Int
+                              (IP :< cls, Object :< cls) =>
+                              cls -> GodotString -> Maybe Int -> IO Int
 resolve_hostname_queue_item cls arg1 arg2
-  = withVariantArray [toVariant arg1, toVariant arg2]
+  = withVariantArray
+      [toVariant arg1, maybe (VariantInt (3)) toVariant arg2]
       (\ (arrPtr, len) ->
          godot_method_bind_call bindIP_resolve_hostname_queue_item
            (upcast cls)
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod IP "resolve_hostname_queue_item"
+           '[GodotString, Maybe Int]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.IP.resolve_hostname_queue_item

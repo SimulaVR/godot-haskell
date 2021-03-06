@@ -43,9 +43,14 @@ module Godot.Core.VisualShaderNodeVectorFunc
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.VisualShaderNode()
 
 _FUNC_ASINH :: Int
 _FUNC_ASINH = 10
@@ -152,9 +157,15 @@ _FUNC_ABS = 6
 _FUNC_FLOOR :: Int
 _FUNC_FLOOR = 19
 
+instance NodeProperty VisualShaderNodeVectorFunc "function" Int
+           'False
+         where
+        nodeProperty
+          = (get_function, wrapDroppingSetter set_function, Nothing)
+
 {-# NOINLINE bindVisualShaderNodeVectorFunc_get_function #-}
 
--- | The function to be performed. See [enum Function] for options.
+-- | The function to be performed. See @enum Function@ for options.
 bindVisualShaderNodeVectorFunc_get_function :: MethodBind
 bindVisualShaderNodeVectorFunc_get_function
   = unsafePerformIO $
@@ -164,7 +175,7 @@ bindVisualShaderNodeVectorFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The function to be performed. See [enum Function] for options.
+-- | The function to be performed. See @enum Function@ for options.
 get_function ::
                (VisualShaderNodeVectorFunc :< cls, Object :< cls) => cls -> IO Int
 get_function cls
@@ -176,9 +187,14 @@ get_function cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod VisualShaderNodeVectorFunc "get_function" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeVectorFunc.get_function
+
 {-# NOINLINE bindVisualShaderNodeVectorFunc_set_function #-}
 
--- | The function to be performed. See [enum Function] for options.
+-- | The function to be performed. See @enum Function@ for options.
 bindVisualShaderNodeVectorFunc_set_function :: MethodBind
 bindVisualShaderNodeVectorFunc_set_function
   = unsafePerformIO $
@@ -188,7 +204,7 @@ bindVisualShaderNodeVectorFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The function to be performed. See [enum Function] for options.
+-- | The function to be performed. See @enum Function@ for options.
 set_function ::
                (VisualShaderNodeVectorFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()
@@ -200,3 +216,9 @@ set_function cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod VisualShaderNodeVectorFunc "set_function"
+           '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.VisualShaderNodeVectorFunc.set_function

@@ -8,9 +8,19 @@ module Godot.Core.BoneAttachment
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Spatial()
+
+instance NodeProperty BoneAttachment "bone_name" GodotString 'False
+         where
+        nodeProperty
+          = (get_bone_name, wrapDroppingSetter set_bone_name, Nothing)
 
 {-# NOINLINE bindBoneAttachment_get_bone_name #-}
 
@@ -36,6 +46,11 @@ get_bone_name cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod BoneAttachment "get_bone_name" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.BoneAttachment.get_bone_name
+
 {-# NOINLINE bindBoneAttachment_set_bone_name #-}
 
 -- | The name of the attached bone.
@@ -60,3 +75,8 @@ set_bone_name cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod BoneAttachment "set_bone_name" '[GodotString]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.BoneAttachment.set_bone_name

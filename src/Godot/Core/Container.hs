@@ -12,9 +12,14 @@ module Godot.Core.Container
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Control()
 
 _NOTIFICATION_SORT_CHILDREN :: Int
 _NOTIFICATION_SORT_CHILDREN = 50
@@ -47,6 +52,10 @@ _child_minsize_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Container "_child_minsize_changed" '[] (IO ())
+         where
+        nodeMethod = Godot.Core.Container._child_minsize_changed
+
 {-# NOINLINE bindContainer__sort_children #-}
 
 bindContainer__sort_children :: MethodBind
@@ -66,6 +75,9 @@ _sort_children cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Container "_sort_children" '[] (IO ()) where
+        nodeMethod = Godot.Core.Container._sort_children
 
 {-# NOINLINE bindContainer_fit_child_in_rect #-}
 
@@ -91,6 +103,11 @@ fit_child_in_rect cls arg1 arg2
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Container "fit_child_in_rect" '[Control, Rect2]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.Container.fit_child_in_rect
+
 {-# NOINLINE bindContainer_queue_sort #-}
 
 -- | Queue resort of the contained children. This is called automatically anyway, but can be called upon request.
@@ -111,3 +128,6 @@ queue_sort cls
          godot_method_bind_call bindContainer_queue_sort (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Container "queue_sort" '[] (IO ()) where
+        nodeMethod = Godot.Core.Container.queue_sort

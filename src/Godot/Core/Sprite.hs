@@ -25,22 +25,77 @@ module Godot.Core.Sprite
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.Node2D()
 
--- | Emitted when the [member frame] changes.
+-- | Emitted when the @frame@ changes.
 sig_frame_changed :: Godot.Internal.Dispatch.Signal Sprite
 sig_frame_changed = Godot.Internal.Dispatch.Signal "frame_changed"
 
 instance NodeSignal Sprite "frame_changed" '[]
 
--- | Emitted when the [member texture] changes.
+-- | Emitted when the @texture@ changes.
 sig_texture_changed :: Godot.Internal.Dispatch.Signal Sprite
 sig_texture_changed
   = Godot.Internal.Dispatch.Signal "texture_changed"
 
 instance NodeSignal Sprite "texture_changed" '[]
+
+instance NodeProperty Sprite "centered" Bool 'False where
+        nodeProperty
+          = (is_centered, wrapDroppingSetter set_centered, Nothing)
+
+instance NodeProperty Sprite "flip_h" Bool 'False where
+        nodeProperty
+          = (is_flipped_h, wrapDroppingSetter set_flip_h, Nothing)
+
+instance NodeProperty Sprite "flip_v" Bool 'False where
+        nodeProperty
+          = (is_flipped_v, wrapDroppingSetter set_flip_v, Nothing)
+
+instance NodeProperty Sprite "frame" Int 'False where
+        nodeProperty = (get_frame, wrapDroppingSetter set_frame, Nothing)
+
+instance NodeProperty Sprite "frame_coords" Vector2 'False where
+        nodeProperty
+          = (get_frame_coords, wrapDroppingSetter set_frame_coords, Nothing)
+
+instance NodeProperty Sprite "hframes" Int 'False where
+        nodeProperty
+          = (get_hframes, wrapDroppingSetter set_hframes, Nothing)
+
+instance NodeProperty Sprite "normal_map" Texture 'False where
+        nodeProperty
+          = (get_normal_map, wrapDroppingSetter set_normal_map, Nothing)
+
+instance NodeProperty Sprite "offset" Vector2 'False where
+        nodeProperty = (get_offset, wrapDroppingSetter set_offset, Nothing)
+
+instance NodeProperty Sprite "region_enabled" Bool 'False where
+        nodeProperty = (is_region, wrapDroppingSetter set_region, Nothing)
+
+instance NodeProperty Sprite "region_filter_clip" Bool 'False where
+        nodeProperty
+          = (is_region_filter_clip_enabled,
+             wrapDroppingSetter set_region_filter_clip, Nothing)
+
+instance NodeProperty Sprite "region_rect" Rect2 'False where
+        nodeProperty
+          = (get_region_rect, wrapDroppingSetter set_region_rect, Nothing)
+
+instance NodeProperty Sprite "texture" Texture 'False where
+        nodeProperty
+          = (get_texture, wrapDroppingSetter set_texture, Nothing)
+
+instance NodeProperty Sprite "vframes" Int 'False where
+        nodeProperty
+          = (get_vframes, wrapDroppingSetter set_vframes, Nothing)
 
 {-# NOINLINE bindSprite__texture_changed #-}
 
@@ -62,9 +117,12 @@ _texture_changed cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "_texture_changed" '[] (IO ()) where
+        nodeMethod = Godot.Core.Sprite._texture_changed
+
 {-# NOINLINE bindSprite_get_frame #-}
 
--- | Current frame to display from sprite sheet. [member vframes] or [member hframes] must be greater than 1.
+-- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
 bindSprite_get_frame :: MethodBind
 bindSprite_get_frame
   = unsafePerformIO $
@@ -74,7 +132,7 @@ bindSprite_get_frame
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Current frame to display from sprite sheet. [member vframes] or [member hframes] must be greater than 1.
+-- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
 get_frame :: (Sprite :< cls, Object :< cls) => cls -> IO Int
 get_frame cls
   = withVariantArray []
@@ -82,9 +140,12 @@ get_frame cls
          godot_method_bind_call bindSprite_get_frame (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "get_frame" '[] (IO Int) where
+        nodeMethod = Godot.Core.Sprite.get_frame
+
 {-# NOINLINE bindSprite_get_frame_coords #-}
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
 bindSprite_get_frame_coords :: MethodBind
 bindSprite_get_frame_coords
   = unsafePerformIO $
@@ -94,7 +155,7 @@ bindSprite_get_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
 get_frame_coords ::
                    (Sprite :< cls, Object :< cls) => cls -> IO Vector2
 get_frame_coords cls
@@ -104,6 +165,10 @@ get_frame_coords cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sprite "get_frame_coords" '[] (IO Vector2)
+         where
+        nodeMethod = Godot.Core.Sprite.get_frame_coords
 
 {-# NOINLINE bindSprite_get_hframes #-}
 
@@ -126,10 +191,13 @@ get_hframes cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "get_hframes" '[] (IO Int) where
+        nodeMethod = Godot.Core.Sprite.get_hframes
+
 {-# NOINLINE bindSprite_get_normal_map #-}
 
 -- | The normal map gives depth to the Sprite.
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindSprite_get_normal_map :: MethodBind
 bindSprite_get_normal_map
   = unsafePerformIO $
@@ -140,7 +208,7 @@ bindSprite_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map gives depth to the Sprite.
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (Sprite :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -150,6 +218,9 @@ get_normal_map cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sprite "get_normal_map" '[] (IO Texture) where
+        nodeMethod = Godot.Core.Sprite.get_normal_map
 
 {-# NOINLINE bindSprite_get_offset #-}
 
@@ -172,15 +243,21 @@ get_offset cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "get_offset" '[] (IO Vector2) where
+        nodeMethod = Godot.Core.Sprite.get_offset
+
 {-# NOINLINE bindSprite_get_rect #-}
 
--- | Returns a [Rect2] representing the Sprite's boundary in local coordinates. Can be used to detect if the Sprite was clicked. Example:
---   				[codeblock]
+-- | Returns a @Rect2@ representing the Sprite's boundary in local coordinates. Can be used to detect if the Sprite was clicked. Example:
+--   				
+--   @
+--   
 --   				func _input(event):
 --   				    if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 --   				        if get_rect().has_point(to_local(event.position)):
 --   				            print("A click!")
---   				[/codeblock]
+--   				
+--   @
 bindSprite_get_rect :: MethodBind
 bindSprite_get_rect
   = unsafePerformIO $
@@ -190,13 +267,16 @@ bindSprite_get_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a [Rect2] representing the Sprite's boundary in local coordinates. Can be used to detect if the Sprite was clicked. Example:
---   				[codeblock]
+-- | Returns a @Rect2@ representing the Sprite's boundary in local coordinates. Can be used to detect if the Sprite was clicked. Example:
+--   				
+--   @
+--   
 --   				func _input(event):
 --   				    if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 --   				        if get_rect().has_point(to_local(event.position)):
 --   				            print("A click!")
---   				[/codeblock]
+--   				
+--   @
 get_rect :: (Sprite :< cls, Object :< cls) => cls -> IO Rect2
 get_rect cls
   = withVariantArray []
@@ -204,9 +284,12 @@ get_rect cls
          godot_method_bind_call bindSprite_get_rect (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "get_rect" '[] (IO Rect2) where
+        nodeMethod = Godot.Core.Sprite.get_rect
+
 {-# NOINLINE bindSprite_get_region_rect #-}
 
--- | The region of the atlas texture to display. [member region_enabled] must be [code]true[/code].
+-- | The region of the atlas texture to display. @region_enabled@ must be @true@.
 bindSprite_get_region_rect :: MethodBind
 bindSprite_get_region_rect
   = unsafePerformIO $
@@ -216,7 +299,7 @@ bindSprite_get_region_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The region of the atlas texture to display. [member region_enabled] must be [code]true[/code].
+-- | The region of the atlas texture to display. @region_enabled@ must be @true@.
 get_region_rect ::
                   (Sprite :< cls, Object :< cls) => cls -> IO Rect2
 get_region_rect cls
@@ -227,9 +310,12 @@ get_region_rect cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "get_region_rect" '[] (IO Rect2) where
+        nodeMethod = Godot.Core.Sprite.get_region_rect
+
 {-# NOINLINE bindSprite_get_texture #-}
 
--- | [Texture] object to draw.
+-- | @Texture@ object to draw.
 bindSprite_get_texture :: MethodBind
 bindSprite_get_texture
   = unsafePerformIO $
@@ -239,7 +325,7 @@ bindSprite_get_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Texture] object to draw.
+-- | @Texture@ object to draw.
 get_texture :: (Sprite :< cls, Object :< cls) => cls -> IO Texture
 get_texture cls
   = withVariantArray []
@@ -247,6 +333,9 @@ get_texture cls
          godot_method_bind_call bindSprite_get_texture (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sprite "get_texture" '[] (IO Texture) where
+        nodeMethod = Godot.Core.Sprite.get_texture
 
 {-# NOINLINE bindSprite_get_vframes #-}
 
@@ -269,9 +358,12 @@ get_vframes cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "get_vframes" '[] (IO Int) where
+        nodeMethod = Godot.Core.Sprite.get_vframes
+
 {-# NOINLINE bindSprite_is_centered #-}
 
--- | If [code]true[/code], texture is centered.
+-- | If @true@, texture is centered.
 bindSprite_is_centered :: MethodBind
 bindSprite_is_centered
   = unsafePerformIO $
@@ -281,7 +373,7 @@ bindSprite_is_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is centered.
+-- | If @true@, texture is centered.
 is_centered :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_centered cls
   = withVariantArray []
@@ -290,9 +382,12 @@ is_centered cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "is_centered" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Sprite.is_centered
+
 {-# NOINLINE bindSprite_is_flipped_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 bindSprite_is_flipped_h :: MethodBind
 bindSprite_is_flipped_h
   = unsafePerformIO $
@@ -302,7 +397,7 @@ bindSprite_is_flipped_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 is_flipped_h :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_h cls
   = withVariantArray []
@@ -311,9 +406,12 @@ is_flipped_h cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "is_flipped_h" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Sprite.is_flipped_h
+
 {-# NOINLINE bindSprite_is_flipped_v #-}
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 bindSprite_is_flipped_v :: MethodBind
 bindSprite_is_flipped_v
   = unsafePerformIO $
@@ -323,7 +421,7 @@ bindSprite_is_flipped_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 is_flipped_v :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_flipped_v cls
   = withVariantArray []
@@ -332,10 +430,13 @@ is_flipped_v cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "is_flipped_v" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Sprite.is_flipped_v
+
 {-# NOINLINE bindSprite_is_pixel_opaque #-}
 
--- | Returns [code]true[/code], if the pixel at the given position is opaque and [code]false[/code] in other case.
---   				[b]Note:[/b] It also returns [code]false[/code], if the sprite's texture is [code]null[/code] or if the given position is invalid.
+-- | Returns @true@, if the pixel at the given position is opaque and @false@ in other case.
+--   				__Note:__ It also returns @false@, if the sprite's texture is @null@ or if the given position is invalid.
 bindSprite_is_pixel_opaque :: MethodBind
 bindSprite_is_pixel_opaque
   = unsafePerformIO $
@@ -345,8 +446,8 @@ bindSprite_is_pixel_opaque
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns [code]true[/code], if the pixel at the given position is opaque and [code]false[/code] in other case.
---   				[b]Note:[/b] It also returns [code]false[/code], if the sprite's texture is [code]null[/code] or if the given position is invalid.
+-- | Returns @true@, if the pixel at the given position is opaque and @false@ in other case.
+--   				__Note:__ It also returns @false@, if the sprite's texture is @null@ or if the given position is invalid.
 is_pixel_opaque ::
                   (Sprite :< cls, Object :< cls) => cls -> Vector2 -> IO Bool
 is_pixel_opaque cls arg1
@@ -357,9 +458,13 @@ is_pixel_opaque cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "is_pixel_opaque" '[Vector2] (IO Bool)
+         where
+        nodeMethod = Godot.Core.Sprite.is_pixel_opaque
+
 {-# NOINLINE bindSprite_is_region #-}
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
+-- | If @true@, texture is cut from a larger atlas texture. See @region_rect@.
 bindSprite_is_region :: MethodBind
 bindSprite_is_region
   = unsafePerformIO $
@@ -369,7 +474,7 @@ bindSprite_is_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
+-- | If @true@, texture is cut from a larger atlas texture. See @region_rect@.
 is_region :: (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_region cls
   = withVariantArray []
@@ -377,9 +482,12 @@ is_region cls
          godot_method_bind_call bindSprite_is_region (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "is_region" '[] (IO Bool) where
+        nodeMethod = Godot.Core.Sprite.is_region
+
 {-# NOINLINE bindSprite_is_region_filter_clip_enabled #-}
 
--- | If [code]true[/code], the outermost pixels get blurred out.
+-- | If @true@, the outermost pixels get blurred out.
 bindSprite_is_region_filter_clip_enabled :: MethodBind
 bindSprite_is_region_filter_clip_enabled
   = unsafePerformIO $
@@ -389,7 +497,7 @@ bindSprite_is_region_filter_clip_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the outermost pixels get blurred out.
+-- | If @true@, the outermost pixels get blurred out.
 is_region_filter_clip_enabled ::
                                 (Sprite :< cls, Object :< cls) => cls -> IO Bool
 is_region_filter_clip_enabled cls
@@ -401,9 +509,14 @@ is_region_filter_clip_enabled cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "is_region_filter_clip_enabled" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.Sprite.is_region_filter_clip_enabled
+
 {-# NOINLINE bindSprite_set_centered #-}
 
--- | If [code]true[/code], texture is centered.
+-- | If @true@, texture is centered.
 bindSprite_set_centered :: MethodBind
 bindSprite_set_centered
   = unsafePerformIO $
@@ -413,7 +526,7 @@ bindSprite_set_centered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is centered.
+-- | If @true@, texture is centered.
 set_centered ::
                (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_centered cls arg1
@@ -423,9 +536,12 @@ set_centered cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_centered" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_centered
+
 {-# NOINLINE bindSprite_set_flip_h #-}
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 bindSprite_set_flip_h :: MethodBind
 bindSprite_set_flip_h
   = unsafePerformIO $
@@ -435,7 +551,7 @@ bindSprite_set_flip_h
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped horizontally.
+-- | If @true@, texture is flipped horizontally.
 set_flip_h ::
              (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_h cls arg1
@@ -445,9 +561,12 @@ set_flip_h cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_flip_h" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_flip_h
+
 {-# NOINLINE bindSprite_set_flip_v #-}
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 bindSprite_set_flip_v :: MethodBind
 bindSprite_set_flip_v
   = unsafePerformIO $
@@ -457,7 +576,7 @@ bindSprite_set_flip_v
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is flipped vertically.
+-- | If @true@, texture is flipped vertically.
 set_flip_v ::
              (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_flip_v cls arg1
@@ -467,9 +586,12 @@ set_flip_v cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_flip_v" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_flip_v
+
 {-# NOINLINE bindSprite_set_frame #-}
 
--- | Current frame to display from sprite sheet. [member vframes] or [member hframes] must be greater than 1.
+-- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
 bindSprite_set_frame :: MethodBind
 bindSprite_set_frame
   = unsafePerformIO $
@@ -479,7 +601,7 @@ bindSprite_set_frame
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Current frame to display from sprite sheet. [member vframes] or [member hframes] must be greater than 1.
+-- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
 set_frame :: (Sprite :< cls, Object :< cls) => cls -> Int -> IO ()
 set_frame cls arg1
   = withVariantArray [toVariant arg1]
@@ -487,9 +609,12 @@ set_frame cls arg1
          godot_method_bind_call bindSprite_set_frame (upcast cls) arrPtr len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_frame" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_frame
+
 {-# NOINLINE bindSprite_set_frame_coords #-}
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
 bindSprite_set_frame_coords :: MethodBind
 bindSprite_set_frame_coords
   = unsafePerformIO $
@@ -499,7 +624,7 @@ bindSprite_set_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the [member frame] property. [member vframes] or [member hframes] must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
 set_frame_coords ::
                    (Sprite :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_frame_coords cls arg1
@@ -509,6 +634,10 @@ set_frame_coords cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sprite "set_frame_coords" '[Vector2] (IO ())
+         where
+        nodeMethod = Godot.Core.Sprite.set_frame_coords
 
 {-# NOINLINE bindSprite_set_hframes #-}
 
@@ -532,10 +661,13 @@ set_hframes cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_hframes" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_hframes
+
 {-# NOINLINE bindSprite_set_normal_map #-}
 
 -- | The normal map gives depth to the Sprite.
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindSprite_set_normal_map :: MethodBind
 bindSprite_set_normal_map
   = unsafePerformIO $
@@ -546,7 +678,7 @@ bindSprite_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map gives depth to the Sprite.
---   			[b]Note:[/b] Godot expects the normal map to use X+, Y-, and Z+ coordinates. See [url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates]this page[/url] for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (Sprite :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1
@@ -556,6 +688,10 @@ set_normal_map cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sprite "set_normal_map" '[Texture] (IO ())
+         where
+        nodeMethod = Godot.Core.Sprite.set_normal_map
 
 {-# NOINLINE bindSprite_set_offset #-}
 
@@ -579,9 +715,12 @@ set_offset cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_offset" '[Vector2] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_offset
+
 {-# NOINLINE bindSprite_set_region #-}
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
+-- | If @true@, texture is cut from a larger atlas texture. See @region_rect@.
 bindSprite_set_region :: MethodBind
 bindSprite_set_region
   = unsafePerformIO $
@@ -591,7 +730,7 @@ bindSprite_set_region
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], texture is cut from a larger atlas texture. See [member region_rect].
+-- | If @true@, texture is cut from a larger atlas texture. See @region_rect@.
 set_region ::
              (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_region cls arg1
@@ -601,9 +740,12 @@ set_region cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_region" '[Bool] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_region
+
 {-# NOINLINE bindSprite_set_region_filter_clip #-}
 
--- | If [code]true[/code], the outermost pixels get blurred out.
+-- | If @true@, the outermost pixels get blurred out.
 bindSprite_set_region_filter_clip :: MethodBind
 bindSprite_set_region_filter_clip
   = unsafePerformIO $
@@ -613,7 +755,7 @@ bindSprite_set_region_filter_clip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the outermost pixels get blurred out.
+-- | If @true@, the outermost pixels get blurred out.
 set_region_filter_clip ::
                          (Sprite :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_region_filter_clip cls arg1
@@ -625,9 +767,13 @@ set_region_filter_clip cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_region_filter_clip" '[Bool] (IO ())
+         where
+        nodeMethod = Godot.Core.Sprite.set_region_filter_clip
+
 {-# NOINLINE bindSprite_set_region_rect #-}
 
--- | The region of the atlas texture to display. [member region_enabled] must be [code]true[/code].
+-- | The region of the atlas texture to display. @region_enabled@ must be @true@.
 bindSprite_set_region_rect :: MethodBind
 bindSprite_set_region_rect
   = unsafePerformIO $
@@ -637,7 +783,7 @@ bindSprite_set_region_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The region of the atlas texture to display. [member region_enabled] must be [code]true[/code].
+-- | The region of the atlas texture to display. @region_enabled@ must be @true@.
 set_region_rect ::
                   (Sprite :< cls, Object :< cls) => cls -> Rect2 -> IO ()
 set_region_rect cls arg1
@@ -648,9 +794,12 @@ set_region_rect cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod Sprite "set_region_rect" '[Rect2] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_region_rect
+
 {-# NOINLINE bindSprite_set_texture #-}
 
--- | [Texture] object to draw.
+-- | @Texture@ object to draw.
 bindSprite_set_texture :: MethodBind
 bindSprite_set_texture
   = unsafePerformIO $
@@ -660,7 +809,7 @@ bindSprite_set_texture
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | [Texture] object to draw.
+-- | @Texture@ object to draw.
 set_texture ::
               (Sprite :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_texture cls arg1
@@ -669,6 +818,9 @@ set_texture cls arg1
          godot_method_bind_call bindSprite_set_texture (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sprite "set_texture" '[Texture] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_texture
 
 {-# NOINLINE bindSprite_set_vframes #-}
 
@@ -691,3 +843,6 @@ set_vframes cls arg1
          godot_method_bind_call bindSprite_set_vframes (upcast cls) arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod Sprite "set_vframes" '[Int] (IO ()) where
+        nodeMethod = Godot.Core.Sprite.set_vframes

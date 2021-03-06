@@ -22,15 +22,59 @@ module Godot.Core.AnimationNodeOneShot
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.AnimationNode()
 
 _MIX_MODE_ADD :: Int
 _MIX_MODE_ADD = 1
 
 _MIX_MODE_BLEND :: Int
 _MIX_MODE_BLEND = 0
+
+instance NodeProperty AnimationNodeOneShot "autorestart" Bool
+           'False
+         where
+        nodeProperty
+          = (has_autorestart, wrapDroppingSetter set_autorestart, Nothing)
+
+instance NodeProperty AnimationNodeOneShot "autorestart_delay"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_autorestart_delay, wrapDroppingSetter set_autorestart_delay,
+             Nothing)
+
+instance NodeProperty AnimationNodeOneShot
+           "autorestart_random_delay"
+           Float
+           'False
+         where
+        nodeProperty
+          = (get_autorestart_random_delay,
+             wrapDroppingSetter set_autorestart_random_delay, Nothing)
+
+instance NodeProperty AnimationNodeOneShot "fadein_time" Float
+           'False
+         where
+        nodeProperty
+          = (get_fadein_time, wrapDroppingSetter set_fadein_time, Nothing)
+
+instance NodeProperty AnimationNodeOneShot "fadeout_time" Float
+           'False
+         where
+        nodeProperty
+          = (get_fadeout_time, wrapDroppingSetter set_fadeout_time, Nothing)
+
+instance NodeProperty AnimationNodeOneShot "sync" Bool 'False where
+        nodeProperty
+          = (is_using_sync, wrapDroppingSetter set_use_sync, Nothing)
 
 {-# NOINLINE bindAnimationNodeOneShot_get_autorestart_delay #-}
 
@@ -57,10 +101,16 @@ get_autorestart_delay cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeOneShot "get_autorestart_delay"
+           '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.get_autorestart_delay
+
 {-# NOINLINE bindAnimationNodeOneShot_get_autorestart_random_delay
              #-}
 
--- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
+-- | If @autorestart@ is @true@, a random additional delay (in seconds) between 0 and this value will be added to @autorestart_delay@.
 bindAnimationNodeOneShot_get_autorestart_random_delay :: MethodBind
 bindAnimationNodeOneShot_get_autorestart_random_delay
   = unsafePerformIO $
@@ -70,7 +120,7 @@ bindAnimationNodeOneShot_get_autorestart_random_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
+-- | If @autorestart@ is @true@, a random additional delay (in seconds) between 0 and this value will be added to @autorestart_delay@.
 get_autorestart_random_delay ::
                                (AnimationNodeOneShot :< cls, Object :< cls) => cls -> IO Float
 get_autorestart_random_delay cls
@@ -82,6 +132,14 @@ get_autorestart_random_delay cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeOneShot
+           "get_autorestart_random_delay"
+           '[]
+           (IO Float)
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeOneShot.get_autorestart_random_delay
 
 {-# NOINLINE bindAnimationNodeOneShot_get_fadein_time #-}
 
@@ -105,6 +163,11 @@ get_fadein_time cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeOneShot "get_fadein_time" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.get_fadein_time
+
 {-# NOINLINE bindAnimationNodeOneShot_get_fadeout_time #-}
 
 bindAnimationNodeOneShot_get_fadeout_time :: MethodBind
@@ -126,6 +189,11 @@ get_fadeout_time cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeOneShot "get_fadeout_time" '[]
+           (IO Float)
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.get_fadeout_time
 
 {-# NOINLINE bindAnimationNodeOneShot_get_mix_mode #-}
 
@@ -149,9 +217,14 @@ get_mix_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeOneShot "get_mix_mode" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.get_mix_mode
+
 {-# NOINLINE bindAnimationNodeOneShot_has_autorestart #-}
 
--- | If [code]true[/code], the sub-animation will restart automatically after finishing.
+-- | If @true@, the sub-animation will restart automatically after finishing.
 bindAnimationNodeOneShot_has_autorestart :: MethodBind
 bindAnimationNodeOneShot_has_autorestart
   = unsafePerformIO $
@@ -161,7 +234,7 @@ bindAnimationNodeOneShot_has_autorestart
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the sub-animation will restart automatically after finishing.
+-- | If @true@, the sub-animation will restart automatically after finishing.
 has_autorestart ::
                   (AnimationNodeOneShot :< cls, Object :< cls) => cls -> IO Bool
 has_autorestart cls
@@ -172,6 +245,11 @@ has_autorestart cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeOneShot "has_autorestart" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.has_autorestart
 
 {-# NOINLINE bindAnimationNodeOneShot_is_using_sync #-}
 
@@ -195,9 +273,14 @@ is_using_sync cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeOneShot "is_using_sync" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.is_using_sync
+
 {-# NOINLINE bindAnimationNodeOneShot_set_autorestart #-}
 
--- | If [code]true[/code], the sub-animation will restart automatically after finishing.
+-- | If @true@, the sub-animation will restart automatically after finishing.
 bindAnimationNodeOneShot_set_autorestart :: MethodBind
 bindAnimationNodeOneShot_set_autorestart
   = unsafePerformIO $
@@ -207,7 +290,7 @@ bindAnimationNodeOneShot_set_autorestart
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [code]true[/code], the sub-animation will restart automatically after finishing.
+-- | If @true@, the sub-animation will restart automatically after finishing.
 set_autorestart ::
                   (AnimationNodeOneShot :< cls, Object :< cls) =>
                   cls -> Bool -> IO ()
@@ -219,6 +302,11 @@ set_autorestart cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeOneShot "set_autorestart" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.set_autorestart
 
 {-# NOINLINE bindAnimationNodeOneShot_set_autorestart_delay #-}
 
@@ -246,10 +334,16 @@ set_autorestart_delay cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeOneShot "set_autorestart_delay"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.set_autorestart_delay
+
 {-# NOINLINE bindAnimationNodeOneShot_set_autorestart_random_delay
              #-}
 
--- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
+-- | If @autorestart@ is @true@, a random additional delay (in seconds) between 0 and this value will be added to @autorestart_delay@.
 bindAnimationNodeOneShot_set_autorestart_random_delay :: MethodBind
 bindAnimationNodeOneShot_set_autorestart_random_delay
   = unsafePerformIO $
@@ -259,7 +353,7 @@ bindAnimationNodeOneShot_set_autorestart_random_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If [member autorestart] is [code]true[/code], a random additional delay (in seconds) between 0 and this value will be added to [member autorestart_delay].
+-- | If @autorestart@ is @true@, a random additional delay (in seconds) between 0 and this value will be added to @autorestart_delay@.
 set_autorestart_random_delay ::
                                (AnimationNodeOneShot :< cls, Object :< cls) =>
                                cls -> Float -> IO ()
@@ -272,6 +366,14 @@ set_autorestart_random_delay cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeOneShot
+           "set_autorestart_random_delay"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod
+          = Godot.Core.AnimationNodeOneShot.set_autorestart_random_delay
 
 {-# NOINLINE bindAnimationNodeOneShot_set_fadein_time #-}
 
@@ -296,6 +398,11 @@ set_fadein_time cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeOneShot "set_fadein_time" '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.set_fadein_time
+
 {-# NOINLINE bindAnimationNodeOneShot_set_fadeout_time #-}
 
 bindAnimationNodeOneShot_set_fadeout_time :: MethodBind
@@ -319,6 +426,12 @@ set_fadeout_time cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod AnimationNodeOneShot "set_fadeout_time"
+           '[Float]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.set_fadeout_time
+
 {-# NOINLINE bindAnimationNodeOneShot_set_mix_mode #-}
 
 bindAnimationNodeOneShot_set_mix_mode :: MethodBind
@@ -340,6 +453,11 @@ set_mix_mode cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeOneShot "set_mix_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.set_mix_mode
 
 {-# NOINLINE bindAnimationNodeOneShot_set_use_sync #-}
 
@@ -363,3 +481,8 @@ set_use_sync cls arg1
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod AnimationNodeOneShot "set_use_sync" '[Bool]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.AnimationNodeOneShot.set_use_sync

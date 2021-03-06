@@ -25,9 +25,14 @@ module Godot.Core.WebRTCDataChannel
 import Data.Coerce
 import Foreign.C
 import Godot.Internal.Dispatch
+import qualified Data.Vector as V
+import Linear(V2(..),V3(..),M22)
+import Data.Colour(withOpacity)
+import Data.Colour.SRGB(sRGB)
 import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
+import Godot.Core.PacketPeer()
 
 _STATE_CLOSED :: Int
 _STATE_CLOSED = 3
@@ -46,6 +51,11 @@ _STATE_OPEN = 1
 
 _WRITE_MODE_BINARY :: Int
 _WRITE_MODE_BINARY = 1
+
+instance NodeProperty WebRTCDataChannel "write_mode" Int 'False
+         where
+        nodeProperty
+          = (get_write_mode, wrapDroppingSetter set_write_mode, Nothing)
 
 {-# NOINLINE bindWebRTCDataChannel_close #-}
 
@@ -66,6 +76,9 @@ close cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCDataChannel "close" '[] (IO ()) where
+        nodeMethod = Godot.Core.WebRTCDataChannel.close
 
 {-# NOINLINE bindWebRTCDataChannel_get_id #-}
 
@@ -88,6 +101,9 @@ get_id cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCDataChannel "get_id" '[] (IO Int) where
+        nodeMethod = Godot.Core.WebRTCDataChannel.get_id
+
 {-# NOINLINE bindWebRTCDataChannel_get_label #-}
 
 bindWebRTCDataChannel_get_label :: MethodBind
@@ -108,6 +124,11 @@ get_label cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCDataChannel "get_label" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.get_label
 
 {-# NOINLINE bindWebRTCDataChannel_get_max_packet_life_time #-}
 
@@ -132,6 +153,12 @@ get_max_packet_life_time cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCDataChannel "get_max_packet_life_time"
+           '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.get_max_packet_life_time
+
 {-# NOINLINE bindWebRTCDataChannel_get_max_retransmits #-}
 
 bindWebRTCDataChannel_get_max_retransmits :: MethodBind
@@ -153,6 +180,11 @@ get_max_retransmits cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCDataChannel "get_max_retransmits" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.get_max_retransmits
 
 {-# NOINLINE bindWebRTCDataChannel_get_protocol #-}
 
@@ -176,6 +208,11 @@ get_protocol cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCDataChannel "get_protocol" '[]
+           (IO GodotString)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.get_protocol
+
 {-# NOINLINE bindWebRTCDataChannel_get_ready_state #-}
 
 bindWebRTCDataChannel_get_ready_state :: MethodBind
@@ -197,6 +234,11 @@ get_ready_state cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCDataChannel "get_ready_state" '[]
+           (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.get_ready_state
 
 {-# NOINLINE bindWebRTCDataChannel_get_write_mode #-}
 
@@ -220,6 +262,10 @@ get_write_mode cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCDataChannel "get_write_mode" '[] (IO Int)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.get_write_mode
+
 {-# NOINLINE bindWebRTCDataChannel_is_negotiated #-}
 
 bindWebRTCDataChannel_is_negotiated :: MethodBind
@@ -241,6 +287,10 @@ is_negotiated cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCDataChannel "is_negotiated" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.is_negotiated
 
 {-# NOINLINE bindWebRTCDataChannel_is_ordered #-}
 
@@ -264,6 +314,10 @@ is_ordered cls
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCDataChannel "is_ordered" '[] (IO Bool)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.is_ordered
+
 {-# NOINLINE bindWebRTCDataChannel_poll #-}
 
 bindWebRTCDataChannel_poll :: MethodBind
@@ -283,6 +337,9 @@ poll cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCDataChannel "poll" '[] (IO Int) where
+        nodeMethod = Godot.Core.WebRTCDataChannel.poll
 
 {-# NOINLINE bindWebRTCDataChannel_set_write_mode #-}
 
@@ -306,6 +363,11 @@ set_write_mode cls arg1
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
 
+instance NodeMethod WebRTCDataChannel "set_write_mode" '[Int]
+           (IO ())
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.set_write_mode
+
 {-# NOINLINE bindWebRTCDataChannel_was_string_packet #-}
 
 bindWebRTCDataChannel_was_string_packet :: MethodBind
@@ -327,3 +389,8 @@ was_string_packet cls
            arrPtr
            len
            >>= \ (err, res) -> throwIfErr err >> fromGodotVariant res)
+
+instance NodeMethod WebRTCDataChannel "was_string_packet" '[]
+           (IO Bool)
+         where
+        nodeMethod = Godot.Core.WebRTCDataChannel.was_string_packet
