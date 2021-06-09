@@ -38,7 +38,12 @@ class GodotFFI low high | low -> high where
 
 type instance TypeOf 'HaskellTy GodotString = Text
 instance GodotFFI GodotString Text where
-  fromLowLevel str = godot_string_utf8 str >>= \cstr -> T.decodeUtf8 <$> fromCharString cstr
+  fromLowLevel str = do 
+      cstr <- godot_string_utf8 str 
+      result <- T.decodeUtf8 <$> fromCharString cstr
+      godot_char_string_destroy cstr
+      return result
+      
     where
       fromCharString cstr = do
         len <- godot_char_string_length cstr
