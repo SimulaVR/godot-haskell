@@ -1,10 +1,9 @@
 { mkDerivation, aeson, ansi-wl-pprint, base, bytestring, c2hs
 , casing, colour, containers, hpack, lens, linear, mtl, parsec
 , parsers, stdenv, stm, template-haskell, text
-, unordered-containers, vector, rsync, api-json ? null, lib, haskellPackages
+, unordered-containers, vector, rsync, api-json ? null, lib, haskellPackages, godot-haskell-classgen, profileBuild ? false
 }:
-let godot-haskell-classgen = haskellPackages.callPackage ./classgen/classgen.nix { };
-    modifyGodotApi = lib.optionalString (api-json != null) ''
+let modifyGodotApi = lib.optionalString (api-json != null) ''
 cd classgen
 echo "Running godot-haskell-classgen on path " ${api-json}
 godot-haskell-classgen ${api-json}
