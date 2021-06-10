@@ -198,7 +198,7 @@ registerClass (RegClass desc constr) = do
 
     atomically $ modifyTVar' typeTags (S.insert $ castStablePtrToPtr tyPtr)
 
-    putStrLn $ T.unpack $ T.unwords ["Registering class", clsName]
+    putStrLn $ T.unpack $ T.unwords ["Registering class", clsName, "with base", base]
     withCString (T.unpack clsName)
       $ \namePtr -> withCString (T.unpack base) $ \basePtr -> do
           godot_nativescript_register_class pHandle

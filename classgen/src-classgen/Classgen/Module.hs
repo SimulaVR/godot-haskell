@@ -183,14 +183,33 @@ mkMethod cls method = do
          \clsNamePtr -> withCString $(HS.strE methodName) $
          \methodNamePtr -> godot_method_bind_get_method clsNamePtr methodNamePtr |]
 
+    -- this one is a bit redudant now, but code is a tad cleaner
+    returnsVariant = method ^. returnType == CoreType "Variant"
+    needsCleanup = case method ^. returnType of
+      CoreType "Object" -> False
+      CoreType "Variant" -> False
+      CustomType _ -> False
+      _ -> True
+
     -- this is actually killing me.
     runMethodRhs = HS.UnGuardedRhs () $ HS.App () (
       HS.App () (HS.Var () (HS.UnQual () (HS.Ident () "withVariantArray")))
       (HS.List () $ map (HS.App () (HS.Var () (HS.UnQual () (HS.Ident () "toVariant"))) . HS.Var () . HS.UnQual ()) argNames)
-      )
-      [hs|
+      ) runMethodBody
+
+    runMethodBody
+      | returnsVariant = [hs|
         \(arrPtr, len) -> godot_method_bind_call $(clsMethodBindVar) (coerce cls) arrPtr len >>=
-        \(err, res) -> throwIfErr err >> fromGodotVariant res |]
+        \(err, var) -> throwIfErr err >> return var |]
+      | needsCleanup = [hs|
+        \(arrPtr, len) -> godot_method_bind_call $(clsMethodBindVar) (coerce cls) arrPtr len >>=
+        \(err, var) -> throwIfErr err >> fromGodotVariant var >>=
+        \ret -> godot_variant_destroy var >> return ret |]
+      | otherwise = [hs|
+        \(arrPtr, len) -> godot_method_bind_call $(clsMethodBindVar) (coerce cls) arrPtr len >>=
+        \(err, var) -> throwIfErr err >> fromGodotVariant var |]
+
+
 
     argNames = map (HS.Ident () . ("arg" ++) . show) [1..length (method ^. arguments)]
 
