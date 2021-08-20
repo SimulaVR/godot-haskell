@@ -7,7 +7,6 @@ import Control.Monad
 import System.Directory
 import System.FSNotify
 import Control.Concurrent (threadDelay)
-import Control.Monad (forever)
 import Data.List
 import System.FilePath
 import qualified Data.Text as T
@@ -21,7 +20,7 @@ import Control.Lens hiding (from,to)
 import Control.Lens.TH
 import Prelude hiding (id)
 import qualified Language.Haskell.TH.Syntax as TH
-  
+
 newtype Id = Id { unId :: T.Text}
   deriving (Eq, Ord)
   deriving newtype (Show)
@@ -113,7 +112,6 @@ import Data.Typeable
 import qualified Data.Text as T
 import qualified Data.Map as M
 import Language.Haskell.TH
-import Language.Haskell.TH.Datatype
 import Control.Lens
 import Control.Monad
 import Godot
@@ -124,6 +122,7 @@ import Data.Maybe
 import Data.Coerce
 import Godot.Core.ResourceLoader
 import Godot.Core.PackedScene
+import Language.Haskell.TH.Datatype
 
 -- * Helper to keep Haskell types in sync with the Godot project.
 newtype PackedScene' (scene :: Symbol) = PackedScene' PackedScene
@@ -318,9 +317,25 @@ mkProperty' :: forall node (name :: Symbol) ty. (NodeProperty node name ty 'Fals
 mkProperty' = ClassProperty (T.pack $ symbolVal (Proxy @name)) a s g
   where (_,_,Just (g,s,a)) = nodeProperty @node @name @ty @'False
 
+deriveHasBase :: Name -> Q [Dec]
+deriveHasBase ty = do
+  rdt <- reifyDatatype ty
+  let base = case datatypeCons rdt of
+                    (c:_) -> case (constructorFields c, constructorVariant c) of
+                              (ConT baseTy:_, RecordConstructor (baseFn:_)) -> Just (baseTy, baseFn)
+                              _ -> Nothing
+                    _ -> Nothing
+  case base of
+    Just (baseTy, baseFn) ->
+      [d|instance HasBaseClass $(pure $ PromotedT ty) where
+          type BaseClass $(pure $ PromotedT ty) = $(pure $ PromotedT baseTy)
+          super = $(pure $ VarE baseFn)#{end}
+    _ -> error "setupNode can only handle records whose first field is the Godot base class. You can still interface with Godot, but you will need to set things up manually."
+
 -- | You should use this as:
---   setupNode ''Ty
+--   deriveHasBase ''Ty
 --   deriveBase ''Ty
+--   setupNode ''Ty
 -- This will instantiate everything that your Object needs
 setupNode :: Name -> String -> String -> Q [Dec]
 setupNode ty scene sceneNode = do
@@ -332,11 +347,6 @@ setupNode ty scene sceneNode = do
   allSignals   <- map unNodeSignal . classInstances <$> reify ''NodeSignal
   -- Collect information about our node
   rdt <- reifyDatatype ty
-  let base = case datatypeCons rdt of
-                    (c:_) -> case (constructorFields c, constructorVariant c) of
-                              (ConT baseTy:_, RecordConstructor (baseFn:_)) -> Just (baseTy, baseFn)
-                              _ -> Nothing
-                    _ -> Nothing
   --
   methods    <- filter (\\i -> i^._1 == ty) . mapMaybe unNodeMethod . classInstances <$> reify ''NodeMethod
   properties <- filter (\\i -> i^._1 == ty) . mapMaybe unNodeProperty . classInstances <$> reify ''NodeProperty
@@ -381,12 +391,7 @@ setupNode ty scene sceneNode = do
     mapM_ print haskellNodes
 
   -- Generate code
-  bi <- case base of
-    Just (baseTy, baseFn) ->
-      [d|instance HasBaseClass $(pure $ PromotedT ty) where
-          type BaseClass $(pure $ PromotedT ty) = $(pure $ PromotedT baseTy)
-          super = $(pure $ VarE baseFn)#{end}
-    _ -> error "setupNode can only handle records whose first field is the Godot base class. You can still interface with Godot, but you will need to set things up manually."
+  inh <- deriveBase ty
   nis <- [d|instance NodeInScene $(pure $ LitT $ StrTyLit scene) $(pure $ LitT $ StrTyLit sceneNode) $(pure $ PromotedT ty)#{end}
   ns <- [d|instance NativeScript $(pure $ PromotedT ty) where
             classInit = Project.Support.init
@@ -399,20 +404,20 @@ setupNode ty scene sceneNode = do
                                   4 -> [e|method4#{end}
                                   5 -> [e|method5#{end}
                                   n -> error $ "More arguments than we currently impelement, look for 'method5' for more info " ++ show  n
-                     in [e|$m $(pure $ LitE $ StringL n) (nodeMethod @ $(pure $ PromotedT t) @ $(pure $ LitT $ StrTyLit n))#{end}) methods)
-            classProperties = $(ListE <$> mapM (\\(name,prop,_,_) -> [e|mkProperty' @ $(pure $ PromotedT name) @ $(pure $ LitT $ StrTyLit prop) #{end}) properties)
-            classSignals = $(ListE <$> mapM (\\(ty,name,_) -> [e|signal' @ $(pure $ PromotedT ty) @ $(pure $ LitT $ StrTyLit name)#{end}) signals)#{end}
+                     in [e|$m $(pure $ LitE $ StringL n) (nodeMethod @($(pure $ PromotedT t)) @($(pure $ LitT $ StrTyLit n)))#{end}) methods)
+            classProperties = $(ListE <$> mapM (\\(name,prop,_,_) -> [e|mkProperty' @($(pure $ PromotedT name)) @($(pure $ LitT $ StrTyLit prop)) #{end}) properties)
+            classSignals = $(ListE <$> mapM (\\(ty,name,_) -> [e|signal' @($(pure $ PromotedT ty)) @($(pure $ LitT $ StrTyLit name))#{end}) signals)#{end}
   let cn = mkName $ "witness_connections_" ++ nameBase ty
   ws <- (:) <$> (cn `sigD` [t| [()] #{end}) <*>
        [d|$(varP cn) =
              $(ListE <$> mapM (\\(scene,from,signal,to,method) ->
                     [e|witnessConnection
-                        @ $(pure $ LitT $ StrTyLit scene)  @ $(pure $ LitT $ StrTyLit from)
-                        @ $(pure $ LitT $ StrTyLit signal) @ $(pure $ LitT $ StrTyLit to)
-                        @ $(pure $ LitT $ StrTyLit method)
-                        @ $(pure $ PromotedT $ resolveSignalActualClass scene from signal)
+                        @($(pure $ LitT $ StrTyLit scene))  @($(pure $ LitT $ StrTyLit from))
+                        @($(pure $ LitT $ StrTyLit signal)) @($(pure $ LitT $ StrTyLit to))
+                        @($(pure $ LitT $ StrTyLit method))
+                        @($(pure $ PromotedT $ resolveSignalActualClass scene from signal))
                     #{end}) connections)#{end}
-  pure $ bi <> nis <> ns <> ws
+  pure $ inh <> nis <> ns <> ws
 
   where
       unTree (InstanceD Nothing [] (AppT (AppT _ parent) child) []) = (unName child, unName parent)
@@ -656,7 +661,7 @@ outputTscn segmentsTscnName sceneName outDir tscn tscns gdnss = do
         annotatePackedScene node ty = ty
 
 isHaskellNode :: Name -> TscnNode -> Tscn -> M.Map T.Text Tscn -> M.Map T.Text Gdns -> Maybe (Name, Name)
-isHaskellNode name node tscn tscns gdnss = 
+isHaskellNode name node tscn tscns gdnss =
   case ((\f -> tscn ^? resources . at f . _Just . path) =<< (node ^. script), node ^. instanceof) of
     (Just p, _) -> case gdnss ^. at p of
                     Just g -> if isHaskellGdns name g then
@@ -673,7 +678,7 @@ isHaskellGdns n gdns =
   maybe False (\f -> maybe False isHaskellResource (gdns ^. extResources . at f)) (gdns ^. resources . at n)
 
 isHaskellResource :: Resource -> Bool
-isHaskellResource r = T.isSuffixOf ".gdnlib" $ r ^. path 
+isHaskellResource r = T.isSuffixOf ".gdnlib" $ r ^. path
 
 rootNodeTscn :: Tscn -> Maybe (Name, TscnNode)
 rootNodeTscn tscn = find (\(name,node) -> isNothing (node^.parent)) $ M.toList $ tscn ^. nodes
@@ -684,9 +689,9 @@ outputCombined inDir outDir tscns =
 #{imports}
 |]
       where imports = unlines $ map (\(fn,t) -> let f = intercalate "." $ segmentsName inDir fn <> [moduleName inDir fn]
-                                               in [i|import qualified Project.Scenes.#{f} as M|]) $ M.toList tscns 
+                                               in [i|import qualified Project.Scenes.#{f} as M|]) $ M.toList tscns
             exports = if null imports then "" else "(module M)"
-  
+
 outputSupport dir = createAndWriteFile (dir </> "Project" </> "Support.hs") (T.pack $ language ++ support)
 
 mkRequirementsModule inDir gdnss = T.pack [i|{-# LANGUAGE DataKinds #-}
