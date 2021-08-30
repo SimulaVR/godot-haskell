@@ -463,7 +463,7 @@ language = [i|{-# LANGUAGE FlexibleContexts, FunctionalDependencies, MultiParamT
   UndecidableInstances, OverloadedStrings, TemplateHaskell, TypeApplications,
   TypeFamilies, TupleSections, DataKinds, TypeOperators, FlexibleInstances, RankNTypes,
   AllowAmbiguousTypes, ScopedTypeVariables, DerivingStrategies,
-  GeneralizedNewtypeDeriving, LambdaCase #-}
+  GeneralizedNewtypeDeriving, LambdaCase, ImplicitPrelude #-}
 |]
 
 mkModule qualifiedName = T.pack [i|module Project.Scenes.#{qualifiedName} where
@@ -653,7 +653,7 @@ outputTscn segmentsTscnName sceneName outDir tscn tscns gdnss = do
                                                   (t, _) -> t)
                                             (isHaskellNode name node tscn tscns gdnss))
                      (M.toList $ tscn ^. nodes)
-        annotatePackedScene node (Ty "PackedScene") = Ty $ "PackedScene' \"" <> (unName $ fromJust $ do
+        annotatePackedScene node (Ty "PackedScene") = Ty $ "PackedScene' \"" <> unName (fromJust $ do
           i <- node ^. instanceof
           r <- M.lookup i (tscn ^. resources)
           t <- M.lookup (r ^. path) tscns
