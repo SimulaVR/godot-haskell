@@ -105,6 +105,7 @@ support = [i|
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 
 module Project.Support where
+import Prelude
 import Godot.Core.Object
 import Godot.Internal.Dispatch
 import Godot.Gdnative.Internal.Types
@@ -461,6 +462,7 @@ language = [i|{-# LANGUAGE FlexibleContexts, FunctionalDependencies, MultiParamT
 |]
 
 mkModule qualifiedName = T.pack [i|module Project.Scenes.#{qualifiedName} where
+import Prelude
 import Project.Support
 import Godot
 import GHC.TypeLits
