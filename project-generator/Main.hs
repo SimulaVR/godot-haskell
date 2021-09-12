@@ -687,7 +687,9 @@ outputCombined inDir outDir tscns =
   
 outputSupport dir = createAndWriteFile (dir </> "Project" </> "Support.hs") (T.pack $ language ++ support)
 
-mkRequirementsModule inDir gdnss = T.pack [i|module Project.Requirements where
+mkRequirementsModule inDir gdnss = T.pack [i|{-# LANGUAGE DataKinds #-}
+
+module Project.Requirements where
 import Project.Support
 
 type Nodes = '[#{reqs}]
