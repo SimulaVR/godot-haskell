@@ -455,7 +455,7 @@ setupNode ty scene sceneNode = do
 
 language = [i|{-# LANGUAGE FlexibleContexts, FunctionalDependencies, MultiParamTypeClasses,
   UndecidableInstances, OverloadedStrings, TemplateHaskell, TypeApplications,
-  TypeFamilies, DataKinds, TypeOperators, FlexibleInstances, RankNTypes,
+  TypeFamilies, TupleSections, DataKinds, TypeOperators, FlexibleInstances, RankNTypes,
   AllowAmbiguousTypes, ScopedTypeVariables, DerivingStrategies,
   GeneralizedNewtypeDeriving, LambdaCase #-}
 |]
