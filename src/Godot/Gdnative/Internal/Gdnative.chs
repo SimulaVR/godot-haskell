@@ -290,6 +290,10 @@ deriving newtype instance Storable GodotGdnativeCoreApiStruct
 deriving newtype instance Eq GodotGdnativeCore11ApiStruct
 deriving newtype instance Storable GodotGdnativeCore11ApiStruct
 
+{#pointer *godot_gdnative_core_1_2_api_struct as GodotGdnativeCore12ApiStruct newtype#}
+deriving newtype instance Eq GodotGdnativeCore12ApiStruct
+deriving newtype instance Storable GodotGdnativeCore12ApiStruct
+
 {#pointer *godot_gdnative_ext_nativescript_api_struct as GodotGdnativeExtNativescriptApiStruct newtype#}
 deriving newtype instance Eq GodotGdnativeExtNativescriptApiStruct
 deriving newtype instance Storable GodotGdnativeExtNativescriptApiStruct
@@ -774,6 +778,33 @@ instance Storable GodotArvrInterfaceGdnative where
 {#pointer *godot_arvr_interface_gdnative as GodotArvrInterfaceGdnativePtr -> GodotArvrInterfaceGdnative #}
 
 
+--webrtc
+
+data GodotNetWebrtcLibrary
+instance Storable GodotNetWebrtcLibrary where
+  sizeOf _ = {#sizeof godot_net_webrtc_library#}
+  alignment _ = {#sizeof godot_net_webrtc_library#}
+  peek = error "GodotNetWebrtcLibrary peek not implemented"
+  poke = error "GodotNetWebrtcLibrary poke not implemented"
+{#pointer *godot_net_webrtc_library as GodotNetWebrtcLibraryPtr -> GodotNetWebrtcLibrary #}
+
+data GodotNetWebrtcPeerConnection
+instance Storable GodotNetWebrtcPeerConnection where
+  sizeOf _ = {#sizeof godot_net_webrtc_peer_connection#}
+  alignment _ = {#sizeof godot_net_webrtc_peer_connection#}
+  peek = error "GodotNetWebrtcPeerConnection peek not implemented"
+  poke = error "GodotNetWebrtcPeerConnection poke not implemented"
+{#pointer *godot_net_webrtc_peer_connection as GodotNetWebrtcPeerConnectionPtr -> GodotNetWebrtcPeerConnection #}
+
+data GodotNetWebrtcDataChannel
+instance Storable GodotNetWebrtcDataChannel where
+  sizeOf _ = {#sizeof godot_net_webrtc_data_channel#}
+  alignment _ = {#sizeof godot_net_webrtc_data_channel#}
+  peek = error "GodotNetWebrtcDataChannel peek not implemented"
+  poke = error "GodotNetWebrtcDataChannel poke not implemented"
+{#pointer *godot_net_webrtc_data_channel as GodotNetWebrtcDataChannelPtr -> GodotNetWebrtcDataChannel #}
+
+
 
 
 godotGdnativeCoreApiStructRef :: IORef GodotGdnativeCoreApiStruct
@@ -785,6 +816,11 @@ godotGdnativeCore11ApiStructRef :: IORef GodotGdnativeCore11ApiStruct
 godotGdnativeCore11ApiStructRef = unsafePerformIO $ newIORef $ 
   error "attempted to get godotGdnativeCore11ApiStructRef too early"
 {-# NOINLINE godotGdnativeCore11ApiStructRef #-}
+
+godotGdnativeCore12ApiStructRef :: IORef GodotGdnativeCore12ApiStruct
+godotGdnativeCore12ApiStructRef = unsafePerformIO $ newIORef $
+  error "attempted to get godotGdnativeCore12ApiStructRef too early"
+{-# NOINLINE godotGdnativeCore12ApiStructRef #-}
 
 godotGdnativeExtNativescriptApiStructRef :: IORef GodotGdnativeExtNativescriptApiStruct
 godotGdnativeExtNativescriptApiStructRef = unsafePerformIO $ newIORef $ 
@@ -821,8 +857,8 @@ initApiStructs :: GodotGdnativeInitOptions -> IO ()
 initApiStructs opts = do
   let coreApi = gdnativeInitOptionsApiStruct opts
   writeIORef godotGdnativeCoreApiStructRef coreApi
-  findCoreExt (coerce coreApi)
-
+  findCore11Ext (coerce coreApi)
+  findCore12Ext (coerce coreApi)
   numExt <- {#get godot_gdnative_core_api_struct->num_extensions #} coreApi
   extsPtr <- {#get godot_gdnative_core_api_struct->extensions #} coreApi
   exts <- peekArray (fromIntegral numExt) (castPtr extsPtr :: Ptr GodotGdnativeApiStruct)
@@ -844,15 +880,16 @@ initApiStructs opts = do
         writeIORef godotGdnativeExtNetApiStructRef (coerce ext)
       _ -> error $ "Unknown API struct type " ++ show ty
   where
-    findCoreExt = findExt GodotGdnativeCore11ApiStruct godotGdnativeCore11ApiStructRef
-    findNativescriptExt = findExt GodotGdnativeExtNativescript11ApiStruct godotGdnativeExtNativescript11ApiStructRef
-    findExt con ref ext = do
+    findCore11Ext = findExt GodotGdnativeCore11ApiStruct godotGdnativeCore11ApiStructRef 1 1
+    findCore12Ext = findExt GodotGdnativeCore12ApiStruct godotGdnativeCore12ApiStructRef 1 2
+    findNativescriptExt = findExt GodotGdnativeExtNativescript11ApiStruct godotGdnativeExtNativescript11ApiStructRef 1 1
+    findExt con ref maj min ext = do
       next <- {#get godot_gdnative_api_struct->next #} ext
       when (next /= coerce nullPtr) $ do
 
         major <- {#get godot_gdnative_api_struct->version.major #} next
         minor <- {#get godot_gdnative_api_struct->version.minor #} next
-        if major == 1 && minor == 1 then writeIORef ref (con $ coerce next)
-        else findExt con ref next
+        if major == maj && minor == min then writeIORef ref (con $ coerce next)
+        else findExt con ref maj min next
 
 
