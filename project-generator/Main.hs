@@ -837,32 +837,28 @@ outputTscn segmentsTscnName sceneName outDir tscn tscns gdnss = do
       )
   where
     sceneNodes =
-      map
-        ( \(name, node) ->
-            mkSceneNode
-              sceneName
-              (T.unpack $ unName name)
-              ( case node ^. parent of
-                  Nothing -> unName name
-                  Just (NodePath ".") -> unName name
-                  Just (NodePath p') -> p' <> "/" <> unName name
-              )
-              ( case (node ^. ty, node ^. instanceof) of
-                  (Ty "", Just i) -> case M.lookup i (tscn ^. resources) of
-                    Just r -> r ^. ty
-                    Nothing -> error $ "Can't look up type of " ++ show (name, node)
-                  (t, _) -> t
-              )
-              ( annotatePackedScene node $
-                  case (node ^. ty, node ^. instanceof) of
-                    (Ty "", Just i) -> case M.lookup i (tscn ^. resources) of
-                      Just r -> r ^. ty
-                      Nothing -> error $ "Can't look up type of " ++ show (name, node)
-                    (t, _) -> t
-              )
-              (isHaskellNode name node tscn tscns gdnss)
-        )
-        (M.toList $ tscn ^. nodes)
+      flip mapMaybe (M.toList $ tscn ^. nodes) $ \(name, node) -> do
+        ty <- case (node ^. ty, node ^. instanceof) of
+          (Ty "", Just i) -> case M.lookup i (tscn ^. resources) of
+            Just r -> Just $ r ^. ty
+            Nothing -> error $ "Can't look up type of " ++ show (name, node)
+          -- This happens for nodes from editable scenes
+          (Ty "", Nothing) -> Nothing
+          (t, _) -> Just t
+
+        return $
+          mkSceneNode
+            sceneName
+            (T.unpack $ unName name)
+            ( case node ^. parent of
+                Nothing -> unName name
+                Just (NodePath ".") -> unName name
+                Just (NodePath p') -> p' <> "/" <> unName name
+            )
+            ty
+            (annotatePackedScene node ty)
+            (isHaskellNode name node tscn tscns gdnss)
+
     annotatePackedScene node (Ty "PackedScene") =
       Ty $
         "PackedScene' \""
