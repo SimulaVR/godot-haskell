@@ -414,8 +414,7 @@ deriveHasBase ty = do
 
 -- | You should use this as:
 --   deriveHasBase ''Ty
---   deriveBase ''Ty
---   setupNode ''Ty
+--   setupNode ''Ty "sceneName" "nodePath"
 -- This will instantiate everything that your Object needs
 setupNode :: Name -> String -> String -> Q [Dec]
 setupNode ty scene sceneNode = do
@@ -771,25 +770,27 @@ main = do
     [inDir, outDir] -> do
       let regenerate = do
             putStrLn "Regenerating ..."
-            print =<< allByExtension ".gdns" inDir
-            print =<< allByExtension ".tscn" inDir
+            gdnsFiles <- allByExtension ".gdns" inDir
+            tscnFiles <- allByExtension ".tscn" inDir
+            mapM_ putStrLn gdnsFiles
+            mapM_ putStrLn tscnFiles
             b <- doesDirectoryExist (outDir </> "Project")
             when b $ removeDirectoryRecursive (outDir </> "Project")
             createDirectoryIfMissing True (outDir </> "Project" </> "Scenes")
             outputSupport outDir
-            --
+            ---
             tscns <-
-              M.fromList
-                <$> ( mapM
-                        ( \f ->
-                            let relFile = makeRelative inDir f
-                             in (T.pack relFile,) <$> readTscn f relFile
-                        )
-                        =<< allByExtension ".tscn" inDir
-                    )
-            gdnss <- M.fromList <$> (mapM (\f -> (T.pack $ makeRelative inDir f,) <$> readGdns f) =<< allByExtension ".gdns" inDir)
-            --
-            mapM_ (\(fn, t) -> outputTscn (segmentsName inDir fn) (moduleName inDir fn) outDir t tscns gdnss) $ M.toList tscns
+              fmap M.fromList $
+                forM tscnFiles $ \f ->
+                  let relFile = makeRelative inDir f
+                   in (T.pack relFile,) <$> readTscn f relFile
+            gdnss <-
+              fmap M.fromList $
+                forM gdnsFiles $ \f ->
+                  (T.pack $ makeRelative inDir f,) <$> readGdns f
+            ---
+            forM_ (M.toList tscns) $ \(fn, t) ->
+              outputTscn (segmentsName inDir fn) (moduleName inDir fn) outDir t tscns gdnss
             outputCombined inDir outDir tscns
             outputGdnss inDir outDir gdnss
             putStrLn "Generated!"
