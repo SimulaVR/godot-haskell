@@ -1,7 +1,12 @@
+{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TupleSections #-}
 
@@ -817,7 +822,7 @@ outputTscn :: [FilePath] -> FilePath -> FilePath -> Tscn -> M.Map T.Text Tscn ->
 outputTscn segmentsTscnName sceneName outDir tscn tscns gdnss = do
   createAndWriteFile (normalise $ outDir </> "Project" </> "Scenes" </> joinPath segmentsTscnName </> sceneName <> ".hs") $
     T.unlines
-      ( [T.pack language, mkModule (intercalate "." (segmentsTscnName <> [sceneName]))]
+      ( [T.pack language, mkModule (toNamespace $ segmentsTscnName <> [sceneName])]
           ++ nub (map fst sceneNodes)
           ++ [ mkScenePath (_tscnSceneName tscn) (tscn ^. filepath),
                mkSceneRoot (_tscnSceneName tscn) (tscn ^. rootNode)
@@ -878,6 +883,7 @@ isHaskellNode name node tscn tscns gdnss =
         if isHaskellGdns name g
           then Just (Name $ T.pack $ dropExtension $ T.unpack p, name)
           else Nothing
+      Nothing -> Nothing
     (_, Just i) ->
       let t = tscns ^. at (tscn ^. resources . at i . _Just . path)
        in case (t, rootNodeTscn (fromJust t)) of
@@ -906,7 +912,7 @@ outputCombined inDir outDir tscns =
       unlines $
         map
           ( \(fn, t) ->
-              let f = intercalate "." $ segmentsName inDir fn <> [moduleName inDir fn]
+              let f = toNamespace $ segmentsName inDir fn <> [moduleName inDir fn]
                in [i|import qualified Project.Scenes.#{f} as M|]
           )
           $ M.toList tscns
@@ -942,3 +948,6 @@ mkRequirement inDir (fn, gdns) =
           _ -> Nothing
     )
     $ M.toList $ gdns ^. resources
+
+toNamespace :: [FilePath] -> String
+toNamespace = intercalate "." . fmap dropTrailingPathSeparator
