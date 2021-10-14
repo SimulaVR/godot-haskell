@@ -697,6 +697,7 @@ readTscn fn relFile = do
     then do
       f <- T.lines <$> T.readFile fn
       case f of
+        [] -> error $ "Empty .tscn file: " ++ fn
         (h : l) -> do
           if T.isPrefixOf "[gd_scene " h
             then
@@ -740,6 +741,7 @@ readGdns fn = do
     then do
       f <- T.lines <$> T.readFile fn
       case f of
+        [] -> error $ "Empty .gdns file: " ++ fn
         (h : l) -> do
           if T.isPrefixOf "[gd_resource type=\"NativeScript\" " h
             then
@@ -809,7 +811,7 @@ main = do
               print a
           )
         forever $ threadDelay 1000000
-    _ -> error "Usage: godot-haskell-parse-game <godot-project-directory> <output-directory>"
+    _ -> error "Usage: godot-haskell-project-generator <godot-project-directory> <haskell-src-directory>"
 
 segmentsName :: FilePath -> T.Text -> [[Char]]
 segmentsName inDir tscnFilepath =
