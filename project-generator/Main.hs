@@ -315,7 +315,18 @@ instance {-# OVERLAPPABLE #-} (NodeMethod (BaseClass node) name arg ret, HasBase
 
 mkProperty' :: forall node (name :: Symbol) ty. (NodeProperty node name ty 'False, KnownSymbol name) => ClassProperty node
 mkProperty' = ClassProperty (T.pack $ symbolVal (Proxy @name)) a s g
-  where (_,_,Just (g,s,a)) = nodeProperty @node @name @ty @'False
+  where
+    (_, _, Just (g, s, a)) = nodeProperty @node @name @ty @'False
+
+deriveInheritance :: Name -> String -> String -> Q [Dec]
+deriveInheritance ty scene sceneNode = do
+  inh <- deriveBase ty
+  sin <- [d|instance NodeInScene $(pure
+                                 $ LitT
+                                 $ StrTyLit scene) $(pure
+                                                   $ LitT
+                                                   $ StrTyLit sceneNode) $(pure $ PromotedT ty)#{end}
+  pure $ inh <> sin
 
 deriveHasBase :: Name -> Q [Dec]
 deriveHasBase ty = do
@@ -326,19 +337,20 @@ deriveHasBase ty = do
                               _ -> Nothing
                     _ -> Nothing
   case base of
-    Just (baseTy, baseFn) ->
-      [d|instance HasBaseClass $(pure $ PromotedT ty) where
-          type BaseClass $(pure $ PromotedT ty) = $(pure $ PromotedT baseTy)
-          super = $(pure $ VarE baseFn)#{end}
-    _ -> error "setupNode can only handle records whose first field is the Godot base class. You can still interface with Godot, but you will need to set things up manually."
+    Just (baseTy, baseFn)
+      -> [d|instance HasBaseClass $(pure $ PromotedT ty) where
+              type BaseClass $(pure $ PromotedT ty) = $(pure $ PromotedT baseTy)
+
+              super = $(pure $ VarE baseFn)#{end}
+    _ -> error "deriveHasBase can only handle records whose first field is the Godot base class. You can still interface with Godot, but you will need to set things up manually."
 
 -- | You should use this as:
 --   deriveHasBase ''Ty
 --   deriveBase ''Ty
 --   setupNode ''Ty
 -- This will instantiate everything that your Object needs
-setupNode :: Name -> String -> String -> Q [Dec]
-setupNode ty scene sceneNode = do
+setupNode :: Name -> Q [Dec]
+setupNode ty = do
   -- Collect information about all scenes
   tree         <- map unTree . classInstances <$> reify ''(:<)
   sceneRoots   <- M.fromList . map unSceneRootNode . familyInstances <$> reify ''SceneRootNode
@@ -347,6 +359,7 @@ setupNode ty scene sceneNode = do
   allSignals   <- map unNodeSignal . classInstances <$> reify ''NodeSignal
   -- Collect information about our node
   rdt <- reifyDatatype ty
+  let (scene, sceneNode, _) = head $ filter (\\i -> i ^. _3 == ty) haskellNodes
   --
   methods    <- filter (\\i -> i^._1 == ty) . mapMaybe unNodeMethod . classInstances <$> reify ''NodeMethod
   properties <- filter (\\i -> i^._1 == ty) . mapMaybe unNodeProperty . classInstances <$> reify ''NodeProperty
@@ -391,8 +404,6 @@ setupNode ty scene sceneNode = do
     mapM_ print haskellNodes
 
   -- Generate code
-  inh <- deriveBase ty
-  nis <- [d|instance NodeInScene $(pure $ LitT $ StrTyLit scene) $(pure $ LitT $ StrTyLit sceneNode) $(pure $ PromotedT ty)#{end}
   ns <- [d|instance NativeScript $(pure $ PromotedT ty) where
             classInit = Project.Support.init
             classMethods = $(ListE <$> mapM (\\(t,n,argTy,_) ->
@@ -408,15 +419,15 @@ setupNode ty scene sceneNode = do
             classProperties = $(ListE <$> mapM (\\(name,prop,_,_) -> [e|mkProperty' @($(pure $ PromotedT name)) @($(pure $ LitT $ StrTyLit prop)) #{end}) properties)
             classSignals = $(ListE <$> mapM (\\(ty,name,_) -> [e|signal' @($(pure $ PromotedT ty)) @($(pure $ LitT $ StrTyLit name))#{end}) signals)#{end}
   let cn = mkName $ "witness_connections_" ++ nameBase ty
-  ws <- (:) <$> (cn `sigD` [t| [()] #{end}) <*>
-       [d|$(varP cn) =
-             $(ListE <$> mapM (\\(scene,from,signal,to,method) ->
-                    [e|witnessConnection
-                        @($(pure $ LitT $ StrTyLit scene))  @($(pure $ LitT $ StrTyLit from))
-                        @($(pure $ LitT $ StrTyLit signal)) @($(pure $ LitT $ StrTyLit to))
-                        @($(pure $ LitT $ StrTyLit method))
-                        @($(pure $ PromotedT $ resolveSignalActualClass scene from signal))
-                    #{end}) connections)#{end}
+  ws <- (:) <$> (cn `sigD` [t|[()]#{end})
+    <*> [d|$(varP cn) =
+             $(ListE
+             <$> mapM (\\(scene, from, signal, to, method)
+                       -> [|witnessConnection @($(pure $ LitT $ StrTyLit scene))
+                          @($(pure $ LitT $ StrTyLit from)) @($(pure $ LitT $ StrTyLit signal))
+                          @($(pure $ LitT $ StrTyLit to)) @($(pure $ LitT $ StrTyLit method))
+                          @($(pure $ PromotedT $ resolveSignalActualClass scene from signal))#{end})
+             connections)#{end}
   pure $ inh <> nis <> ns <> ws
 
   where
@@ -463,7 +474,7 @@ language = [i|{-# LANGUAGE FlexibleContexts, FunctionalDependencies, MultiParamT
   UndecidableInstances, OverloadedStrings, TemplateHaskell, TypeApplications,
   TypeFamilies, TupleSections, DataKinds, TypeOperators, FlexibleInstances, RankNTypes,
   AllowAmbiguousTypes, ScopedTypeVariables, DerivingStrategies,
-  GeneralizedNewtypeDeriving, LambdaCase, ImplicitPrelude #-}
+  GeneralizedNewtypeDeriving, LambdaCase #-}
 |]
 
 mkModule qualifiedName = T.pack [i|module Project.Scenes.#{qualifiedName} where
@@ -578,6 +589,8 @@ readGdns fn = do
     else
     pure $ Gdns M.empty M.empty
 
+outputSupport dir = createAndWriteFile (dir </> "Project" </> "Support.hs") (T.pack $ language ++ support)
+
 main :: IO ()
 main = do
   args <- getArgs
@@ -691,8 +704,6 @@ outputCombined inDir outDir tscns =
       where imports = unlines $ map (\(fn,t) -> let f = intercalate "." $ segmentsName inDir fn <> [moduleName inDir fn]
                                                in [i|import qualified Project.Scenes.#{f} as M|]) $ M.toList tscns
             exports = if null imports then "" else "(module M)"
-
-outputSupport dir = createAndWriteFile (dir </> "Project" </> "Support.hs") (T.pack $ language ++ support)
 
 mkRequirementsModule inDir gdnss = T.pack [i|{-# LANGUAGE DataKinds #-}
 
