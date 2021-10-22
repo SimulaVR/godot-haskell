@@ -390,18 +390,7 @@ mkProperty' :: forall node (name :: Symbol) ty.
             (NodeProperty node name ty 'False, KnownSymbol name)
             => ClassProperty node
 mkProperty' = ClassProperty (T.pack $ symbolVal (Proxy @name)) a s g
-  where
-    (_, _, Just (g, s, a)) = nodeProperty @node @name @ty @'False
-
-deriveInheritance :: Name -> String -> String -> Q [Dec]
-deriveInheritance ty scene sceneNode = do
-  inh <- deriveBase ty
-  sin <- [d|instance NodeInScene $(pure
-                                 $ LitT
-                                 $ StrTyLit scene) $(pure
-                                                   $ LitT
-                                                   $ StrTyLit sceneNode) $(pure $ PromotedT ty)#{end}
-  pure $ inh <> sin
+  where (_,_,Just (g,s,a)) = nodeProperty @node @name @ty @'False
 
 deriveHasBase :: Name -> Q [Dec]
 deriveHasBase ty = do
@@ -412,20 +401,19 @@ deriveHasBase ty = do
           _ -> Nothing
         _     -> Nothing
   case base of
-    Just (baseTy, baseFn)
-      -> [d|instance HasBaseClass $(pure $ PromotedT ty) where
-              type BaseClass $(pure $ PromotedT ty) = $(pure $ PromotedT baseTy)
-
-              super = $(pure $ VarE baseFn)#{end}
-    _ -> error "deriveHasBase can only handle records whose first field is the Godot base class. You can still interface with Godot, but you will need to set things up manually."
+    Just (baseTy, baseFn) ->
+      [d|instance HasBaseClass $(pure $ PromotedT ty) where
+          type BaseClass $(pure $ PromotedT ty) = $(pure $ PromotedT baseTy)
+          super = $(pure $ VarE baseFn)#{end}
+    _ -> error "setupNode can only handle records whose first field is the Godot base class. You can still interface with Godot, but you will need to set things up manually."
 
 -- | You should use this as:
 --   deriveHasBase ''Ty
 --   deriveBase ''Ty
 --   setupNode ''Ty
 -- This will instantiate everything that your Object needs
-setupNode :: Name -> Q [Dec]
-setupNode ty = do
+setupNode :: Name -> String -> String -> Q [Dec]
+setupNode ty scene sceneNode = do
   -- Collect information about all scenes
   tree <- map unTree . classInstances <$> reify ''(:<)
   sceneRoots <- M.fromList . map unSceneRootNode . familyInstances <$> reify ''SceneRootNode
@@ -434,7 +422,6 @@ setupNode ty = do
   allSignals <- map unNodeSignal . classInstances <$> reify ''NodeSignal
   -- Collect information about our node
   rdt <- reifyDatatype ty
-  let (scene, sceneNode, _) = head $ filter (\\i -> i ^. _3 == ty) haskellNodes
   --
   methods <- filter (\\i -> i ^. _1 == ty) . mapMaybe unNodeMethod . classInstances
     <$> reify ''NodeMethod
@@ -498,6 +485,8 @@ setupNode ty = do
     mapM_ print haskellNodes
 
   -- Generate code
+  inh <- deriveBase ty
+  nis <- [d|instance NodeInScene $(pure $ LitT $ StrTyLit scene) $(pure $ LitT $ StrTyLit sceneNode) $(pure $ PromotedT ty)#{end}
   ns <- [d|instance NativeScript $(pure $ PromotedT ty) where
              classInit       = Project.Support.init
 
@@ -506,38 +495,38 @@ setupNode ty = do
                <$> mapM
                (\\(t, n, argTy, _)
                 -> let m = case nrArguments argTy of
-                         0 -> [|method0#{end}
-                         1 -> [|method1#{end}
-                         2 -> [|method2#{end}
-                         3 -> [|method3#{end}
-                         4 -> [|method4#{end}
-                         5 -> [|method5#{end}
+                         0 -> [e|method0#{end}
+                         1 -> [e|method1#{end}
+                         2 -> [e|method2#{end}
+                         3 -> [e|method3#{end}
+                         4 -> [e|method4#{end}
+                         5 -> [e|method5#{end}
                          n -> error
                            $ "More arguments than we currently impelement, look for 'method5' for more info "
                            ++ show n
-                   in [|$m $(pure $ LitE $ StringL n)
+                   in [e|$m $(pure $ LitE $ StringL n)
                       (nodeMethod @($(pure $ PromotedT t)) @($(pure $ LitT $ StrTyLit n)))#{end})
                methods)
 
              classProperties =
                $(ListE
-               <$> mapM (\\(name, prop, _, _) -> [|mkProperty' @($(pure $ PromotedT name))
+               <$> mapM (\\(name, prop, _, _) -> [e|mkProperty' @($(pure $ PromotedT name))
                                                 @($(pure $ LitT $ StrTyLit prop))#{end}) properties)
 
              classSignals    =
-               $(ListE <$> mapM (\\(ty, name, _) -> [|signal' @($(pure $ PromotedT ty))
+               $(ListE <$> mapM (\\(ty, name, _) -> [e|signal' @($(pure $ PromotedT ty))
                                                    @($(pure $ LitT $ StrTyLit name))#{end}) signals)#{end}
   let cn = mkName $ "witness_connections_" ++ nameBase ty
-  ws <- (:) <$> (cn `sigD` [t|[()]#{end})
-    <*> [d|$(varP cn) =
-             $(ListE
-             <$> mapM (\\(scene, from, signal, to, method)
-                       -> [|witnessConnection @($(pure $ LitT $ StrTyLit scene))
-                          @($(pure $ LitT $ StrTyLit from)) @($(pure $ LitT $ StrTyLit signal))
-                          @($(pure $ LitT $ StrTyLit to)) @($(pure $ LitT $ StrTyLit method))
-                          @($(pure $ PromotedT $ resolveSignalActualClass scene from signal))#{end})
-             connections)#{end}
-  pure $ ns <> ws
+  ws <- (:) <$> (cn `sigD` [t| [()] #{end}) <*>
+       [d|$(varP cn) =
+             $(ListE <$> mapM (\\(scene,from,signal,to,method) ->
+                    [e|witnessConnection
+                        @($(pure $ LitT $ StrTyLit scene))  @($(pure $ LitT $ StrTyLit from))
+                        @($(pure $ LitT $ StrTyLit signal)) @($(pure $ LitT $ StrTyLit to))
+                        @($(pure $ LitT $ StrTyLit method))
+                        @($(pure $ PromotedT $ resolveSignalActualClass scene from signal))
+                    #{end}) connections)#{end}
+  pure $ inh <> nis <> ns <> ws
   where
     unTree (InstanceD Nothing [] (AppT (AppT _ parent) child) []) = (unName child, unName parent)
     unTree p = error $ "I don't understand this parent " ++ show p
@@ -608,7 +597,7 @@ language =
   UndecidableInstances, OverloadedStrings, TemplateHaskell, TypeApplications,
   TypeFamilies, TupleSections, DataKinds, TypeOperators, FlexibleInstances, RankNTypes,
   AllowAmbiguousTypes, ScopedTypeVariables, DerivingStrategies,
-  GeneralizedNewtypeDeriving, LambdaCase #-}
+  GeneralizedNewtypeDeriving, LambdaCase, ImplicitPrelude #-}
 |]
 
 mkModule qualifiedName =
@@ -770,8 +759,6 @@ readGdns fn = do
             else pure $ Gdns M.empty M.empty
     else pure $ Gdns M.empty M.empty
 
-outputSupport dir = createAndWriteFile (dir </> "Project" </> "Support.hs") (T.pack $ language ++ support)
-
 main :: IO ()
 main = do
   args <- getArgs
@@ -924,6 +911,8 @@ outputCombined inDir outDir tscns =
           )
           $ M.toList tscns
     exports = if null imports then "" else "(module M)"
+
+outputSupport dir = createAndWriteFile (dir </> "Project" </> "Support.hs") (T.pack $ language ++ support)
 
 mkRequirementsModule inDir gdnss =
   T.pack
