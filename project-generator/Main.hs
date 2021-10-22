@@ -662,6 +662,7 @@ isHaskellNode name node tscn tscns gdnss =
                     Just g -> if isHaskellGdns name g then
                                Just (Name $ T.pack $ dropExtension $ T.unpack p, name) else
                                Nothing
+                    _ -> Nothing
     (_, Just i) -> let t = tscns ^. at (tscn ^. resources . at i . _Just . path)
                   in case (t, rootNodeTscn (fromJust t)) of
                        (Just t', Just (n,r)) -> isHaskellNode n r t' tscns gdnss
