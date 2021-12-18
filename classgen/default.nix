@@ -44,6 +44,25 @@
           license = stdenv.lib.licenses.bsd3;
           }) { };
 
+      haskell-src-exts-sc = haskellPackages.callPackage (
+        { mkDerivation, base, stdenv,
+        }:
+        mkDerivation {
+          pname = "haskell-src-exts-sc";
+          version = "0.1.0.6";
+          src = fetchFromGitHub {
+            owner = "achirkin";
+            repo = "haskell-src-exts-sc";
+            rev = "cc0e0f8e86814519281805da610d87cc34c86bea";
+            sha256 = "17gxxhhflxbqrar0dd32lczs6vz89w8gqg4jv44djp9fxq98xsqq";
+          };
+          libraryHaskellDepends = [
+            base haskell-src-exts-custom
+          ];
+          description = "Pretty print haskell code with comments";
+          license = stdenv.lib.licenses.bsd3;
+          }) { };
+
   haskell-src-meta-custom = haskell.lib.dontCheck (haskellPackages.callPackage
         ({ mkDerivation, base, HUnit, pretty, stdenv, syb
         , template-haskell, test-framework, test-framework-hunit
@@ -70,7 +89,8 @@ mkDerivation {
   isExecutable = true;
   libraryHaskellDepends = [
     aeson base bytestring casing containers
-    haskell-src-exts-qq lens mtl template-haskell text
+    haskell-src-exts-qq haskell-src-exts-sc
+    lens mtl template-haskell text
     unordered-containers vector
   ];
   libraryToolDepends = [ c2hs hpack ];
