@@ -1,6 +1,6 @@
 { mkDerivation, aeson, ansi-wl-pprint, base, bytestring, c2hs
 , casing, colour, containers, hpack, lens, linear, mtl, parsec
-, parsers, stdenv, stm, template-haskell, text,
+, parsers, stdenv, stm, template-haskell, text
 , unordered-containers, vector, rsync, api-json ? null, lib, haskellPackages, godot-haskell-classgen, profileBuild ? false
 }:
 let modifyGodotApi = lib.optionalString (api-json != null) ''
