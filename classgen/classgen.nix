@@ -2,6 +2,7 @@
 , directory, filepath, hpack
 , lens, mtl, template-haskell, text, unordered-containers
 , vector , stdenv, syb, callPackage, haskell, haskellPackages, fetchFromGitHub
+, lib
 }:
   let haskell-src-exts-custom = haskell.lib.dontCheck (haskellPackages.callPackage
         ({ mkDerivation, array, base, containers, directory, filepath
@@ -20,8 +21,8 @@
           ];
           doCheck = false;
           description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";
-          license = stdenv.lib.licenses.bsd3;
-          hydraPlatforms = stdenv.lib.platforms.none;
+          license = lib.licenses.bsd3;
+          hydraPlatforms = lib.platforms.none;
 
           doHaddock = false;
           # doCheck = false;
@@ -45,7 +46,7 @@
           ];
           testHaskellDepends = [ base haskell-src-exts-custom hspec ];
           description = "A quasiquoter for haskell-src-exts";
-          license = stdenv.lib.licenses.bsd3;
+          license = lib.licenses.bsd3;
 
           doHaddock = false;
           doCheck = false;
@@ -67,7 +68,7 @@
             base haskell-src-exts-custom pretty syb template-haskell th-orphans
           ];
           description = "Parse source to template-haskell abstract syntax";
-          license = stdenv.lib.licenses.bsd3;
+          license = lib.licenses.bsd3;
 
           doHaddock = false;
           doCheck = false;
@@ -94,7 +95,7 @@ mkDerivation {
   executableToolDepends = [ c2hs ];
   prePatch = "hpack";
   homepage = "https://github.com/KaneTW/godot-haskell#readme";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 
   doHaddock = false;
   doCheck = false;
