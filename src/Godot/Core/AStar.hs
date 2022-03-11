@@ -91,7 +91,8 @@ instance NodeMethod AStar "_estimate_cost" '[Int, Int] (IO Float)
 
 {-# NOINLINE bindAStar_add_point #-}
 
--- | Adds a new point at the given position with the given identifier. The algorithm prefers points with lower @weight_scale@ to form a path. The @id@ must be 0 or larger, and the @weight_scale@ must be 1 or larger.
+-- | Adds a new point at the given position with the given identifier. The @id@ must be 0 or larger, and the @weight_scale@ must be 1 or larger.
+--   				The @weight_scale@ is multiplied by the result of @method _compute_cost@ when determining the overall cost of traveling across a segment from a neighboring point to this point. Thus, all else being equal, the algorithm prefers points with lower @weight_scale@s to form a path.
 --   				
 --   @
 --   
@@ -110,7 +111,8 @@ bindAStar_add_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a new point at the given position with the given identifier. The algorithm prefers points with lower @weight_scale@ to form a path. The @id@ must be 0 or larger, and the @weight_scale@ must be 1 or larger.
+-- | Adds a new point at the given position with the given identifier. The @id@ must be 0 or larger, and the @weight_scale@ must be 1 or larger.
+--   				The @weight_scale@ is multiplied by the result of @method _compute_cost@ when determining the overall cost of traveling across a segment from a neighboring point to this point. Thus, all else being equal, the algorithm prefers points with lower @weight_scale@s to form a path.
 --   				
 --   @
 --   
@@ -564,6 +566,7 @@ instance NodeMethod AStar "get_point_count" '[] (IO Int) where
 {-# NOINLINE bindAStar_get_point_path #-}
 
 -- | Returns an array with the points that are in the path found by AStar between the given points. The array is ordered from the starting point to the ending point of the path.
+--   				__Note:__ This method is not thread-safe. If called from a @Thread@, it will return an empty @PoolVector3Array@ and will print an error message.
 bindAStar_get_point_path :: MethodBind
 bindAStar_get_point_path
   = unsafePerformIO $
@@ -574,6 +577,7 @@ bindAStar_get_point_path
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns an array with the points that are in the path found by AStar between the given points. The array is ordered from the starting point to the ending point of the path.
+--   				__Note:__ This method is not thread-safe. If called from a @Thread@, it will return an empty @PoolVector3Array@ and will print an error message.
 get_point_path ::
                  (AStar :< cls, Object :< cls) =>
                  cls -> Int -> Int -> IO PoolVector3Array
@@ -827,7 +831,7 @@ instance NodeMethod AStar "set_point_position" '[Int, Vector3]
 
 {-# NOINLINE bindAStar_set_point_weight_scale #-}
 
--- | Sets the @weight_scale@ for the point with the given @id@.
+-- | Sets the @weight_scale@ for the point with the given @id@. The @weight_scale@ is multiplied by the result of @method _compute_cost@ when determining the overall cost of traveling across a segment from a neighboring point to this point.
 bindAStar_set_point_weight_scale :: MethodBind
 bindAStar_set_point_weight_scale
   = unsafePerformIO $
@@ -837,7 +841,7 @@ bindAStar_set_point_weight_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the @weight_scale@ for the point with the given @id@.
+-- | Sets the @weight_scale@ for the point with the given @id@. The @weight_scale@ is multiplied by the result of @method _compute_cost@ when determining the overall cost of traveling across a segment from a neighboring point to this point.
 set_point_weight_scale ::
                          (AStar :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_point_weight_scale cls arg1 arg2

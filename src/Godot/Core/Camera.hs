@@ -183,7 +183,7 @@ instance NodeMethod Camera "get_camera_rid" '[] (IO Rid) where
 
 {-# NOINLINE bindCamera_get_camera_transform #-}
 
--- | Gets the camera transform. Subclassed cameras such as @InterpolatedCamera@ may provide different transforms than the @Node@ transform.
+-- | Returns the transform of the camera plus the vertical (@v_offset@) and horizontal (@h_offset@) offsets; and any other adjustments made to the position and orientation of the camera by subclassed cameras such as @ClippedCamera@, @InterpolatedCamera@ and @ARVRCamera@.
 bindCamera_get_camera_transform :: MethodBind
 bindCamera_get_camera_transform
   = unsafePerformIO $
@@ -193,7 +193,7 @@ bindCamera_get_camera_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the camera transform. Subclassed cameras such as @InterpolatedCamera@ may provide different transforms than the @Node@ transform.
+-- | Returns the transform of the camera plus the vertical (@v_offset@) and horizontal (@h_offset@) offsets; and any other adjustments made to the position and orientation of the camera by subclassed cameras such as @ClippedCamera@, @InterpolatedCamera@ and @ARVRCamera@.
 get_camera_transform ::
                        (Camera :< cls, Object :< cls) => cls -> IO Transform
 get_camera_transform cls
@@ -262,7 +262,8 @@ instance NodeMethod Camera "get_cull_mask_bit" '[Int] (IO Bool)
 
 {-# NOINLINE bindCamera_get_doppler_tracking #-}
 
--- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. See @enum DopplerTracking@ for possible values.
+-- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. The Doppler effect is only simulated for @AudioStreamPlayer3D@ nodes that have @AudioStreamPlayer3D.doppler_tracking@ set to a value other than @AudioStreamPlayer3D.DOPPLER_TRACKING_DISABLED@.
+--   			__Note:__ To toggle the Doppler effect preview in the editor, use the Perspective menu in the top-left corner of the 3D viewport and toggle __Enable Doppler__.
 bindCamera_get_doppler_tracking :: MethodBind
 bindCamera_get_doppler_tracking
   = unsafePerformIO $
@@ -272,7 +273,8 @@ bindCamera_get_doppler_tracking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. See @enum DopplerTracking@ for possible values.
+-- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. The Doppler effect is only simulated for @AudioStreamPlayer3D@ nodes that have @AudioStreamPlayer3D.doppler_tracking@ set to a value other than @AudioStreamPlayer3D.DOPPLER_TRACKING_DISABLED@.
+--   			__Note:__ To toggle the Doppler effect preview in the editor, use the Perspective menu in the top-left corner of the 3D viewport and toggle __Enable Doppler__.
 get_doppler_tracking ::
                        (Camera :< cls, Object :< cls) => cls -> IO Int
 get_doppler_tracking cls
@@ -317,6 +319,11 @@ instance NodeMethod Camera "get_environment" '[] (IO Environment)
 {-# NOINLINE bindCamera_get_fov #-}
 
 -- | The camera's field of view angle (in degrees). Only applicable in perspective mode. Since @keep_aspect@ locks one axis, @fov@ sets the other axis' field of view angle.
+--   			For reference, the default vertical field of view value (@70.0@) is equivalent to a horizontal FOV of:
+--   			- ~86.07 degrees in a 4:3 viewport
+--   			- ~96.50 degrees in a 16:10 viewport
+--   			- ~102.45 degrees in a 16:9 viewport
+--   			- ~117.06 degrees in a 21:9 viewport
 bindCamera_get_fov :: MethodBind
 bindCamera_get_fov
   = unsafePerformIO $
@@ -327,6 +334,11 @@ bindCamera_get_fov
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The camera's field of view angle (in degrees). Only applicable in perspective mode. Since @keep_aspect@ locks one axis, @fov@ sets the other axis' field of view angle.
+--   			For reference, the default vertical field of view value (@70.0@) is equivalent to a horizontal FOV of:
+--   			- ~86.07 degrees in a 4:3 viewport
+--   			- ~96.50 degrees in a 16:10 viewport
+--   			- ~102.45 degrees in a 16:9 viewport
+--   			- ~117.06 degrees in a 21:9 viewport
 get_fov :: (Camera :< cls, Object :< cls) => cls -> IO Float
 get_fov cls
   = withVariantArray []
@@ -339,7 +351,7 @@ instance NodeMethod Camera "get_fov" '[] (IO Float) where
 
 {-# NOINLINE bindCamera_get_frustum #-}
 
--- | Returns the camera's frustum planes in world-space units as an array of @Plane@s in the following order: near, far, left, top, right, bottom. Not to be confused with @frustum_offset@.
+-- | Returns the camera's frustum planes in world space units as an array of @Plane@s in the following order: near, far, left, top, right, bottom. Not to be confused with @frustum_offset@.
 bindCamera_get_frustum :: MethodBind
 bindCamera_get_frustum
   = unsafePerformIO $
@@ -349,7 +361,7 @@ bindCamera_get_frustum
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the camera's frustum planes in world-space units as an array of @Plane@s in the following order: near, far, left, top, right, bottom. Not to be confused with @frustum_offset@.
+-- | Returns the camera's frustum planes in world space units as an array of @Plane@s in the following order: near, far, left, top, right, bottom. Not to be confused with @frustum_offset@.
 get_frustum :: (Camera :< cls, Object :< cls) => cls -> IO Array
 get_frustum cls
   = withVariantArray []
@@ -666,7 +678,7 @@ instance NodeMethod Camera "project_local_ray_normal" '[Vector2]
 
 {-# NOINLINE bindCamera_project_position #-}
 
--- | Returns the 3D point in worldspace that maps to the given 2D coordinate in the @Viewport@ rectangle on a plane that is the given @z_depth@ distance into the scene away from the camera.
+-- | Returns the 3D point in world space that maps to the given 2D coordinate in the @Viewport@ rectangle on a plane that is the given @z_depth@ distance into the scene away from the camera.
 bindCamera_project_position :: MethodBind
 bindCamera_project_position
   = unsafePerformIO $
@@ -676,7 +688,7 @@ bindCamera_project_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the 3D point in worldspace that maps to the given 2D coordinate in the @Viewport@ rectangle on a plane that is the given @z_depth@ distance into the scene away from the camera.
+-- | Returns the 3D point in world space that maps to the given 2D coordinate in the @Viewport@ rectangle on a plane that is the given @z_depth@ distance into the scene away from the camera.
 project_position ::
                    (Camera :< cls, Object :< cls) =>
                    cls -> Vector2 -> Float -> IO Vector3
@@ -695,7 +707,7 @@ instance NodeMethod Camera "project_position" '[Vector2, Float]
 
 {-# NOINLINE bindCamera_project_ray_normal #-}
 
--- | Returns a normal vector in worldspace, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
+-- | Returns a normal vector in world space, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
 bindCamera_project_ray_normal :: MethodBind
 bindCamera_project_ray_normal
   = unsafePerformIO $
@@ -705,7 +717,7 @@ bindCamera_project_ray_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a normal vector in worldspace, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
+-- | Returns a normal vector in world space, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
 project_ray_normal ::
                      (Camera :< cls, Object :< cls) => cls -> Vector2 -> IO Vector3
 project_ray_normal cls arg1
@@ -723,7 +735,7 @@ instance NodeMethod Camera "project_ray_normal" '[Vector2]
 
 {-# NOINLINE bindCamera_project_ray_origin #-}
 
--- | Returns a 3D position in worldspace, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
+-- | Returns a 3D position in world space, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
 bindCamera_project_ray_origin :: MethodBind
 bindCamera_project_ray_origin
   = unsafePerformIO $
@@ -733,7 +745,7 @@ bindCamera_project_ray_origin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a 3D position in worldspace, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
+-- | Returns a 3D position in world space, that is the result of projecting a point on the @Viewport@ rectangle by the camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
 project_ray_origin ::
                      (Camera :< cls, Object :< cls) => cls -> Vector2 -> IO Vector3
 project_ray_origin cls arg1
@@ -828,7 +840,8 @@ instance NodeMethod Camera "set_current" '[Bool] (IO ()) where
 
 {-# NOINLINE bindCamera_set_doppler_tracking #-}
 
--- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. See @enum DopplerTracking@ for possible values.
+-- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. The Doppler effect is only simulated for @AudioStreamPlayer3D@ nodes that have @AudioStreamPlayer3D.doppler_tracking@ set to a value other than @AudioStreamPlayer3D.DOPPLER_TRACKING_DISABLED@.
+--   			__Note:__ To toggle the Doppler effect preview in the editor, use the Perspective menu in the top-left corner of the 3D viewport and toggle __Enable Doppler__.
 bindCamera_set_doppler_tracking :: MethodBind
 bindCamera_set_doppler_tracking
   = unsafePerformIO $
@@ -838,7 +851,8 @@ bindCamera_set_doppler_tracking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. See @enum DopplerTracking@ for possible values.
+-- | If not @DOPPLER_TRACKING_DISABLED@, this camera will simulate the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ for objects changed in particular @_process@ methods. The Doppler effect is only simulated for @AudioStreamPlayer3D@ nodes that have @AudioStreamPlayer3D.doppler_tracking@ set to a value other than @AudioStreamPlayer3D.DOPPLER_TRACKING_DISABLED@.
+--   			__Note:__ To toggle the Doppler effect preview in the editor, use the Perspective menu in the top-left corner of the 3D viewport and toggle __Enable Doppler__.
 set_doppler_tracking ::
                        (Camera :< cls, Object :< cls) => cls -> Int -> IO ()
 set_doppler_tracking cls arg1
@@ -883,6 +897,11 @@ instance NodeMethod Camera "set_environment" '[Environment] (IO ())
 {-# NOINLINE bindCamera_set_fov #-}
 
 -- | The camera's field of view angle (in degrees). Only applicable in perspective mode. Since @keep_aspect@ locks one axis, @fov@ sets the other axis' field of view angle.
+--   			For reference, the default vertical field of view value (@70.0@) is equivalent to a horizontal FOV of:
+--   			- ~86.07 degrees in a 4:3 viewport
+--   			- ~96.50 degrees in a 16:10 viewport
+--   			- ~102.45 degrees in a 16:9 viewport
+--   			- ~117.06 degrees in a 21:9 viewport
 bindCamera_set_fov :: MethodBind
 bindCamera_set_fov
   = unsafePerformIO $
@@ -893,6 +912,11 @@ bindCamera_set_fov
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The camera's field of view angle (in degrees). Only applicable in perspective mode. Since @keep_aspect@ locks one axis, @fov@ sets the other axis' field of view angle.
+--   			For reference, the default vertical field of view value (@70.0@) is equivalent to a horizontal FOV of:
+--   			- ~86.07 degrees in a 4:3 viewport
+--   			- ~96.50 degrees in a 16:10 viewport
+--   			- ~102.45 degrees in a 16:9 viewport
+--   			- ~117.06 degrees in a 21:9 viewport
 set_fov :: (Camera :< cls, Object :< cls) => cls -> Float -> IO ()
 set_fov cls arg1
   = withVariantArray [toVariant arg1]
@@ -905,7 +929,7 @@ instance NodeMethod Camera "set_fov" '[Float] (IO ()) where
 
 {-# NOINLINE bindCamera_set_frustum #-}
 
--- | Sets the camera projection to frustum mode (see @PROJECTION_FRUSTUM@), by specifying a @size@, an @offset@, and the @z_near@ and @z_far@ clip planes in world-space units.
+-- | Sets the camera projection to frustum mode (see @PROJECTION_FRUSTUM@), by specifying a @size@, an @offset@, and the @z_near@ and @z_far@ clip planes in world space units.
 bindCamera_set_frustum :: MethodBind
 bindCamera_set_frustum
   = unsafePerformIO $
@@ -915,7 +939,7 @@ bindCamera_set_frustum
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the camera projection to frustum mode (see @PROJECTION_FRUSTUM@), by specifying a @size@, an @offset@, and the @z_near@ and @z_far@ clip planes in world-space units.
+-- | Sets the camera projection to frustum mode (see @PROJECTION_FRUSTUM@), by specifying a @size@, an @offset@, and the @z_near@ and @z_far@ clip planes in world space units.
 set_frustum ::
               (Camera :< cls, Object :< cls) =>
               cls -> Float -> Vector2 -> Float -> Float -> IO ()
@@ -1014,7 +1038,7 @@ instance NodeMethod Camera "set_keep_aspect_mode" '[Int] (IO ())
 
 {-# NOINLINE bindCamera_set_orthogonal #-}
 
--- | Sets the camera projection to orthogonal mode (see @PROJECTION_ORTHOGONAL@), by specifying a @size@, and the @z_near@ and @z_far@ clip planes in world-space units. (As a hint, 2D games often use this projection, with values specified in pixels.)
+-- | Sets the camera projection to orthogonal mode (see @PROJECTION_ORTHOGONAL@), by specifying a @size@, and the @z_near@ and @z_far@ clip planes in world space units. (As a hint, 2D games often use this projection, with values specified in pixels.)
 bindCamera_set_orthogonal :: MethodBind
 bindCamera_set_orthogonal
   = unsafePerformIO $
@@ -1024,7 +1048,7 @@ bindCamera_set_orthogonal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the camera projection to orthogonal mode (see @PROJECTION_ORTHOGONAL@), by specifying a @size@, and the @z_near@ and @z_far@ clip planes in world-space units. (As a hint, 2D games often use this projection, with values specified in pixels.)
+-- | Sets the camera projection to orthogonal mode (see @PROJECTION_ORTHOGONAL@), by specifying a @size@, and the @z_near@ and @z_far@ clip planes in world space units. (As a hint, 2D games often use this projection, with values specified in pixels.)
 set_orthogonal ::
                  (Camera :< cls, Object :< cls) =>
                  cls -> Float -> Float -> Float -> IO ()
@@ -1043,7 +1067,7 @@ instance NodeMethod Camera "set_orthogonal" '[Float, Float, Float]
 
 {-# NOINLINE bindCamera_set_perspective #-}
 
--- | Sets the camera projection to perspective mode (see @PROJECTION_PERSPECTIVE@), by specifying a @fov@ (field of view) angle in degrees, and the @z_near@ and @z_far@ clip planes in world-space units.
+-- | Sets the camera projection to perspective mode (see @PROJECTION_PERSPECTIVE@), by specifying a @fov@ (field of view) angle in degrees, and the @z_near@ and @z_far@ clip planes in world space units.
 bindCamera_set_perspective :: MethodBind
 bindCamera_set_perspective
   = unsafePerformIO $
@@ -1053,7 +1077,7 @@ bindCamera_set_perspective
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the camera projection to perspective mode (see @PROJECTION_PERSPECTIVE@), by specifying a @fov@ (field of view) angle in degrees, and the @z_near@ and @z_far@ clip planes in world-space units.
+-- | Sets the camera projection to perspective mode (see @PROJECTION_PERSPECTIVE@), by specifying a @fov@ (field of view) angle in degrees, and the @z_near@ and @z_far@ clip planes in world space units.
 set_perspective ::
                   (Camera :< cls, Object :< cls) =>
                   cls -> Float -> Float -> Float -> IO ()
@@ -1193,7 +1217,17 @@ instance NodeMethod Camera "set_znear" '[Float] (IO ()) where
 
 {-# NOINLINE bindCamera_unproject_position #-}
 
--- | Returns the 2D coordinate in the @Viewport@ rectangle that maps to the given 3D point in worldspace.
+-- | Returns the 2D coordinate in the @Viewport@ rectangle that maps to the given 3D point in world space.
+--   				__Note:__ When using this to position GUI elements over a 3D viewport, use @method is_position_behind@ to prevent them from appearing if the 3D point is behind the camera:
+--   				
+--   @
+--   
+--   				# This code block is part of a script that inherits from Spatial.
+--   				# `control` is a reference to a node inheriting from Control.
+--   				control.visible = not get_viewport().get_camera().is_position_behind(global_transform.origin)
+--   				control.rect_position = get_viewport().get_camera().unproject_position(global_transform.origin)
+--   				
+--   @
 bindCamera_unproject_position :: MethodBind
 bindCamera_unproject_position
   = unsafePerformIO $
@@ -1203,7 +1237,17 @@ bindCamera_unproject_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the 2D coordinate in the @Viewport@ rectangle that maps to the given 3D point in worldspace.
+-- | Returns the 2D coordinate in the @Viewport@ rectangle that maps to the given 3D point in world space.
+--   				__Note:__ When using this to position GUI elements over a 3D viewport, use @method is_position_behind@ to prevent them from appearing if the 3D point is behind the camera:
+--   				
+--   @
+--   
+--   				# This code block is part of a script that inherits from Spatial.
+--   				# `control` is a reference to a node inheriting from Control.
+--   				control.visible = not get_viewport().get_camera().is_position_behind(global_transform.origin)
+--   				control.rect_position = get_viewport().get_camera().unproject_position(global_transform.origin)
+--   				
+--   @
 unproject_position ::
                      (Camera :< cls, Object :< cls) => cls -> Vector3 -> IO Vector2
 unproject_position cls arg1

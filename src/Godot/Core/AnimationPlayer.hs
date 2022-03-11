@@ -83,7 +83,8 @@ _ANIMATION_PROCESS_PHYSICS = 0
 _ANIMATION_PROCESS_IDLE :: Int
 _ANIMATION_PROCESS_IDLE = 1
 
--- | If the currently being played animation changes, this signal will notify of such change.
+-- | Emitted when a queued animation plays after the previous animation was finished. See @method queue@.
+--   				__Note:__ The signal is not emitted when the animation is changed via @method play@ or from @AnimationTree@.
 sig_animation_changed ::
                       Godot.Internal.Dispatch.Signal AnimationPlayer
 sig_animation_changed
@@ -625,7 +626,7 @@ instance NodeMethod AnimationPlayer "get_blend_time"
 {-# NOINLINE bindAnimationPlayer_get_current_animation #-}
 
 -- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+--   			__Note:__ While this property appears in the inspector, it's not meant to be edited, and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
 bindAnimationPlayer_get_current_animation :: MethodBind
 bindAnimationPlayer_get_current_animation
   = unsafePerformIO $
@@ -636,7 +637,7 @@ bindAnimationPlayer_get_current_animation
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+--   			__Note:__ While this property appears in the inspector, it's not meant to be edited, and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
 get_current_animation ::
                         (AnimationPlayer :< cls, Object :< cls) => cls -> IO GodotString
 get_current_animation cls
@@ -1321,7 +1322,7 @@ instance NodeMethod AnimationPlayer "set_blend_time"
 {-# NOINLINE bindAnimationPlayer_set_current_animation #-}
 
 -- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+--   			__Note:__ While this property appears in the inspector, it's not meant to be edited, and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
 bindAnimationPlayer_set_current_animation :: MethodBind
 bindAnimationPlayer_set_current_animation
   = unsafePerformIO $
@@ -1332,7 +1333,7 @@ bindAnimationPlayer_set_current_animation
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+--   			__Note:__ While this property appears in the inspector, it's not meant to be edited, and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
 set_current_animation ::
                         (AnimationPlayer :< cls, Object :< cls) =>
                         cls -> GodotString -> IO ()

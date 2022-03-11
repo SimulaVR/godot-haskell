@@ -180,6 +180,7 @@ instance NodeMethod ClassDB "class_get_integer_constant_list"
 {-# NOINLINE bindClassDB_class_get_method_list #-}
 
 -- | Returns an array with all the methods of @class@ or its ancestry if @no_inheritance@ is @false@. Every element of the array is a @Dictionary@ with the following keys: @args@, @default_args@, @flags@, @id@, @name@, @return: (class_name, hint, hint_string, name, type, usage)@.
+--   				__Note:__ In exported release builds the debug info is not available, so the returned dictionaries will contain only method names.
 bindClassDB_class_get_method_list :: MethodBind
 bindClassDB_class_get_method_list
   = unsafePerformIO $
@@ -190,6 +191,7 @@ bindClassDB_class_get_method_list
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns an array with all the methods of @class@ or its ancestry if @no_inheritance@ is @false@. Every element of the array is a @Dictionary@ with the following keys: @args@, @default_args@, @flags@, @id@, @name@, @return: (class_name, hint, hint_string, name, type, usage)@.
+--   				__Note:__ In exported release builds the debug info is not available, so the returned dictionaries will contain only method names.
 class_get_method_list ::
                         (ClassDB :< cls, Object :< cls) =>
                         cls -> GodotString -> Maybe Bool -> IO Array

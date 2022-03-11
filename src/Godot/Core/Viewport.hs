@@ -607,7 +607,7 @@ instance NodeMethod Viewport "_vp_unhandled_input" '[InputEvent]
 
 {-# NOINLINE bindViewport_find_world #-}
 
--- | Returns the 3D world of the viewport, or if none the world of the parent viewport.
+-- | Returns the first valid @World@ for this viewport, searching the @world@ property of itself and any Viewport ancestor.
 bindViewport_find_world :: MethodBind
 bindViewport_find_world
   = unsafePerformIO $
@@ -617,7 +617,7 @@ bindViewport_find_world
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the 3D world of the viewport, or if none the world of the parent viewport.
+-- | Returns the first valid @World@ for this viewport, searching the @world@ property of itself and any Viewport ancestor.
 find_world :: (Viewport :< cls, Object :< cls) => cls -> IO World
 find_world cls
   = withVariantArray []
@@ -631,7 +631,7 @@ instance NodeMethod Viewport "find_world" '[] (IO World) where
 
 {-# NOINLINE bindViewport_find_world_2d #-}
 
--- | Returns the 2D world of the viewport.
+-- | Returns the first valid @World2D@ for this viewport, searching the @world_2d@ property of itself and any Viewport ancestor.
 bindViewport_find_world_2d :: MethodBind
 bindViewport_find_world_2d
   = unsafePerformIO $
@@ -641,7 +641,7 @@ bindViewport_find_world_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the 2D world of the viewport.
+-- | Returns the first valid @World2D@ for this viewport, searching the @world_2d@ property of itself and any Viewport ancestor.
 find_world_2d ::
                 (Viewport :< cls, Object :< cls) => cls -> IO World2D
 find_world_2d cls
@@ -845,7 +845,7 @@ instance NodeMethod Viewport "get_hdr" '[] (IO Bool) where
 
 {-# NOINLINE bindViewport_get_keep_3d_linear #-}
 
--- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output.
+-- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output. For the GLES2 driver this will convert the sRGB output to linear, this should only be used for VR plugins that require input in linear color space!
 bindViewport_get_keep_3d_linear :: MethodBind
 bindViewport_get_keep_3d_linear
   = unsafePerformIO $
@@ -855,7 +855,7 @@ bindViewport_get_keep_3d_linear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output.
+-- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output. For the GLES2 driver this will convert the sRGB output to linear, this should only be used for VR plugins that require input in linear color space!
 get_keep_3d_linear ::
                      (Viewport :< cls, Object :< cls) => cls -> IO Bool
 get_keep_3d_linear cls
@@ -1068,7 +1068,7 @@ instance NodeMethod Viewport "get_shadow_atlas_size" '[] (IO Int)
 
 {-# NOINLINE bindViewport_get_size #-}
 
--- | The width and height of viewport.
+-- | The width and height of viewport. Must be set to a value greater than or equal to 2 pixels on both dimensions. Otherwise, nothing will be displayed.
 bindViewport_get_size :: MethodBind
 bindViewport_get_size
   = unsafePerformIO $
@@ -1078,7 +1078,7 @@ bindViewport_get_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The width and height of viewport.
+-- | The width and height of viewport. Must be set to a value greater than or equal to 2 pixels on both dimensions. Otherwise, nothing will be displayed.
 get_size :: (Viewport :< cls, Object :< cls) => cls -> IO Vector2
 get_size cls
   = withVariantArray []
@@ -1211,7 +1211,7 @@ instance NodeMethod Viewport "get_usage" '[] (IO Int) where
 
 {-# NOINLINE bindViewport_get_vflip #-}
 
--- | If @true@, the result of rendering will be flipped vertically.
+-- | If @true@, the result of rendering will be flipped vertically. Since Viewports in Godot 3.x render upside-down, it's recommended to set this to @true@ in most situations.
 bindViewport_get_vflip :: MethodBind
 bindViewport_get_vflip
   = unsafePerformIO $
@@ -1221,7 +1221,7 @@ bindViewport_get_vflip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the result of rendering will be flipped vertically.
+-- | If @true@, the result of rendering will be flipped vertically. Since Viewports in Godot 3.x render upside-down, it's recommended to set this to @true@ in most situations.
 get_vflip :: (Viewport :< cls, Object :< cls) => cls -> IO Bool
 get_vflip cls
   = withVariantArray []
@@ -1579,7 +1579,7 @@ instance NodeMethod Viewport "is_handling_input_locally" '[]
 
 {-# NOINLINE bindViewport_is_input_disabled #-}
 
--- | If @true@, the viewport will not receive input event.
+-- | If @true@, the viewport will not receive input events.
 bindViewport_is_input_disabled :: MethodBind
 bindViewport_is_input_disabled
   = unsafePerformIO $
@@ -1589,7 +1589,7 @@ bindViewport_is_input_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the viewport will not receive input event.
+-- | If @true@, the viewport will not receive input events.
 is_input_disabled ::
                     (Viewport :< cls, Object :< cls) => cls -> IO Bool
 is_input_disabled cls
@@ -1973,7 +1973,7 @@ instance NodeMethod Viewport "set_disable_3d" '[Bool] (IO ()) where
 
 {-# NOINLINE bindViewport_set_disable_input #-}
 
--- | If @true@, the viewport will not receive input event.
+-- | If @true@, the viewport will not receive input events.
 bindViewport_set_disable_input :: MethodBind
 bindViewport_set_disable_input
   = unsafePerformIO $
@@ -1983,7 +1983,7 @@ bindViewport_set_disable_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the viewport will not receive input event.
+-- | If @true@, the viewport will not receive input events.
 set_disable_input ::
                     (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_disable_input cls arg1
@@ -2110,7 +2110,7 @@ instance NodeMethod Viewport "set_input_as_handled" '[] (IO ())
 
 {-# NOINLINE bindViewport_set_keep_3d_linear #-}
 
--- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output.
+-- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output. For the GLES2 driver this will convert the sRGB output to linear, this should only be used for VR plugins that require input in linear color space!
 bindViewport_set_keep_3d_linear :: MethodBind
 bindViewport_set_keep_3d_linear
   = unsafePerformIO $
@@ -2120,7 +2120,7 @@ bindViewport_set_keep_3d_linear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output.
+-- | If @true@, the result after 3D rendering will not have a linear to sRGB color conversion applied. This is important when the viewport is used as a render target where the result is used as a texture on a 3D object rendered in another viewport. It is also important if the viewport is used to create data that is not color based (noise, heightmaps, pickmaps, etc.). Do not enable this when the viewport is used as a texture on a 2D object or if the viewport is your final output. For the GLES2 driver this will convert the sRGB output to linear, this should only be used for VR plugins that require input in linear color space!
 set_keep_3d_linear ::
                      (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_keep_3d_linear cls arg1
@@ -2251,7 +2251,7 @@ instance NodeMethod Viewport "set_shadow_atlas_size" '[Int] (IO ())
 
 {-# NOINLINE bindViewport_set_size #-}
 
--- | The width and height of viewport.
+-- | The width and height of viewport. Must be set to a value greater than or equal to 2 pixels on both dimensions. Otherwise, nothing will be displayed.
 bindViewport_set_size :: MethodBind
 bindViewport_set_size
   = unsafePerformIO $
@@ -2261,7 +2261,7 @@ bindViewport_set_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The width and height of viewport.
+-- | The width and height of viewport. Must be set to a value greater than or equal to 2 pixels on both dimensions. Otherwise, nothing will be displayed.
 set_size ::
            (Viewport :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_size cls arg1
@@ -2530,7 +2530,7 @@ instance NodeMethod Viewport "set_use_render_direct_to_screen"
 
 {-# NOINLINE bindViewport_set_vflip #-}
 
--- | If @true@, the result of rendering will be flipped vertically.
+-- | If @true@, the result of rendering will be flipped vertically. Since Viewports in Godot 3.x render upside-down, it's recommended to set this to @true@ in most situations.
 bindViewport_set_vflip :: MethodBind
 bindViewport_set_vflip
   = unsafePerformIO $
@@ -2540,7 +2540,7 @@ bindViewport_set_vflip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the result of rendering will be flipped vertically.
+-- | If @true@, the result of rendering will be flipped vertically. Since Viewports in Godot 3.x render upside-down, it's recommended to set this to @true@ in most situations.
 set_vflip ::
             (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_vflip cls arg1

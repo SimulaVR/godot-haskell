@@ -678,7 +678,8 @@ instance NodeProperty OS "max_window_size" Vector2 'False where
 
 {-# NOINLINE bindOS_get_min_window_size #-}
 
--- | The minimum size of the window (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system default value.
+-- | The minimum size of the window in pixels (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system's default value.
+--   			__Note:__ By default, the project window has a minimum size of @Vector2(64, 64)@. This prevents issues that can arise when the window is resized to a near-zero size.
 bindOS_get_min_window_size :: MethodBind
 bindOS_get_min_window_size
   = unsafePerformIO $
@@ -688,7 +689,8 @@ bindOS_get_min_window_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum size of the window (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system default value.
+-- | The minimum size of the window in pixels (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system's default value.
+--   			__Note:__ By default, the project window has a minimum size of @Vector2(64, 64)@. This prevents issues that can arise when the window is resized to a near-zero size.
 get_min_window_size ::
                       (OS :< cls, Object :< cls) => cls -> IO Vector2
 get_min_window_size cls
@@ -704,7 +706,8 @@ instance NodeMethod OS "get_min_window_size" '[] (IO Vector2) where
 
 {-# NOINLINE bindOS_set_min_window_size #-}
 
--- | The minimum size of the window (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system default value.
+-- | The minimum size of the window in pixels (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system's default value.
+--   			__Note:__ By default, the project window has a minimum size of @Vector2(64, 64)@. This prevents issues that can arise when the window is resized to a near-zero size.
 bindOS_set_min_window_size :: MethodBind
 bindOS_set_min_window_size
   = unsafePerformIO $
@@ -714,7 +717,8 @@ bindOS_set_min_window_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The minimum size of the window (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system default value.
+-- | The minimum size of the window in pixels (without counting window manager decorations). Does not affect fullscreen mode. Set to @(0, 0)@ to reset to the system's default value.
+--   			__Note:__ By default, the project window has a minimum size of @Vector2(64, 64)@. This prevents issues that can arise when the window is resized to a near-zero size.
 set_min_window_size ::
                       (OS :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_min_window_size cls arg1
@@ -1146,10 +1150,10 @@ instance NodeProperty OS "window_minimized" Bool 'False where
 
 {-# NOINLINE bindOS_get_window_per_pixel_transparency_enabled #-}
 
--- | If @true@, the window background is transparent and window frame is removed.
+-- | If @true@, the window background is transparent and the window frame is removed.
 --   			Use @get_tree().get_root().set_transparent_background(true)@ to disable main viewport background rendering.
---   			__Note:__ This property has no effect if __Project > Project Settings > Display > Window > Per-pixel transparency > Allowed__ setting is disabled.
---   			__Note:__ This property is implemented on HTML5, Linux, macOS and Windows.
+--   			__Note:__ This property has no effect if @ProjectSettings.display/window/per_pixel_transparency/allowed@ setting is disabled.
+--   			__Note:__ This property is implemented on HTML5, Linux, macOS, Windows, and Android. It can't be changed at runtime for Android. Use @ProjectSettings.display/window/per_pixel_transparency/enabled@ to set it at startup instead.
 bindOS_get_window_per_pixel_transparency_enabled :: MethodBind
 bindOS_get_window_per_pixel_transparency_enabled
   = unsafePerformIO $
@@ -1159,10 +1163,10 @@ bindOS_get_window_per_pixel_transparency_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the window background is transparent and window frame is removed.
+-- | If @true@, the window background is transparent and the window frame is removed.
 --   			Use @get_tree().get_root().set_transparent_background(true)@ to disable main viewport background rendering.
---   			__Note:__ This property has no effect if __Project > Project Settings > Display > Window > Per-pixel transparency > Allowed__ setting is disabled.
---   			__Note:__ This property is implemented on HTML5, Linux, macOS and Windows.
+--   			__Note:__ This property has no effect if @ProjectSettings.display/window/per_pixel_transparency/allowed@ setting is disabled.
+--   			__Note:__ This property is implemented on HTML5, Linux, macOS, Windows, and Android. It can't be changed at runtime for Android. Use @ProjectSettings.display/window/per_pixel_transparency/enabled@ to set it at startup instead.
 get_window_per_pixel_transparency_enabled ::
                                             (OS :< cls, Object :< cls) => cls -> IO Bool
 get_window_per_pixel_transparency_enabled cls
@@ -1184,10 +1188,10 @@ instance NodeMethod OS "get_window_per_pixel_transparency_enabled"
 
 {-# NOINLINE bindOS_set_window_per_pixel_transparency_enabled #-}
 
--- | If @true@, the window background is transparent and window frame is removed.
+-- | If @true@, the window background is transparent and the window frame is removed.
 --   			Use @get_tree().get_root().set_transparent_background(true)@ to disable main viewport background rendering.
---   			__Note:__ This property has no effect if __Project > Project Settings > Display > Window > Per-pixel transparency > Allowed__ setting is disabled.
---   			__Note:__ This property is implemented on HTML5, Linux, macOS and Windows.
+--   			__Note:__ This property has no effect if @ProjectSettings.display/window/per_pixel_transparency/allowed@ setting is disabled.
+--   			__Note:__ This property is implemented on HTML5, Linux, macOS, Windows, and Android. It can't be changed at runtime for Android. Use @ProjectSettings.display/window/per_pixel_transparency/enabled@ to set it at startup instead.
 bindOS_set_window_per_pixel_transparency_enabled :: MethodBind
 bindOS_set_window_per_pixel_transparency_enabled
   = unsafePerformIO $
@@ -1197,10 +1201,10 @@ bindOS_set_window_per_pixel_transparency_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the window background is transparent and window frame is removed.
+-- | If @true@, the window background is transparent and the window frame is removed.
 --   			Use @get_tree().get_root().set_transparent_background(true)@ to disable main viewport background rendering.
---   			__Note:__ This property has no effect if __Project > Project Settings > Display > Window > Per-pixel transparency > Allowed__ setting is disabled.
---   			__Note:__ This property is implemented on HTML5, Linux, macOS and Windows.
+--   			__Note:__ This property has no effect if @ProjectSettings.display/window/per_pixel_transparency/allowed@ setting is disabled.
+--   			__Note:__ This property is implemented on HTML5, Linux, macOS, Windows, and Android. It can't be changed at runtime for Android. Use @ProjectSettings.display/window/per_pixel_transparency/enabled@ to set it at startup instead.
 set_window_per_pixel_transparency_enabled ::
                                             (OS :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_window_per_pixel_transparency_enabled cls arg1
@@ -1522,7 +1526,9 @@ instance NodeMethod OS "close_midi_inputs" '[] (IO ()) where
 
 {-# NOINLINE bindOS_delay_msec #-}
 
--- | Delay execution of the current thread by @msec@ milliseconds.
+-- | Delays execution of the current thread by @msec@ milliseconds. @msec@ must be greater than or equal to @0@. Otherwise, @method delay_msec@ will do nothing and will print an error message.
+--   				__Note:__ @method delay_msec@ is a @i@blocking@/i@ way to delay code execution. To delay code execution in a non-blocking way, see @method SceneTree.create_timer@. Yielding with @method SceneTree.create_timer@ will delay the execution of code placed below the @yield@ without affecting the rest of the project (or editor, for @EditorPlugin@s and @EditorScript@s).
+--   				__Note:__ When @method delay_msec@ is called on the main thread, it will freeze the project and will prevent it from redrawing and registering input until the delay has passed. When using @method delay_msec@ as part of an @EditorPlugin@ or @EditorScript@, it will freeze the editor but won't freeze the project if it is currently running (since the project is an independent child process).
 bindOS_delay_msec :: MethodBind
 bindOS_delay_msec
   = unsafePerformIO $
@@ -1532,7 +1538,9 @@ bindOS_delay_msec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Delay execution of the current thread by @msec@ milliseconds.
+-- | Delays execution of the current thread by @msec@ milliseconds. @msec@ must be greater than or equal to @0@. Otherwise, @method delay_msec@ will do nothing and will print an error message.
+--   				__Note:__ @method delay_msec@ is a @i@blocking@/i@ way to delay code execution. To delay code execution in a non-blocking way, see @method SceneTree.create_timer@. Yielding with @method SceneTree.create_timer@ will delay the execution of code placed below the @yield@ without affecting the rest of the project (or editor, for @EditorPlugin@s and @EditorScript@s).
+--   				__Note:__ When @method delay_msec@ is called on the main thread, it will freeze the project and will prevent it from redrawing and registering input until the delay has passed. When using @method delay_msec@ as part of an @EditorPlugin@ or @EditorScript@, it will freeze the editor but won't freeze the project if it is currently running (since the project is an independent child process).
 delay_msec :: (OS :< cls, Object :< cls) => cls -> Int -> IO ()
 delay_msec cls arg1
   = withVariantArray [toVariant arg1]
@@ -1545,7 +1553,9 @@ instance NodeMethod OS "delay_msec" '[Int] (IO ()) where
 
 {-# NOINLINE bindOS_delay_usec #-}
 
--- | Delay execution of the current thread by @usec@ microseconds.
+-- | Delays execution of the current thread by @usec@ microseconds. @usec@ must be greater than or equal to @0@. Otherwise, @method delay_usec@ will do nothing and will print an error message.
+--   				__Note:__ @method delay_usec@ is a @i@blocking@/i@ way to delay code execution. To delay code execution in a non-blocking way, see @method SceneTree.create_timer@. Yielding with @method SceneTree.create_timer@ will delay the execution of code placed below the @yield@ without affecting the rest of the project (or editor, for @EditorPlugin@s and @EditorScript@s).
+--   				__Note:__ When @method delay_usec@ is called on the main thread, it will freeze the project and will prevent it from redrawing and registering input until the delay has passed. When using @method delay_usec@ as part of an @EditorPlugin@ or @EditorScript@, it will freeze the editor but won't freeze the project if it is currently running (since the project is an independent child process).
 bindOS_delay_usec :: MethodBind
 bindOS_delay_usec
   = unsafePerformIO $
@@ -1555,7 +1565,9 @@ bindOS_delay_usec
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Delay execution of the current thread by @usec@ microseconds.
+-- | Delays execution of the current thread by @usec@ microseconds. @usec@ must be greater than or equal to @0@. Otherwise, @method delay_usec@ will do nothing and will print an error message.
+--   				__Note:__ @method delay_usec@ is a @i@blocking@/i@ way to delay code execution. To delay code execution in a non-blocking way, see @method SceneTree.create_timer@. Yielding with @method SceneTree.create_timer@ will delay the execution of code placed below the @yield@ without affecting the rest of the project (or editor, for @EditorPlugin@s and @EditorScript@s).
+--   				__Note:__ When @method delay_usec@ is called on the main thread, it will freeze the project and will prevent it from redrawing and registering input until the delay has passed. When using @method delay_usec@ as part of an @EditorPlugin@ or @EditorScript@, it will freeze the editor but won't freeze the project if it is currently running (since the project is an independent child process).
 delay_usec :: (OS :< cls, Object :< cls) => cls -> Int -> IO ()
 delay_usec cls arg1
   = withVariantArray [toVariant arg1]
@@ -1661,6 +1673,9 @@ instance NodeMethod OS "dump_resources_to_file" '[GodotString]
 --   @
 --   
 --   				__Note:__ This method is implemented on Android, iOS, Linux, macOS and Windows.
+--   				__Note:__ To execute a Windows command interpreter built-in command, specify @cmd.exe@ in @path@, @/c@ as the first argument, and the desired command as the second argument.
+--   				__Note:__ To execute a PowerShell built-in command, specify @powershell.exe@ in @path@, @-Command@ as the first argument, and the desired command as the second argument.
+--   				__Note:__ To execute a Unix shell built-in command, specify shell executable name in @path@, @-c@ as the first argument, and the desired command as the second argument.
 bindOS_execute :: MethodBind
 bindOS_execute
   = unsafePerformIO $
@@ -1702,6 +1717,9 @@ bindOS_execute
 --   @
 --   
 --   				__Note:__ This method is implemented on Android, iOS, Linux, macOS and Windows.
+--   				__Note:__ To execute a Windows command interpreter built-in command, specify @cmd.exe@ in @path@, @/c@ as the first argument, and the desired command as the second argument.
+--   				__Note:__ To execute a PowerShell built-in command, specify @powershell.exe@ in @path@, @-Command@ as the first argument, and the desired command as the second argument.
+--   				__Note:__ To execute a Unix shell built-in command, specify shell executable name in @path@, @-c@ as the first argument, and the desired command as the second argument.
 execute ::
           (OS :< cls, Object :< cls) =>
           cls ->
@@ -1813,7 +1831,7 @@ instance NodeMethod OS "get_audio_driver_name" '[Int]
 -- | Returns the command-line arguments passed to the engine.
 --   				Command-line arguments can be written in any form, including both @--key value@ and @--key=value@ forms so they can be properly parsed, as long as custom command-line arguments do not conflict with engine arguments.
 --   				You can also incorporate environment variables using the @method get_environment@ method.
---   				You can set @editor/main_run_args@ in the Project Settings to define command-line arguments to be passed by the editor when running the project.
+--   				You can set @ProjectSettings.editor/main_run_args@ to define command-line arguments to be passed by the editor when running the project.
 --   				Here's a minimal example on how to parse command-line arguments into a dictionary using the @--key=value@ form for arguments:
 --   				
 --   @
@@ -1837,7 +1855,7 @@ bindOS_get_cmdline_args
 -- | Returns the command-line arguments passed to the engine.
 --   				Command-line arguments can be written in any form, including both @--key value@ and @--key=value@ forms so they can be properly parsed, as long as custom command-line arguments do not conflict with engine arguments.
 --   				You can also incorporate environment variables using the @method get_environment@ method.
---   				You can set @editor/main_run_args@ in the Project Settings to define command-line arguments to be passed by the editor when running the project.
+--   				You can set @ProjectSettings.editor/main_run_args@ to define command-line arguments to be passed by the editor when running the project.
 --   				Here's a minimal example on how to parse command-line arguments into a dictionary using the @--key=value@ form for arguments:
 --   				
 --   @
@@ -2032,7 +2050,8 @@ instance NodeMethod OS "get_dynamic_memory_usage" '[] (IO Int)
 
 {-# NOINLINE bindOS_get_environment #-}
 
--- | Returns an environment variable.
+-- | Returns the value of an environment variable. Returns an empty string if the environment variable doesn't exist.
+--   				__Note:__ Double-check the casing of @variable@. Environment variable names are case-sensitive on all platforms except Windows.
 bindOS_get_environment :: MethodBind
 bindOS_get_environment
   = unsafePerformIO $
@@ -2042,7 +2061,8 @@ bindOS_get_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an environment variable.
+-- | Returns the value of an environment variable. Returns an empty string if the environment variable doesn't exist.
+--   				__Note:__ Double-check the casing of @variable@. Environment variable names are case-sensitive on all platforms except Windows.
 get_environment ::
                   (OS :< cls, Object :< cls) => cls -> GodotString -> IO GodotString
 get_environment cls arg1
@@ -2086,7 +2106,7 @@ instance NodeMethod OS "get_executable_path" '[] (IO GodotString)
 
 {-# NOINLINE bindOS_get_granted_permissions #-}
 
--- | With this function you can get the list of dangerous permissions that have been granted to the Android application.
+-- | With this function, you can get the list of dangerous permissions that have been granted to the Android application.
 --   				__Note:__ This method is implemented on Android.
 bindOS_get_granted_permissions :: MethodBind
 bindOS_get_granted_permissions
@@ -2097,7 +2117,7 @@ bindOS_get_granted_permissions
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | With this function you can get the list of dangerous permissions that have been granted to the Android application.
+-- | With this function, you can get the list of dangerous permissions that have been granted to the Android application.
 --   				__Note:__ This method is implemented on Android.
 get_granted_permissions ::
                           (OS :< cls, Object :< cls) => cls -> IO PoolStringArray
@@ -2205,7 +2225,12 @@ instance NodeMethod OS "get_latin_keyboard_variant" '[]
 
 {-# NOINLINE bindOS_get_locale #-}
 
--- | Returns the host OS locale.
+-- | Returns the host OS locale as a string of the form @language_Script_COUNTRY_VARIANT@extra@. If you want only the language code and not the fully specified locale from the OS, you can use @method get_locale_language@.
+--   				@language@ - 2 or 3-letter @url=https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes@language code@/url@, in lower case.
+--   				@Script@ - optional, 4-letter @url=https://en.wikipedia.org/wiki/ISO_15924@script code@/url@, in title case.
+--   				@COUNTRY@ - optional, 2 or 3-letter @url=https://en.wikipedia.org/wiki/ISO_3166-1@country code@/url@, in upper case.
+--   				@VARIANT@ - optional, language variant, region and sort order. Variant can have any number of underscored keywords.
+--   				@extra@ - optional, semicolon separated list of additional key words. Currency, calendar, sort order and numbering system information.
 bindOS_get_locale :: MethodBind
 bindOS_get_locale
   = unsafePerformIO $
@@ -2215,7 +2240,12 @@ bindOS_get_locale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the host OS locale.
+-- | Returns the host OS locale as a string of the form @language_Script_COUNTRY_VARIANT@extra@. If you want only the language code and not the fully specified locale from the OS, you can use @method get_locale_language@.
+--   				@language@ - 2 or 3-letter @url=https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes@language code@/url@, in lower case.
+--   				@Script@ - optional, 4-letter @url=https://en.wikipedia.org/wiki/ISO_15924@script code@/url@, in title case.
+--   				@COUNTRY@ - optional, 2 or 3-letter @url=https://en.wikipedia.org/wiki/ISO_3166-1@country code@/url@, in upper case.
+--   				@VARIANT@ - optional, language variant, region and sort order. Variant can have any number of underscored keywords.
+--   				@extra@ - optional, semicolon separated list of additional key words. Currency, calendar, sort order and numbering system information.
 get_locale :: (OS :< cls, Object :< cls) => cls -> IO GodotString
 get_locale cls
   = withVariantArray []
@@ -2493,7 +2523,8 @@ instance NodeMethod OS "get_screen_count" '[] (IO Int) where
 {-# NOINLINE bindOS_get_screen_dpi #-}
 
 -- | Returns the dots per inch density of the specified screen. If @screen@ is @-1@ (the default value), the current screen will be used.
---   				On Android devices, the actual screen densities are grouped into six generalized densities:
+--   				__Note:__ On macOS, returned value is inaccurate if fractional display scaling mode is used.
+--   				__Note:__ On Android devices, the actual screen densities are grouped into six generalized densities:
 --   				
 --   @
 --   
@@ -2517,7 +2548,8 @@ bindOS_get_screen_dpi
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the dots per inch density of the specified screen. If @screen@ is @-1@ (the default value), the current screen will be used.
---   				On Android devices, the actual screen densities are grouped into six generalized densities:
+--   				__Note:__ On macOS, returned value is inaccurate if fractional display scaling mode is used.
+--   				__Note:__ On Android devices, the actual screen densities are grouped into six generalized densities:
 --   				
 --   @
 --   
@@ -2652,7 +2684,7 @@ instance NodeMethod OS "get_static_memory_peak_usage" '[] (IO Int)
 
 {-# NOINLINE bindOS_get_static_memory_usage #-}
 
--- | Returns the amount of static memory being used by the program in bytes.
+-- | Returns the amount of static memory being used by the program in bytes (only works in debug).
 bindOS_get_static_memory_usage :: MethodBind
 bindOS_get_static_memory_usage
   = unsafePerformIO $
@@ -2662,7 +2694,7 @@ bindOS_get_static_memory_usage
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the amount of static memory being used by the program in bytes.
+-- | Returns the amount of static memory being used by the program in bytes (only works in debug).
 get_static_memory_usage ::
                           (OS :< cls, Object :< cls) => cls -> IO Int
 get_static_memory_usage cls
@@ -2680,6 +2712,7 @@ instance NodeMethod OS "get_static_memory_usage" '[] (IO Int) where
 
 -- | Returns the actual path to commonly used folders across different platforms. Available locations are specified in @enum SystemDir@.
 --   				__Note:__ This method is implemented on Android, Linux, macOS and Windows.
+--   				__Note:__ Shared storage is implemented on Android and allows to differentiate between app specific and shared directories. Shared directories have additional restrictions on Android.
 bindOS_get_system_dir :: MethodBind
 bindOS_get_system_dir
   = unsafePerformIO $
@@ -2691,6 +2724,7 @@ bindOS_get_system_dir
 
 -- | Returns the actual path to commonly used folders across different platforms. Available locations are specified in @enum SystemDir@.
 --   				__Note:__ This method is implemented on Android, Linux, macOS and Windows.
+--   				__Note:__ Shared storage is implemented on Android and allows to differentiate between app specific and shared directories. Shared directories have additional restrictions on Android.
 get_system_dir ::
                  (OS :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_system_dir cls arg1
@@ -2858,6 +2892,7 @@ instance NodeMethod OS "get_time_zone_info" '[] (IO Dictionary)
 {-# NOINLINE bindOS_get_unique_id #-}
 
 -- | Returns a string that is unique to the device.
+--   				__Note:__ This string may change without notice if the user reinstalls/upgrades their operating system or changes their hardware. This means it should generally not be used to encrypt persistent data as the data saved before an unexpected ID change would become inaccessible. The returned string may also be falsified using external programs, so do not rely on the string returned by @method get_unique_id@ for security purposes.
 --   				__Note:__ Returns an empty string on HTML5 and UWP, as this method isn't implemented on those platforms yet.
 bindOS_get_unique_id :: MethodBind
 bindOS_get_unique_id
@@ -2869,6 +2904,7 @@ bindOS_get_unique_id
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a string that is unique to the device.
+--   				__Note:__ This string may change without notice if the user reinstalls/upgrades their operating system or changes their hardware. This means it should generally not be used to encrypt persistent data as the data saved before an unexpected ID change would become inaccessible. The returned string may also be falsified using external programs, so do not rely on the string returned by @method get_unique_id@ for security purposes.
 --   				__Note:__ Returns an empty string on HTML5 and UWP, as this method isn't implemented on those platforms yet.
 get_unique_id ::
                 (OS :< cls, Object :< cls) => cls -> IO GodotString
@@ -2883,7 +2919,8 @@ instance NodeMethod OS "get_unique_id" '[] (IO GodotString) where
 
 {-# NOINLINE bindOS_get_unix_time #-}
 
--- | Returns the current UNIX epoch timestamp.
+-- | Returns the current UNIX epoch timestamp in seconds.
+--   				__Important:__ This is the system clock that the user can manually set. __Never use__ this method for precise time calculation since its results are also subject to automatic adjustments by the operating system. __Always use__ @method get_ticks_usec@ or @method get_ticks_msec@ for precise time calculation instead, since they are guaranteed to be monotonic (i.e. never decrease).
 bindOS_get_unix_time :: MethodBind
 bindOS_get_unix_time
   = unsafePerformIO $
@@ -2893,7 +2930,8 @@ bindOS_get_unix_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current UNIX epoch timestamp.
+-- | Returns the current UNIX epoch timestamp in seconds.
+--   				__Important:__ This is the system clock that the user can manually set. __Never use__ this method for precise time calculation since its results are also subject to automatic adjustments by the operating system. __Always use__ @method get_ticks_usec@ or @method get_ticks_msec@ for precise time calculation instead, since they are guaranteed to be monotonic (i.e. never decrease).
 get_unix_time :: (OS :< cls, Object :< cls) => cls -> IO Int
 get_unix_time cls
   = withVariantArray []
@@ -2908,6 +2946,7 @@ instance NodeMethod OS "get_unix_time" '[] (IO Int) where
 
 -- | Gets an epoch time value from a dictionary of time values.
 --   				@datetime@ must be populated with the following keys: @year@, @month@, @day@, @hour@, @minute@, @second@.
+--   				If the dictionary is empty @0@ is returned. If some keys are omitted, they default to the equivalent values for the UNIX epoch timestamp 0 (1970-01-01 at 00:00:00 UTC).
 --   				You can pass the output from @method get_datetime_from_unix_time@ directly into this function. Daylight Savings Time (@dst@), if present, is ignored.
 bindOS_get_unix_time_from_datetime :: MethodBind
 bindOS_get_unix_time_from_datetime
@@ -2920,6 +2959,7 @@ bindOS_get_unix_time_from_datetime
 
 -- | Gets an epoch time value from a dictionary of time values.
 --   				@datetime@ must be populated with the following keys: @year@, @month@, @day@, @hour@, @minute@, @second@.
+--   				If the dictionary is empty @0@ is returned. If some keys are omitted, they default to the equivalent values for the UNIX epoch timestamp 0 (1970-01-01 at 00:00:00 UTC).
 --   				You can pass the output from @method get_datetime_from_unix_time@ directly into this function. Daylight Savings Time (@dst@), if present, is ignored.
 get_unix_time_from_datetime ::
                               (OS :< cls, Object :< cls) => cls -> Dictionary -> IO Int
@@ -2944,6 +2984,7 @@ instance NodeMethod OS "get_unix_time_from_datetime" '[Dictionary]
 --   				On macOS, this is @~/Library/Application Support/Godot/app_userdata/@project_name@@, or @~/Library/Application Support/@custom_name@@ if @use_custom_user_dir@ is set.
 --   				On Windows, this is @%APPDATA%\Godot\app_userdata\@project_name@@, or @%APPDATA%\@custom_name@@ if @use_custom_user_dir@ is set. @%APPDATA%@ expands to @%USERPROFILE%\AppData\Roaming@.
 --   				If the project name is empty, @user://@ falls back to @res://@.
+--   				Not to be confused with @method get_data_dir@, which returns the @i@global@/i@ (non-project-specific) user data directory.
 bindOS_get_user_data_dir :: MethodBind
 bindOS_get_user_data_dir
   = unsafePerformIO $
@@ -2958,6 +2999,7 @@ bindOS_get_user_data_dir
 --   				On macOS, this is @~/Library/Application Support/Godot/app_userdata/@project_name@@, or @~/Library/Application Support/@custom_name@@ if @use_custom_user_dir@ is set.
 --   				On Windows, this is @%APPDATA%\Godot\app_userdata\@project_name@@, or @%APPDATA%\@custom_name@@ if @use_custom_user_dir@ is set. @%APPDATA%@ expands to @%USERPROFILE%\AppData\Roaming@.
 --   				If the project name is empty, @user://@ falls back to @res://@.
+--   				Not to be confused with @method get_data_dir@, which returns the @i@global@/i@ (non-project-specific) user data directory.
 get_user_data_dir ::
                     (OS :< cls, Object :< cls) => cls -> IO GodotString
 get_user_data_dir cls
@@ -3205,7 +3247,8 @@ instance NodeMethod OS "global_menu_remove_item"
 
 {-# NOINLINE bindOS_has_environment #-}
 
--- | Returns @true@ if an environment variable exists.
+-- | Returns @true@ if the environment variable with the name @variable@ exists.
+--   				__Note:__ Double-check the casing of @variable@. Environment variable names are case-sensitive on all platforms except Windows.
 bindOS_has_environment :: MethodBind
 bindOS_has_environment
   = unsafePerformIO $
@@ -3215,7 +3258,8 @@ bindOS_has_environment
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if an environment variable exists.
+-- | Returns @true@ if the environment variable with the name @variable@ exists.
+--   				__Note:__ Double-check the casing of @variable@. Environment variable names are case-sensitive on all platforms except Windows.
 has_environment ::
                   (OS :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_environment cls arg1
@@ -3231,7 +3275,7 @@ instance NodeMethod OS "has_environment" '[GodotString] (IO Bool)
 
 {-# NOINLINE bindOS_has_feature #-}
 
--- | Returns @true@ if the feature for the given feature tag is supported in the currently running instance, depending on platform, build etc. Can be used to check whether you're currently running a debug build, on a certain platform or arch, etc. Refer to the @url=https://docs.godotengine.org/en/latest/getting_started/workflow/export/feature_tags.html@Feature Tags@/url@ documentation for more details.
+-- | Returns @true@ if the feature for the given feature tag is supported in the currently running instance, depending on the platform, build etc. Can be used to check whether you're currently running a debug build, on a certain platform or arch, etc. Refer to the @url=https://docs.godotengine.org/en/3.4/tutorials/export/feature_tags.html@Feature Tags@/url@ documentation for more details.
 --   				__Note:__ Tag names are case-sensitive.
 bindOS_has_feature :: MethodBind
 bindOS_has_feature
@@ -3242,7 +3286,7 @@ bindOS_has_feature
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the feature for the given feature tag is supported in the currently running instance, depending on platform, build etc. Can be used to check whether you're currently running a debug build, on a certain platform or arch, etc. Refer to the @url=https://docs.godotengine.org/en/latest/getting_started/workflow/export/feature_tags.html@Feature Tags@/url@ documentation for more details.
+-- | Returns @true@ if the feature for the given feature tag is supported in the currently running instance, depending on the platform, build etc. Can be used to check whether you're currently running a debug build, on a certain platform or arch, etc. Refer to the @url=https://docs.godotengine.org/en/3.4/tutorials/export/feature_tags.html@Feature Tags@/url@ documentation for more details.
 --   				__Note:__ Tag names are case-sensitive.
 has_feature ::
               (OS :< cls, Object :< cls) => cls -> GodotString -> IO Bool
@@ -3578,7 +3622,7 @@ instance NodeMethod OS "move_window_to_foreground" '[] (IO ())
 {-# NOINLINE bindOS_native_video_is_playing #-}
 
 -- | Returns @true@ if native video is playing.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is only implemented on iOS.
 bindOS_native_video_is_playing :: MethodBind
 bindOS_native_video_is_playing
   = unsafePerformIO $
@@ -3589,7 +3633,7 @@ bindOS_native_video_is_playing
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ if native video is playing.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is only implemented on iOS.
 native_video_is_playing ::
                           (OS :< cls, Object :< cls) => cls -> IO Bool
 native_video_is_playing cls
@@ -3607,7 +3651,7 @@ instance NodeMethod OS "native_video_is_playing" '[] (IO Bool)
 {-# NOINLINE bindOS_native_video_pause #-}
 
 -- | Pauses native video playback.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is only implemented on iOS.
 bindOS_native_video_pause :: MethodBind
 bindOS_native_video_pause
   = unsafePerformIO $
@@ -3618,7 +3662,7 @@ bindOS_native_video_pause
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Pauses native video playback.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is only implemented on iOS.
 native_video_pause :: (OS :< cls, Object :< cls) => cls -> IO ()
 native_video_pause cls
   = withVariantArray []
@@ -3634,7 +3678,7 @@ instance NodeMethod OS "native_video_pause" '[] (IO ()) where
 {-# NOINLINE bindOS_native_video_play #-}
 
 -- | Plays native video from the specified path, at the given volume and with audio and subtitle tracks.
---   				__Note:__ This method is implemented on Android and iOS, and the current Android implementation does not support the @volume@, @audio_track@ and @subtitle_track@ options.
+--   				__Note:__ This method is only implemented on iOS.
 bindOS_native_video_play :: MethodBind
 bindOS_native_video_play
   = unsafePerformIO $
@@ -3645,7 +3689,7 @@ bindOS_native_video_play
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Plays native video from the specified path, at the given volume and with audio and subtitle tracks.
---   				__Note:__ This method is implemented on Android and iOS, and the current Android implementation does not support the @volume@, @audio_track@ and @subtitle_track@ options.
+--   				__Note:__ This method is only implemented on iOS.
 native_video_play ::
                     (OS :< cls, Object :< cls) =>
                     cls -> GodotString -> Float -> GodotString -> GodotString -> IO Int
@@ -3666,7 +3710,7 @@ instance NodeMethod OS "native_video_play"
 {-# NOINLINE bindOS_native_video_stop #-}
 
 -- | Stops native video playback.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is implemented on iOS.
 bindOS_native_video_stop :: MethodBind
 bindOS_native_video_stop
   = unsafePerformIO $
@@ -3677,7 +3721,7 @@ bindOS_native_video_stop
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stops native video playback.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is implemented on iOS.
 native_video_stop :: (OS :< cls, Object :< cls) => cls -> IO ()
 native_video_stop cls
   = withVariantArray []
@@ -3692,7 +3736,7 @@ instance NodeMethod OS "native_video_stop" '[] (IO ()) where
 {-# NOINLINE bindOS_native_video_unpause #-}
 
 -- | Resumes native video playback.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is implemented on iOS.
 bindOS_native_video_unpause :: MethodBind
 bindOS_native_video_unpause
   = unsafePerformIO $
@@ -3703,7 +3747,7 @@ bindOS_native_video_unpause
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Resumes native video playback.
---   				__Note:__ This method is implemented on Android and iOS.
+--   				__Note:__ This method is implemented on iOS.
 native_video_unpause :: (OS :< cls, Object :< cls) => cls -> IO ()
 native_video_unpause cls
   = withVariantArray []
@@ -3910,7 +3954,7 @@ instance NodeMethod OS "request_permission" '[GodotString]
 
 {-# NOINLINE bindOS_request_permissions #-}
 
--- | With this function you can request dangerous permissions since normal permissions are automatically granted at install time in Android application.
+-- | With this function, you can request dangerous permissions since normal permissions are automatically granted at install time in Android applications.
 --   				__Note:__ This method is implemented on Android.
 bindOS_request_permissions :: MethodBind
 bindOS_request_permissions
@@ -3921,7 +3965,7 @@ bindOS_request_permissions
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | With this function you can request dangerous permissions since normal permissions are automatically granted at install time in Android application.
+-- | With this function, you can request dangerous permissions since normal permissions are automatically granted at install time in Android applications.
 --   				__Note:__ This method is implemented on Android.
 request_permissions :: (OS :< cls, Object :< cls) => cls -> IO Bool
 request_permissions cls

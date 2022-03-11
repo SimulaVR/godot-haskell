@@ -195,6 +195,8 @@ instance NodeProperty Mesh "lightmap_size_hint" Vector2 'False
 {-# NOINLINE bindMesh_create_convex_shape #-}
 
 -- | Calculate a @ConvexPolygonShape@ from the mesh.
+--   				If @clean@ is @true@ (default), duplicate and interior vertices are removed automatically. You can set it to @false@ to make the process faster if not needed.
+--   				If @simplify@ is @true@, the geometry can be further simplified to reduce the amount of vertices. Disabled by default.
 bindMesh_create_convex_shape :: MethodBind
 bindMesh_create_convex_shape
   = unsafePerformIO $
@@ -205,6 +207,8 @@ bindMesh_create_convex_shape
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Calculate a @ConvexPolygonShape@ from the mesh.
+--   				If @clean@ is @true@ (default), duplicate and interior vertices are removed automatically. You can set it to @false@ to make the process faster if not needed.
+--   				If @simplify@ is @true@, the geometry can be further simplified to reduce the amount of vertices. Disabled by default.
 create_convex_shape ::
                       (Mesh :< cls, Object :< cls) => cls -> IO Shape
 create_convex_shape cls
@@ -352,7 +356,7 @@ instance NodeMethod Mesh "get_faces" '[] (IO PoolVector3Array)
 
 {-# NOINLINE bindMesh_get_lightmap_size_hint #-}
 
--- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.default_texels_per_unit@.
 bindMesh_get_lightmap_size_hint :: MethodBind
 bindMesh_get_lightmap_size_hint
   = unsafePerformIO $
@@ -362,7 +366,7 @@ bindMesh_get_lightmap_size_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.default_texels_per_unit@.
 get_lightmap_size_hint ::
                          (Mesh :< cls, Object :< cls) => cls -> IO Vector2
 get_lightmap_size_hint cls
@@ -404,7 +408,7 @@ instance NodeMethod Mesh "get_surface_count" '[] (IO Int) where
 
 {-# NOINLINE bindMesh_set_lightmap_size_hint #-}
 
--- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.default_texels_per_unit@.
 bindMesh_set_lightmap_size_hint :: MethodBind
 bindMesh_set_lightmap_size_hint
   = unsafePerformIO $
@@ -414,7 +418,7 @@ bindMesh_set_lightmap_size_hint
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.bake_default_texels_per_unit@.
+-- | Sets a hint to be used for lightmap resolution in @BakedLightmap@. Overrides @BakedLightmap.default_texels_per_unit@.
 set_lightmap_size_hint ::
                          (Mesh :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_lightmap_size_hint cls arg1

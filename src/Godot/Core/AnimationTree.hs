@@ -255,7 +255,7 @@ instance NodeMethod AnimationTree "get_process_mode" '[] (IO Int)
 {-# NOINLINE bindAnimationTree_get_root_motion_track #-}
 
 -- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by @":"@. For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
---   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place.
+--   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place. See also @method get_root_motion_transform@ and @RootMotionView@.
 bindAnimationTree_get_root_motion_track :: MethodBind
 bindAnimationTree_get_root_motion_track
   = unsafePerformIO $
@@ -266,7 +266,7 @@ bindAnimationTree_get_root_motion_track
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by @":"@. For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
---   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place.
+--   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place. See also @method get_root_motion_transform@ and @RootMotionView@.
 get_root_motion_track ::
                         (AnimationTree :< cls, Object :< cls) => cls -> IO NodePath
 get_root_motion_track cls
@@ -285,7 +285,7 @@ instance NodeMethod AnimationTree "get_root_motion_track" '[]
 
 {-# NOINLINE bindAnimationTree_get_root_motion_transform #-}
 
--- | Retrieve the motion of the @root_motion_track@ as a @Transform@ that can be used elsewhere. If @root_motion_track@ is not a path to a track of type @Animation.TYPE_TRANSFORM@, returns an identity transformation.
+-- | Retrieve the motion of the @root_motion_track@ as a @Transform@ that can be used elsewhere. If @root_motion_track@ is not a path to a track of type @Animation.TYPE_TRANSFORM@, returns an identity transformation. See also @root_motion_track@ and @RootMotionView@.
 bindAnimationTree_get_root_motion_transform :: MethodBind
 bindAnimationTree_get_root_motion_transform
   = unsafePerformIO $
@@ -295,7 +295,7 @@ bindAnimationTree_get_root_motion_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Retrieve the motion of the @root_motion_track@ as a @Transform@ that can be used elsewhere. If @root_motion_track@ is not a path to a track of type @Animation.TYPE_TRANSFORM@, returns an identity transformation.
+-- | Retrieve the motion of the @root_motion_track@ as a @Transform@ that can be used elsewhere. If @root_motion_track@ is not a path to a track of type @Animation.TYPE_TRANSFORM@, returns an identity transformation. See also @root_motion_track@ and @RootMotionView@.
 get_root_motion_transform ::
                             (AnimationTree :< cls, Object :< cls) => cls -> IO Transform
 get_root_motion_transform cls
@@ -483,7 +483,7 @@ instance NodeMethod AnimationTree "set_process_mode" '[Int] (IO ())
 {-# NOINLINE bindAnimationTree_set_root_motion_track #-}
 
 -- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by @":"@. For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
---   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place.
+--   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place. See also @method get_root_motion_transform@ and @RootMotionView@.
 bindAnimationTree_set_root_motion_track :: MethodBind
 bindAnimationTree_set_root_motion_track
   = unsafePerformIO $
@@ -494,7 +494,7 @@ bindAnimationTree_set_root_motion_track
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The path to the Animation track used for root motion. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. To specify a track that controls properties or bones, append its name after the path, separated by @":"@. For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
---   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place.
+--   			If the track has type @Animation.TYPE_TRANSFORM@, the transformation will be cancelled visually, and the animation will appear to stay in place. See also @method get_root_motion_transform@ and @RootMotionView@.
 set_root_motion_track ::
                         (AnimationTree :< cls, Object :< cls) => cls -> NodePath -> IO ()
 set_root_motion_track cls arg1

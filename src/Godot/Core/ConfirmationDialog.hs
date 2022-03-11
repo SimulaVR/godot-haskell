@@ -18,6 +18,7 @@ import Godot.Core.AcceptDialog()
 {-# NOINLINE bindConfirmationDialog_get_cancel #-}
 
 -- | Returns the cancel button.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindConfirmationDialog_get_cancel :: MethodBind
 bindConfirmationDialog_get_cancel
   = unsafePerformIO $
@@ -28,6 +29,7 @@ bindConfirmationDialog_get_cancel
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the cancel button.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_cancel ::
              (ConfirmationDialog :< cls, Object :< cls) => cls -> IO Button
 get_cancel cls

@@ -5583,7 +5583,8 @@ instance NodeMethod VisualServer "has_feature" '[Int] (IO Bool)
 
 {-# NOINLINE bindVisualServer_has_os_feature #-}
 
--- | Returns @true@ if the OS supports a certain feature. Features might be @s3tc@, @etc@, @etc2@ and @pvrtc@.
+-- | Returns @true@ if the OS supports a certain feature. Features might be @s3tc@, @etc@, @etc2@, @pvrtc@ and @skinning_fallback@.
+--   				When rendering with GLES2, returns @true@ with @skinning_fallback@ in case the hardware doesn't support the default GPU skinning process.
 bindVisualServer_has_os_feature :: MethodBind
 bindVisualServer_has_os_feature
   = unsafePerformIO $
@@ -5593,7 +5594,8 @@ bindVisualServer_has_os_feature
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the OS supports a certain feature. Features might be @s3tc@, @etc@, @etc2@ and @pvrtc@.
+-- | Returns @true@ if the OS supports a certain feature. Features might be @s3tc@, @etc@, @etc2@, @pvrtc@ and @skinning_fallback@.
+--   				When rendering with GLES2, returns @true@ with @skinning_fallback@ in case the hardware doesn't support the default GPU skinning process.
 has_os_feature ::
                  (VisualServer :< cls, Object :< cls) =>
                  cls -> GodotString -> IO Bool
@@ -6448,7 +6450,7 @@ instance NodeMethod VisualServer "instance_set_exterior"
 {-# NOINLINE bindVisualServer_instance_set_extra_visibility_margin
              #-}
 
--- | Sets a margin to increase the size of the AABB when culling objects from the view frustum. This allows you avoid culling objects that fall outside the view frustum. Equivalent to @GeometryInstance.extra_cull_margin@.
+-- | Sets a margin to increase the size of the AABB when culling objects from the view frustum. This allows you to avoid culling objects that fall outside the view frustum. Equivalent to @GeometryInstance.extra_cull_margin@.
 bindVisualServer_instance_set_extra_visibility_margin :: MethodBind
 bindVisualServer_instance_set_extra_visibility_margin
   = unsafePerformIO $
@@ -6458,7 +6460,7 @@ bindVisualServer_instance_set_extra_visibility_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a margin to increase the size of the AABB when culling objects from the view frustum. This allows you avoid culling objects that fall outside the view frustum. Equivalent to @GeometryInstance.extra_cull_margin@.
+-- | Sets a margin to increase the size of the AABB when culling objects from the view frustum. This allows you to avoid culling objects that fall outside the view frustum. Equivalent to @GeometryInstance.extra_cull_margin@.
 instance_set_extra_visibility_margin ::
                                        (VisualServer :< cls, Object :< cls) =>
                                        cls -> Rid -> Float -> IO ()
@@ -7175,7 +7177,7 @@ instance NodeMethod VisualServer "light_set_shadow_color"
 
 {-# NOINLINE bindVisualServer_light_set_use_gi #-}
 
--- | Sets whether GI probes capture light information from this light.
+-- | Sets whether GI probes capture light information from this light. @i@Deprecated method.@/i@ Use @method light_set_bake_mode@ instead. This method is only kept for compatibility reasons and calls @method light_set_bake_mode@ internally, setting the bake mode to @LIGHT_BAKE_DISABLED@ or @LIGHT_BAKE_INDIRECT@ depending on the given parameter.
 bindVisualServer_light_set_use_gi :: MethodBind
 bindVisualServer_light_set_use_gi
   = unsafePerformIO $
@@ -7185,7 +7187,7 @@ bindVisualServer_light_set_use_gi
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether GI probes capture light information from this light.
+-- | Sets whether GI probes capture light information from this light. @i@Deprecated method.@/i@ Use @method light_set_bake_mode@ instead. This method is only kept for compatibility reasons and calls @method light_set_bake_mode@ internally, setting the bake mode to @LIGHT_BAKE_DISABLED@ or @LIGHT_BAKE_INDIRECT@ depending on the given parameter.
 light_set_use_gi ::
                    (VisualServer :< cls, Object :< cls) => cls -> Rid -> Bool -> IO ()
 light_set_use_gi cls arg1 arg2
@@ -8449,7 +8451,6 @@ instance NodeMethod VisualServer "mesh_surface_get_format_offset"
 
 {-# NOINLINE bindVisualServer_mesh_surface_get_format_stride #-}
 
--- | Function is unused in Godot 3.x.
 bindVisualServer_mesh_surface_get_format_stride :: MethodBind
 bindVisualServer_mesh_surface_get_format_stride
   = unsafePerformIO $
@@ -8459,7 +8460,6 @@ bindVisualServer_mesh_surface_get_format_stride
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Function is unused in Godot 3.x.
 mesh_surface_get_format_stride ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Int -> Int -> Int -> IO Int
@@ -9806,7 +9806,7 @@ instance NodeMethod VisualServer "particles_set_one_shot"
 
 {-# NOINLINE bindVisualServer_particles_set_pre_process_time #-}
 
--- | Sets the preprocess time for the particles animation. This lets you delay starting an animation until after the particles have begun emitting. Equivalent to @Particles.preprocess@.
+-- | Sets the preprocess time for the particles' animation. This lets you delay starting an animation until after the particles have begun emitting. Equivalent to @Particles.preprocess@.
 bindVisualServer_particles_set_pre_process_time :: MethodBind
 bindVisualServer_particles_set_pre_process_time
   = unsafePerformIO $
@@ -9816,7 +9816,7 @@ bindVisualServer_particles_set_pre_process_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the preprocess time for the particles animation. This lets you delay starting an animation until after the particles have begun emitting. Equivalent to @Particles.preprocess@.
+-- | Sets the preprocess time for the particles' animation. This lets you delay starting an animation until after the particles have begun emitting. Equivalent to @Particles.preprocess@.
 particles_set_pre_process_time ::
                                  (VisualServer :< cls, Object :< cls) =>
                                  cls -> Rid -> Float -> IO ()
@@ -9838,7 +9838,8 @@ instance NodeMethod VisualServer "particles_set_pre_process_time"
 
 {-# NOINLINE bindVisualServer_particles_set_process_material #-}
 
--- | Sets the material for processing the particles. Note: this is not the material used to draw the materials. Equivalent to @Particles.process_material@.
+-- | Sets the material for processing the particles.
+--   				__Note:__ This is not the material used to draw the materials. Equivalent to @Particles.process_material@.
 bindVisualServer_particles_set_process_material :: MethodBind
 bindVisualServer_particles_set_process_material
   = unsafePerformIO $
@@ -9848,7 +9849,8 @@ bindVisualServer_particles_set_process_material
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the material for processing the particles. Note: this is not the material used to draw the materials. Equivalent to @Particles.process_material@.
+-- | Sets the material for processing the particles.
+--   				__Note:__ This is not the material used to draw the materials. Equivalent to @Particles.process_material@.
 particles_set_process_material ::
                                  (VisualServer :< cls, Object :< cls) => cls -> Rid -> Rid -> IO ()
 particles_set_process_material cls arg1 arg2

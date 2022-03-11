@@ -308,7 +308,7 @@ instance NodeMethod AudioStreamPlayer3D "_set_playing" '[Bool]
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_area_mask #-}
 
--- | Areas in which this sound plays.
+-- | Determines which @Area@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 bindAudioStreamPlayer3D_get_area_mask :: MethodBind
 bindAudioStreamPlayer3D_get_area_mask
   = unsafePerformIO $
@@ -318,7 +318,7 @@ bindAudioStreamPlayer3D_get_area_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Areas in which this sound plays.
+-- | Determines which @Area@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 get_area_mask ::
                 (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Int
 get_area_mask cls
@@ -338,7 +338,7 @@ instance NodeMethod AudioStreamPlayer3D "get_area_mask" '[]
 {-# NOINLINE bindAudioStreamPlayer3D_get_attenuation_filter_cutoff_hz
              #-}
 
--- | Dampens audio above this frequency, in Hz.
+-- | Dampens audio using a low-pass filter above this frequency, in Hz. To disable the dampening effect entirely, set this to @20500@ as this frequency is above the human hearing limit.
 bindAudioStreamPlayer3D_get_attenuation_filter_cutoff_hz ::
                                                          MethodBind
 bindAudioStreamPlayer3D_get_attenuation_filter_cutoff_hz
@@ -349,7 +349,7 @@ bindAudioStreamPlayer3D_get_attenuation_filter_cutoff_hz
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Dampens audio above this frequency, in Hz.
+-- | Dampens audio using a low-pass filter above this frequency, in Hz. To disable the dampening effect entirely, set this to @20500@ as this frequency is above the human hearing limit.
 get_attenuation_filter_cutoff_hz ::
                                    (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Float
 get_attenuation_filter_cutoff_hz cls
@@ -372,7 +372,7 @@ instance NodeMethod AudioStreamPlayer3D
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_attenuation_filter_db #-}
 
--- | Amount how much the filter affects the loudness, in dB.
+-- | Amount how much the filter affects the loudness, in decibels.
 bindAudioStreamPlayer3D_get_attenuation_filter_db :: MethodBind
 bindAudioStreamPlayer3D_get_attenuation_filter_db
   = unsafePerformIO $
@@ -382,7 +382,7 @@ bindAudioStreamPlayer3D_get_attenuation_filter_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount how much the filter affects the loudness, in dB.
+-- | Amount how much the filter affects the loudness, in decibels.
 get_attenuation_filter_db ::
                             (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Float
 get_attenuation_filter_db cls
@@ -434,7 +434,7 @@ instance NodeMethod AudioStreamPlayer3D "get_attenuation_model" '[]
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_bus #-}
 
--- | Bus on which this audio is playing.
+-- | The bus on which this audio is playing.
 bindAudioStreamPlayer3D_get_bus :: MethodBind
 bindAudioStreamPlayer3D_get_bus
   = unsafePerformIO $
@@ -444,7 +444,7 @@ bindAudioStreamPlayer3D_get_bus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bus on which this audio is playing.
+-- | The bus on which this audio is playing.
 get_bus ::
           (AudioStreamPlayer3D :< cls, Object :< cls) =>
           cls -> IO GodotString
@@ -463,7 +463,8 @@ instance NodeMethod AudioStreamPlayer3D "get_bus" '[]
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_doppler_tracking #-}
 
--- | Decides in which step the Doppler effect should be calculated.
+-- | Decides in which step the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ should be calculated.
+--   			__Note:__ Only effective if the current @Camera@'s @Camera.doppler_tracking@ property is set to a value other than @Camera.DOPPLER_TRACKING_DISABLED@.
 bindAudioStreamPlayer3D_get_doppler_tracking :: MethodBind
 bindAudioStreamPlayer3D_get_doppler_tracking
   = unsafePerformIO $
@@ -473,7 +474,8 @@ bindAudioStreamPlayer3D_get_doppler_tracking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Decides in which step the Doppler effect should be calculated.
+-- | Decides in which step the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ should be calculated.
+--   			__Note:__ Only effective if the current @Camera@'s @Camera.doppler_tracking@ property is set to a value other than @Camera.DOPPLER_TRACKING_DISABLED@.
 get_doppler_tracking ::
                        (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Int
 get_doppler_tracking cls
@@ -522,7 +524,7 @@ instance NodeMethod AudioStreamPlayer3D "get_emission_angle" '[]
 {-# NOINLINE bindAudioStreamPlayer3D_get_emission_angle_filter_attenuation_db
              #-}
 
--- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in dB.
+-- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in decibels.
 bindAudioStreamPlayer3D_get_emission_angle_filter_attenuation_db ::
                                                                  MethodBind
 bindAudioStreamPlayer3D_get_emission_angle_filter_attenuation_db
@@ -533,7 +535,7 @@ bindAudioStreamPlayer3D_get_emission_angle_filter_attenuation_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in dB.
+-- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in decibels.
 get_emission_angle_filter_attenuation_db ::
                                            (AudioStreamPlayer3D :< cls, Object :< cls) =>
                                            cls -> IO Float
@@ -557,7 +559,7 @@ instance NodeMethod AudioStreamPlayer3D
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_max_db #-}
 
--- | Sets the absolute maximum of the soundlevel, in dB.
+-- | Sets the absolute maximum of the soundlevel, in decibels.
 bindAudioStreamPlayer3D_get_max_db :: MethodBind
 bindAudioStreamPlayer3D_get_max_db
   = unsafePerformIO $
@@ -567,7 +569,7 @@ bindAudioStreamPlayer3D_get_max_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the absolute maximum of the soundlevel, in dB.
+-- | Sets the absolute maximum of the soundlevel, in decibels.
 get_max_db ::
              (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Float
 get_max_db cls
@@ -703,7 +705,7 @@ instance NodeMethod AudioStreamPlayer3D "get_playback_position" '[]
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_stream #-}
 
--- | The @AudioStream@ object to be played.
+-- | The @AudioStream@ resource to be played.
 bindAudioStreamPlayer3D_get_stream :: MethodBind
 bindAudioStreamPlayer3D_get_stream
   = unsafePerformIO $
@@ -713,7 +715,7 @@ bindAudioStreamPlayer3D_get_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The @AudioStream@ object to be played.
+-- | The @AudioStream@ resource to be played.
 get_stream ::
              (AudioStreamPlayer3D :< cls, Object :< cls) =>
              cls -> IO AudioStream
@@ -792,7 +794,7 @@ instance NodeMethod AudioStreamPlayer3D "get_stream_playback" '[]
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_unit_db #-}
 
--- | Base sound level unaffected by dampening, in dB.
+-- | The base sound level unaffected by dampening, in decibels.
 bindAudioStreamPlayer3D_get_unit_db :: MethodBind
 bindAudioStreamPlayer3D_get_unit_db
   = unsafePerformIO $
@@ -802,7 +804,7 @@ bindAudioStreamPlayer3D_get_unit_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Base sound level unaffected by dampening, in dB.
+-- | The base sound level unaffected by dampening, in decibels.
 get_unit_db ::
               (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Float
 get_unit_db cls
@@ -821,7 +823,7 @@ instance NodeMethod AudioStreamPlayer3D "get_unit_db" '[]
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_unit_size #-}
 
--- | Factor for the attenuation effect.
+-- | The factor for the attenuation effect. Higher values make the sound audible over a larger distance.
 bindAudioStreamPlayer3D_get_unit_size :: MethodBind
 bindAudioStreamPlayer3D_get_unit_size
   = unsafePerformIO $
@@ -831,7 +833,7 @@ bindAudioStreamPlayer3D_get_unit_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Factor for the attenuation effect.
+-- | The factor for the attenuation effect. Higher values make the sound audible over a larger distance.
 get_unit_size ::
                 (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Float
 get_unit_size cls
@@ -850,7 +852,7 @@ instance NodeMethod AudioStreamPlayer3D "get_unit_size" '[]
 
 {-# NOINLINE bindAudioStreamPlayer3D_is_autoplay_enabled #-}
 
--- | If @true@, audio plays when added to scene tree.
+-- | If @true@, audio plays when the AudioStreamPlayer3D node is added to scene tree.
 bindAudioStreamPlayer3D_is_autoplay_enabled :: MethodBind
 bindAudioStreamPlayer3D_is_autoplay_enabled
   = unsafePerformIO $
@@ -860,7 +862,7 @@ bindAudioStreamPlayer3D_is_autoplay_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, audio plays when added to scene tree.
+-- | If @true@, audio plays when the AudioStreamPlayer3D node is added to scene tree.
 is_autoplay_enabled ::
                       (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Bool
 is_autoplay_enabled cls
@@ -996,7 +998,7 @@ instance NodeMethod AudioStreamPlayer3D "seek" '[Float] (IO ())
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_area_mask #-}
 
--- | Areas in which this sound plays.
+-- | Determines which @Area@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 bindAudioStreamPlayer3D_set_area_mask :: MethodBind
 bindAudioStreamPlayer3D_set_area_mask
   = unsafePerformIO $
@@ -1006,7 +1008,7 @@ bindAudioStreamPlayer3D_set_area_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Areas in which this sound plays.
+-- | Determines which @Area@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 set_area_mask ::
                 (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_area_mask cls arg1
@@ -1026,7 +1028,7 @@ instance NodeMethod AudioStreamPlayer3D "set_area_mask" '[Int]
 {-# NOINLINE bindAudioStreamPlayer3D_set_attenuation_filter_cutoff_hz
              #-}
 
--- | Dampens audio above this frequency, in Hz.
+-- | Dampens audio using a low-pass filter above this frequency, in Hz. To disable the dampening effect entirely, set this to @20500@ as this frequency is above the human hearing limit.
 bindAudioStreamPlayer3D_set_attenuation_filter_cutoff_hz ::
                                                          MethodBind
 bindAudioStreamPlayer3D_set_attenuation_filter_cutoff_hz
@@ -1037,7 +1039,7 @@ bindAudioStreamPlayer3D_set_attenuation_filter_cutoff_hz
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Dampens audio above this frequency, in Hz.
+-- | Dampens audio using a low-pass filter above this frequency, in Hz. To disable the dampening effect entirely, set this to @20500@ as this frequency is above the human hearing limit.
 set_attenuation_filter_cutoff_hz ::
                                    (AudioStreamPlayer3D :< cls, Object :< cls) =>
                                    cls -> Float -> IO ()
@@ -1061,7 +1063,7 @@ instance NodeMethod AudioStreamPlayer3D
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_attenuation_filter_db #-}
 
--- | Amount how much the filter affects the loudness, in dB.
+-- | Amount how much the filter affects the loudness, in decibels.
 bindAudioStreamPlayer3D_set_attenuation_filter_db :: MethodBind
 bindAudioStreamPlayer3D_set_attenuation_filter_db
   = unsafePerformIO $
@@ -1071,7 +1073,7 @@ bindAudioStreamPlayer3D_set_attenuation_filter_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount how much the filter affects the loudness, in dB.
+-- | Amount how much the filter affects the loudness, in decibels.
 set_attenuation_filter_db ::
                             (AudioStreamPlayer3D :< cls, Object :< cls) =>
                             cls -> Float -> IO ()
@@ -1125,7 +1127,7 @@ instance NodeMethod AudioStreamPlayer3D "set_attenuation_model"
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_autoplay #-}
 
--- | If @true@, audio plays when added to scene tree.
+-- | If @true@, audio plays when the AudioStreamPlayer3D node is added to scene tree.
 bindAudioStreamPlayer3D_set_autoplay :: MethodBind
 bindAudioStreamPlayer3D_set_autoplay
   = unsafePerformIO $
@@ -1135,7 +1137,7 @@ bindAudioStreamPlayer3D_set_autoplay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, audio plays when added to scene tree.
+-- | If @true@, audio plays when the AudioStreamPlayer3D node is added to scene tree.
 set_autoplay ::
                (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_autoplay cls arg1
@@ -1154,7 +1156,7 @@ instance NodeMethod AudioStreamPlayer3D "set_autoplay" '[Bool]
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_bus #-}
 
--- | Bus on which this audio is playing.
+-- | The bus on which this audio is playing.
 bindAudioStreamPlayer3D_set_bus :: MethodBind
 bindAudioStreamPlayer3D_set_bus
   = unsafePerformIO $
@@ -1164,7 +1166,7 @@ bindAudioStreamPlayer3D_set_bus
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bus on which this audio is playing.
+-- | The bus on which this audio is playing.
 set_bus ::
           (AudioStreamPlayer3D :< cls, Object :< cls) =>
           cls -> GodotString -> IO ()
@@ -1183,7 +1185,8 @@ instance NodeMethod AudioStreamPlayer3D "set_bus" '[GodotString]
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_doppler_tracking #-}
 
--- | Decides in which step the Doppler effect should be calculated.
+-- | Decides in which step the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ should be calculated.
+--   			__Note:__ Only effective if the current @Camera@'s @Camera.doppler_tracking@ property is set to a value other than @Camera.DOPPLER_TRACKING_DISABLED@.
 bindAudioStreamPlayer3D_set_doppler_tracking :: MethodBind
 bindAudioStreamPlayer3D_set_doppler_tracking
   = unsafePerformIO $
@@ -1193,7 +1196,8 @@ bindAudioStreamPlayer3D_set_doppler_tracking
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Decides in which step the Doppler effect should be calculated.
+-- | Decides in which step the @url=https://en.wikipedia.org/wiki/Doppler_effect@Doppler effect@/url@ should be calculated.
+--   			__Note:__ Only effective if the current @Camera@'s @Camera.doppler_tracking@ property is set to a value other than @Camera.DOPPLER_TRACKING_DISABLED@.
 set_doppler_tracking ::
                        (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_doppler_tracking cls arg1
@@ -1278,7 +1282,7 @@ instance NodeMethod AudioStreamPlayer3D
 {-# NOINLINE bindAudioStreamPlayer3D_set_emission_angle_filter_attenuation_db
              #-}
 
--- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in dB.
+-- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in decibels.
 bindAudioStreamPlayer3D_set_emission_angle_filter_attenuation_db ::
                                                                  MethodBind
 bindAudioStreamPlayer3D_set_emission_angle_filter_attenuation_db
@@ -1289,7 +1293,7 @@ bindAudioStreamPlayer3D_set_emission_angle_filter_attenuation_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in dB.
+-- | Dampens audio if camera is outside of @emission_angle_degrees@ and @emission_angle_enabled@ is set by this factor, in decibels.
 set_emission_angle_filter_attenuation_db ::
                                            (AudioStreamPlayer3D :< cls, Object :< cls) =>
                                            cls -> Float -> IO ()
@@ -1313,7 +1317,7 @@ instance NodeMethod AudioStreamPlayer3D
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_max_db #-}
 
--- | Sets the absolute maximum of the soundlevel, in dB.
+-- | Sets the absolute maximum of the soundlevel, in decibels.
 bindAudioStreamPlayer3D_set_max_db :: MethodBind
 bindAudioStreamPlayer3D_set_max_db
   = unsafePerformIO $
@@ -1323,7 +1327,7 @@ bindAudioStreamPlayer3D_set_max_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the absolute maximum of the soundlevel, in dB.
+-- | Sets the absolute maximum of the soundlevel, in decibels.
 set_max_db ::
              (AudioStreamPlayer3D :< cls, Object :< cls) =>
              cls -> Float -> IO ()
@@ -1434,7 +1438,7 @@ instance NodeMethod AudioStreamPlayer3D "set_pitch_scale" '[Float]
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_stream #-}
 
--- | The @AudioStream@ object to be played.
+-- | The @AudioStream@ resource to be played.
 bindAudioStreamPlayer3D_set_stream :: MethodBind
 bindAudioStreamPlayer3D_set_stream
   = unsafePerformIO $
@@ -1444,7 +1448,7 @@ bindAudioStreamPlayer3D_set_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The @AudioStream@ object to be played.
+-- | The @AudioStream@ resource to be played.
 set_stream ::
              (AudioStreamPlayer3D :< cls, Object :< cls) =>
              cls -> AudioStream -> IO ()
@@ -1493,7 +1497,7 @@ instance NodeMethod AudioStreamPlayer3D "set_stream_paused" '[Bool]
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_unit_db #-}
 
--- | Base sound level unaffected by dampening, in dB.
+-- | The base sound level unaffected by dampening, in decibels.
 bindAudioStreamPlayer3D_set_unit_db :: MethodBind
 bindAudioStreamPlayer3D_set_unit_db
   = unsafePerformIO $
@@ -1503,7 +1507,7 @@ bindAudioStreamPlayer3D_set_unit_db
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Base sound level unaffected by dampening, in dB.
+-- | The base sound level unaffected by dampening, in decibels.
 set_unit_db ::
               (AudioStreamPlayer3D :< cls, Object :< cls) =>
               cls -> Float -> IO ()
@@ -1523,7 +1527,7 @@ instance NodeMethod AudioStreamPlayer3D "set_unit_db" '[Float]
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_unit_size #-}
 
--- | Factor for the attenuation effect.
+-- | The factor for the attenuation effect. Higher values make the sound audible over a larger distance.
 bindAudioStreamPlayer3D_set_unit_size :: MethodBind
 bindAudioStreamPlayer3D_set_unit_size
   = unsafePerformIO $
@@ -1533,7 +1537,7 @@ bindAudioStreamPlayer3D_set_unit_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Factor for the attenuation effect.
+-- | The factor for the attenuation effect. Higher values make the sound audible over a larger distance.
 set_unit_size ::
                 (AudioStreamPlayer3D :< cls, Object :< cls) =>
                 cls -> Float -> IO ()

@@ -306,7 +306,8 @@ instance NodeMethod TouchScreenButton "get_visibility_mode" '[]
 
 {-# NOINLINE bindTouchScreenButton_is_passby_press_enabled #-}
 
--- | If @true@, pass-by presses are enabled.
+-- | If @true@, the @signal pressed@ and @signal released@ signals are emitted whenever a pressed finger goes in and out of the button, even if the pressure started outside the active area of the button.
+--   			__Note:__ This is a "pass-by" (not "bypass") press mode.
 bindTouchScreenButton_is_passby_press_enabled :: MethodBind
 bindTouchScreenButton_is_passby_press_enabled
   = unsafePerformIO $
@@ -316,7 +317,8 @@ bindTouchScreenButton_is_passby_press_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, pass-by presses are enabled.
+-- | If @true@, the @signal pressed@ and @signal released@ signals are emitted whenever a pressed finger goes in and out of the button, even if the pressure started outside the active area of the button.
+--   			__Note:__ This is a "pass-by" (not "bypass") press mode.
 is_passby_press_enabled ::
                           (TouchScreenButton :< cls, Object :< cls) => cls -> IO Bool
 is_passby_press_enabled cls
@@ -481,7 +483,8 @@ instance NodeMethod TouchScreenButton "set_bitmask" '[BitMap]
 
 {-# NOINLINE bindTouchScreenButton_set_passby_press #-}
 
--- | If @true@, pass-by presses are enabled.
+-- | If @true@, the @signal pressed@ and @signal released@ signals are emitted whenever a pressed finger goes in and out of the button, even if the pressure started outside the active area of the button.
+--   			__Note:__ This is a "pass-by" (not "bypass") press mode.
 bindTouchScreenButton_set_passby_press :: MethodBind
 bindTouchScreenButton_set_passby_press
   = unsafePerformIO $
@@ -491,7 +494,8 @@ bindTouchScreenButton_set_passby_press
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, pass-by presses are enabled.
+-- | If @true@, the @signal pressed@ and @signal released@ signals are emitted whenever a pressed finger goes in and out of the button, even if the pressure started outside the active area of the button.
+--   			__Note:__ This is a "pass-by" (not "bypass") press mode.
 set_passby_press ::
                    (TouchScreenButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_passby_press cls arg1

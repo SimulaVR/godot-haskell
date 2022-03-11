@@ -300,6 +300,7 @@ instance NodeMethod NavigationMesh "_set_polygons" '[Array] (IO ())
 
 {-# NOINLINE bindNavigationMesh_add_polygon #-}
 
+-- | Adds a polygon using the indices of the vertices you get when calling @method get_vertices@.
 bindNavigationMesh_add_polygon :: MethodBind
 bindNavigationMesh_add_polygon
   = unsafePerformIO $
@@ -309,6 +310,7 @@ bindNavigationMesh_add_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a polygon using the indices of the vertices you get when calling @method get_vertices@.
 add_polygon ::
               (NavigationMesh :< cls, Object :< cls) =>
               cls -> PoolIntArray -> IO ()
@@ -327,6 +329,7 @@ instance NodeMethod NavigationMesh "add_polygon" '[PoolIntArray]
 
 {-# NOINLINE bindNavigationMesh_clear_polygons #-}
 
+-- | Clears the array of polygons, but it doesn't clear the array of vertices.
 bindNavigationMesh_clear_polygons :: MethodBind
 bindNavigationMesh_clear_polygons
   = unsafePerformIO $
@@ -336,6 +339,7 @@ bindNavigationMesh_clear_polygons
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Clears the array of polygons, but it doesn't clear the array of vertices.
 clear_polygons ::
                  (NavigationMesh :< cls, Object :< cls) => cls -> IO ()
 clear_polygons cls
@@ -353,6 +357,7 @@ instance NodeMethod NavigationMesh "clear_polygons" '[] (IO ())
 
 {-# NOINLINE bindNavigationMesh_create_from_mesh #-}
 
+-- | Initializes the navigation mesh by setting the vertices and indices according to a @Mesh@.
 bindNavigationMesh_create_from_mesh :: MethodBind
 bindNavigationMesh_create_from_mesh
   = unsafePerformIO $
@@ -362,6 +367,7 @@ bindNavigationMesh_create_from_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Initializes the navigation mesh by setting the vertices and indices according to a @Mesh@.
 create_from_mesh ::
                    (NavigationMesh :< cls, Object :< cls) => cls -> Mesh -> IO ()
 create_from_mesh cls arg1
@@ -380,6 +386,8 @@ instance NodeMethod NavigationMesh "create_from_mesh" '[Mesh]
 
 {-# NOINLINE bindNavigationMesh_get_agent_height #-}
 
+-- | The minimum floor to ceiling height that will still allow the floor area to be considered walkable.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/height@.
 bindNavigationMesh_get_agent_height :: MethodBind
 bindNavigationMesh_get_agent_height
   = unsafePerformIO $
@@ -389,6 +397,8 @@ bindNavigationMesh_get_agent_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The minimum floor to ceiling height that will still allow the floor area to be considered walkable.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/height@.
 get_agent_height ::
                    (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_agent_height cls
@@ -407,6 +417,8 @@ instance NodeMethod NavigationMesh "get_agent_height" '[]
 
 {-# NOINLINE bindNavigationMesh_get_agent_max_climb #-}
 
+-- | The minimum ledge height that is considered to still be traversable.
+--   			__Note:__ While baking, this value will be rounded down to the nearest multiple of @cell/height@.
 bindNavigationMesh_get_agent_max_climb :: MethodBind
 bindNavigationMesh_get_agent_max_climb
   = unsafePerformIO $
@@ -416,6 +428,8 @@ bindNavigationMesh_get_agent_max_climb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The minimum ledge height that is considered to still be traversable.
+--   			__Note:__ While baking, this value will be rounded down to the nearest multiple of @cell/height@.
 get_agent_max_climb ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_agent_max_climb cls
@@ -434,6 +448,7 @@ instance NodeMethod NavigationMesh "get_agent_max_climb" '[]
 
 {-# NOINLINE bindNavigationMesh_get_agent_max_slope #-}
 
+-- | The maximum slope that is considered walkable, in degrees.
 bindNavigationMesh_get_agent_max_slope :: MethodBind
 bindNavigationMesh_get_agent_max_slope
   = unsafePerformIO $
@@ -443,6 +458,7 @@ bindNavigationMesh_get_agent_max_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum slope that is considered walkable, in degrees.
 get_agent_max_slope ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_agent_max_slope cls
@@ -461,6 +477,8 @@ instance NodeMethod NavigationMesh "get_agent_max_slope" '[]
 
 {-# NOINLINE bindNavigationMesh_get_agent_radius #-}
 
+-- | The distance to erode/shrink the walkable area of the heightfield away from obstructions.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 bindNavigationMesh_get_agent_radius :: MethodBind
 bindNavigationMesh_get_agent_radius
   = unsafePerformIO $
@@ -470,6 +488,8 @@ bindNavigationMesh_get_agent_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The distance to erode/shrink the walkable area of the heightfield away from obstructions.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 get_agent_radius ::
                    (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_agent_radius cls
@@ -488,6 +508,7 @@ instance NodeMethod NavigationMesh "get_agent_radius" '[]
 
 {-# NOINLINE bindNavigationMesh_get_cell_height #-}
 
+-- | The Y axis cell size to use for fields.
 bindNavigationMesh_get_cell_height :: MethodBind
 bindNavigationMesh_get_cell_height
   = unsafePerformIO $
@@ -497,6 +518,7 @@ bindNavigationMesh_get_cell_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The Y axis cell size to use for fields.
 get_cell_height ::
                   (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_cell_height cls
@@ -514,6 +536,7 @@ instance NodeMethod NavigationMesh "get_cell_height" '[] (IO Float)
 
 {-# NOINLINE bindNavigationMesh_get_cell_size #-}
 
+-- | The XZ plane cell size to use for fields.
 bindNavigationMesh_get_cell_size :: MethodBind
 bindNavigationMesh_get_cell_size
   = unsafePerformIO $
@@ -523,6 +546,7 @@ bindNavigationMesh_get_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The XZ plane cell size to use for fields.
 get_cell_size ::
                 (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_cell_size cls
@@ -540,6 +564,8 @@ instance NodeMethod NavigationMesh "get_cell_size" '[] (IO Float)
 
 {-# NOINLINE bindNavigationMesh_get_collision_mask #-}
 
+-- | The physics layers to scan for static colliders.
+--   			Only used when @geometry/parsed_geometry_type@ is @PARSED_GEOMETRY_STATIC_COLLIDERS@ or @PARSED_GEOMETRY_BOTH@.
 bindNavigationMesh_get_collision_mask :: MethodBind
 bindNavigationMesh_get_collision_mask
   = unsafePerformIO $
@@ -549,6 +575,8 @@ bindNavigationMesh_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The physics layers to scan for static colliders.
+--   			Only used when @geometry/parsed_geometry_type@ is @PARSED_GEOMETRY_STATIC_COLLIDERS@ or @PARSED_GEOMETRY_BOTH@.
 get_collision_mask ::
                      (NavigationMesh :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -567,6 +595,7 @@ instance NodeMethod NavigationMesh "get_collision_mask" '[]
 
 {-# NOINLINE bindNavigationMesh_get_collision_mask_bit #-}
 
+-- | Returns whether the specified @bit@ of the @geometry/collision_mask@ is set.
 bindNavigationMesh_get_collision_mask_bit :: MethodBind
 bindNavigationMesh_get_collision_mask_bit
   = unsafePerformIO $
@@ -576,6 +605,7 @@ bindNavigationMesh_get_collision_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns whether the specified @bit@ of the @geometry/collision_mask@ is set.
 get_collision_mask_bit ::
                          (NavigationMesh :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_collision_mask_bit cls arg1
@@ -594,6 +624,7 @@ instance NodeMethod NavigationMesh "get_collision_mask_bit" '[Int]
 
 {-# NOINLINE bindNavigationMesh_get_detail_sample_distance #-}
 
+-- | The sampling distance to use when generating the detail mesh, in cell unit.
 bindNavigationMesh_get_detail_sample_distance :: MethodBind
 bindNavigationMesh_get_detail_sample_distance
   = unsafePerformIO $
@@ -603,6 +634,7 @@ bindNavigationMesh_get_detail_sample_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The sampling distance to use when generating the detail mesh, in cell unit.
 get_detail_sample_distance ::
                              (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_detail_sample_distance cls
@@ -622,6 +654,7 @@ instance NodeMethod NavigationMesh "get_detail_sample_distance" '[]
 
 {-# NOINLINE bindNavigationMesh_get_detail_sample_max_error #-}
 
+-- | The maximum distance the detail mesh surface should deviate from heightfield, in cell unit.
 bindNavigationMesh_get_detail_sample_max_error :: MethodBind
 bindNavigationMesh_get_detail_sample_max_error
   = unsafePerformIO $
@@ -631,6 +664,7 @@ bindNavigationMesh_get_detail_sample_max_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum distance the detail mesh surface should deviate from heightfield, in cell unit.
 get_detail_sample_max_error ::
                               (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_detail_sample_max_error cls
@@ -651,6 +685,7 @@ instance NodeMethod NavigationMesh "get_detail_sample_max_error"
 
 {-# NOINLINE bindNavigationMesh_get_edge_max_error #-}
 
+-- | The maximum distance a simplfied contour's border edges should deviate the original raw contour.
 bindNavigationMesh_get_edge_max_error :: MethodBind
 bindNavigationMesh_get_edge_max_error
   = unsafePerformIO $
@@ -660,6 +695,7 @@ bindNavigationMesh_get_edge_max_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum distance a simplfied contour's border edges should deviate the original raw contour.
 get_edge_max_error ::
                      (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_edge_max_error cls
@@ -678,6 +714,8 @@ instance NodeMethod NavigationMesh "get_edge_max_error" '[]
 
 {-# NOINLINE bindNavigationMesh_get_edge_max_length #-}
 
+-- | The maximum allowed length for contour edges along the border of the mesh.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 bindNavigationMesh_get_edge_max_length :: MethodBind
 bindNavigationMesh_get_edge_max_length
   = unsafePerformIO $
@@ -687,6 +725,8 @@ bindNavigationMesh_get_edge_max_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum allowed length for contour edges along the border of the mesh.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 get_edge_max_length ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_edge_max_length cls
@@ -705,6 +745,7 @@ instance NodeMethod NavigationMesh "get_edge_max_length" '[]
 
 {-# NOINLINE bindNavigationMesh_get_filter_ledge_spans #-}
 
+-- | If @true@, marks spans that are ledges as non-walkable.
 bindNavigationMesh_get_filter_ledge_spans :: MethodBind
 bindNavigationMesh_get_filter_ledge_spans
   = unsafePerformIO $
@@ -714,6 +755,7 @@ bindNavigationMesh_get_filter_ledge_spans
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, marks spans that are ledges as non-walkable.
 get_filter_ledge_spans ::
                          (NavigationMesh :< cls, Object :< cls) => cls -> IO Bool
 get_filter_ledge_spans cls
@@ -733,6 +775,7 @@ instance NodeMethod NavigationMesh "get_filter_ledge_spans" '[]
 {-# NOINLINE bindNavigationMesh_get_filter_low_hanging_obstacles
              #-}
 
+-- | If @true@, marks non-walkable spans as walkable if their maximum is within @agent/max_climb@ of a walkable neighbor.
 bindNavigationMesh_get_filter_low_hanging_obstacles :: MethodBind
 bindNavigationMesh_get_filter_low_hanging_obstacles
   = unsafePerformIO $
@@ -742,6 +785,7 @@ bindNavigationMesh_get_filter_low_hanging_obstacles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, marks non-walkable spans as walkable if their maximum is within @agent/max_climb@ of a walkable neighbor.
 get_filter_low_hanging_obstacles ::
                                    (NavigationMesh :< cls, Object :< cls) => cls -> IO Bool
 get_filter_low_hanging_obstacles cls
@@ -765,6 +809,7 @@ instance NodeMethod NavigationMesh
 {-# NOINLINE bindNavigationMesh_get_filter_walkable_low_height_spans
              #-}
 
+-- | If @true@, marks walkable spans as not walkable if the clearance above the span is less than @agent/height@.
 bindNavigationMesh_get_filter_walkable_low_height_spans ::
                                                         MethodBind
 bindNavigationMesh_get_filter_walkable_low_height_spans
@@ -775,6 +820,7 @@ bindNavigationMesh_get_filter_walkable_low_height_spans
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, marks walkable spans as not walkable if the clearance above the span is less than @agent/height@.
 get_filter_walkable_low_height_spans ::
                                        (NavigationMesh :< cls, Object :< cls) => cls -> IO Bool
 get_filter_walkable_low_height_spans cls
@@ -797,6 +843,7 @@ instance NodeMethod NavigationMesh
 
 {-# NOINLINE bindNavigationMesh_get_parsed_geometry_type #-}
 
+-- | Determines which type of nodes will be parsed as geometry. See @enum ParsedGeometryType@ for possible values.
 bindNavigationMesh_get_parsed_geometry_type :: MethodBind
 bindNavigationMesh_get_parsed_geometry_type
   = unsafePerformIO $
@@ -806,6 +853,7 @@ bindNavigationMesh_get_parsed_geometry_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Determines which type of nodes will be parsed as geometry. See @enum ParsedGeometryType@ for possible values.
 get_parsed_geometry_type ::
                            (NavigationMesh :< cls, Object :< cls) => cls -> IO Int
 get_parsed_geometry_type cls
@@ -824,6 +872,7 @@ instance NodeMethod NavigationMesh "get_parsed_geometry_type" '[]
 
 {-# NOINLINE bindNavigationMesh_get_polygon #-}
 
+-- | Returns a @PoolIntArray@ containing the indices of the vertices of a created polygon.
 bindNavigationMesh_get_polygon :: MethodBind
 bindNavigationMesh_get_polygon
   = unsafePerformIO $
@@ -833,6 +882,7 @@ bindNavigationMesh_get_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a @PoolIntArray@ containing the indices of the vertices of a created polygon.
 get_polygon ::
               (NavigationMesh :< cls, Object :< cls) =>
               cls -> Int -> IO PoolIntArray
@@ -851,6 +901,7 @@ instance NodeMethod NavigationMesh "get_polygon" '[Int]
 
 {-# NOINLINE bindNavigationMesh_get_polygon_count #-}
 
+-- | Returns the number of polygons in the navigation mesh.
 bindNavigationMesh_get_polygon_count :: MethodBind
 bindNavigationMesh_get_polygon_count
   = unsafePerformIO $
@@ -860,6 +911,7 @@ bindNavigationMesh_get_polygon_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of polygons in the navigation mesh.
 get_polygon_count ::
                     (NavigationMesh :< cls, Object :< cls) => cls -> IO Int
 get_polygon_count cls
@@ -877,6 +929,8 @@ instance NodeMethod NavigationMesh "get_polygon_count" '[] (IO Int)
 
 {-# NOINLINE bindNavigationMesh_get_region_merge_size #-}
 
+-- | Any regions with a size smaller than this will be merged with larger regions if possible.
+--   			__Note:__ This value will be squared to calculate the number of cells. For example, a value of 20 will set the number of cells to 400.
 bindNavigationMesh_get_region_merge_size :: MethodBind
 bindNavigationMesh_get_region_merge_size
   = unsafePerformIO $
@@ -886,6 +940,8 @@ bindNavigationMesh_get_region_merge_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Any regions with a size smaller than this will be merged with larger regions if possible.
+--   			__Note:__ This value will be squared to calculate the number of cells. For example, a value of 20 will set the number of cells to 400.
 get_region_merge_size ::
                         (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_region_merge_size cls
@@ -904,6 +960,8 @@ instance NodeMethod NavigationMesh "get_region_merge_size" '[]
 
 {-# NOINLINE bindNavigationMesh_get_region_min_size #-}
 
+-- | The minimum size of a region for it to be created.
+--   			__Note:__ This value will be squared to calculate the minimum number of cells allowed to form isolated island areas. For example, a value of 8 will set the number of cells to 64.
 bindNavigationMesh_get_region_min_size :: MethodBind
 bindNavigationMesh_get_region_min_size
   = unsafePerformIO $
@@ -913,6 +971,8 @@ bindNavigationMesh_get_region_min_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The minimum size of a region for it to be created.
+--   			__Note:__ This value will be squared to calculate the minimum number of cells allowed to form isolated island areas. For example, a value of 8 will set the number of cells to 64.
 get_region_min_size ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_region_min_size cls
@@ -931,6 +991,7 @@ instance NodeMethod NavigationMesh "get_region_min_size" '[]
 
 {-# NOINLINE bindNavigationMesh_get_sample_partition_type #-}
 
+-- | Partitioning algorithm for creating the navigation mesh polys. See @enum SamplePartitionType@ for possible values.
 bindNavigationMesh_get_sample_partition_type :: MethodBind
 bindNavigationMesh_get_sample_partition_type
   = unsafePerformIO $
@@ -940,6 +1001,7 @@ bindNavigationMesh_get_sample_partition_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Partitioning algorithm for creating the navigation mesh polys. See @enum SamplePartitionType@ for possible values.
 get_sample_partition_type ::
                             (NavigationMesh :< cls, Object :< cls) => cls -> IO Int
 get_sample_partition_type cls
@@ -958,6 +1020,7 @@ instance NodeMethod NavigationMesh "get_sample_partition_type" '[]
 
 {-# NOINLINE bindNavigationMesh_get_source_geometry_mode #-}
 
+-- | The source of the geometry used when baking. See @enum SourceGeometryMode@ for possible values.
 bindNavigationMesh_get_source_geometry_mode :: MethodBind
 bindNavigationMesh_get_source_geometry_mode
   = unsafePerformIO $
@@ -967,6 +1030,7 @@ bindNavigationMesh_get_source_geometry_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The source of the geometry used when baking. See @enum SourceGeometryMode@ for possible values.
 get_source_geometry_mode ::
                            (NavigationMesh :< cls, Object :< cls) => cls -> IO Int
 get_source_geometry_mode cls
@@ -985,6 +1049,8 @@ instance NodeMethod NavigationMesh "get_source_geometry_mode" '[]
 
 {-# NOINLINE bindNavigationMesh_get_source_group_name #-}
 
+-- | The name of the group to scan for geometry.
+--   			Only used when @geometry/source_geometry_mode@ is @SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN@ or @SOURCE_GEOMETRY_GROUPS_EXPLICIT@.
 bindNavigationMesh_get_source_group_name :: MethodBind
 bindNavigationMesh_get_source_group_name
   = unsafePerformIO $
@@ -994,6 +1060,8 @@ bindNavigationMesh_get_source_group_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The name of the group to scan for geometry.
+--   			Only used when @geometry/source_geometry_mode@ is @SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN@ or @SOURCE_GEOMETRY_GROUPS_EXPLICIT@.
 get_source_group_name ::
                         (NavigationMesh :< cls, Object :< cls) => cls -> IO GodotString
 get_source_group_name cls
@@ -1012,6 +1080,7 @@ instance NodeMethod NavigationMesh "get_source_group_name" '[]
 
 {-# NOINLINE bindNavigationMesh_get_vertices #-}
 
+-- | Returns a @PoolVector3Array@ containing all the vertices being used to create the polygons.
 bindNavigationMesh_get_vertices :: MethodBind
 bindNavigationMesh_get_vertices
   = unsafePerformIO $
@@ -1021,6 +1090,7 @@ bindNavigationMesh_get_vertices
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a @PoolVector3Array@ containing all the vertices being used to create the polygons.
 get_vertices ::
                (NavigationMesh :< cls, Object :< cls) =>
                cls -> IO PoolVector3Array
@@ -1039,6 +1109,7 @@ instance NodeMethod NavigationMesh "get_vertices" '[]
 
 {-# NOINLINE bindNavigationMesh_get_verts_per_poly #-}
 
+-- | The maximum number of vertices allowed for polygons generated during the contour to polygon conversion process.
 bindNavigationMesh_get_verts_per_poly :: MethodBind
 bindNavigationMesh_get_verts_per_poly
   = unsafePerformIO $
@@ -1048,6 +1119,7 @@ bindNavigationMesh_get_verts_per_poly
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum number of vertices allowed for polygons generated during the contour to polygon conversion process.
 get_verts_per_poly ::
                      (NavigationMesh :< cls, Object :< cls) => cls -> IO Float
 get_verts_per_poly cls
@@ -1066,6 +1138,8 @@ instance NodeMethod NavigationMesh "get_verts_per_poly" '[]
 
 {-# NOINLINE bindNavigationMesh_set_agent_height #-}
 
+-- | The minimum floor to ceiling height that will still allow the floor area to be considered walkable.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/height@.
 bindNavigationMesh_set_agent_height :: MethodBind
 bindNavigationMesh_set_agent_height
   = unsafePerformIO $
@@ -1075,6 +1149,8 @@ bindNavigationMesh_set_agent_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The minimum floor to ceiling height that will still allow the floor area to be considered walkable.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/height@.
 set_agent_height ::
                    (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_agent_height cls arg1
@@ -1093,6 +1169,8 @@ instance NodeMethod NavigationMesh "set_agent_height" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_agent_max_climb #-}
 
+-- | The minimum ledge height that is considered to still be traversable.
+--   			__Note:__ While baking, this value will be rounded down to the nearest multiple of @cell/height@.
 bindNavigationMesh_set_agent_max_climb :: MethodBind
 bindNavigationMesh_set_agent_max_climb
   = unsafePerformIO $
@@ -1102,6 +1180,8 @@ bindNavigationMesh_set_agent_max_climb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The minimum ledge height that is considered to still be traversable.
+--   			__Note:__ While baking, this value will be rounded down to the nearest multiple of @cell/height@.
 set_agent_max_climb ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_agent_max_climb cls arg1
@@ -1120,6 +1200,7 @@ instance NodeMethod NavigationMesh "set_agent_max_climb" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_agent_max_slope #-}
 
+-- | The maximum slope that is considered walkable, in degrees.
 bindNavigationMesh_set_agent_max_slope :: MethodBind
 bindNavigationMesh_set_agent_max_slope
   = unsafePerformIO $
@@ -1129,6 +1210,7 @@ bindNavigationMesh_set_agent_max_slope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum slope that is considered walkable, in degrees.
 set_agent_max_slope ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_agent_max_slope cls arg1
@@ -1147,6 +1229,8 @@ instance NodeMethod NavigationMesh "set_agent_max_slope" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_agent_radius #-}
 
+-- | The distance to erode/shrink the walkable area of the heightfield away from obstructions.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 bindNavigationMesh_set_agent_radius :: MethodBind
 bindNavigationMesh_set_agent_radius
   = unsafePerformIO $
@@ -1156,6 +1240,8 @@ bindNavigationMesh_set_agent_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The distance to erode/shrink the walkable area of the heightfield away from obstructions.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 set_agent_radius ::
                    (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_agent_radius cls arg1
@@ -1174,6 +1260,7 @@ instance NodeMethod NavigationMesh "set_agent_radius" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_cell_height #-}
 
+-- | The Y axis cell size to use for fields.
 bindNavigationMesh_set_cell_height :: MethodBind
 bindNavigationMesh_set_cell_height
   = unsafePerformIO $
@@ -1183,6 +1270,7 @@ bindNavigationMesh_set_cell_height
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The Y axis cell size to use for fields.
 set_cell_height ::
                   (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_cell_height cls arg1
@@ -1201,6 +1289,7 @@ instance NodeMethod NavigationMesh "set_cell_height" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_cell_size #-}
 
+-- | The XZ plane cell size to use for fields.
 bindNavigationMesh_set_cell_size :: MethodBind
 bindNavigationMesh_set_cell_size
   = unsafePerformIO $
@@ -1210,6 +1299,7 @@ bindNavigationMesh_set_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The XZ plane cell size to use for fields.
 set_cell_size ::
                 (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_cell_size cls arg1
@@ -1227,6 +1317,8 @@ instance NodeMethod NavigationMesh "set_cell_size" '[Float] (IO ())
 
 {-# NOINLINE bindNavigationMesh_set_collision_mask #-}
 
+-- | The physics layers to scan for static colliders.
+--   			Only used when @geometry/parsed_geometry_type@ is @PARSED_GEOMETRY_STATIC_COLLIDERS@ or @PARSED_GEOMETRY_BOTH@.
 bindNavigationMesh_set_collision_mask :: MethodBind
 bindNavigationMesh_set_collision_mask
   = unsafePerformIO $
@@ -1236,6 +1328,8 @@ bindNavigationMesh_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The physics layers to scan for static colliders.
+--   			Only used when @geometry/parsed_geometry_type@ is @PARSED_GEOMETRY_STATIC_COLLIDERS@ or @PARSED_GEOMETRY_BOTH@.
 set_collision_mask ::
                      (NavigationMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1
@@ -1254,6 +1348,8 @@ instance NodeMethod NavigationMesh "set_collision_mask" '[Int]
 
 {-# NOINLINE bindNavigationMesh_set_collision_mask_bit #-}
 
+-- | If @value@ is @true@, sets the specified @bit@ in the @geometry/collision_mask@.
+--   				If @value@ is @false@, clears the specified @bit@ in the @geometry/collision_mask@.
 bindNavigationMesh_set_collision_mask_bit :: MethodBind
 bindNavigationMesh_set_collision_mask_bit
   = unsafePerformIO $
@@ -1263,6 +1359,8 @@ bindNavigationMesh_set_collision_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @value@ is @true@, sets the specified @bit@ in the @geometry/collision_mask@.
+--   				If @value@ is @false@, clears the specified @bit@ in the @geometry/collision_mask@.
 set_collision_mask_bit ::
                          (NavigationMesh :< cls, Object :< cls) =>
                          cls -> Int -> Bool -> IO ()
@@ -1283,6 +1381,7 @@ instance NodeMethod NavigationMesh "set_collision_mask_bit"
 
 {-# NOINLINE bindNavigationMesh_set_detail_sample_distance #-}
 
+-- | The sampling distance to use when generating the detail mesh, in cell unit.
 bindNavigationMesh_set_detail_sample_distance :: MethodBind
 bindNavigationMesh_set_detail_sample_distance
   = unsafePerformIO $
@@ -1292,6 +1391,7 @@ bindNavigationMesh_set_detail_sample_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The sampling distance to use when generating the detail mesh, in cell unit.
 set_detail_sample_distance ::
                              (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_detail_sample_distance cls arg1
@@ -1312,6 +1412,7 @@ instance NodeMethod NavigationMesh "set_detail_sample_distance"
 
 {-# NOINLINE bindNavigationMesh_set_detail_sample_max_error #-}
 
+-- | The maximum distance the detail mesh surface should deviate from heightfield, in cell unit.
 bindNavigationMesh_set_detail_sample_max_error :: MethodBind
 bindNavigationMesh_set_detail_sample_max_error
   = unsafePerformIO $
@@ -1321,6 +1422,7 @@ bindNavigationMesh_set_detail_sample_max_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum distance the detail mesh surface should deviate from heightfield, in cell unit.
 set_detail_sample_max_error ::
                               (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_detail_sample_max_error cls arg1
@@ -1341,6 +1443,7 @@ instance NodeMethod NavigationMesh "set_detail_sample_max_error"
 
 {-# NOINLINE bindNavigationMesh_set_edge_max_error #-}
 
+-- | The maximum distance a simplfied contour's border edges should deviate the original raw contour.
 bindNavigationMesh_set_edge_max_error :: MethodBind
 bindNavigationMesh_set_edge_max_error
   = unsafePerformIO $
@@ -1350,6 +1453,7 @@ bindNavigationMesh_set_edge_max_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum distance a simplfied contour's border edges should deviate the original raw contour.
 set_edge_max_error ::
                      (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_edge_max_error cls arg1
@@ -1368,6 +1472,8 @@ instance NodeMethod NavigationMesh "set_edge_max_error" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_edge_max_length #-}
 
+-- | The maximum allowed length for contour edges along the border of the mesh.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 bindNavigationMesh_set_edge_max_length :: MethodBind
 bindNavigationMesh_set_edge_max_length
   = unsafePerformIO $
@@ -1377,6 +1483,8 @@ bindNavigationMesh_set_edge_max_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum allowed length for contour edges along the border of the mesh.
+--   			__Note:__ While baking, this value will be rounded up to the nearest multiple of @cell/size@.
 set_edge_max_length ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_edge_max_length cls arg1
@@ -1395,6 +1503,7 @@ instance NodeMethod NavigationMesh "set_edge_max_length" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_filter_ledge_spans #-}
 
+-- | If @true@, marks spans that are ledges as non-walkable.
 bindNavigationMesh_set_filter_ledge_spans :: MethodBind
 bindNavigationMesh_set_filter_ledge_spans
   = unsafePerformIO $
@@ -1404,6 +1513,7 @@ bindNavigationMesh_set_filter_ledge_spans
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, marks spans that are ledges as non-walkable.
 set_filter_ledge_spans ::
                          (NavigationMesh :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_filter_ledge_spans cls arg1
@@ -1423,6 +1533,7 @@ instance NodeMethod NavigationMesh "set_filter_ledge_spans" '[Bool]
 {-# NOINLINE bindNavigationMesh_set_filter_low_hanging_obstacles
              #-}
 
+-- | If @true@, marks non-walkable spans as walkable if their maximum is within @agent/max_climb@ of a walkable neighbor.
 bindNavigationMesh_set_filter_low_hanging_obstacles :: MethodBind
 bindNavigationMesh_set_filter_low_hanging_obstacles
   = unsafePerformIO $
@@ -1432,6 +1543,7 @@ bindNavigationMesh_set_filter_low_hanging_obstacles
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, marks non-walkable spans as walkable if their maximum is within @agent/max_climb@ of a walkable neighbor.
 set_filter_low_hanging_obstacles ::
                                    (NavigationMesh :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_filter_low_hanging_obstacles cls arg1
@@ -1455,6 +1567,7 @@ instance NodeMethod NavigationMesh
 {-# NOINLINE bindNavigationMesh_set_filter_walkable_low_height_spans
              #-}
 
+-- | If @true@, marks walkable spans as not walkable if the clearance above the span is less than @agent/height@.
 bindNavigationMesh_set_filter_walkable_low_height_spans ::
                                                         MethodBind
 bindNavigationMesh_set_filter_walkable_low_height_spans
@@ -1465,6 +1578,7 @@ bindNavigationMesh_set_filter_walkable_low_height_spans
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, marks walkable spans as not walkable if the clearance above the span is less than @agent/height@.
 set_filter_walkable_low_height_spans ::
                                        (NavigationMesh :< cls, Object :< cls) =>
                                        cls -> Bool -> IO ()
@@ -1488,6 +1602,7 @@ instance NodeMethod NavigationMesh
 
 {-# NOINLINE bindNavigationMesh_set_parsed_geometry_type #-}
 
+-- | Determines which type of nodes will be parsed as geometry. See @enum ParsedGeometryType@ for possible values.
 bindNavigationMesh_set_parsed_geometry_type :: MethodBind
 bindNavigationMesh_set_parsed_geometry_type
   = unsafePerformIO $
@@ -1497,6 +1612,7 @@ bindNavigationMesh_set_parsed_geometry_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Determines which type of nodes will be parsed as geometry. See @enum ParsedGeometryType@ for possible values.
 set_parsed_geometry_type ::
                            (NavigationMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_parsed_geometry_type cls arg1
@@ -1516,6 +1632,8 @@ instance NodeMethod NavigationMesh "set_parsed_geometry_type"
 
 {-# NOINLINE bindNavigationMesh_set_region_merge_size #-}
 
+-- | Any regions with a size smaller than this will be merged with larger regions if possible.
+--   			__Note:__ This value will be squared to calculate the number of cells. For example, a value of 20 will set the number of cells to 400.
 bindNavigationMesh_set_region_merge_size :: MethodBind
 bindNavigationMesh_set_region_merge_size
   = unsafePerformIO $
@@ -1525,6 +1643,8 @@ bindNavigationMesh_set_region_merge_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Any regions with a size smaller than this will be merged with larger regions if possible.
+--   			__Note:__ This value will be squared to calculate the number of cells. For example, a value of 20 will set the number of cells to 400.
 set_region_merge_size ::
                         (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_region_merge_size cls arg1
@@ -1543,6 +1663,8 @@ instance NodeMethod NavigationMesh "set_region_merge_size" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_region_min_size #-}
 
+-- | The minimum size of a region for it to be created.
+--   			__Note:__ This value will be squared to calculate the minimum number of cells allowed to form isolated island areas. For example, a value of 8 will set the number of cells to 64.
 bindNavigationMesh_set_region_min_size :: MethodBind
 bindNavigationMesh_set_region_min_size
   = unsafePerformIO $
@@ -1552,6 +1674,8 @@ bindNavigationMesh_set_region_min_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The minimum size of a region for it to be created.
+--   			__Note:__ This value will be squared to calculate the minimum number of cells allowed to form isolated island areas. For example, a value of 8 will set the number of cells to 64.
 set_region_min_size ::
                       (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_region_min_size cls arg1
@@ -1570,6 +1694,7 @@ instance NodeMethod NavigationMesh "set_region_min_size" '[Float]
 
 {-# NOINLINE bindNavigationMesh_set_sample_partition_type #-}
 
+-- | Partitioning algorithm for creating the navigation mesh polys. See @enum SamplePartitionType@ for possible values.
 bindNavigationMesh_set_sample_partition_type :: MethodBind
 bindNavigationMesh_set_sample_partition_type
   = unsafePerformIO $
@@ -1579,6 +1704,7 @@ bindNavigationMesh_set_sample_partition_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Partitioning algorithm for creating the navigation mesh polys. See @enum SamplePartitionType@ for possible values.
 set_sample_partition_type ::
                             (NavigationMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_sample_partition_type cls arg1
@@ -1598,6 +1724,7 @@ instance NodeMethod NavigationMesh "set_sample_partition_type"
 
 {-# NOINLINE bindNavigationMesh_set_source_geometry_mode #-}
 
+-- | The source of the geometry used when baking. See @enum SourceGeometryMode@ for possible values.
 bindNavigationMesh_set_source_geometry_mode :: MethodBind
 bindNavigationMesh_set_source_geometry_mode
   = unsafePerformIO $
@@ -1607,6 +1734,7 @@ bindNavigationMesh_set_source_geometry_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The source of the geometry used when baking. See @enum SourceGeometryMode@ for possible values.
 set_source_geometry_mode ::
                            (NavigationMesh :< cls, Object :< cls) => cls -> Int -> IO ()
 set_source_geometry_mode cls arg1
@@ -1626,6 +1754,8 @@ instance NodeMethod NavigationMesh "set_source_geometry_mode"
 
 {-# NOINLINE bindNavigationMesh_set_source_group_name #-}
 
+-- | The name of the group to scan for geometry.
+--   			Only used when @geometry/source_geometry_mode@ is @SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN@ or @SOURCE_GEOMETRY_GROUPS_EXPLICIT@.
 bindNavigationMesh_set_source_group_name :: MethodBind
 bindNavigationMesh_set_source_group_name
   = unsafePerformIO $
@@ -1635,6 +1765,8 @@ bindNavigationMesh_set_source_group_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The name of the group to scan for geometry.
+--   			Only used when @geometry/source_geometry_mode@ is @SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN@ or @SOURCE_GEOMETRY_GROUPS_EXPLICIT@.
 set_source_group_name ::
                         (NavigationMesh :< cls, Object :< cls) =>
                         cls -> GodotString -> IO ()
@@ -1655,6 +1787,7 @@ instance NodeMethod NavigationMesh "set_source_group_name"
 
 {-# NOINLINE bindNavigationMesh_set_vertices #-}
 
+-- | Sets the vertices that can be then indexed to create polygons with the @method add_polygon@ method.
 bindNavigationMesh_set_vertices :: MethodBind
 bindNavigationMesh_set_vertices
   = unsafePerformIO $
@@ -1664,6 +1797,7 @@ bindNavigationMesh_set_vertices
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the vertices that can be then indexed to create polygons with the @method add_polygon@ method.
 set_vertices ::
                (NavigationMesh :< cls, Object :< cls) =>
                cls -> PoolVector3Array -> IO ()
@@ -1683,6 +1817,7 @@ instance NodeMethod NavigationMesh "set_vertices"
 
 {-# NOINLINE bindNavigationMesh_set_verts_per_poly #-}
 
+-- | The maximum number of vertices allowed for polygons generated during the contour to polygon conversion process.
 bindNavigationMesh_set_verts_per_poly :: MethodBind
 bindNavigationMesh_set_verts_per_poly
   = unsafePerformIO $
@@ -1692,6 +1827,7 @@ bindNavigationMesh_set_verts_per_poly
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The maximum number of vertices allowed for polygons generated during the contour to polygon conversion process.
 set_verts_per_poly ::
                      (NavigationMesh :< cls, Object :< cls) => cls -> Float -> IO ()
 set_verts_per_poly cls arg1

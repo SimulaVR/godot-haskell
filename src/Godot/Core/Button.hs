@@ -57,6 +57,7 @@ instance NodeProperty Button "text" GodotString 'False where
 {-# NOINLINE bindButton_get_button_icon #-}
 
 -- | Button's icon, if text is present the icon will be placed before the text.
+--   			To edit margin and spacing of the icon, use @hseparation@ theme property of @Button@ and @content_margin_*@ properties of the used @StyleBox@es.
 bindButton_get_button_icon :: MethodBind
 bindButton_get_button_icon
   = unsafePerformIO $
@@ -67,6 +68,7 @@ bindButton_get_button_icon
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Button's icon, if text is present the icon will be placed before the text.
+--   			To edit margin and spacing of the icon, use @hseparation@ theme property of @Button@ and @content_margin_*@ properties of the used @StyleBox@es.
 get_button_icon ::
                   (Button :< cls, Object :< cls) => cls -> IO Texture
 get_button_icon cls
@@ -203,6 +205,7 @@ instance NodeMethod Button "is_flat" '[] (IO Bool) where
 {-# NOINLINE bindButton_set_button_icon #-}
 
 -- | Button's icon, if text is present the icon will be placed before the text.
+--   			To edit margin and spacing of the icon, use @hseparation@ theme property of @Button@ and @content_margin_*@ properties of the used @StyleBox@es.
 bindButton_set_button_icon :: MethodBind
 bindButton_set_button_icon
   = unsafePerformIO $
@@ -213,6 +216,7 @@ bindButton_set_button_icon
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Button's icon, if text is present the icon will be placed before the text.
+--   			To edit margin and spacing of the icon, use @hseparation@ theme property of @Button@ and @content_margin_*@ properties of the used @StyleBox@es.
 set_button_icon ::
                   (Button :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_button_icon cls arg1

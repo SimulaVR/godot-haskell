@@ -41,7 +41,7 @@ import Godot.Core.Node()
 
 {-# NOINLINE bindEditorInterface_edit_resource #-}
 
--- | Edits the given @Resource@.
+-- | Edits the given @Resource@. If the resource is a @Script@ you can also edit it with @method edit_script@ to specify the line and column position.
 bindEditorInterface_edit_resource :: MethodBind
 bindEditorInterface_edit_resource
   = unsafePerformIO $
@@ -51,7 +51,7 @@ bindEditorInterface_edit_resource
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Edits the given @Resource@.
+-- | Edits the given @Resource@. If the resource is a @Script@ you can also edit it with @method edit_script@ to specify the line and column position.
 edit_resource ::
                 (EditorInterface :< cls, Object :< cls) => cls -> Resource -> IO ()
 edit_resource cls arg1
@@ -71,6 +71,7 @@ instance NodeMethod EditorInterface "edit_resource" '[Resource]
 {-# NOINLINE bindEditorInterface_get_base_control #-}
 
 -- | Returns the main container of Godot editor's window. For example, you can use it to retrieve the size of the container and place your controls accordingly.
+--   				__Warning:__ Removing and freeing this node will render the editor useless and may cause a crash.
 bindEditorInterface_get_base_control :: MethodBind
 bindEditorInterface_get_base_control
   = unsafePerformIO $
@@ -81,6 +82,7 @@ bindEditorInterface_get_base_control
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the main container of Godot editor's window. For example, you can use it to retrieve the size of the container and place your controls accordingly.
+--   				__Warning:__ Removing and freeing this node will render the editor useless and may cause a crash.
 get_base_control ::
                    (EditorInterface :< cls, Object :< cls) => cls -> IO Control
 get_base_control cls
@@ -188,6 +190,7 @@ instance NodeMethod EditorInterface "get_editor_settings" '[]
 
 -- | Returns the main editor control. Use this as a parent for main screens.
 --   				__Note:__ This returns the main editor control containing the whole editor, not the 2D or 3D viewports specifically.
+--   				__Warning:__ Removing and freeing this node will render a part of the editor useless and may cause a crash.
 bindEditorInterface_get_editor_viewport :: MethodBind
 bindEditorInterface_get_editor_viewport
   = unsafePerformIO $
@@ -199,6 +202,7 @@ bindEditorInterface_get_editor_viewport
 
 -- | Returns the main editor control. Use this as a parent for main screens.
 --   				__Note:__ This returns the main editor control containing the whole editor, not the 2D or 3D viewports specifically.
+--   				__Warning:__ Removing and freeing this node will render a part of the editor useless and may cause a crash.
 get_editor_viewport ::
                       (EditorInterface :< cls, Object :< cls) => cls -> IO Control
 get_editor_viewport cls
@@ -218,6 +222,7 @@ instance NodeMethod EditorInterface "get_editor_viewport" '[]
 {-# NOINLINE bindEditorInterface_get_inspector #-}
 
 -- | Returns the editor's @EditorInspector@ instance.
+--   				__Warning:__ Removing and freeing this node will render a part of the editor useless and may cause a crash.
 bindEditorInterface_get_inspector :: MethodBind
 bindEditorInterface_get_inspector
   = unsafePerformIO $
@@ -228,6 +233,7 @@ bindEditorInterface_get_inspector
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the editor's @EditorInspector@ instance.
+--   				__Warning:__ Removing and freeing this node will render a part of the editor useless and may cause a crash.
 get_inspector ::
                 (EditorInterface :< cls, Object :< cls) =>
                 cls -> IO EditorInspector
@@ -337,6 +343,7 @@ instance NodeMethod EditorInterface "get_resource_previewer" '[]
 {-# NOINLINE bindEditorInterface_get_script_editor #-}
 
 -- | Returns the editor's @ScriptEditor@ instance.
+--   				__Warning:__ Removing and freeing this node will render a part of the editor useless and may cause a crash.
 bindEditorInterface_get_script_editor :: MethodBind
 bindEditorInterface_get_script_editor
   = unsafePerformIO $
@@ -347,6 +354,7 @@ bindEditorInterface_get_script_editor
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the editor's @ScriptEditor@ instance.
+--   				__Warning:__ Removing and freeing this node will render a part of the editor useless and may cause a crash.
 get_script_editor ::
                     (EditorInterface :< cls, Object :< cls) => cls -> IO ScriptEditor
 get_script_editor cls
@@ -424,7 +432,7 @@ instance NodeMethod EditorInterface "get_selection" '[]
 
 {-# NOINLINE bindEditorInterface_inspect_object #-}
 
--- | Shows the given property on the given @object@ in the editor's Inspector dock.
+-- | Shows the given property on the given @object@ in the editor's Inspector dock. If @inspector_only@ is @true@, plugins will not attempt to edit @object@.
 bindEditorInterface_inspect_object :: MethodBind
 bindEditorInterface_inspect_object
   = unsafePerformIO $
@@ -434,7 +442,7 @@ bindEditorInterface_inspect_object
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shows the given property on the given @object@ in the editor's Inspector dock.
+-- | Shows the given property on the given @object@ in the editor's Inspector dock. If @inspector_only@ is @true@, plugins will not attempt to edit @object@.
 inspect_object ::
                  (EditorInterface :< cls, Object :< cls) =>
                  cls -> Object -> Maybe GodotString -> IO ()

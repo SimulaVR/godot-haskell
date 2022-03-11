@@ -958,7 +958,8 @@ instance NodeMethod Environment "get_ambient_light_energy" '[]
 
 {-# NOINLINE bindEnvironment_get_ambient_light_sky_contribution #-}
 
--- | Defines the amount of light that the sky brings on the scene. A value of 0 means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of 1 means that all the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+-- | Defines the amount of light that the sky brings on the scene. A value of @0.0@ means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of @1.0@ means that @i@all@/i@ the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+--   			__Note:__ @ambient_light_sky_contribution@ is internally clamped between @0.0@ and @1.0@ (inclusive).
 bindEnvironment_get_ambient_light_sky_contribution :: MethodBind
 bindEnvironment_get_ambient_light_sky_contribution
   = unsafePerformIO $
@@ -968,7 +969,8 @@ bindEnvironment_get_ambient_light_sky_contribution
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the amount of light that the sky brings on the scene. A value of 0 means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of 1 means that all the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+-- | Defines the amount of light that the sky brings on the scene. A value of @0.0@ means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of @1.0@ means that @i@all@/i@ the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+--   			__Note:__ @ambient_light_sky_contribution@ is internally clamped between @0.0@ and @1.0@ (inclusive).
 get_ambient_light_sky_contribution ::
                                      (Environment :< cls, Object :< cls) => cls -> IO Float
 get_ambient_light_sky_contribution cls
@@ -2865,6 +2867,8 @@ instance NodeMethod Environment "is_glow_bicubic_upscale_enabled"
 {-# NOINLINE bindEnvironment_is_glow_enabled #-}
 
 -- | If @true@, the glow effect is enabled.
+--   			__Note:__ Only effective if @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ is __3D__ (@i@not@/i@ __3D Without Effects__). On mobile, @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ defaults to __3D Without Effects__ by default, so its @.mobile@ override needs to be changed to __3D__.
+--   			__Note:__ When using GLES3 on mobile, HDR rendering is disabled by default for performance reasons. This means glow will only be visible if @glow_hdr_threshold@ is decreased below @1.0@ or if @glow_bloom@ is increased above @0.0@. Also consider increasing @glow_intensity@ to @1.5@. If you want glow to behave on mobile like it does on desktop (at a performance cost), enable @ProjectSettings.rendering/quality/depth/hdr@'s @.mobile@ override.
 bindEnvironment_is_glow_enabled :: MethodBind
 bindEnvironment_is_glow_enabled
   = unsafePerformIO $
@@ -2875,6 +2879,8 @@ bindEnvironment_is_glow_enabled
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the glow effect is enabled.
+--   			__Note:__ Only effective if @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ is __3D__ (@i@not@/i@ __3D Without Effects__). On mobile, @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ defaults to __3D Without Effects__ by default, so its @.mobile@ override needs to be changed to __3D__.
+--   			__Note:__ When using GLES3 on mobile, HDR rendering is disabled by default for performance reasons. This means glow will only be visible if @glow_hdr_threshold@ is decreased below @1.0@ or if @glow_bloom@ is increased above @0.0@. Also consider increasing @glow_intensity@ to @1.5@. If you want glow to behave on mobile like it does on desktop (at a performance cost), enable @ProjectSettings.rendering/quality/depth/hdr@'s @.mobile@ override.
 is_glow_enabled ::
                   (Environment :< cls, Object :< cls) => cls -> IO Bool
 is_glow_enabled cls
@@ -3207,7 +3213,8 @@ instance NodeMethod Environment "set_ambient_light_energy" '[Float]
 
 {-# NOINLINE bindEnvironment_set_ambient_light_sky_contribution #-}
 
--- | Defines the amount of light that the sky brings on the scene. A value of 0 means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of 1 means that all the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+-- | Defines the amount of light that the sky brings on the scene. A value of @0.0@ means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of @1.0@ means that @i@all@/i@ the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+--   			__Note:__ @ambient_light_sky_contribution@ is internally clamped between @0.0@ and @1.0@ (inclusive).
 bindEnvironment_set_ambient_light_sky_contribution :: MethodBind
 bindEnvironment_set_ambient_light_sky_contribution
   = unsafePerformIO $
@@ -3217,7 +3224,8 @@ bindEnvironment_set_ambient_light_sky_contribution
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the amount of light that the sky brings on the scene. A value of 0 means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of 1 means that all the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+-- | Defines the amount of light that the sky brings on the scene. A value of @0.0@ means that the sky's light emission has no effect on the scene illumination, thus all ambient illumination is provided by the ambient light. On the contrary, a value of @1.0@ means that @i@all@/i@ the light that affects the scene is provided by the sky, thus the ambient light parameter has no effect on the scene.
+--   			__Note:__ @ambient_light_sky_contribution@ is internally clamped between @0.0@ and @1.0@ (inclusive).
 set_ambient_light_sky_contribution ::
                                      (Environment :< cls, Object :< cls) => cls -> Float -> IO ()
 set_ambient_light_sky_contribution cls arg1
@@ -4162,6 +4170,8 @@ instance NodeMethod Environment "set_glow_bloom" '[Float] (IO ())
 {-# NOINLINE bindEnvironment_set_glow_enabled #-}
 
 -- | If @true@, the glow effect is enabled.
+--   			__Note:__ Only effective if @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ is __3D__ (@i@not@/i@ __3D Without Effects__). On mobile, @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ defaults to __3D Without Effects__ by default, so its @.mobile@ override needs to be changed to __3D__.
+--   			__Note:__ When using GLES3 on mobile, HDR rendering is disabled by default for performance reasons. This means glow will only be visible if @glow_hdr_threshold@ is decreased below @1.0@ or if @glow_bloom@ is increased above @0.0@. Also consider increasing @glow_intensity@ to @1.5@. If you want glow to behave on mobile like it does on desktop (at a performance cost), enable @ProjectSettings.rendering/quality/depth/hdr@'s @.mobile@ override.
 bindEnvironment_set_glow_enabled :: MethodBind
 bindEnvironment_set_glow_enabled
   = unsafePerformIO $
@@ -4172,6 +4182,8 @@ bindEnvironment_set_glow_enabled
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the glow effect is enabled.
+--   			__Note:__ Only effective if @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ is __3D__ (@i@not@/i@ __3D Without Effects__). On mobile, @ProjectSettings.rendering/quality/intended_usage/framebuffer_allocation@ defaults to __3D Without Effects__ by default, so its @.mobile@ override needs to be changed to __3D__.
+--   			__Note:__ When using GLES3 on mobile, HDR rendering is disabled by default for performance reasons. This means glow will only be visible if @glow_hdr_threshold@ is decreased below @1.0@ or if @glow_bloom@ is increased above @0.0@. Also consider increasing @glow_intensity@ to @1.5@. If you want glow to behave on mobile like it does on desktop (at a performance cost), enable @ProjectSettings.rendering/quality/depth/hdr@'s @.mobile@ override.
 set_glow_enabled ::
                    (Environment :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_glow_enabled cls arg1

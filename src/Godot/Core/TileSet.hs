@@ -1644,6 +1644,7 @@ instance NodeMethod TileSet "tile_set_material"
 {-# NOINLINE bindTileSet_tile_set_modulate #-}
 
 -- | Sets the tile's modulation color.
+--   				__Note:__ Modulation is performed by setting the tile's vertex color. To access this in a shader, use @COLOR@ rather than @MODULATE@ (which instead accesses the @TileMap@'s @CanvasItem.modulate@ property).
 bindTileSet_tile_set_modulate :: MethodBind
 bindTileSet_tile_set_modulate
   = unsafePerformIO $
@@ -1654,6 +1655,7 @@ bindTileSet_tile_set_modulate
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the tile's modulation color.
+--   				__Note:__ Modulation is performed by setting the tile's vertex color. To access this in a shader, use @COLOR@ rather than @MODULATE@ (which instead accesses the @TileMap@'s @CanvasItem.modulate@ property).
 tile_set_modulate ::
                     (TileSet :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 tile_set_modulate cls arg1 arg2

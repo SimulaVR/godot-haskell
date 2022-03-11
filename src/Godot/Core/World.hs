@@ -46,7 +46,7 @@ instance NodeProperty World "space" Rid 'True where
 
 {-# NOINLINE bindWorld_get_direct_space_state #-}
 
--- | Direct access to the world's physics 3D space state. Used for querying current and potential collisions. Must only be accessed from within @_physics_process(delta)@.
+-- | Direct access to the world's physics 3D space state. Used for querying current and potential collisions.
 bindWorld_get_direct_space_state :: MethodBind
 bindWorld_get_direct_space_state
   = unsafePerformIO $
@@ -56,7 +56,7 @@ bindWorld_get_direct_space_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Direct access to the world's physics 3D space state. Used for querying current and potential collisions. Must only be accessed from within @_physics_process(delta)@.
+-- | Direct access to the world's physics 3D space state. Used for querying current and potential collisions.
 get_direct_space_state ::
                          (World :< cls, Object :< cls) => cls -> IO PhysicsDirectSpaceState
 get_direct_space_state cls

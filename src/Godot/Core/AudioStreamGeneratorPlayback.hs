@@ -23,6 +23,7 @@ import Godot.Core.AudioStreamPlaybackResampled()
 
 {-# NOINLINE bindAudioStreamGeneratorPlayback_can_push_buffer #-}
 
+-- | Returns @true@ if a buffer of the size @amount@ can be pushed to the audio sample data buffer without overflowing it, @false@ otherwise.
 bindAudioStreamGeneratorPlayback_can_push_buffer :: MethodBind
 bindAudioStreamGeneratorPlayback_can_push_buffer
   = unsafePerformIO $
@@ -32,6 +33,7 @@ bindAudioStreamGeneratorPlayback_can_push_buffer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns @true@ if a buffer of the size @amount@ can be pushed to the audio sample data buffer without overflowing it, @false@ otherwise.
 can_push_buffer ::
                   (AudioStreamGeneratorPlayback :< cls, Object :< cls) =>
                   cls -> Int -> IO Bool
@@ -54,6 +56,7 @@ instance NodeMethod AudioStreamGeneratorPlayback "can_push_buffer"
 
 {-# NOINLINE bindAudioStreamGeneratorPlayback_clear_buffer #-}
 
+-- | Clears the audio sample data buffer.
 bindAudioStreamGeneratorPlayback_clear_buffer :: MethodBind
 bindAudioStreamGeneratorPlayback_clear_buffer
   = unsafePerformIO $
@@ -63,6 +66,7 @@ bindAudioStreamGeneratorPlayback_clear_buffer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Clears the audio sample data buffer.
 clear_buffer ::
                (AudioStreamGeneratorPlayback :< cls, Object :< cls) =>
                cls -> IO ()
@@ -84,6 +88,7 @@ instance NodeMethod AudioStreamGeneratorPlayback "clear_buffer" '[]
 {-# NOINLINE bindAudioStreamGeneratorPlayback_get_frames_available
              #-}
 
+-- | Returns the number of audio data frames left to play. If this returned number reaches @0@, the audio will stop playing until frames are added again. Therefore, make sure your script can always generate and push new audio frames fast enough to avoid audio cracking.
 bindAudioStreamGeneratorPlayback_get_frames_available :: MethodBind
 bindAudioStreamGeneratorPlayback_get_frames_available
   = unsafePerformIO $
@@ -93,6 +98,7 @@ bindAudioStreamGeneratorPlayback_get_frames_available
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the number of audio data frames left to play. If this returned number reaches @0@, the audio will stop playing until frames are added again. Therefore, make sure your script can always generate and push new audio frames fast enough to avoid audio cracking.
 get_frames_available ::
                        (AudioStreamGeneratorPlayback :< cls, Object :< cls) =>
                        cls -> IO Int
@@ -144,6 +150,7 @@ instance NodeMethod AudioStreamGeneratorPlayback "get_skips" '[]
 
 {-# NOINLINE bindAudioStreamGeneratorPlayback_push_buffer #-}
 
+-- | Pushes several audio data frames to the buffer. This is usually more efficient than @method push_frame@ in C# and compiled languages via GDNative, but @method push_buffer@ may be @i@less@/i@ efficient in GDScript.
 bindAudioStreamGeneratorPlayback_push_buffer :: MethodBind
 bindAudioStreamGeneratorPlayback_push_buffer
   = unsafePerformIO $
@@ -153,6 +160,7 @@ bindAudioStreamGeneratorPlayback_push_buffer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Pushes several audio data frames to the buffer. This is usually more efficient than @method push_frame@ in C# and compiled languages via GDNative, but @method push_buffer@ may be @i@less@/i@ efficient in GDScript.
 push_buffer ::
               (AudioStreamGeneratorPlayback :< cls, Object :< cls) =>
               cls -> PoolVector2Array -> IO Bool
@@ -173,6 +181,7 @@ instance NodeMethod AudioStreamGeneratorPlayback "push_buffer"
 
 {-# NOINLINE bindAudioStreamGeneratorPlayback_push_frame #-}
 
+-- | Pushes a single audio data frame to the buffer. This is usually less efficient than @method push_buffer@ in C# and compiled languages via GDNative, but @method push_frame@ may be @i@more@/i@ efficient in GDScript.
 bindAudioStreamGeneratorPlayback_push_frame :: MethodBind
 bindAudioStreamGeneratorPlayback_push_frame
   = unsafePerformIO $
@@ -182,6 +191,7 @@ bindAudioStreamGeneratorPlayback_push_frame
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Pushes a single audio data frame to the buffer. This is usually less efficient than @method push_buffer@ in C# and compiled languages via GDNative, but @method push_frame@ may be @i@more@/i@ efficient in GDScript.
 push_frame ::
              (AudioStreamGeneratorPlayback :< cls, Object :< cls) =>
              cls -> Vector2 -> IO Bool

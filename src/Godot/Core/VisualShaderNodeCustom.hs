@@ -30,7 +30,7 @@ import Godot.Core.VisualShaderNode()
 
 {-# NOINLINE bindVisualShaderNodeCustom__get_category #-}
 
--- | Override this method to define the category of the associated custom node in the Visual Shader Editor's members dialog.
+-- | Override this method to define the category of the associated custom node in the Visual Shader Editor's members dialog. The path may look like @"MyGame/MyFunctions/Noise"@.
 --   				Defining this method is __optional__. If not overridden, the node will be filed under the "Custom" category.
 bindVisualShaderNodeCustom__get_category :: MethodBind
 bindVisualShaderNodeCustom__get_category
@@ -41,7 +41,7 @@ bindVisualShaderNodeCustom__get_category
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override this method to define the category of the associated custom node in the Visual Shader Editor's members dialog.
+-- | Override this method to define the category of the associated custom node in the Visual Shader Editor's members dialog. The path may look like @"MyGame/MyFunctions/Noise"@.
 --   				Defining this method is __optional__. If not overridden, the node will be filed under the "Custom" category.
 _get_category ::
                 (VisualShaderNodeCustom :< cls, Object :< cls) =>

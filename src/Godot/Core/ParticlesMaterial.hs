@@ -550,7 +550,7 @@ instance NodeMethod ParticlesMaterial "get_color" '[] (IO Color)
 
 {-# NOINLINE bindParticlesMaterial_get_color_ramp #-}
 
--- | Each particle's color will vary along this @GradientTexture@.
+-- | Each particle's color will vary along this @GradientTexture@ over its lifetime (multiplied with @color@).
 bindParticlesMaterial_get_color_ramp :: MethodBind
 bindParticlesMaterial_get_color_ramp
   = unsafePerformIO $
@@ -560,7 +560,7 @@ bindParticlesMaterial_get_color_ramp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's color will vary along this @GradientTexture@.
+-- | Each particle's color will vary along this @GradientTexture@ over its lifetime (multiplied with @color@).
 get_color_ramp ::
                  (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Texture
 get_color_ramp cls
@@ -854,7 +854,7 @@ instance NodeMethod ParticlesMaterial "get_flag" '[Int] (IO Bool)
 
 {-# NOINLINE bindParticlesMaterial_get_flatness #-}
 
--- | Amount of @spread@ in Y/Z plane. A value of @1@ restricts particles to X/Z plane.
+-- | Amount of @spread@ along the Y axis.
 bindParticlesMaterial_get_flatness :: MethodBind
 bindParticlesMaterial_get_flatness
   = unsafePerformIO $
@@ -864,7 +864,7 @@ bindParticlesMaterial_get_flatness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of @spread@ in Y/Z plane. A value of @1@ restricts particles to X/Z plane.
+-- | Amount of @spread@ along the Y axis.
 get_flatness ::
                (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Float
 get_flatness cls
@@ -1027,7 +1027,7 @@ instance NodeMethod ParticlesMaterial "get_param_texture" '[Int]
 
 {-# NOINLINE bindParticlesMaterial_get_spread #-}
 
--- | Each particle's initial direction range from @+spread@ to @-spread@ degrees. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from @+spread@ to @-spread@ degrees.
 bindParticlesMaterial_get_spread :: MethodBind
 bindParticlesMaterial_get_spread
   = unsafePerformIO $
@@ -1037,7 +1037,7 @@ bindParticlesMaterial_get_spread
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's initial direction range from @+spread@ to @-spread@ degrees. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from @+spread@ to @-spread@ degrees.
 get_spread ::
              (ParticlesMaterial :< cls, Object :< cls) => cls -> IO Float
 get_spread cls
@@ -1173,7 +1173,7 @@ instance NodeMethod ParticlesMaterial "set_color" '[Color] (IO ())
 
 {-# NOINLINE bindParticlesMaterial_set_color_ramp #-}
 
--- | Each particle's color will vary along this @GradientTexture@.
+-- | Each particle's color will vary along this @GradientTexture@ over its lifetime (multiplied with @color@).
 bindParticlesMaterial_set_color_ramp :: MethodBind
 bindParticlesMaterial_set_color_ramp
   = unsafePerformIO $
@@ -1183,7 +1183,7 @@ bindParticlesMaterial_set_color_ramp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's color will vary along this @GradientTexture@.
+-- | Each particle's color will vary along this @GradientTexture@ over its lifetime (multiplied with @color@).
 set_color_ramp ::
                  (ParticlesMaterial :< cls, Object :< cls) =>
                  cls -> Texture -> IO ()
@@ -1485,7 +1485,7 @@ instance NodeMethod ParticlesMaterial "set_flag" '[Int, Bool]
 
 {-# NOINLINE bindParticlesMaterial_set_flatness #-}
 
--- | Amount of @spread@ in Y/Z plane. A value of @1@ restricts particles to X/Z plane.
+-- | Amount of @spread@ along the Y axis.
 bindParticlesMaterial_set_flatness :: MethodBind
 bindParticlesMaterial_set_flatness
   = unsafePerformIO $
@@ -1495,7 +1495,7 @@ bindParticlesMaterial_set_flatness
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of @spread@ in Y/Z plane. A value of @1@ restricts particles to X/Z plane.
+-- | Amount of @spread@ along the Y axis.
 set_flatness ::
                (ParticlesMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_flatness cls arg1
@@ -1666,7 +1666,7 @@ instance NodeMethod ParticlesMaterial "set_param_texture"
 
 {-# NOINLINE bindParticlesMaterial_set_spread #-}
 
--- | Each particle's initial direction range from @+spread@ to @-spread@ degrees. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from @+spread@ to @-spread@ degrees.
 bindParticlesMaterial_set_spread :: MethodBind
 bindParticlesMaterial_set_spread
   = unsafePerformIO $
@@ -1676,7 +1676,7 @@ bindParticlesMaterial_set_spread
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's initial direction range from @+spread@ to @-spread@ degrees. Applied to X/Z plane and Y/Z planes.
+-- | Each particle's initial direction range from @+spread@ to @-spread@ degrees.
 set_spread ::
              (ParticlesMaterial :< cls, Object :< cls) => cls -> Float -> IO ()
 set_spread cls arg1

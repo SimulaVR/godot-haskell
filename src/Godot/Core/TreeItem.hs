@@ -115,7 +115,7 @@ instance NodeProperty TreeItem "disable_folding" Bool 'False where
 
 {-# NOINLINE bindTreeItem_add_button #-}
 
--- | Adds a button with @Texture@ @button@ at column @column@. The @button_idx@ index is used to identify the button when calling other methods. If not specified, the next available index is used, which may be retrieved by calling @method get_button_count@ immediately after this method. Optionally, the button can be @disabled@ and have a @tooltip@.
+-- | Adds a button with @Texture@ @button@ at column @column@. The @button_idx@ is used to identify the button. If not specified, the next available index is used, which may be retrieved by calling @method get_button_count@ immediately after this method. Optionally, the button can be @disabled@ and have a @tooltip@.
 bindTreeItem_add_button :: MethodBind
 bindTreeItem_add_button
   = unsafePerformIO $
@@ -125,7 +125,7 @@ bindTreeItem_add_button
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a button with @Texture@ @button@ at column @column@. The @button_idx@ index is used to identify the button when calling other methods. If not specified, the next available index is used, which may be retrieved by calling @method get_button_count@ immediately after this method. Optionally, the button can be @disabled@ and have a @tooltip@.
+-- | Adds a button with @Texture@ @button@ at column @column@. The @button_idx@ is used to identify the button. If not specified, the next available index is used, which may be retrieved by calling @method get_button_count@ immediately after this method. Optionally, the button can be @disabled@ and have a @tooltip@.
 add_button ::
              (TreeItem :< cls, Object :< cls) =>
              cls ->
@@ -312,7 +312,7 @@ instance NodeMethod TreeItem "get_button" '[Int, Int] (IO Texture)
 
 {-# NOINLINE bindTreeItem_get_button_count #-}
 
--- | Returns the number of buttons in column @column@. May be used to get the most recently added button's index, if no index was specified.
+-- | Returns the number of buttons in column @column@.
 bindTreeItem_get_button_count :: MethodBind
 bindTreeItem_get_button_count
   = unsafePerformIO $
@@ -322,7 +322,7 @@ bindTreeItem_get_button_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of buttons in column @column@. May be used to get the most recently added button's index, if no index was specified.
+-- | Returns the number of buttons in column @column@.
 get_button_count ::
                    (TreeItem :< cls, Object :< cls) => cls -> Int -> IO Int
 get_button_count cls arg1
@@ -638,6 +638,7 @@ instance NodeMethod TreeItem "get_icon_region" '[Int] (IO Rect2)
 
 {-# NOINLINE bindTreeItem_get_metadata #-}
 
+-- | Returns the metadata value that was set for the given column using @method set_metadata@.
 bindTreeItem_get_metadata :: MethodBind
 bindTreeItem_get_metadata
   = unsafePerformIO $
@@ -647,6 +648,7 @@ bindTreeItem_get_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the metadata value that was set for the given column using @method set_metadata@.
 get_metadata ::
                (TreeItem :< cls, Object :< cls) => cls -> Int -> IO GodotVariant
 get_metadata cls arg1
@@ -799,6 +801,7 @@ instance NodeMethod TreeItem "get_prev_visible" '[Maybe Bool]
 
 {-# NOINLINE bindTreeItem_get_range #-}
 
+-- | Returns the value of a @CELL_MODE_RANGE@ column.
 bindTreeItem_get_range :: MethodBind
 bindTreeItem_get_range
   = unsafePerformIO $
@@ -808,6 +811,7 @@ bindTreeItem_get_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the value of a @CELL_MODE_RANGE@ column.
 get_range ::
             (TreeItem :< cls, Object :< cls) => cls -> Int -> IO Float
 get_range cls arg1
@@ -822,6 +826,7 @@ instance NodeMethod TreeItem "get_range" '[Int] (IO Float) where
 
 {-# NOINLINE bindTreeItem_get_range_config #-}
 
+-- | Returns a dictionary containing the range parameters for a given column. The keys are "min", "max", "step", and "expr".
 bindTreeItem_get_range_config :: MethodBind
 bindTreeItem_get_range_config
   = unsafePerformIO $
@@ -831,6 +836,7 @@ bindTreeItem_get_range_config
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a dictionary containing the range parameters for a given column. The keys are "min", "max", "step", and "expr".
 get_range_config ::
                    (TreeItem :< cls, Object :< cls) => cls -> Int -> IO Dictionary
 get_range_config cls arg1
@@ -1713,6 +1719,7 @@ instance NodeMethod TreeItem "set_icon_region" '[Int, Rect2]
 
 {-# NOINLINE bindTreeItem_set_metadata #-}
 
+-- | Sets the metadata value for the given column, which can be retrieved later using @method get_metadata@. This can be used, for example, to store a reference to the original data.
 bindTreeItem_set_metadata :: MethodBind
 bindTreeItem_set_metadata
   = unsafePerformIO $
@@ -1722,6 +1729,7 @@ bindTreeItem_set_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the metadata value for the given column, which can be retrieved later using @method get_metadata@. This can be used, for example, to store a reference to the original data.
 set_metadata ::
                (TreeItem :< cls, Object :< cls) =>
                cls -> Int -> GodotVariant -> IO ()
@@ -1740,6 +1748,7 @@ instance NodeMethod TreeItem "set_metadata" '[Int, GodotVariant]
 
 {-# NOINLINE bindTreeItem_set_range #-}
 
+-- | Sets the value of a @CELL_MODE_RANGE@ column.
 bindTreeItem_set_range :: MethodBind
 bindTreeItem_set_range
   = unsafePerformIO $
@@ -1749,6 +1758,7 @@ bindTreeItem_set_range
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the value of a @CELL_MODE_RANGE@ column.
 set_range ::
             (TreeItem :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_range cls arg1 arg2
@@ -1764,6 +1774,8 @@ instance NodeMethod TreeItem "set_range" '[Int, Float] (IO ())
 
 {-# NOINLINE bindTreeItem_set_range_config #-}
 
+-- | Sets the range of accepted values for a column. The column must be in the @CELL_MODE_RANGE@ mode.
+--   				If @expr@ is @true@, the edit mode slider will use an exponential scale as with @Range.exp_edit@.
 bindTreeItem_set_range_config :: MethodBind
 bindTreeItem_set_range_config
   = unsafePerformIO $
@@ -1773,6 +1785,8 @@ bindTreeItem_set_range_config
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the range of accepted values for a column. The column must be in the @CELL_MODE_RANGE@ mode.
+--   				If @expr@ is @true@, the edit mode slider will use an exponential scale as with @Range.exp_edit@.
 set_range_config ::
                    (TreeItem :< cls, Object :< cls) =>
                    cls -> Int -> Float -> Float -> Float -> Maybe Bool -> IO ()
@@ -1821,6 +1835,7 @@ instance NodeMethod TreeItem "set_selectable" '[Int, Bool] (IO ())
 
 {-# NOINLINE bindTreeItem_set_text #-}
 
+-- | Sets the given column's text value.
 bindTreeItem_set_text :: MethodBind
 bindTreeItem_set_text
   = unsafePerformIO $
@@ -1830,6 +1845,7 @@ bindTreeItem_set_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Sets the given column's text value.
 set_text ::
            (TreeItem :< cls, Object :< cls) =>
            cls -> Int -> GodotString -> IO ()

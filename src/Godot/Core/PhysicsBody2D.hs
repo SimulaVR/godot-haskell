@@ -46,7 +46,7 @@ instance NodeProperty PhysicsBody2D "layers" Int 'False where
 
 {-# NOINLINE bindPhysicsBody2D__get_layers #-}
 
--- | Both @collision_layer@ and @collision_mask@. Returns @collision_layer@ when accessed. Updates @collision_layer@ and @collision_mask@ when modified.
+-- | Both collision_layer and collision_mask. Returns collision_layer when accessed. Updates collision_layer and collision_mask when modified.
 bindPhysicsBody2D__get_layers :: MethodBind
 bindPhysicsBody2D__get_layers
   = unsafePerformIO $
@@ -56,7 +56,7 @@ bindPhysicsBody2D__get_layers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Both @collision_layer@ and @collision_mask@. Returns @collision_layer@ when accessed. Updates @collision_layer@ and @collision_mask@ when modified.
+-- | Both collision_layer and collision_mask. Returns collision_layer when accessed. Updates collision_layer and collision_mask when modified.
 _get_layers ::
               (PhysicsBody2D :< cls, Object :< cls) => cls -> IO Int
 _get_layers cls
@@ -72,7 +72,7 @@ instance NodeMethod PhysicsBody2D "_get_layers" '[] (IO Int) where
 
 {-# NOINLINE bindPhysicsBody2D__set_layers #-}
 
--- | Both @collision_layer@ and @collision_mask@. Returns @collision_layer@ when accessed. Updates @collision_layer@ and @collision_mask@ when modified.
+-- | Both collision_layer and collision_mask. Returns collision_layer when accessed. Updates collision_layer and collision_mask when modified.
 bindPhysicsBody2D__set_layers :: MethodBind
 bindPhysicsBody2D__set_layers
   = unsafePerformIO $
@@ -82,7 +82,7 @@ bindPhysicsBody2D__set_layers
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Both @collision_layer@ and @collision_mask@. Returns @collision_layer@ when accessed. Updates @collision_layer@ and @collision_mask@ when modified.
+-- | Both collision_layer and collision_mask. Returns collision_layer when accessed. Updates collision_layer and collision_mask when modified.
 _set_layers ::
               (PhysicsBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 _set_layers cls arg1
@@ -159,9 +159,6 @@ instance NodeMethod PhysicsBody2D "get_collision_exceptions" '[]
 
 {-# NOINLINE bindPhysicsBody2D_get_collision_layer #-}
 
--- | The physics layers this area is in.
---   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindPhysicsBody2D_get_collision_layer :: MethodBind
 bindPhysicsBody2D_get_collision_layer
   = unsafePerformIO $
@@ -171,9 +168,6 @@ bindPhysicsBody2D_get_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area is in.
---   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 get_collision_layer ::
                       (PhysicsBody2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_layer cls
@@ -192,7 +186,6 @@ instance NodeMethod PhysicsBody2D "get_collision_layer" '[]
 
 {-# NOINLINE bindPhysicsBody2D_get_collision_layer_bit #-}
 
--- | Returns an individual bit on the @collision_layer@.
 bindPhysicsBody2D_get_collision_layer_bit :: MethodBind
 bindPhysicsBody2D_get_collision_layer_bit
   = unsafePerformIO $
@@ -202,7 +195,6 @@ bindPhysicsBody2D_get_collision_layer_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an individual bit on the @collision_layer@.
 get_collision_layer_bit ::
                           (PhysicsBody2D :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_collision_layer_bit cls arg1
@@ -221,7 +213,6 @@ instance NodeMethod PhysicsBody2D "get_collision_layer_bit" '[Int]
 
 {-# NOINLINE bindPhysicsBody2D_get_collision_mask #-}
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindPhysicsBody2D_get_collision_mask :: MethodBind
 bindPhysicsBody2D_get_collision_mask
   = unsafePerformIO $
@@ -231,7 +222,6 @@ bindPhysicsBody2D_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 get_collision_mask ::
                      (PhysicsBody2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -249,7 +239,6 @@ instance NodeMethod PhysicsBody2D "get_collision_mask" '[] (IO Int)
 
 {-# NOINLINE bindPhysicsBody2D_get_collision_mask_bit #-}
 
--- | Returns an individual bit on the @collision_mask@.
 bindPhysicsBody2D_get_collision_mask_bit :: MethodBind
 bindPhysicsBody2D_get_collision_mask_bit
   = unsafePerformIO $
@@ -259,7 +248,6 @@ bindPhysicsBody2D_get_collision_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an individual bit on the @collision_mask@.
 get_collision_mask_bit ::
                          (PhysicsBody2D :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_collision_mask_bit cls arg1
@@ -310,9 +298,6 @@ instance NodeMethod PhysicsBody2D "remove_collision_exception_with"
 
 {-# NOINLINE bindPhysicsBody2D_set_collision_layer #-}
 
--- | The physics layers this area is in.
---   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindPhysicsBody2D_set_collision_layer :: MethodBind
 bindPhysicsBody2D_set_collision_layer
   = unsafePerformIO $
@@ -322,9 +307,6 @@ bindPhysicsBody2D_set_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area is in.
---   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 set_collision_layer ::
                       (PhysicsBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_layer cls arg1
@@ -343,7 +325,6 @@ instance NodeMethod PhysicsBody2D "set_collision_layer" '[Int]
 
 {-# NOINLINE bindPhysicsBody2D_set_collision_layer_bit #-}
 
--- | Sets individual bits on the @collision_layer@ bitmask. Use this if you only need to change one layer's value.
 bindPhysicsBody2D_set_collision_layer_bit :: MethodBind
 bindPhysicsBody2D_set_collision_layer_bit
   = unsafePerformIO $
@@ -353,7 +334,6 @@ bindPhysicsBody2D_set_collision_layer_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets individual bits on the @collision_layer@ bitmask. Use this if you only need to change one layer's value.
 set_collision_layer_bit ::
                           (PhysicsBody2D :< cls, Object :< cls) =>
                           cls -> Int -> Bool -> IO ()
@@ -374,7 +354,6 @@ instance NodeMethod PhysicsBody2D "set_collision_layer_bit"
 
 {-# NOINLINE bindPhysicsBody2D_set_collision_mask #-}
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindPhysicsBody2D_set_collision_mask :: MethodBind
 bindPhysicsBody2D_set_collision_mask
   = unsafePerformIO $
@@ -384,7 +363,6 @@ bindPhysicsBody2D_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 set_collision_mask ::
                      (PhysicsBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1
@@ -403,7 +381,6 @@ instance NodeMethod PhysicsBody2D "set_collision_mask" '[Int]
 
 {-# NOINLINE bindPhysicsBody2D_set_collision_mask_bit #-}
 
--- | Sets individual bits on the @collision_mask@ bitmask. Use this if you only need to change one layer's value.
 bindPhysicsBody2D_set_collision_mask_bit :: MethodBind
 bindPhysicsBody2D_set_collision_mask_bit
   = unsafePerformIO $
@@ -413,7 +390,6 @@ bindPhysicsBody2D_set_collision_mask_bit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets individual bits on the @collision_mask@ bitmask. Use this if you only need to change one layer's value.
 set_collision_mask_bit ::
                          (PhysicsBody2D :< cls, Object :< cls) =>
                          cls -> Int -> Bool -> IO ()

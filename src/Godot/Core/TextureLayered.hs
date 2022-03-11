@@ -107,7 +107,6 @@ instance NodeMethod TextureLayered "_set_data" '[Dictionary]
 
 {-# NOINLINE bindTextureLayered_create #-}
 
--- | Creates the @Texture3D@ or @TextureArray@ with specified @width@, @height@, and @depth@. See @enum Image.Format@ for @format@ options. See @enum Flags@ enumerator for @flags@ options.
 bindTextureLayered_create :: MethodBind
 bindTextureLayered_create
   = unsafePerformIO $
@@ -117,7 +116,6 @@ bindTextureLayered_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates the @Texture3D@ or @TextureArray@ with specified @width@, @height@, and @depth@. See @enum Image.Format@ for @format@ options. See @enum Flags@ enumerator for @flags@ options.
 create ::
          (TextureLayered :< cls, Object :< cls) =>
          cls -> Int -> Int -> Int -> Int -> Maybe Int -> IO ()

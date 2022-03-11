@@ -198,7 +198,7 @@ instance NodeMethod BitMap "get_true_bit_count" '[] (IO Int) where
 
 {-# NOINLINE bindBitMap_grow_mask #-}
 
--- | Applies morphological dilation to the bitmap. The first argument is the dilation amount, Rect2 is the area where the dilation will be applied.
+-- | Applies morphological dilation or erosion to the bitmap. If @pixels@ is positive, dilation is applied to the bitmap. If @pixels@ is negative, erosion is applied to the bitmap. @rect@ defines the area where the morphological operation is applied. Pixels located outside the @rect@ are unaffected by @method grow_mask@.
 bindBitMap_grow_mask :: MethodBind
 bindBitMap_grow_mask
   = unsafePerformIO $
@@ -208,7 +208,7 @@ bindBitMap_grow_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Applies morphological dilation to the bitmap. The first argument is the dilation amount, Rect2 is the area where the dilation will be applied.
+-- | Applies morphological dilation or erosion to the bitmap. If @pixels@ is positive, dilation is applied to the bitmap. If @pixels@ is negative, erosion is applied to the bitmap. @rect@ defines the area where the morphological operation is applied. Pixels located outside the @rect@ are unaffected by @method grow_mask@.
 grow_mask ::
             (BitMap :< cls, Object :< cls) => cls -> Int -> Rect2 -> IO ()
 grow_mask cls arg1 arg2

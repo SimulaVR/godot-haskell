@@ -28,8 +28,19 @@ instance NodeProperty RandomNumberGenerator "seed" Int 'False where
 
 {-# NOINLINE bindRandomNumberGenerator_get_seed #-}
 
--- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
+-- | Initializes the random number generator state based on the given seed value. A given seed will give a reproducible sequence of pseudo-random numbers.
 --   			__Note:__ The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
+--   			__Note:__ Setting this property produces a side effect of changing the internal @state@, so make sure to initialize the seed @i@before@/i@ modifying the @state@:
+--   			
+--   @
+--   
+--   			var rng = RandomNumberGenerator.new()
+--   			rng.seed = hash("Godot")
+--   			rng.state = 100 # Restore to some previously saved state.
+--   			
+--   @
+--   
+--   			__Warning:__ the getter of this property returns the previous @state@, and not the initial seed value, which is going to be fixed in Godot 4.0.
 bindRandomNumberGenerator_get_seed :: MethodBind
 bindRandomNumberGenerator_get_seed
   = unsafePerformIO $
@@ -39,8 +50,19 @@ bindRandomNumberGenerator_get_seed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
+-- | Initializes the random number generator state based on the given seed value. A given seed will give a reproducible sequence of pseudo-random numbers.
 --   			__Note:__ The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
+--   			__Note:__ Setting this property produces a side effect of changing the internal @state@, so make sure to initialize the seed @i@before@/i@ modifying the @state@:
+--   			
+--   @
+--   
+--   			var rng = RandomNumberGenerator.new()
+--   			rng.seed = hash("Godot")
+--   			rng.state = 100 # Restore to some previously saved state.
+--   			
+--   @
+--   
+--   			__Warning:__ the getter of this property returns the previous @state@, and not the initial seed value, which is going to be fixed in Godot 4.0.
 get_seed ::
            (RandomNumberGenerator :< cls, Object :< cls) => cls -> IO Int
 get_seed cls
@@ -234,8 +256,19 @@ instance NodeMethod RandomNumberGenerator "randomize" '[] (IO ())
 
 {-# NOINLINE bindRandomNumberGenerator_set_seed #-}
 
--- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
+-- | Initializes the random number generator state based on the given seed value. A given seed will give a reproducible sequence of pseudo-random numbers.
 --   			__Note:__ The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
+--   			__Note:__ Setting this property produces a side effect of changing the internal @state@, so make sure to initialize the seed @i@before@/i@ modifying the @state@:
+--   			
+--   @
+--   
+--   			var rng = RandomNumberGenerator.new()
+--   			rng.seed = hash("Godot")
+--   			rng.state = 100 # Restore to some previously saved state.
+--   			
+--   @
+--   
+--   			__Warning:__ the getter of this property returns the previous @state@, and not the initial seed value, which is going to be fixed in Godot 4.0.
 bindRandomNumberGenerator_set_seed :: MethodBind
 bindRandomNumberGenerator_set_seed
   = unsafePerformIO $
@@ -245,8 +278,19 @@ bindRandomNumberGenerator_set_seed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The seed used by the random number generator. A given seed will give a reproducible sequence of pseudo-random numbers.
+-- | Initializes the random number generator state based on the given seed value. A given seed will give a reproducible sequence of pseudo-random numbers.
 --   			__Note:__ The RNG does not have an avalanche effect, and can output similar random streams given similar seeds. Consider using a hash function to improve your seed quality if they're sourced externally.
+--   			__Note:__ Setting this property produces a side effect of changing the internal @state@, so make sure to initialize the seed @i@before@/i@ modifying the @state@:
+--   			
+--   @
+--   
+--   			var rng = RandomNumberGenerator.new()
+--   			rng.seed = hash("Godot")
+--   			rng.state = 100 # Restore to some previously saved state.
+--   			
+--   @
+--   
+--   			__Warning:__ the getter of this property returns the previous @state@, and not the initial seed value, which is going to be fixed in Godot 4.0.
 set_seed ::
            (RandomNumberGenerator :< cls, Object :< cls) =>
            cls -> Int -> IO ()

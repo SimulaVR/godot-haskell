@@ -1216,6 +1216,7 @@ instance NodeMethod EditorFileDialog "get_mode" '[] (IO Int) where
 {-# NOINLINE bindEditorFileDialog_get_vbox #-}
 
 -- | Returns the @VBoxContainer@ used to display the file system.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindEditorFileDialog_get_vbox :: MethodBind
 bindEditorFileDialog_get_vbox
   = unsafePerformIO $
@@ -1226,6 +1227,7 @@ bindEditorFileDialog_get_vbox
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @VBoxContainer@ used to display the file system.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_vbox ::
            (EditorFileDialog :< cls, Object :< cls) => cls -> IO VBoxContainer
 get_vbox cls

@@ -226,6 +226,7 @@ instance NodeMethod Line2D "clear_points" '[] (IO ()) where
 {-# NOINLINE bindLine2D_get_antialiased #-}
 
 -- | If @true@, the line's border will be anti-aliased.
+--   			__Note:__ Line2D is not accelerated by batching when being anti-aliased.
 bindLine2D_get_antialiased :: MethodBind
 bindLine2D_get_antialiased
   = unsafePerformIO $
@@ -236,6 +237,7 @@ bindLine2D_get_antialiased
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the line's border will be anti-aliased.
+--   			__Note:__ Line2D is not accelerated by batching when being anti-aliased.
 get_antialiased :: (Line2D :< cls, Object :< cls) => cls -> IO Bool
 get_antialiased cls
   = withVariantArray []
@@ -628,6 +630,7 @@ instance NodeMethod Line2D "remove_point" '[Int] (IO ()) where
 {-# NOINLINE bindLine2D_set_antialiased #-}
 
 -- | If @true@, the line's border will be anti-aliased.
+--   			__Note:__ Line2D is not accelerated by batching when being anti-aliased.
 bindLine2D_set_antialiased :: MethodBind
 bindLine2D_set_antialiased
   = unsafePerformIO $
@@ -638,6 +641,7 @@ bindLine2D_set_antialiased
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the line's border will be anti-aliased.
+--   			__Note:__ Line2D is not accelerated by batching when being anti-aliased.
 set_antialiased ::
                   (Line2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_antialiased cls arg1

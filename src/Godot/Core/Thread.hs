@@ -53,7 +53,7 @@ instance NodeMethod Thread "get_id" '[] (IO GodotString) where
 
 {-# NOINLINE bindThread_is_active #-}
 
--- | Returns @true@ if this @Thread@ is currently active. An active @Thread@ cannot start work on a new method but can be joined with @method wait_to_finish@.
+-- | Returns @true@ if this @Thread@ has been started. Once started, this will return @true@ until it is joined using @method wait_to_finish@. For checking if a @Thread@ is still executing its task, use @method is_alive@.
 bindThread_is_active :: MethodBind
 bindThread_is_active
   = unsafePerformIO $
@@ -63,7 +63,7 @@ bindThread_is_active
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if this @Thread@ is currently active. An active @Thread@ cannot start work on a new method but can be joined with @method wait_to_finish@.
+-- | Returns @true@ if this @Thread@ has been started. Once started, this will return @true@ until it is joined using @method wait_to_finish@. For checking if a @Thread@ is still executing its task, use @method is_alive@.
 is_active :: (Thread :< cls, Object :< cls) => cls -> IO Bool
 is_active cls
   = withVariantArray []
@@ -109,7 +109,10 @@ instance NodeMethod Thread "start"
 
 {-# NOINLINE bindThread_wait_to_finish #-}
 
--- | Joins the @Thread@ and waits for it to finish. Returns what the method called returned.
+-- | Joins the @Thread@ and waits for it to finish. Returns the output of the method passed to @method start@.
+--   				Should either be used when you want to retrieve the value returned from the method called by the @Thread@ or before freeing the instance that contains the @Thread@.
+--   				To determine if this can be called without blocking the calling thread, check if @method is_alive@ is @false@.
+--   				__Note:__ After the @Thread@ finishes joining it will be disposed. If you want to use it again you will have to create a new instance of it.
 bindThread_wait_to_finish :: MethodBind
 bindThread_wait_to_finish
   = unsafePerformIO $
@@ -119,7 +122,10 @@ bindThread_wait_to_finish
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Joins the @Thread@ and waits for it to finish. Returns what the method called returned.
+-- | Joins the @Thread@ and waits for it to finish. Returns the output of the method passed to @method start@.
+--   				Should either be used when you want to retrieve the value returned from the method called by the @Thread@ or before freeing the instance that contains the @Thread@.
+--   				To determine if this can be called without blocking the calling thread, check if @method is_alive@ is @false@.
+--   				__Note:__ After the @Thread@ finishes joining it will be disposed. If you want to use it again you will have to create a new instance of it.
 wait_to_finish ::
                  (Thread :< cls, Object :< cls) => cls -> IO GodotVariant
 wait_to_finish cls

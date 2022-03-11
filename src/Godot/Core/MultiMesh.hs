@@ -745,7 +745,7 @@ instance NodeMethod MultiMesh "set_custom_data_format" '[Int]
 
 {-# NOINLINE bindMultiMesh_set_instance_color #-}
 
--- | Sets the color of a specific instance.
+-- | Sets the color of a specific instance by @i@multiplying@/i@ the mesh's existing vertex colors.
 --   				For the color to take effect, ensure that @color_format@ is non-@null@ on the @MultiMesh@ and @SpatialMaterial.vertex_color_use_as_albedo@ is @true@ on the material.
 bindMultiMesh_set_instance_color :: MethodBind
 bindMultiMesh_set_instance_color
@@ -756,7 +756,7 @@ bindMultiMesh_set_instance_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the color of a specific instance.
+-- | Sets the color of a specific instance by @i@multiplying@/i@ the mesh's existing vertex colors.
 --   				For the color to take effect, ensure that @color_format@ is non-@null@ on the @MultiMesh@ and @SpatialMaterial.vertex_color_use_as_albedo@ is @true@ on the material.
 set_instance_color ::
                      (MultiMesh :< cls, Object :< cls) => cls -> Int -> Color -> IO ()

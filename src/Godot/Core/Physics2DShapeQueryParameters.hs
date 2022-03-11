@@ -92,7 +92,7 @@ instance NodeProperty Physics2DShapeQueryParameters "transform"
 {-# NOINLINE bindPhysics2DShapeQueryParameters_get_collision_layer
              #-}
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindPhysics2DShapeQueryParameters_get_collision_layer :: MethodBind
 bindPhysics2DShapeQueryParameters_get_collision_layer
   = unsafePerformIO $
@@ -102,7 +102,7 @@ bindPhysics2DShapeQueryParameters_get_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 get_collision_layer ::
                       (Physics2DShapeQueryParameters :< cls, Object :< cls) =>
                       cls -> IO Int
@@ -426,7 +426,7 @@ instance NodeMethod Physics2DShapeQueryParameters
 {-# NOINLINE bindPhysics2DShapeQueryParameters_set_collision_layer
              #-}
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindPhysics2DShapeQueryParameters_set_collision_layer :: MethodBind
 bindPhysics2DShapeQueryParameters_set_collision_layer
   = unsafePerformIO $
@@ -436,7 +436,7 @@ bindPhysics2DShapeQueryParameters_set_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 set_collision_layer ::
                       (Physics2DShapeQueryParameters :< cls, Object :< cls) =>
                       cls -> Int -> IO ()

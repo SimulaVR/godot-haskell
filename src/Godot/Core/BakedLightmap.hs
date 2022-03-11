@@ -137,7 +137,7 @@ instance NodeProperty BakedLightmap "light_data" BakedLightmapData
 
 {-# NOINLINE bindBakedLightmap_bake #-}
 
--- | Bakes the lightmaps within the currently edited scene. Returns a @enum BakeError@ to signify if the bake was successful, or if unsuccessful, how the bake failed.
+-- | Bakes the lightmap, scanning from the given @from_node@ root and saves the resulting @BakedLightmapData@ in @data_save_path@. If no root node is provided, parent of this node will be used as root instead. If no save path is provided it will try to match the path from the current @light_data@.
 bindBakedLightmap_bake :: MethodBind
 bindBakedLightmap_bake
   = unsafePerformIO $
@@ -147,7 +147,7 @@ bindBakedLightmap_bake
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Bakes the lightmaps within the currently edited scene. Returns a @enum BakeError@ to signify if the bake was successful, or if unsuccessful, how the bake failed.
+-- | Bakes the lightmap, scanning from the given @from_node@ root and saves the resulting @BakedLightmapData@ in @data_save_path@. If no root node is provided, parent of this node will be used as root instead. If no save path is provided it will try to match the path from the current @light_data@.
 bake ::
        (BakedLightmap :< cls, Object :< cls) =>
        cls -> Maybe Node -> Maybe Bool -> IO Int
@@ -167,7 +167,6 @@ instance NodeMethod BakedLightmap "bake" '[Maybe Node, Maybe Bool]
 
 {-# NOINLINE bindBakedLightmap_debug_bake #-}
 
--- | Executes a dry run bake of lightmaps within the currently edited scene.
 bindBakedLightmap_debug_bake :: MethodBind
 bindBakedLightmap_debug_bake
   = unsafePerformIO $
@@ -177,7 +176,6 @@ bindBakedLightmap_debug_bake
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Executes a dry run bake of lightmaps within the currently edited scene.
 debug_bake :: (BakedLightmap :< cls, Object :< cls) => cls -> IO ()
 debug_bake cls
   = withVariantArray []
@@ -192,7 +190,6 @@ instance NodeMethod BakedLightmap "debug_bake" '[] (IO ()) where
 
 {-# NOINLINE bindBakedLightmap_get_bake_cell_size #-}
 
--- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 bindBakedLightmap_get_bake_cell_size :: MethodBind
 bindBakedLightmap_get_bake_cell_size
   = unsafePerformIO $
@@ -202,7 +199,6 @@ bindBakedLightmap_get_bake_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 get_bake_cell_size ::
                      (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_bake_cell_size cls
@@ -221,7 +217,6 @@ instance NodeMethod BakedLightmap "get_bake_cell_size" '[]
 
 {-# NOINLINE bindBakedLightmap_get_bake_default_texels_per_unit #-}
 
--- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 bindBakedLightmap_get_bake_default_texels_per_unit :: MethodBind
 bindBakedLightmap_get_bake_default_texels_per_unit
   = unsafePerformIO $
@@ -231,7 +226,6 @@ bindBakedLightmap_get_bake_default_texels_per_unit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 get_bake_default_texels_per_unit ::
                                    (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_bake_default_texels_per_unit cls
@@ -254,7 +248,6 @@ instance NodeMethod BakedLightmap
 
 {-# NOINLINE bindBakedLightmap_get_bake_mode #-}
 
--- | Lightmapping mode. See @enum BakeMode@.
 bindBakedLightmap_get_bake_mode :: MethodBind
 bindBakedLightmap_get_bake_mode
   = unsafePerformIO $
@@ -264,7 +257,6 @@ bindBakedLightmap_get_bake_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Lightmapping mode. See @enum BakeMode@.
 get_bake_mode ::
                 (BakedLightmap :< cls, Object :< cls) => cls -> IO Int
 get_bake_mode cls
@@ -281,7 +273,7 @@ instance NodeMethod BakedLightmap "get_bake_mode" '[] (IO Int)
 
 {-# NOINLINE bindBakedLightmap_get_bake_quality #-}
 
--- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
+-- | Determines the amount of samples per texel used in indrect light baking. The amount of samples for each quality level can be configured in the project settings.
 bindBakedLightmap_get_bake_quality :: MethodBind
 bindBakedLightmap_get_bake_quality
   = unsafePerformIO $
@@ -291,7 +283,7 @@ bindBakedLightmap_get_bake_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
+-- | Determines the amount of samples per texel used in indrect light baking. The amount of samples for each quality level can be configured in the project settings.
 get_bake_quality ::
                    (BakedLightmap :< cls, Object :< cls) => cls -> IO Int
 get_bake_quality cls
@@ -309,7 +301,7 @@ instance NodeMethod BakedLightmap "get_bake_quality" '[] (IO Int)
 
 {-# NOINLINE bindBakedLightmap_get_capture_cell_size #-}
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
+-- | Grid size used for real-time capture information on dynamic objects.
 bindBakedLightmap_get_capture_cell_size :: MethodBind
 bindBakedLightmap_get_capture_cell_size
   = unsafePerformIO $
@@ -319,7 +311,7 @@ bindBakedLightmap_get_capture_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
+-- | Grid size used for real-time capture information on dynamic objects.
 get_capture_cell_size ::
                         (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_capture_cell_size cls
@@ -338,7 +330,6 @@ instance NodeMethod BakedLightmap "get_capture_cell_size" '[]
 
 {-# NOINLINE bindBakedLightmap_get_energy #-}
 
--- | Multiplies the light sources' intensity by this value. For instance, if the value is set to 2, lights will be twice as bright. If the value is set to 0.5, lights will be half as bright.
 bindBakedLightmap_get_energy :: MethodBind
 bindBakedLightmap_get_energy
   = unsafePerformIO $
@@ -348,7 +339,6 @@ bindBakedLightmap_get_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies the light sources' intensity by this value. For instance, if the value is set to 2, lights will be twice as bright. If the value is set to 0.5, lights will be half as bright.
 get_energy ::
              (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_energy cls
@@ -364,7 +354,7 @@ instance NodeMethod BakedLightmap "get_energy" '[] (IO Float) where
 
 {-# NOINLINE bindBakedLightmap_get_extents #-}
 
--- | The size of the affected area.
+-- | Size of the baked lightmap. Only meshes inside this region will be included in the baked lightmap, also used as the bounds of the captured region for dynamic lighting.
 bindBakedLightmap_get_extents :: MethodBind
 bindBakedLightmap_get_extents
   = unsafePerformIO $
@@ -374,7 +364,7 @@ bindBakedLightmap_get_extents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The size of the affected area.
+-- | Size of the baked lightmap. Only meshes inside this region will be included in the baked lightmap, also used as the bounds of the captured region for dynamic lighting.
 get_extents ::
               (BakedLightmap :< cls, Object :< cls) => cls -> IO Vector3
 get_extents cls
@@ -391,7 +381,7 @@ instance NodeMethod BakedLightmap "get_extents" '[] (IO Vector3)
 
 {-# NOINLINE bindBakedLightmap_get_image_path #-}
 
--- | The location where lightmaps will be saved.
+-- | Deprecated, in previous versions it determined the location where lightmaps were be saved.
 bindBakedLightmap_get_image_path :: MethodBind
 bindBakedLightmap_get_image_path
   = unsafePerformIO $
@@ -401,7 +391,7 @@ bindBakedLightmap_get_image_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The location where lightmaps will be saved.
+-- | Deprecated, in previous versions it determined the location where lightmaps were be saved.
 get_image_path ::
                  (BakedLightmap :< cls, Object :< cls) => cls -> IO GodotString
 get_image_path cls
@@ -450,7 +440,6 @@ instance NodeMethod BakedLightmap "get_light_data" '[]
 
 {-# NOINLINE bindBakedLightmap_get_propagation #-}
 
--- | Defines how far the light will travel before it is no longer effective. The higher the number, the farther the light will travel. For instance, if the value is set to 2, the light will go twice as far. If the value is set to 0.5, the light will only go half as far.
 bindBakedLightmap_get_propagation :: MethodBind
 bindBakedLightmap_get_propagation
   = unsafePerformIO $
@@ -460,7 +449,6 @@ bindBakedLightmap_get_propagation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines how far the light will travel before it is no longer effective. The higher the number, the farther the light will travel. For instance, if the value is set to 2, the light will go twice as far. If the value is set to 0.5, the light will only go half as far.
 get_propagation ::
                   (BakedLightmap :< cls, Object :< cls) => cls -> IO Float
 get_propagation cls
@@ -478,7 +466,6 @@ instance NodeMethod BakedLightmap "get_propagation" '[] (IO Float)
 
 {-# NOINLINE bindBakedLightmap_is_hdr #-}
 
--- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 bindBakedLightmap_is_hdr :: MethodBind
 bindBakedLightmap_is_hdr
   = unsafePerformIO $
@@ -488,7 +475,6 @@ bindBakedLightmap_is_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 is_hdr :: (BakedLightmap :< cls, Object :< cls) => cls -> IO Bool
 is_hdr cls
   = withVariantArray []
@@ -502,7 +488,6 @@ instance NodeMethod BakedLightmap "is_hdr" '[] (IO Bool) where
 
 {-# NOINLINE bindBakedLightmap_set_bake_cell_size #-}
 
--- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 bindBakedLightmap_set_bake_cell_size :: MethodBind
 bindBakedLightmap_set_bake_cell_size
   = unsafePerformIO $
@@ -512,7 +497,6 @@ bindBakedLightmap_set_bake_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid subdivision size for lightmapper calculation. The default value will work for most cases. Increase for better lighting on small details or if your scene is very large.
 set_bake_cell_size ::
                      (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bake_cell_size cls arg1
@@ -531,7 +515,6 @@ instance NodeMethod BakedLightmap "set_bake_cell_size" '[Float]
 
 {-# NOINLINE bindBakedLightmap_set_bake_default_texels_per_unit #-}
 
--- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 bindBakedLightmap_set_bake_default_texels_per_unit :: MethodBind
 bindBakedLightmap_set_bake_default_texels_per_unit
   = unsafePerformIO $
@@ -541,7 +524,6 @@ bindBakedLightmap_set_bake_default_texels_per_unit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If a @Mesh.lightmap_size_hint@ isn't specified, the lightmap baker will dynamically set the lightmap size using this value. This value is measured in texels per world unit. The maximum lightmap texture size is 4096x4096.
 set_bake_default_texels_per_unit ::
                                    (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_bake_default_texels_per_unit cls arg1
@@ -564,7 +546,6 @@ instance NodeMethod BakedLightmap
 
 {-# NOINLINE bindBakedLightmap_set_bake_mode #-}
 
--- | Lightmapping mode. See @enum BakeMode@.
 bindBakedLightmap_set_bake_mode :: MethodBind
 bindBakedLightmap_set_bake_mode
   = unsafePerformIO $
@@ -574,7 +555,6 @@ bindBakedLightmap_set_bake_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Lightmapping mode. See @enum BakeMode@.
 set_bake_mode ::
                 (BakedLightmap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_bake_mode cls arg1
@@ -591,7 +571,7 @@ instance NodeMethod BakedLightmap "set_bake_mode" '[Int] (IO ())
 
 {-# NOINLINE bindBakedLightmap_set_bake_quality #-}
 
--- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
+-- | Determines the amount of samples per texel used in indrect light baking. The amount of samples for each quality level can be configured in the project settings.
 bindBakedLightmap_set_bake_quality :: MethodBind
 bindBakedLightmap_set_bake_quality
   = unsafePerformIO $
@@ -601,7 +581,7 @@ bindBakedLightmap_set_bake_quality
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Three quality modes are available. Higher quality requires more rendering time. See @enum BakeQuality@.
+-- | Determines the amount of samples per texel used in indrect light baking. The amount of samples for each quality level can be configured in the project settings.
 set_bake_quality ::
                    (BakedLightmap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_bake_quality cls arg1
@@ -619,7 +599,7 @@ instance NodeMethod BakedLightmap "set_bake_quality" '[Int] (IO ())
 
 {-# NOINLINE bindBakedLightmap_set_capture_cell_size #-}
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
+-- | Grid size used for real-time capture information on dynamic objects.
 bindBakedLightmap_set_capture_cell_size :: MethodBind
 bindBakedLightmap_set_capture_cell_size
   = unsafePerformIO $
@@ -629,7 +609,7 @@ bindBakedLightmap_set_capture_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Grid size used for real-time capture information on dynamic objects. Cannot be larger than @bake_cell_size@.
+-- | Grid size used for real-time capture information on dynamic objects.
 set_capture_cell_size ::
                         (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_capture_cell_size cls arg1
@@ -648,7 +628,6 @@ instance NodeMethod BakedLightmap "set_capture_cell_size" '[Float]
 
 {-# NOINLINE bindBakedLightmap_set_energy #-}
 
--- | Multiplies the light sources' intensity by this value. For instance, if the value is set to 2, lights will be twice as bright. If the value is set to 0.5, lights will be half as bright.
 bindBakedLightmap_set_energy :: MethodBind
 bindBakedLightmap_set_energy
   = unsafePerformIO $
@@ -658,7 +637,6 @@ bindBakedLightmap_set_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Multiplies the light sources' intensity by this value. For instance, if the value is set to 2, lights will be twice as bright. If the value is set to 0.5, lights will be half as bright.
 set_energy ::
              (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_energy cls arg1
@@ -675,7 +653,7 @@ instance NodeMethod BakedLightmap "set_energy" '[Float] (IO ())
 
 {-# NOINLINE bindBakedLightmap_set_extents #-}
 
--- | The size of the affected area.
+-- | Size of the baked lightmap. Only meshes inside this region will be included in the baked lightmap, also used as the bounds of the captured region for dynamic lighting.
 bindBakedLightmap_set_extents :: MethodBind
 bindBakedLightmap_set_extents
   = unsafePerformIO $
@@ -685,7 +663,7 @@ bindBakedLightmap_set_extents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The size of the affected area.
+-- | Size of the baked lightmap. Only meshes inside this region will be included in the baked lightmap, also used as the bounds of the captured region for dynamic lighting.
 set_extents ::
               (BakedLightmap :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_extents cls arg1
@@ -702,7 +680,6 @@ instance NodeMethod BakedLightmap "set_extents" '[Vector3] (IO ())
 
 {-# NOINLINE bindBakedLightmap_set_hdr #-}
 
--- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 bindBakedLightmap_set_hdr :: MethodBind
 bindBakedLightmap_set_hdr
   = unsafePerformIO $
@@ -712,7 +689,6 @@ bindBakedLightmap_set_hdr
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the lightmap can capture light values greater than @1.0@. Turning this off will result in a smaller file size.
 set_hdr ::
           (BakedLightmap :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hdr cls arg1
@@ -728,7 +704,7 @@ instance NodeMethod BakedLightmap "set_hdr" '[Bool] (IO ()) where
 
 {-# NOINLINE bindBakedLightmap_set_image_path #-}
 
--- | The location where lightmaps will be saved.
+-- | Deprecated, in previous versions it determined the location where lightmaps were be saved.
 bindBakedLightmap_set_image_path :: MethodBind
 bindBakedLightmap_set_image_path
   = unsafePerformIO $
@@ -738,7 +714,7 @@ bindBakedLightmap_set_image_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The location where lightmaps will be saved.
+-- | Deprecated, in previous versions it determined the location where lightmaps were be saved.
 set_image_path ::
                  (BakedLightmap :< cls, Object :< cls) =>
                  cls -> GodotString -> IO ()
@@ -789,7 +765,6 @@ instance NodeMethod BakedLightmap "set_light_data"
 
 {-# NOINLINE bindBakedLightmap_set_propagation #-}
 
--- | Defines how far the light will travel before it is no longer effective. The higher the number, the farther the light will travel. For instance, if the value is set to 2, the light will go twice as far. If the value is set to 0.5, the light will only go half as far.
 bindBakedLightmap_set_propagation :: MethodBind
 bindBakedLightmap_set_propagation
   = unsafePerformIO $
@@ -799,7 +774,6 @@ bindBakedLightmap_set_propagation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines how far the light will travel before it is no longer effective. The higher the number, the farther the light will travel. For instance, if the value is set to 2, the light will go twice as far. If the value is set to 0.5, the light will only go half as far.
 set_propagation ::
                   (BakedLightmap :< cls, Object :< cls) => cls -> Float -> IO ()
 set_propagation cls arg1

@@ -25,7 +25,7 @@ import Godot.Core.Reference()
 
 {-# NOINLINE bindEditorInspectorPlugin_add_custom_control #-}
 
--- | Adds a custom control, not necessarily a property editor.
+-- | Adds a custom control, which is not necessarily a property editor.
 bindEditorInspectorPlugin_add_custom_control :: MethodBind
 bindEditorInspectorPlugin_add_custom_control
   = unsafePerformIO $
@@ -35,7 +35,7 @@ bindEditorInspectorPlugin_add_custom_control
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a custom control, not necessarily a property editor.
+-- | Adds a custom control, which is not necessarily a property editor.
 add_custom_control ::
                      (EditorInspectorPlugin :< cls, Object :< cls) =>
                      cls -> Control -> IO ()
@@ -56,7 +56,7 @@ instance NodeMethod EditorInspectorPlugin "add_custom_control"
 
 {-# NOINLINE bindEditorInspectorPlugin_add_property_editor #-}
 
--- | Adds a property editor, this must inherit @EditorProperty@.
+-- | Adds a property editor for an individual property. The @editor@ control must extend @EditorProperty@.
 bindEditorInspectorPlugin_add_property_editor :: MethodBind
 bindEditorInspectorPlugin_add_property_editor
   = unsafePerformIO $
@@ -66,7 +66,7 @@ bindEditorInspectorPlugin_add_property_editor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a property editor, this must inherit @EditorProperty@.
+-- | Adds a property editor for an individual property. The @editor@ control must extend @EditorProperty@.
 add_property_editor ::
                       (EditorInspectorPlugin :< cls, Object :< cls) =>
                       cls -> GodotString -> Control -> IO ()
@@ -89,7 +89,7 @@ instance NodeMethod EditorInspectorPlugin "add_property_editor"
 {-# NOINLINE bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
              #-}
 
--- | Adds an editor that allows modifying multiple properties, this must inherit @EditorProperty@.
+-- | Adds an editor that allows modifying multiple properties. The @editor@ control must extend @EditorProperty@.
 bindEditorInspectorPlugin_add_property_editor_for_multiple_properties ::
                                                                       MethodBind
 bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
@@ -100,7 +100,7 @@ bindEditorInspectorPlugin_add_property_editor_for_multiple_properties
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an editor that allows modifying multiple properties, this must inherit @EditorProperty@.
+-- | Adds an editor that allows modifying multiple properties. The @editor@ control must extend @EditorProperty@.
 add_property_editor_for_multiple_properties ::
                                               (EditorInspectorPlugin :< cls, Object :< cls) =>
                                               cls ->

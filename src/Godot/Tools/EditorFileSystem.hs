@@ -36,7 +36,7 @@ sig_filesystem_changed
 
 instance NodeSignal EditorFileSystem "filesystem_changed" '[]
 
--- | Remitted if a resource is reimported.
+-- | Emitted if a resource is reimported.
 sig_resources_reimported ::
                          Godot.Internal.Dispatch.Signal EditorFileSystem
 sig_resources_reimported
@@ -64,7 +64,7 @@ instance NodeSignal EditorFileSystem "sources_changed" '[Bool]
 
 {-# NOINLINE bindEditorFileSystem_get_file_type #-}
 
--- | Gets the type of the file, given the full path.
+-- | Returns the resource type of the file, given the full path. This returns a string such as @"Resource"@ or @"GDScript"@, @i@not@/i@ a file extension such as @".gd"@.
 bindEditorFileSystem_get_file_type :: MethodBind
 bindEditorFileSystem_get_file_type
   = unsafePerformIO $
@@ -74,7 +74,7 @@ bindEditorFileSystem_get_file_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the type of the file, given the full path.
+-- | Returns the resource type of the file, given the full path. This returns a string such as @"Resource"@ or @"GDScript"@, @i@not@/i@ a file extension such as @".gd"@.
 get_file_type ::
                 (EditorFileSystem :< cls, Object :< cls) =>
                 cls -> GodotString -> IO GodotString

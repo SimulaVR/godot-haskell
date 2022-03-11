@@ -187,7 +187,7 @@ instance NodeMethod AudioStreamPlayer2D "_set_playing" '[Bool]
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_area_mask #-}
 
--- | Areas in which this sound plays.
+-- | Determines which @Area2D@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 bindAudioStreamPlayer2D_get_area_mask :: MethodBind
 bindAudioStreamPlayer2D_get_area_mask
   = unsafePerformIO $
@@ -197,7 +197,7 @@ bindAudioStreamPlayer2D_get_area_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Areas in which this sound plays.
+-- | Determines which @Area2D@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 get_area_mask ::
                 (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Int
 get_area_mask cls
@@ -594,7 +594,7 @@ instance NodeMethod AudioStreamPlayer2D "seek" '[Float] (IO ())
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_area_mask #-}
 
--- | Areas in which this sound plays.
+-- | Determines which @Area2D@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 bindAudioStreamPlayer2D_set_area_mask :: MethodBind
 bindAudioStreamPlayer2D_set_area_mask
   = unsafePerformIO $
@@ -604,7 +604,7 @@ bindAudioStreamPlayer2D_set_area_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Areas in which this sound plays.
+-- | Determines which @Area2D@ layers affect the sound for reverb and audio bus effects. Areas can be used to redirect @AudioStream@s so that they play in a certain audio bus. An example of how you might use this is making a "water" area so that sounds played in the water are redirected through an audio bus to make them sound like they are being played underwater.
 set_area_mask ::
                 (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_area_mask cls arg1

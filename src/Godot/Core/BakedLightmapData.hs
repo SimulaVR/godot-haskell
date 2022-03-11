@@ -253,6 +253,8 @@ instance NodeMethod BakedLightmapData "get_cell_subdiv" '[]
 
 {-# NOINLINE bindBakedLightmapData_get_energy #-}
 
+-- | Global energy multiplier for baked and dynamic capture objects. This can be changed at run-time without having to bake lightmaps again.
+--   			To adjust only the energy of indirect lighting (without affecting direct lighting or emissive materials), adjust @BakedLightmap.bounce_indirect_energy@ and bake lightmaps again.
 bindBakedLightmapData_get_energy :: MethodBind
 bindBakedLightmapData_get_energy
   = unsafePerformIO $
@@ -262,6 +264,8 @@ bindBakedLightmapData_get_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Global energy multiplier for baked and dynamic capture objects. This can be changed at run-time without having to bake lightmaps again.
+--   			To adjust only the energy of indirect lighting (without affecting direct lighting or emissive materials), adjust @BakedLightmap.bounce_indirect_energy@ and bake lightmaps again.
 get_energy ::
              (BakedLightmapData :< cls, Object :< cls) => cls -> IO Float
 get_energy cls
@@ -472,6 +476,8 @@ instance NodeMethod BakedLightmapData "set_cell_subdiv" '[Int]
 
 {-# NOINLINE bindBakedLightmapData_set_energy #-}
 
+-- | Global energy multiplier for baked and dynamic capture objects. This can be changed at run-time without having to bake lightmaps again.
+--   			To adjust only the energy of indirect lighting (without affecting direct lighting or emissive materials), adjust @BakedLightmap.bounce_indirect_energy@ and bake lightmaps again.
 bindBakedLightmapData_set_energy :: MethodBind
 bindBakedLightmapData_set_energy
   = unsafePerformIO $
@@ -481,6 +487,8 @@ bindBakedLightmapData_set_energy
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Global energy multiplier for baked and dynamic capture objects. This can be changed at run-time without having to bake lightmaps again.
+--   			To adjust only the energy of indirect lighting (without affecting direct lighting or emissive materials), adjust @BakedLightmap.bounce_indirect_energy@ and bake lightmaps again.
 set_energy ::
              (BakedLightmapData :< cls, Object :< cls) => cls -> Float -> IO ()
 set_energy cls arg1

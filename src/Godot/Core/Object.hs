@@ -576,7 +576,8 @@ instance NodeMethod Object "emit_signal"
 
 {-# NOINLINE bindObject_free #-}
 
--- | Deletes the object from memory. Any pre-existing reference to the freed object will become invalid, e.g. @is_instance_valid(object)@ will return @false@.
+-- | Deletes the object from memory immediately. For @Node@s, you may want to use @method Node.queue_free@ to queue the node for safe deletion at the end of the current frame.
+--   				__Important:__ If you have a variable pointing to an object, it will @i@not@/i@ be assigned to @null@ once the object is freed. Instead, it will point to a @i@previously freed instance@/i@ and you should validate it with @method @GDScript.is_instance_valid@ before attempting to call its methods or access its properties.
 bindObject_free :: MethodBind
 bindObject_free
   = unsafePerformIO $
@@ -586,7 +587,8 @@ bindObject_free
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deletes the object from memory. Any pre-existing reference to the freed object will become invalid, e.g. @is_instance_valid(object)@ will return @false@.
+-- | Deletes the object from memory immediately. For @Node@s, you may want to use @method Node.queue_free@ to queue the node for safe deletion at the end of the current frame.
+--   				__Important:__ If you have a variable pointing to an object, it will @i@not@/i@ be assigned to @null@ once the object is freed. Instead, it will point to a @i@previously freed instance@/i@ and you should validate it with @method @GDScript.is_instance_valid@ before attempting to call its methods or access its properties.
 free :: (Object :< cls, Object :< cls) => cls -> IO ()
 free cls
   = withVariantArray []
@@ -627,7 +629,8 @@ instance NodeMethod Object "get" '[GodotString] (IO GodotVariant)
 
 {-# NOINLINE bindObject_get_class #-}
 
--- | Returns the object's class as a @String@.
+-- | Returns the object's class as a @String@. See also @method is_class@.
+--   				__Note:__ @method get_class@ does not take @class_name@ declarations into account. If the object has a @class_name@ defined, the base class name will be returned instead.
 bindObject_get_class :: MethodBind
 bindObject_get_class
   = unsafePerformIO $
@@ -637,7 +640,8 @@ bindObject_get_class
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the object's class as a @String@.
+-- | Returns the object's class as a @String@. See also @method is_class@.
+--   				__Note:__ @method get_class@ does not take @class_name@ declarations into account. If the object has a @class_name@ defined, the base class name will be returned instead.
 get_class ::
             (Object :< cls, Object :< cls) => cls -> IO GodotString
 get_class cls
@@ -689,6 +693,7 @@ instance NodeMethod Object "get_incoming_connections" '[]
 {-# NOINLINE bindObject_get_indexed #-}
 
 -- | Gets the object's property indexed by the given @NodePath@. The node path should be relative to the current object and can use the colon character (@:@) to access nested properties. Examples: @"position:x"@ or @"material:next_pass:blend_mode"@.
+--   				__Note:__ Even though the method takes @NodePath@ argument, it doesn't support actual paths to @Node@s in the scene tree, only colon-separated sub-property paths. For the purpose of nodes, use @method Node.get_node_and_resource@ instead.
 bindObject_get_indexed :: MethodBind
 bindObject_get_indexed
   = unsafePerformIO $
@@ -699,6 +704,7 @@ bindObject_get_indexed
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Gets the object's property indexed by the given @NodePath@. The node path should be relative to the current object and can use the colon character (@:@) to access nested properties. Examples: @"position:x"@ or @"material:next_pass:blend_mode"@.
+--   				__Note:__ Even though the method takes @NodePath@ argument, it doesn't support actual paths to @Node@s in the scene tree, only colon-separated sub-property paths. For the purpose of nodes, use @method Node.get_node_and_resource@ instead.
 get_indexed ::
               (Object :< cls, Object :< cls) =>
               cls -> NodePath -> IO GodotVariant
@@ -1036,7 +1042,8 @@ instance NodeMethod Object "is_blocking_signals" '[] (IO Bool)
 
 {-# NOINLINE bindObject_is_class #-}
 
--- | Returns @true@ if the object inherits from the given @class@.
+-- | Returns @true@ if the object inherits from the given @class@. See also @method get_class@.
+--   				__Note:__ @method is_class@ does not take @class_name@ declarations into account. If the object has a @class_name@ defined, @method is_class@ will return @false@ for that name.
 bindObject_is_class :: MethodBind
 bindObject_is_class
   = unsafePerformIO $
@@ -1046,7 +1053,8 @@ bindObject_is_class
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the object inherits from the given @class@.
+-- | Returns @true@ if the object inherits from the given @class@. See also @method get_class@.
+--   				__Note:__ @method is_class@ does not take @class_name@ declarations into account. If the object has a @class_name@ defined, @method is_class@ will return @false@ for that name.
 is_class ::
            (Object :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_class cls arg1
@@ -1203,7 +1211,7 @@ instance NodeMethod Object "remove_meta" '[GodotString] (IO ())
 
 {-# NOINLINE bindObject_set #-}
 
--- | Assigns a new value to the given property. If the @property@ does not exist, nothing will happen.
+-- | Assigns a new value to the given property. If the @property@ does not exist or the given value's type doesn't match, nothing will happen.
 --   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_set :: MethodBind
 bindObject_set
@@ -1214,7 +1222,7 @@ bindObject_set
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Assigns a new value to the given property. If the @property@ does not exist, nothing will happen.
+-- | Assigns a new value to the given property. If the @property@ does not exist or the given value's type doesn't match, nothing will happen.
 --   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 set ::
       (Object :< cls, Object :< cls) =>

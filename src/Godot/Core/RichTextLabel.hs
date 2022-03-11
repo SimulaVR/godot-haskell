@@ -386,6 +386,7 @@ instance NodeMethod RichTextLabel "add_text" '[GodotString] (IO ())
 {-# NOINLINE bindRichTextLabel_append_bbcode #-}
 
 -- | Parses @bbcode@ and adds tags to the tag stack as needed. Returns the result of the parsing, @OK@ if successful.
+--   				__Note:__ Using this method, you can't close a tag that was opened in a previous @method append_bbcode@ call. This is done to improve performance, especially when updating large RichTextLabels since rebuilding the whole BBCode every time would be slower. If you absolutely need to close a tag in a future method call, append the @bbcode_text@ instead of using @method append_bbcode@.
 bindRichTextLabel_append_bbcode :: MethodBind
 bindRichTextLabel_append_bbcode
   = unsafePerformIO $
@@ -396,6 +397,7 @@ bindRichTextLabel_append_bbcode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Parses @bbcode@ and adds tags to the tag stack as needed. Returns the result of the parsing, @OK@ if successful.
+--   				__Note:__ Using this method, you can't close a tag that was opened in a previous @method append_bbcode@ call. This is done to improve performance, especially when updating large RichTextLabels since rebuilding the whole BBCode every time would be slower. If you absolutely need to close a tag in a future method call, append the @bbcode_text@ instead of using @method append_bbcode@.
 append_bbcode ::
                 (RichTextLabel :< cls, Object :< cls) =>
                 cls -> GodotString -> IO Int
@@ -439,7 +441,7 @@ instance NodeMethod RichTextLabel "clear" '[] (IO ()) where
 {-# NOINLINE bindRichTextLabel_get_bbcode #-}
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
---   			__Note:__ It is unadvised to use @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. Use @method append_bbcode@ for adding text instead.
+--   			__Note:__ It is unadvised to use the @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. It will also erase all BBCode that was added to stack using @push_*@ methods. Use @method append_bbcode@ for adding text instead, unless you absolutely need to close a tag that was opened in an earlier method call.
 bindRichTextLabel_get_bbcode :: MethodBind
 bindRichTextLabel_get_bbcode
   = unsafePerformIO $
@@ -450,7 +452,7 @@ bindRichTextLabel_get_bbcode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
---   			__Note:__ It is unadvised to use @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. Use @method append_bbcode@ for adding text instead.
+--   			__Note:__ It is unadvised to use the @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. It will also erase all BBCode that was added to stack using @push_*@ methods. Use @method append_bbcode@ for adding text instead, unless you absolutely need to close a tag that was opened in an earlier method call.
 get_bbcode ::
              (RichTextLabel :< cls, Object :< cls) => cls -> IO GodotString
 get_bbcode cls
@@ -668,6 +670,7 @@ instance NodeMethod RichTextLabel "get_total_character_count" '[]
 {-# NOINLINE bindRichTextLabel_get_v_scroll #-}
 
 -- | Returns the vertical scrollbar.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindRichTextLabel_get_v_scroll :: MethodBind
 bindRichTextLabel_get_v_scroll
   = unsafePerformIO $
@@ -678,6 +681,7 @@ bindRichTextLabel_get_v_scroll
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the vertical scrollbar.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_v_scroll ::
                (RichTextLabel :< cls, Object :< cls) => cls -> IO VScrollBar
 get_v_scroll cls
@@ -696,6 +700,7 @@ instance NodeMethod RichTextLabel "get_v_scroll" '[]
 {-# NOINLINE bindRichTextLabel_get_visible_characters #-}
 
 -- | The restricted number of characters to display in the label. If @-1@, all characters will be displayed.
+--   			__Note:__ Setting this property updates @percent_visible@ based on current @method get_total_character_count@.
 bindRichTextLabel_get_visible_characters :: MethodBind
 bindRichTextLabel_get_visible_characters
   = unsafePerformIO $
@@ -706,6 +711,7 @@ bindRichTextLabel_get_visible_characters
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The restricted number of characters to display in the label. If @-1@, all characters will be displayed.
+--   			__Note:__ Setting this property updates @percent_visible@ based on current @method get_total_character_count@.
 get_visible_characters ::
                          (RichTextLabel :< cls, Object :< cls) => cls -> IO Int
 get_visible_characters cls
@@ -933,6 +939,7 @@ instance NodeMethod RichTextLabel "is_selection_enabled" '[]
 {-# NOINLINE bindRichTextLabel_is_using_bbcode #-}
 
 -- | If @true@, the label uses BBCode formatting.
+--   			__Note:__ Trying to alter the @RichTextLabel@'s text with @method add_text@ will reset this to @false@. Use instead @method append_bbcode@ to preserve BBCode formatting.
 bindRichTextLabel_is_using_bbcode :: MethodBind
 bindRichTextLabel_is_using_bbcode
   = unsafePerformIO $
@@ -943,6 +950,7 @@ bindRichTextLabel_is_using_bbcode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the label uses BBCode formatting.
+--   			__Note:__ Trying to alter the @RichTextLabel@'s text with @method add_text@ will reset this to @false@. Use instead @method append_bbcode@ to preserve BBCode formatting.
 is_using_bbcode ::
                   (RichTextLabel :< cls, Object :< cls) => cls -> IO Bool
 is_using_bbcode cls
@@ -1526,7 +1534,7 @@ instance NodeMethod RichTextLabel "scroll_to_line" '[Int] (IO ())
 {-# NOINLINE bindRichTextLabel_set_bbcode #-}
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
---   			__Note:__ It is unadvised to use @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. Use @method append_bbcode@ for adding text instead.
+--   			__Note:__ It is unadvised to use the @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. It will also erase all BBCode that was added to stack using @push_*@ methods. Use @method append_bbcode@ for adding text instead, unless you absolutely need to close a tag that was opened in an earlier method call.
 bindRichTextLabel_set_bbcode :: MethodBind
 bindRichTextLabel_set_bbcode
   = unsafePerformIO $
@@ -1537,7 +1545,7 @@ bindRichTextLabel_set_bbcode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The label's text in BBCode format. Is not representative of manual modifications to the internal tag stack. Erases changes made by other methods when edited.
---   			__Note:__ It is unadvised to use @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. Use @method append_bbcode@ for adding text instead.
+--   			__Note:__ It is unadvised to use the @+=@ operator with @bbcode_text@ (e.g. @bbcode_text += "some string"@) as it replaces the whole text and can cause slowdowns. It will also erase all BBCode that was added to stack using @push_*@ methods. Use @method append_bbcode@ for adding text instead, unless you absolutely need to close a tag that was opened in an earlier method call.
 set_bbcode ::
              (RichTextLabel :< cls, Object :< cls) =>
              cls -> GodotString -> IO ()
@@ -1858,6 +1866,7 @@ instance NodeMethod RichTextLabel "set_text" '[GodotString] (IO ())
 {-# NOINLINE bindRichTextLabel_set_use_bbcode #-}
 
 -- | If @true@, the label uses BBCode formatting.
+--   			__Note:__ Trying to alter the @RichTextLabel@'s text with @method add_text@ will reset this to @false@. Use instead @method append_bbcode@ to preserve BBCode formatting.
 bindRichTextLabel_set_use_bbcode :: MethodBind
 bindRichTextLabel_set_use_bbcode
   = unsafePerformIO $
@@ -1868,6 +1877,7 @@ bindRichTextLabel_set_use_bbcode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the label uses BBCode formatting.
+--   			__Note:__ Trying to alter the @RichTextLabel@'s text with @method add_text@ will reset this to @false@. Use instead @method append_bbcode@ to preserve BBCode formatting.
 set_use_bbcode ::
                  (RichTextLabel :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_bbcode cls arg1
@@ -1886,6 +1896,7 @@ instance NodeMethod RichTextLabel "set_use_bbcode" '[Bool] (IO ())
 {-# NOINLINE bindRichTextLabel_set_visible_characters #-}
 
 -- | The restricted number of characters to display in the label. If @-1@, all characters will be displayed.
+--   			__Note:__ Setting this property updates @percent_visible@ based on current @method get_total_character_count@.
 bindRichTextLabel_set_visible_characters :: MethodBind
 bindRichTextLabel_set_visible_characters
   = unsafePerformIO $
@@ -1896,6 +1907,7 @@ bindRichTextLabel_set_visible_characters
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The restricted number of characters to display in the label. If @-1@, all characters will be displayed.
+--   			__Note:__ Setting this property updates @percent_visible@ based on current @method get_total_character_count@.
 set_visible_characters ::
                          (RichTextLabel :< cls, Object :< cls) => cls -> Int -> IO ()
 set_visible_characters cls arg1

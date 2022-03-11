@@ -1194,7 +1194,7 @@ instance NodeMethod TextEdit "get_breakpoints" '[] (IO Array) where
 
 {-# NOINLINE bindTextEdit_get_h_scroll #-}
 
--- | The current horizontal scroll value.
+-- | If there is a horizontal scrollbar, this determines the current horizontal scroll value in pixels.
 bindTextEdit_get_h_scroll :: MethodBind
 bindTextEdit_get_h_scroll
   = unsafePerformIO $
@@ -1204,7 +1204,7 @@ bindTextEdit_get_h_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The current horizontal scroll value.
+-- | If there is a horizontal scrollbar, this determines the current horizontal scroll value in pixels.
 get_h_scroll :: (TextEdit :< cls, Object :< cls) => cls -> IO Int
 get_h_scroll cls
   = withVariantArray []
@@ -1299,6 +1299,7 @@ instance NodeMethod TextEdit "get_line_count" '[] (IO Int) where
 {-# NOINLINE bindTextEdit_get_menu #-}
 
 -- | Returns the @PopupMenu@ of this @TextEdit@. By default, this menu is displayed when right-clicking on the @TextEdit@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindTextEdit_get_menu :: MethodBind
 bindTextEdit_get_menu
   = unsafePerformIO $
@@ -1309,6 +1310,7 @@ bindTextEdit_get_menu
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @PopupMenu@ of this @TextEdit@. By default, this menu is displayed when right-clicking on the @TextEdit@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_menu :: (TextEdit :< cls, Object :< cls) => cls -> IO PopupMenu
 get_menu cls
   = withVariantArray []
@@ -1514,7 +1516,7 @@ instance NodeMethod TextEdit "get_text" '[] (IO GodotString) where
 
 {-# NOINLINE bindTextEdit_get_v_scroll #-}
 
--- | The current vertical scroll value.
+-- | If there is a vertical scrollbar, this determines the current vertical scroll value in line numbers, starting at 0 for the top line.
 bindTextEdit_get_v_scroll :: MethodBind
 bindTextEdit_get_v_scroll
   = unsafePerformIO $
@@ -1524,7 +1526,7 @@ bindTextEdit_get_v_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The current vertical scroll value.
+-- | If there is a vertical scrollbar, this determines the current vertical scroll value in line numbers, starting at 0 for the top line.
 get_v_scroll :: (TextEdit :< cls, Object :< cls) => cls -> IO Float
 get_v_scroll cls
   = withVariantArray []
@@ -1566,7 +1568,7 @@ instance NodeMethod TextEdit "get_v_scroll_speed" '[] (IO Float)
 
 {-# NOINLINE bindTextEdit_get_word_under_cursor #-}
 
--- | Returns a @String@ text with the word under the mouse cursor location.
+-- | Returns a @String@ text with the word under the caret (text cursor) location.
 bindTextEdit_get_word_under_cursor :: MethodBind
 bindTextEdit_get_word_under_cursor
   = unsafePerformIO $
@@ -1576,7 +1578,7 @@ bindTextEdit_get_word_under_cursor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a @String@ text with the word under the mouse cursor location.
+-- | Returns a @String@ text with the word under the caret (text cursor) location.
 get_word_under_cursor ::
                         (TextEdit :< cls, Object :< cls) => cls -> IO GodotString
 get_word_under_cursor cls
@@ -2588,7 +2590,7 @@ instance NodeMethod TextEdit "set_draw_tabs" '[Bool] (IO ()) where
 
 {-# NOINLINE bindTextEdit_set_h_scroll #-}
 
--- | The current horizontal scroll value.
+-- | If there is a horizontal scrollbar, this determines the current horizontal scroll value in pixels.
 bindTextEdit_set_h_scroll :: MethodBind
 bindTextEdit_set_h_scroll
   = unsafePerformIO $
@@ -2598,7 +2600,7 @@ bindTextEdit_set_h_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The current horizontal scroll value.
+-- | If there is a horizontal scrollbar, this determines the current horizontal scroll value in pixels.
 set_h_scroll ::
                (TextEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_h_scroll cls arg1
@@ -3015,7 +3017,7 @@ instance NodeMethod TextEdit "set_text" '[GodotString] (IO ())
 
 {-# NOINLINE bindTextEdit_set_v_scroll #-}
 
--- | The current vertical scroll value.
+-- | If there is a vertical scrollbar, this determines the current vertical scroll value in line numbers, starting at 0 for the top line.
 bindTextEdit_set_v_scroll :: MethodBind
 bindTextEdit_set_v_scroll
   = unsafePerformIO $
@@ -3025,7 +3027,7 @@ bindTextEdit_set_v_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The current vertical scroll value.
+-- | If there is a vertical scrollbar, this determines the current vertical scroll value in line numbers, starting at 0 for the top line.
 set_v_scroll ::
                (TextEdit :< cls, Object :< cls) => cls -> Float -> IO ()
 set_v_scroll cls arg1

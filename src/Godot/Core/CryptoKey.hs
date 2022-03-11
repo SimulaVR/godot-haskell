@@ -17,7 +17,8 @@ import Godot.Core.Resource()
 
 {-# NOINLINE bindCryptoKey_load #-}
 
--- | Loads a key from @path@ ("*.key" file).
+-- | Loads a key from @path@. If @public_only@ is @true@, only the public key will be loaded.
+--   				__Note:__ @path@ should be a "*.pub" file if @public_only@ is @true@, a "*.key" file otherwise.
 bindCryptoKey_load :: MethodBind
 bindCryptoKey_load
   = unsafePerformIO $
@@ -27,7 +28,8 @@ bindCryptoKey_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads a key from @path@ ("*.key" file).
+-- | Loads a key from @path@. If @public_only@ is @true@, only the public key will be loaded.
+--   				__Note:__ @path@ should be a "*.pub" file if @public_only@ is @true@, a "*.key" file otherwise.
 load ::
        (CryptoKey :< cls, Object :< cls) => cls -> GodotString -> IO Int
 load cls arg1
@@ -41,7 +43,8 @@ instance NodeMethod CryptoKey "load" '[GodotString] (IO Int) where
 
 {-# NOINLINE bindCryptoKey_save #-}
 
--- | Saves a key to the given @path@ (should be a "*.key" file).
+-- | Saves a key to the given @path@. If @public_only@ is @true@, only the public key will be saved.
+--   				__Note:__ @path@ should be a "*.pub" file if @public_only@ is @true@, a "*.key" file otherwise.
 bindCryptoKey_save :: MethodBind
 bindCryptoKey_save
   = unsafePerformIO $
@@ -51,7 +54,8 @@ bindCryptoKey_save
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves a key to the given @path@ (should be a "*.key" file).
+-- | Saves a key to the given @path@. If @public_only@ is @true@, only the public key will be saved.
+--   				__Note:__ @path@ should be a "*.pub" file if @public_only@ is @true@, a "*.key" file otherwise.
 save ::
        (CryptoKey :< cls, Object :< cls) => cls -> GodotString -> IO Int
 save cls arg1

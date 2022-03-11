@@ -331,7 +331,8 @@ instance NodeMethod SpriteBase3D "get_item_rect" '[] (IO Rect2)
 
 {-# NOINLINE bindSpriteBase3D_get_modulate #-}
 
--- | A color value that gets multiplied on, could be used for mood-coloring or to simulate the color of light.
+-- | A color value used to @i@multiply@/i@ the texture's colors. Can be used for mood-coloring or to simulate the color of light.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the color defined in @modulate@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALBEDO *= COLOR.rgb;@/color@ must be inserted in the shader's @fragment()@ function.
 bindSpriteBase3D_get_modulate :: MethodBind
 bindSpriteBase3D_get_modulate
   = unsafePerformIO $
@@ -341,7 +342,8 @@ bindSpriteBase3D_get_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A color value that gets multiplied on, could be used for mood-coloring or to simulate the color of light.
+-- | A color value used to @i@multiply@/i@ the texture's colors. Can be used for mood-coloring or to simulate the color of light.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the color defined in @modulate@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALBEDO *= COLOR.rgb;@/color@ must be inserted in the shader's @fragment()@ function.
 get_modulate ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> IO Color
 get_modulate cls
@@ -385,7 +387,8 @@ instance NodeMethod SpriteBase3D "get_offset" '[] (IO Vector2)
 
 {-# NOINLINE bindSpriteBase3D_get_opacity #-}
 
--- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
+-- | The texture's visibility on a scale from @0@ (fully invisible) to @1@ (fully visible). @opacity@ is a multiplier for the @modulate@ color's alpha channel.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the opacity defined in @opacity@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALPHA *= COLOR.a;@/color@ must be inserted in the shader's @fragment()@ function.
 bindSpriteBase3D_get_opacity :: MethodBind
 bindSpriteBase3D_get_opacity
   = unsafePerformIO $
@@ -395,7 +398,8 @@ bindSpriteBase3D_get_opacity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
+-- | The texture's visibility on a scale from @0@ (fully invisible) to @1@ (fully visible). @opacity@ is a multiplier for the @modulate@ color's alpha channel.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the opacity defined in @opacity@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALPHA *= COLOR.a;@/color@ must be inserted in the shader's @fragment()@ function.
 get_opacity ::
               (SpriteBase3D :< cls, Object :< cls) => cls -> IO Float
 get_opacity cls
@@ -703,7 +707,8 @@ instance NodeMethod SpriteBase3D "set_flip_v" '[Bool] (IO ()) where
 
 {-# NOINLINE bindSpriteBase3D_set_modulate #-}
 
--- | A color value that gets multiplied on, could be used for mood-coloring or to simulate the color of light.
+-- | A color value used to @i@multiply@/i@ the texture's colors. Can be used for mood-coloring or to simulate the color of light.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the color defined in @modulate@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALBEDO *= COLOR.rgb;@/color@ must be inserted in the shader's @fragment()@ function.
 bindSpriteBase3D_set_modulate :: MethodBind
 bindSpriteBase3D_set_modulate
   = unsafePerformIO $
@@ -713,7 +718,8 @@ bindSpriteBase3D_set_modulate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A color value that gets multiplied on, could be used for mood-coloring or to simulate the color of light.
+-- | A color value used to @i@multiply@/i@ the texture's colors. Can be used for mood-coloring or to simulate the color of light.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the color defined in @modulate@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALBEDO *= COLOR.rgb;@/color@ must be inserted in the shader's @fragment()@ function.
 set_modulate ::
                (SpriteBase3D :< cls, Object :< cls) => cls -> Color -> IO ()
 set_modulate cls arg1
@@ -757,7 +763,8 @@ instance NodeMethod SpriteBase3D "set_offset" '[Vector2] (IO ())
 
 {-# NOINLINE bindSpriteBase3D_set_opacity #-}
 
--- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
+-- | The texture's visibility on a scale from @0@ (fully invisible) to @1@ (fully visible). @opacity@ is a multiplier for the @modulate@ color's alpha channel.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the opacity defined in @opacity@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALPHA *= COLOR.a;@/color@ must be inserted in the shader's @fragment()@ function.
 bindSpriteBase3D_set_opacity :: MethodBind
 bindSpriteBase3D_set_opacity
   = unsafePerformIO $
@@ -767,7 +774,8 @@ bindSpriteBase3D_set_opacity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The objects visibility on a scale from @0@ fully invisible to @1@ fully visible.
+-- | The texture's visibility on a scale from @0@ (fully invisible) to @1@ (fully visible). @opacity@ is a multiplier for the @modulate@ color's alpha channel.
+--   			__Note:__ If a @GeometryInstance.material_override@ is defined on the @SpriteBase3D@, the material override must be configured to take vertex colors into account for albedo. Otherwise, the opacity defined in @opacity@ will be ignored. For a @SpatialMaterial@, @SpatialMaterial.vertex_color_use_as_albedo@ must be @true@. For a @ShaderMaterial@, @ALPHA *= COLOR.a;@/color@ must be inserted in the shader's @fragment()@ function.
 set_opacity ::
               (SpriteBase3D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_opacity cls arg1

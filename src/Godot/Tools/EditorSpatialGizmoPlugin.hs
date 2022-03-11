@@ -159,6 +159,7 @@ instance NodeMethod EditorSpatialGizmoPlugin "create_gizmo"
              #-}
 
 -- | Creates a handle material with its variants (selected and/or editable) and adds them to the internal material list. They can then be accessed with @method get_material@ and used in @method EditorSpatialGizmo.add_handles@. Should not be overridden.
+--   				You can optionally provide a texture to use instead of the default icon.
 bindEditorSpatialGizmoPlugin_create_handle_material :: MethodBind
 bindEditorSpatialGizmoPlugin_create_handle_material
   = unsafePerformIO $
@@ -169,6 +170,7 @@ bindEditorSpatialGizmoPlugin_create_handle_material
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Creates a handle material with its variants (selected and/or editable) and adds them to the internal material list. They can then be accessed with @method get_material@ and used in @method EditorSpatialGizmo.add_handles@. Should not be overridden.
+--   				You can optionally provide a texture to use instead of the default icon.
 create_handle_material ::
                          (EditorSpatialGizmoPlugin :< cls, Object :< cls) =>
                          cls -> GodotString -> Maybe Bool -> IO ()
@@ -487,7 +489,7 @@ instance NodeMethod EditorSpatialGizmoPlugin
 {-# NOINLINE bindEditorSpatialGizmoPlugin_is_selectable_when_hidden
              #-}
 
--- | Override this method to define whether Spatial with this gizmo should be selecteble even when the gizmo is hidden.
+-- | Override this method to define whether a Spatial with this gizmo should be selectable even when the gizmo is hidden.
 bindEditorSpatialGizmoPlugin_is_selectable_when_hidden ::
                                                        MethodBind
 bindEditorSpatialGizmoPlugin_is_selectable_when_hidden
@@ -498,7 +500,7 @@ bindEditorSpatialGizmoPlugin_is_selectable_when_hidden
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override this method to define whether Spatial with this gizmo should be selecteble even when the gizmo is hidden.
+-- | Override this method to define whether a Spatial with this gizmo should be selectable even when the gizmo is hidden.
 is_selectable_when_hidden ::
                             (EditorSpatialGizmoPlugin :< cls, Object :< cls) => cls -> IO Bool
 is_selectable_when_hidden cls

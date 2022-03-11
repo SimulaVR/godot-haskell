@@ -81,6 +81,7 @@ instance NodeMethod WindowDialog "_gui_input" '[InputEvent] (IO ())
 {-# NOINLINE bindWindowDialog_get_close_button #-}
 
 -- | Returns the close @TextureButton@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindWindowDialog_get_close_button :: MethodBind
 bindWindowDialog_get_close_button
   = unsafePerformIO $
@@ -91,6 +92,7 @@ bindWindowDialog_get_close_button
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the close @TextureButton@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_close_button ::
                    (WindowDialog :< cls, Object :< cls) => cls -> IO TextureButton
 get_close_button cls

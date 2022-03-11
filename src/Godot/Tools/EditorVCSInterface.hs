@@ -390,7 +390,7 @@ instance NodeMethod EditorVCSInterface "get_file_diff"
 
 {-# NOINLINE bindEditorVCSInterface_get_modified_files_data #-}
 
--- | Returns a @Dictionary@ containing the path of the detected file change mapped to an integer signifying what kind of a change the corresponding file has experienced.
+-- | Returns a @Dictionary@ containing the path of the detected file change mapped to an integer signifying what kind of change the corresponding file has experienced.
 --   				The following integer values are being used to signify that the detected file is:
 --   				- @0@: New to the VCS working directory
 --   				- @1@: Modified
@@ -406,7 +406,7 @@ bindEditorVCSInterface_get_modified_files_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a @Dictionary@ containing the path of the detected file change mapped to an integer signifying what kind of a change the corresponding file has experienced.
+-- | Returns a @Dictionary@ containing the path of the detected file change mapped to an integer signifying what kind of change the corresponding file has experienced.
 --   				The following integer values are being used to signify that the detected file is:
 --   				- @0@: New to the VCS working directory
 --   				- @1@: Modified

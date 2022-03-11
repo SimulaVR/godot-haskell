@@ -355,6 +355,7 @@ instance NodeMethod TabContainer "get_drag_to_rearrange_enabled"
 {-# NOINLINE bindTabContainer_get_popup #-}
 
 -- | Returns the @Popup@ node instance if one has been set already with @method set_popup@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindTabContainer_get_popup :: MethodBind
 bindTabContainer_get_popup
   = unsafePerformIO $
@@ -365,6 +366,7 @@ bindTabContainer_get_popup
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @Popup@ node instance if one has been set already with @method set_popup@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_popup ::
             (TabContainer :< cls, Object :< cls) => cls -> IO Popup
 get_popup cls
@@ -747,8 +749,7 @@ instance NodeMethod TabContainer "set_tab_align" '[Int] (IO ())
 
 {-# NOINLINE bindTabContainer_set_tab_disabled #-}
 
--- | If @disabled@ is @false@, hides the tab at index @tab_idx@.
---   				__Note:__ Its title text will remain, unless also removed with @method set_tab_title@.
+-- | If @disabled@ is @true@, disables the tab at index @tab_idx@, making it non-interactable.
 bindTabContainer_set_tab_disabled :: MethodBind
 bindTabContainer_set_tab_disabled
   = unsafePerformIO $
@@ -758,8 +759,7 @@ bindTabContainer_set_tab_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @disabled@ is @false@, hides the tab at index @tab_idx@.
---   				__Note:__ Its title text will remain, unless also removed with @method set_tab_title@.
+-- | If @disabled@ is @true@, disables the tab at index @tab_idx@, making it non-interactable.
 set_tab_disabled ::
                    (TabContainer :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_tab_disabled cls arg1 arg2
@@ -807,7 +807,7 @@ instance NodeMethod TabContainer "set_tab_icon" '[Int, Texture]
 
 {-# NOINLINE bindTabContainer_set_tab_title #-}
 
--- | Sets a title for the tab at index @tab_idx@. Tab titles default to the name of the indexed child node, but this can be overridden with @method set_tab_title@.
+-- | Sets a title for the tab at index @tab_idx@. Tab titles default to the name of the indexed child node.
 bindTabContainer_set_tab_title :: MethodBind
 bindTabContainer_set_tab_title
   = unsafePerformIO $
@@ -817,7 +817,7 @@ bindTabContainer_set_tab_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a title for the tab at index @tab_idx@. Tab titles default to the name of the indexed child node, but this can be overridden with @method set_tab_title@.
+-- | Sets a title for the tab at index @tab_idx@. Tab titles default to the name of the indexed child node.
 set_tab_title ::
                 (TabContainer :< cls, Object :< cls) =>
                 cls -> Int -> GodotString -> IO ()
@@ -837,7 +837,7 @@ instance NodeMethod TabContainer "set_tab_title"
 
 {-# NOINLINE bindTabContainer_set_tabs_rearrange_group #-}
 
--- | Defines rearrange group id, choose for each @TabContainer@ the same value to enable tab drag between @TabContainer@. Enable drag with @set_drag_to_rearrange_enabled(true)@.
+-- | Defines rearrange group id, choose for each @TabContainer@ the same value to enable tab drag between @TabContainer@. Enable drag with @drag_to_rearrange_enabled@.
 bindTabContainer_set_tabs_rearrange_group :: MethodBind
 bindTabContainer_set_tabs_rearrange_group
   = unsafePerformIO $
@@ -847,7 +847,7 @@ bindTabContainer_set_tabs_rearrange_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines rearrange group id, choose for each @TabContainer@ the same value to enable tab drag between @TabContainer@. Enable drag with @set_drag_to_rearrange_enabled(true)@.
+-- | Defines rearrange group id, choose for each @TabContainer@ the same value to enable tab drag between @TabContainer@. Enable drag with @drag_to_rearrange_enabled@.
 set_tabs_rearrange_group ::
                            (TabContainer :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tabs_rearrange_group cls arg1

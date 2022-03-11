@@ -39,7 +39,7 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Spatial()
 
--- | Emitted when @method _input_event@ receives an event. See its description for details.
+-- | Emitted when the object receives an unhandled @InputEvent@. @position@ is the location in world space of the mouse pointer on the surface of the shape with index @shape_idx@ and @normal@ is the normal vector of the surface at that point.
 sig_input_event :: Godot.Internal.Dispatch.Signal CollisionObject
 sig_input_event = Godot.Internal.Dispatch.Signal "input_event"
 
@@ -73,7 +73,7 @@ instance NodeProperty CollisionObject "input_ray_pickable" Bool
 
 {-# NOINLINE bindCollisionObject__input_event #-}
 
--- | Accepts unhandled @InputEvent@s. @click_position@ is the clicked location in world space and @click_normal@ is the normal vector extending from the clicked surface of the @Shape@ at @shape_idx@. Connect to the @input_event@ signal to easily pick up these events.
+-- | Receives unhandled @InputEvent@s. @position@ is the location in world space of the mouse pointer on the surface of the shape with index @shape_idx@ and @normal@ is the normal vector of the surface at that point. Connect to the @signal input_event@ signal to easily pick up these events.
 bindCollisionObject__input_event :: MethodBind
 bindCollisionObject__input_event
   = unsafePerformIO $
@@ -83,7 +83,7 @@ bindCollisionObject__input_event
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Accepts unhandled @InputEvent@s. @click_position@ is the clicked location in world space and @click_normal@ is the normal vector extending from the clicked surface of the @Shape@ at @shape_idx@. Connect to the @input_event@ signal to easily pick up these events.
+-- | Receives unhandled @InputEvent@s. @position@ is the location in world space of the mouse pointer on the surface of the shape with index @shape_idx@ and @normal@ is the normal vector of the surface at that point. Connect to the @signal input_event@ signal to easily pick up these events.
 _input_event ::
                (CollisionObject :< cls, Object :< cls) =>
                cls -> Object -> InputEvent -> Vector3 -> Vector3 -> Int -> IO ()
@@ -219,7 +219,7 @@ instance NodeMethod CollisionObject "get_shape_owners" '[]
 
 {-# NOINLINE bindCollisionObject_is_ray_pickable #-}
 
--- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
+-- | If @true@, this object is pickable. A pickable object can detect the mouse pointer entering/leaving, and if the mouse is inside it, report input events. Requires at least one @collision_layer@ bit to be set.
 bindCollisionObject_is_ray_pickable :: MethodBind
 bindCollisionObject_is_ray_pickable
   = unsafePerformIO $
@@ -229,7 +229,7 @@ bindCollisionObject_is_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
+-- | If @true@, this object is pickable. A pickable object can detect the mouse pointer entering/leaving, and if the mouse is inside it, report input events. Requires at least one @collision_layer@ bit to be set.
 is_ray_pickable ::
                   (CollisionObject :< cls, Object :< cls) => cls -> IO Bool
 is_ray_pickable cls
@@ -337,7 +337,7 @@ instance NodeMethod CollisionObject "set_capture_input_on_drag"
 
 {-# NOINLINE bindCollisionObject_set_ray_pickable #-}
 
--- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
+-- | If @true@, this object is pickable. A pickable object can detect the mouse pointer entering/leaving, and if the mouse is inside it, report input events. Requires at least one @collision_layer@ bit to be set.
 bindCollisionObject_set_ray_pickable :: MethodBind
 bindCollisionObject_set_ray_pickable
   = unsafePerformIO $
@@ -347,7 +347,7 @@ bindCollisionObject_set_ray_pickable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the @CollisionObject@'s shapes will respond to @RayCast@s.
+-- | If @true@, this object is pickable. A pickable object can detect the mouse pointer entering/leaving, and if the mouse is inside it, report input events. Requires at least one @collision_layer@ bit to be set.
 set_ray_pickable ::
                    (CollisionObject :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_ray_pickable cls arg1

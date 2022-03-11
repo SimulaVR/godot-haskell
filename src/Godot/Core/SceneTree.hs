@@ -453,7 +453,10 @@ instance NodeMethod SceneTree "_server_disconnected" '[] (IO ())
 
 {-# NOINLINE bindSceneTree_call_group #-}
 
--- | Calls @method@ on each member of the given group.
+-- | Calls @method@ on each member of the given group. You can pass arguments to @method@ by specifying them at the end of the method call. This method is equivalent of calling @method call_group_flags@ with @GROUP_CALL_DEFAULT@ flag.
+--   				__Note:__ @method@ may only have 5 arguments at most (7 arguments passed to this method in total).
+--   				__Note:__ Due to design limitations, @method call_group@ will fail silently if one of the arguments is @null@.
+--   				__Note:__ @method call_group@ will always call methods with an one-frame delay, in a way similar to @method Object.call_deferred@. To call methods immediately, use @method call_group_flags@ with the @GROUP_CALL_REALTIME@ flag.
 bindSceneTree_call_group :: MethodBind
 bindSceneTree_call_group
   = unsafePerformIO $
@@ -463,7 +466,10 @@ bindSceneTree_call_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls @method@ on each member of the given group.
+-- | Calls @method@ on each member of the given group. You can pass arguments to @method@ by specifying them at the end of the method call. This method is equivalent of calling @method call_group_flags@ with @GROUP_CALL_DEFAULT@ flag.
+--   				__Note:__ @method@ may only have 5 arguments at most (7 arguments passed to this method in total).
+--   				__Note:__ Due to design limitations, @method call_group@ will fail silently if one of the arguments is @null@.
+--   				__Note:__ @method call_group@ will always call methods with an one-frame delay, in a way similar to @method Object.call_deferred@. To call methods immediately, use @method call_group_flags@ with the @GROUP_CALL_REALTIME@ flag.
 call_group ::
              (SceneTree :< cls, Object :< cls) =>
              cls ->
@@ -483,7 +489,16 @@ instance NodeMethod SceneTree "call_group"
 
 {-# NOINLINE bindSceneTree_call_group_flags #-}
 
--- | Calls @method@ on each member of the given group, respecting the given @enum GroupCallFlags@.
+-- | Calls @method@ on each member of the given group, respecting the given @enum GroupCallFlags@. You can pass arguments to @method@ by specifying them at the end of the method call.
+--   				__Note:__ @method@ may only have 5 arguments at most (8 arguments passed to this method in total).
+--   				__Note:__ Due to design limitations, @method call_group_flags@ will fail silently if one of the arguments is @null@.
+--   				
+--   @
+--   
+--   				# Call the method immediately and in reverse order.
+--   				get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME | SceneTree.GROUP_CALL_REVERSE, "bases", "destroy")
+--   				
+--   @
 bindSceneTree_call_group_flags :: MethodBind
 bindSceneTree_call_group_flags
   = unsafePerformIO $
@@ -493,7 +508,16 @@ bindSceneTree_call_group_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls @method@ on each member of the given group, respecting the given @enum GroupCallFlags@.
+-- | Calls @method@ on each member of the given group, respecting the given @enum GroupCallFlags@. You can pass arguments to @method@ by specifying them at the end of the method call.
+--   				__Note:__ @method@ may only have 5 arguments at most (8 arguments passed to this method in total).
+--   				__Note:__ Due to design limitations, @method call_group_flags@ will fail silently if one of the arguments is @null@.
+--   				
+--   @
+--   
+--   				# Call the method immediately and in reverse order.
+--   				get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME | SceneTree.GROUP_CALL_REVERSE, "bases", "destroy")
+--   				
+--   @
 call_group_flags ::
                    (SceneTree :< cls, Object :< cls) =>
                    cls ->
@@ -518,6 +542,7 @@ instance NodeMethod SceneTree "call_group_flags"
 
 -- | Changes the running scene to the one at the given @path@, after loading it into a @PackedScene@ and creating a new instance.
 --   				Returns @OK@ on success, @ERR_CANT_OPEN@ if the @path@ cannot be loaded into a @PackedScene@, or @ERR_CANT_CREATE@ if that scene cannot be instantiated.
+--   				__Note:__ The scene change is deferred, which means that the new scene node is added on the next idle frame. You won't be able to access it immediately after the @method change_scene@ call.
 bindSceneTree_change_scene :: MethodBind
 bindSceneTree_change_scene
   = unsafePerformIO $
@@ -529,6 +554,7 @@ bindSceneTree_change_scene
 
 -- | Changes the running scene to the one at the given @path@, after loading it into a @PackedScene@ and creating a new instance.
 --   				Returns @OK@ on success, @ERR_CANT_OPEN@ if the @path@ cannot be loaded into a @PackedScene@, or @ERR_CANT_CREATE@ if that scene cannot be instantiated.
+--   				__Note:__ The scene change is deferred, which means that the new scene node is added on the next idle frame. You won't be able to access it immediately after the @method change_scene@ call.
 change_scene ::
                (SceneTree :< cls, Object :< cls) => cls -> GodotString -> IO Int
 change_scene cls arg1
@@ -548,6 +574,7 @@ instance NodeMethod SceneTree "change_scene" '[GodotString]
 
 -- | Changes the running scene to a new instance of the given @PackedScene@.
 --   				Returns @OK@ on success or @ERR_CANT_CREATE@ if the scene cannot be instantiated.
+--   				__Note:__ The scene change is deferred, which means that the new scene node is added on the next idle frame. You won't be able to access it immediately after the @method change_scene_to@ call.
 bindSceneTree_change_scene_to :: MethodBind
 bindSceneTree_change_scene_to
   = unsafePerformIO $
@@ -559,6 +586,7 @@ bindSceneTree_change_scene_to
 
 -- | Changes the running scene to a new instance of the given @PackedScene@.
 --   				Returns @OK@ on success or @ERR_CANT_CREATE@ if the scene cannot be instantiated.
+--   				__Note:__ The scene change is deferred, which means that the new scene node is added on the next idle frame. You won't be able to access it immediately after the @method change_scene_to@ call.
 change_scene_to ::
                   (SceneTree :< cls, Object :< cls) => cls -> PackedScene -> IO Int
 change_scene_to cls arg1
@@ -587,6 +615,8 @@ instance NodeMethod SceneTree "change_scene_to" '[PackedScene]
 --   				    print("end")
 --   				
 --   @
+--   
+--   				The timer will be automatically freed after its time elapses.
 bindSceneTree_create_timer :: MethodBind
 bindSceneTree_create_timer
   = unsafePerformIO $
@@ -607,6 +637,8 @@ bindSceneTree_create_timer
 --   				    print("end")
 --   				
 --   @
+--   
+--   				The timer will be automatically freed after its time elapses.
 create_timer ::
                (SceneTree :< cls, Object :< cls) =>
                cls -> Float -> Maybe Bool -> IO SceneTreeTimer
@@ -1122,7 +1154,7 @@ instance NodeMethod SceneTree "is_network_server" '[] (IO Bool)
 {-# NOINLINE bindSceneTree_is_paused #-}
 
 -- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
---   			- 2D and 3D physics will be stopped.
+--   			- 2D and 3D physics will be stopped. This includes signals and collision detection.
 --   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 bindSceneTree_is_paused :: MethodBind
 bindSceneTree_is_paused
@@ -1134,7 +1166,7 @@ bindSceneTree_is_paused
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
---   			- 2D and 3D physics will be stopped.
+--   			- 2D and 3D physics will be stopped. This includes signals and collision detection.
 --   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 is_paused :: (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_paused cls
@@ -1181,7 +1213,9 @@ instance NodeMethod SceneTree "is_refusing_new_network_connections"
 
 {-# NOINLINE bindSceneTree_is_using_font_oversampling #-}
 
--- | If @true@, font oversampling is used.
+-- | If @true@, font oversampling is enabled. This means that @DynamicFont@s will be rendered at higher or lower size than configured based on the viewport's scaling ratio. For example, in a viewport scaled with a factor 1.5, a font configured with size 14 would be rendered with size 21 (@14 * 1.5@).
+--   			__Note:__ Font oversampling is only used if the viewport stretch mode is @STRETCH_MODE_VIEWPORT@, and if the stretch aspect mode is different from @STRETCH_ASPECT_IGNORE@.
+--   			__Note:__ This property is set automatically for the active @SceneTree@ when the project starts based on the configuration of @rendering/quality/dynamic_fonts/use_oversampling@ in @ProjectSettings@. The property can however be overridden at runtime as needed.
 bindSceneTree_is_using_font_oversampling :: MethodBind
 bindSceneTree_is_using_font_oversampling
   = unsafePerformIO $
@@ -1191,7 +1225,9 @@ bindSceneTree_is_using_font_oversampling
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, font oversampling is used.
+-- | If @true@, font oversampling is enabled. This means that @DynamicFont@s will be rendered at higher or lower size than configured based on the viewport's scaling ratio. For example, in a viewport scaled with a factor 1.5, a font configured with size 14 would be rendered with size 21 (@14 * 1.5@).
+--   			__Note:__ Font oversampling is only used if the viewport stretch mode is @STRETCH_MODE_VIEWPORT@, and if the stretch aspect mode is different from @STRETCH_ASPECT_IGNORE@.
+--   			__Note:__ This property is set automatically for the active @SceneTree@ when the project starts based on the configuration of @rendering/quality/dynamic_fonts/use_oversampling@ in @ProjectSettings@. The property can however be overridden at runtime as needed.
 is_using_font_oversampling ::
                              (SceneTree :< cls, Object :< cls) => cls -> IO Bool
 is_using_font_oversampling cls
@@ -1297,7 +1333,8 @@ instance NodeMethod SceneTree "queue_delete" '[Object] (IO ())
 
 {-# NOINLINE bindSceneTree_quit #-}
 
--- | Quits the application. A process @exit_code@ can optionally be passed as an argument. If this argument is @0@ or greater, it will override the @OS.exit_code@ defined before quitting the application.
+-- | Quits the application at the end of the current iteration. A process @exit_code@ can optionally be passed as an argument. If this argument is @0@ or greater, it will override the @OS.exit_code@ defined before quitting the application.
+--   				__Note:__ On iOS this method doesn't work. Instead, as recommended by the iOS Human Interface Guidelines, the user is expected to close apps via the Home button.
 bindSceneTree_quit :: MethodBind
 bindSceneTree_quit
   = unsafePerformIO $
@@ -1307,7 +1344,8 @@ bindSceneTree_quit
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Quits the application. A process @exit_code@ can optionally be passed as an argument. If this argument is @0@ or greater, it will override the @OS.exit_code@ defined before quitting the application.
+-- | Quits the application at the end of the current iteration. A process @exit_code@ can optionally be passed as an argument. If this argument is @0@ or greater, it will override the @OS.exit_code@ defined before quitting the application.
+--   				__Note:__ On iOS this method doesn't work. Instead, as recommended by the iOS Human Interface Guidelines, the user is expected to close apps via the Home button.
 quit ::
        (SceneTree :< cls, Object :< cls) => cls -> Maybe Int -> IO ()
 quit cls arg1
@@ -1675,7 +1713,7 @@ instance NodeMethod SceneTree "set_network_peer"
 {-# NOINLINE bindSceneTree_set_pause #-}
 
 -- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
---   			- 2D and 3D physics will be stopped.
+--   			- 2D and 3D physics will be stopped. This includes signals and collision detection.
 --   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 bindSceneTree_set_pause :: MethodBind
 bindSceneTree_set_pause
@@ -1687,7 +1725,7 @@ bindSceneTree_set_pause
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the @SceneTree@ is paused. Doing so will have the following behavior:
---   			- 2D and 3D physics will be stopped.
+--   			- 2D and 3D physics will be stopped. This includes signals and collision detection.
 --   			- @method Node._process@, @method Node._physics_process@ and @method Node._input@ will not be called anymore in nodes.
 set_pause ::
             (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
@@ -1765,7 +1803,7 @@ instance NodeMethod SceneTree "set_refuse_new_network_connections"
 
 {-# NOINLINE bindSceneTree_set_screen_stretch #-}
 
--- | Configures screen stretching to the given @enum StretchMode@, @enum StretchAspect@, minimum size and @shrink@ ratio.
+-- | Configures screen stretching to the given @enum StretchMode@, @enum StretchAspect@, minimum size and @scale@.
 bindSceneTree_set_screen_stretch :: MethodBind
 bindSceneTree_set_screen_stretch
   = unsafePerformIO $
@@ -1775,7 +1813,7 @@ bindSceneTree_set_screen_stretch
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Configures screen stretching to the given @enum StretchMode@, @enum StretchAspect@, minimum size and @shrink@ ratio.
+-- | Configures screen stretching to the given @enum StretchMode@, @enum StretchAspect@, minimum size and @scale@.
 set_screen_stretch ::
                      (SceneTree :< cls, Object :< cls) =>
                      cls -> Int -> Int -> Vector2 -> Maybe Float -> IO ()
@@ -1798,7 +1836,9 @@ instance NodeMethod SceneTree "set_screen_stretch"
 
 {-# NOINLINE bindSceneTree_set_use_font_oversampling #-}
 
--- | If @true@, font oversampling is used.
+-- | If @true@, font oversampling is enabled. This means that @DynamicFont@s will be rendered at higher or lower size than configured based on the viewport's scaling ratio. For example, in a viewport scaled with a factor 1.5, a font configured with size 14 would be rendered with size 21 (@14 * 1.5@).
+--   			__Note:__ Font oversampling is only used if the viewport stretch mode is @STRETCH_MODE_VIEWPORT@, and if the stretch aspect mode is different from @STRETCH_ASPECT_IGNORE@.
+--   			__Note:__ This property is set automatically for the active @SceneTree@ when the project starts based on the configuration of @rendering/quality/dynamic_fonts/use_oversampling@ in @ProjectSettings@. The property can however be overridden at runtime as needed.
 bindSceneTree_set_use_font_oversampling :: MethodBind
 bindSceneTree_set_use_font_oversampling
   = unsafePerformIO $
@@ -1808,7 +1848,9 @@ bindSceneTree_set_use_font_oversampling
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, font oversampling is used.
+-- | If @true@, font oversampling is enabled. This means that @DynamicFont@s will be rendered at higher or lower size than configured based on the viewport's scaling ratio. For example, in a viewport scaled with a factor 1.5, a font configured with size 14 would be rendered with size 21 (@14 * 1.5@).
+--   			__Note:__ Font oversampling is only used if the viewport stretch mode is @STRETCH_MODE_VIEWPORT@, and if the stretch aspect mode is different from @STRETCH_ASPECT_IGNORE@.
+--   			__Note:__ This property is set automatically for the active @SceneTree@ when the project starts based on the configuration of @rendering/quality/dynamic_fonts/use_oversampling@ in @ProjectSettings@. The property can however be overridden at runtime as needed.
 set_use_font_oversampling ::
                             (SceneTree :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_font_oversampling cls arg1

@@ -229,9 +229,9 @@ instance NodeMethod Input "add_joy_mapping"
 
 {-# NOINLINE bindInput_get_accelerometer #-}
 
--- | Returns the acceleration of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+-- | Returns the acceleration of the device's accelerometer sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
 --   				Note this method returns an empty @Vector3@ when running from the editor even when your device has an accelerometer. You must export your project to a supported device to read values from the accelerometer.
---   				__Note:__ This method only works on iOS, Android, and UWP. On other platforms, it always returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on iOS, Android, and UWP. On other platforms, it always returns @Vector3.ZERO@. On Android the unit of measurement for each axis is m/s² while on iOS and UWP it's a multiple of the Earth's gravitational acceleration @g@ (~9.81 m/s²).
 bindInput_get_accelerometer :: MethodBind
 bindInput_get_accelerometer
   = unsafePerformIO $
@@ -241,9 +241,9 @@ bindInput_get_accelerometer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the acceleration of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+-- | Returns the acceleration of the device's accelerometer sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
 --   				Note this method returns an empty @Vector3@ when running from the editor even when your device has an accelerometer. You must export your project to a supported device to read values from the accelerometer.
---   				__Note:__ This method only works on iOS, Android, and UWP. On other platforms, it always returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on iOS, Android, and UWP. On other platforms, it always returns @Vector3.ZERO@. On Android the unit of measurement for each axis is m/s² while on iOS and UWP it's a multiple of the Earth's gravitational acceleration @g@ (~9.81 m/s²).
 get_accelerometer ::
                     (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_accelerometer cls
@@ -261,6 +261,7 @@ instance NodeMethod Input "get_accelerometer" '[] (IO Vector3)
 {-# NOINLINE bindInput_get_action_strength #-}
 
 -- | Returns a value between 0 and 1 representing the intensity of the given action. In a joypad, for example, the further away the axis (analog sticks or L2, R2 triggers) is from the dead zone, the closer the value will be to 1. If the action is mapped to a control that has no axis as the keyboard, the value returned will be 0 or 1.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 bindInput_get_action_strength :: MethodBind
 bindInput_get_action_strength
   = unsafePerformIO $
@@ -271,6 +272,7 @@ bindInput_get_action_strength
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a value between 0 and 1 representing the intensity of the given action. In a joypad, for example, the further away the axis (analog sticks or L2, R2 triggers) is from the dead zone, the closer the value will be to 1. If the action is mapped to a control that has no axis as the keyboard, the value returned will be 0 or 1.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 get_action_strength ::
                       (Input :< cls, Object :< cls) => cls -> GodotString -> IO Float
 get_action_strength cls arg1
@@ -343,8 +345,8 @@ instance NodeMethod Input "get_current_cursor_shape" '[] (IO Int)
 
 {-# NOINLINE bindInput_get_gravity #-}
 
--- | Returns the gravity of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@.
+-- | Returns the gravity of the device's accelerometer sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@. On Android the unit of measurement for each axis is m/s² while on iOS it's a multiple of the Earth's gravitational acceleration @g@ (~9.81 m/s²).
 bindInput_get_gravity :: MethodBind
 bindInput_get_gravity
   = unsafePerformIO $
@@ -354,8 +356,8 @@ bindInput_get_gravity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the gravity of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@.
+-- | Returns the gravity of the device's accelerometer sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@. On Android the unit of measurement for each axis is m/s² while on iOS it's a multiple of the Earth's gravitational acceleration @g@ (~9.81 m/s²).
 get_gravity :: (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_gravity cls
   = withVariantArray []
@@ -369,8 +371,8 @@ instance NodeMethod Input "get_gravity" '[] (IO Vector3) where
 
 {-# NOINLINE bindInput_get_gyroscope #-}
 
--- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android. On other platforms, it always returns @Vector3.ZERO@.
+-- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@.
 bindInput_get_gyroscope :: MethodBind
 bindInput_get_gyroscope
   = unsafePerformIO $
@@ -380,8 +382,8 @@ bindInput_get_gyroscope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android. On other platforms, it always returns @Vector3.ZERO@.
+-- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@.
 get_gyroscope :: (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_gyroscope cls
   = withVariantArray []
@@ -674,8 +676,8 @@ instance NodeMethod Input "get_last_mouse_speed" '[] (IO Vector2)
 
 {-# NOINLINE bindInput_get_magnetometer #-}
 
--- | Returns the the magnetic field strength in micro-Tesla for all axes of the device's magnetometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and UWP. On other platforms, it always returns @Vector3.ZERO@.
+-- | Returns the magnetic field strength in micro-Tesla for all axes of the device's magnetometer sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on Android, iOS and UWP. On other platforms, it always returns @Vector3.ZERO@.
 bindInput_get_magnetometer :: MethodBind
 bindInput_get_magnetometer
   = unsafePerformIO $
@@ -685,8 +687,8 @@ bindInput_get_magnetometer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the the magnetic field strength in micro-Tesla for all axes of the device's magnetometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and UWP. On other platforms, it always returns @Vector3.ZERO@.
+-- | Returns the magnetic field strength in micro-Tesla for all axes of the device's magnetometer sensor, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+--   				__Note:__ This method only works on Android, iOS and UWP. On other platforms, it always returns @Vector3.ZERO@.
 get_magnetometer ::
                    (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_magnetometer cls
@@ -755,6 +757,8 @@ instance NodeMethod Input "get_mouse_mode" '[] (IO Int) where
 
 -- | Returns @true@ when the user starts pressing the action event, meaning it's @true@ only on the frame that the user pressed down the button.
 --   				This is useful for code that needs to run only once when an action is pressed, instead of every frame while it's pressed.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_just_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 bindInput_is_action_just_pressed :: MethodBind
 bindInput_is_action_just_pressed
   = unsafePerformIO $
@@ -766,6 +770,8 @@ bindInput_is_action_just_pressed
 
 -- | Returns @true@ when the user starts pressing the action event, meaning it's @true@ only on the frame that the user pressed down the button.
 --   				This is useful for code that needs to run only once when an action is pressed, instead of every frame while it's pressed.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_just_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 is_action_just_pressed ::
                          (Input :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_action_just_pressed cls arg1
@@ -785,6 +791,7 @@ instance NodeMethod Input "is_action_just_pressed" '[GodotString]
 {-# NOINLINE bindInput_is_action_just_released #-}
 
 -- | Returns @true@ when the user stops pressing the action event, meaning it's @true@ only on the frame that the user released the button.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 bindInput_is_action_just_released :: MethodBind
 bindInput_is_action_just_released
   = unsafePerformIO $
@@ -795,6 +802,7 @@ bindInput_is_action_just_released
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ when the user stops pressing the action event, meaning it's @true@ only on the frame that the user released the button.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 is_action_just_released ::
                           (Input :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_action_just_released cls arg1
@@ -814,6 +822,8 @@ instance NodeMethod Input "is_action_just_released" '[GodotString]
 {-# NOINLINE bindInput_is_action_pressed #-}
 
 -- | Returns @true@ if you are pressing the action event. Note that if an action has multiple buttons assigned and more than one of them is pressed, releasing one button will release the action, even if some other button assigned to this action is still pressed.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 bindInput_is_action_pressed :: MethodBind
 bindInput_is_action_pressed
   = unsafePerformIO $
@@ -824,6 +834,8 @@ bindInput_is_action_pressed
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ if you are pressing the action event. Note that if an action has multiple buttons assigned and more than one of them is pressed, releasing one button will release the action, even if some other button assigned to this action is still pressed.
+--   				If @exact@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 is_action_pressed ::
                     (Input :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_action_pressed cls arg1
@@ -894,7 +906,9 @@ instance NodeMethod Input "is_joy_known" '[Int] (IO Bool) where
 
 {-# NOINLINE bindInput_is_key_pressed #-}
 
--- | Returns @true@ if you are pressing the key. You can pass a @enum KeyList@ constant.
+-- | Returns @true@ if you are pressing the key in the current keyboard layout. You can pass a @enum KeyList@ constant.
+--   				@method is_key_pressed@ is only recommended over @method is_physical_key_pressed@ in non-game applications. This ensures that shortcut keys behave as expected depending on the user's keyboard layout, as keyboard shortcuts are generally dependent on the keyboard layout in non-game applications. If in doubt, use @method is_physical_key_pressed@.
+--   				__Note:__ Due to keyboard ghosting, @method is_key_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 bindInput_is_key_pressed :: MethodBind
 bindInput_is_key_pressed
   = unsafePerformIO $
@@ -904,7 +918,9 @@ bindInput_is_key_pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if you are pressing the key. You can pass a @enum KeyList@ constant.
+-- | Returns @true@ if you are pressing the key in the current keyboard layout. You can pass a @enum KeyList@ constant.
+--   				@method is_key_pressed@ is only recommended over @method is_physical_key_pressed@ in non-game applications. This ensures that shortcut keys behave as expected depending on the user's keyboard layout, as keyboard shortcuts are generally dependent on the keyboard layout in non-game applications. If in doubt, use @method is_physical_key_pressed@.
+--   				__Note:__ Due to keyboard ghosting, @method is_key_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 is_key_pressed ::
                  (Input :< cls, Object :< cls) => cls -> Int -> IO Bool
 is_key_pressed cls arg1
@@ -1248,7 +1264,7 @@ instance NodeMethod Input "stop_joy_vibration" '[Int] (IO ()) where
 {-# NOINLINE bindInput_vibrate_handheld #-}
 
 -- | Vibrate Android and iOS devices.
---   				__Note:__ It needs VIBRATE permission for Android at export settings. iOS does not support duration.
+--   				__Note:__ It needs @VIBRATE@ permission for Android at export settings. iOS does not support duration.
 bindInput_vibrate_handheld :: MethodBind
 bindInput_vibrate_handheld
   = unsafePerformIO $
@@ -1259,7 +1275,7 @@ bindInput_vibrate_handheld
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Vibrate Android and iOS devices.
---   				__Note:__ It needs VIBRATE permission for Android at export settings. iOS does not support duration.
+--   				__Note:__ It needs @VIBRATE@ permission for Android at export settings. iOS does not support duration.
 vibrate_handheld ::
                    (Input :< cls, Object :< cls) => cls -> Maybe Int -> IO ()
 vibrate_handheld cls arg1
@@ -1276,7 +1292,8 @@ instance NodeMethod Input "vibrate_handheld" '[Maybe Int] (IO ())
 
 {-# NOINLINE bindInput_warp_mouse_position #-}
 
--- | Sets the mouse position to the specified vector.
+-- | Sets the mouse position to the specified vector, provided in pixels and relative to an origin at the upper left corner of the game window.
+--   				Mouse position is clipped to the limits of the screen resolution, or to the limits of the game window if @enum MouseMode@ is set to @MOUSE_MODE_CONFINED@.
 bindInput_warp_mouse_position :: MethodBind
 bindInput_warp_mouse_position
   = unsafePerformIO $
@@ -1286,7 +1303,8 @@ bindInput_warp_mouse_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the mouse position to the specified vector.
+-- | Sets the mouse position to the specified vector, provided in pixels and relative to an origin at the upper left corner of the game window.
+--   				Mouse position is clipped to the limits of the screen resolution, or to the limits of the game window if @enum MouseMode@ is set to @MOUSE_MODE_CONFINED@.
 warp_mouse_position ::
                       (Input :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 warp_mouse_position cls arg1

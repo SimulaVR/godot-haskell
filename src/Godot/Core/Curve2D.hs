@@ -258,7 +258,7 @@ instance NodeMethod Curve2D "get_closest_offset" '[Vector2]
 
 {-# NOINLINE bindCurve2D_get_closest_point #-}
 
--- | Returns the closest point (in curve's local space) to @to_point@.
+-- | Returns the closest baked point (in curve's local space) to @to_point@.
 --   				@to_point@ must be in this curve's local space.
 bindCurve2D_get_closest_point :: MethodBind
 bindCurve2D_get_closest_point
@@ -269,7 +269,7 @@ bindCurve2D_get_closest_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the closest point (in curve's local space) to @to_point@.
+-- | Returns the closest baked point (in curve's local space) to @to_point@.
 --   				@to_point@ must be in this curve's local space.
 get_closest_point ::
                     (Curve2D :< cls, Object :< cls) => cls -> Vector2 -> IO Vector2
@@ -313,7 +313,7 @@ instance NodeMethod Curve2D "get_point_count" '[] (IO Int) where
 
 {-# NOINLINE bindCurve2D_get_point_in #-}
 
--- | Returns the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
+-- | Returns the position of the control point leading to the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
 bindCurve2D_get_point_in :: MethodBind
 bindCurve2D_get_point_in
   = unsafePerformIO $
@@ -323,7 +323,7 @@ bindCurve2D_get_point_in
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
+-- | Returns the position of the control point leading to the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
 get_point_in ::
                (Curve2D :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_point_in cls arg1
@@ -339,7 +339,7 @@ instance NodeMethod Curve2D "get_point_in" '[Int] (IO Vector2)
 
 {-# NOINLINE bindCurve2D_get_point_out #-}
 
--- | Returns the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
+-- | Returns the position of the control point leading out of the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
 bindCurve2D_get_point_out :: MethodBind
 bindCurve2D_get_point_out
   = unsafePerformIO $
@@ -349,7 +349,7 @@ bindCurve2D_get_point_out
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
+-- | Returns the position of the control point leading out of the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0)@.
 get_point_out ::
                 (Curve2D :< cls, Object :< cls) => cls -> Int -> IO Vector2
 get_point_out cls arg1
@@ -537,7 +537,7 @@ instance NodeMethod Curve2D "set_bake_interval" '[Float] (IO ())
 
 {-# NOINLINE bindCurve2D_set_point_in #-}
 
--- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 bindCurve2D_set_point_in :: MethodBind
 bindCurve2D_set_point_in
   = unsafePerformIO $
@@ -547,7 +547,7 @@ bindCurve2D_set_point_in
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 set_point_in ::
                (Curve2D :< cls, Object :< cls) => cls -> Int -> Vector2 -> IO ()
 set_point_in cls arg1 arg2
@@ -563,7 +563,7 @@ instance NodeMethod Curve2D "set_point_in" '[Int, Vector2] (IO ())
 
 {-# NOINLINE bindCurve2D_set_point_out #-}
 
--- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 bindCurve2D_set_point_out :: MethodBind
 bindCurve2D_set_point_out
   = unsafePerformIO $
@@ -573,7 +573,7 @@ bindCurve2D_set_point_out
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 set_point_out ::
                 (Curve2D :< cls, Object :< cls) => cls -> Int -> Vector2 -> IO ()
 set_point_out cls arg1 arg2

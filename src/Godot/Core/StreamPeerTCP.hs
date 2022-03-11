@@ -183,7 +183,7 @@ instance NodeMethod StreamPeerTCP "get_status" '[] (IO Int) where
 
 {-# NOINLINE bindStreamPeerTCP_is_connected_to_host #-}
 
--- | Returns @true@ if this peer is currently connected to a host, @false@ otherwise.
+-- | Returns @true@ if this peer is currently connected or is connecting to a host, @false@ otherwise.
 bindStreamPeerTCP_is_connected_to_host :: MethodBind
 bindStreamPeerTCP_is_connected_to_host
   = unsafePerformIO $
@@ -193,7 +193,7 @@ bindStreamPeerTCP_is_connected_to_host
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if this peer is currently connected to a host, @false@ otherwise.
+-- | Returns @true@ if this peer is currently connected or is connecting to a host, @false@ otherwise.
 is_connected_to_host ::
                        (StreamPeerTCP :< cls, Object :< cls) => cls -> IO Bool
 is_connected_to_host cls
@@ -212,8 +212,8 @@ instance NodeMethod StreamPeerTCP "is_connected_to_host" '[]
 
 {-# NOINLINE bindStreamPeerTCP_set_no_delay #-}
 
--- | Disables Nagle's algorithm to improve latency for small packets.
---   				__Note:__ For applications that send large packets or need to transfer a lot of data, this can decrease the total available bandwidth.
+-- | If @enabled@ is @true@, packets will be sent immediately. If @enabled@ is @false@ (the default), packet transfers will be delayed and combined using @url=https://en.wikipedia.org/wiki/Nagle%27s_algorithm@Nagle's algorithm@/url@.
+--   				__Note:__ It's recommended to leave this disabled for applications that send large packets or need to transfer a lot of data, as enabling this can decrease the total available bandwidth.
 bindStreamPeerTCP_set_no_delay :: MethodBind
 bindStreamPeerTCP_set_no_delay
   = unsafePerformIO $
@@ -223,8 +223,8 @@ bindStreamPeerTCP_set_no_delay
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Disables Nagle's algorithm to improve latency for small packets.
---   				__Note:__ For applications that send large packets or need to transfer a lot of data, this can decrease the total available bandwidth.
+-- | If @enabled@ is @true@, packets will be sent immediately. If @enabled@ is @false@ (the default), packet transfers will be delayed and combined using @url=https://en.wikipedia.org/wiki/Nagle%27s_algorithm@Nagle's algorithm@/url@.
+--   				__Note:__ It's recommended to leave this disabled for applications that send large packets or need to transfer a lot of data, as enabling this can decrease the total available bandwidth.
 set_no_delay ::
                (StreamPeerTCP :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_no_delay cls arg1

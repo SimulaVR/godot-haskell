@@ -165,7 +165,7 @@ instance NodeMethod Font "get_height" '[] (IO Float) where
 
 {-# NOINLINE bindFont_get_string_size #-}
 
--- | Returns the size of a string, taking kerning and advance into account.
+-- | Returns the size of a string, taking kerning and advance into account. Note that the height returned is the font height (see @method get_height@) and has no relation to the string.
 bindFont_get_string_size :: MethodBind
 bindFont_get_string_size
   = unsafePerformIO $
@@ -175,7 +175,7 @@ bindFont_get_string_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the size of a string, taking kerning and advance into account.
+-- | Returns the size of a string, taking kerning and advance into account. Note that the height returned is the font height (see @method get_height@) and has no relation to the string.
 get_string_size ::
                   (Font :< cls, Object :< cls) => cls -> GodotString -> IO Vector2
 get_string_size cls arg1

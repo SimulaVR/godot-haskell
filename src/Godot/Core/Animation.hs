@@ -467,7 +467,7 @@ instance NodeMethod Animation "audio_track_set_key_start_offset"
 
 {-# NOINLINE bindAnimation_audio_track_set_key_stream #-}
 
--- | Sets the stream of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
+-- | Sets the stream of the key identified by @key_idx@ to value @stream@. The @track_idx@ must be the index of an Audio Track.
 bindAnimation_audio_track_set_key_stream :: MethodBind
 bindAnimation_audio_track_set_key_stream
   = unsafePerformIO $
@@ -477,7 +477,7 @@ bindAnimation_audio_track_set_key_stream
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the stream of the key identified by @key_idx@ to value @offset@. The @track_idx@ must be the index of an Audio Track.
+-- | Sets the stream of the key identified by @key_idx@ to value @stream@. The @track_idx@ must be the index of an Audio Track.
 audio_track_set_key_stream ::
                              (Animation :< cls, Object :< cls) =>
                              cls -> Int -> Int -> Resource -> IO ()
@@ -906,7 +906,7 @@ instance NodeMethod Animation "get_track_count" '[] (IO Int) where
 
 {-# NOINLINE bindAnimation_has_loop #-}
 
--- | A flag indicating that the animation must loop. This is uses for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
+-- | A flag indicating that the animation must loop. This is used for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
 bindAnimation_has_loop :: MethodBind
 bindAnimation_has_loop
   = unsafePerformIO $
@@ -916,7 +916,7 @@ bindAnimation_has_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A flag indicating that the animation must loop. This is uses for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
+-- | A flag indicating that the animation must loop. This is used for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
 has_loop :: (Animation :< cls, Object :< cls) => cls -> IO Bool
 has_loop cls
   = withVariantArray []
@@ -1073,7 +1073,7 @@ instance NodeMethod Animation "set_length" '[Float] (IO ()) where
 
 {-# NOINLINE bindAnimation_set_loop #-}
 
--- | A flag indicating that the animation must loop. This is uses for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
+-- | A flag indicating that the animation must loop. This is used for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
 bindAnimation_set_loop :: MethodBind
 bindAnimation_set_loop
   = unsafePerformIO $
@@ -1083,7 +1083,7 @@ bindAnimation_set_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A flag indicating that the animation must loop. This is uses for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
+-- | A flag indicating that the animation must loop. This is used for correct interpolation of animation cycles, and for hinting the player that it must restart the animation.
 set_loop ::
            (Animation :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_loop cls arg1
@@ -1821,7 +1821,7 @@ instance NodeMethod Animation "track_set_key_value"
 
 {-# NOINLINE bindAnimation_track_set_path #-}
 
--- | Sets the path of a track. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by @":"@.
+-- | Sets the path of a track. Paths must be valid scene-tree paths to a node and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by @":"@.
 --   				For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
 bindAnimation_track_set_path :: MethodBind
 bindAnimation_track_set_path
@@ -1832,7 +1832,7 @@ bindAnimation_track_set_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the path of a track. Paths must be valid scene-tree paths to a node, and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by @":"@.
+-- | Sets the path of a track. Paths must be valid scene-tree paths to a node and must be specified starting from the parent node of the node that will reproduce the animation. Tracks that control properties or bones must append their name after the path, separated by @":"@.
 --   				For example, @"character/skeleton:ankle"@ or @"character/mesh:transform/local"@.
 track_set_path ::
                  (Animation :< cls, Object :< cls) =>

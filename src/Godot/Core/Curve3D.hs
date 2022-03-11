@@ -329,7 +329,7 @@ instance NodeMethod Curve3D "get_closest_offset" '[Vector3]
 
 {-# NOINLINE bindCurve3D_get_closest_point #-}
 
--- | Returns the closest point (in curve's local space) to @to_point@.
+-- | Returns the closest baked point (in curve's local space) to @to_point@.
 --   				@to_point@ must be in this curve's local space.
 bindCurve3D_get_closest_point :: MethodBind
 bindCurve3D_get_closest_point
@@ -340,7 +340,7 @@ bindCurve3D_get_closest_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the closest point (in curve's local space) to @to_point@.
+-- | Returns the closest baked point (in curve's local space) to @to_point@.
 --   				@to_point@ must be in this curve's local space.
 get_closest_point ::
                     (Curve3D :< cls, Object :< cls) => cls -> Vector3 -> IO Vector3
@@ -384,7 +384,7 @@ instance NodeMethod Curve3D "get_point_count" '[] (IO Int) where
 
 {-# NOINLINE bindCurve3D_get_point_in #-}
 
--- | Returns the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
+-- | Returns the position of the control point leading to the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
 bindCurve3D_get_point_in :: MethodBind
 bindCurve3D_get_point_in
   = unsafePerformIO $
@@ -394,7 +394,7 @@ bindCurve3D_get_point_in
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
+-- | Returns the position of the control point leading to the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
 get_point_in ::
                (Curve3D :< cls, Object :< cls) => cls -> Int -> IO Vector3
 get_point_in cls arg1
@@ -410,7 +410,7 @@ instance NodeMethod Curve3D "get_point_in" '[Int] (IO Vector3)
 
 {-# NOINLINE bindCurve3D_get_point_out #-}
 
--- | Returns the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
+-- | Returns the position of the control point leading out of the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
 bindCurve3D_get_point_out :: MethodBind
 bindCurve3D_get_point_out
   = unsafePerformIO $
@@ -420,7 +420,7 @@ bindCurve3D_get_point_out
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
+-- | Returns the position of the control point leading out of the vertex @idx@. The returned position is relative to the vertex @idx@. If the index is out of bounds, the function sends an error to the console, and returns @(0, 0, 0)@.
 get_point_out ::
                 (Curve3D :< cls, Object :< cls) => cls -> Int -> IO Vector3
 get_point_out cls arg1
@@ -522,7 +522,7 @@ instance NodeMethod Curve3D "interpolate" '[Int, Float]
 
 {-# NOINLINE bindCurve3D_interpolate_baked #-}
 
--- | Returns a point within the curve at position @offset@, where @offset@ is measured as a pixel distance along the curve.
+-- | Returns a point within the curve at position @offset@, where @offset@ is measured as a distance in 3D units along the curve.
 --   				To do that, it finds the two cached points where the @offset@ lies between, then interpolates the values. This interpolation is cubic if @cubic@ is set to @true@, or linear if set to @false@.
 --   				Cubic interpolation tends to follow the curves better, but linear is faster (and often, precise enough).
 bindCurve3D_interpolate_baked :: MethodBind
@@ -534,7 +534,7 @@ bindCurve3D_interpolate_baked
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a point within the curve at position @offset@, where @offset@ is measured as a pixel distance along the curve.
+-- | Returns a point within the curve at position @offset@, where @offset@ is measured as a distance in 3D units along the curve.
 --   				To do that, it finds the two cached points where the @offset@ lies between, then interpolates the values. This interpolation is cubic if @cubic@ is set to @true@, or linear if set to @false@.
 --   				Cubic interpolation tends to follow the curves better, but linear is faster (and often, precise enough).
 interpolate_baked ::
@@ -699,7 +699,7 @@ instance NodeMethod Curve3D "set_bake_interval" '[Float] (IO ())
 
 {-# NOINLINE bindCurve3D_set_point_in #-}
 
--- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 bindCurve3D_set_point_in :: MethodBind
 bindCurve3D_set_point_in
   = unsafePerformIO $
@@ -709,7 +709,7 @@ bindCurve3D_set_point_in
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading to the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 set_point_in ::
                (Curve3D :< cls, Object :< cls) => cls -> Int -> Vector3 -> IO ()
 set_point_in cls arg1 arg2
@@ -725,7 +725,7 @@ instance NodeMethod Curve3D "set_point_in" '[Int, Vector3] (IO ())
 
 {-# NOINLINE bindCurve3D_set_point_out #-}
 
--- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 bindCurve3D_set_point_out :: MethodBind
 bindCurve3D_set_point_out
   = unsafePerformIO $
@@ -735,7 +735,7 @@ bindCurve3D_set_point_out
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console.
+-- | Sets the position of the control point leading out of the vertex @idx@. If the index is out of bounds, the function sends an error to the console. The position is relative to the vertex.
 set_point_out ::
                 (Curve3D :< cls, Object :< cls) => cls -> Int -> Vector3 -> IO ()
 set_point_out cls arg1 arg2

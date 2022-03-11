@@ -1821,7 +1821,6 @@ instance NodeMethod PhysicsServer "body_get_collision_layer" '[Rid]
 {-# NOINLINE bindPhysicsServer_body_get_collision_mask #-}
 
 -- | Returns the physics layer or layers a body can collide with.
---   -
 bindPhysicsServer_body_get_collision_mask :: MethodBind
 bindPhysicsServer_body_get_collision_mask
   = unsafePerformIO $
@@ -1832,7 +1831,6 @@ bindPhysicsServer_body_get_collision_mask
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the physics layer or layers a body can collide with.
---   -
 body_get_collision_mask ::
                           (PhysicsServer :< cls, Object :< cls) => cls -> Rid -> IO Int
 body_get_collision_mask cls arg1
@@ -1851,7 +1849,7 @@ instance NodeMethod PhysicsServer "body_get_collision_mask" '[Rid]
 
 {-# NOINLINE bindPhysicsServer_body_get_direct_state #-}
 
--- | Returns the @PhysicsDirectBodyState@ of the body.
+-- | Returns the @PhysicsDirectBodyState@ of the body. Returns @null@ if the body is destroyed or removed from the physics space.
 bindPhysicsServer_body_get_direct_state :: MethodBind
 bindPhysicsServer_body_get_direct_state
   = unsafePerformIO $
@@ -1861,7 +1859,7 @@ bindPhysicsServer_body_get_direct_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the @PhysicsDirectBodyState@ of the body.
+-- | Returns the @PhysicsDirectBodyState@ of the body. Returns @null@ if the body is destroyed or removed from the physics space.
 body_get_direct_state ::
                         (PhysicsServer :< cls, Object :< cls) =>
                         cls -> Rid -> IO PhysicsDirectBodyState

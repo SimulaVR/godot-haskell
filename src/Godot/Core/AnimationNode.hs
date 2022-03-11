@@ -55,7 +55,7 @@ _FILTER_PASS = 1
 _FILTER_STOP :: Int
 _FILTER_STOP = 2
 
--- | Called when the node was removed from the graph.
+-- | Emitted when the node was removed from the graph.
 sig_removed_from_graph ::
                        Godot.Internal.Dispatch.Signal AnimationNode
 sig_removed_from_graph
@@ -556,7 +556,7 @@ instance NodeMethod AnimationNode "is_filter_enabled" '[] (IO Bool)
 
 {-# NOINLINE bindAnimationNode_is_path_filtered #-}
 
--- | Returns @true@ whether a given path is filtered.
+-- | Returns whether the given path is filtered.
 bindAnimationNode_is_path_filtered :: MethodBind
 bindAnimationNode_is_path_filtered
   = unsafePerformIO $
@@ -566,7 +566,7 @@ bindAnimationNode_is_path_filtered
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ whether a given path is filtered.
+-- | Returns whether the given path is filtered.
 is_path_filtered ::
                    (AnimationNode :< cls, Object :< cls) => cls -> NodePath -> IO Bool
 is_path_filtered cls arg1
@@ -704,7 +704,7 @@ instance NodeMethod AnimationNode "set_filter_path"
 
 {-# NOINLINE bindAnimationNode_set_parameter #-}
 
--- | Sets a custom parameter. These are used as local storage, because resources can be reused across the tree or scenes.
+-- | Sets a custom parameter. These are used as local memory, because resources can be reused across the tree or scenes.
 bindAnimationNode_set_parameter :: MethodBind
 bindAnimationNode_set_parameter
   = unsafePerformIO $
@@ -714,7 +714,7 @@ bindAnimationNode_set_parameter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets a custom parameter. These are used as local storage, because resources can be reused across the tree or scenes.
+-- | Sets a custom parameter. These are used as local memory, because resources can be reused across the tree or scenes.
 set_parameter ::
                 (AnimationNode :< cls, Object :< cls) =>
                 cls -> GodotString -> GodotVariant -> IO ()

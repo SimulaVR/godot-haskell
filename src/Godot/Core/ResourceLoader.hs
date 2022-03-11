@@ -184,9 +184,10 @@ instance NodeMethod ResourceLoader "has_cached" '[GodotString]
 
 -- | Loads a resource at the given @path@, caching the result for further access.
 --   				The registered @ResourceFormatLoader@s are queried sequentially to find the first one which can handle the file's extension, and then attempt loading. If loading fails, the remaining ResourceFormatLoaders are also attempted.
---   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@.
+--   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@. Anything that inherits from @Resource@ can be used as a type hint, for example @Image@.
 --   				If @no_cache@ is @true@, the resource cache will be bypassed and the resource will be loaded anew. Otherwise, the cached resource will be returned if it exists.
---   				Returns an empty resource if no ResourceFormatLoader could handle the file.
+--   				Returns an empty resource if no @ResourceFormatLoader@ could handle the file.
+--   				GDScript has a simplified @method @GDScript.load@ built-in method which can be used in most situations, leaving the use of @ResourceLoader@ for more advanced scenarios.
 bindResourceLoader_load :: MethodBind
 bindResourceLoader_load
   = unsafePerformIO $
@@ -198,9 +199,10 @@ bindResourceLoader_load
 
 -- | Loads a resource at the given @path@, caching the result for further access.
 --   				The registered @ResourceFormatLoader@s are queried sequentially to find the first one which can handle the file's extension, and then attempt loading. If loading fails, the remaining ResourceFormatLoaders are also attempted.
---   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@.
+--   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@. Anything that inherits from @Resource@ can be used as a type hint, for example @Image@.
 --   				If @no_cache@ is @true@, the resource cache will be bypassed and the resource will be loaded anew. Otherwise, the cached resource will be returned if it exists.
---   				Returns an empty resource if no ResourceFormatLoader could handle the file.
+--   				Returns an empty resource if no @ResourceFormatLoader@ could handle the file.
+--   				GDScript has a simplified @method @GDScript.load@ built-in method which can be used in most situations, leaving the use of @ResourceLoader@ for more advanced scenarios.
 load ::
        (ResourceLoader :< cls, Object :< cls) =>
        cls ->
@@ -223,7 +225,7 @@ instance NodeMethod ResourceLoader "load"
 {-# NOINLINE bindResourceLoader_load_interactive #-}
 
 -- | Starts loading a resource interactively. The returned @ResourceInteractiveLoader@ object allows to load with high granularity, calling its @method ResourceInteractiveLoader.poll@ method successively to load chunks.
---   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@.
+--   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@. Anything that inherits from @Resource@ can be used as a type hint, for example @Image@.
 bindResourceLoader_load_interactive :: MethodBind
 bindResourceLoader_load_interactive
   = unsafePerformIO $
@@ -234,7 +236,7 @@ bindResourceLoader_load_interactive
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Starts loading a resource interactively. The returned @ResourceInteractiveLoader@ object allows to load with high granularity, calling its @method ResourceInteractiveLoader.poll@ method successively to load chunks.
---   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@.
+--   				An optional @type_hint@ can be used to further specify the @Resource@ type that should be handled by the @ResourceFormatLoader@. Anything that inherits from @Resource@ can be used as a type hint, for example @Image@.
 load_interactive ::
                    (ResourceLoader :< cls, Object :< cls) =>
                    cls ->

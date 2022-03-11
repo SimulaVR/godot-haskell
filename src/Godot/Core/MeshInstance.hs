@@ -66,6 +66,8 @@ instance NodeMethod MeshInstance "_mesh_changed" '[] (IO ()) where
 {-# NOINLINE bindMeshInstance_create_convex_collision #-}
 
 -- | This helper creates a @StaticBody@ child node with a @ConvexPolygonShape@ collision shape calculated from the mesh geometry. It's mainly used for testing.
+--   				If @clean@ is @true@ (default), duplicate and interior vertices are removed automatically. You can set it to @false@ to make the process faster if not needed.
+--   				If @simplify@ is @true@, the geometry can be further simplified to reduce the amount of vertices. Disabled by default.
 bindMeshInstance_create_convex_collision :: MethodBind
 bindMeshInstance_create_convex_collision
   = unsafePerformIO $
@@ -76,6 +78,8 @@ bindMeshInstance_create_convex_collision
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | This helper creates a @StaticBody@ child node with a @ConvexPolygonShape@ collision shape calculated from the mesh geometry. It's mainly used for testing.
+--   				If @clean@ is @true@ (default), duplicate and interior vertices are removed automatically. You can set it to @false@ to make the process faster if not needed.
+--   				If @simplify@ is @true@, the geometry can be further simplified to reduce the amount of vertices. Disabled by default.
 create_convex_collision ::
                           (MeshInstance :< cls, Object :< cls) => cls -> IO ()
 create_convex_collision cls

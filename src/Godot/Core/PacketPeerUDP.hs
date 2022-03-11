@@ -136,7 +136,7 @@ instance NodeMethod PacketPeerUDP "is_listening" '[] (IO Bool)
 
 -- | Joins the multicast group specified by @multicast_address@ using the interface identified by @interface_name@.
 --   				You can join the same multicast group with multiple interfaces. Use @method IP.get_local_interfaces@ to know which are available.
---   				Note: Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission for multicast to work.
+--   				__Note:__ Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission for multicast to work.
 bindPacketPeerUDP_join_multicast_group :: MethodBind
 bindPacketPeerUDP_join_multicast_group
   = unsafePerformIO $
@@ -148,7 +148,7 @@ bindPacketPeerUDP_join_multicast_group
 
 -- | Joins the multicast group specified by @multicast_address@ using the interface identified by @interface_name@.
 --   				You can join the same multicast group with multiple interfaces. Use @method IP.get_local_interfaces@ to know which are available.
---   				Note: Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission for multicast to work.
+--   				__Note:__ Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission for multicast to work.
 join_multicast_group ::
                        (PacketPeerUDP :< cls, Object :< cls) =>
                        cls -> GodotString -> GodotString -> IO Int
@@ -238,7 +238,7 @@ instance NodeMethod PacketPeerUDP "listen"
 {-# NOINLINE bindPacketPeerUDP_set_broadcast_enabled #-}
 
 -- | Enable or disable sending of broadcast packets (e.g. @set_dest_address("255.255.255.255", 4343)@. This option is disabled by default.
---   				Note: Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission and this option to be enabled to receive broadcast packets too.
+--   				__Note:__ Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission and this option to be enabled to receive broadcast packets too.
 bindPacketPeerUDP_set_broadcast_enabled :: MethodBind
 bindPacketPeerUDP_set_broadcast_enabled
   = unsafePerformIO $
@@ -249,7 +249,7 @@ bindPacketPeerUDP_set_broadcast_enabled
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Enable or disable sending of broadcast packets (e.g. @set_dest_address("255.255.255.255", 4343)@. This option is disabled by default.
---   				Note: Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission and this option to be enabled to receive broadcast packets too.
+--   				__Note:__ Some Android devices might require the @CHANGE_WIFI_MULTICAST_STATE@ permission and this option to be enabled to receive broadcast packets too.
 set_broadcast_enabled ::
                         (PacketPeerUDP :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_broadcast_enabled cls arg1
@@ -269,7 +269,7 @@ instance NodeMethod PacketPeerUDP "set_broadcast_enabled" '[Bool]
 {-# NOINLINE bindPacketPeerUDP_set_dest_address #-}
 
 -- | Sets the destination address and port for sending packets and variables. A hostname will be resolved using DNS if needed.
---   				Note: @method set_broadcast_enabled@ must be enabled before sending packets to a broadcast address (e.g. @255.255.255.255@).
+--   				__Note:__ @method set_broadcast_enabled@ must be enabled before sending packets to a broadcast address (e.g. @255.255.255.255@).
 bindPacketPeerUDP_set_dest_address :: MethodBind
 bindPacketPeerUDP_set_dest_address
   = unsafePerformIO $
@@ -280,7 +280,7 @@ bindPacketPeerUDP_set_dest_address
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the destination address and port for sending packets and variables. A hostname will be resolved using DNS if needed.
---   				Note: @method set_broadcast_enabled@ must be enabled before sending packets to a broadcast address (e.g. @255.255.255.255@).
+--   				__Note:__ @method set_broadcast_enabled@ must be enabled before sending packets to a broadcast address (e.g. @255.255.255.255@).
 set_dest_address ::
                    (PacketPeerUDP :< cls, Object :< cls) =>
                    cls -> GodotString -> Int -> IO Int
@@ -302,6 +302,21 @@ instance NodeMethod PacketPeerUDP "set_dest_address"
 {-# NOINLINE bindPacketPeerUDP_wait #-}
 
 -- | Waits for a packet to arrive on the listening port. See @method listen@.
+--   				__Note:__ @method wait@ can't be interrupted once it has been called. This can be worked around by allowing the other party to send a specific "death pill" packet like this:
+--   				
+--   @
+--   
+--   				# Server
+--   				socket.set_dest_address("127.0.0.1", 789)
+--   				socket.put_packet("Time to stop".to_ascii())
+--   
+--   				# Client
+--   				while socket.wait() == OK:
+--   				    var data = socket.get_packet().get_string_from_ascii()
+--   				    if data == "Time to stop":
+--   				        return
+--   				
+--   @
 bindPacketPeerUDP_wait :: MethodBind
 bindPacketPeerUDP_wait
   = unsafePerformIO $
@@ -312,6 +327,21 @@ bindPacketPeerUDP_wait
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Waits for a packet to arrive on the listening port. See @method listen@.
+--   				__Note:__ @method wait@ can't be interrupted once it has been called. This can be worked around by allowing the other party to send a specific "death pill" packet like this:
+--   				
+--   @
+--   
+--   				# Server
+--   				socket.set_dest_address("127.0.0.1", 789)
+--   				socket.put_packet("Time to stop".to_ascii())
+--   
+--   				# Client
+--   				while socket.wait() == OK:
+--   				    var data = socket.get_packet().get_string_from_ascii()
+--   				    if data == "Time to stop":
+--   				        return
+--   				
+--   @
 wait :: (PacketPeerUDP :< cls, Object :< cls) => cls -> IO Int
 wait cls
   = withVariantArray []

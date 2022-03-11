@@ -292,7 +292,7 @@ instance NodeMethod EditorFileSystemDirectory
 
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_type #-}
 
--- | Returns the file extension of the file at index @idx@.
+-- | Returns the resource type of the file at index @idx@. This returns a string such as @"Resource"@ or @"GDScript"@, @i@not@/i@ a file extension such as @".gd"@.
 bindEditorFileSystemDirectory_get_file_type :: MethodBind
 bindEditorFileSystemDirectory_get_file_type
   = unsafePerformIO $
@@ -302,7 +302,7 @@ bindEditorFileSystemDirectory_get_file_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the file extension of the file at index @idx@.
+-- | Returns the resource type of the file at index @idx@. This returns a string such as @"Resource"@ or @"GDScript"@, @i@not@/i@ a file extension such as @".gd"@.
 get_file_type ::
                 (EditorFileSystemDirectory :< cls, Object :< cls) =>
                 cls -> Int -> IO GodotString

@@ -79,7 +79,7 @@ instance NodeMethod MultiMeshInstance2D "get_multimesh" '[]
 {-# NOINLINE bindMultiMeshInstance2D_get_normal_map #-}
 
 -- | The normal map that will be used if using the default @CanvasItemMaterial@.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y+, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindMultiMeshInstance2D_get_normal_map :: MethodBind
 bindMultiMeshInstance2D_get_normal_map
   = unsafePerformIO $
@@ -90,7 +90,7 @@ bindMultiMeshInstance2D_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map that will be used if using the default @CanvasItemMaterial@.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y+, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (MultiMeshInstance2D :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -170,7 +170,7 @@ instance NodeMethod MultiMeshInstance2D "set_multimesh"
 {-# NOINLINE bindMultiMeshInstance2D_set_normal_map #-}
 
 -- | The normal map that will be used if using the default @CanvasItemMaterial@.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y+, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindMultiMeshInstance2D_set_normal_map :: MethodBind
 bindMultiMeshInstance2D_set_normal_map
   = unsafePerformIO $
@@ -181,7 +181,7 @@ bindMultiMeshInstance2D_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map that will be used if using the default @CanvasItemMaterial@.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
+--   			__Note:__ Godot expects the normal map to use X+, Y+, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (MultiMeshInstance2D :< cls, Object :< cls) =>
                  cls -> Texture -> IO ()

@@ -59,7 +59,7 @@ instance NodeMethod EditorImportPlugin "get_import_options" '[Int]
 
 {-# NOINLINE bindEditorImportPlugin_get_import_order #-}
 
--- | Gets the order of this importer to be run when importing resources. Higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported.
+-- | Gets the order of this importer to be run when importing resources. Importers with @i@lower@/i@ import orders will be called first, and higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported. The default import order is @0@ unless overridden by a specific importer. See @enum ResourceImporter.ImportOrder@ for some predefined values.
 bindEditorImportPlugin_get_import_order :: MethodBind
 bindEditorImportPlugin_get_import_order
   = unsafePerformIO $
@@ -69,7 +69,7 @@ bindEditorImportPlugin_get_import_order
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the order of this importer to be run when importing resources. Higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported.
+-- | Gets the order of this importer to be run when importing resources. Importers with @i@lower@/i@ import orders will be called first, and higher values will be called later. Use this to ensure the importer runs after the dependencies are already imported. The default import order is @0@ unless overridden by a specific importer. See @enum ResourceImporter.ImportOrder@ for some predefined values.
 get_import_order ::
                    (EditorImportPlugin :< cls, Object :< cls) => cls -> IO Int
 get_import_order cls
@@ -323,7 +323,7 @@ instance NodeMethod EditorImportPlugin "get_resource_type" '[]
 
 {-# NOINLINE bindEditorImportPlugin_get_save_extension #-}
 
--- | Gets the extension used to save this resource in the @.import@ directory.
+-- | Gets the extension used to save this resource in the @.import@ directory (see @ProjectSettings.application/config/use_hidden_project_data_directory@).
 bindEditorImportPlugin_get_save_extension :: MethodBind
 bindEditorImportPlugin_get_save_extension
   = unsafePerformIO $
@@ -333,7 +333,7 @@ bindEditorImportPlugin_get_save_extension
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the extension used to save this resource in the @.import@ directory.
+-- | Gets the extension used to save this resource in the @.import@ directory (see @ProjectSettings.application/config/use_hidden_project_data_directory@).
 get_save_extension ::
                      (EditorImportPlugin :< cls, Object :< cls) => cls -> IO GodotString
 get_save_extension cls
@@ -352,7 +352,7 @@ instance NodeMethod EditorImportPlugin "get_save_extension" '[]
 
 {-# NOINLINE bindEditorImportPlugin_get_visible_name #-}
 
--- | Gets the name to display in the import window.
+-- | Gets the name to display in the import window. You should choose this name as a continuation to "Import as", e.g. "Import as Special Mesh".
 bindEditorImportPlugin_get_visible_name :: MethodBind
 bindEditorImportPlugin_get_visible_name
   = unsafePerformIO $
@@ -362,7 +362,7 @@ bindEditorImportPlugin_get_visible_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Gets the name to display in the import window.
+-- | Gets the name to display in the import window. You should choose this name as a continuation to "Import as", e.g. "Import as Special Mesh".
 get_visible_name ::
                    (EditorImportPlugin :< cls, Object :< cls) => cls -> IO GodotString
 get_visible_name cls

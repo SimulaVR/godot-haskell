@@ -86,6 +86,7 @@ instance NodeMethod EditorSelection "_node_removed" '[Node] (IO ())
 {-# NOINLINE bindEditorSelection_add_node #-}
 
 -- | Adds a node to the selection.
+--   				__Note:__ The newly selected node will not be automatically edited in the inspector. If you want to edit a node, use @method EditorInterface.edit_node@.
 bindEditorSelection_add_node :: MethodBind
 bindEditorSelection_add_node
   = unsafePerformIO $
@@ -96,6 +97,7 @@ bindEditorSelection_add_node
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds a node to the selection.
+--   				__Note:__ The newly selected node will not be automatically edited in the inspector. If you want to edit a node, use @method EditorInterface.edit_node@.
 add_node ::
            (EditorSelection :< cls, Object :< cls) => cls -> Node -> IO ()
 add_node cls arg1

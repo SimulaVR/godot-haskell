@@ -478,7 +478,7 @@ instance NodeMethod ColorPicker "_w_input" '[InputEvent] (IO ())
 {-# NOINLINE bindColorPicker_add_preset #-}
 
 -- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them.
---   				__Note:__ the presets list is only for @i@this@/i@ color picker.
+--   				__Note:__ The presets list is only for @i@this@/i@ color picker.
 bindColorPicker_add_preset :: MethodBind
 bindColorPicker_add_preset
   = unsafePerformIO $
@@ -489,7 +489,7 @@ bindColorPicker_add_preset
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds the given color to a list of color presets. The presets are displayed in the color picker and the user will be able to select them.
---   				__Note:__ the presets list is only for @i@this@/i@ color picker.
+--   				__Note:__ The presets list is only for @i@this@/i@ color picker.
 add_preset ::
              (ColorPicker :< cls, Object :< cls) => cls -> Color -> IO ()
 add_preset cls arg1
@@ -671,7 +671,7 @@ instance NodeMethod ColorPicker "is_deferred_mode" '[] (IO Bool)
 
 {-# NOINLINE bindColorPicker_is_editing_alpha #-}
 
--- | If @true@, shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (opacity).
 bindColorPicker_is_editing_alpha :: MethodBind
 bindColorPicker_is_editing_alpha
   = unsafePerformIO $
@@ -681,7 +681,7 @@ bindColorPicker_is_editing_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (opacity).
 is_editing_alpha ::
                    (ColorPicker :< cls, Object :< cls) => cls -> IO Bool
 is_editing_alpha cls
@@ -783,7 +783,7 @@ instance NodeMethod ColorPicker "set_deferred_mode" '[Bool] (IO ())
 
 {-# NOINLINE bindColorPicker_set_edit_alpha #-}
 
--- | If @true@, shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (opacity).
 bindColorPicker_set_edit_alpha :: MethodBind
 bindColorPicker_set_edit_alpha
   = unsafePerformIO $
@@ -793,7 +793,7 @@ bindColorPicker_set_edit_alpha
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, shows an alpha channel slider (transparency).
+-- | If @true@, shows an alpha channel slider (opacity).
 set_edit_alpha ::
                  (ColorPicker :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_edit_alpha cls arg1

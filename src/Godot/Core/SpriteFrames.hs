@@ -260,7 +260,7 @@ instance NodeMethod SpriteFrames "clear_all" '[] (IO ()) where
 
 {-# NOINLINE bindSpriteFrames_get_animation_loop #-}
 
--- | If @true@, the given animation will loop.
+-- | Returns @true@ if the given animation is configured to loop when it finishes playing. Otherwise, returns @false@.
 bindSpriteFrames_get_animation_loop :: MethodBind
 bindSpriteFrames_get_animation_loop
   = unsafePerformIO $
@@ -270,7 +270,7 @@ bindSpriteFrames_get_animation_loop
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the given animation will loop.
+-- | Returns @true@ if the given animation is configured to loop when it finishes playing. Otherwise, returns @false@.
 get_animation_loop ::
                      (SpriteFrames :< cls, Object :< cls) =>
                      cls -> GodotString -> IO Bool

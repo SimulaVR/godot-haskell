@@ -153,6 +153,7 @@ instance NodeMethod Navigation "get_closest_point_to_segment"
 {-# NOINLINE bindNavigation_get_simple_path #-}
 
 -- | Returns the path between two given points. Points are in local coordinate space. If @optimize@ is @true@ (the default), the agent properties associated with each @NavigationMesh@ (radius, height, etc.) are considered in the path calculation, otherwise they are ignored.
+--   				__Note:__ This method has known issues and will often return non-optimal paths. These issues will be fixed in Godot 4.0.
 bindNavigation_get_simple_path :: MethodBind
 bindNavigation_get_simple_path
   = unsafePerformIO $
@@ -163,6 +164,7 @@ bindNavigation_get_simple_path
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the path between two given points. Points are in local coordinate space. If @optimize@ is @true@ (the default), the agent properties associated with each @NavigationMesh@ (radius, height, etc.) are considered in the path calculation, otherwise they are ignored.
+--   				__Note:__ This method has known issues and will often return non-optimal paths. These issues will be fixed in Godot 4.0.
 get_simple_path ::
                   (Navigation :< cls, Object :< cls) =>
                   cls -> Vector3 -> Vector3 -> Maybe Bool -> IO PoolVector3Array

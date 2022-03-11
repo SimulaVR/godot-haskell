@@ -91,7 +91,7 @@ instance NodeMethod InputEventAction "get_action" '[]
 
 {-# NOINLINE bindInputEventAction_get_strength #-}
 
--- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by specifying how strongly the joypad axis is bent or pressed.
 bindInputEventAction_get_strength :: MethodBind
 bindInputEventAction_get_strength
   = unsafePerformIO $
@@ -101,7 +101,7 @@ bindInputEventAction_get_strength
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by specifying how strongly the joypad axis is bent or pressed.
 get_strength ::
                (InputEventAction :< cls, Object :< cls) => cls -> IO Float
 get_strength cls
@@ -176,7 +176,7 @@ instance NodeMethod InputEventAction "set_pressed" '[Bool] (IO ())
 
 {-# NOINLINE bindInputEventAction_set_strength #-}
 
--- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by specifying how strongly the joypad axis is bent or pressed.
 bindInputEventAction_set_strength :: MethodBind
 bindInputEventAction_set_strength
   = unsafePerformIO $
@@ -186,7 +186,7 @@ bindInputEventAction_set_strength
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by precising how strongly is the joypad axis bent or pressed.
+-- | The action's strength between 0 and 1. This value is considered as equal to 0 if pressed is @false@. The event strength allows faking analog joypad motion events, by specifying how strongly the joypad axis is bent or pressed.
 set_strength ::
                (InputEventAction :< cls, Object :< cls) => cls -> Float -> IO ()
 set_strength cls arg1

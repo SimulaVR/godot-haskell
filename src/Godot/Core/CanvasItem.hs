@@ -149,7 +149,7 @@ sig_hide = Godot.Internal.Dispatch.Signal "hide"
 
 instance NodeSignal CanvasItem "hide" '[]
 
--- | Emitted when the item rect has changed.
+-- | Emitted when the item's @Rect2@ boundaries (position or size) have changed, or when an action is taking place that may have impacted these boundaries (e.g. changing @Sprite.texture@).
 sig_item_rect_changed :: Godot.Internal.Dispatch.Signal CanvasItem
 sig_item_rect_changed
   = Godot.Internal.Dispatch.Signal "item_rect_changed"
@@ -737,7 +737,7 @@ instance NodeMethod CanvasItem "_update_callback" '[] (IO ()) where
 
 {-# NOINLINE bindCanvasItem_draw_arc #-}
 
--- | Draws an arc between the given angles. The larger the value of @point_count@, the smoother the curve.
+-- | Draws a unfilled arc between the given angles. The larger the value of @point_count@, the smoother the curve. See also @method draw_circle@.
 bindCanvasItem_draw_arc :: MethodBind
 bindCanvasItem_draw_arc
   = unsafePerformIO $
@@ -747,7 +747,7 @@ bindCanvasItem_draw_arc
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws an arc between the given angles. The larger the value of @point_count@, the smoother the curve.
+-- | Draws a unfilled arc between the given angles. The larger the value of @point_count@, the smoother the curve. See also @method draw_circle@.
 draw_arc ::
            (CanvasItem :< cls, Object :< cls) =>
            cls ->
@@ -808,7 +808,7 @@ instance NodeMethod CanvasItem "draw_char"
 
 {-# NOINLINE bindCanvasItem_draw_circle #-}
 
--- | Draws a colored circle.
+-- | Draws a colored, unfilled circle. See also @method draw_arc@, @method draw_polyline@ and @method draw_polygon@.
 bindCanvasItem_draw_circle :: MethodBind
 bindCanvasItem_draw_circle
   = unsafePerformIO $
@@ -818,7 +818,7 @@ bindCanvasItem_draw_circle
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a colored circle.
+-- | Draws a colored, unfilled circle. See also @method draw_arc@, @method draw_polyline@ and @method draw_polygon@.
 draw_circle ::
               (CanvasItem :< cls, Object :< cls) =>
               cls -> Vector2 -> Float -> Color -> IO ()
@@ -838,7 +838,7 @@ instance NodeMethod CanvasItem "draw_circle"
 
 {-# NOINLINE bindCanvasItem_draw_colored_polygon #-}
 
--- | Draws a colored polygon of any amount of points, convex or concave.
+-- | Draws a colored polygon of any amount of points, convex or concave. Unlike @method draw_polygon@, a single color must be specified for the whole polygon.
 bindCanvasItem_draw_colored_polygon :: MethodBind
 bindCanvasItem_draw_colored_polygon
   = unsafePerformIO $
@@ -848,7 +848,7 @@ bindCanvasItem_draw_colored_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a colored polygon of any amount of points, convex or concave.
+-- | Draws a colored polygon of any amount of points, convex or concave. Unlike @method draw_polygon@, a single color must be specified for the whole polygon.
 draw_colored_polygon ::
                        (CanvasItem :< cls, Object :< cls) =>
                        cls ->
@@ -878,7 +878,7 @@ instance NodeMethod CanvasItem "draw_colored_polygon"
 
 {-# NOINLINE bindCanvasItem_draw_line #-}
 
--- | Draws a line from a 2D point to another, with a given color and width. It can be optionally antialiased.
+-- | Draws a line from a 2D point to another, with a given color and width. It can be optionally antialiased. See also @method draw_multiline@ and @method draw_polyline@.
 bindCanvasItem_draw_line :: MethodBind
 bindCanvasItem_draw_line
   = unsafePerformIO $
@@ -888,7 +888,7 @@ bindCanvasItem_draw_line
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a line from a 2D point to another, with a given color and width. It can be optionally antialiased.
+-- | Draws a line from a 2D point to another, with a given color and width. It can be optionally antialiased. See also @method draw_multiline@ and @method draw_polyline@.
 draw_line ::
             (CanvasItem :< cls, Object :< cls) =>
             cls ->
@@ -948,7 +948,7 @@ instance NodeMethod CanvasItem "draw_mesh"
 
 {-# NOINLINE bindCanvasItem_draw_multiline #-}
 
--- | Draws multiple, parallel lines with a uniform @color@.
+-- | Draws multiple disconnected lines with a uniform @color@. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw interconnected lines, use @method draw_polyline@ instead.
 --   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 bindCanvasItem_draw_multiline :: MethodBind
 bindCanvasItem_draw_multiline
@@ -959,7 +959,7 @@ bindCanvasItem_draw_multiline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws multiple, parallel lines with a uniform @color@.
+-- | Draws multiple disconnected lines with a uniform @color@. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw interconnected lines, use @method draw_polyline@ instead.
 --   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 draw_multiline ::
                  (CanvasItem :< cls, Object :< cls) =>
@@ -984,7 +984,7 @@ instance NodeMethod CanvasItem "draw_multiline"
 
 {-# NOINLINE bindCanvasItem_draw_multiline_colors #-}
 
--- | Draws multiple, parallel lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@.
+-- | Draws multiple disconnected lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw interconnected lines, use @method draw_polyline_colors@ instead.
 --   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 bindCanvasItem_draw_multiline_colors :: MethodBind
 bindCanvasItem_draw_multiline_colors
@@ -995,7 +995,7 @@ bindCanvasItem_draw_multiline_colors
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws multiple, parallel lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@.
+-- | Draws multiple disconnected lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw interconnected lines, use @method draw_polyline_colors@ instead.
 --   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
 draw_multiline_colors ::
                         (CanvasItem :< cls, Object :< cls) =>
@@ -1053,7 +1053,7 @@ instance NodeMethod CanvasItem "draw_multimesh"
 
 {-# NOINLINE bindCanvasItem_draw_polygon #-}
 
--- | Draws a polygon of any amount of points, convex or concave.
+-- | Draws a solid polygon of any amount of points, convex or concave. Unlike @method draw_colored_polygon@, each point's color can be changed individually. See also @method draw_polyline@ and @method draw_polyline_colors@.
 bindCanvasItem_draw_polygon :: MethodBind
 bindCanvasItem_draw_polygon
   = unsafePerformIO $
@@ -1063,7 +1063,7 @@ bindCanvasItem_draw_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a polygon of any amount of points, convex or concave.
+-- | Draws a solid polygon of any amount of points, convex or concave. Unlike @method draw_colored_polygon@, each point's color can be changed individually. See also @method draw_polyline@ and @method draw_polyline_colors@.
 draw_polygon ::
                (CanvasItem :< cls, Object :< cls) =>
                cls ->
@@ -1092,7 +1092,7 @@ instance NodeMethod CanvasItem "draw_polygon"
 
 {-# NOINLINE bindCanvasItem_draw_polyline #-}
 
--- | Draws interconnected line segments with a uniform @color@ and @width@ and optional antialiasing.
+-- | Draws interconnected line segments with a uniform @color@ and @width@ and optional antialiasing. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw disconnected lines, use @method draw_multiline@ instead. See also @method draw_polygon@.
 bindCanvasItem_draw_polyline :: MethodBind
 bindCanvasItem_draw_polyline
   = unsafePerformIO $
@@ -1102,7 +1102,7 @@ bindCanvasItem_draw_polyline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws interconnected line segments with a uniform @color@ and @width@ and optional antialiasing.
+-- | Draws interconnected line segments with a uniform @color@ and @width@ and optional antialiasing. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw disconnected lines, use @method draw_multiline@ instead. See also @method draw_polygon@.
 draw_polyline ::
                 (CanvasItem :< cls, Object :< cls) =>
                 cls ->
@@ -1126,7 +1126,7 @@ instance NodeMethod CanvasItem "draw_polyline"
 
 {-# NOINLINE bindCanvasItem_draw_polyline_colors #-}
 
--- | Draws interconnected line segments with a uniform @width@, segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@.
+-- | Draws interconnected line segments with a uniform @width@ and segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw disconnected lines, use @method draw_multiline_colors@ instead. See also @method draw_polygon@.
 bindCanvasItem_draw_polyline_colors :: MethodBind
 bindCanvasItem_draw_polyline_colors
   = unsafePerformIO $
@@ -1136,7 +1136,7 @@ bindCanvasItem_draw_polyline_colors
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws interconnected line segments with a uniform @width@, segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@.
+-- | Draws interconnected line segments with a uniform @width@ and segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@. When drawing large amounts of lines, this is faster than using individual @method draw_line@ calls. To draw disconnected lines, use @method draw_multiline_colors@ instead. See also @method draw_polygon@.
 draw_polyline_colors ::
                        (CanvasItem :< cls, Object :< cls) =>
                        cls ->
@@ -1162,7 +1162,7 @@ instance NodeMethod CanvasItem "draw_polyline_colors"
 
 {-# NOINLINE bindCanvasItem_draw_primitive #-}
 
--- | Draws a custom primitive. 1 point for a point, 2 points for a line, 3 points for a triangle and 4 points for a quad.
+-- | Draws a custom primitive. 1 point for a point, 2 points for a line, 3 points for a triangle, and 4 points for a quad. If 0 points or more than 4 points are specified, nothing will be drawn and an error message will be printed. See also @method draw_line@, @method draw_polyline@, @method draw_polygon@, and @method draw_rect@.
 bindCanvasItem_draw_primitive :: MethodBind
 bindCanvasItem_draw_primitive
   = unsafePerformIO $
@@ -1172,7 +1172,7 @@ bindCanvasItem_draw_primitive
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws a custom primitive. 1 point for a point, 2 points for a line, 3 points for a triangle and 4 points for a quad.
+-- | Draws a custom primitive. 1 point for a point, 2 points for a line, 3 points for a triangle, and 4 points for a quad. If 0 points or more than 4 points are specified, nothing will be drawn and an error message will be printed. See also @method draw_line@, @method draw_polyline@, @method draw_polygon@, and @method draw_rect@.
 draw_primitive ::
                  (CanvasItem :< cls, Object :< cls) =>
                  cls ->
@@ -1298,7 +1298,7 @@ instance NodeMethod CanvasItem "draw_set_transform_matrix"
 
 {-# NOINLINE bindCanvasItem_draw_string #-}
 
--- | Draws @text@ using the specified @font@ at the @position@ (top-left corner). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
+-- | Draws @text@ using the specified @font@ at the @position@ (bottom-left corner using the baseline of the font). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
 --   				__Example using the default project font:__
 --   				
 --   @
@@ -1321,7 +1321,7 @@ bindCanvasItem_draw_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws @text@ using the specified @font@ at the @position@ (top-left corner). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
+-- | Draws @text@ using the specified @font@ at the @position@ (bottom-left corner using the baseline of the font). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
 --   				__Example using the default project font:__
 --   				
 --   @
@@ -1972,7 +1972,7 @@ instance NodeMethod CanvasItem "get_world_2d" '[] (IO World2D)
 
 {-# NOINLINE bindCanvasItem_hide #-}
 
--- | Hide the @CanvasItem@ if it's currently visible.
+-- | Hide the @CanvasItem@ if it's currently visible. This is equivalent to setting @visible@ to @false@.
 bindCanvasItem_hide :: MethodBind
 bindCanvasItem_hide
   = unsafePerformIO $
@@ -1982,7 +1982,7 @@ bindCanvasItem_hide
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Hide the @CanvasItem@ if it's currently visible.
+-- | Hide the @CanvasItem@ if it's currently visible. This is equivalent to setting @visible@ to @false@.
 hide :: (CanvasItem :< cls, Object :< cls) => cls -> IO ()
 hide cls
   = withVariantArray []
@@ -2513,7 +2513,7 @@ instance NodeMethod CanvasItem "set_visible" '[Bool] (IO ()) where
 
 {-# NOINLINE bindCanvasItem_show #-}
 
--- | Show the @CanvasItem@ if it's currently hidden. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
+-- | Show the @CanvasItem@ if it's currently hidden. This is equivalent to setting @visible@ to @true@. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 bindCanvasItem_show :: MethodBind
 bindCanvasItem_show
   = unsafePerformIO $
@@ -2523,7 +2523,7 @@ bindCanvasItem_show
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Show the @CanvasItem@ if it's currently hidden. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
+-- | Show the @CanvasItem@ if it's currently hidden. This is equivalent to setting @visible@ to @true@. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 show :: (CanvasItem :< cls, Object :< cls) => cls -> IO ()
 show cls
   = withVariantArray []

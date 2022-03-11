@@ -470,6 +470,7 @@ instance NodeMethod OptionButton "get_item_text" '[Int]
 {-# NOINLINE bindOptionButton_get_popup #-}
 
 -- | Returns the @PopupMenu@ contained in this button.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindOptionButton_get_popup :: MethodBind
 bindOptionButton_get_popup
   = unsafePerformIO $
@@ -480,6 +481,7 @@ bindOptionButton_get_popup
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @PopupMenu@ contained in this button.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_popup ::
             (OptionButton :< cls, Object :< cls) => cls -> IO PopupMenu
 get_popup cls

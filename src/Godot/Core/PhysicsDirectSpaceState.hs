@@ -22,8 +22,9 @@ import Godot.Core.Object()
 
 {-# NOINLINE bindPhysicsDirectSpaceState_cast_motion #-}
 
--- | Checks whether the shape can travel to a point. The method will return an array with two floats between 0 and 1, both representing a fraction of @motion@. The first is how far the shape can move without triggering a collision, and the second is the point at which a collision will occur. If no collision is detected, the returned array will be @@1, 1@@.
---   				If the shape can not move, the returned array will be @@0, 0@@ under Bullet, and empty under GodotPhysics.
+-- | Checks how far a @Shape@ can move without colliding. All the parameters for the query, including the shape, are supplied through a @PhysicsShapeQueryParameters@ object.
+--   				Returns an array with the safe and unsafe proportions (between 0 and 1) of the motion. The safe proportion is the maximum fraction of the motion that can be made without a collision. The unsafe proportion is the minimum fraction of the distance that must be moved for a collision. If no collision is detected a result of @@1.0, 1.0@@ will be returned.
+--   				__Note:__ Any @Shape@s that the shape is already colliding with e.g. inside of, will be ignored. Use @method collide_shape@ to determine the @Shape@s that the shape is already colliding with.
 bindPhysicsDirectSpaceState_cast_motion :: MethodBind
 bindPhysicsDirectSpaceState_cast_motion
   = unsafePerformIO $
@@ -33,8 +34,9 @@ bindPhysicsDirectSpaceState_cast_motion
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Checks whether the shape can travel to a point. The method will return an array with two floats between 0 and 1, both representing a fraction of @motion@. The first is how far the shape can move without triggering a collision, and the second is the point at which a collision will occur. If no collision is detected, the returned array will be @@1, 1@@.
---   				If the shape can not move, the returned array will be @@0, 0@@ under Bullet, and empty under GodotPhysics.
+-- | Checks how far a @Shape@ can move without colliding. All the parameters for the query, including the shape, are supplied through a @PhysicsShapeQueryParameters@ object.
+--   				Returns an array with the safe and unsafe proportions (between 0 and 1) of the motion. The safe proportion is the maximum fraction of the motion that can be made without a collision. The unsafe proportion is the minimum fraction of the distance that must be moved for a collision. If no collision is detected a result of @@1.0, 1.0@@ will be returned.
+--   				__Note:__ Any @Shape@s that the shape is already colliding with e.g. inside of, will be ignored. Use @method collide_shape@ to determine the @Shape@s that the shape is already colliding with.
 cast_motion ::
               (PhysicsDirectSpaceState :< cls, Object :< cls) =>
               cls -> PhysicsShapeQueryParameters -> Vector3 -> IO Array

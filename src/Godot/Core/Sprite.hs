@@ -122,7 +122,7 @@ instance NodeMethod Sprite "_texture_changed" '[] (IO ()) where
 
 {-# NOINLINE bindSprite_get_frame #-}
 
--- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
+-- | Current frame to display from sprite sheet. @hframes@ or @vframes@ must be greater than 1.
 bindSprite_get_frame :: MethodBind
 bindSprite_get_frame
   = unsafePerformIO $
@@ -132,7 +132,7 @@ bindSprite_get_frame
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
+-- | Current frame to display from sprite sheet. @hframes@ or @vframes@ must be greater than 1.
 get_frame :: (Sprite :< cls, Object :< cls) => cls -> IO Int
 get_frame cls
   = withVariantArray []
@@ -145,7 +145,7 @@ instance NodeMethod Sprite "get_frame" '[] (IO Int) where
 
 {-# NOINLINE bindSprite_get_frame_coords #-}
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @hframes@ or @vframes@ must be greater than 1.
 bindSprite_get_frame_coords :: MethodBind
 bindSprite_get_frame_coords
   = unsafePerformIO $
@@ -155,7 +155,7 @@ bindSprite_get_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @hframes@ or @vframes@ must be greater than 1.
 get_frame_coords ::
                    (Sprite :< cls, Object :< cls) => cls -> IO Vector2
 get_frame_coords cls
@@ -591,7 +591,7 @@ instance NodeMethod Sprite "set_flip_v" '[Bool] (IO ()) where
 
 {-# NOINLINE bindSprite_set_frame #-}
 
--- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
+-- | Current frame to display from sprite sheet. @hframes@ or @vframes@ must be greater than 1.
 bindSprite_set_frame :: MethodBind
 bindSprite_set_frame
   = unsafePerformIO $
@@ -601,7 +601,7 @@ bindSprite_set_frame
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Current frame to display from sprite sheet. @vframes@ or @hframes@ must be greater than 1.
+-- | Current frame to display from sprite sheet. @hframes@ or @vframes@ must be greater than 1.
 set_frame :: (Sprite :< cls, Object :< cls) => cls -> Int -> IO ()
 set_frame cls arg1
   = withVariantArray [toVariant arg1]
@@ -614,7 +614,7 @@ instance NodeMethod Sprite "set_frame" '[Int] (IO ()) where
 
 {-# NOINLINE bindSprite_set_frame_coords #-}
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @hframes@ or @vframes@ must be greater than 1.
 bindSprite_set_frame_coords :: MethodBind
 bindSprite_set_frame_coords
   = unsafePerformIO $
@@ -624,7 +624,7 @@ bindSprite_set_frame_coords
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @vframes@ or @hframes@ must be greater than 1.
+-- | Coordinates of the frame to display from sprite sheet. This is as an alias for the @frame@ property. @hframes@ or @vframes@ must be greater than 1.
 set_frame_coords ::
                    (Sprite :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_frame_coords cls arg1

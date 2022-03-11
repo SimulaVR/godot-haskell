@@ -339,7 +339,7 @@ instance NodeMethod EditorProperty "get_label" '[] (IO GodotString)
 
 {-# NOINLINE bindEditorProperty_get_tooltip_text #-}
 
--- | Override if you want to allow a custom tooltip over your property.
+-- | Must be implemented to provide a custom tooltip to the property editor.
 bindEditorProperty_get_tooltip_text :: MethodBind
 bindEditorProperty_get_tooltip_text
   = unsafePerformIO $
@@ -349,7 +349,7 @@ bindEditorProperty_get_tooltip_text
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override if you want to allow a custom tooltip over your property.
+-- | Must be implemented to provide a custom tooltip to the property editor.
 get_tooltip_text ::
                    (EditorProperty :< cls, Object :< cls) => cls -> IO GodotString
 get_tooltip_text cls
@@ -421,7 +421,7 @@ instance NodeMethod EditorProperty "is_checked" '[] (IO Bool) where
 
 {-# NOINLINE bindEditorProperty_is_draw_red #-}
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, set to @true@ when the property is drawn with the editor theme's warning color. This is used for editable children's properties.
 bindEditorProperty_is_draw_red :: MethodBind
 bindEditorProperty_is_draw_red
   = unsafePerformIO $
@@ -431,7 +431,7 @@ bindEditorProperty_is_draw_red
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, set to @true@ when the property is drawn with the editor theme's warning color. This is used for editable children's properties.
 is_draw_red ::
               (EditorProperty :< cls, Object :< cls) => cls -> IO Bool
 is_draw_red cls
@@ -501,7 +501,7 @@ instance NodeMethod EditorProperty "is_read_only" '[] (IO Bool)
 
 {-# NOINLINE bindEditorProperty_set_bottom_editor #-}
 
--- | Adds controls with this function if you want them on the bottom (below the label).
+-- | Puts the @editor@ control below the property label. The control must be previously added using @method Node.add_child@.
 bindEditorProperty_set_bottom_editor :: MethodBind
 bindEditorProperty_set_bottom_editor
   = unsafePerformIO $
@@ -511,7 +511,7 @@ bindEditorProperty_set_bottom_editor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds controls with this function if you want them on the bottom (below the label).
+-- | Puts the @editor@ control below the property label. The control must be previously added using @method Node.add_child@.
 set_bottom_editor ::
                     (EditorProperty :< cls, Object :< cls) => cls -> Control -> IO ()
 set_bottom_editor cls arg1
@@ -585,7 +585,7 @@ instance NodeMethod EditorProperty "set_checked" '[Bool] (IO ())
 
 {-# NOINLINE bindEditorProperty_set_draw_red #-}
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, set to @true@ when the property is drawn with the editor theme's warning color. This is used for editable children's properties.
 bindEditorProperty_set_draw_red :: MethodBind
 bindEditorProperty_set_draw_red
   = unsafePerformIO $
@@ -595,7 +595,7 @@ bindEditorProperty_set_draw_red
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, set to @true@ when the property is drawn with the editor theme's warning color. This is used for editable children's properties.
 set_draw_red ::
                (EditorProperty :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_red cls arg1

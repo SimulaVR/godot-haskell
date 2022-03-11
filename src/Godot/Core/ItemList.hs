@@ -973,7 +973,8 @@ instance NodeMethod ItemList "get_selected_items" '[]
 
 {-# NOINLINE bindItemList_get_v_scroll #-}
 
--- | Returns the @Object@ ID associated with the list.
+-- | Returns the vertical scrollbar.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindItemList_get_v_scroll :: MethodBind
 bindItemList_get_v_scroll
   = unsafePerformIO $
@@ -983,7 +984,8 @@ bindItemList_get_v_scroll
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the @Object@ ID associated with the list.
+-- | Returns the vertical scrollbar.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_v_scroll ::
                (ItemList :< cls, Object :< cls) => cls -> IO VScrollBar
 get_v_scroll cls
@@ -1498,13 +1500,6 @@ instance NodeMethod ItemList "set_icon_scale" '[Float] (IO ())
 {-# NOINLINE bindItemList_set_item_custom_bg_color #-}
 
 -- | Sets the background color of the item specified by @idx@ index to the specified @Color@.
---   				
---   @
---   
---   				var some_string = "Some text"
---   				some_string.set_item_custom_bg_color(0,Color(1, 0, 0, 1) # This will set the background color of the first item of the control to red.
---   				
---   @
 bindItemList_set_item_custom_bg_color :: MethodBind
 bindItemList_set_item_custom_bg_color
   = unsafePerformIO $
@@ -1515,13 +1510,6 @@ bindItemList_set_item_custom_bg_color
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the background color of the item specified by @idx@ index to the specified @Color@.
---   				
---   @
---   
---   				var some_string = "Some text"
---   				some_string.set_item_custom_bg_color(0,Color(1, 0, 0, 1) # This will set the background color of the first item of the control to red.
---   				
---   @
 set_item_custom_bg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 set_item_custom_bg_color cls arg1 arg2
@@ -1542,13 +1530,6 @@ instance NodeMethod ItemList "set_item_custom_bg_color"
 {-# NOINLINE bindItemList_set_item_custom_fg_color #-}
 
 -- | Sets the foreground color of the item specified by @idx@ index to the specified @Color@.
---   				
---   @
---   
---   				var some_string = "Some text"
---   				some_string.set_item_custom_fg_color(0,Color(1, 0, 0, 1) # This will set the foreground color of the first item of the control to red.
---   				
---   @
 bindItemList_set_item_custom_fg_color :: MethodBind
 bindItemList_set_item_custom_fg_color
   = unsafePerformIO $
@@ -1559,13 +1540,6 @@ bindItemList_set_item_custom_fg_color
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the foreground color of the item specified by @idx@ index to the specified @Color@.
---   				
---   @
---   
---   				var some_string = "Some text"
---   				some_string.set_item_custom_fg_color(0,Color(1, 0, 0, 1) # This will set the foreground color of the first item of the control to red.
---   				
---   @
 set_item_custom_fg_color ::
                            (ItemList :< cls, Object :< cls) => cls -> Int -> Color -> IO ()
 set_item_custom_fg_color cls arg1 arg2

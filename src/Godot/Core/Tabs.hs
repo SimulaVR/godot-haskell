@@ -340,7 +340,7 @@ instance NodeMethod Tabs "get_offset_buttons_visible" '[] (IO Bool)
 
 {-# NOINLINE bindTabs_get_scrolling_enabled #-}
 
--- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel can be used to navigate the scroll view.
 bindTabs_get_scrolling_enabled :: MethodBind
 bindTabs_get_scrolling_enabled
   = unsafePerformIO $
@@ -350,7 +350,7 @@ bindTabs_get_scrolling_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel can be used to navigate the scroll view.
 get_scrolling_enabled ::
                         (Tabs :< cls, Object :< cls) => cls -> IO Bool
 get_scrolling_enabled cls
@@ -570,7 +570,7 @@ instance NodeMethod Tabs "get_tab_rect" '[Int] (IO Rect2) where
 
 {-# NOINLINE bindTabs_get_tab_title #-}
 
--- | Returns the title of the tab at index @tab_idx@. Tab titles default to the name of the indexed child node, but this can be overridden with @method set_tab_title@.
+-- | Returns the title of the tab at index @tab_idx@.
 bindTabs_get_tab_title :: MethodBind
 bindTabs_get_tab_title
   = unsafePerformIO $
@@ -580,7 +580,7 @@ bindTabs_get_tab_title
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the title of the tab at index @tab_idx@. Tab titles default to the name of the indexed child node, but this can be overridden with @method set_tab_title@.
+-- | Returns the title of the tab at index @tab_idx@.
 get_tab_title ::
                 (Tabs :< cls, Object :< cls) => cls -> Int -> IO GodotString
 get_tab_title cls arg1
@@ -725,7 +725,7 @@ instance NodeMethod Tabs "set_drag_to_rearrange_enabled" '[Bool]
 
 {-# NOINLINE bindTabs_set_scrolling_enabled #-}
 
--- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel can be used to navigate the scroll view.
 bindTabs_set_scrolling_enabled :: MethodBind
 bindTabs_set_scrolling_enabled
   = unsafePerformIO $
@@ -735,7 +735,7 @@ bindTabs_set_scrolling_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | if @true@, the mouse's scroll wheel cab be used to navigate the scroll view.
+-- | if @true@, the mouse's scroll wheel can be used to navigate the scroll view.
 set_scrolling_enabled ::
                         (Tabs :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_scrolling_enabled cls arg1
@@ -833,8 +833,7 @@ instance NodeMethod Tabs "set_tab_close_display_policy" '[Int]
 
 {-# NOINLINE bindTabs_set_tab_disabled #-}
 
--- | If @disabled@ is @false@, hides the tab at index @tab_idx@.
---   				__Note:__ Its title text will remain unless it is also removed with @method set_tab_title@.
+-- | If @disabled@ is @true@, disables the tab at index @tab_idx@, making it non-interactable.
 bindTabs_set_tab_disabled :: MethodBind
 bindTabs_set_tab_disabled
   = unsafePerformIO $
@@ -844,8 +843,7 @@ bindTabs_set_tab_disabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @disabled@ is @false@, hides the tab at index @tab_idx@.
---   				__Note:__ Its title text will remain unless it is also removed with @method set_tab_title@.
+-- | If @disabled@ is @true@, disables the tab at index @tab_idx@, making it non-interactable.
 set_tab_disabled ::
                    (Tabs :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_tab_disabled cls arg1 arg2
@@ -915,7 +913,7 @@ instance NodeMethod Tabs "set_tab_title" '[Int, GodotString]
 
 {-# NOINLINE bindTabs_set_tabs_rearrange_group #-}
 
--- | Defines the rearrange group ID. Choose for each @Tabs@ the same value to dragging tabs between @Tabs@. Enable drag with @set_drag_to_rearrange_enabled(true)@.
+-- | Defines the rearrange group ID. Choose for each @Tabs@ the same value to dragging tabs between @Tabs@. Enable drag with @drag_to_rearrange_enabled@.
 bindTabs_set_tabs_rearrange_group :: MethodBind
 bindTabs_set_tabs_rearrange_group
   = unsafePerformIO $
@@ -925,7 +923,7 @@ bindTabs_set_tabs_rearrange_group
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the rearrange group ID. Choose for each @Tabs@ the same value to dragging tabs between @Tabs@. Enable drag with @set_drag_to_rearrange_enabled(true)@.
+-- | Defines the rearrange group ID. Choose for each @Tabs@ the same value to dragging tabs between @Tabs@. Enable drag with @drag_to_rearrange_enabled@.
 set_tabs_rearrange_group ::
                            (Tabs :< cls, Object :< cls) => cls -> Int -> IO ()
 set_tabs_rearrange_group cls arg1

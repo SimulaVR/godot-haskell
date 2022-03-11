@@ -158,7 +158,8 @@ instance NodeMethod Particles2D "capture_rect" '[] (IO Rect2) where
 
 {-# NOINLINE bindParticles2D_get_amount #-}
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 bindParticles2D_get_amount :: MethodBind
 bindParticles2D_get_amount
   = unsafePerformIO $
@@ -168,7 +169,8 @@ bindParticles2D_get_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 get_amount :: (Particles2D :< cls, Object :< cls) => cls -> IO Int
 get_amount cls
   = withVariantArray []
@@ -293,7 +295,7 @@ instance NodeMethod Particles2D "get_fractional_delta" '[]
 
 {-# NOINLINE bindParticles2D_get_lifetime #-}
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 bindParticles2D_get_lifetime :: MethodBind
 bindParticles2D_get_lifetime
   = unsafePerformIO $
@@ -303,7 +305,7 @@ bindParticles2D_get_lifetime
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 get_lifetime ::
                (Particles2D :< cls, Object :< cls) => cls -> IO Float
 get_lifetime cls
@@ -544,7 +546,8 @@ instance NodeMethod Particles2D "get_use_local_coordinates" '[]
 
 {-# NOINLINE bindParticles2D_get_visibility_rect #-}
 
--- | Editor visibility helper.
+-- | The @Rect2@ that determines the node's region which needs to be visible on screen for the particle system to be active.
+--   			Grow the rect if particles suddenly appear/disappear when the node enters/exits the screen. The @Rect2@ can be grown via code or with the __Particles → Generate Visibility Rect__ editor tool.
 bindParticles2D_get_visibility_rect :: MethodBind
 bindParticles2D_get_visibility_rect
   = unsafePerformIO $
@@ -554,7 +557,8 @@ bindParticles2D_get_visibility_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Editor visibility helper.
+-- | The @Rect2@ that determines the node's region which needs to be visible on screen for the particle system to be active.
+--   			Grow the rect if particles suddenly appear/disappear when the node enters/exits the screen. The @Rect2@ can be grown via code or with the __Particles → Generate Visibility Rect__ editor tool.
 get_visibility_rect ::
                       (Particles2D :< cls, Object :< cls) => cls -> IO Rect2
 get_visibility_rect cls
@@ -623,7 +627,8 @@ instance NodeMethod Particles2D "restart" '[] (IO ()) where
 
 {-# NOINLINE bindParticles2D_set_amount #-}
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 bindParticles2D_set_amount :: MethodBind
 bindParticles2D_set_amount
   = unsafePerformIO $
@@ -633,7 +638,8 @@ bindParticles2D_set_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 set_amount ::
              (Particles2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_amount cls arg1
@@ -788,7 +794,7 @@ instance NodeMethod Particles2D "set_fractional_delta" '[Bool]
 
 {-# NOINLINE bindParticles2D_set_lifetime #-}
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 bindParticles2D_set_lifetime :: MethodBind
 bindParticles2D_set_lifetime
   = unsafePerformIO $
@@ -798,7 +804,7 @@ bindParticles2D_set_lifetime
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 set_lifetime ::
                (Particles2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_lifetime cls arg1
@@ -1041,7 +1047,8 @@ instance NodeMethod Particles2D "set_use_local_coordinates" '[Bool]
 
 {-# NOINLINE bindParticles2D_set_visibility_rect #-}
 
--- | Editor visibility helper.
+-- | The @Rect2@ that determines the node's region which needs to be visible on screen for the particle system to be active.
+--   			Grow the rect if particles suddenly appear/disappear when the node enters/exits the screen. The @Rect2@ can be grown via code or with the __Particles → Generate Visibility Rect__ editor tool.
 bindParticles2D_set_visibility_rect :: MethodBind
 bindParticles2D_set_visibility_rect
   = unsafePerformIO $
@@ -1051,7 +1058,8 @@ bindParticles2D_set_visibility_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Editor visibility helper.
+-- | The @Rect2@ that determines the node's region which needs to be visible on screen for the particle system to be active.
+--   			Grow the rect if particles suddenly appear/disappear when the node enters/exits the screen. The @Rect2@ can be grown via code or with the __Particles → Generate Visibility Rect__ editor tool.
 set_visibility_rect ::
                       (Particles2D :< cls, Object :< cls) => cls -> Rect2 -> IO ()
 set_visibility_rect cls arg1

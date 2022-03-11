@@ -276,7 +276,7 @@ instance NodeMethod MainLoop "_input_text" '[GodotString] (IO ())
 
 {-# NOINLINE bindMainLoop__iteration #-}
 
--- | Called each physics frame with the time since the last physics frame as argument (in seconds). Equivalent to @method Node._physics_process@.
+-- | Called each physics frame with the time since the last physics frame as argument (@delta@, in seconds). Equivalent to @method Node._physics_process@.
 --   				If implemented, the method must return a boolean value. @true@ ends the main loop, while @false@ lets it proceed to the next frame.
 bindMainLoop__iteration :: MethodBind
 bindMainLoop__iteration
@@ -287,7 +287,7 @@ bindMainLoop__iteration
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called each physics frame with the time since the last physics frame as argument (in seconds). Equivalent to @method Node._physics_process@.
+-- | Called each physics frame with the time since the last physics frame as argument (@delta@, in seconds). Equivalent to @method Node._physics_process@.
 --   				If implemented, the method must return a boolean value. @true@ ends the main loop, while @false@ lets it proceed to the next frame.
 _iteration ::
              (MainLoop :< cls, Object :< cls) => cls -> Float -> IO Bool

@@ -27,6 +27,7 @@ import Godot.Core.VisualInstance()
 
 {-# NOINLINE bindRootMotionView_get_animation_path #-}
 
+-- | Path to an @AnimationTree@ node to use as a basis for root motion.
 bindRootMotionView_get_animation_path :: MethodBind
 bindRootMotionView_get_animation_path
   = unsafePerformIO $
@@ -36,6 +37,7 @@ bindRootMotionView_get_animation_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Path to an @AnimationTree@ node to use as a basis for root motion.
 get_animation_path ::
                      (RootMotionView :< cls, Object :< cls) => cls -> IO NodePath
 get_animation_path cls
@@ -54,6 +56,7 @@ instance NodeMethod RootMotionView "get_animation_path" '[]
 
 {-# NOINLINE bindRootMotionView_set_animation_path #-}
 
+-- | Path to an @AnimationTree@ node to use as a basis for root motion.
 bindRootMotionView_set_animation_path :: MethodBind
 bindRootMotionView_set_animation_path
   = unsafePerformIO $
@@ -63,6 +66,7 @@ bindRootMotionView_set_animation_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Path to an @AnimationTree@ node to use as a basis for root motion.
 set_animation_path ::
                      (RootMotionView :< cls, Object :< cls) => cls -> NodePath -> IO ()
 set_animation_path cls arg1
@@ -88,6 +92,7 @@ instance NodeProperty RootMotionView "animation_path" NodePath
 
 {-# NOINLINE bindRootMotionView_get_cell_size #-}
 
+-- | The grid's cell size in 3D units.
 bindRootMotionView_get_cell_size :: MethodBind
 bindRootMotionView_get_cell_size
   = unsafePerformIO $
@@ -97,6 +102,7 @@ bindRootMotionView_get_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The grid's cell size in 3D units.
 get_cell_size ::
                 (RootMotionView :< cls, Object :< cls) => cls -> IO Float
 get_cell_size cls
@@ -114,6 +120,7 @@ instance NodeMethod RootMotionView "get_cell_size" '[] (IO Float)
 
 {-# NOINLINE bindRootMotionView_set_cell_size #-}
 
+-- | The grid's cell size in 3D units.
 bindRootMotionView_set_cell_size :: MethodBind
 bindRootMotionView_set_cell_size
   = unsafePerformIO $
@@ -123,6 +130,7 @@ bindRootMotionView_set_cell_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The grid's cell size in 3D units.
 set_cell_size ::
                 (RootMotionView :< cls, Object :< cls) => cls -> Float -> IO ()
 set_cell_size cls arg1
@@ -144,6 +152,7 @@ instance NodeProperty RootMotionView "cell_size" Float 'False where
 
 {-# NOINLINE bindRootMotionView_get_color #-}
 
+-- | The grid's color.
 bindRootMotionView_get_color :: MethodBind
 bindRootMotionView_get_color
   = unsafePerformIO $
@@ -153,6 +162,7 @@ bindRootMotionView_get_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The grid's color.
 get_color ::
             (RootMotionView :< cls, Object :< cls) => cls -> IO Color
 get_color cls
@@ -168,6 +178,7 @@ instance NodeMethod RootMotionView "get_color" '[] (IO Color) where
 
 {-# NOINLINE bindRootMotionView_set_color #-}
 
+-- | The grid's color.
 bindRootMotionView_set_color :: MethodBind
 bindRootMotionView_set_color
   = unsafePerformIO $
@@ -177,6 +188,7 @@ bindRootMotionView_set_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The grid's color.
 set_color ::
             (RootMotionView :< cls, Object :< cls) => cls -> Color -> IO ()
 set_color cls arg1
@@ -196,6 +208,7 @@ instance NodeProperty RootMotionView "color" Color 'False where
 
 {-# NOINLINE bindRootMotionView_get_radius #-}
 
+-- | The grid's radius in 3D units. The grid's opacity will fade gradually as the distance from the origin increases until this @radius@ is reached.
 bindRootMotionView_get_radius :: MethodBind
 bindRootMotionView_get_radius
   = unsafePerformIO $
@@ -205,6 +218,7 @@ bindRootMotionView_get_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The grid's radius in 3D units. The grid's opacity will fade gradually as the distance from the origin increases until this @radius@ is reached.
 get_radius ::
              (RootMotionView :< cls, Object :< cls) => cls -> IO Float
 get_radius cls
@@ -221,6 +235,7 @@ instance NodeMethod RootMotionView "get_radius" '[] (IO Float)
 
 {-# NOINLINE bindRootMotionView_set_radius #-}
 
+-- | The grid's radius in 3D units. The grid's opacity will fade gradually as the distance from the origin increases until this @radius@ is reached.
 bindRootMotionView_set_radius :: MethodBind
 bindRootMotionView_set_radius
   = unsafePerformIO $
@@ -230,6 +245,7 @@ bindRootMotionView_set_radius
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The grid's radius in 3D units. The grid's opacity will fade gradually as the distance from the origin increases until this @radius@ is reached.
 set_radius ::
              (RootMotionView :< cls, Object :< cls) => cls -> Float -> IO ()
 set_radius cls arg1
@@ -249,6 +265,7 @@ instance NodeProperty RootMotionView "radius" Float 'False where
 
 {-# NOINLINE bindRootMotionView_get_zero_y #-}
 
+-- | If @true@, the grid's points will all be on the same Y coordinate (@i@local@/i@ Y = 0). If @false@, the points' original Y coordinate is preserved.
 bindRootMotionView_get_zero_y :: MethodBind
 bindRootMotionView_get_zero_y
   = unsafePerformIO $
@@ -258,6 +275,7 @@ bindRootMotionView_get_zero_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, the grid's points will all be on the same Y coordinate (@i@local@/i@ Y = 0). If @false@, the points' original Y coordinate is preserved.
 get_zero_y ::
              (RootMotionView :< cls, Object :< cls) => cls -> IO Bool
 get_zero_y cls
@@ -273,6 +291,7 @@ instance NodeMethod RootMotionView "get_zero_y" '[] (IO Bool) where
 
 {-# NOINLINE bindRootMotionView_set_zero_y #-}
 
+-- | If @true@, the grid's points will all be on the same Y coordinate (@i@local@/i@ Y = 0). If @false@, the points' original Y coordinate is preserved.
 bindRootMotionView_set_zero_y :: MethodBind
 bindRootMotionView_set_zero_y
   = unsafePerformIO $
@@ -282,6 +301,7 @@ bindRootMotionView_set_zero_y
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, the grid's points will all be on the same Y coordinate (@i@local@/i@ Y = 0). If @false@, the points' original Y coordinate is preserved.
 set_zero_y ::
              (RootMotionView :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_zero_y cls arg1

@@ -85,6 +85,7 @@ instance NodeMethod InputEvent "as_text" '[] (IO GodotString) where
 {-# NOINLINE bindInputEvent_get_action_strength #-}
 
 -- | Returns a value between 0.0 and 1.0 depending on the given actions' state. Useful for getting the value of events of type @InputEventJoypadMotion@.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 bindInputEvent_get_action_strength :: MethodBind
 bindInputEvent_get_action_strength
   = unsafePerformIO $
@@ -95,6 +96,7 @@ bindInputEvent_get_action_strength
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a value between 0.0 and 1.0 depending on the given actions' state. Useful for getting the value of events of type @InputEventJoypadMotion@.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 get_action_strength ::
                       (InputEvent :< cls, Object :< cls) =>
                       cls -> GodotString -> IO Float
@@ -142,6 +144,7 @@ instance NodeMethod InputEvent "get_device" '[] (IO Int) where
 {-# NOINLINE bindInputEvent_is_action #-}
 
 -- | Returns @true@ if this input event matches a pre-defined action of any type.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 bindInputEvent_is_action :: MethodBind
 bindInputEvent_is_action
   = unsafePerformIO $
@@ -152,6 +155,7 @@ bindInputEvent_is_action
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ if this input event matches a pre-defined action of any type.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 is_action ::
             (InputEvent :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_action cls arg1
@@ -168,6 +172,8 @@ instance NodeMethod InputEvent "is_action" '[GodotString] (IO Bool)
 {-# NOINLINE bindInputEvent_is_action_pressed #-}
 
 -- | Returns @true@ if the given action is being pressed (and is not an echo event for @InputEventKey@ events, unless @allow_echo@ is @true@). Not relevant for events of type @InputEventMouseMotion@ or @InputEventScreenDrag@.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 bindInputEvent_is_action_pressed :: MethodBind
 bindInputEvent_is_action_pressed
   = unsafePerformIO $
@@ -178,6 +184,8 @@ bindInputEvent_is_action_pressed
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ if the given action is being pressed (and is not an echo event for @InputEventKey@ events, unless @allow_echo@ is @true@). Not relevant for events of type @InputEventMouseMotion@ or @InputEventScreenDrag@.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 is_action_pressed ::
                     (InputEvent :< cls, Object :< cls) =>
                     cls -> GodotString -> Maybe Bool -> IO Bool
@@ -200,6 +208,7 @@ instance NodeMethod InputEvent "is_action_pressed"
 {-# NOINLINE bindInputEvent_is_action_released #-}
 
 -- | Returns @true@ if the given action is released (i.e. not pressed). Not relevant for events of type @InputEventMouseMotion@ or @InputEventScreenDrag@.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 bindInputEvent_is_action_released :: MethodBind
 bindInputEvent_is_action_released
   = unsafePerformIO $
@@ -210,6 +219,7 @@ bindInputEvent_is_action_released
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ if the given action is released (i.e. not pressed). Not relevant for events of type @InputEventMouseMotion@ or @InputEventScreenDrag@.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 is_action_released ::
                      (InputEvent :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 is_action_released cls arg1
@@ -279,6 +289,7 @@ instance NodeMethod InputEvent "is_echo" '[] (IO Bool) where
 {-# NOINLINE bindInputEvent_is_pressed #-}
 
 -- | Returns @true@ if this input event is pressed. Not relevant for events of type @InputEventMouseMotion@ or @InputEventScreenDrag@.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 bindInputEvent_is_pressed :: MethodBind
 bindInputEvent_is_pressed
   = unsafePerformIO $
@@ -289,6 +300,7 @@ bindInputEvent_is_pressed
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ if this input event is pressed. Not relevant for events of type @InputEventMouseMotion@ or @InputEventScreenDrag@.
+--   				__Note:__ Due to keyboard ghosting, @method is_action_pressed@ may return @false@ even if one of the action's keys is pressed. See @url=https://docs.godotengine.org/en/3.4/tutorials/inputs/input_examples.html#keyboard-events@Input examples@/url@ in the documentation for more information.
 is_pressed :: (InputEvent :< cls, Object :< cls) => cls -> IO Bool
 is_pressed cls
   = withVariantArray []
@@ -331,7 +343,8 @@ instance NodeMethod InputEvent "set_device" '[Int] (IO ()) where
 
 {-# NOINLINE bindInputEvent_shortcut_match #-}
 
--- | Returns @true@ if the given input event is checking for the same key (@InputEventKey@), button (@InputEventJoypadButton@) or action (@InputEventAction@).
+-- | Returns @true@ if the specified @event@ matches this event. Only valid for action events i.e key (@InputEventKey@), button (@InputEventMouseButton@ or @InputEventJoypadButton@), axis @InputEventJoypadMotion@ or action (@InputEventAction@) events.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 bindInputEvent_shortcut_match :: MethodBind
 bindInputEvent_shortcut_match
   = unsafePerformIO $
@@ -341,7 +354,8 @@ bindInputEvent_shortcut_match
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the given input event is checking for the same key (@InputEventKey@), button (@InputEventJoypadButton@) or action (@InputEventAction@).
+-- | Returns @true@ if the specified @event@ matches this event. Only valid for action events i.e key (@InputEventKey@), button (@InputEventMouseButton@ or @InputEventJoypadButton@), axis @InputEventJoypadMotion@ or action (@InputEventAction@) events.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 shortcut_match ::
                  (InputEvent :< cls, Object :< cls) => cls -> InputEvent -> IO Bool
 shortcut_match cls arg1

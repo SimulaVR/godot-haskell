@@ -805,6 +805,8 @@ instance NodeMethod Camera2D "is_limit_drawing_enabled" '[]
 {-# NOINLINE bindCamera2D_is_limit_smoothing_enabled #-}
 
 -- | If @true@, the camera smoothly stops when reaches its limits.
+--   			This has no effect if smoothing is disabled.
+--   			__Note:__ To immediately update the camera's position to be within limits without smoothing, even with this setting enabled, invoke @method reset_smoothing@.
 bindCamera2D_is_limit_smoothing_enabled :: MethodBind
 bindCamera2D_is_limit_smoothing_enabled
   = unsafePerformIO $
@@ -815,6 +817,8 @@ bindCamera2D_is_limit_smoothing_enabled
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the camera smoothly stops when reaches its limits.
+--   			This has no effect if smoothing is disabled.
+--   			__Note:__ To immediately update the camera's position to be within limits without smoothing, even with this setting enabled, invoke @method reset_smoothing@.
 is_limit_smoothing_enabled ::
                              (Camera2D :< cls, Object :< cls) => cls -> IO Bool
 is_limit_smoothing_enabled cls
@@ -1244,6 +1248,8 @@ instance NodeMethod Camera2D "set_limit_drawing_enabled" '[Bool]
 {-# NOINLINE bindCamera2D_set_limit_smoothing_enabled #-}
 
 -- | If @true@, the camera smoothly stops when reaches its limits.
+--   			This has no effect if smoothing is disabled.
+--   			__Note:__ To immediately update the camera's position to be within limits without smoothing, even with this setting enabled, invoke @method reset_smoothing@.
 bindCamera2D_set_limit_smoothing_enabled :: MethodBind
 bindCamera2D_set_limit_smoothing_enabled
   = unsafePerformIO $
@@ -1254,6 +1260,8 @@ bindCamera2D_set_limit_smoothing_enabled
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the camera smoothly stops when reaches its limits.
+--   			This has no effect if smoothing is disabled.
+--   			__Note:__ To immediately update the camera's position to be within limits without smoothing, even with this setting enabled, invoke @method reset_smoothing@.
 set_limit_smoothing_enabled ::
                               (Camera2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_limit_smoothing_enabled cls arg1

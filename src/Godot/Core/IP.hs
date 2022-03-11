@@ -111,7 +111,7 @@ instance NodeMethod IP "erase_resolve_item" '[Int] (IO ()) where
 
 {-# NOINLINE bindIP_get_local_addresses #-}
 
--- | Returns all of the user's current IPv4 and IPv6 addresses as an array.
+-- | Returns all the user's current IPv4 and IPv6 addresses as an array.
 bindIP_get_local_addresses :: MethodBind
 bindIP_get_local_addresses
   = unsafePerformIO $
@@ -121,7 +121,7 @@ bindIP_get_local_addresses
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns all of the user's current IPv4 and IPv6 addresses as an array.
+-- | Returns all the user's current IPv4 and IPv6 addresses as an array.
 get_local_addresses ::
                       (IP :< cls, Object :< cls) => cls -> IO Array
 get_local_addresses cls

@@ -285,7 +285,7 @@ instance NodeMethod MeshDataTool "get_face_count" '[] (IO Int)
 {-# NOINLINE bindMeshDataTool_get_face_edge #-}
 
 -- | Returns specified edge associated with given face.
---   				Edge argument must 2 or less because a face only has three edges.
+--   				Edge argument must be either 0, 1, or 2 because a face only has three edges.
 bindMeshDataTool_get_face_edge :: MethodBind
 bindMeshDataTool_get_face_edge
   = unsafePerformIO $
@@ -296,7 +296,7 @@ bindMeshDataTool_get_face_edge
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns specified edge associated with given face.
---   				Edge argument must 2 or less because a face only has three edges.
+--   				Edge argument must be either 0, 1, or 2 because a face only has three edges.
 get_face_edge ::
                 (MeshDataTool :< cls, Object :< cls) => cls -> Int -> Int -> IO Int
 get_face_edge cls arg1 arg2
@@ -373,7 +373,7 @@ instance NodeMethod MeshDataTool "get_face_normal" '[Int]
 {-# NOINLINE bindMeshDataTool_get_face_vertex #-}
 
 -- | Returns the specified vertex of the given face.
---   				Vertex argument must be 2 or less because faces contain three vertices.
+--   				Vertex argument must be either 0, 1, or 2 because faces contain three vertices.
 bindMeshDataTool_get_face_vertex :: MethodBind
 bindMeshDataTool_get_face_vertex
   = unsafePerformIO $
@@ -384,7 +384,7 @@ bindMeshDataTool_get_face_vertex
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the specified vertex of the given face.
---   				Vertex argument must be 2 or less because faces contain three vertices.
+--   				Vertex argument must be either 0, 1, or 2 because faces contain three vertices.
 get_face_vertex ::
                   (MeshDataTool :< cls, Object :< cls) => cls -> Int -> Int -> IO Int
 get_face_vertex cls arg1 arg2

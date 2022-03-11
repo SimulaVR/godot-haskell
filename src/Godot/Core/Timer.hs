@@ -117,7 +117,8 @@ instance NodeMethod Timer "get_timer_process_mode" '[] (IO Int)
 
 {-# NOINLINE bindTimer_get_wait_time #-}
 
--- | Wait time in seconds.
+-- | The wait time in seconds.
+--   			__Note:__ Timers can only emit once per rendered frame at most (or once per physics frame if @process_mode@ is @TIMER_PROCESS_PHYSICS@). This means very low wait times (lower than 0.05 seconds) will behave in significantly different ways depending on the rendered framerate. For very low wait times, it is recommended to use a process loop in a script instead of using a Timer node.
 bindTimer_get_wait_time :: MethodBind
 bindTimer_get_wait_time
   = unsafePerformIO $
@@ -127,7 +128,8 @@ bindTimer_get_wait_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Wait time in seconds.
+-- | The wait time in seconds.
+--   			__Note:__ Timers can only emit once per rendered frame at most (or once per physics frame if @process_mode@ is @TIMER_PROCESS_PHYSICS@). This means very low wait times (lower than 0.05 seconds) will behave in significantly different ways depending on the rendered framerate. For very low wait times, it is recommended to use a process loop in a script instead of using a Timer node.
 get_wait_time :: (Timer :< cls, Object :< cls) => cls -> IO Float
 get_wait_time cls
   = withVariantArray []
@@ -340,7 +342,8 @@ instance NodeMethod Timer "set_timer_process_mode" '[Int] (IO ())
 
 {-# NOINLINE bindTimer_set_wait_time #-}
 
--- | Wait time in seconds.
+-- | The wait time in seconds.
+--   			__Note:__ Timers can only emit once per rendered frame at most (or once per physics frame if @process_mode@ is @TIMER_PROCESS_PHYSICS@). This means very low wait times (lower than 0.05 seconds) will behave in significantly different ways depending on the rendered framerate. For very low wait times, it is recommended to use a process loop in a script instead of using a Timer node.
 bindTimer_set_wait_time :: MethodBind
 bindTimer_set_wait_time
   = unsafePerformIO $
@@ -350,7 +353,8 @@ bindTimer_set_wait_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Wait time in seconds.
+-- | The wait time in seconds.
+--   			__Note:__ Timers can only emit once per rendered frame at most (or once per physics frame if @process_mode@ is @TIMER_PROCESS_PHYSICS@). This means very low wait times (lower than 0.05 seconds) will behave in significantly different ways depending on the rendered framerate. For very low wait times, it is recommended to use a process loop in a script instead of using a Timer node.
 set_wait_time ::
                 (Timer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_wait_time cls arg1
@@ -366,7 +370,7 @@ instance NodeMethod Timer "set_wait_time" '[Float] (IO ()) where
 {-# NOINLINE bindTimer_start #-}
 
 -- | Starts the timer. Sets @wait_time@ to @time_sec@ if @time_sec > 0@. This also resets the remaining time to @wait_time@.
---   				__Note:__ this method will not resume a paused timer. See @paused@.
+--   				__Note:__ This method will not resume a paused timer. See @paused@.
 bindTimer_start :: MethodBind
 bindTimer_start
   = unsafePerformIO $
@@ -377,7 +381,7 @@ bindTimer_start
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Starts the timer. Sets @wait_time@ to @time_sec@ if @time_sec > 0@. This also resets the remaining time to @wait_time@.
---   				__Note:__ this method will not resume a paused timer. See @paused@.
+--   				__Note:__ This method will not resume a paused timer. See @paused@.
 start ::
         (Timer :< cls, Object :< cls) => cls -> Maybe Float -> IO ()
 start cls arg1

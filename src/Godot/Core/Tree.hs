@@ -446,7 +446,7 @@ instance NodeMethod Tree "clear" '[] (IO ()) where
 
 {-# NOINLINE bindTree_create_item #-}
 
--- | Creates an item in the tree and adds it as a child of @parent@.
+-- | Creates an item in the tree and adds it as a child of @parent@, which can be either a valid @TreeItem@ or @null@.
 --   				If @parent@ is @null@, the root item will be the parent, or the new item will be the root itself if the tree is empty.
 --   				The new item will be the @idx@th child of parent, or it will be the last child if there are not enough siblings.
 bindTree_create_item :: MethodBind
@@ -458,7 +458,7 @@ bindTree_create_item
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an item in the tree and adds it as a child of @parent@.
+-- | Creates an item in the tree and adds it as a child of @parent@, which can be either a valid @TreeItem@ or @null@.
 --   				If @parent@ is @null@, the root item will be the parent, or the new item will be the root itself if the tree is empty.
 --   				The new item will be the @idx@th child of parent, or it will be the last child if there are not enough siblings.
 create_item ::
@@ -755,7 +755,17 @@ instance NodeMethod Tree "get_drop_section_at_position" '[Vector2]
 
 {-# NOINLINE bindTree_get_edited #-}
 
--- | Returns the currently edited item. This is only available for custom cell mode.
+-- | Returns the currently edited item. Can be used with @signal item_edited@ to get the item that was modified.
+--   				
+--   @
+--   
+--   				func _ready():
+--   				    $Tree.item_edited.connect(on_Tree_item_edited)
+--   
+--   				func on_Tree_item_edited():
+--   				    print($Tree.get_edited()) # This item just got edited (e.g. checked).
+--   				
+--   @
 bindTree_get_edited :: MethodBind
 bindTree_get_edited
   = unsafePerformIO $
@@ -765,7 +775,17 @@ bindTree_get_edited
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the currently edited item. This is only available for custom cell mode.
+-- | Returns the currently edited item. Can be used with @signal item_edited@ to get the item that was modified.
+--   				
+--   @
+--   
+--   				func _ready():
+--   				    $Tree.item_edited.connect(on_Tree_item_edited)
+--   
+--   				func on_Tree_item_edited():
+--   				    print($Tree.get_edited()) # This item just got edited (e.g. checked).
+--   				
+--   @
 get_edited :: (Tree :< cls, Object :< cls) => cls -> IO TreeItem
 get_edited cls
   = withVariantArray []
@@ -778,7 +798,7 @@ instance NodeMethod Tree "get_edited" '[] (IO TreeItem) where
 
 {-# NOINLINE bindTree_get_edited_column #-}
 
--- | Returns the column for the currently edited item. This is only available for custom cell mode.
+-- | Returns the column for the currently edited item.
 bindTree_get_edited_column :: MethodBind
 bindTree_get_edited_column
   = unsafePerformIO $
@@ -788,7 +808,7 @@ bindTree_get_edited_column
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the column for the currently edited item. This is only available for custom cell mode.
+-- | Returns the column for the currently edited item.
 get_edited_column :: (Tree :< cls, Object :< cls) => cls -> IO Int
 get_edited_column cls
   = withVariantArray []
@@ -803,7 +823,7 @@ instance NodeMethod Tree "get_edited_column" '[] (IO Int) where
 
 {-# NOINLINE bindTree_get_item_area_rect #-}
 
--- | Returns the rectangle area for the specified item. If @column@ is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
+-- | Returns the rectangle area for the specified @TreeItem@. If @column@ is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
 bindTree_get_item_area_rect :: MethodBind
 bindTree_get_item_area_rect
   = unsafePerformIO $
@@ -813,7 +833,7 @@ bindTree_get_item_area_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the rectangle area for the specified item. If @column@ is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
+-- | Returns the rectangle area for the specified @TreeItem@. If @column@ is specified, only get the position and size of that column, otherwise get the rectangle containing all columns.
 get_item_area_rect ::
                      (Tree :< cls, Object :< cls) =>
                      cls -> Object -> Maybe Int -> IO Rect2
@@ -861,7 +881,7 @@ instance NodeMethod Tree "get_item_at_position" '[Vector2]
 
 {-# NOINLINE bindTree_get_next_selected #-}
 
--- | Returns the next selected item after the given one, or @null@ if the end is reached.
+-- | Returns the next selected @TreeItem@ after the given one, or @null@ if the end is reached.
 --   				If @from@ is @null@, this returns the first selected item.
 bindTree_get_next_selected :: MethodBind
 bindTree_get_next_selected
@@ -872,7 +892,7 @@ bindTree_get_next_selected
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next selected item after the given one, or @null@ if the end is reached.
+-- | Returns the next selected @TreeItem@ after the given one, or @null@ if the end is reached.
 --   				If @from@ is @null@, this returns the first selected item.
 get_next_selected ::
                     (Tree :< cls, Object :< cls) => cls -> Object -> IO TreeItem

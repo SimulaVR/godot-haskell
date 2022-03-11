@@ -342,8 +342,8 @@ instance NodeMethod StyleBoxFlat "get_border_width_min" '[]
 
 {-# NOINLINE bindStyleBoxFlat_get_corner_detail #-}
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
---   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+-- | This sets the number of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii less than 10, @4@ or @5@ should be enough. For corner radii less than 30, values between @8@ and @12@ should be enough.
 --   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 bindStyleBoxFlat_get_corner_detail :: MethodBind
 bindStyleBoxFlat_get_corner_detail
@@ -354,8 +354,8 @@ bindStyleBoxFlat_get_corner_detail
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
---   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+-- | This sets the number of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii less than 10, @4@ or @5@ should be enough. For corner radii less than 30, values between @8@ and @12@ should be enough.
 --   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 get_corner_detail ::
                     (StyleBoxFlat :< cls, Object :< cls) => cls -> IO Int
@@ -518,6 +518,7 @@ instance NodeMethod StyleBoxFlat "get_shadow_size" '[] (IO Int)
 {-# NOINLINE bindStyleBoxFlat_is_anti_aliased #-}
 
 -- | Antialiasing draws a small ring around the edges, which fades to transparency. As a result, edges look much smoother. This is only noticeable when using rounded corners.
+--   			__Note:__ When using beveled corners with 45-degree angles (@corner_detail@ = 1), it is recommended to set @anti_aliasing@ to @false@ to ensure crisp visuals and avoid possible visual glitches.
 bindStyleBoxFlat_is_anti_aliased :: MethodBind
 bindStyleBoxFlat_is_anti_aliased
   = unsafePerformIO $
@@ -528,6 +529,7 @@ bindStyleBoxFlat_is_anti_aliased
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Antialiasing draws a small ring around the edges, which fades to transparency. As a result, edges look much smoother. This is only noticeable when using rounded corners.
+--   			__Note:__ When using beveled corners with 45-degree angles (@corner_detail@ = 1), it is recommended to set @anti_aliasing@ to @false@ to ensure crisp visuals and avoid possible visual glitches.
 is_anti_aliased ::
                   (StyleBoxFlat :< cls, Object :< cls) => cls -> IO Bool
 is_anti_aliased cls
@@ -601,6 +603,7 @@ instance NodeMethod StyleBoxFlat "set_aa_size" '[Int] (IO ()) where
 {-# NOINLINE bindStyleBoxFlat_set_anti_aliased #-}
 
 -- | Antialiasing draws a small ring around the edges, which fades to transparency. As a result, edges look much smoother. This is only noticeable when using rounded corners.
+--   			__Note:__ When using beveled corners with 45-degree angles (@corner_detail@ = 1), it is recommended to set @anti_aliasing@ to @false@ to ensure crisp visuals and avoid possible visual glitches.
 bindStyleBoxFlat_set_anti_aliased :: MethodBind
 bindStyleBoxFlat_set_anti_aliased
   = unsafePerformIO $
@@ -611,6 +614,7 @@ bindStyleBoxFlat_set_anti_aliased
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Antialiasing draws a small ring around the edges, which fades to transparency. As a result, edges look much smoother. This is only noticeable when using rounded corners.
+--   			__Note:__ When using beveled corners with 45-degree angles (@corner_detail@ = 1), it is recommended to set @anti_aliasing@ to @false@ to ensure crisp visuals and avoid possible visual glitches.
 set_anti_aliased ::
                    (StyleBoxFlat :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_anti_aliased cls arg1
@@ -770,8 +774,8 @@ instance NodeMethod StyleBoxFlat "set_border_width_all" '[Int]
 
 {-# NOINLINE bindStyleBoxFlat_set_corner_detail #-}
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
---   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+-- | This sets the number of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii less than 10, @4@ or @5@ should be enough. For corner radii less than 30, values between @8@ and @12@ should be enough.
 --   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 bindStyleBoxFlat_set_corner_detail :: MethodBind
 bindStyleBoxFlat_set_corner_detail
@@ -782,8 +786,8 @@ bindStyleBoxFlat_set_corner_detail
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This sets the amount of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
---   			For corner radii smaller than 10, @4@ or @5@ should be enough. For corner radii smaller than 30, values between @8@ and @12@ should be enough.
+-- | This sets the number of vertices used for each corner. Higher values result in rounder corners but take more processing power to compute. When choosing a value, you should take the corner radius (@method set_corner_radius_all@) into account.
+--   			For corner radii less than 10, @4@ or @5@ should be enough. For corner radii less than 30, values between @8@ and @12@ should be enough.
 --   			A corner detail of @1@ will result in chamfered corners instead of rounded corners, which is useful for some artistic effects.
 set_corner_detail ::
                     (StyleBoxFlat :< cls, Object :< cls) => cls -> Int -> IO ()

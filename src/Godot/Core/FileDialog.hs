@@ -570,7 +570,9 @@ instance NodeMethod FileDialog "_update_file_name" '[] (IO ())
 
 {-# NOINLINE bindFileDialog_add_filter #-}
 
--- | Adds @filter@ as a custom filter; @filter@ should be of the form @"filename.extension ; Description"@. For example, @"*.png ; PNG Images"@.
+-- | Adds @filter@ to the list of filters, which restricts what files can be picked.
+--   				A @filter@ should be of the form @"filename.extension ; Description"@, where filename and extension can be @*@ to match any string. Filters starting with @.@ (i.e. empty filenames) are not allowed.
+--   				Example filters: @"*.png ; PNG Images"@, @"project.godot ; Godot Project"@.
 bindFileDialog_add_filter :: MethodBind
 bindFileDialog_add_filter
   = unsafePerformIO $
@@ -580,7 +582,9 @@ bindFileDialog_add_filter
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds @filter@ as a custom filter; @filter@ should be of the form @"filename.extension ; Description"@. For example, @"*.png ; PNG Images"@.
+-- | Adds @filter@ to the list of filters, which restricts what files can be picked.
+--   				A @filter@ should be of the form @"filename.extension ; Description"@, where filename and extension can be @*@ to match any string. Filters starting with @.@ (i.e. empty filenames) are not allowed.
+--   				Example filters: @"*.png ; PNG Images"@, @"project.godot ; Godot Project"@.
 add_filter ::
              (FileDialog :< cls, Object :< cls) => cls -> GodotString -> IO ()
 add_filter cls arg1
@@ -759,7 +763,7 @@ instance NodeMethod FileDialog "get_current_path" '[]
 
 {-# NOINLINE bindFileDialog_get_filters #-}
 
--- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@. Multiple file types can also be specified in a single filter. @"*.png, *.jpg, *.jpeg ; Supported Images"@ will show both PNG and JPEG files when selected.
 bindFileDialog_get_filters :: MethodBind
 bindFileDialog_get_filters
   = unsafePerformIO $
@@ -769,7 +773,7 @@ bindFileDialog_get_filters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@. Multiple file types can also be specified in a single filter. @"*.png, *.jpg, *.jpeg ; Supported Images"@ will show both PNG and JPEG files when selected.
 get_filters ::
               (FileDialog :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_filters cls
@@ -788,6 +792,7 @@ instance NodeMethod FileDialog "get_filters" '[]
 {-# NOINLINE bindFileDialog_get_line_edit #-}
 
 -- | Returns the LineEdit for the selected file.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindFileDialog_get_line_edit :: MethodBind
 bindFileDialog_get_line_edit
   = unsafePerformIO $
@@ -798,6 +803,7 @@ bindFileDialog_get_line_edit
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the LineEdit for the selected file.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_line_edit ::
                 (FileDialog :< cls, Object :< cls) => cls -> IO LineEdit
 get_line_edit cls
@@ -839,6 +845,7 @@ instance NodeMethod FileDialog "get_mode" '[] (IO Int) where
 {-# NOINLINE bindFileDialog_get_vbox #-}
 
 -- | Returns the vertical box container of the dialog, custom controls can be added to it.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindFileDialog_get_vbox :: MethodBind
 bindFileDialog_get_vbox
   = unsafePerformIO $
@@ -849,6 +856,7 @@ bindFileDialog_get_vbox
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the vertical box container of the dialog, custom controls can be added to it.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_vbox ::
            (FileDialog :< cls, Object :< cls) => cls -> IO VBoxContainer
 get_vbox cls
@@ -1059,7 +1067,7 @@ instance NodeMethod FileDialog "set_current_path" '[GodotString]
 
 {-# NOINLINE bindFileDialog_set_filters #-}
 
--- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@. Multiple file types can also be specified in a single filter. @"*.png, *.jpg, *.jpeg ; Supported Images"@ will show both PNG and JPEG files when selected.
 bindFileDialog_set_filters :: MethodBind
 bindFileDialog_set_filters
   = unsafePerformIO $
@@ -1069,7 +1077,7 @@ bindFileDialog_set_filters
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@.
+-- | The available file type filters. For example, this shows only @.png@ and @.gd@ files: @set_filters(PoolStringArray(@"*.png ; PNG Images","*.gd ; GDScript Files"@))@. Multiple file types can also be specified in a single filter. @"*.png, *.jpg, *.jpeg ; Supported Images"@ will show both PNG and JPEG files when selected.
 set_filters ::
               (FileDialog :< cls, Object :< cls) =>
               cls -> PoolStringArray -> IO ()

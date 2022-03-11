@@ -861,7 +861,8 @@ instance NodeMethod HTTPClient "read_response_body_chunk" '[]
 
 {-# NOINLINE bindHTTPClient_request #-}
 
--- | Sends a request to the connected host. The URL parameter is just the part after the host, so for @http://somehost.com/index.php@, it is @index.php@.
+-- | Sends a request to the connected host.
+--   				The URL parameter is usually just the part after the host, so for @http://somehost.com/index.php@, it is @/index.php@. When sending requests to an HTTP proxy server, it should be an absolute URL. For @HTTPClient.METHOD_OPTIONS@ requests, @*@ is also allowed. For @HTTPClient.METHOD_CONNECT@ requests, it should be the authority component (@host:port@).
 --   				Headers are HTTP request headers. For available HTTP methods, see @enum Method@.
 --   				To create a POST request with query strings to push to the server, do:
 --   				
@@ -870,7 +871,7 @@ instance NodeMethod HTTPClient "read_response_body_chunk" '[]
 --   				var fields = {"username" : "user", "password" : "pass"}
 --   				var query_string = http_client.query_string_from_dict(fields)
 --   				var headers = @"Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())@
---   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
+--   				var result = http_client.request(http_client.METHOD_POST, "/index.php", headers, query_string)
 --   				
 --   @
 --   
@@ -884,7 +885,8 @@ bindHTTPClient_request
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends a request to the connected host. The URL parameter is just the part after the host, so for @http://somehost.com/index.php@, it is @index.php@.
+-- | Sends a request to the connected host.
+--   				The URL parameter is usually just the part after the host, so for @http://somehost.com/index.php@, it is @/index.php@. When sending requests to an HTTP proxy server, it should be an absolute URL. For @HTTPClient.METHOD_OPTIONS@ requests, @*@ is also allowed. For @HTTPClient.METHOD_CONNECT@ requests, it should be the authority component (@host:port@).
 --   				Headers are HTTP request headers. For available HTTP methods, see @enum Method@.
 --   				To create a POST request with query strings to push to the server, do:
 --   				
@@ -893,7 +895,7 @@ bindHTTPClient_request
 --   				var fields = {"username" : "user", "password" : "pass"}
 --   				var query_string = http_client.query_string_from_dict(fields)
 --   				var headers = @"Content-Type: application/x-www-form-urlencoded", "Content-Length: " + str(query_string.length())@
---   				var result = http_client.request(http_client.METHOD_POST, "index.php", headers, query_string)
+--   				var result = http_client.request(http_client.METHOD_POST, "/index.php", headers, query_string)
 --   				
 --   @
 --   
@@ -920,7 +922,8 @@ instance NodeMethod HTTPClient "request"
 
 {-# NOINLINE bindHTTPClient_request_raw #-}
 
--- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for @http://somehost.com/index.php@, it is @index.php@.
+-- | Sends a raw request to the connected host.
+--   				The URL parameter is usually just the part after the host, so for @http://somehost.com/index.php@, it is @/index.php@. When sending requests to an HTTP proxy server, it should be an absolute URL. For @HTTPClient.METHOD_OPTIONS@ requests, @*@ is also allowed. For @HTTPClient.METHOD_CONNECT@ requests, it should be the authority component (@host:port@).
 --   				Headers are HTTP request headers. For available HTTP methods, see @enum Method@.
 --   				Sends the body data raw, as a byte array and does not encode it in any way.
 bindHTTPClient_request_raw :: MethodBind
@@ -932,7 +935,8 @@ bindHTTPClient_request_raw
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sends a raw request to the connected host. The URL parameter is just the part after the host, so for @http://somehost.com/index.php@, it is @index.php@.
+-- | Sends a raw request to the connected host.
+--   				The URL parameter is usually just the part after the host, so for @http://somehost.com/index.php@, it is @/index.php@. When sending requests to an HTTP proxy server, it should be an absolute URL. For @HTTPClient.METHOD_OPTIONS@ requests, @*@ is also allowed. For @HTTPClient.METHOD_CONNECT@ requests, it should be the authority component (@host:port@).
 --   				Headers are HTTP request headers. For available HTTP methods, see @enum Method@.
 --   				Sends the body data raw, as a byte array and does not encode it in any way.
 request_raw ::

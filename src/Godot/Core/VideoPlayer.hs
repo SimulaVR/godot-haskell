@@ -220,6 +220,7 @@ instance NodeMethod VideoPlayer "get_stream_name" '[]
 {-# NOINLINE bindVideoPlayer_get_stream_position #-}
 
 -- | The current position of the stream, in seconds.
+--   			__Note:__ Changing this value won't have any effect as seeking is not implemented yet, except in video formats implemented by a GDNative add-on.
 bindVideoPlayer_get_stream_position :: MethodBind
 bindVideoPlayer_get_stream_position
   = unsafePerformIO $
@@ -230,6 +231,7 @@ bindVideoPlayer_get_stream_position
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The current position of the stream, in seconds.
+--   			__Note:__ Changing this value won't have any effect as seeking is not implemented yet, except in video formats implemented by a GDNative add-on.
 get_stream_position ::
                       (VideoPlayer :< cls, Object :< cls) => cls -> IO Float
 get_stream_position cls
@@ -644,6 +646,7 @@ instance NodeMethod VideoPlayer "set_stream" '[VideoStream] (IO ())
 {-# NOINLINE bindVideoPlayer_set_stream_position #-}
 
 -- | The current position of the stream, in seconds.
+--   			__Note:__ Changing this value won't have any effect as seeking is not implemented yet, except in video formats implemented by a GDNative add-on.
 bindVideoPlayer_set_stream_position :: MethodBind
 bindVideoPlayer_set_stream_position
   = unsafePerformIO $
@@ -654,6 +657,7 @@ bindVideoPlayer_set_stream_position
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The current position of the stream, in seconds.
+--   			__Note:__ Changing this value won't have any effect as seeking is not implemented yet, except in video formats implemented by a GDNative add-on.
 set_stream_position ::
                       (VideoPlayer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_stream_position cls arg1

@@ -390,12 +390,23 @@ sig_modal_closed = Godot.Internal.Dispatch.Signal "modal_closed"
 instance NodeSignal Control "modal_closed" '[]
 
 -- | Emitted when the mouse enters the control's @Rect@ area, provided its @mouse_filter@ lets the event reach it.
+--   				__Note:__ @signal mouse_entered@ will not be emitted if the mouse enters a child @Control@ node before entering the parent's @Rect@ area, at least until the mouse is moved to reach the parent's @Rect@ area.
 sig_mouse_entered :: Godot.Internal.Dispatch.Signal Control
 sig_mouse_entered = Godot.Internal.Dispatch.Signal "mouse_entered"
 
 instance NodeSignal Control "mouse_entered" '[]
 
 -- | Emitted when the mouse leaves the control's @Rect@ area, provided its @mouse_filter@ lets the event reach it.
+--   				__Note:__ @signal mouse_exited@ will be emitted if the mouse enters a child @Control@ node, even if the mouse cursor is still inside the parent's @Rect@ area.
+--   				If you want to check whether the mouse truly left the area, ignoring any top nodes, you can use code like this:
+--   				
+--   @
+--   
+--   				func _on_mouse_exited():
+--   				    if not Rect2(Vector2(), rect_size).has_point(get_local_mouse_position()):
+--   				        # Not hovering over area.
+--   				
+--   @
 sig_mouse_exited :: Godot.Internal.Dispatch.Signal Control
 sig_mouse_exited = Godot.Internal.Dispatch.Signal "mouse_exited"
 
@@ -635,6 +646,18 @@ instance NodeMethod Control "_get_minimum_size" '[] (IO Vector2)
 {-# NOINLINE bindControl__get_tooltip #-}
 
 -- | Changes the tooltip text. The tooltip appears when the user's mouse cursor stays idle over this control for a few moments, provided that the @mouse_filter@ property is not @MOUSE_FILTER_IGNORE@. You can change the time required for the tooltip to appear with @gui/timers/tooltip_delay_sec@ option in Project Settings.
+--   			The tooltip popup will use either a default implementation, or a custom one that you can provide by overriding @method _make_custom_tooltip@. The default tooltip includes a @PopupPanel@ and @Label@ whose theme properties can be customized using @Theme@ methods with the @"TooltipPanel"@ and @"TooltipLabel"@ respectively. For example:
+--   			
+--   @
+--   
+--   			var style_box = StyleBoxFlat.new()
+--   			style_box.set_bg_color(Color(1, 1, 0))
+--   			style_box.set_border_width_all(2)
+--   			# We assume here that the `theme` property has been assigned a custom Theme beforehand.
+--   			theme.set_stylebox("panel", "TooltipPanel", style_box)
+--   			theme.set_color("font_color", "TooltipLabel", Color(0, 1, 1))
+--   			
+--   @
 bindControl__get_tooltip :: MethodBind
 bindControl__get_tooltip
   = unsafePerformIO $
@@ -645,6 +668,18 @@ bindControl__get_tooltip
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Changes the tooltip text. The tooltip appears when the user's mouse cursor stays idle over this control for a few moments, provided that the @mouse_filter@ property is not @MOUSE_FILTER_IGNORE@. You can change the time required for the tooltip to appear with @gui/timers/tooltip_delay_sec@ option in Project Settings.
+--   			The tooltip popup will use either a default implementation, or a custom one that you can provide by overriding @method _make_custom_tooltip@. The default tooltip includes a @PopupPanel@ and @Label@ whose theme properties can be customized using @Theme@ methods with the @"TooltipPanel"@ and @"TooltipLabel"@ respectively. For example:
+--   			
+--   @
+--   
+--   			var style_box = StyleBoxFlat.new()
+--   			style_box.set_bg_color(Color(1, 1, 0))
+--   			style_box.set_border_width_all(2)
+--   			# We assume here that the `theme` property has been assigned a custom Theme beforehand.
+--   			theme.set_stylebox("panel", "TooltipPanel", style_box)
+--   			theme.set_color("font_color", "TooltipLabel", Color(0, 1, 1))
+--   			
+--   @
 _get_tooltip ::
                (Control :< cls, Object :< cls) => cls -> IO GodotString
 _get_tooltip cls
@@ -677,7 +712,8 @@ instance NodeMethod Control "_get_tooltip" '[] (IO GodotString)
 --   				* control has @mouse_filter@ set to @MOUSE_FILTER_IGNORE@;
 --   				* control is obstructed by another @Control@ on top of it, which doesn't have @mouse_filter@ set to @MOUSE_FILTER_IGNORE@;
 --   				* control's parent has @mouse_filter@ set to @MOUSE_FILTER_STOP@ or has accepted the event;
---   				* it happens outside parent's rectangle and the parent has either @rect_clip_content@ or @method _clips_input@ enabled.
+--   				* it happens outside the parent's rectangle and the parent has either @rect_clip_content@ or @method _clips_input@ enabled.
+--   				__Note:__ Event position is relative to the control origin.
 bindControl__gui_input :: MethodBind
 bindControl__gui_input
   = unsafePerformIO $
@@ -704,7 +740,8 @@ bindControl__gui_input
 --   				* control has @mouse_filter@ set to @MOUSE_FILTER_IGNORE@;
 --   				* control is obstructed by another @Control@ on top of it, which doesn't have @mouse_filter@ set to @MOUSE_FILTER_IGNORE@;
 --   				* control's parent has @mouse_filter@ set to @MOUSE_FILTER_STOP@ or has accepted the event;
---   				* it happens outside parent's rectangle and the parent has either @rect_clip_content@ or @method _clips_input@ enabled.
+--   				* it happens outside the parent's rectangle and the parent has either @rect_clip_content@ or @method _clips_input@ enabled.
+--   				__Note:__ Event position is relative to the control origin.
 _gui_input ::
              (Control :< cls, Object :< cls) => cls -> InputEvent -> IO ()
 _gui_input cls arg1
@@ -720,10 +757,11 @@ instance NodeMethod Control "_gui_input" '[InputEvent] (IO ())
 
 {-# NOINLINE bindControl__make_custom_tooltip #-}
 
--- | Virtual method to be implemented by the user. Returns a @Control@ node that should be used as a tooltip instead of the default one. Use @for_text@ parameter to determine what text the tooltip should contain (likely the contents of @hint_tooltip@).
---   				The returned node must be of type @Control@ or Control-derieved. It can have child nodes of any type. It is freed when the tooltip disappears, so make sure you always provide a new instance, not e.g. a node from scene. When @null@ or non-Control node is returned, the default tooltip will be used instead.
+-- | Virtual method to be implemented by the user. Returns a @Control@ node that should be used as a tooltip instead of the default one. The @for_text@ includes the contents of the @hint_tooltip@ property.
+--   				The returned node must be of type @Control@ or Control-derived. It can have child nodes of any type. It is freed when the tooltip disappears, so make sure you always provide a new instance (if you want to use a pre-existing node from your scene tree, you can duplicate it and pass the duplicated instance). When @null@ or a non-Control node is returned, the default tooltip will be used instead.
+--   				The returned node will be added as child to a @PopupPanel@, so you should only provide the contents of that panel. That @PopupPanel@ can be themed using @method Theme.set_stylebox@ for the type @"TooltipPanel"@ (see @hint_tooltip@ for an example).
 --   				__Note:__ The tooltip is shrunk to minimal size. If you want to ensure it's fully visible, you might want to set its @rect_min_size@ to some non-zero value.
---   				Example of usage with custom-constructed node:
+--   				Example of usage with a custom-constructed node:
 --   				
 --   @
 --   
@@ -734,12 +772,12 @@ instance NodeMethod Control "_gui_input" '[InputEvent] (IO ())
 --   				
 --   @
 --   
---   				Example of usage with custom scene instance:
+--   				Example of usage with a custom scene instance:
 --   				
 --   @
 --   
 --   				func _make_custom_tooltip(for_text):
---   				    var tooltip = preload("SomeTooltipScene.tscn").instance()
+--   				    var tooltip = preload("res://SomeTooltipScene.tscn").instance()
 --   				    tooltip.get_node("Label").text = for_text
 --   				    return tooltip
 --   				
@@ -753,10 +791,11 @@ bindControl__make_custom_tooltip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Virtual method to be implemented by the user. Returns a @Control@ node that should be used as a tooltip instead of the default one. Use @for_text@ parameter to determine what text the tooltip should contain (likely the contents of @hint_tooltip@).
---   				The returned node must be of type @Control@ or Control-derieved. It can have child nodes of any type. It is freed when the tooltip disappears, so make sure you always provide a new instance, not e.g. a node from scene. When @null@ or non-Control node is returned, the default tooltip will be used instead.
+-- | Virtual method to be implemented by the user. Returns a @Control@ node that should be used as a tooltip instead of the default one. The @for_text@ includes the contents of the @hint_tooltip@ property.
+--   				The returned node must be of type @Control@ or Control-derived. It can have child nodes of any type. It is freed when the tooltip disappears, so make sure you always provide a new instance (if you want to use a pre-existing node from your scene tree, you can duplicate it and pass the duplicated instance). When @null@ or a non-Control node is returned, the default tooltip will be used instead.
+--   				The returned node will be added as child to a @PopupPanel@, so you should only provide the contents of that panel. That @PopupPanel@ can be themed using @method Theme.set_stylebox@ for the type @"TooltipPanel"@ (see @hint_tooltip@ for an example).
 --   				__Note:__ The tooltip is shrunk to minimal size. If you want to ensure it's fully visible, you might want to set its @rect_min_size@ to some non-zero value.
---   				Example of usage with custom-constructed node:
+--   				Example of usage with a custom-constructed node:
 --   				
 --   @
 --   
@@ -767,12 +806,12 @@ bindControl__make_custom_tooltip
 --   				
 --   @
 --   
---   				Example of usage with custom scene instance:
+--   				Example of usage with a custom scene instance:
 --   				
 --   @
 --   
 --   				func _make_custom_tooltip(for_text):
---   				    var tooltip = preload("SomeTooltipScene.tscn").instance()
+--   				    var tooltip = preload("res://SomeTooltipScene.tscn").instance()
 --   				    tooltip.get_node("Label").text = for_text
 --   				    return tooltip
 --   				
@@ -1022,18 +1061,16 @@ instance NodeMethod Control "accept_event" '[] (IO ()) where
 
 {-# NOINLINE bindControl_add_color_override #-}
 
--- | Overrides the @Color@ with given @name@ in the @theme@ resource the control uses.
---   				__Note:__ Unlike other theme overrides, there is no way to undo a color override without manually assigning the previous color.
+-- | Creates a local override for a theme @Color@ with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override cannot be removed, but it can be overridden with the corresponding default value.
+--   				See also @method get_color@.
 --   				__Example of overriding a label's color and resetting it later:__
 --   				
 --   @
 --   
---   				# Override the child node "MyLabel"'s font color to orange.
+--   				# Given the child Label node "MyLabel", override its font color with a custom value.
 --   				$MyLabel.add_color_override("font_color", Color(1, 0.5, 0))
---   
---   				# Reset the color by creating a new node to get the default value:
---   				var default_label_color = Label.new().get_color("font_color")
---   				$MyLabel.add_color_override("font_color", default_label_color)
+--   				# Reset the font color of the child label.
+--   				$MyLabel.add_color_override("font_color", get_color("font_color", "Label"))
 --   				
 --   @
 bindControl_add_color_override :: MethodBind
@@ -1045,18 +1082,16 @@ bindControl_add_color_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the @Color@ with given @name@ in the @theme@ resource the control uses.
---   				__Note:__ Unlike other theme overrides, there is no way to undo a color override without manually assigning the previous color.
+-- | Creates a local override for a theme @Color@ with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override cannot be removed, but it can be overridden with the corresponding default value.
+--   				See also @method get_color@.
 --   				__Example of overriding a label's color and resetting it later:__
 --   				
 --   @
 --   
---   				# Override the child node "MyLabel"'s font color to orange.
+--   				# Given the child Label node "MyLabel", override its font color with a custom value.
 --   				$MyLabel.add_color_override("font_color", Color(1, 0.5, 0))
---   
---   				# Reset the color by creating a new node to get the default value:
---   				var default_label_color = Label.new().get_color("font_color")
---   				$MyLabel.add_color_override("font_color", default_label_color)
+--   				# Reset the font color of the child label.
+--   				$MyLabel.add_color_override("font_color", get_color("font_color", "Label"))
 --   				
 --   @
 add_color_override ::
@@ -1078,7 +1113,8 @@ instance NodeMethod Control "add_color_override"
 
 {-# NOINLINE bindControl_add_constant_override #-}
 
--- | Overrides an integer constant with given @name@ in the @theme@ resource the control uses. If the @constant@ is @0@, the override is cleared and the constant from assigned @Theme@ is used.
+-- | Creates a local override for a theme constant with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override cannot be removed, but it can be overridden with the corresponding default value.
+--   				See also @method get_constant@.
 bindControl_add_constant_override :: MethodBind
 bindControl_add_constant_override
   = unsafePerformIO $
@@ -1088,7 +1124,8 @@ bindControl_add_constant_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides an integer constant with given @name@ in the @theme@ resource the control uses. If the @constant@ is @0@, the override is cleared and the constant from assigned @Theme@ is used.
+-- | Creates a local override for a theme constant with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override cannot be removed, but it can be overridden with the corresponding default value.
+--   				See also @method get_constant@.
 add_constant_override ::
                         (Control :< cls, Object :< cls) =>
                         cls -> GodotString -> Int -> IO ()
@@ -1109,7 +1146,8 @@ instance NodeMethod Control "add_constant_override"
 
 {-# NOINLINE bindControl_add_font_override #-}
 
--- | Overrides the font with given @name@ in the @theme@ resource the control uses. If @font@ is @null@ or invalid, the override is cleared and the font from assigned @Theme@ is used.
+-- | Creates a local override for a theme @Font@ with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
+--   				See also @method get_font@.
 bindControl_add_font_override :: MethodBind
 bindControl_add_font_override
   = unsafePerformIO $
@@ -1119,7 +1157,8 @@ bindControl_add_font_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the font with given @name@ in the @theme@ resource the control uses. If @font@ is @null@ or invalid, the override is cleared and the font from assigned @Theme@ is used.
+-- | Creates a local override for a theme @Font@ with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
+--   				See also @method get_font@.
 add_font_override ::
                     (Control :< cls, Object :< cls) =>
                     cls -> GodotString -> Font -> IO ()
@@ -1139,7 +1178,8 @@ instance NodeMethod Control "add_font_override"
 
 {-# NOINLINE bindControl_add_icon_override #-}
 
--- | Overrides the icon with given @name@ in the @theme@ resource the control uses. If @icon@ is @null@ or invalid, the override is cleared and the icon from assigned @Theme@ is used.
+-- | Creates a local override for a theme icon with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
+--   				See also @method get_icon@.
 bindControl_add_icon_override :: MethodBind
 bindControl_add_icon_override
   = unsafePerformIO $
@@ -1149,7 +1189,8 @@ bindControl_add_icon_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the icon with given @name@ in the @theme@ resource the control uses. If @icon@ is @null@ or invalid, the override is cleared and the icon from assigned @Theme@ is used.
+-- | Creates a local override for a theme icon with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
+--   				See also @method get_icon@.
 add_icon_override ::
                     (Control :< cls, Object :< cls) =>
                     cls -> GodotString -> Texture -> IO ()
@@ -1169,7 +1210,7 @@ instance NodeMethod Control "add_icon_override"
 
 {-# NOINLINE bindControl_add_shader_override #-}
 
--- | Overrides the @Shader@ with given @name@ in the @theme@ resource the control uses. If @shader@ is @null@ or invalid, the override is cleared and the shader from assigned @Theme@ is used.
+-- | Creates a local override for a theme shader with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
 bindControl_add_shader_override :: MethodBind
 bindControl_add_shader_override
   = unsafePerformIO $
@@ -1179,7 +1220,7 @@ bindControl_add_shader_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the @Shader@ with given @name@ in the @theme@ resource the control uses. If @shader@ is @null@ or invalid, the override is cleared and the shader from assigned @Theme@ is used.
+-- | Creates a local override for a theme shader with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
 add_shader_override ::
                       (Control :< cls, Object :< cls) =>
                       cls -> GodotString -> Shader -> IO ()
@@ -1199,7 +1240,8 @@ instance NodeMethod Control "add_shader_override"
 
 {-# NOINLINE bindControl_add_stylebox_override #-}
 
--- | Overrides the @StyleBox@ with given @name@ in the @theme@ resource the control uses. If @stylebox@ is empty or invalid, the override is cleared and the @StyleBox@ from assigned @Theme@ is used.
+-- | Creates a local override for a theme @StyleBox@ with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
+--   				See also @method get_stylebox@.
 --   				__Example of modifying a property in a StyleBox by duplicating it:__
 --   				
 --   @
@@ -1211,8 +1253,7 @@ instance NodeMethod Control "add_shader_override"
 --   				new_stylebox_normal.border_width_top = 3
 --   				new_stylebox_normal.border_color = Color(0, 1, 0.5)
 --   				$MyButton.add_stylebox_override("normal", new_stylebox_normal)
---   
---   				# Remove the stylebox override:
+--   				# Remove the stylebox override.
 --   				$MyButton.add_stylebox_override("normal", null)
 --   				
 --   @
@@ -1225,7 +1266,8 @@ bindControl_add_stylebox_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the @StyleBox@ with given @name@ in the @theme@ resource the control uses. If @stylebox@ is empty or invalid, the override is cleared and the @StyleBox@ from assigned @Theme@ is used.
+-- | Creates a local override for a theme @StyleBox@ with the specified @name@. Local overrides always take precedence when fetching theme items for the control. An override can be removed by assigning it a @null@ value.
+--   				See also @method get_stylebox@.
 --   				__Example of modifying a property in a StyleBox by duplicating it:__
 --   				
 --   @
@@ -1237,8 +1279,7 @@ bindControl_add_stylebox_override
 --   				new_stylebox_normal.border_width_top = 3
 --   				new_stylebox_normal.border_color = Color(0, 1, 0.5)
 --   				$MyButton.add_stylebox_override("normal", new_stylebox_normal)
---   
---   				# Remove the stylebox override:
+--   				# Remove the stylebox override.
 --   				$MyButton.add_stylebox_override("normal", null)
 --   				
 --   @
@@ -1439,12 +1480,16 @@ instance NodeMethod Control "get_begin" '[] (IO Vector2) where
 
 {-# NOINLINE bindControl_get_color #-}
 
--- | Returns a color from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a @Color@ from the first matching @Theme@ in the tree if that @Theme@ has a color item with the specified @name@ and @theme_type@. If @theme_type@ is omitted the class name of the current control is used as the type. If the type is a class name its parent classes are also checked, in order of inheritance.
+--   				For the current control its local overrides are considered first (see @method add_color_override@), then its assigned @theme@. After the current control, each parent control and its assigned @theme@ are considered; controls without a @theme@ assigned are skipped. If no matching @Theme@ is found in the tree, a custom project @Theme@ (see @ProjectSettings.gui/theme/custom@) and the default @Theme@ are used.
 --   				
 --   @
 --   
 --   				func _ready():
---   				    modulate = get_color("font_color", "Button") #get the color defined for button fonts
+--   				    # Get the font color defined for the current Control's class, if it exists.
+--   				    modulate = get_color("font_color")
+--   				    # Get the font color defined for the Button class.
+--   				    modulate = get_color("font_color", "Button")
 --   				
 --   @
 bindControl_get_color :: MethodBind
@@ -1456,12 +1501,16 @@ bindControl_get_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a color from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a @Color@ from the first matching @Theme@ in the tree if that @Theme@ has a color item with the specified @name@ and @theme_type@. If @theme_type@ is omitted the class name of the current control is used as the type. If the type is a class name its parent classes are also checked, in order of inheritance.
+--   				For the current control its local overrides are considered first (see @method add_color_override@), then its assigned @theme@. After the current control, each parent control and its assigned @theme@ are considered; controls without a @theme@ assigned are skipped. If no matching @Theme@ is found in the tree, a custom project @Theme@ (see @ProjectSettings.gui/theme/custom@) and the default @Theme@ are used.
 --   				
 --   @
 --   
 --   				func _ready():
---   				    modulate = get_color("font_color", "Button") #get the color defined for button fonts
+--   				    # Get the font color defined for the current Control's class, if it exists.
+--   				    modulate = get_color("font_color")
+--   				    # Get the font color defined for the Button class.
+--   				    modulate = get_color("font_color", "Button")
 --   				
 --   @
 get_color ::
@@ -1512,7 +1561,8 @@ instance NodeMethod Control "get_combined_minimum_size" '[]
 
 {-# NOINLINE bindControl_get_constant #-}
 
--- | Returns a constant from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a constant from the first matching @Theme@ in the tree if that @Theme@ has a constant item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_get_constant :: MethodBind
 bindControl_get_constant
   = unsafePerformIO $
@@ -1522,7 +1572,8 @@ bindControl_get_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a constant from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a constant from the first matching @Theme@ in the tree if that @Theme@ has a constant item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 get_constant ::
                (Control :< cls, Object :< cls) =>
                cls -> GodotString -> Maybe GodotString -> IO Int
@@ -1839,7 +1890,8 @@ instance NodeMethod Control "get_focus_previous" '[] (IO NodePath)
 
 {-# NOINLINE bindControl_get_font #-}
 
--- | Returns a font from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a @Font@ from the first matching @Theme@ in the tree if that @Theme@ has a font item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_get_font :: MethodBind
 bindControl_get_font
   = unsafePerformIO $
@@ -1849,7 +1901,8 @@ bindControl_get_font
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a font from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a @Font@ from the first matching @Theme@ in the tree if that @Theme@ has a font item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 get_font ::
            (Control :< cls, Object :< cls) =>
            cls -> GodotString -> Maybe GodotString -> IO Font
@@ -1975,7 +2028,8 @@ instance NodeMethod Control "get_h_size_flags" '[] (IO Int) where
 
 {-# NOINLINE bindControl_get_icon #-}
 
--- | Returns an icon from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns an icon from the first matching @Theme@ in the tree if that @Theme@ has an icon item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_get_icon :: MethodBind
 bindControl_get_icon
   = unsafePerformIO $
@@ -1985,7 +2039,8 @@ bindControl_get_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an icon from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns an icon from the first matching @Theme@ in the tree if that @Theme@ has an icon item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 get_icon ::
            (Control :< cls, Object :< cls) =>
            cls -> GodotString -> Maybe GodotString -> IO Texture
@@ -2265,7 +2320,7 @@ instance NodeMethod Control "get_rotation_degrees" '[] (IO Float)
 {-# NOINLINE bindControl_get_scale #-}
 
 -- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
+--   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/3.4/tutorials/rendering/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
 --   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
 bindControl_get_scale :: MethodBind
 bindControl_get_scale
@@ -2277,7 +2332,7 @@ bindControl_get_scale
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
+--   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/3.4/tutorials/rendering/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
 --   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
 get_scale :: (Control :< cls, Object :< cls) => cls -> IO Vector2
 get_scale cls
@@ -2342,7 +2397,8 @@ instance NodeMethod Control "get_stretch_ratio" '[] (IO Float)
 
 {-# NOINLINE bindControl_get_stylebox #-}
 
--- | Returns a @StyleBox@ from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a @StyleBox@ from the first matching @Theme@ in the tree if that @Theme@ has a stylebox item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_get_stylebox :: MethodBind
 bindControl_get_stylebox
   = unsafePerformIO $
@@ -2352,7 +2408,8 @@ bindControl_get_stylebox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a @StyleBox@ from assigned @Theme@ with given @name@ and associated with @Control@ of given @type@.
+-- | Returns a @StyleBox@ from the first matching @Theme@ in the tree if that @Theme@ has a stylebox item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 get_stylebox ::
                (Control :< cls, Object :< cls) =>
                cls -> GodotString -> Maybe GodotString -> IO StyleBox
@@ -2541,7 +2598,8 @@ instance NodeMethod Control "grab_focus" '[] (IO ()) where
 
 {-# NOINLINE bindControl_has_color #-}
 
--- | Returns @true@ if @Color@ with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a color item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_has_color :: MethodBind
 bindControl_has_color
   = unsafePerformIO $
@@ -2551,7 +2609,8 @@ bindControl_has_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if @Color@ with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a color item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 has_color ::
             (Control :< cls, Object :< cls) =>
             cls -> GodotString -> Maybe GodotString -> IO Bool
@@ -2571,7 +2630,8 @@ instance NodeMethod Control "has_color"
 
 {-# NOINLINE bindControl_has_color_override #-}
 
--- | Returns @true@ if @Color@ with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme @Color@ with the specified @name@ in this @Control@ node.
+--   				See @method add_color_override@.
 bindControl_has_color_override :: MethodBind
 bindControl_has_color_override
   = unsafePerformIO $
@@ -2581,7 +2641,8 @@ bindControl_has_color_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if @Color@ with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme @Color@ with the specified @name@ in this @Control@ node.
+--   				See @method add_color_override@.
 has_color_override ::
                      (Control :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_color_override cls arg1
@@ -2599,7 +2660,8 @@ instance NodeMethod Control "has_color_override" '[GodotString]
 
 {-# NOINLINE bindControl_has_constant #-}
 
--- | Returns @true@ if constant with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a constant item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_has_constant :: MethodBind
 bindControl_has_constant
   = unsafePerformIO $
@@ -2609,7 +2671,8 @@ bindControl_has_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if constant with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a constant item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 has_constant ::
                (Control :< cls, Object :< cls) =>
                cls -> GodotString -> Maybe GodotString -> IO Bool
@@ -2629,7 +2692,8 @@ instance NodeMethod Control "has_constant"
 
 {-# NOINLINE bindControl_has_constant_override #-}
 
--- | Returns @true@ if constant with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme constant with the specified @name@ in this @Control@ node.
+--   				See @method add_constant_override@.
 bindControl_has_constant_override :: MethodBind
 bindControl_has_constant_override
   = unsafePerformIO $
@@ -2639,7 +2703,8 @@ bindControl_has_constant_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if constant with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme constant with the specified @name@ in this @Control@ node.
+--   				See @method add_constant_override@.
 has_constant_override ::
                         (Control :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_constant_override cls arg1
@@ -2682,7 +2747,8 @@ instance NodeMethod Control "has_focus" '[] (IO Bool) where
 
 {-# NOINLINE bindControl_has_font #-}
 
--- | Returns @true@ if font with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a font item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_has_font :: MethodBind
 bindControl_has_font
   = unsafePerformIO $
@@ -2692,7 +2758,8 @@ bindControl_has_font
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if font with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a font item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 has_font ::
            (Control :< cls, Object :< cls) =>
            cls -> GodotString -> Maybe GodotString -> IO Bool
@@ -2711,7 +2778,8 @@ instance NodeMethod Control "has_font"
 
 {-# NOINLINE bindControl_has_font_override #-}
 
--- | Returns @true@ if font with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme @Font@ with the specified @name@ in this @Control@ node.
+--   				See @method add_font_override@.
 bindControl_has_font_override :: MethodBind
 bindControl_has_font_override
   = unsafePerformIO $
@@ -2721,7 +2789,8 @@ bindControl_has_font_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if font with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme @Font@ with the specified @name@ in this @Control@ node.
+--   				See @method add_font_override@.
 has_font_override ::
                     (Control :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_font_override cls arg1
@@ -2739,7 +2808,8 @@ instance NodeMethod Control "has_font_override" '[GodotString]
 
 {-# NOINLINE bindControl_has_icon #-}
 
--- | Returns @true@ if icon with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has an icon item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_has_icon :: MethodBind
 bindControl_has_icon
   = unsafePerformIO $
@@ -2749,7 +2819,8 @@ bindControl_has_icon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if icon with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has an icon item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 has_icon ::
            (Control :< cls, Object :< cls) =>
            cls -> GodotString -> Maybe GodotString -> IO Bool
@@ -2768,7 +2839,8 @@ instance NodeMethod Control "has_icon"
 
 {-# NOINLINE bindControl_has_icon_override #-}
 
--- | Returns @true@ if icon with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme icon with the specified @name@ in this @Control@ node.
+--   				See @method add_icon_override@.
 bindControl_has_icon_override :: MethodBind
 bindControl_has_icon_override
   = unsafePerformIO $
@@ -2778,7 +2850,8 @@ bindControl_has_icon_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if icon with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme icon with the specified @name@ in this @Control@ node.
+--   				See @method add_icon_override@.
 has_icon_override ::
                     (Control :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_icon_override cls arg1
@@ -2825,7 +2898,8 @@ instance NodeMethod Control "has_point" '[Vector2] (IO Bool) where
 
 {-# NOINLINE bindControl_has_shader_override #-}
 
--- | Returns @true@ if @Shader@ with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme shader with the specified @name@ in this @Control@ node.
+--   				See @method add_shader_override@.
 bindControl_has_shader_override :: MethodBind
 bindControl_has_shader_override
   = unsafePerformIO $
@@ -2835,7 +2909,8 @@ bindControl_has_shader_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if @Shader@ with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme shader with the specified @name@ in this @Control@ node.
+--   				See @method add_shader_override@.
 has_shader_override ::
                       (Control :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_shader_override cls arg1
@@ -2853,7 +2928,8 @@ instance NodeMethod Control "has_shader_override" '[GodotString]
 
 {-# NOINLINE bindControl_has_stylebox #-}
 
--- | Returns @true@ if @StyleBox@ with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a stylebox item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 bindControl_has_stylebox :: MethodBind
 bindControl_has_stylebox
   = unsafePerformIO $
@@ -2863,7 +2939,8 @@ bindControl_has_stylebox
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if @StyleBox@ with given @name@ and associated with @Control@ of given @type@ exists in assigned @Theme@.
+-- | Returns @true@ if there is a matching @Theme@ in the tree that has a stylebox item with the specified @name@ and @theme_type@.
+--   				See @method get_color@ for details.
 has_stylebox ::
                (Control :< cls, Object :< cls) =>
                cls -> GodotString -> Maybe GodotString -> IO Bool
@@ -2883,7 +2960,8 @@ instance NodeMethod Control "has_stylebox"
 
 {-# NOINLINE bindControl_has_stylebox_override #-}
 
--- | Returns @true@ if @StyleBox@ with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme @StyleBox@ with the specified @name@ in this @Control@ node.
+--   				See @method add_stylebox_override@.
 bindControl_has_stylebox_override :: MethodBind
 bindControl_has_stylebox_override
   = unsafePerformIO $
@@ -2893,7 +2971,8 @@ bindControl_has_stylebox_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if @StyleBox@ with given @name@ has a valid override in this @Control@ node.
+-- | Returns @true@ if there is a local override for a theme @StyleBox@ with the specified @name@ in this @Control@ node.
+--   				See @method add_stylebox_override@.
 has_stylebox_override ::
                         (Control :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_stylebox_override cls arg1
@@ -3095,7 +3174,7 @@ instance NodeMethod Control "set_anchors_and_margins_preset"
 
 {-# NOINLINE bindControl_set_anchors_preset #-}
 
--- | Sets the anchors to a @preset@ from @enum Control.LayoutPreset@ enum. This is code equivalent of using the Layout menu in 2D editor.
+-- | Sets the anchors to a @preset@ from @enum Control.LayoutPreset@ enum. This is the code equivalent to using the Layout menu in the 2D editor.
 --   				If @keep_margins@ is @true@, control's position will also be updated.
 bindControl_set_anchors_preset :: MethodBind
 bindControl_set_anchors_preset
@@ -3106,7 +3185,7 @@ bindControl_set_anchors_preset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the anchors to a @preset@ from @enum Control.LayoutPreset@ enum. This is code equivalent of using the Layout menu in 2D editor.
+-- | Sets the anchors to a @preset@ from @enum Control.LayoutPreset@ enum. This is the code equivalent to using the Layout menu in the 2D editor.
 --   				If @keep_margins@ is @true@, control's position will also be updated.
 set_anchors_preset ::
                      (Control :< cls, Object :< cls) =>
@@ -3315,7 +3394,7 @@ instance NodeMethod Control "set_drag_forwarding" '[Control]
 
 {-# NOINLINE bindControl_set_drag_preview #-}
 
--- | Shows the given control at the mouse pointer. A good time to call this method is in @method get_drag_data@. The control must not be in the scene tree.
+-- | Shows the given control at the mouse pointer. A good time to call this method is in @method get_drag_data@. The control must not be in the scene tree. You should not free the control, and you should not keep a reference to the control beyond the duration of the drag. It will be deleted automatically after the drag has ended.
 --   				
 --   @
 --   
@@ -3339,7 +3418,7 @@ bindControl_set_drag_preview
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shows the given control at the mouse pointer. A good time to call this method is in @method get_drag_data@. The control must not be in the scene tree.
+-- | Shows the given control at the mouse pointer. A good time to call this method is in @method get_drag_data@. The control must not be in the scene tree. You should not free the control, and you should not keep a reference to the control beyond the duration of the drag. It will be deleted automatically after the drag has ended.
 --   				
 --   @
 --   
@@ -3620,7 +3699,7 @@ instance NodeMethod Control "set_margin" '[Int, Float] (IO ())
 
 {-# NOINLINE bindControl_set_margins_preset #-}
 
--- | Sets the margins to a @preset@ from @enum Control.LayoutPreset@ enum. This is code equivalent of using the Layout menu in 2D editor.
+-- | Sets the margins to a @preset@ from @enum Control.LayoutPreset@ enum. This is the code equivalent to using the Layout menu in the 2D editor.
 --   				Use parameter @resize_mode@ with constants from @enum Control.LayoutPresetMode@ to better determine the resulting size of the @Control@. Constant size will be ignored if used with presets that change size, e.g. @PRESET_LEFT_WIDE@.
 --   				Use parameter @margin@ to determine the gap between the @Control@ and the edges.
 bindControl_set_margins_preset :: MethodBind
@@ -3632,7 +3711,7 @@ bindControl_set_margins_preset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the margins to a @preset@ from @enum Control.LayoutPreset@ enum. This is code equivalent of using the Layout menu in 2D editor.
+-- | Sets the margins to a @preset@ from @enum Control.LayoutPreset@ enum. This is the code equivalent to using the Layout menu in the 2D editor.
 --   				Use parameter @resize_mode@ with constants from @enum Control.LayoutPresetMode@ to better determine the resulting size of the @Control@. Constant size will be ignored if used with presets that change size, e.g. @PRESET_LEFT_WIDE@.
 --   				Use parameter @margin@ to determine the gap between the @Control@ and the edges.
 set_margins_preset ::
@@ -3794,7 +3873,7 @@ instance NodeMethod Control "set_rotation_degrees" '[Float] (IO ())
 {-# NOINLINE bindControl_set_scale #-}
 
 -- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
+--   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/3.4/tutorials/rendering/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
 --   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
 bindControl_set_scale :: MethodBind
 bindControl_set_scale
@@ -3806,7 +3885,7 @@ bindControl_set_scale
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
+--   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/3.4/tutorials/rendering/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
 --   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
 set_scale ::
             (Control :< cls, Object :< cls) => cls -> Vector2 -> IO ()
@@ -3905,6 +3984,18 @@ instance NodeMethod Control "set_theme" '[Theme] (IO ()) where
 {-# NOINLINE bindControl_set_tooltip #-}
 
 -- | Changes the tooltip text. The tooltip appears when the user's mouse cursor stays idle over this control for a few moments, provided that the @mouse_filter@ property is not @MOUSE_FILTER_IGNORE@. You can change the time required for the tooltip to appear with @gui/timers/tooltip_delay_sec@ option in Project Settings.
+--   			The tooltip popup will use either a default implementation, or a custom one that you can provide by overriding @method _make_custom_tooltip@. The default tooltip includes a @PopupPanel@ and @Label@ whose theme properties can be customized using @Theme@ methods with the @"TooltipPanel"@ and @"TooltipLabel"@ respectively. For example:
+--   			
+--   @
+--   
+--   			var style_box = StyleBoxFlat.new()
+--   			style_box.set_bg_color(Color(1, 1, 0))
+--   			style_box.set_border_width_all(2)
+--   			# We assume here that the `theme` property has been assigned a custom Theme beforehand.
+--   			theme.set_stylebox("panel", "TooltipPanel", style_box)
+--   			theme.set_color("font_color", "TooltipLabel", Color(0, 1, 1))
+--   			
+--   @
 bindControl_set_tooltip :: MethodBind
 bindControl_set_tooltip
   = unsafePerformIO $
@@ -3915,6 +4006,18 @@ bindControl_set_tooltip
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Changes the tooltip text. The tooltip appears when the user's mouse cursor stays idle over this control for a few moments, provided that the @mouse_filter@ property is not @MOUSE_FILTER_IGNORE@. You can change the time required for the tooltip to appear with @gui/timers/tooltip_delay_sec@ option in Project Settings.
+--   			The tooltip popup will use either a default implementation, or a custom one that you can provide by overriding @method _make_custom_tooltip@. The default tooltip includes a @PopupPanel@ and @Label@ whose theme properties can be customized using @Theme@ methods with the @"TooltipPanel"@ and @"TooltipLabel"@ respectively. For example:
+--   			
+--   @
+--   
+--   			var style_box = StyleBoxFlat.new()
+--   			style_box.set_bg_color(Color(1, 1, 0))
+--   			style_box.set_border_width_all(2)
+--   			# We assume here that the `theme` property has been assigned a custom Theme beforehand.
+--   			theme.set_stylebox("panel", "TooltipPanel", style_box)
+--   			theme.set_color("font_color", "TooltipLabel", Color(0, 1, 1))
+--   			
+--   @
 set_tooltip ::
               (Control :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_tooltip cls arg1

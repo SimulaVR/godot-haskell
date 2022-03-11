@@ -61,7 +61,7 @@ instance NodeMethod PrimitiveMesh "_update" '[] (IO ()) where
 
 {-# NOINLINE bindPrimitiveMesh_get_custom_aabb #-}
 
--- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unexpected culling when using a shader to offset vertices.
 bindPrimitiveMesh_get_custom_aabb :: MethodBind
 bindPrimitiveMesh_get_custom_aabb
   = unsafePerformIO $
@@ -71,7 +71,7 @@ bindPrimitiveMesh_get_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unexpected culling when using a shader to offset vertices.
 get_custom_aabb ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> IO Aabb
 get_custom_aabb cls
@@ -190,7 +190,7 @@ instance NodeMethod PrimitiveMesh "get_mesh_arrays" '[] (IO Array)
 
 {-# NOINLINE bindPrimitiveMesh_set_custom_aabb #-}
 
--- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unexpected culling when using a shader to offset vertices.
 bindPrimitiveMesh_set_custom_aabb :: MethodBind
 bindPrimitiveMesh_set_custom_aabb
   = unsafePerformIO $
@@ -200,7 +200,7 @@ bindPrimitiveMesh_set_custom_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unnexpected culling when  using a shader to offset vertices.
+-- | Overrides the @AABB@ with one defined by user for use with frustum culling. Especially useful to avoid unexpected culling when using a shader to offset vertices.
 set_custom_aabb ::
                   (PrimitiveMesh :< cls, Object :< cls) => cls -> Aabb -> IO ()
 set_custom_aabb cls arg1

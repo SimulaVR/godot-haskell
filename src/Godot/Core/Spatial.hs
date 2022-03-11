@@ -672,8 +672,9 @@ instance NodeMethod Spatial "is_visible_in_tree" '[] (IO Bool)
 
 {-# NOINLINE bindSpatial_look_at #-}
 
--- | Rotates itself so that the local -Z axis points towards the @target@ position.
---   				The transform will first be rotated around the given @up@ vector, and then fully aligned to the target by a further rotation around an axis perpendicular to both the @target@ and @up@ vectors.
+-- | Rotates the node so that the local forward axis (-Z) points toward the @target@ position.
+--   				The local up axis (+Y) points as close to the @up@ vector as possible while staying perpendicular to the local forward axis. The resulting transform is orthogonal, and the scale is preserved. Non-uniform scaling may not work correctly.
+--   				The @target@ position cannot be the same as the node's position, the @up@ vector cannot be zero, and the direction from the node's position to the @target@ vector cannot be parallel to the @up@ vector.
 --   				Operations take place in global space.
 bindSpatial_look_at :: MethodBind
 bindSpatial_look_at
@@ -684,8 +685,9 @@ bindSpatial_look_at
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Rotates itself so that the local -Z axis points towards the @target@ position.
---   				The transform will first be rotated around the given @up@ vector, and then fully aligned to the target by a further rotation around an axis perpendicular to both the @target@ and @up@ vectors.
+-- | Rotates the node so that the local forward axis (-Z) points toward the @target@ position.
+--   				The local up axis (+Y) points as close to the @up@ vector as possible while staying perpendicular to the local forward axis. The resulting transform is orthogonal, and the scale is preserved. Non-uniform scaling may not work correctly.
+--   				The @target@ position cannot be the same as the node's position, the @up@ vector cannot be zero, and the direction from the node's position to the @target@ vector cannot be parallel to the @up@ vector.
 --   				Operations take place in global space.
 look_at ::
           (Spatial :< cls, Object :< cls) =>
@@ -1102,7 +1104,7 @@ instance NodeMethod Spatial "set_notify_local_transform" '[Bool]
 
 {-# NOINLINE bindSpatial_set_notify_transform #-}
 
--- | Sets whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default.
+-- | Sets whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default, unless it is in the editor context and it has a valid gizmo.
 bindSpatial_set_notify_transform :: MethodBind
 bindSpatial_set_notify_transform
   = unsafePerformIO $
@@ -1112,7 +1114,7 @@ bindSpatial_set_notify_transform
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default.
+-- | Sets whether the node notifies about its global and local transformation changes. @Spatial@ will not propagate this by default, unless it is in the editor context and it has a valid gizmo.
 set_notify_transform ::
                        (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_notify_transform cls arg1

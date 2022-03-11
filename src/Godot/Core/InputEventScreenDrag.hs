@@ -101,7 +101,7 @@ instance NodeMethod InputEventScreenDrag "get_position" '[]
 
 {-# NOINLINE bindInputEventScreenDrag_get_relative #-}
 
--- | The drag position relative to its start position.
+-- | The drag position relative to the previous position (position at the last frame).
 bindInputEventScreenDrag_get_relative :: MethodBind
 bindInputEventScreenDrag_get_relative
   = unsafePerformIO $
@@ -111,7 +111,7 @@ bindInputEventScreenDrag_get_relative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The drag position relative to its start position.
+-- | The drag position relative to the previous position (position at the last frame).
 get_relative ::
                (InputEventScreenDrag :< cls, Object :< cls) => cls -> IO Vector2
 get_relative cls
@@ -217,7 +217,7 @@ instance NodeMethod InputEventScreenDrag "set_position" '[Vector2]
 
 {-# NOINLINE bindInputEventScreenDrag_set_relative #-}
 
--- | The drag position relative to its start position.
+-- | The drag position relative to the previous position (position at the last frame).
 bindInputEventScreenDrag_set_relative :: MethodBind
 bindInputEventScreenDrag_set_relative
   = unsafePerformIO $
@@ -227,7 +227,7 @@ bindInputEventScreenDrag_set_relative
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The drag position relative to its start position.
+-- | The drag position relative to the previous position (position at the last frame).
 set_relative ::
                (InputEventScreenDrag :< cls, Object :< cls) =>
                cls -> Vector2 -> IO ()

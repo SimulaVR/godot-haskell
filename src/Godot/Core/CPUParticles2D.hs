@@ -614,7 +614,8 @@ instance NodeMethod CPUParticles2D "convert_from_particles" '[Node]
 
 {-# NOINLINE bindCPUParticles2D_get_amount #-}
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 bindCPUParticles2D_get_amount :: MethodBind
 bindCPUParticles2D_get_amount
   = unsafePerformIO $
@@ -624,7 +625,8 @@ bindCPUParticles2D_get_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 get_amount ::
              (CPUParticles2D :< cls, Object :< cls) => cls -> IO Int
 get_amount cls
@@ -666,7 +668,7 @@ instance NodeMethod CPUParticles2D "get_color" '[] (IO Color) where
 
 {-# NOINLINE bindCPUParticles2D_get_color_ramp #-}
 
--- | Each particle's color will vary along this @Gradient@.
+-- | Each particle's color will vary along this @Gradient@ (multiplied with @color@).
 bindCPUParticles2D_get_color_ramp :: MethodBind
 bindCPUParticles2D_get_color_ramp
   = unsafePerformIO $
@@ -676,7 +678,7 @@ bindCPUParticles2D_get_color_ramp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's color will vary along this @Gradient@.
+-- | Each particle's color will vary along this @Gradient@ (multiplied with @color@).
 get_color_ramp ::
                  (CPUParticles2D :< cls, Object :< cls) => cls -> IO Gradient
 get_color_ramp cls
@@ -1041,7 +1043,7 @@ instance NodeMethod CPUParticles2D "get_gravity" '[] (IO Vector2)
 
 {-# NOINLINE bindCPUParticles2D_get_lifetime #-}
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 bindCPUParticles2D_get_lifetime :: MethodBind
 bindCPUParticles2D_get_lifetime
   = unsafePerformIO $
@@ -1051,7 +1053,7 @@ bindCPUParticles2D_get_lifetime
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 get_lifetime ::
                (CPUParticles2D :< cls, Object :< cls) => cls -> IO Float
 get_lifetime cls
@@ -1489,7 +1491,8 @@ instance NodeMethod CPUParticles2D "restart" '[] (IO ()) where
 
 {-# NOINLINE bindCPUParticles2D_set_amount #-}
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 bindCPUParticles2D_set_amount :: MethodBind
 bindCPUParticles2D_set_amount
   = unsafePerformIO $
@@ -1499,7 +1502,8 @@ bindCPUParticles2D_set_amount
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Number of particles emitted in one emission cycle.
+-- | The number of particles emitted in one emission cycle (corresponding to the @lifetime@).
+--   			__Note:__ Changing @amount@ will reset the particle emission, therefore removing all particles that were already emitted before changing @amount@.
 set_amount ::
              (CPUParticles2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_amount cls arg1
@@ -1543,7 +1547,7 @@ instance NodeMethod CPUParticles2D "set_color" '[Color] (IO ())
 
 {-# NOINLINE bindCPUParticles2D_set_color_ramp #-}
 
--- | Each particle's color will vary along this @Gradient@.
+-- | Each particle's color will vary along this @Gradient@ (multiplied with @color@).
 bindCPUParticles2D_set_color_ramp :: MethodBind
 bindCPUParticles2D_set_color_ramp
   = unsafePerformIO $
@@ -1553,7 +1557,7 @@ bindCPUParticles2D_set_color_ramp
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Each particle's color will vary along this @Gradient@.
+-- | Each particle's color will vary along this @Gradient@ (multiplied with @color@).
 set_color_ramp ::
                  (CPUParticles2D :< cls, Object :< cls) => cls -> Gradient -> IO ()
 set_color_ramp cls arg1
@@ -1953,7 +1957,7 @@ instance NodeMethod CPUParticles2D "set_gravity" '[Vector2] (IO ())
 
 {-# NOINLINE bindCPUParticles2D_set_lifetime #-}
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 bindCPUParticles2D_set_lifetime :: MethodBind
 bindCPUParticles2D_set_lifetime
   = unsafePerformIO $
@@ -1963,7 +1967,7 @@ bindCPUParticles2D_set_lifetime
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of time each particle will exist.
+-- | The amount of time each particle will exist (in seconds).
 set_lifetime ::
                (CPUParticles2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_lifetime cls arg1

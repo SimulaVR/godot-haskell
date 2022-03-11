@@ -180,7 +180,7 @@ instance NodeMethod ClippedCamera "get_clip_offset" '[] (IO Float)
 
 {-# NOINLINE bindClippedCamera_get_collision_mask #-}
 
--- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindClippedCamera_get_collision_mask :: MethodBind
 bindClippedCamera_get_collision_mask
   = unsafePerformIO $
@@ -190,7 +190,7 @@ bindClippedCamera_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 get_collision_mask ::
                      (ClippedCamera :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -467,7 +467,7 @@ instance NodeMethod ClippedCamera "set_clip_to_bodies" '[Bool]
 
 {-# NOINLINE bindClippedCamera_set_collision_mask #-}
 
--- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindClippedCamera_set_collision_mask :: MethodBind
 bindClippedCamera_set_collision_mask
   = unsafePerformIO $
@@ -477,7 +477,7 @@ bindClippedCamera_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The camera's collision mask. Only objects in at least one collision layer matching the mask will be detected. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 set_collision_mask ::
                      (ClippedCamera :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1

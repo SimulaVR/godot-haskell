@@ -506,7 +506,7 @@ instance NodeMethod Physics2DServer "area_clear_shapes" '[Rid]
 
 {-# NOINLINE bindPhysics2DServer_area_create #-}
 
--- | Creates an @Area2D@.
+-- | Creates an @Area2D@. After creating an @Area2D@ with this method, assign it to a space using @method area_set_space@ to use the created @Area2D@ in the physics world.
 bindPhysics2DServer_area_create :: MethodBind
 bindPhysics2DServer_area_create
   = unsafePerformIO $
@@ -516,7 +516,7 @@ bindPhysics2DServer_area_create
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates an @Area2D@.
+-- | Creates an @Area2D@. After creating an @Area2D@ with this method, assign it to a space using @method area_set_space@ to use the created @Area2D@ in the physics world.
 area_create ::
               (Physics2DServer :< cls, Object :< cls) => cls -> IO Rid
 area_create cls
@@ -1712,7 +1712,7 @@ instance NodeMethod Physics2DServer
 
 {-# NOINLINE bindPhysics2DServer_body_get_direct_state #-}
 
--- | Returns the @Physics2DDirectBodyState@ of the body.
+-- | Returns the @Physics2DDirectBodyState@ of the body. Returns @null@ if the body is destroyed or removed from the physics space.
 bindPhysics2DServer_body_get_direct_state :: MethodBind
 bindPhysics2DServer_body_get_direct_state
   = unsafePerformIO $
@@ -1722,7 +1722,7 @@ bindPhysics2DServer_body_get_direct_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the @Physics2DDirectBodyState@ of the body.
+-- | Returns the @Physics2DDirectBodyState@ of the body. Returns @null@ if the body is destroyed or removed from the physics space.
 body_get_direct_state ::
                         (Physics2DServer :< cls, Object :< cls) =>
                         cls -> Rid -> IO Physics2DDirectBodyState

@@ -26,7 +26,7 @@ instance NodeProperty ConvexPolygonShape2D "points"
 
 {-# NOINLINE bindConvexPolygonShape2D_get_points #-}
 
--- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order.
+-- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order. Only set this property with convex hull points, use @method set_point_cloud@ to generate a convex hull shape from concave shape points.
 bindConvexPolygonShape2D_get_points :: MethodBind
 bindConvexPolygonShape2D_get_points
   = unsafePerformIO $
@@ -36,7 +36,7 @@ bindConvexPolygonShape2D_get_points
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order.
+-- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order. Only set this property with convex hull points, use @method set_point_cloud@ to generate a convex hull shape from concave shape points.
 get_points ::
              (ConvexPolygonShape2D :< cls, Object :< cls) =>
              cls -> IO PoolVector2Array
@@ -87,7 +87,7 @@ instance NodeMethod ConvexPolygonShape2D "set_point_cloud"
 
 {-# NOINLINE bindConvexPolygonShape2D_set_points #-}
 
--- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order.
+-- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order. Only set this property with convex hull points, use @method set_point_cloud@ to generate a convex hull shape from concave shape points.
 bindConvexPolygonShape2D_set_points :: MethodBind
 bindConvexPolygonShape2D_set_points
   = unsafePerformIO $
@@ -97,7 +97,7 @@ bindConvexPolygonShape2D_set_points
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order.
+-- | The polygon's list of vertices. Can be in either clockwise or counterclockwise order. Only set this property with convex hull points, use @method set_point_cloud@ to generate a convex hull shape from concave shape points.
 set_points ::
              (ConvexPolygonShape2D :< cls, Object :< cls) =>
              cls -> PoolVector2Array -> IO ()

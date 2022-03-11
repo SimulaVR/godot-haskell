@@ -151,7 +151,7 @@ instance NodeMethod ReflectionProbe "are_shadows_enabled" '[]
 
 {-# NOINLINE bindReflectionProbe_get_cull_mask #-}
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. To improve performance, it is best to only include large objects which are likely to take up a lot of space in the reflection.
 bindReflectionProbe_get_cull_mask :: MethodBind
 bindReflectionProbe_get_cull_mask
   = unsafePerformIO $
@@ -161,7 +161,7 @@ bindReflectionProbe_get_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. To improve performance, it is best to only include large objects which are likely to take up a lot of space in the reflection.
 get_cull_mask ::
                 (ReflectionProbe :< cls, Object :< cls) => cls -> IO Int
 get_cull_mask cls
@@ -180,6 +180,7 @@ instance NodeMethod ReflectionProbe "get_cull_mask" '[] (IO Int)
 {-# NOINLINE bindReflectionProbe_get_extents #-}
 
 -- | The size of the reflection probe. The larger the extents the more space covered by the probe which will lower the perceived resolution. It is best to keep the extents only as large as you need them.
+--   			__Note:__ To better fit areas that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 bindReflectionProbe_get_extents :: MethodBind
 bindReflectionProbe_get_extents
   = unsafePerformIO $
@@ -190,6 +191,7 @@ bindReflectionProbe_get_extents
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The size of the reflection probe. The larger the extents the more space covered by the probe which will lower the perceived resolution. It is best to keep the extents only as large as you need them.
+--   			__Note:__ To better fit areas that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 get_extents ::
               (ReflectionProbe :< cls, Object :< cls) => cls -> IO Vector3
 get_extents cls
@@ -329,7 +331,8 @@ instance NodeMethod ReflectionProbe
 
 {-# NOINLINE bindReflectionProbe_get_max_distance #-}
 
--- | Sets the max distance away from the probe an object can be before it is culled.
+-- | The maximum distance away from the @ReflectionProbe@ an object can be before it is culled. Decrease this to improve performance, especially when using the @UPDATE_ALWAYS@ @update_mode@.
+--   			__Note:__ The maximum reflection distance is always at least equal to the @extents@. This means that decreasing @max_distance@ will not always cull objects from reflections, especially if the reflection probe's @extents@ are already large.
 bindReflectionProbe_get_max_distance :: MethodBind
 bindReflectionProbe_get_max_distance
   = unsafePerformIO $
@@ -339,7 +342,8 @@ bindReflectionProbe_get_max_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the max distance away from the probe an object can be before it is culled.
+-- | The maximum distance away from the @ReflectionProbe@ an object can be before it is culled. Decrease this to improve performance, especially when using the @UPDATE_ALWAYS@ @update_mode@.
+--   			__Note:__ The maximum reflection distance is always at least equal to the @extents@. This means that decreasing @max_distance@ will not always cull objects from reflections, especially if the reflection probe's @extents@ are already large.
 get_max_distance ::
                    (ReflectionProbe :< cls, Object :< cls) => cls -> IO Float
 get_max_distance cls
@@ -358,7 +362,7 @@ instance NodeMethod ReflectionProbe "get_max_distance" '[]
 
 {-# NOINLINE bindReflectionProbe_get_origin_offset #-}
 
--- | Sets the origin offset to be used when this reflection probe is in box project mode.
+-- | Sets the origin offset to be used when this @ReflectionProbe@ is in @box_projection@ mode. This can be set to a non-zero value to ensure a reflection fits a rectangle-shaped room, while reducing the amount of objects that "get in the way" of the reflection.
 bindReflectionProbe_get_origin_offset :: MethodBind
 bindReflectionProbe_get_origin_offset
   = unsafePerformIO $
@@ -368,7 +372,7 @@ bindReflectionProbe_get_origin_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the origin offset to be used when this reflection probe is in box project mode.
+-- | Sets the origin offset to be used when this @ReflectionProbe@ is in @box_projection@ mode. This can be set to a non-zero value to ensure a reflection fits a rectangle-shaped room, while reducing the amount of objects that "get in the way" of the reflection.
 get_origin_offset ::
                     (ReflectionProbe :< cls, Object :< cls) => cls -> IO Vector3
 get_origin_offset cls
@@ -387,7 +391,7 @@ instance NodeMethod ReflectionProbe "get_origin_offset" '[]
 
 {-# NOINLINE bindReflectionProbe_get_update_mode #-}
 
--- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
+-- | Sets how frequently the @ReflectionProbe@ is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 bindReflectionProbe_get_update_mode :: MethodBind
 bindReflectionProbe_get_update_mode
   = unsafePerformIO $
@@ -397,7 +401,7 @@ bindReflectionProbe_get_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
+-- | Sets how frequently the @ReflectionProbe@ is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 get_update_mode ::
                   (ReflectionProbe :< cls, Object :< cls) => cls -> IO Int
 get_update_mode cls
@@ -416,6 +420,7 @@ instance NodeMethod ReflectionProbe "get_update_mode" '[] (IO Int)
 {-# NOINLINE bindReflectionProbe_is_box_projection_enabled #-}
 
 -- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+--   			__Note:__ To better fit rectangle-shaped rooms that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 bindReflectionProbe_is_box_projection_enabled :: MethodBind
 bindReflectionProbe_is_box_projection_enabled
   = unsafePerformIO $
@@ -426,6 +431,7 @@ bindReflectionProbe_is_box_projection_enabled
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+--   			__Note:__ To better fit rectangle-shaped rooms that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 is_box_projection_enabled ::
                             (ReflectionProbe :< cls, Object :< cls) => cls -> IO Bool
 is_box_projection_enabled cls
@@ -503,7 +509,7 @@ instance NodeMethod ReflectionProbe "set_as_interior" '[Bool]
 
 {-# NOINLINE bindReflectionProbe_set_cull_mask #-}
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. To improve performance, it is best to only include large objects which are likely to take up a lot of space in the reflection.
 bindReflectionProbe_set_cull_mask :: MethodBind
 bindReflectionProbe_set_cull_mask
   = unsafePerformIO $
@@ -513,7 +519,7 @@ bindReflectionProbe_set_cull_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. It is best to only include large objects which are likely to take up a lot of space in the reflection in order to save on rendering cost.
+-- | Sets the cull mask which determines what objects are drawn by this probe. Every @VisualInstance@ with a layer included in this cull mask will be rendered by the probe. To improve performance, it is best to only include large objects which are likely to take up a lot of space in the reflection.
 set_cull_mask ::
                 (ReflectionProbe :< cls, Object :< cls) => cls -> Int -> IO ()
 set_cull_mask cls arg1
@@ -532,6 +538,7 @@ instance NodeMethod ReflectionProbe "set_cull_mask" '[Int] (IO ())
 {-# NOINLINE bindReflectionProbe_set_enable_box_projection #-}
 
 -- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+--   			__Note:__ To better fit rectangle-shaped rooms that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 bindReflectionProbe_set_enable_box_projection :: MethodBind
 bindReflectionProbe_set_enable_box_projection
   = unsafePerformIO $
@@ -542,6 +549,7 @@ bindReflectionProbe_set_enable_box_projection
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, enables box projection. This makes reflections look more correct in rectangle-shaped rooms by offsetting the reflection center depending on the camera's location.
+--   			__Note:__ To better fit rectangle-shaped rooms that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 set_enable_box_projection ::
                             (ReflectionProbe :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_enable_box_projection cls arg1
@@ -592,6 +600,7 @@ instance NodeMethod ReflectionProbe "set_enable_shadows" '[Bool]
 {-# NOINLINE bindReflectionProbe_set_extents #-}
 
 -- | The size of the reflection probe. The larger the extents the more space covered by the probe which will lower the perceived resolution. It is best to keep the extents only as large as you need them.
+--   			__Note:__ To better fit areas that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 bindReflectionProbe_set_extents :: MethodBind
 bindReflectionProbe_set_extents
   = unsafePerformIO $
@@ -602,6 +611,7 @@ bindReflectionProbe_set_extents
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The size of the reflection probe. The larger the extents the more space covered by the probe which will lower the perceived resolution. It is best to keep the extents only as large as you need them.
+--   			__Note:__ To better fit areas that are not aligned to the grid, you can rotate the @ReflectionProbe@ node.
 set_extents ::
               (ReflectionProbe :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_extents cls arg1
@@ -744,7 +754,8 @@ instance NodeMethod ReflectionProbe
 
 {-# NOINLINE bindReflectionProbe_set_max_distance #-}
 
--- | Sets the max distance away from the probe an object can be before it is culled.
+-- | The maximum distance away from the @ReflectionProbe@ an object can be before it is culled. Decrease this to improve performance, especially when using the @UPDATE_ALWAYS@ @update_mode@.
+--   			__Note:__ The maximum reflection distance is always at least equal to the @extents@. This means that decreasing @max_distance@ will not always cull objects from reflections, especially if the reflection probe's @extents@ are already large.
 bindReflectionProbe_set_max_distance :: MethodBind
 bindReflectionProbe_set_max_distance
   = unsafePerformIO $
@@ -754,7 +765,8 @@ bindReflectionProbe_set_max_distance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the max distance away from the probe an object can be before it is culled.
+-- | The maximum distance away from the @ReflectionProbe@ an object can be before it is culled. Decrease this to improve performance, especially when using the @UPDATE_ALWAYS@ @update_mode@.
+--   			__Note:__ The maximum reflection distance is always at least equal to the @extents@. This means that decreasing @max_distance@ will not always cull objects from reflections, especially if the reflection probe's @extents@ are already large.
 set_max_distance ::
                    (ReflectionProbe :< cls, Object :< cls) => cls -> Float -> IO ()
 set_max_distance cls arg1
@@ -773,7 +785,7 @@ instance NodeMethod ReflectionProbe "set_max_distance" '[Float]
 
 {-# NOINLINE bindReflectionProbe_set_origin_offset #-}
 
--- | Sets the origin offset to be used when this reflection probe is in box project mode.
+-- | Sets the origin offset to be used when this @ReflectionProbe@ is in @box_projection@ mode. This can be set to a non-zero value to ensure a reflection fits a rectangle-shaped room, while reducing the amount of objects that "get in the way" of the reflection.
 bindReflectionProbe_set_origin_offset :: MethodBind
 bindReflectionProbe_set_origin_offset
   = unsafePerformIO $
@@ -783,7 +795,7 @@ bindReflectionProbe_set_origin_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the origin offset to be used when this reflection probe is in box project mode.
+-- | Sets the origin offset to be used when this @ReflectionProbe@ is in @box_projection@ mode. This can be set to a non-zero value to ensure a reflection fits a rectangle-shaped room, while reducing the amount of objects that "get in the way" of the reflection.
 set_origin_offset ::
                     (ReflectionProbe :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_origin_offset cls arg1
@@ -802,7 +814,7 @@ instance NodeMethod ReflectionProbe "set_origin_offset" '[Vector3]
 
 {-# NOINLINE bindReflectionProbe_set_update_mode #-}
 
--- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
+-- | Sets how frequently the @ReflectionProbe@ is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 bindReflectionProbe_set_update_mode :: MethodBind
 bindReflectionProbe_set_update_mode
   = unsafePerformIO $
@@ -812,7 +824,7 @@ bindReflectionProbe_set_update_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets how frequently the probe is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
+-- | Sets how frequently the @ReflectionProbe@ is updated. Can be @UPDATE_ONCE@ or @UPDATE_ALWAYS@.
 set_update_mode ::
                   (ReflectionProbe :< cls, Object :< cls) => cls -> Int -> IO ()
 set_update_mode cls arg1

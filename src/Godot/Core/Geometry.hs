@@ -222,7 +222,7 @@ instance NodeMethod Geometry "clip_polygon"
 {-# NOINLINE bindGeometry_clip_polygons_2d #-}
 
 -- | Clips @polygon_a@ against @polygon_b@ and returns an array of clipped polygons. This performs @OPERATION_DIFFERENCE@ between polygons. Returns an empty array if @polygon_b@ completely overlaps @polygon_a@.
---   				If @polygon_b@ is enclosed by @polygon_a@, returns an outer polygon (boundary) and inner polygon (hole) which could be distiguished by calling @method is_polygon_clockwise@.
+--   				If @polygon_b@ is enclosed by @polygon_a@, returns an outer polygon (boundary) and inner polygon (hole) which could be distinguished by calling @method is_polygon_clockwise@.
 bindGeometry_clip_polygons_2d :: MethodBind
 bindGeometry_clip_polygons_2d
   = unsafePerformIO $
@@ -233,7 +233,7 @@ bindGeometry_clip_polygons_2d
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Clips @polygon_a@ against @polygon_b@ and returns an array of clipped polygons. This performs @OPERATION_DIFFERENCE@ between polygons. Returns an empty array if @polygon_b@ completely overlaps @polygon_a@.
---   				If @polygon_b@ is enclosed by @polygon_a@, returns an outer polygon (boundary) and inner polygon (hole) which could be distiguished by calling @method is_polygon_clockwise@.
+--   				If @polygon_b@ is enclosed by @polygon_a@, returns an outer polygon (boundary) and inner polygon (hole) which could be distinguished by calling @method is_polygon_clockwise@.
 clip_polygons_2d ::
                    (Geometry :< cls, Object :< cls) =>
                    cls -> PoolVector2Array -> PoolVector2Array -> IO Array
@@ -314,7 +314,7 @@ instance NodeMethod Geometry "convex_hull_2d" '[PoolVector2Array]
 {-# NOINLINE bindGeometry_exclude_polygons_2d #-}
 
 -- | Mutually excludes common area defined by intersection of @polygon_a@ and @polygon_b@ (see @method intersect_polygons_2d@) and returns an array of excluded polygons. This performs @OPERATION_XOR@ between polygons. In other words, returns all but common area between polygons.
---   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distiguished by calling @method is_polygon_clockwise@.
+--   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distinguished by calling @method is_polygon_clockwise@.
 bindGeometry_exclude_polygons_2d :: MethodBind
 bindGeometry_exclude_polygons_2d
   = unsafePerformIO $
@@ -325,7 +325,7 @@ bindGeometry_exclude_polygons_2d
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Mutually excludes common area defined by intersection of @polygon_a@ and @polygon_b@ (see @method intersect_polygons_2d@) and returns an array of excluded polygons. This performs @OPERATION_XOR@ between polygons. In other words, returns all but common area between polygons.
---   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distiguished by calling @method is_polygon_clockwise@.
+--   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distinguished by calling @method is_polygon_clockwise@.
 exclude_polygons_2d ::
                       (Geometry :< cls, Object :< cls) =>
                       cls -> PoolVector2Array -> PoolVector2Array -> IO Array
@@ -514,7 +514,7 @@ instance NodeMethod Geometry "get_closest_points_between_segments"
 {-# NOINLINE bindGeometry_get_closest_points_between_segments_2d
              #-}
 
--- | Given the two 2D segments (@p1@, @p2@) and (@q1@, @q2@), finds those two points on the two segments that are closest to each other. Returns a @PoolVector2Array@ that contains this point on (@p1@, @p2@) as well the accompanying point on (@q1@, @q2@).
+-- | Given the two 2D segments (@p1@, @q1@) and (@p2@, @q2@), finds those two points on the two segments that are closest to each other. Returns a @PoolVector2Array@ that contains this point on (@p1@, @q1@) as well the accompanying point on (@p2@, @q2@).
 bindGeometry_get_closest_points_between_segments_2d :: MethodBind
 bindGeometry_get_closest_points_between_segments_2d
   = unsafePerformIO $
@@ -524,7 +524,7 @@ bindGeometry_get_closest_points_between_segments_2d
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Given the two 2D segments (@p1@, @p2@) and (@q1@, @q2@), finds those two points on the two segments that are closest to each other. Returns a @PoolVector2Array@ that contains this point on (@p1@, @p2@) as well the accompanying point on (@q1@, @q2@).
+-- | Given the two 2D segments (@p1@, @q1@) and (@p2@, @q2@), finds those two points on the two segments that are closest to each other. Returns a @PoolVector2Array@ that contains this point on (@p1@, @q1@) as well the accompanying point on (@p2@, @q2@).
 get_closest_points_between_segments_2d ::
                                          (Geometry :< cls, Object :< cls) =>
                                          cls ->
@@ -800,7 +800,7 @@ instance NodeMethod Geometry "make_atlas" '[PoolVector2Array]
 {-# NOINLINE bindGeometry_merge_polygons_2d #-}
 
 -- | Merges (combines) @polygon_a@ and @polygon_b@ and returns an array of merged polygons. This performs @OPERATION_UNION@ between polygons.
---   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distinguished by calling @method is_polygon_clockwise@.
+--   				The operation may result in an outer polygon (boundary) and multiple inner polygons (holes) produced which could be distinguished by calling @method is_polygon_clockwise@.
 bindGeometry_merge_polygons_2d :: MethodBind
 bindGeometry_merge_polygons_2d
   = unsafePerformIO $
@@ -811,7 +811,7 @@ bindGeometry_merge_polygons_2d
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Merges (combines) @polygon_a@ and @polygon_b@ and returns an array of merged polygons. This performs @OPERATION_UNION@ between polygons.
---   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distinguished by calling @method is_polygon_clockwise@.
+--   				The operation may result in an outer polygon (boundary) and multiple inner polygons (holes) produced which could be distinguished by calling @method is_polygon_clockwise@.
 merge_polygons_2d ::
                     (Geometry :< cls, Object :< cls) =>
                     cls -> PoolVector2Array -> PoolVector2Array -> IO Array
@@ -1220,7 +1220,7 @@ instance NodeMethod Geometry "triangulate_delaunay_2d"
 
 {-# NOINLINE bindGeometry_triangulate_polygon #-}
 
--- | Triangulates the polygon specified by the points in @polygon@. Returns a @PoolIntArray@ where each triangle consists of three consecutive point indices into @polygon@ (i.e. the returned array will have @n * 3@ elements, with @n@ being the number of found triangles). If the triangulation did not succeed, an empty @PoolIntArray@ is returned.
+-- | Triangulates the polygon specified by the points in @polygon@. Returns a @PoolIntArray@ where each triangle consists of three consecutive point indices into @polygon@ (i.e. the returned array will have @n * 3@ elements, with @n@ being the number of found triangles). Output triangles will always be counter clockwise, and the contour will be flipped if it's clockwise. If the triangulation did not succeed, an empty @PoolIntArray@ is returned.
 bindGeometry_triangulate_polygon :: MethodBind
 bindGeometry_triangulate_polygon
   = unsafePerformIO $
@@ -1230,7 +1230,7 @@ bindGeometry_triangulate_polygon
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Triangulates the polygon specified by the points in @polygon@. Returns a @PoolIntArray@ where each triangle consists of three consecutive point indices into @polygon@ (i.e. the returned array will have @n * 3@ elements, with @n@ being the number of found triangles). If the triangulation did not succeed, an empty @PoolIntArray@ is returned.
+-- | Triangulates the polygon specified by the points in @polygon@. Returns a @PoolIntArray@ where each triangle consists of three consecutive point indices into @polygon@ (i.e. the returned array will have @n * 3@ elements, with @n@ being the number of found triangles). Output triangles will always be counter clockwise, and the contour will be flipped if it's clockwise. If the triangulation did not succeed, an empty @PoolIntArray@ is returned.
 triangulate_polygon ::
                       (Geometry :< cls, Object :< cls) =>
                       cls -> PoolVector2Array -> IO PoolIntArray

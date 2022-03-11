@@ -42,6 +42,9 @@ _INVALID_PARAMS = -32602
 
 {-# NOINLINE bindJSONRPC_make_notification #-}
 
+-- | Returns a dictionary in the form of a JSON-RPC notification. Notifications are one-shot messages which do not expect a response.
+--   				- @method@: Name of the method being called.
+--   				- @params@: An array or dictionary of parameters being passed to the method.
 bindJSONRPC_make_notification :: MethodBind
 bindJSONRPC_make_notification
   = unsafePerformIO $
@@ -51,6 +54,9 @@ bindJSONRPC_make_notification
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a dictionary in the form of a JSON-RPC notification. Notifications are one-shot messages which do not expect a response.
+--   				- @method@: Name of the method being called.
+--   				- @params@: An array or dictionary of parameters being passed to the method.
 make_notification ::
                     (JSONRPC :< cls, Object :< cls) =>
                     cls -> GodotString -> GodotVariant -> IO Dictionary
@@ -70,6 +76,10 @@ instance NodeMethod JSONRPC "make_notification"
 
 {-# NOINLINE bindJSONRPC_make_request #-}
 
+-- | Returns a dictionary in the form of a JSON-RPC request. Requests are sent to a server with the expectation of a response. The ID field is used for the server to specify which exact request it is responding to.
+--   				- @method@: Name of the method being called.
+--   				- @params@: An array or dictionary of parameters being passed to the method.
+--   				- @id@: Uniquely identifies this request. The server is expected to send a response with the same ID.
 bindJSONRPC_make_request :: MethodBind
 bindJSONRPC_make_request
   = unsafePerformIO $
@@ -79,6 +89,10 @@ bindJSONRPC_make_request
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns a dictionary in the form of a JSON-RPC request. Requests are sent to a server with the expectation of a response. The ID field is used for the server to specify which exact request it is responding to.
+--   				- @method@: Name of the method being called.
+--   				- @params@: An array or dictionary of parameters being passed to the method.
+--   				- @id@: Uniquely identifies this request. The server is expected to send a response with the same ID.
 make_request ::
                (JSONRPC :< cls, Object :< cls) =>
                cls -> GodotString -> GodotVariant -> GodotVariant -> IO Dictionary
@@ -97,6 +111,9 @@ instance NodeMethod JSONRPC "make_request"
 
 {-# NOINLINE bindJSONRPC_make_response #-}
 
+-- | When a server has received and processed a request, it is expected to send a response. If you did not want a response then you need to have sent a Notification instead.
+--   				- @result@: The return value of the function which was called.
+--   				- @id@: The ID of the request this response is targeted to.
 bindJSONRPC_make_response :: MethodBind
 bindJSONRPC_make_response
   = unsafePerformIO $
@@ -106,6 +123,9 @@ bindJSONRPC_make_response
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | When a server has received and processed a request, it is expected to send a response. If you did not want a response then you need to have sent a Notification instead.
+--   				- @result@: The return value of the function which was called.
+--   				- @id@: The ID of the request this response is targeted to.
 make_response ::
                 (JSONRPC :< cls, Object :< cls) =>
                 cls -> GodotVariant -> GodotVariant -> IO Dictionary
@@ -125,6 +145,10 @@ instance NodeMethod JSONRPC "make_response"
 
 {-# NOINLINE bindJSONRPC_make_response_error #-}
 
+-- | Creates a response which indicates a previous reply has failed in some way.
+--   				- @code@: The error code corresponding to what kind of error this is. See the @enum ErrorCode@ constants.
+--   				- @message@: A custom message about this error.
+--   				- @id@: The request this error is a response to.
 bindJSONRPC_make_response_error :: MethodBind
 bindJSONRPC_make_response_error
   = unsafePerformIO $
@@ -134,6 +158,10 @@ bindJSONRPC_make_response_error
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Creates a response which indicates a previous reply has failed in some way.
+--   				- @code@: The error code corresponding to what kind of error this is. See the @enum ErrorCode@ constants.
+--   				- @message@: A custom message about this error.
+--   				- @id@: The request this error is a response to.
 make_response_error ::
                       (JSONRPC :< cls, Object :< cls) =>
                       cls -> Int -> GodotString -> Maybe GodotVariant -> IO Dictionary
@@ -154,6 +182,9 @@ instance NodeMethod JSONRPC "make_response_error"
 
 {-# NOINLINE bindJSONRPC_process_action #-}
 
+-- | Given a Dictionary which takes the form of a JSON-RPC request: unpack the request and run it. Methods are resolved by looking at the field called "method" and looking for an equivalently named function in the JSONRPC object. If one is found that method is called.
+--   				To add new supported methods extend the JSONRPC class and call @method process_action@ on your subclass.
+--   				@action@: The action to be run, as a Dictionary in the form of a JSON-RPC request or notification.
 bindJSONRPC_process_action :: MethodBind
 bindJSONRPC_process_action
   = unsafePerformIO $
@@ -163,6 +194,9 @@ bindJSONRPC_process_action
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Given a Dictionary which takes the form of a JSON-RPC request: unpack the request and run it. Methods are resolved by looking at the field called "method" and looking for an equivalently named function in the JSONRPC object. If one is found that method is called.
+--   				To add new supported methods extend the JSONRPC class and call @method process_action@ on your subclass.
+--   				@action@: The action to be run, as a Dictionary in the form of a JSON-RPC request or notification.
 process_action ::
                  (JSONRPC :< cls, Object :< cls) =>
                  cls -> GodotVariant -> Maybe Bool -> IO GodotVariant

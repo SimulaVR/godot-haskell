@@ -291,7 +291,7 @@ instance NodeMethod HTTPRequest "get_body_size_limit" '[] (IO Int)
 {-# NOINLINE bindHTTPRequest_get_download_chunk_size #-}
 
 -- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
---   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
+--   			Set this to a lower value (e.g. 4096 for 4 KiB) when downloading small files to decrease memory usage at the cost of download speeds.
 bindHTTPRequest_get_download_chunk_size :: MethodBind
 bindHTTPRequest_get_download_chunk_size
   = unsafePerformIO $
@@ -302,7 +302,7 @@ bindHTTPRequest_get_download_chunk_size
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
---   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
+--   			Set this to a lower value (e.g. 4096 for 4 KiB) when downloading small files to decrease memory usage at the cost of download speeds.
 get_download_chunk_size ::
                           (HTTPRequest :< cls, Object :< cls) => cls -> IO Int
 get_download_chunk_size cls
@@ -488,7 +488,7 @@ instance NodeMethod HTTPRequest "is_using_threads" '[] (IO Bool)
 
 -- | Creates request on the underlying @HTTPClient@. If there is no configuration errors, it tries to connect using @method HTTPClient.connect_to_host@ and passes parameters onto @method HTTPClient.request@.
 --   				Returns @OK@ if request is successfully created. (Does not imply that the server has responded), @ERR_UNCONFIGURED@ if not in the tree, @ERR_BUSY@ if still processing previous request, @ERR_INVALID_PARAMETER@ if given string is not a valid URL format, or @ERR_CANT_CONNECT@ if not using thread and the @HTTPClient@ cannot connect to host.
---   				__Note:__ The @request_data@ parameter is ignored if @method@ is @HTTPClient.METHOD_GET@. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See @method String.http_escape@ for an example.
+--   				__Note:__ When @method@ is @HTTPClient.METHOD_GET@, the payload sent via @request_data@ might be ignored by the server or even cause the server to reject the request (check @url=https://datatracker.ietf.org/doc/html/rfc7231#section-4.3.1@RFC 7231 section 4.3.1@/url@ for more details). As a workaround, you can send data as a query string in the URL. See @method String.http_escape@ for an example.
 bindHTTPRequest_request :: MethodBind
 bindHTTPRequest_request
   = unsafePerformIO $
@@ -500,7 +500,7 @@ bindHTTPRequest_request
 
 -- | Creates request on the underlying @HTTPClient@. If there is no configuration errors, it tries to connect using @method HTTPClient.connect_to_host@ and passes parameters onto @method HTTPClient.request@.
 --   				Returns @OK@ if request is successfully created. (Does not imply that the server has responded), @ERR_UNCONFIGURED@ if not in the tree, @ERR_BUSY@ if still processing previous request, @ERR_INVALID_PARAMETER@ if given string is not a valid URL format, or @ERR_CANT_CONNECT@ if not using thread and the @HTTPClient@ cannot connect to host.
---   				__Note:__ The @request_data@ parameter is ignored if @method@ is @HTTPClient.METHOD_GET@. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See @method String.http_escape@ for an example.
+--   				__Note:__ When @method@ is @HTTPClient.METHOD_GET@, the payload sent via @request_data@ might be ignored by the server or even cause the server to reject the request (check @url=https://datatracker.ietf.org/doc/html/rfc7231#section-4.3.1@RFC 7231 section 4.3.1@/url@ for more details). As a workaround, you can send data as a query string in the URL. See @method String.http_escape@ for an example.
 request ::
           (HTTPRequest :< cls, Object :< cls) =>
           cls ->
@@ -558,7 +558,7 @@ instance NodeMethod HTTPRequest "set_body_size_limit" '[Int]
 {-# NOINLINE bindHTTPRequest_set_download_chunk_size #-}
 
 -- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
---   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
+--   			Set this to a lower value (e.g. 4096 for 4 KiB) when downloading small files to decrease memory usage at the cost of download speeds.
 bindHTTPRequest_set_download_chunk_size :: MethodBind
 bindHTTPRequest_set_download_chunk_size
   = unsafePerformIO $
@@ -569,7 +569,7 @@ bindHTTPRequest_set_download_chunk_size
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The size of the buffer used and maximum bytes to read per iteration. See @HTTPClient.read_chunk_size@.
---   			Set this to a higher value (e.g. 65536 for 64 KiB) when downloading large files to achieve better speeds at the cost of memory.
+--   			Set this to a lower value (e.g. 4096 for 4 KiB) when downloading small files to decrease memory usage at the cost of download speeds.
 set_download_chunk_size ::
                           (HTTPRequest :< cls, Object :< cls) => cls -> Int -> IO ()
 set_download_chunk_size cls arg1

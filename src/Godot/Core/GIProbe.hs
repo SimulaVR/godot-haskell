@@ -88,6 +88,8 @@ instance NodeProperty GIProbe "subdiv" Int 'False where
 {-# NOINLINE bindGIProbe_bake #-}
 
 -- | Bakes the effect from all @GeometryInstance@s marked with @GeometryInstance.use_in_baked_light@ and @Light@s marked with either @Light.BAKE_INDIRECT@ or @Light.BAKE_ALL@. If @create_visual_debug@ is @true@, after baking the light, this will generate a @MultiMesh@ that has a cube representing each solid cell with each cube colored to the cell's albedo color. This can be used to visualize the @GIProbe@'s data and debug any issues that may be occurring.
+--   				__Note:__ @method bake@ works from the editor and in exported projects. This makes it suitable for procedurally generated or user-built levels. Baking a @GIProbe@ generally takes from 5 to 20 seconds in most scenes. Reducing @subdiv@ can speed up baking.
+--   				__Note:__ @GeometryInstance@s and @Light@s must be fully ready before @method bake@ is called. If you are procedurally creating those and some meshes or lights are missing from your baked @GIProbe@, use @call_deferred("bake")@ instead of calling @method bake@ directly.
 bindGIProbe_bake :: MethodBind
 bindGIProbe_bake
   = unsafePerformIO $
@@ -98,6 +100,8 @@ bindGIProbe_bake
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Bakes the effect from all @GeometryInstance@s marked with @GeometryInstance.use_in_baked_light@ and @Light@s marked with either @Light.BAKE_INDIRECT@ or @Light.BAKE_ALL@. If @create_visual_debug@ is @true@, after baking the light, this will generate a @MultiMesh@ that has a cube representing each solid cell with each cube colored to the cell's albedo color. This can be used to visualize the @GIProbe@'s data and debug any issues that may be occurring.
+--   				__Note:__ @method bake@ works from the editor and in exported projects. This makes it suitable for procedurally generated or user-built levels. Baking a @GIProbe@ generally takes from 5 to 20 seconds in most scenes. Reducing @subdiv@ can speed up baking.
+--   				__Note:__ @GeometryInstance@s and @Light@s must be fully ready before @method bake@ is called. If you are procedurally creating those and some meshes or lights are missing from your baked @GIProbe@, use @call_deferred("bake")@ instead of calling @method bake@ directly.
 bake ::
        (GIProbe :< cls, Object :< cls) =>
        cls -> Maybe Node -> Maybe Bool -> IO ()
@@ -342,7 +346,7 @@ instance NodeMethod GIProbe "get_subdiv" '[] (IO Int) where
 
 {-# NOINLINE bindGIProbe_is_compressed #-}
 
--- | If @true@, the data for this @GIProbe@ will be compressed. Compression saves space, but results in far worse visual quality.
+-- | @i@Deprecated.@/i@ This property has been deprecated due to known bugs and no longer has any effect when enabled.
 bindGIProbe_is_compressed :: MethodBind
 bindGIProbe_is_compressed
   = unsafePerformIO $
@@ -352,7 +356,7 @@ bindGIProbe_is_compressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the data for this @GIProbe@ will be compressed. Compression saves space, but results in far worse visual quality.
+-- | @i@Deprecated.@/i@ This property has been deprecated due to known bugs and no longer has any effect when enabled.
 is_compressed :: (GIProbe :< cls, Object :< cls) => cls -> IO Bool
 is_compressed cls
   = withVariantArray []
@@ -417,7 +421,7 @@ instance NodeMethod GIProbe "set_bias" '[Float] (IO ()) where
 
 {-# NOINLINE bindGIProbe_set_compress #-}
 
--- | If @true@, the data for this @GIProbe@ will be compressed. Compression saves space, but results in far worse visual quality.
+-- | @i@Deprecated.@/i@ This property has been deprecated due to known bugs and no longer has any effect when enabled.
 bindGIProbe_set_compress :: MethodBind
 bindGIProbe_set_compress
   = unsafePerformIO $
@@ -427,7 +431,7 @@ bindGIProbe_set_compress
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the data for this @GIProbe@ will be compressed. Compression saves space, but results in far worse visual quality.
+-- | @i@Deprecated.@/i@ This property has been deprecated due to known bugs and no longer has any effect when enabled.
 set_compress ::
                (GIProbe :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_compress cls arg1

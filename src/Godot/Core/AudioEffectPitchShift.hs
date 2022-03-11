@@ -64,6 +64,7 @@ instance NodeProperty AudioEffectPitchShift "pitch_scale" Float
 
 {-# NOINLINE bindAudioEffectPitchShift_get_fft_size #-}
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the effect over time, but have greater latency. The effects of this higher latency are especially noticeable on sounds that have sudden amplitude changes.
 bindAudioEffectPitchShift_get_fft_size :: MethodBind
 bindAudioEffectPitchShift_get_fft_size
   = unsafePerformIO $
@@ -73,6 +74,7 @@ bindAudioEffectPitchShift_get_fft_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the effect over time, but have greater latency. The effects of this higher latency are especially noticeable on sounds that have sudden amplitude changes.
 get_fft_size ::
                (AudioEffectPitchShift :< cls, Object :< cls) => cls -> IO Int
 get_fft_size cls
@@ -91,6 +93,7 @@ instance NodeMethod AudioEffectPitchShift "get_fft_size" '[]
 
 {-# NOINLINE bindAudioEffectPitchShift_get_oversampling #-}
 
+-- | The oversampling factor to use. Higher values result in better quality, but are more demanding on the CPU and may cause audio cracking if the CPU can't keep up.
 bindAudioEffectPitchShift_get_oversampling :: MethodBind
 bindAudioEffectPitchShift_get_oversampling
   = unsafePerformIO $
@@ -100,6 +103,7 @@ bindAudioEffectPitchShift_get_oversampling
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The oversampling factor to use. Higher values result in better quality, but are more demanding on the CPU and may cause audio cracking if the CPU can't keep up.
 get_oversampling ::
                    (AudioEffectPitchShift :< cls, Object :< cls) => cls -> IO Int
 get_oversampling cls
@@ -118,7 +122,7 @@ instance NodeMethod AudioEffectPitchShift "get_oversampling" '[]
 
 {-# NOINLINE bindAudioEffectPitchShift_get_pitch_scale #-}
 
--- | Pitch value. Can range from 0 (-1 octave) to 16 (+16 octaves).
+-- | The pitch scale to use. @1.0@ is the default pitch and plays sounds unaltered. @pitch_scale@ can range from @0.0@ (infinitely low pitch, inaudible) to @16@ (16 times higher than the initial pitch).
 bindAudioEffectPitchShift_get_pitch_scale :: MethodBind
 bindAudioEffectPitchShift_get_pitch_scale
   = unsafePerformIO $
@@ -128,7 +132,7 @@ bindAudioEffectPitchShift_get_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Pitch value. Can range from 0 (-1 octave) to 16 (+16 octaves).
+-- | The pitch scale to use. @1.0@ is the default pitch and plays sounds unaltered. @pitch_scale@ can range from @0.0@ (infinitely low pitch, inaudible) to @16@ (16 times higher than the initial pitch).
 get_pitch_scale ::
                   (AudioEffectPitchShift :< cls, Object :< cls) => cls -> IO Float
 get_pitch_scale cls
@@ -147,6 +151,7 @@ instance NodeMethod AudioEffectPitchShift "get_pitch_scale" '[]
 
 {-# NOINLINE bindAudioEffectPitchShift_set_fft_size #-}
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the effect over time, but have greater latency. The effects of this higher latency are especially noticeable on sounds that have sudden amplitude changes.
 bindAudioEffectPitchShift_set_fft_size :: MethodBind
 bindAudioEffectPitchShift_set_fft_size
   = unsafePerformIO $
@@ -156,6 +161,7 @@ bindAudioEffectPitchShift_set_fft_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the effect over time, but have greater latency. The effects of this higher latency are especially noticeable on sounds that have sudden amplitude changes.
 set_fft_size ::
                (AudioEffectPitchShift :< cls, Object :< cls) =>
                cls -> Int -> IO ()
@@ -175,6 +181,7 @@ instance NodeMethod AudioEffectPitchShift "set_fft_size" '[Int]
 
 {-# NOINLINE bindAudioEffectPitchShift_set_oversampling #-}
 
+-- | The oversampling factor to use. Higher values result in better quality, but are more demanding on the CPU and may cause audio cracking if the CPU can't keep up.
 bindAudioEffectPitchShift_set_oversampling :: MethodBind
 bindAudioEffectPitchShift_set_oversampling
   = unsafePerformIO $
@@ -184,6 +191,7 @@ bindAudioEffectPitchShift_set_oversampling
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The oversampling factor to use. Higher values result in better quality, but are more demanding on the CPU and may cause audio cracking if the CPU can't keep up.
 set_oversampling ::
                    (AudioEffectPitchShift :< cls, Object :< cls) =>
                    cls -> Int -> IO ()
@@ -203,7 +211,7 @@ instance NodeMethod AudioEffectPitchShift "set_oversampling" '[Int]
 
 {-# NOINLINE bindAudioEffectPitchShift_set_pitch_scale #-}
 
--- | Pitch value. Can range from 0 (-1 octave) to 16 (+16 octaves).
+-- | The pitch scale to use. @1.0@ is the default pitch and plays sounds unaltered. @pitch_scale@ can range from @0.0@ (infinitely low pitch, inaudible) to @16@ (16 times higher than the initial pitch).
 bindAudioEffectPitchShift_set_pitch_scale :: MethodBind
 bindAudioEffectPitchShift_set_pitch_scale
   = unsafePerformIO $
@@ -213,7 +221,7 @@ bindAudioEffectPitchShift_set_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Pitch value. Can range from 0 (-1 octave) to 16 (+16 octaves).
+-- | The pitch scale to use. @1.0@ is the default pitch and plays sounds unaltered. @pitch_scale@ can range from @0.0@ (infinitely low pitch, inaudible) to @16@ (16 times higher than the initial pitch).
 set_pitch_scale ::
                   (AudioEffectPitchShift :< cls, Object :< cls) =>
                   cls -> Float -> IO ()

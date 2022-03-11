@@ -237,6 +237,7 @@ instance NodeMethod InputMap "erase_action" '[GodotString] (IO ())
 {-# NOINLINE bindInputMap_event_is_action #-}
 
 -- | Returns @true@ if the given event is part of an existing action. This method ignores keyboard modifiers if the given @InputEvent@ is not pressed (for proper release detection). See @method action_has_event@ if you don't want this behavior.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 bindInputMap_event_is_action :: MethodBind
 bindInputMap_event_is_action
   = unsafePerformIO $
@@ -247,6 +248,7 @@ bindInputMap_event_is_action
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns @true@ if the given event is part of an existing action. This method ignores keyboard modifiers if the given @InputEvent@ is not pressed (for proper release detection). See @method action_has_event@ if you don't want this behavior.
+--   				If @exact_match@ is @false@, it ignores the input modifiers for @InputEventKey@ and @InputEventMouseButton@ events, and the direction for @InputEventJoypadMotion@ events.
 event_is_action ::
                   (InputMap :< cls, Object :< cls) =>
                   cls -> InputEvent -> GodotString -> IO Bool

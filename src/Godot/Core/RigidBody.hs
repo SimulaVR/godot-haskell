@@ -84,20 +84,26 @@ _MODE_RIGID = 0
 _MODE_CHARACTER :: Int
 _MODE_CHARACTER = 2
 
--- | Emitted when a body enters into contact with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Emitted when a collision with another @PhysicsBody@ or @GridMap@ occurs. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions. @GridMap@s are detected if the @MeshLibrary@ has Collision @Shape@s.
+--   				@body@ the @Node@, if it exists in the tree, of the other @PhysicsBody@ or @GridMap@.
 sig_body_entered :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_entered = Godot.Internal.Dispatch.Signal "body_entered"
 
 instance NodeSignal RigidBody "body_entered" '[Node]
 
--- | Emitted when a body shape exits contact with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Emitted when the collision with another @PhysicsBody@ or @GridMap@ ends. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions. @GridMap@s are detected if the @MeshLibrary@ has Collision @Shape@s.
+--   				@body@ the @Node@, if it exists in the tree, of the other @PhysicsBody@ or @GridMap@.
 sig_body_exited :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_exited = Godot.Internal.Dispatch.Signal "body_exited"
 
 instance NodeSignal RigidBody "body_exited" '[Node]
 
--- | Emitted when a body enters into contact with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
---   				This signal not only receives the body that collided with this one, but also its @RID@ (@body_id@), the shape index from the colliding body (@body_shape@), and the shape index from this body (@local_shape@) the other body collided with.
+-- | Emitted when one of this RigidBody's @Shape@s collides with another @PhysicsBody@ or @GridMap@'s @Shape@s. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions. @GridMap@s are detected if the @MeshLibrary@ has Collision @Shape@s.
+--   				@body_rid@ the @RID@ of the other @PhysicsBody@ or @MeshLibrary@'s @CollisionObject@ used by the @PhysicsServer@.
+--   				@body@ the @Node@, if it exists in the tree, of the other @PhysicsBody@ or @GridMap@.
+--   				@body_shape_index@ the index of the @Shape@ of the other @PhysicsBody@ or @GridMap@ used by the @PhysicsServer@. Get the @CollisionShape@ node with @body.shape_owner_get_owner(body_shape_index)@.
+--   				@local_shape_index@ the index of the @Shape@ of this RigidBody used by the @PhysicsServer@. Get the @CollisionShape@ node with @self.shape_owner_get_owner(local_shape_index)@.
+--   				__Note:__ Bullet physics cannot identify the shape index when using a @ConcavePolygonShape@. Don't use multiple @CollisionShape@s when using a @ConcavePolygonShape@ with Bullet physics if you need shape indices.
 sig_body_shape_entered :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_shape_entered
   = Godot.Internal.Dispatch.Signal "body_shape_entered"
@@ -105,8 +111,12 @@ sig_body_shape_entered
 instance NodeSignal RigidBody "body_shape_entered"
            '[Int, Node, Int, Int]
 
--- | Emitted when a body shape exits contact with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
---   				This signal not only receives the body that stopped colliding with this one, but also its @RID@ (@body_id@), the shape index from the colliding body (@body_shape@), and the shape index from this body (@local_shape@) the other body stopped colliding with.
+-- | Emitted when the collision between one of this RigidBody's @Shape@s and another @PhysicsBody@ or @GridMap@'s @Shape@s ends. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions. @GridMap@s are detected if the @MeshLibrary@ has Collision @Shape@s.
+--   				@body_rid@ the @RID@ of the other @PhysicsBody@ or @MeshLibrary@'s @CollisionObject@ used by the @PhysicsServer@. @GridMap@s are detected if the Meshes have @Shape@s.
+--   				@body@ the @Node@, if it exists in the tree, of the other @PhysicsBody@ or @GridMap@.
+--   				@body_shape_index@ the index of the @Shape@ of the other @PhysicsBody@ or @GridMap@ used by the @PhysicsServer@. Get the @CollisionShape@ node with @body.shape_owner_get_owner(body_shape_index)@.
+--   				@local_shape_index@ the index of the @Shape@ of this RigidBody used by the @PhysicsServer@. Get the @CollisionShape@ node with @self.shape_owner_get_owner(local_shape_index)@.
+--   				__Note:__ Bullet physics cannot identify the shape index when using a @ConcavePolygonShape@. Don't use multiple @CollisionShape@s when using a @ConcavePolygonShape@ with Bullet physics if you need shape indices.
 sig_body_shape_exited :: Godot.Internal.Dispatch.Signal RigidBody
 sig_body_shape_exited
   = Godot.Internal.Dispatch.Signal "body_shape_exited"
@@ -550,6 +560,7 @@ instance NodeMethod RigidBody "apply_torque_impulse" '[Vector3]
 {-# NOINLINE bindRigidBody_get_angular_damp #-}
 
 -- | Damps RigidBody's rotational forces.
+--   			See @ProjectSettings.physics/3d/default_angular_damp@ for more details about damping.
 bindRigidBody_get_angular_damp :: MethodBind
 bindRigidBody_get_angular_damp
   = unsafePerformIO $
@@ -560,6 +571,7 @@ bindRigidBody_get_angular_damp
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Damps RigidBody's rotational forces.
+--   			See @ProjectSettings.physics/3d/default_angular_damp@ for more details about damping.
 get_angular_damp ::
                    (RigidBody :< cls, Object :< cls) => cls -> IO Float
 get_angular_damp cls
@@ -576,7 +588,7 @@ instance NodeMethod RigidBody "get_angular_damp" '[] (IO Float)
 
 {-# NOINLINE bindRigidBody_get_angular_velocity #-}
 
--- | RigidBody's rotational velocity.
+-- | The body's rotational velocity in axis-angle format. The magnitude of the vector is the rotation rate in @i@radians@/i@ per second.
 bindRigidBody_get_angular_velocity :: MethodBind
 bindRigidBody_get_angular_velocity
   = unsafePerformIO $
@@ -586,7 +598,7 @@ bindRigidBody_get_angular_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | RigidBody's rotational velocity.
+-- | The body's rotational velocity in axis-angle format. The magnitude of the vector is the rotation rate in @i@radians@/i@ per second.
 get_angular_velocity ::
                        (RigidBody :< cls, Object :< cls) => cls -> IO Vector3
 get_angular_velocity cls
@@ -744,6 +756,7 @@ instance NodeMethod RigidBody "get_gravity_scale" '[] (IO Float)
 {-# NOINLINE bindRigidBody_get_linear_damp #-}
 
 -- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
+--   			See @ProjectSettings.physics/3d/default_linear_damp@ for more details about damping.
 bindRigidBody_get_linear_damp :: MethodBind
 bindRigidBody_get_linear_damp
   = unsafePerformIO $
@@ -754,6 +767,7 @@ bindRigidBody_get_linear_damp
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
+--   			See @ProjectSettings.physics/3d/default_linear_damp@ for more details about damping.
 get_linear_damp ::
                   (RigidBody :< cls, Object :< cls) => cls -> IO Float
 get_linear_damp cls
@@ -770,7 +784,7 @@ instance NodeMethod RigidBody "get_linear_damp" '[] (IO Float)
 
 {-# NOINLINE bindRigidBody_get_linear_velocity #-}
 
--- | The body's linear velocity. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
+-- | The body's linear velocity in units per second. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
 bindRigidBody_get_linear_velocity :: MethodBind
 bindRigidBody_get_linear_velocity
   = unsafePerformIO $
@@ -780,7 +794,7 @@ bindRigidBody_get_linear_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear velocity. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
+-- | The body's linear velocity in units per second. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
 get_linear_velocity ::
                       (RigidBody :< cls, Object :< cls) => cls -> IO Vector3
 get_linear_velocity cls
@@ -1082,6 +1096,7 @@ instance NodeMethod RigidBody "is_using_custom_integrator" '[]
 {-# NOINLINE bindRigidBody_set_angular_damp #-}
 
 -- | Damps RigidBody's rotational forces.
+--   			See @ProjectSettings.physics/3d/default_angular_damp@ for more details about damping.
 bindRigidBody_set_angular_damp :: MethodBind
 bindRigidBody_set_angular_damp
   = unsafePerformIO $
@@ -1092,6 +1107,7 @@ bindRigidBody_set_angular_damp
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Damps RigidBody's rotational forces.
+--   			See @ProjectSettings.physics/3d/default_angular_damp@ for more details about damping.
 set_angular_damp ::
                    (RigidBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_angular_damp cls arg1
@@ -1108,7 +1124,7 @@ instance NodeMethod RigidBody "set_angular_damp" '[Float] (IO ())
 
 {-# NOINLINE bindRigidBody_set_angular_velocity #-}
 
--- | RigidBody's rotational velocity.
+-- | The body's rotational velocity in axis-angle format. The magnitude of the vector is the rotation rate in @i@radians@/i@ per second.
 bindRigidBody_set_angular_velocity :: MethodBind
 bindRigidBody_set_angular_velocity
   = unsafePerformIO $
@@ -1118,7 +1134,7 @@ bindRigidBody_set_angular_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | RigidBody's rotational velocity.
+-- | The body's rotational velocity in axis-angle format. The magnitude of the vector is the rotation rate in @i@radians@/i@ per second.
 set_angular_velocity ::
                        (RigidBody :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_angular_velocity cls arg1
@@ -1331,6 +1347,7 @@ instance NodeMethod RigidBody "set_gravity_scale" '[Float] (IO ())
 {-# NOINLINE bindRigidBody_set_linear_damp #-}
 
 -- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
+--   			See @ProjectSettings.physics/3d/default_linear_damp@ for more details about damping.
 bindRigidBody_set_linear_damp :: MethodBind
 bindRigidBody_set_linear_damp
   = unsafePerformIO $
@@ -1341,6 +1358,7 @@ bindRigidBody_set_linear_damp
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The body's linear damp. Cannot be less than -1.0. If this value is different from -1.0, any linear damp derived from the world or areas will be overridden.
+--   			See @ProjectSettings.physics/3d/default_linear_damp@ for more details about damping.
 set_linear_damp ::
                   (RigidBody :< cls, Object :< cls) => cls -> Float -> IO ()
 set_linear_damp cls arg1
@@ -1357,7 +1375,7 @@ instance NodeMethod RigidBody "set_linear_damp" '[Float] (IO ())
 
 {-# NOINLINE bindRigidBody_set_linear_velocity #-}
 
--- | The body's linear velocity. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
+-- | The body's linear velocity in units per second. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
 bindRigidBody_set_linear_velocity :: MethodBind
 bindRigidBody_set_linear_velocity
   = unsafePerformIO $
@@ -1367,7 +1385,7 @@ bindRigidBody_set_linear_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear velocity. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
+-- | The body's linear velocity in units per second. Can be used sporadically, but __don't set this every frame__, because physics may run in another thread and runs at a different granularity. Use @method _integrate_forces@ as your process loop for precise control of the body state.
 set_linear_velocity ::
                       (RigidBody :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 set_linear_velocity cls arg1

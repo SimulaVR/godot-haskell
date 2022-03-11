@@ -466,7 +466,7 @@ instance NodeMethod Node "_input" '[InputEvent] (IO ()) where
 
 {-# NOINLINE bindNode__physics_process #-}
 
--- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the @delta@ variable should be constant.
+-- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the @delta@ variable should be constant. @delta@ is in seconds.
 --   				It is only called if physics processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_physics_process@.
 --   				Corresponds to the @NOTIFICATION_PHYSICS_PROCESS@ notification in @method Object._notification@.
 --   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
@@ -479,7 +479,7 @@ bindNode__physics_process
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the @delta@ variable should be constant.
+-- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the @delta@ variable should be constant. @delta@ is in seconds.
 --   				It is only called if physics processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_physics_process@.
 --   				Corresponds to the @NOTIFICATION_PHYSICS_PROCESS@ notification in @method Object._notification@.
 --   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
@@ -498,7 +498,7 @@ instance NodeMethod Node "_physics_process" '[Float] (IO ()) where
 
 {-# NOINLINE bindNode__process #-}
 
--- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the @delta@ time since the previous frame is not constant.
+-- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the @delta@ time since the previous frame is not constant. @delta@ is in seconds.
 --   				It is only called if processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process@.
 --   				Corresponds to the @NOTIFICATION_PROCESS@ notification in @method Object._notification@.
 --   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
@@ -511,7 +511,7 @@ bindNode__process
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the @delta@ time since the previous frame is not constant.
+-- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the @delta@ time since the previous frame is not constant. @delta@ is in seconds.
 --   				It is only called if processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process@.
 --   				Corresponds to the @NOTIFICATION_PROCESS@ notification in @method Object._notification@.
 --   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
@@ -680,7 +680,7 @@ instance NodeMethod Node "_unhandled_key_input" '[InputEventKey]
 {-# NOINLINE bindNode_add_child #-}
 
 -- | Adds a child node. Nodes can have any number of children, but every child must have a unique name. Child nodes are automatically deleted when the parent node is deleted, so an entire scene can be removed by deleting its topmost node.
---   				If @legible_unique_name@ is @true@, the child node will have an human-readable name based on the name of the node being instanced instead of its type.
+--   				If @legible_unique_name@ is @true@, the child node will have a human-readable name based on the name of the node being instanced instead of its type.
 --   				__Note:__ If the child node already has a parent, the function will fail. Use @method remove_child@ first to remove the node from its current parent. For example:
 --   				
 --   @
@@ -691,7 +691,7 @@ instance NodeMethod Node "_unhandled_key_input" '[InputEventKey]
 --   				
 --   @
 --   
---   				__Note:__ If you want a child to be persisted to a @PackedScene@, you must set @owner@ in addition to calling @method add_child@. This is typically relevant for @url=https://godot.readthedocs.io/en/latest/tutorials/misc/running_code_in_the_editor.html@tool scripts@/url@ and @url=https://godot.readthedocs.io/en/latest/tutorials/plugins/editor/index.html@editor plugins@/url@. If @method add_child@ is called without setting @owner@, the newly added @Node@ will not be visible in the scene tree, though it will be visible in the 2D/3D view.
+--   				__Note:__ If you want a child to be persisted to a @PackedScene@, you must set @owner@ in addition to calling @method add_child@. This is typically relevant for @url=https://godot.readthedocs.io/en/3.2/tutorials/misc/running_code_in_the_editor.html@tool scripts@/url@ and @url=https://godot.readthedocs.io/en/latest/tutorials/plugins/editor/index.html@editor plugins@/url@. If @method add_child@ is called without setting @owner@, the newly added @Node@ will not be visible in the scene tree, though it will be visible in the 2D/3D view.
 bindNode_add_child :: MethodBind
 bindNode_add_child
   = unsafePerformIO $
@@ -702,7 +702,7 @@ bindNode_add_child
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds a child node. Nodes can have any number of children, but every child must have a unique name. Child nodes are automatically deleted when the parent node is deleted, so an entire scene can be removed by deleting its topmost node.
---   				If @legible_unique_name@ is @true@, the child node will have an human-readable name based on the name of the node being instanced instead of its type.
+--   				If @legible_unique_name@ is @true@, the child node will have a human-readable name based on the name of the node being instanced instead of its type.
 --   				__Note:__ If the child node already has a parent, the function will fail. Use @method remove_child@ first to remove the node from its current parent. For example:
 --   				
 --   @
@@ -713,7 +713,7 @@ bindNode_add_child
 --   				
 --   @
 --   
---   				__Note:__ If you want a child to be persisted to a @PackedScene@, you must set @owner@ in addition to calling @method add_child@. This is typically relevant for @url=https://godot.readthedocs.io/en/latest/tutorials/misc/running_code_in_the_editor.html@tool scripts@/url@ and @url=https://godot.readthedocs.io/en/latest/tutorials/plugins/editor/index.html@editor plugins@/url@. If @method add_child@ is called without setting @owner@, the newly added @Node@ will not be visible in the scene tree, though it will be visible in the 2D/3D view.
+--   				__Note:__ If you want a child to be persisted to a @PackedScene@, you must set @owner@ in addition to calling @method add_child@. This is typically relevant for @url=https://godot.readthedocs.io/en/3.2/tutorials/misc/running_code_in_the_editor.html@tool scripts@/url@ and @url=https://godot.readthedocs.io/en/latest/tutorials/plugins/editor/index.html@editor plugins@/url@. If @method add_child@ is called without setting @owner@, the newly added @Node@ will not be visible in the scene tree, though it will be visible in the 2D/3D view.
 add_child ::
             (Node :< cls, Object :< cls) => cls -> Node -> Maybe Bool -> IO ()
 add_child cls arg1 arg2
@@ -730,7 +730,7 @@ instance NodeMethod Node "add_child" '[Node, Maybe Bool] (IO ())
 {-# NOINLINE bindNode_add_child_below_node #-}
 
 -- | Adds @child_node@ as a child. The child is placed below the given @node@ in the list of children.
---   				If @legible_unique_name@ is @true@, the child node will have an human-readable name based on the name of the node being instanced instead of its type.
+--   				If @legible_unique_name@ is @true@, the child node will have a human-readable name based on the name of the node being instanced instead of its type.
 bindNode_add_child_below_node :: MethodBind
 bindNode_add_child_below_node
   = unsafePerformIO $
@@ -741,7 +741,7 @@ bindNode_add_child_below_node
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Adds @child_node@ as a child. The child is placed below the given @node@ in the list of children.
---   				If @legible_unique_name@ is @true@, the child node will have an human-readable name based on the name of the node being instanced instead of its type.
+--   				If @legible_unique_name@ is @true@, the child node will have a human-readable name based on the name of the node being instanced instead of its type.
 add_child_below_node ::
                        (Node :< cls, Object :< cls) =>
                        cls -> Node -> Node -> Maybe Bool -> IO ()
@@ -765,6 +765,7 @@ instance NodeMethod Node "add_child_below_node"
 
 -- | Adds the node to a group. Groups are helpers to name and organize a subset of nodes, for example "enemies" or "collectables". A node can be in any number of groups. Nodes can be assigned a group at any time, but will not be added until they are inside the scene tree (see @method is_inside_tree@). See notes in the description, and the group methods in @SceneTree@.
 --   				The @persistent@ option is used when packing node to @PackedScene@ and saving to file. Non-persistent groups aren't stored.
+--   				__Note:__ For performance reasons, the order of node groups is @i@not@/i@ guaranteed. The order of node groups should not be relied upon as it can vary across project runs.
 bindNode_add_to_group :: MethodBind
 bindNode_add_to_group
   = unsafePerformIO $
@@ -776,6 +777,7 @@ bindNode_add_to_group
 
 -- | Adds the node to a group. Groups are helpers to name and organize a subset of nodes, for example "enemies" or "collectables". A node can be in any number of groups. Nodes can be assigned a group at any time, but will not be added until they are inside the scene tree (see @method is_inside_tree@). See notes in the description, and the group methods in @SceneTree@.
 --   				The @persistent@ option is used when packing node to @PackedScene@ and saving to file. Non-persistent groups aren't stored.
+--   				__Note:__ For performance reasons, the order of node groups is @i@not@/i@ guaranteed. The order of node groups should not be relied upon as it can vary across project runs.
 add_to_group ::
                (Node :< cls, Object :< cls) =>
                cls -> GodotString -> Maybe Bool -> IO ()
@@ -845,7 +847,7 @@ instance NodeMethod Node "duplicate" '[Maybe Int] (IO Node) where
 
 {-# NOINLINE bindNode_find_node #-}
 
--- | Finds a descendant of this node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@).
+-- | Finds a descendant of this node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@). Returns @null@ if no matching @Node@ is found.
 --   				__Note:__ It does not match against the full path, just against individual node names.
 --   				If @owned@ is @true@, this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through a script, because those scenes don't have an owner.
 --   				__Note:__ As this method walks through all the descendants of the node, it is the slowest way to get a reference to another node. Whenever possible, consider using @method get_node@ instead. To avoid using @method find_node@ too often, consider caching the node reference into a variable.
@@ -858,7 +860,7 @@ bindNode_find_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Finds a descendant of this node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@).
+-- | Finds a descendant of this node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@). Returns @null@ if no matching @Node@ is found.
 --   				__Note:__ It does not match against the full path, just against individual node names.
 --   				If @owned@ is @true@, this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through a script, because those scenes don't have an owner.
 --   				__Note:__ As this method walks through all the descendants of the node, it is the slowest way to get a reference to another node. Whenever possible, consider using @method get_node@ instead. To avoid using @method find_node@ too often, consider caching the node reference into a variable.
@@ -1011,7 +1013,7 @@ instance NodeMethod Node "get_custom_multiplayer" '[]
 
 {-# NOINLINE bindNode_get_filename #-}
 
--- | When a scene is instanced from a file, its topmost node contains the filename from which it was loaded.
+-- | If a scene is instantiated from a file, its topmost node contains the absolute file path from which it was loaded in @filename@ (e.g. @res://levels/1.tscn@). Otherwise, @filename@ is set to an empty string.
 bindNode_get_filename :: MethodBind
 bindNode_get_filename
   = unsafePerformIO $
@@ -1021,7 +1023,7 @@ bindNode_get_filename
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | When a scene is instanced from a file, its topmost node contains the filename from which it was loaded.
+-- | If a scene is instantiated from a file, its topmost node contains the absolute file path from which it was loaded in @filename@ (e.g. @res://levels/1.tscn@). Otherwise, @filename@ is set to an empty string.
 get_filename ::
                (Node :< cls, Object :< cls) => cls -> IO GodotString
 get_filename cls
@@ -1037,6 +1039,18 @@ instance NodeMethod Node "get_filename" '[] (IO GodotString) where
 {-# NOINLINE bindNode_get_groups #-}
 
 -- | Returns an array listing the groups that the node is a member of.
+--   				__Note:__ For performance reasons, the order of node groups is @i@not@/i@ guaranteed. The order of node groups should not be relied upon as it can vary across project runs.
+--   				__Note:__ The engine uses some group names internally (all starting with an underscore). To avoid conflicts with internal groups, do not add custom groups whose name starts with an underscore. To exclude internal groups while looping over @method get_groups@, use the following snippet:
+--   				
+--   @
+--   
+--   				# Stores the node's non-internal groups only (as an array of Strings).
+--   				var non_internal_groups = @@
+--   				for group in get_groups():
+--   				    if not group.begins_with("_"):
+--   				        non_internal_groups.push_back(group)
+--   				
+--   @
 bindNode_get_groups :: MethodBind
 bindNode_get_groups
   = unsafePerformIO $
@@ -1047,6 +1061,18 @@ bindNode_get_groups
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns an array listing the groups that the node is a member of.
+--   				__Note:__ For performance reasons, the order of node groups is @i@not@/i@ guaranteed. The order of node groups should not be relied upon as it can vary across project runs.
+--   				__Note:__ The engine uses some group names internally (all starting with an underscore). To avoid conflicts with internal groups, do not add custom groups whose name starts with an underscore. To exclude internal groups while looping over @method get_groups@, use the following snippet:
+--   				
+--   @
+--   
+--   				# Stores the node's non-internal groups only (as an array of Strings).
+--   				var non_internal_groups = @@
+--   				for group in get_groups():
+--   				    if not group.begins_with("_"):
+--   				        non_internal_groups.push_back(group)
+--   				
+--   @
 get_groups :: (Node :< cls, Object :< cls) => cls -> IO Array
 get_groups cls
   = withVariantArray []
@@ -1109,6 +1135,7 @@ instance NodeMethod Node "get_multiplayer" '[] (IO MultiplayerAPI)
 {-# NOINLINE bindNode_get_name #-}
 
 -- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
+--   			__Note:__ Auto-generated names might include the @@@ character, which is reserved for unique names when using @method add_child@. When setting the name manually, any @@@ will be removed.
 bindNode_get_name :: MethodBind
 bindNode_get_name
   = unsafePerformIO $
@@ -1119,6 +1146,7 @@ bindNode_get_name
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
+--   			__Note:__ Auto-generated names might include the @@@ character, which is reserved for unique names when using @method add_child@. When setting the name manually, any @@@ will be removed.
 get_name :: (Node :< cls, Object :< cls) => cls -> IO GodotString
 get_name cls
   = withVariantArray []
@@ -1424,7 +1452,7 @@ instance NodeMethod Node "get_pause_mode" '[] (IO Int) where
 
 {-# NOINLINE bindNode_get_physics_process_delta_time #-}
 
--- | Returns the time elapsed since the last physics-bound frame (see @method _physics_process@). This is always a constant value in physics processing unless the frames per second is changed via @Engine.iterations_per_second@.
+-- | Returns the time elapsed (in seconds) since the last physics-bound frame (see @method _physics_process@). This is always a constant value in physics processing unless the frames per second is changed via @Engine.iterations_per_second@.
 bindNode_get_physics_process_delta_time :: MethodBind
 bindNode_get_physics_process_delta_time
   = unsafePerformIO $
@@ -1434,7 +1462,7 @@ bindNode_get_physics_process_delta_time
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the time elapsed since the last physics-bound frame (see @method _physics_process@). This is always a constant value in physics processing unless the frames per second is changed via @Engine.iterations_per_second@.
+-- | Returns the time elapsed (in seconds) since the last physics-bound frame (see @method _physics_process@). This is always a constant value in physics processing unless the frames per second is changed via @Engine.iterations_per_second@.
 get_physics_process_delta_time ::
                                  (Node :< cls, Object :< cls) => cls -> IO Float
 get_physics_process_delta_time cls
@@ -2206,6 +2234,7 @@ instance NodeMethod Node "propagate_notification" '[Int] (IO ())
 {-# NOINLINE bindNode_queue_free #-}
 
 -- | Queues a node for deletion at the end of the current frame. When deleted, all of its child nodes will be deleted as well. This method ensures it's safe to delete the node, contrary to @method Object.free@. Use @method Object.is_queued_for_deletion@ to check whether a node will be deleted at the end of the frame.
+--   				__Important:__ If you have a variable pointing to a node, it will @i@not@/i@ be assigned to @null@ once the node is freed. Instead, it will point to a @i@previously freed instance@/i@ and you should validate it with @method @GDScript.is_instance_valid@ before attempting to call its methods or access its properties.
 bindNode_queue_free :: MethodBind
 bindNode_queue_free
   = unsafePerformIO $
@@ -2216,6 +2245,7 @@ bindNode_queue_free
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Queues a node for deletion at the end of the current frame. When deleted, all of its child nodes will be deleted as well. This method ensures it's safe to delete the node, contrary to @method Object.free@. Use @method Object.is_queued_for_deletion@ to check whether a node will be deleted at the end of the frame.
+--   				__Important:__ If you have a variable pointing to a node, it will @i@not@/i@ be assigned to @null@ once the node is freed. Instead, it will point to a @i@previously freed instance@/i@ and you should validate it with @method @GDScript.is_instance_valid@ before attempting to call its methods or access its properties.
 queue_free :: (Node :< cls, Object :< cls) => cls -> IO ()
 queue_free cls
   = withVariantArray []
@@ -2228,7 +2258,7 @@ instance NodeMethod Node "queue_free" '[] (IO ()) where
 
 {-# NOINLINE bindNode_raise #-}
 
--- | Moves this node to the bottom of parent node's children hierarchy. This is often useful in GUIs (@Control@ nodes), because their order of drawing depends on their order in the tree, i.e. the further they are on the node list, the higher they are drawn. After using @raise@, a Control will be drawn on top of their siblings.
+-- | Moves this node to the bottom of parent node's children hierarchy. This is often useful in GUIs (@Control@ nodes), because their order of drawing depends on their order in the tree. The top Node is drawn first, then any siblings below the top Node in the hierarchy are successively drawn on top of it. After using @raise@, a Control will be drawn on top of its siblings.
 bindNode_raise :: MethodBind
 bindNode_raise
   = unsafePerformIO $
@@ -2238,7 +2268,7 @@ bindNode_raise
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Moves this node to the bottom of parent node's children hierarchy. This is often useful in GUIs (@Control@ nodes), because their order of drawing depends on their order in the tree, i.e. the further they are on the node list, the higher they are drawn. After using @raise@, a Control will be drawn on top of their siblings.
+-- | Moves this node to the bottom of parent node's children hierarchy. This is often useful in GUIs (@Control@ nodes), because their order of drawing depends on their order in the tree. The top Node is drawn first, then any siblings below the top Node in the hierarchy are successively drawn on top of it. After using @raise@, a Control will be drawn on top of its siblings.
 raise :: (Node :< cls, Object :< cls) => cls -> IO ()
 raise cls
   = withVariantArray []
@@ -2276,6 +2306,7 @@ instance NodeMethod Node "remove_and_skip" '[] (IO ()) where
 {-# NOINLINE bindNode_remove_child #-}
 
 -- | Removes a child node. The node is NOT deleted and must be deleted manually.
+--   				__Note:__ This function may set the @owner@ of the removed Node (or its descendants) to be @null@, if that @owner@ is no longer a parent or ancestor.
 bindNode_remove_child :: MethodBind
 bindNode_remove_child
   = unsafePerformIO $
@@ -2286,6 +2317,7 @@ bindNode_remove_child
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Removes a child node. The node is NOT deleted and must be deleted manually.
+--   				__Note:__ This function may set the @owner@ of the removed Node (or its descendants) to be @null@, if that @owner@ is no longer a parent or ancestor.
 remove_child ::
                (Node :< cls, Object :< cls) => cls -> Node -> IO ()
 remove_child cls arg1
@@ -2328,6 +2360,7 @@ instance NodeMethod Node "remove_from_group" '[GodotString] (IO ())
 {-# NOINLINE bindNode_replace_by #-}
 
 -- | Replaces a node in a scene by the given one. Subscriptions that pass through this node will be lost.
+--   				Note that the replaced node is not automatically freed, so you either need to keep it in a variable for later use or free it using @method Object.free@.
 bindNode_replace_by :: MethodBind
 bindNode_replace_by
   = unsafePerformIO $
@@ -2338,6 +2371,7 @@ bindNode_replace_by
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Replaces a node in a scene by the given one. Subscriptions that pass through this node will be lost.
+--   				Note that the replaced node is not automatically freed, so you either need to keep it in a variable for later use or free it using @method Object.free@.
 replace_by ::
              (Node :< cls, Object :< cls) => cls -> Node -> Maybe Bool -> IO ()
 replace_by cls arg1 arg2
@@ -2711,7 +2745,7 @@ instance NodeMethod Node "set_display_folded" '[Bool] (IO ()) where
 
 {-# NOINLINE bindNode_set_filename #-}
 
--- | When a scene is instanced from a file, its topmost node contains the filename from which it was loaded.
+-- | If a scene is instantiated from a file, its topmost node contains the absolute file path from which it was loaded in @filename@ (e.g. @res://levels/1.tscn@). Otherwise, @filename@ is set to an empty string.
 bindNode_set_filename :: MethodBind
 bindNode_set_filename
   = unsafePerformIO $
@@ -2721,7 +2755,7 @@ bindNode_set_filename
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | When a scene is instanced from a file, its topmost node contains the filename from which it was loaded.
+-- | If a scene is instantiated from a file, its topmost node contains the absolute file path from which it was loaded in @filename@ (e.g. @res://levels/1.tscn@). Otherwise, @filename@ is set to an empty string.
 set_filename ::
                (Node :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_filename cls arg1
@@ -2738,6 +2772,7 @@ instance NodeMethod Node "set_filename" '[GodotString] (IO ())
 {-# NOINLINE bindNode_set_name #-}
 
 -- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
+--   			__Note:__ Auto-generated names might include the @@@ character, which is reserved for unique names when using @method add_child@. When setting the name manually, any @@@ will be removed.
 bindNode_set_name :: MethodBind
 bindNode_set_name
   = unsafePerformIO $
@@ -2748,6 +2783,7 @@ bindNode_set_name
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed.
+--   			__Note:__ Auto-generated names might include the @@@ character, which is reserved for unique names when using @method add_child@. When setting the name manually, any @@@ will be removed.
 set_name ::
            (Node :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_name cls arg1
@@ -2865,7 +2901,8 @@ instance NodeMethod Node "set_physics_process" '[Bool] (IO ())
 
 {-# NOINLINE bindNode_set_physics_process_internal #-}
 
--- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal @method _physics_process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting (@method set_physics_process@). Only useful for advanced uses to manipulate built-in nodes' behaviour.
+-- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal @method _physics_process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting (@method set_physics_process@). Only useful for advanced uses to manipulate built-in nodes' behavior.
+--   				__Warning:__ Built-in Nodes rely on the internal processing for their own logic, so changing this value from your code may lead to unexpected behavior. Script access to this internal logic is provided for specific advanced uses, but is unsafe and not supported.
 bindNode_set_physics_process_internal :: MethodBind
 bindNode_set_physics_process_internal
   = unsafePerformIO $
@@ -2875,7 +2912,8 @@ bindNode_set_physics_process_internal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal @method _physics_process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting (@method set_physics_process@). Only useful for advanced uses to manipulate built-in nodes' behaviour.
+-- | Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal @method _physics_process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting (@method set_physics_process@). Only useful for advanced uses to manipulate built-in nodes' behavior.
+--   				__Warning:__ Built-in Nodes rely on the internal processing for their own logic, so changing this value from your code may lead to unexpected behavior. Script access to this internal logic is provided for specific advanced uses, but is unsafe and not supported.
 set_physics_process_internal ::
                                (Node :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_physics_process_internal cls arg1
@@ -2943,7 +2981,8 @@ instance NodeMethod Node "set_process_input" '[Bool] (IO ()) where
 
 {-# NOINLINE bindNode_set_process_internal #-}
 
--- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal @method _process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting (@method set_process@). Only useful for advanced uses to manipulate built-in nodes' behaviour.
+-- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal @method _process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting (@method set_process@). Only useful for advanced uses to manipulate built-in nodes' behavior.
+--   				__Warning:__ Built-in Nodes rely on the internal processing for their own logic, so changing this value from your code may lead to unexpected behavior. Script access to this internal logic is provided for specific advanced uses, but is unsafe and not supported.
 bindNode_set_process_internal :: MethodBind
 bindNode_set_process_internal
   = unsafePerformIO $
@@ -2953,7 +2992,8 @@ bindNode_set_process_internal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal @method _process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting (@method set_process@). Only useful for advanced uses to manipulate built-in nodes' behaviour.
+-- | Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal @method _process@ calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting (@method set_process@). Only useful for advanced uses to manipulate built-in nodes' behavior.
+--   				__Warning:__ Built-in Nodes rely on the internal processing for their own logic, so changing this value from your code may lead to unexpected behavior. Script access to this internal logic is provided for specific advanced uses, but is unsafe and not supported.
 set_process_internal ::
                        (Node :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_process_internal cls arg1

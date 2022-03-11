@@ -102,7 +102,7 @@ instance NodeProperty AnimationNodeStateMachineTransition
 {-# NOINLINE bindAnimationNodeStateMachineTransition_get_advance_condition
              #-}
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/3.4/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
 --   			
 --   @
 --   
@@ -119,7 +119,7 @@ bindAnimationNodeStateMachineTransition_get_advance_condition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/3.4/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
 --   			
 --   @
 --   
@@ -328,7 +328,7 @@ instance NodeMethod AnimationNodeStateMachineTransition
 {-# NOINLINE bindAnimationNodeStateMachineTransition_set_advance_condition
              #-}
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/3.4/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
 --   			
 --   @
 --   
@@ -345,7 +345,7 @@ bindAnimationNodeStateMachineTransition_set_advance_condition
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/latest/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
+-- | Turn on auto advance when this condition is set. The provided name will become a boolean parameter on the @AnimationTree@ that can be controlled from code (see @url=https://docs.godotengine.org/en/3.4/tutorials/animation/animation_tree.html#controlling-from-code@@/url@). For example, if @AnimationTree.tree_root@ is an @AnimationNodeStateMachine@ and @advance_condition@ is set to @"idle"@:
 --   			
 --   @
 --   

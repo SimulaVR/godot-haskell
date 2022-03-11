@@ -37,7 +37,7 @@ _FEED_CBCR_IMAGE = 1
 _FEED_RGBA_IMAGE :: Int
 _FEED_RGBA_IMAGE = 0
 
--- | Emitted when a @CameraFeed@ is added (e.g. webcam is plugged in).
+-- | Emitted when a @CameraFeed@ is added (e.g. a webcam is plugged in).
 sig_camera_feed_added ::
                       Godot.Internal.Dispatch.Signal CameraServer
 sig_camera_feed_added
@@ -45,7 +45,7 @@ sig_camera_feed_added
 
 instance NodeSignal CameraServer "camera_feed_added" '[Int]
 
--- | Emitted when a @CameraFeed@ is removed (e.g. webcam is unplugged).
+-- | Emitted when a @CameraFeed@ is removed (e.g. a webcam is unplugged).
 sig_camera_feed_removed ::
                         Godot.Internal.Dispatch.Signal CameraServer
 sig_camera_feed_removed
@@ -55,7 +55,7 @@ instance NodeSignal CameraServer "camera_feed_removed" '[Int]
 
 {-# NOINLINE bindCameraServer_add_feed #-}
 
--- | Adds a camera feed to the camera server.
+-- | Adds the camera @feed@ to the camera server.
 bindCameraServer_add_feed :: MethodBind
 bindCameraServer_add_feed
   = unsafePerformIO $
@@ -65,7 +65,7 @@ bindCameraServer_add_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a camera feed to the camera server.
+-- | Adds the camera @feed@ to the camera server.
 add_feed ::
            (CameraServer :< cls, Object :< cls) => cls -> CameraFeed -> IO ()
 add_feed cls arg1
@@ -106,7 +106,7 @@ instance NodeMethod CameraServer "feeds" '[] (IO Array) where
 
 {-# NOINLINE bindCameraServer_get_feed #-}
 
--- | Returns the @CameraFeed@ with this id.
+-- | Returns the @CameraFeed@ corresponding to the camera with the given @index@.
 bindCameraServer_get_feed :: MethodBind
 bindCameraServer_get_feed
   = unsafePerformIO $
@@ -116,7 +116,7 @@ bindCameraServer_get_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the @CameraFeed@ with this id.
+-- | Returns the @CameraFeed@ corresponding to the camera with the given @index@.
 get_feed ::
            (CameraServer :< cls, Object :< cls) => cls -> Int -> IO CameraFeed
 get_feed cls arg1
@@ -160,7 +160,7 @@ instance NodeMethod CameraServer "get_feed_count" '[] (IO Int)
 
 {-# NOINLINE bindCameraServer_remove_feed #-}
 
--- | Removes a @CameraFeed@.
+-- | Removes the specified camera @feed@.
 bindCameraServer_remove_feed :: MethodBind
 bindCameraServer_remove_feed
   = unsafePerformIO $
@@ -170,7 +170,7 @@ bindCameraServer_remove_feed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes a @CameraFeed@.
+-- | Removes the specified camera @feed@.
 remove_feed ::
               (CameraServer :< cls, Object :< cls) => cls -> CameraFeed -> IO ()
 remove_feed cls arg1

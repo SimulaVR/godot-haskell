@@ -33,6 +33,7 @@ instance NodeProperty AudioStreamGenerator "mix_rate" Float 'False
 
 {-# NOINLINE bindAudioStreamGenerator_get_buffer_length #-}
 
+-- | The length of the buffer to generate (in seconds). Lower values result in less latency, but require the script to generate audio data faster, resulting in increased CPU usage and more risk for audio cracking if the CPU can't keep up.
 bindAudioStreamGenerator_get_buffer_length :: MethodBind
 bindAudioStreamGenerator_get_buffer_length
   = unsafePerformIO $
@@ -42,6 +43,7 @@ bindAudioStreamGenerator_get_buffer_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The length of the buffer to generate (in seconds). Lower values result in less latency, but require the script to generate audio data faster, resulting in increased CPU usage and more risk for audio cracking if the CPU can't keep up.
 get_buffer_length ::
                     (AudioStreamGenerator :< cls, Object :< cls) => cls -> IO Float
 get_buffer_length cls
@@ -60,6 +62,9 @@ instance NodeMethod AudioStreamGenerator "get_buffer_length" '[]
 
 {-# NOINLINE bindAudioStreamGenerator_get_mix_rate #-}
 
+-- | The sample rate to use (in Hz). Higher values are more demanding for the CPU to generate, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are generating lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 bindAudioStreamGenerator_get_mix_rate :: MethodBind
 bindAudioStreamGenerator_get_mix_rate
   = unsafePerformIO $
@@ -69,6 +74,9 @@ bindAudioStreamGenerator_get_mix_rate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The sample rate to use (in Hz). Higher values are more demanding for the CPU to generate, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are generating lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 get_mix_rate ::
                (AudioStreamGenerator :< cls, Object :< cls) => cls -> IO Float
 get_mix_rate cls
@@ -87,6 +95,7 @@ instance NodeMethod AudioStreamGenerator "get_mix_rate" '[]
 
 {-# NOINLINE bindAudioStreamGenerator_set_buffer_length #-}
 
+-- | The length of the buffer to generate (in seconds). Lower values result in less latency, but require the script to generate audio data faster, resulting in increased CPU usage and more risk for audio cracking if the CPU can't keep up.
 bindAudioStreamGenerator_set_buffer_length :: MethodBind
 bindAudioStreamGenerator_set_buffer_length
   = unsafePerformIO $
@@ -96,6 +105,7 @@ bindAudioStreamGenerator_set_buffer_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The length of the buffer to generate (in seconds). Lower values result in less latency, but require the script to generate audio data faster, resulting in increased CPU usage and more risk for audio cracking if the CPU can't keep up.
 set_buffer_length ::
                     (AudioStreamGenerator :< cls, Object :< cls) =>
                     cls -> Float -> IO ()
@@ -116,6 +126,9 @@ instance NodeMethod AudioStreamGenerator "set_buffer_length"
 
 {-# NOINLINE bindAudioStreamGenerator_set_mix_rate #-}
 
+-- | The sample rate to use (in Hz). Higher values are more demanding for the CPU to generate, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are generating lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 bindAudioStreamGenerator_set_mix_rate :: MethodBind
 bindAudioStreamGenerator_set_mix_rate
   = unsafePerformIO $
@@ -125,6 +138,9 @@ bindAudioStreamGenerator_set_mix_rate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The sample rate to use (in Hz). Higher values are more demanding for the CPU to generate, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are generating lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 set_mix_rate ::
                (AudioStreamGenerator :< cls, Object :< cls) =>
                cls -> Float -> IO ()

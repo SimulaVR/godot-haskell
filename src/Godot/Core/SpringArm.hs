@@ -97,7 +97,7 @@ instance NodeMethod SpringArm "clear_excluded_objects" '[] (IO ())
 
 {-# NOINLINE bindSpringArm_get_collision_mask #-}
 
--- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindSpringArm_get_collision_mask :: MethodBind
 bindSpringArm_get_collision_mask
   = unsafePerformIO $
@@ -107,7 +107,7 @@ bindSpringArm_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 get_collision_mask ::
                      (SpringArm :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -260,7 +260,7 @@ instance NodeMethod SpringArm "remove_excluded_object" '[Rid]
 
 {-# NOINLINE bindSpringArm_set_collision_mask #-}
 
--- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 bindSpringArm_set_collision_mask :: MethodBind
 bindSpringArm_set_collision_mask
   = unsafePerformIO $
@@ -270,7 +270,7 @@ bindSpringArm_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The layers against which the collision check shall be done. See @url=https://docs.godotengine.org/en/3.4/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
 set_collision_mask ::
                      (SpringArm :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1

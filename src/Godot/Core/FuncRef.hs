@@ -20,7 +20,7 @@ import Godot.Core.Reference()
 
 {-# NOINLINE bindFuncRef_call_func #-}
 
--- | Calls the referenced function previously set by @method set_function@ or @method @GDScript.funcref@.
+-- | Calls the referenced function previously set in @function@ or @method @GDScript.funcref@.
 bindFuncRef_call_func :: MethodBind
 bindFuncRef_call_func
   = unsafePerformIO $
@@ -30,7 +30,7 @@ bindFuncRef_call_func
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls the referenced function previously set by @method set_function@ or @method @GDScript.funcref@.
+-- | Calls the referenced function previously set in @function@ or @method @GDScript.funcref@.
 call_func ::
             (FuncRef :< cls, Object :< cls) =>
             cls -> [Variant 'GodotTy] -> IO GodotVariant
@@ -48,7 +48,7 @@ instance NodeMethod FuncRef "call_func" '[[Variant 'GodotTy]]
 
 {-# NOINLINE bindFuncRef_call_funcv #-}
 
--- | Calls the referenced function previously set by @method set_function@ or @method @GDScript.funcref@. Contrarily to @method call_func@, this method does not support a variable number of arguments but expects all parameters to be passed via a single @Array@.
+-- | Calls the referenced function previously set in @function@ or @method @GDScript.funcref@. Contrarily to @method call_func@, this method does not support a variable number of arguments but expects all parameters to be passed via a single @Array@.
 bindFuncRef_call_funcv :: MethodBind
 bindFuncRef_call_funcv
   = unsafePerformIO $
@@ -58,7 +58,7 @@ bindFuncRef_call_funcv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Calls the referenced function previously set by @method set_function@ or @method @GDScript.funcref@. Contrarily to @method call_func@, this method does not support a variable number of arguments but expects all parameters to be passed via a single @Array@.
+-- | Calls the referenced function previously set in @function@ or @method @GDScript.funcref@. Contrarily to @method call_func@, this method does not support a variable number of arguments but expects all parameters to be passed via a single @Array@.
 call_funcv ::
              (FuncRef :< cls, Object :< cls) => cls -> Array -> IO GodotVariant
 call_funcv cls arg1
@@ -97,7 +97,7 @@ instance NodeMethod FuncRef "is_valid" '[] (IO Bool) where
 
 {-# NOINLINE bindFuncRef_set_function #-}
 
--- | The name of the referenced function to call on the object, without parentheses or any parameters.
+-- | The name of the referenced function.
 bindFuncRef_set_function :: MethodBind
 bindFuncRef_set_function
   = unsafePerformIO $
@@ -107,7 +107,7 @@ bindFuncRef_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the referenced function to call on the object, without parentheses or any parameters.
+-- | The name of the referenced function.
 set_function ::
                (FuncRef :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_function cls arg1

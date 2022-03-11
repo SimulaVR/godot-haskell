@@ -231,7 +231,9 @@ instance NodeMethod AudioStreamSample "get_loop_mode" '[] (IO Int)
 
 {-# NOINLINE bindAudioStreamSample_get_mix_rate #-}
 
--- | The sample rate for mixing this audio.
+-- | The sample rate for mixing this audio. Higher values require more storage space, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are using lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 bindAudioStreamSample_get_mix_rate :: MethodBind
 bindAudioStreamSample_get_mix_rate
   = unsafePerformIO $
@@ -241,7 +243,9 @@ bindAudioStreamSample_get_mix_rate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The sample rate for mixing this audio.
+-- | The sample rate for mixing this audio. Higher values require more storage space, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are using lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 get_mix_rate ::
                (AudioStreamSample :< cls, Object :< cls) => cls -> IO Int
 get_mix_rate cls
@@ -463,7 +467,9 @@ instance NodeMethod AudioStreamSample "set_loop_mode" '[Int]
 
 {-# NOINLINE bindAudioStreamSample_set_mix_rate #-}
 
--- | The sample rate for mixing this audio.
+-- | The sample rate for mixing this audio. Higher values require more storage space, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are using lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 bindAudioStreamSample_set_mix_rate :: MethodBind
 bindAudioStreamSample_set_mix_rate
   = unsafePerformIO $
@@ -473,7 +479,9 @@ bindAudioStreamSample_set_mix_rate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The sample rate for mixing this audio.
+-- | The sample rate for mixing this audio. Higher values require more storage space, but result in better quality.
+--   			In games, common sample rates in use are @11025@, @16000@, @22050@, @32000@, @44100@, and @48000@.
+--   			According to the @url=https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem@Nyquist-Shannon sampling theorem@/url@, there is no quality difference to human hearing when going past 40,000 Hz (since most humans can only hear up to ~20,000 Hz, often less). If you are using lower-pitched sounds such as voices, lower sample rates such as @32000@ or @22050@ may be usable with no loss in quality.
 set_mix_rate ::
                (AudioStreamSample :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mix_rate cls arg1

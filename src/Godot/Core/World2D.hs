@@ -56,7 +56,7 @@ instance NodeMethod World2D "get_canvas" '[] (IO Rid) where
 
 {-# NOINLINE bindWorld2D_get_direct_space_state #-}
 
--- | Direct access to the world's physics 2D space state. Used for querying current and potential collisions. Must only be accessed from the main thread within @_physics_process(delta)@.
+-- | Direct access to the world's physics 2D space state. Used for querying current and potential collisions. When using multi-threaded physics, access is limited to @_physics_process(delta)@ in the main thread.
 bindWorld2D_get_direct_space_state :: MethodBind
 bindWorld2D_get_direct_space_state
   = unsafePerformIO $
@@ -66,7 +66,7 @@ bindWorld2D_get_direct_space_state
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Direct access to the world's physics 2D space state. Used for querying current and potential collisions. Must only be accessed from the main thread within @_physics_process(delta)@.
+-- | Direct access to the world's physics 2D space state. Used for querying current and potential collisions. When using multi-threaded physics, access is limited to @_physics_process(delta)@ in the main thread.
 get_direct_space_state ::
                          (World2D :< cls, Object :< cls) =>
                          cls -> IO Physics2DDirectSpaceState

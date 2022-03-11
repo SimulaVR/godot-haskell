@@ -1770,6 +1770,7 @@ instance NodeMethod ScriptEditor "goto_line" '[Int] (IO ()) where
 
 {-# NOINLINE bindScriptEditor_open_script_create_dialog #-}
 
+-- | Opens the script create dialog. The script will extend @base_name@. The file extension can be omitted from @base_path@. It will be added based on the selected scripting language.
 bindScriptEditor_open_script_create_dialog :: MethodBind
 bindScriptEditor_open_script_create_dialog
   = unsafePerformIO $
@@ -1779,6 +1780,7 @@ bindScriptEditor_open_script_create_dialog
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Opens the script create dialog. The script will extend @base_name@. The file extension can be omitted from @base_path@. It will be added based on the selected scripting language.
 open_script_create_dialog ::
                             (ScriptEditor :< cls, Object :< cls) =>
                             cls -> GodotString -> GodotString -> IO ()

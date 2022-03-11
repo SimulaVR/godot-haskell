@@ -200,7 +200,8 @@ instance NodeMethod ShaderMaterial "set_shader" '[Shader] (IO ())
 
 {-# NOINLINE bindShaderMaterial_set_shader_param #-}
 
--- | Changes the value set for this material of a uniform in the shader. __Note:__ @param@ must match the name of the uniform in the code exactly.
+-- | Changes the value set for this material of a uniform in the shader.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 bindShaderMaterial_set_shader_param :: MethodBind
 bindShaderMaterial_set_shader_param
   = unsafePerformIO $
@@ -210,7 +211,8 @@ bindShaderMaterial_set_shader_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Changes the value set for this material of a uniform in the shader. __Note:__ @param@ must match the name of the uniform in the code exactly.
+-- | Changes the value set for this material of a uniform in the shader.
+--   				__Note:__ @param@ must match the name of the uniform in the code exactly.
 set_shader_param ::
                    (ShaderMaterial :< cls, Object :< cls) =>
                    cls -> GodotString -> GodotVariant -> IO ()

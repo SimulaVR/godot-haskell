@@ -28,7 +28,7 @@ import Godot.Core.Reference()
 
 {-# NOINLINE bindEditorExportPlugin__export_begin #-}
 
--- | Virtual method to be overridden by the user. It is called when the export starts and provides all information about the export.
+-- | Virtual method to be overridden by the user. It is called when the export starts and provides all information about the export. @features@ is the list of features for the export, @is_debug@ is @true@ for debug builds, @path@ is the target path for the exported project. @flags@ is only used when running a runnable profile, e.g. when using native run on Android.
 bindEditorExportPlugin__export_begin :: MethodBind
 bindEditorExportPlugin__export_begin
   = unsafePerformIO $
@@ -38,7 +38,7 @@ bindEditorExportPlugin__export_begin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Virtual method to be overridden by the user. It is called when the export starts and provides all information about the export.
+-- | Virtual method to be overridden by the user. It is called when the export starts and provides all information about the export. @features@ is the list of features for the export, @is_debug@ is @true@ for debug builds, @path@ is the target path for the exported project. @flags@ is only used when running a runnable profile, e.g. when using native run on Android.
 _export_begin ::
                 (EditorExportPlugin :< cls, Object :< cls) =>
                 cls -> PoolStringArray -> Bool -> GodotString -> Int -> IO ()
@@ -88,6 +88,8 @@ instance NodeMethod EditorExportPlugin "_export_end" '[] (IO ())
 
 {-# NOINLINE bindEditorExportPlugin__export_file #-}
 
+-- | Virtual method to be overridden by the user. Called for each exported file, providing arguments that can be used to identify the file. @path@ is the path of the file, @type@ is the @Resource@ represented by the file (e.g. @PackedScene@) and @features@ is the list of features for the export.
+--   				Calling @method skip@ inside this callback will make the file not included in the export.
 bindEditorExportPlugin__export_file :: MethodBind
 bindEditorExportPlugin__export_file
   = unsafePerformIO $
@@ -97,6 +99,8 @@ bindEditorExportPlugin__export_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Virtual method to be overridden by the user. Called for each exported file, providing arguments that can be used to identify the file. @path@ is the path of the file, @type@ is the @Resource@ represented by the file (e.g. @PackedScene@) and @features@ is the list of features for the export.
+--   				Calling @method skip@ inside this callback will make the file not included in the export.
 _export_file ::
                (EditorExportPlugin :< cls, Object :< cls) =>
                cls -> GodotString -> GodotString -> PoolStringArray -> IO ()
@@ -117,6 +121,7 @@ instance NodeMethod EditorExportPlugin "_export_file"
 
 {-# NOINLINE bindEditorExportPlugin_add_file #-}
 
+-- | Adds a custom file to be exported. @path@ is the virtual path that can be used to load the file, @file@ is the binary data of the file. If @remap@ is @true@, file will not be exported, but instead remapped to the given @path@.
 bindEditorExportPlugin_add_file :: MethodBind
 bindEditorExportPlugin_add_file
   = unsafePerformIO $
@@ -126,6 +131,7 @@ bindEditorExportPlugin_add_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a custom file to be exported. @path@ is the virtual path that can be used to load the file, @file@ is the binary data of the file. If @remap@ is @true@, file will not be exported, but instead remapped to the given @path@.
 add_file ::
            (EditorExportPlugin :< cls, Object :< cls) =>
            cls -> GodotString -> PoolByteArray -> Bool -> IO ()
@@ -145,6 +151,7 @@ instance NodeMethod EditorExportPlugin "add_file"
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_bundle_file #-}
 
+-- | Adds an iOS bundle file from the given @path@ to the exported project.
 bindEditorExportPlugin_add_ios_bundle_file :: MethodBind
 bindEditorExportPlugin_add_ios_bundle_file
   = unsafePerformIO $
@@ -154,6 +161,7 @@ bindEditorExportPlugin_add_ios_bundle_file
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds an iOS bundle file from the given @path@ to the exported project.
 add_ios_bundle_file ::
                       (EditorExportPlugin :< cls, Object :< cls) =>
                       cls -> GodotString -> IO ()
@@ -174,6 +182,7 @@ instance NodeMethod EditorExportPlugin "add_ios_bundle_file"
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_cpp_code #-}
 
+-- | Adds a C++ code to the iOS export. The final code is created from the code appended by each active export plugin.
 bindEditorExportPlugin_add_ios_cpp_code :: MethodBind
 bindEditorExportPlugin_add_ios_cpp_code
   = unsafePerformIO $
@@ -183,6 +192,7 @@ bindEditorExportPlugin_add_ios_cpp_code
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a C++ code to the iOS export. The final code is created from the code appended by each active export plugin.
 add_ios_cpp_code ::
                    (EditorExportPlugin :< cls, Object :< cls) =>
                    cls -> GodotString -> IO ()
@@ -234,6 +244,7 @@ instance NodeMethod EditorExportPlugin "add_ios_framework"
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_linker_flags #-}
 
+-- | Adds linker flags for the iOS export.
 bindEditorExportPlugin_add_ios_linker_flags :: MethodBind
 bindEditorExportPlugin_add_ios_linker_flags
   = unsafePerformIO $
@@ -243,6 +254,7 @@ bindEditorExportPlugin_add_ios_linker_flags
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds linker flags for the iOS export.
 add_ios_linker_flags ::
                        (EditorExportPlugin :< cls, Object :< cls) =>
                        cls -> GodotString -> IO ()
@@ -263,6 +275,7 @@ instance NodeMethod EditorExportPlugin "add_ios_linker_flags"
 
 {-# NOINLINE bindEditorExportPlugin_add_ios_plist_content #-}
 
+-- | Adds content for iOS Property List files.
 bindEditorExportPlugin_add_ios_plist_content :: MethodBind
 bindEditorExportPlugin_add_ios_plist_content
   = unsafePerformIO $
@@ -272,6 +285,7 @@ bindEditorExportPlugin_add_ios_plist_content
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds content for iOS Property List files.
 add_ios_plist_content ::
                         (EditorExportPlugin :< cls, Object :< cls) =>
                         cls -> GodotString -> IO ()
@@ -292,6 +306,7 @@ instance NodeMethod EditorExportPlugin "add_ios_plist_content"
 
 {-# NOINLINE bindEditorExportPlugin_add_shared_object #-}
 
+-- | Adds a shared object with the given @tags@ and destination @path@.
 bindEditorExportPlugin_add_shared_object :: MethodBind
 bindEditorExportPlugin_add_shared_object
   = unsafePerformIO $
@@ -301,6 +316,7 @@ bindEditorExportPlugin_add_shared_object
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Adds a shared object with the given @tags@ and destination @path@.
 add_shared_object ::
                     (EditorExportPlugin :< cls, Object :< cls) =>
                     cls -> GodotString -> PoolStringArray -> IO ()
@@ -321,6 +337,7 @@ instance NodeMethod EditorExportPlugin "add_shared_object"
 
 {-# NOINLINE bindEditorExportPlugin_skip #-}
 
+-- | To be called inside @method _export_file@. Skips the current file, so it's not included in the export.
 bindEditorExportPlugin_skip :: MethodBind
 bindEditorExportPlugin_skip
   = unsafePerformIO $
@@ -330,6 +347,7 @@ bindEditorExportPlugin_skip
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | To be called inside @method _export_file@. Skips the current file, so it's not included in the export.
 skip :: (EditorExportPlugin :< cls, Object :< cls) => cls -> IO ()
 skip cls
   = withVariantArray []

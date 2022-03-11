@@ -211,7 +211,7 @@ instance NodeMethod Gradient "interpolate" '[Float] (IO Color)
 
 {-# NOINLINE bindGradient_remove_point #-}
 
--- | Removes the color at the index @offset@.
+-- | Removes the color at the index @point@.
 bindGradient_remove_point :: MethodBind
 bindGradient_remove_point
   = unsafePerformIO $
@@ -221,7 +221,7 @@ bindGradient_remove_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the color at the index @offset@.
+-- | Removes the color at the index @point@.
 remove_point ::
                (Gradient :< cls, Object :< cls) => cls -> Int -> IO ()
 remove_point cls arg1

@@ -92,7 +92,7 @@ instance NodeProperty InputEventKey "unicode" Int 'False where
 
 {-# NOINLINE bindInputEventKey_get_scancode #-}
 
--- | The key scancode, which corresponds to one of the @enum KeyList@ constants.
+-- | The key scancode, which corresponds to one of the @enum KeyList@ constants. Represent key in the current keyboard layout.
 --   			To get a human-readable representation of the @InputEventKey@, use @OS.get_scancode_string(event.scancode)@ where @event@ is the @InputEventKey@.
 bindInputEventKey_get_scancode :: MethodBind
 bindInputEventKey_get_scancode
@@ -103,7 +103,7 @@ bindInputEventKey_get_scancode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The key scancode, which corresponds to one of the @enum KeyList@ constants.
+-- | The key scancode, which corresponds to one of the @enum KeyList@ constants. Represent key in the current keyboard layout.
 --   			To get a human-readable representation of the @InputEventKey@, use @OS.get_scancode_string(event.scancode)@ where @event@ is the @InputEventKey@.
 get_scancode ::
                (InputEventKey :< cls, Object :< cls) => cls -> IO Int
@@ -231,7 +231,7 @@ instance NodeMethod InputEventKey "set_pressed" '[Bool] (IO ())
 
 {-# NOINLINE bindInputEventKey_set_scancode #-}
 
--- | The key scancode, which corresponds to one of the @enum KeyList@ constants.
+-- | The key scancode, which corresponds to one of the @enum KeyList@ constants. Represent key in the current keyboard layout.
 --   			To get a human-readable representation of the @InputEventKey@, use @OS.get_scancode_string(event.scancode)@ where @event@ is the @InputEventKey@.
 bindInputEventKey_set_scancode :: MethodBind
 bindInputEventKey_set_scancode
@@ -242,7 +242,7 @@ bindInputEventKey_set_scancode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The key scancode, which corresponds to one of the @enum KeyList@ constants.
+-- | The key scancode, which corresponds to one of the @enum KeyList@ constants. Represent key in the current keyboard layout.
 --   			To get a human-readable representation of the @InputEventKey@, use @OS.get_scancode_string(event.scancode)@ where @event@ is the @InputEventKey@.
 set_scancode ::
                (InputEventKey :< cls, Object :< cls) => cls -> Int -> IO ()

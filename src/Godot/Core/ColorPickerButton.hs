@@ -142,6 +142,7 @@ instance NodeMethod ColorPickerButton "get_pick_color" '[]
 {-# NOINLINE bindColorPickerButton_get_picker #-}
 
 -- | Returns the @ColorPicker@ that this node toggles.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindColorPickerButton_get_picker :: MethodBind
 bindColorPickerButton_get_picker
   = unsafePerformIO $
@@ -152,6 +153,7 @@ bindColorPickerButton_get_picker
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @ColorPicker@ that this node toggles.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_picker ::
              (ColorPickerButton :< cls, Object :< cls) => cls -> IO ColorPicker
 get_picker cls
@@ -171,6 +173,7 @@ instance NodeMethod ColorPickerButton "get_picker" '[]
 {-# NOINLINE bindColorPickerButton_get_popup #-}
 
 -- | Returns the control's @PopupPanel@ which allows you to connect to popup signals. This allows you to handle events when the ColorPicker is shown or hidden.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindColorPickerButton_get_popup :: MethodBind
 bindColorPickerButton_get_popup
   = unsafePerformIO $
@@ -181,6 +184,7 @@ bindColorPickerButton_get_popup
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the control's @PopupPanel@ which allows you to connect to popup signals. This allows you to handle events when the ColorPicker is shown or hidden.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_popup ::
             (ColorPickerButton :< cls, Object :< cls) => cls -> IO PopupPanel
 get_popup cls

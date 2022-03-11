@@ -68,6 +68,7 @@ instance NodeProperty AudioEffectSpectrumAnalyzer "tap_back_pos"
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_get_buffer_length #-}
 
+-- | The length of the buffer to keep (in seconds). Higher values keep data around for longer, but require more memory.
 bindAudioEffectSpectrumAnalyzer_get_buffer_length :: MethodBind
 bindAudioEffectSpectrumAnalyzer_get_buffer_length
   = unsafePerformIO $
@@ -77,6 +78,7 @@ bindAudioEffectSpectrumAnalyzer_get_buffer_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The length of the buffer to keep (in seconds). Higher values keep data around for longer, but require more memory.
 get_buffer_length ::
                     (AudioEffectSpectrumAnalyzer :< cls, Object :< cls) =>
                     cls -> IO Float
@@ -99,6 +101,7 @@ instance NodeMethod AudioEffectSpectrumAnalyzer "get_buffer_length"
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_get_fft_size #-}
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the spectrum analysis over time, but have greater latency. The effects of this higher latency are especially noticeable with sudden amplitude changes.
 bindAudioEffectSpectrumAnalyzer_get_fft_size :: MethodBind
 bindAudioEffectSpectrumAnalyzer_get_fft_size
   = unsafePerformIO $
@@ -108,6 +111,7 @@ bindAudioEffectSpectrumAnalyzer_get_fft_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the spectrum analysis over time, but have greater latency. The effects of this higher latency are especially noticeable with sudden amplitude changes.
 get_fft_size ::
                (AudioEffectSpectrumAnalyzer :< cls, Object :< cls) =>
                cls -> IO Int
@@ -158,6 +162,7 @@ instance NodeMethod AudioEffectSpectrumAnalyzer "get_tap_back_pos"
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_set_buffer_length #-}
 
+-- | The length of the buffer to keep (in seconds). Higher values keep data around for longer, but require more memory.
 bindAudioEffectSpectrumAnalyzer_set_buffer_length :: MethodBind
 bindAudioEffectSpectrumAnalyzer_set_buffer_length
   = unsafePerformIO $
@@ -167,6 +172,7 @@ bindAudioEffectSpectrumAnalyzer_set_buffer_length
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The length of the buffer to keep (in seconds). Higher values keep data around for longer, but require more memory.
 set_buffer_length ::
                     (AudioEffectSpectrumAnalyzer :< cls, Object :< cls) =>
                     cls -> Float -> IO ()
@@ -189,6 +195,7 @@ instance NodeMethod AudioEffectSpectrumAnalyzer "set_buffer_length"
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzer_set_fft_size #-}
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the spectrum analysis over time, but have greater latency. The effects of this higher latency are especially noticeable with sudden amplitude changes.
 bindAudioEffectSpectrumAnalyzer_set_fft_size :: MethodBind
 bindAudioEffectSpectrumAnalyzer_set_fft_size
   = unsafePerformIO $
@@ -198,6 +205,7 @@ bindAudioEffectSpectrumAnalyzer_set_fft_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The size of the @url=https://en.wikipedia.org/wiki/Fast_Fourier_transform@Fast Fourier transform@/url@ buffer. Higher values smooth out the spectrum analysis over time, but have greater latency. The effects of this higher latency are especially noticeable with sudden amplitude changes.
 set_fft_size ::
                (AudioEffectSpectrumAnalyzer :< cls, Object :< cls) =>
                cls -> Int -> IO ()

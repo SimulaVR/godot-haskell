@@ -81,7 +81,7 @@ instance NodeMethod TranslationServer "clear" '[] (IO ()) where
 
 {-# NOINLINE bindTranslationServer_get_loaded_locales #-}
 
--- | Returns an Array of all loaded locales of the game.
+-- | Returns an array of all loaded locales of the project.
 bindTranslationServer_get_loaded_locales :: MethodBind
 bindTranslationServer_get_loaded_locales
   = unsafePerformIO $
@@ -91,7 +91,7 @@ bindTranslationServer_get_loaded_locales
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an Array of all loaded locales of the game.
+-- | Returns an array of all loaded locales of the project.
 get_loaded_locales ::
                      (TranslationServer :< cls, Object :< cls) => cls -> IO Array
 get_loaded_locales cls
@@ -110,7 +110,8 @@ instance NodeMethod TranslationServer "get_loaded_locales" '[]
 
 {-# NOINLINE bindTranslationServer_get_locale #-}
 
--- | Returns the current locale of the game.
+-- | Returns the current locale of the project.
+--   				See also @method OS.get_locale@ and @method OS.get_locale_language@ to query the locale of the user system.
 bindTranslationServer_get_locale :: MethodBind
 bindTranslationServer_get_locale
   = unsafePerformIO $
@@ -120,7 +121,8 @@ bindTranslationServer_get_locale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current locale of the game.
+-- | Returns the current locale of the project.
+--   				See also @method OS.get_locale@ and @method OS.get_locale_language@ to query the locale of the user system.
 get_locale ::
              (TranslationServer :< cls, Object :< cls) => cls -> IO GodotString
 get_locale cls
@@ -201,7 +203,8 @@ instance NodeMethod TranslationServer "remove_translation"
 
 {-# NOINLINE bindTranslationServer_set_locale #-}
 
--- | Sets the locale of the game.
+-- | Sets the locale of the project. The @locale@ string will be standardized to match known locales (e.g. @en-US@ would be matched to @en_US@).
+--   				If translations have been loaded beforehand for the new locale, they will be applied.
 bindTranslationServer_set_locale :: MethodBind
 bindTranslationServer_set_locale
   = unsafePerformIO $
@@ -211,7 +214,8 @@ bindTranslationServer_set_locale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the locale of the game.
+-- | Sets the locale of the project. The @locale@ string will be standardized to match known locales (e.g. @en-US@ would be matched to @en_US@).
+--   				If translations have been loaded beforehand for the new locale, they will be applied.
 set_locale ::
              (TranslationServer :< cls, Object :< cls) =>
              cls -> GodotString -> IO ()

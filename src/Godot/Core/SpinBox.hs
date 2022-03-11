@@ -215,6 +215,7 @@ instance NodeMethod SpinBox "get_align" '[] (IO Int) where
 {-# NOINLINE bindSpinBox_get_line_edit #-}
 
 -- | Returns the @LineEdit@ instance from this @SpinBox@. You can use it to access properties and methods of @LineEdit@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindSpinBox_get_line_edit :: MethodBind
 bindSpinBox_get_line_edit
   = unsafePerformIO $
@@ -225,6 +226,7 @@ bindSpinBox_get_line_edit
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @LineEdit@ instance from this @SpinBox@. You can use it to access properties and methods of @LineEdit@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_line_edit ::
                 (SpinBox :< cls, Object :< cls) => cls -> IO LineEdit
 get_line_edit cls

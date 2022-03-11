@@ -102,7 +102,7 @@ instance NodeProperty NinePatchRect "texture" Texture 'False where
 
 {-# NOINLINE bindNinePatchRect_get_h_axis_stretch_mode #-}
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for horizontal stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 bindNinePatchRect_get_h_axis_stretch_mode :: MethodBind
 bindNinePatchRect_get_h_axis_stretch_mode
   = unsafePerformIO $
@@ -112,7 +112,7 @@ bindNinePatchRect_get_h_axis_stretch_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for horizontal stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 get_h_axis_stretch_mode ::
                           (NinePatchRect :< cls, Object :< cls) => cls -> IO Int
 get_h_axis_stretch_mode cls
@@ -215,7 +215,7 @@ instance NodeMethod NinePatchRect "get_texture" '[] (IO Texture)
 
 {-# NOINLINE bindNinePatchRect_get_v_axis_stretch_mode #-}
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for vertical stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 bindNinePatchRect_get_v_axis_stretch_mode :: MethodBind
 bindNinePatchRect_get_v_axis_stretch_mode
   = unsafePerformIO $
@@ -225,7 +225,7 @@ bindNinePatchRect_get_v_axis_stretch_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for vertical stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 get_v_axis_stretch_mode ::
                           (NinePatchRect :< cls, Object :< cls) => cls -> IO Int
 get_v_axis_stretch_mode cls
@@ -301,7 +301,7 @@ instance NodeMethod NinePatchRect "set_draw_center" '[Bool] (IO ())
 
 {-# NOINLINE bindNinePatchRect_set_h_axis_stretch_mode #-}
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for horizontal stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 bindNinePatchRect_set_h_axis_stretch_mode :: MethodBind
 bindNinePatchRect_set_h_axis_stretch_mode
   = unsafePerformIO $
@@ -311,7 +311,7 @@ bindNinePatchRect_set_h_axis_stretch_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for horizontal stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 set_h_axis_stretch_mode ::
                           (NinePatchRect :< cls, Object :< cls) => cls -> Int -> IO ()
 set_h_axis_stretch_mode cls arg1
@@ -415,7 +415,7 @@ instance NodeMethod NinePatchRect "set_texture" '[Texture] (IO ())
 
 {-# NOINLINE bindNinePatchRect_set_v_axis_stretch_mode #-}
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for vertical stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 bindNinePatchRect_set_v_axis_stretch_mode :: MethodBind
 bindNinePatchRect_set_v_axis_stretch_mode
   = unsafePerformIO $
@@ -425,7 +425,7 @@ bindNinePatchRect_set_v_axis_stretch_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Doesn't do anything at the time of writing.
+-- | The stretch mode to use for vertical stretching/tiling. See @enum NinePatchRect.AxisStretchMode@ for possible values.
 set_v_axis_stretch_mode ::
                           (NinePatchRect :< cls, Object :< cls) => cls -> Int -> IO ()
 set_v_axis_stretch_mode cls arg1

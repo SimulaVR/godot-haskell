@@ -84,6 +84,7 @@ instance NodeMethod Navigation2D "get_closest_point_owner"
 {-# NOINLINE bindNavigation2D_get_simple_path #-}
 
 -- | Returns the path between two given points. Points are in local coordinate space. If @optimize@ is @true@ (the default), the path is smoothed by merging path segments where possible.
+--   				__Note:__ This method has known issues and will often return non-optimal paths. These issues will be fixed in Godot 4.0.
 bindNavigation2D_get_simple_path :: MethodBind
 bindNavigation2D_get_simple_path
   = unsafePerformIO $
@@ -94,6 +95,7 @@ bindNavigation2D_get_simple_path
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the path between two given points. Points are in local coordinate space. If @optimize@ is @true@ (the default), the path is smoothed by merging path segments where possible.
+--   				__Note:__ This method has known issues and will often return non-optimal paths. These issues will be fixed in Godot 4.0.
 get_simple_path ::
                   (Navigation2D :< cls, Object :< cls) =>
                   cls -> Vector2 -> Vector2 -> Maybe Bool -> IO PoolVector2Array

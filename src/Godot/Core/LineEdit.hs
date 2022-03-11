@@ -98,7 +98,7 @@ _ALIGN_LEFT = 0
 _ALIGN_CENTER :: Int
 _ALIGN_CENTER = 1
 
--- | Emitted when trying to append text that would overflow the @max_length@.
+-- | Emitted when appending text that overflows the @max_length@. The appended text is truncated to fit @max_length@, and the part that couldn't fit is passed as the @rejected_substring@ argument.
 sig_text_change_rejected :: Godot.Internal.Dispatch.Signal LineEdit
 sig_text_change_rejected
   = Godot.Internal.Dispatch.Signal "text_change_rejected"
@@ -575,6 +575,20 @@ instance NodeMethod LineEdit "get_expand_to_text_length" '[]
 {-# NOINLINE bindLineEdit_get_max_length #-}
 
 -- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
+--   			When a limit is defined, characters that would exceed @max_length@ are truncated. This happens both for existing @text@ contents when setting the max length, or for new text inserted in the @LineEdit@, including pasting. If any input text is truncated, the @signal text_change_rejected@ signal is emitted with the truncated substring as parameter.
+--   			__Example:__
+--   			
+--   @
+--   
+--   			text = "Hello world"
+--   			max_length = 5
+--   			# `text` becomes "Hello".
+--   			max_length = 10
+--   			text += " goodbye"
+--   			# `text` becomes "Hello good".
+--   			# `text_change_rejected` is emitted with "bye" as parameter.
+--   			
+--   @
 bindLineEdit_get_max_length :: MethodBind
 bindLineEdit_get_max_length
   = unsafePerformIO $
@@ -585,6 +599,20 @@ bindLineEdit_get_max_length
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
+--   			When a limit is defined, characters that would exceed @max_length@ are truncated. This happens both for existing @text@ contents when setting the max length, or for new text inserted in the @LineEdit@, including pasting. If any input text is truncated, the @signal text_change_rejected@ signal is emitted with the truncated substring as parameter.
+--   			__Example:__
+--   			
+--   @
+--   
+--   			text = "Hello world"
+--   			max_length = 5
+--   			# `text` becomes "Hello".
+--   			max_length = 10
+--   			text += " goodbye"
+--   			# `text` becomes "Hello good".
+--   			# `text_change_rejected` is emitted with "bye" as parameter.
+--   			
+--   @
 get_max_length :: (LineEdit :< cls, Object :< cls) => cls -> IO Int
 get_max_length cls
   = withVariantArray []
@@ -600,6 +628,7 @@ instance NodeMethod LineEdit "get_max_length" '[] (IO Int) where
 {-# NOINLINE bindLineEdit_get_menu #-}
 
 -- | Returns the @PopupMenu@ of this @LineEdit@. By default, this menu is displayed when right-clicking on the @LineEdit@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 bindLineEdit_get_menu :: MethodBind
 bindLineEdit_get_menu
   = unsafePerformIO $
@@ -610,6 +639,7 @@ bindLineEdit_get_menu
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @PopupMenu@ of this @LineEdit@. By default, this menu is displayed when right-clicking on the @LineEdit@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to hide it or any of its children, use their @CanvasItem.visible@ property.
 get_menu :: (LineEdit :< cls, Object :< cls) => cls -> IO PopupMenu
 get_menu cls
   = withVariantArray []
@@ -1187,6 +1217,20 @@ instance NodeMethod LineEdit "set_expand_to_text_length" '[Bool]
 {-# NOINLINE bindLineEdit_set_max_length #-}
 
 -- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
+--   			When a limit is defined, characters that would exceed @max_length@ are truncated. This happens both for existing @text@ contents when setting the max length, or for new text inserted in the @LineEdit@, including pasting. If any input text is truncated, the @signal text_change_rejected@ signal is emitted with the truncated substring as parameter.
+--   			__Example:__
+--   			
+--   @
+--   
+--   			text = "Hello world"
+--   			max_length = 5
+--   			# `text` becomes "Hello".
+--   			max_length = 10
+--   			text += " goodbye"
+--   			# `text` becomes "Hello good".
+--   			# `text_change_rejected` is emitted with "bye" as parameter.
+--   			
+--   @
 bindLineEdit_set_max_length :: MethodBind
 bindLineEdit_set_max_length
   = unsafePerformIO $
@@ -1197,6 +1241,20 @@ bindLineEdit_set_max_length
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Maximum amount of characters that can be entered inside the @LineEdit@. If @0@, there is no limit.
+--   			When a limit is defined, characters that would exceed @max_length@ are truncated. This happens both for existing @text@ contents when setting the max length, or for new text inserted in the @LineEdit@, including pasting. If any input text is truncated, the @signal text_change_rejected@ signal is emitted with the truncated substring as parameter.
+--   			__Example:__
+--   			
+--   @
+--   
+--   			text = "Hello world"
+--   			max_length = 5
+--   			# `text` becomes "Hello".
+--   			max_length = 10
+--   			text += " goodbye"
+--   			# `text` becomes "Hello good".
+--   			# `text_change_rejected` is emitted with "bye" as parameter.
+--   			
+--   @
 set_max_length ::
                  (LineEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_length cls arg1

@@ -25,6 +25,7 @@ import Godot.Api.Types
 import Godot.Core.Reference()
 
 -- | Emitted whenever the resource changes.
+--   				__Note:__ This signal is not emitted automatically for custom resources, which means that you need to create a setter and emit the signal yourself.
 sig_changed :: Godot.Internal.Dispatch.Signal Resource
 sig_changed = Godot.Internal.Dispatch.Signal "changed"
 
@@ -75,8 +76,10 @@ instance NodeMethod Resource "_setup_local_to_scene" '[] (IO ())
 
 {-# NOINLINE bindResource_duplicate #-}
 
--- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing @true@ to the @subresources@ argument which will copy the subresources.
+-- | Duplicates the resource, returning a new resource with the exported members copied. __Note:__ To duplicate the resource the constructor is called without arguments. This method will error when the constructor doesn't have default values.
+--   				By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing @true@ to the @subresources@ argument which will copy the subresources.
 --   				__Note:__ If @subresources@ is @true@, this method will only perform a shallow copy. Nested resources within subresources will not be duplicated and will still be shared.
+--   				__Note:__ When duplicating a resource, only @export@ed properties are copied. Other properties will be set to their default value in the new resource.
 bindResource_duplicate :: MethodBind
 bindResource_duplicate
   = unsafePerformIO $
@@ -86,8 +89,10 @@ bindResource_duplicate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing @true@ to the @subresources@ argument which will copy the subresources.
+-- | Duplicates the resource, returning a new resource with the exported members copied. __Note:__ To duplicate the resource the constructor is called without arguments. This method will error when the constructor doesn't have default values.
+--   				By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing @true@ to the @subresources@ argument which will copy the subresources.
 --   				__Note:__ If @subresources@ is @true@, this method will only perform a shallow copy. Nested resources within subresources will not be duplicated and will still be shared.
+--   				__Note:__ When duplicating a resource, only @export@ed properties are copied. Other properties will be set to their default value in the new resource.
 duplicate ::
             (Resource :< cls, Object :< cls) =>
             cls -> Maybe Bool -> IO Resource
@@ -131,7 +136,7 @@ instance NodeMethod Resource "get_local_scene" '[] (IO Node) where
 
 {-# NOINLINE bindResource_get_name #-}
 
--- | The name of the resource. This is an optional identifier.
+-- | The name of the resource. This is an optional identifier. If @resource_name@ is not empty, its value will be displayed to represent the current resource in the editor inspector. For built-in scripts, the @resource_name@ will be displayed as the tab name in the script editor.
 bindResource_get_name :: MethodBind
 bindResource_get_name
   = unsafePerformIO $
@@ -141,7 +146,7 @@ bindResource_get_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the resource. This is an optional identifier.
+-- | The name of the resource. This is an optional identifier. If @resource_name@ is not empty, its value will be displayed to represent the current resource in the editor inspector. For built-in scripts, the @resource_name@ will be displayed as the tab name in the script editor.
 get_name ::
            (Resource :< cls, Object :< cls) => cls -> IO GodotString
 get_name cls
@@ -258,7 +263,7 @@ instance NodeMethod Resource "set_local_to_scene" '[Bool] (IO ())
 
 {-# NOINLINE bindResource_set_name #-}
 
--- | The name of the resource. This is an optional identifier.
+-- | The name of the resource. This is an optional identifier. If @resource_name@ is not empty, its value will be displayed to represent the current resource in the editor inspector. For built-in scripts, the @resource_name@ will be displayed as the tab name in the script editor.
 bindResource_set_name :: MethodBind
 bindResource_set_name
   = unsafePerformIO $
@@ -268,7 +273,7 @@ bindResource_set_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the resource. This is an optional identifier.
+-- | The name of the resource. This is an optional identifier. If @resource_name@ is not empty, its value will be displayed to represent the current resource in the editor inspector. For built-in scripts, the @resource_name@ will be displayed as the tab name in the script editor.
 set_name ::
            (Resource :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_name cls arg1

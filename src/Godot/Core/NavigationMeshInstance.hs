@@ -34,6 +34,7 @@ instance NodeProperty NavigationMeshInstance "navmesh"
 
 {-# NOINLINE bindNavigationMeshInstance_get_navigation_mesh #-}
 
+-- | The @NavigationMesh@ resource for the instance.
 bindNavigationMeshInstance_get_navigation_mesh :: MethodBind
 bindNavigationMeshInstance_get_navigation_mesh
   = unsafePerformIO $
@@ -43,6 +44,7 @@ bindNavigationMeshInstance_get_navigation_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The @NavigationMesh@ resource for the instance.
 get_navigation_mesh ::
                       (NavigationMeshInstance :< cls, Object :< cls) =>
                       cls -> IO NavigationMesh
@@ -64,6 +66,7 @@ instance NodeMethod NavigationMeshInstance "get_navigation_mesh"
 
 {-# NOINLINE bindNavigationMeshInstance_is_enabled #-}
 
+-- | If @true@, the navigation mesh will be used by @Navigation@.
 bindNavigationMeshInstance_is_enabled :: MethodBind
 bindNavigationMeshInstance_is_enabled
   = unsafePerformIO $
@@ -73,6 +76,7 @@ bindNavigationMeshInstance_is_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, the navigation mesh will be used by @Navigation@.
 is_enabled ::
              (NavigationMeshInstance :< cls, Object :< cls) => cls -> IO Bool
 is_enabled cls
@@ -91,6 +95,7 @@ instance NodeMethod NavigationMeshInstance "is_enabled" '[]
 
 {-# NOINLINE bindNavigationMeshInstance_set_enabled #-}
 
+-- | If @true@, the navigation mesh will be used by @Navigation@.
 bindNavigationMeshInstance_set_enabled :: MethodBind
 bindNavigationMeshInstance_set_enabled
   = unsafePerformIO $
@@ -100,6 +105,7 @@ bindNavigationMeshInstance_set_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | If @true@, the navigation mesh will be used by @Navigation@.
 set_enabled ::
               (NavigationMeshInstance :< cls, Object :< cls) =>
               cls -> Bool -> IO ()
@@ -119,6 +125,7 @@ instance NodeMethod NavigationMeshInstance "set_enabled" '[Bool]
 
 {-# NOINLINE bindNavigationMeshInstance_set_navigation_mesh #-}
 
+-- | The @NavigationMesh@ resource for the instance.
 bindNavigationMeshInstance_set_navigation_mesh :: MethodBind
 bindNavigationMeshInstance_set_navigation_mesh
   = unsafePerformIO $
@@ -128,6 +135,7 @@ bindNavigationMeshInstance_set_navigation_mesh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | The @NavigationMesh@ resource for the instance.
 set_navigation_mesh ::
                       (NavigationMeshInstance :< cls, Object :< cls) =>
                       cls -> NavigationMesh -> IO ()

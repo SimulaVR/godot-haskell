@@ -35,7 +35,7 @@ import Godot.Core.Reference()
 
 {-# NOINLINE bindSurfaceTool_add_bones #-}
 
--- | Adds an array of bones for the next vertex to use. @bones@ must contain 4 integers.
+-- | Specifies an array of bones to use for the @i@next@/i@ vertex. @bones@ must contain 4 integers.
 bindSurfaceTool_add_bones :: MethodBind
 bindSurfaceTool_add_bones
   = unsafePerformIO $
@@ -45,7 +45,7 @@ bindSurfaceTool_add_bones
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds an array of bones for the next vertex to use. @bones@ must contain 4 integers.
+-- | Specifies an array of bones to use for the @i@next@/i@ vertex. @bones@ must contain 4 integers.
 add_bones ::
             (SurfaceTool :< cls, Object :< cls) => cls -> PoolIntArray -> IO ()
 add_bones cls arg1
@@ -62,7 +62,8 @@ instance NodeMethod SurfaceTool "add_bones" '[PoolIntArray] (IO ())
 
 {-# NOINLINE bindSurfaceTool_add_color #-}
 
--- | Specifies a @Color@ for the next vertex to use.
+-- | Specifies a @Color@ to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
+--   				__Note:__ The material must have @SpatialMaterial.vertex_color_use_as_albedo@ enabled for the vertex color to be visible.
 bindSurfaceTool_add_color :: MethodBind
 bindSurfaceTool_add_color
   = unsafePerformIO $
@@ -72,7 +73,8 @@ bindSurfaceTool_add_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies a @Color@ for the next vertex to use.
+-- | Specifies a @Color@ to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
+--   				__Note:__ The material must have @SpatialMaterial.vertex_color_use_as_albedo@ enabled for the vertex color to be visible.
 add_color ::
             (SurfaceTool :< cls, Object :< cls) => cls -> Color -> IO ()
 add_color cls arg1
@@ -114,7 +116,7 @@ instance NodeMethod SurfaceTool "add_index" '[Int] (IO ()) where
 
 {-# NOINLINE bindSurfaceTool_add_normal #-}
 
--- | Specifies a normal for the next vertex to use.
+-- | Specifies a normal to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 bindSurfaceTool_add_normal :: MethodBind
 bindSurfaceTool_add_normal
   = unsafePerformIO $
@@ -124,7 +126,7 @@ bindSurfaceTool_add_normal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies a normal for the next vertex to use.
+-- | Specifies a normal to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 add_normal ::
              (SurfaceTool :< cls, Object :< cls) => cls -> Vector3 -> IO ()
 add_normal cls arg1
@@ -169,7 +171,7 @@ instance NodeMethod SurfaceTool "add_smooth_group" '[Bool] (IO ())
 
 {-# NOINLINE bindSurfaceTool_add_tangent #-}
 
--- | Specifies a tangent for the next vertex to use.
+-- | Specifies a tangent to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 bindSurfaceTool_add_tangent :: MethodBind
 bindSurfaceTool_add_tangent
   = unsafePerformIO $
@@ -179,7 +181,7 @@ bindSurfaceTool_add_tangent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies a tangent for the next vertex to use.
+-- | Specifies a tangent to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 add_tangent ::
               (SurfaceTool :< cls, Object :< cls) => cls -> Plane -> IO ()
 add_tangent cls arg1
@@ -241,7 +243,7 @@ instance NodeMethod SurfaceTool "add_triangle_fan"
 
 {-# NOINLINE bindSurfaceTool_add_uv #-}
 
--- | Specifies a set of UV coordinates to use for the next vertex.
+-- | Specifies a set of UV coordinates to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 bindSurfaceTool_add_uv :: MethodBind
 bindSurfaceTool_add_uv
   = unsafePerformIO $
@@ -251,7 +253,7 @@ bindSurfaceTool_add_uv
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies a set of UV coordinates to use for the next vertex.
+-- | Specifies a set of UV coordinates to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 add_uv ::
          (SurfaceTool :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 add_uv cls arg1
@@ -266,7 +268,7 @@ instance NodeMethod SurfaceTool "add_uv" '[Vector2] (IO ()) where
 
 {-# NOINLINE bindSurfaceTool_add_uv2 #-}
 
--- | Specifies an optional second set of UV coordinates to use for the next vertex.
+-- | Specifies an optional second set of UV coordinates to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 bindSurfaceTool_add_uv2 :: MethodBind
 bindSurfaceTool_add_uv2
   = unsafePerformIO $
@@ -276,7 +278,7 @@ bindSurfaceTool_add_uv2
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies an optional second set of UV coordinates to use for the next vertex.
+-- | Specifies an optional second set of UV coordinates to use for the @i@next@/i@ vertex. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 add_uv2 ::
           (SurfaceTool :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 add_uv2 cls arg1
@@ -318,7 +320,7 @@ instance NodeMethod SurfaceTool "add_vertex" '[Vector3] (IO ())
 
 {-# NOINLINE bindSurfaceTool_add_weights #-}
 
--- | Specifies weight values for next vertex to use. @weights@ must contain 4 values.
+-- | Specifies weight values to use for the @i@next@/i@ vertex. @weights@ must contain 4 values. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 bindSurfaceTool_add_weights :: MethodBind
 bindSurfaceTool_add_weights
   = unsafePerformIO $
@@ -328,7 +330,7 @@ bindSurfaceTool_add_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Specifies weight values for next vertex to use. @weights@ must contain 4 values.
+-- | Specifies weight values to use for the @i@next@/i@ vertex. @weights@ must contain 4 values. If every vertex needs to have this information set and you fail to submit it for the first vertex, this information may not be used at all.
 add_weights ::
               (SurfaceTool :< cls, Object :< cls) =>
               cls -> PoolRealArray -> IO ()
@@ -348,6 +350,7 @@ instance NodeMethod SurfaceTool "add_weights" '[PoolRealArray]
 {-# NOINLINE bindSurfaceTool_append_from #-}
 
 -- | Append vertices from a given @Mesh@ surface onto the current vertex array with specified @Transform@.
+--   				__Note:__ Using @method append_from@ on a @Thread@ is much slower as the GPU must communicate data back to the CPU, while also causing the main thread to stall (as OpenGL is not thread-safe). Consider requesting a copy of the mesh, converting it to an @ArrayMesh@ and adding vertices manually instead.
 bindSurfaceTool_append_from :: MethodBind
 bindSurfaceTool_append_from
   = unsafePerformIO $
@@ -358,6 +361,7 @@ bindSurfaceTool_append_from
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Append vertices from a given @Mesh@ surface onto the current vertex array with specified @Transform@.
+--   				__Note:__ Using @method append_from@ on a @Thread@ is much slower as the GPU must communicate data back to the CPU, while also causing the main thread to stall (as OpenGL is not thread-safe). Consider requesting a copy of the mesh, converting it to an @ArrayMesh@ and adding vertices manually instead.
 append_from ::
               (SurfaceTool :< cls, Object :< cls) =>
               cls -> Mesh -> Int -> Transform -> IO ()
@@ -426,7 +430,7 @@ instance NodeMethod SurfaceTool "clear" '[] (IO ()) where
 {-# NOINLINE bindSurfaceTool_commit #-}
 
 -- | Returns a constructed @ArrayMesh@ from current information passed in. If an existing @ArrayMesh@ is passed in as an argument, will add an extra surface to the existing @ArrayMesh@.
---   				Default flag is @Mesh.ARRAY_COMPRESS_DEFAULT@. See @ARRAY_COMPRESS_*@ constants in @enum Mesh.ArrayFormat@ for other flags.
+--   				Default flag is @Mesh.ARRAY_COMPRESS_DEFAULT@ if compression is enabled. If compression is disabled the default flag is @Mesh.ARRAY_FLAG_USE_OCTAHEDRAL_COMPRESSION@. See @ARRAY_COMPRESS_*@ constants in @enum Mesh.ArrayFormat@ for other flags.
 bindSurfaceTool_commit :: MethodBind
 bindSurfaceTool_commit
   = unsafePerformIO $
@@ -437,7 +441,7 @@ bindSurfaceTool_commit
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a constructed @ArrayMesh@ from current information passed in. If an existing @ArrayMesh@ is passed in as an argument, will add an extra surface to the existing @ArrayMesh@.
---   				Default flag is @Mesh.ARRAY_COMPRESS_DEFAULT@. See @ARRAY_COMPRESS_*@ constants in @enum Mesh.ArrayFormat@ for other flags.
+--   				Default flag is @Mesh.ARRAY_COMPRESS_DEFAULT@ if compression is enabled. If compression is disabled the default flag is @Mesh.ARRAY_FLAG_USE_OCTAHEDRAL_COMPRESSION@. See @ARRAY_COMPRESS_*@ constants in @enum Mesh.ArrayFormat@ for other flags.
 commit ::
          (SurfaceTool :< cls, Object :< cls) =>
          cls -> Maybe ArrayMesh -> Maybe Int -> IO ArrayMesh
@@ -568,8 +572,8 @@ instance NodeMethod SurfaceTool "deindex" '[] (IO ()) where
 
 {-# NOINLINE bindSurfaceTool_generate_normals #-}
 
--- | Generates normals from vertices so you do not have to do it manually. If @flip@ is @true@, the resulting normals will be inverted.
---   				Requires the primitive type to be set to @Mesh.PRIMITIVE_TRIANGLES@.
+-- | Generates normals from vertices so you do not have to do it manually. If @flip@ is @true@, the resulting normals will be inverted. @method generate_normals@ should be called @i@after@/i@ generating geometry and @i@before@/i@ committing the mesh using @method commit@ or @method commit_to_arrays@. For correct display of normal-mapped surfaces, you will also have to generate tangents using @method generate_tangents@.
+--   				__Note:__ @method generate_normals@ only works if the primitive type to be set to @Mesh.PRIMITIVE_TRIANGLES@.
 bindSurfaceTool_generate_normals :: MethodBind
 bindSurfaceTool_generate_normals
   = unsafePerformIO $
@@ -579,8 +583,8 @@ bindSurfaceTool_generate_normals
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates normals from vertices so you do not have to do it manually. If @flip@ is @true@, the resulting normals will be inverted.
---   				Requires the primitive type to be set to @Mesh.PRIMITIVE_TRIANGLES@.
+-- | Generates normals from vertices so you do not have to do it manually. If @flip@ is @true@, the resulting normals will be inverted. @method generate_normals@ should be called @i@after@/i@ generating geometry and @i@before@/i@ committing the mesh using @method commit@ or @method commit_to_arrays@. For correct display of normal-mapped surfaces, you will also have to generate tangents using @method generate_tangents@.
+--   				__Note:__ @method generate_normals@ only works if the primitive type to be set to @Mesh.PRIMITIVE_TRIANGLES@.
 generate_normals ::
                    (SurfaceTool :< cls, Object :< cls) => cls -> Maybe Bool -> IO ()
 generate_normals cls arg1
@@ -599,7 +603,7 @@ instance NodeMethod SurfaceTool "generate_normals" '[Maybe Bool]
 
 {-# NOINLINE bindSurfaceTool_generate_tangents #-}
 
--- | Generates a tangent vector for each vertex. Requires that each vertex have UVs and normals set already.
+-- | Generates a tangent vector for each vertex. Requires that each vertex have UVs and normals set already (see @method generate_normals@).
 bindSurfaceTool_generate_tangents :: MethodBind
 bindSurfaceTool_generate_tangents
   = unsafePerformIO $
@@ -609,7 +613,7 @@ bindSurfaceTool_generate_tangents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Generates a tangent vector for each vertex. Requires that each vertex have UVs and normals set already.
+-- | Generates a tangent vector for each vertex. Requires that each vertex have UVs and normals set already (see @method generate_normals@).
 generate_tangents ::
                     (SurfaceTool :< cls, Object :< cls) => cls -> IO ()
 generate_tangents cls
@@ -627,7 +631,7 @@ instance NodeMethod SurfaceTool "generate_tangents" '[] (IO ())
 
 {-# NOINLINE bindSurfaceTool_index #-}
 
--- | Shrinks the vertex array by creating an index array (avoids reusing vertices).
+-- | Shrinks the vertex array by creating an index array. This can improve performance by avoiding vertex reuse.
 bindSurfaceTool_index :: MethodBind
 bindSurfaceTool_index
   = unsafePerformIO $
@@ -637,7 +641,7 @@ bindSurfaceTool_index
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shrinks the vertex array by creating an index array (avoids reusing vertices).
+-- | Shrinks the vertex array by creating an index array. This can improve performance by avoiding vertex reuse.
 index :: (SurfaceTool :< cls, Object :< cls) => cls -> IO ()
 index cls
   = withVariantArray []

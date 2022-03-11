@@ -255,6 +255,7 @@ instance NodeMethod ScrollContainer "get_h_scroll" '[] (IO Int)
 {-# NOINLINE bindScrollContainer_get_h_scrollbar #-}
 
 -- | Returns the horizontal scrollbar @HScrollBar@ of this @ScrollContainer@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to disable the horizontal scrollbar, use @scroll_horizontal_enabled@. If you want to only hide it instead, use its @CanvasItem.visible@ property.
 bindScrollContainer_get_h_scrollbar :: MethodBind
 bindScrollContainer_get_h_scrollbar
   = unsafePerformIO $
@@ -265,6 +266,7 @@ bindScrollContainer_get_h_scrollbar
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the horizontal scrollbar @HScrollBar@ of this @ScrollContainer@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to disable the horizontal scrollbar, use @scroll_horizontal_enabled@. If you want to only hide it instead, use its @CanvasItem.visible@ property.
 get_h_scrollbar ::
                   (ScrollContainer :< cls, Object :< cls) => cls -> IO HScrollBar
 get_h_scrollbar cls
@@ -312,6 +314,7 @@ instance NodeMethod ScrollContainer "get_v_scroll" '[] (IO Int)
 {-# NOINLINE bindScrollContainer_get_v_scrollbar #-}
 
 -- | Returns the vertical scrollbar @VScrollBar@ of this @ScrollContainer@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to disable the vertical scrollbar, use @scroll_vertical_enabled@. If you want to only hide it instead, use its @CanvasItem.visible@ property.
 bindScrollContainer_get_v_scrollbar :: MethodBind
 bindScrollContainer_get_v_scrollbar
   = unsafePerformIO $
@@ -322,6 +325,7 @@ bindScrollContainer_get_v_scrollbar
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the vertical scrollbar @VScrollBar@ of this @ScrollContainer@.
+--   				__Warning:__ This is a required internal node, removing and freeing it may cause a crash. If you wish to disable the vertical scrollbar, use @scroll_vertical_enabled@. If you want to only hide it instead, use its @CanvasItem.visible@ property.
 get_v_scrollbar ::
                   (ScrollContainer :< cls, Object :< cls) => cls -> IO VScrollBar
 get_v_scrollbar cls

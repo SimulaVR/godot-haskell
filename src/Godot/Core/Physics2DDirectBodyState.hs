@@ -303,7 +303,7 @@ instance NodeMethod Physics2DDirectBodyState "apply_torque_impulse"
 
 {-# NOINLINE bindPhysics2DDirectBodyState_get_angular_velocity #-}
 
--- | The body's rotational velocity.
+-- | The body's rotational velocity in @i@radians@/i@ per second.
 bindPhysics2DDirectBodyState_get_angular_velocity :: MethodBind
 bindPhysics2DDirectBodyState_get_angular_velocity
   = unsafePerformIO $
@@ -313,7 +313,7 @@ bindPhysics2DDirectBodyState_get_angular_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's rotational velocity.
+-- | The body's rotational velocity in @i@radians@/i@ per second.
 get_angular_velocity ::
                        (Physics2DDirectBodyState :< cls, Object :< cls) => cls -> IO Float
 get_angular_velocity cls
@@ -784,7 +784,7 @@ instance NodeMethod Physics2DDirectBodyState "get_inverse_mass" '[]
 
 {-# NOINLINE bindPhysics2DDirectBodyState_get_linear_velocity #-}
 
--- | The body's linear velocity.
+-- | The body's linear velocity in pixels per second.
 bindPhysics2DDirectBodyState_get_linear_velocity :: MethodBind
 bindPhysics2DDirectBodyState_get_linear_velocity
   = unsafePerformIO $
@@ -794,7 +794,7 @@ bindPhysics2DDirectBodyState_get_linear_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear velocity.
+-- | The body's linear velocity in pixels per second.
 get_linear_velocity ::
                       (Physics2DDirectBodyState :< cls, Object :< cls) =>
                       cls -> IO Vector2
@@ -1064,7 +1064,7 @@ instance NodeMethod Physics2DDirectBodyState "is_sleeping" '[]
 
 {-# NOINLINE bindPhysics2DDirectBodyState_set_angular_velocity #-}
 
--- | The body's rotational velocity.
+-- | The body's rotational velocity in @i@radians@/i@ per second.
 bindPhysics2DDirectBodyState_set_angular_velocity :: MethodBind
 bindPhysics2DDirectBodyState_set_angular_velocity
   = unsafePerformIO $
@@ -1074,7 +1074,7 @@ bindPhysics2DDirectBodyState_set_angular_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's rotational velocity.
+-- | The body's rotational velocity in @i@radians@/i@ per second.
 set_angular_velocity ::
                        (Physics2DDirectBodyState :< cls, Object :< cls) =>
                        cls -> Float -> IO ()
@@ -1097,7 +1097,7 @@ instance NodeMethod Physics2DDirectBodyState "set_angular_velocity"
 
 {-# NOINLINE bindPhysics2DDirectBodyState_set_linear_velocity #-}
 
--- | The body's linear velocity.
+-- | The body's linear velocity in pixels per second.
 bindPhysics2DDirectBodyState_set_linear_velocity :: MethodBind
 bindPhysics2DDirectBodyState_set_linear_velocity
   = unsafePerformIO $
@@ -1107,7 +1107,7 @@ bindPhysics2DDirectBodyState_set_linear_velocity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The body's linear velocity.
+-- | The body's linear velocity in pixels per second.
 set_linear_velocity ::
                       (Physics2DDirectBodyState :< cls, Object :< cls) =>
                       cls -> Vector2 -> IO ()
