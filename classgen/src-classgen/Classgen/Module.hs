@@ -51,10 +51,6 @@ resolveMethods = do
   let imports = map (\n -> HS.ImportDecl () (HS.ModuleName () n) False False False Nothing Nothing Nothing ) ["Godot.Internal.Dispatch", "Godot.Api.Auto"]
   modules %= HM.insert "Methods" (HS.Module () (Just moduleHead) [] imports decls)
   where
-    escapeName "import" = "import'"
-    escapeName "instance" = "instance'"
-    escapeName n = n
-    
     resolveMethod method =
       let methodName = T.unpack method
           methodNameVar = HS.Var () $ HS.UnQual () $ HS.Ident () methodName
@@ -129,7 +125,7 @@ mkSignals :: MonadState ClassgenState m => GodotClass -> m [HS.Decl ()]
 mkSignals cls = return $ concatMap mkSignal (V.toList $ cls ^. signals)
   where
     mkSignal sig 
-      = let sigStr = T.unpack (sig ^. name)
+      = let sigStr = escapeName . T.unpack $ sig ^. name
             sigName = HS.Ident () sigStr
         in [ HS.TypeSig () [sigName] (HS.TyApp () sigTy (clsTy cls))
            , HS.PatBind () (HS.PVar () sigName) (
@@ -245,3 +241,64 @@ toHsType (CoreType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ r
     renameType x = x
 toHsType (CustomType ty) = HS.TyCon () $ HS.UnQual () $ HS.Ident () $ "Godot" ++ T.unpack ty
 toHsType (EnumType _) = [ty| Int |]
+
+escapeName :: String -> String
+escapeName name = if name `S.member` reservedWords then name ++ "'" else name
+
+reservedWords :: S.Set String
+reservedWords = S.fromList
+  [ "_"
+  , "as"
+  , "case"
+  , "class"
+  , "data"
+  , "default"
+  , "deriving"
+  , "do"
+  , "else"
+  , "hiding"
+  , "if"
+  , "import"
+  , "in"
+  , "infix"
+  , "infixl"
+  , "infixr"
+  , "instance"
+  , "let"
+  , "module"
+  , "newtype"
+  , "of"
+  , "qualified"
+  , "then"
+  , "type"
+  , "where"
+  , "forall"
+  , "mdo"
+  , "family"
+  , "role"
+  , "pattern"
+  , "static"
+  , "stock"
+  , "anyclass"
+  , "via"
+  , "group"
+  , "by"
+  , "using"
+  , "foreign"
+  , "export"
+  , "label"
+  , "dynamic"
+  , "safe"
+  , "interruptible"
+  , "unsafe"
+  , "stdcall"
+  , "ccall"
+  , "capi"
+  , "prim"
+  , "javascript"
+  , "unit"
+  , "dependency"
+  , "signature"
+  , "rec"
+  , "proc"
+  ]
