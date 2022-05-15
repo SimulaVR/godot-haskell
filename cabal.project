@@ -1,0 +1,4 @@
+packages:
+  godot-haskell.cabal
+  classgen/godot-haskell-classgen.cabal
+  haskell-src-exts-qq/haskell-src-exts-qq.cabal
