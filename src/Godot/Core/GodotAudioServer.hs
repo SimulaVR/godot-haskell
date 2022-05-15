@@ -7,13 +7,13 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-pattern SPEAKER_SURROUND_71 :: Int
-
-pattern SPEAKER_SURROUND_71 = 3
-
 pattern SPEAKER_SURROUND_31 :: Int
 
 pattern SPEAKER_SURROUND_31 = 1
+
+pattern SPEAKER_SURROUND_71 :: Int
+
+pattern SPEAKER_SURROUND_71 = 3
 
 pattern SPEAKER_MODE_STEREO :: Int
 

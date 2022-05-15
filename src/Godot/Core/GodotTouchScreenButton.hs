@@ -15,8 +15,8 @@ pattern VISIBILITY_TOUCHSCREEN_ONLY :: Int
 
 pattern VISIBILITY_TOUCHSCREEN_ONLY = 1
 
-released :: Signal GodotTouchScreenButton
-released = Signal "released"
-
 pressed :: Signal GodotTouchScreenButton
 pressed = Signal "pressed"
+
+released :: Signal GodotTouchScreenButton
+released = Signal "released"

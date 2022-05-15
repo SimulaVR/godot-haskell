@@ -7,13 +7,13 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-pattern PRIORITY_NORMAL :: Int
-
-pattern PRIORITY_NORMAL = 1
-
 pattern PRIORITY_LOW :: Int
 
 pattern PRIORITY_LOW = 0
+
+pattern PRIORITY_NORMAL :: Int
+
+pattern PRIORITY_NORMAL = 1
 
 pattern PRIORITY_HIGH :: Int
 

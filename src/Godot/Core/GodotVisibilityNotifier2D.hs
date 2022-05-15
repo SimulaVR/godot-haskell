@@ -10,11 +10,11 @@ import Godot.Api.Auto
 screen_entered :: Signal GodotVisibilityNotifier2D
 screen_entered = Signal "screen_entered"
 
-viewport_entered :: Signal GodotVisibilityNotifier2D
-viewport_entered = Signal "viewport_entered"
-
 screen_exited :: Signal GodotVisibilityNotifier2D
 screen_exited = Signal "screen_exited"
+
+viewport_entered :: Signal GodotVisibilityNotifier2D
+viewport_entered = Signal "viewport_entered"
 
 viewport_exited :: Signal GodotVisibilityNotifier2D
 viewport_exited = Signal "viewport_exited"

@@ -7,14 +7,14 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-pattern COPY_MODE_VIEWPORT :: Int
+pattern COPY_MODE_DISABLED :: Int
 
-pattern COPY_MODE_VIEWPORT = 2
+pattern COPY_MODE_DISABLED = 0
 
 pattern COPY_MODE_RECT :: Int
 
 pattern COPY_MODE_RECT = 1
 
-pattern COPY_MODE_DISABLED :: Int
+pattern COPY_MODE_VIEWPORT :: Int
 
-pattern COPY_MODE_DISABLED = 0
+pattern COPY_MODE_VIEWPORT = 2

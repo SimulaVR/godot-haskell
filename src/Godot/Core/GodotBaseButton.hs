@@ -11,38 +11,38 @@ pattern DRAW_NORMAL :: Int
 
 pattern DRAW_NORMAL = 0
 
-pattern DRAW_DISABLED :: Int
-
-pattern DRAW_DISABLED = 3
-
-pattern ACTION_MODE_BUTTON_RELEASE :: Int
-
-pattern ACTION_MODE_BUTTON_RELEASE = 1
-
 pattern DRAW_HOVER_PRESSED :: Int
 
 pattern DRAW_HOVER_PRESSED = 4
-
-pattern ACTION_MODE_BUTTON_PRESS :: Int
-
-pattern ACTION_MODE_BUTTON_PRESS = 0
 
 pattern DRAW_PRESSED :: Int
 
 pattern DRAW_PRESSED = 1
 
+pattern ACTION_MODE_BUTTON_PRESS :: Int
+
+pattern ACTION_MODE_BUTTON_PRESS = 0
+
+pattern DRAW_DISABLED :: Int
+
+pattern DRAW_DISABLED = 3
+
 pattern DRAW_HOVER :: Int
 
 pattern DRAW_HOVER = 2
 
+pattern ACTION_MODE_BUTTON_RELEASE :: Int
+
+pattern ACTION_MODE_BUTTON_RELEASE = 1
+
 button_down :: Signal GodotBaseButton
 button_down = Signal "button_down"
 
-toggled :: Signal GodotBaseButton
-toggled = Signal "toggled"
+button_up :: Signal GodotBaseButton
+button_up = Signal "button_up"
 
 pressed :: Signal GodotBaseButton
 pressed = Signal "pressed"
 
-button_up :: Signal GodotBaseButton
-button_up = Signal "button_up"
+toggled :: Signal GodotBaseButton
+toggled = Signal "toggled"

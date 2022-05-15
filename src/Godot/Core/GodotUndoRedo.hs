@@ -18,3 +18,6 @@ pattern MERGE_ALL = 2
 pattern MERGE_ENDS :: Int
 
 pattern MERGE_ENDS = 1
+
+version_changed :: Signal GodotUndoRedo
+version_changed = Signal "version_changed"

@@ -10,3 +10,6 @@ import Godot.Api.Auto
 pattern NOTIFICATION_UPDATE_SKELETON :: Int
 
 pattern NOTIFICATION_UPDATE_SKELETON = 50
+
+skeleton_updated :: Signal GodotSkeleton
+skeleton_updated = Signal "skeleton_updated"

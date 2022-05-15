@@ -7,5 +7,8 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
+animation_finished :: Signal GodotAnimatedSprite3D
+animation_finished = Signal "animation_finished"
+
 frame_changed :: Signal GodotAnimatedSprite3D
 frame_changed = Signal "frame_changed"
