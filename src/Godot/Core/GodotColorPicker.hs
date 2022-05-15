@@ -7,11 +7,11 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-preset_removed :: Signal GodotColorPicker
-preset_removed = Signal "preset_removed"
+color_changed :: Signal GodotColorPicker
+color_changed = Signal "color_changed"
 
 preset_added :: Signal GodotColorPicker
 preset_added = Signal "preset_added"
 
-color_changed :: Signal GodotColorPicker
-color_changed = Signal "color_changed"
+preset_removed :: Signal GodotColorPicker
+preset_removed = Signal "preset_removed"

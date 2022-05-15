@@ -7,13 +7,13 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-pattern AXIS_STRETCH_MODE_TILE_FIT :: Int
-
-pattern AXIS_STRETCH_MODE_TILE_FIT = 2
-
 pattern AXIS_STRETCH_MODE_TILE :: Int
 
 pattern AXIS_STRETCH_MODE_TILE = 1
+
+pattern AXIS_STRETCH_MODE_TILE_FIT :: Int
+
+pattern AXIS_STRETCH_MODE_TILE_FIT = 2
 
 pattern AXIS_STRETCH_MODE_STRETCH :: Int
 

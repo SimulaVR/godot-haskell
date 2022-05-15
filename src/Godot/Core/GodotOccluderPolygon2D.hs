@@ -7,14 +7,14 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-pattern CULL_CLOCKWISE :: Int
+pattern CULL_COUNTER_CLOCKWISE :: Int
 
-pattern CULL_CLOCKWISE = 1
+pattern CULL_COUNTER_CLOCKWISE = 2
 
 pattern CULL_DISABLED :: Int
 
 pattern CULL_DISABLED = 0
 
-pattern CULL_COUNTER_CLOCKWISE :: Int
+pattern CULL_CLOCKWISE :: Int
 
-pattern CULL_COUNTER_CLOCKWISE = 2
+pattern CULL_CLOCKWISE = 1

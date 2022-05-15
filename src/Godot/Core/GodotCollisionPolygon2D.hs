@@ -7,10 +7,10 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-pattern BUILD_SOLIDS :: Int
-
-pattern BUILD_SOLIDS = 0
-
 pattern BUILD_SEGMENTS :: Int
 
 pattern BUILD_SEGMENTS = 1
+
+pattern BUILD_SOLIDS :: Int
+
+pattern BUILD_SOLIDS = 0

@@ -15,10 +15,10 @@ pattern DRAW_ORDER_LIFETIME :: Int
 
 pattern DRAW_ORDER_LIFETIME = 1
 
-pattern DRAW_ORDER_INDEX :: Int
-
-pattern DRAW_ORDER_INDEX = 0
-
 pattern DRAW_ORDER_VIEW_DEPTH :: Int
 
 pattern DRAW_ORDER_VIEW_DEPTH = 2
+
+pattern DRAW_ORDER_INDEX :: Int
+
+pattern DRAW_ORDER_INDEX = 0

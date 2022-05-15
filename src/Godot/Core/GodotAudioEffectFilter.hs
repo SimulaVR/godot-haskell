@@ -15,10 +15,10 @@ pattern FILTER_12DB :: Int
 
 pattern FILTER_12DB = 1
 
-pattern FILTER_18DB :: Int
-
-pattern FILTER_18DB = 2
-
 pattern FILTER_6DB :: Int
 
 pattern FILTER_6DB = 0
+
+pattern FILTER_18DB :: Int
+
+pattern FILTER_18DB = 2

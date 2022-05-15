@@ -11,13 +11,13 @@ pattern ROTATION_ORIENTED :: Int
 
 pattern ROTATION_ORIENTED = 4
 
-pattern ROTATION_XY :: Int
-
-pattern ROTATION_XY = 2
-
 pattern ROTATION_Y :: Int
 
 pattern ROTATION_Y = 1
+
+pattern ROTATION_XY :: Int
+
+pattern ROTATION_XY = 2
 
 pattern ROTATION_XYZ :: Int
 

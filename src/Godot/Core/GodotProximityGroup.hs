@@ -7,13 +7,13 @@ import Godot.Gdnative.Internal
 import Godot.Gdnative.Types
 import Godot.Api.Auto
 
-pattern MODE_SIGNAL :: Int
-
-pattern MODE_SIGNAL = 1
-
 pattern MODE_PROXY :: Int
 
 pattern MODE_PROXY = 0
+
+pattern MODE_SIGNAL :: Int
+
+pattern MODE_SIGNAL = 1
 
 broadcast :: Signal GodotProximityGroup
 broadcast = Signal "broadcast"

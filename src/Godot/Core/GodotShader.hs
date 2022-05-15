@@ -11,10 +11,10 @@ pattern MODE_CANVAS_ITEM :: Int
 
 pattern MODE_CANVAS_ITEM = 1
 
-pattern MODE_PARTICLES :: Int
-
-pattern MODE_PARTICLES = 2
-
 pattern MODE_SPATIAL :: Int
 
 pattern MODE_SPATIAL = 0
+
+pattern MODE_PARTICLES :: Int
+
+pattern MODE_PARTICLES = 2
