@@ -1,7 +1,7 @@
 name: godot-haskell
 synopsis: Haskell bindings for the Godot game engine API
 description: This package contains Haskell bindings for GDNative and the Godot API. For details and examples, see README.md
-version: '3.1.0.0'
+version: '3.4.4.0'
 category: Web
 author: David Kraeutmann
 maintainer: kane@kane.cx
