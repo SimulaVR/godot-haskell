@@ -54,21 +54,22 @@
           }) { };
 
   haskell-src-meta-custom = haskell.lib.dontCheck (haskellPackages.callPackage
-        ({ mkDerivation, base, HUnit, pretty, stdenv, syb
-        , template-haskell, test-framework, test-framework-hunit
-        , th-orphans
-        }:
-        mkDerivation {
-          pname = "haskell-src-meta";
-          version = "0.8.5";
-          sha256 = "1csqp3n7330rhia9msyw34z7qwwj64gdy5qlv8w4jbm49dap24ik";
-          revision = "1";
-          editedCabalFile = "00znr8mrlbyn0n1bw4c82rv82pq5ngkk7kw9cgk13pghf93hwwv7";
-          libraryHaskellDepends = [
-            base haskell-src-exts-custom pretty syb template-haskell th-orphans
-          ];
-          description = "Parse source to template-haskell abstract syntax";
-          license = lib.licenses.bsd3;
+({ mkDerivation, base, containers, haskell-src-exts, HUnit, pretty
+, stdenv, syb, tasty, tasty-hunit, template-haskell, th-orphans
+}:
+mkDerivation {
+  pname = "haskell-src-meta";
+  version = "0.8.10";
+  sha256 = "215e5ca5949962634b210e7f8b0459e557b466bfc9731caa67fc949076cdfc43";
+  libraryHaskellDepends = [
+    base haskell-src-exts pretty syb template-haskell th-orphans
+  ];
+  testHaskellDepends = [
+    base containers haskell-src-exts HUnit pretty syb tasty tasty-hunit
+    template-haskell
+  ];
+  description = "Parse source to template-haskell abstract syntax";
+  license = stdenv.lib.licenses.bsd3;
 
           doHaddock = false;
           doCheck = false;
