@@ -807,6 +807,18 @@ scriptDesc :: MVar GodotString
 {-# NOINLINE scriptDesc #-}
 scriptDesc = unsafePerformIO newEmptyMVar
 
+-- | Sometimes we really have to pass in a Haskell pointer to Godot,
+-- particularly for callbacks.
+data WrapperStablePtr = WrapperStablePtr { _wrapperStablePtrBase :: Object
+                                , _wrapperStablePtr :: MVar (StablePtr ()) }
+instance HasBaseClass WrapperStablePtr where
+  type BaseClass WrapperStablePtr = Object
+  super = _wrapperStablePtrBase
+deriveBase ''WrapperStablePtr
+instance NativeScript WrapperStablePtr where
+  classInit base = WrapperStablePtr base <$> newEmptyMVar
+  classMethods = []
+
 -- | Called for you in the setup code.
 defaultExports :: GdnativeHandle -> IO ()
 defaultExports desc = do
@@ -845,15 +857,3 @@ await self target signal fn = do
     <*> toLowLevel "__script_callback"
     <*> (Just <$> toLowLevel (V.singleton fnBind))
     <*> pure (Just _CONNECT_ONESHOT))
-
--- | Sometimes we really have to pass in a Haskell pointer to Godot,
--- particularly for callbacks.
-data WrapperStablePtr = WrapperStablePtr { _wrapperStablePtrBase :: Object
-                                , _wrapperStablePtr :: MVar (StablePtr ()) }
-instance HasBaseClass WrapperStablePtr where
-  type BaseClass WrapperStablePtr = Object
-  super = _wrapperStablePtrBase
-instance NativeScript WrapperStablePtr where
-  classInit base = WrapperStablePtr base <$> newEmptyMVar
-  classMethods = []
-deriveBase ''WrapperStablePtr

@@ -82,8 +82,8 @@ deriveBase ty = do
   rdt <- reifyDatatype ty
   let appliedTy = appsT (ConT ty)
         [ case typeBinder of
-            PlainTV n -> VarT n
-            KindedTV n _ -> VarT n
+            PlainTV n _ -> VarT n
+            KindedTV n _ _ -> VarT n
         | typeBinder <- datatypeVars rdt
         ]
   r <- reify ''BaseClass

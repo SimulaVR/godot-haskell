@@ -25,8 +25,9 @@ import Data.List
 data ClassgenState = ClassgenState
   { _csModules :: !(HashMap Text (HS.Module (Maybe CodeComment)))
   , _csMethods :: !(HashMap Text (Set Text))
-  , _csTyDecls :: !([HS.Decl (Maybe CodeComment)])
-  } deriving (Show, Eq) 
+  , -- | Class to parent class and declarations
+    _csTyDecls :: !(HashMap Text (Text, [HS.Decl (Maybe CodeComment)]))
+  } deriving (Show, Eq)
 
 makeLensesWith abbreviatedFields ''ClassgenState
 
@@ -38,7 +39,9 @@ addClass cls mdoc allClasses = do
   properties <- mkProperties cls mdoc
   signals <- mkSignals cls mdoc
   let dataType = if isCoreType (cls ^. name) then [] else mkDataType cls mdoc
-  tyDecls <>= dataType
+  tyDecls %= HM.insert
+    (mangleClass $ cls ^. name)
+    (mangleClass $ cls ^. baseClass, dataType)
   let classDecls = nub $ (noComments <$> (mkConstants cls ++ mkEnums cls))
                  ++ signals ++ properties ++ methods
   modules %= HM.insert (mangleClass $ cls ^. name) (HS.Module Nothing

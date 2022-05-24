@@ -1,10 +1,10 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9eee1b834a7b311c2aaf343d7472f4478f3d5840413d415e779ebfd822966642
+-- hash: 3688f61b345cc5d0df9dbbe14018fa62870ae42512d34bdc8488b09b66348b3d
 
 name:           godot-haskell
 version:        3.1.0.0
@@ -695,7 +695,24 @@ library
       Paths_godot_haskell
   hs-source-dirs:
       src
-  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
+  default-extensions:
+      FlexibleContexts
+      FlexibleInstances
+      ScopedTypeVariables
+      TypeApplications
+      StandaloneDeriving
+      DerivingStrategies
+      DefaultSignatures
+      MultiParamTypeClasses
+      FunctionalDependencies
+      TypeFamilies
+      TemplateHaskell
+      TypeOperators
+      TypeInType
+      QuasiQuotes
+      OverloadedStrings
+      PatternSynonyms
+      GeneralizedNewtypeDeriving
   ghc-options: -O0
   include-dirs:
       godot_headers
@@ -732,7 +749,24 @@ library generate
       Paths_godot_haskell
   hs-source-dirs:
       src-generate
-  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
+  default-extensions:
+      FlexibleContexts
+      FlexibleInstances
+      ScopedTypeVariables
+      TypeApplications
+      StandaloneDeriving
+      DerivingStrategies
+      DefaultSignatures
+      MultiParamTypeClasses
+      FunctionalDependencies
+      TypeFamilies
+      TemplateHaskell
+      TypeOperators
+      TypeInType
+      QuasiQuotes
+      OverloadedStrings
+      PatternSynonyms
+      GeneralizedNewtypeDeriving
   ghc-options: -O0
   build-depends:
       aeson
@@ -760,7 +794,24 @@ executable godot-haskell-project-generator
       Paths_godot_haskell
   hs-source-dirs:
       project-generator
-  default-extensions: FlexibleContexts FlexibleInstances ScopedTypeVariables TypeApplications StandaloneDeriving DerivingStrategies DefaultSignatures MultiParamTypeClasses FunctionalDependencies TypeFamilies TemplateHaskell TypeOperators TypeInType QuasiQuotes OverloadedStrings PatternSynonyms GeneralizedNewtypeDeriving
+  default-extensions:
+      FlexibleContexts
+      FlexibleInstances
+      ScopedTypeVariables
+      TypeApplications
+      StandaloneDeriving
+      DerivingStrategies
+      DefaultSignatures
+      MultiParamTypeClasses
+      FunctionalDependencies
+      TypeFamilies
+      TemplateHaskell
+      TypeOperators
+      TypeInType
+      QuasiQuotes
+      OverloadedStrings
+      PatternSynonyms
+      GeneralizedNewtypeDeriving
   ghc-options: -O0
   build-depends:
       aeson
