@@ -41,10 +41,10 @@ main = do
                                                      <|> (H.lookup  ("_" <> (cls ^. Classgen.Spec.name)) docTable)
                                                     ) classes) classes)
                         (ClassgenState mempty mempty mempty)
-  writeModule godotHaskellRootDir $ godotApiTypes (state ^. tyDecls)
+  writeModule godotHaskellRootDir $ godotApiTypes $ state ^. tyDecls
   mapM_ (writeModule godotHaskellRootDir) (HM.elems (state ^. modules))
   where
-    godotApiTypes decls   = Module Nothing (Just
+    godotApiTypes declsUnordered   = Module Nothing (Just
                                             $ ModuleHead Nothing (ModuleName Nothing "Godot.Api.Types") Nothing
                                             $ Just (classExports decls))
                             [LanguagePragma Nothing [Ident Nothing "DerivingStrategies"
@@ -53,6 +53,8 @@ main = do
                                                     ,Ident Nothing "TemplateHaskell"]]
                             classImports
                             (decls ++ mapMaybe fromNewtypeDerivingBase decls)
+      where
+        decls = concat $ topoSort declsUnordered
     classExports decls   = ExportSpecList Nothing $ tcHasBaseClass : mapMaybe fromNewtypeOnly decls
     tcHasBaseClass       = fmap (\_ -> Nothing) $ EThingWith () (EWildcard () 0) (UnQual () (Ident () "HasBaseClass")) []
     fromNewtypeOnly decl = case decl of
@@ -79,3 +81,24 @@ writeModule godotHaskellRootDir mdl@(Module _ (Just (ModuleHead _ (ModuleName No
   where
     replaceDot '.' = '/'
     replaceDot c = c
+
+-- | Topologically sort 
+topoSort :: forall v. HM.HashMap T.Text (T.Text, v) -> [v]
+topoSort xs = --error (unlines $ fmap show $ HM.toList childrenMap)
+   topo ""
+  where
+    childrenMap :: HM.HashMap T.Text [T.Text]
+    childrenMap = HM.fromListWith (++) [(parent, [child]) | (child, (parent, v)) <- HM.toList xs]
+
+    toV :: T.Text -> [v]
+    toV cls = case HM.lookup cls xs of
+      Nothing -> []
+      Just (_, v) -> [v]
+
+
+    topo :: T.Text -> [v]
+    topo parent = toV parent ++ concatMap topo children
+      where
+        children = case HM.lookup parent childrenMap of
+          Just cs -> cs
+          Nothing -> []

@@ -103,10 +103,6 @@ data GodotDoc = GodotDoc {
   _gdClass :: !GodotDocClass
   } deriving (Show, Eq)
 
-instance FromJSON GodotDoc where
-  parseJSON (Object x) = GodotDoc <$> x .: "class"
-  parseJSON _ = fail "Expected an Object"
-
 data OptionalArray a = OptionalArray { unOption :: Vector a }
   deriving (Show, Eq)
 
@@ -191,3 +187,7 @@ convertDoc = T.replace "]" "@" . T.replace "[" "@"
            . T.replace "[b]" "__" . T.replace "[/b]" "__"
            . T.replace "[constant " "@"
            . T.replace "[member " "@"
+
+instance FromJSON GodotDoc where
+  parseJSON (Object x) = GodotDoc <$> x .: "class"
+  parseJSON _ = fail "Expected an Object"
