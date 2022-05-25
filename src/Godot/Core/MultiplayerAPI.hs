@@ -3,14 +3,14 @@
   MultiParamTypeClasses #-}
 module Godot.Core.MultiplayerAPI
        (Godot.Core.MultiplayerAPI._RPC_MODE_SLAVE,
-        Godot.Core.MultiplayerAPI._RPC_MODE_DISABLED,
-        Godot.Core.MultiplayerAPI._RPC_MODE_MASTER,
-        Godot.Core.MultiplayerAPI._RPC_MODE_MASTERSYNC,
-        Godot.Core.MultiplayerAPI._RPC_MODE_SYNC,
-        Godot.Core.MultiplayerAPI._RPC_MODE_REMOTE,
-        Godot.Core.MultiplayerAPI._RPC_MODE_PUPPET,
         Godot.Core.MultiplayerAPI._RPC_MODE_PUPPETSYNC,
         Godot.Core.MultiplayerAPI._RPC_MODE_REMOTESYNC,
+        Godot.Core.MultiplayerAPI._RPC_MODE_MASTER,
+        Godot.Core.MultiplayerAPI._RPC_MODE_DISABLED,
+        Godot.Core.MultiplayerAPI._RPC_MODE_REMOTE,
+        Godot.Core.MultiplayerAPI._RPC_MODE_PUPPET,
+        Godot.Core.MultiplayerAPI._RPC_MODE_SYNC,
+        Godot.Core.MultiplayerAPI._RPC_MODE_MASTERSYNC,
         Godot.Core.MultiplayerAPI.sig_connected_to_server,
         Godot.Core.MultiplayerAPI.sig_connection_failed,
         Godot.Core.MultiplayerAPI.sig_network_peer_connected,
@@ -53,17 +53,17 @@ import Godot.Core.Reference()
 _RPC_MODE_SLAVE :: Int
 _RPC_MODE_SLAVE = 3
 
-_RPC_MODE_DISABLED :: Int
-_RPC_MODE_DISABLED = 0
+_RPC_MODE_PUPPETSYNC :: Int
+_RPC_MODE_PUPPETSYNC = 6
+
+_RPC_MODE_REMOTESYNC :: Int
+_RPC_MODE_REMOTESYNC = 4
 
 _RPC_MODE_MASTER :: Int
 _RPC_MODE_MASTER = 2
 
-_RPC_MODE_MASTERSYNC :: Int
-_RPC_MODE_MASTERSYNC = 5
-
-_RPC_MODE_SYNC :: Int
-_RPC_MODE_SYNC = 4
+_RPC_MODE_DISABLED :: Int
+_RPC_MODE_DISABLED = 0
 
 _RPC_MODE_REMOTE :: Int
 _RPC_MODE_REMOTE = 1
@@ -71,11 +71,11 @@ _RPC_MODE_REMOTE = 1
 _RPC_MODE_PUPPET :: Int
 _RPC_MODE_PUPPET = 3
 
-_RPC_MODE_PUPPETSYNC :: Int
-_RPC_MODE_PUPPETSYNC = 6
+_RPC_MODE_SYNC :: Int
+_RPC_MODE_SYNC = 4
 
-_RPC_MODE_REMOTESYNC :: Int
-_RPC_MODE_REMOTESYNC = 4
+_RPC_MODE_MASTERSYNC :: Int
+_RPC_MODE_MASTERSYNC = 5
 
 -- | Emitted when this MultiplayerAPI's @network_peer@ successfully connected to a server. Only emitted on clients.
 sig_connected_to_server ::

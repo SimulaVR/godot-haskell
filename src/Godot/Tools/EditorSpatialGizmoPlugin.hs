@@ -390,8 +390,6 @@ instance NodeMethod EditorSpatialGizmoPlugin "get_name" '[]
 
 {-# NOINLINE bindEditorSpatialGizmoPlugin_get_priority #-}
 
--- | Override this method to set the gizmo's priority. Higher values correspond to higher priority. If a gizmo with higher priority conflicts with another gizmo, only the gizmo with higher priority will be used.
---   				All built-in editor gizmos return a priority of @-1@. If not overridden, this method will return @0@, which means custom gizmos will automatically override built-in gizmos.
 bindEditorSpatialGizmoPlugin_get_priority :: MethodBind
 bindEditorSpatialGizmoPlugin_get_priority
   = unsafePerformIO $
@@ -401,8 +399,6 @@ bindEditorSpatialGizmoPlugin_get_priority
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Override this method to set the gizmo's priority. Higher values correspond to higher priority. If a gizmo with higher priority conflicts with another gizmo, only the gizmo with higher priority will be used.
---   				All built-in editor gizmos return a priority of @-1@. If not overridden, this method will return @0@, which means custom gizmos will automatically override built-in gizmos.
 get_priority ::
                (EditorSpatialGizmoPlugin :< cls, Object :< cls) =>
                cls -> IO GodotString

@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Popup
-       (Godot.Core.Popup._NOTIFICATION_POST_POPUP,
-        Godot.Core.Popup._NOTIFICATION_POPUP_HIDE,
+       (Godot.Core.Popup._NOTIFICATION_POPUP_HIDE,
+        Godot.Core.Popup._NOTIFICATION_POST_POPUP,
         Godot.Core.Popup.sig_about_to_show,
         Godot.Core.Popup.sig_popup_hide, Godot.Core.Popup.is_exclusive,
         Godot.Core.Popup.popup, Godot.Core.Popup.popup_centered,
@@ -24,11 +24,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
-_NOTIFICATION_POST_POPUP :: Int
-_NOTIFICATION_POST_POPUP = 80
-
 _NOTIFICATION_POPUP_HIDE :: Int
 _NOTIFICATION_POPUP_HIDE = 81
+
+_NOTIFICATION_POST_POPUP :: Int
+_NOTIFICATION_POST_POPUP = 80
 
 -- | Emitted when a popup is about to be shown. This is often used in @PopupMenu@ to clear the list of options then create a new one according to the current context.
 sig_about_to_show :: Godot.Internal.Dispatch.Signal Popup
@@ -49,7 +49,6 @@ instance NodeProperty Popup "popup_exclusive" Bool 'False where
 {-# NOINLINE bindPopup_is_exclusive #-}
 
 -- | If @true@, the popup will not be hidden when a click event occurs outside of it, or when it receives the @ui_cancel@ action event.
---   			__Note:__ Enabling this property doesn't affect the Close or Cancel buttons' behavior in dialogs that inherit from this class. As a workaround, you can use @method WindowDialog.get_close_button@ or @method ConfirmationDialog.get_cancel@ and hide the buttons in question by setting their @CanvasItem.visible@ property to @false@.
 bindPopup_is_exclusive :: MethodBind
 bindPopup_is_exclusive
   = unsafePerformIO $
@@ -60,7 +59,6 @@ bindPopup_is_exclusive
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the popup will not be hidden when a click event occurs outside of it, or when it receives the @ui_cancel@ action event.
---   			__Note:__ Enabling this property doesn't affect the Close or Cancel buttons' behavior in dialogs that inherit from this class. As a workaround, you can use @method WindowDialog.get_close_button@ or @method ConfirmationDialog.get_cancel@ and hide the buttons in question by setting their @CanvasItem.visible@ property to @false@.
 is_exclusive :: (Popup :< cls, Object :< cls) => cls -> IO Bool
 is_exclusive cls
   = withVariantArray []
@@ -240,7 +238,6 @@ instance NodeMethod Popup "set_as_minsize" '[] (IO ()) where
 {-# NOINLINE bindPopup_set_exclusive #-}
 
 -- | If @true@, the popup will not be hidden when a click event occurs outside of it, or when it receives the @ui_cancel@ action event.
---   			__Note:__ Enabling this property doesn't affect the Close or Cancel buttons' behavior in dialogs that inherit from this class. As a workaround, you can use @method WindowDialog.get_close_button@ or @method ConfirmationDialog.get_cancel@ and hide the buttons in question by setting their @CanvasItem.visible@ property to @false@.
 bindPopup_set_exclusive :: MethodBind
 bindPopup_set_exclusive
   = unsafePerformIO $
@@ -251,7 +248,6 @@ bindPopup_set_exclusive
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the popup will not be hidden when a click event occurs outside of it, or when it receives the @ui_cancel@ action event.
---   			__Note:__ Enabling this property doesn't affect the Close or Cancel buttons' behavior in dialogs that inherit from this class. As a workaround, you can use @method WindowDialog.get_close_button@ or @method ConfirmationDialog.get_cancel@ and hide the buttons in question by setting their @CanvasItem.visible@ property to @false@.
 set_exclusive ::
                 (Popup :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_exclusive cls arg1

@@ -152,7 +152,7 @@ instance NodeMethod RayCast2D "clear_exceptions" '[] (IO ()) where
 {-# NOINLINE bindRayCast2D_force_raycast_update #-}
 
 -- | Updates the collision information for the ray. Use this method to update the collision information immediately instead of waiting for the next @_physics_process@ call, for example if the ray or its parent has changed state.
---   				__Note:__ @enabled@ is not required for this to work.
+--   				__Note:__ @enabled == true@ is not required for this to work.
 bindRayCast2D_force_raycast_update :: MethodBind
 bindRayCast2D_force_raycast_update
   = unsafePerformIO $
@@ -163,7 +163,7 @@ bindRayCast2D_force_raycast_update
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Updates the collision information for the ray. Use this method to update the collision information immediately instead of waiting for the next @_physics_process@ call, for example if the ray or its parent has changed state.
---   				__Note:__ @enabled@ is not required for this to work.
+--   				__Note:__ @enabled == true@ is not required for this to work.
 force_raycast_update ::
                        (RayCast2D :< cls, Object :< cls) => cls -> IO ()
 force_raycast_update cls
@@ -261,7 +261,7 @@ instance NodeMethod RayCast2D "get_collider_shape" '[] (IO Int)
 
 {-# NOINLINE bindRayCast2D_get_collision_mask #-}
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
 bindRayCast2D_get_collision_mask :: MethodBind
 bindRayCast2D_get_collision_mask
   = unsafePerformIO $
@@ -271,7 +271,7 @@ bindRayCast2D_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
 get_collision_mask ::
                      (RayCast2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -654,7 +654,7 @@ instance NodeMethod RayCast2D "set_collide_with_bodies" '[Bool]
 
 {-# NOINLINE bindRayCast2D_set_collision_mask #-}
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
 bindRayCast2D_set_collision_mask :: MethodBind
 bindRayCast2D_set_collision_mask
   = unsafePerformIO $
@@ -664,7 +664,7 @@ bindRayCast2D_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The ray's collision mask. Only objects in at least one collision layer enabled in the mask will be detected.
 set_collision_mask ::
                      (RayCast2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1

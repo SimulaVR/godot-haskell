@@ -2,13 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TreeItem
-       (Godot.Core.TreeItem._ALIGN_RIGHT,
-        Godot.Core.TreeItem._CELL_MODE_CUSTOM,
+       (Godot.Core.TreeItem._ALIGN_CENTER,
+        Godot.Core.TreeItem._ALIGN_LEFT,
         Godot.Core.TreeItem._CELL_MODE_ICON,
+        Godot.Core.TreeItem._CELL_MODE_CUSTOM,
+        Godot.Core.TreeItem._ALIGN_RIGHT,
         Godot.Core.TreeItem._CELL_MODE_RANGE,
         Godot.Core.TreeItem._CELL_MODE_STRING,
         Godot.Core.TreeItem._CELL_MODE_CHECK,
-        Godot.Core.TreeItem._ALIGN_LEFT, Godot.Core.TreeItem._ALIGN_CENTER,
         Godot.Core.TreeItem.add_button, Godot.Core.TreeItem.call_recursive,
         Godot.Core.TreeItem.clear_custom_bg_color,
         Godot.Core.TreeItem.clear_custom_color,
@@ -74,14 +75,20 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_ALIGN_RIGHT :: Int
-_ALIGN_RIGHT = 2
+_ALIGN_CENTER :: Int
+_ALIGN_CENTER = 1
+
+_ALIGN_LEFT :: Int
+_ALIGN_LEFT = 0
+
+_CELL_MODE_ICON :: Int
+_CELL_MODE_ICON = 3
 
 _CELL_MODE_CUSTOM :: Int
 _CELL_MODE_CUSTOM = 4
 
-_CELL_MODE_ICON :: Int
-_CELL_MODE_ICON = 3
+_ALIGN_RIGHT :: Int
+_ALIGN_RIGHT = 2
 
 _CELL_MODE_RANGE :: Int
 _CELL_MODE_RANGE = 2
@@ -91,12 +98,6 @@ _CELL_MODE_STRING = 0
 
 _CELL_MODE_CHECK :: Int
 _CELL_MODE_CHECK = 1
-
-_ALIGN_LEFT :: Int
-_ALIGN_LEFT = 0
-
-_ALIGN_CENTER :: Int
-_ALIGN_CENTER = 1
 
 instance NodeProperty TreeItem "collapsed" Bool 'False where
         nodeProperty
@@ -394,7 +395,7 @@ instance NodeMethod TreeItem "get_cell_mode" '[Int] (IO Int) where
 
 {-# NOINLINE bindTreeItem_get_children #-}
 
--- | Returns the TreeItem's first child item or a null object if there is none.
+-- | Returns the TreeItem's child items.
 bindTreeItem_get_children :: MethodBind
 bindTreeItem_get_children
   = unsafePerformIO $
@@ -404,7 +405,7 @@ bindTreeItem_get_children
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the TreeItem's first child item or a null object if there is none.
+-- | Returns the TreeItem's child items.
 get_children ::
                (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_children cls
@@ -664,7 +665,7 @@ instance NodeMethod TreeItem "get_metadata" '[Int]
 
 {-# NOINLINE bindTreeItem_get_next #-}
 
--- | Returns the next TreeItem in the tree or a null object if there is none.
+-- | Returns the next TreeItem in the tree.
 bindTreeItem_get_next :: MethodBind
 bindTreeItem_get_next
   = unsafePerformIO $
@@ -674,7 +675,7 @@ bindTreeItem_get_next
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next TreeItem in the tree or a null object if there is none.
+-- | Returns the next TreeItem in the tree.
 get_next :: (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_next cls
   = withVariantArray []
@@ -688,7 +689,7 @@ instance NodeMethod TreeItem "get_next" '[] (IO TreeItem) where
 
 {-# NOINLINE bindTreeItem_get_next_visible #-}
 
--- | Returns the next visible TreeItem in the tree or a null object if there is none.
+-- | Returns the next visible TreeItem in the tree.
 --   				If @wrap@ is enabled, the method will wrap around to the first visible element in the tree when called on the last visible element, otherwise it returns @null@.
 bindTreeItem_get_next_visible :: MethodBind
 bindTreeItem_get_next_visible
@@ -699,7 +700,7 @@ bindTreeItem_get_next_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next visible TreeItem in the tree or a null object if there is none.
+-- | Returns the next visible TreeItem in the tree.
 --   				If @wrap@ is enabled, the method will wrap around to the first visible element in the tree when called on the last visible element, otherwise it returns @null@.
 get_next_visible ::
                    (TreeItem :< cls, Object :< cls) =>
@@ -719,7 +720,7 @@ instance NodeMethod TreeItem "get_next_visible" '[Maybe Bool]
 
 {-# NOINLINE bindTreeItem_get_parent #-}
 
--- | Returns the parent TreeItem or a null object if there is none.
+-- | Returns the parent TreeItem.
 bindTreeItem_get_parent :: MethodBind
 bindTreeItem_get_parent
   = unsafePerformIO $
@@ -729,7 +730,7 @@ bindTreeItem_get_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent TreeItem or a null object if there is none.
+-- | Returns the parent TreeItem.
 get_parent ::
              (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_parent cls
@@ -744,7 +745,7 @@ instance NodeMethod TreeItem "get_parent" '[] (IO TreeItem) where
 
 {-# NOINLINE bindTreeItem_get_prev #-}
 
--- | Returns the previous TreeItem in the tree or a null object if there is none.
+-- | Returns the previous TreeItem in the tree.
 bindTreeItem_get_prev :: MethodBind
 bindTreeItem_get_prev
   = unsafePerformIO $
@@ -754,7 +755,7 @@ bindTreeItem_get_prev
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the previous TreeItem in the tree or a null object if there is none.
+-- | Returns the previous TreeItem in the tree.
 get_prev :: (TreeItem :< cls, Object :< cls) => cls -> IO TreeItem
 get_prev cls
   = withVariantArray []
@@ -768,7 +769,7 @@ instance NodeMethod TreeItem "get_prev" '[] (IO TreeItem) where
 
 {-# NOINLINE bindTreeItem_get_prev_visible #-}
 
--- | Returns the previous visible TreeItem in the tree or a null object if there is none.
+-- | Returns the previous visible TreeItem in the tree.
 --   				If @wrap@ is enabled, the method will wrap around to the last visible element in the tree when called on the first visible element, otherwise it returns @null@.
 bindTreeItem_get_prev_visible :: MethodBind
 bindTreeItem_get_prev_visible
@@ -779,7 +780,7 @@ bindTreeItem_get_prev_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the previous visible TreeItem in the tree or a null object if there is none.
+-- | Returns the previous visible TreeItem in the tree.
 --   				If @wrap@ is enabled, the method will wrap around to the last visible element in the tree when called on the first visible element, otherwise it returns @null@.
 get_prev_visible ::
                    (TreeItem :< cls, Object :< cls) =>
@@ -1184,7 +1185,7 @@ instance NodeMethod TreeItem "move_to_top" '[] (IO ()) where
 
 {-# NOINLINE bindTreeItem_remove_child #-}
 
--- | Removes the given child @TreeItem@ and all its children from the @Tree@. Note that it doesn't free the item from memory, so it can be reused later. To completely remove a @TreeItem@ use @method Object.free@.
+-- | Removes the given child TreeItem.
 bindTreeItem_remove_child :: MethodBind
 bindTreeItem_remove_child
   = unsafePerformIO $
@@ -1194,7 +1195,7 @@ bindTreeItem_remove_child
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the given child @TreeItem@ and all its children from the @Tree@. Note that it doesn't free the item from memory, so it can be reused later. To completely remove a @TreeItem@ use @method Object.free@.
+-- | Removes the given child TreeItem.
 remove_child ::
                (TreeItem :< cls, Object :< cls) => cls -> Object -> IO ()
 remove_child cls arg1

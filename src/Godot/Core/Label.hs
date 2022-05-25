@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Label
-       (Godot.Core.Label._VALIGN_TOP, Godot.Core.Label._ALIGN_RIGHT,
-        Godot.Core.Label._ALIGN_FILL, Godot.Core.Label._VALIGN_FILL,
-        Godot.Core.Label._VALIGN_CENTER, Godot.Core.Label._VALIGN_BOTTOM,
-        Godot.Core.Label._ALIGN_LEFT, Godot.Core.Label._ALIGN_CENTER,
+       (Godot.Core.Label._ALIGN_CENTER, Godot.Core.Label._ALIGN_LEFT,
+        Godot.Core.Label._VALIGN_CENTER, Godot.Core.Label._VALIGN_TOP,
+        Godot.Core.Label._ALIGN_RIGHT, Godot.Core.Label._VALIGN_FILL,
+        Godot.Core.Label._ALIGN_FILL, Godot.Core.Label._VALIGN_BOTTOM,
         Godot.Core.Label.get_align, Godot.Core.Label.get_line_count,
         Godot.Core.Label.get_line_height,
         Godot.Core.Label.get_lines_skipped,
@@ -36,29 +36,29 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
+_ALIGN_CENTER :: Int
+_ALIGN_CENTER = 1
+
+_ALIGN_LEFT :: Int
+_ALIGN_LEFT = 0
+
+_VALIGN_CENTER :: Int
+_VALIGN_CENTER = 1
+
 _VALIGN_TOP :: Int
 _VALIGN_TOP = 0
 
 _ALIGN_RIGHT :: Int
 _ALIGN_RIGHT = 2
 
-_ALIGN_FILL :: Int
-_ALIGN_FILL = 3
-
 _VALIGN_FILL :: Int
 _VALIGN_FILL = 3
 
-_VALIGN_CENTER :: Int
-_VALIGN_CENTER = 1
+_ALIGN_FILL :: Int
+_ALIGN_FILL = 3
 
 _VALIGN_BOTTOM :: Int
 _VALIGN_BOTTOM = 2
-
-_ALIGN_LEFT :: Int
-_ALIGN_LEFT = 0
-
-_ALIGN_CENTER :: Int
-_ALIGN_CENTER = 1
 
 instance NodeProperty Label "align" Int 'False where
         nodeProperty = (get_align, wrapDroppingSetter set_align, Nothing)
@@ -227,7 +227,7 @@ instance NodeMethod Label "get_max_lines_visible" '[] (IO Int)
 
 {-# NOINLINE bindLabel_get_percent_visible #-}
 
--- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the count of visible characters. If you set @percent_visible@ to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 bindLabel_get_percent_visible :: MethodBind
 bindLabel_get_percent_visible
   = unsafePerformIO $
@@ -237,7 +237,7 @@ bindLabel_get_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the count of visible characters. If you set @percent_visible@ to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 get_percent_visible ::
                       (Label :< cls, Object :< cls) => cls -> IO Float
 get_percent_visible cls
@@ -583,7 +583,7 @@ instance NodeMethod Label "set_max_lines_visible" '[Int] (IO ())
 
 {-# NOINLINE bindLabel_set_percent_visible #-}
 
--- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the count of visible characters. If you set @percent_visible@ to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 bindLabel_set_percent_visible :: MethodBind
 bindLabel_set_percent_visible
   = unsafePerformIO $
@@ -593,7 +593,7 @@ bindLabel_set_percent_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Limits the amount of visible characters. If you set @percent_visible@ to 0.5, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
+-- | Limits the count of visible characters. If you set @percent_visible@ to 50, only up to half of the text's characters will display on screen. Useful to animate the text in a dialog box.
 set_percent_visible ::
                       (Label :< cls, Object :< cls) => cls -> Float -> IO ()
 set_percent_visible cls arg1

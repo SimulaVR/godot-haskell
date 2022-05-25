@@ -207,7 +207,6 @@ instance NodeMethod Polygon2D "_skeleton_bone_setup_changed" '[]
 
 {-# NOINLINE bindPolygon2D_add_bone #-}
 
--- | Adds a bone with the specified @path@ and @weights@.
 bindPolygon2D_add_bone :: MethodBind
 bindPolygon2D_add_bone
   = unsafePerformIO $
@@ -217,7 +216,6 @@ bindPolygon2D_add_bone
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds a bone with the specified @path@ and @weights@.
 add_bone ::
            (Polygon2D :< cls, Object :< cls) =>
            cls -> NodePath -> PoolRealArray -> IO ()
@@ -235,7 +233,6 @@ instance NodeMethod Polygon2D "add_bone" '[NodePath, PoolRealArray]
 
 {-# NOINLINE bindPolygon2D_clear_bones #-}
 
--- | Removes all bones from this @Polygon2D@.
 bindPolygon2D_clear_bones :: MethodBind
 bindPolygon2D_clear_bones
   = unsafePerformIO $
@@ -245,7 +242,6 @@ bindPolygon2D_clear_bones
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes all bones from this @Polygon2D@.
 clear_bones :: (Polygon2D :< cls, Object :< cls) => cls -> IO ()
 clear_bones cls
   = withVariantArray []
@@ -260,7 +256,6 @@ instance NodeMethod Polygon2D "clear_bones" '[] (IO ()) where
 
 {-# NOINLINE bindPolygon2D_erase_bone #-}
 
--- | Removes the specified bone from this @Polygon2D@.
 bindPolygon2D_erase_bone :: MethodBind
 bindPolygon2D_erase_bone
   = unsafePerformIO $
@@ -270,7 +265,6 @@ bindPolygon2D_erase_bone
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the specified bone from this @Polygon2D@.
 erase_bone ::
              (Polygon2D :< cls, Object :< cls) => cls -> Int -> IO ()
 erase_bone cls arg1
@@ -311,7 +305,6 @@ instance NodeMethod Polygon2D "get_antialiased" '[] (IO Bool) where
 
 {-# NOINLINE bindPolygon2D_get_bone_count #-}
 
--- | Returns the number of bones in this @Polygon2D@.
 bindPolygon2D_get_bone_count :: MethodBind
 bindPolygon2D_get_bone_count
   = unsafePerformIO $
@@ -321,7 +314,6 @@ bindPolygon2D_get_bone_count
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the number of bones in this @Polygon2D@.
 get_bone_count ::
                  (Polygon2D :< cls, Object :< cls) => cls -> IO Int
 get_bone_count cls
@@ -337,7 +329,6 @@ instance NodeMethod Polygon2D "get_bone_count" '[] (IO Int) where
 
 {-# NOINLINE bindPolygon2D_get_bone_path #-}
 
--- | Returns the path to the node associated with the specified bone.
 bindPolygon2D_get_bone_path :: MethodBind
 bindPolygon2D_get_bone_path
   = unsafePerformIO $
@@ -347,7 +338,6 @@ bindPolygon2D_get_bone_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the path to the node associated with the specified bone.
 get_bone_path ::
                 (Polygon2D :< cls, Object :< cls) => cls -> Int -> IO NodePath
 get_bone_path cls arg1
@@ -364,7 +354,6 @@ instance NodeMethod Polygon2D "get_bone_path" '[Int] (IO NodePath)
 
 {-# NOINLINE bindPolygon2D_get_bone_weights #-}
 
--- | Returns the height values of the specified bone.
 bindPolygon2D_get_bone_weights :: MethodBind
 bindPolygon2D_get_bone_weights
   = unsafePerformIO $
@@ -374,7 +363,6 @@ bindPolygon2D_get_bone_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the height values of the specified bone.
 get_bone_weights ::
                    (Polygon2D :< cls, Object :< cls) => cls -> Int -> IO PoolRealArray
 get_bone_weights cls arg1
@@ -816,7 +804,6 @@ instance NodeMethod Polygon2D "set_antialiased" '[Bool] (IO ())
 
 {-# NOINLINE bindPolygon2D_set_bone_path #-}
 
--- | Sets the path to the node associated with the specified bone.
 bindPolygon2D_set_bone_path :: MethodBind
 bindPolygon2D_set_bone_path
   = unsafePerformIO $
@@ -826,7 +813,6 @@ bindPolygon2D_set_bone_path
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the path to the node associated with the specified bone.
 set_bone_path ::
                 (Polygon2D :< cls, Object :< cls) =>
                 cls -> Int -> NodePath -> IO ()
@@ -845,7 +831,6 @@ instance NodeMethod Polygon2D "set_bone_path" '[Int, NodePath]
 
 {-# NOINLINE bindPolygon2D_set_bone_weights #-}
 
--- | Sets the weight values for the specified bone.
 bindPolygon2D_set_bone_weights :: MethodBind
 bindPolygon2D_set_bone_weights
   = unsafePerformIO $
@@ -855,7 +840,6 @@ bindPolygon2D_set_bone_weights
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the weight values for the specified bone.
 set_bone_weights ::
                    (Polygon2D :< cls, Object :< cls) =>
                    cls -> Int -> PoolRealArray -> IO ()

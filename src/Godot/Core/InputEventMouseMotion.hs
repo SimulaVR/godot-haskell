@@ -74,7 +74,6 @@ instance NodeMethod InputEventMouseMotion "get_pressure" '[]
 {-# NOINLINE bindInputEventMouseMotion_get_relative #-}
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 bindInputEventMouseMotion_get_relative :: MethodBind
 bindInputEventMouseMotion_get_relative
   = unsafePerformIO $
@@ -85,7 +84,6 @@ bindInputEventMouseMotion_get_relative
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 get_relative ::
                (InputEventMouseMotion :< cls, Object :< cls) => cls -> IO Vector2
 get_relative cls
@@ -193,7 +191,6 @@ instance NodeMethod InputEventMouseMotion "set_pressure" '[Float]
 {-# NOINLINE bindInputEventMouseMotion_set_relative #-}
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 bindInputEventMouseMotion_set_relative :: MethodBind
 bindInputEventMouseMotion_set_relative
   = unsafePerformIO $
@@ -204,7 +201,6 @@ bindInputEventMouseMotion_set_relative
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The mouse position relative to the previous position (position at the last frame).
---   			__Note:__ Since @InputEventMouseMotion@ is only emitted when the mouse moves, the last event won't have a relative position of @Vector2(0, 0)@ when the user stops moving the mouse.
 set_relative ::
                (InputEventMouseMotion :< cls, Object :< cls) =>
                cls -> Vector2 -> IO ()

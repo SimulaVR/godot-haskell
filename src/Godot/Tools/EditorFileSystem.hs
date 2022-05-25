@@ -45,7 +45,6 @@ sig_resources_reimported
 instance NodeSignal EditorFileSystem "resources_reimported"
            '[PoolStringArray]
 
--- | Emitted if at least one resource is reloaded when the filesystem is scanned.
 sig_resources_reload ::
                      Godot.Internal.Dispatch.Signal EditorFileSystem
 sig_resources_reload
@@ -295,7 +294,6 @@ instance NodeMethod EditorFileSystem "update_file" '[GodotString]
 
 {-# NOINLINE bindEditorFileSystem_update_script_classes #-}
 
--- | Scans the script files and updates the list of custom class names.
 bindEditorFileSystem_update_script_classes :: MethodBind
 bindEditorFileSystem_update_script_classes
   = unsafePerformIO $
@@ -305,7 +303,6 @@ bindEditorFileSystem_update_script_classes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Scans the script files and updates the list of custom class names.
 update_script_classes ::
                         (EditorFileSystem :< cls, Object :< cls) => cls -> IO ()
 update_script_classes cls

@@ -2,10 +2,11 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Thread
-       (Godot.Core.Thread._PRIORITY_NORMAL,
-        Godot.Core.Thread._PRIORITY_LOW, Godot.Core.Thread._PRIORITY_HIGH,
-        Godot.Core.Thread.get_id, Godot.Core.Thread.is_active,
-        Godot.Core.Thread.start, Godot.Core.Thread.wait_to_finish)
+       (Godot.Core.Thread._PRIORITY_LOW,
+        Godot.Core.Thread._PRIORITY_NORMAL,
+        Godot.Core.Thread._PRIORITY_HIGH, Godot.Core.Thread.get_id,
+        Godot.Core.Thread.is_active, Godot.Core.Thread.start,
+        Godot.Core.Thread.wait_to_finish)
        where
 import Data.Coerce
 import Foreign.C
@@ -19,18 +20,18 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Reference()
 
-_PRIORITY_NORMAL :: Int
-_PRIORITY_NORMAL = 1
-
 _PRIORITY_LOW :: Int
 _PRIORITY_LOW = 0
+
+_PRIORITY_NORMAL :: Int
+_PRIORITY_NORMAL = 1
 
 _PRIORITY_HIGH :: Int
 _PRIORITY_HIGH = 2
 
 {-# NOINLINE bindThread_get_id #-}
 
--- | Returns the current @Thread@'s ID, uniquely identifying it among all threads. If the @Thread@ is not running this returns an empty string.
+-- | Returns the current @Thread@'s ID, uniquely identifying it among all threads.
 bindThread_get_id :: MethodBind
 bindThread_get_id
   = unsafePerformIO $
@@ -40,7 +41,7 @@ bindThread_get_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the current @Thread@'s ID, uniquely identifying it among all threads. If the @Thread@ is not running this returns an empty string.
+-- | Returns the current @Thread@'s ID, uniquely identifying it among all threads.
 get_id :: (Thread :< cls, Object :< cls) => cls -> IO GodotString
 get_id cls
   = withVariantArray []
@@ -76,7 +77,7 @@ instance NodeMethod Thread "is_active" '[] (IO Bool) where
 
 {-# NOINLINE bindThread_start #-}
 
--- | Starts a new @Thread@ that runs @method@ on object @instance@ with @userdata@ passed as an argument. Even if no userdata is passed, @method@ must accept one argument and it will be null. The @priority@ of the @Thread@ can be changed by passing a value from the @enum Priority@ enum.
+-- | Starts a new @Thread@ that runs @method@ on object @instance@ with @userdata@ passed as an argument. The @priority@ of the @Thread@ can be changed by passing a value from the @enum Priority@ enum.
 --   				Returns @OK@ on success, or @ERR_CANT_CREATE@ on failure.
 bindThread_start :: MethodBind
 bindThread_start
@@ -87,7 +88,7 @@ bindThread_start
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Starts a new @Thread@ that runs @method@ on object @instance@ with @userdata@ passed as an argument. Even if no userdata is passed, @method@ must accept one argument and it will be null. The @priority@ of the @Thread@ can be changed by passing a value from the @enum Priority@ enum.
+-- | Starts a new @Thread@ that runs @method@ on object @instance@ with @userdata@ passed as an argument. The @priority@ of the @Thread@ can be changed by passing a value from the @enum Priority@ enum.
 --   				Returns @OK@ on success, or @ERR_CANT_CREATE@ on failure.
 start ::
         (Thread :< cls, Object :< cls) =>

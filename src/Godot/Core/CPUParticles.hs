@@ -2,32 +2,32 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.CPUParticles
-       (Godot.Core.CPUParticles._FLAG_ALIGN_Y_TO_VELOCITY,
-        Godot.Core.CPUParticles._PARAM_RADIAL_ACCEL,
-        Godot.Core.CPUParticles._FLAG_ROTATE_Y,
-        Godot.Core.CPUParticles._EMISSION_SHAPE_SPHERE,
-        Godot.Core.CPUParticles._FLAG_DISABLE_Z,
-        Godot.Core.CPUParticles._PARAM_ANGULAR_VELOCITY,
-        Godot.Core.CPUParticles._EMISSION_SHAPE_MAX,
-        Godot.Core.CPUParticles._PARAM_TANGENTIAL_ACCEL,
-        Godot.Core.CPUParticles._PARAM_ANIM_SPEED,
-        Godot.Core.CPUParticles._EMISSION_SHAPE_BOX,
-        Godot.Core.CPUParticles._EMISSION_SHAPE_POINTS,
-        Godot.Core.CPUParticles._PARAM_MAX,
-        Godot.Core.CPUParticles._PARAM_INITIAL_LINEAR_VELOCITY,
-        Godot.Core.CPUParticles._FLAG_MAX,
-        Godot.Core.CPUParticles._PARAM_LINEAR_ACCEL,
-        Godot.Core.CPUParticles._EMISSION_SHAPE_DIRECTED_POINTS,
-        Godot.Core.CPUParticles._EMISSION_SHAPE_POINT,
+       (Godot.Core.CPUParticles._EMISSION_SHAPE_POINT,
         Godot.Core.CPUParticles._PARAM_ORBIT_VELOCITY,
-        Godot.Core.CPUParticles._DRAW_ORDER_LIFETIME,
-        Godot.Core.CPUParticles._PARAM_SCALE,
-        Godot.Core.CPUParticles._DRAW_ORDER_INDEX,
-        Godot.Core.CPUParticles._PARAM_DAMPING,
+        Godot.Core.CPUParticles._PARAM_MAX,
+        Godot.Core.CPUParticles._FLAG_MAX,
         Godot.Core.CPUParticles._PARAM_HUE_VARIATION,
-        Godot.Core.CPUParticles._PARAM_ANIM_OFFSET,
+        Godot.Core.CPUParticles._PARAM_LINEAR_ACCEL,
+        Godot.Core.CPUParticles._PARAM_TANGENTIAL_ACCEL,
+        Godot.Core.CPUParticles._PARAM_RADIAL_ACCEL,
+        Godot.Core.CPUParticles._PARAM_ANIM_SPEED,
+        Godot.Core.CPUParticles._PARAM_DAMPING,
+        Godot.Core.CPUParticles._EMISSION_SHAPE_DIRECTED_POINTS,
+        Godot.Core.CPUParticles._PARAM_SCALE,
+        Godot.Core.CPUParticles._EMISSION_SHAPE_BOX,
         Godot.Core.CPUParticles._PARAM_ANGLE,
+        Godot.Core.CPUParticles._FLAG_DISABLE_Z,
+        Godot.Core.CPUParticles._FLAG_ALIGN_Y_TO_VELOCITY,
+        Godot.Core.CPUParticles._DRAW_ORDER_LIFETIME,
         Godot.Core.CPUParticles._DRAW_ORDER_VIEW_DEPTH,
+        Godot.Core.CPUParticles._PARAM_INITIAL_LINEAR_VELOCITY,
+        Godot.Core.CPUParticles._DRAW_ORDER_INDEX,
+        Godot.Core.CPUParticles._PARAM_ANIM_OFFSET,
+        Godot.Core.CPUParticles._PARAM_ANGULAR_VELOCITY,
+        Godot.Core.CPUParticles._EMISSION_SHAPE_SPHERE,
+        Godot.Core.CPUParticles._EMISSION_SHAPE_POINTS,
+        Godot.Core.CPUParticles._FLAG_ROTATE_Y,
+        Godot.Core.CPUParticles._EMISSION_SHAPE_MAX,
         Godot.Core.CPUParticles._update_render_thread,
         Godot.Core.CPUParticles.convert_from_particles,
         Godot.Core.CPUParticles.get_amount,
@@ -104,83 +104,83 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.GeometryInstance()
 
-_FLAG_ALIGN_Y_TO_VELOCITY :: Int
-_FLAG_ALIGN_Y_TO_VELOCITY = 0
-
-_PARAM_RADIAL_ACCEL :: Int
-_PARAM_RADIAL_ACCEL = 4
-
-_FLAG_ROTATE_Y :: Int
-_FLAG_ROTATE_Y = 1
-
-_EMISSION_SHAPE_SPHERE :: Int
-_EMISSION_SHAPE_SPHERE = 1
-
-_FLAG_DISABLE_Z :: Int
-_FLAG_DISABLE_Z = 2
-
-_PARAM_ANGULAR_VELOCITY :: Int
-_PARAM_ANGULAR_VELOCITY = 1
-
-_EMISSION_SHAPE_MAX :: Int
-_EMISSION_SHAPE_MAX = 5
-
-_PARAM_TANGENTIAL_ACCEL :: Int
-_PARAM_TANGENTIAL_ACCEL = 5
-
-_PARAM_ANIM_SPEED :: Int
-_PARAM_ANIM_SPEED = 10
-
-_EMISSION_SHAPE_BOX :: Int
-_EMISSION_SHAPE_BOX = 2
-
-_EMISSION_SHAPE_POINTS :: Int
-_EMISSION_SHAPE_POINTS = 3
-
-_PARAM_MAX :: Int
-_PARAM_MAX = 12
-
-_PARAM_INITIAL_LINEAR_VELOCITY :: Int
-_PARAM_INITIAL_LINEAR_VELOCITY = 0
-
-_FLAG_MAX :: Int
-_FLAG_MAX = 3
-
-_PARAM_LINEAR_ACCEL :: Int
-_PARAM_LINEAR_ACCEL = 3
-
-_EMISSION_SHAPE_DIRECTED_POINTS :: Int
-_EMISSION_SHAPE_DIRECTED_POINTS = 4
-
 _EMISSION_SHAPE_POINT :: Int
 _EMISSION_SHAPE_POINT = 0
 
 _PARAM_ORBIT_VELOCITY :: Int
 _PARAM_ORBIT_VELOCITY = 2
 
-_DRAW_ORDER_LIFETIME :: Int
-_DRAW_ORDER_LIFETIME = 1
+_PARAM_MAX :: Int
+_PARAM_MAX = 12
 
-_PARAM_SCALE :: Int
-_PARAM_SCALE = 8
-
-_DRAW_ORDER_INDEX :: Int
-_DRAW_ORDER_INDEX = 0
-
-_PARAM_DAMPING :: Int
-_PARAM_DAMPING = 6
+_FLAG_MAX :: Int
+_FLAG_MAX = 3
 
 _PARAM_HUE_VARIATION :: Int
 _PARAM_HUE_VARIATION = 9
 
-_PARAM_ANIM_OFFSET :: Int
-_PARAM_ANIM_OFFSET = 11
+_PARAM_LINEAR_ACCEL :: Int
+_PARAM_LINEAR_ACCEL = 3
+
+_PARAM_TANGENTIAL_ACCEL :: Int
+_PARAM_TANGENTIAL_ACCEL = 5
+
+_PARAM_RADIAL_ACCEL :: Int
+_PARAM_RADIAL_ACCEL = 4
+
+_PARAM_ANIM_SPEED :: Int
+_PARAM_ANIM_SPEED = 10
+
+_PARAM_DAMPING :: Int
+_PARAM_DAMPING = 6
+
+_EMISSION_SHAPE_DIRECTED_POINTS :: Int
+_EMISSION_SHAPE_DIRECTED_POINTS = 4
+
+_PARAM_SCALE :: Int
+_PARAM_SCALE = 8
+
+_EMISSION_SHAPE_BOX :: Int
+_EMISSION_SHAPE_BOX = 2
 
 _PARAM_ANGLE :: Int
 _PARAM_ANGLE = 7
 
+_FLAG_DISABLE_Z :: Int
+_FLAG_DISABLE_Z = 2
+
+_FLAG_ALIGN_Y_TO_VELOCITY :: Int
+_FLAG_ALIGN_Y_TO_VELOCITY = 0
+
+_DRAW_ORDER_LIFETIME :: Int
+_DRAW_ORDER_LIFETIME = 1
+
 _DRAW_ORDER_VIEW_DEPTH :: Int
 _DRAW_ORDER_VIEW_DEPTH = 2
+
+_PARAM_INITIAL_LINEAR_VELOCITY :: Int
+_PARAM_INITIAL_LINEAR_VELOCITY = 0
+
+_DRAW_ORDER_INDEX :: Int
+_DRAW_ORDER_INDEX = 0
+
+_PARAM_ANIM_OFFSET :: Int
+_PARAM_ANIM_OFFSET = 11
+
+_PARAM_ANGULAR_VELOCITY :: Int
+_PARAM_ANGULAR_VELOCITY = 1
+
+_EMISSION_SHAPE_SPHERE :: Int
+_EMISSION_SHAPE_SPHERE = 1
+
+_EMISSION_SHAPE_POINTS :: Int
+_EMISSION_SHAPE_POINTS = 3
+
+_FLAG_ROTATE_Y :: Int
+_FLAG_ROTATE_Y = 1
+
+_EMISSION_SHAPE_MAX :: Int
+_EMISSION_SHAPE_MAX = 5
 
 instance NodeProperty CPUParticles "amount" Int 'False where
         nodeProperty = (get_amount, wrapDroppingSetter set_amount, Nothing)

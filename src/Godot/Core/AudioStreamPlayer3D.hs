@@ -2,15 +2,15 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AudioStreamPlayer3D
-       (Godot.Core.AudioStreamPlayer3D._ATTENUATION_INVERSE_SQUARE_DISTANCE,
-        Godot.Core.AudioStreamPlayer3D._ATTENUATION_INVERSE_DISTANCE,
-        Godot.Core.AudioStreamPlayer3D._DOPPLER_TRACKING_PHYSICS_STEP,
-        Godot.Core.AudioStreamPlayer3D._DOPPLER_TRACKING_DISABLED,
-        Godot.Core.AudioStreamPlayer3D._ATTENUATION_DISABLED,
+       (Godot.Core.AudioStreamPlayer3D._ATTENUATION_LOGARITHMIC,
+        Godot.Core.AudioStreamPlayer3D._ATTENUATION_INVERSE_SQUARE_DISTANCE,
         Godot.Core.AudioStreamPlayer3D._OUT_OF_RANGE_PAUSE,
-        Godot.Core.AudioStreamPlayer3D._ATTENUATION_LOGARITHMIC,
+        Godot.Core.AudioStreamPlayer3D._ATTENUATION_INVERSE_DISTANCE,
         Godot.Core.AudioStreamPlayer3D._OUT_OF_RANGE_MIX,
         Godot.Core.AudioStreamPlayer3D._DOPPLER_TRACKING_IDLE_STEP,
+        Godot.Core.AudioStreamPlayer3D._ATTENUATION_DISABLED,
+        Godot.Core.AudioStreamPlayer3D._DOPPLER_TRACKING_PHYSICS_STEP,
+        Godot.Core.AudioStreamPlayer3D._DOPPLER_TRACKING_DISABLED,
         Godot.Core.AudioStreamPlayer3D.sig_finished,
         Godot.Core.AudioStreamPlayer3D._bus_layout_changed,
         Godot.Core.AudioStreamPlayer3D._is_active,
@@ -70,32 +70,32 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Spatial()
 
+_ATTENUATION_LOGARITHMIC :: Int
+_ATTENUATION_LOGARITHMIC = 2
+
 _ATTENUATION_INVERSE_SQUARE_DISTANCE :: Int
 _ATTENUATION_INVERSE_SQUARE_DISTANCE = 1
-
-_ATTENUATION_INVERSE_DISTANCE :: Int
-_ATTENUATION_INVERSE_DISTANCE = 0
-
-_DOPPLER_TRACKING_PHYSICS_STEP :: Int
-_DOPPLER_TRACKING_PHYSICS_STEP = 2
-
-_DOPPLER_TRACKING_DISABLED :: Int
-_DOPPLER_TRACKING_DISABLED = 0
-
-_ATTENUATION_DISABLED :: Int
-_ATTENUATION_DISABLED = 3
 
 _OUT_OF_RANGE_PAUSE :: Int
 _OUT_OF_RANGE_PAUSE = 1
 
-_ATTENUATION_LOGARITHMIC :: Int
-_ATTENUATION_LOGARITHMIC = 2
+_ATTENUATION_INVERSE_DISTANCE :: Int
+_ATTENUATION_INVERSE_DISTANCE = 0
 
 _OUT_OF_RANGE_MIX :: Int
 _OUT_OF_RANGE_MIX = 0
 
 _DOPPLER_TRACKING_IDLE_STEP :: Int
 _DOPPLER_TRACKING_IDLE_STEP = 1
+
+_ATTENUATION_DISABLED :: Int
+_ATTENUATION_DISABLED = 3
+
+_DOPPLER_TRACKING_PHYSICS_STEP :: Int
+_DOPPLER_TRACKING_PHYSICS_STEP = 2
+
+_DOPPLER_TRACKING_DISABLED :: Int
+_DOPPLER_TRACKING_DISABLED = 0
 
 -- | Emitted when the audio stops playing.
 sig_finished :: Godot.Internal.Dispatch.Signal AudioStreamPlayer3D
@@ -644,7 +644,7 @@ instance NodeMethod AudioStreamPlayer3D "get_out_of_range_mode" '[]
 
 {-# NOINLINE bindAudioStreamPlayer3D_get_pitch_scale #-}
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 bindAudioStreamPlayer3D_get_pitch_scale :: MethodBind
 bindAudioStreamPlayer3D_get_pitch_scale
   = unsafePerformIO $
@@ -654,7 +654,7 @@ bindAudioStreamPlayer3D_get_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 get_pitch_scale ::
                   (AudioStreamPlayer3D :< cls, Object :< cls) => cls -> IO Float
 get_pitch_scale cls
@@ -1404,7 +1404,7 @@ instance NodeMethod AudioStreamPlayer3D "set_out_of_range_mode"
 
 {-# NOINLINE bindAudioStreamPlayer3D_set_pitch_scale #-}
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 bindAudioStreamPlayer3D_set_pitch_scale :: MethodBind
 bindAudioStreamPlayer3D_set_pitch_scale
   = unsafePerformIO $
@@ -1414,7 +1414,7 @@ bindAudioStreamPlayer3D_set_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 set_pitch_scale ::
                   (AudioStreamPlayer3D :< cls, Object :< cls) =>
                   cls -> Float -> IO ()

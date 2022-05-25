@@ -2,32 +2,32 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.RichTextLabel
-       (Godot.Core.RichTextLabel._ITEM_UNDERLINE,
-        Godot.Core.RichTextLabel._ITEM_RAINBOW,
-        Godot.Core.RichTextLabel._ITEM_CUSTOMFX,
-        Godot.Core.RichTextLabel._ITEM_META,
-        Godot.Core.RichTextLabel._ITEM_ALIGN,
-        Godot.Core.RichTextLabel._ITEM_TORNADO,
-        Godot.Core.RichTextLabel._ITEM_FRAME,
-        Godot.Core.RichTextLabel._ALIGN_RIGHT,
-        Godot.Core.RichTextLabel._ALIGN_FILL,
-        Godot.Core.RichTextLabel._ITEM_STRIKETHROUGH,
-        Godot.Core.RichTextLabel._ITEM_SHAKE,
-        Godot.Core.RichTextLabel._ITEM_FONT,
+       (Godot.Core.RichTextLabel._ITEM_ALIGN,
         Godot.Core.RichTextLabel._ITEM_FADE,
-        Godot.Core.RichTextLabel._ITEM_TABLE,
+        Godot.Core.RichTextLabel._ITEM_TORNADO,
         Godot.Core.RichTextLabel._ITEM_WAVE,
-        Godot.Core.RichTextLabel._ITEM_COLOR,
-        Godot.Core.RichTextLabel._ITEM_TEXT,
-        Godot.Core.RichTextLabel._ITEM_IMAGE,
-        Godot.Core.RichTextLabel._LIST_NUMBERS,
-        Godot.Core.RichTextLabel._LIST_LETTERS,
-        Godot.Core.RichTextLabel._ITEM_LIST,
-        Godot.Core.RichTextLabel._ITEM_NEWLINE,
-        Godot.Core.RichTextLabel._ITEM_INDENT,
-        Godot.Core.RichTextLabel._LIST_DOTS,
-        Godot.Core.RichTextLabel._ALIGN_LEFT,
+        Godot.Core.RichTextLabel._ITEM_RAINBOW,
         Godot.Core.RichTextLabel._ALIGN_CENTER,
+        Godot.Core.RichTextLabel._ALIGN_LEFT,
+        Godot.Core.RichTextLabel._LIST_LETTERS,
+        Godot.Core.RichTextLabel._ITEM_SHAKE,
+        Godot.Core.RichTextLabel._LIST_NUMBERS,
+        Godot.Core.RichTextLabel._ITEM_STRIKETHROUGH,
+        Godot.Core.RichTextLabel._ITEM_META,
+        Godot.Core.RichTextLabel._ITEM_FRAME,
+        Godot.Core.RichTextLabel._LIST_DOTS,
+        Godot.Core.RichTextLabel._ALIGN_RIGHT,
+        Godot.Core.RichTextLabel._ITEM_CUSTOMFX,
+        Godot.Core.RichTextLabel._ITEM_UNDERLINE,
+        Godot.Core.RichTextLabel._ITEM_IMAGE,
+        Godot.Core.RichTextLabel._ITEM_TEXT,
+        Godot.Core.RichTextLabel._ITEM_COLOR,
+        Godot.Core.RichTextLabel._ITEM_TABLE,
+        Godot.Core.RichTextLabel._ITEM_FONT,
+        Godot.Core.RichTextLabel._ITEM_NEWLINE,
+        Godot.Core.RichTextLabel._ALIGN_FILL,
+        Godot.Core.RichTextLabel._ITEM_LIST,
+        Godot.Core.RichTextLabel._ITEM_INDENT,
         Godot.Core.RichTextLabel.sig_meta_clicked,
         Godot.Core.RichTextLabel.sig_meta_hover_ended,
         Godot.Core.RichTextLabel.sig_meta_hover_started,
@@ -101,83 +101,83 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
-_ITEM_UNDERLINE :: Int
-_ITEM_UNDERLINE = 6
-
-_ITEM_RAINBOW :: Int
-_ITEM_RAINBOW = 16
-
-_ITEM_CUSTOMFX :: Int
-_ITEM_CUSTOMFX = 18
-
-_ITEM_META :: Int
-_ITEM_META = 17
-
 _ITEM_ALIGN :: Int
 _ITEM_ALIGN = 8
-
-_ITEM_TORNADO :: Int
-_ITEM_TORNADO = 15
-
-_ITEM_FRAME :: Int
-_ITEM_FRAME = 0
-
-_ALIGN_RIGHT :: Int
-_ALIGN_RIGHT = 2
-
-_ALIGN_FILL :: Int
-_ALIGN_FILL = 3
-
-_ITEM_STRIKETHROUGH :: Int
-_ITEM_STRIKETHROUGH = 7
-
-_ITEM_SHAKE :: Int
-_ITEM_SHAKE = 13
-
-_ITEM_FONT :: Int
-_ITEM_FONT = 4
 
 _ITEM_FADE :: Int
 _ITEM_FADE = 12
 
-_ITEM_TABLE :: Int
-_ITEM_TABLE = 11
+_ITEM_TORNADO :: Int
+_ITEM_TORNADO = 15
 
 _ITEM_WAVE :: Int
 _ITEM_WAVE = 14
 
-_ITEM_COLOR :: Int
-_ITEM_COLOR = 5
+_ITEM_RAINBOW :: Int
+_ITEM_RAINBOW = 16
 
-_ITEM_TEXT :: Int
-_ITEM_TEXT = 1
-
-_ITEM_IMAGE :: Int
-_ITEM_IMAGE = 2
-
-_LIST_NUMBERS :: Int
-_LIST_NUMBERS = 0
-
-_LIST_LETTERS :: Int
-_LIST_LETTERS = 1
-
-_ITEM_LIST :: Int
-_ITEM_LIST = 10
-
-_ITEM_NEWLINE :: Int
-_ITEM_NEWLINE = 3
-
-_ITEM_INDENT :: Int
-_ITEM_INDENT = 9
-
-_LIST_DOTS :: Int
-_LIST_DOTS = 2
+_ALIGN_CENTER :: Int
+_ALIGN_CENTER = 1
 
 _ALIGN_LEFT :: Int
 _ALIGN_LEFT = 0
 
-_ALIGN_CENTER :: Int
-_ALIGN_CENTER = 1
+_LIST_LETTERS :: Int
+_LIST_LETTERS = 1
+
+_ITEM_SHAKE :: Int
+_ITEM_SHAKE = 13
+
+_LIST_NUMBERS :: Int
+_LIST_NUMBERS = 0
+
+_ITEM_STRIKETHROUGH :: Int
+_ITEM_STRIKETHROUGH = 7
+
+_ITEM_META :: Int
+_ITEM_META = 17
+
+_ITEM_FRAME :: Int
+_ITEM_FRAME = 0
+
+_LIST_DOTS :: Int
+_LIST_DOTS = 2
+
+_ALIGN_RIGHT :: Int
+_ALIGN_RIGHT = 2
+
+_ITEM_CUSTOMFX :: Int
+_ITEM_CUSTOMFX = 18
+
+_ITEM_UNDERLINE :: Int
+_ITEM_UNDERLINE = 6
+
+_ITEM_IMAGE :: Int
+_ITEM_IMAGE = 2
+
+_ITEM_TEXT :: Int
+_ITEM_TEXT = 1
+
+_ITEM_COLOR :: Int
+_ITEM_COLOR = 5
+
+_ITEM_TABLE :: Int
+_ITEM_TABLE = 11
+
+_ITEM_FONT :: Int
+_ITEM_FONT = 4
+
+_ITEM_NEWLINE :: Int
+_ITEM_NEWLINE = 3
+
+_ALIGN_FILL :: Int
+_ALIGN_FILL = 3
+
+_ITEM_LIST :: Int
+_ITEM_LIST = 10
+
+_ITEM_INDENT :: Int
+_ITEM_INDENT = 9
 
 -- | Triggered when the user clicks on content between meta tags. If the meta is defined in text, e.g. @@url={"data"="hi"}@hi@/url@@, then the parameter for this signal will be a @String@ type. If a particular type or an object is desired, the @method push_meta@ method must be used to manually insert the data into the tag stack.
 sig_meta_clicked :: Godot.Internal.Dispatch.Signal RichTextLabel

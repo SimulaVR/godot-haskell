@@ -161,7 +161,7 @@ instance NodeMethod PhysicsBody2D "get_collision_exceptions" '[]
 
 -- | The physics layers this area is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
 bindPhysicsBody2D_get_collision_layer :: MethodBind
 bindPhysicsBody2D_get_collision_layer
   = unsafePerformIO $
@@ -173,7 +173,7 @@ bindPhysicsBody2D_get_collision_layer
 
 -- | The physics layers this area is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
 get_collision_layer ::
                       (PhysicsBody2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_layer cls
@@ -221,7 +221,7 @@ instance NodeMethod PhysicsBody2D "get_collision_layer_bit" '[Int]
 
 {-# NOINLINE bindPhysicsBody2D_get_collision_mask #-}
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans for collisions.
 bindPhysicsBody2D_get_collision_mask :: MethodBind
 bindPhysicsBody2D_get_collision_mask
   = unsafePerformIO $
@@ -231,7 +231,7 @@ bindPhysicsBody2D_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans for collisions.
 get_collision_mask ::
                      (PhysicsBody2D :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -312,7 +312,7 @@ instance NodeMethod PhysicsBody2D "remove_collision_exception_with"
 
 -- | The physics layers this area is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
 bindPhysicsBody2D_set_collision_layer :: MethodBind
 bindPhysicsBody2D_set_collision_layer
   = unsafePerformIO $
@@ -324,7 +324,7 @@ bindPhysicsBody2D_set_collision_layer
 
 -- | The physics layers this area is in.
 --   			Collidable objects can exist in any of 32 different layers. These layers work like a tagging system, and are not visual. A collidable can use these layers to select with which objects it can collide, using the @collision_mask@ property.
---   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+--   			A contact is detected if object A is in any of the layers that object B scans, or object B is in any layer scanned by object A.
 set_collision_layer ::
                       (PhysicsBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_layer cls arg1
@@ -374,7 +374,7 @@ instance NodeMethod PhysicsBody2D "set_collision_layer_bit"
 
 {-# NOINLINE bindPhysicsBody2D_set_collision_mask #-}
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans for collisions.
 bindPhysicsBody2D_set_collision_mask :: MethodBind
 bindPhysicsBody2D_set_collision_mask
   = unsafePerformIO $
@@ -384,7 +384,7 @@ bindPhysicsBody2D_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans for collisions. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans for collisions.
 set_collision_mask ::
                      (PhysicsBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1

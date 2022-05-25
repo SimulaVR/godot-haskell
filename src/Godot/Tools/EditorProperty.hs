@@ -312,7 +312,7 @@ instance NodeMethod EditorProperty "get_edited_property" '[]
 
 {-# NOINLINE bindEditorProperty_get_label #-}
 
--- | Set this property to change the label (if you want to show one).
+-- | Sets this property to change the label (if you want to show one).
 bindEditorProperty_get_label :: MethodBind
 bindEditorProperty_get_label
   = unsafePerformIO $
@@ -322,7 +322,7 @@ bindEditorProperty_get_label
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set this property to change the label (if you want to show one).
+-- | Sets this property to change the label (if you want to show one).
 get_label ::
             (EditorProperty :< cls, Object :< cls) => cls -> IO GodotString
 get_label cls
@@ -368,7 +368,7 @@ instance NodeMethod EditorProperty "get_tooltip_text" '[]
 
 {-# NOINLINE bindEditorProperty_is_checkable #-}
 
--- | Used by the inspector, set to @true@ when the property is checkable.
+-- | Used by the inspector, set when property is checkable.
 bindEditorProperty_is_checkable :: MethodBind
 bindEditorProperty_is_checkable
   = unsafePerformIO $
@@ -378,7 +378,7 @@ bindEditorProperty_is_checkable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property is checkable.
+-- | Used by the inspector, set when property is checkable.
 is_checkable ::
                (EditorProperty :< cls, Object :< cls) => cls -> IO Bool
 is_checkable cls
@@ -395,7 +395,7 @@ instance NodeMethod EditorProperty "is_checkable" '[] (IO Bool)
 
 {-# NOINLINE bindEditorProperty_is_checked #-}
 
--- | Used by the inspector, set to @true@ when the property is checked.
+-- | Used by the inspector, when the property is checked.
 bindEditorProperty_is_checked :: MethodBind
 bindEditorProperty_is_checked
   = unsafePerformIO $
@@ -405,7 +405,7 @@ bindEditorProperty_is_checked
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property is checked.
+-- | Used by the inspector, when the property is checked.
 is_checked ::
              (EditorProperty :< cls, Object :< cls) => cls -> IO Bool
 is_checked cls
@@ -421,7 +421,7 @@ instance NodeMethod EditorProperty "is_checked" '[] (IO Bool) where
 
 {-# NOINLINE bindEditorProperty_is_draw_red #-}
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, when the property must draw with error color.
 bindEditorProperty_is_draw_red :: MethodBind
 bindEditorProperty_is_draw_red
   = unsafePerformIO $
@@ -431,7 +431,7 @@ bindEditorProperty_is_draw_red
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, when the property must draw with error color.
 is_draw_red ::
               (EditorProperty :< cls, Object :< cls) => cls -> IO Bool
 is_draw_red cls
@@ -448,7 +448,7 @@ instance NodeMethod EditorProperty "is_draw_red" '[] (IO Bool)
 
 {-# NOINLINE bindEditorProperty_is_keying #-}
 
--- | Used by the inspector, set to @true@ when the property can add keys for animation.
+-- | Used by the inspector, when the property can add keys for animation.
 bindEditorProperty_is_keying :: MethodBind
 bindEditorProperty_is_keying
   = unsafePerformIO $
@@ -458,7 +458,7 @@ bindEditorProperty_is_keying
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property can add keys for animation.
+-- | Used by the inspector, when the property can add keys for animation.
 is_keying ::
             (EditorProperty :< cls, Object :< cls) => cls -> IO Bool
 is_keying cls
@@ -474,7 +474,7 @@ instance NodeMethod EditorProperty "is_keying" '[] (IO Bool) where
 
 {-# NOINLINE bindEditorProperty_is_read_only #-}
 
--- | Used by the inspector, set to @true@ when the property is read-only.
+-- | Used by the inspector, when the property is read-only.
 bindEditorProperty_is_read_only :: MethodBind
 bindEditorProperty_is_read_only
   = unsafePerformIO $
@@ -484,7 +484,7 @@ bindEditorProperty_is_read_only
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property is read-only.
+-- | Used by the inspector, when the property is read-only.
 is_read_only ::
                (EditorProperty :< cls, Object :< cls) => cls -> IO Bool
 is_read_only cls
@@ -530,7 +530,7 @@ instance NodeMethod EditorProperty "set_bottom_editor" '[Control]
 
 {-# NOINLINE bindEditorProperty_set_checkable #-}
 
--- | Used by the inspector, set to @true@ when the property is checkable.
+-- | Used by the inspector, set when property is checkable.
 bindEditorProperty_set_checkable :: MethodBind
 bindEditorProperty_set_checkable
   = unsafePerformIO $
@@ -540,7 +540,7 @@ bindEditorProperty_set_checkable
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property is checkable.
+-- | Used by the inspector, set when property is checkable.
 set_checkable ::
                 (EditorProperty :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_checkable cls arg1
@@ -558,7 +558,7 @@ instance NodeMethod EditorProperty "set_checkable" '[Bool] (IO ())
 
 {-# NOINLINE bindEditorProperty_set_checked #-}
 
--- | Used by the inspector, set to @true@ when the property is checked.
+-- | Used by the inspector, when the property is checked.
 bindEditorProperty_set_checked :: MethodBind
 bindEditorProperty_set_checked
   = unsafePerformIO $
@@ -568,7 +568,7 @@ bindEditorProperty_set_checked
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property is checked.
+-- | Used by the inspector, when the property is checked.
 set_checked ::
               (EditorProperty :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_checked cls arg1
@@ -585,7 +585,7 @@ instance NodeMethod EditorProperty "set_checked" '[Bool] (IO ())
 
 {-# NOINLINE bindEditorProperty_set_draw_red #-}
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, when the property must draw with error color.
 bindEditorProperty_set_draw_red :: MethodBind
 bindEditorProperty_set_draw_red
   = unsafePerformIO $
@@ -595,7 +595,7 @@ bindEditorProperty_set_draw_red
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property must draw with error color. This is used for editable children's properties.
+-- | Used by the inspector, when the property must draw with error color.
 set_draw_red ::
                (EditorProperty :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_draw_red cls arg1
@@ -612,7 +612,7 @@ instance NodeMethod EditorProperty "set_draw_red" '[Bool] (IO ())
 
 {-# NOINLINE bindEditorProperty_set_keying #-}
 
--- | Used by the inspector, set to @true@ when the property can add keys for animation.
+-- | Used by the inspector, when the property can add keys for animation.
 bindEditorProperty_set_keying :: MethodBind
 bindEditorProperty_set_keying
   = unsafePerformIO $
@@ -622,7 +622,7 @@ bindEditorProperty_set_keying
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property can add keys for animation.
+-- | Used by the inspector, when the property can add keys for animation.
 set_keying ::
              (EditorProperty :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_keying cls arg1
@@ -639,7 +639,7 @@ instance NodeMethod EditorProperty "set_keying" '[Bool] (IO ())
 
 {-# NOINLINE bindEditorProperty_set_label #-}
 
--- | Set this property to change the label (if you want to show one).
+-- | Sets this property to change the label (if you want to show one).
 bindEditorProperty_set_label :: MethodBind
 bindEditorProperty_set_label
   = unsafePerformIO $
@@ -649,7 +649,7 @@ bindEditorProperty_set_label
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Set this property to change the label (if you want to show one).
+-- | Sets this property to change the label (if you want to show one).
 set_label ::
             (EditorProperty :< cls, Object :< cls) =>
             cls -> GodotString -> IO ()
@@ -668,7 +668,7 @@ instance NodeMethod EditorProperty "set_label" '[GodotString]
 
 {-# NOINLINE bindEditorProperty_set_read_only #-}
 
--- | Used by the inspector, set to @true@ when the property is read-only.
+-- | Used by the inspector, when the property is read-only.
 bindEditorProperty_set_read_only :: MethodBind
 bindEditorProperty_set_read_only
   = unsafePerformIO $
@@ -678,7 +678,7 @@ bindEditorProperty_set_read_only
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Used by the inspector, set to @true@ when the property is read-only.
+-- | Used by the inspector, when the property is read-only.
 set_read_only ::
                 (EditorProperty :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_read_only cls arg1

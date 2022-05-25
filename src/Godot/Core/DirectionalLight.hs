@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.DirectionalLight
-       (Godot.Core.DirectionalLight._SHADOW_ORTHOGONAL,
+       (Godot.Core.DirectionalLight._SHADOW_DEPTH_RANGE_OPTIMIZED,
         Godot.Core.DirectionalLight._SHADOW_PARALLEL_4_SPLITS,
+        Godot.Core.DirectionalLight._SHADOW_ORTHOGONAL,
         Godot.Core.DirectionalLight._SHADOW_DEPTH_RANGE_STABLE,
-        Godot.Core.DirectionalLight._SHADOW_DEPTH_RANGE_OPTIMIZED,
         Godot.Core.DirectionalLight._SHADOW_PARALLEL_2_SPLITS,
         Godot.Core.DirectionalLight.get_param,
         Godot.Core.DirectionalLight.set_param,
@@ -28,17 +28,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Light()
 
-_SHADOW_ORTHOGONAL :: Int
-_SHADOW_ORTHOGONAL = 0
+_SHADOW_DEPTH_RANGE_OPTIMIZED :: Int
+_SHADOW_DEPTH_RANGE_OPTIMIZED = 1
 
 _SHADOW_PARALLEL_4_SPLITS :: Int
 _SHADOW_PARALLEL_4_SPLITS = 2
 
+_SHADOW_ORTHOGONAL :: Int
+_SHADOW_ORTHOGONAL = 0
+
 _SHADOW_DEPTH_RANGE_STABLE :: Int
 _SHADOW_DEPTH_RANGE_STABLE = 0
-
-_SHADOW_DEPTH_RANGE_OPTIMIZED :: Int
-_SHADOW_DEPTH_RANGE_OPTIMIZED = 1
 
 _SHADOW_PARALLEL_2_SPLITS :: Int
 _SHADOW_PARALLEL_2_SPLITS = 1

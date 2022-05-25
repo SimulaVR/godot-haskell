@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Object
-       (Godot.Core.Object._CONNECT_REFERENCE_COUNTED,
+       (Godot.Core.Object._CONNECT_PERSIST,
+        Godot.Core.Object._CONNECT_ONESHOT,
         Godot.Core.Object._CONNECT_DEFERRED,
         Godot.Core.Object._NOTIFICATION_POSTINITIALIZE,
-        Godot.Core.Object._CONNECT_ONESHOT,
-        Godot.Core.Object._CONNECT_PERSIST,
         Godot.Core.Object._NOTIFICATION_PREDELETE,
+        Godot.Core.Object._CONNECT_REFERENCE_COUNTED,
         Godot.Core.Object.sig_script_changed, Godot.Core.Object._get,
         Godot.Core.Object._get_property_list, Godot.Core.Object._init,
         Godot.Core.Object._notification, Godot.Core.Object._set,
@@ -48,8 +48,11 @@ import System.IO.Unsafe
 import Godot.Gdnative.Internal
 import Godot.Api.Types
 
-_CONNECT_REFERENCE_COUNTED :: Int
-_CONNECT_REFERENCE_COUNTED = 8
+_CONNECT_PERSIST :: Int
+_CONNECT_PERSIST = 2
+
+_CONNECT_ONESHOT :: Int
+_CONNECT_ONESHOT = 4
 
 _CONNECT_DEFERRED :: Int
 _CONNECT_DEFERRED = 1
@@ -57,14 +60,11 @@ _CONNECT_DEFERRED = 1
 _NOTIFICATION_POSTINITIALIZE :: Int
 _NOTIFICATION_POSTINITIALIZE = 0
 
-_CONNECT_ONESHOT :: Int
-_CONNECT_ONESHOT = 4
-
-_CONNECT_PERSIST :: Int
-_CONNECT_PERSIST = 2
-
 _NOTIFICATION_PREDELETE :: Int
 _NOTIFICATION_PREDELETE = 1
+
+_CONNECT_REFERENCE_COUNTED :: Int
+_CONNECT_REFERENCE_COUNTED = 8
 
 -- | Emitted whenever the object's script is changed.
 sig_script_changed :: Godot.Internal.Dispatch.Signal Object
@@ -276,8 +276,6 @@ instance NodeMethod Object "add_user_signal"
 --   				call("set", "position", Vector2(42.0, 0.0))
 --   				
 --   @
---   
---   				__Note:__ In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_call :: MethodBind
 bindObject_call
   = unsafePerformIO $
@@ -294,8 +292,6 @@ bindObject_call
 --   				call("set", "position", Vector2(42.0, 0.0))
 --   				
 --   @
---   
---   				__Note:__ In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 call ::
        (Object :< cls, Object :< cls) =>
        cls -> GodotString -> [Variant 'GodotTy] -> IO GodotVariant
@@ -320,8 +316,6 @@ instance NodeMethod Object "call"
 --   				call_deferred("set", "position", Vector2(42.0, 0.0))
 --   				
 --   @
---   
---   				__Note:__ In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_call_deferred :: MethodBind
 bindObject_call_deferred
   = unsafePerformIO $
@@ -338,8 +332,6 @@ bindObject_call_deferred
 --   				call_deferred("set", "position", Vector2(42.0, 0.0))
 --   				
 --   @
---   
---   				__Note:__ In C#, the method name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined methods where you should use the same convention as in the C# source (typically PascalCase).
 call_deferred ::
                 (Object :< cls, Object :< cls) =>
                 cls -> GodotString -> [Variant 'GodotTy] -> IO ()
@@ -576,7 +568,7 @@ instance NodeMethod Object "emit_signal"
 
 {-# NOINLINE bindObject_free #-}
 
--- | Deletes the object from memory. Any pre-existing reference to the freed object will become invalid, e.g. @is_instance_valid(object)@ will return @false@.
+-- | Deletes the object from memory. Any pre-existing reference to the freed object will now return @null@.
 bindObject_free :: MethodBind
 bindObject_free
   = unsafePerformIO $
@@ -586,7 +578,7 @@ bindObject_free
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Deletes the object from memory. Any pre-existing reference to the freed object will become invalid, e.g. @is_instance_valid(object)@ will return @false@.
+-- | Deletes the object from memory. Any pre-existing reference to the freed object will now return @null@.
 free :: (Object :< cls, Object :< cls) => cls -> IO ()
 free cls
   = withVariantArray []
@@ -600,7 +592,6 @@ instance NodeMethod Object "free" '[] (IO ()) where
 {-# NOINLINE bindObject_get #-}
 
 -- | Returns the @Variant@ value of the given @property@. If the @property@ doesn't exist, this will return @null@.
---   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_get :: MethodBind
 bindObject_get
   = unsafePerformIO $
@@ -611,7 +602,6 @@ bindObject_get
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the @Variant@ value of the given @property@. If the @property@ doesn't exist, this will return @null@.
---   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 get ::
       (Object :< cls, Object :< cls) =>
       cls -> GodotString -> IO GodotVariant
@@ -981,7 +971,7 @@ instance NodeMethod Object "has_method" '[GodotString] (IO Bool)
 
 {-# NOINLINE bindObject_has_user_signal #-}
 
--- | Returns @true@ if the given user-defined @signal@ exists. Only signals added using @method add_user_signal@ are taken into account.
+-- | Returns @true@ if the given user-defined @signal@ exists.
 bindObject_has_user_signal :: MethodBind
 bindObject_has_user_signal
   = unsafePerformIO $
@@ -991,7 +981,7 @@ bindObject_has_user_signal
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the given user-defined @signal@ exists. Only signals added using @method add_user_signal@ are taken into account.
+-- | Returns @true@ if the given user-defined @signal@ exists.
 has_user_signal ::
                   (Object :< cls, Object :< cls) => cls -> GodotString -> IO Bool
 has_user_signal cls arg1
@@ -1177,7 +1167,7 @@ instance NodeMethod Object "property_list_changed_notify" '[]
 
 {-# NOINLINE bindObject_remove_meta #-}
 
--- | Removes a given entry from the object's metadata. See also @method set_meta@.
+-- | Removes a given entry from the object's metadata.
 bindObject_remove_meta :: MethodBind
 bindObject_remove_meta
   = unsafePerformIO $
@@ -1187,7 +1177,7 @@ bindObject_remove_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes a given entry from the object's metadata. See also @method set_meta@.
+-- | Removes a given entry from the object's metadata.
 remove_meta ::
               (Object :< cls, Object :< cls) => cls -> GodotString -> IO ()
 remove_meta cls arg1
@@ -1204,7 +1194,6 @@ instance NodeMethod Object "remove_meta" '[GodotString] (IO ())
 {-# NOINLINE bindObject_set #-}
 
 -- | Assigns a new value to the given property. If the @property@ does not exist, nothing will happen.
---   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_set :: MethodBind
 bindObject_set
   = unsafePerformIO $
@@ -1215,7 +1204,6 @@ bindObject_set
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Assigns a new value to the given property. If the @property@ does not exist, nothing will happen.
---   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 set ::
       (Object :< cls, Object :< cls) =>
       cls -> GodotString -> GodotVariant -> IO ()
@@ -1260,7 +1248,6 @@ instance NodeMethod Object "set_block_signals" '[Bool] (IO ())
 {-# NOINLINE bindObject_set_deferred #-}
 
 -- | Assigns a new value to the given property, after the current frame's physics step. This is equivalent to calling @method set@ via @method call_deferred@, i.e. @call_deferred("set", property, value)@.
---   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 bindObject_set_deferred :: MethodBind
 bindObject_set_deferred
   = unsafePerformIO $
@@ -1271,7 +1258,6 @@ bindObject_set_deferred
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Assigns a new value to the given property, after the current frame's physics step. This is equivalent to calling @method set@ via @method call_deferred@, i.e. @call_deferred("set", property, value)@.
---   				__Note:__ In C#, the property name must be specified as snake_case if it is defined by a built-in Godot node. This doesn't apply to user-defined properties where you should use the same convention as in the C# source (typically PascalCase).
 set_deferred ::
                (Object :< cls, Object :< cls) =>
                cls -> GodotString -> GodotVariant -> IO ()
@@ -1363,8 +1349,7 @@ instance NodeMethod Object "set_message_translation" '[Bool]
 
 {-# NOINLINE bindObject_set_meta #-}
 
--- | Adds, changes or removes a given entry in the object's metadata. Metadata are serialized and can take any @Variant@ value.
---   				To remove a given entry from the object's metadata, use @method remove_meta@. Metadata is also removed if its value is set to @null@. This means you can also use @set_meta("name", null)@ to remove metadata for @"name"@.
+-- | Adds or changes a given entry in the object's metadata. Metadata are serialized, and can take any @Variant@ value.
 bindObject_set_meta :: MethodBind
 bindObject_set_meta
   = unsafePerformIO $
@@ -1374,8 +1359,7 @@ bindObject_set_meta
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds, changes or removes a given entry in the object's metadata. Metadata are serialized and can take any @Variant@ value.
---   				To remove a given entry from the object's metadata, use @method remove_meta@. Metadata is also removed if its value is set to @null@. This means you can also use @set_meta("name", null)@ to remove metadata for @"name"@.
+-- | Adds or changes a given entry in the object's metadata. Metadata are serialized, and can take any @Variant@ value.
 set_meta ::
            (Object :< cls, Object :< cls) =>
            cls -> GodotString -> GodotVariant -> IO ()

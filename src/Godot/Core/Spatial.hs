@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Spatial
-       (Godot.Core.Spatial._NOTIFICATION_ENTER_WORLD,
-        Godot.Core.Spatial._NOTIFICATION_EXIT_WORLD,
-        Godot.Core.Spatial._NOTIFICATION_TRANSFORM_CHANGED,
+       (Godot.Core.Spatial._NOTIFICATION_TRANSFORM_CHANGED,
         Godot.Core.Spatial._NOTIFICATION_VISIBILITY_CHANGED,
+        Godot.Core.Spatial._NOTIFICATION_EXIT_WORLD,
+        Godot.Core.Spatial._NOTIFICATION_ENTER_WORLD,
         Godot.Core.Spatial.sig_visibility_changed,
         Godot.Core.Spatial._update_gizmo,
         Godot.Core.Spatial.force_update_transform,
@@ -57,17 +57,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node()
 
-_NOTIFICATION_ENTER_WORLD :: Int
-_NOTIFICATION_ENTER_WORLD = 41
-
-_NOTIFICATION_EXIT_WORLD :: Int
-_NOTIFICATION_EXIT_WORLD = 42
-
 _NOTIFICATION_TRANSFORM_CHANGED :: Int
 _NOTIFICATION_TRANSFORM_CHANGED = 2000
 
 _NOTIFICATION_VISIBILITY_CHANGED :: Int
 _NOTIFICATION_VISIBILITY_CHANGED = 43
+
+_NOTIFICATION_EXIT_WORLD :: Int
+_NOTIFICATION_EXIT_WORLD = 42
+
+_NOTIFICATION_ENTER_WORLD :: Int
+_NOTIFICATION_ENTER_WORLD = 41
 
 -- | Emitted when node visibility changes.
 sig_visibility_changed :: Godot.Internal.Dispatch.Signal Spatial
@@ -621,7 +621,7 @@ instance NodeMethod Spatial "is_transform_notification_enabled" '[]
 
 {-# NOINLINE bindSpatial_is_visible #-}
 
--- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+-- | If @true@, this node is drawn.
 bindSpatial_is_visible :: MethodBind
 bindSpatial_is_visible
   = unsafePerformIO $
@@ -631,7 +631,7 @@ bindSpatial_is_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+-- | If @true@, this node is drawn.
 is_visible :: (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_visible cls
   = withVariantArray []
@@ -645,7 +645,7 @@ instance NodeMethod Spatial "is_visible" '[] (IO Bool) where
 
 {-# NOINLINE bindSpatial_is_visible_in_tree #-}
 
--- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns whether the node is visible, taking into consideration that its parents visibility.
 bindSpatial_is_visible_in_tree :: MethodBind
 bindSpatial_is_visible_in_tree
   = unsafePerformIO $
@@ -655,7 +655,7 @@ bindSpatial_is_visible_in_tree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns whether the node is visible, taking into consideration that its parents visibility.
 is_visible_in_tree ::
                      (Spatial :< cls, Object :< cls) => cls -> IO Bool
 is_visible_in_tree cls
@@ -1265,7 +1265,7 @@ instance NodeMethod Spatial "set_translation" '[Vector3] (IO ())
 
 {-# NOINLINE bindSpatial_set_visible #-}
 
--- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+-- | If @true@, this node is drawn.
 bindSpatial_set_visible :: MethodBind
 bindSpatial_set_visible
   = unsafePerformIO $
@@ -1275,7 +1275,7 @@ bindSpatial_set_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, this node is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
+-- | If @true@, this node is drawn.
 set_visible ::
               (Spatial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_visible cls arg1

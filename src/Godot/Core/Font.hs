@@ -25,7 +25,6 @@ import Godot.Core.Resource()
 {-# NOINLINE bindFont_draw #-}
 
 -- | Draw @string@ into a canvas item using the font at a given position, with @modulate@ color, and optionally clipping the width. @position@ specifies the baseline, not the top. To draw from the top, @i@ascent@/i@ must be added to the Y axis.
---   				See also @method CanvasItem.draw_string@.
 bindFont_draw :: MethodBind
 bindFont_draw
   = unsafePerformIO $
@@ -36,7 +35,6 @@ bindFont_draw
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Draw @string@ into a canvas item using the font at a given position, with @modulate@ color, and optionally clipping the width. @position@ specifies the baseline, not the top. To draw from the top, @i@ascent@/i@ must be added to the Y axis.
---   				See also @method CanvasItem.draw_string@.
 draw ::
        (Font :< cls, Object :< cls) =>
        cls ->
@@ -192,7 +190,6 @@ instance NodeMethod Font "get_string_size" '[GodotString]
 
 {-# NOINLINE bindFont_get_wordwrap_string_size #-}
 
--- | Returns the size that the string would have with word wrapping enabled with a fixed @width@.
 bindFont_get_wordwrap_string_size :: MethodBind
 bindFont_get_wordwrap_string_size
   = unsafePerformIO $
@@ -202,7 +199,6 @@ bindFont_get_wordwrap_string_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the size that the string would have with word wrapping enabled with a fixed @width@.
 get_wordwrap_string_size ::
                            (Font :< cls, Object :< cls) =>
                            cls -> GodotString -> Float -> IO Vector2

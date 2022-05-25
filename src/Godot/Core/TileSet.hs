@@ -2,16 +2,15 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TileSet
-       (Godot.Core.TileSet._BITMASK_2X2, Godot.Core.TileSet._BITMASK_3X3,
-        Godot.Core.TileSet._BIND_BOTTOMLEFT,
-        Godot.Core.TileSet._BIND_CENTER, Godot.Core.TileSet._BIND_LEFT,
-        Godot.Core.TileSet._ATLAS_TILE,
-        Godot.Core.TileSet._BITMASK_3X3_MINIMAL,
-        Godot.Core.TileSet._BIND_RIGHT, Godot.Core.TileSet._BIND_TOPLEFT,
-        Godot.Core.TileSet._BIND_BOTTOM,
+       (Godot.Core.TileSet._BITMASK_3X3, Godot.Core.TileSet._BITMASK_2X2,
+        Godot.Core.TileSet._AUTO_TILE, Godot.Core.TileSet._BIND_CENTER,
+        Godot.Core.TileSet._BIND_TOP, Godot.Core.TileSet._SINGLE_TILE,
+        Godot.Core.TileSet._ATLAS_TILE, Godot.Core.TileSet._BIND_BOTTOM,
+        Godot.Core.TileSet._BIND_TOPRIGHT, Godot.Core.TileSet._BIND_RIGHT,
         Godot.Core.TileSet._BIND_BOTTOMRIGHT,
-        Godot.Core.TileSet._AUTO_TILE, Godot.Core.TileSet._BIND_TOP,
-        Godot.Core.TileSet._BIND_TOPRIGHT, Godot.Core.TileSet._SINGLE_TILE,
+        Godot.Core.TileSet._BITMASK_3X3_MINIMAL,
+        Godot.Core.TileSet._BIND_TOPLEFT, Godot.Core.TileSet._BIND_LEFT,
+        Godot.Core.TileSet._BIND_BOTTOMLEFT,
         Godot.Core.TileSet._forward_atlas_subtile_selection,
         Godot.Core.TileSet._forward_subtile_selection,
         Godot.Core.TileSet._is_tile_bound,
@@ -91,50 +90,50 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_BITMASK_2X2 :: Int
-_BITMASK_2X2 = 0
-
 _BITMASK_3X3 :: Int
 _BITMASK_3X3 = 2
 
-_BIND_BOTTOMLEFT :: Int
-_BIND_BOTTOMLEFT = 64
-
-_BIND_CENTER :: Int
-_BIND_CENTER = 16
-
-_BIND_LEFT :: Int
-_BIND_LEFT = 8
-
-_ATLAS_TILE :: Int
-_ATLAS_TILE = 2
-
-_BITMASK_3X3_MINIMAL :: Int
-_BITMASK_3X3_MINIMAL = 1
-
-_BIND_RIGHT :: Int
-_BIND_RIGHT = 32
-
-_BIND_TOPLEFT :: Int
-_BIND_TOPLEFT = 1
-
-_BIND_BOTTOM :: Int
-_BIND_BOTTOM = 128
-
-_BIND_BOTTOMRIGHT :: Int
-_BIND_BOTTOMRIGHT = 256
+_BITMASK_2X2 :: Int
+_BITMASK_2X2 = 0
 
 _AUTO_TILE :: Int
 _AUTO_TILE = 1
 
+_BIND_CENTER :: Int
+_BIND_CENTER = 16
+
 _BIND_TOP :: Int
 _BIND_TOP = 2
+
+_SINGLE_TILE :: Int
+_SINGLE_TILE = 0
+
+_ATLAS_TILE :: Int
+_ATLAS_TILE = 2
+
+_BIND_BOTTOM :: Int
+_BIND_BOTTOM = 128
 
 _BIND_TOPRIGHT :: Int
 _BIND_TOPRIGHT = 4
 
-_SINGLE_TILE :: Int
-_SINGLE_TILE = 0
+_BIND_RIGHT :: Int
+_BIND_RIGHT = 32
+
+_BIND_BOTTOMRIGHT :: Int
+_BIND_BOTTOMRIGHT = 256
+
+_BITMASK_3X3_MINIMAL :: Int
+_BITMASK_3X3_MINIMAL = 1
+
+_BIND_TOPLEFT :: Int
+_BIND_TOPLEFT = 1
+
+_BIND_LEFT :: Int
+_BIND_LEFT = 8
+
+_BIND_BOTTOMLEFT :: Int
+_BIND_BOTTOMLEFT = 64
 
 {-# NOINLINE bindTileSet__forward_atlas_subtile_selection #-}
 
@@ -197,8 +196,6 @@ instance NodeMethod TileSet "_forward_subtile_selection"
 
 {-# NOINLINE bindTileSet__is_tile_bound #-}
 
--- | Determines when the auto-tiler should consider two different auto-tile IDs to be bound together.
---   				__Note:__ @neighbor_id@ will be @-1@ (@TileMap.INVALID_CELL@) when checking a tile against an empty neighbor tile.
 bindTileSet__is_tile_bound :: MethodBind
 bindTileSet__is_tile_bound
   = unsafePerformIO $
@@ -208,8 +205,6 @@ bindTileSet__is_tile_bound
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Determines when the auto-tiler should consider two different auto-tile IDs to be bound together.
---   				__Note:__ @neighbor_id@ will be @-1@ (@TileMap.INVALID_CELL@) when checking a tile against an empty neighbor tile.
 _is_tile_bound ::
                  (TileSet :< cls, Object :< cls) => cls -> Int -> Int -> IO Bool
 _is_tile_bound cls arg1 arg2
@@ -1419,20 +1414,7 @@ instance NodeMethod TileSet "tile_get_shape_transform" '[Int, Int]
 
 {-# NOINLINE bindTileSet_tile_get_shapes #-}
 
--- | Returns an array of dictionaries describing the tile's shapes.
---   				__Dictionary structure in the array returned by this method:__
---   				
---   @
---   
---   				{
---   				    "autotile_coord": Vector2,
---   				    "one_way": bool,
---   				    "one_way_margin": int,
---   				    "shape": CollisionShape2D,
---   				    "shape_transform": Transform2D,
---   				}
---   				
---   @
+-- | Returns an array of the tile's shapes.
 bindTileSet_tile_get_shapes :: MethodBind
 bindTileSet_tile_get_shapes
   = unsafePerformIO $
@@ -1442,20 +1424,7 @@ bindTileSet_tile_get_shapes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of dictionaries describing the tile's shapes.
---   				__Dictionary structure in the array returned by this method:__
---   				
---   @
---   
---   				{
---   				    "autotile_coord": Vector2,
---   				    "one_way": bool,
---   				    "one_way_margin": int,
---   				    "shape": CollisionShape2D,
---   				    "shape_transform": Transform2D,
---   				}
---   				
---   @
+-- | Returns an array of the tile's shapes.
 tile_get_shapes ::
                   (TileSet :< cls, Object :< cls) => cls -> Int -> IO Array
 tile_get_shapes cls arg1
@@ -1764,7 +1733,6 @@ instance NodeMethod TileSet "tile_set_navigation_polygon_offset"
 {-# NOINLINE bindTileSet_tile_set_normal_map #-}
 
 -- | Sets the tile's normal map texture.
---   				__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindTileSet_tile_set_normal_map :: MethodBind
 bindTileSet_tile_set_normal_map
   = unsafePerformIO $
@@ -1775,7 +1743,6 @@ bindTileSet_tile_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the tile's normal map texture.
---   				__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 tile_set_normal_map ::
                       (TileSet :< cls, Object :< cls) => cls -> Int -> Texture -> IO ()
 tile_set_normal_map cls arg1 arg2

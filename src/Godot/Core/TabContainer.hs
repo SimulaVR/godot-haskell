@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TabContainer
-       (Godot.Core.TabContainer._ALIGN_RIGHT,
+       (Godot.Core.TabContainer._ALIGN_CENTER,
         Godot.Core.TabContainer._ALIGN_LEFT,
-        Godot.Core.TabContainer._ALIGN_CENTER,
+        Godot.Core.TabContainer._ALIGN_RIGHT,
         Godot.Core.TabContainer.sig_pre_popup_pressed,
         Godot.Core.TabContainer.sig_tab_changed,
         Godot.Core.TabContainer.sig_tab_selected,
@@ -50,14 +50,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Container()
 
-_ALIGN_RIGHT :: Int
-_ALIGN_RIGHT = 2
+_ALIGN_CENTER :: Int
+_ALIGN_CENTER = 1
 
 _ALIGN_LEFT :: Int
 _ALIGN_LEFT = 0
 
-_ALIGN_CENTER :: Int
-_ALIGN_CENTER = 1
+_ALIGN_RIGHT :: Int
+_ALIGN_RIGHT = 2
 
 -- | Emitted when the @TabContainer@'s @Popup@ button is clicked. See @method set_popup@ for details.
 sig_pre_popup_pressed ::
@@ -434,7 +434,7 @@ instance NodeMethod TabContainer "get_tab_align" '[] (IO Int) where
 
 {-# NOINLINE bindTabContainer_get_tab_control #-}
 
--- | Returns the @Control@ node from the tab at index @tab_idx@.
+-- | Returns the currently visible tab's @Control@ node.
 bindTabContainer_get_tab_control :: MethodBind
 bindTabContainer_get_tab_control
   = unsafePerformIO $
@@ -444,7 +444,7 @@ bindTabContainer_get_tab_control
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the @Control@ node from the tab at index @tab_idx@.
+-- | Returns the currently visible tab's @Control@ node.
 get_tab_control ::
                   (TabContainer :< cls, Object :< cls) => cls -> Int -> IO Control
 get_tab_control cls arg1

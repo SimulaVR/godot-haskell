@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ItemList
-       (Godot.Core.ItemList._ICON_MODE_LEFT,
+       (Godot.Core.ItemList._SELECT_SINGLE,
         Godot.Core.ItemList._SELECT_MULTI,
-        Godot.Core.ItemList._SELECT_SINGLE,
         Godot.Core.ItemList._ICON_MODE_TOP,
+        Godot.Core.ItemList._ICON_MODE_LEFT,
         Godot.Core.ItemList.sig_item_activated,
         Godot.Core.ItemList.sig_item_rmb_selected,
         Godot.Core.ItemList.sig_item_selected,
@@ -85,17 +85,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
-_ICON_MODE_LEFT :: Int
-_ICON_MODE_LEFT = 1
+_SELECT_SINGLE :: Int
+_SELECT_SINGLE = 0
 
 _SELECT_MULTI :: Int
 _SELECT_MULTI = 1
 
-_SELECT_SINGLE :: Int
-_SELECT_SINGLE = 0
-
 _ICON_MODE_TOP :: Int
 _ICON_MODE_TOP = 0
+
+_ICON_MODE_LEFT :: Int
+_ICON_MODE_LEFT = 1
 
 -- | Triggered when specified list item is activated via double-clicking or by pressing Enter.
 sig_item_activated :: Godot.Internal.Dispatch.Signal ItemList

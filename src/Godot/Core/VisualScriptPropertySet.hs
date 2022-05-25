@@ -2,21 +2,21 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptPropertySet
-       (Godot.Core.VisualScriptPropertySet._CALL_MODE_BASIC_TYPE,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_SHIFT_LEFT,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_DIV,
+       (Godot.Core.VisualScriptPropertySet._ASSIGN_OP_DIV,
         Godot.Core.VisualScriptPropertySet._ASSIGN_OP_MOD,
-        Godot.Core.VisualScriptPropertySet._CALL_MODE_NODE_PATH,
+        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_SHIFT_LEFT,
         Godot.Core.VisualScriptPropertySet._ASSIGN_OP_BIT_OR,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_SHIFT_RIGHT,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_NONE,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_ADD,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_MUL,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_SUB,
-        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_BIT_AND,
-        Godot.Core.VisualScriptPropertySet._CALL_MODE_SELF,
-        Godot.Core.VisualScriptPropertySet._CALL_MODE_INSTANCE,
         Godot.Core.VisualScriptPropertySet._ASSIGN_OP_BIT_XOR,
+        Godot.Core.VisualScriptPropertySet._CALL_MODE_NODE_PATH,
+        Godot.Core.VisualScriptPropertySet._CALL_MODE_BASIC_TYPE,
+        Godot.Core.VisualScriptPropertySet._CALL_MODE_INSTANCE,
+        Godot.Core.VisualScriptPropertySet._CALL_MODE_SELF,
+        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_ADD,
+        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_SUB,
+        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_MUL,
+        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_BIT_AND,
+        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_NONE,
+        Godot.Core.VisualScriptPropertySet._ASSIGN_OP_SHIFT_RIGHT,
         Godot.Core.VisualScriptPropertySet._get_type_cache,
         Godot.Core.VisualScriptPropertySet._set_type_cache,
         Godot.Core.VisualScriptPropertySet.get_assign_op,
@@ -48,50 +48,50 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualScriptNode()
 
-_CALL_MODE_BASIC_TYPE :: Int
-_CALL_MODE_BASIC_TYPE = 3
-
-_ASSIGN_OP_SHIFT_LEFT :: Int
-_ASSIGN_OP_SHIFT_LEFT = 6
-
 _ASSIGN_OP_DIV :: Int
 _ASSIGN_OP_DIV = 4
 
 _ASSIGN_OP_MOD :: Int
 _ASSIGN_OP_MOD = 5
 
-_CALL_MODE_NODE_PATH :: Int
-_CALL_MODE_NODE_PATH = 1
+_ASSIGN_OP_SHIFT_LEFT :: Int
+_ASSIGN_OP_SHIFT_LEFT = 6
 
 _ASSIGN_OP_BIT_OR :: Int
 _ASSIGN_OP_BIT_OR = 9
 
-_ASSIGN_OP_SHIFT_RIGHT :: Int
-_ASSIGN_OP_SHIFT_RIGHT = 7
+_ASSIGN_OP_BIT_XOR :: Int
+_ASSIGN_OP_BIT_XOR = 10
 
-_ASSIGN_OP_NONE :: Int
-_ASSIGN_OP_NONE = 0
+_CALL_MODE_NODE_PATH :: Int
+_CALL_MODE_NODE_PATH = 1
 
-_ASSIGN_OP_ADD :: Int
-_ASSIGN_OP_ADD = 1
-
-_ASSIGN_OP_MUL :: Int
-_ASSIGN_OP_MUL = 3
-
-_ASSIGN_OP_SUB :: Int
-_ASSIGN_OP_SUB = 2
-
-_ASSIGN_OP_BIT_AND :: Int
-_ASSIGN_OP_BIT_AND = 8
-
-_CALL_MODE_SELF :: Int
-_CALL_MODE_SELF = 0
+_CALL_MODE_BASIC_TYPE :: Int
+_CALL_MODE_BASIC_TYPE = 3
 
 _CALL_MODE_INSTANCE :: Int
 _CALL_MODE_INSTANCE = 2
 
-_ASSIGN_OP_BIT_XOR :: Int
-_ASSIGN_OP_BIT_XOR = 10
+_CALL_MODE_SELF :: Int
+_CALL_MODE_SELF = 0
+
+_ASSIGN_OP_ADD :: Int
+_ASSIGN_OP_ADD = 1
+
+_ASSIGN_OP_SUB :: Int
+_ASSIGN_OP_SUB = 2
+
+_ASSIGN_OP_MUL :: Int
+_ASSIGN_OP_MUL = 3
+
+_ASSIGN_OP_BIT_AND :: Int
+_ASSIGN_OP_BIT_AND = 8
+
+_ASSIGN_OP_NONE :: Int
+_ASSIGN_OP_NONE = 0
+
+_ASSIGN_OP_SHIFT_RIGHT :: Int
+_ASSIGN_OP_SHIFT_RIGHT = 7
 
 instance NodeProperty VisualScriptPropertySet "assign_op" Int
            'False

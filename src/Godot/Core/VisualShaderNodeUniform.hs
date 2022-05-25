@@ -26,7 +26,6 @@ instance NodeProperty VisualShaderNodeUniform "uniform_name"
 
 {-# NOINLINE bindVisualShaderNodeUniform_get_uniform_name #-}
 
--- | Name of the uniform, by which it can be accessed through the @ShaderMaterial@ properties.
 bindVisualShaderNodeUniform_get_uniform_name :: MethodBind
 bindVisualShaderNodeUniform_get_uniform_name
   = unsafePerformIO $
@@ -36,7 +35,6 @@ bindVisualShaderNodeUniform_get_uniform_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Name of the uniform, by which it can be accessed through the @ShaderMaterial@ properties.
 get_uniform_name ::
                    (VisualShaderNodeUniform :< cls, Object :< cls) =>
                    cls -> IO GodotString
@@ -56,7 +54,6 @@ instance NodeMethod VisualShaderNodeUniform "get_uniform_name" '[]
 
 {-# NOINLINE bindVisualShaderNodeUniform_set_uniform_name #-}
 
--- | Name of the uniform, by which it can be accessed through the @ShaderMaterial@ properties.
 bindVisualShaderNodeUniform_set_uniform_name :: MethodBind
 bindVisualShaderNodeUniform_set_uniform_name
   = unsafePerformIO $
@@ -66,7 +63,6 @@ bindVisualShaderNodeUniform_set_uniform_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Name of the uniform, by which it can be accessed through the @ShaderMaterial@ properties.
 set_uniform_name ::
                    (VisualShaderNodeUniform :< cls, Object :< cls) =>
                    cls -> GodotString -> IO ()

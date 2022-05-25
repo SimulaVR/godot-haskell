@@ -2,39 +2,39 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Viewport
-       (Godot.Core.Viewport._CLEAR_MODE_ONLY_NEXT_FRAME,
-        Godot.Core.Viewport._DEBUG_DRAW_OVERDRAW,
+       (Godot.Core.Viewport._RENDER_INFO_MAX,
+        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_64,
+        Godot.Core.Viewport._USAGE_3D,
+        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_MAX,
         Godot.Core.Viewport._UPDATE_ALWAYS,
-        Godot.Core.Viewport._RENDER_INFO_MATERIAL_CHANGES_IN_FRAME,
-        Godot.Core.Viewport._USAGE_3D, Godot.Core.Viewport._MSAA_4X,
+        Godot.Core.Viewport._DEBUG_DRAW_UNSHADED,
+        Godot.Core.Viewport._RENDER_INFO_OBJECTS_IN_FRAME,
+        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_DISABLED,
+        Godot.Core.Viewport._UPDATE_WHEN_VISIBLE,
         Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_1024,
         Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_16,
-        Godot.Core.Viewport._RENDER_INFO_SHADER_CHANGES_IN_FRAME,
-        Godot.Core.Viewport._RENDER_INFO_MAX,
-        Godot.Core.Viewport._CLEAR_MODE_NEVER,
-        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_64,
-        Godot.Core.Viewport._USAGE_3D_NO_EFFECTS,
-        Godot.Core.Viewport._RENDER_INFO_OBJECTS_IN_FRAME,
-        Godot.Core.Viewport._MSAA_2X,
         Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_256,
-        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_MAX,
-        Godot.Core.Viewport._UPDATE_DISABLED,
-        Godot.Core.Viewport._MSAA_DISABLED,
-        Godot.Core.Viewport._DEBUG_DRAW_DISABLED,
-        Godot.Core.Viewport._MSAA_8X, Godot.Core.Viewport._USAGE_2D,
-        Godot.Core.Viewport._RENDER_INFO_VERTICES_IN_FRAME,
-        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_DISABLED,
-        Godot.Core.Viewport._DEBUG_DRAW_UNSHADED,
-        Godot.Core.Viewport._DEBUG_DRAW_WIREFRAME,
-        Godot.Core.Viewport._RENDER_INFO_DRAW_CALLS_IN_FRAME,
-        Godot.Core.Viewport._UPDATE_WHEN_VISIBLE,
-        Godot.Core.Viewport._CLEAR_MODE_ALWAYS,
-        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_1,
-        Godot.Core.Viewport._MSAA_16X,
-        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_4,
-        Godot.Core.Viewport._USAGE_2D_NO_SAMPLING,
+        Godot.Core.Viewport._USAGE_2D, Godot.Core.Viewport._MSAA_8X,
+        Godot.Core.Viewport._USAGE_3D_NO_EFFECTS,
         Godot.Core.Viewport._UPDATE_ONCE,
+        Godot.Core.Viewport._CLEAR_MODE_NEVER,
+        Godot.Core.Viewport._DEBUG_DRAW_DISABLED,
+        Godot.Core.Viewport._MSAA_4X,
         Godot.Core.Viewport._RENDER_INFO_SURFACE_CHANGES_IN_FRAME,
+        Godot.Core.Viewport._CLEAR_MODE_ONLY_NEXT_FRAME,
+        Godot.Core.Viewport._MSAA_16X,
+        Godot.Core.Viewport._DEBUG_DRAW_WIREFRAME,
+        Godot.Core.Viewport._MSAA_DISABLED,
+        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_4,
+        Godot.Core.Viewport._SHADOW_ATLAS_QUADRANT_SUBDIV_1,
+        Godot.Core.Viewport._RENDER_INFO_DRAW_CALLS_IN_FRAME,
+        Godot.Core.Viewport._DEBUG_DRAW_OVERDRAW,
+        Godot.Core.Viewport._MSAA_2X, Godot.Core.Viewport._UPDATE_DISABLED,
+        Godot.Core.Viewport._RENDER_INFO_VERTICES_IN_FRAME,
+        Godot.Core.Viewport._RENDER_INFO_SHADER_CHANGES_IN_FRAME,
+        Godot.Core.Viewport._CLEAR_MODE_ALWAYS,
+        Godot.Core.Viewport._RENDER_INFO_MATERIAL_CHANGES_IN_FRAME,
+        Godot.Core.Viewport._USAGE_2D_NO_SAMPLING,
         Godot.Core.Viewport.sig_gui_focus_changed,
         Godot.Core.Viewport.sig_size_changed,
         Godot.Core.Viewport._gui_remove_focus,
@@ -127,23 +127,32 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node()
 
-_CLEAR_MODE_ONLY_NEXT_FRAME :: Int
-_CLEAR_MODE_ONLY_NEXT_FRAME = 2
+_RENDER_INFO_MAX :: Int
+_RENDER_INFO_MAX = 6
 
-_DEBUG_DRAW_OVERDRAW :: Int
-_DEBUG_DRAW_OVERDRAW = 2
-
-_UPDATE_ALWAYS :: Int
-_UPDATE_ALWAYS = 3
-
-_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME :: Int
-_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME = 2
+_SHADOW_ATLAS_QUADRANT_SUBDIV_64 :: Int
+_SHADOW_ATLAS_QUADRANT_SUBDIV_64 = 4
 
 _USAGE_3D :: Int
 _USAGE_3D = 2
 
-_MSAA_4X :: Int
-_MSAA_4X = 2
+_SHADOW_ATLAS_QUADRANT_SUBDIV_MAX :: Int
+_SHADOW_ATLAS_QUADRANT_SUBDIV_MAX = 7
+
+_UPDATE_ALWAYS :: Int
+_UPDATE_ALWAYS = 3
+
+_DEBUG_DRAW_UNSHADED :: Int
+_DEBUG_DRAW_UNSHADED = 1
+
+_RENDER_INFO_OBJECTS_IN_FRAME :: Int
+_RENDER_INFO_OBJECTS_IN_FRAME = 0
+
+_SHADOW_ATLAS_QUADRANT_SUBDIV_DISABLED :: Int
+_SHADOW_ATLAS_QUADRANT_SUBDIV_DISABLED = 0
+
+_UPDATE_WHEN_VISIBLE :: Int
+_UPDATE_WHEN_VISIBLE = 2
 
 _SHADOW_ATLAS_QUADRANT_SUBDIV_1024 :: Int
 _SHADOW_ATLAS_QUADRANT_SUBDIV_1024 = 6
@@ -151,86 +160,77 @@ _SHADOW_ATLAS_QUADRANT_SUBDIV_1024 = 6
 _SHADOW_ATLAS_QUADRANT_SUBDIV_16 :: Int
 _SHADOW_ATLAS_QUADRANT_SUBDIV_16 = 3
 
-_RENDER_INFO_SHADER_CHANGES_IN_FRAME :: Int
-_RENDER_INFO_SHADER_CHANGES_IN_FRAME = 3
-
-_RENDER_INFO_MAX :: Int
-_RENDER_INFO_MAX = 6
-
-_CLEAR_MODE_NEVER :: Int
-_CLEAR_MODE_NEVER = 1
-
-_SHADOW_ATLAS_QUADRANT_SUBDIV_64 :: Int
-_SHADOW_ATLAS_QUADRANT_SUBDIV_64 = 4
-
-_USAGE_3D_NO_EFFECTS :: Int
-_USAGE_3D_NO_EFFECTS = 3
-
-_RENDER_INFO_OBJECTS_IN_FRAME :: Int
-_RENDER_INFO_OBJECTS_IN_FRAME = 0
-
-_MSAA_2X :: Int
-_MSAA_2X = 1
-
 _SHADOW_ATLAS_QUADRANT_SUBDIV_256 :: Int
 _SHADOW_ATLAS_QUADRANT_SUBDIV_256 = 5
-
-_SHADOW_ATLAS_QUADRANT_SUBDIV_MAX :: Int
-_SHADOW_ATLAS_QUADRANT_SUBDIV_MAX = 7
-
-_UPDATE_DISABLED :: Int
-_UPDATE_DISABLED = 0
-
-_MSAA_DISABLED :: Int
-_MSAA_DISABLED = 0
-
-_DEBUG_DRAW_DISABLED :: Int
-_DEBUG_DRAW_DISABLED = 0
-
-_MSAA_8X :: Int
-_MSAA_8X = 3
 
 _USAGE_2D :: Int
 _USAGE_2D = 0
 
-_RENDER_INFO_VERTICES_IN_FRAME :: Int
-_RENDER_INFO_VERTICES_IN_FRAME = 1
+_MSAA_8X :: Int
+_MSAA_8X = 3
 
-_SHADOW_ATLAS_QUADRANT_SUBDIV_DISABLED :: Int
-_SHADOW_ATLAS_QUADRANT_SUBDIV_DISABLED = 0
-
-_DEBUG_DRAW_UNSHADED :: Int
-_DEBUG_DRAW_UNSHADED = 1
-
-_DEBUG_DRAW_WIREFRAME :: Int
-_DEBUG_DRAW_WIREFRAME = 3
-
-_RENDER_INFO_DRAW_CALLS_IN_FRAME :: Int
-_RENDER_INFO_DRAW_CALLS_IN_FRAME = 5
-
-_UPDATE_WHEN_VISIBLE :: Int
-_UPDATE_WHEN_VISIBLE = 2
-
-_CLEAR_MODE_ALWAYS :: Int
-_CLEAR_MODE_ALWAYS = 0
-
-_SHADOW_ATLAS_QUADRANT_SUBDIV_1 :: Int
-_SHADOW_ATLAS_QUADRANT_SUBDIV_1 = 1
-
-_MSAA_16X :: Int
-_MSAA_16X = 4
-
-_SHADOW_ATLAS_QUADRANT_SUBDIV_4 :: Int
-_SHADOW_ATLAS_QUADRANT_SUBDIV_4 = 2
-
-_USAGE_2D_NO_SAMPLING :: Int
-_USAGE_2D_NO_SAMPLING = 1
+_USAGE_3D_NO_EFFECTS :: Int
+_USAGE_3D_NO_EFFECTS = 3
 
 _UPDATE_ONCE :: Int
 _UPDATE_ONCE = 1
 
+_CLEAR_MODE_NEVER :: Int
+_CLEAR_MODE_NEVER = 1
+
+_DEBUG_DRAW_DISABLED :: Int
+_DEBUG_DRAW_DISABLED = 0
+
+_MSAA_4X :: Int
+_MSAA_4X = 2
+
 _RENDER_INFO_SURFACE_CHANGES_IN_FRAME :: Int
 _RENDER_INFO_SURFACE_CHANGES_IN_FRAME = 4
+
+_CLEAR_MODE_ONLY_NEXT_FRAME :: Int
+_CLEAR_MODE_ONLY_NEXT_FRAME = 2
+
+_MSAA_16X :: Int
+_MSAA_16X = 4
+
+_DEBUG_DRAW_WIREFRAME :: Int
+_DEBUG_DRAW_WIREFRAME = 3
+
+_MSAA_DISABLED :: Int
+_MSAA_DISABLED = 0
+
+_SHADOW_ATLAS_QUADRANT_SUBDIV_4 :: Int
+_SHADOW_ATLAS_QUADRANT_SUBDIV_4 = 2
+
+_SHADOW_ATLAS_QUADRANT_SUBDIV_1 :: Int
+_SHADOW_ATLAS_QUADRANT_SUBDIV_1 = 1
+
+_RENDER_INFO_DRAW_CALLS_IN_FRAME :: Int
+_RENDER_INFO_DRAW_CALLS_IN_FRAME = 5
+
+_DEBUG_DRAW_OVERDRAW :: Int
+_DEBUG_DRAW_OVERDRAW = 2
+
+_MSAA_2X :: Int
+_MSAA_2X = 1
+
+_UPDATE_DISABLED :: Int
+_UPDATE_DISABLED = 0
+
+_RENDER_INFO_VERTICES_IN_FRAME :: Int
+_RENDER_INFO_VERTICES_IN_FRAME = 1
+
+_RENDER_INFO_SHADER_CHANGES_IN_FRAME :: Int
+_RENDER_INFO_SHADER_CHANGES_IN_FRAME = 3
+
+_CLEAR_MODE_ALWAYS :: Int
+_CLEAR_MODE_ALWAYS = 0
+
+_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME :: Int
+_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME = 2
+
+_USAGE_2D_NO_SAMPLING :: Int
+_USAGE_2D_NO_SAMPLING = 1
 
 -- | Emitted when a Control node grabs keyboard focus.
 sig_gui_focus_changed :: Godot.Internal.Dispatch.Signal Viewport
@@ -711,7 +711,6 @@ instance NodeMethod Viewport "get_canvas_transform" '[]
 {-# NOINLINE bindViewport_get_clear_mode #-}
 
 -- | The clear mode when viewport used as a render target.
---   			__Note:__ This property is intended for 2D usage.
 bindViewport_get_clear_mode :: MethodBind
 bindViewport_get_clear_mode
   = unsafePerformIO $
@@ -722,7 +721,6 @@ bindViewport_get_clear_mode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The clear mode when viewport used as a render target.
---   			__Note:__ This property is intended for 2D usage.
 get_clear_mode :: (Viewport :< cls, Object :< cls) => cls -> IO Int
 get_clear_mode cls
   = withVariantArray []
@@ -821,7 +819,6 @@ instance NodeMethod Viewport "get_global_canvas_transform" '[]
 {-# NOINLINE bindViewport_get_hdr #-}
 
 -- | If @true@, the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
---   			__Note:__ Requires @usage@ to be set to @USAGE_3D@ or @USAGE_3D_NO_EFFECTS@, since HDR is not supported for 2D.
 bindViewport_get_hdr :: MethodBind
 bindViewport_get_hdr
   = unsafePerformIO $
@@ -832,7 +829,6 @@ bindViewport_get_hdr
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
---   			__Note:__ Requires @usage@ to be set to @USAGE_3D@ or @USAGE_3D_NO_EFFECTS@, since HDR is not supported for 2D.
 get_hdr :: (Viewport :< cls, Object :< cls) => cls -> IO Bool
 get_hdr cls
   = withVariantArray []
@@ -1894,7 +1890,6 @@ instance NodeMethod Viewport "set_canvas_transform" '[Transform2d]
 {-# NOINLINE bindViewport_set_clear_mode #-}
 
 -- | The clear mode when viewport used as a render target.
---   			__Note:__ This property is intended for 2D usage.
 bindViewport_set_clear_mode :: MethodBind
 bindViewport_set_clear_mode
   = unsafePerformIO $
@@ -1905,7 +1900,6 @@ bindViewport_set_clear_mode
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The clear mode when viewport used as a render target.
---   			__Note:__ This property is intended for 2D usage.
 set_clear_mode ::
                  (Viewport :< cls, Object :< cls) => cls -> Int -> IO ()
 set_clear_mode cls arg1
@@ -2058,7 +2052,6 @@ instance NodeMethod Viewport "set_handle_input_locally" '[Bool]
 {-# NOINLINE bindViewport_set_hdr #-}
 
 -- | If @true@, the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
---   			__Note:__ Requires @usage@ to be set to @USAGE_3D@ or @USAGE_3D_NO_EFFECTS@, since HDR is not supported for 2D.
 bindViewport_set_hdr :: MethodBind
 bindViewport_set_hdr
   = unsafePerformIO $
@@ -2069,7 +2062,6 @@ bindViewport_set_hdr
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the viewport rendering will receive benefits from High Dynamic Range algorithm. High Dynamic Range allows the viewport to receive values that are outside the 0-1 range. In Godot HDR uses 16 bits, meaning it does not store the full range of a floating point number.
---   			__Note:__ Requires @usage@ to be set to @USAGE_3D@ or @USAGE_3D_NO_EFFECTS@, since HDR is not supported for 2D.
 set_hdr :: (Viewport :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_hdr cls arg1
   = withVariantArray [toVariant arg1]

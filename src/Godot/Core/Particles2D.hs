@@ -320,7 +320,6 @@ instance NodeMethod Particles2D "get_lifetime" '[] (IO Float) where
 {-# NOINLINE bindParticles2D_get_normal_map #-}
 
 -- | Normal map to be used for the @texture@ property.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindParticles2D_get_normal_map :: MethodBind
 bindParticles2D_get_normal_map
   = unsafePerformIO $
@@ -331,7 +330,6 @@ bindParticles2D_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Normal map to be used for the @texture@ property.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (Particles2D :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -816,7 +814,6 @@ instance NodeMethod Particles2D "set_lifetime" '[Float] (IO ())
 {-# NOINLINE bindParticles2D_set_normal_map #-}
 
 -- | Normal map to be used for the @texture@ property.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindParticles2D_set_normal_map :: MethodBind
 bindParticles2D_set_normal_map
   = unsafePerformIO $
@@ -827,7 +824,6 @@ bindParticles2D_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Normal map to be used for the @texture@ property.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (Particles2D :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1

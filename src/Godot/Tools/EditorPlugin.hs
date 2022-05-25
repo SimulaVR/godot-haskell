@@ -2,27 +2,27 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Tools.EditorPlugin
-       (Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_SIDE_LEFT,
-        Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_BOTTOM,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_UR,
+       (Godot.Tools.EditorPlugin._DOCK_SLOT_RIGHT_UR,
+        Godot.Tools.EditorPlugin._CONTAINER_TOOLBAR,
+        Godot.Tools.EditorPlugin._DOCK_SLOT_RIGHT_BL,
+        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_UL,
         Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_BL,
+        Godot.Tools.EditorPlugin._CONTAINER_CANVAS_EDITOR_MENU,
+        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_BR,
+        Godot.Tools.EditorPlugin._CONTAINER_CANVAS_EDITOR_SIDE_LEFT,
         Godot.Tools.EditorPlugin._CONTAINER_PROJECT_SETTING_TAB_LEFT,
+        Godot.Tools.EditorPlugin._DOCK_SLOT_MAX,
+        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_UR,
         Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_MENU,
+        Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_BOTTOM,
+        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_BL,
+        Godot.Tools.EditorPlugin._CONTAINER_SPATIAL_EDITOR_SIDE_LEFT,
+        Godot.Tools.EditorPlugin._DOCK_SLOT_RIGHT_UL,
+        Godot.Tools.EditorPlugin._CONTAINER_PROPERTY_EDITOR_BOTTOM,
         Godot.Tools.EditorPlugin._DOCK_SLOT_RIGHT_BR,
         Godot.Tools.EditorPlugin._CONTAINER_PROJECT_SETTING_TAB_RIGHT,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_RIGHT_BL,
-        Godot.Tools.EditorPlugin._CONTAINER_CANVAS_EDITOR_BOTTOM,
-        Godot.Tools.EditorPlugin._CONTAINER_CANVAS_EDITOR_SIDE_LEFT,
-        Godot.Tools.EditorPlugin._CONTAINER_PROPERTY_EDITOR_BOTTOM,
-        Godot.Tools.EditorPlugin._CONTAINER_TOOLBAR,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_RIGHT_UL,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_RIGHT_UR,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_UL,
-        Godot.Tools.EditorPlugin._CONTAINER_CANVAS_EDITOR_MENU,
         Godot.Tools.EditorPlugin._CONTAINER_CANVAS_EDITOR_SIDE_RIGHT,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_LEFT_BR,
-        Godot.Tools.EditorPlugin._DOCK_SLOT_MAX,
+        Godot.Tools.EditorPlugin._CONTAINER_CANVAS_EDITOR_BOTTOM,
         Godot.Tools.EditorPlugin.sig_main_screen_changed,
         Godot.Tools.EditorPlugin.sig_resource_saved,
         Godot.Tools.EditorPlugin.sig_scene_changed,
@@ -92,26 +92,56 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node()
 
-_CONTAINER_SPATIAL_EDITOR_SIDE_LEFT :: Int
-_CONTAINER_SPATIAL_EDITOR_SIDE_LEFT = 2
+_DOCK_SLOT_RIGHT_UR :: Int
+_DOCK_SLOT_RIGHT_UR = 6
 
-_CONTAINER_SPATIAL_EDITOR_BOTTOM :: Int
-_CONTAINER_SPATIAL_EDITOR_BOTTOM = 4
+_CONTAINER_TOOLBAR :: Int
+_CONTAINER_TOOLBAR = 0
 
-_DOCK_SLOT_LEFT_UR :: Int
-_DOCK_SLOT_LEFT_UR = 2
+_DOCK_SLOT_RIGHT_BL :: Int
+_DOCK_SLOT_RIGHT_BL = 5
+
+_DOCK_SLOT_LEFT_UL :: Int
+_DOCK_SLOT_LEFT_UL = 0
 
 _CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT :: Int
 _CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT = 3
 
-_DOCK_SLOT_LEFT_BL :: Int
-_DOCK_SLOT_LEFT_BL = 1
+_CONTAINER_CANVAS_EDITOR_MENU :: Int
+_CONTAINER_CANVAS_EDITOR_MENU = 5
+
+_DOCK_SLOT_LEFT_BR :: Int
+_DOCK_SLOT_LEFT_BR = 3
+
+_CONTAINER_CANVAS_EDITOR_SIDE_LEFT :: Int
+_CONTAINER_CANVAS_EDITOR_SIDE_LEFT = 6
 
 _CONTAINER_PROJECT_SETTING_TAB_LEFT :: Int
 _CONTAINER_PROJECT_SETTING_TAB_LEFT = 10
 
+_DOCK_SLOT_MAX :: Int
+_DOCK_SLOT_MAX = 8
+
+_DOCK_SLOT_LEFT_UR :: Int
+_DOCK_SLOT_LEFT_UR = 2
+
 _CONTAINER_SPATIAL_EDITOR_MENU :: Int
 _CONTAINER_SPATIAL_EDITOR_MENU = 1
+
+_CONTAINER_SPATIAL_EDITOR_BOTTOM :: Int
+_CONTAINER_SPATIAL_EDITOR_BOTTOM = 4
+
+_DOCK_SLOT_LEFT_BL :: Int
+_DOCK_SLOT_LEFT_BL = 1
+
+_CONTAINER_SPATIAL_EDITOR_SIDE_LEFT :: Int
+_CONTAINER_SPATIAL_EDITOR_SIDE_LEFT = 2
+
+_DOCK_SLOT_RIGHT_UL :: Int
+_DOCK_SLOT_RIGHT_UL = 4
+
+_CONTAINER_PROPERTY_EDITOR_BOTTOM :: Int
+_CONTAINER_PROPERTY_EDITOR_BOTTOM = 9
 
 _DOCK_SLOT_RIGHT_BR :: Int
 _DOCK_SLOT_RIGHT_BR = 7
@@ -119,41 +149,11 @@ _DOCK_SLOT_RIGHT_BR = 7
 _CONTAINER_PROJECT_SETTING_TAB_RIGHT :: Int
 _CONTAINER_PROJECT_SETTING_TAB_RIGHT = 11
 
-_DOCK_SLOT_RIGHT_BL :: Int
-_DOCK_SLOT_RIGHT_BL = 5
-
-_CONTAINER_CANVAS_EDITOR_BOTTOM :: Int
-_CONTAINER_CANVAS_EDITOR_BOTTOM = 8
-
-_CONTAINER_CANVAS_EDITOR_SIDE_LEFT :: Int
-_CONTAINER_CANVAS_EDITOR_SIDE_LEFT = 6
-
-_CONTAINER_PROPERTY_EDITOR_BOTTOM :: Int
-_CONTAINER_PROPERTY_EDITOR_BOTTOM = 9
-
-_CONTAINER_TOOLBAR :: Int
-_CONTAINER_TOOLBAR = 0
-
-_DOCK_SLOT_RIGHT_UL :: Int
-_DOCK_SLOT_RIGHT_UL = 4
-
-_DOCK_SLOT_RIGHT_UR :: Int
-_DOCK_SLOT_RIGHT_UR = 6
-
-_DOCK_SLOT_LEFT_UL :: Int
-_DOCK_SLOT_LEFT_UL = 0
-
-_CONTAINER_CANVAS_EDITOR_MENU :: Int
-_CONTAINER_CANVAS_EDITOR_MENU = 5
-
 _CONTAINER_CANVAS_EDITOR_SIDE_RIGHT :: Int
 _CONTAINER_CANVAS_EDITOR_SIDE_RIGHT = 7
 
-_DOCK_SLOT_LEFT_BR :: Int
-_DOCK_SLOT_LEFT_BR = 3
-
-_DOCK_SLOT_MAX :: Int
-_DOCK_SLOT_MAX = 8
+_CONTAINER_CANVAS_EDITOR_BOTTOM :: Int
+_CONTAINER_CANVAS_EDITOR_BOTTOM = 8
 
 -- | Emitted when user changes the workspace (__2D__, __3D__, __Script__, __AssetLib__). Also works with custom screens defined by plugins.
 sig_main_screen_changed ::

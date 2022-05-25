@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.CameraServer
-       (Godot.Core.CameraServer._FEED_YCBCR_IMAGE,
-        Godot.Core.CameraServer._FEED_Y_IMAGE,
+       (Godot.Core.CameraServer._FEED_RGBA_IMAGE,
         Godot.Core.CameraServer._FEED_CBCR_IMAGE,
-        Godot.Core.CameraServer._FEED_RGBA_IMAGE,
+        Godot.Core.CameraServer._FEED_Y_IMAGE,
+        Godot.Core.CameraServer._FEED_YCBCR_IMAGE,
         Godot.Core.CameraServer.sig_camera_feed_added,
         Godot.Core.CameraServer.sig_camera_feed_removed,
         Godot.Core.CameraServer.add_feed, Godot.Core.CameraServer.feeds,
@@ -25,17 +25,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_FEED_YCBCR_IMAGE :: Int
-_FEED_YCBCR_IMAGE = 0
-
-_FEED_Y_IMAGE :: Int
-_FEED_Y_IMAGE = 0
+_FEED_RGBA_IMAGE :: Int
+_FEED_RGBA_IMAGE = 0
 
 _FEED_CBCR_IMAGE :: Int
 _FEED_CBCR_IMAGE = 1
 
-_FEED_RGBA_IMAGE :: Int
-_FEED_RGBA_IMAGE = 0
+_FEED_Y_IMAGE :: Int
+_FEED_Y_IMAGE = 0
+
+_FEED_YCBCR_IMAGE :: Int
+_FEED_YCBCR_IMAGE = 0
 
 -- | Emitted when a @CameraFeed@ is added (e.g. webcam is plugged in).
 sig_camera_feed_added ::

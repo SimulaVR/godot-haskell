@@ -2,43 +2,43 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Node
-       (Godot.Core.Node._DUPLICATE_GROUPS,
+       (Godot.Core.Node._NOTIFICATION_CRASH,
         Godot.Core.Node._DUPLICATE_SCRIPTS,
-        Godot.Core.Node._NOTIFICATION_PAUSED,
-        Godot.Core.Node._NOTIFICATION_MOVED_IN_PARENT,
-        Godot.Core.Node._NOTIFICATION_UNPARENTED,
-        Godot.Core.Node._PAUSE_MODE_PROCESS,
-        Godot.Core.Node._NOTIFICATION_WM_ABOUT,
-        Godot.Core.Node._NOTIFICATION_DRAG_END,
-        Godot.Core.Node._NOTIFICATION_PATH_CHANGED,
-        Godot.Core.Node._NOTIFICATION_APP_PAUSED,
-        Godot.Core.Node._NOTIFICATION_PHYSICS_PROCESS,
-        Godot.Core.Node._NOTIFICATION_INTERNAL_PHYSICS_PROCESS,
-        Godot.Core.Node._NOTIFICATION_WM_GO_BACK_REQUEST,
-        Godot.Core.Node._NOTIFICATION_WM_QUIT_REQUEST,
-        Godot.Core.Node._DUPLICATE_USE_INSTANCING,
-        Godot.Core.Node._NOTIFICATION_ENTER_TREE,
-        Godot.Core.Node._NOTIFICATION_EXIT_TREE,
-        Godot.Core.Node._NOTIFICATION_WM_FOCUS_IN,
-        Godot.Core.Node._NOTIFICATION_WM_MOUSE_EXIT,
-        Godot.Core.Node._NOTIFICATION_PROCESS,
-        Godot.Core.Node._NOTIFICATION_INTERNAL_PROCESS,
         Godot.Core.Node._PAUSE_MODE_STOP,
-        Godot.Core.Node._PAUSE_MODE_INHERIT,
         Godot.Core.Node._NOTIFICATION_TRANSLATION_CHANGED,
-        Godot.Core.Node._NOTIFICATION_INSTANCED,
         Godot.Core.Node._NOTIFICATION_UNPAUSED,
-        Godot.Core.Node._NOTIFICATION_PARENTED,
-        Godot.Core.Node._NOTIFICATION_WM_FOCUS_OUT,
-        Godot.Core.Node._NOTIFICATION_DRAG_BEGIN,
-        Godot.Core.Node._DUPLICATE_SIGNALS,
+        Godot.Core.Node._NOTIFICATION_PHYSICS_PROCESS,
+        Godot.Core.Node._NOTIFICATION_MOVED_IN_PARENT,
+        Godot.Core.Node._NOTIFICATION_WM_GO_BACK_REQUEST,
+        Godot.Core.Node._NOTIFICATION_PROCESS,
+        Godot.Core.Node._NOTIFICATION_PAUSED,
         Godot.Core.Node._NOTIFICATION_OS_MEMORY_WARNING,
-        Godot.Core.Node._NOTIFICATION_WM_UNFOCUS_REQUEST,
-        Godot.Core.Node._NOTIFICATION_OS_IME_UPDATE,
-        Godot.Core.Node._NOTIFICATION_APP_RESUMED,
-        Godot.Core.Node._NOTIFICATION_READY,
+        Godot.Core.Node._NOTIFICATION_WM_ABOUT,
+        Godot.Core.Node._NOTIFICATION_DRAG_BEGIN,
         Godot.Core.Node._NOTIFICATION_WM_MOUSE_ENTER,
-        Godot.Core.Node._NOTIFICATION_CRASH, Godot.Core.Node.sig_ready,
+        Godot.Core.Node._PAUSE_MODE_PROCESS,
+        Godot.Core.Node._NOTIFICATION_WM_FOCUS_OUT,
+        Godot.Core.Node._PAUSE_MODE_INHERIT,
+        Godot.Core.Node._NOTIFICATION_WM_MOUSE_EXIT,
+        Godot.Core.Node._NOTIFICATION_READY,
+        Godot.Core.Node._NOTIFICATION_WM_FOCUS_IN,
+        Godot.Core.Node._NOTIFICATION_WM_UNFOCUS_REQUEST,
+        Godot.Core.Node._NOTIFICATION_PARENTED,
+        Godot.Core.Node._NOTIFICATION_OS_IME_UPDATE,
+        Godot.Core.Node._NOTIFICATION_WM_QUIT_REQUEST,
+        Godot.Core.Node._NOTIFICATION_INSTANCED,
+        Godot.Core.Node._NOTIFICATION_INTERNAL_PROCESS,
+        Godot.Core.Node._NOTIFICATION_APP_PAUSED,
+        Godot.Core.Node._DUPLICATE_USE_INSTANCING,
+        Godot.Core.Node._NOTIFICATION_PATH_CHANGED,
+        Godot.Core.Node._NOTIFICATION_EXIT_TREE,
+        Godot.Core.Node._NOTIFICATION_INTERNAL_PHYSICS_PROCESS,
+        Godot.Core.Node._NOTIFICATION_ENTER_TREE,
+        Godot.Core.Node._DUPLICATE_GROUPS,
+        Godot.Core.Node._NOTIFICATION_APP_RESUMED,
+        Godot.Core.Node._NOTIFICATION_UNPARENTED,
+        Godot.Core.Node._NOTIFICATION_DRAG_END,
+        Godot.Core.Node._DUPLICATE_SIGNALS, Godot.Core.Node.sig_ready,
         Godot.Core.Node.sig_renamed, Godot.Core.Node.sig_tree_entered,
         Godot.Core.Node.sig_tree_exited, Godot.Core.Node.sig_tree_exiting,
         Godot.Core.Node._enter_tree, Godot.Core.Node._exit_tree,
@@ -118,116 +118,116 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_DUPLICATE_GROUPS :: Int
-_DUPLICATE_GROUPS = 2
+_NOTIFICATION_CRASH :: Int
+_NOTIFICATION_CRASH = 1012
 
 _DUPLICATE_SCRIPTS :: Int
 _DUPLICATE_SCRIPTS = 4
 
-_NOTIFICATION_PAUSED :: Int
-_NOTIFICATION_PAUSED = 14
-
-_NOTIFICATION_MOVED_IN_PARENT :: Int
-_NOTIFICATION_MOVED_IN_PARENT = 12
-
-_NOTIFICATION_UNPARENTED :: Int
-_NOTIFICATION_UNPARENTED = 19
-
-_PAUSE_MODE_PROCESS :: Int
-_PAUSE_MODE_PROCESS = 2
-
-_NOTIFICATION_WM_ABOUT :: Int
-_NOTIFICATION_WM_ABOUT = 1011
-
-_NOTIFICATION_DRAG_END :: Int
-_NOTIFICATION_DRAG_END = 22
-
-_NOTIFICATION_PATH_CHANGED :: Int
-_NOTIFICATION_PATH_CHANGED = 23
-
-_NOTIFICATION_APP_PAUSED :: Int
-_NOTIFICATION_APP_PAUSED = 1015
-
-_NOTIFICATION_PHYSICS_PROCESS :: Int
-_NOTIFICATION_PHYSICS_PROCESS = 16
-
-_NOTIFICATION_INTERNAL_PHYSICS_PROCESS :: Int
-_NOTIFICATION_INTERNAL_PHYSICS_PROCESS = 26
-
-_NOTIFICATION_WM_GO_BACK_REQUEST :: Int
-_NOTIFICATION_WM_GO_BACK_REQUEST = 1007
-
-_NOTIFICATION_WM_QUIT_REQUEST :: Int
-_NOTIFICATION_WM_QUIT_REQUEST = 1006
-
-_DUPLICATE_USE_INSTANCING :: Int
-_DUPLICATE_USE_INSTANCING = 8
-
-_NOTIFICATION_ENTER_TREE :: Int
-_NOTIFICATION_ENTER_TREE = 10
-
-_NOTIFICATION_EXIT_TREE :: Int
-_NOTIFICATION_EXIT_TREE = 11
-
-_NOTIFICATION_WM_FOCUS_IN :: Int
-_NOTIFICATION_WM_FOCUS_IN = 1004
-
-_NOTIFICATION_WM_MOUSE_EXIT :: Int
-_NOTIFICATION_WM_MOUSE_EXIT = 1003
-
-_NOTIFICATION_PROCESS :: Int
-_NOTIFICATION_PROCESS = 17
-
-_NOTIFICATION_INTERNAL_PROCESS :: Int
-_NOTIFICATION_INTERNAL_PROCESS = 25
-
 _PAUSE_MODE_STOP :: Int
 _PAUSE_MODE_STOP = 1
-
-_PAUSE_MODE_INHERIT :: Int
-_PAUSE_MODE_INHERIT = 0
 
 _NOTIFICATION_TRANSLATION_CHANGED :: Int
 _NOTIFICATION_TRANSLATION_CHANGED = 1010
 
-_NOTIFICATION_INSTANCED :: Int
-_NOTIFICATION_INSTANCED = 20
-
 _NOTIFICATION_UNPAUSED :: Int
 _NOTIFICATION_UNPAUSED = 15
 
-_NOTIFICATION_PARENTED :: Int
-_NOTIFICATION_PARENTED = 18
+_NOTIFICATION_PHYSICS_PROCESS :: Int
+_NOTIFICATION_PHYSICS_PROCESS = 16
 
-_NOTIFICATION_WM_FOCUS_OUT :: Int
-_NOTIFICATION_WM_FOCUS_OUT = 1005
+_NOTIFICATION_MOVED_IN_PARENT :: Int
+_NOTIFICATION_MOVED_IN_PARENT = 12
 
-_NOTIFICATION_DRAG_BEGIN :: Int
-_NOTIFICATION_DRAG_BEGIN = 21
+_NOTIFICATION_WM_GO_BACK_REQUEST :: Int
+_NOTIFICATION_WM_GO_BACK_REQUEST = 1007
 
-_DUPLICATE_SIGNALS :: Int
-_DUPLICATE_SIGNALS = 1
+_NOTIFICATION_PROCESS :: Int
+_NOTIFICATION_PROCESS = 17
+
+_NOTIFICATION_PAUSED :: Int
+_NOTIFICATION_PAUSED = 14
 
 _NOTIFICATION_OS_MEMORY_WARNING :: Int
 _NOTIFICATION_OS_MEMORY_WARNING = 1009
 
-_NOTIFICATION_WM_UNFOCUS_REQUEST :: Int
-_NOTIFICATION_WM_UNFOCUS_REQUEST = 1008
+_NOTIFICATION_WM_ABOUT :: Int
+_NOTIFICATION_WM_ABOUT = 1011
 
-_NOTIFICATION_OS_IME_UPDATE :: Int
-_NOTIFICATION_OS_IME_UPDATE = 1013
-
-_NOTIFICATION_APP_RESUMED :: Int
-_NOTIFICATION_APP_RESUMED = 1014
-
-_NOTIFICATION_READY :: Int
-_NOTIFICATION_READY = 13
+_NOTIFICATION_DRAG_BEGIN :: Int
+_NOTIFICATION_DRAG_BEGIN = 21
 
 _NOTIFICATION_WM_MOUSE_ENTER :: Int
 _NOTIFICATION_WM_MOUSE_ENTER = 1002
 
-_NOTIFICATION_CRASH :: Int
-_NOTIFICATION_CRASH = 1012
+_PAUSE_MODE_PROCESS :: Int
+_PAUSE_MODE_PROCESS = 2
+
+_NOTIFICATION_WM_FOCUS_OUT :: Int
+_NOTIFICATION_WM_FOCUS_OUT = 1005
+
+_PAUSE_MODE_INHERIT :: Int
+_PAUSE_MODE_INHERIT = 0
+
+_NOTIFICATION_WM_MOUSE_EXIT :: Int
+_NOTIFICATION_WM_MOUSE_EXIT = 1003
+
+_NOTIFICATION_READY :: Int
+_NOTIFICATION_READY = 13
+
+_NOTIFICATION_WM_FOCUS_IN :: Int
+_NOTIFICATION_WM_FOCUS_IN = 1004
+
+_NOTIFICATION_WM_UNFOCUS_REQUEST :: Int
+_NOTIFICATION_WM_UNFOCUS_REQUEST = 1008
+
+_NOTIFICATION_PARENTED :: Int
+_NOTIFICATION_PARENTED = 18
+
+_NOTIFICATION_OS_IME_UPDATE :: Int
+_NOTIFICATION_OS_IME_UPDATE = 1013
+
+_NOTIFICATION_WM_QUIT_REQUEST :: Int
+_NOTIFICATION_WM_QUIT_REQUEST = 1006
+
+_NOTIFICATION_INSTANCED :: Int
+_NOTIFICATION_INSTANCED = 20
+
+_NOTIFICATION_INTERNAL_PROCESS :: Int
+_NOTIFICATION_INTERNAL_PROCESS = 25
+
+_NOTIFICATION_APP_PAUSED :: Int
+_NOTIFICATION_APP_PAUSED = 1015
+
+_DUPLICATE_USE_INSTANCING :: Int
+_DUPLICATE_USE_INSTANCING = 8
+
+_NOTIFICATION_PATH_CHANGED :: Int
+_NOTIFICATION_PATH_CHANGED = 23
+
+_NOTIFICATION_EXIT_TREE :: Int
+_NOTIFICATION_EXIT_TREE = 11
+
+_NOTIFICATION_INTERNAL_PHYSICS_PROCESS :: Int
+_NOTIFICATION_INTERNAL_PHYSICS_PROCESS = 26
+
+_NOTIFICATION_ENTER_TREE :: Int
+_NOTIFICATION_ENTER_TREE = 10
+
+_DUPLICATE_GROUPS :: Int
+_DUPLICATE_GROUPS = 2
+
+_NOTIFICATION_APP_RESUMED :: Int
+_NOTIFICATION_APP_RESUMED = 1014
+
+_NOTIFICATION_UNPARENTED :: Int
+_NOTIFICATION_UNPARENTED = 19
+
+_NOTIFICATION_DRAG_END :: Int
+_NOTIFICATION_DRAG_END = 22
+
+_DUPLICATE_SIGNALS :: Int
+_DUPLICATE_SIGNALS = 1
 
 -- | Emitted when the node is ready.
 sig_ready :: Godot.Internal.Dispatch.Signal Node
@@ -438,7 +438,6 @@ instance NodeMethod Node "_get_import_path" '[] (IO NodePath) where
 --   				It is only called if input processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process_input@.
 --   				To consume the input event and stop it propagating further to other nodes, @method SceneTree.set_input_as_handled@ can be called.
 --   				For gameplay input, @method _unhandled_input@ and @method _unhandled_key_input@ are usually a better fit as they allow the GUI to intercept the events first.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__input :: MethodBind
 bindNode__input
   = unsafePerformIO $
@@ -452,7 +451,6 @@ bindNode__input
 --   				It is only called if input processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process_input@.
 --   				To consume the input event and stop it propagating further to other nodes, @method SceneTree.set_input_as_handled@ can be called.
 --   				For gameplay input, @method _unhandled_input@ and @method _unhandled_key_input@ are usually a better fit as they allow the GUI to intercept the events first.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _input ::
          (Node :< cls, Object :< cls) => cls -> InputEvent -> IO ()
 _input cls arg1
@@ -469,7 +467,6 @@ instance NodeMethod Node "_input" '[InputEvent] (IO ()) where
 -- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the @delta@ variable should be constant.
 --   				It is only called if physics processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_physics_process@.
 --   				Corresponds to the @NOTIFICATION_PHYSICS_PROCESS@ notification in @method Object._notification@.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__physics_process :: MethodBind
 bindNode__physics_process
   = unsafePerformIO $
@@ -482,7 +479,6 @@ bindNode__physics_process
 -- | Called during the physics processing step of the main loop. Physics processing means that the frame rate is synced to the physics, i.e. the @delta@ variable should be constant.
 --   				It is only called if physics processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_physics_process@.
 --   				Corresponds to the @NOTIFICATION_PHYSICS_PROCESS@ notification in @method Object._notification@.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _physics_process ::
                    (Node :< cls, Object :< cls) => cls -> Float -> IO ()
 _physics_process cls arg1
@@ -501,7 +497,6 @@ instance NodeMethod Node "_physics_process" '[Float] (IO ()) where
 -- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the @delta@ time since the previous frame is not constant.
 --   				It is only called if processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process@.
 --   				Corresponds to the @NOTIFICATION_PROCESS@ notification in @method Object._notification@.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__process :: MethodBind
 bindNode__process
   = unsafePerformIO $
@@ -514,7 +509,6 @@ bindNode__process
 -- | Called during the processing step of the main loop. Processing happens at every frame and as fast as possible, so the @delta@ time since the previous frame is not constant.
 --   				It is only called if processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process@.
 --   				Corresponds to the @NOTIFICATION_PROCESS@ notification in @method Object._notification@.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _process :: (Node :< cls, Object :< cls) => cls -> Float -> IO ()
 _process cls arg1
   = withVariantArray [toVariant arg1]
@@ -612,7 +606,6 @@ instance NodeMethod Node "_set_import_path" '[NodePath] (IO ())
 --   				It is only called if unhandled input processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process_unhandled_input@.
 --   				To consume the input event and stop it propagating further to other nodes, @method SceneTree.set_input_as_handled@ can be called.
 --   				For gameplay input, this and @method _unhandled_key_input@ are usually a better fit than @method _input@ as they allow the GUI to intercept the events first.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__unhandled_input :: MethodBind
 bindNode__unhandled_input
   = unsafePerformIO $
@@ -626,7 +619,6 @@ bindNode__unhandled_input
 --   				It is only called if unhandled input processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process_unhandled_input@.
 --   				To consume the input event and stop it propagating further to other nodes, @method SceneTree.set_input_as_handled@ can be called.
 --   				For gameplay input, this and @method _unhandled_key_input@ are usually a better fit than @method _input@ as they allow the GUI to intercept the events first.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _unhandled_input ::
                    (Node :< cls, Object :< cls) => cls -> InputEvent -> IO ()
 _unhandled_input cls arg1
@@ -647,7 +639,6 @@ instance NodeMethod Node "_unhandled_input" '[InputEvent] (IO ())
 --   				It is only called if unhandled key input processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process_unhandled_key_input@.
 --   				To consume the input event and stop it propagating further to other nodes, @method SceneTree.set_input_as_handled@ can be called.
 --   				For gameplay input, this and @method _unhandled_input@ are usually a better fit than @method _input@ as they allow the GUI to intercept the events first.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 bindNode__unhandled_key_input :: MethodBind
 bindNode__unhandled_key_input
   = unsafePerformIO $
@@ -661,7 +652,6 @@ bindNode__unhandled_key_input
 --   				It is only called if unhandled key input processing is enabled, which is done automatically if this method is overridden, and can be toggled with @method set_process_unhandled_key_input@.
 --   				To consume the input event and stop it propagating further to other nodes, @method SceneTree.set_input_as_handled@ can be called.
 --   				For gameplay input, this and @method _unhandled_input@ are usually a better fit than @method _input@ as they allow the GUI to intercept the events first.
---   				__Note:__ This method is only called if the node is present in the scene tree (i.e. if it's not orphan).
 _unhandled_key_input ::
                        (Node :< cls, Object :< cls) => cls -> InputEventKey -> IO ()
 _unhandled_key_input cls arg1
@@ -729,7 +719,7 @@ instance NodeMethod Node "add_child" '[Node, Maybe Bool] (IO ())
 
 {-# NOINLINE bindNode_add_child_below_node #-}
 
--- | Adds @child_node@ as a child. The child is placed below the given @node@ in the list of children.
+-- | Adds a child node. The child is placed below the given node in the list of children.
 --   				If @legible_unique_name@ is @true@, the child node will have an human-readable name based on the name of the node being instanced instead of its type.
 bindNode_add_child_below_node :: MethodBind
 bindNode_add_child_below_node
@@ -740,7 +730,7 @@ bindNode_add_child_below_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds @child_node@ as a child. The child is placed below the given @node@ in the list of children.
+-- | Adds a child node. The child is placed below the given node in the list of children.
 --   				If @legible_unique_name@ is @true@, the child node will have an human-readable name based on the name of the node being instanced instead of its type.
 add_child_below_node ::
                        (Node :< cls, Object :< cls) =>
@@ -848,7 +838,6 @@ instance NodeMethod Node "duplicate" '[Maybe Int] (IO Node) where
 -- | Finds a descendant of this node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@).
 --   				__Note:__ It does not match against the full path, just against individual node names.
 --   				If @owned@ is @true@, this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through a script, because those scenes don't have an owner.
---   				__Note:__ As this method walks through all the descendants of the node, it is the slowest way to get a reference to another node. Whenever possible, consider using @method get_node@ instead. To avoid using @method find_node@ too often, consider caching the node reference into a variable.
 bindNode_find_node :: MethodBind
 bindNode_find_node
   = unsafePerformIO $
@@ -861,7 +850,6 @@ bindNode_find_node
 -- | Finds a descendant of this node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@).
 --   				__Note:__ It does not match against the full path, just against individual node names.
 --   				If @owned@ is @true@, this method only finds nodes whose owner is this node. This is especially important for scenes instantiated through a script, because those scenes don't have an owner.
---   				__Note:__ As this method walks through all the descendants of the node, it is the slowest way to get a reference to another node. Whenever possible, consider using @method get_node@ instead. To avoid using @method find_node@ too often, consider caching the node reference into a variable.
 find_node ::
             (Node :< cls, Object :< cls) =>
             cls -> GodotString -> Maybe Bool -> Maybe Bool -> IO Node
@@ -883,7 +871,6 @@ instance NodeMethod Node "find_node"
 
 -- | Finds the first parent of the current node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@).
 --   				__Note:__ It does not match against the full path, just against individual node names.
---   				__Note:__ As this method walks upwards in the scene tree, it can be slow in large, deeply nested scene trees. Whenever possible, consider using @method get_node@ instead. To avoid using @method find_parent@ too often, consider caching the node reference into a variable.
 bindNode_find_parent :: MethodBind
 bindNode_find_parent
   = unsafePerformIO $
@@ -895,7 +882,6 @@ bindNode_find_parent
 
 -- | Finds the first parent of the current node whose name matches @mask@ as in @method String.match@ (i.e. case-sensitive, but @"*"@ matches zero or more characters and @"?"@ matches any single character except @"."@).
 --   				__Note:__ It does not match against the full path, just against individual node names.
---   				__Note:__ As this method walks upwards in the scene tree, it can be slow in large, deeply nested scene trees. Whenever possible, consider using @method get_node@ instead. To avoid using @method find_parent@ too often, consider caching the node reference into a variable.
 find_parent ::
               (Node :< cls, Object :< cls) => cls -> GodotString -> IO Node
 find_parent cls arg1
@@ -1330,7 +1316,7 @@ instance NodeMethod Node "get_owner" '[] (IO Node) where
 
 {-# NOINLINE bindNode_get_parent #-}
 
--- | Returns the parent node of the current node, or a @null instance@ if the node lacks a parent.
+-- | Returns the parent node of the current node, or an empty @Node@ if the node lacks a parent.
 bindNode_get_parent :: MethodBind
 bindNode_get_parent
   = unsafePerformIO $
@@ -1340,7 +1326,7 @@ bindNode_get_parent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the parent node of the current node, or a @null instance@ if the node lacks a parent.
+-- | Returns the parent node of the current node, or an empty @Node@ if the node lacks a parent.
 get_parent :: (Node :< cls, Object :< cls) => cls -> IO Node
 get_parent cls
   = withVariantArray []
@@ -2107,7 +2093,7 @@ instance NodeMethod Node "print_tree" '[] (IO ()) where
 --   				    ┠╴Menu
 --   				    ┃  ┠╴Label
 --   				    ┃  ┖╴Camera2D
---   				    ┖╴SplashScreen
+--   				    ┖-SplashScreen
 --   				       ┖╴Camera2D
 --   				
 --   @
@@ -2129,7 +2115,7 @@ bindNode_print_tree_pretty
 --   				    ┠╴Menu
 --   				    ┃  ┠╴Label
 --   				    ┃  ┖╴Camera2D
---   				    ┖╴SplashScreen
+--   				    ┖-SplashScreen
 --   				       ┖╴Camera2D
 --   				
 --   @

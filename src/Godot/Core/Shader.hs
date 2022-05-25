@@ -3,7 +3,7 @@
   MultiParamTypeClasses #-}
 module Godot.Core.Shader
        (Godot.Core.Shader._MODE_CANVAS_ITEM,
-        Godot.Core.Shader._MODE_PARTICLES, Godot.Core.Shader._MODE_SPATIAL,
+        Godot.Core.Shader._MODE_SPATIAL, Godot.Core.Shader._MODE_PARTICLES,
         Godot.Core.Shader.get_code,
         Godot.Core.Shader.get_default_texture_param,
         Godot.Core.Shader.get_mode, Godot.Core.Shader.has_param,
@@ -25,11 +25,11 @@ import Godot.Core.Resource()
 _MODE_CANVAS_ITEM :: Int
 _MODE_CANVAS_ITEM = 1
 
-_MODE_PARTICLES :: Int
-_MODE_PARTICLES = 2
-
 _MODE_SPATIAL :: Int
 _MODE_SPATIAL = 0
+
+_MODE_PARTICLES :: Int
+_MODE_PARTICLES = 2
 
 instance NodeProperty Shader "code" GodotString 'False where
         nodeProperty = (get_code, wrapDroppingSetter set_code, Nothing)

@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.BackBufferCopy
-       (Godot.Core.BackBufferCopy._COPY_MODE_VIEWPORT,
+       (Godot.Core.BackBufferCopy._COPY_MODE_DISABLED,
         Godot.Core.BackBufferCopy._COPY_MODE_RECT,
-        Godot.Core.BackBufferCopy._COPY_MODE_DISABLED,
+        Godot.Core.BackBufferCopy._COPY_MODE_VIEWPORT,
         Godot.Core.BackBufferCopy.get_copy_mode,
         Godot.Core.BackBufferCopy.get_rect,
         Godot.Core.BackBufferCopy.set_copy_mode,
@@ -22,14 +22,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node2D()
 
-_COPY_MODE_VIEWPORT :: Int
-_COPY_MODE_VIEWPORT = 2
+_COPY_MODE_DISABLED :: Int
+_COPY_MODE_DISABLED = 0
 
 _COPY_MODE_RECT :: Int
 _COPY_MODE_RECT = 1
 
-_COPY_MODE_DISABLED :: Int
-_COPY_MODE_DISABLED = 0
+_COPY_MODE_VIEWPORT :: Int
+_COPY_MODE_VIEWPORT = 2
 
 instance NodeProperty BackBufferCopy "copy_mode" Int 'False where
         nodeProperty

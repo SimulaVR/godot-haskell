@@ -2,14 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.CubeMap
-       (Godot.Core.CubeMap._SIDE_RIGHT, Godot.Core.CubeMap._SIDE_TOP,
-        Godot.Core.CubeMap._SIDE_BACK, Godot.Core.CubeMap._STORAGE_RAW,
+       (Godot.Core.CubeMap._SIDE_RIGHT, Godot.Core.CubeMap._STORAGE_RAW,
+        Godot.Core.CubeMap._SIDE_FRONT, Godot.Core.CubeMap._SIDE_LEFT,
+        Godot.Core.CubeMap._FLAGS_DEFAULT, Godot.Core.CubeMap._FLAG_FILTER,
         Godot.Core.CubeMap._STORAGE_COMPRESS_LOSSLESS,
-        Godot.Core.CubeMap._FLAGS_DEFAULT, Godot.Core.CubeMap._FLAG_REPEAT,
-        Godot.Core.CubeMap._SIDE_LEFT, Godot.Core.CubeMap._SIDE_FRONT,
         Godot.Core.CubeMap._STORAGE_COMPRESS_LOSSY,
-        Godot.Core.CubeMap._FLAG_MIPMAPS, Godot.Core.CubeMap._SIDE_BOTTOM,
-        Godot.Core.CubeMap._FLAG_FILTER, Godot.Core.CubeMap.get_flags,
+        Godot.Core.CubeMap._FLAG_REPEAT, Godot.Core.CubeMap._FLAG_MIPMAPS,
+        Godot.Core.CubeMap._SIDE_BOTTOM, Godot.Core.CubeMap._SIDE_TOP,
+        Godot.Core.CubeMap._SIDE_BACK, Godot.Core.CubeMap.get_flags,
         Godot.Core.CubeMap.get_height,
         Godot.Core.CubeMap.get_lossy_storage_quality,
         Godot.Core.CubeMap.get_side, Godot.Core.CubeMap.get_storage,
@@ -32,32 +32,29 @@ import Godot.Core.Resource()
 _SIDE_RIGHT :: Int
 _SIDE_RIGHT = 1
 
-_SIDE_TOP :: Int
-_SIDE_TOP = 3
-
-_SIDE_BACK :: Int
-_SIDE_BACK = 5
-
 _STORAGE_RAW :: Int
 _STORAGE_RAW = 0
-
-_STORAGE_COMPRESS_LOSSLESS :: Int
-_STORAGE_COMPRESS_LOSSLESS = 2
-
-_FLAGS_DEFAULT :: Int
-_FLAGS_DEFAULT = 7
-
-_FLAG_REPEAT :: Int
-_FLAG_REPEAT = 2
-
-_SIDE_LEFT :: Int
-_SIDE_LEFT = 0
 
 _SIDE_FRONT :: Int
 _SIDE_FRONT = 4
 
+_SIDE_LEFT :: Int
+_SIDE_LEFT = 0
+
+_FLAGS_DEFAULT :: Int
+_FLAGS_DEFAULT = 7
+
+_FLAG_FILTER :: Int
+_FLAG_FILTER = 4
+
+_STORAGE_COMPRESS_LOSSLESS :: Int
+_STORAGE_COMPRESS_LOSSLESS = 2
+
 _STORAGE_COMPRESS_LOSSY :: Int
 _STORAGE_COMPRESS_LOSSY = 1
+
+_FLAG_REPEAT :: Int
+_FLAG_REPEAT = 2
 
 _FLAG_MIPMAPS :: Int
 _FLAG_MIPMAPS = 1
@@ -65,8 +62,11 @@ _FLAG_MIPMAPS = 1
 _SIDE_BOTTOM :: Int
 _SIDE_BOTTOM = 2
 
-_FLAG_FILTER :: Int
-_FLAG_FILTER = 4
+_SIDE_TOP :: Int
+_SIDE_TOP = 3
+
+_SIDE_BACK :: Int
+_SIDE_BACK = 5
 
 instance NodeProperty CubeMap "flags" Int 'False where
         nodeProperty = (get_flags, wrapDroppingSetter set_flags, Nothing)

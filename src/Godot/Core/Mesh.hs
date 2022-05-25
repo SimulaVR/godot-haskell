@@ -2,43 +2,42 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Mesh
-       (Godot.Core.Mesh._ARRAY_COMPRESS_WEIGHTS,
-        Godot.Core.Mesh._ARRAY_FLAG_USE_16_BIT_BONES,
-        Godot.Core.Mesh._ARRAY_FORMAT_INDEX,
-        Godot.Core.Mesh._ARRAY_COMPRESS_TANGENT,
-        Godot.Core.Mesh._ARRAY_COMPRESS_NORMAL,
-        Godot.Core.Mesh._ARRAY_FORMAT_COLOR,
-        Godot.Core.Mesh._ARRAY_FORMAT_TEX_UV,
-        Godot.Core.Mesh._ARRAY_COMPRESS_VERTEX,
-        Godot.Core.Mesh._ARRAY_FORMAT_VERTEX,
-        Godot.Core.Mesh._ARRAY_COMPRESS_TEX_UV,
-        Godot.Core.Mesh._ARRAY_COMPRESS_BASE,
-        Godot.Core.Mesh._ARRAY_COMPRESS_BONES, Godot.Core.Mesh._ARRAY_MAX,
-        Godot.Core.Mesh._ARRAY_NORMAL,
-        Godot.Core.Mesh._ARRAY_FORMAT_TEX_UV2,
-        Godot.Core.Mesh._ARRAY_INDEX, Godot.Core.Mesh._ARRAY_COLOR,
-        Godot.Core.Mesh._PRIMITIVE_TRIANGLE_STRIP,
-        Godot.Core.Mesh._PRIMITIVE_TRIANGLES,
-        Godot.Core.Mesh._ARRAY_TEX_UV,
-        Godot.Core.Mesh._BLEND_SHAPE_MODE_NORMALIZED,
-        Godot.Core.Mesh._PRIMITIVE_LINE_LOOP,
-        Godot.Core.Mesh._PRIMITIVE_TRIANGLE_FAN,
-        Godot.Core.Mesh._ARRAY_FORMAT_NORMAL,
-        Godot.Core.Mesh._ARRAY_TEX_UV2,
-        Godot.Core.Mesh._ARRAY_COMPRESS_DEFAULT,
-        Godot.Core.Mesh._ARRAY_FORMAT_BONES,
-        Godot.Core.Mesh._ARRAY_COMPRESS_COLOR,
-        Godot.Core.Mesh._ARRAY_WEIGHTS, Godot.Core.Mesh._ARRAY_TANGENT,
-        Godot.Core.Mesh._ARRAY_COMPRESS_TEX_UV2,
-        Godot.Core.Mesh._PRIMITIVE_LINE_STRIP,
-        Godot.Core.Mesh._PRIMITIVE_LINES, Godot.Core.Mesh._ARRAY_BONES,
-        Godot.Core.Mesh._BLEND_SHAPE_MODE_RELATIVE,
-        Godot.Core.Mesh._ARRAY_VERTEX,
-        Godot.Core.Mesh._ARRAY_FLAG_USE_2D_VERTICES,
+       (Godot.Core.Mesh._ARRAY_FLAG_USE_16_BIT_BONES,
         Godot.Core.Mesh._ARRAY_COMPRESS_INDEX,
         Godot.Core.Mesh._ARRAY_FORMAT_WEIGHTS,
+        Godot.Core.Mesh._ARRAY_COMPRESS_COLOR,
+        Godot.Core.Mesh._ARRAY_NORMAL,
+        Godot.Core.Mesh._BLEND_SHAPE_MODE_NORMALIZED,
+        Godot.Core.Mesh._ARRAY_COMPRESS_DEFAULT,
+        Godot.Core.Mesh._ARRAY_MAX, Godot.Core.Mesh._ARRAY_FORMAT_COLOR,
+        Godot.Core.Mesh._PRIMITIVE_LINES,
+        Godot.Core.Mesh._ARRAY_FORMAT_TEX_UV,
+        Godot.Core.Mesh._ARRAY_COMPRESS_BASE,
+        Godot.Core.Mesh._ARRAY_COMPRESS_VERTEX,
+        Godot.Core.Mesh._ARRAY_FORMAT_TEX_UV2,
+        Godot.Core.Mesh._ARRAY_COMPRESS_TANGENT,
+        Godot.Core.Mesh._ARRAY_COMPRESS_WEIGHTS,
+        Godot.Core.Mesh._ARRAY_FORMAT_NORMAL,
+        Godot.Core.Mesh._ARRAY_FORMAT_BONES,
         Godot.Core.Mesh._ARRAY_FORMAT_TANGENT,
-        Godot.Core.Mesh._PRIMITIVE_POINTS,
+        Godot.Core.Mesh._ARRAY_COMPRESS_TEX_UV2,
+        Godot.Core.Mesh._PRIMITIVE_TRIANGLE_STRIP,
+        Godot.Core.Mesh._PRIMITIVE_POINTS, Godot.Core.Mesh._ARRAY_INDEX,
+        Godot.Core.Mesh._ARRAY_VERTEX, Godot.Core.Mesh._ARRAY_TEX_UV2,
+        Godot.Core.Mesh._ARRAY_COLOR,
+        Godot.Core.Mesh._ARRAY_COMPRESS_NORMAL,
+        Godot.Core.Mesh._PRIMITIVE_TRIANGLE_FAN,
+        Godot.Core.Mesh._ARRAY_FORMAT_INDEX,
+        Godot.Core.Mesh._ARRAY_TANGENT, Godot.Core.Mesh._ARRAY_WEIGHTS,
+        Godot.Core.Mesh._ARRAY_COMPRESS_BONES,
+        Godot.Core.Mesh._ARRAY_FORMAT_VERTEX,
+        Godot.Core.Mesh._ARRAY_FLAG_USE_2D_VERTICES,
+        Godot.Core.Mesh._ARRAY_COMPRESS_TEX_UV,
+        Godot.Core.Mesh._BLEND_SHAPE_MODE_RELATIVE,
+        Godot.Core.Mesh._PRIMITIVE_TRIANGLES, Godot.Core.Mesh._ARRAY_BONES,
+        Godot.Core.Mesh._PRIMITIVE_LINE_LOOP,
+        Godot.Core.Mesh._ARRAY_TEX_UV,
+        Godot.Core.Mesh._PRIMITIVE_LINE_STRIP,
         Godot.Core.Mesh.create_convex_shape,
         Godot.Core.Mesh.create_outline,
         Godot.Core.Mesh.create_trimesh_shape,
@@ -63,116 +62,8 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_ARRAY_COMPRESS_WEIGHTS :: Int
-_ARRAY_COMPRESS_WEIGHTS = 65536
-
 _ARRAY_FLAG_USE_16_BIT_BONES :: Int
 _ARRAY_FLAG_USE_16_BIT_BONES = 524288
-
-_ARRAY_FORMAT_INDEX :: Int
-_ARRAY_FORMAT_INDEX = 256
-
-_ARRAY_COMPRESS_TANGENT :: Int
-_ARRAY_COMPRESS_TANGENT = 2048
-
-_ARRAY_COMPRESS_NORMAL :: Int
-_ARRAY_COMPRESS_NORMAL = 1024
-
-_ARRAY_FORMAT_COLOR :: Int
-_ARRAY_FORMAT_COLOR = 8
-
-_ARRAY_FORMAT_TEX_UV :: Int
-_ARRAY_FORMAT_TEX_UV = 16
-
-_ARRAY_COMPRESS_VERTEX :: Int
-_ARRAY_COMPRESS_VERTEX = 512
-
-_ARRAY_FORMAT_VERTEX :: Int
-_ARRAY_FORMAT_VERTEX = 1
-
-_ARRAY_COMPRESS_TEX_UV :: Int
-_ARRAY_COMPRESS_TEX_UV = 8192
-
-_ARRAY_COMPRESS_BASE :: Int
-_ARRAY_COMPRESS_BASE = 9
-
-_ARRAY_COMPRESS_BONES :: Int
-_ARRAY_COMPRESS_BONES = 32768
-
-_ARRAY_MAX :: Int
-_ARRAY_MAX = 9
-
-_ARRAY_NORMAL :: Int
-_ARRAY_NORMAL = 1
-
-_ARRAY_FORMAT_TEX_UV2 :: Int
-_ARRAY_FORMAT_TEX_UV2 = 32
-
-_ARRAY_INDEX :: Int
-_ARRAY_INDEX = 8
-
-_ARRAY_COLOR :: Int
-_ARRAY_COLOR = 3
-
-_PRIMITIVE_TRIANGLE_STRIP :: Int
-_PRIMITIVE_TRIANGLE_STRIP = 5
-
-_PRIMITIVE_TRIANGLES :: Int
-_PRIMITIVE_TRIANGLES = 4
-
-_ARRAY_TEX_UV :: Int
-_ARRAY_TEX_UV = 4
-
-_BLEND_SHAPE_MODE_NORMALIZED :: Int
-_BLEND_SHAPE_MODE_NORMALIZED = 0
-
-_PRIMITIVE_LINE_LOOP :: Int
-_PRIMITIVE_LINE_LOOP = 3
-
-_PRIMITIVE_TRIANGLE_FAN :: Int
-_PRIMITIVE_TRIANGLE_FAN = 6
-
-_ARRAY_FORMAT_NORMAL :: Int
-_ARRAY_FORMAT_NORMAL = 2
-
-_ARRAY_TEX_UV2 :: Int
-_ARRAY_TEX_UV2 = 5
-
-_ARRAY_COMPRESS_DEFAULT :: Int
-_ARRAY_COMPRESS_DEFAULT = 97280
-
-_ARRAY_FORMAT_BONES :: Int
-_ARRAY_FORMAT_BONES = 64
-
-_ARRAY_COMPRESS_COLOR :: Int
-_ARRAY_COMPRESS_COLOR = 4096
-
-_ARRAY_WEIGHTS :: Int
-_ARRAY_WEIGHTS = 7
-
-_ARRAY_TANGENT :: Int
-_ARRAY_TANGENT = 2
-
-_ARRAY_COMPRESS_TEX_UV2 :: Int
-_ARRAY_COMPRESS_TEX_UV2 = 16384
-
-_PRIMITIVE_LINE_STRIP :: Int
-_PRIMITIVE_LINE_STRIP = 2
-
-_PRIMITIVE_LINES :: Int
-_PRIMITIVE_LINES = 1
-
-_ARRAY_BONES :: Int
-_ARRAY_BONES = 6
-
-_BLEND_SHAPE_MODE_RELATIVE :: Int
-_BLEND_SHAPE_MODE_RELATIVE = 1
-
-_ARRAY_VERTEX :: Int
-_ARRAY_VERTEX = 0
-
-_ARRAY_FLAG_USE_2D_VERTICES :: Int
-_ARRAY_FLAG_USE_2D_VERTICES = 262144
 
 _ARRAY_COMPRESS_INDEX :: Int
 _ARRAY_COMPRESS_INDEX = 131072
@@ -180,11 +71,119 @@ _ARRAY_COMPRESS_INDEX = 131072
 _ARRAY_FORMAT_WEIGHTS :: Int
 _ARRAY_FORMAT_WEIGHTS = 128
 
+_ARRAY_COMPRESS_COLOR :: Int
+_ARRAY_COMPRESS_COLOR = 4096
+
+_ARRAY_NORMAL :: Int
+_ARRAY_NORMAL = 1
+
+_BLEND_SHAPE_MODE_NORMALIZED :: Int
+_BLEND_SHAPE_MODE_NORMALIZED = 0
+
+_ARRAY_COMPRESS_DEFAULT :: Int
+_ARRAY_COMPRESS_DEFAULT = 97280
+
+_ARRAY_MAX :: Int
+_ARRAY_MAX = 9
+
+_ARRAY_FORMAT_COLOR :: Int
+_ARRAY_FORMAT_COLOR = 8
+
+_PRIMITIVE_LINES :: Int
+_PRIMITIVE_LINES = 1
+
+_ARRAY_FORMAT_TEX_UV :: Int
+_ARRAY_FORMAT_TEX_UV = 16
+
+_ARRAY_COMPRESS_BASE :: Int
+_ARRAY_COMPRESS_BASE = 9
+
+_ARRAY_COMPRESS_VERTEX :: Int
+_ARRAY_COMPRESS_VERTEX = 512
+
+_ARRAY_FORMAT_TEX_UV2 :: Int
+_ARRAY_FORMAT_TEX_UV2 = 32
+
+_ARRAY_COMPRESS_TANGENT :: Int
+_ARRAY_COMPRESS_TANGENT = 2048
+
+_ARRAY_COMPRESS_WEIGHTS :: Int
+_ARRAY_COMPRESS_WEIGHTS = 65536
+
+_ARRAY_FORMAT_NORMAL :: Int
+_ARRAY_FORMAT_NORMAL = 2
+
+_ARRAY_FORMAT_BONES :: Int
+_ARRAY_FORMAT_BONES = 64
+
 _ARRAY_FORMAT_TANGENT :: Int
 _ARRAY_FORMAT_TANGENT = 4
 
+_ARRAY_COMPRESS_TEX_UV2 :: Int
+_ARRAY_COMPRESS_TEX_UV2 = 16384
+
+_PRIMITIVE_TRIANGLE_STRIP :: Int
+_PRIMITIVE_TRIANGLE_STRIP = 5
+
 _PRIMITIVE_POINTS :: Int
 _PRIMITIVE_POINTS = 0
+
+_ARRAY_INDEX :: Int
+_ARRAY_INDEX = 8
+
+_ARRAY_VERTEX :: Int
+_ARRAY_VERTEX = 0
+
+_ARRAY_TEX_UV2 :: Int
+_ARRAY_TEX_UV2 = 5
+
+_ARRAY_COLOR :: Int
+_ARRAY_COLOR = 3
+
+_ARRAY_COMPRESS_NORMAL :: Int
+_ARRAY_COMPRESS_NORMAL = 1024
+
+_PRIMITIVE_TRIANGLE_FAN :: Int
+_PRIMITIVE_TRIANGLE_FAN = 6
+
+_ARRAY_FORMAT_INDEX :: Int
+_ARRAY_FORMAT_INDEX = 256
+
+_ARRAY_TANGENT :: Int
+_ARRAY_TANGENT = 2
+
+_ARRAY_WEIGHTS :: Int
+_ARRAY_WEIGHTS = 7
+
+_ARRAY_COMPRESS_BONES :: Int
+_ARRAY_COMPRESS_BONES = 32768
+
+_ARRAY_FORMAT_VERTEX :: Int
+_ARRAY_FORMAT_VERTEX = 1
+
+_ARRAY_FLAG_USE_2D_VERTICES :: Int
+_ARRAY_FLAG_USE_2D_VERTICES = 262144
+
+_ARRAY_COMPRESS_TEX_UV :: Int
+_ARRAY_COMPRESS_TEX_UV = 8192
+
+_BLEND_SHAPE_MODE_RELATIVE :: Int
+_BLEND_SHAPE_MODE_RELATIVE = 1
+
+_PRIMITIVE_TRIANGLES :: Int
+_PRIMITIVE_TRIANGLES = 4
+
+_ARRAY_BONES :: Int
+_ARRAY_BONES = 6
+
+_PRIMITIVE_LINE_LOOP :: Int
+_PRIMITIVE_LINE_LOOP = 3
+
+_ARRAY_TEX_UV :: Int
+_ARRAY_TEX_UV = 4
+
+_PRIMITIVE_LINE_STRIP :: Int
+_PRIMITIVE_LINE_STRIP = 2
 
 instance NodeProperty Mesh "lightmap_size_hint" Vector2 'False
          where
@@ -302,7 +301,7 @@ instance NodeMethod Mesh "generate_triangle_mesh" '[]
 
 {-# NOINLINE bindMesh_get_aabb #-}
 
--- | Returns the smallest @AABB@ enclosing this mesh in local space. Not affected by @custom_aabb@. See also @method VisualInstance.get_transformed_aabb@.
+-- | Returns the smallest @AABB@ enclosing this mesh. Not affected by @custom_aabb@.
 --   				__Note:__ This is only implemented for @ArrayMesh@ and @PrimitiveMesh@.
 bindMesh_get_aabb :: MethodBind
 bindMesh_get_aabb
@@ -313,7 +312,7 @@ bindMesh_get_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the smallest @AABB@ enclosing this mesh in local space. Not affected by @custom_aabb@. See also @method VisualInstance.get_transformed_aabb@.
+-- | Returns the smallest @AABB@ enclosing this mesh. Not affected by @custom_aabb@.
 --   				__Note:__ This is only implemented for @ArrayMesh@ and @PrimitiveMesh@.
 get_aabb :: (Mesh :< cls, Object :< cls) => cls -> IO Aabb
 get_aabb cls

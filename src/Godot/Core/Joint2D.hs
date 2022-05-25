@@ -60,7 +60,7 @@ instance NodeMethod Joint2D "get_bias" '[] (IO Float) where
 
 {-# NOINLINE bindJoint2D_get_exclude_nodes_from_collision #-}
 
--- | If @true@, @node_a@ and @node_b@ can not collide.
+-- | If @true@, @node_a@ and @node_b@ can collide.
 bindJoint2D_get_exclude_nodes_from_collision :: MethodBind
 bindJoint2D_get_exclude_nodes_from_collision
   = unsafePerformIO $
@@ -70,7 +70,7 @@ bindJoint2D_get_exclude_nodes_from_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, @node_a@ and @node_b@ can not collide.
+-- | If @true@, @node_a@ and @node_b@ can collide.
 get_exclude_nodes_from_collision ::
                                    (Joint2D :< cls, Object :< cls) => cls -> IO Bool
 get_exclude_nodes_from_collision cls
@@ -161,7 +161,7 @@ instance NodeMethod Joint2D "set_bias" '[Float] (IO ()) where
 
 {-# NOINLINE bindJoint2D_set_exclude_nodes_from_collision #-}
 
--- | If @true@, @node_a@ and @node_b@ can not collide.
+-- | If @true@, @node_a@ and @node_b@ can collide.
 bindJoint2D_set_exclude_nodes_from_collision :: MethodBind
 bindJoint2D_set_exclude_nodes_from_collision
   = unsafePerformIO $
@@ -171,7 +171,7 @@ bindJoint2D_set_exclude_nodes_from_collision
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, @node_a@ and @node_b@ can not collide.
+-- | If @true@, @node_a@ and @node_b@ can collide.
 set_exclude_nodes_from_collision ::
                                    (Joint2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_exclude_nodes_from_collision cls arg1

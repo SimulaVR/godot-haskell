@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShader
-       (Godot.Core.VisualShader._NODE_ID_INVALID,
-        Godot.Core.VisualShader._TYPE_VERTEX,
-        Godot.Core.VisualShader._TYPE_FRAGMENT,
-        Godot.Core.VisualShader._NODE_ID_OUTPUT,
+       (Godot.Core.VisualShader._NODE_ID_OUTPUT,
         Godot.Core.VisualShader._TYPE_MAX,
         Godot.Core.VisualShader._TYPE_LIGHT,
+        Godot.Core.VisualShader._TYPE_VERTEX,
+        Godot.Core.VisualShader._TYPE_FRAGMENT,
+        Godot.Core.VisualShader._NODE_ID_INVALID,
         Godot.Core.VisualShader._input_type_changed,
         Godot.Core.VisualShader._queue_update,
         Godot.Core.VisualShader._update_shader,
@@ -40,15 +40,6 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Shader()
 
-_NODE_ID_INVALID :: Int
-_NODE_ID_INVALID = -1
-
-_TYPE_VERTEX :: Int
-_TYPE_VERTEX = 0
-
-_TYPE_FRAGMENT :: Int
-_TYPE_FRAGMENT = 1
-
 _NODE_ID_OUTPUT :: Int
 _NODE_ID_OUTPUT = 0
 
@@ -57,6 +48,15 @@ _TYPE_MAX = 3
 
 _TYPE_LIGHT :: Int
 _TYPE_LIGHT = 2
+
+_TYPE_VERTEX :: Int
+_TYPE_VERTEX = 0
+
+_TYPE_FRAGMENT :: Int
+_TYPE_FRAGMENT = 1
+
+_NODE_ID_INVALID :: Int
+_NODE_ID_INVALID = -1
 
 instance NodeProperty VisualShader "graph_offset" Vector2 'False
          where
@@ -140,7 +140,6 @@ instance NodeMethod VisualShader "_update_shader" '[] (IO ()) where
 
 {-# NOINLINE bindVisualShader_add_node #-}
 
--- | Adds the specified node to the shader.
 bindVisualShader_add_node :: MethodBind
 bindVisualShader_add_node
   = unsafePerformIO $
@@ -150,7 +149,6 @@ bindVisualShader_add_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified node to the shader.
 add_node ::
            (VisualShader :< cls, Object :< cls) =>
            cls -> Int -> VisualShaderNode -> Vector2 -> Int -> IO ()
@@ -171,7 +169,6 @@ instance NodeMethod VisualShader "add_node"
 
 {-# NOINLINE bindVisualShader_can_connect_nodes #-}
 
--- | Returns @true@ if the specified nodes and ports can be connected together.
 bindVisualShader_can_connect_nodes :: MethodBind
 bindVisualShader_can_connect_nodes
   = unsafePerformIO $
@@ -181,7 +178,6 @@ bindVisualShader_can_connect_nodes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the specified nodes and ports can be connected together.
 can_connect_nodes ::
                     (VisualShader :< cls, Object :< cls) =>
                     cls -> Int -> Int -> Int -> Int -> Int -> IO Bool
@@ -204,7 +200,6 @@ instance NodeMethod VisualShader "can_connect_nodes"
 
 {-# NOINLINE bindVisualShader_connect_nodes #-}
 
--- | Connects the specified nodes and ports.
 bindVisualShader_connect_nodes :: MethodBind
 bindVisualShader_connect_nodes
   = unsafePerformIO $
@@ -214,7 +209,6 @@ bindVisualShader_connect_nodes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connects the specified nodes and ports.
 connect_nodes ::
                 (VisualShader :< cls, Object :< cls) =>
                 cls -> Int -> Int -> Int -> Int -> Int -> IO Int
@@ -236,7 +230,6 @@ instance NodeMethod VisualShader "connect_nodes"
 
 {-# NOINLINE bindVisualShader_connect_nodes_forced #-}
 
--- | Connects the specified nodes and ports, even if they can't be connected. Such connection is invalid and will not function properly.
 bindVisualShader_connect_nodes_forced :: MethodBind
 bindVisualShader_connect_nodes_forced
   = unsafePerformIO $
@@ -246,7 +239,6 @@ bindVisualShader_connect_nodes_forced
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connects the specified nodes and ports, even if they can't be connected. Such connection is invalid and will not function properly.
 connect_nodes_forced ::
                        (VisualShader :< cls, Object :< cls) =>
                        cls -> Int -> Int -> Int -> Int -> Int -> IO ()
@@ -269,7 +261,6 @@ instance NodeMethod VisualShader "connect_nodes_forced"
 
 {-# NOINLINE bindVisualShader_disconnect_nodes #-}
 
--- | Connects the specified nodes and ports.
 bindVisualShader_disconnect_nodes :: MethodBind
 bindVisualShader_disconnect_nodes
   = unsafePerformIO $
@@ -279,7 +270,6 @@ bindVisualShader_disconnect_nodes
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Connects the specified nodes and ports.
 disconnect_nodes ::
                    (VisualShader :< cls, Object :< cls) =>
                    cls -> Int -> Int -> Int -> Int -> Int -> IO ()
@@ -302,7 +292,6 @@ instance NodeMethod VisualShader "disconnect_nodes"
 
 {-# NOINLINE bindVisualShader_get_graph_offset #-}
 
--- | The offset vector of the whole graph.
 bindVisualShader_get_graph_offset :: MethodBind
 bindVisualShader_get_graph_offset
   = unsafePerformIO $
@@ -312,7 +301,6 @@ bindVisualShader_get_graph_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The offset vector of the whole graph.
 get_graph_offset ::
                    (VisualShader :< cls, Object :< cls) => cls -> IO Vector2
 get_graph_offset cls
@@ -331,7 +319,6 @@ instance NodeMethod VisualShader "get_graph_offset" '[]
 
 {-# NOINLINE bindVisualShader_get_node #-}
 
--- | Returns the shader node instance with specified @type@ and @id@.
 bindVisualShader_get_node :: MethodBind
 bindVisualShader_get_node
   = unsafePerformIO $
@@ -341,7 +328,6 @@ bindVisualShader_get_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the shader node instance with specified @type@ and @id@.
 get_node ::
            (VisualShader :< cls, Object :< cls) =>
            cls -> Int -> Int -> IO VisualShaderNode
@@ -360,7 +346,6 @@ instance NodeMethod VisualShader "get_node" '[Int, Int]
 
 {-# NOINLINE bindVisualShader_get_node_connections #-}
 
--- | Returns the list of connected nodes with the specified type.
 bindVisualShader_get_node_connections :: MethodBind
 bindVisualShader_get_node_connections
   = unsafePerformIO $
@@ -370,7 +355,6 @@ bindVisualShader_get_node_connections
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of connected nodes with the specified type.
 get_node_connections ::
                        (VisualShader :< cls, Object :< cls) => cls -> Int -> IO Array
 get_node_connections cls arg1
@@ -389,7 +373,6 @@ instance NodeMethod VisualShader "get_node_connections" '[Int]
 
 {-# NOINLINE bindVisualShader_get_node_list #-}
 
--- | Returns the list of all nodes in the shader with the specified type.
 bindVisualShader_get_node_list :: MethodBind
 bindVisualShader_get_node_list
   = unsafePerformIO $
@@ -399,7 +382,6 @@ bindVisualShader_get_node_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of all nodes in the shader with the specified type.
 get_node_list ::
                 (VisualShader :< cls, Object :< cls) =>
                 cls -> Int -> IO PoolIntArray
@@ -418,7 +400,6 @@ instance NodeMethod VisualShader "get_node_list" '[Int]
 
 {-# NOINLINE bindVisualShader_get_node_position #-}
 
--- | Returns the position of the specified node within the shader graph.
 bindVisualShader_get_node_position :: MethodBind
 bindVisualShader_get_node_position
   = unsafePerformIO $
@@ -428,7 +409,6 @@ bindVisualShader_get_node_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the position of the specified node within the shader graph.
 get_node_position ::
                     (VisualShader :< cls, Object :< cls) =>
                     cls -> Int -> Int -> IO Vector2
@@ -475,7 +455,6 @@ instance NodeMethod VisualShader "get_valid_node_id" '[Int]
 
 {-# NOINLINE bindVisualShader_is_node_connection #-}
 
--- | Returns @true@ if the specified node and port connection exist.
 bindVisualShader_is_node_connection :: MethodBind
 bindVisualShader_is_node_connection
   = unsafePerformIO $
@@ -485,7 +464,6 @@ bindVisualShader_is_node_connection
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the specified node and port connection exist.
 is_node_connection ::
                      (VisualShader :< cls, Object :< cls) =>
                      cls -> Int -> Int -> Int -> Int -> Int -> IO Bool
@@ -508,7 +486,6 @@ instance NodeMethod VisualShader "is_node_connection"
 
 {-# NOINLINE bindVisualShader_remove_node #-}
 
--- | Removes the specified node from the shader.
 bindVisualShader_remove_node :: MethodBind
 bindVisualShader_remove_node
   = unsafePerformIO $
@@ -518,7 +495,6 @@ bindVisualShader_remove_node
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Removes the specified node from the shader.
 remove_node ::
               (VisualShader :< cls, Object :< cls) => cls -> Int -> Int -> IO ()
 remove_node cls arg1 arg2
@@ -535,7 +511,6 @@ instance NodeMethod VisualShader "remove_node" '[Int, Int] (IO ())
 
 {-# NOINLINE bindVisualShader_set_graph_offset #-}
 
--- | The offset vector of the whole graph.
 bindVisualShader_set_graph_offset :: MethodBind
 bindVisualShader_set_graph_offset
   = unsafePerformIO $
@@ -545,7 +520,6 @@ bindVisualShader_set_graph_offset
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The offset vector of the whole graph.
 set_graph_offset ::
                    (VisualShader :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_graph_offset cls arg1
@@ -564,7 +538,6 @@ instance NodeMethod VisualShader "set_graph_offset" '[Vector2]
 
 {-# NOINLINE bindVisualShader_set_mode #-}
 
--- | Sets the mode of this shader.
 bindVisualShader_set_mode :: MethodBind
 bindVisualShader_set_mode
   = unsafePerformIO $
@@ -574,7 +547,6 @@ bindVisualShader_set_mode
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the mode of this shader.
 set_mode ::
            (VisualShader :< cls, Object :< cls) => cls -> Int -> IO ()
 set_mode cls arg1
@@ -590,7 +562,6 @@ instance NodeMethod VisualShader "set_mode" '[Int] (IO ()) where
 
 {-# NOINLINE bindVisualShader_set_node_position #-}
 
--- | Sets the position of the specified node.
 bindVisualShader_set_node_position :: MethodBind
 bindVisualShader_set_node_position
   = unsafePerformIO $
@@ -600,7 +571,6 @@ bindVisualShader_set_node_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the position of the specified node.
 set_node_position ::
                     (VisualShader :< cls, Object :< cls) =>
                     cls -> Int -> Int -> Vector2 -> IO ()

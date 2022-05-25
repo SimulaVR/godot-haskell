@@ -2,15 +2,15 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Geometry
-       (Godot.Core.Geometry._END_POLYGON, Godot.Core.Geometry._JOIN_ROUND,
-        Godot.Core.Geometry._OPERATION_XOR,
-        Godot.Core.Geometry._JOIN_MITER, Godot.Core.Geometry._END_JOINED,
+       (Godot.Core.Geometry._JOIN_ROUND, Godot.Core.Geometry._END_ROUND,
         Godot.Core.Geometry._OPERATION_UNION,
-        Godot.Core.Geometry._JOIN_SQUARE,
-        Godot.Core.Geometry._OPERATION_INTERSECTION,
-        Godot.Core.Geometry._END_BUTT, Godot.Core.Geometry._END_ROUND,
+        Godot.Core.Geometry._JOIN_SQUARE, Godot.Core.Geometry._END_SQUARE,
+        Godot.Core.Geometry._END_POLYGON,
+        Godot.Core.Geometry._OPERATION_XOR,
+        Godot.Core.Geometry._END_JOINED,
         Godot.Core.Geometry._OPERATION_DIFFERENCE,
-        Godot.Core.Geometry._END_SQUARE,
+        Godot.Core.Geometry._OPERATION_INTERSECTION,
+        Godot.Core.Geometry._END_BUTT, Godot.Core.Geometry._JOIN_MITER,
         Godot.Core.Geometry.build_box_planes,
         Godot.Core.Geometry.build_capsule_planes,
         Godot.Core.Geometry.build_cylinder_planes,
@@ -59,20 +59,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_END_POLYGON :: Int
-_END_POLYGON = 0
-
 _JOIN_ROUND :: Int
 _JOIN_ROUND = 1
 
-_OPERATION_XOR :: Int
-_OPERATION_XOR = 3
-
-_JOIN_MITER :: Int
-_JOIN_MITER = 2
-
-_END_JOINED :: Int
-_END_JOINED = 1
+_END_ROUND :: Int
+_END_ROUND = 4
 
 _OPERATION_UNION :: Int
 _OPERATION_UNION = 0
@@ -80,20 +71,29 @@ _OPERATION_UNION = 0
 _JOIN_SQUARE :: Int
 _JOIN_SQUARE = 0
 
+_END_SQUARE :: Int
+_END_SQUARE = 3
+
+_END_POLYGON :: Int
+_END_POLYGON = 0
+
+_OPERATION_XOR :: Int
+_OPERATION_XOR = 3
+
+_END_JOINED :: Int
+_END_JOINED = 1
+
+_OPERATION_DIFFERENCE :: Int
+_OPERATION_DIFFERENCE = 1
+
 _OPERATION_INTERSECTION :: Int
 _OPERATION_INTERSECTION = 2
 
 _END_BUTT :: Int
 _END_BUTT = 2
 
-_END_ROUND :: Int
-_END_ROUND = 4
-
-_OPERATION_DIFFERENCE :: Int
-_OPERATION_DIFFERENCE = 1
-
-_END_SQUARE :: Int
-_END_SQUARE = 3
+_JOIN_MITER :: Int
+_JOIN_MITER = 2
 
 {-# NOINLINE bindGeometry_build_box_planes #-}
 
@@ -834,16 +834,6 @@ instance NodeMethod Geometry "merge_polygons_2d"
 -- | Inflates or deflates @polygon@ by @delta@ units (pixels). If @delta@ is positive, makes the polygon grow outward. If @delta@ is negative, shrinks the polygon inward. Returns an array of polygons because inflating/deflating may result in multiple discrete polygons. Returns an empty array if @delta@ is negative and the absolute value of it approximately exceeds the minimum bounding rectangle dimensions of the polygon.
 --   				Each polygon's vertices will be rounded as determined by @join_type@, see @enum PolyJoinType@.
 --   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distinguished by calling @method is_polygon_clockwise@.
---   				__Note:__ To translate the polygon's vertices specifically, use the @method Transform2D.xform@ method:
---   				
---   @
---   
---   				var polygon = PoolVector2Array(@Vector2(0, 0), Vector2(100, 0), Vector2(100, 100), Vector2(0, 100)@)
---   				var offset = Vector2(50, 50)
---   				polygon = Transform2D(0, offset).xform(polygon)
---   				print(polygon) # prints @Vector2(50, 50), Vector2(150, 50), Vector2(150, 150), Vector2(50, 150)@
---   				
---   @
 bindGeometry_offset_polygon_2d :: MethodBind
 bindGeometry_offset_polygon_2d
   = unsafePerformIO $
@@ -856,16 +846,6 @@ bindGeometry_offset_polygon_2d
 -- | Inflates or deflates @polygon@ by @delta@ units (pixels). If @delta@ is positive, makes the polygon grow outward. If @delta@ is negative, shrinks the polygon inward. Returns an array of polygons because inflating/deflating may result in multiple discrete polygons. Returns an empty array if @delta@ is negative and the absolute value of it approximately exceeds the minimum bounding rectangle dimensions of the polygon.
 --   				Each polygon's vertices will be rounded as determined by @join_type@, see @enum PolyJoinType@.
 --   				The operation may result in an outer polygon (boundary) and inner polygon (hole) produced which could be distinguished by calling @method is_polygon_clockwise@.
---   				__Note:__ To translate the polygon's vertices specifically, use the @method Transform2D.xform@ method:
---   				
---   @
---   
---   				var polygon = PoolVector2Array(@Vector2(0, 0), Vector2(100, 0), Vector2(100, 100), Vector2(0, 100)@)
---   				var offset = Vector2(50, 50)
---   				polygon = Transform2D(0, offset).xform(polygon)
---   				print(polygon) # prints @Vector2(50, 50), Vector2(150, 50), Vector2(150, 150), Vector2(50, 150)@
---   				
---   @
 offset_polygon_2d ::
                     (Geometry :< cls, Object :< cls) =>
                     cls -> PoolVector2Array -> Float -> Maybe Int -> IO Array

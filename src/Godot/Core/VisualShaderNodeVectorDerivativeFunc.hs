@@ -3,8 +3,8 @@
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeVectorDerivativeFunc
        (Godot.Core.VisualShaderNodeVectorDerivativeFunc._FUNC_SUM,
-        Godot.Core.VisualShaderNodeVectorDerivativeFunc._FUNC_Y,
         Godot.Core.VisualShaderNodeVectorDerivativeFunc._FUNC_X,
+        Godot.Core.VisualShaderNodeVectorDerivativeFunc._FUNC_Y,
         Godot.Core.VisualShaderNodeVectorDerivativeFunc.get_function,
         Godot.Core.VisualShaderNodeVectorDerivativeFunc.set_function)
        where
@@ -23,11 +23,11 @@ import Godot.Core.VisualShaderNode()
 _FUNC_SUM :: Int
 _FUNC_SUM = 0
 
-_FUNC_Y :: Int
-_FUNC_Y = 2
-
 _FUNC_X :: Int
 _FUNC_X = 1
+
+_FUNC_Y :: Int
+_FUNC_Y = 2
 
 instance NodeProperty VisualShaderNodeVectorDerivativeFunc
            "function"
@@ -40,7 +40,6 @@ instance NodeProperty VisualShaderNodeVectorDerivativeFunc
 {-# NOINLINE bindVisualShaderNodeVectorDerivativeFunc_get_function
              #-}
 
--- | A derivative type. See @enum Function@ for options.
 bindVisualShaderNodeVectorDerivativeFunc_get_function :: MethodBind
 bindVisualShaderNodeVectorDerivativeFunc_get_function
   = unsafePerformIO $
@@ -50,7 +49,6 @@ bindVisualShaderNodeVectorDerivativeFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A derivative type. See @enum Function@ for options.
 get_function ::
                (VisualShaderNodeVectorDerivativeFunc :< cls, Object :< cls) =>
                cls -> IO Int
@@ -75,7 +73,6 @@ instance NodeMethod VisualShaderNodeVectorDerivativeFunc
 {-# NOINLINE bindVisualShaderNodeVectorDerivativeFunc_set_function
              #-}
 
--- | A derivative type. See @enum Function@ for options.
 bindVisualShaderNodeVectorDerivativeFunc_set_function :: MethodBind
 bindVisualShaderNodeVectorDerivativeFunc_set_function
   = unsafePerformIO $
@@ -85,7 +82,6 @@ bindVisualShaderNodeVectorDerivativeFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A derivative type. See @enum Function@ for options.
 set_function ::
                (VisualShaderNodeVectorDerivativeFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()

@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectSpectrumAnalyzerInstance
-       (Godot.Core.AudioEffectSpectrumAnalyzerInstance._MAGNITUDE_MAX,
-        Godot.Core.AudioEffectSpectrumAnalyzerInstance._MAGNITUDE_AVERAGE,
+       (Godot.Core.AudioEffectSpectrumAnalyzerInstance._MAGNITUDE_AVERAGE,
+        Godot.Core.AudioEffectSpectrumAnalyzerInstance._MAGNITUDE_MAX,
         Godot.Core.AudioEffectSpectrumAnalyzerInstance.get_magnitude_for_frequency_range)
        where
 import Data.Coerce
@@ -18,11 +18,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.AudioEffectInstance()
 
-_MAGNITUDE_MAX :: Int
-_MAGNITUDE_MAX = 1
-
 _MAGNITUDE_AVERAGE :: Int
 _MAGNITUDE_AVERAGE = 0
+
+_MAGNITUDE_MAX :: Int
+_MAGNITUDE_MAX = 1
 
 {-# NOINLINE bindAudioEffectSpectrumAnalyzerInstance_get_magnitude_for_frequency_range
              #-}

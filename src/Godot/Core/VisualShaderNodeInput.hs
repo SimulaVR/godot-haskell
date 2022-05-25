@@ -35,7 +35,6 @@ instance NodeProperty VisualShaderNodeInput "input_name"
 
 {-# NOINLINE bindVisualShaderNodeInput_get_input_name #-}
 
--- | One of the several input constants in lower-case style like: "vertex"(@VERTEX@) or "point_size"(@POINT_SIZE@).
 bindVisualShaderNodeInput_get_input_name :: MethodBind
 bindVisualShaderNodeInput_get_input_name
   = unsafePerformIO $
@@ -45,7 +44,6 @@ bindVisualShaderNodeInput_get_input_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | One of the several input constants in lower-case style like: "vertex"(@VERTEX@) or "point_size"(@POINT_SIZE@).
 get_input_name ::
                  (VisualShaderNodeInput :< cls, Object :< cls) =>
                  cls -> IO GodotString
@@ -94,7 +92,6 @@ instance NodeMethod VisualShaderNodeInput "get_input_real_name" '[]
 
 {-# NOINLINE bindVisualShaderNodeInput_set_input_name #-}
 
--- | One of the several input constants in lower-case style like: "vertex"(@VERTEX@) or "point_size"(@POINT_SIZE@).
 bindVisualShaderNodeInput_set_input_name :: MethodBind
 bindVisualShaderNodeInput_set_input_name
   = unsafePerformIO $
@@ -104,7 +101,6 @@ bindVisualShaderNodeInput_set_input_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | One of the several input constants in lower-case style like: "vertex"(@VERTEX@) or "point_size"(@POINT_SIZE@).
 set_input_name ::
                  (VisualShaderNodeInput :< cls, Object :< cls) =>
                  cls -> GodotString -> IO ()

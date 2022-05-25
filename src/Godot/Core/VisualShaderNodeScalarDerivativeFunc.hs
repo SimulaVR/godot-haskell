@@ -3,8 +3,8 @@
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeScalarDerivativeFunc
        (Godot.Core.VisualShaderNodeScalarDerivativeFunc._FUNC_SUM,
-        Godot.Core.VisualShaderNodeScalarDerivativeFunc._FUNC_Y,
         Godot.Core.VisualShaderNodeScalarDerivativeFunc._FUNC_X,
+        Godot.Core.VisualShaderNodeScalarDerivativeFunc._FUNC_Y,
         Godot.Core.VisualShaderNodeScalarDerivativeFunc.get_function,
         Godot.Core.VisualShaderNodeScalarDerivativeFunc.set_function)
        where
@@ -23,11 +23,11 @@ import Godot.Core.VisualShaderNode()
 _FUNC_SUM :: Int
 _FUNC_SUM = 0
 
-_FUNC_Y :: Int
-_FUNC_Y = 2
-
 _FUNC_X :: Int
 _FUNC_X = 1
+
+_FUNC_Y :: Int
+_FUNC_Y = 2
 
 instance NodeProperty VisualShaderNodeScalarDerivativeFunc
            "function"
@@ -40,7 +40,6 @@ instance NodeProperty VisualShaderNodeScalarDerivativeFunc
 {-# NOINLINE bindVisualShaderNodeScalarDerivativeFunc_get_function
              #-}
 
--- | The derivative type. See @enum Function@ for options.
 bindVisualShaderNodeScalarDerivativeFunc_get_function :: MethodBind
 bindVisualShaderNodeScalarDerivativeFunc_get_function
   = unsafePerformIO $
@@ -50,7 +49,6 @@ bindVisualShaderNodeScalarDerivativeFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The derivative type. See @enum Function@ for options.
 get_function ::
                (VisualShaderNodeScalarDerivativeFunc :< cls, Object :< cls) =>
                cls -> IO Int
@@ -75,7 +73,6 @@ instance NodeMethod VisualShaderNodeScalarDerivativeFunc
 {-# NOINLINE bindVisualShaderNodeScalarDerivativeFunc_set_function
              #-}
 
--- | The derivative type. See @enum Function@ for options.
 bindVisualShaderNodeScalarDerivativeFunc_set_function :: MethodBind
 bindVisualShaderNodeScalarDerivativeFunc_set_function
   = unsafePerformIO $
@@ -85,7 +82,6 @@ bindVisualShaderNodeScalarDerivativeFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The derivative type. See @enum Function@ for options.
 set_function ::
                (VisualShaderNodeScalarDerivativeFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()

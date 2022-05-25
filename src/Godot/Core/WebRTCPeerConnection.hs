@@ -3,11 +3,11 @@
   MultiParamTypeClasses #-}
 module Godot.Core.WebRTCPeerConnection
        (Godot.Core.WebRTCPeerConnection._STATE_CONNECTED,
+        Godot.Core.WebRTCPeerConnection._STATE_FAILED,
+        Godot.Core.WebRTCPeerConnection._STATE_DISCONNECTED,
         Godot.Core.WebRTCPeerConnection._STATE_CLOSED,
         Godot.Core.WebRTCPeerConnection._STATE_CONNECTING,
-        Godot.Core.WebRTCPeerConnection._STATE_DISCONNECTED,
         Godot.Core.WebRTCPeerConnection._STATE_NEW,
-        Godot.Core.WebRTCPeerConnection._STATE_FAILED,
         Godot.Core.WebRTCPeerConnection.sig_data_channel_received,
         Godot.Core.WebRTCPeerConnection.sig_ice_candidate_created,
         Godot.Core.WebRTCPeerConnection.sig_session_description_created,
@@ -36,20 +36,20 @@ import Godot.Core.Reference()
 _STATE_CONNECTED :: Int
 _STATE_CONNECTED = 2
 
+_STATE_FAILED :: Int
+_STATE_FAILED = 4
+
+_STATE_DISCONNECTED :: Int
+_STATE_DISCONNECTED = 3
+
 _STATE_CLOSED :: Int
 _STATE_CLOSED = 5
 
 _STATE_CONNECTING :: Int
 _STATE_CONNECTING = 1
 
-_STATE_DISCONNECTED :: Int
-_STATE_DISCONNECTED = 3
-
 _STATE_NEW :: Int
 _STATE_NEW = 0
-
-_STATE_FAILED :: Int
-_STATE_FAILED = 4
 
 sig_data_channel_received ::
                           Godot.Internal.Dispatch.Signal WebRTCPeerConnection

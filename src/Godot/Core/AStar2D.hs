@@ -243,8 +243,7 @@ instance NodeMethod AStar2D "get_available_point_id" '[] (IO Int)
 
 {-# NOINLINE bindAStar2D_get_closest_point #-}
 
--- | Returns the ID of the closest point to @to_position@, optionally taking disabled points into account. Returns @-1@ if there are no points in the points pool.
---   				__Note:__ If several points are the closest to @to_position@, the one with the smallest ID will be returned, ensuring a deterministic result.
+-- | Returns the ID of the closest point to @to_position@, optionally taking disabled points into account. Returns -1 if there are no points in the points pool.
 bindAStar2D_get_closest_point :: MethodBind
 bindAStar2D_get_closest_point
   = unsafePerformIO $
@@ -254,8 +253,7 @@ bindAStar2D_get_closest_point
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the ID of the closest point to @to_position@, optionally taking disabled points into account. Returns @-1@ if there are no points in the points pool.
---   				__Note:__ If several points are the closest to @to_position@, the one with the smallest ID will be returned, ensuring a deterministic result.
+-- | Returns the ID of the closest point to @to_position@, optionally taking disabled points into account. Returns -1 if there are no points in the points pool.
 get_closest_point ::
                     (AStar2D :< cls, Object :< cls) =>
                     cls -> Vector2 -> Maybe Bool -> IO Int

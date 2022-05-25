@@ -2,13 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisibilityEnabler2D
-       (Godot.Core.VisibilityEnabler2D._ENABLER_PARENT_PROCESS,
-        Godot.Core.VisibilityEnabler2D._ENABLER_MAX,
-        Godot.Core.VisibilityEnabler2D._ENABLER_PARENT_PHYSICS_PROCESS,
-        Godot.Core.VisibilityEnabler2D._ENABLER_PAUSE_ANIMATIONS,
-        Godot.Core.VisibilityEnabler2D._ENABLER_PAUSE_ANIMATED_SPRITES,
+       (Godot.Core.VisibilityEnabler2D._ENABLER_PARENT_PHYSICS_PROCESS,
         Godot.Core.VisibilityEnabler2D._ENABLER_PAUSE_PARTICLES,
+        Godot.Core.VisibilityEnabler2D._ENABLER_MAX,
         Godot.Core.VisibilityEnabler2D._ENABLER_FREEZE_BODIES,
+        Godot.Core.VisibilityEnabler2D._ENABLER_PAUSE_ANIMATED_SPRITES,
+        Godot.Core.VisibilityEnabler2D._ENABLER_PAUSE_ANIMATIONS,
+        Godot.Core.VisibilityEnabler2D._ENABLER_PARENT_PROCESS,
         Godot.Core.VisibilityEnabler2D._node_removed,
         Godot.Core.VisibilityEnabler2D.is_enabler_enabled,
         Godot.Core.VisibilityEnabler2D.set_enabler)
@@ -25,26 +25,26 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisibilityNotifier2D()
 
-_ENABLER_PARENT_PROCESS :: Int
-_ENABLER_PARENT_PROCESS = 3
-
-_ENABLER_MAX :: Int
-_ENABLER_MAX = 6
-
 _ENABLER_PARENT_PHYSICS_PROCESS :: Int
 _ENABLER_PARENT_PHYSICS_PROCESS = 4
-
-_ENABLER_PAUSE_ANIMATIONS :: Int
-_ENABLER_PAUSE_ANIMATIONS = 0
-
-_ENABLER_PAUSE_ANIMATED_SPRITES :: Int
-_ENABLER_PAUSE_ANIMATED_SPRITES = 5
 
 _ENABLER_PAUSE_PARTICLES :: Int
 _ENABLER_PAUSE_PARTICLES = 2
 
+_ENABLER_MAX :: Int
+_ENABLER_MAX = 6
+
 _ENABLER_FREEZE_BODIES :: Int
 _ENABLER_FREEZE_BODIES = 1
+
+_ENABLER_PAUSE_ANIMATED_SPRITES :: Int
+_ENABLER_PAUSE_ANIMATED_SPRITES = 5
+
+_ENABLER_PAUSE_ANIMATIONS :: Int
+_ENABLER_PAUSE_ANIMATIONS = 0
+
+_ENABLER_PARENT_PROCESS :: Int
+_ENABLER_PARENT_PROCESS = 3
 
 instance NodeProperty VisibilityEnabler2D "freeze_bodies" Bool
            'False

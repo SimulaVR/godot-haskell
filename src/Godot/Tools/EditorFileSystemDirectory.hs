@@ -221,7 +221,6 @@ instance NodeMethod EditorFileSystemDirectory "get_file_path"
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_script_class_extends
              #-}
 
--- | Returns the base class of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 bindEditorFileSystemDirectory_get_file_script_class_extends ::
                                                             MethodBind
 bindEditorFileSystemDirectory_get_file_script_class_extends
@@ -232,7 +231,6 @@ bindEditorFileSystemDirectory_get_file_script_class_extends
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the base class of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 get_file_script_class_extends ::
                                 (EditorFileSystemDirectory :< cls, Object :< cls) =>
                                 cls -> Int -> IO GodotString
@@ -257,7 +255,6 @@ instance NodeMethod EditorFileSystemDirectory
 {-# NOINLINE bindEditorFileSystemDirectory_get_file_script_class_name
              #-}
 
--- | Returns the name of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 bindEditorFileSystemDirectory_get_file_script_class_name ::
                                                          MethodBind
 bindEditorFileSystemDirectory_get_file_script_class_name
@@ -268,7 +265,6 @@ bindEditorFileSystemDirectory_get_file_script_class_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the name of the script class defined in the file at index @idx@. If the file doesn't define a script class using the @class_name@ syntax, this will return an empty string.
 get_file_script_class_name ::
                              (EditorFileSystemDirectory :< cls, Object :< cls) =>
                              cls -> Int -> IO GodotString

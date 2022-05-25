@@ -4,8 +4,8 @@
 module Godot.Core.Camera2D
        (Godot.Core.Camera2D._ANCHOR_MODE_FIXED_TOP_LEFT,
         Godot.Core.Camera2D._CAMERA2D_PROCESS_PHYSICS,
-        Godot.Core.Camera2D._CAMERA2D_PROCESS_IDLE,
         Godot.Core.Camera2D._ANCHOR_MODE_DRAG_CENTER,
+        Godot.Core.Camera2D._CAMERA2D_PROCESS_IDLE,
         Godot.Core.Camera2D._make_current,
         Godot.Core.Camera2D._set_current,
         Godot.Core.Camera2D._set_old_smoothing,
@@ -68,11 +68,11 @@ _ANCHOR_MODE_FIXED_TOP_LEFT = 0
 _CAMERA2D_PROCESS_PHYSICS :: Int
 _CAMERA2D_PROCESS_PHYSICS = 0
 
-_CAMERA2D_PROCESS_IDLE :: Int
-_CAMERA2D_PROCESS_IDLE = 1
-
 _ANCHOR_MODE_DRAG_CENTER :: Int
 _ANCHOR_MODE_DRAG_CENTER = 1
+
+_CAMERA2D_PROCESS_IDLE :: Int
+_CAMERA2D_PROCESS_IDLE = 1
 
 instance NodeProperty Camera2D "anchor_mode" Int 'False where
         nodeProperty

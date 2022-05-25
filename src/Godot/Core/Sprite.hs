@@ -197,7 +197,6 @@ instance NodeMethod Sprite "get_hframes" '[] (IO Int) where
 {-# NOINLINE bindSprite_get_normal_map #-}
 
 -- | The normal map gives depth to the Sprite.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindSprite_get_normal_map :: MethodBind
 bindSprite_get_normal_map
   = unsafePerformIO $
@@ -208,7 +207,6 @@ bindSprite_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map gives depth to the Sprite.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (Sprite :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -667,7 +665,6 @@ instance NodeMethod Sprite "set_hframes" '[Int] (IO ()) where
 {-# NOINLINE bindSprite_set_normal_map #-}
 
 -- | The normal map gives depth to the Sprite.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindSprite_set_normal_map :: MethodBind
 bindSprite_set_normal_map
   = unsafePerformIO $
@@ -678,7 +675,6 @@ bindSprite_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map gives depth to the Sprite.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (Sprite :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1

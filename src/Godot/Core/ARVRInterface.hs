@@ -2,19 +2,19 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ARVRInterface
-       (Godot.Core.ARVRInterface._ARVR_STEREO,
-        Godot.Core.ARVRInterface._ARVR_INSUFFICIENT_FEATURES,
-        Godot.Core.ARVRInterface._ARVR_NOT_TRACKING,
+       (Godot.Core.ARVRInterface._EYE_LEFT,
         Godot.Core.ARVRInterface._EYE_MONO,
-        Godot.Core.ARVRInterface._EYE_LEFT,
-        Godot.Core.ARVRInterface._ARVR_EXCESSIVE_MOTION,
-        Godot.Core.ARVRInterface._ARVR_NORMAL_TRACKING,
-        Godot.Core.ARVRInterface._EYE_RIGHT,
         Godot.Core.ARVRInterface._ARVR_NONE,
-        Godot.Core.ARVRInterface._ARVR_EXTERNAL,
-        Godot.Core.ARVRInterface._ARVR_UNKNOWN_TRACKING,
         Godot.Core.ARVRInterface._ARVR_AR,
+        Godot.Core.ARVRInterface._ARVR_UNKNOWN_TRACKING,
         Godot.Core.ARVRInterface._ARVR_MONO,
+        Godot.Core.ARVRInterface._EYE_RIGHT,
+        Godot.Core.ARVRInterface._ARVR_NOT_TRACKING,
+        Godot.Core.ARVRInterface._ARVR_NORMAL_TRACKING,
+        Godot.Core.ARVRInterface._ARVR_EXTERNAL,
+        Godot.Core.ARVRInterface._ARVR_EXCESSIVE_MOTION,
+        Godot.Core.ARVRInterface._ARVR_INSUFFICIENT_FEATURES,
+        Godot.Core.ARVRInterface._ARVR_STEREO,
         Godot.Core.ARVRInterface.get_anchor_detection_is_enabled,
         Godot.Core.ARVRInterface.get_camera_feed_id,
         Godot.Core.ARVRInterface.get_capabilities,
@@ -42,44 +42,44 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Reference()
 
-_ARVR_STEREO :: Int
-_ARVR_STEREO = 2
-
-_ARVR_INSUFFICIENT_FEATURES :: Int
-_ARVR_INSUFFICIENT_FEATURES = 2
-
-_ARVR_NOT_TRACKING :: Int
-_ARVR_NOT_TRACKING = 4
+_EYE_LEFT :: Int
+_EYE_LEFT = 1
 
 _EYE_MONO :: Int
 _EYE_MONO = 0
 
-_EYE_LEFT :: Int
-_EYE_LEFT = 1
-
-_ARVR_EXCESSIVE_MOTION :: Int
-_ARVR_EXCESSIVE_MOTION = 1
-
-_ARVR_NORMAL_TRACKING :: Int
-_ARVR_NORMAL_TRACKING = 0
-
-_EYE_RIGHT :: Int
-_EYE_RIGHT = 2
-
 _ARVR_NONE :: Int
 _ARVR_NONE = 0
-
-_ARVR_EXTERNAL :: Int
-_ARVR_EXTERNAL = 8
-
-_ARVR_UNKNOWN_TRACKING :: Int
-_ARVR_UNKNOWN_TRACKING = 3
 
 _ARVR_AR :: Int
 _ARVR_AR = 4
 
+_ARVR_UNKNOWN_TRACKING :: Int
+_ARVR_UNKNOWN_TRACKING = 3
+
 _ARVR_MONO :: Int
 _ARVR_MONO = 1
+
+_EYE_RIGHT :: Int
+_EYE_RIGHT = 2
+
+_ARVR_NOT_TRACKING :: Int
+_ARVR_NOT_TRACKING = 4
+
+_ARVR_NORMAL_TRACKING :: Int
+_ARVR_NORMAL_TRACKING = 0
+
+_ARVR_EXTERNAL :: Int
+_ARVR_EXTERNAL = 8
+
+_ARVR_EXCESSIVE_MOTION :: Int
+_ARVR_EXCESSIVE_MOTION = 1
+
+_ARVR_INSUFFICIENT_FEATURES :: Int
+_ARVR_INSUFFICIENT_FEATURES = 2
+
+_ARVR_STEREO :: Int
+_ARVR_STEREO = 2
 
 instance NodeProperty ARVRInterface
            "ar_is_anchor_detection_enabled"

@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectPitchShift
-       (Godot.Core.AudioEffectPitchShift._FFT_SIZE_2048,
+       (Godot.Core.AudioEffectPitchShift._FFT_SIZE_MAX,
+        Godot.Core.AudioEffectPitchShift._FFT_SIZE_1024,
+        Godot.Core.AudioEffectPitchShift._FFT_SIZE_2048,
         Godot.Core.AudioEffectPitchShift._FFT_SIZE_4096,
-        Godot.Core.AudioEffectPitchShift._FFT_SIZE_MAX,
         Godot.Core.AudioEffectPitchShift._FFT_SIZE_512,
         Godot.Core.AudioEffectPitchShift._FFT_SIZE_256,
-        Godot.Core.AudioEffectPitchShift._FFT_SIZE_1024,
         Godot.Core.AudioEffectPitchShift.get_fft_size,
         Godot.Core.AudioEffectPitchShift.get_oversampling,
         Godot.Core.AudioEffectPitchShift.get_pitch_scale,
@@ -27,23 +27,23 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.AudioEffect()
 
+_FFT_SIZE_MAX :: Int
+_FFT_SIZE_MAX = 5
+
+_FFT_SIZE_1024 :: Int
+_FFT_SIZE_1024 = 2
+
 _FFT_SIZE_2048 :: Int
 _FFT_SIZE_2048 = 3
 
 _FFT_SIZE_4096 :: Int
 _FFT_SIZE_4096 = 4
 
-_FFT_SIZE_MAX :: Int
-_FFT_SIZE_MAX = 5
-
 _FFT_SIZE_512 :: Int
 _FFT_SIZE_512 = 1
 
 _FFT_SIZE_256 :: Int
 _FFT_SIZE_256 = 0
-
-_FFT_SIZE_1024 :: Int
-_FFT_SIZE_1024 = 2
 
 instance NodeProperty AudioEffectPitchShift "fft_size" Int 'False
          where

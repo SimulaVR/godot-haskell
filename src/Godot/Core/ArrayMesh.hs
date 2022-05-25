@@ -2,27 +2,27 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ArrayMesh
-       (Godot.Core.ArrayMesh._ARRAY_FORMAT_INDEX,
+       (Godot.Core.ArrayMesh._ARRAY_WEIGHTS_SIZE,
+        Godot.Core.ArrayMesh._ARRAY_FORMAT_WEIGHTS,
+        Godot.Core.ArrayMesh._ARRAY_NORMAL,
+        Godot.Core.ArrayMesh._NO_INDEX_ARRAY,
+        Godot.Core.ArrayMesh._ARRAY_MAX,
         Godot.Core.ArrayMesh._ARRAY_FORMAT_COLOR,
         Godot.Core.ArrayMesh._ARRAY_FORMAT_TEX_UV,
-        Godot.Core.ArrayMesh._ARRAY_FORMAT_VERTEX,
-        Godot.Core.ArrayMesh._ARRAY_MAX,
-        Godot.Core.ArrayMesh._ARRAY_NORMAL,
         Godot.Core.ArrayMesh._ARRAY_FORMAT_TEX_UV2,
-        Godot.Core.ArrayMesh._ARRAY_INDEX,
-        Godot.Core.ArrayMesh._ARRAY_COLOR,
-        Godot.Core.ArrayMesh._ARRAY_TEX_UV,
         Godot.Core.ArrayMesh._ARRAY_FORMAT_NORMAL,
-        Godot.Core.ArrayMesh._ARRAY_TEX_UV2,
         Godot.Core.ArrayMesh._ARRAY_FORMAT_BONES,
-        Godot.Core.ArrayMesh._ARRAY_WEIGHTS_SIZE,
-        Godot.Core.ArrayMesh._ARRAY_WEIGHTS,
-        Godot.Core.ArrayMesh._ARRAY_TANGENT,
-        Godot.Core.ArrayMesh._ARRAY_BONES,
-        Godot.Core.ArrayMesh._NO_INDEX_ARRAY,
-        Godot.Core.ArrayMesh._ARRAY_VERTEX,
-        Godot.Core.ArrayMesh._ARRAY_FORMAT_WEIGHTS,
         Godot.Core.ArrayMesh._ARRAY_FORMAT_TANGENT,
+        Godot.Core.ArrayMesh._ARRAY_INDEX,
+        Godot.Core.ArrayMesh._ARRAY_VERTEX,
+        Godot.Core.ArrayMesh._ARRAY_TEX_UV2,
+        Godot.Core.ArrayMesh._ARRAY_COLOR,
+        Godot.Core.ArrayMesh._ARRAY_FORMAT_INDEX,
+        Godot.Core.ArrayMesh._ARRAY_TANGENT,
+        Godot.Core.ArrayMesh._ARRAY_WEIGHTS,
+        Godot.Core.ArrayMesh._ARRAY_FORMAT_VERTEX,
+        Godot.Core.ArrayMesh._ARRAY_BONES,
+        Godot.Core.ArrayMesh._ARRAY_TEX_UV,
         Godot.Core.ArrayMesh.add_blend_shape,
         Godot.Core.ArrayMesh.add_surface_from_arrays,
         Godot.Core.ArrayMesh.clear_blend_shapes,
@@ -56,8 +56,20 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Mesh()
 
-_ARRAY_FORMAT_INDEX :: Int
-_ARRAY_FORMAT_INDEX = 256
+_ARRAY_WEIGHTS_SIZE :: Int
+_ARRAY_WEIGHTS_SIZE = 4
+
+_ARRAY_FORMAT_WEIGHTS :: Int
+_ARRAY_FORMAT_WEIGHTS = 128
+
+_ARRAY_NORMAL :: Int
+_ARRAY_NORMAL = 1
+
+_NO_INDEX_ARRAY :: Int
+_NO_INDEX_ARRAY = -1
+
+_ARRAY_MAX :: Int
+_ARRAY_MAX = 9
 
 _ARRAY_FORMAT_COLOR :: Int
 _ARRAY_FORMAT_COLOR = 8
@@ -65,59 +77,47 @@ _ARRAY_FORMAT_COLOR = 8
 _ARRAY_FORMAT_TEX_UV :: Int
 _ARRAY_FORMAT_TEX_UV = 16
 
-_ARRAY_FORMAT_VERTEX :: Int
-_ARRAY_FORMAT_VERTEX = 1
-
-_ARRAY_MAX :: Int
-_ARRAY_MAX = 9
-
-_ARRAY_NORMAL :: Int
-_ARRAY_NORMAL = 1
-
 _ARRAY_FORMAT_TEX_UV2 :: Int
 _ARRAY_FORMAT_TEX_UV2 = 32
-
-_ARRAY_INDEX :: Int
-_ARRAY_INDEX = 8
-
-_ARRAY_COLOR :: Int
-_ARRAY_COLOR = 3
-
-_ARRAY_TEX_UV :: Int
-_ARRAY_TEX_UV = 4
 
 _ARRAY_FORMAT_NORMAL :: Int
 _ARRAY_FORMAT_NORMAL = 2
 
-_ARRAY_TEX_UV2 :: Int
-_ARRAY_TEX_UV2 = 5
-
 _ARRAY_FORMAT_BONES :: Int
 _ARRAY_FORMAT_BONES = 64
 
-_ARRAY_WEIGHTS_SIZE :: Int
-_ARRAY_WEIGHTS_SIZE = 4
+_ARRAY_FORMAT_TANGENT :: Int
+_ARRAY_FORMAT_TANGENT = 4
 
-_ARRAY_WEIGHTS :: Int
-_ARRAY_WEIGHTS = 7
-
-_ARRAY_TANGENT :: Int
-_ARRAY_TANGENT = 2
-
-_ARRAY_BONES :: Int
-_ARRAY_BONES = 6
-
-_NO_INDEX_ARRAY :: Int
-_NO_INDEX_ARRAY = -1
+_ARRAY_INDEX :: Int
+_ARRAY_INDEX = 8
 
 _ARRAY_VERTEX :: Int
 _ARRAY_VERTEX = 0
 
-_ARRAY_FORMAT_WEIGHTS :: Int
-_ARRAY_FORMAT_WEIGHTS = 128
+_ARRAY_TEX_UV2 :: Int
+_ARRAY_TEX_UV2 = 5
 
-_ARRAY_FORMAT_TANGENT :: Int
-_ARRAY_FORMAT_TANGENT = 4
+_ARRAY_COLOR :: Int
+_ARRAY_COLOR = 3
+
+_ARRAY_FORMAT_INDEX :: Int
+_ARRAY_FORMAT_INDEX = 256
+
+_ARRAY_TANGENT :: Int
+_ARRAY_TANGENT = 2
+
+_ARRAY_WEIGHTS :: Int
+_ARRAY_WEIGHTS = 7
+
+_ARRAY_FORMAT_VERTEX :: Int
+_ARRAY_FORMAT_VERTEX = 1
+
+_ARRAY_BONES :: Int
+_ARRAY_BONES = 6
+
+_ARRAY_TEX_UV :: Int
+_ARRAY_TEX_UV = 4
 
 instance NodeProperty ArrayMesh "blend_shape_mode" Int 'False where
         nodeProperty
@@ -162,6 +162,7 @@ instance NodeMethod ArrayMesh "add_blend_shape" '[GodotString]
 --   				Surfaces are created to be rendered using a @primitive@, which may be any of the types defined in @enum Mesh.PrimitiveType@. (As a note, when using indices, it is recommended to only use points, lines or triangles.) @method Mesh.get_surface_count@ will become the @surf_idx@ for this new surface.
 --   				The @arrays@ argument is an array of arrays. See @enum ArrayType@ for the values used in this array. For example, @arrays@0@@ is the array of vertices. That first vertex sub-array is always required; the others are optional. Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data and the index array defines the vertex order. All sub-arrays must have the same length as the vertex array or be empty, except for @ARRAY_INDEX@ if it is used.
 --   				Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data, and the index array defines the order of the vertices.
+--   				Godot uses clockwise winding order for front faces of triangle primitive modes.
 bindArrayMesh_add_surface_from_arrays :: MethodBind
 bindArrayMesh_add_surface_from_arrays
   = unsafePerformIO $
@@ -175,6 +176,7 @@ bindArrayMesh_add_surface_from_arrays
 --   				Surfaces are created to be rendered using a @primitive@, which may be any of the types defined in @enum Mesh.PrimitiveType@. (As a note, when using indices, it is recommended to only use points, lines or triangles.) @method Mesh.get_surface_count@ will become the @surf_idx@ for this new surface.
 --   				The @arrays@ argument is an array of arrays. See @enum ArrayType@ for the values used in this array. For example, @arrays@0@@ is the array of vertices. That first vertex sub-array is always required; the others are optional. Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data and the index array defines the vertex order. All sub-arrays must have the same length as the vertex array or be empty, except for @ARRAY_INDEX@ if it is used.
 --   				Adding an index array puts this function into "index mode" where the vertex and other arrays become the sources of data, and the index array defines the order of the vertices.
+--   				Godot uses clockwise winding order for front faces of triangle primitive modes.
 add_surface_from_arrays ::
                           (ArrayMesh :< cls, Object :< cls) =>
                           cls -> Int -> Array -> Maybe Array -> Maybe Int -> IO ()

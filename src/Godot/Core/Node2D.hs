@@ -936,7 +936,7 @@ instance NodeMethod Node2D "set_z_index" '[Int] (IO ()) where
 
 {-# NOINLINE bindNode2D_to_global #-}
 
--- | Transforms the provided local position into a position in global coordinate space. The input is expected to be local relative to the @Node2D@ it is called on. e.g. Applying this method to the positions of child nodes will correctly transform their positions into the global coordinate space, but applying it to a node's own position will give an incorrect result, as it will incorporate the node's own transformation into its global position.
+-- | Converts a local point's coordinates to global coordinates.
 bindNode2D_to_global :: MethodBind
 bindNode2D_to_global
   = unsafePerformIO $
@@ -946,7 +946,7 @@ bindNode2D_to_global
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transforms the provided local position into a position in global coordinate space. The input is expected to be local relative to the @Node2D@ it is called on. e.g. Applying this method to the positions of child nodes will correctly transform their positions into the global coordinate space, but applying it to a node's own position will give an incorrect result, as it will incorporate the node's own transformation into its global position.
+-- | Converts a local point's coordinates to global coordinates.
 to_global ::
             (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO Vector2
 to_global cls arg1
@@ -961,7 +961,7 @@ instance NodeMethod Node2D "to_global" '[Vector2] (IO Vector2)
 
 {-# NOINLINE bindNode2D_to_local #-}
 
--- | Transforms the provided global position into a position in local coordinate space. The output will be local relative to the @Node2D@ it is called on. e.g. It is appropriate for determining the positions of child nodes, but it is not appropriate for determining its own position relative to its parent.
+-- | Converts a global point's coordinates to local coordinates.
 bindNode2D_to_local :: MethodBind
 bindNode2D_to_local
   = unsafePerformIO $
@@ -971,7 +971,7 @@ bindNode2D_to_local
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Transforms the provided global position into a position in local coordinate space. The output will be local relative to the @Node2D@ it is called on. e.g. It is appropriate for determining the positions of child nodes, but it is not appropriate for determining its own position relative to its parent.
+-- | Converts a global point's coordinates to local coordinates.
 to_local ::
            (Node2D :< cls, Object :< cls) => cls -> Vector2 -> IO Vector2
 to_local cls arg1

@@ -2,14 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TextureRect
-       (Godot.Core.TextureRect._STRETCH_TILE,
-        Godot.Core.TextureRect._STRETCH_KEEP_ASPECT_COVERED,
-        Godot.Core.TextureRect._STRETCH_KEEP_ASPECT,
-        Godot.Core.TextureRect._STRETCH_SCALE_ON_EXPAND,
-        Godot.Core.TextureRect._STRETCH_SCALE,
+       (Godot.Core.TextureRect._STRETCH_KEEP_ASPECT,
         Godot.Core.TextureRect._STRETCH_KEEP,
-        Godot.Core.TextureRect._STRETCH_KEEP_CENTERED,
         Godot.Core.TextureRect._STRETCH_KEEP_ASPECT_CENTERED,
+        Godot.Core.TextureRect._STRETCH_SCALE,
+        Godot.Core.TextureRect._STRETCH_KEEP_ASPECT_COVERED,
+        Godot.Core.TextureRect._STRETCH_SCALE_ON_EXPAND,
+        Godot.Core.TextureRect._STRETCH_TILE,
+        Godot.Core.TextureRect._STRETCH_KEEP_CENTERED,
         Godot.Core.TextureRect._texture_changed,
         Godot.Core.TextureRect.get_stretch_mode,
         Godot.Core.TextureRect.get_texture,
@@ -34,29 +34,29 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
-_STRETCH_TILE :: Int
-_STRETCH_TILE = 2
-
-_STRETCH_KEEP_ASPECT_COVERED :: Int
-_STRETCH_KEEP_ASPECT_COVERED = 7
-
 _STRETCH_KEEP_ASPECT :: Int
 _STRETCH_KEEP_ASPECT = 5
-
-_STRETCH_SCALE_ON_EXPAND :: Int
-_STRETCH_SCALE_ON_EXPAND = 0
-
-_STRETCH_SCALE :: Int
-_STRETCH_SCALE = 1
 
 _STRETCH_KEEP :: Int
 _STRETCH_KEEP = 3
 
-_STRETCH_KEEP_CENTERED :: Int
-_STRETCH_KEEP_CENTERED = 4
-
 _STRETCH_KEEP_ASPECT_CENTERED :: Int
 _STRETCH_KEEP_ASPECT_CENTERED = 6
+
+_STRETCH_SCALE :: Int
+_STRETCH_SCALE = 1
+
+_STRETCH_KEEP_ASPECT_COVERED :: Int
+_STRETCH_KEEP_ASPECT_COVERED = 7
+
+_STRETCH_SCALE_ON_EXPAND :: Int
+_STRETCH_SCALE_ON_EXPAND = 0
+
+_STRETCH_TILE :: Int
+_STRETCH_TILE = 2
+
+_STRETCH_KEEP_CENTERED :: Int
+_STRETCH_KEEP_CENTERED = 4
 
 instance NodeProperty TextureRect "expand" Bool 'False where
         nodeProperty = (has_expand, wrapDroppingSetter set_expand, Nothing)

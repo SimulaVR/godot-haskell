@@ -3,8 +3,8 @@
   MultiParamTypeClasses #-}
 module Godot.Core.PathFollow
        (Godot.Core.PathFollow._ROTATION_ORIENTED,
-        Godot.Core.PathFollow._ROTATION_XY,
         Godot.Core.PathFollow._ROTATION_Y,
+        Godot.Core.PathFollow._ROTATION_XY,
         Godot.Core.PathFollow._ROTATION_XYZ,
         Godot.Core.PathFollow._ROTATION_NONE,
         Godot.Core.PathFollow.get_cubic_interpolation,
@@ -35,11 +35,11 @@ import Godot.Core.Spatial()
 _ROTATION_ORIENTED :: Int
 _ROTATION_ORIENTED = 4
 
-_ROTATION_XY :: Int
-_ROTATION_XY = 2
-
 _ROTATION_Y :: Int
 _ROTATION_Y = 1
+
+_ROTATION_XY :: Int
+_ROTATION_XY = 2
 
 _ROTATION_XYZ :: Int
 _ROTATION_XYZ = 3

@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptYield
-       (Godot.Core.VisualScriptYield._YIELD_FRAME,
+       (Godot.Core.VisualScriptYield._YIELD_WAIT,
+        Godot.Core.VisualScriptYield._YIELD_FRAME,
         Godot.Core.VisualScriptYield._YIELD_PHYSICS_FRAME,
-        Godot.Core.VisualScriptYield._YIELD_WAIT,
         Godot.Core.VisualScriptYield.get_wait_time,
         Godot.Core.VisualScriptYield.get_yield_mode,
         Godot.Core.VisualScriptYield.set_wait_time,
@@ -22,14 +22,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualScriptNode()
 
+_YIELD_WAIT :: Int
+_YIELD_WAIT = 3
+
 _YIELD_FRAME :: Int
 _YIELD_FRAME = 1
 
 _YIELD_PHYSICS_FRAME :: Int
 _YIELD_PHYSICS_FRAME = 2
-
-_YIELD_WAIT :: Int
-_YIELD_WAIT = 3
 
 instance NodeProperty VisualScriptYield "mode" Int 'False where
         nodeProperty

@@ -2,13 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TextureButton
-       (Godot.Core.TextureButton._STRETCH_TILE,
-        Godot.Core.TextureButton._STRETCH_KEEP_ASPECT_COVERED,
-        Godot.Core.TextureButton._STRETCH_KEEP_ASPECT,
-        Godot.Core.TextureButton._STRETCH_SCALE,
+       (Godot.Core.TextureButton._STRETCH_KEEP_ASPECT,
         Godot.Core.TextureButton._STRETCH_KEEP,
-        Godot.Core.TextureButton._STRETCH_KEEP_CENTERED,
         Godot.Core.TextureButton._STRETCH_KEEP_ASPECT_CENTERED,
+        Godot.Core.TextureButton._STRETCH_SCALE,
+        Godot.Core.TextureButton._STRETCH_KEEP_ASPECT_COVERED,
+        Godot.Core.TextureButton._STRETCH_TILE,
+        Godot.Core.TextureButton._STRETCH_KEEP_CENTERED,
         Godot.Core.TextureButton.get_click_mask,
         Godot.Core.TextureButton.get_disabled_texture,
         Godot.Core.TextureButton.get_expand,
@@ -38,26 +38,26 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.BaseButton()
 
-_STRETCH_TILE :: Int
-_STRETCH_TILE = 1
-
-_STRETCH_KEEP_ASPECT_COVERED :: Int
-_STRETCH_KEEP_ASPECT_COVERED = 6
-
 _STRETCH_KEEP_ASPECT :: Int
 _STRETCH_KEEP_ASPECT = 4
-
-_STRETCH_SCALE :: Int
-_STRETCH_SCALE = 0
 
 _STRETCH_KEEP :: Int
 _STRETCH_KEEP = 2
 
-_STRETCH_KEEP_CENTERED :: Int
-_STRETCH_KEEP_CENTERED = 3
-
 _STRETCH_KEEP_ASPECT_CENTERED :: Int
 _STRETCH_KEEP_ASPECT_CENTERED = 5
+
+_STRETCH_SCALE :: Int
+_STRETCH_SCALE = 0
+
+_STRETCH_KEEP_ASPECT_COVERED :: Int
+_STRETCH_KEEP_ASPECT_COVERED = 6
+
+_STRETCH_TILE :: Int
+_STRETCH_TILE = 1
+
+_STRETCH_KEEP_CENTERED :: Int
+_STRETCH_KEEP_CENTERED = 3
 
 instance NodeProperty TextureButton "expand" Bool 'False where
         nodeProperty = (get_expand, wrapDroppingSetter set_expand, Nothing)

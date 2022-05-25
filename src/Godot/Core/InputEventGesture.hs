@@ -24,7 +24,6 @@ instance NodeProperty InputEventGesture "position" Vector2 'False
 
 {-# NOINLINE bindInputEventGesture_get_position #-}
 
--- | The local gesture position relative to the @Viewport@. If used in @method Control._gui_input@, the position is relative to the current @Control@ that received this gesture.
 bindInputEventGesture_get_position :: MethodBind
 bindInputEventGesture_get_position
   = unsafePerformIO $
@@ -34,7 +33,6 @@ bindInputEventGesture_get_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The local gesture position relative to the @Viewport@. If used in @method Control._gui_input@, the position is relative to the current @Control@ that received this gesture.
 get_position ::
                (InputEventGesture :< cls, Object :< cls) => cls -> IO Vector2
 get_position cls
@@ -53,7 +51,6 @@ instance NodeMethod InputEventGesture "get_position" '[]
 
 {-# NOINLINE bindInputEventGesture_set_position #-}
 
--- | The local gesture position relative to the @Viewport@. If used in @method Control._gui_input@, the position is relative to the current @Control@ that received this gesture.
 bindInputEventGesture_set_position :: MethodBind
 bindInputEventGesture_set_position
   = unsafePerformIO $
@@ -63,7 +60,6 @@ bindInputEventGesture_set_position
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The local gesture position relative to the @Viewport@. If used in @method Control._gui_input@, the position is relative to the current @Control@ that received this gesture.
 set_position ::
                (InputEventGesture :< cls, Object :< cls) =>
                cls -> Vector2 -> IO ()

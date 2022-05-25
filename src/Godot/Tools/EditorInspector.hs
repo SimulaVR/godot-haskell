@@ -37,7 +37,6 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.ScrollContainer()
 
--- | Emitted when the Edit button of an @Object@ has been pressed in the inspector. This is mainly used in the remote scene tree inspector.
 sig_object_id_selected ::
                        Godot.Internal.Dispatch.Signal EditorInspector
 sig_object_id_selected
@@ -45,7 +44,6 @@ sig_object_id_selected
 
 instance NodeSignal EditorInspector "object_id_selected" '[Int]
 
--- | Emitted when a property is edited in the inspector.
 sig_property_edited ::
                     Godot.Internal.Dispatch.Signal EditorInspector
 sig_property_edited
@@ -54,7 +52,6 @@ sig_property_edited
 instance NodeSignal EditorInspector "property_edited"
            '[GodotString]
 
--- | Emitted when a property is keyed in the inspector. Properties can be keyed by clicking the "key" icon next to a property when the Animation panel is toggled.
 sig_property_keyed ::
                    Godot.Internal.Dispatch.Signal EditorInspector
 sig_property_keyed
@@ -62,7 +59,6 @@ sig_property_keyed
 
 instance NodeSignal EditorInspector "property_keyed" '[GodotString]
 
--- | Emitted when a property is selected in the inspector.
 sig_property_selected ::
                       Godot.Internal.Dispatch.Signal EditorInspector
 sig_property_selected
@@ -71,8 +67,6 @@ sig_property_selected
 instance NodeSignal EditorInspector "property_selected"
            '[GodotString]
 
--- | Emitted when a boolean property is toggled in the inspector.
---   				__Note:__ This signal is never emitted if the internal @autoclear@ property enabled. Since this property is always enabled in the editor inspector, this signal is never emitted by the editor itself.
 sig_property_toggled ::
                      Godot.Internal.Dispatch.Signal EditorInspector
 sig_property_toggled
@@ -81,7 +75,6 @@ sig_property_toggled
 instance NodeSignal EditorInspector "property_toggled"
            '[GodotString, Bool]
 
--- | Emitted when a resource is selected in the inspector.
 sig_resource_selected ::
                       Godot.Internal.Dispatch.Signal EditorInspector
 sig_resource_selected
@@ -90,7 +83,6 @@ sig_resource_selected
 instance NodeSignal EditorInspector "resource_selected"
            '[Object, GodotString]
 
--- | Emitted when a property that requires a restart to be applied is edited in the inspector. This is only used in the Project Settings and Editor Settings.
 sig_restart_requested ::
                       Godot.Internal.Dispatch.Signal EditorInspector
 sig_restart_requested
@@ -510,8 +502,6 @@ instance NodeMethod EditorInspector "_vscroll_changed" '[Float]
 
 {-# NOINLINE bindEditorInspector_refresh #-}
 
--- | Refreshes the inspector.
---   				__Note:__ To save on CPU resources, calling this method will do nothing if the time specified in @docks/property_editor/auto_refresh_interval@ editor setting hasn't passed yet since this method was last called. (By default, this interval is set to 0.3 seconds.)
 bindEditorInspector_refresh :: MethodBind
 bindEditorInspector_refresh
   = unsafePerformIO $
@@ -521,8 +511,6 @@ bindEditorInspector_refresh
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Refreshes the inspector.
---   				__Note:__ To save on CPU resources, calling this method will do nothing if the time specified in @docks/property_editor/auto_refresh_interval@ editor setting hasn't passed yet since this method was last called. (By default, this interval is set to 0.3 seconds.)
 refresh :: (EditorInspector :< cls, Object :< cls) => cls -> IO ()
 refresh cls
   = withVariantArray []

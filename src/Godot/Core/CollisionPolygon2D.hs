@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.CollisionPolygon2D
-       (Godot.Core.CollisionPolygon2D._BUILD_SOLIDS,
-        Godot.Core.CollisionPolygon2D._BUILD_SEGMENTS,
+       (Godot.Core.CollisionPolygon2D._BUILD_SEGMENTS,
+        Godot.Core.CollisionPolygon2D._BUILD_SOLIDS,
         Godot.Core.CollisionPolygon2D.get_build_mode,
         Godot.Core.CollisionPolygon2D.get_one_way_collision_margin,
         Godot.Core.CollisionPolygon2D.get_polygon,
@@ -27,11 +27,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node2D()
 
-_BUILD_SOLIDS :: Int
-_BUILD_SOLIDS = 0
-
 _BUILD_SEGMENTS :: Int
 _BUILD_SEGMENTS = 1
+
+_BUILD_SOLIDS :: Int
+_BUILD_SOLIDS = 0
 
 instance NodeProperty CollisionPolygon2D "build_mode" Int 'False
          where
@@ -96,7 +96,6 @@ instance NodeMethod CollisionPolygon2D "get_build_mode" '[]
 {-# NOINLINE bindCollisionPolygon2D_get_one_way_collision_margin
              #-}
 
--- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 bindCollisionPolygon2D_get_one_way_collision_margin :: MethodBind
 bindCollisionPolygon2D_get_one_way_collision_margin
   = unsafePerformIO $
@@ -106,7 +105,6 @@ bindCollisionPolygon2D_get_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 get_one_way_collision_margin ::
                                (CollisionPolygon2D :< cls, Object :< cls) => cls -> IO Float
 get_one_way_collision_margin cls
@@ -310,7 +308,6 @@ instance NodeMethod CollisionPolygon2D "set_one_way_collision"
 {-# NOINLINE bindCollisionPolygon2D_set_one_way_collision_margin
              #-}
 
--- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 bindCollisionPolygon2D_set_one_way_collision_margin :: MethodBind
 bindCollisionPolygon2D_set_one_way_collision_margin
   = unsafePerformIO $
@@ -320,7 +317,6 @@ bindCollisionPolygon2D_set_one_way_collision_margin
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The margin used for one-way collision (in pixels). Higher values will make the shape thicker, and work better for colliders that enter the polygon at a high velocity.
 set_one_way_collision_margin ::
                                (CollisionPolygon2D :< cls, Object :< cls) => cls -> Float -> IO ()
 set_one_way_collision_margin cls arg1

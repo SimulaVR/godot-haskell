@@ -2,18 +2,18 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.SceneTree
-       (Godot.Core.SceneTree._STRETCH_ASPECT_KEEP,
-        Godot.Core.SceneTree._STRETCH_ASPECT_IGNORE,
+       (Godot.Core.SceneTree._STRETCH_ASPECT_KEEP_WIDTH,
+        Godot.Core.SceneTree._STRETCH_ASPECT_EXPAND,
         Godot.Core.SceneTree._GROUP_CALL_REALTIME,
+        Godot.Core.SceneTree._STRETCH_ASPECT_IGNORE,
+        Godot.Core.SceneTree._GROUP_CALL_DEFAULT,
+        Godot.Core.SceneTree._GROUP_CALL_REVERSE,
+        Godot.Core.SceneTree._STRETCH_MODE_VIEWPORT,
+        Godot.Core.SceneTree._STRETCH_MODE_2D,
+        Godot.Core.SceneTree._STRETCH_ASPECT_KEEP,
+        Godot.Core.SceneTree._STRETCH_ASPECT_KEEP_HEIGHT,
         Godot.Core.SceneTree._GROUP_CALL_UNIQUE,
         Godot.Core.SceneTree._STRETCH_MODE_DISABLED,
-        Godot.Core.SceneTree._STRETCH_ASPECT_KEEP_HEIGHT,
-        Godot.Core.SceneTree._STRETCH_MODE_2D,
-        Godot.Core.SceneTree._GROUP_CALL_REVERSE,
-        Godot.Core.SceneTree._STRETCH_ASPECT_KEEP_WIDTH,
-        Godot.Core.SceneTree._STRETCH_MODE_VIEWPORT,
-        Godot.Core.SceneTree._GROUP_CALL_DEFAULT,
-        Godot.Core.SceneTree._STRETCH_ASPECT_EXPAND,
         Godot.Core.SceneTree.sig_connected_to_server,
         Godot.Core.SceneTree.sig_connection_failed,
         Godot.Core.SceneTree.sig_files_dropped,
@@ -94,41 +94,41 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.MainLoop()
 
-_STRETCH_ASPECT_KEEP :: Int
-_STRETCH_ASPECT_KEEP = 1
+_STRETCH_ASPECT_KEEP_WIDTH :: Int
+_STRETCH_ASPECT_KEEP_WIDTH = 2
+
+_STRETCH_ASPECT_EXPAND :: Int
+_STRETCH_ASPECT_EXPAND = 4
+
+_GROUP_CALL_REALTIME :: Int
+_GROUP_CALL_REALTIME = 2
 
 _STRETCH_ASPECT_IGNORE :: Int
 _STRETCH_ASPECT_IGNORE = 0
 
-_GROUP_CALL_REALTIME :: Int
-_GROUP_CALL_REALTIME = 2
+_GROUP_CALL_DEFAULT :: Int
+_GROUP_CALL_DEFAULT = 0
+
+_GROUP_CALL_REVERSE :: Int
+_GROUP_CALL_REVERSE = 1
+
+_STRETCH_MODE_VIEWPORT :: Int
+_STRETCH_MODE_VIEWPORT = 2
+
+_STRETCH_MODE_2D :: Int
+_STRETCH_MODE_2D = 1
+
+_STRETCH_ASPECT_KEEP :: Int
+_STRETCH_ASPECT_KEEP = 1
+
+_STRETCH_ASPECT_KEEP_HEIGHT :: Int
+_STRETCH_ASPECT_KEEP_HEIGHT = 3
 
 _GROUP_CALL_UNIQUE :: Int
 _GROUP_CALL_UNIQUE = 4
 
 _STRETCH_MODE_DISABLED :: Int
 _STRETCH_MODE_DISABLED = 0
-
-_STRETCH_ASPECT_KEEP_HEIGHT :: Int
-_STRETCH_ASPECT_KEEP_HEIGHT = 3
-
-_STRETCH_MODE_2D :: Int
-_STRETCH_MODE_2D = 1
-
-_GROUP_CALL_REVERSE :: Int
-_GROUP_CALL_REVERSE = 1
-
-_STRETCH_ASPECT_KEEP_WIDTH :: Int
-_STRETCH_ASPECT_KEEP_WIDTH = 2
-
-_STRETCH_MODE_VIEWPORT :: Int
-_STRETCH_MODE_VIEWPORT = 2
-
-_GROUP_CALL_DEFAULT :: Int
-_GROUP_CALL_DEFAULT = 0
-
-_STRETCH_ASPECT_EXPAND :: Int
-_STRETCH_ASPECT_EXPAND = 4
 
 -- | Emitted whenever this @SceneTree@'s @network_peer@ successfully connected to a server. Only emitted on clients.
 sig_connected_to_server :: Godot.Internal.Dispatch.Signal SceneTree

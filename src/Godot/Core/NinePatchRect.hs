@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.NinePatchRect
-       (Godot.Core.NinePatchRect._AXIS_STRETCH_MODE_TILE_FIT,
-        Godot.Core.NinePatchRect._AXIS_STRETCH_MODE_TILE,
+       (Godot.Core.NinePatchRect._AXIS_STRETCH_MODE_TILE,
+        Godot.Core.NinePatchRect._AXIS_STRETCH_MODE_TILE_FIT,
         Godot.Core.NinePatchRect._AXIS_STRETCH_MODE_STRETCH,
         Godot.Core.NinePatchRect.sig_texture_changed,
         Godot.Core.NinePatchRect.get_h_axis_stretch_mode,
@@ -31,11 +31,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
-_AXIS_STRETCH_MODE_TILE_FIT :: Int
-_AXIS_STRETCH_MODE_TILE_FIT = 2
-
 _AXIS_STRETCH_MODE_TILE :: Int
 _AXIS_STRETCH_MODE_TILE = 1
+
+_AXIS_STRETCH_MODE_TILE_FIT :: Int
+_AXIS_STRETCH_MODE_TILE_FIT = 2
 
 _AXIS_STRETCH_MODE_STRETCH :: Int
 _AXIS_STRETCH_MODE_STRETCH = 0

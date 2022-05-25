@@ -398,7 +398,7 @@ instance NodeMethod Engine "get_copyright_info" '[] (IO Array)
 {-# NOINLINE bindEngine_get_donor_info #-}
 
 -- | Returns a Dictionary of Arrays of donor names.
---   				{@platinum_sponsors@, @gold_sponsors@, @silver_sponsors@, @bronze_sponsors@, @mini_sponsors@, @gold_donors@, @silver_donors@, @bronze_donors@}
+--   				{@platinum_sponsors@, @gold_sponsors@, @mini_sponsors@, @gold_donors@, @silver_donors@, @bronze_donors@}
 bindEngine_get_donor_info :: MethodBind
 bindEngine_get_donor_info
   = unsafePerformIO $
@@ -409,7 +409,7 @@ bindEngine_get_donor_info
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns a Dictionary of Arrays of donor names.
---   				{@platinum_sponsors@, @gold_sponsors@, @silver_sponsors@, @bronze_sponsors@, @mini_sponsors@, @gold_donors@, @silver_donors@, @bronze_donors@}
+--   				{@platinum_sponsors@, @gold_sponsors@, @mini_sponsors@, @gold_donors@, @silver_donors@, @bronze_donors@}
 get_donor_info ::
                  (Engine :< cls, Object :< cls) => cls -> IO Dictionary
 get_donor_info cls
@@ -639,7 +639,7 @@ instance NodeMethod Engine "get_physics_interpolation_fraction" '[]
 
 {-# NOINLINE bindEngine_get_singleton #-}
 
--- | Returns a global singleton with given @name@. Often used for plugins, e.g. @GodotPayment@ on Android.
+-- | Returns a global singleton with given @name@. Often used for plugins, e.g. GodotPayments.
 bindEngine_get_singleton :: MethodBind
 bindEngine_get_singleton
   = unsafePerformIO $
@@ -649,7 +649,7 @@ bindEngine_get_singleton
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a global singleton with given @name@. Often used for plugins, e.g. @GodotPayment@ on Android.
+-- | Returns a global singleton with given @name@. Often used for plugins, e.g. GodotPayments.
 get_singleton ::
                 (Engine :< cls, Object :< cls) => cls -> GodotString -> IO Object
 get_singleton cls arg1

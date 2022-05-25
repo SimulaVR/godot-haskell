@@ -2,64 +2,64 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Control
-       (Godot.Core.Control._NOTIFICATION_MOUSE_EXIT,
-        Godot.Core.Control._CURSOR_MOVE,
-        Godot.Core.Control._NOTIFICATION_MOUSE_ENTER,
-        Godot.Core.Control._PRESET_MODE_KEEP_WIDTH,
-        Godot.Core.Control._CURSOR_ARROW,
-        Godot.Core.Control._GROW_DIRECTION_BEGIN,
+       (Godot.Core.Control._GROW_DIRECTION_END,
         Godot.Core.Control._CURSOR_IBEAM,
-        Godot.Core.Control._NOTIFICATION_SCROLL_END,
-        Godot.Core.Control._CURSOR_HSPLIT, Godot.Core.Control._FOCUS_ALL,
-        Godot.Core.Control._PRESET_BOTTOM_RIGHT,
-        Godot.Core.Control._CURSOR_DRAG,
-        Godot.Core.Control._PRESET_TOP_LEFT,
-        Godot.Core.Control._PRESET_CENTER_TOP,
-        Godot.Core.Control._FOCUS_CLICK, Godot.Core.Control._CURSOR_BUSY,
-        Godot.Core.Control._SIZE_SHRINK_CENTER,
-        Godot.Core.Control._CURSOR_CROSS, Godot.Core.Control._CURSOR_WAIT,
+        Godot.Core.Control._NOTIFICATION_MOUSE_ENTER,
+        Godot.Core.Control._NOTIFICATION_FOCUS_EXIT,
+        Godot.Core.Control._PRESET_MODE_KEEP_SIZE,
+        Godot.Core.Control._CURSOR_HSPLIT,
+        Godot.Core.Control._PRESET_TOP_WIDE,
+        Godot.Core.Control._FOCUS_CLICK,
+        Godot.Core.Control._NOTIFICATION_FOCUS_ENTER,
+        Godot.Core.Control._CURSOR_BUSY,
+        Godot.Core.Control._CURSOR_POINTING_HAND,
+        Godot.Core.Control._MOUSE_FILTER_PASS,
+        Godot.Core.Control._PRESET_MODE_KEEP_HEIGHT,
+        Godot.Core.Control._SIZE_EXPAND,
+        Godot.Core.Control._MOUSE_FILTER_STOP,
+        Godot.Core.Control._ANCHOR_END,
+        Godot.Core.Control._NOTIFICATION_MOUSE_EXIT,
+        Godot.Core.Control._SIZE_SHRINK_END,
+        Godot.Core.Control._CURSOR_VSPLIT,
+        Godot.Core.Control._CURSOR_CAN_DROP,
+        Godot.Core.Control._PRESET_CENTER,
+        Godot.Core.Control._CURSOR_CROSS,
+        Godot.Core.Control._PRESET_CENTER_LEFT,
+        Godot.Core.Control._PRESET_MODE_MINSIZE,
+        Godot.Core.Control._MOUSE_FILTER_IGNORE,
+        Godot.Core.Control._CURSOR_FDIAGSIZE,
+        Godot.Core.Control._PRESET_CENTER_BOTTOM,
+        Godot.Core.Control._ANCHOR_BEGIN, Godot.Core.Control._CURSOR_MOVE,
+        Godot.Core.Control._PRESET_VCENTER_WIDE,
         Godot.Core.Control._PRESET_TOP_RIGHT,
+        Godot.Core.Control._PRESET_BOTTOM_LEFT,
+        Godot.Core.Control._SIZE_EXPAND_FILL,
+        Godot.Core.Control._CURSOR_DRAG,
+        Godot.Core.Control._PRESET_LEFT_WIDE,
+        Godot.Core.Control._CURSOR_VSIZE, Godot.Core.Control._SIZE_FILL,
+        Godot.Core.Control._PRESET_CENTER_TOP,
+        Godot.Core.Control._CURSOR_WAIT,
+        Godot.Core.Control._PRESET_CENTER_RIGHT,
+        Godot.Core.Control._PRESET_TOP_LEFT,
+        Godot.Core.Control._NOTIFICATION_SCROLL_BEGIN,
+        Godot.Core.Control._CURSOR_ARROW,
+        Godot.Core.Control._NOTIFICATION_RESIZED,
+        Godot.Core.Control._PRESET_RIGHT_WIDE,
+        Godot.Core.Control._FOCUS_ALL, Godot.Core.Control._CURSOR_HELP,
+        Godot.Core.Control._CURSOR_FORBIDDEN,
+        Godot.Core.Control._GROW_DIRECTION_BEGIN,
+        Godot.Core.Control._FOCUS_NONE,
+        Godot.Core.Control._PRESET_BOTTOM_RIGHT,
+        Godot.Core.Control._CURSOR_HSIZE, Godot.Core.Control._PRESET_WIDE,
         Godot.Core.Control._NOTIFICATION_THEME_CHANGED,
         Godot.Core.Control._CURSOR_BDIAGSIZE,
+        Godot.Core.Control._SIZE_SHRINK_CENTER,
+        Godot.Core.Control._NOTIFICATION_SCROLL_END,
+        Godot.Core.Control._PRESET_MODE_KEEP_WIDTH,
+        Godot.Core.Control._PRESET_BOTTOM_WIDE,
         Godot.Core.Control._PRESET_HCENTER_WIDE,
         Godot.Core.Control._GROW_DIRECTION_BOTH,
-        Godot.Core.Control._ANCHOR_BEGIN,
-        Godot.Core.Control._MOUSE_FILTER_IGNORE,
-        Godot.Core.Control._PRESET_TOP_WIDE,
-        Godot.Core.Control._PRESET_MODE_MINSIZE,
-        Godot.Core.Control._NOTIFICATION_FOCUS_ENTER,
-        Godot.Core.Control._SIZE_EXPAND_FILL,
-        Godot.Core.Control._CURSOR_HELP,
-        Godot.Core.Control._NOTIFICATION_RESIZED,
-        Godot.Core.Control._SIZE_EXPAND,
-        Godot.Core.Control._CURSOR_CAN_DROP,
-        Godot.Core.Control._NOTIFICATION_SCROLL_BEGIN,
-        Godot.Core.Control._PRESET_MODE_KEEP_SIZE,
-        Godot.Core.Control._GROW_DIRECTION_END,
-        Godot.Core.Control._PRESET_VCENTER_WIDE,
-        Godot.Core.Control._SIZE_SHRINK_END,
-        Godot.Core.Control._PRESET_RIGHT_WIDE,
-        Godot.Core.Control._SIZE_FILL,
-        Godot.Core.Control._PRESET_BOTTOM_WIDE,
-        Godot.Core.Control._CURSOR_POINTING_HAND,
-        Godot.Core.Control._PRESET_MODE_KEEP_HEIGHT,
-        Godot.Core.Control._CURSOR_FDIAGSIZE,
-        Godot.Core.Control._PRESET_WIDE,
-        Godot.Core.Control._PRESET_CENTER_LEFT,
-        Godot.Core.Control._MOUSE_FILTER_PASS,
         Godot.Core.Control._NOTIFICATION_MODAL_CLOSE,
-        Godot.Core.Control._CURSOR_HSIZE,
-        Godot.Core.Control._PRESET_CENTER_RIGHT,
-        Godot.Core.Control._CURSOR_FORBIDDEN,
-        Godot.Core.Control._CURSOR_VSIZE,
-        Godot.Core.Control._PRESET_CENTER_BOTTOM,
-        Godot.Core.Control._NOTIFICATION_FOCUS_EXIT,
-        Godot.Core.Control._PRESET_LEFT_WIDE,
-        Godot.Core.Control._ANCHOR_END,
-        Godot.Core.Control._MOUSE_FILTER_STOP,
-        Godot.Core.Control._PRESET_BOTTOM_LEFT,
-        Godot.Core.Control._PRESET_CENTER,
-        Godot.Core.Control._CURSOR_VSPLIT, Godot.Core.Control._FOCUS_NONE,
         Godot.Core.Control.sig_focus_entered,
         Godot.Core.Control.sig_focus_exited,
         Godot.Core.Control.sig_gui_input,
@@ -172,65 +172,164 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.CanvasItem()
 
-_NOTIFICATION_MOUSE_EXIT :: Int
-_NOTIFICATION_MOUSE_EXIT = 42
-
-_CURSOR_MOVE :: Int
-_CURSOR_MOVE = 13
-
-_NOTIFICATION_MOUSE_ENTER :: Int
-_NOTIFICATION_MOUSE_ENTER = 41
-
-_PRESET_MODE_KEEP_WIDTH :: Int
-_PRESET_MODE_KEEP_WIDTH = 1
-
-_CURSOR_ARROW :: Int
-_CURSOR_ARROW = 0
-
-_GROW_DIRECTION_BEGIN :: Int
-_GROW_DIRECTION_BEGIN = 0
+_GROW_DIRECTION_END :: Int
+_GROW_DIRECTION_END = 1
 
 _CURSOR_IBEAM :: Int
 _CURSOR_IBEAM = 1
 
-_NOTIFICATION_SCROLL_END :: Int
-_NOTIFICATION_SCROLL_END = 48
+_NOTIFICATION_MOUSE_ENTER :: Int
+_NOTIFICATION_MOUSE_ENTER = 41
+
+_NOTIFICATION_FOCUS_EXIT :: Int
+_NOTIFICATION_FOCUS_EXIT = 44
+
+_PRESET_MODE_KEEP_SIZE :: Int
+_PRESET_MODE_KEEP_SIZE = 3
 
 _CURSOR_HSPLIT :: Int
 _CURSOR_HSPLIT = 15
 
-_FOCUS_ALL :: Int
-_FOCUS_ALL = 2
-
-_PRESET_BOTTOM_RIGHT :: Int
-_PRESET_BOTTOM_RIGHT = 3
-
-_CURSOR_DRAG :: Int
-_CURSOR_DRAG = 6
-
-_PRESET_TOP_LEFT :: Int
-_PRESET_TOP_LEFT = 0
-
-_PRESET_CENTER_TOP :: Int
-_PRESET_CENTER_TOP = 5
+_PRESET_TOP_WIDE :: Int
+_PRESET_TOP_WIDE = 10
 
 _FOCUS_CLICK :: Int
 _FOCUS_CLICK = 1
 
+_NOTIFICATION_FOCUS_ENTER :: Int
+_NOTIFICATION_FOCUS_ENTER = 43
+
 _CURSOR_BUSY :: Int
 _CURSOR_BUSY = 5
 
-_SIZE_SHRINK_CENTER :: Int
-_SIZE_SHRINK_CENTER = 4
+_CURSOR_POINTING_HAND :: Int
+_CURSOR_POINTING_HAND = 2
+
+_MOUSE_FILTER_PASS :: Int
+_MOUSE_FILTER_PASS = 1
+
+_PRESET_MODE_KEEP_HEIGHT :: Int
+_PRESET_MODE_KEEP_HEIGHT = 2
+
+_SIZE_EXPAND :: Int
+_SIZE_EXPAND = 2
+
+_MOUSE_FILTER_STOP :: Int
+_MOUSE_FILTER_STOP = 0
+
+_ANCHOR_END :: Int
+_ANCHOR_END = 1
+
+_NOTIFICATION_MOUSE_EXIT :: Int
+_NOTIFICATION_MOUSE_EXIT = 42
+
+_SIZE_SHRINK_END :: Int
+_SIZE_SHRINK_END = 8
+
+_CURSOR_VSPLIT :: Int
+_CURSOR_VSPLIT = 14
+
+_CURSOR_CAN_DROP :: Int
+_CURSOR_CAN_DROP = 7
+
+_PRESET_CENTER :: Int
+_PRESET_CENTER = 8
 
 _CURSOR_CROSS :: Int
 _CURSOR_CROSS = 3
 
-_CURSOR_WAIT :: Int
-_CURSOR_WAIT = 4
+_PRESET_CENTER_LEFT :: Int
+_PRESET_CENTER_LEFT = 4
+
+_PRESET_MODE_MINSIZE :: Int
+_PRESET_MODE_MINSIZE = 0
+
+_MOUSE_FILTER_IGNORE :: Int
+_MOUSE_FILTER_IGNORE = 2
+
+_CURSOR_FDIAGSIZE :: Int
+_CURSOR_FDIAGSIZE = 12
+
+_PRESET_CENTER_BOTTOM :: Int
+_PRESET_CENTER_BOTTOM = 7
+
+_ANCHOR_BEGIN :: Int
+_ANCHOR_BEGIN = 0
+
+_CURSOR_MOVE :: Int
+_CURSOR_MOVE = 13
+
+_PRESET_VCENTER_WIDE :: Int
+_PRESET_VCENTER_WIDE = 13
 
 _PRESET_TOP_RIGHT :: Int
 _PRESET_TOP_RIGHT = 1
+
+_PRESET_BOTTOM_LEFT :: Int
+_PRESET_BOTTOM_LEFT = 2
+
+_SIZE_EXPAND_FILL :: Int
+_SIZE_EXPAND_FILL = 3
+
+_CURSOR_DRAG :: Int
+_CURSOR_DRAG = 6
+
+_PRESET_LEFT_WIDE :: Int
+_PRESET_LEFT_WIDE = 9
+
+_CURSOR_VSIZE :: Int
+_CURSOR_VSIZE = 9
+
+_SIZE_FILL :: Int
+_SIZE_FILL = 1
+
+_PRESET_CENTER_TOP :: Int
+_PRESET_CENTER_TOP = 5
+
+_CURSOR_WAIT :: Int
+_CURSOR_WAIT = 4
+
+_PRESET_CENTER_RIGHT :: Int
+_PRESET_CENTER_RIGHT = 6
+
+_PRESET_TOP_LEFT :: Int
+_PRESET_TOP_LEFT = 0
+
+_NOTIFICATION_SCROLL_BEGIN :: Int
+_NOTIFICATION_SCROLL_BEGIN = 47
+
+_CURSOR_ARROW :: Int
+_CURSOR_ARROW = 0
+
+_NOTIFICATION_RESIZED :: Int
+_NOTIFICATION_RESIZED = 40
+
+_PRESET_RIGHT_WIDE :: Int
+_PRESET_RIGHT_WIDE = 11
+
+_FOCUS_ALL :: Int
+_FOCUS_ALL = 2
+
+_CURSOR_HELP :: Int
+_CURSOR_HELP = 16
+
+_CURSOR_FORBIDDEN :: Int
+_CURSOR_FORBIDDEN = 8
+
+_GROW_DIRECTION_BEGIN :: Int
+_GROW_DIRECTION_BEGIN = 0
+
+_FOCUS_NONE :: Int
+_FOCUS_NONE = 0
+
+_PRESET_BOTTOM_RIGHT :: Int
+_PRESET_BOTTOM_RIGHT = 3
+
+_CURSOR_HSIZE :: Int
+_CURSOR_HSIZE = 10
+
+_PRESET_WIDE :: Int
+_PRESET_WIDE = 15
 
 _NOTIFICATION_THEME_CHANGED :: Int
 _NOTIFICATION_THEME_CHANGED = 45
@@ -238,125 +337,26 @@ _NOTIFICATION_THEME_CHANGED = 45
 _CURSOR_BDIAGSIZE :: Int
 _CURSOR_BDIAGSIZE = 11
 
+_SIZE_SHRINK_CENTER :: Int
+_SIZE_SHRINK_CENTER = 4
+
+_NOTIFICATION_SCROLL_END :: Int
+_NOTIFICATION_SCROLL_END = 48
+
+_PRESET_MODE_KEEP_WIDTH :: Int
+_PRESET_MODE_KEEP_WIDTH = 1
+
+_PRESET_BOTTOM_WIDE :: Int
+_PRESET_BOTTOM_WIDE = 12
+
 _PRESET_HCENTER_WIDE :: Int
 _PRESET_HCENTER_WIDE = 14
 
 _GROW_DIRECTION_BOTH :: Int
 _GROW_DIRECTION_BOTH = 2
 
-_ANCHOR_BEGIN :: Int
-_ANCHOR_BEGIN = 0
-
-_MOUSE_FILTER_IGNORE :: Int
-_MOUSE_FILTER_IGNORE = 2
-
-_PRESET_TOP_WIDE :: Int
-_PRESET_TOP_WIDE = 10
-
-_PRESET_MODE_MINSIZE :: Int
-_PRESET_MODE_MINSIZE = 0
-
-_NOTIFICATION_FOCUS_ENTER :: Int
-_NOTIFICATION_FOCUS_ENTER = 43
-
-_SIZE_EXPAND_FILL :: Int
-_SIZE_EXPAND_FILL = 3
-
-_CURSOR_HELP :: Int
-_CURSOR_HELP = 16
-
-_NOTIFICATION_RESIZED :: Int
-_NOTIFICATION_RESIZED = 40
-
-_SIZE_EXPAND :: Int
-_SIZE_EXPAND = 2
-
-_CURSOR_CAN_DROP :: Int
-_CURSOR_CAN_DROP = 7
-
-_NOTIFICATION_SCROLL_BEGIN :: Int
-_NOTIFICATION_SCROLL_BEGIN = 47
-
-_PRESET_MODE_KEEP_SIZE :: Int
-_PRESET_MODE_KEEP_SIZE = 3
-
-_GROW_DIRECTION_END :: Int
-_GROW_DIRECTION_END = 1
-
-_PRESET_VCENTER_WIDE :: Int
-_PRESET_VCENTER_WIDE = 13
-
-_SIZE_SHRINK_END :: Int
-_SIZE_SHRINK_END = 8
-
-_PRESET_RIGHT_WIDE :: Int
-_PRESET_RIGHT_WIDE = 11
-
-_SIZE_FILL :: Int
-_SIZE_FILL = 1
-
-_PRESET_BOTTOM_WIDE :: Int
-_PRESET_BOTTOM_WIDE = 12
-
-_CURSOR_POINTING_HAND :: Int
-_CURSOR_POINTING_HAND = 2
-
-_PRESET_MODE_KEEP_HEIGHT :: Int
-_PRESET_MODE_KEEP_HEIGHT = 2
-
-_CURSOR_FDIAGSIZE :: Int
-_CURSOR_FDIAGSIZE = 12
-
-_PRESET_WIDE :: Int
-_PRESET_WIDE = 15
-
-_PRESET_CENTER_LEFT :: Int
-_PRESET_CENTER_LEFT = 4
-
-_MOUSE_FILTER_PASS :: Int
-_MOUSE_FILTER_PASS = 1
-
 _NOTIFICATION_MODAL_CLOSE :: Int
 _NOTIFICATION_MODAL_CLOSE = 46
-
-_CURSOR_HSIZE :: Int
-_CURSOR_HSIZE = 10
-
-_PRESET_CENTER_RIGHT :: Int
-_PRESET_CENTER_RIGHT = 6
-
-_CURSOR_FORBIDDEN :: Int
-_CURSOR_FORBIDDEN = 8
-
-_CURSOR_VSIZE :: Int
-_CURSOR_VSIZE = 9
-
-_PRESET_CENTER_BOTTOM :: Int
-_PRESET_CENTER_BOTTOM = 7
-
-_NOTIFICATION_FOCUS_EXIT :: Int
-_NOTIFICATION_FOCUS_EXIT = 44
-
-_PRESET_LEFT_WIDE :: Int
-_PRESET_LEFT_WIDE = 9
-
-_ANCHOR_END :: Int
-_ANCHOR_END = 1
-
-_MOUSE_FILTER_STOP :: Int
-_MOUSE_FILTER_STOP = 0
-
-_PRESET_BOTTOM_LEFT :: Int
-_PRESET_BOTTOM_LEFT = 2
-
-_PRESET_CENTER :: Int
-_PRESET_CENTER = 8
-
-_CURSOR_VSPLIT :: Int
-_CURSOR_VSPLIT = 14
-
-_FOCUS_NONE :: Int
-_FOCUS_NONE = 0
 
 -- | Emitted when the node gains keyboard focus.
 sig_focus_entered :: Godot.Internal.Dispatch.Signal Control
@@ -1022,20 +1022,7 @@ instance NodeMethod Control "accept_event" '[] (IO ()) where
 
 {-# NOINLINE bindControl_add_color_override #-}
 
--- | Overrides the @Color@ with given @name@ in the @theme@ resource the control uses.
---   				__Note:__ Unlike other theme overrides, there is no way to undo a color override without manually assigning the previous color.
---   				__Example of overriding a label's color and resetting it later:__
---   				
---   @
---   
---   				# Override the child node "MyLabel"'s font color to orange.
---   				$MyLabel.add_color_override("font_color", Color(1, 0.5, 0))
---   
---   				# Reset the color by creating a new node to get the default value:
---   				var default_label_color = Label.new().get_color("font_color")
---   				$MyLabel.add_color_override("font_color", default_label_color)
---   				
---   @
+-- | Overrides the @Color@ with given @name@ in the @theme@ resource the control uses. If the @color@ is empty or invalid, the override is cleared and the color from assigned @Theme@ is used.
 bindControl_add_color_override :: MethodBind
 bindControl_add_color_override
   = unsafePerformIO $
@@ -1045,20 +1032,7 @@ bindControl_add_color_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the @Color@ with given @name@ in the @theme@ resource the control uses.
---   				__Note:__ Unlike other theme overrides, there is no way to undo a color override without manually assigning the previous color.
---   				__Example of overriding a label's color and resetting it later:__
---   				
---   @
---   
---   				# Override the child node "MyLabel"'s font color to orange.
---   				$MyLabel.add_color_override("font_color", Color(1, 0.5, 0))
---   
---   				# Reset the color by creating a new node to get the default value:
---   				var default_label_color = Label.new().get_color("font_color")
---   				$MyLabel.add_color_override("font_color", default_label_color)
---   				
---   @
+-- | Overrides the @Color@ with given @name@ in the @theme@ resource the control uses. If the @color@ is empty or invalid, the override is cleared and the color from assigned @Theme@ is used.
 add_color_override ::
                      (Control :< cls, Object :< cls) =>
                      cls -> GodotString -> Color -> IO ()
@@ -1078,7 +1052,7 @@ instance NodeMethod Control "add_color_override"
 
 {-# NOINLINE bindControl_add_constant_override #-}
 
--- | Overrides an integer constant with given @name@ in the @theme@ resource the control uses. If the @constant@ is @0@, the override is cleared and the constant from assigned @Theme@ is used.
+-- | Overrides an integer constant with given @name@ in the @theme@ resource the control uses. If the @constant@ is empty or invalid, the override is cleared and the constant from assigned @Theme@ is used.
 bindControl_add_constant_override :: MethodBind
 bindControl_add_constant_override
   = unsafePerformIO $
@@ -1088,7 +1062,7 @@ bindControl_add_constant_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides an integer constant with given @name@ in the @theme@ resource the control uses. If the @constant@ is @0@, the override is cleared and the constant from assigned @Theme@ is used.
+-- | Overrides an integer constant with given @name@ in the @theme@ resource the control uses. If the @constant@ is empty or invalid, the override is cleared and the constant from assigned @Theme@ is used.
 add_constant_override ::
                         (Control :< cls, Object :< cls) =>
                         cls -> GodotString -> Int -> IO ()
@@ -1109,7 +1083,7 @@ instance NodeMethod Control "add_constant_override"
 
 {-# NOINLINE bindControl_add_font_override #-}
 
--- | Overrides the font with given @name@ in the @theme@ resource the control uses. If @font@ is @null@ or invalid, the override is cleared and the font from assigned @Theme@ is used.
+-- | Overrides the font with given @name@ in the @theme@ resource the control uses. If @font@ is empty or invalid, the override is cleared and the font from assigned @Theme@ is used.
 bindControl_add_font_override :: MethodBind
 bindControl_add_font_override
   = unsafePerformIO $
@@ -1119,7 +1093,7 @@ bindControl_add_font_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the font with given @name@ in the @theme@ resource the control uses. If @font@ is @null@ or invalid, the override is cleared and the font from assigned @Theme@ is used.
+-- | Overrides the font with given @name@ in the @theme@ resource the control uses. If @font@ is empty or invalid, the override is cleared and the font from assigned @Theme@ is used.
 add_font_override ::
                     (Control :< cls, Object :< cls) =>
                     cls -> GodotString -> Font -> IO ()
@@ -1139,7 +1113,7 @@ instance NodeMethod Control "add_font_override"
 
 {-# NOINLINE bindControl_add_icon_override #-}
 
--- | Overrides the icon with given @name@ in the @theme@ resource the control uses. If @icon@ is @null@ or invalid, the override is cleared and the icon from assigned @Theme@ is used.
+-- | Overrides the icon with given @name@ in the @theme@ resource the control uses. If @icon@ is empty or invalid, the override is cleared and the icon from assigned @Theme@ is used.
 bindControl_add_icon_override :: MethodBind
 bindControl_add_icon_override
   = unsafePerformIO $
@@ -1149,7 +1123,7 @@ bindControl_add_icon_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the icon with given @name@ in the @theme@ resource the control uses. If @icon@ is @null@ or invalid, the override is cleared and the icon from assigned @Theme@ is used.
+-- | Overrides the icon with given @name@ in the @theme@ resource the control uses. If @icon@ is empty or invalid, the override is cleared and the icon from assigned @Theme@ is used.
 add_icon_override ::
                     (Control :< cls, Object :< cls) =>
                     cls -> GodotString -> Texture -> IO ()
@@ -1169,7 +1143,7 @@ instance NodeMethod Control "add_icon_override"
 
 {-# NOINLINE bindControl_add_shader_override #-}
 
--- | Overrides the @Shader@ with given @name@ in the @theme@ resource the control uses. If @shader@ is @null@ or invalid, the override is cleared and the shader from assigned @Theme@ is used.
+-- | Overrides the @Shader@ with given @name@ in the @theme@ resource the control uses. If @shader@ is empty or invalid, the override is cleared and the shader from assigned @Theme@ is used.
 bindControl_add_shader_override :: MethodBind
 bindControl_add_shader_override
   = unsafePerformIO $
@@ -1179,7 +1153,7 @@ bindControl_add_shader_override
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Overrides the @Shader@ with given @name@ in the @theme@ resource the control uses. If @shader@ is @null@ or invalid, the override is cleared and the shader from assigned @Theme@ is used.
+-- | Overrides the @Shader@ with given @name@ in the @theme@ resource the control uses. If @shader@ is empty or invalid, the override is cleared and the shader from assigned @Theme@ is used.
 add_shader_override ::
                       (Control :< cls, Object :< cls) =>
                       cls -> GodotString -> Shader -> IO ()
@@ -1200,22 +1174,6 @@ instance NodeMethod Control "add_shader_override"
 {-# NOINLINE bindControl_add_stylebox_override #-}
 
 -- | Overrides the @StyleBox@ with given @name@ in the @theme@ resource the control uses. If @stylebox@ is empty or invalid, the override is cleared and the @StyleBox@ from assigned @Theme@ is used.
---   				__Example of modifying a property in a StyleBox by duplicating it:__
---   				
---   @
---   
---   				# The snippet below assumes the child node MyButton has a StyleBoxFlat assigned.
---   				# Resources are shared across instances, so we need to duplicate it
---   				# to avoid modifying the appearance of all other buttons.
---   				var new_stylebox_normal = $MyButton.get_stylebox("normal").duplicate()
---   				new_stylebox_normal.border_width_top = 3
---   				new_stylebox_normal.border_color = Color(0, 1, 0.5)
---   				$MyButton.add_stylebox_override("normal", new_stylebox_normal)
---   
---   				# Remove the stylebox override:
---   				$MyButton.add_stylebox_override("normal", null)
---   				
---   @
 bindControl_add_stylebox_override :: MethodBind
 bindControl_add_stylebox_override
   = unsafePerformIO $
@@ -1226,22 +1184,6 @@ bindControl_add_stylebox_override
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Overrides the @StyleBox@ with given @name@ in the @theme@ resource the control uses. If @stylebox@ is empty or invalid, the override is cleared and the @StyleBox@ from assigned @Theme@ is used.
---   				__Example of modifying a property in a StyleBox by duplicating it:__
---   				
---   @
---   
---   				# The snippet below assumes the child node MyButton has a StyleBoxFlat assigned.
---   				# Resources are shared across instances, so we need to duplicate it
---   				# to avoid modifying the appearance of all other buttons.
---   				var new_stylebox_normal = $MyButton.get_stylebox("normal").duplicate()
---   				new_stylebox_normal.border_width_top = 3
---   				new_stylebox_normal.border_color = Color(0, 1, 0.5)
---   				$MyButton.add_stylebox_override("normal", new_stylebox_normal)
---   
---   				# Remove the stylebox override:
---   				$MyButton.add_stylebox_override("normal", null)
---   				
---   @
 add_stylebox_override ::
                         (Control :< cls, Object :< cls) =>
                         cls -> GodotString -> StyleBox -> IO ()
@@ -2264,9 +2206,7 @@ instance NodeMethod Control "get_rotation_degrees" '[] (IO Float)
 
 {-# NOINLINE bindControl_get_scale #-}
 
--- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
---   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
+-- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@.
 bindControl_get_scale :: MethodBind
 bindControl_get_scale
   = unsafePerformIO $
@@ -2276,9 +2216,7 @@ bindControl_get_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
---   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
+-- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@.
 get_scale :: (Control :< cls, Object :< cls) => cls -> IO Vector2
 get_scale cls
   = withVariantArray []
@@ -2912,7 +2850,7 @@ instance NodeMethod Control "has_stylebox_override" '[GodotString]
 
 {-# NOINLINE bindControl_is_clipping_contents #-}
 
--- | Enables whether rendering of @CanvasItem@ based children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
+-- | Enables whether rendering of children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
 bindControl_is_clipping_contents :: MethodBind
 bindControl_is_clipping_contents
   = unsafePerformIO $
@@ -2922,7 +2860,7 @@ bindControl_is_clipping_contents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables whether rendering of @CanvasItem@ based children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
+-- | Enables whether rendering of children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
 is_clipping_contents ::
                        (Control :< cls, Object :< cls) => cls -> IO Bool
 is_clipping_contents cls
@@ -3152,7 +3090,7 @@ instance NodeMethod Control "set_begin" '[Vector2] (IO ()) where
 
 {-# NOINLINE bindControl_set_clip_contents #-}
 
--- | Enables whether rendering of @CanvasItem@ based children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
+-- | Enables whether rendering of children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
 bindControl_set_clip_contents :: MethodBind
 bindControl_set_clip_contents
   = unsafePerformIO $
@@ -3162,7 +3100,7 @@ bindControl_set_clip_contents
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables whether rendering of @CanvasItem@ based children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
+-- | Enables whether rendering of children should be clipped to this control's rectangle. If @true@, parts of a child which would be visibly outside of this control's rectangle will not be rendered.
 set_clip_contents ::
                     (Control :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_clip_contents cls arg1
@@ -3793,9 +3731,7 @@ instance NodeMethod Control "set_rotation_degrees" '[Float] (IO ())
 
 {-# NOINLINE bindControl_set_scale #-}
 
--- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
---   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
+-- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@.
 bindControl_set_scale :: MethodBind
 bindControl_set_scale
   = unsafePerformIO $
@@ -3805,9 +3741,7 @@ bindControl_set_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@. The Control's @hint_tooltip@ will also scale according to this value.
---   			__Note:__ This property is mainly intended to be used for animation purposes. Text inside the Control will look pixelated or blurry when the Control is scaled. To support multiple resolutions in your project, use an appropriate viewport stretch mode as described in the @url=https://docs.godotengine.org/en/latest/tutorials/viewports/multiple_resolutions.html@documentation@/url@ instead of scaling Controls individually.
---   			__Note:__ If the Control node is a child of a @Container@ node, the scale will be reset to @Vector2(1, 1)@ when the scene is instanced. To set the Control's scale when it's instanced, wait for one frame using @yield(get_tree(), "idle_frame")@ then set its @rect_scale@ property.
+-- | The node's scale, relative to its @rect_size@. Change this property to scale the node around its @rect_pivot_offset@.
 set_scale ::
             (Control :< cls, Object :< cls) => cls -> Vector2 -> IO ()
 set_scale cls arg1

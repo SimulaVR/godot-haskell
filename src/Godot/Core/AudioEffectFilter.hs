@@ -4,8 +4,8 @@
 module Godot.Core.AudioEffectFilter
        (Godot.Core.AudioEffectFilter._FILTER_24DB,
         Godot.Core.AudioEffectFilter._FILTER_12DB,
-        Godot.Core.AudioEffectFilter._FILTER_18DB,
         Godot.Core.AudioEffectFilter._FILTER_6DB,
+        Godot.Core.AudioEffectFilter._FILTER_18DB,
         Godot.Core.AudioEffectFilter.get_cutoff,
         Godot.Core.AudioEffectFilter.get_db,
         Godot.Core.AudioEffectFilter.get_gain,
@@ -33,11 +33,11 @@ _FILTER_24DB = 3
 _FILTER_12DB :: Int
 _FILTER_12DB = 1
 
-_FILTER_18DB :: Int
-_FILTER_18DB = 2
-
 _FILTER_6DB :: Int
 _FILTER_6DB = 0
+
+_FILTER_18DB :: Int
+_FILTER_18DB = 2
 
 instance NodeProperty AudioEffectFilter "cutoff_hz" Float 'False
          where
@@ -135,7 +135,7 @@ instance NodeMethod AudioEffectFilter "get_gain" '[] (IO Float)
 
 {-# NOINLINE bindAudioEffectFilter_get_resonance #-}
 
--- | Amount of boost in the frequency range near the cutoff frequency.
+-- | Amount of boost in the overtones near the cutoff frequency.
 bindAudioEffectFilter_get_resonance :: MethodBind
 bindAudioEffectFilter_get_resonance
   = unsafePerformIO $
@@ -145,7 +145,7 @@ bindAudioEffectFilter_get_resonance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of boost in the frequency range near the cutoff frequency.
+-- | Amount of boost in the overtones near the cutoff frequency.
 get_resonance ::
                 (AudioEffectFilter :< cls, Object :< cls) => cls -> IO Float
 get_resonance cls
@@ -243,7 +243,7 @@ instance NodeMethod AudioEffectFilter "set_gain" '[Float] (IO ())
 
 {-# NOINLINE bindAudioEffectFilter_set_resonance #-}
 
--- | Amount of boost in the frequency range near the cutoff frequency.
+-- | Amount of boost in the overtones near the cutoff frequency.
 bindAudioEffectFilter_set_resonance :: MethodBind
 bindAudioEffectFilter_set_resonance
   = unsafePerformIO $
@@ -253,7 +253,7 @@ bindAudioEffectFilter_set_resonance
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Amount of boost in the frequency range near the cutoff frequency.
+-- | Amount of boost in the overtones near the cutoff frequency.
 set_resonance ::
                 (AudioEffectFilter :< cls, Object :< cls) => cls -> Float -> IO ()
 set_resonance cls arg1

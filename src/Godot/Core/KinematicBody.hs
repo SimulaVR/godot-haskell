@@ -343,9 +343,9 @@ instance NodeMethod KinematicBody "move_and_collide"
 
 -- | Moves the body along a vector. If the body collides with another, it will slide along the other body rather than stop immediately. If the other body is a @KinematicBody@ or @RigidBody@, it will also be affected by the motion of the other body. You can use this to make moving or rotating platforms, or to make nodes push other nodes.
 --   				This method should be used in @method Node._physics_process@ (or in a method called by @method Node._physics_process@), as it uses the physics step's @delta@ value automatically in calculations. Otherwise, the simulation will run at an incorrect speed.
---   				@linear_velocity@ is the velocity vector (typically meters per second). Unlike in @method move_and_collide@, you should @i@not@/i@ multiply it by @delta@ — the physics engine handles applying the velocity.
+--   				@linear_velocity@ is the velocity vector (typically meters per second). Unlike in @method move_and_collide@, you should @i@not@/i@ multiply it by @delta@ — the physics engine handles applying the velocity. 
 --   				@up_direction@ is the up direction, used to determine what is a wall and what is a floor or a ceiling. If set to the default value of @Vector3(0, 0, 0)@, everything is considered a wall.
---   				If @stop_on_slope@ is @true@, body will not slide on slopes when you include gravity in @linear_velocity@ and the body is standing still.
+--   				If @stop_on_slope@ is @true@, body will not slide on slopes if you include gravity in @linear_velocity@.
 --   				If the body collides, it will change direction a maximum of @max_slides@ times before it stops.
 --   				@floor_max_angle@ is the maximum angle (in radians) where a slope is still considered a floor (or a ceiling), rather than a wall. The default value equals 45 degrees.
 --   				If @infinite_inertia@ is @true@, body will be able to push @RigidBody@ nodes, but it won't also detect any collisions with them. If @false@, it will interact with @RigidBody@ nodes like with @StaticBody@.
@@ -361,9 +361,9 @@ bindKinematicBody_move_and_slide
 
 -- | Moves the body along a vector. If the body collides with another, it will slide along the other body rather than stop immediately. If the other body is a @KinematicBody@ or @RigidBody@, it will also be affected by the motion of the other body. You can use this to make moving or rotating platforms, or to make nodes push other nodes.
 --   				This method should be used in @method Node._physics_process@ (or in a method called by @method Node._physics_process@), as it uses the physics step's @delta@ value automatically in calculations. Otherwise, the simulation will run at an incorrect speed.
---   				@linear_velocity@ is the velocity vector (typically meters per second). Unlike in @method move_and_collide@, you should @i@not@/i@ multiply it by @delta@ — the physics engine handles applying the velocity.
+--   				@linear_velocity@ is the velocity vector (typically meters per second). Unlike in @method move_and_collide@, you should @i@not@/i@ multiply it by @delta@ — the physics engine handles applying the velocity. 
 --   				@up_direction@ is the up direction, used to determine what is a wall and what is a floor or a ceiling. If set to the default value of @Vector3(0, 0, 0)@, everything is considered a wall.
---   				If @stop_on_slope@ is @true@, body will not slide on slopes when you include gravity in @linear_velocity@ and the body is standing still.
+--   				If @stop_on_slope@ is @true@, body will not slide on slopes if you include gravity in @linear_velocity@.
 --   				If the body collides, it will change direction a maximum of @max_slides@ times before it stops.
 --   				@floor_max_angle@ is the maximum angle (in radians) where a slope is still considered a floor (or a ceiling), rather than a wall. The default value equals 45 degrees.
 --   				If @infinite_inertia@ is @true@, body will be able to push @RigidBody@ nodes, but it won't also detect any collisions with them. If @false@, it will interact with @RigidBody@ nodes like with @StaticBody@.

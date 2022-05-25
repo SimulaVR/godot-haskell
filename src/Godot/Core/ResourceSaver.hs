@@ -2,13 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ResourceSaver
-       (Godot.Core.ResourceSaver._FLAG_REPLACE_SUBRESOURCE_PATHS,
+       (Godot.Core.ResourceSaver._FLAG_OMIT_EDITOR_PROPERTIES,
         Godot.Core.ResourceSaver._FLAG_RELATIVE_PATHS,
-        Godot.Core.ResourceSaver._FLAG_OMIT_EDITOR_PROPERTIES,
-        Godot.Core.ResourceSaver._FLAG_SAVE_BIG_ENDIAN,
         Godot.Core.ResourceSaver._FLAG_CHANGE_PATH,
-        Godot.Core.ResourceSaver._FLAG_COMPRESS,
+        Godot.Core.ResourceSaver._FLAG_SAVE_BIG_ENDIAN,
+        Godot.Core.ResourceSaver._FLAG_REPLACE_SUBRESOURCE_PATHS,
         Godot.Core.ResourceSaver._FLAG_BUNDLE_RESOURCES,
+        Godot.Core.ResourceSaver._FLAG_COMPRESS,
         Godot.Core.ResourceSaver.get_recognized_extensions,
         Godot.Core.ResourceSaver.save)
        where
@@ -24,26 +24,26 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_FLAG_REPLACE_SUBRESOURCE_PATHS :: Int
-_FLAG_REPLACE_SUBRESOURCE_PATHS = 64
+_FLAG_OMIT_EDITOR_PROPERTIES :: Int
+_FLAG_OMIT_EDITOR_PROPERTIES = 8
 
 _FLAG_RELATIVE_PATHS :: Int
 _FLAG_RELATIVE_PATHS = 1
 
-_FLAG_OMIT_EDITOR_PROPERTIES :: Int
-_FLAG_OMIT_EDITOR_PROPERTIES = 8
+_FLAG_CHANGE_PATH :: Int
+_FLAG_CHANGE_PATH = 4
 
 _FLAG_SAVE_BIG_ENDIAN :: Int
 _FLAG_SAVE_BIG_ENDIAN = 16
 
-_FLAG_CHANGE_PATH :: Int
-_FLAG_CHANGE_PATH = 4
-
-_FLAG_COMPRESS :: Int
-_FLAG_COMPRESS = 32
+_FLAG_REPLACE_SUBRESOURCE_PATHS :: Int
+_FLAG_REPLACE_SUBRESOURCE_PATHS = 64
 
 _FLAG_BUNDLE_RESOURCES :: Int
 _FLAG_BUNDLE_RESOURCES = 2
+
+_FLAG_COMPRESS :: Int
+_FLAG_COMPRESS = 32
 
 {-# NOINLINE bindResourceSaver_get_recognized_extensions #-}
 

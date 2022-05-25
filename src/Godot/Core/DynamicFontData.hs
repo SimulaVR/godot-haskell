@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.DynamicFontData
-       (Godot.Core.DynamicFontData._HINTING_NONE,
-        Godot.Core.DynamicFontData._HINTING_NORMAL,
+       (Godot.Core.DynamicFontData._HINTING_NORMAL,
         Godot.Core.DynamicFontData._HINTING_LIGHT,
+        Godot.Core.DynamicFontData._HINTING_NONE,
         Godot.Core.DynamicFontData.get_font_path,
         Godot.Core.DynamicFontData.get_hinting,
         Godot.Core.DynamicFontData.is_antialiased,
@@ -24,14 +24,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_HINTING_NONE :: Int
-_HINTING_NONE = 0
-
 _HINTING_NORMAL :: Int
 _HINTING_NORMAL = 2
 
 _HINTING_LIGHT :: Int
 _HINTING_LIGHT = 1
+
+_HINTING_NONE :: Int
+_HINTING_NONE = 0
 
 instance NodeProperty DynamicFontData "antialiased" Bool 'False
          where
@@ -106,7 +106,7 @@ instance NodeMethod DynamicFontData "get_hinting" '[] (IO Int)
 
 {-# NOINLINE bindDynamicFontData_is_antialiased #-}
 
--- | If @true@, the font is rendered with anti-aliasing. This property applies both to the main font and its outline (if it has one).
+-- | If @true@, the font is rendered with anti-aliasing.
 bindDynamicFontData_is_antialiased :: MethodBind
 bindDynamicFontData_is_antialiased
   = unsafePerformIO $
@@ -116,7 +116,7 @@ bindDynamicFontData_is_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the font is rendered with anti-aliasing. This property applies both to the main font and its outline (if it has one).
+-- | If @true@, the font is rendered with anti-aliasing.
 is_antialiased ::
                  (DynamicFontData :< cls, Object :< cls) => cls -> IO Bool
 is_antialiased cls
@@ -134,7 +134,7 @@ instance NodeMethod DynamicFontData "is_antialiased" '[] (IO Bool)
 
 {-# NOINLINE bindDynamicFontData_set_antialiased #-}
 
--- | If @true@, the font is rendered with anti-aliasing. This property applies both to the main font and its outline (if it has one).
+-- | If @true@, the font is rendered with anti-aliasing.
 bindDynamicFontData_set_antialiased :: MethodBind
 bindDynamicFontData_set_antialiased
   = unsafePerformIO $
@@ -144,7 +144,7 @@ bindDynamicFontData_set_antialiased
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the font is rendered with anti-aliasing. This property applies both to the main font and its outline (if it has one).
+-- | If @true@, the font is rendered with anti-aliasing.
 set_antialiased ::
                   (DynamicFontData :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_antialiased cls arg1

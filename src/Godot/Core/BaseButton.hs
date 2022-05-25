@@ -3,12 +3,12 @@
   MultiParamTypeClasses #-}
 module Godot.Core.BaseButton
        (Godot.Core.BaseButton._DRAW_NORMAL,
-        Godot.Core.BaseButton._DRAW_DISABLED,
-        Godot.Core.BaseButton._ACTION_MODE_BUTTON_RELEASE,
         Godot.Core.BaseButton._DRAW_HOVER_PRESSED,
-        Godot.Core.BaseButton._ACTION_MODE_BUTTON_PRESS,
         Godot.Core.BaseButton._DRAW_PRESSED,
+        Godot.Core.BaseButton._ACTION_MODE_BUTTON_PRESS,
+        Godot.Core.BaseButton._DRAW_DISABLED,
         Godot.Core.BaseButton._DRAW_HOVER,
+        Godot.Core.BaseButton._ACTION_MODE_BUTTON_RELEASE,
         Godot.Core.BaseButton.sig_button_down,
         Godot.Core.BaseButton.sig_button_up,
         Godot.Core.BaseButton.sig_pressed,
@@ -54,23 +54,23 @@ import Godot.Core.Control()
 _DRAW_NORMAL :: Int
 _DRAW_NORMAL = 0
 
-_DRAW_DISABLED :: Int
-_DRAW_DISABLED = 3
-
-_ACTION_MODE_BUTTON_RELEASE :: Int
-_ACTION_MODE_BUTTON_RELEASE = 1
-
 _DRAW_HOVER_PRESSED :: Int
 _DRAW_HOVER_PRESSED = 4
-
-_ACTION_MODE_BUTTON_PRESS :: Int
-_ACTION_MODE_BUTTON_PRESS = 0
 
 _DRAW_PRESSED :: Int
 _DRAW_PRESSED = 1
 
+_ACTION_MODE_BUTTON_PRESS :: Int
+_ACTION_MODE_BUTTON_PRESS = 0
+
+_DRAW_DISABLED :: Int
+_DRAW_DISABLED = 3
+
 _DRAW_HOVER :: Int
 _DRAW_HOVER = 2
+
+_ACTION_MODE_BUTTON_RELEASE :: Int
+_ACTION_MODE_BUTTON_RELEASE = 1
 
 -- | Emitted when the button starts being held down.
 sig_button_down :: Godot.Internal.Dispatch.Signal BaseButton
@@ -85,7 +85,6 @@ sig_button_up = Godot.Internal.Dispatch.Signal "button_up"
 instance NodeSignal BaseButton "button_up" '[]
 
 -- | Emitted when the button is toggled or pressed. This is on @signal button_down@ if @action_mode@ is @ACTION_MODE_BUTTON_PRESS@ and on @signal button_up@ otherwise.
---   				If you need to know the button's pressed state (and @toggle_mode@ is active), use @signal toggled@ instead.
 sig_pressed :: Godot.Internal.Dispatch.Signal BaseButton
 sig_pressed = Godot.Internal.Dispatch.Signal "pressed"
 
@@ -170,7 +169,7 @@ instance NodeMethod BaseButton "_gui_input" '[InputEvent] (IO ())
 
 {-# NOINLINE bindBaseButton__pressed #-}
 
--- | Called when the button is pressed. If you need to know the button's pressed state (and @toggle_mode@ is active), use @method _toggled@ instead.
+-- | Called when the button is pressed.
 bindBaseButton__pressed :: MethodBind
 bindBaseButton__pressed
   = unsafePerformIO $
@@ -180,7 +179,7 @@ bindBaseButton__pressed
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Called when the button is pressed. If you need to know the button's pressed state (and @toggle_mode@ is active), use @method _toggled@ instead.
+-- | Called when the button is pressed.
 _pressed :: (BaseButton :< cls, Object :< cls) => cls -> IO ()
 _pressed cls
   = withVariantArray []
@@ -460,7 +459,6 @@ instance NodeMethod BaseButton "is_hovered" '[] (IO Bool) where
 {-# NOINLINE bindBaseButton_is_keep_pressed_outside #-}
 
 -- | If @true@, the button stays pressed when moving the cursor outside the button while pressing it.
---   			__Note:__ This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 bindBaseButton_is_keep_pressed_outside :: MethodBind
 bindBaseButton_is_keep_pressed_outside
   = unsafePerformIO $
@@ -471,7 +469,6 @@ bindBaseButton_is_keep_pressed_outside
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the button stays pressed when moving the cursor outside the button while pressing it.
---   			__Note:__ This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 is_keep_pressed_outside ::
                           (BaseButton :< cls, Object :< cls) => cls -> IO Bool
 is_keep_pressed_outside cls
@@ -711,7 +708,6 @@ instance NodeMethod BaseButton "set_enabled_focus_mode" '[Int]
 {-# NOINLINE bindBaseButton_set_keep_pressed_outside #-}
 
 -- | If @true@, the button stays pressed when moving the cursor outside the button while pressing it.
---   			__Note:__ This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 bindBaseButton_set_keep_pressed_outside :: MethodBind
 bindBaseButton_set_keep_pressed_outside
   = unsafePerformIO $
@@ -722,7 +718,6 @@ bindBaseButton_set_keep_pressed_outside
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | If @true@, the button stays pressed when moving the cursor outside the button while pressing it.
---   			__Note:__ This property only affects the button's visual appearance. Signals will be emitted at the same moment regardless of this property's value.
 set_keep_pressed_outside ::
                            (BaseButton :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_keep_pressed_outside cls arg1

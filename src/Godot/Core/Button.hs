@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Button
-       (Godot.Core.Button._ALIGN_RIGHT, Godot.Core.Button._ALIGN_LEFT,
-        Godot.Core.Button._ALIGN_CENTER, Godot.Core.Button.get_button_icon,
+       (Godot.Core.Button._ALIGN_CENTER, Godot.Core.Button._ALIGN_LEFT,
+        Godot.Core.Button._ALIGN_RIGHT, Godot.Core.Button.get_button_icon,
         Godot.Core.Button.get_clip_text, Godot.Core.Button.get_text,
         Godot.Core.Button.get_text_align, Godot.Core.Button.is_expand_icon,
         Godot.Core.Button.is_flat, Godot.Core.Button.set_button_icon,
@@ -23,14 +23,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.BaseButton()
 
-_ALIGN_RIGHT :: Int
-_ALIGN_RIGHT = 2
+_ALIGN_CENTER :: Int
+_ALIGN_CENTER = 1
 
 _ALIGN_LEFT :: Int
 _ALIGN_LEFT = 0
 
-_ALIGN_CENTER :: Int
-_ALIGN_CENTER = 1
+_ALIGN_RIGHT :: Int
+_ALIGN_RIGHT = 2
 
 instance NodeProperty Button "align" Int 'False where
         nodeProperty

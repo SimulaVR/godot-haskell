@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.GraphNode
-       (Godot.Core.GraphNode._OVERLAY_DISABLED,
-        Godot.Core.GraphNode._OVERLAY_POSITION,
+       (Godot.Core.GraphNode._OVERLAY_POSITION,
+        Godot.Core.GraphNode._OVERLAY_DISABLED,
         Godot.Core.GraphNode._OVERLAY_BREAKPOINT,
         Godot.Core.GraphNode.sig_close_request,
         Godot.Core.GraphNode.sig_dragged,
@@ -51,11 +51,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Container()
 
-_OVERLAY_DISABLED :: Int
-_OVERLAY_DISABLED = 0
-
 _OVERLAY_POSITION :: Int
 _OVERLAY_POSITION = 2
+
+_OVERLAY_DISABLED :: Int
+_OVERLAY_DISABLED = 0
 
 _OVERLAY_BREAKPOINT :: Int
 _OVERLAY_BREAKPOINT = 1

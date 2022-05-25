@@ -2,17 +2,18 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Texture
-       (Godot.Core.Texture._FLAG_VIDEO_SURFACE,
-        Godot.Core.Texture._FLAGS_DEFAULT, Godot.Core.Texture._FLAG_REPEAT,
+       (Godot.Core.Texture._FLAGS_DEFAULT,
+        Godot.Core.Texture._FLAG_FILTER,
+        Godot.Core.Texture._FLAG_VIDEO_SURFACE,
+        Godot.Core.Texture._FLAG_MIRRORED_REPEAT,
         Godot.Core.Texture._FLAG_CONVERT_TO_LINEAR,
         Godot.Core.Texture._FLAG_ANISOTROPIC_FILTER,
-        Godot.Core.Texture._FLAG_MIPMAPS, Godot.Core.Texture._FLAG_FILTER,
-        Godot.Core.Texture._FLAG_MIRRORED_REPEAT, Godot.Core.Texture.draw,
-        Godot.Core.Texture.draw_rect, Godot.Core.Texture.draw_rect_region,
-        Godot.Core.Texture.get_data, Godot.Core.Texture.get_flags,
-        Godot.Core.Texture.get_height, Godot.Core.Texture.get_size,
-        Godot.Core.Texture.get_width, Godot.Core.Texture.has_alpha,
-        Godot.Core.Texture.set_flags)
+        Godot.Core.Texture._FLAG_REPEAT, Godot.Core.Texture._FLAG_MIPMAPS,
+        Godot.Core.Texture.draw, Godot.Core.Texture.draw_rect,
+        Godot.Core.Texture.draw_rect_region, Godot.Core.Texture.get_data,
+        Godot.Core.Texture.get_flags, Godot.Core.Texture.get_height,
+        Godot.Core.Texture.get_size, Godot.Core.Texture.get_width,
+        Godot.Core.Texture.has_alpha, Godot.Core.Texture.set_flags)
        where
 import Data.Coerce
 import Foreign.C
@@ -26,14 +27,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_FLAG_VIDEO_SURFACE :: Int
-_FLAG_VIDEO_SURFACE = 2048
-
 _FLAGS_DEFAULT :: Int
 _FLAGS_DEFAULT = 7
 
-_FLAG_REPEAT :: Int
-_FLAG_REPEAT = 2
+_FLAG_FILTER :: Int
+_FLAG_FILTER = 4
+
+_FLAG_VIDEO_SURFACE :: Int
+_FLAG_VIDEO_SURFACE = 2048
+
+_FLAG_MIRRORED_REPEAT :: Int
+_FLAG_MIRRORED_REPEAT = 32
 
 _FLAG_CONVERT_TO_LINEAR :: Int
 _FLAG_CONVERT_TO_LINEAR = 16
@@ -41,14 +45,11 @@ _FLAG_CONVERT_TO_LINEAR = 16
 _FLAG_ANISOTROPIC_FILTER :: Int
 _FLAG_ANISOTROPIC_FILTER = 8
 
+_FLAG_REPEAT :: Int
+_FLAG_REPEAT = 2
+
 _FLAG_MIPMAPS :: Int
 _FLAG_MIPMAPS = 1
-
-_FLAG_FILTER :: Int
-_FLAG_FILTER = 4
-
-_FLAG_MIRRORED_REPEAT :: Int
-_FLAG_MIRRORED_REPEAT = 32
 
 instance NodeProperty Texture "flags" Int 'False where
         nodeProperty = (get_flags, wrapDroppingSetter set_flags, Nothing)
@@ -165,7 +166,7 @@ instance NodeMethod Texture "draw_rect_region"
 
 {-# NOINLINE bindTexture_get_data #-}
 
--- | Returns an @Image@ that is a copy of data from this @Texture@. @Image@s can be accessed and manipulated directly.
+-- | Returns an @Image@ with the data from this @Texture@. @Image@s can be accessed and manipulated directly.
 bindTexture_get_data :: MethodBind
 bindTexture_get_data
   = unsafePerformIO $
@@ -175,7 +176,7 @@ bindTexture_get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an @Image@ that is a copy of data from this @Texture@. @Image@s can be accessed and manipulated directly.
+-- | Returns an @Image@ with the data from this @Texture@. @Image@s can be accessed and manipulated directly.
 get_data :: (Texture :< cls, Object :< cls) => cls -> IO Image
 get_data cls
   = withVariantArray []

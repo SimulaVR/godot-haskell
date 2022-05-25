@@ -2,16 +2,16 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Light2D
-       (Godot.Core.Light2D._SHADOW_FILTER_PCF7,
-        Godot.Core.Light2D._MODE_ADD, Godot.Core.Light2D._MODE_SUB,
+       (Godot.Core.Light2D._SHADOW_FILTER_NONE,
         Godot.Core.Light2D._SHADOW_FILTER_PCF5,
-        Godot.Core.Light2D._SHADOW_FILTER_NONE,
+        Godot.Core.Light2D._MODE_SUB,
         Godot.Core.Light2D._SHADOW_FILTER_PCF9,
-        Godot.Core.Light2D._MODE_MASK, Godot.Core.Light2D._MODE_MIX,
+        Godot.Core.Light2D._SHADOW_FILTER_PCF7,
+        Godot.Core.Light2D._MODE_MASK, Godot.Core.Light2D._MODE_ADD,
         Godot.Core.Light2D._SHADOW_FILTER_PCF3,
         Godot.Core.Light2D._SHADOW_FILTER_PCF13,
-        Godot.Core.Light2D.get_color, Godot.Core.Light2D.get_energy,
-        Godot.Core.Light2D.get_height,
+        Godot.Core.Light2D._MODE_MIX, Godot.Core.Light2D.get_color,
+        Godot.Core.Light2D.get_energy, Godot.Core.Light2D.get_height,
         Godot.Core.Light2D.get_item_cull_mask,
         Godot.Core.Light2D.get_item_shadow_cull_mask,
         Godot.Core.Light2D.get_layer_range_max,
@@ -60,35 +60,35 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node2D()
 
-_SHADOW_FILTER_PCF7 :: Int
-_SHADOW_FILTER_PCF7 = 3
-
-_MODE_ADD :: Int
-_MODE_ADD = 0
-
-_MODE_SUB :: Int
-_MODE_SUB = 1
+_SHADOW_FILTER_NONE :: Int
+_SHADOW_FILTER_NONE = 0
 
 _SHADOW_FILTER_PCF5 :: Int
 _SHADOW_FILTER_PCF5 = 2
 
-_SHADOW_FILTER_NONE :: Int
-_SHADOW_FILTER_NONE = 0
+_MODE_SUB :: Int
+_MODE_SUB = 1
 
 _SHADOW_FILTER_PCF9 :: Int
 _SHADOW_FILTER_PCF9 = 4
 
+_SHADOW_FILTER_PCF7 :: Int
+_SHADOW_FILTER_PCF7 = 3
+
 _MODE_MASK :: Int
 _MODE_MASK = 3
 
-_MODE_MIX :: Int
-_MODE_MIX = 2
+_MODE_ADD :: Int
+_MODE_ADD = 0
 
 _SHADOW_FILTER_PCF3 :: Int
 _SHADOW_FILTER_PCF3 = 1
 
 _SHADOW_FILTER_PCF13 :: Int
 _SHADOW_FILTER_PCF13 = 5
+
+_MODE_MIX :: Int
+_MODE_MIX = 2
 
 instance NodeProperty Light2D "color" Color 'False where
         nodeProperty = (get_color, wrapDroppingSetter set_color, Nothing)

@@ -2,20 +2,20 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Input
-       (Godot.Core.Input._CURSOR_MOVE, Godot.Core.Input._CURSOR_ARROW,
-        Godot.Core.Input._CURSOR_IBEAM, Godot.Core.Input._CURSOR_HSPLIT,
-        Godot.Core.Input._CURSOR_DRAG, Godot.Core.Input._CURSOR_BUSY,
-        Godot.Core.Input._MOUSE_MODE_CONFINED,
-        Godot.Core.Input._CURSOR_CROSS, Godot.Core.Input._CURSOR_WAIT,
-        Godot.Core.Input._CURSOR_BDIAGSIZE, Godot.Core.Input._CURSOR_HELP,
-        Godot.Core.Input._MOUSE_MODE_VISIBLE,
-        Godot.Core.Input._CURSOR_CAN_DROP,
+       (Godot.Core.Input._MOUSE_MODE_VISIBLE,
         Godot.Core.Input._MOUSE_MODE_CAPTURED,
+        Godot.Core.Input._CURSOR_IBEAM, Godot.Core.Input._CURSOR_HSPLIT,
+        Godot.Core.Input._CURSOR_BUSY,
         Godot.Core.Input._CURSOR_POINTING_HAND,
-        Godot.Core.Input._CURSOR_FDIAGSIZE, Godot.Core.Input._CURSOR_HSIZE,
         Godot.Core.Input._MOUSE_MODE_HIDDEN,
-        Godot.Core.Input._CURSOR_FORBIDDEN, Godot.Core.Input._CURSOR_VSIZE,
-        Godot.Core.Input._CURSOR_VSPLIT,
+        Godot.Core.Input._CURSOR_VSPLIT, Godot.Core.Input._CURSOR_CAN_DROP,
+        Godot.Core.Input._CURSOR_CROSS, Godot.Core.Input._CURSOR_FDIAGSIZE,
+        Godot.Core.Input._CURSOR_MOVE, Godot.Core.Input._CURSOR_DRAG,
+        Godot.Core.Input._CURSOR_VSIZE, Godot.Core.Input._CURSOR_WAIT,
+        Godot.Core.Input._CURSOR_ARROW, Godot.Core.Input._CURSOR_HELP,
+        Godot.Core.Input._CURSOR_FORBIDDEN, Godot.Core.Input._CURSOR_HSIZE,
+        Godot.Core.Input._CURSOR_BDIAGSIZE,
+        Godot.Core.Input._MOUSE_MODE_CONFINED,
         Godot.Core.Input.sig_joy_connection_changed,
         Godot.Core.Input.action_press, Godot.Core.Input.action_release,
         Godot.Core.Input.add_joy_mapping,
@@ -66,11 +66,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_CURSOR_MOVE :: Int
-_CURSOR_MOVE = 13
+_MOUSE_MODE_VISIBLE :: Int
+_MOUSE_MODE_VISIBLE = 0
 
-_CURSOR_ARROW :: Int
-_CURSOR_ARROW = 0
+_MOUSE_MODE_CAPTURED :: Int
+_MOUSE_MODE_CAPTURED = 2
 
 _CURSOR_IBEAM :: Int
 _CURSOR_IBEAM = 1
@@ -78,56 +78,56 @@ _CURSOR_IBEAM = 1
 _CURSOR_HSPLIT :: Int
 _CURSOR_HSPLIT = 15
 
-_CURSOR_DRAG :: Int
-_CURSOR_DRAG = 6
-
 _CURSOR_BUSY :: Int
 _CURSOR_BUSY = 5
-
-_MOUSE_MODE_CONFINED :: Int
-_MOUSE_MODE_CONFINED = 3
-
-_CURSOR_CROSS :: Int
-_CURSOR_CROSS = 3
-
-_CURSOR_WAIT :: Int
-_CURSOR_WAIT = 4
-
-_CURSOR_BDIAGSIZE :: Int
-_CURSOR_BDIAGSIZE = 11
-
-_CURSOR_HELP :: Int
-_CURSOR_HELP = 16
-
-_MOUSE_MODE_VISIBLE :: Int
-_MOUSE_MODE_VISIBLE = 0
-
-_CURSOR_CAN_DROP :: Int
-_CURSOR_CAN_DROP = 7
-
-_MOUSE_MODE_CAPTURED :: Int
-_MOUSE_MODE_CAPTURED = 2
 
 _CURSOR_POINTING_HAND :: Int
 _CURSOR_POINTING_HAND = 2
 
-_CURSOR_FDIAGSIZE :: Int
-_CURSOR_FDIAGSIZE = 12
-
-_CURSOR_HSIZE :: Int
-_CURSOR_HSIZE = 10
-
 _MOUSE_MODE_HIDDEN :: Int
 _MOUSE_MODE_HIDDEN = 1
 
-_CURSOR_FORBIDDEN :: Int
-_CURSOR_FORBIDDEN = 8
+_CURSOR_VSPLIT :: Int
+_CURSOR_VSPLIT = 14
+
+_CURSOR_CAN_DROP :: Int
+_CURSOR_CAN_DROP = 7
+
+_CURSOR_CROSS :: Int
+_CURSOR_CROSS = 3
+
+_CURSOR_FDIAGSIZE :: Int
+_CURSOR_FDIAGSIZE = 12
+
+_CURSOR_MOVE :: Int
+_CURSOR_MOVE = 13
+
+_CURSOR_DRAG :: Int
+_CURSOR_DRAG = 6
 
 _CURSOR_VSIZE :: Int
 _CURSOR_VSIZE = 9
 
-_CURSOR_VSPLIT :: Int
-_CURSOR_VSPLIT = 14
+_CURSOR_WAIT :: Int
+_CURSOR_WAIT = 4
+
+_CURSOR_ARROW :: Int
+_CURSOR_ARROW = 0
+
+_CURSOR_HELP :: Int
+_CURSOR_HELP = 16
+
+_CURSOR_FORBIDDEN :: Int
+_CURSOR_FORBIDDEN = 8
+
+_CURSOR_HSIZE :: Int
+_CURSOR_HSIZE = 10
+
+_CURSOR_BDIAGSIZE :: Int
+_CURSOR_BDIAGSIZE = 11
+
+_MOUSE_MODE_CONFINED :: Int
+_MOUSE_MODE_CONFINED = 3
 
 -- | Emitted when a joypad device has been connected or disconnected.
 sig_joy_connection_changed :: Godot.Internal.Dispatch.Signal Input
@@ -229,9 +229,8 @@ instance NodeMethod Input "add_joy_mapping"
 
 {-# NOINLINE bindInput_get_accelerometer #-}
 
--- | Returns the acceleration of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+-- | If the device has an accelerometer, this will return the acceleration. Otherwise, it returns an empty @Vector3@.
 --   				Note this method returns an empty @Vector3@ when running from the editor even when your device has an accelerometer. You must export your project to a supported device to read values from the accelerometer.
---   				__Note:__ This method only works on iOS, Android, and UWP. On other platforms, it always returns @Vector3.ZERO@.
 bindInput_get_accelerometer :: MethodBind
 bindInput_get_accelerometer
   = unsafePerformIO $
@@ -241,9 +240,8 @@ bindInput_get_accelerometer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the acceleration of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
+-- | If the device has an accelerometer, this will return the acceleration. Otherwise, it returns an empty @Vector3@.
 --   				Note this method returns an empty @Vector3@ when running from the editor even when your device has an accelerometer. You must export your project to a supported device to read values from the accelerometer.
---   				__Note:__ This method only works on iOS, Android, and UWP. On other platforms, it always returns @Vector3.ZERO@.
 get_accelerometer ::
                     (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_accelerometer cls
@@ -343,8 +341,7 @@ instance NodeMethod Input "get_current_cursor_shape" '[] (IO Int)
 
 {-# NOINLINE bindInput_get_gravity #-}
 
--- | Returns the gravity of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@.
+-- | If the device has an accelerometer, this will return the gravity. Otherwise, it returns an empty @Vector3@.
 bindInput_get_gravity :: MethodBind
 bindInput_get_gravity
   = unsafePerformIO $
@@ -354,8 +351,7 @@ bindInput_get_gravity
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the gravity of the device's accelerometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and iOS. On other platforms, it always returns @Vector3.ZERO@.
+-- | If the device has an accelerometer, this will return the gravity. Otherwise, it returns an empty @Vector3@.
 get_gravity :: (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_gravity cls
   = withVariantArray []
@@ -369,8 +365,7 @@ instance NodeMethod Input "get_gravity" '[] (IO Vector3) where
 
 {-# NOINLINE bindInput_get_gyroscope #-}
 
--- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android. On other platforms, it always returns @Vector3.ZERO@.
+-- | If the device has a gyroscope, this will return the rate of rotation in rad/s around a device's X, Y, and Z axes. Otherwise, it returns an empty @Vector3@.
 bindInput_get_gyroscope :: MethodBind
 bindInput_get_gyroscope
   = unsafePerformIO $
@@ -380,8 +375,7 @@ bindInput_get_gyroscope
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the rotation rate in rad/s around a device's X, Y, and Z axes of the gyroscope, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android. On other platforms, it always returns @Vector3.ZERO@.
+-- | If the device has a gyroscope, this will return the rate of rotation in rad/s around a device's X, Y, and Z axes. Otherwise, it returns an empty @Vector3@.
 get_gyroscope :: (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_gyroscope cls
   = withVariantArray []
@@ -674,8 +668,7 @@ instance NodeMethod Input "get_last_mouse_speed" '[] (IO Vector2)
 
 {-# NOINLINE bindInput_get_magnetometer #-}
 
--- | Returns the the magnetic field strength in micro-Tesla for all axes of the device's magnetometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and UWP. On other platforms, it always returns @Vector3.ZERO@.
+-- | If the device has a magnetometer, this will return the magnetic field strength in micro-Tesla for all axes.
 bindInput_get_magnetometer :: MethodBind
 bindInput_get_magnetometer
   = unsafePerformIO $
@@ -685,8 +678,7 @@ bindInput_get_magnetometer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the the magnetic field strength in micro-Tesla for all axes of the device's magnetometer, if the device has one. Otherwise, the method returns @Vector3.ZERO@.
---   				__Note:__ This method only works on Android and UWP. On other platforms, it always returns @Vector3.ZERO@.
+-- | If the device has a magnetometer, this will return the magnetic field strength in micro-Tesla for all axes.
 get_magnetometer ::
                    (Input :< cls, Object :< cls) => cls -> IO Vector3
 get_magnetometer cls
@@ -1156,8 +1148,7 @@ instance NodeMethod Input "set_mouse_mode" '[Int] (IO ()) where
 
 {-# NOINLINE bindInput_set_use_accumulated_input #-}
 
--- | Enables or disables the accumulation of similar input events sent by the operating system. When input accumulation is enabled, all input events generated during a frame will be merged and emitted when the frame is done rendering. Therefore, this limits the number of input method calls per second to the rendering FPS.
---   				Input accumulation is enabled by default. It can be disabled to get slightly more precise/reactive input at the cost of increased CPU usage. In applications where drawing freehand lines is required, input accumulation should generally be disabled while the user is drawing the line to get results that closely follow the actual input.
+-- | Whether to accumulate similar input events sent by the operating system. Enabled by default.
 bindInput_set_use_accumulated_input :: MethodBind
 bindInput_set_use_accumulated_input
   = unsafePerformIO $
@@ -1167,8 +1158,7 @@ bindInput_set_use_accumulated_input
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Enables or disables the accumulation of similar input events sent by the operating system. When input accumulation is enabled, all input events generated during a frame will be merged and emitted when the frame is done rendering. Therefore, this limits the number of input method calls per second to the rendering FPS.
---   				Input accumulation is enabled by default. It can be disabled to get slightly more precise/reactive input at the cost of increased CPU usage. In applications where drawing freehand lines is required, input accumulation should generally be disabled while the user is drawing the line to get results that closely follow the actual input.
+-- | Whether to accumulate similar input events sent by the operating system. Enabled by default.
 set_use_accumulated_input ::
                             (Input :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_use_accumulated_input cls arg1

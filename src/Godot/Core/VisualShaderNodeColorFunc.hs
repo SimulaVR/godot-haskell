@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeColorFunc
-       (Godot.Core.VisualShaderNodeColorFunc._FUNC_GRAYSCALE,
-        Godot.Core.VisualShaderNodeColorFunc._FUNC_SEPIA,
+       (Godot.Core.VisualShaderNodeColorFunc._FUNC_SEPIA,
+        Godot.Core.VisualShaderNodeColorFunc._FUNC_GRAYSCALE,
         Godot.Core.VisualShaderNodeColorFunc.get_function,
         Godot.Core.VisualShaderNodeColorFunc.set_function)
        where
@@ -19,11 +19,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualShaderNode()
 
-_FUNC_GRAYSCALE :: Int
-_FUNC_GRAYSCALE = 0
-
 _FUNC_SEPIA :: Int
 _FUNC_SEPIA = 1
+
+_FUNC_GRAYSCALE :: Int
+_FUNC_GRAYSCALE = 0
 
 instance NodeProperty VisualShaderNodeColorFunc "function" Int
            'False

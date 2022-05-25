@@ -2,32 +2,30 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Environment
-       (Godot.Core.Environment._TONE_MAPPER_FILMIC,
-        Godot.Core.Environment._SSAO_QUALITY_LOW,
-        Godot.Core.Environment._BG_CANVAS,
-        Godot.Core.Environment._DOF_BLUR_QUALITY_LOW,
-        Godot.Core.Environment._GLOW_BLEND_MODE_ADDITIVE,
-        Godot.Core.Environment._DOF_BLUR_QUALITY_HIGH,
-        Godot.Core.Environment._DOF_BLUR_QUALITY_MEDIUM,
-        Godot.Core.Environment._BG_SKY,
-        Godot.Core.Environment._SSAO_QUALITY_MEDIUM,
-        Godot.Core.Environment._GLOW_BLEND_MODE_SOFTLIGHT,
-        Godot.Core.Environment._TONE_MAPPER_LINEAR,
-        Godot.Core.Environment._BG_MAX,
-        Godot.Core.Environment._BG_COLOR_SKY,
-        Godot.Core.Environment._SSAO_BLUR_DISABLED,
-        Godot.Core.Environment._SSAO_BLUR_2x2,
-        Godot.Core.Environment._TONE_MAPPER_ACES,
-        Godot.Core.Environment._SSAO_BLUR_1x1,
-        Godot.Core.Environment._BG_COLOR,
-        Godot.Core.Environment._SSAO_BLUR_3x3,
-        Godot.Core.Environment._GLOW_BLEND_MODE_REPLACE,
+       (Godot.Core.Environment._SSAO_BLUR_DISABLED,
         Godot.Core.Environment._GLOW_BLEND_MODE_SCREEN,
-        Godot.Core.Environment._SSAO_QUALITY_HIGH,
-        Godot.Core.Environment._TONE_MAPPER_REINHARDT,
-        Godot.Core.Environment._BG_CAMERA_FEED,
+        Godot.Core.Environment._GLOW_BLEND_MODE_SOFTLIGHT,
         Godot.Core.Environment._BG_CLEAR_COLOR,
-        Godot.Core.Environment._BG_KEEP,
+        Godot.Core.Environment._GLOW_BLEND_MODE_ADDITIVE,
+        Godot.Core.Environment._BG_MAX, Godot.Core.Environment._BG_SKY,
+        Godot.Core.Environment._DOF_BLUR_QUALITY_LOW,
+        Godot.Core.Environment._SSAO_BLUR_3x3,
+        Godot.Core.Environment._SSAO_BLUR_1x1,
+        Godot.Core.Environment._SSAO_BLUR_2x2,
+        Godot.Core.Environment._SSAO_QUALITY_HIGH,
+        Godot.Core.Environment._TONE_MAPPER_ACES,
+        Godot.Core.Environment._GLOW_BLEND_MODE_REPLACE,
+        Godot.Core.Environment._BG_COLOR_SKY,
+        Godot.Core.Environment._TONE_MAPPER_REINHARDT,
+        Godot.Core.Environment._TONE_MAPPER_LINEAR,
+        Godot.Core.Environment._BG_KEEP, Godot.Core.Environment._BG_COLOR,
+        Godot.Core.Environment._SSAO_QUALITY_LOW,
+        Godot.Core.Environment._BG_CAMERA_FEED,
+        Godot.Core.Environment._TONE_MAPPER_FILMIC,
+        Godot.Core.Environment._BG_CANVAS,
+        Godot.Core.Environment._DOF_BLUR_QUALITY_MEDIUM,
+        Godot.Core.Environment._DOF_BLUR_QUALITY_HIGH,
+        Godot.Core.Environment._SSAO_QUALITY_MEDIUM,
         Godot.Core.Environment.get_adjustment_brightness,
         Godot.Core.Environment.get_adjustment_color_correction,
         Godot.Core.Environment.get_adjustment_contrast,
@@ -197,83 +195,83 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_TONE_MAPPER_FILMIC :: Int
-_TONE_MAPPER_FILMIC = 2
-
-_SSAO_QUALITY_LOW :: Int
-_SSAO_QUALITY_LOW = 0
-
-_BG_CANVAS :: Int
-_BG_CANVAS = 4
-
-_DOF_BLUR_QUALITY_LOW :: Int
-_DOF_BLUR_QUALITY_LOW = 0
-
-_GLOW_BLEND_MODE_ADDITIVE :: Int
-_GLOW_BLEND_MODE_ADDITIVE = 0
-
-_DOF_BLUR_QUALITY_HIGH :: Int
-_DOF_BLUR_QUALITY_HIGH = 2
-
-_DOF_BLUR_QUALITY_MEDIUM :: Int
-_DOF_BLUR_QUALITY_MEDIUM = 1
-
-_BG_SKY :: Int
-_BG_SKY = 2
-
-_SSAO_QUALITY_MEDIUM :: Int
-_SSAO_QUALITY_MEDIUM = 1
-
-_GLOW_BLEND_MODE_SOFTLIGHT :: Int
-_GLOW_BLEND_MODE_SOFTLIGHT = 2
-
-_TONE_MAPPER_LINEAR :: Int
-_TONE_MAPPER_LINEAR = 0
-
-_BG_MAX :: Int
-_BG_MAX = 7
-
-_BG_COLOR_SKY :: Int
-_BG_COLOR_SKY = 3
-
 _SSAO_BLUR_DISABLED :: Int
 _SSAO_BLUR_DISABLED = 0
-
-_SSAO_BLUR_2x2 :: Int
-_SSAO_BLUR_2x2 = 2
-
-_TONE_MAPPER_ACES :: Int
-_TONE_MAPPER_ACES = 3
-
-_SSAO_BLUR_1x1 :: Int
-_SSAO_BLUR_1x1 = 1
-
-_BG_COLOR :: Int
-_BG_COLOR = 1
-
-_SSAO_BLUR_3x3 :: Int
-_SSAO_BLUR_3x3 = 3
-
-_GLOW_BLEND_MODE_REPLACE :: Int
-_GLOW_BLEND_MODE_REPLACE = 3
 
 _GLOW_BLEND_MODE_SCREEN :: Int
 _GLOW_BLEND_MODE_SCREEN = 1
 
-_SSAO_QUALITY_HIGH :: Int
-_SSAO_QUALITY_HIGH = 2
-
-_TONE_MAPPER_REINHARDT :: Int
-_TONE_MAPPER_REINHARDT = 1
-
-_BG_CAMERA_FEED :: Int
-_BG_CAMERA_FEED = 6
+_GLOW_BLEND_MODE_SOFTLIGHT :: Int
+_GLOW_BLEND_MODE_SOFTLIGHT = 2
 
 _BG_CLEAR_COLOR :: Int
 _BG_CLEAR_COLOR = 0
 
+_GLOW_BLEND_MODE_ADDITIVE :: Int
+_GLOW_BLEND_MODE_ADDITIVE = 0
+
+_BG_MAX :: Int
+_BG_MAX = 7
+
+_BG_SKY :: Int
+_BG_SKY = 2
+
+_DOF_BLUR_QUALITY_LOW :: Int
+_DOF_BLUR_QUALITY_LOW = 0
+
+_SSAO_BLUR_3x3 :: Int
+_SSAO_BLUR_3x3 = 3
+
+_SSAO_BLUR_1x1 :: Int
+_SSAO_BLUR_1x1 = 1
+
+_SSAO_BLUR_2x2 :: Int
+_SSAO_BLUR_2x2 = 2
+
+_SSAO_QUALITY_HIGH :: Int
+_SSAO_QUALITY_HIGH = 2
+
+_TONE_MAPPER_ACES :: Int
+_TONE_MAPPER_ACES = 3
+
+_GLOW_BLEND_MODE_REPLACE :: Int
+_GLOW_BLEND_MODE_REPLACE = 3
+
+_BG_COLOR_SKY :: Int
+_BG_COLOR_SKY = 3
+
+_TONE_MAPPER_REINHARDT :: Int
+_TONE_MAPPER_REINHARDT = 1
+
+_TONE_MAPPER_LINEAR :: Int
+_TONE_MAPPER_LINEAR = 0
+
 _BG_KEEP :: Int
 _BG_KEEP = 5
+
+_BG_COLOR :: Int
+_BG_COLOR = 1
+
+_SSAO_QUALITY_LOW :: Int
+_SSAO_QUALITY_LOW = 0
+
+_BG_CAMERA_FEED :: Int
+_BG_CAMERA_FEED = 6
+
+_TONE_MAPPER_FILMIC :: Int
+_TONE_MAPPER_FILMIC = 2
+
+_BG_CANVAS :: Int
+_BG_CANVAS = 4
+
+_DOF_BLUR_QUALITY_MEDIUM :: Int
+_DOF_BLUR_QUALITY_MEDIUM = 1
+
+_DOF_BLUR_QUALITY_HIGH :: Int
+_DOF_BLUR_QUALITY_HIGH = 2
+
+_SSAO_QUALITY_MEDIUM :: Int
+_SSAO_QUALITY_MEDIUM = 1
 
 instance NodeProperty Environment "adjustment_brightness" Float
            'False

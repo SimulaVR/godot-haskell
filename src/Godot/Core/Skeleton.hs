@@ -687,7 +687,7 @@ instance NodeMethod Skeleton "set_bone_parent" '[Int, Int] (IO ())
 
 {-# NOINLINE bindSkeleton_set_bone_pose #-}
 
--- | Sets the pose transform for bone @bone_idx@.
+-- | Returns the pose transform for bone @bone_idx@.
 bindSkeleton_set_bone_pose :: MethodBind
 bindSkeleton_set_bone_pose
   = unsafePerformIO $
@@ -697,7 +697,7 @@ bindSkeleton_set_bone_pose
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the pose transform for bone @bone_idx@.
+-- | Returns the pose transform for bone @bone_idx@.
 set_bone_pose ::
                 (Skeleton :< cls, Object :< cls) =>
                 cls -> Int -> Transform -> IO ()

@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.StreamPeerTCP
-       (Godot.Core.StreamPeerTCP._STATUS_CONNECTED,
-        Godot.Core.StreamPeerTCP._STATUS_CONNECTING,
+       (Godot.Core.StreamPeerTCP._STATUS_CONNECTING,
         Godot.Core.StreamPeerTCP._STATUS_ERROR,
+        Godot.Core.StreamPeerTCP._STATUS_CONNECTED,
         Godot.Core.StreamPeerTCP._STATUS_NONE,
         Godot.Core.StreamPeerTCP.connect_to_host,
         Godot.Core.StreamPeerTCP.disconnect_from_host,
@@ -26,14 +26,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.StreamPeer()
 
-_STATUS_CONNECTED :: Int
-_STATUS_CONNECTED = 2
-
 _STATUS_CONNECTING :: Int
 _STATUS_CONNECTING = 1
 
 _STATUS_ERROR :: Int
 _STATUS_ERROR = 3
+
+_STATUS_CONNECTED :: Int
+_STATUS_CONNECTED = 2
 
 _STATUS_NONE :: Int
 _STATUS_NONE = 0

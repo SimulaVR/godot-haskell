@@ -2,17 +2,17 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.CanvasItem
-       (Godot.Core.CanvasItem._BLEND_MODE_DISABLED,
-        Godot.Core.CanvasItem._NOTIFICATION_EXIT_CANVAS,
-        Godot.Core.CanvasItem._NOTIFICATION_ENTER_CANVAS,
+       (Godot.Core.CanvasItem._BLEND_MODE_ADD,
         Godot.Core.CanvasItem._NOTIFICATION_TRANSFORM_CHANGED,
-        Godot.Core.CanvasItem._BLEND_MODE_ADD,
-        Godot.Core.CanvasItem._BLEND_MODE_MIX,
-        Godot.Core.CanvasItem._NOTIFICATION_DRAW,
-        Godot.Core.CanvasItem._BLEND_MODE_MUL,
         Godot.Core.CanvasItem._BLEND_MODE_PREMULT_ALPHA,
-        Godot.Core.CanvasItem._BLEND_MODE_SUB,
         Godot.Core.CanvasItem._NOTIFICATION_VISIBILITY_CHANGED,
+        Godot.Core.CanvasItem._BLEND_MODE_MIX,
+        Godot.Core.CanvasItem._NOTIFICATION_EXIT_CANVAS,
+        Godot.Core.CanvasItem._BLEND_MODE_SUB,
+        Godot.Core.CanvasItem._BLEND_MODE_MUL,
+        Godot.Core.CanvasItem._NOTIFICATION_DRAW,
+        Godot.Core.CanvasItem._BLEND_MODE_DISABLED,
+        Godot.Core.CanvasItem._NOTIFICATION_ENTER_CANVAS,
         Godot.Core.CanvasItem.sig_draw, Godot.Core.CanvasItem.sig_hide,
         Godot.Core.CanvasItem.sig_item_rect_changed,
         Godot.Core.CanvasItem.sig_visibility_changed,
@@ -104,38 +104,38 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node()
 
-_BLEND_MODE_DISABLED :: Int
-_BLEND_MODE_DISABLED = 5
-
-_NOTIFICATION_EXIT_CANVAS :: Int
-_NOTIFICATION_EXIT_CANVAS = 33
-
-_NOTIFICATION_ENTER_CANVAS :: Int
-_NOTIFICATION_ENTER_CANVAS = 32
+_BLEND_MODE_ADD :: Int
+_BLEND_MODE_ADD = 1
 
 _NOTIFICATION_TRANSFORM_CHANGED :: Int
 _NOTIFICATION_TRANSFORM_CHANGED = 2000
 
-_BLEND_MODE_ADD :: Int
-_BLEND_MODE_ADD = 1
+_BLEND_MODE_PREMULT_ALPHA :: Int
+_BLEND_MODE_PREMULT_ALPHA = 4
+
+_NOTIFICATION_VISIBILITY_CHANGED :: Int
+_NOTIFICATION_VISIBILITY_CHANGED = 31
 
 _BLEND_MODE_MIX :: Int
 _BLEND_MODE_MIX = 0
 
-_NOTIFICATION_DRAW :: Int
-_NOTIFICATION_DRAW = 30
-
-_BLEND_MODE_MUL :: Int
-_BLEND_MODE_MUL = 3
-
-_BLEND_MODE_PREMULT_ALPHA :: Int
-_BLEND_MODE_PREMULT_ALPHA = 4
+_NOTIFICATION_EXIT_CANVAS :: Int
+_NOTIFICATION_EXIT_CANVAS = 33
 
 _BLEND_MODE_SUB :: Int
 _BLEND_MODE_SUB = 2
 
-_NOTIFICATION_VISIBILITY_CHANGED :: Int
-_NOTIFICATION_VISIBILITY_CHANGED = 31
+_BLEND_MODE_MUL :: Int
+_BLEND_MODE_MUL = 3
+
+_NOTIFICATION_DRAW :: Int
+_NOTIFICATION_DRAW = 30
+
+_BLEND_MODE_DISABLED :: Int
+_BLEND_MODE_DISABLED = 5
+
+_NOTIFICATION_ENTER_CANVAS :: Int
+_NOTIFICATION_ENTER_CANVAS = 32
 
 -- | Emitted when the @CanvasItem@ must redraw. This can only be connected realtime, as deferred will not allow drawing.
 sig_draw :: Godot.Internal.Dispatch.Signal CanvasItem
@@ -948,8 +948,7 @@ instance NodeMethod CanvasItem "draw_mesh"
 
 {-# NOINLINE bindCanvasItem_draw_multiline #-}
 
--- | Draws multiple, parallel lines with a uniform @color@.
---   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @color@. @width@ and @antialiased@ are currently not implemented and have no effect.
 bindCanvasItem_draw_multiline :: MethodBind
 bindCanvasItem_draw_multiline
   = unsafePerformIO $
@@ -959,8 +958,7 @@ bindCanvasItem_draw_multiline
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws multiple, parallel lines with a uniform @color@.
---   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @color@. @width@ and @antialiased@ are currently not implemented and have no effect.
 draw_multiline ::
                  (CanvasItem :< cls, Object :< cls) =>
                  cls ->
@@ -984,8 +982,7 @@ instance NodeMethod CanvasItem "draw_multiline"
 
 {-# NOINLINE bindCanvasItem_draw_multiline_colors #-}
 
--- | Draws multiple, parallel lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@.
---   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @width@, segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@.
 bindCanvasItem_draw_multiline_colors :: MethodBind
 bindCanvasItem_draw_multiline_colors
   = unsafePerformIO $
@@ -995,8 +992,7 @@ bindCanvasItem_draw_multiline_colors
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws multiple, parallel lines with a uniform @width@ and segment-by-segment coloring. Colors assigned to line segments match by index between @points@ and @colors@.
---   				__Note:__ @width@ and @antialiased@ are currently not implemented and have no effect.
+-- | Draws multiple, parallel lines with a uniform @width@, segment-by-segment coloring, and optional antialiasing. Colors assigned to line segments match by index between @points@ and @colors@.
 draw_multiline_colors ::
                         (CanvasItem :< cls, Object :< cls) =>
                         cls ->
@@ -1298,20 +1294,7 @@ instance NodeMethod CanvasItem "draw_set_transform_matrix"
 
 {-# NOINLINE bindCanvasItem_draw_string #-}
 
--- | Draws @text@ using the specified @font@ at the @position@ (top-left corner). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
---   				__Example using the default project font:__
---   				
---   @
---   
---   				# If using this method in a script that redraws constantly, move the
---   				# `default_font` declaration to a member variable assigned in `_ready()`
---   				# so the Control is only created once.
---   				var default_font = Control.new().get_font("font")
---   				draw_string(default_font, Vector2(64, 64), "Hello world")
---   				
---   @
---   
---   				See also @method Font.draw@.
+-- | Draws a string using a custom font.
 bindCanvasItem_draw_string :: MethodBind
 bindCanvasItem_draw_string
   = unsafePerformIO $
@@ -1321,20 +1304,7 @@ bindCanvasItem_draw_string
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Draws @text@ using the specified @font@ at the @position@ (top-left corner). The text will have its color multiplied by @modulate@. If @clip_w@ is greater than or equal to 0, the text will be clipped if it exceeds the specified width.
---   				__Example using the default project font:__
---   				
---   @
---   
---   				# If using this method in a script that redraws constantly, move the
---   				# `default_font` declaration to a member variable assigned in `_ready()`
---   				# so the Control is only created once.
---   				var default_font = Control.new().get_font("font")
---   				draw_string(default_font, Vector2(64, 64), "Hello world")
---   				
---   @
---   
---   				See also @method Font.draw@.
+-- | Draws a string using a custom font.
 draw_string ::
               (CanvasItem :< cls, Object :< cls) =>
               cls ->
@@ -2119,8 +2089,7 @@ instance NodeMethod CanvasItem "is_transform_notification_enabled"
 
 {-# NOINLINE bindCanvasItem_is_visible #-}
 
--- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
---   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 bindCanvasItem_is_visible :: MethodBind
 bindCanvasItem_is_visible
   = unsafePerformIO $
@@ -2130,8 +2099,7 @@ bindCanvasItem_is_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
---   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 is_visible :: (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_visible cls
   = withVariantArray []
@@ -2146,7 +2114,7 @@ instance NodeMethod CanvasItem "is_visible" '[] (IO Bool) where
 
 {-# NOINLINE bindCanvasItem_is_visible_in_tree #-}
 
--- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and its inherited visibility is also @true@.
 bindCanvasItem_is_visible_in_tree :: MethodBind
 bindCanvasItem_is_visible_in_tree
   = unsafePerformIO $
@@ -2156,7 +2124,7 @@ bindCanvasItem_is_visible_in_tree
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and all its antecedents are also visible. If any antecedent is hidden, this node will not be visible in the scene tree.
+-- | Returns @true@ if the node is present in the @SceneTree@, its @visible@ property is @true@ and its inherited visibility is also @true@.
 is_visible_in_tree ::
                      (CanvasItem :< cls, Object :< cls) => cls -> IO Bool
 is_visible_in_tree cls
@@ -2485,8 +2453,7 @@ instance NodeMethod CanvasItem "set_use_parent_material" '[Bool]
 
 {-# NOINLINE bindCanvasItem_set_visible #-}
 
--- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
---   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 bindCanvasItem_set_visible :: MethodBind
 bindCanvasItem_set_visible
   = unsafePerformIO $
@@ -2496,8 +2463,7 @@ bindCanvasItem_set_visible
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, this @CanvasItem@ is drawn. The node is only visible if all of its antecedents are visible as well (in other words, @method is_visible_in_tree@ must return @true@).
---   			__Note:__ For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
+-- | If @true@, this @CanvasItem@ is drawn. For controls that inherit @Popup@, the correct way to make them visible is to call one of the multiple @popup*()@ functions instead.
 set_visible ::
               (CanvasItem :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_visible cls arg1

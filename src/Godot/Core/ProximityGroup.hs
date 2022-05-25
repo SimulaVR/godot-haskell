@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ProximityGroup
-       (Godot.Core.ProximityGroup._MODE_SIGNAL,
-        Godot.Core.ProximityGroup._MODE_PROXY,
+       (Godot.Core.ProximityGroup._MODE_PROXY,
+        Godot.Core.ProximityGroup._MODE_SIGNAL,
         Godot.Core.ProximityGroup.sig_broadcast,
         Godot.Core.ProximityGroup._proximity_group_broadcast,
         Godot.Core.ProximityGroup.broadcast,
@@ -26,11 +26,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Spatial()
 
-_MODE_SIGNAL :: Int
-_MODE_SIGNAL = 1
-
 _MODE_PROXY :: Int
 _MODE_PROXY = 0
+
+_MODE_SIGNAL :: Int
+_MODE_SIGNAL = 1
 
 sig_broadcast :: Godot.Internal.Dispatch.Signal ProximityGroup
 sig_broadcast = Godot.Internal.Dispatch.Signal "broadcast"

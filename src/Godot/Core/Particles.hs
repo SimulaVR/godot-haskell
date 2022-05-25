@@ -4,8 +4,8 @@
 module Godot.Core.Particles
        (Godot.Core.Particles._MAX_DRAW_PASSES,
         Godot.Core.Particles._DRAW_ORDER_LIFETIME,
-        Godot.Core.Particles._DRAW_ORDER_INDEX,
         Godot.Core.Particles._DRAW_ORDER_VIEW_DEPTH,
+        Godot.Core.Particles._DRAW_ORDER_INDEX,
         Godot.Core.Particles.capture_aabb, Godot.Core.Particles.get_amount,
         Godot.Core.Particles.get_draw_order,
         Godot.Core.Particles.get_draw_pass_mesh,
@@ -57,11 +57,11 @@ _MAX_DRAW_PASSES = 4
 _DRAW_ORDER_LIFETIME :: Int
 _DRAW_ORDER_LIFETIME = 1
 
-_DRAW_ORDER_INDEX :: Int
-_DRAW_ORDER_INDEX = 0
-
 _DRAW_ORDER_VIEW_DEPTH :: Int
 _DRAW_ORDER_VIEW_DEPTH = 2
+
+_DRAW_ORDER_INDEX :: Int
+_DRAW_ORDER_INDEX = 0
 
 instance NodeProperty Particles "amount" Int 'False where
         nodeProperty = (get_amount, wrapDroppingSetter set_amount, Nothing)
@@ -556,7 +556,6 @@ instance NodeMethod Particles "get_use_local_coordinates" '[]
 {-# NOINLINE bindParticles_get_visibility_aabb #-}
 
 -- | The @AABB@ that determines the area of the world part of which needs to be visible on screen for the particle system to be active.
---   			__Note:__ If the @ParticlesMaterial@ in use is configured to cast shadows, you may want to enlarge this AABB to ensure the shadow is updated when particles are off-screen.
 bindParticles_get_visibility_aabb :: MethodBind
 bindParticles_get_visibility_aabb
   = unsafePerformIO $
@@ -567,7 +566,6 @@ bindParticles_get_visibility_aabb
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The @AABB@ that determines the area of the world part of which needs to be visible on screen for the particle system to be active.
---   			__Note:__ If the @ParticlesMaterial@ in use is configured to cast shadows, you may want to enlarge this AABB to ensure the shadow is updated when particles are off-screen.
 get_visibility_aabb ::
                       (Particles :< cls, Object :< cls) => cls -> IO Aabb
 get_visibility_aabb cls
@@ -1047,7 +1045,6 @@ instance NodeMethod Particles "set_use_local_coordinates" '[Bool]
 {-# NOINLINE bindParticles_set_visibility_aabb #-}
 
 -- | The @AABB@ that determines the area of the world part of which needs to be visible on screen for the particle system to be active.
---   			__Note:__ If the @ParticlesMaterial@ in use is configured to cast shadows, you may want to enlarge this AABB to ensure the shadow is updated when particles are off-screen.
 bindParticles_set_visibility_aabb :: MethodBind
 bindParticles_set_visibility_aabb
   = unsafePerformIO $
@@ -1058,7 +1055,6 @@ bindParticles_set_visibility_aabb
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The @AABB@ that determines the area of the world part of which needs to be visible on screen for the particle system to be active.
---   			__Note:__ If the @ParticlesMaterial@ in use is configured to cast shadows, you may want to enlarge this AABB to ensure the shadow is updated when particles are off-screen.
 set_visibility_aabb ::
                       (Particles :< cls, Object :< cls) => cls -> Aabb -> IO ()
 set_visibility_aabb cls arg1

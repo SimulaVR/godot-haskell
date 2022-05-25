@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.OccluderPolygon2D
-       (Godot.Core.OccluderPolygon2D._CULL_CLOCKWISE,
+       (Godot.Core.OccluderPolygon2D._CULL_COUNTER_CLOCKWISE,
         Godot.Core.OccluderPolygon2D._CULL_DISABLED,
-        Godot.Core.OccluderPolygon2D._CULL_COUNTER_CLOCKWISE,
+        Godot.Core.OccluderPolygon2D._CULL_CLOCKWISE,
         Godot.Core.OccluderPolygon2D.get_cull_mode,
         Godot.Core.OccluderPolygon2D.get_polygon,
         Godot.Core.OccluderPolygon2D.is_closed,
@@ -24,14 +24,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_CULL_CLOCKWISE :: Int
-_CULL_CLOCKWISE = 1
+_CULL_COUNTER_CLOCKWISE :: Int
+_CULL_COUNTER_CLOCKWISE = 2
 
 _CULL_DISABLED :: Int
 _CULL_DISABLED = 0
 
-_CULL_COUNTER_CLOCKWISE :: Int
-_CULL_COUNTER_CLOCKWISE = 2
+_CULL_CLOCKWISE :: Int
+_CULL_CLOCKWISE = 1
 
 instance NodeProperty OccluderPolygon2D "closed" Bool 'False where
         nodeProperty = (is_closed, wrapDroppingSetter set_closed, Nothing)
