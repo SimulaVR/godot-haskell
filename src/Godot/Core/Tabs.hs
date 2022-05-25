@@ -2,12 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Tabs
-       (Godot.Core.Tabs._ALIGN_RIGHT,
+       (Godot.Core.Tabs._CLOSE_BUTTON_MAX,
         Godot.Core.Tabs._CLOSE_BUTTON_SHOW_ACTIVE_ONLY,
-        Godot.Core.Tabs._ALIGN_MAX, Godot.Core.Tabs._CLOSE_BUTTON_MAX,
+        Godot.Core.Tabs._ALIGN_CENTER,
         Godot.Core.Tabs._CLOSE_BUTTON_SHOW_ALWAYS,
+        Godot.Core.Tabs._ALIGN_LEFT, Godot.Core.Tabs._ALIGN_RIGHT,
+        Godot.Core.Tabs._ALIGN_MAX,
         Godot.Core.Tabs._CLOSE_BUTTON_SHOW_NEVER,
-        Godot.Core.Tabs._ALIGN_LEFT, Godot.Core.Tabs._ALIGN_CENTER,
         Godot.Core.Tabs.sig_reposition_active_tab_request,
         Godot.Core.Tabs.sig_right_button_pressed,
         Godot.Core.Tabs.sig_tab_changed, Godot.Core.Tabs.sig_tab_clicked,
@@ -46,29 +47,29 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
-_ALIGN_RIGHT :: Int
-_ALIGN_RIGHT = 2
+_CLOSE_BUTTON_MAX :: Int
+_CLOSE_BUTTON_MAX = 3
 
 _CLOSE_BUTTON_SHOW_ACTIVE_ONLY :: Int
 _CLOSE_BUTTON_SHOW_ACTIVE_ONLY = 1
 
-_ALIGN_MAX :: Int
-_ALIGN_MAX = 3
-
-_CLOSE_BUTTON_MAX :: Int
-_CLOSE_BUTTON_MAX = 3
+_ALIGN_CENTER :: Int
+_ALIGN_CENTER = 1
 
 _CLOSE_BUTTON_SHOW_ALWAYS :: Int
 _CLOSE_BUTTON_SHOW_ALWAYS = 2
 
-_CLOSE_BUTTON_SHOW_NEVER :: Int
-_CLOSE_BUTTON_SHOW_NEVER = 0
-
 _ALIGN_LEFT :: Int
 _ALIGN_LEFT = 0
 
-_ALIGN_CENTER :: Int
-_ALIGN_CENTER = 1
+_ALIGN_RIGHT :: Int
+_ALIGN_RIGHT = 2
+
+_ALIGN_MAX :: Int
+_ALIGN_MAX = 3
+
+_CLOSE_BUTTON_SHOW_NEVER :: Int
+_CLOSE_BUTTON_SHOW_NEVER = 0
 
 -- | Emitted when the active tab is rearranged via mouse drag. See @drag_to_rearrange_enabled@.
 sig_reposition_active_tab_request ::

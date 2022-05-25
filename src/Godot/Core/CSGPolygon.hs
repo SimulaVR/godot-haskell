@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.CSGPolygon
-       (Godot.Core.CSGPolygon._MODE_PATH,
+       (Godot.Core.CSGPolygon._PATH_ROTATION_PATH_FOLLOW,
         Godot.Core.CSGPolygon._PATH_ROTATION_PATH,
-        Godot.Core.CSGPolygon._PATH_ROTATION_PATH_FOLLOW,
+        Godot.Core.CSGPolygon._MODE_PATH,
         Godot.Core.CSGPolygon._PATH_ROTATION_POLYGON,
-        Godot.Core.CSGPolygon._MODE_SPIN,
         Godot.Core.CSGPolygon._MODE_DEPTH,
+        Godot.Core.CSGPolygon._MODE_SPIN,
         Godot.Core.CSGPolygon._has_editable_3d_polygon_no_depth,
         Godot.Core.CSGPolygon._is_editable_3d_polygon,
         Godot.Core.CSGPolygon._path_changed,
@@ -49,23 +49,23 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.CSGPrimitive()
 
-_MODE_PATH :: Int
-_MODE_PATH = 2
+_PATH_ROTATION_PATH_FOLLOW :: Int
+_PATH_ROTATION_PATH_FOLLOW = 2
 
 _PATH_ROTATION_PATH :: Int
 _PATH_ROTATION_PATH = 1
 
-_PATH_ROTATION_PATH_FOLLOW :: Int
-_PATH_ROTATION_PATH_FOLLOW = 2
+_MODE_PATH :: Int
+_MODE_PATH = 2
 
 _PATH_ROTATION_POLYGON :: Int
 _PATH_ROTATION_POLYGON = 0
 
-_MODE_SPIN :: Int
-_MODE_SPIN = 1
-
 _MODE_DEPTH :: Int
 _MODE_DEPTH = 0
+
+_MODE_SPIN :: Int
+_MODE_SPIN = 1
 
 instance NodeProperty CSGPolygon "depth" Float 'False where
         nodeProperty = (get_depth, wrapDroppingSetter set_depth, Nothing)

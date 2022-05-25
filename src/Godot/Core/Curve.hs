@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Curve
-       (Godot.Core.Curve._TANGENT_LINEAR, Godot.Core.Curve._TANGENT_FREE,
-        Godot.Core.Curve._TANGENT_MODE_COUNT,
+       (Godot.Core.Curve._TANGENT_MODE_COUNT,
+        Godot.Core.Curve._TANGENT_LINEAR, Godot.Core.Curve._TANGENT_FREE,
         Godot.Core.Curve.sig_range_changed, Godot.Core.Curve._get_data,
         Godot.Core.Curve._set_data, Godot.Core.Curve.add_point,
         Godot.Core.Curve.bake, Godot.Core.Curve.clean_dupes,
@@ -39,14 +39,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
+_TANGENT_MODE_COUNT :: Int
+_TANGENT_MODE_COUNT = 2
+
 _TANGENT_LINEAR :: Int
 _TANGENT_LINEAR = 1
 
 _TANGENT_FREE :: Int
 _TANGENT_FREE = 0
-
-_TANGENT_MODE_COUNT :: Int
-_TANGENT_MODE_COUNT = 2
 
 -- | Emitted when @max_value@ or @min_value@ is changed.
 sig_range_changed :: Godot.Internal.Dispatch.Signal Curve

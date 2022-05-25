@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeTransformFunc
-       (Godot.Core.VisualShaderNodeTransformFunc._FUNC_TRANSPOSE,
-        Godot.Core.VisualShaderNodeTransformFunc._FUNC_INVERSE,
+       (Godot.Core.VisualShaderNodeTransformFunc._FUNC_INVERSE,
+        Godot.Core.VisualShaderNodeTransformFunc._FUNC_TRANSPOSE,
         Godot.Core.VisualShaderNodeTransformFunc.get_function,
         Godot.Core.VisualShaderNodeTransformFunc.set_function)
        where
@@ -19,11 +19,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualShaderNode()
 
-_FUNC_TRANSPOSE :: Int
-_FUNC_TRANSPOSE = 1
-
 _FUNC_INVERSE :: Int
 _FUNC_INVERSE = 0
+
+_FUNC_TRANSPOSE :: Int
+_FUNC_TRANSPOSE = 1
 
 instance NodeProperty VisualShaderNodeTransformFunc "function" Int
            'False
@@ -33,7 +33,6 @@ instance NodeProperty VisualShaderNodeTransformFunc "function" Int
 
 {-# NOINLINE bindVisualShaderNodeTransformFunc_get_function #-}
 
--- | The function to be computed. See @enum Function@ for options.
 bindVisualShaderNodeTransformFunc_get_function :: MethodBind
 bindVisualShaderNodeTransformFunc_get_function
   = unsafePerformIO $
@@ -43,7 +42,6 @@ bindVisualShaderNodeTransformFunc_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The function to be computed. See @enum Function@ for options.
 get_function ::
                (VisualShaderNodeTransformFunc :< cls, Object :< cls) =>
                cls -> IO Int
@@ -65,7 +63,6 @@ instance NodeMethod VisualShaderNodeTransformFunc "get_function"
 
 {-# NOINLINE bindVisualShaderNodeTransformFunc_set_function #-}
 
--- | The function to be computed. See @enum Function@ for options.
 bindVisualShaderNodeTransformFunc_set_function :: MethodBind
 bindVisualShaderNodeTransformFunc_set_function
   = unsafePerformIO $
@@ -75,7 +72,6 @@ bindVisualShaderNodeTransformFunc_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The function to be computed. See @enum Function@ for options.
 set_function ::
                (VisualShaderNodeTransformFunc :< cls, Object :< cls) =>
                cls -> Int -> IO ()

@@ -2,18 +2,18 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeCompare
-       (Godot.Core.VisualShaderNodeCompare._FUNC_GREATER_THAN_EQUAL,
+       (Godot.Core.VisualShaderNodeCompare._FUNC_LESS_THAN_EQUAL,
         Godot.Core.VisualShaderNodeCompare._FUNC_GREATER_THAN,
-        Godot.Core.VisualShaderNodeCompare._CTYPE_SCALAR,
-        Godot.Core.VisualShaderNodeCompare._CTYPE_TRANSFORM,
-        Godot.Core.VisualShaderNodeCompare._FUNC_LESS_THAN,
-        Godot.Core.VisualShaderNodeCompare._FUNC_NOT_EQUAL,
-        Godot.Core.VisualShaderNodeCompare._COND_ANY,
-        Godot.Core.VisualShaderNodeCompare._FUNC_LESS_THAN_EQUAL,
-        Godot.Core.VisualShaderNodeCompare._CTYPE_VECTOR,
-        Godot.Core.VisualShaderNodeCompare._FUNC_EQUAL,
-        Godot.Core.VisualShaderNodeCompare._COND_ALL,
         Godot.Core.VisualShaderNodeCompare._CTYPE_BOOLEAN,
+        Godot.Core.VisualShaderNodeCompare._CTYPE_VECTOR,
+        Godot.Core.VisualShaderNodeCompare._FUNC_NOT_EQUAL,
+        Godot.Core.VisualShaderNodeCompare._FUNC_GREATER_THAN_EQUAL,
+        Godot.Core.VisualShaderNodeCompare._FUNC_LESS_THAN,
+        Godot.Core.VisualShaderNodeCompare._COND_ALL,
+        Godot.Core.VisualShaderNodeCompare._CTYPE_TRANSFORM,
+        Godot.Core.VisualShaderNodeCompare._CTYPE_SCALAR,
+        Godot.Core.VisualShaderNodeCompare._COND_ANY,
+        Godot.Core.VisualShaderNodeCompare._FUNC_EQUAL,
         Godot.Core.VisualShaderNodeCompare.get_comparison_type,
         Godot.Core.VisualShaderNodeCompare.get_condition,
         Godot.Core.VisualShaderNodeCompare.get_function,
@@ -33,41 +33,41 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualShaderNode()
 
-_FUNC_GREATER_THAN_EQUAL :: Int
-_FUNC_GREATER_THAN_EQUAL = 3
+_FUNC_LESS_THAN_EQUAL :: Int
+_FUNC_LESS_THAN_EQUAL = 5
 
 _FUNC_GREATER_THAN :: Int
 _FUNC_GREATER_THAN = 2
 
-_CTYPE_SCALAR :: Int
-_CTYPE_SCALAR = 0
-
-_CTYPE_TRANSFORM :: Int
-_CTYPE_TRANSFORM = 3
-
-_FUNC_LESS_THAN :: Int
-_FUNC_LESS_THAN = 4
-
-_FUNC_NOT_EQUAL :: Int
-_FUNC_NOT_EQUAL = 1
-
-_COND_ANY :: Int
-_COND_ANY = 1
-
-_FUNC_LESS_THAN_EQUAL :: Int
-_FUNC_LESS_THAN_EQUAL = 5
+_CTYPE_BOOLEAN :: Int
+_CTYPE_BOOLEAN = 2
 
 _CTYPE_VECTOR :: Int
 _CTYPE_VECTOR = 1
 
-_FUNC_EQUAL :: Int
-_FUNC_EQUAL = 0
+_FUNC_NOT_EQUAL :: Int
+_FUNC_NOT_EQUAL = 1
+
+_FUNC_GREATER_THAN_EQUAL :: Int
+_FUNC_GREATER_THAN_EQUAL = 3
+
+_FUNC_LESS_THAN :: Int
+_FUNC_LESS_THAN = 4
 
 _COND_ALL :: Int
 _COND_ALL = 0
 
-_CTYPE_BOOLEAN :: Int
-_CTYPE_BOOLEAN = 2
+_CTYPE_TRANSFORM :: Int
+_CTYPE_TRANSFORM = 3
+
+_CTYPE_SCALAR :: Int
+_CTYPE_SCALAR = 0
+
+_COND_ANY :: Int
+_COND_ANY = 1
+
+_FUNC_EQUAL :: Int
+_FUNC_EQUAL = 0
 
 instance NodeProperty VisualShaderNodeCompare "condition" Int
            'False

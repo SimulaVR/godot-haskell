@@ -2,14 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualScriptCustomNode
-       (Godot.Core.VisualScriptCustomNode._STEP_PUSH_STACK_BIT,
+       (Godot.Core.VisualScriptCustomNode._STEP_YIELD_BIT,
+        Godot.Core.VisualScriptCustomNode._START_MODE_BEGIN_SEQUENCE,
+        Godot.Core.VisualScriptCustomNode._STEP_GO_BACK_BIT,
+        Godot.Core.VisualScriptCustomNode._START_MODE_CONTINUE_SEQUENCE,
         Godot.Core.VisualScriptCustomNode._START_MODE_RESUME_YIELD,
         Godot.Core.VisualScriptCustomNode._STEP_EXIT_FUNCTION_BIT,
-        Godot.Core.VisualScriptCustomNode._STEP_YIELD_BIT,
+        Godot.Core.VisualScriptCustomNode._STEP_PUSH_STACK_BIT,
         Godot.Core.VisualScriptCustomNode._STEP_NO_ADVANCE_BIT,
-        Godot.Core.VisualScriptCustomNode._START_MODE_BEGIN_SEQUENCE,
-        Godot.Core.VisualScriptCustomNode._START_MODE_CONTINUE_SEQUENCE,
-        Godot.Core.VisualScriptCustomNode._STEP_GO_BACK_BIT,
         Godot.Core.VisualScriptCustomNode._get_caption,
         Godot.Core.VisualScriptCustomNode._get_category,
         Godot.Core.VisualScriptCustomNode._get_input_value_port_count,
@@ -38,8 +38,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualScriptNode()
 
-_STEP_PUSH_STACK_BIT :: Int
-_STEP_PUSH_STACK_BIT = 16777216
+_STEP_YIELD_BIT :: Int
+_STEP_YIELD_BIT = 268435456
+
+_START_MODE_BEGIN_SEQUENCE :: Int
+_START_MODE_BEGIN_SEQUENCE = 0
+
+_STEP_GO_BACK_BIT :: Int
+_STEP_GO_BACK_BIT = 33554432
+
+_START_MODE_CONTINUE_SEQUENCE :: Int
+_START_MODE_CONTINUE_SEQUENCE = 1
 
 _START_MODE_RESUME_YIELD :: Int
 _START_MODE_RESUME_YIELD = 2
@@ -47,20 +56,11 @@ _START_MODE_RESUME_YIELD = 2
 _STEP_EXIT_FUNCTION_BIT :: Int
 _STEP_EXIT_FUNCTION_BIT = 134217728
 
-_STEP_YIELD_BIT :: Int
-_STEP_YIELD_BIT = 268435456
+_STEP_PUSH_STACK_BIT :: Int
+_STEP_PUSH_STACK_BIT = 16777216
 
 _STEP_NO_ADVANCE_BIT :: Int
 _STEP_NO_ADVANCE_BIT = 67108864
-
-_START_MODE_BEGIN_SEQUENCE :: Int
-_START_MODE_BEGIN_SEQUENCE = 0
-
-_START_MODE_CONTINUE_SEQUENCE :: Int
-_START_MODE_CONTINUE_SEQUENCE = 1
-
-_STEP_GO_BACK_BIT :: Int
-_STEP_GO_BACK_BIT = 33554432
 
 {-# NOINLINE bindVisualScriptCustomNode__get_caption #-}
 

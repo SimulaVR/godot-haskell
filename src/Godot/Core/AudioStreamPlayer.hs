@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AudioStreamPlayer
-       (Godot.Core.AudioStreamPlayer._MIX_TARGET_SURROUND,
+       (Godot.Core.AudioStreamPlayer._MIX_TARGET_CENTER,
+        Godot.Core.AudioStreamPlayer._MIX_TARGET_SURROUND,
         Godot.Core.AudioStreamPlayer._MIX_TARGET_STEREO,
-        Godot.Core.AudioStreamPlayer._MIX_TARGET_CENTER,
         Godot.Core.AudioStreamPlayer.sig_finished,
         Godot.Core.AudioStreamPlayer._bus_layout_changed,
         Godot.Core.AudioStreamPlayer._is_active,
@@ -42,14 +42,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node()
 
+_MIX_TARGET_CENTER :: Int
+_MIX_TARGET_CENTER = 2
+
 _MIX_TARGET_SURROUND :: Int
 _MIX_TARGET_SURROUND = 1
 
 _MIX_TARGET_STEREO :: Int
 _MIX_TARGET_STEREO = 0
-
-_MIX_TARGET_CENTER :: Int
-_MIX_TARGET_CENTER = 2
 
 -- | Emitted when the audio stops playing.
 sig_finished :: Godot.Internal.Dispatch.Signal AudioStreamPlayer
@@ -235,7 +235,7 @@ instance NodeMethod AudioStreamPlayer "get_mix_target" '[] (IO Int)
 
 {-# NOINLINE bindAudioStreamPlayer_get_pitch_scale #-}
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 bindAudioStreamPlayer_get_pitch_scale :: MethodBind
 bindAudioStreamPlayer_get_pitch_scale
   = unsafePerformIO $
@@ -245,7 +245,7 @@ bindAudioStreamPlayer_get_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 get_pitch_scale ::
                   (AudioStreamPlayer :< cls, Object :< cls) => cls -> IO Float
 get_pitch_scale cls
@@ -608,7 +608,7 @@ instance NodeMethod AudioStreamPlayer "set_mix_target" '[Int]
 
 {-# NOINLINE bindAudioStreamPlayer_set_pitch_scale #-}
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 bindAudioStreamPlayer_set_pitch_scale :: MethodBind
 bindAudioStreamPlayer_set_pitch_scale
   = unsafePerformIO $
@@ -618,7 +618,7 @@ bindAudioStreamPlayer_set_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 set_pitch_scale ::
                   (AudioStreamPlayer :< cls, Object :< cls) => cls -> Float -> IO ()
 set_pitch_scale cls arg1

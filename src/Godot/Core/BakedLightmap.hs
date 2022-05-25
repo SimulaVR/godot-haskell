@@ -2,16 +2,16 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.BakedLightmap
-       (Godot.Core.BakedLightmap._BAKE_QUALITY_LOW,
-        Godot.Core.BakedLightmap._BAKE_QUALITY_MEDIUM,
-        Godot.Core.BakedLightmap._BAKE_ERROR_CANT_CREATE_IMAGE,
-        Godot.Core.BakedLightmap._BAKE_ERROR_NO_MESHES,
-        Godot.Core.BakedLightmap._BAKE_ERROR_OK,
-        Godot.Core.BakedLightmap._BAKE_MODE_CONE_TRACE,
-        Godot.Core.BakedLightmap._BAKE_MODE_RAY_TRACE,
+       (Godot.Core.BakedLightmap._BAKE_QUALITY_HIGH,
         Godot.Core.BakedLightmap._BAKE_ERROR_NO_SAVE_PATH,
         Godot.Core.BakedLightmap._BAKE_ERROR_USER_ABORTED,
-        Godot.Core.BakedLightmap._BAKE_QUALITY_HIGH,
+        Godot.Core.BakedLightmap._BAKE_MODE_CONE_TRACE,
+        Godot.Core.BakedLightmap._BAKE_MODE_RAY_TRACE,
+        Godot.Core.BakedLightmap._BAKE_ERROR_OK,
+        Godot.Core.BakedLightmap._BAKE_ERROR_NO_MESHES,
+        Godot.Core.BakedLightmap._BAKE_QUALITY_MEDIUM,
+        Godot.Core.BakedLightmap._BAKE_QUALITY_LOW,
+        Godot.Core.BakedLightmap._BAKE_ERROR_CANT_CREATE_IMAGE,
         Godot.Core.BakedLightmap.bake, Godot.Core.BakedLightmap.debug_bake,
         Godot.Core.BakedLightmap.get_bake_cell_size,
         Godot.Core.BakedLightmap.get_bake_default_texels_per_unit,
@@ -48,26 +48,8 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualInstance()
 
-_BAKE_QUALITY_LOW :: Int
-_BAKE_QUALITY_LOW = 0
-
-_BAKE_QUALITY_MEDIUM :: Int
-_BAKE_QUALITY_MEDIUM = 1
-
-_BAKE_ERROR_CANT_CREATE_IMAGE :: Int
-_BAKE_ERROR_CANT_CREATE_IMAGE = 3
-
-_BAKE_ERROR_NO_MESHES :: Int
-_BAKE_ERROR_NO_MESHES = 2
-
-_BAKE_ERROR_OK :: Int
-_BAKE_ERROR_OK = 0
-
-_BAKE_MODE_CONE_TRACE :: Int
-_BAKE_MODE_CONE_TRACE = 0
-
-_BAKE_MODE_RAY_TRACE :: Int
-_BAKE_MODE_RAY_TRACE = 1
+_BAKE_QUALITY_HIGH :: Int
+_BAKE_QUALITY_HIGH = 2
 
 _BAKE_ERROR_NO_SAVE_PATH :: Int
 _BAKE_ERROR_NO_SAVE_PATH = 1
@@ -75,8 +57,26 @@ _BAKE_ERROR_NO_SAVE_PATH = 1
 _BAKE_ERROR_USER_ABORTED :: Int
 _BAKE_ERROR_USER_ABORTED = 4
 
-_BAKE_QUALITY_HIGH :: Int
-_BAKE_QUALITY_HIGH = 2
+_BAKE_MODE_CONE_TRACE :: Int
+_BAKE_MODE_CONE_TRACE = 0
+
+_BAKE_MODE_RAY_TRACE :: Int
+_BAKE_MODE_RAY_TRACE = 1
+
+_BAKE_ERROR_OK :: Int
+_BAKE_ERROR_OK = 0
+
+_BAKE_ERROR_NO_MESHES :: Int
+_BAKE_ERROR_NO_MESHES = 2
+
+_BAKE_QUALITY_MEDIUM :: Int
+_BAKE_QUALITY_MEDIUM = 1
+
+_BAKE_QUALITY_LOW :: Int
+_BAKE_QUALITY_LOW = 0
+
+_BAKE_ERROR_CANT_CREATE_IMAGE :: Int
+_BAKE_ERROR_CANT_CREATE_IMAGE = 3
 
 instance NodeProperty BakedLightmap "bake_cell_size" Float 'False
          where

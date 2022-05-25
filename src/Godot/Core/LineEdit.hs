@@ -2,13 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.LineEdit
-       (Godot.Core.LineEdit._MENU_PASTE, Godot.Core.LineEdit._ALIGN_RIGHT,
-        Godot.Core.LineEdit._ALIGN_FILL, Godot.Core.LineEdit._MENU_CLEAR,
-        Godot.Core.LineEdit._MENU_MAX, Godot.Core.LineEdit._MENU_REDO,
-        Godot.Core.LineEdit._MENU_COPY, Godot.Core.LineEdit._MENU_UNDO,
+       (Godot.Core.LineEdit._MENU_PASTE, Godot.Core.LineEdit._MENU_UNDO,
         Godot.Core.LineEdit._MENU_SELECT_ALL,
-        Godot.Core.LineEdit._MENU_CUT, Godot.Core.LineEdit._ALIGN_LEFT,
-        Godot.Core.LineEdit._ALIGN_CENTER,
+        Godot.Core.LineEdit._ALIGN_CENTER, Godot.Core.LineEdit._ALIGN_LEFT,
+        Godot.Core.LineEdit._MENU_CUT, Godot.Core.LineEdit._ALIGN_RIGHT,
+        Godot.Core.LineEdit._MENU_REDO, Godot.Core.LineEdit._MENU_MAX,
+        Godot.Core.LineEdit._MENU_COPY, Godot.Core.LineEdit._ALIGN_FILL,
+        Godot.Core.LineEdit._MENU_CLEAR,
         Godot.Core.LineEdit.sig_text_change_rejected,
         Godot.Core.LineEdit.sig_text_changed,
         Godot.Core.LineEdit.sig_text_entered,
@@ -65,38 +65,38 @@ import Godot.Core.Control()
 _MENU_PASTE :: Int
 _MENU_PASTE = 2
 
-_ALIGN_RIGHT :: Int
-_ALIGN_RIGHT = 2
-
-_ALIGN_FILL :: Int
-_ALIGN_FILL = 3
-
-_MENU_CLEAR :: Int
-_MENU_CLEAR = 3
-
-_MENU_MAX :: Int
-_MENU_MAX = 7
-
-_MENU_REDO :: Int
-_MENU_REDO = 6
-
-_MENU_COPY :: Int
-_MENU_COPY = 1
-
 _MENU_UNDO :: Int
 _MENU_UNDO = 5
 
 _MENU_SELECT_ALL :: Int
 _MENU_SELECT_ALL = 4
 
-_MENU_CUT :: Int
-_MENU_CUT = 0
+_ALIGN_CENTER :: Int
+_ALIGN_CENTER = 1
 
 _ALIGN_LEFT :: Int
 _ALIGN_LEFT = 0
 
-_ALIGN_CENTER :: Int
-_ALIGN_CENTER = 1
+_MENU_CUT :: Int
+_MENU_CUT = 0
+
+_ALIGN_RIGHT :: Int
+_ALIGN_RIGHT = 2
+
+_MENU_REDO :: Int
+_MENU_REDO = 6
+
+_MENU_MAX :: Int
+_MENU_MAX = 7
+
+_MENU_COPY :: Int
+_MENU_COPY = 1
+
+_ALIGN_FILL :: Int
+_ALIGN_FILL = 3
+
+_MENU_CLEAR :: Int
+_MENU_CLEAR = 3
 
 -- | Emitted when trying to append text that would overflow the @max_length@.
 sig_text_change_rejected :: Godot.Internal.Dispatch.Signal LineEdit
@@ -330,7 +330,7 @@ instance NodeMethod LineEdit "append_at_cursor" '[GodotString]
 
 {-# NOINLINE bindLineEdit_clear #-}
 
--- | Erases the @LineEdit@'s @text@.
+-- | Erases the @LineEdit@ text.
 bindLineEdit_clear :: MethodBind
 bindLineEdit_clear
   = unsafePerformIO $
@@ -340,7 +340,7 @@ bindLineEdit_clear
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Erases the @LineEdit@'s @text@.
+-- | Erases the @LineEdit@ text.
 clear :: (LineEdit :< cls, Object :< cls) => cls -> IO ()
 clear cls
   = withVariantArray []

@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.File
-       (Godot.Core.File._COMPRESSION_DEFLATE, Godot.Core.File._READ,
-        Godot.Core.File._WRITE, Godot.Core.File._WRITE_READ,
-        Godot.Core.File._READ_WRITE, Godot.Core.File._COMPRESSION_FASTLZ,
-        Godot.Core.File._COMPRESSION_GZIP,
+       (Godot.Core.File._COMPRESSION_GZIP, Godot.Core.File._READ_WRITE,
+        Godot.Core.File._WRITE, Godot.Core.File._READ,
+        Godot.Core.File._COMPRESSION_DEFLATE,
+        Godot.Core.File._COMPRESSION_FASTLZ, Godot.Core.File._WRITE_READ,
         Godot.Core.File._COMPRESSION_ZSTD, Godot.Core.File.get_endian_swap,
         Godot.Core.File.set_endian_swap, Godot.Core.File.close,
         Godot.Core.File.eof_reached, Godot.Core.File.file_exists,
@@ -43,26 +43,26 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Reference()
 
-_COMPRESSION_DEFLATE :: Int
-_COMPRESSION_DEFLATE = 1
-
-_READ :: Int
-_READ = 1
-
-_WRITE :: Int
-_WRITE = 2
-
-_WRITE_READ :: Int
-_WRITE_READ = 7
+_COMPRESSION_GZIP :: Int
+_COMPRESSION_GZIP = 3
 
 _READ_WRITE :: Int
 _READ_WRITE = 3
 
+_WRITE :: Int
+_WRITE = 2
+
+_READ :: Int
+_READ = 1
+
+_COMPRESSION_DEFLATE :: Int
+_COMPRESSION_DEFLATE = 1
+
 _COMPRESSION_FASTLZ :: Int
 _COMPRESSION_FASTLZ = 0
 
-_COMPRESSION_GZIP :: Int
-_COMPRESSION_GZIP = 3
+_WRITE_READ :: Int
+_WRITE_READ = 7
 
 _COMPRESSION_ZSTD :: Int
 _COMPRESSION_ZSTD = 2
@@ -201,7 +201,7 @@ instance NodeMethod File "file_exists" '[GodotString] (IO Bool)
 
 {-# NOINLINE bindFile_get_16 #-}
 
--- | Returns the next 16 bits from the file as an integer. See @method store_16@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 16 bits from the file as an integer.
 bindFile_get_16 :: MethodBind
 bindFile_get_16
   = unsafePerformIO $
@@ -211,7 +211,7 @@ bindFile_get_16
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 16 bits from the file as an integer. See @method store_16@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 16 bits from the file as an integer.
 get_16 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_16 cls
   = withVariantArray []
@@ -224,7 +224,7 @@ instance NodeMethod File "get_16" '[] (IO Int) where
 
 {-# NOINLINE bindFile_get_32 #-}
 
--- | Returns the next 32 bits from the file as an integer. See @method store_32@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 32 bits from the file as an integer.
 bindFile_get_32 :: MethodBind
 bindFile_get_32
   = unsafePerformIO $
@@ -234,7 +234,7 @@ bindFile_get_32
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 32 bits from the file as an integer. See @method store_32@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 32 bits from the file as an integer.
 get_32 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_32 cls
   = withVariantArray []
@@ -247,7 +247,7 @@ instance NodeMethod File "get_32" '[] (IO Int) where
 
 {-# NOINLINE bindFile_get_64 #-}
 
--- | Returns the next 64 bits from the file as an integer. See @method store_64@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 64 bits from the file as an integer.
 bindFile_get_64 :: MethodBind
 bindFile_get_64
   = unsafePerformIO $
@@ -257,7 +257,7 @@ bindFile_get_64
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 64 bits from the file as an integer. See @method store_64@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 64 bits from the file as an integer.
 get_64 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_64 cls
   = withVariantArray []
@@ -270,7 +270,7 @@ instance NodeMethod File "get_64" '[] (IO Int) where
 
 {-# NOINLINE bindFile_get_8 #-}
 
--- | Returns the next 8 bits from the file as an integer. See @method store_8@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 8 bits from the file as an integer.
 bindFile_get_8 :: MethodBind
 bindFile_get_8
   = unsafePerformIO $
@@ -280,7 +280,7 @@ bindFile_get_8
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the next 8 bits from the file as an integer. See @method store_8@ for details on what values can be stored and retrieved this way.
+-- | Returns the next 8 bits from the file as an integer.
 get_8 :: (File :< cls, Object :< cls) => cls -> IO Int
 get_8 cls
   = withVariantArray []
@@ -805,7 +805,6 @@ instance NodeMethod File "open_compressed"
 {-# NOINLINE bindFile_open_encrypted #-}
 
 -- | Opens an encrypted file in write or read mode. You need to pass a binary key to encrypt/decrypt it.
---   				__Note:__ The provided key must be 32 bytes long.
 bindFile_open_encrypted :: MethodBind
 bindFile_open_encrypted
   = unsafePerformIO $
@@ -816,7 +815,6 @@ bindFile_open_encrypted
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Opens an encrypted file in write or read mode. You need to pass a binary key to encrypt/decrypt it.
---   				__Note:__ The provided key must be 32 bytes long.
 open_encrypted ::
                  (File :< cls, Object :< cls) =>
                  cls -> GodotString -> Int -> PoolByteArray -> IO Int
@@ -916,29 +914,6 @@ instance NodeMethod File "seek_end" '[Maybe Int] (IO ()) where
 {-# NOINLINE bindFile_store_16 #-}
 
 -- | Stores an integer as 16 bits in the file.
---   				__Note:__ The @value@ should lie in the interval @@0, 2^16 - 1@@. Any other value will overflow and wrap around.
---   				To store a signed integer, use @method store_64@ or store a signed integer from the interval @@-2^15, 2^15 - 1@@ (i.e. keeping one bit for the signedness) and compute its sign manually when reading. For example:
---   				
---   @
---   
---   				const MAX_15B = 1 << 15
---   				const MAX_16B = 1 << 16
---   
---   				func unsigned16_to_signed(unsigned):
---   				    return (unsigned + MAX_15B) % MAX_16B - MAX_15B
---   
---   				func _ready():
---   				    var f = File.new()
---   				    f.open("user://file.dat", File.WRITE_READ)
---   				    f.store_16(-42) # This wraps around and stores 65494 (2^16 - 42).
---   				    f.store_16(121) # In bounds, will store 121.
---   				    f.seek(0) # Go back to start to read the stored value.
---   				    var read1 = f.get_16() # 65494
---   				    var read2 = f.get_16() # 121
---   				    var converted1 = unsigned16_to_signed(read1) # -42
---   				    var converted2 = unsigned16_to_signed(read2) # 121
---   				
---   @
 bindFile_store_16 :: MethodBind
 bindFile_store_16
   = unsafePerformIO $
@@ -949,29 +924,6 @@ bindFile_store_16
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 16 bits in the file.
---   				__Note:__ The @value@ should lie in the interval @@0, 2^16 - 1@@. Any other value will overflow and wrap around.
---   				To store a signed integer, use @method store_64@ or store a signed integer from the interval @@-2^15, 2^15 - 1@@ (i.e. keeping one bit for the signedness) and compute its sign manually when reading. For example:
---   				
---   @
---   
---   				const MAX_15B = 1 << 15
---   				const MAX_16B = 1 << 16
---   
---   				func unsigned16_to_signed(unsigned):
---   				    return (unsigned + MAX_15B) % MAX_16B - MAX_15B
---   
---   				func _ready():
---   				    var f = File.new()
---   				    f.open("user://file.dat", File.WRITE_READ)
---   				    f.store_16(-42) # This wraps around and stores 65494 (2^16 - 42).
---   				    f.store_16(121) # In bounds, will store 121.
---   				    f.seek(0) # Go back to start to read the stored value.
---   				    var read1 = f.get_16() # 65494
---   				    var read2 = f.get_16() # 121
---   				    var converted1 = unsigned16_to_signed(read1) # -42
---   				    var converted2 = unsigned16_to_signed(read2) # 121
---   				
---   @
 store_16 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_16 cls arg1
   = withVariantArray [toVariant arg1]
@@ -985,8 +937,6 @@ instance NodeMethod File "store_16" '[Int] (IO ()) where
 {-# NOINLINE bindFile_store_32 #-}
 
 -- | Stores an integer as 32 bits in the file.
---   				__Note:__ The @value@ should lie in the interval @@0, 2^32 - 1@@. Any other value will overflow and wrap around.
---   				To store a signed integer, use @method store_64@, or convert it manually (see @method store_16@ for an example).
 bindFile_store_32 :: MethodBind
 bindFile_store_32
   = unsafePerformIO $
@@ -997,8 +947,6 @@ bindFile_store_32
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 32 bits in the file.
---   				__Note:__ The @value@ should lie in the interval @@0, 2^32 - 1@@. Any other value will overflow and wrap around.
---   				To store a signed integer, use @method store_64@, or convert it manually (see @method store_16@ for an example).
 store_32 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_32 cls arg1
   = withVariantArray [toVariant arg1]
@@ -1012,7 +960,6 @@ instance NodeMethod File "store_32" '[Int] (IO ()) where
 {-# NOINLINE bindFile_store_64 #-}
 
 -- | Stores an integer as 64 bits in the file.
---   				__Note:__ The @value@ must lie in the interval @@-2^63, 2^63 - 1@@ (i.e. be a valid @int@ value).
 bindFile_store_64 :: MethodBind
 bindFile_store_64
   = unsafePerformIO $
@@ -1023,7 +970,6 @@ bindFile_store_64
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 64 bits in the file.
---   				__Note:__ The @value@ must lie in the interval @@-2^63, 2^63 - 1@@ (i.e. be a valid @int@ value).
 store_64 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_64 cls arg1
   = withVariantArray [toVariant arg1]
@@ -1037,8 +983,6 @@ instance NodeMethod File "store_64" '[Int] (IO ()) where
 {-# NOINLINE bindFile_store_8 #-}
 
 -- | Stores an integer as 8 bits in the file.
---   				__Note:__ The @value@ should lie in the interval @@0, 255@@. Any other value will overflow and wrap around.
---   				To store a signed integer, use @method store_64@, or convert it manually (see @method store_16@ for an example).
 bindFile_store_8 :: MethodBind
 bindFile_store_8
   = unsafePerformIO $
@@ -1049,8 +993,6 @@ bindFile_store_8
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Stores an integer as 8 bits in the file.
---   				__Note:__ The @value@ should lie in the interval @@0, 255@@. Any other value will overflow and wrap around.
---   				To store a signed integer, use @method store_64@, or convert it manually (see @method store_16@ for an example).
 store_8 :: (File :< cls, Object :< cls) => cls -> Int -> IO ()
 store_8 cls arg1
   = withVariantArray [toVariant arg1]

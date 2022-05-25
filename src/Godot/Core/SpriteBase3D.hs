@@ -3,12 +3,12 @@
   MultiParamTypeClasses #-}
 module Godot.Core.SpriteBase3D
        (Godot.Core.SpriteBase3D._FLAG_SHADED,
-        Godot.Core.SpriteBase3D._ALPHA_CUT_OPAQUE_PREPASS,
-        Godot.Core.SpriteBase3D._FLAG_DOUBLE_SIDED,
-        Godot.Core.SpriteBase3D._ALPHA_CUT_DISABLED,
-        Godot.Core.SpriteBase3D._ALPHA_CUT_DISCARD,
         Godot.Core.SpriteBase3D._FLAG_MAX,
         Godot.Core.SpriteBase3D._FLAG_TRANSPARENT,
+        Godot.Core.SpriteBase3D._ALPHA_CUT_DISABLED,
+        Godot.Core.SpriteBase3D._ALPHA_CUT_OPAQUE_PREPASS,
+        Godot.Core.SpriteBase3D._ALPHA_CUT_DISCARD,
+        Godot.Core.SpriteBase3D._FLAG_DOUBLE_SIDED,
         Godot.Core.SpriteBase3D._im_update,
         Godot.Core.SpriteBase3D._queue_update,
         Godot.Core.SpriteBase3D.generate_triangle_mesh,
@@ -51,23 +51,23 @@ import Godot.Core.GeometryInstance()
 _FLAG_SHADED :: Int
 _FLAG_SHADED = 1
 
-_ALPHA_CUT_OPAQUE_PREPASS :: Int
-_ALPHA_CUT_OPAQUE_PREPASS = 2
-
-_FLAG_DOUBLE_SIDED :: Int
-_FLAG_DOUBLE_SIDED = 2
-
-_ALPHA_CUT_DISABLED :: Int
-_ALPHA_CUT_DISABLED = 0
-
-_ALPHA_CUT_DISCARD :: Int
-_ALPHA_CUT_DISCARD = 1
-
 _FLAG_MAX :: Int
 _FLAG_MAX = 3
 
 _FLAG_TRANSPARENT :: Int
 _FLAG_TRANSPARENT = 0
+
+_ALPHA_CUT_DISABLED :: Int
+_ALPHA_CUT_DISABLED = 0
+
+_ALPHA_CUT_OPAQUE_PREPASS :: Int
+_ALPHA_CUT_OPAQUE_PREPASS = 2
+
+_ALPHA_CUT_DISCARD :: Int
+_ALPHA_CUT_DISCARD = 1
+
+_FLAG_DOUBLE_SIDED :: Int
+_FLAG_DOUBLE_SIDED = 2
 
 instance NodeProperty SpriteBase3D "alpha_cut" Int 'False where
         nodeProperty
@@ -277,7 +277,7 @@ instance NodeMethod SpriteBase3D "get_billboard_mode" '[] (IO Int)
 
 {-# NOINLINE bindSpriteBase3D_get_draw_flag #-}
 
--- | Returns the value of the specified flag.
+-- | If @true@, texture can be seen from the back as well, if @false@, it is invisible when looking at it from behind.
 bindSpriteBase3D_get_draw_flag :: MethodBind
 bindSpriteBase3D_get_draw_flag
   = unsafePerformIO $
@@ -287,7 +287,7 @@ bindSpriteBase3D_get_draw_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of the specified flag.
+-- | If @true@, texture can be seen from the back as well, if @false@, it is invisible when looking at it from behind.
 get_draw_flag ::
                 (SpriteBase3D :< cls, Object :< cls) => cls -> Int -> IO Bool
 get_draw_flag cls arg1
@@ -304,7 +304,6 @@ instance NodeMethod SpriteBase3D "get_draw_flag" '[Int] (IO Bool)
 
 {-# NOINLINE bindSpriteBase3D_get_item_rect #-}
 
--- | Returns the rectangle representing this sprite.
 bindSpriteBase3D_get_item_rect :: MethodBind
 bindSpriteBase3D_get_item_rect
   = unsafePerformIO $
@@ -314,7 +313,6 @@ bindSpriteBase3D_get_item_rect
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the rectangle representing this sprite.
 get_item_rect ::
                 (SpriteBase3D :< cls, Object :< cls) => cls -> IO Rect2
 get_item_rect cls
@@ -623,7 +621,7 @@ instance NodeMethod SpriteBase3D "set_centered" '[Bool] (IO ())
 
 {-# NOINLINE bindSpriteBase3D_set_draw_flag #-}
 
--- | If @true@, the specified flag will be enabled.
+-- | If @true@, texture can be seen from the back as well, if @false@, it is invisible when looking at it from behind.
 bindSpriteBase3D_set_draw_flag :: MethodBind
 bindSpriteBase3D_set_draw_flag
   = unsafePerformIO $
@@ -633,7 +631,7 @@ bindSpriteBase3D_set_draw_flag
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the specified flag will be enabled.
+-- | If @true@, texture can be seen from the back as well, if @false@, it is invisible when looking at it from behind.
 set_draw_flag ::
                 (SpriteBase3D :< cls, Object :< cls) => cls -> Int -> Bool -> IO ()
 set_draw_flag cls arg1 arg2

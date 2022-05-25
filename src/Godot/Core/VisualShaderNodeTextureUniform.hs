@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeTextureUniform
-       (Godot.Core.VisualShaderNodeTextureUniform._TYPE_DATA,
-        Godot.Core.VisualShaderNodeTextureUniform._TYPE_ANISO,
-        Godot.Core.VisualShaderNodeTextureUniform._COLOR_DEFAULT_WHITE,
-        Godot.Core.VisualShaderNodeTextureUniform._TYPE_COLOR,
+       (Godot.Core.VisualShaderNodeTextureUniform._COLOR_DEFAULT_BLACK,
         Godot.Core.VisualShaderNodeTextureUniform._TYPE_NORMALMAP,
-        Godot.Core.VisualShaderNodeTextureUniform._COLOR_DEFAULT_BLACK,
+        Godot.Core.VisualShaderNodeTextureUniform._COLOR_DEFAULT_WHITE,
+        Godot.Core.VisualShaderNodeTextureUniform._TYPE_DATA,
+        Godot.Core.VisualShaderNodeTextureUniform._TYPE_COLOR,
+        Godot.Core.VisualShaderNodeTextureUniform._TYPE_ANISO,
         Godot.Core.VisualShaderNodeTextureUniform.get_color_default,
         Godot.Core.VisualShaderNodeTextureUniform.get_texture_type,
         Godot.Core.VisualShaderNodeTextureUniform.set_color_default,
@@ -25,23 +25,23 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualShaderNodeUniform()
 
-_TYPE_DATA :: Int
-_TYPE_DATA = 0
-
-_TYPE_ANISO :: Int
-_TYPE_ANISO = 3
-
-_COLOR_DEFAULT_WHITE :: Int
-_COLOR_DEFAULT_WHITE = 0
-
-_TYPE_COLOR :: Int
-_TYPE_COLOR = 1
+_COLOR_DEFAULT_BLACK :: Int
+_COLOR_DEFAULT_BLACK = 1
 
 _TYPE_NORMALMAP :: Int
 _TYPE_NORMALMAP = 2
 
-_COLOR_DEFAULT_BLACK :: Int
-_COLOR_DEFAULT_BLACK = 1
+_COLOR_DEFAULT_WHITE :: Int
+_COLOR_DEFAULT_WHITE = 0
+
+_TYPE_DATA :: Int
+_TYPE_DATA = 0
+
+_TYPE_COLOR :: Int
+_TYPE_COLOR = 1
+
+_TYPE_ANISO :: Int
+_TYPE_ANISO = 3
 
 instance NodeProperty VisualShaderNodeTextureUniform
            "color_default"
@@ -62,7 +62,6 @@ instance NodeProperty VisualShaderNodeTextureUniform "texture_type"
 {-# NOINLINE bindVisualShaderNodeTextureUniform_get_color_default
              #-}
 
--- | Sets the default color if no texture is assigned to the uniform.
 bindVisualShaderNodeTextureUniform_get_color_default :: MethodBind
 bindVisualShaderNodeTextureUniform_get_color_default
   = unsafePerformIO $
@@ -72,7 +71,6 @@ bindVisualShaderNodeTextureUniform_get_color_default
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default color if no texture is assigned to the uniform.
 get_color_default ::
                     (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                     cls -> IO Int
@@ -97,7 +95,6 @@ instance NodeMethod VisualShaderNodeTextureUniform
 {-# NOINLINE bindVisualShaderNodeTextureUniform_get_texture_type
              #-}
 
--- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 bindVisualShaderNodeTextureUniform_get_texture_type :: MethodBind
 bindVisualShaderNodeTextureUniform_get_texture_type
   = unsafePerformIO $
@@ -107,7 +104,6 @@ bindVisualShaderNodeTextureUniform_get_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 get_texture_type ::
                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                    cls -> IO Int
@@ -132,7 +128,6 @@ instance NodeMethod VisualShaderNodeTextureUniform
 {-# NOINLINE bindVisualShaderNodeTextureUniform_set_color_default
              #-}
 
--- | Sets the default color if no texture is assigned to the uniform.
 bindVisualShaderNodeTextureUniform_set_color_default :: MethodBind
 bindVisualShaderNodeTextureUniform_set_color_default
   = unsafePerformIO $
@@ -142,7 +137,6 @@ bindVisualShaderNodeTextureUniform_set_color_default
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the default color if no texture is assigned to the uniform.
 set_color_default ::
                     (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                     cls -> Int -> IO ()
@@ -167,7 +161,6 @@ instance NodeMethod VisualShaderNodeTextureUniform
 {-# NOINLINE bindVisualShaderNodeTextureUniform_set_texture_type
              #-}
 
--- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 bindVisualShaderNodeTextureUniform_set_texture_type :: MethodBind
 bindVisualShaderNodeTextureUniform_set_texture_type
   = unsafePerformIO $
@@ -177,7 +170,6 @@ bindVisualShaderNodeTextureUniform_set_texture_type
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Defines the type of data provided by the source texture. See @enum TextureType@ for options.
 set_texture_type ::
                    (VisualShaderNodeTextureUniform :< cls, Object :< cls) =>
                    cls -> Int -> IO ()

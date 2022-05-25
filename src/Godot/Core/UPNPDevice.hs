@@ -2,16 +2,16 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.UPNPDevice
-       (Godot.Core.UPNPDevice._IGD_STATUS_INVALID_CONTROL,
-        Godot.Core.UPNPDevice._IGD_STATUS_DISCONNECTED,
-        Godot.Core.UPNPDevice._IGD_STATUS_OK,
-        Godot.Core.UPNPDevice._IGD_STATUS_NO_URLS,
-        Godot.Core.UPNPDevice._IGD_STATUS_MALLOC_ERROR,
-        Godot.Core.UPNPDevice._IGD_STATUS_UNKNOWN_ERROR,
-        Godot.Core.UPNPDevice._IGD_STATUS_HTTP_EMPTY,
+       (Godot.Core.UPNPDevice._IGD_STATUS_OK,
         Godot.Core.UPNPDevice._IGD_STATUS_NO_IGD,
+        Godot.Core.UPNPDevice._IGD_STATUS_NO_URLS,
+        Godot.Core.UPNPDevice._IGD_STATUS_DISCONNECTED,
+        Godot.Core.UPNPDevice._IGD_STATUS_INVALID_CONTROL,
         Godot.Core.UPNPDevice._IGD_STATUS_UNKNOWN_DEVICE,
+        Godot.Core.UPNPDevice._IGD_STATUS_UNKNOWN_ERROR,
         Godot.Core.UPNPDevice._IGD_STATUS_HTTP_ERROR,
+        Godot.Core.UPNPDevice._IGD_STATUS_MALLOC_ERROR,
+        Godot.Core.UPNPDevice._IGD_STATUS_HTTP_EMPTY,
         Godot.Core.UPNPDevice.add_port_mapping,
         Godot.Core.UPNPDevice.delete_port_mapping,
         Godot.Core.UPNPDevice.get_description_url,
@@ -41,35 +41,35 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Reference()
 
-_IGD_STATUS_INVALID_CONTROL :: Int
-_IGD_STATUS_INVALID_CONTROL = 7
-
-_IGD_STATUS_DISCONNECTED :: Int
-_IGD_STATUS_DISCONNECTED = 5
-
 _IGD_STATUS_OK :: Int
 _IGD_STATUS_OK = 0
-
-_IGD_STATUS_NO_URLS :: Int
-_IGD_STATUS_NO_URLS = 3
-
-_IGD_STATUS_MALLOC_ERROR :: Int
-_IGD_STATUS_MALLOC_ERROR = 8
-
-_IGD_STATUS_UNKNOWN_ERROR :: Int
-_IGD_STATUS_UNKNOWN_ERROR = 9
-
-_IGD_STATUS_HTTP_EMPTY :: Int
-_IGD_STATUS_HTTP_EMPTY = 2
 
 _IGD_STATUS_NO_IGD :: Int
 _IGD_STATUS_NO_IGD = 4
 
+_IGD_STATUS_NO_URLS :: Int
+_IGD_STATUS_NO_URLS = 3
+
+_IGD_STATUS_DISCONNECTED :: Int
+_IGD_STATUS_DISCONNECTED = 5
+
+_IGD_STATUS_INVALID_CONTROL :: Int
+_IGD_STATUS_INVALID_CONTROL = 7
+
 _IGD_STATUS_UNKNOWN_DEVICE :: Int
 _IGD_STATUS_UNKNOWN_DEVICE = 6
 
+_IGD_STATUS_UNKNOWN_ERROR :: Int
+_IGD_STATUS_UNKNOWN_ERROR = 9
+
 _IGD_STATUS_HTTP_ERROR :: Int
 _IGD_STATUS_HTTP_ERROR = 1
+
+_IGD_STATUS_MALLOC_ERROR :: Int
+_IGD_STATUS_MALLOC_ERROR = 8
+
+_IGD_STATUS_HTTP_EMPTY :: Int
+_IGD_STATUS_HTTP_EMPTY = 2
 
 instance NodeProperty UPNPDevice "description_url" GodotString
            'False

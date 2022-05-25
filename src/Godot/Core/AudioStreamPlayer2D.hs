@@ -303,7 +303,7 @@ instance NodeMethod AudioStreamPlayer2D "get_max_distance" '[]
 
 {-# NOINLINE bindAudioStreamPlayer2D_get_pitch_scale #-}
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 bindAudioStreamPlayer2D_get_pitch_scale :: MethodBind
 bindAudioStreamPlayer2D_get_pitch_scale
   = unsafePerformIO $
@@ -313,7 +313,7 @@ bindAudioStreamPlayer2D_get_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 get_pitch_scale ::
                   (AudioStreamPlayer2D :< cls, Object :< cls) => cls -> IO Float
 get_pitch_scale cls
@@ -741,7 +741,7 @@ instance NodeMethod AudioStreamPlayer2D "set_max_distance" '[Float]
 
 {-# NOINLINE bindAudioStreamPlayer2D_set_pitch_scale #-}
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 bindAudioStreamPlayer2D_set_pitch_scale :: MethodBind
 bindAudioStreamPlayer2D_set_pitch_scale
   = unsafePerformIO $
@@ -751,7 +751,7 @@ bindAudioStreamPlayer2D_set_pitch_scale
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The pitch and the tempo of the audio, as a multiplier of the audio sample's sample rate.
+-- | Changes the pitch and the tempo of the audio.
 set_pitch_scale ::
                   (AudioStreamPlayer2D :< cls, Object :< cls) =>
                   cls -> Float -> IO ()

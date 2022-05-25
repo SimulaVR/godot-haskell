@@ -3,8 +3,8 @@
   MultiParamTypeClasses #-}
 module Godot.Core.DynamicFont
        (Godot.Core.DynamicFont._SPACING_TOP,
-        Godot.Core.DynamicFont._SPACING_SPACE,
         Godot.Core.DynamicFont._SPACING_CHAR,
+        Godot.Core.DynamicFont._SPACING_SPACE,
         Godot.Core.DynamicFont._SPACING_BOTTOM,
         Godot.Core.DynamicFont.add_fallback,
         Godot.Core.DynamicFont.get_fallback,
@@ -41,11 +41,11 @@ import Godot.Core.Font()
 _SPACING_TOP :: Int
 _SPACING_TOP = 0
 
-_SPACING_SPACE :: Int
-_SPACING_SPACE = 3
-
 _SPACING_CHAR :: Int
 _SPACING_CHAR = 2
+
+_SPACING_SPACE :: Int
+_SPACING_SPACE = 3
 
 _SPACING_BOTTOM :: Int
 _SPACING_BOTTOM = 1

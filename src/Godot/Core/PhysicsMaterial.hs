@@ -94,7 +94,6 @@ instance NodeMethod PhysicsMaterial "get_friction" '[] (IO Float)
 
 {-# NOINLINE bindPhysicsMaterial_is_absorbent #-}
 
--- | If @true@, subtracts the bounciness from the colliding object's bounciness instead of adding it.
 bindPhysicsMaterial_is_absorbent :: MethodBind
 bindPhysicsMaterial_is_absorbent
   = unsafePerformIO $
@@ -104,7 +103,6 @@ bindPhysicsMaterial_is_absorbent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, subtracts the bounciness from the colliding object's bounciness instead of adding it.
 is_absorbent ::
                (PhysicsMaterial :< cls, Object :< cls) => cls -> IO Bool
 is_absorbent cls
@@ -122,7 +120,6 @@ instance NodeMethod PhysicsMaterial "is_absorbent" '[] (IO Bool)
 
 {-# NOINLINE bindPhysicsMaterial_is_rough #-}
 
--- | If @true@, the physics engine will use the friction of the object marked as "rough" when two objects collide. If @false@, the physics engine will use the lowest friction of all colliding objects instead. If @true@ for both colliding objects, the physics engine will use the highest friction.
 bindPhysicsMaterial_is_rough :: MethodBind
 bindPhysicsMaterial_is_rough
   = unsafePerformIO $
@@ -132,7 +129,6 @@ bindPhysicsMaterial_is_rough
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the physics engine will use the friction of the object marked as "rough" when two objects collide. If @false@, the physics engine will use the lowest friction of all colliding objects instead. If @true@ for both colliding objects, the physics engine will use the highest friction.
 is_rough ::
            (PhysicsMaterial :< cls, Object :< cls) => cls -> IO Bool
 is_rough cls
@@ -148,7 +144,6 @@ instance NodeMethod PhysicsMaterial "is_rough" '[] (IO Bool) where
 
 {-# NOINLINE bindPhysicsMaterial_set_absorbent #-}
 
--- | If @true@, subtracts the bounciness from the colliding object's bounciness instead of adding it.
 bindPhysicsMaterial_set_absorbent :: MethodBind
 bindPhysicsMaterial_set_absorbent
   = unsafePerformIO $
@@ -158,7 +153,6 @@ bindPhysicsMaterial_set_absorbent
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, subtracts the bounciness from the colliding object's bounciness instead of adding it.
 set_absorbent ::
                 (PhysicsMaterial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_absorbent cls arg1
@@ -231,7 +225,6 @@ instance NodeMethod PhysicsMaterial "set_friction" '[Float] (IO ())
 
 {-# NOINLINE bindPhysicsMaterial_set_rough #-}
 
--- | If @true@, the physics engine will use the friction of the object marked as "rough" when two objects collide. If @false@, the physics engine will use the lowest friction of all colliding objects instead. If @true@ for both colliding objects, the physics engine will use the highest friction.
 bindPhysicsMaterial_set_rough :: MethodBind
 bindPhysicsMaterial_set_rough
   = unsafePerformIO $
@@ -241,7 +234,6 @@ bindPhysicsMaterial_set_rough
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the physics engine will use the friction of the object marked as "rough" when two objects collide. If @false@, the physics engine will use the lowest friction of all colliding objects instead. If @true@ for both colliding objects, the physics engine will use the highest friction.
 set_rough ::
             (PhysicsMaterial :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_rough cls arg1

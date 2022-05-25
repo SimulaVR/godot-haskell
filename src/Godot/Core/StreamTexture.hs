@@ -51,7 +51,7 @@ instance NodeMethod StreamTexture "get_load_path" '[]
 
 {-# NOINLINE bindStreamTexture_load #-}
 
--- | Loads the texture from the given path.
+-- | The StreamTexture's file path to a @.stex@ file.
 bindStreamTexture_load :: MethodBind
 bindStreamTexture_load
   = unsafePerformIO $
@@ -61,7 +61,7 @@ bindStreamTexture_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads the texture from the given path.
+-- | The StreamTexture's file path to a @.stex@ file.
 load ::
        (StreamTexture :< cls, Object :< cls) =>
        cls -> GodotString -> IO Int

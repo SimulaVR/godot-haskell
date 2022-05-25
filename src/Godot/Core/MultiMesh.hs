@@ -2,14 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.MultiMesh
-       (Godot.Core.MultiMesh._CUSTOM_DATA_8BIT,
+       (Godot.Core.MultiMesh._CUSTOM_DATA_NONE,
         Godot.Core.MultiMesh._TRANSFORM_3D,
-        Godot.Core.MultiMesh._COLOR_NONE,
+        Godot.Core.MultiMesh._CUSTOM_DATA_8BIT,
+        Godot.Core.MultiMesh._CUSTOM_DATA_FLOAT,
+        Godot.Core.MultiMesh._COLOR_NONE, Godot.Core.MultiMesh._COLOR_8BIT,
         Godot.Core.MultiMesh._COLOR_FLOAT,
         Godot.Core.MultiMesh._TRANSFORM_2D,
-        Godot.Core.MultiMesh._COLOR_8BIT,
-        Godot.Core.MultiMesh._CUSTOM_DATA_FLOAT,
-        Godot.Core.MultiMesh._CUSTOM_DATA_NONE,
         Godot.Core.MultiMesh._get_color_array,
         Godot.Core.MultiMesh._get_custom_data_array,
         Godot.Core.MultiMesh._get_transform_2d_array,
@@ -53,29 +52,29 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_CUSTOM_DATA_8BIT :: Int
-_CUSTOM_DATA_8BIT = 1
+_CUSTOM_DATA_NONE :: Int
+_CUSTOM_DATA_NONE = 0
 
 _TRANSFORM_3D :: Int
 _TRANSFORM_3D = 1
 
+_CUSTOM_DATA_8BIT :: Int
+_CUSTOM_DATA_8BIT = 1
+
+_CUSTOM_DATA_FLOAT :: Int
+_CUSTOM_DATA_FLOAT = 2
+
 _COLOR_NONE :: Int
 _COLOR_NONE = 0
+
+_COLOR_8BIT :: Int
+_COLOR_8BIT = 1
 
 _COLOR_FLOAT :: Int
 _COLOR_FLOAT = 2
 
 _TRANSFORM_2D :: Int
 _TRANSFORM_2D = 0
-
-_COLOR_8BIT :: Int
-_COLOR_8BIT = 1
-
-_CUSTOM_DATA_FLOAT :: Int
-_CUSTOM_DATA_FLOAT = 2
-
-_CUSTOM_DATA_NONE :: Int
-_CUSTOM_DATA_NONE = 0
 
 instance NodeProperty MultiMesh "color_array" PoolColorArray 'False
          where
@@ -354,7 +353,7 @@ instance NodeMethod MultiMesh "_set_transform_array"
 
 {-# NOINLINE bindMultiMesh_get_aabb #-}
 
--- | Returns the visibility axis-aligned bounding box in local space. See also @method VisualInstance.get_transformed_aabb@.
+-- | Returns the visibility axis-aligned bounding box.
 bindMultiMesh_get_aabb :: MethodBind
 bindMultiMesh_get_aabb
   = unsafePerformIO $
@@ -364,7 +363,7 @@ bindMultiMesh_get_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the visibility axis-aligned bounding box in local space. See also @method VisualInstance.get_transformed_aabb@.
+-- | Returns the visibility axis-aligned bounding box.
 get_aabb :: (MultiMesh :< cls, Object :< cls) => cls -> IO Aabb
 get_aabb cls
   = withVariantArray []

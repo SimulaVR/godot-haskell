@@ -46,7 +46,7 @@ instance NodeProperty PinJoint "params/impulse_clamp" Float 'False
 
 {-# NOINLINE bindPinJoint_get_param #-}
 
--- | Returns the value of the specified parameter.
+-- | The force with which the pinned objects stay in positional relation to each other. The higher, the stronger.
 bindPinJoint_get_param :: MethodBind
 bindPinJoint_get_param
   = unsafePerformIO $
@@ -56,7 +56,7 @@ bindPinJoint_get_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of the specified parameter.
+-- | The force with which the pinned objects stay in positional relation to each other. The higher, the stronger.
 get_param ::
             (PinJoint :< cls, Object :< cls) => cls -> Int -> IO Float
 get_param cls arg1
@@ -71,7 +71,7 @@ instance NodeMethod PinJoint "get_param" '[Int] (IO Float) where
 
 {-# NOINLINE bindPinJoint_set_param #-}
 
--- | Sets the value of the specified parameter.
+-- | The force with which the pinned objects stay in positional relation to each other. The higher, the stronger.
 bindPinJoint_set_param :: MethodBind
 bindPinJoint_set_param
   = unsafePerformIO $
@@ -81,7 +81,7 @@ bindPinJoint_set_param
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the value of the specified parameter.
+-- | The force with which the pinned objects stay in positional relation to each other. The higher, the stronger.
 set_param ::
             (PinJoint :< cls, Object :< cls) => cls -> Int -> Float -> IO ()
 set_param cls arg1 arg2

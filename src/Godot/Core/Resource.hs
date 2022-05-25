@@ -75,8 +75,7 @@ instance NodeMethod Resource "_setup_local_to_scene" '[] (IO ())
 
 {-# NOINLINE bindResource_duplicate #-}
 
--- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing @true@ to the @subresources@ argument which will copy the subresources.
---   				__Note:__ If @subresources@ is @true@, this method will only perform a shallow copy. Nested resources within subresources will not be duplicated and will still be shared.
+-- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency, this can be changed by passing @true@ to the @subresources@ argument.
 bindResource_duplicate :: MethodBind
 bindResource_duplicate
   = unsafePerformIO $
@@ -86,8 +85,7 @@ bindResource_duplicate
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency. This can be changed by passing @true@ to the @subresources@ argument which will copy the subresources.
---   				__Note:__ If @subresources@ is @true@, this method will only perform a shallow copy. Nested resources within subresources will not be duplicated and will still be shared.
+-- | Duplicates the resource, returning a new resource. By default, sub-resources are shared between resource copies for efficiency, this can be changed by passing @true@ to the @subresources@ argument.
 duplicate ::
             (Resource :< cls, Object :< cls) =>
             cls -> Maybe Bool -> IO Resource

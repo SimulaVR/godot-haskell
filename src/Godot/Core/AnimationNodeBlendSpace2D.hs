@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeBlendSpace2D
-       (Godot.Core.AnimationNodeBlendSpace2D._BLEND_MODE_DISCRETE_CARRY,
-        Godot.Core.AnimationNodeBlendSpace2D._BLEND_MODE_DISCRETE,
+       (Godot.Core.AnimationNodeBlendSpace2D._BLEND_MODE_DISCRETE,
         Godot.Core.AnimationNodeBlendSpace2D._BLEND_MODE_INTERPOLATED,
+        Godot.Core.AnimationNodeBlendSpace2D._BLEND_MODE_DISCRETE_CARRY,
         Godot.Core.AnimationNodeBlendSpace2D.sig_triangles_updated,
         Godot.Core.AnimationNodeBlendSpace2D._add_blend_point,
         Godot.Core.AnimationNodeBlendSpace2D._get_triangles,
@@ -49,14 +49,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.AnimationRootNode()
 
-_BLEND_MODE_DISCRETE_CARRY :: Int
-_BLEND_MODE_DISCRETE_CARRY = 2
-
 _BLEND_MODE_DISCRETE :: Int
 _BLEND_MODE_DISCRETE = 1
 
 _BLEND_MODE_INTERPOLATED :: Int
 _BLEND_MODE_INTERPOLATED = 0
+
+_BLEND_MODE_DISCRETE_CARRY :: Int
+_BLEND_MODE_DISCRETE_CARRY = 2
 
 -- | Emitted every time the blend space's triangles are created, removed, or when one of their vertices changes position.
 sig_triangles_updated ::

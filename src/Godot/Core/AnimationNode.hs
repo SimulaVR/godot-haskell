@@ -2,10 +2,10 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AnimationNode
-       (Godot.Core.AnimationNode._FILTER_IGNORE,
-        Godot.Core.AnimationNode._FILTER_BLEND,
-        Godot.Core.AnimationNode._FILTER_PASS,
+       (Godot.Core.AnimationNode._FILTER_PASS,
         Godot.Core.AnimationNode._FILTER_STOP,
+        Godot.Core.AnimationNode._FILTER_IGNORE,
+        Godot.Core.AnimationNode._FILTER_BLEND,
         Godot.Core.AnimationNode.sig_removed_from_graph,
         Godot.Core.AnimationNode.sig_tree_changed,
         Godot.Core.AnimationNode._get_filters,
@@ -43,17 +43,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_FILTER_IGNORE :: Int
-_FILTER_IGNORE = 0
-
-_FILTER_BLEND :: Int
-_FILTER_BLEND = 3
-
 _FILTER_PASS :: Int
 _FILTER_PASS = 1
 
 _FILTER_STOP :: Int
 _FILTER_STOP = 2
+
+_FILTER_IGNORE :: Int
+_FILTER_IGNORE = 0
+
+_FILTER_BLEND :: Int
+_FILTER_BLEND = 3
 
 -- | Called when the node was removed from the graph.
 sig_removed_from_graph ::

@@ -2,16 +2,16 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Tools.EditorFileDialog
-       (Godot.Tools.EditorFileDialog._ACCESS_RESOURCES,
-        Godot.Tools.EditorFileDialog._DISPLAY_THUMBNAILS,
-        Godot.Tools.EditorFileDialog._MODE_OPEN_FILES,
-        Godot.Tools.EditorFileDialog._MODE_OPEN_FILE,
-        Godot.Tools.EditorFileDialog._MODE_SAVE_FILE,
+       (Godot.Tools.EditorFileDialog._MODE_OPEN_DIR,
         Godot.Tools.EditorFileDialog._DISPLAY_LIST,
-        Godot.Tools.EditorFileDialog._ACCESS_USERDATA,
+        Godot.Tools.EditorFileDialog._MODE_SAVE_FILE,
+        Godot.Tools.EditorFileDialog._MODE_OPEN_FILE,
+        Godot.Tools.EditorFileDialog._DISPLAY_THUMBNAILS,
         Godot.Tools.EditorFileDialog._ACCESS_FILESYSTEM,
-        Godot.Tools.EditorFileDialog._MODE_OPEN_DIR,
+        Godot.Tools.EditorFileDialog._ACCESS_USERDATA,
+        Godot.Tools.EditorFileDialog._ACCESS_RESOURCES,
         Godot.Tools.EditorFileDialog._MODE_OPEN_ANY,
+        Godot.Tools.EditorFileDialog._MODE_OPEN_FILES,
         Godot.Tools.EditorFileDialog.sig_dir_selected,
         Godot.Tools.EditorFileDialog.sig_file_selected,
         Godot.Tools.EditorFileDialog.sig_files_selected,
@@ -78,35 +78,35 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.ConfirmationDialog()
 
-_ACCESS_RESOURCES :: Int
-_ACCESS_RESOURCES = 0
-
-_DISPLAY_THUMBNAILS :: Int
-_DISPLAY_THUMBNAILS = 0
-
-_MODE_OPEN_FILES :: Int
-_MODE_OPEN_FILES = 1
-
-_MODE_OPEN_FILE :: Int
-_MODE_OPEN_FILE = 0
-
-_MODE_SAVE_FILE :: Int
-_MODE_SAVE_FILE = 4
+_MODE_OPEN_DIR :: Int
+_MODE_OPEN_DIR = 2
 
 _DISPLAY_LIST :: Int
 _DISPLAY_LIST = 1
 
-_ACCESS_USERDATA :: Int
-_ACCESS_USERDATA = 1
+_MODE_SAVE_FILE :: Int
+_MODE_SAVE_FILE = 4
+
+_MODE_OPEN_FILE :: Int
+_MODE_OPEN_FILE = 0
+
+_DISPLAY_THUMBNAILS :: Int
+_DISPLAY_THUMBNAILS = 0
 
 _ACCESS_FILESYSTEM :: Int
 _ACCESS_FILESYSTEM = 2
 
-_MODE_OPEN_DIR :: Int
-_MODE_OPEN_DIR = 2
+_ACCESS_USERDATA :: Int
+_ACCESS_USERDATA = 1
+
+_ACCESS_RESOURCES :: Int
+_ACCESS_RESOURCES = 0
 
 _MODE_OPEN_ANY :: Int
 _MODE_OPEN_ANY = 3
+
+_MODE_OPEN_FILES :: Int
+_MODE_OPEN_FILES = 1
 
 -- | Emitted when a directory is selected.
 sig_dir_selected :: Godot.Internal.Dispatch.Signal EditorFileDialog

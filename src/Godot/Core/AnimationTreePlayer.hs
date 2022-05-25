@@ -3,17 +3,17 @@
   MultiParamTypeClasses #-}
 module Godot.Core.AnimationTreePlayer
        (Godot.Core.AnimationTreePlayer._NODE_TIMESEEK,
-        Godot.Core.AnimationTreePlayer._NODE_OUTPUT,
-        Godot.Core.AnimationTreePlayer._NODE_ANIMATION,
-        Godot.Core.AnimationTreePlayer._NODE_BLEND2,
-        Godot.Core.AnimationTreePlayer._NODE_TIMESCALE,
-        Godot.Core.AnimationTreePlayer._NODE_BLEND4,
-        Godot.Core.AnimationTreePlayer._NODE_BLEND3,
-        Godot.Core.AnimationTreePlayer._NODE_TRANSITION,
-        Godot.Core.AnimationTreePlayer._NODE_MIX,
         Godot.Core.AnimationTreePlayer._NODE_ONESHOT,
+        Godot.Core.AnimationTreePlayer._NODE_TRANSITION,
+        Godot.Core.AnimationTreePlayer._NODE_BLEND4,
+        Godot.Core.AnimationTreePlayer._NODE_TIMESCALE,
+        Godot.Core.AnimationTreePlayer._NODE_BLEND3,
         Godot.Core.AnimationTreePlayer._ANIMATION_PROCESS_PHYSICS,
         Godot.Core.AnimationTreePlayer._ANIMATION_PROCESS_IDLE,
+        Godot.Core.AnimationTreePlayer._NODE_ANIMATION,
+        Godot.Core.AnimationTreePlayer._NODE_OUTPUT,
+        Godot.Core.AnimationTreePlayer._NODE_BLEND2,
+        Godot.Core.AnimationTreePlayer._NODE_MIX,
         Godot.Core.AnimationTreePlayer.add_node,
         Godot.Core.AnimationTreePlayer.advance,
         Godot.Core.AnimationTreePlayer.animation_node_get_animation,
@@ -95,38 +95,38 @@ import Godot.Core.Node()
 _NODE_TIMESEEK :: Int
 _NODE_TIMESEEK = 8
 
-_NODE_OUTPUT :: Int
-_NODE_OUTPUT = 0
-
-_NODE_ANIMATION :: Int
-_NODE_ANIMATION = 1
-
-_NODE_BLEND2 :: Int
-_NODE_BLEND2 = 4
-
-_NODE_TIMESCALE :: Int
-_NODE_TIMESCALE = 7
-
-_NODE_BLEND4 :: Int
-_NODE_BLEND4 = 6
-
-_NODE_BLEND3 :: Int
-_NODE_BLEND3 = 5
+_NODE_ONESHOT :: Int
+_NODE_ONESHOT = 2
 
 _NODE_TRANSITION :: Int
 _NODE_TRANSITION = 9
 
-_NODE_MIX :: Int
-_NODE_MIX = 3
+_NODE_BLEND4 :: Int
+_NODE_BLEND4 = 6
 
-_NODE_ONESHOT :: Int
-_NODE_ONESHOT = 2
+_NODE_TIMESCALE :: Int
+_NODE_TIMESCALE = 7
+
+_NODE_BLEND3 :: Int
+_NODE_BLEND3 = 5
 
 _ANIMATION_PROCESS_PHYSICS :: Int
 _ANIMATION_PROCESS_PHYSICS = 0
 
 _ANIMATION_PROCESS_IDLE :: Int
 _ANIMATION_PROCESS_IDLE = 1
+
+_NODE_ANIMATION :: Int
+_NODE_ANIMATION = 1
+
+_NODE_OUTPUT :: Int
+_NODE_OUTPUT = 0
+
+_NODE_BLEND2 :: Int
+_NODE_BLEND2 = 4
+
+_NODE_MIX :: Int
+_NODE_MIX = 3
 
 instance NodeProperty AnimationTreePlayer "active" Bool 'False
          where

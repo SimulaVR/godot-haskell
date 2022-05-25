@@ -2,11 +2,11 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.JSONRPC
-       (Godot.Core.JSONRPC._METHOD_NOT_FOUND,
-        Godot.Core.JSONRPC._INTERNAL_ERROR,
-        Godot.Core.JSONRPC._INVALID_REQUEST,
+       (Godot.Core.JSONRPC._INTERNAL_ERROR,
         Godot.Core.JSONRPC._PARSE_ERROR,
         Godot.Core.JSONRPC._INVALID_PARAMS,
+        Godot.Core.JSONRPC._INVALID_REQUEST,
+        Godot.Core.JSONRPC._METHOD_NOT_FOUND,
         Godot.Core.JSONRPC.make_notification,
         Godot.Core.JSONRPC.make_request, Godot.Core.JSONRPC.make_response,
         Godot.Core.JSONRPC.make_response_error,
@@ -25,20 +25,20 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_METHOD_NOT_FOUND :: Int
-_METHOD_NOT_FOUND = -32601
-
 _INTERNAL_ERROR :: Int
 _INTERNAL_ERROR = -32603
-
-_INVALID_REQUEST :: Int
-_INVALID_REQUEST = -32600
 
 _PARSE_ERROR :: Int
 _PARSE_ERROR = -32700
 
 _INVALID_PARAMS :: Int
 _INVALID_PARAMS = -32602
+
+_INVALID_REQUEST :: Int
+_INVALID_REQUEST = -32600
+
+_METHOD_NOT_FOUND :: Int
+_METHOD_NOT_FOUND = -32601
 
 {-# NOINLINE bindJSONRPC_make_notification #-}
 

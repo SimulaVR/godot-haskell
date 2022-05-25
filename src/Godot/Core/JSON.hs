@@ -17,7 +17,7 @@ import Godot.Core.Object()
 
 {-# NOINLINE bindJSON_parse #-}
 
--- | Parses a JSON-encoded string and returns a @JSONParseResult@ containing the result.
+-- | Parses a JSON encoded string and returns a @JSONParseResult@ containing the result.
 bindJSON_parse :: MethodBind
 bindJSON_parse
   = unsafePerformIO $
@@ -27,7 +27,7 @@ bindJSON_parse
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Parses a JSON-encoded string and returns a @JSONParseResult@ containing the result.
+-- | Parses a JSON encoded string and returns a @JSONParseResult@ containing the result.
 parse ::
         (JSON :< cls, Object :< cls) =>
         cls -> GodotString -> IO JSONParseResult
@@ -45,32 +45,6 @@ instance NodeMethod JSON "parse" '[GodotString]
 {-# NOINLINE bindJSON_print #-}
 
 -- | Converts a @Variant@ var to JSON text and returns the result. Useful for serializing data to store or send over the network.
---   				__Note:__ The JSON specification does not define integer or float types, but only a @i@number@/i@ type. Therefore, converting a Variant to JSON text will convert all numerical values to @float@ types.
---   				Use @indent@ parameter to pretty print the output.
---   				__Example output:__
---   				
---   @
---   
---   				## JSON.print(my_dictionary)
---   				{"name":"my_dictionary","version":"1.0.0","entities":@{"name":"entity_0","value":"value_0"},{"name":"entity_1","value":"value_1"}@}
---   
---   				## JSON.print(my_dictionary, "\t")
---   				{
---   				        "name": "my_dictionary",
---   				        "version": "1.0.0",
---   				        "entities": @
---   				                {
---   				                        "name": "entity_0",
---   				                        "value": "value_0"
---   				                },
---   				                {
---   				                        "name": "entity_1",
---   				                        "value": "value_1"
---   				                }
---   				        @
---   				}
---   				
---   @
 bindJSON_print :: MethodBind
 bindJSON_print
   = unsafePerformIO $
@@ -81,32 +55,6 @@ bindJSON_print
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Converts a @Variant@ var to JSON text and returns the result. Useful for serializing data to store or send over the network.
---   				__Note:__ The JSON specification does not define integer or float types, but only a @i@number@/i@ type. Therefore, converting a Variant to JSON text will convert all numerical values to @float@ types.
---   				Use @indent@ parameter to pretty print the output.
---   				__Example output:__
---   				
---   @
---   
---   				## JSON.print(my_dictionary)
---   				{"name":"my_dictionary","version":"1.0.0","entities":@{"name":"entity_0","value":"value_0"},{"name":"entity_1","value":"value_1"}@}
---   
---   				## JSON.print(my_dictionary, "\t")
---   				{
---   				        "name": "my_dictionary",
---   				        "version": "1.0.0",
---   				        "entities": @
---   				                {
---   				                        "name": "entity_0",
---   				                        "value": "value_0"
---   				                },
---   				                {
---   				                        "name": "entity_1",
---   				                        "value": "value_1"
---   				                }
---   				        @
---   				}
---   				
---   @
 print ::
         (JSON :< cls, Object :< cls) =>
         cls ->

@@ -2,26 +2,27 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Light
-       (Godot.Core.Light._PARAM_SHADOW_NORMAL_BIAS,
-        Godot.Core.Light._PARAM_SHADOW_SPLIT_2_OFFSET,
-        Godot.Core.Light._PARAM_SPECULAR,
+       (Godot.Core.Light._PARAM_SHADOW_SPLIT_2_OFFSET,
         Godot.Core.Light._PARAM_SHADOW_SPLIT_1_OFFSET,
-        Godot.Core.Light._PARAM_INDIRECT_ENERGY,
-        Godot.Core.Light._PARAM_RANGE,
-        Godot.Core.Light._PARAM_SPOT_ATTENUATION,
-        Godot.Core.Light._PARAM_SHADOW_MAX_DISTANCE,
         Godot.Core.Light._PARAM_MAX,
-        Godot.Core.Light._PARAM_SHADOW_BIAS_SPLIT_SCALE,
-        Godot.Core.Light._BAKE_DISABLED,
-        Godot.Core.Light._PARAM_ATTENUATION,
-        Godot.Core.Light._PARAM_ENERGY,
-        Godot.Core.Light._PARAM_SHADOW_SPLIT_3_OFFSET,
-        Godot.Core.Light._BAKE_INDIRECT,
-        Godot.Core.Light._PARAM_SHADOW_BIAS, Godot.Core.Light._BAKE_ALL,
         Godot.Core.Light._PARAM_CONTACT_SHADOW_SIZE,
-        Godot.Core.Light._PARAM_SPOT_ANGLE, Godot.Core.Light.get_bake_mode,
-        Godot.Core.Light.get_color, Godot.Core.Light.get_cull_mask,
-        Godot.Core.Light.get_param, Godot.Core.Light.get_shadow_color,
+        Godot.Core.Light._PARAM_SPECULAR,
+        Godot.Core.Light._PARAM_ATTENUATION,
+        Godot.Core.Light._PARAM_SHADOW_MAX_DISTANCE,
+        Godot.Core.Light._BAKE_INDIRECT,
+        Godot.Core.Light._PARAM_INDIRECT_ENERGY,
+        Godot.Core.Light._PARAM_SHADOW_SPLIT_3_OFFSET,
+        Godot.Core.Light._BAKE_DISABLED,
+        Godot.Core.Light._PARAM_SHADOW_BIAS_SPLIT_SCALE,
+        Godot.Core.Light._PARAM_RANGE,
+        Godot.Core.Light._PARAM_SHADOW_NORMAL_BIAS,
+        Godot.Core.Light._PARAM_SHADOW_BIAS,
+        Godot.Core.Light._PARAM_ENERGY, Godot.Core.Light._PARAM_SPOT_ANGLE,
+        Godot.Core.Light._BAKE_ALL,
+        Godot.Core.Light._PARAM_SPOT_ATTENUATION,
+        Godot.Core.Light.get_bake_mode, Godot.Core.Light.get_color,
+        Godot.Core.Light.get_cull_mask, Godot.Core.Light.get_param,
+        Godot.Core.Light.get_shadow_color,
         Godot.Core.Light.get_shadow_reverse_cull_face,
         Godot.Core.Light.has_shadow, Godot.Core.Light.is_editor_only,
         Godot.Core.Light.is_negative, Godot.Core.Light.set_bake_mode,
@@ -43,62 +44,62 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualInstance()
 
-_PARAM_SHADOW_NORMAL_BIAS :: Int
-_PARAM_SHADOW_NORMAL_BIAS = 12
-
 _PARAM_SHADOW_SPLIT_2_OFFSET :: Int
 _PARAM_SHADOW_SPLIT_2_OFFSET = 10
-
-_PARAM_SPECULAR :: Int
-_PARAM_SPECULAR = 2
 
 _PARAM_SHADOW_SPLIT_1_OFFSET :: Int
 _PARAM_SHADOW_SPLIT_1_OFFSET = 9
 
-_PARAM_INDIRECT_ENERGY :: Int
-_PARAM_INDIRECT_ENERGY = 1
-
-_PARAM_RANGE :: Int
-_PARAM_RANGE = 3
-
-_PARAM_SPOT_ATTENUATION :: Int
-_PARAM_SPOT_ATTENUATION = 6
-
-_PARAM_SHADOW_MAX_DISTANCE :: Int
-_PARAM_SHADOW_MAX_DISTANCE = 8
-
 _PARAM_MAX :: Int
 _PARAM_MAX = 15
-
-_PARAM_SHADOW_BIAS_SPLIT_SCALE :: Int
-_PARAM_SHADOW_BIAS_SPLIT_SCALE = 14
-
-_BAKE_DISABLED :: Int
-_BAKE_DISABLED = 0
-
-_PARAM_ATTENUATION :: Int
-_PARAM_ATTENUATION = 4
-
-_PARAM_ENERGY :: Int
-_PARAM_ENERGY = 0
-
-_PARAM_SHADOW_SPLIT_3_OFFSET :: Int
-_PARAM_SHADOW_SPLIT_3_OFFSET = 11
-
-_BAKE_INDIRECT :: Int
-_BAKE_INDIRECT = 1
-
-_PARAM_SHADOW_BIAS :: Int
-_PARAM_SHADOW_BIAS = 13
-
-_BAKE_ALL :: Int
-_BAKE_ALL = 2
 
 _PARAM_CONTACT_SHADOW_SIZE :: Int
 _PARAM_CONTACT_SHADOW_SIZE = 7
 
+_PARAM_SPECULAR :: Int
+_PARAM_SPECULAR = 2
+
+_PARAM_ATTENUATION :: Int
+_PARAM_ATTENUATION = 4
+
+_PARAM_SHADOW_MAX_DISTANCE :: Int
+_PARAM_SHADOW_MAX_DISTANCE = 8
+
+_BAKE_INDIRECT :: Int
+_BAKE_INDIRECT = 1
+
+_PARAM_INDIRECT_ENERGY :: Int
+_PARAM_INDIRECT_ENERGY = 1
+
+_PARAM_SHADOW_SPLIT_3_OFFSET :: Int
+_PARAM_SHADOW_SPLIT_3_OFFSET = 11
+
+_BAKE_DISABLED :: Int
+_BAKE_DISABLED = 0
+
+_PARAM_SHADOW_BIAS_SPLIT_SCALE :: Int
+_PARAM_SHADOW_BIAS_SPLIT_SCALE = 14
+
+_PARAM_RANGE :: Int
+_PARAM_RANGE = 3
+
+_PARAM_SHADOW_NORMAL_BIAS :: Int
+_PARAM_SHADOW_NORMAL_BIAS = 12
+
+_PARAM_SHADOW_BIAS :: Int
+_PARAM_SHADOW_BIAS = 13
+
+_PARAM_ENERGY :: Int
+_PARAM_ENERGY = 0
+
 _PARAM_SPOT_ANGLE :: Int
 _PARAM_SPOT_ANGLE = 5
+
+_BAKE_ALL :: Int
+_BAKE_ALL = 2
+
+_PARAM_SPOT_ATTENUATION :: Int
+_PARAM_SPOT_ATTENUATION = 6
 
 instance NodeProperty Light "editor_only" Bool 'False where
         nodeProperty
@@ -184,7 +185,7 @@ instance NodeMethod Light "get_bake_mode" '[] (IO Int) where
 
 {-# NOINLINE bindLight_get_color #-}
 
--- | The light's color. An @i@overbright@/i@ color can be used to achieve a result equivalent to increasing the light's @light_energy@.
+-- | The light's color.
 bindLight_get_color :: MethodBind
 bindLight_get_color
   = unsafePerformIO $
@@ -194,7 +195,7 @@ bindLight_get_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's color. An @i@overbright@/i@ color can be used to achieve a result equivalent to increasing the light's @light_energy@.
+-- | The light's color.
 get_color :: (Light :< cls, Object :< cls) => cls -> IO Color
 get_color cls
   = withVariantArray []
@@ -406,7 +407,7 @@ instance NodeMethod Light "set_bake_mode" '[Int] (IO ()) where
 
 {-# NOINLINE bindLight_set_color #-}
 
--- | The light's color. An @i@overbright@/i@ color can be used to achieve a result equivalent to increasing the light's @light_energy@.
+-- | The light's color.
 bindLight_set_color :: MethodBind
 bindLight_set_color
   = unsafePerformIO $
@@ -416,7 +417,7 @@ bindLight_set_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The light's color. An @i@overbright@/i@ color can be used to achieve a result equivalent to increasing the light's @light_energy@.
+-- | The light's color.
 set_color :: (Light :< cls, Object :< cls) => cls -> Color -> IO ()
 set_color cls arg1
   = withVariantArray [toVariant arg1]

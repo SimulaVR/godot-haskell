@@ -410,7 +410,7 @@ instance NodeMethod ProjectSettings "save" '[] (IO Int) where
 
 {-# NOINLINE bindProjectSettings_save_custom #-}
 
--- | Saves the configuration to a custom file. The file extension must be @.godot@ (to save in text-based @ConfigFile@ format) or @.binary@ (to save in binary format).
+-- | Saves the configuration to a custom file.
 bindProjectSettings_save_custom :: MethodBind
 bindProjectSettings_save_custom
   = unsafePerformIO $
@@ -420,7 +420,7 @@ bindProjectSettings_save_custom
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Saves the configuration to a custom file. The file extension must be @.godot@ (to save in text-based @ConfigFile@ format) or @.binary@ (to save in binary format).
+-- | Saves the configuration to a custom file.
 save_custom ::
               (ProjectSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO Int

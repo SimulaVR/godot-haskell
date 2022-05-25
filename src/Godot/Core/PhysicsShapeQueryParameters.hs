@@ -82,7 +82,7 @@ instance NodeProperty PhysicsShapeQueryParameters "transform"
 
 {-# NOINLINE bindPhysicsShapeQueryParameters_get_collision_mask #-}
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask).
 bindPhysicsShapeQueryParameters_get_collision_mask :: MethodBind
 bindPhysicsShapeQueryParameters_get_collision_mask
   = unsafePerformIO $
@@ -92,7 +92,7 @@ bindPhysicsShapeQueryParameters_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask).
 get_collision_mask ::
                      (PhysicsShapeQueryParameters :< cls, Object :< cls) =>
                      cls -> IO Int
@@ -382,7 +382,7 @@ instance NodeMethod PhysicsShapeQueryParameters
 
 {-# NOINLINE bindPhysicsShapeQueryParameters_set_collision_mask #-}
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask).
 bindPhysicsShapeQueryParameters_set_collision_mask :: MethodBind
 bindPhysicsShapeQueryParameters_set_collision_mask
   = unsafePerformIO $
@@ -392,7 +392,7 @@ bindPhysicsShapeQueryParameters_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layer(s) the query will take into account (as a bitmask). See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layer(s) the query will take into account (as a bitmask).
 set_collision_mask ::
                      (PhysicsShapeQueryParameters :< cls, Object :< cls) =>
                      cls -> Int -> IO ()

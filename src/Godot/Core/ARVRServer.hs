@@ -2,15 +2,15 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ARVRServer
-       (Godot.Core.ARVRServer._RESET_BUT_KEEP_TILT,
+       (Godot.Core.ARVRServer._TRACKER_BASESTATION,
+        Godot.Core.ARVRServer._DONT_RESET_ROTATION,
         Godot.Core.ARVRServer._RESET_FULL_ROTATION,
         Godot.Core.ARVRServer._TRACKER_CONTROLLER,
+        Godot.Core.ARVRServer._TRACKER_ANY,
+        Godot.Core.ARVRServer._TRACKER_ANCHOR,
+        Godot.Core.ARVRServer._RESET_BUT_KEEP_TILT,
         Godot.Core.ARVRServer._TRACKER_UNKNOWN,
         Godot.Core.ARVRServer._TRACKER_ANY_KNOWN,
-        Godot.Core.ARVRServer._DONT_RESET_ROTATION,
-        Godot.Core.ARVRServer._TRACKER_BASESTATION,
-        Godot.Core.ARVRServer._TRACKER_ANCHOR,
-        Godot.Core.ARVRServer._TRACKER_ANY,
         Godot.Core.ARVRServer.sig_interface_added,
         Godot.Core.ARVRServer.sig_interface_removed,
         Godot.Core.ARVRServer.sig_tracker_added,
@@ -44,8 +44,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_RESET_BUT_KEEP_TILT :: Int
-_RESET_BUT_KEEP_TILT = 1
+_TRACKER_BASESTATION :: Int
+_TRACKER_BASESTATION = 2
+
+_DONT_RESET_ROTATION :: Int
+_DONT_RESET_ROTATION = 2
 
 _RESET_FULL_ROTATION :: Int
 _RESET_FULL_ROTATION = 0
@@ -53,23 +56,20 @@ _RESET_FULL_ROTATION = 0
 _TRACKER_CONTROLLER :: Int
 _TRACKER_CONTROLLER = 1
 
+_TRACKER_ANY :: Int
+_TRACKER_ANY = 255
+
+_TRACKER_ANCHOR :: Int
+_TRACKER_ANCHOR = 4
+
+_RESET_BUT_KEEP_TILT :: Int
+_RESET_BUT_KEEP_TILT = 1
+
 _TRACKER_UNKNOWN :: Int
 _TRACKER_UNKNOWN = 128
 
 _TRACKER_ANY_KNOWN :: Int
 _TRACKER_ANY_KNOWN = 127
-
-_DONT_RESET_ROTATION :: Int
-_DONT_RESET_ROTATION = 2
-
-_TRACKER_BASESTATION :: Int
-_TRACKER_BASESTATION = 2
-
-_TRACKER_ANCHOR :: Int
-_TRACKER_ANCHOR = 4
-
-_TRACKER_ANY :: Int
-_TRACKER_ANY = 255
 
 -- | Emitted when a new interface has been added.
 sig_interface_added :: Godot.Internal.Dispatch.Signal ARVRServer

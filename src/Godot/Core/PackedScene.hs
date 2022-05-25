@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.PackedScene
-       (Godot.Core.PackedScene._GEN_EDIT_STATE_DISABLED,
+       (Godot.Core.PackedScene._GEN_EDIT_STATE_INSTANCE,
+        Godot.Core.PackedScene._GEN_EDIT_STATE_DISABLED,
         Godot.Core.PackedScene._GEN_EDIT_STATE_MAIN,
-        Godot.Core.PackedScene._GEN_EDIT_STATE_INSTANCE,
         Godot.Core.PackedScene._get_bundled_scene,
         Godot.Core.PackedScene._set_bundled_scene,
         Godot.Core.PackedScene.can_instance,
@@ -23,14 +23,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
+_GEN_EDIT_STATE_INSTANCE :: Int
+_GEN_EDIT_STATE_INSTANCE = 1
+
 _GEN_EDIT_STATE_DISABLED :: Int
 _GEN_EDIT_STATE_DISABLED = 0
 
 _GEN_EDIT_STATE_MAIN :: Int
 _GEN_EDIT_STATE_MAIN = 2
-
-_GEN_EDIT_STATE_INSTANCE :: Int
-_GEN_EDIT_STATE_INSTANCE = 1
 
 instance NodeProperty PackedScene "_bundled" Dictionary 'False
          where

@@ -2,18 +2,17 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TileMap
-       (Godot.Core.TileMap._MODE_CUSTOM,
-        Godot.Core.TileMap._HALF_OFFSET_Y,
-        Godot.Core.TileMap._HALF_OFFSET_NEGATIVE_X,
-        Godot.Core.TileMap._MODE_SQUARE,
-        Godot.Core.TileMap._HALF_OFFSET_NEGATIVE_Y,
+       (Godot.Core.TileMap._HALF_OFFSET_Y,
         Godot.Core.TileMap._TILE_ORIGIN_BOTTOM_LEFT,
-        Godot.Core.TileMap._TILE_ORIGIN_CENTER,
-        Godot.Core.TileMap._HALF_OFFSET_DISABLED,
-        Godot.Core.TileMap._TILE_ORIGIN_TOP_LEFT,
         Godot.Core.TileMap._MODE_ISOMETRIC,
+        Godot.Core.TileMap._HALF_OFFSET_NEGATIVE_X,
         Godot.Core.TileMap._INVALID_CELL,
-        Godot.Core.TileMap._HALF_OFFSET_X,
+        Godot.Core.TileMap._HALF_OFFSET_X, Godot.Core.TileMap._MODE_CUSTOM,
+        Godot.Core.TileMap._TILE_ORIGIN_TOP_LEFT,
+        Godot.Core.TileMap._MODE_SQUARE,
+        Godot.Core.TileMap._HALF_OFFSET_DISABLED,
+        Godot.Core.TileMap._HALF_OFFSET_NEGATIVE_Y,
+        Godot.Core.TileMap._TILE_ORIGIN_CENTER,
         Godot.Core.TileMap.sig_settings_changed,
         Godot.Core.TileMap._clear_quadrants,
         Godot.Core.TileMap._get_old_cell_size,
@@ -84,41 +83,41 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node2D()
 
-_MODE_CUSTOM :: Int
-_MODE_CUSTOM = 2
-
 _HALF_OFFSET_Y :: Int
 _HALF_OFFSET_Y = 1
-
-_HALF_OFFSET_NEGATIVE_X :: Int
-_HALF_OFFSET_NEGATIVE_X = 3
-
-_MODE_SQUARE :: Int
-_MODE_SQUARE = 0
-
-_HALF_OFFSET_NEGATIVE_Y :: Int
-_HALF_OFFSET_NEGATIVE_Y = 4
 
 _TILE_ORIGIN_BOTTOM_LEFT :: Int
 _TILE_ORIGIN_BOTTOM_LEFT = 2
 
-_TILE_ORIGIN_CENTER :: Int
-_TILE_ORIGIN_CENTER = 1
-
-_HALF_OFFSET_DISABLED :: Int
-_HALF_OFFSET_DISABLED = 2
-
-_TILE_ORIGIN_TOP_LEFT :: Int
-_TILE_ORIGIN_TOP_LEFT = 0
-
 _MODE_ISOMETRIC :: Int
 _MODE_ISOMETRIC = 1
+
+_HALF_OFFSET_NEGATIVE_X :: Int
+_HALF_OFFSET_NEGATIVE_X = 3
 
 _INVALID_CELL :: Int
 _INVALID_CELL = -1
 
 _HALF_OFFSET_X :: Int
 _HALF_OFFSET_X = 0
+
+_MODE_CUSTOM :: Int
+_MODE_CUSTOM = 2
+
+_TILE_ORIGIN_TOP_LEFT :: Int
+_TILE_ORIGIN_TOP_LEFT = 0
+
+_MODE_SQUARE :: Int
+_MODE_SQUARE = 0
+
+_HALF_OFFSET_DISABLED :: Int
+_HALF_OFFSET_DISABLED = 2
+
+_HALF_OFFSET_NEGATIVE_Y :: Int
+_HALF_OFFSET_NEGATIVE_Y = 4
+
+_TILE_ORIGIN_CENTER :: Int
+_TILE_ORIGIN_CENTER = 1
 
 -- | Emitted when a tilemap setting has changed.
 sig_settings_changed :: Godot.Internal.Dispatch.Signal TileMap
@@ -465,7 +464,7 @@ instance NodeMethod TileMap "get_cell" '[Int, Int] (IO Int) where
 
 {-# NOINLINE bindTileMap_get_cell_autotile_coord #-}
 
--- | Returns the coordinate (subtile column and row) of the autotile variation in the tileset. Returns a zero vector if the cell doesn't have autotiling.
+-- | Returns the coordinate of the autotile variation in the tileset. Returns a zero vector if the cell doesn't have autotiling.
 bindTileMap_get_cell_autotile_coord :: MethodBind
 bindTileMap_get_cell_autotile_coord
   = unsafePerformIO $
@@ -475,7 +474,7 @@ bindTileMap_get_cell_autotile_coord
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the coordinate (subtile column and row) of the autotile variation in the tileset. Returns a zero vector if the cell doesn't have autotiling.
+-- | Returns the coordinate of the autotile variation in the tileset. Returns a zero vector if the cell doesn't have autotiling.
 get_cell_autotile_coord ::
                           (TileMap :< cls, Object :< cls) => cls -> Int -> Int -> IO Vector2
 get_cell_autotile_coord cls arg1 arg2
@@ -625,7 +624,7 @@ instance NodeMethod TileMap "get_collision_friction" '[] (IO Float)
 
 {-# NOINLINE bindTileMap_get_collision_layer #-}
 
--- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap.
 bindTileMap_get_collision_layer :: MethodBind
 bindTileMap_get_collision_layer
   = unsafePerformIO $
@@ -635,7 +634,7 @@ bindTileMap_get_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap.
 get_collision_layer ::
                       (TileMap :< cls, Object :< cls) => cls -> IO Int
 get_collision_layer cls
@@ -681,7 +680,7 @@ instance NodeMethod TileMap "get_collision_layer_bit" '[Int]
 
 {-# NOINLINE bindTileMap_get_collision_mask #-}
 
--- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap.
 bindTileMap_get_collision_mask :: MethodBind
 bindTileMap_get_collision_mask
   = unsafePerformIO $
@@ -691,7 +690,7 @@ bindTileMap_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap.
 get_collision_mask ::
                      (TileMap :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
@@ -1000,7 +999,7 @@ instance NodeMethod TileMap "get_used_cells" '[] (IO Array) where
 
 {-# NOINLINE bindTileMap_get_used_cells_by_id #-}
 
--- | Returns an array of all cells with the given tile index specified in @id@.
+-- | Returns an array of all cells with the given tile @id@.
 bindTileMap_get_used_cells_by_id :: MethodBind
 bindTileMap_get_used_cells_by_id
   = unsafePerformIO $
@@ -1010,7 +1009,7 @@ bindTileMap_get_used_cells_by_id
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns an array of all cells with the given tile index specified in @id@.
+-- | Returns an array of all cells with the given tile @id@.
 get_used_cells_by_id ::
                        (TileMap :< cls, Object :< cls) => cls -> Int -> IO Array
 get_used_cells_by_id cls arg1
@@ -1263,14 +1262,14 @@ instance NodeMethod TileMap "map_to_world" '[Vector2, Maybe Bool]
 
 -- | Sets the tile index for the cell given by a Vector2.
 --   				An index of @-1@ clears the cell.
---   				Optionally, the tile can also be flipped, transposed, or given autotile coordinates. The autotile coordinate refers to the column and row of the subtile.
+--   				Optionally, the tile can also be flipped, transposed, or given autotile coordinates.
 --   				__Note:__ Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
 --   				If you need these to be immediately updated, you can call @method update_dirty_quadrants@.
 --   				Overriding this method also overrides it internally, allowing custom logic to be implemented when tiles are placed/removed:
 --   				
 --   @
 --   
---   				func set_cell(x, y, tile, flip_x=false, flip_y=false, transpose=false, autotile_coord=Vector2())
+--   				func set_cell(x, y, tile, flip_x, flip_y, transpose, autotile_coord)
 --   				    # Write your custom logic here.
 --   				    # To call the default method:
 --   				    .set_cell(x, y, tile, flip_x, flip_y, transpose, autotile_coord)
@@ -1287,14 +1286,14 @@ bindTileMap_set_cell
 
 -- | Sets the tile index for the cell given by a Vector2.
 --   				An index of @-1@ clears the cell.
---   				Optionally, the tile can also be flipped, transposed, or given autotile coordinates. The autotile coordinate refers to the column and row of the subtile.
+--   				Optionally, the tile can also be flipped, transposed, or given autotile coordinates.
 --   				__Note:__ Data such as navigation polygons and collision shapes are not immediately updated for performance reasons.
 --   				If you need these to be immediately updated, you can call @method update_dirty_quadrants@.
 --   				Overriding this method also overrides it internally, allowing custom logic to be implemented when tiles are placed/removed:
 --   				
 --   @
 --   
---   				func set_cell(x, y, tile, flip_x=false, flip_y=false, transpose=false, autotile_coord=Vector2())
+--   				func set_cell(x, y, tile, flip_x, flip_y, transpose, autotile_coord)
 --   				    # Write your custom logic here.
 --   				    # To call the default method:
 --   				    .set_cell(x, y, tile, flip_x, flip_y, transpose, autotile_coord)
@@ -1507,7 +1506,7 @@ instance NodeMethod TileMap "set_collision_friction" '[Float]
 
 {-# NOINLINE bindTileMap_set_collision_layer #-}
 
--- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap.
 bindTileMap_set_collision_layer :: MethodBind
 bindTileMap_set_collision_layer
   = unsafePerformIO $
@@ -1517,7 +1516,7 @@ bindTileMap_set_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision layer(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision layer(s) for all colliders in the TileMap.
 set_collision_layer ::
                       (TileMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_layer cls arg1
@@ -1563,7 +1562,7 @@ instance NodeMethod TileMap "set_collision_layer_bit" '[Int, Bool]
 
 {-# NOINLINE bindTileMap_set_collision_mask #-}
 
--- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap.
 bindTileMap_set_collision_mask :: MethodBind
 bindTileMap_set_collision_mask
   = unsafePerformIO $
@@ -1573,7 +1572,7 @@ bindTileMap_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The collision mask(s) for all colliders in the TileMap. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The collision mask(s) for all colliders in the TileMap.
 set_collision_mask ::
                      (TileMap :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1

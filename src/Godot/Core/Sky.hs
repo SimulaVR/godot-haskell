@@ -2,13 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Sky
-       (Godot.Core.Sky._RADIANCE_SIZE_128,
-        Godot.Core.Sky._RADIANCE_SIZE_2048,
-        Godot.Core.Sky._RADIANCE_SIZE_512,
-        Godot.Core.Sky._RADIANCE_SIZE_1024,
-        Godot.Core.Sky._RADIANCE_SIZE_64, Godot.Core.Sky._RADIANCE_SIZE_32,
-        Godot.Core.Sky._RADIANCE_SIZE_256,
+       (Godot.Core.Sky._RADIANCE_SIZE_2048,
+        Godot.Core.Sky._RADIANCE_SIZE_128,
+        Godot.Core.Sky._RADIANCE_SIZE_32,
         Godot.Core.Sky._RADIANCE_SIZE_MAX,
+        Godot.Core.Sky._RADIANCE_SIZE_64,
+        Godot.Core.Sky._RADIANCE_SIZE_1024,
+        Godot.Core.Sky._RADIANCE_SIZE_512,
+        Godot.Core.Sky._RADIANCE_SIZE_256,
         Godot.Core.Sky.get_radiance_size, Godot.Core.Sky.set_radiance_size)
        where
 import Data.Coerce
@@ -23,29 +24,29 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_RADIANCE_SIZE_128 :: Int
-_RADIANCE_SIZE_128 = 2
-
 _RADIANCE_SIZE_2048 :: Int
 _RADIANCE_SIZE_2048 = 6
 
-_RADIANCE_SIZE_512 :: Int
-_RADIANCE_SIZE_512 = 4
-
-_RADIANCE_SIZE_1024 :: Int
-_RADIANCE_SIZE_1024 = 5
-
-_RADIANCE_SIZE_64 :: Int
-_RADIANCE_SIZE_64 = 1
+_RADIANCE_SIZE_128 :: Int
+_RADIANCE_SIZE_128 = 2
 
 _RADIANCE_SIZE_32 :: Int
 _RADIANCE_SIZE_32 = 0
 
-_RADIANCE_SIZE_256 :: Int
-_RADIANCE_SIZE_256 = 3
-
 _RADIANCE_SIZE_MAX :: Int
 _RADIANCE_SIZE_MAX = 7
+
+_RADIANCE_SIZE_64 :: Int
+_RADIANCE_SIZE_64 = 1
+
+_RADIANCE_SIZE_1024 :: Int
+_RADIANCE_SIZE_1024 = 5
+
+_RADIANCE_SIZE_512 :: Int
+_RADIANCE_SIZE_512 = 4
+
+_RADIANCE_SIZE_256 :: Int
+_RADIANCE_SIZE_256 = 3
 
 instance NodeProperty Sky "radiance_size" Int 'False where
         nodeProperty

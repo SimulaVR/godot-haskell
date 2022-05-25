@@ -2,37 +2,38 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.OS
-       (Godot.Core.OS._POWERSTATE_NO_BATTERY,
-        Godot.Core.OS._SCREEN_ORIENTATION_SENSOR_PORTRAIT,
-        Godot.Core.OS._SCREEN_ORIENTATION_SENSOR,
-        Godot.Core.OS._DAY_THURSDAY, Godot.Core.OS._POWERSTATE_UNKNOWN,
-        Godot.Core.OS._MONTH_MARCH, Godot.Core.OS._DAY_FRIDAY,
-        Godot.Core.OS._SYSTEM_DIR_DOWNLOADS, Godot.Core.OS._MONTH_NOVEMBER,
-        Godot.Core.OS._MONTH_JULY, Godot.Core.OS._SYSTEM_DIR_PICTURES,
-        Godot.Core.OS._MONTH_DECEMBER, Godot.Core.OS._DAY_TUESDAY,
-        Godot.Core.OS._SYSTEM_DIR_DESKTOP, Godot.Core.OS._DAY_MONDAY,
-        Godot.Core.OS._SYSTEM_DIR_MUSIC,
-        Godot.Core.OS._SYSTEM_DIR_RINGTONES, Godot.Core.OS._MONTH_AUGUST,
-        Godot.Core.OS._SYSTEM_DIR_DOCUMENTS,
-        Godot.Core.OS._SYSTEM_DIR_MOVIES, Godot.Core.OS._SYSTEM_DIR_DCIM,
-        Godot.Core.OS._POWERSTATE_CHARGED, Godot.Core.OS._MONTH_APRIL,
-        Godot.Core.OS._POWERSTATE_ON_BATTERY, Godot.Core.OS._DAY_SUNDAY,
-        Godot.Core.OS._MONTH_MAY,
-        Godot.Core.OS._SCREEN_ORIENTATION_REVERSE_PORTRAIT,
-        Godot.Core.OS._MONTH_JANUARY, Godot.Core.OS._MONTH_OCTOBER,
-        Godot.Core.OS._SCREEN_ORIENTATION_PORTRAIT,
+       (Godot.Core.OS._MONTH_MAY, Godot.Core.OS._SYSTEM_DIR_MOVIES,
+        Godot.Core.OS._MONTH_DECEMBER, Godot.Core.OS._MONTH_MARCH,
+        Godot.Core.OS._DAY_THURSDAY, Godot.Core.OS._SYSTEM_DIR_DCIM,
+        Godot.Core.OS._DAY_MONDAY, Godot.Core.OS._DAY_TUESDAY,
         Godot.Core.OS._SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
-        Godot.Core.OS._MONTH_SEPTEMBER, Godot.Core.OS._VIDEO_DRIVER_GLES2,
-        Godot.Core.OS._POWERSTATE_CHARGING, Godot.Core.OS._MONTH_FEBRUARY,
-        Godot.Core.OS._MONTH_JUNE,
+        Godot.Core.OS._POWERSTATE_CHARGING,
+        Godot.Core.OS._VIDEO_DRIVER_GLES2,
+        Godot.Core.OS._SYSTEM_DIR_RINGTONES,
+        Godot.Core.OS._POWERSTATE_NO_BATTERY, Godot.Core.OS._MONTH_APRIL,
+        Godot.Core.OS._DAY_FRIDAY, Godot.Core.OS._MONTH_SEPTEMBER,
+        Godot.Core.OS._POWERSTATE_CHARGED,
+        Godot.Core.OS._SCREEN_ORIENTATION_SENSOR,
+        Godot.Core.OS._SYSTEM_DIR_MUSIC,
+        Godot.Core.OS._SYSTEM_DIR_PICTURES,
+        Godot.Core.OS._SCREEN_ORIENTATION_PORTRAIT,
         Godot.Core.OS._SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
-        Godot.Core.OS._DAY_SATURDAY,
+        Godot.Core.OS._DAY_WEDNESDAY, Godot.Core.OS._MONTH_JULY,
+        Godot.Core.OS._MONTH_NOVEMBER,
+        Godot.Core.OS._SCREEN_ORIENTATION_REVERSE_PORTRAIT,
+        Godot.Core.OS._VIDEO_DRIVER_GLES3, Godot.Core.OS._DAY_SATURDAY,
+        Godot.Core.OS._SYSTEM_DIR_DOCUMENTS, Godot.Core.OS._MONTH_FEBRUARY,
         Godot.Core.OS._SCREEN_ORIENTATION_LANDSCAPE,
-        Godot.Core.OS._DAY_WEDNESDAY, Godot.Core.OS._VIDEO_DRIVER_GLES3,
-        Godot.Core.OS.get_clipboard, Godot.Core.OS.set_clipboard,
-        Godot.Core.OS.get_current_screen, Godot.Core.OS.set_current_screen,
-        Godot.Core.OS.get_exit_code, Godot.Core.OS.set_exit_code,
-        Godot.Core.OS.is_keep_screen_on, Godot.Core.OS.set_keep_screen_on,
+        Godot.Core.OS._POWERSTATE_UNKNOWN, Godot.Core.OS._DAY_SUNDAY,
+        Godot.Core.OS._MONTH_JANUARY, Godot.Core.OS._MONTH_OCTOBER,
+        Godot.Core.OS._SCREEN_ORIENTATION_SENSOR_PORTRAIT,
+        Godot.Core.OS._SYSTEM_DIR_DOWNLOADS, Godot.Core.OS._MONTH_JUNE,
+        Godot.Core.OS._MONTH_AUGUST, Godot.Core.OS._SYSTEM_DIR_DESKTOP,
+        Godot.Core.OS._POWERSTATE_ON_BATTERY, Godot.Core.OS.get_clipboard,
+        Godot.Core.OS.set_clipboard, Godot.Core.OS.get_current_screen,
+        Godot.Core.OS.set_current_screen, Godot.Core.OS.get_exit_code,
+        Godot.Core.OS.set_exit_code, Godot.Core.OS.is_keep_screen_on,
+        Godot.Core.OS.set_keep_screen_on,
         Godot.Core.OS.is_in_low_processor_usage_mode,
         Godot.Core.OS.set_low_processor_usage_mode,
         Godot.Core.OS.get_low_processor_usage_mode_sleep_usec,
@@ -144,86 +145,104 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_POWERSTATE_NO_BATTERY :: Int
-_POWERSTATE_NO_BATTERY = 2
-
-_SCREEN_ORIENTATION_SENSOR_PORTRAIT :: Int
-_SCREEN_ORIENTATION_SENSOR_PORTRAIT = 5
-
-_SCREEN_ORIENTATION_SENSOR :: Int
-_SCREEN_ORIENTATION_SENSOR = 6
-
-_DAY_THURSDAY :: Int
-_DAY_THURSDAY = 4
-
-_POWERSTATE_UNKNOWN :: Int
-_POWERSTATE_UNKNOWN = 0
-
-_MONTH_MARCH :: Int
-_MONTH_MARCH = 3
-
-_DAY_FRIDAY :: Int
-_DAY_FRIDAY = 5
-
-_SYSTEM_DIR_DOWNLOADS :: Int
-_SYSTEM_DIR_DOWNLOADS = 3
-
-_MONTH_NOVEMBER :: Int
-_MONTH_NOVEMBER = 11
-
-_MONTH_JULY :: Int
-_MONTH_JULY = 7
-
-_SYSTEM_DIR_PICTURES :: Int
-_SYSTEM_DIR_PICTURES = 6
-
-_MONTH_DECEMBER :: Int
-_MONTH_DECEMBER = 12
-
-_DAY_TUESDAY :: Int
-_DAY_TUESDAY = 2
-
-_SYSTEM_DIR_DESKTOP :: Int
-_SYSTEM_DIR_DESKTOP = 0
-
-_DAY_MONDAY :: Int
-_DAY_MONDAY = 1
-
-_SYSTEM_DIR_MUSIC :: Int
-_SYSTEM_DIR_MUSIC = 5
-
-_SYSTEM_DIR_RINGTONES :: Int
-_SYSTEM_DIR_RINGTONES = 7
-
-_MONTH_AUGUST :: Int
-_MONTH_AUGUST = 8
-
-_SYSTEM_DIR_DOCUMENTS :: Int
-_SYSTEM_DIR_DOCUMENTS = 2
+_MONTH_MAY :: Int
+_MONTH_MAY = 5
 
 _SYSTEM_DIR_MOVIES :: Int
 _SYSTEM_DIR_MOVIES = 4
 
+_MONTH_DECEMBER :: Int
+_MONTH_DECEMBER = 12
+
+_MONTH_MARCH :: Int
+_MONTH_MARCH = 3
+
+_DAY_THURSDAY :: Int
+_DAY_THURSDAY = 4
+
 _SYSTEM_DIR_DCIM :: Int
 _SYSTEM_DIR_DCIM = 1
 
-_POWERSTATE_CHARGED :: Int
-_POWERSTATE_CHARGED = 4
+_DAY_MONDAY :: Int
+_DAY_MONDAY = 1
+
+_DAY_TUESDAY :: Int
+_DAY_TUESDAY = 2
+
+_SCREEN_ORIENTATION_SENSOR_LANDSCAPE :: Int
+_SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 4
+
+_POWERSTATE_CHARGING :: Int
+_POWERSTATE_CHARGING = 3
+
+_VIDEO_DRIVER_GLES2 :: Int
+_VIDEO_DRIVER_GLES2 = 1
+
+_SYSTEM_DIR_RINGTONES :: Int
+_SYSTEM_DIR_RINGTONES = 7
+
+_POWERSTATE_NO_BATTERY :: Int
+_POWERSTATE_NO_BATTERY = 2
 
 _MONTH_APRIL :: Int
 _MONTH_APRIL = 4
 
-_POWERSTATE_ON_BATTERY :: Int
-_POWERSTATE_ON_BATTERY = 1
+_DAY_FRIDAY :: Int
+_DAY_FRIDAY = 5
 
-_DAY_SUNDAY :: Int
-_DAY_SUNDAY = 0
+_MONTH_SEPTEMBER :: Int
+_MONTH_SEPTEMBER = 9
 
-_MONTH_MAY :: Int
-_MONTH_MAY = 5
+_POWERSTATE_CHARGED :: Int
+_POWERSTATE_CHARGED = 4
+
+_SCREEN_ORIENTATION_SENSOR :: Int
+_SCREEN_ORIENTATION_SENSOR = 6
+
+_SYSTEM_DIR_MUSIC :: Int
+_SYSTEM_DIR_MUSIC = 5
+
+_SYSTEM_DIR_PICTURES :: Int
+_SYSTEM_DIR_PICTURES = 6
+
+_SCREEN_ORIENTATION_PORTRAIT :: Int
+_SCREEN_ORIENTATION_PORTRAIT = 1
+
+_SCREEN_ORIENTATION_REVERSE_LANDSCAPE :: Int
+_SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 2
+
+_DAY_WEDNESDAY :: Int
+_DAY_WEDNESDAY = 3
+
+_MONTH_JULY :: Int
+_MONTH_JULY = 7
+
+_MONTH_NOVEMBER :: Int
+_MONTH_NOVEMBER = 11
 
 _SCREEN_ORIENTATION_REVERSE_PORTRAIT :: Int
 _SCREEN_ORIENTATION_REVERSE_PORTRAIT = 3
+
+_VIDEO_DRIVER_GLES3 :: Int
+_VIDEO_DRIVER_GLES3 = 0
+
+_DAY_SATURDAY :: Int
+_DAY_SATURDAY = 6
+
+_SYSTEM_DIR_DOCUMENTS :: Int
+_SYSTEM_DIR_DOCUMENTS = 2
+
+_MONTH_FEBRUARY :: Int
+_MONTH_FEBRUARY = 2
+
+_SCREEN_ORIENTATION_LANDSCAPE :: Int
+_SCREEN_ORIENTATION_LANDSCAPE = 0
+
+_POWERSTATE_UNKNOWN :: Int
+_POWERSTATE_UNKNOWN = 0
+
+_DAY_SUNDAY :: Int
+_DAY_SUNDAY = 0
 
 _MONTH_JANUARY :: Int
 _MONTH_JANUARY = 1
@@ -231,41 +250,23 @@ _MONTH_JANUARY = 1
 _MONTH_OCTOBER :: Int
 _MONTH_OCTOBER = 10
 
-_SCREEN_ORIENTATION_PORTRAIT :: Int
-_SCREEN_ORIENTATION_PORTRAIT = 1
+_SCREEN_ORIENTATION_SENSOR_PORTRAIT :: Int
+_SCREEN_ORIENTATION_SENSOR_PORTRAIT = 5
 
-_SCREEN_ORIENTATION_SENSOR_LANDSCAPE :: Int
-_SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 4
-
-_MONTH_SEPTEMBER :: Int
-_MONTH_SEPTEMBER = 9
-
-_VIDEO_DRIVER_GLES2 :: Int
-_VIDEO_DRIVER_GLES2 = 1
-
-_POWERSTATE_CHARGING :: Int
-_POWERSTATE_CHARGING = 3
-
-_MONTH_FEBRUARY :: Int
-_MONTH_FEBRUARY = 2
+_SYSTEM_DIR_DOWNLOADS :: Int
+_SYSTEM_DIR_DOWNLOADS = 3
 
 _MONTH_JUNE :: Int
 _MONTH_JUNE = 6
 
-_SCREEN_ORIENTATION_REVERSE_LANDSCAPE :: Int
-_SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 2
+_MONTH_AUGUST :: Int
+_MONTH_AUGUST = 8
 
-_DAY_SATURDAY :: Int
-_DAY_SATURDAY = 6
+_SYSTEM_DIR_DESKTOP :: Int
+_SYSTEM_DIR_DESKTOP = 0
 
-_SCREEN_ORIENTATION_LANDSCAPE :: Int
-_SCREEN_ORIENTATION_LANDSCAPE = 0
-
-_DAY_WEDNESDAY :: Int
-_DAY_WEDNESDAY = 3
-
-_VIDEO_DRIVER_GLES3 :: Int
-_VIDEO_DRIVER_GLES3 = 0
+_POWERSTATE_ON_BATTERY :: Int
+_POWERSTATE_ON_BATTERY = 1
 
 {-# NOINLINE bindOS_get_clipboard #-}
 
@@ -1810,21 +1811,7 @@ instance NodeMethod OS "get_audio_driver_name" '[Int]
 
 {-# NOINLINE bindOS_get_cmdline_args #-}
 
--- | Returns the command-line arguments passed to the engine.
---   				Command-line arguments can be written in any form, including both @--key value@ and @--key=value@ forms so they can be properly parsed, as long as custom command-line arguments do not conflict with engine arguments.
---   				You can also incorporate environment variables using the @method get_environment@ method.
---   				You can set @editor/main_run_args@ in the Project Settings to define command-line arguments to be passed by the editor when running the project.
---   				Here's a minimal example on how to parse command-line arguments into a dictionary using the @--key=value@ form for arguments:
---   				
---   @
---   
---   				var arguments = {}
---   				for argument in OS.get_cmdline_args():
---   				    if argument.find("=") > -1:
---   				        var key_value = argument.split("=")
---   				        arguments@key_value@0@.lstrip("--")@ = key_value@1@
---   				
---   @
+-- | Returns the command line arguments passed to the engine.
 bindOS_get_cmdline_args :: MethodBind
 bindOS_get_cmdline_args
   = unsafePerformIO $
@@ -1834,21 +1821,7 @@ bindOS_get_cmdline_args
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the command-line arguments passed to the engine.
---   				Command-line arguments can be written in any form, including both @--key value@ and @--key=value@ forms so they can be properly parsed, as long as custom command-line arguments do not conflict with engine arguments.
---   				You can also incorporate environment variables using the @method get_environment@ method.
---   				You can set @editor/main_run_args@ in the Project Settings to define command-line arguments to be passed by the editor when running the project.
---   				Here's a minimal example on how to parse command-line arguments into a dictionary using the @--key=value@ form for arguments:
---   				
---   @
---   
---   				var arguments = {}
---   				for argument in OS.get_cmdline_args():
---   				    if argument.find("=") > -1:
---   				        var key_value = argument.split("=")
---   				        arguments@key_value@0@.lstrip("--")@ = key_value@1@
---   				
---   @
+-- | Returns the command line arguments passed to the engine.
 get_cmdline_args ::
                    (OS :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_cmdline_args cls
@@ -2255,7 +2228,7 @@ instance NodeMethod OS "get_model_name" '[] (IO GodotString) where
 
 {-# NOINLINE bindOS_get_name #-}
 
--- | Returns the name of the host OS. Possible values are: @"Android"@, @"iOS"@, @"HTML5"@, @"OSX"@, @"Server"@, @"Windows"@, @"UWP"@, @"X11"@.
+-- | Returns the name of the host OS. Possible values are: @"Android"@, @"Haiku"@, @"iOS"@, @"HTML5"@, @"OSX"@, @"Server"@, @"Windows"@, @"UWP"@, @"X11"@.
 bindOS_get_name :: MethodBind
 bindOS_get_name
   = unsafePerformIO $
@@ -2265,7 +2238,7 @@ bindOS_get_name
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the name of the host OS. Possible values are: @"Android"@, @"iOS"@, @"HTML5"@, @"OSX"@, @"Server"@, @"Windows"@, @"UWP"@, @"X11"@.
+-- | Returns the name of the host OS. Possible values are: @"Android"@, @"Haiku"@, @"iOS"@, @"HTML5"@, @"OSX"@, @"Server"@, @"Windows"@, @"UWP"@, @"X11"@.
 get_name :: (OS :< cls, Object :< cls) => cls -> IO GodotString
 get_name cls
   = withVariantArray []
@@ -4172,7 +4145,6 @@ instance NodeMethod OS "set_window_title" '[GodotString] (IO ())
 --   				- @OS.shell_open("C:\\Users\name\Downloads")@ on Windows opens the file explorer at the user's Downloads folder.
 --   				- @OS.shell_open("https://godotengine.org")@ opens the default web browser on the official Godot website.
 --   				- @OS.shell_open("mailto:example@example.com")@ opens the default email client with the "To" field set to @example@example.com@. See @url=https://blog.escapecreative.com/customizing-mailto-links/@Customizing @mailto:@ Links@/url@ for a list of fields that can be added.
---   				Use @method ProjectSettings.globalize_path@ to convert a @res://@ or @user://@ path into a system path for use with this method.
 --   				__Note:__ This method is implemented on Android, iOS, HTML5, Linux, macOS and Windows.
 bindOS_shell_open :: MethodBind
 bindOS_shell_open
@@ -4187,7 +4159,6 @@ bindOS_shell_open
 --   				- @OS.shell_open("C:\\Users\name\Downloads")@ on Windows opens the file explorer at the user's Downloads folder.
 --   				- @OS.shell_open("https://godotengine.org")@ opens the default web browser on the official Godot website.
 --   				- @OS.shell_open("mailto:example@example.com")@ opens the default email client with the "To" field set to @example@example.com@. See @url=https://blog.escapecreative.com/customizing-mailto-links/@Customizing @mailto:@ Links@/url@ for a list of fields that can be added.
---   				Use @method ProjectSettings.globalize_path@ to convert a @res://@ or @user://@ path into a system path for use with this method.
 --   				__Note:__ This method is implemented on Android, iOS, HTML5, Linux, macOS and Windows.
 shell_open ::
              (OS :< cls, Object :< cls) => cls -> GodotString -> IO Int
@@ -4202,9 +4173,7 @@ instance NodeMethod OS "shell_open" '[GodotString] (IO Int) where
 
 {-# NOINLINE bindOS_show_virtual_keyboard #-}
 
--- | Shows the virtual keyboard if the platform has one.
---   				The @existing_text@ parameter is useful for implementing your own @LineEdit@ or @TextEdit@, as it tells the virtual keyboard what text has already been typed (the virtual keyboard uses it for auto-correct and predictions).
---   				The @multiline@ parameter needs to be set to @true@ to be able to enter multiple lines of text, as in @TextEdit@.
+-- | Shows the virtual keyboard if the platform has one. The @existing_text@ parameter is useful for implementing your own LineEdit, as it tells the virtual keyboard what text has already been typed (the virtual keyboard uses it for auto-correct and predictions).
 --   				__Note:__ This method is implemented on Android, iOS and UWP.
 bindOS_show_virtual_keyboard :: MethodBind
 bindOS_show_virtual_keyboard
@@ -4215,9 +4184,7 @@ bindOS_show_virtual_keyboard
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Shows the virtual keyboard if the platform has one.
---   				The @existing_text@ parameter is useful for implementing your own @LineEdit@ or @TextEdit@, as it tells the virtual keyboard what text has already been typed (the virtual keyboard uses it for auto-correct and predictions).
---   				The @multiline@ parameter needs to be set to @true@ to be able to enter multiple lines of text, as in @TextEdit@.
+-- | Shows the virtual keyboard if the platform has one. The @existing_text@ parameter is useful for implementing your own LineEdit, as it tells the virtual keyboard what text has already been typed (the virtual keyboard uses it for auto-correct and predictions).
 --   				__Note:__ This method is implemented on Android, iOS and UWP.
 show_virtual_keyboard ::
                         (OS :< cls, Object :< cls) => cls -> Maybe GodotString -> IO ()

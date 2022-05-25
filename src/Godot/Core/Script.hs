@@ -112,7 +112,6 @@ instance NodeMethod Script "get_instance_base_type" '[]
 
 {-# NOINLINE bindScript_get_property_default_value #-}
 
--- | Returns the default value of the specified property.
 bindScript_get_property_default_value :: MethodBind
 bindScript_get_property_default_value
   = unsafePerformIO $
@@ -122,7 +121,6 @@ bindScript_get_property_default_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the default value of the specified property.
 get_property_default_value ::
                              (Script :< cls, Object :< cls) =>
                              cls -> GodotString -> IO GodotVariant
@@ -143,7 +141,6 @@ instance NodeMethod Script "get_property_default_value"
 
 {-# NOINLINE bindScript_get_script_constant_map #-}
 
--- | Returns a dictionary containing constant names and their values.
 bindScript_get_script_constant_map :: MethodBind
 bindScript_get_script_constant_map
   = unsafePerformIO $
@@ -153,7 +150,6 @@ bindScript_get_script_constant_map
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a dictionary containing constant names and their values.
 get_script_constant_map ::
                           (Script :< cls, Object :< cls) => cls -> IO Dictionary
 get_script_constant_map cls
@@ -172,7 +168,6 @@ instance NodeMethod Script "get_script_constant_map" '[]
 
 {-# NOINLINE bindScript_get_script_method_list #-}
 
--- | Returns the list of methods in this @Script@.
 bindScript_get_script_method_list :: MethodBind
 bindScript_get_script_method_list
   = unsafePerformIO $
@@ -182,7 +177,6 @@ bindScript_get_script_method_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of methods in this @Script@.
 get_script_method_list ::
                          (Script :< cls, Object :< cls) => cls -> IO Array
 get_script_method_list cls
@@ -200,7 +194,6 @@ instance NodeMethod Script "get_script_method_list" '[] (IO Array)
 
 {-# NOINLINE bindScript_get_script_property_list #-}
 
--- | Returns the list of properties in this @Script@.
 bindScript_get_script_property_list :: MethodBind
 bindScript_get_script_property_list
   = unsafePerformIO $
@@ -210,7 +203,6 @@ bindScript_get_script_property_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of properties in this @Script@.
 get_script_property_list ::
                            (Script :< cls, Object :< cls) => cls -> IO Array
 get_script_property_list cls
@@ -229,7 +221,6 @@ instance NodeMethod Script "get_script_property_list" '[]
 
 {-# NOINLINE bindScript_get_script_signal_list #-}
 
--- | Returns the list of user signals defined in this @Script@.
 bindScript_get_script_signal_list :: MethodBind
 bindScript_get_script_signal_list
   = unsafePerformIO $
@@ -239,7 +230,6 @@ bindScript_get_script_signal_list
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of user signals defined in this @Script@.
 get_script_signal_list ::
                          (Script :< cls, Object :< cls) => cls -> IO Array
 get_script_signal_list cls

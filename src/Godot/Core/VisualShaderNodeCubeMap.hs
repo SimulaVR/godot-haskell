@@ -2,11 +2,11 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeCubeMap
-       (Godot.Core.VisualShaderNodeCubeMap._TYPE_DATA,
-        Godot.Core.VisualShaderNodeCubeMap._SOURCE_PORT,
+       (Godot.Core.VisualShaderNodeCubeMap._TYPE_NORMALMAP,
+        Godot.Core.VisualShaderNodeCubeMap._TYPE_DATA,
         Godot.Core.VisualShaderNodeCubeMap._TYPE_COLOR,
+        Godot.Core.VisualShaderNodeCubeMap._SOURCE_PORT,
         Godot.Core.VisualShaderNodeCubeMap._SOURCE_TEXTURE,
-        Godot.Core.VisualShaderNodeCubeMap._TYPE_NORMALMAP,
         Godot.Core.VisualShaderNodeCubeMap.get_cube_map,
         Godot.Core.VisualShaderNodeCubeMap.get_source,
         Godot.Core.VisualShaderNodeCubeMap.get_texture_type,
@@ -26,20 +26,20 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualShaderNode()
 
+_TYPE_NORMALMAP :: Int
+_TYPE_NORMALMAP = 2
+
 _TYPE_DATA :: Int
 _TYPE_DATA = 0
-
-_SOURCE_PORT :: Int
-_SOURCE_PORT = 1
 
 _TYPE_COLOR :: Int
 _TYPE_COLOR = 1
 
+_SOURCE_PORT :: Int
+_SOURCE_PORT = 1
+
 _SOURCE_TEXTURE :: Int
 _SOURCE_TEXTURE = 0
-
-_TYPE_NORMALMAP :: Int
-_TYPE_NORMALMAP = 2
 
 instance NodeProperty VisualShaderNodeCubeMap "cube_map" CubeMap
            'False

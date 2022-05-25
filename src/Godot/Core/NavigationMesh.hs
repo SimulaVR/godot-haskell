@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.NavigationMesh
-       (Godot.Core.NavigationMesh._SAMPLE_PARTITION_LAYERS,
-        Godot.Core.NavigationMesh._SAMPLE_PARTITION_WATERSHED,
-        Godot.Core.NavigationMesh._SAMPLE_PARTITION_MONOTONE,
+       (Godot.Core.NavigationMesh._SAMPLE_PARTITION_WATERSHED,
+        Godot.Core.NavigationMesh._SAMPLE_PARTITION_LAYERS,
         Godot.Core.NavigationMesh._PARSED_GEOMETRY_BOTH,
-        Godot.Core.NavigationMesh._PARSED_GEOMETRY_MESH_INSTANCES,
         Godot.Core.NavigationMesh._PARSED_GEOMETRY_STATIC_COLLIDERS,
+        Godot.Core.NavigationMesh._SAMPLE_PARTITION_MONOTONE,
+        Godot.Core.NavigationMesh._PARSED_GEOMETRY_MESH_INSTANCES,
         Godot.Core.NavigationMesh._get_polygons,
         Godot.Core.NavigationMesh._set_polygons,
         Godot.Core.NavigationMesh.add_polygon,
@@ -74,23 +74,23 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_SAMPLE_PARTITION_LAYERS :: Int
-_SAMPLE_PARTITION_LAYERS = 2
-
 _SAMPLE_PARTITION_WATERSHED :: Int
 _SAMPLE_PARTITION_WATERSHED = 0
 
-_SAMPLE_PARTITION_MONOTONE :: Int
-_SAMPLE_PARTITION_MONOTONE = 1
+_SAMPLE_PARTITION_LAYERS :: Int
+_SAMPLE_PARTITION_LAYERS = 2
 
 _PARSED_GEOMETRY_BOTH :: Int
 _PARSED_GEOMETRY_BOTH = 2
 
-_PARSED_GEOMETRY_MESH_INSTANCES :: Int
-_PARSED_GEOMETRY_MESH_INSTANCES = 0
-
 _PARSED_GEOMETRY_STATIC_COLLIDERS :: Int
 _PARSED_GEOMETRY_STATIC_COLLIDERS = 1
+
+_SAMPLE_PARTITION_MONOTONE :: Int
+_SAMPLE_PARTITION_MONOTONE = 1
+
+_PARSED_GEOMETRY_MESH_INSTANCES :: Int
+_PARSED_GEOMETRY_MESH_INSTANCES = 0
 
 instance NodeProperty NavigationMesh "agent/height" Float 'False
          where

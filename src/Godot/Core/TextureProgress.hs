@@ -2,15 +2,15 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TextureProgress
-       (Godot.Core.TextureProgress._FILL_BOTTOM_TO_TOP,
-        Godot.Core.TextureProgress._FILL_TOP_TO_BOTTOM,
-        Godot.Core.TextureProgress._FILL_CLOCKWISE_AND_COUNTER_CLOCKWISE,
+       (Godot.Core.TextureProgress._FILL_TOP_TO_BOTTOM,
+        Godot.Core.TextureProgress._FILL_BOTTOM_TO_TOP,
         Godot.Core.TextureProgress._FILL_RIGHT_TO_LEFT,
-        Godot.Core.TextureProgress._FILL_CLOCKWISE,
-        Godot.Core.TextureProgress._FILL_LEFT_TO_RIGHT,
         Godot.Core.TextureProgress._FILL_BILINEAR_LEFT_AND_RIGHT,
         Godot.Core.TextureProgress._FILL_COUNTER_CLOCKWISE,
+        Godot.Core.TextureProgress._FILL_CLOCKWISE,
         Godot.Core.TextureProgress._FILL_BILINEAR_TOP_AND_BOTTOM,
+        Godot.Core.TextureProgress._FILL_CLOCKWISE_AND_COUNTER_CLOCKWISE,
+        Godot.Core.TextureProgress._FILL_LEFT_TO_RIGHT,
         Godot.Core.TextureProgress.get_fill_degrees,
         Godot.Core.TextureProgress.get_fill_mode,
         Godot.Core.TextureProgress.get_nine_patch_stretch,
@@ -48,23 +48,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Range()
 
-_FILL_BOTTOM_TO_TOP :: Int
-_FILL_BOTTOM_TO_TOP = 3
-
 _FILL_TOP_TO_BOTTOM :: Int
 _FILL_TOP_TO_BOTTOM = 2
 
-_FILL_CLOCKWISE_AND_COUNTER_CLOCKWISE :: Int
-_FILL_CLOCKWISE_AND_COUNTER_CLOCKWISE = 8
+_FILL_BOTTOM_TO_TOP :: Int
+_FILL_BOTTOM_TO_TOP = 3
 
 _FILL_RIGHT_TO_LEFT :: Int
 _FILL_RIGHT_TO_LEFT = 1
-
-_FILL_CLOCKWISE :: Int
-_FILL_CLOCKWISE = 4
-
-_FILL_LEFT_TO_RIGHT :: Int
-_FILL_LEFT_TO_RIGHT = 0
 
 _FILL_BILINEAR_LEFT_AND_RIGHT :: Int
 _FILL_BILINEAR_LEFT_AND_RIGHT = 6
@@ -72,8 +63,17 @@ _FILL_BILINEAR_LEFT_AND_RIGHT = 6
 _FILL_COUNTER_CLOCKWISE :: Int
 _FILL_COUNTER_CLOCKWISE = 5
 
+_FILL_CLOCKWISE :: Int
+_FILL_CLOCKWISE = 4
+
 _FILL_BILINEAR_TOP_AND_BOTTOM :: Int
 _FILL_BILINEAR_TOP_AND_BOTTOM = 7
+
+_FILL_CLOCKWISE_AND_COUNTER_CLOCKWISE :: Int
+_FILL_CLOCKWISE_AND_COUNTER_CLOCKWISE = 8
+
+_FILL_LEFT_TO_RIGHT :: Int
+_FILL_LEFT_TO_RIGHT = 0
 
 instance NodeProperty TextureProgress "fill_mode" Int 'False where
         nodeProperty

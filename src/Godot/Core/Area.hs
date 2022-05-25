@@ -4,8 +4,8 @@
 module Godot.Core.Area
        (Godot.Core.Area._SPACE_OVERRIDE_REPLACE,
         Godot.Core.Area._SPACE_OVERRIDE_DISABLED,
-        Godot.Core.Area._SPACE_OVERRIDE_COMBINE_REPLACE,
         Godot.Core.Area._SPACE_OVERRIDE_REPLACE_COMBINE,
+        Godot.Core.Area._SPACE_OVERRIDE_COMBINE_REPLACE,
         Godot.Core.Area._SPACE_OVERRIDE_COMBINE,
         Godot.Core.Area.sig_area_entered, Godot.Core.Area.sig_area_exited,
         Godot.Core.Area.sig_area_shape_entered,
@@ -71,11 +71,11 @@ _SPACE_OVERRIDE_REPLACE = 3
 _SPACE_OVERRIDE_DISABLED :: Int
 _SPACE_OVERRIDE_DISABLED = 0
 
-_SPACE_OVERRIDE_COMBINE_REPLACE :: Int
-_SPACE_OVERRIDE_COMBINE_REPLACE = 2
-
 _SPACE_OVERRIDE_REPLACE_COMBINE :: Int
 _SPACE_OVERRIDE_REPLACE_COMBINE = 4
+
+_SPACE_OVERRIDE_COMBINE_REPLACE :: Int
+_SPACE_OVERRIDE_COMBINE_REPLACE = 2
 
 _SPACE_OVERRIDE_COMBINE :: Int
 _SPACE_OVERRIDE_COMBINE = 1
@@ -424,7 +424,7 @@ instance NodeMethod Area "get_audio_bus" '[] (IO GodotString) where
 
 {-# NOINLINE bindArea_get_collision_layer #-}
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@.
 bindArea_get_collision_layer :: MethodBind
 bindArea_get_collision_layer
   = unsafePerformIO $
@@ -434,7 +434,7 @@ bindArea_get_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@.
 get_collision_layer ::
                       (Area :< cls, Object :< cls) => cls -> IO Int
 get_collision_layer cls
@@ -478,7 +478,7 @@ instance NodeMethod Area "get_collision_layer_bit" '[Int] (IO Bool)
 
 {-# NOINLINE bindArea_get_collision_mask #-}
 
--- | The physics layers this area scans to determine collision detection. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans to determine collision detection.
 bindArea_get_collision_mask :: MethodBind
 bindArea_get_collision_mask
   = unsafePerformIO $
@@ -488,7 +488,7 @@ bindArea_get_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans to determine collision detection. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans to determine collision detection.
 get_collision_mask :: (Area :< cls, Object :< cls) => cls -> IO Int
 get_collision_mask cls
   = withVariantArray []
@@ -1081,7 +1081,7 @@ instance NodeMethod Area "set_audio_bus_override" '[Bool] (IO ())
 
 {-# NOINLINE bindArea_set_collision_layer #-}
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@.
 bindArea_set_collision_layer :: MethodBind
 bindArea_set_collision_layer
   = unsafePerformIO $
@@ -1091,7 +1091,7 @@ bindArea_set_collision_layer
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The area's physics layer(s). Collidable objects can exist in any of 32 different layers. A contact is detected if object A is in any of the layers that object B scans, or object B is in any layers that object A scans. See also @collision_mask@.
 set_collision_layer ::
                       (Area :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_layer cls arg1
@@ -1136,7 +1136,7 @@ instance NodeMethod Area "set_collision_layer_bit" '[Int, Bool]
 
 {-# NOINLINE bindArea_set_collision_mask #-}
 
--- | The physics layers this area scans to determine collision detection. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans to determine collision detection.
 bindArea_set_collision_mask :: MethodBind
 bindArea_set_collision_mask
   = unsafePerformIO $
@@ -1146,7 +1146,7 @@ bindArea_set_collision_mask
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The physics layers this area scans to determine collision detection. See @url=https://docs.godotengine.org/en/latest/tutorials/physics/physics_introduction.html#collision-layers-and-masks@Collision layers and masks@/url@ in the documentation for more information.
+-- | The physics layers this area scans to determine collision detection.
 set_collision_mask ::
                      (Area :< cls, Object :< cls) => cls -> Int -> IO ()
 set_collision_mask cls arg1

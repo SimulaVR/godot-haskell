@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Material
-       (Godot.Core.Material._RENDER_PRIORITY_MAX,
-        Godot.Core.Material._RENDER_PRIORITY_MIN,
+       (Godot.Core.Material._RENDER_PRIORITY_MIN,
+        Godot.Core.Material._RENDER_PRIORITY_MAX,
         Godot.Core.Material.get_next_pass,
         Godot.Core.Material.get_render_priority,
         Godot.Core.Material.set_next_pass,
@@ -21,11 +21,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_RENDER_PRIORITY_MAX :: Int
-_RENDER_PRIORITY_MAX = 127
-
 _RENDER_PRIORITY_MIN :: Int
 _RENDER_PRIORITY_MIN = -128
+
+_RENDER_PRIORITY_MAX :: Int
+_RENDER_PRIORITY_MAX = 127
 
 instance NodeProperty Material "next_pass" Material 'False where
         nodeProperty
@@ -68,7 +68,7 @@ instance NodeMethod Material "get_next_pass" '[] (IO Material)
 {-# NOINLINE bindMaterial_get_render_priority #-}
 
 -- | Sets the render priority for transparent objects in 3D scenes. Higher priority objects will be sorted in front of lower priority objects.
---   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are not sorted, while transparent objects are sorted from back to front (subject to priority).
+--   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are sorted based on depth, while transparent objects are sorted from back to front (subject to priority).
 bindMaterial_get_render_priority :: MethodBind
 bindMaterial_get_render_priority
   = unsafePerformIO $
@@ -79,7 +79,7 @@ bindMaterial_get_render_priority
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the render priority for transparent objects in 3D scenes. Higher priority objects will be sorted in front of lower priority objects.
---   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are not sorted, while transparent objects are sorted from back to front (subject to priority).
+--   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are sorted based on depth, while transparent objects are sorted from back to front (subject to priority).
 get_render_priority ::
                       (Material :< cls, Object :< cls) => cls -> IO Int
 get_render_priority cls
@@ -127,7 +127,7 @@ instance NodeMethod Material "set_next_pass" '[Material] (IO ())
 {-# NOINLINE bindMaterial_set_render_priority #-}
 
 -- | Sets the render priority for transparent objects in 3D scenes. Higher priority objects will be sorted in front of lower priority objects.
---   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are not sorted, while transparent objects are sorted from back to front (subject to priority).
+--   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are sorted based on depth, while transparent objects are sorted from back to front (subject to priority).
 bindMaterial_set_render_priority :: MethodBind
 bindMaterial_set_render_priority
   = unsafePerformIO $
@@ -138,7 +138,7 @@ bindMaterial_set_render_priority
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Sets the render priority for transparent objects in 3D scenes. Higher priority objects will be sorted in front of lower priority objects.
---   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are not sorted, while transparent objects are sorted from back to front (subject to priority).
+--   			__Note:__ this only applies to sorting of transparent objects. This will not impact how transparent objects are sorted relative to opaque objects. This is because opaque objects are sorted based on depth, while transparent objects are sorted from back to front (subject to priority).
 set_render_priority ::
                       (Material :< cls, Object :< cls) => cls -> Int -> IO ()
 set_render_priority cls arg1

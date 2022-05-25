@@ -32,7 +32,6 @@ instance NodeProperty VisualShaderNodeIs "function" Int 'False
 
 {-# NOINLINE bindVisualShaderNodeIs_get_function #-}
 
--- | The comparison function. See @enum Function@ for options.
 bindVisualShaderNodeIs_get_function :: MethodBind
 bindVisualShaderNodeIs_get_function
   = unsafePerformIO $
@@ -42,7 +41,6 @@ bindVisualShaderNodeIs_get_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The comparison function. See @enum Function@ for options.
 get_function ::
                (VisualShaderNodeIs :< cls, Object :< cls) => cls -> IO Int
 get_function cls
@@ -60,7 +58,6 @@ instance NodeMethod VisualShaderNodeIs "get_function" '[] (IO Int)
 
 {-# NOINLINE bindVisualShaderNodeIs_set_function #-}
 
--- | The comparison function. See @enum Function@ for options.
 bindVisualShaderNodeIs_set_function :: MethodBind
 bindVisualShaderNodeIs_set_function
   = unsafePerformIO $
@@ -70,7 +67,6 @@ bindVisualShaderNodeIs_set_function
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The comparison function. See @enum Function@ for options.
 set_function ::
                (VisualShaderNodeIs :< cls, Object :< cls) => cls -> Int -> IO ()
 set_function cls arg1

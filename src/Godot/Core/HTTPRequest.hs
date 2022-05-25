@@ -2,19 +2,19 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.HTTPRequest
-       (Godot.Core.HTTPRequest._RESULT_DOWNLOAD_FILE_CANT_OPEN,
-        Godot.Core.HTTPRequest._RESULT_SUCCESS,
+       (Godot.Core.HTTPRequest._RESULT_CANT_RESOLVE,
+        Godot.Core.HTTPRequest._RESULT_CONNECTION_ERROR,
+        Godot.Core.HTTPRequest._RESULT_REDIRECT_LIMIT_REACHED,
+        Godot.Core.HTTPRequest._RESULT_DOWNLOAD_FILE_WRITE_ERROR,
+        Godot.Core.HTTPRequest._RESULT_TIMEOUT,
         Godot.Core.HTTPRequest._RESULT_NO_RESPONSE,
         Godot.Core.HTTPRequest._RESULT_REQUEST_FAILED,
-        Godot.Core.HTTPRequest._RESULT_CONNECTION_ERROR,
         Godot.Core.HTTPRequest._RESULT_CANT_CONNECT,
-        Godot.Core.HTTPRequest._RESULT_CHUNKED_BODY_SIZE_MISMATCH,
+        Godot.Core.HTTPRequest._RESULT_SUCCESS,
+        Godot.Core.HTTPRequest._RESULT_DOWNLOAD_FILE_CANT_OPEN,
         Godot.Core.HTTPRequest._RESULT_BODY_SIZE_LIMIT_EXCEEDED,
-        Godot.Core.HTTPRequest._RESULT_REDIRECT_LIMIT_REACHED,
         Godot.Core.HTTPRequest._RESULT_SSL_HANDSHAKE_ERROR,
-        Godot.Core.HTTPRequest._RESULT_CANT_RESOLVE,
-        Godot.Core.HTTPRequest._RESULT_TIMEOUT,
-        Godot.Core.HTTPRequest._RESULT_DOWNLOAD_FILE_WRITE_ERROR,
+        Godot.Core.HTTPRequest._RESULT_CHUNKED_BODY_SIZE_MISMATCH,
         Godot.Core.HTTPRequest.sig_request_completed,
         Godot.Core.HTTPRequest._redirect_request,
         Godot.Core.HTTPRequest._request_done,
@@ -49,11 +49,20 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node()
 
-_RESULT_DOWNLOAD_FILE_CANT_OPEN :: Int
-_RESULT_DOWNLOAD_FILE_CANT_OPEN = 9
+_RESULT_CANT_RESOLVE :: Int
+_RESULT_CANT_RESOLVE = 3
 
-_RESULT_SUCCESS :: Int
-_RESULT_SUCCESS = 0
+_RESULT_CONNECTION_ERROR :: Int
+_RESULT_CONNECTION_ERROR = 4
+
+_RESULT_REDIRECT_LIMIT_REACHED :: Int
+_RESULT_REDIRECT_LIMIT_REACHED = 11
+
+_RESULT_DOWNLOAD_FILE_WRITE_ERROR :: Int
+_RESULT_DOWNLOAD_FILE_WRITE_ERROR = 10
+
+_RESULT_TIMEOUT :: Int
+_RESULT_TIMEOUT = 12
 
 _RESULT_NO_RESPONSE :: Int
 _RESULT_NO_RESPONSE = 6
@@ -61,32 +70,23 @@ _RESULT_NO_RESPONSE = 6
 _RESULT_REQUEST_FAILED :: Int
 _RESULT_REQUEST_FAILED = 8
 
-_RESULT_CONNECTION_ERROR :: Int
-_RESULT_CONNECTION_ERROR = 4
-
 _RESULT_CANT_CONNECT :: Int
 _RESULT_CANT_CONNECT = 2
 
-_RESULT_CHUNKED_BODY_SIZE_MISMATCH :: Int
-_RESULT_CHUNKED_BODY_SIZE_MISMATCH = 1
+_RESULT_SUCCESS :: Int
+_RESULT_SUCCESS = 0
+
+_RESULT_DOWNLOAD_FILE_CANT_OPEN :: Int
+_RESULT_DOWNLOAD_FILE_CANT_OPEN = 9
 
 _RESULT_BODY_SIZE_LIMIT_EXCEEDED :: Int
 _RESULT_BODY_SIZE_LIMIT_EXCEEDED = 7
 
-_RESULT_REDIRECT_LIMIT_REACHED :: Int
-_RESULT_REDIRECT_LIMIT_REACHED = 11
-
 _RESULT_SSL_HANDSHAKE_ERROR :: Int
 _RESULT_SSL_HANDSHAKE_ERROR = 5
 
-_RESULT_CANT_RESOLVE :: Int
-_RESULT_CANT_RESOLVE = 3
-
-_RESULT_TIMEOUT :: Int
-_RESULT_TIMEOUT = 12
-
-_RESULT_DOWNLOAD_FILE_WRITE_ERROR :: Int
-_RESULT_DOWNLOAD_FILE_WRITE_ERROR = 10
+_RESULT_CHUNKED_BODY_SIZE_MISMATCH :: Int
+_RESULT_CHUNKED_BODY_SIZE_MISMATCH = 1
 
 -- | Emitted when a request is completed.
 sig_request_completed :: Godot.Internal.Dispatch.Signal HTTPRequest
@@ -488,7 +488,6 @@ instance NodeMethod HTTPRequest "is_using_threads" '[] (IO Bool)
 
 -- | Creates request on the underlying @HTTPClient@. If there is no configuration errors, it tries to connect using @method HTTPClient.connect_to_host@ and passes parameters onto @method HTTPClient.request@.
 --   				Returns @OK@ if request is successfully created. (Does not imply that the server has responded), @ERR_UNCONFIGURED@ if not in the tree, @ERR_BUSY@ if still processing previous request, @ERR_INVALID_PARAMETER@ if given string is not a valid URL format, or @ERR_CANT_CONNECT@ if not using thread and the @HTTPClient@ cannot connect to host.
---   				__Note:__ The @request_data@ parameter is ignored if @method@ is @HTTPClient.METHOD_GET@. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See @method String.http_escape@ for an example.
 bindHTTPRequest_request :: MethodBind
 bindHTTPRequest_request
   = unsafePerformIO $
@@ -500,7 +499,6 @@ bindHTTPRequest_request
 
 -- | Creates request on the underlying @HTTPClient@. If there is no configuration errors, it tries to connect using @method HTTPClient.connect_to_host@ and passes parameters onto @method HTTPClient.request@.
 --   				Returns @OK@ if request is successfully created. (Does not imply that the server has responded), @ERR_UNCONFIGURED@ if not in the tree, @ERR_BUSY@ if still processing previous request, @ERR_INVALID_PARAMETER@ if given string is not a valid URL format, or @ERR_CANT_CONNECT@ if not using thread and the @HTTPClient@ cannot connect to host.
---   				__Note:__ The @request_data@ parameter is ignored if @method@ is @HTTPClient.METHOD_GET@. This is because GET methods can't contain request data. As a workaround, you can pass request data as a query string in the URL. See @method String.http_escape@ for an example.
 request ::
           (HTTPRequest :< cls, Object :< cls) =>
           cls ->

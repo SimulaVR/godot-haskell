@@ -2,14 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.NetworkedMultiplayerPeer
-       (Godot.Core.NetworkedMultiplayerPeer._CONNECTION_DISCONNECTED,
-        Godot.Core.NetworkedMultiplayerPeer._TRANSFER_MODE_UNRELIABLE,
-        Godot.Core.NetworkedMultiplayerPeer._CONNECTION_CONNECTED,
-        Godot.Core.NetworkedMultiplayerPeer._TARGET_PEER_SERVER,
-        Godot.Core.NetworkedMultiplayerPeer._TARGET_PEER_BROADCAST,
+       (Godot.Core.NetworkedMultiplayerPeer._TRANSFER_MODE_UNRELIABLE,
         Godot.Core.NetworkedMultiplayerPeer._CONNECTION_CONNECTING,
+        Godot.Core.NetworkedMultiplayerPeer._CONNECTION_CONNECTED,
         Godot.Core.NetworkedMultiplayerPeer._TRANSFER_MODE_RELIABLE,
         Godot.Core.NetworkedMultiplayerPeer._TRANSFER_MODE_UNRELIABLE_ORDERED,
+        Godot.Core.NetworkedMultiplayerPeer._TARGET_PEER_SERVER,
+        Godot.Core.NetworkedMultiplayerPeer._CONNECTION_DISCONNECTED,
+        Godot.Core.NetworkedMultiplayerPeer._TARGET_PEER_BROADCAST,
         Godot.Core.NetworkedMultiplayerPeer.sig_connection_failed,
         Godot.Core.NetworkedMultiplayerPeer.sig_connection_succeeded,
         Godot.Core.NetworkedMultiplayerPeer.sig_peer_connected,
@@ -37,29 +37,29 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.PacketPeer()
 
-_CONNECTION_DISCONNECTED :: Int
-_CONNECTION_DISCONNECTED = 0
-
 _TRANSFER_MODE_UNRELIABLE :: Int
 _TRANSFER_MODE_UNRELIABLE = 0
 
-_CONNECTION_CONNECTED :: Int
-_CONNECTION_CONNECTED = 2
-
-_TARGET_PEER_SERVER :: Int
-_TARGET_PEER_SERVER = 1
-
-_TARGET_PEER_BROADCAST :: Int
-_TARGET_PEER_BROADCAST = 0
-
 _CONNECTION_CONNECTING :: Int
 _CONNECTION_CONNECTING = 1
+
+_CONNECTION_CONNECTED :: Int
+_CONNECTION_CONNECTED = 2
 
 _TRANSFER_MODE_RELIABLE :: Int
 _TRANSFER_MODE_RELIABLE = 2
 
 _TRANSFER_MODE_UNRELIABLE_ORDERED :: Int
 _TRANSFER_MODE_UNRELIABLE_ORDERED = 1
+
+_TARGET_PEER_SERVER :: Int
+_TARGET_PEER_SERVER = 1
+
+_CONNECTION_DISCONNECTED :: Int
+_CONNECTION_DISCONNECTED = 0
+
+_TARGET_PEER_BROADCAST :: Int
+_TARGET_PEER_BROADCAST = 0
 
 -- | Emitted when a connection attempt fails.
 sig_connection_failed ::

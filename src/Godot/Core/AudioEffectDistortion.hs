@@ -2,11 +2,11 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AudioEffectDistortion
-       (Godot.Core.AudioEffectDistortion._MODE_CLIP,
-        Godot.Core.AudioEffectDistortion._MODE_LOFI,
+       (Godot.Core.AudioEffectDistortion._MODE_LOFI,
+        Godot.Core.AudioEffectDistortion._MODE_ATAN,
         Godot.Core.AudioEffectDistortion._MODE_OVERDRIVE,
         Godot.Core.AudioEffectDistortion._MODE_WAVESHAPE,
-        Godot.Core.AudioEffectDistortion._MODE_ATAN,
+        Godot.Core.AudioEffectDistortion._MODE_CLIP,
         Godot.Core.AudioEffectDistortion.get_drive,
         Godot.Core.AudioEffectDistortion.get_keep_hf_hz,
         Godot.Core.AudioEffectDistortion.get_mode,
@@ -30,11 +30,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.AudioEffect()
 
-_MODE_CLIP :: Int
-_MODE_CLIP = 0
-
 _MODE_LOFI :: Int
 _MODE_LOFI = 2
+
+_MODE_ATAN :: Int
+_MODE_ATAN = 1
 
 _MODE_OVERDRIVE :: Int
 _MODE_OVERDRIVE = 3
@@ -42,8 +42,8 @@ _MODE_OVERDRIVE = 3
 _MODE_WAVESHAPE :: Int
 _MODE_WAVESHAPE = 4
 
-_MODE_ATAN :: Int
-_MODE_ATAN = 1
+_MODE_CLIP :: Int
+_MODE_CLIP = 0
 
 instance NodeProperty AudioEffectDistortion "drive" Float 'False
          where

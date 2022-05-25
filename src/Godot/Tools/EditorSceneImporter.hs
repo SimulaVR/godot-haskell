@@ -2,16 +2,16 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Tools.EditorSceneImporter
-       (Godot.Tools.EditorSceneImporter._IMPORT_MATERIALS_IN_INSTANCES,
-        Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_FORCE_ALL_TRACKS_IN_ALL_CLIPS,
-        Godot.Tools.EditorSceneImporter._IMPORT_USE_COMPRESSION,
+       (Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION,
         Godot.Tools.EditorSceneImporter._IMPORT_FAIL_ON_MISSING_DEPENDENCIES,
-        Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION,
         Godot.Tools.EditorSceneImporter._IMPORT_SCENE,
-        Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_KEEP_VALUE_TRACKS,
-        Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_DETECT_LOOP,
         Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_OPTIMIZE,
+        Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_KEEP_VALUE_TRACKS,
+        Godot.Tools.EditorSceneImporter._IMPORT_MATERIALS_IN_INSTANCES,
+        Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_FORCE_ALL_TRACKS_IN_ALL_CLIPS,
         Godot.Tools.EditorSceneImporter._IMPORT_GENERATE_TANGENT_ARRAYS,
+        Godot.Tools.EditorSceneImporter._IMPORT_USE_COMPRESSION,
+        Godot.Tools.EditorSceneImporter._IMPORT_ANIMATION_DETECT_LOOP,
         Godot.Tools.EditorSceneImporter._get_extensions,
         Godot.Tools.EditorSceneImporter._get_import_flags,
         Godot.Tools.EditorSceneImporter._import_animation,
@@ -31,35 +31,35 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Reference()
 
+_IMPORT_ANIMATION :: Int
+_IMPORT_ANIMATION = 2
+
+_IMPORT_FAIL_ON_MISSING_DEPENDENCIES :: Int
+_IMPORT_FAIL_ON_MISSING_DEPENDENCIES = 512
+
+_IMPORT_SCENE :: Int
+_IMPORT_SCENE = 1
+
+_IMPORT_ANIMATION_OPTIMIZE :: Int
+_IMPORT_ANIMATION_OPTIMIZE = 8
+
+_IMPORT_ANIMATION_KEEP_VALUE_TRACKS :: Int
+_IMPORT_ANIMATION_KEEP_VALUE_TRACKS = 32
+
 _IMPORT_MATERIALS_IN_INSTANCES :: Int
 _IMPORT_MATERIALS_IN_INSTANCES = 1024
 
 _IMPORT_ANIMATION_FORCE_ALL_TRACKS_IN_ALL_CLIPS :: Int
 _IMPORT_ANIMATION_FORCE_ALL_TRACKS_IN_ALL_CLIPS = 16
 
+_IMPORT_GENERATE_TANGENT_ARRAYS :: Int
+_IMPORT_GENERATE_TANGENT_ARRAYS = 256
+
 _IMPORT_USE_COMPRESSION :: Int
 _IMPORT_USE_COMPRESSION = 2048
 
-_IMPORT_FAIL_ON_MISSING_DEPENDENCIES :: Int
-_IMPORT_FAIL_ON_MISSING_DEPENDENCIES = 512
-
-_IMPORT_ANIMATION :: Int
-_IMPORT_ANIMATION = 2
-
-_IMPORT_SCENE :: Int
-_IMPORT_SCENE = 1
-
-_IMPORT_ANIMATION_KEEP_VALUE_TRACKS :: Int
-_IMPORT_ANIMATION_KEEP_VALUE_TRACKS = 32
-
 _IMPORT_ANIMATION_DETECT_LOOP :: Int
 _IMPORT_ANIMATION_DETECT_LOOP = 4
-
-_IMPORT_ANIMATION_OPTIMIZE :: Int
-_IMPORT_ANIMATION_OPTIMIZE = 8
-
-_IMPORT_GENERATE_TANGENT_ARRAYS :: Int
-_IMPORT_GENERATE_TANGENT_ARRAYS = 256
 
 {-# NOINLINE bindEditorSceneImporter__get_extensions #-}
 

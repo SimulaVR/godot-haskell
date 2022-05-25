@@ -2,47 +2,44 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Image
-       (Godot.Core.Image._FORMAT_RGBAF, Godot.Core.Image._FORMAT_PVRTC2A,
-        Godot.Core.Image._FORMAT_ETC2_RGB8, Godot.Core.Image._FORMAT_RGF,
-        Godot.Core.Image._FORMAT_DXT3,
-        Godot.Core.Image._COMPRESS_SOURCE_GENERIC,
-        Godot.Core.Image._FORMAT_ETC2_R11S,
-        Godot.Core.Image._FORMAT_PVRTC4A,
-        Godot.Core.Image._FORMAT_RGBA4444,
-        Godot.Core.Image._FORMAT_ETC2_RG11S, Godot.Core.Image._FORMAT_RGBF,
-        Godot.Core.Image._FORMAT_MAX,
-        Godot.Core.Image._COMPRESS_SOURCE_NORMAL,
-        Godot.Core.Image._COMPRESS_ETC, Godot.Core.Image._FORMAT_RGTC_R,
-        Godot.Core.Image._COMPRESS_S3TC, Godot.Core.Image._COMPRESS_PVRTC4,
-        Godot.Core.Image._FORMAT_ETC2_RG11, Godot.Core.Image._FORMAT_ETC,
-        Godot.Core.Image._FORMAT_RGBA5551, Godot.Core.Image._COMPRESS_ETC2,
-        Godot.Core.Image._FORMAT_ETC2_R11, Godot.Core.Image._FORMAT_LA8,
-        Godot.Core.Image._FORMAT_DXT5, Godot.Core.Image._ALPHA_NONE,
-        Godot.Core.Image._MAX_HEIGHT, Godot.Core.Image._ALPHA_BIT,
-        Godot.Core.Image._FORMAT_ETC2_RGB8A1,
-        Godot.Core.Image._FORMAT_RGTC_RG,
-        Godot.Core.Image._FORMAT_BPTC_RGBF,
-        Godot.Core.Image._COMPRESS_SOURCE_SRGB,
-        Godot.Core.Image._FORMAT_RGBA8,
-        Godot.Core.Image._INTERPOLATE_NEAREST,
-        Godot.Core.Image._FORMAT_RGBAH, Godot.Core.Image._FORMAT_RGBE9995,
-        Godot.Core.Image._FORMAT_BPTC_RGBFU,
+       (Godot.Core.Image._FORMAT_ETC2_RG11,
+        Godot.Core.Image._FORMAT_ETC2_RGB8A1, Godot.Core.Image._FORMAT_LA8,
+        Godot.Core.Image._ALPHA_BIT, Godot.Core.Image._FORMAT_PVRTC4A,
+        Godot.Core.Image._FORMAT_ETC2_R11, Godot.Core.Image._FORMAT_RGBF,
         Godot.Core.Image._INTERPOLATE_TRILINEAR,
-        Godot.Core.Image._ALPHA_BLEND, Godot.Core.Image._FORMAT_PVRTC2,
-        Godot.Core.Image._FORMAT_DXT1, Godot.Core.Image._MAX_WIDTH,
-        Godot.Core.Image._FORMAT_ETC2_RGBA8,
-        Godot.Core.Image._FORMAT_BPTC_RGBA,
-        Godot.Core.Image._COMPRESS_PVRTC2, Godot.Core.Image._FORMAT_RF,
-        Godot.Core.Image._FORMAT_L8, Godot.Core.Image._FORMAT_RGB8,
-        Godot.Core.Image._FORMAT_RGBH, Godot.Core.Image._FORMAT_PVRTC4,
-        Godot.Core.Image._FORMAT_RH, Godot.Core.Image._FORMAT_R8,
-        Godot.Core.Image._INTERPOLATE_BILINEAR,
-        Godot.Core.Image._INTERPOLATE_CUBIC,
+        Godot.Core.Image._FORMAT_PVRTC2A, Godot.Core.Image._COMPRESS_ETC2,
+        Godot.Core.Image._COMPRESS_SOURCE_GENERIC,
+        Godot.Core.Image._FORMAT_RGBE9995, Godot.Core.Image._COMPRESS_S3TC,
+        Godot.Core.Image._COMPRESS_PVRTC2, Godot.Core.Image._FORMAT_PVRTC2,
+        Godot.Core.Image._MAX_HEIGHT, Godot.Core.Image._FORMAT_RGBA8,
+        Godot.Core.Image._FORMAT_RGBA5551, Godot.Core.Image._FORMAT_RG8,
+        Godot.Core.Image._FORMAT_ETC2_RGB8, Godot.Core.Image._FORMAT_DXT1,
+        Godot.Core.Image._FORMAT_RH, Godot.Core.Image._FORMAT_ETC2_RGBA8,
+        Godot.Core.Image._FORMAT_RGTC_RG, Godot.Core.Image._FORMAT_RGBH,
+        Godot.Core.Image._FORMAT_RGBA4444, Godot.Core.Image._FORMAT_L8,
+        Godot.Core.Image._FORMAT_PVRTC4, Godot.Core.Image._FORMAT_RGF,
+        Godot.Core.Image._FORMAT_DXT3,
+        Godot.Core.Image._INTERPOLATE_NEAREST,
+        Godot.Core.Image._COMPRESS_SOURCE_SRGB,
+        Godot.Core.Image._ALPHA_NONE, Godot.Core.Image._INTERPOLATE_CUBIC,
+        Godot.Core.Image._FORMAT_MAX, Godot.Core.Image._MAX_WIDTH,
+        Godot.Core.Image._FORMAT_ETC2_RG11S,
         Godot.Core.Image._INTERPOLATE_LANCZOS,
-        Godot.Core.Image._FORMAT_RG8, Godot.Core.Image._FORMAT_RGH,
-        Godot.Core.Image._get_data, Godot.Core.Image._set_data,
-        Godot.Core.Image.blend_rect, Godot.Core.Image.blend_rect_mask,
-        Godot.Core.Image.blit_rect, Godot.Core.Image.blit_rect_mask,
+        Godot.Core.Image._FORMAT_RGBAF, Godot.Core.Image._FORMAT_BPTC_RGBA,
+        Godot.Core.Image._FORMAT_DXT5, Godot.Core.Image._FORMAT_RGTC_R,
+        Godot.Core.Image._FORMAT_BPTC_RGBFU,
+        Godot.Core.Image._FORMAT_RGBAH,
+        Godot.Core.Image._COMPRESS_SOURCE_NORMAL,
+        Godot.Core.Image._ALPHA_BLEND, Godot.Core.Image._FORMAT_RGH,
+        Godot.Core.Image._COMPRESS_PVRTC4, Godot.Core.Image._FORMAT_ETC,
+        Godot.Core.Image._FORMAT_R8, Godot.Core.Image._FORMAT_ETC2_R11S,
+        Godot.Core.Image._FORMAT_RGB8,
+        Godot.Core.Image._INTERPOLATE_BILINEAR,
+        Godot.Core.Image._COMPRESS_ETC, Godot.Core.Image._FORMAT_BPTC_RGBF,
+        Godot.Core.Image._FORMAT_RF, Godot.Core.Image._get_data,
+        Godot.Core.Image._set_data, Godot.Core.Image.blend_rect,
+        Godot.Core.Image.blend_rect_mask, Godot.Core.Image.blit_rect,
+        Godot.Core.Image.blit_rect_mask,
         Godot.Core.Image.bumpmap_to_normalmap,
         Godot.Core.Image.clear_mipmaps, Godot.Core.Image.compress,
         Godot.Core.Image.convert, Godot.Core.Image.copy_from,
@@ -82,14 +79,89 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_FORMAT_RGBAF :: Int
-_FORMAT_RGBAF = 11
+_FORMAT_ETC2_RG11 :: Int
+_FORMAT_ETC2_RG11 = 32
+
+_FORMAT_ETC2_RGB8A1 :: Int
+_FORMAT_ETC2_RGB8A1 = 36
+
+_FORMAT_LA8 :: Int
+_FORMAT_LA8 = 1
+
+_ALPHA_BIT :: Int
+_ALPHA_BIT = 1
+
+_FORMAT_PVRTC4A :: Int
+_FORMAT_PVRTC4A = 28
+
+_FORMAT_ETC2_R11 :: Int
+_FORMAT_ETC2_R11 = 30
+
+_FORMAT_RGBF :: Int
+_FORMAT_RGBF = 10
+
+_INTERPOLATE_TRILINEAR :: Int
+_INTERPOLATE_TRILINEAR = 3
 
 _FORMAT_PVRTC2A :: Int
 _FORMAT_PVRTC2A = 26
 
+_COMPRESS_ETC2 :: Int
+_COMPRESS_ETC2 = 4
+
+_COMPRESS_SOURCE_GENERIC :: Int
+_COMPRESS_SOURCE_GENERIC = 0
+
+_FORMAT_RGBE9995 :: Int
+_FORMAT_RGBE9995 = 16
+
+_COMPRESS_S3TC :: Int
+_COMPRESS_S3TC = 0
+
+_COMPRESS_PVRTC2 :: Int
+_COMPRESS_PVRTC2 = 1
+
+_FORMAT_PVRTC2 :: Int
+_FORMAT_PVRTC2 = 25
+
+_MAX_HEIGHT :: Int
+_MAX_HEIGHT = 16384
+
+_FORMAT_RGBA8 :: Int
+_FORMAT_RGBA8 = 5
+
+_FORMAT_RGBA5551 :: Int
+_FORMAT_RGBA5551 = 7
+
+_FORMAT_RG8 :: Int
+_FORMAT_RG8 = 3
+
 _FORMAT_ETC2_RGB8 :: Int
 _FORMAT_ETC2_RGB8 = 34
+
+_FORMAT_DXT1 :: Int
+_FORMAT_DXT1 = 17
+
+_FORMAT_RH :: Int
+_FORMAT_RH = 12
+
+_FORMAT_ETC2_RGBA8 :: Int
+_FORMAT_ETC2_RGBA8 = 35
+
+_FORMAT_RGTC_RG :: Int
+_FORMAT_RGTC_RG = 21
+
+_FORMAT_RGBH :: Int
+_FORMAT_RGBH = 14
+
+_FORMAT_RGBA4444 :: Int
+_FORMAT_RGBA4444 = 6
+
+_FORMAT_L8 :: Int
+_FORMAT_L8 = 0
+
+_FORMAT_PVRTC4 :: Int
+_FORMAT_PVRTC4 = 27
 
 _FORMAT_RGF :: Int
 _FORMAT_RGF = 9
@@ -97,158 +169,83 @@ _FORMAT_RGF = 9
 _FORMAT_DXT3 :: Int
 _FORMAT_DXT3 = 18
 
-_COMPRESS_SOURCE_GENERIC :: Int
-_COMPRESS_SOURCE_GENERIC = 0
-
-_FORMAT_ETC2_R11S :: Int
-_FORMAT_ETC2_R11S = 31
-
-_FORMAT_PVRTC4A :: Int
-_FORMAT_PVRTC4A = 28
-
-_FORMAT_RGBA4444 :: Int
-_FORMAT_RGBA4444 = 6
-
-_FORMAT_ETC2_RG11S :: Int
-_FORMAT_ETC2_RG11S = 33
-
-_FORMAT_RGBF :: Int
-_FORMAT_RGBF = 10
-
-_FORMAT_MAX :: Int
-_FORMAT_MAX = 37
-
-_COMPRESS_SOURCE_NORMAL :: Int
-_COMPRESS_SOURCE_NORMAL = 2
-
-_COMPRESS_ETC :: Int
-_COMPRESS_ETC = 3
-
-_FORMAT_RGTC_R :: Int
-_FORMAT_RGTC_R = 20
-
-_COMPRESS_S3TC :: Int
-_COMPRESS_S3TC = 0
-
-_COMPRESS_PVRTC4 :: Int
-_COMPRESS_PVRTC4 = 2
-
-_FORMAT_ETC2_RG11 :: Int
-_FORMAT_ETC2_RG11 = 32
-
-_FORMAT_ETC :: Int
-_FORMAT_ETC = 29
-
-_FORMAT_RGBA5551 :: Int
-_FORMAT_RGBA5551 = 7
-
-_COMPRESS_ETC2 :: Int
-_COMPRESS_ETC2 = 4
-
-_FORMAT_ETC2_R11 :: Int
-_FORMAT_ETC2_R11 = 30
-
-_FORMAT_LA8 :: Int
-_FORMAT_LA8 = 1
-
-_FORMAT_DXT5 :: Int
-_FORMAT_DXT5 = 19
-
-_ALPHA_NONE :: Int
-_ALPHA_NONE = 0
-
-_MAX_HEIGHT :: Int
-_MAX_HEIGHT = 16384
-
-_ALPHA_BIT :: Int
-_ALPHA_BIT = 1
-
-_FORMAT_ETC2_RGB8A1 :: Int
-_FORMAT_ETC2_RGB8A1 = 36
-
-_FORMAT_RGTC_RG :: Int
-_FORMAT_RGTC_RG = 21
-
-_FORMAT_BPTC_RGBF :: Int
-_FORMAT_BPTC_RGBF = 23
+_INTERPOLATE_NEAREST :: Int
+_INTERPOLATE_NEAREST = 0
 
 _COMPRESS_SOURCE_SRGB :: Int
 _COMPRESS_SOURCE_SRGB = 1
 
-_FORMAT_RGBA8 :: Int
-_FORMAT_RGBA8 = 5
-
-_INTERPOLATE_NEAREST :: Int
-_INTERPOLATE_NEAREST = 0
-
-_FORMAT_RGBAH :: Int
-_FORMAT_RGBAH = 15
-
-_FORMAT_RGBE9995 :: Int
-_FORMAT_RGBE9995 = 16
-
-_FORMAT_BPTC_RGBFU :: Int
-_FORMAT_BPTC_RGBFU = 24
-
-_INTERPOLATE_TRILINEAR :: Int
-_INTERPOLATE_TRILINEAR = 3
-
-_ALPHA_BLEND :: Int
-_ALPHA_BLEND = 2
-
-_FORMAT_PVRTC2 :: Int
-_FORMAT_PVRTC2 = 25
-
-_FORMAT_DXT1 :: Int
-_FORMAT_DXT1 = 17
-
-_MAX_WIDTH :: Int
-_MAX_WIDTH = 16384
-
-_FORMAT_ETC2_RGBA8 :: Int
-_FORMAT_ETC2_RGBA8 = 35
-
-_FORMAT_BPTC_RGBA :: Int
-_FORMAT_BPTC_RGBA = 22
-
-_COMPRESS_PVRTC2 :: Int
-_COMPRESS_PVRTC2 = 1
-
-_FORMAT_RF :: Int
-_FORMAT_RF = 8
-
-_FORMAT_L8 :: Int
-_FORMAT_L8 = 0
-
-_FORMAT_RGB8 :: Int
-_FORMAT_RGB8 = 4
-
-_FORMAT_RGBH :: Int
-_FORMAT_RGBH = 14
-
-_FORMAT_PVRTC4 :: Int
-_FORMAT_PVRTC4 = 27
-
-_FORMAT_RH :: Int
-_FORMAT_RH = 12
-
-_FORMAT_R8 :: Int
-_FORMAT_R8 = 2
-
-_INTERPOLATE_BILINEAR :: Int
-_INTERPOLATE_BILINEAR = 1
+_ALPHA_NONE :: Int
+_ALPHA_NONE = 0
 
 _INTERPOLATE_CUBIC :: Int
 _INTERPOLATE_CUBIC = 2
 
+_FORMAT_MAX :: Int
+_FORMAT_MAX = 37
+
+_MAX_WIDTH :: Int
+_MAX_WIDTH = 16384
+
+_FORMAT_ETC2_RG11S :: Int
+_FORMAT_ETC2_RG11S = 33
+
 _INTERPOLATE_LANCZOS :: Int
 _INTERPOLATE_LANCZOS = 4
 
-_FORMAT_RG8 :: Int
-_FORMAT_RG8 = 3
+_FORMAT_RGBAF :: Int
+_FORMAT_RGBAF = 11
+
+_FORMAT_BPTC_RGBA :: Int
+_FORMAT_BPTC_RGBA = 22
+
+_FORMAT_DXT5 :: Int
+_FORMAT_DXT5 = 19
+
+_FORMAT_RGTC_R :: Int
+_FORMAT_RGTC_R = 20
+
+_FORMAT_BPTC_RGBFU :: Int
+_FORMAT_BPTC_RGBFU = 24
+
+_FORMAT_RGBAH :: Int
+_FORMAT_RGBAH = 15
+
+_COMPRESS_SOURCE_NORMAL :: Int
+_COMPRESS_SOURCE_NORMAL = 2
+
+_ALPHA_BLEND :: Int
+_ALPHA_BLEND = 2
 
 _FORMAT_RGH :: Int
 _FORMAT_RGH = 13
+
+_COMPRESS_PVRTC4 :: Int
+_COMPRESS_PVRTC4 = 2
+
+_FORMAT_ETC :: Int
+_FORMAT_ETC = 29
+
+_FORMAT_R8 :: Int
+_FORMAT_R8 = 2
+
+_FORMAT_ETC2_R11S :: Int
+_FORMAT_ETC2_R11S = 31
+
+_FORMAT_RGB8 :: Int
+_FORMAT_RGB8 = 4
+
+_INTERPOLATE_BILINEAR :: Int
+_INTERPOLATE_BILINEAR = 1
+
+_COMPRESS_ETC :: Int
+_COMPRESS_ETC = 3
+
+_FORMAT_BPTC_RGBF :: Int
+_FORMAT_BPTC_RGBF = 23
+
+_FORMAT_RF :: Int
+_FORMAT_RF = 8
 
 instance NodeProperty Image "data" Dictionary 'False where
         nodeProperty = (_get_data, wrapDroppingSetter _set_data, Nothing)
@@ -568,7 +565,7 @@ instance NodeMethod Image "create" '[Int, Int, Bool, Int] (IO ())
 
 {-# NOINLINE bindImage_create_from_data #-}
 
--- | Creates a new image of given size and format. See @enum Format@ constants. Fills the image with the given raw data. If @use_mipmaps@ is @true@ then loads mipmaps for this image from @data@. See @method generate_mipmaps@.
+-- | Creates a new image of given size and format. See @enum Format@ constants. Fills the image with the given raw data. If @use_mipmaps@ is @true@ then generate mipmaps for this image. See the @method generate_mipmaps@.
 bindImage_create_from_data :: MethodBind
 bindImage_create_from_data
   = unsafePerformIO $
@@ -578,7 +575,7 @@ bindImage_create_from_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Creates a new image of given size and format. See @enum Format@ constants. Fills the image with the given raw data. If @use_mipmaps@ is @true@ then loads mipmaps for this image from @data@. See @method generate_mipmaps@.
+-- | Creates a new image of given size and format. See @enum Format@ constants. Fills the image with the given raw data. If @use_mipmaps@ is @true@ then generate mipmaps for this image. See the @method generate_mipmaps@.
 create_from_data ::
                    (Image :< cls, Object :< cls) =>
                    cls -> Int -> Int -> Bool -> Int -> PoolByteArray -> IO ()
@@ -815,7 +812,7 @@ instance NodeMethod Image "generate_mipmaps" '[Maybe Bool] (IO Int)
 
 {-# NOINLINE bindImage_get_data #-}
 
--- | Returns a copy of the image's raw data.
+-- | Returns the image's raw data.
 bindImage_get_data :: MethodBind
 bindImage_get_data
   = unsafePerformIO $
@@ -825,7 +822,7 @@ bindImage_get_data
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a copy of the image's raw data.
+-- | Returns the image's raw data.
 get_data ::
            (Image :< cls, Object :< cls) => cls -> IO PoolByteArray
 get_data cls
@@ -1148,7 +1145,7 @@ instance NodeMethod Image "is_invisible" '[] (IO Bool) where
 
 {-# NOINLINE bindImage_load #-}
 
--- | Loads an image from file @path@. See @url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats@Supported image formats@/url@ for a list of supported image formats and limitations.
+-- | Loads an image from file @path@.
 bindImage_load :: MethodBind
 bindImage_load
   = unsafePerformIO $
@@ -1158,7 +1155,7 @@ bindImage_load
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Loads an image from file @path@. See @url=https://docs.godotengine.org/en/latest/getting_started/workflow/assets/importing_images.html#supported-image-formats@Supported image formats@/url@ for a list of supported image formats and limitations.
+-- | Loads an image from file @path@.
 load ::
        (Image :< cls, Object :< cls) => cls -> GodotString -> IO Int
 load cls arg1

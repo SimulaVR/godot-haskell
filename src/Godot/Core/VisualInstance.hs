@@ -58,7 +58,7 @@ instance NodeMethod VisualInstance "_get_visual_instance_rid" '[]
 
 {-# NOINLINE bindVisualInstance_get_aabb #-}
 
--- | Returns the @AABB@ (also known as the bounding box) for this @VisualInstance@. See also @method get_transformed_aabb@.
+-- | Returns the @AABB@ (also known as the bounding box) for this @VisualInstance@.
 bindVisualInstance_get_aabb :: MethodBind
 bindVisualInstance_get_aabb
   = unsafePerformIO $
@@ -68,7 +68,7 @@ bindVisualInstance_get_aabb
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the @AABB@ (also known as the bounding box) for this @VisualInstance@. See also @method get_transformed_aabb@.
+-- | Returns the @AABB@ (also known as the bounding box) for this @VisualInstance@.
 get_aabb ::
            (VisualInstance :< cls, Object :< cls) => cls -> IO Aabb
 get_aabb cls
@@ -196,7 +196,7 @@ instance NodeMethod VisualInstance "get_layer_mask_bit" '[Int]
 {-# NOINLINE bindVisualInstance_get_transformed_aabb #-}
 
 -- | Returns the transformed @AABB@ (also known as the bounding box) for this @VisualInstance@.
---   				Transformed in this case means the @AABB@ plus the position, rotation, and scale of the @Spatial@'s @Transform@. See also @method get_aabb@.
+--   				Transformed in this case means the @AABB@ plus the position, rotation, and scale of the @Spatial@'s @Transform@.
 bindVisualInstance_get_transformed_aabb :: MethodBind
 bindVisualInstance_get_transformed_aabb
   = unsafePerformIO $
@@ -207,7 +207,7 @@ bindVisualInstance_get_transformed_aabb
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Returns the transformed @AABB@ (also known as the bounding box) for this @VisualInstance@.
---   				Transformed in this case means the @AABB@ plus the position, rotation, and scale of the @Spatial@'s @Transform@. See also @method get_aabb@.
+--   				Transformed in this case means the @AABB@ plus the position, rotation, and scale of the @Spatial@'s @Transform@.
 get_transformed_aabb ::
                        (VisualInstance :< cls, Object :< cls) => cls -> IO Aabb
 get_transformed_aabb cls

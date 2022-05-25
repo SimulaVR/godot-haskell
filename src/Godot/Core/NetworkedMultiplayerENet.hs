@@ -2,11 +2,11 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.NetworkedMultiplayerENet
-       (Godot.Core.NetworkedMultiplayerENet._COMPRESS_NONE,
-        Godot.Core.NetworkedMultiplayerENet._COMPRESS_RANGE_CODER,
-        Godot.Core.NetworkedMultiplayerENet._COMPRESS_ZLIB,
-        Godot.Core.NetworkedMultiplayerENet._COMPRESS_FASTLZ,
+       (Godot.Core.NetworkedMultiplayerENet._COMPRESS_ZLIB,
         Godot.Core.NetworkedMultiplayerENet._COMPRESS_ZSTD,
+        Godot.Core.NetworkedMultiplayerENet._COMPRESS_RANGE_CODER,
+        Godot.Core.NetworkedMultiplayerENet._COMPRESS_NONE,
+        Godot.Core.NetworkedMultiplayerENet._COMPRESS_FASTLZ,
         Godot.Core.NetworkedMultiplayerENet.close_connection,
         Godot.Core.NetworkedMultiplayerENet.create_client,
         Godot.Core.NetworkedMultiplayerENet.create_server,
@@ -39,20 +39,20 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.NetworkedMultiplayerPeer()
 
-_COMPRESS_NONE :: Int
-_COMPRESS_NONE = 0
+_COMPRESS_ZLIB :: Int
+_COMPRESS_ZLIB = 3
+
+_COMPRESS_ZSTD :: Int
+_COMPRESS_ZSTD = 4
 
 _COMPRESS_RANGE_CODER :: Int
 _COMPRESS_RANGE_CODER = 1
 
-_COMPRESS_ZLIB :: Int
-_COMPRESS_ZLIB = 3
+_COMPRESS_NONE :: Int
+_COMPRESS_NONE = 0
 
 _COMPRESS_FASTLZ :: Int
 _COMPRESS_FASTLZ = 2
-
-_COMPRESS_ZSTD :: Int
-_COMPRESS_ZSTD = 4
 
 instance NodeProperty NetworkedMultiplayerENet "always_ordered"
            Bool

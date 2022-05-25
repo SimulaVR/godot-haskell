@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ARVRPositionalTracker
-       (Godot.Core.ARVRPositionalTracker._TRACKER_LEFT_HAND,
-        Godot.Core.ARVRPositionalTracker._TRACKER_RIGHT_HAND,
+       (Godot.Core.ARVRPositionalTracker._TRACKER_RIGHT_HAND,
         Godot.Core.ARVRPositionalTracker._TRACKER_HAND_UNKNOWN,
+        Godot.Core.ARVRPositionalTracker._TRACKER_LEFT_HAND,
         Godot.Core.ARVRPositionalTracker._set_joy_id,
         Godot.Core.ARVRPositionalTracker._set_mesh,
         Godot.Core.ARVRPositionalTracker._set_name,
@@ -36,14 +36,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_TRACKER_LEFT_HAND :: Int
-_TRACKER_LEFT_HAND = 1
-
 _TRACKER_RIGHT_HAND :: Int
 _TRACKER_RIGHT_HAND = 2
 
 _TRACKER_HAND_UNKNOWN :: Int
 _TRACKER_HAND_UNKNOWN = 0
+
+_TRACKER_LEFT_HAND :: Int
+_TRACKER_LEFT_HAND = 1
 
 instance NodeProperty ARVRPositionalTracker "rumble" Float 'False
          where

@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AudioServer
-       (Godot.Core.AudioServer._SPEAKER_SURROUND_71,
-        Godot.Core.AudioServer._SPEAKER_SURROUND_31,
+       (Godot.Core.AudioServer._SPEAKER_SURROUND_31,
+        Godot.Core.AudioServer._SPEAKER_SURROUND_71,
         Godot.Core.AudioServer._SPEAKER_MODE_STEREO,
         Godot.Core.AudioServer._SPEAKER_SURROUND_51,
         Godot.Core.AudioServer.sig_bus_layout_changed,
@@ -64,11 +64,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_SPEAKER_SURROUND_71 :: Int
-_SPEAKER_SURROUND_71 = 3
-
 _SPEAKER_SURROUND_31 :: Int
 _SPEAKER_SURROUND_31 = 1
+
+_SPEAKER_SURROUND_71 :: Int
+_SPEAKER_SURROUND_71 = 3
 
 _SPEAKER_MODE_STEREO :: Int
 _SPEAKER_MODE_STEREO = 0

@@ -265,7 +265,7 @@ instance NodeMethod SpinBox "get_prefix" '[] (IO GodotString) where
 
 {-# NOINLINE bindSpinBox_get_suffix #-}
 
--- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
+-- | Adds the specified @prefix@ string after the numerical value of the @SpinBox@.
 bindSpinBox_get_suffix :: MethodBind
 bindSpinBox_get_suffix
   = unsafePerformIO $
@@ -275,7 +275,7 @@ bindSpinBox_get_suffix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
+-- | Adds the specified @prefix@ string after the numerical value of the @SpinBox@.
 get_suffix ::
              (SpinBox :< cls, Object :< cls) => cls -> IO GodotString
 get_suffix cls
@@ -389,7 +389,7 @@ instance NodeMethod SpinBox "set_prefix" '[GodotString] (IO ())
 
 {-# NOINLINE bindSpinBox_set_suffix #-}
 
--- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
+-- | Adds the specified @prefix@ string after the numerical value of the @SpinBox@.
 bindSpinBox_set_suffix :: MethodBind
 bindSpinBox_set_suffix
   = unsafePerformIO $
@@ -399,7 +399,7 @@ bindSpinBox_set_suffix
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Adds the specified @suffix@ string after the numerical value of the @SpinBox@.
+-- | Adds the specified @prefix@ string after the numerical value of the @SpinBox@.
 set_suffix ::
              (SpinBox :< cls, Object :< cls) => cls -> GodotString -> IO ()
 set_suffix cls arg1

@@ -2,10 +2,11 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Tree
-       (Godot.Core.Tree._DROP_MODE_DISABLED, Godot.Core.Tree._SELECT_ROW,
-        Godot.Core.Tree._SELECT_MULTI, Godot.Core.Tree._DROP_MODE_ON_ITEM,
+       (Godot.Core.Tree._DROP_MODE_ON_ITEM,
         Godot.Core.Tree._DROP_MODE_INBETWEEN,
-        Godot.Core.Tree._SELECT_SINGLE, Godot.Core.Tree.sig_button_pressed,
+        Godot.Core.Tree._SELECT_SINGLE, Godot.Core.Tree._SELECT_MULTI,
+        Godot.Core.Tree._SELECT_ROW, Godot.Core.Tree._DROP_MODE_DISABLED,
+        Godot.Core.Tree.sig_button_pressed,
         Godot.Core.Tree.sig_cell_selected,
         Godot.Core.Tree.sig_column_title_pressed,
         Godot.Core.Tree.sig_custom_popup_edited,
@@ -66,15 +67,6 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Control()
 
-_DROP_MODE_DISABLED :: Int
-_DROP_MODE_DISABLED = 0
-
-_SELECT_ROW :: Int
-_SELECT_ROW = 1
-
-_SELECT_MULTI :: Int
-_SELECT_MULTI = 2
-
 _DROP_MODE_ON_ITEM :: Int
 _DROP_MODE_ON_ITEM = 1
 
@@ -83,6 +75,15 @@ _DROP_MODE_INBETWEEN = 2
 
 _SELECT_SINGLE :: Int
 _SELECT_SINGLE = 0
+
+_SELECT_MULTI :: Int
+_SELECT_MULTI = 2
+
+_SELECT_ROW :: Int
+_SELECT_ROW = 1
+
+_DROP_MODE_DISABLED :: Int
+_DROP_MODE_DISABLED = 0
 
 -- | Emitted when a button on the tree was pressed (see @method TreeItem.add_button@).
 sig_button_pressed :: Godot.Internal.Dispatch.Signal Tree
@@ -138,7 +139,6 @@ sig_item_collapsed
 
 instance NodeSignal Tree "item_collapsed" '[TreeItem]
 
--- | Emitted when a custom button is pressed (i.e. in a @TreeItem.CELL_MODE_CUSTOM@ mode cell).
 sig_item_custom_button_pressed ::
                                Godot.Internal.Dispatch.Signal Tree
 sig_item_custom_button_pressed

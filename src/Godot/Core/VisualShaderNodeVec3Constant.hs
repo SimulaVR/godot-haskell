@@ -26,7 +26,6 @@ instance NodeProperty VisualShaderNodeVec3Constant "constant"
 
 {-# NOINLINE bindVisualShaderNodeVec3Constant_get_constant #-}
 
--- | A @Vector3@ constant which represents the state of this node.
 bindVisualShaderNodeVec3Constant_get_constant :: MethodBind
 bindVisualShaderNodeVec3Constant_get_constant
   = unsafePerformIO $
@@ -36,7 +35,6 @@ bindVisualShaderNodeVec3Constant_get_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A @Vector3@ constant which represents the state of this node.
 get_constant ::
                (VisualShaderNodeVec3Constant :< cls, Object :< cls) =>
                cls -> IO Vector3
@@ -57,7 +55,6 @@ instance NodeMethod VisualShaderNodeVec3Constant "get_constant" '[]
 
 {-# NOINLINE bindVisualShaderNodeVec3Constant_set_constant #-}
 
--- | A @Vector3@ constant which represents the state of this node.
 bindVisualShaderNodeVec3Constant_set_constant :: MethodBind
 bindVisualShaderNodeVec3Constant_set_constant
   = unsafePerformIO $
@@ -67,7 +64,6 @@ bindVisualShaderNodeVec3Constant_set_constant
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | A @Vector3@ constant which represents the state of this node.
 set_constant ::
                (VisualShaderNodeVec3Constant :< cls, Object :< cls) =>
                cls -> Vector3 -> IO ()

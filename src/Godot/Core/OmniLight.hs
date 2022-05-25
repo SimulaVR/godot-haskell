@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.OmniLight
-       (Godot.Core.OmniLight._SHADOW_DUAL_PARABOLOID,
-        Godot.Core.OmniLight._SHADOW_DETAIL_HORIZONTAL,
+       (Godot.Core.OmniLight._SHADOW_DETAIL_HORIZONTAL,
+        Godot.Core.OmniLight._SHADOW_DUAL_PARABOLOID,
         Godot.Core.OmniLight._SHADOW_DETAIL_VERTICAL,
         Godot.Core.OmniLight._SHADOW_CUBE, Godot.Core.OmniLight.get_param,
         Godot.Core.OmniLight.set_param,
@@ -24,11 +24,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Light()
 
-_SHADOW_DUAL_PARABOLOID :: Int
-_SHADOW_DUAL_PARABOLOID = 0
-
 _SHADOW_DETAIL_HORIZONTAL :: Int
 _SHADOW_DETAIL_HORIZONTAL = 1
+
+_SHADOW_DUAL_PARABOLOID :: Int
+_SHADOW_DUAL_PARABOLOID = 0
 
 _SHADOW_DETAIL_VERTICAL :: Int
 _SHADOW_DETAIL_VERTICAL = 0

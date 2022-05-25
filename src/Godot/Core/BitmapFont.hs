@@ -434,6 +434,7 @@ instance NodeMethod BitmapFont "create_from_fnt" '[GodotString]
 
 {-# NOINLINE bindBitmapFont_get_char_size #-}
 
+-- | Returns the size of a character, optionally taking kerning into account if the next character is provided.
 bindBitmapFont_get_char_size :: MethodBind
 bindBitmapFont_get_char_size
   = unsafePerformIO $
@@ -443,6 +444,7 @@ bindBitmapFont_get_char_size
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
+-- | Returns the size of a character, optionally taking kerning into account if the next character is provided.
 get_char_size ::
                 (BitmapFont :< cls, Object :< cls) =>
                 cls -> Int -> Maybe Int -> IO Vector2

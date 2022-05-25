@@ -2,94 +2,94 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.SpatialMaterial
-       (Godot.Core.SpatialMaterial._DIFFUSE_BURLEY,
-        Godot.Core.SpatialMaterial._DEPTH_DRAW_ALWAYS,
-        Godot.Core.SpatialMaterial._FLAG_DISABLE_DEPTH_TEST,
-        Godot.Core.SpatialMaterial._TEXTURE_MAX,
-        Godot.Core.SpatialMaterial._DISTANCE_FADE_PIXEL_DITHER,
-        Godot.Core.SpatialMaterial._FLAG_DONT_RECEIVE_SHADOWS,
-        Godot.Core.SpatialMaterial._TEXTURE_METALLIC,
-        Godot.Core.SpatialMaterial._FEATURE_MAX,
-        Godot.Core.SpatialMaterial._TEXTURE_DETAIL_ALBEDO,
-        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_RED,
-        Godot.Core.SpatialMaterial._SPECULAR_TOON,
-        Godot.Core.SpatialMaterial._FEATURE_EMISSION,
-        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_BLUE,
-        Godot.Core.SpatialMaterial._TEXTURE_AMBIENT_OCCLUSION,
-        Godot.Core.SpatialMaterial._TEXTURE_DETAIL_MASK,
-        Godot.Core.SpatialMaterial._FEATURE_DETAIL,
-        Godot.Core.SpatialMaterial._SPECULAR_SCHLICK_GGX,
-        Godot.Core.SpatialMaterial._FEATURE_SUBSURACE_SCATTERING,
-        Godot.Core.SpatialMaterial._FEATURE_DEPTH_MAPPING,
-        Godot.Core.SpatialMaterial._TEXTURE_REFRACTION,
-        Godot.Core.SpatialMaterial._FEATURE_TRANSPARENT,
-        Godot.Core.SpatialMaterial._FEATURE_TRANSMISSION,
-        Godot.Core.SpatialMaterial._FLAG_TRIPLANAR_USE_WORLD,
+       (Godot.Core.SpatialMaterial._FLAG_TRIPLANAR_USE_WORLD,
         Godot.Core.SpatialMaterial._DEPTH_DRAW_ALPHA_OPAQUE_PREPASS,
-        Godot.Core.SpatialMaterial._FLAG_USE_ALPHA_SCISSOR,
-        Godot.Core.SpatialMaterial._DIFFUSE_LAMBERT,
-        Godot.Core.SpatialMaterial._DETAIL_UV_2,
-        Godot.Core.SpatialMaterial._DIFFUSE_LAMBERT_WRAP,
         Godot.Core.SpatialMaterial._BLEND_MODE_ADD,
-        Godot.Core.SpatialMaterial._BILLBOARD_ENABLED,
-        Godot.Core.SpatialMaterial._TEXTURE_NORMAL,
-        Godot.Core.SpatialMaterial._FEATURE_NORMAL_MAPPING,
-        Godot.Core.SpatialMaterial._TEXTURE_TRANSMISSION,
-        Godot.Core.SpatialMaterial._FLAG_ALBEDO_FROM_VERTEX_COLOR,
-        Godot.Core.SpatialMaterial._FEATURE_REFRACTION,
-        Godot.Core.SpatialMaterial._BLEND_MODE_MIX,
-        Godot.Core.SpatialMaterial._BILLBOARD_FIXED_Y,
-        Godot.Core.SpatialMaterial._TEXTURE_FLOWMAP,
-        Godot.Core.SpatialMaterial._TEXTURE_RIM,
-        Godot.Core.SpatialMaterial._FEATURE_AMBIENT_OCCLUSION,
-        Godot.Core.SpatialMaterial._DISTANCE_FADE_OBJECT_DITHER,
-        Godot.Core.SpatialMaterial._FLAG_BILLBOARD_KEEP_SCALE,
-        Godot.Core.SpatialMaterial._DEPTH_DRAW_OPAQUE_ONLY,
-        Godot.Core.SpatialMaterial._FLAG_USE_POINT_SIZE,
-        Godot.Core.SpatialMaterial._CULL_DISABLED,
-        Godot.Core.SpatialMaterial._FEATURE_ANISOTROPY,
-        Godot.Core.SpatialMaterial._TEXTURE_ROUGHNESS,
-        Godot.Core.SpatialMaterial._EMISSION_OP_ADD,
-        Godot.Core.SpatialMaterial._FLAG_MAX,
-        Godot.Core.SpatialMaterial._FLAG_FIXED_SIZE,
-        Godot.Core.SpatialMaterial._FLAG_UNSHADED,
-        Godot.Core.SpatialMaterial._FLAG_ENSURE_CORRECT_NORMALS,
-        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_GREEN,
-        Godot.Core.SpatialMaterial._SPECULAR_BLINN,
-        Godot.Core.SpatialMaterial._CULL_BACK,
-        Godot.Core.SpatialMaterial._EMISSION_OP_MULTIPLY,
-        Godot.Core.SpatialMaterial._FLAG_SRGB_VERTEX_COLOR,
-        Godot.Core.SpatialMaterial._FLAG_EMISSION_ON_UV2,
-        Godot.Core.SpatialMaterial._FLAG_AO_ON_UV2,
-        Godot.Core.SpatialMaterial._TEXTURE_DEPTH,
-        Godot.Core.SpatialMaterial._DIFFUSE_OREN_NAYAR,
-        Godot.Core.SpatialMaterial._FLAG_UV1_USE_TRIPLANAR,
-        Godot.Core.SpatialMaterial._DEPTH_DRAW_DISABLED,
-        Godot.Core.SpatialMaterial._TEXTURE_DETAIL_NORMAL,
-        Godot.Core.SpatialMaterial._FEATURE_RIM,
-        Godot.Core.SpatialMaterial._DISTANCE_FADE_DISABLED,
-        Godot.Core.SpatialMaterial._SPECULAR_DISABLED,
-        Godot.Core.SpatialMaterial._CULL_FRONT,
-        Godot.Core.SpatialMaterial._TEXTURE_SUBSURFACE_SCATTERING,
-        Godot.Core.SpatialMaterial._TEXTURE_CLEARCOAT,
-        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_ALPHA,
-        Godot.Core.SpatialMaterial._FEATURE_CLEARCOAT,
-        Godot.Core.SpatialMaterial._FLAG_ALBEDO_TEXTURE_FORCE_SRGB,
-        Godot.Core.SpatialMaterial._DIFFUSE_TOON,
-        Godot.Core.SpatialMaterial._DETAIL_UV_1,
-        Godot.Core.SpatialMaterial._FLAG_USE_SHADOW_TO_OPACITY,
-        Godot.Core.SpatialMaterial._BILLBOARD_DISABLED,
-        Godot.Core.SpatialMaterial._BLEND_MODE_MUL,
+        Godot.Core.SpatialMaterial._DIFFUSE_LAMBERT,
         Godot.Core.SpatialMaterial._FLAG_USE_VERTEX_LIGHTING,
-        Godot.Core.SpatialMaterial._FLAG_UV2_USE_TRIPLANAR,
-        Godot.Core.SpatialMaterial._BLEND_MODE_SUB,
-        Godot.Core.SpatialMaterial._SPECULAR_PHONG,
-        Godot.Core.SpatialMaterial._DISTANCE_FADE_PIXEL_ALPHA,
-        Godot.Core.SpatialMaterial._FLAG_DISABLE_AMBIENT_LIGHT,
+        Godot.Core.SpatialMaterial._DISTANCE_FADE_DISABLED,
+        Godot.Core.SpatialMaterial._FLAG_UV1_USE_TRIPLANAR,
+        Godot.Core.SpatialMaterial._BILLBOARD_ENABLED,
+        Godot.Core.SpatialMaterial._SPECULAR_TOON,
+        Godot.Core.SpatialMaterial._DETAIL_UV_2,
+        Godot.Core.SpatialMaterial._TEXTURE_TRANSMISSION,
+        Godot.Core.SpatialMaterial._DIFFUSE_BURLEY,
+        Godot.Core.SpatialMaterial._TEXTURE_CLEARCOAT,
+        Godot.Core.SpatialMaterial._FLAG_MAX,
+        Godot.Core.SpatialMaterial._SPECULAR_DISABLED,
+        Godot.Core.SpatialMaterial._TEXTURE_METALLIC,
+        Godot.Core.SpatialMaterial._TEXTURE_REFRACTION,
         Godot.Core.SpatialMaterial._BILLBOARD_PARTICLES,
-        Godot.Core.SpatialMaterial._TEXTURE_EMISSION,
+        Godot.Core.SpatialMaterial._SPECULAR_PHONG,
+        Godot.Core.SpatialMaterial._DISTANCE_FADE_OBJECT_DITHER,
+        Godot.Core.SpatialMaterial._FEATURE_NORMAL_MAPPING,
+        Godot.Core.SpatialMaterial._SPECULAR_SCHLICK_GGX,
+        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_BLUE,
+        Godot.Core.SpatialMaterial._FLAG_ENSURE_CORRECT_NORMALS,
+        Godot.Core.SpatialMaterial._TEXTURE_DEPTH,
+        Godot.Core.SpatialMaterial._FLAG_USE_ALPHA_SCISSOR,
+        Godot.Core.SpatialMaterial._FLAG_BILLBOARD_KEEP_SCALE,
+        Godot.Core.SpatialMaterial._TEXTURE_SUBSURFACE_SCATTERING,
+        Godot.Core.SpatialMaterial._FLAG_DONT_RECEIVE_SHADOWS,
+        Godot.Core.SpatialMaterial._FEATURE_ANISOTROPY,
+        Godot.Core.SpatialMaterial._FLAG_DISABLE_AMBIENT_LIGHT,
+        Godot.Core.SpatialMaterial._TEXTURE_ROUGHNESS,
+        Godot.Core.SpatialMaterial._FLAG_UNSHADED,
+        Godot.Core.SpatialMaterial._BILLBOARD_FIXED_Y,
+        Godot.Core.SpatialMaterial._SPECULAR_BLINN,
+        Godot.Core.SpatialMaterial._EMISSION_OP_ADD,
+        Godot.Core.SpatialMaterial._FLAG_FIXED_SIZE,
+        Godot.Core.SpatialMaterial._BLEND_MODE_MIX,
+        Godot.Core.SpatialMaterial._FLAG_USE_POINT_SIZE,
+        Godot.Core.SpatialMaterial._FLAG_UV2_USE_TRIPLANAR,
+        Godot.Core.SpatialMaterial._TEXTURE_MAX,
+        Godot.Core.SpatialMaterial._TEXTURE_NORMAL,
+        Godot.Core.SpatialMaterial._CULL_BACK,
+        Godot.Core.SpatialMaterial._TEXTURE_DETAIL_NORMAL,
+        Godot.Core.SpatialMaterial._EMISSION_OP_MULTIPLY,
+        Godot.Core.SpatialMaterial._DISTANCE_FADE_PIXEL_DITHER,
         Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_GRAYSCALE,
+        Godot.Core.SpatialMaterial._FLAG_EMISSION_ON_UV2,
+        Godot.Core.SpatialMaterial._FEATURE_MAX,
+        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_ALPHA,
+        Godot.Core.SpatialMaterial._DEPTH_DRAW_ALWAYS,
+        Godot.Core.SpatialMaterial._FLAG_SRGB_VERTEX_COLOR,
+        Godot.Core.SpatialMaterial._FEATURE_REFRACTION,
+        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_GREEN,
+        Godot.Core.SpatialMaterial._DEPTH_DRAW_DISABLED,
+        Godot.Core.SpatialMaterial._FEATURE_DETAIL,
+        Godot.Core.SpatialMaterial._FEATURE_SUBSURACE_SCATTERING,
+        Godot.Core.SpatialMaterial._TEXTURE_EMISSION,
+        Godot.Core.SpatialMaterial._CULL_DISABLED,
+        Godot.Core.SpatialMaterial._DIFFUSE_LAMBERT_WRAP,
+        Godot.Core.SpatialMaterial._TEXTURE_RIM,
+        Godot.Core.SpatialMaterial._DIFFUSE_TOON,
+        Godot.Core.SpatialMaterial._DEPTH_DRAW_OPAQUE_ONLY,
         Godot.Core.SpatialMaterial._TEXTURE_ALBEDO,
+        Godot.Core.SpatialMaterial._BLEND_MODE_SUB,
+        Godot.Core.SpatialMaterial._BLEND_MODE_MUL,
+        Godot.Core.SpatialMaterial._FLAG_ALBEDO_TEXTURE_FORCE_SRGB,
+        Godot.Core.SpatialMaterial._FLAG_ALBEDO_FROM_VERTEX_COLOR,
+        Godot.Core.SpatialMaterial._TEXTURE_AMBIENT_OCCLUSION,
+        Godot.Core.SpatialMaterial._FEATURE_DEPTH_MAPPING,
+        Godot.Core.SpatialMaterial._FEATURE_AMBIENT_OCCLUSION,
+        Godot.Core.SpatialMaterial._TEXTURE_CHANNEL_RED,
+        Godot.Core.SpatialMaterial._TEXTURE_DETAIL_MASK,
+        Godot.Core.SpatialMaterial._FLAG_AO_ON_UV2,
+        Godot.Core.SpatialMaterial._TEXTURE_FLOWMAP,
+        Godot.Core.SpatialMaterial._FEATURE_TRANSPARENT,
+        Godot.Core.SpatialMaterial._FEATURE_CLEARCOAT,
+        Godot.Core.SpatialMaterial._BILLBOARD_DISABLED,
+        Godot.Core.SpatialMaterial._TEXTURE_DETAIL_ALBEDO,
+        Godot.Core.SpatialMaterial._FEATURE_RIM,
+        Godot.Core.SpatialMaterial._DISTANCE_FADE_PIXEL_ALPHA,
+        Godot.Core.SpatialMaterial._FEATURE_TRANSMISSION,
+        Godot.Core.SpatialMaterial._FLAG_USE_SHADOW_TO_OPACITY,
+        Godot.Core.SpatialMaterial._FLAG_DISABLE_DEPTH_TEST,
+        Godot.Core.SpatialMaterial._DETAIL_UV_1,
+        Godot.Core.SpatialMaterial._CULL_FRONT,
+        Godot.Core.SpatialMaterial._FEATURE_EMISSION,
+        Godot.Core.SpatialMaterial._DIFFUSE_OREN_NAYAR,
         Godot.Core.SpatialMaterial.get_albedo,
         Godot.Core.SpatialMaterial.get_alpha_scissor_threshold,
         Godot.Core.SpatialMaterial.get_anisotropy,
@@ -217,269 +217,269 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Material()
 
-_DIFFUSE_BURLEY :: Int
-_DIFFUSE_BURLEY = 0
-
-_DEPTH_DRAW_ALWAYS :: Int
-_DEPTH_DRAW_ALWAYS = 1
-
-_FLAG_DISABLE_DEPTH_TEST :: Int
-_FLAG_DISABLE_DEPTH_TEST = 2
-
-_TEXTURE_MAX :: Int
-_TEXTURE_MAX = 16
-
-_DISTANCE_FADE_PIXEL_DITHER :: Int
-_DISTANCE_FADE_PIXEL_DITHER = 2
-
-_FLAG_DONT_RECEIVE_SHADOWS :: Int
-_FLAG_DONT_RECEIVE_SHADOWS = 15
-
-_TEXTURE_METALLIC :: Int
-_TEXTURE_METALLIC = 1
-
-_FEATURE_MAX :: Int
-_FEATURE_MAX = 12
-
-_TEXTURE_DETAIL_ALBEDO :: Int
-_TEXTURE_DETAIL_ALBEDO = 14
-
-_TEXTURE_CHANNEL_RED :: Int
-_TEXTURE_CHANNEL_RED = 0
-
-_SPECULAR_TOON :: Int
-_SPECULAR_TOON = 3
-
-_FEATURE_EMISSION :: Int
-_FEATURE_EMISSION = 1
-
-_TEXTURE_CHANNEL_BLUE :: Int
-_TEXTURE_CHANNEL_BLUE = 2
-
-_TEXTURE_AMBIENT_OCCLUSION :: Int
-_TEXTURE_AMBIENT_OCCLUSION = 8
-
-_TEXTURE_DETAIL_MASK :: Int
-_TEXTURE_DETAIL_MASK = 13
-
-_FEATURE_DETAIL :: Int
-_FEATURE_DETAIL = 11
-
-_SPECULAR_SCHLICK_GGX :: Int
-_SPECULAR_SCHLICK_GGX = 0
-
-_FEATURE_SUBSURACE_SCATTERING :: Int
-_FEATURE_SUBSURACE_SCATTERING = 8
-
-_FEATURE_DEPTH_MAPPING :: Int
-_FEATURE_DEPTH_MAPPING = 7
-
-_TEXTURE_REFRACTION :: Int
-_TEXTURE_REFRACTION = 12
-
-_FEATURE_TRANSPARENT :: Int
-_FEATURE_TRANSPARENT = 0
-
-_FEATURE_TRANSMISSION :: Int
-_FEATURE_TRANSMISSION = 9
-
 _FLAG_TRIPLANAR_USE_WORLD :: Int
 _FLAG_TRIPLANAR_USE_WORLD = 10
 
 _DEPTH_DRAW_ALPHA_OPAQUE_PREPASS :: Int
 _DEPTH_DRAW_ALPHA_OPAQUE_PREPASS = 3
 
-_FLAG_USE_ALPHA_SCISSOR :: Int
-_FLAG_USE_ALPHA_SCISSOR = 13
+_BLEND_MODE_ADD :: Int
+_BLEND_MODE_ADD = 1
 
 _DIFFUSE_LAMBERT :: Int
 _DIFFUSE_LAMBERT = 1
 
-_DETAIL_UV_2 :: Int
-_DETAIL_UV_2 = 1
-
-_DIFFUSE_LAMBERT_WRAP :: Int
-_DIFFUSE_LAMBERT_WRAP = 2
-
-_BLEND_MODE_ADD :: Int
-_BLEND_MODE_ADD = 1
-
-_BILLBOARD_ENABLED :: Int
-_BILLBOARD_ENABLED = 1
-
-_TEXTURE_NORMAL :: Int
-_TEXTURE_NORMAL = 4
-
-_FEATURE_NORMAL_MAPPING :: Int
-_FEATURE_NORMAL_MAPPING = 2
-
-_TEXTURE_TRANSMISSION :: Int
-_TEXTURE_TRANSMISSION = 11
-
-_FLAG_ALBEDO_FROM_VERTEX_COLOR :: Int
-_FLAG_ALBEDO_FROM_VERTEX_COLOR = 3
-
-_FEATURE_REFRACTION :: Int
-_FEATURE_REFRACTION = 10
-
-_BLEND_MODE_MIX :: Int
-_BLEND_MODE_MIX = 0
-
-_BILLBOARD_FIXED_Y :: Int
-_BILLBOARD_FIXED_Y = 2
-
-_TEXTURE_FLOWMAP :: Int
-_TEXTURE_FLOWMAP = 7
-
-_TEXTURE_RIM :: Int
-_TEXTURE_RIM = 5
-
-_FEATURE_AMBIENT_OCCLUSION :: Int
-_FEATURE_AMBIENT_OCCLUSION = 6
-
-_DISTANCE_FADE_OBJECT_DITHER :: Int
-_DISTANCE_FADE_OBJECT_DITHER = 3
-
-_FLAG_BILLBOARD_KEEP_SCALE :: Int
-_FLAG_BILLBOARD_KEEP_SCALE = 7
-
-_DEPTH_DRAW_OPAQUE_ONLY :: Int
-_DEPTH_DRAW_OPAQUE_ONLY = 0
-
-_FLAG_USE_POINT_SIZE :: Int
-_FLAG_USE_POINT_SIZE = 5
-
-_CULL_DISABLED :: Int
-_CULL_DISABLED = 2
-
-_FEATURE_ANISOTROPY :: Int
-_FEATURE_ANISOTROPY = 5
-
-_TEXTURE_ROUGHNESS :: Int
-_TEXTURE_ROUGHNESS = 2
-
-_EMISSION_OP_ADD :: Int
-_EMISSION_OP_ADD = 0
-
-_FLAG_MAX :: Int
-_FLAG_MAX = 19
-
-_FLAG_FIXED_SIZE :: Int
-_FLAG_FIXED_SIZE = 6
-
-_FLAG_UNSHADED :: Int
-_FLAG_UNSHADED = 0
-
-_FLAG_ENSURE_CORRECT_NORMALS :: Int
-_FLAG_ENSURE_CORRECT_NORMALS = 16
-
-_TEXTURE_CHANNEL_GREEN :: Int
-_TEXTURE_CHANNEL_GREEN = 1
-
-_SPECULAR_BLINN :: Int
-_SPECULAR_BLINN = 1
-
-_CULL_BACK :: Int
-_CULL_BACK = 0
-
-_EMISSION_OP_MULTIPLY :: Int
-_EMISSION_OP_MULTIPLY = 1
-
-_FLAG_SRGB_VERTEX_COLOR :: Int
-_FLAG_SRGB_VERTEX_COLOR = 4
-
-_FLAG_EMISSION_ON_UV2 :: Int
-_FLAG_EMISSION_ON_UV2 = 12
-
-_FLAG_AO_ON_UV2 :: Int
-_FLAG_AO_ON_UV2 = 11
-
-_TEXTURE_DEPTH :: Int
-_TEXTURE_DEPTH = 9
-
-_DIFFUSE_OREN_NAYAR :: Int
-_DIFFUSE_OREN_NAYAR = 3
-
-_FLAG_UV1_USE_TRIPLANAR :: Int
-_FLAG_UV1_USE_TRIPLANAR = 8
-
-_DEPTH_DRAW_DISABLED :: Int
-_DEPTH_DRAW_DISABLED = 2
-
-_TEXTURE_DETAIL_NORMAL :: Int
-_TEXTURE_DETAIL_NORMAL = 15
-
-_FEATURE_RIM :: Int
-_FEATURE_RIM = 3
+_FLAG_USE_VERTEX_LIGHTING :: Int
+_FLAG_USE_VERTEX_LIGHTING = 1
 
 _DISTANCE_FADE_DISABLED :: Int
 _DISTANCE_FADE_DISABLED = 0
 
-_SPECULAR_DISABLED :: Int
-_SPECULAR_DISABLED = 4
+_FLAG_UV1_USE_TRIPLANAR :: Int
+_FLAG_UV1_USE_TRIPLANAR = 8
 
-_CULL_FRONT :: Int
-_CULL_FRONT = 1
+_BILLBOARD_ENABLED :: Int
+_BILLBOARD_ENABLED = 1
 
-_TEXTURE_SUBSURFACE_SCATTERING :: Int
-_TEXTURE_SUBSURFACE_SCATTERING = 10
+_SPECULAR_TOON :: Int
+_SPECULAR_TOON = 3
+
+_DETAIL_UV_2 :: Int
+_DETAIL_UV_2 = 1
+
+_TEXTURE_TRANSMISSION :: Int
+_TEXTURE_TRANSMISSION = 11
+
+_DIFFUSE_BURLEY :: Int
+_DIFFUSE_BURLEY = 0
 
 _TEXTURE_CLEARCOAT :: Int
 _TEXTURE_CLEARCOAT = 6
 
-_TEXTURE_CHANNEL_ALPHA :: Int
-_TEXTURE_CHANNEL_ALPHA = 3
+_FLAG_MAX :: Int
+_FLAG_MAX = 19
 
-_FEATURE_CLEARCOAT :: Int
-_FEATURE_CLEARCOAT = 4
+_SPECULAR_DISABLED :: Int
+_SPECULAR_DISABLED = 4
 
-_FLAG_ALBEDO_TEXTURE_FORCE_SRGB :: Int
-_FLAG_ALBEDO_TEXTURE_FORCE_SRGB = 14
+_TEXTURE_METALLIC :: Int
+_TEXTURE_METALLIC = 1
 
-_DIFFUSE_TOON :: Int
-_DIFFUSE_TOON = 4
-
-_DETAIL_UV_1 :: Int
-_DETAIL_UV_1 = 0
-
-_FLAG_USE_SHADOW_TO_OPACITY :: Int
-_FLAG_USE_SHADOW_TO_OPACITY = 18
-
-_BILLBOARD_DISABLED :: Int
-_BILLBOARD_DISABLED = 0
-
-_BLEND_MODE_MUL :: Int
-_BLEND_MODE_MUL = 3
-
-_FLAG_USE_VERTEX_LIGHTING :: Int
-_FLAG_USE_VERTEX_LIGHTING = 1
-
-_FLAG_UV2_USE_TRIPLANAR :: Int
-_FLAG_UV2_USE_TRIPLANAR = 9
-
-_BLEND_MODE_SUB :: Int
-_BLEND_MODE_SUB = 2
-
-_SPECULAR_PHONG :: Int
-_SPECULAR_PHONG = 2
-
-_DISTANCE_FADE_PIXEL_ALPHA :: Int
-_DISTANCE_FADE_PIXEL_ALPHA = 1
-
-_FLAG_DISABLE_AMBIENT_LIGHT :: Int
-_FLAG_DISABLE_AMBIENT_LIGHT = 17
+_TEXTURE_REFRACTION :: Int
+_TEXTURE_REFRACTION = 12
 
 _BILLBOARD_PARTICLES :: Int
 _BILLBOARD_PARTICLES = 3
 
-_TEXTURE_EMISSION :: Int
-_TEXTURE_EMISSION = 3
+_SPECULAR_PHONG :: Int
+_SPECULAR_PHONG = 2
+
+_DISTANCE_FADE_OBJECT_DITHER :: Int
+_DISTANCE_FADE_OBJECT_DITHER = 3
+
+_FEATURE_NORMAL_MAPPING :: Int
+_FEATURE_NORMAL_MAPPING = 2
+
+_SPECULAR_SCHLICK_GGX :: Int
+_SPECULAR_SCHLICK_GGX = 0
+
+_TEXTURE_CHANNEL_BLUE :: Int
+_TEXTURE_CHANNEL_BLUE = 2
+
+_FLAG_ENSURE_CORRECT_NORMALS :: Int
+_FLAG_ENSURE_CORRECT_NORMALS = 16
+
+_TEXTURE_DEPTH :: Int
+_TEXTURE_DEPTH = 9
+
+_FLAG_USE_ALPHA_SCISSOR :: Int
+_FLAG_USE_ALPHA_SCISSOR = 13
+
+_FLAG_BILLBOARD_KEEP_SCALE :: Int
+_FLAG_BILLBOARD_KEEP_SCALE = 7
+
+_TEXTURE_SUBSURFACE_SCATTERING :: Int
+_TEXTURE_SUBSURFACE_SCATTERING = 10
+
+_FLAG_DONT_RECEIVE_SHADOWS :: Int
+_FLAG_DONT_RECEIVE_SHADOWS = 15
+
+_FEATURE_ANISOTROPY :: Int
+_FEATURE_ANISOTROPY = 5
+
+_FLAG_DISABLE_AMBIENT_LIGHT :: Int
+_FLAG_DISABLE_AMBIENT_LIGHT = 17
+
+_TEXTURE_ROUGHNESS :: Int
+_TEXTURE_ROUGHNESS = 2
+
+_FLAG_UNSHADED :: Int
+_FLAG_UNSHADED = 0
+
+_BILLBOARD_FIXED_Y :: Int
+_BILLBOARD_FIXED_Y = 2
+
+_SPECULAR_BLINN :: Int
+_SPECULAR_BLINN = 1
+
+_EMISSION_OP_ADD :: Int
+_EMISSION_OP_ADD = 0
+
+_FLAG_FIXED_SIZE :: Int
+_FLAG_FIXED_SIZE = 6
+
+_BLEND_MODE_MIX :: Int
+_BLEND_MODE_MIX = 0
+
+_FLAG_USE_POINT_SIZE :: Int
+_FLAG_USE_POINT_SIZE = 5
+
+_FLAG_UV2_USE_TRIPLANAR :: Int
+_FLAG_UV2_USE_TRIPLANAR = 9
+
+_TEXTURE_MAX :: Int
+_TEXTURE_MAX = 16
+
+_TEXTURE_NORMAL :: Int
+_TEXTURE_NORMAL = 4
+
+_CULL_BACK :: Int
+_CULL_BACK = 0
+
+_TEXTURE_DETAIL_NORMAL :: Int
+_TEXTURE_DETAIL_NORMAL = 15
+
+_EMISSION_OP_MULTIPLY :: Int
+_EMISSION_OP_MULTIPLY = 1
+
+_DISTANCE_FADE_PIXEL_DITHER :: Int
+_DISTANCE_FADE_PIXEL_DITHER = 2
 
 _TEXTURE_CHANNEL_GRAYSCALE :: Int
 _TEXTURE_CHANNEL_GRAYSCALE = 4
 
+_FLAG_EMISSION_ON_UV2 :: Int
+_FLAG_EMISSION_ON_UV2 = 12
+
+_FEATURE_MAX :: Int
+_FEATURE_MAX = 12
+
+_TEXTURE_CHANNEL_ALPHA :: Int
+_TEXTURE_CHANNEL_ALPHA = 3
+
+_DEPTH_DRAW_ALWAYS :: Int
+_DEPTH_DRAW_ALWAYS = 1
+
+_FLAG_SRGB_VERTEX_COLOR :: Int
+_FLAG_SRGB_VERTEX_COLOR = 4
+
+_FEATURE_REFRACTION :: Int
+_FEATURE_REFRACTION = 10
+
+_TEXTURE_CHANNEL_GREEN :: Int
+_TEXTURE_CHANNEL_GREEN = 1
+
+_DEPTH_DRAW_DISABLED :: Int
+_DEPTH_DRAW_DISABLED = 2
+
+_FEATURE_DETAIL :: Int
+_FEATURE_DETAIL = 11
+
+_FEATURE_SUBSURACE_SCATTERING :: Int
+_FEATURE_SUBSURACE_SCATTERING = 8
+
+_TEXTURE_EMISSION :: Int
+_TEXTURE_EMISSION = 3
+
+_CULL_DISABLED :: Int
+_CULL_DISABLED = 2
+
+_DIFFUSE_LAMBERT_WRAP :: Int
+_DIFFUSE_LAMBERT_WRAP = 2
+
+_TEXTURE_RIM :: Int
+_TEXTURE_RIM = 5
+
+_DIFFUSE_TOON :: Int
+_DIFFUSE_TOON = 4
+
+_DEPTH_DRAW_OPAQUE_ONLY :: Int
+_DEPTH_DRAW_OPAQUE_ONLY = 0
+
 _TEXTURE_ALBEDO :: Int
 _TEXTURE_ALBEDO = 0
+
+_BLEND_MODE_SUB :: Int
+_BLEND_MODE_SUB = 2
+
+_BLEND_MODE_MUL :: Int
+_BLEND_MODE_MUL = 3
+
+_FLAG_ALBEDO_TEXTURE_FORCE_SRGB :: Int
+_FLAG_ALBEDO_TEXTURE_FORCE_SRGB = 14
+
+_FLAG_ALBEDO_FROM_VERTEX_COLOR :: Int
+_FLAG_ALBEDO_FROM_VERTEX_COLOR = 3
+
+_TEXTURE_AMBIENT_OCCLUSION :: Int
+_TEXTURE_AMBIENT_OCCLUSION = 8
+
+_FEATURE_DEPTH_MAPPING :: Int
+_FEATURE_DEPTH_MAPPING = 7
+
+_FEATURE_AMBIENT_OCCLUSION :: Int
+_FEATURE_AMBIENT_OCCLUSION = 6
+
+_TEXTURE_CHANNEL_RED :: Int
+_TEXTURE_CHANNEL_RED = 0
+
+_TEXTURE_DETAIL_MASK :: Int
+_TEXTURE_DETAIL_MASK = 13
+
+_FLAG_AO_ON_UV2 :: Int
+_FLAG_AO_ON_UV2 = 11
+
+_TEXTURE_FLOWMAP :: Int
+_TEXTURE_FLOWMAP = 7
+
+_FEATURE_TRANSPARENT :: Int
+_FEATURE_TRANSPARENT = 0
+
+_FEATURE_CLEARCOAT :: Int
+_FEATURE_CLEARCOAT = 4
+
+_BILLBOARD_DISABLED :: Int
+_BILLBOARD_DISABLED = 0
+
+_TEXTURE_DETAIL_ALBEDO :: Int
+_TEXTURE_DETAIL_ALBEDO = 14
+
+_FEATURE_RIM :: Int
+_FEATURE_RIM = 3
+
+_DISTANCE_FADE_PIXEL_ALPHA :: Int
+_DISTANCE_FADE_PIXEL_ALPHA = 1
+
+_FEATURE_TRANSMISSION :: Int
+_FEATURE_TRANSMISSION = 9
+
+_FLAG_USE_SHADOW_TO_OPACITY :: Int
+_FLAG_USE_SHADOW_TO_OPACITY = 18
+
+_FLAG_DISABLE_DEPTH_TEST :: Int
+_FLAG_DISABLE_DEPTH_TEST = 2
+
+_DETAIL_UV_1 :: Int
+_DETAIL_UV_1 = 0
+
+_CULL_FRONT :: Int
+_CULL_FRONT = 1
+
+_FEATURE_EMISSION :: Int
+_FEATURE_EMISSION = 1
+
+_DIFFUSE_OREN_NAYAR :: Int
+_DIFFUSE_OREN_NAYAR = 3
 
 instance NodeProperty SpatialMaterial "albedo_color" Color 'False
          where

@@ -2,18 +2,16 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.TextEdit
-       (Godot.Core.TextEdit._MENU_PASTE,
-        Godot.Core.TextEdit._SEARCH_WHOLE_WORDS,
-        Godot.Core.TextEdit._MENU_CLEAR, Godot.Core.TextEdit._MENU_MAX,
-        Godot.Core.TextEdit._MENU_REDO,
-        Godot.Core.TextEdit._SEARCH_BACKWARDS,
-        Godot.Core.TextEdit._MENU_COPY,
-        Godot.Core.TextEdit._SEARCH_RESULT_COLUMN,
-        Godot.Core.TextEdit._MENU_UNDO,
+       (Godot.Core.TextEdit._MENU_PASTE, Godot.Core.TextEdit._MENU_UNDO,
         Godot.Core.TextEdit._MENU_SELECT_ALL,
+        Godot.Core.TextEdit._SEARCH_RESULT_COLUMN,
+        Godot.Core.TextEdit._SEARCH_MATCH_CASE,
+        Godot.Core.TextEdit._SEARCH_BACKWARDS,
+        Godot.Core.TextEdit._SEARCH_WHOLE_WORDS,
         Godot.Core.TextEdit._MENU_CUT,
         Godot.Core.TextEdit._SEARCH_RESULT_LINE,
-        Godot.Core.TextEdit._SEARCH_MATCH_CASE,
+        Godot.Core.TextEdit._MENU_REDO, Godot.Core.TextEdit._MENU_MAX,
+        Godot.Core.TextEdit._MENU_COPY, Godot.Core.TextEdit._MENU_CLEAR,
         Godot.Core.TextEdit.sig_breakpoint_toggled,
         Godot.Core.TextEdit.sig_cursor_changed,
         Godot.Core.TextEdit.sig_info_clicked,
@@ -128,32 +126,23 @@ import Godot.Core.Control()
 _MENU_PASTE :: Int
 _MENU_PASTE = 2
 
-_SEARCH_WHOLE_WORDS :: Int
-_SEARCH_WHOLE_WORDS = 2
-
-_MENU_CLEAR :: Int
-_MENU_CLEAR = 3
-
-_MENU_MAX :: Int
-_MENU_MAX = 7
-
-_MENU_REDO :: Int
-_MENU_REDO = 6
-
-_SEARCH_BACKWARDS :: Int
-_SEARCH_BACKWARDS = 4
-
-_MENU_COPY :: Int
-_MENU_COPY = 1
-
-_SEARCH_RESULT_COLUMN :: Int
-_SEARCH_RESULT_COLUMN = 0
-
 _MENU_UNDO :: Int
 _MENU_UNDO = 5
 
 _MENU_SELECT_ALL :: Int
 _MENU_SELECT_ALL = 4
+
+_SEARCH_RESULT_COLUMN :: Int
+_SEARCH_RESULT_COLUMN = 0
+
+_SEARCH_MATCH_CASE :: Int
+_SEARCH_MATCH_CASE = 1
+
+_SEARCH_BACKWARDS :: Int
+_SEARCH_BACKWARDS = 4
+
+_SEARCH_WHOLE_WORDS :: Int
+_SEARCH_WHOLE_WORDS = 2
 
 _MENU_CUT :: Int
 _MENU_CUT = 0
@@ -161,8 +150,17 @@ _MENU_CUT = 0
 _SEARCH_RESULT_LINE :: Int
 _SEARCH_RESULT_LINE = 1
 
-_SEARCH_MATCH_CASE :: Int
-_SEARCH_MATCH_CASE = 1
+_MENU_REDO :: Int
+_MENU_REDO = 6
+
+_MENU_MAX :: Int
+_MENU_MAX = 7
+
+_MENU_COPY :: Int
+_MENU_COPY = 1
+
+_MENU_CLEAR :: Int
+_MENU_CLEAR = 3
 
 -- | Emitted when a breakpoint is placed via the breakpoint gutter.
 sig_breakpoint_toggled :: Godot.Internal.Dispatch.Signal TextEdit
@@ -644,7 +642,6 @@ instance NodeMethod TextEdit "can_fold" '[Int] (IO Bool) where
 
 {-# NOINLINE bindTextEdit_center_viewport_to_cursor #-}
 
--- | Centers the viewport on the line the editing cursor is at. This also resets the @scroll_horizontal@ value to @0@.
 bindTextEdit_center_viewport_to_cursor :: MethodBind
 bindTextEdit_center_viewport_to_cursor
   = unsafePerformIO $
@@ -654,7 +651,6 @@ bindTextEdit_center_viewport_to_cursor
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Centers the viewport on the line the editing cursor is at. This also resets the @scroll_horizontal@ value to @0@.
 center_viewport_to_cursor ::
                             (TextEdit :< cls, Object :< cls) => cls -> IO ()
 center_viewport_to_cursor cls
@@ -1092,7 +1088,6 @@ instance NodeMethod TextEdit "deselect" '[] (IO ()) where
 
 {-# NOINLINE bindTextEdit_draw_minimap #-}
 
--- | If @true@, a minimap is shown, providing an outline of your source code.
 bindTextEdit_draw_minimap :: MethodBind
 bindTextEdit_draw_minimap
   = unsafePerformIO $
@@ -1102,7 +1097,6 @@ bindTextEdit_draw_minimap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, a minimap is shown, providing an outline of your source code.
 draw_minimap ::
                (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 draw_minimap cls arg1
@@ -1322,7 +1316,6 @@ instance NodeMethod TextEdit "get_menu" '[] (IO PopupMenu) where
 
 {-# NOINLINE bindTextEdit_get_minimap_width #-}
 
--- | The width, in pixels, of the minimap.
 bindTextEdit_get_minimap_width :: MethodBind
 bindTextEdit_get_minimap_width
   = unsafePerformIO $
@@ -1332,7 +1325,6 @@ bindTextEdit_get_minimap_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The width, in pixels, of the minimap.
 get_minimap_width ::
                     (TextEdit :< cls, Object :< cls) => cls -> IO Int
 get_minimap_width cls
@@ -1738,7 +1730,6 @@ instance NodeMethod TextEdit "is_drawing_fold_gutter" '[] (IO Bool)
 
 {-# NOINLINE bindTextEdit_is_drawing_minimap #-}
 
--- | If @true@, a minimap is shown, providing an outline of your source code.
 bindTextEdit_is_drawing_minimap :: MethodBind
 bindTextEdit_is_drawing_minimap
   = unsafePerformIO $
@@ -1748,7 +1739,6 @@ bindTextEdit_is_drawing_minimap
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, a minimap is shown, providing an outline of your source code.
 is_drawing_minimap ::
                      (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_drawing_minimap cls
@@ -1960,7 +1950,6 @@ instance NodeMethod TextEdit "is_line_hidden" '[Int] (IO Bool)
 
 {-# NOINLINE bindTextEdit_is_overriding_selected_font_color #-}
 
--- | If @true@, custom @font_color_selected@ will be used for selected text.
 bindTextEdit_is_overriding_selected_font_color :: MethodBind
 bindTextEdit_is_overriding_selected_font_color
   = unsafePerformIO $
@@ -1970,7 +1959,6 @@ bindTextEdit_is_overriding_selected_font_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, custom @font_color_selected@ will be used for selected text.
 is_overriding_selected_font_color ::
                                     (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_overriding_selected_font_color cls
@@ -2046,8 +2034,6 @@ instance NodeMethod TextEdit "is_right_click_moving_caret" '[]
 
 {-# NOINLINE bindTextEdit_is_selecting_enabled #-}
 
--- | If @true@, text can be selected.
---   			If @false@, text can not be selected by the user or by the @method select@ or @method select_all@ methods.
 bindTextEdit_is_selecting_enabled :: MethodBind
 bindTextEdit_is_selecting_enabled
   = unsafePerformIO $
@@ -2057,8 +2043,6 @@ bindTextEdit_is_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, text can be selected.
---   			If @false@, text can not be selected by the user or by the @method select@ or @method select_all@ methods.
 is_selecting_enabled ::
                        (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_selecting_enabled cls
@@ -2104,7 +2088,6 @@ instance NodeMethod TextEdit "is_selection_active" '[] (IO Bool)
 
 {-# NOINLINE bindTextEdit_is_shortcut_keys_enabled #-}
 
--- | If @true@, shortcut keys for context menu items are enabled, even if the context menu is disabled.
 bindTextEdit_is_shortcut_keys_enabled :: MethodBind
 bindTextEdit_is_shortcut_keys_enabled
   = unsafePerformIO $
@@ -2114,7 +2097,6 @@ bindTextEdit_is_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, shortcut keys for context menu items are enabled, even if the context menu is disabled.
 is_shortcut_keys_enabled ::
                            (TextEdit :< cls, Object :< cls) => cls -> IO Bool
 is_shortcut_keys_enabled cls
@@ -2394,7 +2376,6 @@ instance NodeMethod TextEdit "search" '[GodotString, Int, Int, Int]
 {-# NOINLINE bindTextEdit_select #-}
 
 -- | Perform selection, from line/column to line/column.
---   				If @selecting_enabled@ is @false@, no selection will occur.
 bindTextEdit_select :: MethodBind
 bindTextEdit_select
   = unsafePerformIO $
@@ -2405,7 +2386,6 @@ bindTextEdit_select
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Perform selection, from line/column to line/column.
---   				If @selecting_enabled@ is @false@, no selection will occur.
 select ::
          (TextEdit :< cls, Object :< cls) =>
          cls -> Int -> Int -> Int -> Int -> IO ()
@@ -2423,7 +2403,6 @@ instance NodeMethod TextEdit "select" '[Int, Int, Int, Int] (IO ())
 {-# NOINLINE bindTextEdit_select_all #-}
 
 -- | Select all the text.
---   				If @selecting_enabled@ is @false@, no selection will occur.
 bindTextEdit_select_all :: MethodBind
 bindTextEdit_select_all
   = unsafePerformIO $
@@ -2434,7 +2413,6 @@ bindTextEdit_select_all
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | Select all the text.
---   				If @selecting_enabled@ is @false@, no selection will occur.
 select_all :: (TextEdit :< cls, Object :< cls) => cls -> IO ()
 select_all cls
   = withVariantArray []
@@ -2728,7 +2706,6 @@ instance NodeMethod TextEdit "set_line_as_hidden" '[Int, Bool]
 
 {-# NOINLINE bindTextEdit_set_minimap_width #-}
 
--- | The width, in pixels, of the minimap.
 bindTextEdit_set_minimap_width :: MethodBind
 bindTextEdit_set_minimap_width
   = unsafePerformIO $
@@ -2738,7 +2715,6 @@ bindTextEdit_set_minimap_width
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The width, in pixels, of the minimap.
 set_minimap_width ::
                     (TextEdit :< cls, Object :< cls) => cls -> Int -> IO ()
 set_minimap_width cls arg1
@@ -2755,7 +2731,6 @@ instance NodeMethod TextEdit "set_minimap_width" '[Int] (IO ())
 
 {-# NOINLINE bindTextEdit_set_override_selected_font_color #-}
 
--- | If @true@, custom @font_color_selected@ will be used for selected text.
 bindTextEdit_set_override_selected_font_color :: MethodBind
 bindTextEdit_set_override_selected_font_color
   = unsafePerformIO $
@@ -2765,7 +2740,6 @@ bindTextEdit_set_override_selected_font_color
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, custom @font_color_selected@ will be used for selected text.
 set_override_selected_font_color ::
                                    (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_override_selected_font_color cls arg1
@@ -2843,8 +2817,6 @@ instance NodeMethod TextEdit "set_right_click_moves_caret" '[Bool]
 
 {-# NOINLINE bindTextEdit_set_selecting_enabled #-}
 
--- | If @true@, text can be selected.
---   			If @false@, text can not be selected by the user or by the @method select@ or @method select_all@ methods.
 bindTextEdit_set_selecting_enabled :: MethodBind
 bindTextEdit_set_selecting_enabled
   = unsafePerformIO $
@@ -2854,8 +2826,6 @@ bindTextEdit_set_selecting_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, text can be selected.
---   			If @false@, text can not be selected by the user or by the @method select@ or @method select_all@ methods.
 set_selecting_enabled ::
                         (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_selecting_enabled cls arg1
@@ -2874,7 +2844,6 @@ instance NodeMethod TextEdit "set_selecting_enabled" '[Bool]
 
 {-# NOINLINE bindTextEdit_set_shortcut_keys_enabled #-}
 
--- | If @true@, shortcut keys for context menu items are enabled, even if the context menu is disabled.
 bindTextEdit_set_shortcut_keys_enabled :: MethodBind
 bindTextEdit_set_shortcut_keys_enabled
   = unsafePerformIO $
@@ -2884,7 +2853,6 @@ bindTextEdit_set_shortcut_keys_enabled
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, shortcut keys for context menu items are enabled, even if the context menu is disabled.
 set_shortcut_keys_enabled ::
                             (TextEdit :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_shortcut_keys_enabled cls arg1

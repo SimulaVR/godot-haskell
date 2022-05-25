@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.HashingContext
-       (Godot.Core.HashingContext._HASH_SHA1,
-        Godot.Core.HashingContext._HASH_MD5,
+       (Godot.Core.HashingContext._HASH_MD5,
+        Godot.Core.HashingContext._HASH_SHA1,
         Godot.Core.HashingContext._HASH_SHA256,
         Godot.Core.HashingContext.finish, Godot.Core.HashingContext.start,
         Godot.Core.HashingContext.update)
@@ -20,11 +20,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Reference()
 
-_HASH_SHA1 :: Int
-_HASH_SHA1 = 1
-
 _HASH_MD5 :: Int
 _HASH_MD5 = 0
+
+_HASH_SHA1 :: Int
+_HASH_SHA1 = 1
 
 _HASH_SHA256 :: Int
 _HASH_SHA256 = 2

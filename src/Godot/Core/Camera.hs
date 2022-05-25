@@ -2,15 +2,15 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Camera
-       (Godot.Core.Camera._PROJECTION_FRUSTUM,
-        Godot.Core.Camera._PROJECTION_ORTHOGONAL,
-        Godot.Core.Camera._KEEP_HEIGHT,
+       (Godot.Core.Camera._KEEP_HEIGHT,
+        Godot.Core.Camera._PROJECTION_FRUSTUM,
+        Godot.Core.Camera._DOPPLER_TRACKING_IDLE_STEP,
         Godot.Core.Camera._DOPPLER_TRACKING_PHYSICS_STEP,
         Godot.Core.Camera._DOPPLER_TRACKING_DISABLED,
-        Godot.Core.Camera._KEEP_WIDTH,
-        Godot.Core.Camera._DOPPLER_TRACKING_IDLE_STEP,
+        Godot.Core.Camera._PROJECTION_ORTHOGONAL,
         Godot.Core.Camera._PROJECTION_PERSPECTIVE,
-        Godot.Core.Camera.clear_current, Godot.Core.Camera.get_camera_rid,
+        Godot.Core.Camera._KEEP_WIDTH, Godot.Core.Camera.clear_current,
+        Godot.Core.Camera.get_camera_rid,
         Godot.Core.Camera.get_camera_transform,
         Godot.Core.Camera.get_cull_mask,
         Godot.Core.Camera.get_cull_mask_bit,
@@ -55,14 +55,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Spatial()
 
+_KEEP_HEIGHT :: Int
+_KEEP_HEIGHT = 1
+
 _PROJECTION_FRUSTUM :: Int
 _PROJECTION_FRUSTUM = 2
 
-_PROJECTION_ORTHOGONAL :: Int
-_PROJECTION_ORTHOGONAL = 1
-
-_KEEP_HEIGHT :: Int
-_KEEP_HEIGHT = 1
+_DOPPLER_TRACKING_IDLE_STEP :: Int
+_DOPPLER_TRACKING_IDLE_STEP = 1
 
 _DOPPLER_TRACKING_PHYSICS_STEP :: Int
 _DOPPLER_TRACKING_PHYSICS_STEP = 2
@@ -70,14 +70,14 @@ _DOPPLER_TRACKING_PHYSICS_STEP = 2
 _DOPPLER_TRACKING_DISABLED :: Int
 _DOPPLER_TRACKING_DISABLED = 0
 
-_KEEP_WIDTH :: Int
-_KEEP_WIDTH = 0
-
-_DOPPLER_TRACKING_IDLE_STEP :: Int
-_DOPPLER_TRACKING_IDLE_STEP = 1
+_PROJECTION_ORTHOGONAL :: Int
+_PROJECTION_ORTHOGONAL = 1
 
 _PROJECTION_PERSPECTIVE :: Int
 _PROJECTION_PERSPECTIVE = 0
+
+_KEEP_WIDTH :: Int
+_KEEP_WIDTH = 0
 
 instance NodeProperty Camera "cull_mask" Int 'False where
         nodeProperty

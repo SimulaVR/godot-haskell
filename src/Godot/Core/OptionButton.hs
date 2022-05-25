@@ -44,7 +44,7 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Button()
 
--- | Emitted when the user navigates to an item using the @ui_up@ or @ui_down@ actions. The index of the item selected is passed as argument.
+-- | Emitted the when user navigates to an item using the @ui_up@ or @ui_down@ actions. The index of the item selected is passed as argument.
 sig_item_focused :: Godot.Internal.Dispatch.Signal OptionButton
 sig_item_focused = Godot.Internal.Dispatch.Signal "item_focused"
 

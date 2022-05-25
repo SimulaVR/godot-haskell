@@ -2,14 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.FileDialog
-       (Godot.Core.FileDialog._ACCESS_RESOURCES,
-        Godot.Core.FileDialog._MODE_OPEN_FILES,
-        Godot.Core.FileDialog._MODE_OPEN_FILE,
+       (Godot.Core.FileDialog._MODE_OPEN_DIR,
         Godot.Core.FileDialog._MODE_SAVE_FILE,
-        Godot.Core.FileDialog._ACCESS_USERDATA,
+        Godot.Core.FileDialog._MODE_OPEN_FILE,
         Godot.Core.FileDialog._ACCESS_FILESYSTEM,
-        Godot.Core.FileDialog._MODE_OPEN_DIR,
+        Godot.Core.FileDialog._ACCESS_USERDATA,
+        Godot.Core.FileDialog._ACCESS_RESOURCES,
         Godot.Core.FileDialog._MODE_OPEN_ANY,
+        Godot.Core.FileDialog._MODE_OPEN_FILES,
         Godot.Core.FileDialog.sig_dir_selected,
         Godot.Core.FileDialog.sig_file_selected,
         Godot.Core.FileDialog.sig_files_selected,
@@ -62,29 +62,29 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.ConfirmationDialog()
 
-_ACCESS_RESOURCES :: Int
-_ACCESS_RESOURCES = 0
-
-_MODE_OPEN_FILES :: Int
-_MODE_OPEN_FILES = 1
-
-_MODE_OPEN_FILE :: Int
-_MODE_OPEN_FILE = 0
+_MODE_OPEN_DIR :: Int
+_MODE_OPEN_DIR = 2
 
 _MODE_SAVE_FILE :: Int
 _MODE_SAVE_FILE = 4
 
-_ACCESS_USERDATA :: Int
-_ACCESS_USERDATA = 1
+_MODE_OPEN_FILE :: Int
+_MODE_OPEN_FILE = 0
 
 _ACCESS_FILESYSTEM :: Int
 _ACCESS_FILESYSTEM = 2
 
-_MODE_OPEN_DIR :: Int
-_MODE_OPEN_DIR = 2
+_ACCESS_USERDATA :: Int
+_ACCESS_USERDATA = 1
+
+_ACCESS_RESOURCES :: Int
+_ACCESS_RESOURCES = 0
 
 _MODE_OPEN_ANY :: Int
 _MODE_OPEN_ANY = 3
+
+_MODE_OPEN_FILES :: Int
+_MODE_OPEN_FILES = 1
 
 -- | Emitted when the user selects a directory.
 sig_dir_selected :: Godot.Internal.Dispatch.Signal FileDialog
@@ -649,7 +649,6 @@ instance NodeMethod FileDialog "deselect_items" '[] (IO ()) where
 {-# NOINLINE bindFileDialog_get_access #-}
 
 -- | The file system access scope. See enum @Access@ constants.
---   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 bindFileDialog_get_access :: MethodBind
 bindFileDialog_get_access
   = unsafePerformIO $
@@ -660,7 +659,6 @@ bindFileDialog_get_access
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The file system access scope. See enum @Access@ constants.
---   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 get_access :: (FileDialog :< cls, Object :< cls) => cls -> IO Int
 get_access cls
   = withVariantArray []
@@ -948,7 +946,6 @@ instance NodeMethod FileDialog "is_showing_hidden_files" '[]
 {-# NOINLINE bindFileDialog_set_access #-}
 
 -- | The file system access scope. See enum @Access@ constants.
---   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 bindFileDialog_set_access :: MethodBind
 bindFileDialog_set_access
   = unsafePerformIO $
@@ -959,7 +956,6 @@ bindFileDialog_set_access
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The file system access scope. See enum @Access@ constants.
---   			__Warning:__ Currently, in sandboxed environments such as HTML5 builds or sandboxed macOS apps, FileDialog cannot access the host file system. See @url=https://github.com/godotengine/godot-proposals/issues/1123@godot-proposals#1123@/url@.
 set_access ::
              (FileDialog :< cls, Object :< cls) => cls -> Int -> IO ()
 set_access cls arg1

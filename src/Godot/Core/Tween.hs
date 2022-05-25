@@ -2,16 +2,16 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.Tween
-       (Godot.Core.Tween._TRANS_SINE,
-        Godot.Core.Tween._TWEEN_PROCESS_IDLE,
+       (Godot.Core.Tween._TRANS_LINEAR, Godot.Core.Tween._TRANS_BACK,
+        Godot.Core.Tween._EASE_OUT, Godot.Core.Tween._TRANS_CUBIC,
+        Godot.Core.Tween._EASE_IN, Godot.Core.Tween._TWEEN_PROCESS_IDLE,
+        Godot.Core.Tween._TRANS_SINE, Godot.Core.Tween._TRANS_CIRC,
+        Godot.Core.Tween._EASE_OUT_IN, Godot.Core.Tween._TRANS_EXPO,
+        Godot.Core.Tween._TRANS_QUAD,
         Godot.Core.Tween._TWEEN_PROCESS_PHYSICS,
-        Godot.Core.Tween._TRANS_LINEAR, Godot.Core.Tween._EASE_OUT_IN,
-        Godot.Core.Tween._TRANS_QUAD, Godot.Core.Tween._TRANS_EXPO,
-        Godot.Core.Tween._EASE_IN, Godot.Core.Tween._TRANS_QUINT,
-        Godot.Core.Tween._TRANS_BOUNCE, Godot.Core.Tween._TRANS_ELASTIC,
-        Godot.Core.Tween._TRANS_CUBIC, Godot.Core.Tween._EASE_OUT,
-        Godot.Core.Tween._EASE_IN_OUT, Godot.Core.Tween._TRANS_QUART,
-        Godot.Core.Tween._TRANS_BACK, Godot.Core.Tween._TRANS_CIRC,
+        Godot.Core.Tween._TRANS_ELASTIC, Godot.Core.Tween._TRANS_QUINT,
+        Godot.Core.Tween._TRANS_BOUNCE, Godot.Core.Tween._EASE_IN_OUT,
+        Godot.Core.Tween._TRANS_QUART,
         Godot.Core.Tween.sig_tween_all_completed,
         Godot.Core.Tween.sig_tween_completed,
         Godot.Core.Tween.sig_tween_started,
@@ -46,29 +46,44 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Node()
 
-_TRANS_SINE :: Int
-_TRANS_SINE = 1
+_TRANS_LINEAR :: Int
+_TRANS_LINEAR = 0
+
+_TRANS_BACK :: Int
+_TRANS_BACK = 10
+
+_EASE_OUT :: Int
+_EASE_OUT = 1
+
+_TRANS_CUBIC :: Int
+_TRANS_CUBIC = 7
+
+_EASE_IN :: Int
+_EASE_IN = 0
 
 _TWEEN_PROCESS_IDLE :: Int
 _TWEEN_PROCESS_IDLE = 1
 
-_TWEEN_PROCESS_PHYSICS :: Int
-_TWEEN_PROCESS_PHYSICS = 0
+_TRANS_SINE :: Int
+_TRANS_SINE = 1
 
-_TRANS_LINEAR :: Int
-_TRANS_LINEAR = 0
+_TRANS_CIRC :: Int
+_TRANS_CIRC = 8
 
 _EASE_OUT_IN :: Int
 _EASE_OUT_IN = 3
 
-_TRANS_QUAD :: Int
-_TRANS_QUAD = 4
-
 _TRANS_EXPO :: Int
 _TRANS_EXPO = 5
 
-_EASE_IN :: Int
-_EASE_IN = 0
+_TRANS_QUAD :: Int
+_TRANS_QUAD = 4
+
+_TWEEN_PROCESS_PHYSICS :: Int
+_TWEEN_PROCESS_PHYSICS = 0
+
+_TRANS_ELASTIC :: Int
+_TRANS_ELASTIC = 6
 
 _TRANS_QUINT :: Int
 _TRANS_QUINT = 2
@@ -76,26 +91,11 @@ _TRANS_QUINT = 2
 _TRANS_BOUNCE :: Int
 _TRANS_BOUNCE = 9
 
-_TRANS_ELASTIC :: Int
-_TRANS_ELASTIC = 6
-
-_TRANS_CUBIC :: Int
-_TRANS_CUBIC = 7
-
-_EASE_OUT :: Int
-_EASE_OUT = 1
-
 _EASE_IN_OUT :: Int
 _EASE_IN_OUT = 2
 
 _TRANS_QUART :: Int
 _TRANS_QUART = 3
-
-_TRANS_BACK :: Int
-_TRANS_BACK = 10
-
-_TRANS_CIRC :: Int
-_TRANS_CIRC = 8
 
 -- | Emitted when all processes in a tween end.
 sig_tween_all_completed :: Godot.Internal.Dispatch.Signal Tween

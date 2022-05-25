@@ -2,13 +2,13 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.RigidBody2D
-       (Godot.Core.RigidBody2D._MODE_STATIC,
+       (Godot.Core.RigidBody2D._MODE_KINEMATIC,
+        Godot.Core.RigidBody2D._MODE_CHARACTER,
+        Godot.Core.RigidBody2D._MODE_RIGID,
+        Godot.Core.RigidBody2D._MODE_STATIC,
         Godot.Core.RigidBody2D._CCD_MODE_DISABLED,
         Godot.Core.RigidBody2D._CCD_MODE_CAST_RAY,
-        Godot.Core.RigidBody2D._MODE_KINEMATIC,
         Godot.Core.RigidBody2D._CCD_MODE_CAST_SHAPE,
-        Godot.Core.RigidBody2D._MODE_RIGID,
-        Godot.Core.RigidBody2D._MODE_CHARACTER,
         Godot.Core.RigidBody2D.sig_body_entered,
         Godot.Core.RigidBody2D.sig_body_exited,
         Godot.Core.RigidBody2D.sig_body_shape_entered,
@@ -81,6 +81,15 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.PhysicsBody2D()
 
+_MODE_KINEMATIC :: Int
+_MODE_KINEMATIC = 3
+
+_MODE_CHARACTER :: Int
+_MODE_CHARACTER = 2
+
+_MODE_RIGID :: Int
+_MODE_RIGID = 0
+
 _MODE_STATIC :: Int
 _MODE_STATIC = 1
 
@@ -90,31 +99,22 @@ _CCD_MODE_DISABLED = 0
 _CCD_MODE_CAST_RAY :: Int
 _CCD_MODE_CAST_RAY = 1
 
-_MODE_KINEMATIC :: Int
-_MODE_KINEMATIC = 3
-
 _CCD_MODE_CAST_SHAPE :: Int
 _CCD_MODE_CAST_SHAPE = 2
 
-_MODE_RIGID :: Int
-_MODE_RIGID = 0
-
-_MODE_CHARACTER :: Int
-_MODE_CHARACTER = 2
-
--- | Emitted when a body enters into contact with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Emitted when a body enters into contact with this one. @contact_monitor@ must be @true@ and @contacts_reported@ greater than @0@.
 sig_body_entered :: Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_entered = Godot.Internal.Dispatch.Signal "body_entered"
 
 instance NodeSignal RigidBody2D "body_entered" '[Node]
 
--- | Emitted when a body exits contact with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Emitted when a body exits contact with this one. @contact_monitor@ must be @true@ and @contacts_reported@ greater than @0@.
 sig_body_exited :: Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_exited = Godot.Internal.Dispatch.Signal "body_exited"
 
 instance NodeSignal RigidBody2D "body_exited" '[Node]
 
--- | Emitted when a body enters into contact with this one. Reports colliding shape information. See @CollisionObject2D@ for shape index information. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Emitted when a body enters into contact with this one. Reports colliding shape information. See @CollisionObject2D@ for shape index information. @contact_monitor@ must be @true@ and @contacts_reported@ greater than @0@.
 sig_body_shape_entered ::
                        Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_shape_entered
@@ -123,7 +123,7 @@ sig_body_shape_entered
 instance NodeSignal RigidBody2D "body_shape_entered"
            '[Int, Node, Int, Int]
 
--- | Emitted when a body shape exits contact with this one. Reports colliding shape information. See @CollisionObject2D@ for shape index information. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Emitted when a body shape exits contact with this one. Reports colliding shape information. See @CollisionObject2D@ for shape index information. @contact_monitor@ must be @true@ and @contacts_reported@ greater than @0@.
 sig_body_shape_exited :: Godot.Internal.Dispatch.Signal RigidBody2D
 sig_body_shape_exited
   = Godot.Internal.Dispatch.Signal "body_shape_exited"
@@ -131,8 +131,7 @@ sig_body_shape_exited
 instance NodeSignal RigidBody2D "body_shape_exited"
            '[Int, Node, Int, Int]
 
--- | Emitted when the physics engine changes the body's sleeping state.
---   				__Note:__ Changing the value @sleeping@ will not trigger this signal. It is only emitted if the sleeping state is changed by the physics engine or @emit_signal("sleeping_state_changed")@ is used.
+-- | Emitted when @sleeping@ changes.
 sig_sleeping_state_changed ::
                            Godot.Internal.Dispatch.Signal RigidBody2D
 sig_sleeping_state_changed
@@ -691,7 +690,7 @@ instance NodeMethod RigidBody2D "get_bounce" '[] (IO Float) where
 
 {-# NOINLINE bindRigidBody2D_get_colliding_bodies #-}
 
--- | Returns a list of the bodies colliding with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Returns a list of the bodies colliding with this one. Use @contacts_reported@ to set the maximum number reported. You must also set @contact_monitor@ to @true@.
 --   				__Note:__ The result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
 bindRigidBody2D_get_colliding_bodies :: MethodBind
 bindRigidBody2D_get_colliding_bodies
@@ -702,7 +701,7 @@ bindRigidBody2D_get_colliding_bodies
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns a list of the bodies colliding with this one. Requires @contact_monitor@ to be set to @true@ and @contacts_reported@ to be set high enough to detect all the collisions.
+-- | Returns a list of the bodies colliding with this one. Use @contacts_reported@ to set the maximum number reported. You must also set @contact_monitor@ to @true@.
 --   				__Note:__ The result of this test is not immediate after moving objects. For performance, list of collisions is updated once per frame and before the physics step. Consider using signals instead.
 get_colliding_bodies ::
                        (RigidBody2D :< cls, Object :< cls) => cls -> IO Array
@@ -921,8 +920,7 @@ instance NodeMethod RigidBody2D "get_mass" '[] (IO Float) where
 
 {-# NOINLINE bindRigidBody2D_get_max_contacts_reported #-}
 
--- | The maximum number of contacts that will be recorded. Requires @contact_monitor@ to be set to @true@.
---   			__Note:__ The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
+-- | The maximum number of contacts to report.
 bindRigidBody2D_get_max_contacts_reported :: MethodBind
 bindRigidBody2D_get_max_contacts_reported
   = unsafePerformIO $
@@ -932,8 +930,7 @@ bindRigidBody2D_get_max_contacts_reported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum number of contacts that will be recorded. Requires @contact_monitor@ to be set to @true@.
---   			__Note:__ The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
+-- | The maximum number of contacts to report.
 get_max_contacts_reported ::
                             (RigidBody2D :< cls, Object :< cls) => cls -> IO Int
 get_max_contacts_reported cls
@@ -1034,8 +1031,7 @@ instance NodeMethod RigidBody2D "get_weight" '[] (IO Float) where
 
 {-# NOINLINE bindRigidBody2D_is_able_to_sleep #-}
 
--- | If @true@, the body can enter sleep mode when there is no movement. See @sleeping@.
---   			__Note:__ A RigidBody2D will never enter sleep mode automatically if its @mode@ is @MODE_CHARACTER@. It can still be put to sleep manually by setting its @sleeping@ property to @true@.
+-- | If @true@, the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using @method apply_impulse@ or @method add_force@.
 bindRigidBody2D_is_able_to_sleep :: MethodBind
 bindRigidBody2D_is_able_to_sleep
   = unsafePerformIO $
@@ -1045,8 +1041,7 @@ bindRigidBody2D_is_able_to_sleep
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the body can enter sleep mode when there is no movement. See @sleeping@.
---   			__Note:__ A RigidBody2D will never enter sleep mode automatically if its @mode@ is @MODE_CHARACTER@. It can still be put to sleep manually by setting its @sleeping@ property to @true@.
+-- | If @true@, the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using @method apply_impulse@ or @method add_force@.
 is_able_to_sleep ::
                    (RigidBody2D :< cls, Object :< cls) => cls -> IO Bool
 is_able_to_sleep cls
@@ -1093,7 +1088,7 @@ instance NodeMethod RigidBody2D "is_contact_monitor_enabled" '[]
 
 {-# NOINLINE bindRigidBody2D_is_sleeping #-}
 
--- | If @true@, the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the @method apply_impulse@ or @method add_force@ methods.
+-- | If @true@, the body is sleeping and will not calculate forces until woken up by a collision or by using @method apply_impulse@ or @method add_force@.
 bindRigidBody2D_is_sleeping :: MethodBind
 bindRigidBody2D_is_sleeping
   = unsafePerformIO $
@@ -1103,7 +1098,7 @@ bindRigidBody2D_is_sleeping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the @method apply_impulse@ or @method add_force@ methods.
+-- | If @true@, the body is sleeping and will not calculate forces until woken up by a collision or by using @method apply_impulse@ or @method add_force@.
 is_sleeping ::
               (RigidBody2D :< cls, Object :< cls) => cls -> IO Bool
 is_sleeping cls
@@ -1320,8 +1315,7 @@ instance NodeMethod RigidBody2D "set_bounce" '[Float] (IO ()) where
 
 {-# NOINLINE bindRigidBody2D_set_can_sleep #-}
 
--- | If @true@, the body can enter sleep mode when there is no movement. See @sleeping@.
---   			__Note:__ A RigidBody2D will never enter sleep mode automatically if its @mode@ is @MODE_CHARACTER@. It can still be put to sleep manually by setting its @sleeping@ property to @true@.
+-- | If @true@, the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using @method apply_impulse@ or @method add_force@.
 bindRigidBody2D_set_can_sleep :: MethodBind
 bindRigidBody2D_set_can_sleep
   = unsafePerformIO $
@@ -1331,8 +1325,7 @@ bindRigidBody2D_set_can_sleep
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the body can enter sleep mode when there is no movement. See @sleeping@.
---   			__Note:__ A RigidBody2D will never enter sleep mode automatically if its @mode@ is @MODE_CHARACTER@. It can still be put to sleep manually by setting its @sleeping@ property to @true@.
+-- | If @true@, the body will not calculate forces and will act as a static body if there is no movement. The body will wake up when other forces are applied via collisions or by using @method apply_impulse@ or @method add_force@.
 set_can_sleep ::
                 (RigidBody2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_can_sleep cls arg1
@@ -1581,8 +1574,7 @@ instance NodeMethod RigidBody2D "set_mass" '[Float] (IO ()) where
 
 {-# NOINLINE bindRigidBody2D_set_max_contacts_reported #-}
 
--- | The maximum number of contacts that will be recorded. Requires @contact_monitor@ to be set to @true@.
---   			__Note:__ The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
+-- | The maximum number of contacts to report.
 bindRigidBody2D_set_max_contacts_reported :: MethodBind
 bindRigidBody2D_set_max_contacts_reported
   = unsafePerformIO $
@@ -1592,8 +1584,7 @@ bindRigidBody2D_set_max_contacts_reported
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The maximum number of contacts that will be recorded. Requires @contact_monitor@ to be set to @true@.
---   			__Note:__ The number of contacts is different from the number of collisions. Collisions between parallel edges will result in two contacts (one at each end), and collisions between parallel faces will result in four contacts (one at each corner).
+-- | The maximum number of contacts to report.
 set_max_contacts_reported ::
                             (RigidBody2D :< cls, Object :< cls) => cls -> Int -> IO ()
 set_max_contacts_reported cls arg1
@@ -1671,7 +1662,7 @@ instance NodeMethod RigidBody2D "set_physics_material_override"
 
 {-# NOINLINE bindRigidBody2D_set_sleeping #-}
 
--- | If @true@, the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the @method apply_impulse@ or @method add_force@ methods.
+-- | If @true@, the body is sleeping and will not calculate forces until woken up by a collision or by using @method apply_impulse@ or @method add_force@.
 bindRigidBody2D_set_sleeping :: MethodBind
 bindRigidBody2D_set_sleeping
   = unsafePerformIO $
@@ -1681,7 +1672,7 @@ bindRigidBody2D_set_sleeping
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | If @true@, the body will not move and will not calculate forces until woken up by another body through, for example, a collision, or by using the @method apply_impulse@ or @method add_force@ methods.
+-- | If @true@, the body is sleeping and will not calculate forces until woken up by a collision or by using @method apply_impulse@ or @method add_force@.
 set_sleeping ::
                (RigidBody2D :< cls, Object :< cls) => cls -> Bool -> IO ()
 set_sleeping cls arg1

@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.AnimationNodeStateMachineTransition
-       (Godot.Core.AnimationNodeStateMachineTransition._SWITCH_MODE_IMMEDIATE,
-        Godot.Core.AnimationNodeStateMachineTransition._SWITCH_MODE_SYNC,
+       (Godot.Core.AnimationNodeStateMachineTransition._SWITCH_MODE_SYNC,
+        Godot.Core.AnimationNodeStateMachineTransition._SWITCH_MODE_IMMEDIATE,
         Godot.Core.AnimationNodeStateMachineTransition._SWITCH_MODE_AT_END,
         Godot.Core.AnimationNodeStateMachineTransition.sig_advance_condition_changed,
         Godot.Core.AnimationNodeStateMachineTransition.get_advance_condition,
@@ -31,11 +31,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Resource()
 
-_SWITCH_MODE_IMMEDIATE :: Int
-_SWITCH_MODE_IMMEDIATE = 0
-
 _SWITCH_MODE_SYNC :: Int
 _SWITCH_MODE_SYNC = 1
+
+_SWITCH_MODE_IMMEDIATE :: Int
+_SWITCH_MODE_IMMEDIATE = 0
 
 _SWITCH_MODE_AT_END :: Int
 _SWITCH_MODE_AT_END = 2

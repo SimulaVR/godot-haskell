@@ -2,15 +2,15 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualShaderNodeColorOp
-       (Godot.Core.VisualShaderNodeColorOp._OP_SCREEN,
-        Godot.Core.VisualShaderNodeColorOp._OP_SOFT_LIGHT,
-        Godot.Core.VisualShaderNodeColorOp._OP_DODGE,
-        Godot.Core.VisualShaderNodeColorOp._OP_BURN,
-        Godot.Core.VisualShaderNodeColorOp._OP_HARD_LIGHT,
+       (Godot.Core.VisualShaderNodeColorOp._OP_SOFT_LIGHT,
+        Godot.Core.VisualShaderNodeColorOp._OP_LIGHTEN,
         Godot.Core.VisualShaderNodeColorOp._OP_DARKEN,
+        Godot.Core.VisualShaderNodeColorOp._OP_SCREEN,
+        Godot.Core.VisualShaderNodeColorOp._OP_DODGE,
+        Godot.Core.VisualShaderNodeColorOp._OP_HARD_LIGHT,
+        Godot.Core.VisualShaderNodeColorOp._OP_BURN,
         Godot.Core.VisualShaderNodeColorOp._OP_DIFFERENCE,
         Godot.Core.VisualShaderNodeColorOp._OP_OVERLAY,
-        Godot.Core.VisualShaderNodeColorOp._OP_LIGHTEN,
         Godot.Core.VisualShaderNodeColorOp.get_operator,
         Godot.Core.VisualShaderNodeColorOp.set_operator)
        where
@@ -26,32 +26,32 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.VisualShaderNode()
 
-_OP_SCREEN :: Int
-_OP_SCREEN = 0
-
 _OP_SOFT_LIGHT :: Int
 _OP_SOFT_LIGHT = 7
+
+_OP_LIGHTEN :: Int
+_OP_LIGHTEN = 3
+
+_OP_DARKEN :: Int
+_OP_DARKEN = 2
+
+_OP_SCREEN :: Int
+_OP_SCREEN = 0
 
 _OP_DODGE :: Int
 _OP_DODGE = 5
 
-_OP_BURN :: Int
-_OP_BURN = 6
-
 _OP_HARD_LIGHT :: Int
 _OP_HARD_LIGHT = 8
 
-_OP_DARKEN :: Int
-_OP_DARKEN = 2
+_OP_BURN :: Int
+_OP_BURN = 6
 
 _OP_DIFFERENCE :: Int
 _OP_DIFFERENCE = 1
 
 _OP_OVERLAY :: Int
 _OP_OVERLAY = 4
-
-_OP_LIGHTEN :: Int
-_OP_LIGHTEN = 3
 
 instance NodeProperty VisualShaderNodeColorOp "operator" Int 'False
          where

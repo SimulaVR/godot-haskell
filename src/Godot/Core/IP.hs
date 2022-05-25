@@ -2,13 +2,14 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.IP
-       (Godot.Core.IP._RESOLVER_INVALID_ID, Godot.Core.IP._TYPE_NONE,
-        Godot.Core.IP._RESOLVER_STATUS_WAITING, Godot.Core.IP._TYPE_IPV4,
-        Godot.Core.IP._RESOLVER_STATUS_ERROR,
+       (Godot.Core.IP._TYPE_IPV4, Godot.Core.IP._RESOLVER_INVALID_ID,
+        Godot.Core.IP._TYPE_ANY, Godot.Core.IP._TYPE_NONE,
         Godot.Core.IP._RESOLVER_STATUS_DONE,
-        Godot.Core.IP._RESOLVER_STATUS_NONE, Godot.Core.IP._TYPE_IPV6,
-        Godot.Core.IP._RESOLVER_MAX_QUERIES, Godot.Core.IP._TYPE_ANY,
-        Godot.Core.IP.clear_cache, Godot.Core.IP.erase_resolve_item,
+        Godot.Core.IP._RESOLVER_STATUS_NONE,
+        Godot.Core.IP._RESOLVER_STATUS_ERROR,
+        Godot.Core.IP._RESOLVER_STATUS_WAITING, Godot.Core.IP._TYPE_IPV6,
+        Godot.Core.IP._RESOLVER_MAX_QUERIES, Godot.Core.IP.clear_cache,
+        Godot.Core.IP.erase_resolve_item,
         Godot.Core.IP.get_local_addresses,
         Godot.Core.IP.get_local_interfaces,
         Godot.Core.IP.get_resolve_item_address,
@@ -28,20 +29,17 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_RESOLVER_INVALID_ID :: Int
-_RESOLVER_INVALID_ID = -1
-
-_TYPE_NONE :: Int
-_TYPE_NONE = 0
-
-_RESOLVER_STATUS_WAITING :: Int
-_RESOLVER_STATUS_WAITING = 1
-
 _TYPE_IPV4 :: Int
 _TYPE_IPV4 = 1
 
-_RESOLVER_STATUS_ERROR :: Int
-_RESOLVER_STATUS_ERROR = 3
+_RESOLVER_INVALID_ID :: Int
+_RESOLVER_INVALID_ID = -1
+
+_TYPE_ANY :: Int
+_TYPE_ANY = 3
+
+_TYPE_NONE :: Int
+_TYPE_NONE = 0
 
 _RESOLVER_STATUS_DONE :: Int
 _RESOLVER_STATUS_DONE = 2
@@ -49,14 +47,17 @@ _RESOLVER_STATUS_DONE = 2
 _RESOLVER_STATUS_NONE :: Int
 _RESOLVER_STATUS_NONE = 0
 
+_RESOLVER_STATUS_ERROR :: Int
+_RESOLVER_STATUS_ERROR = 3
+
+_RESOLVER_STATUS_WAITING :: Int
+_RESOLVER_STATUS_WAITING = 1
+
 _TYPE_IPV6 :: Int
 _TYPE_IPV6 = 2
 
 _RESOLVER_MAX_QUERIES :: Int
 _RESOLVER_MAX_QUERIES = 32
-
-_TYPE_ANY :: Int
-_TYPE_ANY = 3
 
 {-# NOINLINE bindIP_clear_cache #-}
 

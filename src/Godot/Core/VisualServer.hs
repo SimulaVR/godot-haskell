@@ -2,221 +2,221 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.VisualServer
-       (Godot.Core.VisualServer._ARRAY_COMPRESS_WEIGHTS,
+       (Godot.Core.VisualServer._VIEWPORT_CLEAR_ONLY_NEXT_FRAME,
         Godot.Core.VisualServer._ARRAY_FLAG_USE_16_BIT_BONES,
-        Godot.Core.VisualServer._VIEWPORT_UPDATE_ALWAYS,
-        Godot.Core.VisualServer._ARRAY_FORMAT_INDEX,
-        Godot.Core.VisualServer._INFO_SURFACE_CHANGES_IN_FRAME,
-        Godot.Core.VisualServer._VIEWPORT_DEBUG_DRAW_OVERDRAW,
-        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_TANGENT,
-        Godot.Core.VisualServer._INSTANCE_MULTIMESH,
-        Godot.Core.VisualServer._VIEWPORT_CLEAR_ALWAYS,
-        Godot.Core.VisualServer._SHADER_SPATIAL,
-        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_SHADOWS_ONLY,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_NORMAL,
-        Godot.Core.VisualServer._ARRAY_FORMAT_COLOR,
-        Godot.Core.VisualServer._VIEWPORT_CLEAR_NEVER,
-        Godot.Core.VisualServer._TEXTURE_TYPE_2D_ARRAY,
-        Godot.Core.VisualServer._INSTANCE_GEOMETRY_MASK,
-        Godot.Core.VisualServer._VIEWPORT_USAGE_2D,
-        Godot.Core.VisualServer._INSTANCE_LIGHTMAP_CAPTURE,
-        Godot.Core.VisualServer._MULTIMESH_COLOR_FLOAT,
-        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_PARALLEL_2_SPLITS,
-        Godot.Core.VisualServer._INSTANCE_IMMEDIATE,
-        Godot.Core.VisualServer._CANVAS_OCCLUDER_POLYGON_CULL_CLOCKWISE,
-        Godot.Core.VisualServer._ARRAY_FORMAT_TEX_UV,
-        Godot.Core.VisualServer._CANVAS_OCCLUDER_POLYGON_CULL_DISABLED,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_VERTEX,
-        Godot.Core.VisualServer._SCENARIO_DEBUG_DISABLED,
-        Godot.Core.VisualServer._ENV_DOF_BLUR_QUALITY_HIGH,
-        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_ORTHOGONAL,
-        Godot.Core.VisualServer._ARRAY_FORMAT_VERTEX,
-        Godot.Core.VisualServer._SHADER_MAX,
-        Godot.Core.VisualServer._VIEWPORT_DEBUG_DRAW_DISABLED,
+        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_SUB,
         Godot.Core.VisualServer._CANVAS_ITEM_Z_MIN,
-        Godot.Core.VisualServer._VIEWPORT_MSAA_8X,
-        Godot.Core.VisualServer._INFO_MATERIAL_CHANGES_IN_FRAME,
-        Godot.Core.VisualServer._MAX_GLOW_LEVELS,
-        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL,
-        Godot.Core.VisualServer._TEXTURE_TYPE_CUBEMAP,
-        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_SURFACE_CHANGES_IN_FRAME,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_TEX_UV,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_BONES,
-        Godot.Core.VisualServer._REFLECTION_PROBE_UPDATE_ALWAYS,
-        Godot.Core.VisualServer._VIEWPORT_MSAA_DISABLED,
+        Godot.Core.VisualServer._ARRAY_WEIGHTS_SIZE,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_INDEX,
+        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_MAX_DISTANCE,
+        Godot.Core.VisualServer._ARRAY_FORMAT_WEIGHTS,
+        Godot.Core.VisualServer._TEXTURE_FLAG_REPEAT,
+        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_DOUBLE_SIDED,
+        Godot.Core.VisualServer._VIEWPORT_UPDATE_ONCE,
+        Godot.Core.VisualServer._MULTIMESH_TRANSFORM_2D,
+        Godot.Core.VisualServer._VIEWPORT_DEBUG_DRAW_DISABLED,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_COLOR,
+        Godot.Core.VisualServer._ENV_TONE_MAPPER_REINHARD,
+        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_MAX,
+        Godot.Core.VisualServer._ENV_SSAO_BLUR_DISABLED,
+        Godot.Core.VisualServer._LIGHT_SPOT,
+        Godot.Core.VisualServer._NINE_PATCH_TILE,
+        Godot.Core.VisualServer._ENV_BG_SKY,
+        Godot.Core.VisualServer._INSTANCE_REFLECTION_PROBE,
+        Godot.Core.VisualServer._ENV_BG_CANVAS,
+        Godot.Core.VisualServer._FEATURE_SHADERS,
+        Godot.Core.VisualServer._MATERIAL_RENDER_PRIORITY_MAX,
+        Godot.Core.VisualServer._GLOW_BLEND_MODE_SCREEN,
+        Godot.Core.VisualServer._INFO_VERTICES_IN_FRAME,
+        Godot.Core.VisualServer._ENV_SSAO_QUALITY_HIGH,
+        Godot.Core.VisualServer._INFO_SHADER_CHANGES_IN_FRAME,
+        Godot.Core.VisualServer._TEXTURE_FLAG_MIPMAPS,
+        Godot.Core.VisualServer._PARTICLES_DRAW_ORDER_VIEW_DEPTH,
+        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_BIAS,
+        Godot.Core.VisualServer._VIEWPORT_MSAA_EXT_4X,
         Godot.Core.VisualServer._CUBEMAP_RIGHT,
-        Godot.Core.VisualServer._ARRAY_MAX,
-        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_SPLIT_2_OFFSET,
-        Godot.Core.VisualServer._ENV_TONE_MAPPER_FILMIC,
-        Godot.Core.VisualServer._PARTICLES_DRAW_ORDER_LIFETIME,
-        Godot.Core.VisualServer._NINE_PATCH_STRETCH,
-        Godot.Core.VisualServer._INFO_USAGE_VIDEO_MEM_TOTAL,
+        Godot.Core.VisualServer._GLOW_BLEND_MODE_SOFTLIGHT,
+        Godot.Core.VisualServer._ENV_BG_CLEAR_COLOR,
+        Godot.Core.VisualServer._ENV_TONE_MAPPER_ACES,
         Godot.Core.VisualServer._ARRAY_NORMAL,
-        Godot.Core.VisualServer._MULTIMESH_COLOR_NONE,
+        Godot.Core.VisualServer._LIGHT_PARAM_RANGE,
+        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_SURFACE_CHANGES_IN_FRAME,
+        Godot.Core.VisualServer._BLEND_SHAPE_MODE_NORMALIZED,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_DEFAULT,
+        Godot.Core.VisualServer._VIEWPORT_MSAA_EXT_2X,
+        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_BIAS_SPLIT_SCALE,
+        Godot.Core.VisualServer._PARTICLES_DRAW_ORDER_INDEX,
+        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF3,
+        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_OFF,
+        Godot.Core.VisualServer._TEXTURE_FLAG_MIRRORED_REPEAT,
+        Godot.Core.VisualServer._VIEWPORT_DEBUG_DRAW_OVERDRAW,
+        Godot.Core.VisualServer._GLOW_BLEND_MODE_ADDITIVE,
+        Godot.Core.VisualServer._ENV_DOF_BLUR_QUALITY_MEDIUM,
+        Godot.Core.VisualServer._NO_INDEX_ARRAY,
+        Godot.Core.VisualServer._ENV_DOF_BLUR_QUALITY_LOW,
+        Godot.Core.VisualServer._VIEWPORT_USAGE_2D,
+        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_CUBE,
+        Godot.Core.VisualServer._TEXTURE_TYPE_3D,
+        Godot.Core.VisualServer._ARRAY_MAX,
+        Godot.Core.VisualServer._ARRAY_FORMAT_COLOR,
+        Godot.Core.VisualServer._VIEWPORT_MSAA_4X,
+        Godot.Core.VisualServer._PRIMITIVE_LINES,
+        Godot.Core.VisualServer._ARRAY_FORMAT_TEX_UV,
+        Godot.Core.VisualServer._ENV_BG_MAX,
+        Godot.Core.VisualServer._LIGHT_OMNI,
+        Godot.Core.VisualServer._VIEWPORT_USAGE_2D_NO_SAMPLING,
+        Godot.Core.VisualServer._MAX_CURSORS,
+        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_SPLIT_3_OFFSET,
+        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_ORTHOGONAL,
+        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_NONE,
+        Godot.Core.VisualServer._VIEWPORT_CLEAR_NEVER,
+        Godot.Core.VisualServer._CUBEMAP_BOTTOM,
+        Godot.Core.VisualServer._INSTANCE_PARTICLES,
+        Godot.Core.VisualServer._ENV_BG_COLOR_SKY,
+        Godot.Core.VisualServer._VIEWPORT_MSAA_DISABLED,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_VERTEX,
+        Godot.Core.VisualServer._TEXTURE_FLAG_CONVERT_TO_LINEAR,
+        Godot.Core.VisualServer._MULTIMESH_COLOR_FLOAT,
+        Godot.Core.VisualServer._INSTANCE_GEOMETRY_MASK,
+        Godot.Core.VisualServer._ENV_BG_COLOR,
         Godot.Core.VisualServer._ARRAY_FORMAT_TEX_UV2,
         Godot.Core.VisualServer._ENV_SSAO_QUALITY_LOW,
-        Godot.Core.VisualServer._INSTANCE_MESH,
-        Godot.Core.VisualServer._MATERIAL_RENDER_PRIORITY_MAX,
-        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_MAX_DISTANCE,
-        Godot.Core.VisualServer._VIEWPORT_MSAA_2X,
-        Godot.Core.VisualServer._PARTICLES_DRAW_ORDER_INDEX,
-        Godot.Core.VisualServer._ENV_DOF_BLUR_QUALITY_LOW,
-        Godot.Core.VisualServer._INFO_SHADER_CHANGES_IN_FRAME,
-        Godot.Core.VisualServer._GLOW_BLEND_MODE_ADDITIVE,
-        Godot.Core.VisualServer._ENV_BG_CANVAS,
-        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_DUAL_PARABOLOID,
-        Godot.Core.VisualServer._ARRAY_INDEX,
-        Godot.Core.VisualServer._LIGHT_PARAM_ENERGY,
-        Godot.Core.VisualServer._ARRAY_COLOR,
-        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_CUBE,
-        Godot.Core.VisualServer._PRIMITIVE_TRIANGLE_STRIP,
-        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_MAX,
-        Godot.Core.VisualServer._PRIMITIVE_TRIANGLES,
-        Godot.Core.VisualServer._TEXTURE_FLAGS_DEFAULT,
-        Godot.Core.VisualServer._VIEWPORT_USAGE_3D_NO_EFFECTS,
-        Godot.Core.VisualServer._ARRAY_TEX_UV,
-        Godot.Core.VisualServer._VIEWPORT_CLEAR_ONLY_NEXT_FRAME,
-        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF7,
-        Godot.Core.VisualServer._BLEND_SHAPE_MODE_NORMALIZED,
-        Godot.Core.VisualServer._ENV_BG_COLOR_SKY,
-        Godot.Core.VisualServer._PRIMITIVE_LINE_LOOP,
-        Godot.Core.VisualServer._LIGHT_PARAM_SPECULAR,
-        Godot.Core.VisualServer._VIEWPORT_MSAA_EXT_2X,
-        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_SUB,
-        Godot.Core.VisualServer._VIEWPORT_USAGE_3D,
-        Godot.Core.VisualServer._GLOW_BLEND_MODE_SOFTLIGHT,
-        Godot.Core.VisualServer._PRIMITIVE_TRIANGLE_FAN,
+        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF13,
+        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF5,
+        Godot.Core.VisualServer._SCENARIO_DEBUG_DISABLED,
+        Godot.Core.VisualServer._VIEWPORT_MSAA_16X,
+        Godot.Core.VisualServer._VIEWPORT_UPDATE_ALWAYS,
+        Godot.Core.VisualServer._ENV_SSAO_BLUR_2x2,
+        Godot.Core.VisualServer._ENV_SSAO_BLUR_3x3,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_TANGENT,
         Godot.Core.VisualServer._VIEWPORT_DEBUG_DRAW_UNSHADED,
         Godot.Core.VisualServer._MATERIAL_RENDER_PRIORITY_MIN,
-        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_DETAIL_VERTICAL,
-        Godot.Core.VisualServer._INSTANCE_FLAG_MAX,
-        Godot.Core.VisualServer._MULTIMESH_TRANSFORM_3D,
-        Godot.Core.VisualServer._SCENARIO_DEBUG_OVERDRAW,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_WEIGHTS,
+        Godot.Core.VisualServer._ENV_SSAO_BLUR_1x1,
+        Godot.Core.VisualServer._INSTANCE_FLAG_USE_BAKED_LIGHT,
+        Godot.Core.VisualServer._INFO_TEXTURE_MEM_USED,
+        Godot.Core.VisualServer._GLOW_BLEND_MODE_REPLACE,
+        Godot.Core.VisualServer._VIEWPORT_USAGE_3D_NO_EFFECTS,
+        Godot.Core.VisualServer._MULTIMESH_CUSTOM_DATA_FLOAT,
+        Godot.Core.VisualServer._INFO_SURFACE_CHANGES_IN_FRAME,
         Godot.Core.VisualServer._ARRAY_FORMAT_NORMAL,
-        Godot.Core.VisualServer._MULTIMESH_CUSTOM_DATA_8BIT,
-        Godot.Core.VisualServer._ARRAY_TEX_UV2,
-        Godot.Core.VisualServer._ENV_DOF_BLUR_QUALITY_MEDIUM,
-        Godot.Core.VisualServer._TEXTURE_TYPE_2D,
-        Godot.Core.VisualServer._ENV_BG_SKY,
-        Godot.Core.VisualServer._FEATURE_SHADERS,
-        Godot.Core.VisualServer._CUBEMAP_TOP,
-        Godot.Core.VisualServer._PARTICLES_DRAW_ORDER_VIEW_DEPTH,
+        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_MASK,
+        Godot.Core.VisualServer._CUBEMAP_FRONT,
+        Godot.Core.VisualServer._LIGHT_PARAM_MAX,
+        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_PARALLEL_2_SPLITS,
+        Godot.Core.VisualServer._ARRAY_FORMAT_BONES,
         Godot.Core.VisualServer._CUBEMAP_BACK,
-        Godot.Core.VisualServer._LIGHT_SPOT,
+        Godot.Core.VisualServer._VIEWPORT_DEBUG_DRAW_WIREFRAME,
+        Godot.Core.VisualServer._ARRAY_FORMAT_TANGENT,
+        Godot.Core.VisualServer._FEATURE_MULTITHREADED,
+        Godot.Core.VisualServer._INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE,
+        Godot.Core.VisualServer._INSTANCE_MESH,
+        Godot.Core.VisualServer._INFO_OBJECTS_IN_FRAME,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_TEX_UV2,
+        Godot.Core.VisualServer._SHADER_CANVAS_ITEM,
+        Godot.Core.VisualServer._INSTANCE_FLAG_MAX,
+        Godot.Core.VisualServer._LIGHT_PARAM_ATTENUATION,
+        Godot.Core.VisualServer._PARTICLES_DRAW_ORDER_LIFETIME,
+        Godot.Core.VisualServer._NINE_PATCH_TILE_FIT,
+        Godot.Core.VisualServer._INFO_VIDEO_MEM_USED,
         Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_PARALLEL_4_SPLITS,
-        Godot.Core.VisualServer._INSTANCE_PARTICLES,
-        Godot.Core.VisualServer._TEXTURE_FLAG_REPEAT,
+        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF7,
+        Godot.Core.VisualServer._MULTIMESH_CUSTOM_DATA_8BIT,
+        Godot.Core.VisualServer._PRIMITIVE_TRIANGLE_STRIP,
+        Godot.Core.VisualServer._INFO_MATERIAL_CHANGES_IN_FRAME,
+        Godot.Core.VisualServer._MULTIMESH_COLOR_8BIT,
+        Godot.Core.VisualServer._TEXTURE_TYPE_2D,
+        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_ON,
+        Godot.Core.VisualServer._REFLECTION_PROBE_UPDATE_ALWAYS,
+        Godot.Core.VisualServer._LIGHT_PARAM_SPOT_ANGLE,
+        Godot.Core.VisualServer._PRIMITIVE_POINTS,
+        Godot.Core.VisualServer._SHADER_PARTICLES,
+        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET,
+        Godot.Core.VisualServer._ENV_SSAO_QUALITY_MEDIUM,
+        Godot.Core.VisualServer._ARRAY_INDEX,
+        Godot.Core.VisualServer._ARRAY_VERTEX,
+        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_SPLIT_2_OFFSET,
+        Godot.Core.VisualServer._ENV_TONE_MAPPER_LINEAR,
+        Godot.Core.VisualServer._ARRAY_TEX_UV2,
+        Godot.Core.VisualServer._LIGHT_PARAM_SPECULAR,
+        Godot.Core.VisualServer._SHADER_SPATIAL,
+        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_VERTICES_IN_FRAME,
+        Godot.Core.VisualServer._ARRAY_COLOR,
+        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME,
+        Godot.Core.VisualServer._TEXTURE_FLAG_FILTER,
+        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME,
+        Godot.Core.VisualServer._MULTIMESH_TRANSFORM_3D,
+        Godot.Core.VisualServer._NINE_PATCH_STRETCH,
+        Godot.Core.VisualServer._LIGHT_PARAM_CONTACT_SHADOW_SIZE,
+        Godot.Core.VisualServer._VIEWPORT_CLEAR_ALWAYS,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_NORMAL,
+        Godot.Core.VisualServer._INSTANCE_NONE,
+        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_ADD,
+        Godot.Core.VisualServer._CUBEMAP_TOP,
+        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_OBJECTS_IN_FRAME,
+        Godot.Core.VisualServer._PRIMITIVE_TRIANGLE_FAN,
+        Godot.Core.VisualServer._SHADER_MAX,
+        Godot.Core.VisualServer._INSTANCE_IMMEDIATE,
+        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_SHADOWS_ONLY,
+        Godot.Core.VisualServer._SCENARIO_DEBUG_SHADELESS,
+        Godot.Core.VisualServer._ENV_DOF_BLUR_QUALITY_HIGH,
+        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF9,
+        Godot.Core.VisualServer._VIEWPORT_UPDATE_DISABLED,
+        Godot.Core.VisualServer._CUBEMAP_LEFT,
+        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_MIX,
+        Godot.Core.VisualServer._INFO_DRAW_CALLS_IN_FRAME,
+        Godot.Core.VisualServer._ARRAY_FORMAT_INDEX,
+        Godot.Core.VisualServer._TEXTURE_FLAG_USED_FOR_STREAMING,
+        Godot.Core.VisualServer._ARRAY_TANGENT,
+        Godot.Core.VisualServer._INSTANCE_MULTIMESH,
+        Godot.Core.VisualServer._INSTANCE_MAX,
+        Godot.Core.VisualServer._TEXTURE_TYPE_CUBEMAP,
+        Godot.Core.VisualServer._ARRAY_WEIGHTS,
+        Godot.Core.VisualServer._INSTANCE_LIGHT,
+        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_OPTIMIZED,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_BONES,
+        Godot.Core.VisualServer._MULTIMESH_CUSTOM_DATA_NONE,
+        Godot.Core.VisualServer._LIGHT_DIRECTIONAL,
+        Godot.Core.VisualServer._SCENARIO_DEBUG_WIREFRAME,
+        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_NORMAL_BIAS,
+        Godot.Core.VisualServer._ARRAY_FORMAT_VERTEX,
+        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL,
+        Godot.Core.VisualServer._ENV_TONE_MAPPER_FILMIC,
+        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME,
+        Godot.Core.VisualServer._CANVAS_ITEM_Z_MAX,
+        Godot.Core.VisualServer._ARRAY_FLAG_USE_2D_VERTICES,
+        Godot.Core.VisualServer._TEXTURE_TYPE_2D_ARRAY,
+        Godot.Core.VisualServer._CANVAS_OCCLUDER_POLYGON_CULL_DISABLED,
+        Godot.Core.VisualServer._SCENARIO_DEBUG_OVERDRAW,
+        Godot.Core.VisualServer._VIEWPORT_UPDATE_WHEN_VISIBLE,
+        Godot.Core.VisualServer._ARRAY_COMPRESS_TEX_UV,
+        Godot.Core.VisualServer._CANVAS_OCCLUDER_POLYGON_CULL_CLOCKWISE,
+        Godot.Core.VisualServer._MULTIMESH_COLOR_NONE,
+        Godot.Core.VisualServer._BLEND_SHAPE_MODE_RELATIVE,
+        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_DETAIL_VERTICAL,
+        Godot.Core.VisualServer._PRIMITIVE_MAX,
+        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_STABLE,
+        Godot.Core.VisualServer._LIGHT_PARAM_ENERGY,
+        Godot.Core.VisualServer._VIEWPORT_USAGE_3D,
+        Godot.Core.VisualServer._CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE,
+        Godot.Core.VisualServer._PRIMITIVE_TRIANGLES,
+        Godot.Core.VisualServer._INSTANCE_GI_PROBE,
+        Godot.Core.VisualServer._ARRAY_BONES,
+        Godot.Core.VisualServer._VIEWPORT_MSAA_8X,
+        Godot.Core.VisualServer._ENV_BG_KEEP,
+        Godot.Core.VisualServer._PRIMITIVE_LINE_LOOP,
+        Godot.Core.VisualServer._INFO_USAGE_VIDEO_MEM_TOTAL,
+        Godot.Core.VisualServer._ARRAY_TEX_UV,
+        Godot.Core.VisualServer._INFO_VERTEX_MEM_USED,
+        Godot.Core.VisualServer._MAX_GLOW_LEVELS,
+        Godot.Core.VisualServer._PRIMITIVE_LINE_STRIP,
+        Godot.Core.VisualServer._LIGHT_OMNI_SHADOW_DUAL_PARABOLOID,
+        Godot.Core.VisualServer._TEXTURE_FLAG_ANISOTROPIC_FILTER,
+        Godot.Core.VisualServer._TEXTURE_FLAGS_DEFAULT,
+        Godot.Core.VisualServer._INSTANCE_LIGHTMAP_CAPTURE,
+        Godot.Core.VisualServer._VIEWPORT_MSAA_2X,
         Godot.Core.VisualServer._LIGHT_PARAM_SPOT_ATTENUATION,
         Godot.Core.VisualServer._REFLECTION_PROBE_UPDATE_ONCE,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_DEFAULT,
-        Godot.Core.VisualServer._CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE,
-        Godot.Core.VisualServer._CANVAS_ITEM_Z_MAX,
-        Godot.Core.VisualServer._ENV_TONE_MAPPER_LINEAR,
-        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_SPLIT_3_OFFSET,
-        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_VERTICES_IN_FRAME,
-        Godot.Core.VisualServer._MULTIMESH_CUSTOM_DATA_NONE,
-        Godot.Core.VisualServer._LIGHT_OMNI,
-        Godot.Core.VisualServer._ENV_BG_MAX,
-        Godot.Core.VisualServer._INSTANCE_REFLECTION_PROBE,
-        Godot.Core.VisualServer._INFO_TEXTURE_MEM_USED,
-        Godot.Core.VisualServer._INSTANCE_NONE,
-        Godot.Core.VisualServer._SHADER_CANVAS_ITEM,
-        Godot.Core.VisualServer._ENV_SSAO_QUALITY_MEDIUM,
-        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF3,
-        Godot.Core.VisualServer._ARRAY_FORMAT_BONES,
-        Godot.Core.VisualServer._LIGHT_PARAM_SPOT_ANGLE,
-        Godot.Core.VisualServer._ARRAY_WEIGHTS_SIZE,
-        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_DOUBLE_SIDED,
-        Godot.Core.VisualServer._ENV_SSAO_QUALITY_HIGH,
-        Godot.Core.VisualServer._INFO_VERTICES_IN_FRAME,
-        Godot.Core.VisualServer._INFO_VIDEO_MEM_USED,
-        Godot.Core.VisualServer._GLOW_BLEND_MODE_REPLACE,
-        Godot.Core.VisualServer._NINE_PATCH_TILE_FIT,
-        Godot.Core.VisualServer._VIEWPORT_UPDATE_ONCE,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_COLOR,
-        Godot.Core.VisualServer._GLOW_BLEND_MODE_SCREEN,
-        Godot.Core.VisualServer._MAX_CURSORS,
-        Godot.Core.VisualServer._TEXTURE_FLAG_CONVERT_TO_LINEAR,
-        Godot.Core.VisualServer._PRIMITIVE_MAX,
-        Godot.Core.VisualServer._LIGHT_PARAM_CONTACT_SHADOW_SIZE,
-        Godot.Core.VisualServer._INSTANCE_MAX,
-        Godot.Core.VisualServer._ENV_SSAO_BLUR_3x3,
-        Godot.Core.VisualServer._ARRAY_WEIGHTS,
-        Godot.Core.VisualServer._LIGHT_PARAM_MAX,
-        Godot.Core.VisualServer._CUBEMAP_BOTTOM,
-        Godot.Core.VisualServer._ARRAY_TANGENT,
-        Godot.Core.VisualServer._SCENARIO_DEBUG_SHADELESS,
-        Godot.Core.VisualServer._INFO_OBJECTS_IN_FRAME,
-        Godot.Core.VisualServer._INSTANCE_GI_PROBE,
-        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_NORMAL_BIAS,
-        Godot.Core.VisualServer._VIEWPORT_USAGE_2D_NO_SAMPLING,
-        Godot.Core.VisualServer._ENV_SSAO_BLUR_2x2,
-        Godot.Core.VisualServer._VIEWPORT_UPDATE_DISABLED,
-        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_OFF,
-        Godot.Core.VisualServer._VIEWPORT_MSAA_16X,
-        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF9,
-        Godot.Core.VisualServer._ENV_SSAO_BLUR_DISABLED,
-        Godot.Core.VisualServer._TEXTURE_FLAG_ANISOTROPIC_FILTER,
-        Godot.Core.VisualServer._FEATURE_MULTITHREADED,
-        Godot.Core.VisualServer._ENV_SSAO_BLUR_1x1,
-        Godot.Core.VisualServer._INFO_DRAW_CALLS_IN_FRAME,
-        Godot.Core.VisualServer._ENV_BG_COLOR,
-        Godot.Core.VisualServer._ENV_TONE_MAPPER_ACES,
-        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_STABLE,
-        Godot.Core.VisualServer._LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_OPTIMIZED,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_TEX_UV2,
-        Godot.Core.VisualServer._MULTIMESH_COLOR_8BIT,
-        Godot.Core.VisualServer._MULTIMESH_TRANSFORM_2D,
-        Godot.Core.VisualServer._VIEWPORT_UPDATE_WHEN_VISIBLE,
-        Godot.Core.VisualServer._VIEWPORT_MSAA_EXT_4X,
-        Godot.Core.VisualServer._INSTANCE_LIGHT,
-        Godot.Core.VisualServer._TEXTURE_TYPE_3D,
-        Godot.Core.VisualServer._TEXTURE_FLAG_MIPMAPS,
-        Godot.Core.VisualServer._PRIMITIVE_LINE_STRIP,
-        Godot.Core.VisualServer._TEXTURE_FLAG_FILTER,
-        Godot.Core.VisualServer._ENV_BG_KEEP,
-        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_NONE,
-        Godot.Core.VisualServer._CUBEMAP_FRONT,
-        Godot.Core.VisualServer._TEXTURE_FLAG_USED_FOR_STREAMING,
-        Godot.Core.VisualServer._INFO_VERTEX_MEM_USED,
-        Godot.Core.VisualServer._TEXTURE_FLAG_MIRRORED_REPEAT,
-        Godot.Core.VisualServer._PRIMITIVE_LINES,
-        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_OBJECTS_IN_FRAME,
-        Godot.Core.VisualServer._ENV_BG_CLEAR_COLOR,
-        Godot.Core.VisualServer._SHADOW_CASTING_SETTING_ON,
-        Godot.Core.VisualServer._SCENARIO_DEBUG_WIREFRAME,
-        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_ADD,
-        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_BIAS_SPLIT_SCALE,
-        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME,
-        Godot.Core.VisualServer._ARRAY_BONES,
-        Godot.Core.VisualServer._LIGHT_PARAM_ATTENUATION,
-        Godot.Core.VisualServer._VIEWPORT_DEBUG_DRAW_WIREFRAME,
-        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_MIX,
-        Godot.Core.VisualServer._NINE_PATCH_TILE,
-        Godot.Core.VisualServer._VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME,
-        Godot.Core.VisualServer._INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE,
-        Godot.Core.VisualServer._CANVAS_LIGHT_MODE_MASK,
-        Godot.Core.VisualServer._LIGHT_PARAM_RANGE,
-        Godot.Core.VisualServer._BLEND_SHAPE_MODE_RELATIVE,
-        Godot.Core.VisualServer._VIEWPORT_MSAA_4X,
-        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET,
-        Godot.Core.VisualServer._ENV_TONE_MAPPER_REINHARD,
-        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF13,
-        Godot.Core.VisualServer._MULTIMESH_CUSTOM_DATA_FLOAT,
-        Godot.Core.VisualServer._NO_INDEX_ARRAY,
-        Godot.Core.VisualServer._ARRAY_VERTEX,
-        Godot.Core.VisualServer._ARRAY_FLAG_USE_2D_VERTICES,
-        Godot.Core.VisualServer._CANVAS_LIGHT_FILTER_PCF5,
-        Godot.Core.VisualServer._LIGHT_DIRECTIONAL,
-        Godot.Core.VisualServer._ARRAY_COMPRESS_INDEX,
-        Godot.Core.VisualServer._INSTANCE_FLAG_USE_BAKED_LIGHT,
-        Godot.Core.VisualServer._CUBEMAP_LEFT,
-        Godot.Core.VisualServer._LIGHT_PARAM_SHADOW_BIAS,
-        Godot.Core.VisualServer._ARRAY_FORMAT_WEIGHTS,
-        Godot.Core.VisualServer._SHADER_PARTICLES,
-        Godot.Core.VisualServer._ARRAY_FORMAT_TANGENT,
-        Godot.Core.VisualServer._PRIMITIVE_POINTS,
         Godot.Core.VisualServer.sig_frame_post_draw,
         Godot.Core.VisualServer.sig_frame_pre_draw,
         Godot.Core.VisualServer.black_bars_set_images,
@@ -596,161 +596,236 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Object()
 
-_ARRAY_COMPRESS_WEIGHTS :: Int
-_ARRAY_COMPRESS_WEIGHTS = 65536
+_VIEWPORT_CLEAR_ONLY_NEXT_FRAME :: Int
+_VIEWPORT_CLEAR_ONLY_NEXT_FRAME = 2
 
 _ARRAY_FLAG_USE_16_BIT_BONES :: Int
 _ARRAY_FLAG_USE_16_BIT_BONES = 524288
 
-_VIEWPORT_UPDATE_ALWAYS :: Int
-_VIEWPORT_UPDATE_ALWAYS = 3
-
-_ARRAY_FORMAT_INDEX :: Int
-_ARRAY_FORMAT_INDEX = 256
-
-_INFO_SURFACE_CHANGES_IN_FRAME :: Int
-_INFO_SURFACE_CHANGES_IN_FRAME = 4
-
-_VIEWPORT_DEBUG_DRAW_OVERDRAW :: Int
-_VIEWPORT_DEBUG_DRAW_OVERDRAW = 2
-
-_VIEWPORT_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME :: Int
-_VIEWPORT_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME = 2
-
-_ARRAY_COMPRESS_TANGENT :: Int
-_ARRAY_COMPRESS_TANGENT = 2048
-
-_INSTANCE_MULTIMESH :: Int
-_INSTANCE_MULTIMESH = 2
-
-_VIEWPORT_CLEAR_ALWAYS :: Int
-_VIEWPORT_CLEAR_ALWAYS = 0
-
-_SHADER_SPATIAL :: Int
-_SHADER_SPATIAL = 0
-
-_SHADOW_CASTING_SETTING_SHADOWS_ONLY :: Int
-_SHADOW_CASTING_SETTING_SHADOWS_ONLY = 3
-
-_ARRAY_COMPRESS_NORMAL :: Int
-_ARRAY_COMPRESS_NORMAL = 1024
-
-_ARRAY_FORMAT_COLOR :: Int
-_ARRAY_FORMAT_COLOR = 8
-
-_VIEWPORT_CLEAR_NEVER :: Int
-_VIEWPORT_CLEAR_NEVER = 1
-
-_TEXTURE_TYPE_2D_ARRAY :: Int
-_TEXTURE_TYPE_2D_ARRAY = 2
-
-_INSTANCE_GEOMETRY_MASK :: Int
-_INSTANCE_GEOMETRY_MASK = 30
-
-_VIEWPORT_USAGE_2D :: Int
-_VIEWPORT_USAGE_2D = 0
-
-_INSTANCE_LIGHTMAP_CAPTURE :: Int
-_INSTANCE_LIGHTMAP_CAPTURE = 8
-
-_MULTIMESH_COLOR_FLOAT :: Int
-_MULTIMESH_COLOR_FLOAT = 2
-
-_LIGHT_DIRECTIONAL_SHADOW_PARALLEL_2_SPLITS :: Int
-_LIGHT_DIRECTIONAL_SHADOW_PARALLEL_2_SPLITS = 1
-
-_INSTANCE_IMMEDIATE :: Int
-_INSTANCE_IMMEDIATE = 3
-
-_CANVAS_OCCLUDER_POLYGON_CULL_CLOCKWISE :: Int
-_CANVAS_OCCLUDER_POLYGON_CULL_CLOCKWISE = 1
-
-_ARRAY_FORMAT_TEX_UV :: Int
-_ARRAY_FORMAT_TEX_UV = 16
-
-_CANVAS_OCCLUDER_POLYGON_CULL_DISABLED :: Int
-_CANVAS_OCCLUDER_POLYGON_CULL_DISABLED = 0
-
-_ARRAY_COMPRESS_VERTEX :: Int
-_ARRAY_COMPRESS_VERTEX = 512
-
-_SCENARIO_DEBUG_DISABLED :: Int
-_SCENARIO_DEBUG_DISABLED = 0
-
-_ENV_DOF_BLUR_QUALITY_HIGH :: Int
-_ENV_DOF_BLUR_QUALITY_HIGH = 2
-
-_LIGHT_DIRECTIONAL_SHADOW_ORTHOGONAL :: Int
-_LIGHT_DIRECTIONAL_SHADOW_ORTHOGONAL = 0
-
-_ARRAY_FORMAT_VERTEX :: Int
-_ARRAY_FORMAT_VERTEX = 1
-
-_SHADER_MAX :: Int
-_SHADER_MAX = 3
-
-_VIEWPORT_DEBUG_DRAW_DISABLED :: Int
-_VIEWPORT_DEBUG_DRAW_DISABLED = 0
+_CANVAS_LIGHT_MODE_SUB :: Int
+_CANVAS_LIGHT_MODE_SUB = 1
 
 _CANVAS_ITEM_Z_MIN :: Int
 _CANVAS_ITEM_Z_MIN = -4096
 
-_VIEWPORT_MSAA_8X :: Int
-_VIEWPORT_MSAA_8X = 3
+_ARRAY_WEIGHTS_SIZE :: Int
+_ARRAY_WEIGHTS_SIZE = 4
 
-_INFO_MATERIAL_CHANGES_IN_FRAME :: Int
-_INFO_MATERIAL_CHANGES_IN_FRAME = 2
+_ARRAY_COMPRESS_INDEX :: Int
+_ARRAY_COMPRESS_INDEX = 131072
 
-_MAX_GLOW_LEVELS :: Int
-_MAX_GLOW_LEVELS = 7
+_LIGHT_PARAM_SHADOW_MAX_DISTANCE :: Int
+_LIGHT_PARAM_SHADOW_MAX_DISTANCE = 8
 
-_LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL :: Int
-_LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL = 1
+_ARRAY_FORMAT_WEIGHTS :: Int
+_ARRAY_FORMAT_WEIGHTS = 128
 
-_TEXTURE_TYPE_CUBEMAP :: Int
-_TEXTURE_TYPE_CUBEMAP = 1
+_TEXTURE_FLAG_REPEAT :: Int
+_TEXTURE_FLAG_REPEAT = 2
 
-_VIEWPORT_RENDER_INFO_SURFACE_CHANGES_IN_FRAME :: Int
-_VIEWPORT_RENDER_INFO_SURFACE_CHANGES_IN_FRAME = 4
+_SHADOW_CASTING_SETTING_DOUBLE_SIDED :: Int
+_SHADOW_CASTING_SETTING_DOUBLE_SIDED = 2
 
-_ARRAY_COMPRESS_TEX_UV :: Int
-_ARRAY_COMPRESS_TEX_UV = 8192
+_VIEWPORT_UPDATE_ONCE :: Int
+_VIEWPORT_UPDATE_ONCE = 1
 
-_ARRAY_COMPRESS_BONES :: Int
-_ARRAY_COMPRESS_BONES = 32768
+_MULTIMESH_TRANSFORM_2D :: Int
+_MULTIMESH_TRANSFORM_2D = 0
 
-_REFLECTION_PROBE_UPDATE_ALWAYS :: Int
-_REFLECTION_PROBE_UPDATE_ALWAYS = 1
+_VIEWPORT_DEBUG_DRAW_DISABLED :: Int
+_VIEWPORT_DEBUG_DRAW_DISABLED = 0
 
-_VIEWPORT_MSAA_DISABLED :: Int
-_VIEWPORT_MSAA_DISABLED = 0
+_ARRAY_COMPRESS_COLOR :: Int
+_ARRAY_COMPRESS_COLOR = 4096
+
+_ENV_TONE_MAPPER_REINHARD :: Int
+_ENV_TONE_MAPPER_REINHARD = 1
+
+_VIEWPORT_RENDER_INFO_MAX :: Int
+_VIEWPORT_RENDER_INFO_MAX = 6
+
+_ENV_SSAO_BLUR_DISABLED :: Int
+_ENV_SSAO_BLUR_DISABLED = 0
+
+_LIGHT_SPOT :: Int
+_LIGHT_SPOT = 2
+
+_NINE_PATCH_TILE :: Int
+_NINE_PATCH_TILE = 1
+
+_ENV_BG_SKY :: Int
+_ENV_BG_SKY = 2
+
+_INSTANCE_REFLECTION_PROBE :: Int
+_INSTANCE_REFLECTION_PROBE = 6
+
+_ENV_BG_CANVAS :: Int
+_ENV_BG_CANVAS = 4
+
+_FEATURE_SHADERS :: Int
+_FEATURE_SHADERS = 0
+
+_MATERIAL_RENDER_PRIORITY_MAX :: Int
+_MATERIAL_RENDER_PRIORITY_MAX = 127
+
+_GLOW_BLEND_MODE_SCREEN :: Int
+_GLOW_BLEND_MODE_SCREEN = 1
+
+_INFO_VERTICES_IN_FRAME :: Int
+_INFO_VERTICES_IN_FRAME = 1
+
+_ENV_SSAO_QUALITY_HIGH :: Int
+_ENV_SSAO_QUALITY_HIGH = 2
+
+_INFO_SHADER_CHANGES_IN_FRAME :: Int
+_INFO_SHADER_CHANGES_IN_FRAME = 3
+
+_TEXTURE_FLAG_MIPMAPS :: Int
+_TEXTURE_FLAG_MIPMAPS = 1
+
+_PARTICLES_DRAW_ORDER_VIEW_DEPTH :: Int
+_PARTICLES_DRAW_ORDER_VIEW_DEPTH = 2
+
+_LIGHT_PARAM_SHADOW_BIAS :: Int
+_LIGHT_PARAM_SHADOW_BIAS = 13
+
+_VIEWPORT_MSAA_EXT_4X :: Int
+_VIEWPORT_MSAA_EXT_4X = 6
 
 _CUBEMAP_RIGHT :: Int
 _CUBEMAP_RIGHT = 1
 
-_ARRAY_MAX :: Int
-_ARRAY_MAX = 9
+_GLOW_BLEND_MODE_SOFTLIGHT :: Int
+_GLOW_BLEND_MODE_SOFTLIGHT = 2
 
-_LIGHT_PARAM_SHADOW_SPLIT_2_OFFSET :: Int
-_LIGHT_PARAM_SHADOW_SPLIT_2_OFFSET = 10
+_ENV_BG_CLEAR_COLOR :: Int
+_ENV_BG_CLEAR_COLOR = 0
 
-_ENV_TONE_MAPPER_FILMIC :: Int
-_ENV_TONE_MAPPER_FILMIC = 2
-
-_PARTICLES_DRAW_ORDER_LIFETIME :: Int
-_PARTICLES_DRAW_ORDER_LIFETIME = 1
-
-_NINE_PATCH_STRETCH :: Int
-_NINE_PATCH_STRETCH = 0
-
-_INFO_USAGE_VIDEO_MEM_TOTAL :: Int
-_INFO_USAGE_VIDEO_MEM_TOTAL = 6
+_ENV_TONE_MAPPER_ACES :: Int
+_ENV_TONE_MAPPER_ACES = 3
 
 _ARRAY_NORMAL :: Int
 _ARRAY_NORMAL = 1
 
-_MULTIMESH_COLOR_NONE :: Int
-_MULTIMESH_COLOR_NONE = 0
+_LIGHT_PARAM_RANGE :: Int
+_LIGHT_PARAM_RANGE = 3
+
+_VIEWPORT_RENDER_INFO_SURFACE_CHANGES_IN_FRAME :: Int
+_VIEWPORT_RENDER_INFO_SURFACE_CHANGES_IN_FRAME = 4
+
+_BLEND_SHAPE_MODE_NORMALIZED :: Int
+_BLEND_SHAPE_MODE_NORMALIZED = 0
+
+_ARRAY_COMPRESS_DEFAULT :: Int
+_ARRAY_COMPRESS_DEFAULT = 97280
+
+_VIEWPORT_MSAA_EXT_2X :: Int
+_VIEWPORT_MSAA_EXT_2X = 5
+
+_LIGHT_PARAM_SHADOW_BIAS_SPLIT_SCALE :: Int
+_LIGHT_PARAM_SHADOW_BIAS_SPLIT_SCALE = 14
+
+_PARTICLES_DRAW_ORDER_INDEX :: Int
+_PARTICLES_DRAW_ORDER_INDEX = 0
+
+_CANVAS_LIGHT_FILTER_PCF3 :: Int
+_CANVAS_LIGHT_FILTER_PCF3 = 1
+
+_SHADOW_CASTING_SETTING_OFF :: Int
+_SHADOW_CASTING_SETTING_OFF = 0
+
+_TEXTURE_FLAG_MIRRORED_REPEAT :: Int
+_TEXTURE_FLAG_MIRRORED_REPEAT = 32
+
+_VIEWPORT_DEBUG_DRAW_OVERDRAW :: Int
+_VIEWPORT_DEBUG_DRAW_OVERDRAW = 2
+
+_GLOW_BLEND_MODE_ADDITIVE :: Int
+_GLOW_BLEND_MODE_ADDITIVE = 0
+
+_ENV_DOF_BLUR_QUALITY_MEDIUM :: Int
+_ENV_DOF_BLUR_QUALITY_MEDIUM = 1
+
+_NO_INDEX_ARRAY :: Int
+_NO_INDEX_ARRAY = -1
+
+_ENV_DOF_BLUR_QUALITY_LOW :: Int
+_ENV_DOF_BLUR_QUALITY_LOW = 0
+
+_VIEWPORT_USAGE_2D :: Int
+_VIEWPORT_USAGE_2D = 0
+
+_LIGHT_OMNI_SHADOW_CUBE :: Int
+_LIGHT_OMNI_SHADOW_CUBE = 1
+
+_TEXTURE_TYPE_3D :: Int
+_TEXTURE_TYPE_3D = 3
+
+_ARRAY_MAX :: Int
+_ARRAY_MAX = 9
+
+_ARRAY_FORMAT_COLOR :: Int
+_ARRAY_FORMAT_COLOR = 8
+
+_VIEWPORT_MSAA_4X :: Int
+_VIEWPORT_MSAA_4X = 2
+
+_PRIMITIVE_LINES :: Int
+_PRIMITIVE_LINES = 1
+
+_ARRAY_FORMAT_TEX_UV :: Int
+_ARRAY_FORMAT_TEX_UV = 16
+
+_ENV_BG_MAX :: Int
+_ENV_BG_MAX = 7
+
+_LIGHT_OMNI :: Int
+_LIGHT_OMNI = 1
+
+_VIEWPORT_USAGE_2D_NO_SAMPLING :: Int
+_VIEWPORT_USAGE_2D_NO_SAMPLING = 1
+
+_MAX_CURSORS :: Int
+_MAX_CURSORS = 8
+
+_LIGHT_PARAM_SHADOW_SPLIT_3_OFFSET :: Int
+_LIGHT_PARAM_SHADOW_SPLIT_3_OFFSET = 11
+
+_LIGHT_DIRECTIONAL_SHADOW_ORTHOGONAL :: Int
+_LIGHT_DIRECTIONAL_SHADOW_ORTHOGONAL = 0
+
+_CANVAS_LIGHT_FILTER_NONE :: Int
+_CANVAS_LIGHT_FILTER_NONE = 0
+
+_VIEWPORT_CLEAR_NEVER :: Int
+_VIEWPORT_CLEAR_NEVER = 1
+
+_CUBEMAP_BOTTOM :: Int
+_CUBEMAP_BOTTOM = 2
+
+_INSTANCE_PARTICLES :: Int
+_INSTANCE_PARTICLES = 4
+
+_ENV_BG_COLOR_SKY :: Int
+_ENV_BG_COLOR_SKY = 3
+
+_VIEWPORT_MSAA_DISABLED :: Int
+_VIEWPORT_MSAA_DISABLED = 0
+
+_ARRAY_COMPRESS_VERTEX :: Int
+_ARRAY_COMPRESS_VERTEX = 512
+
+_TEXTURE_FLAG_CONVERT_TO_LINEAR :: Int
+_TEXTURE_FLAG_CONVERT_TO_LINEAR = 16
+
+_MULTIMESH_COLOR_FLOAT :: Int
+_MULTIMESH_COLOR_FLOAT = 2
+
+_INSTANCE_GEOMETRY_MASK :: Int
+_INSTANCE_GEOMETRY_MASK = 30
+
+_ENV_BG_COLOR :: Int
+_ENV_BG_COLOR = 1
 
 _ARRAY_FORMAT_TEX_UV2 :: Int
 _ARRAY_FORMAT_TEX_UV2 = 32
@@ -758,98 +833,29 @@ _ARRAY_FORMAT_TEX_UV2 = 32
 _ENV_SSAO_QUALITY_LOW :: Int
 _ENV_SSAO_QUALITY_LOW = 0
 
-_INSTANCE_MESH :: Int
-_INSTANCE_MESH = 1
+_CANVAS_LIGHT_FILTER_PCF13 :: Int
+_CANVAS_LIGHT_FILTER_PCF13 = 5
 
-_MATERIAL_RENDER_PRIORITY_MAX :: Int
-_MATERIAL_RENDER_PRIORITY_MAX = 127
+_CANVAS_LIGHT_FILTER_PCF5 :: Int
+_CANVAS_LIGHT_FILTER_PCF5 = 2
 
-_LIGHT_PARAM_SHADOW_MAX_DISTANCE :: Int
-_LIGHT_PARAM_SHADOW_MAX_DISTANCE = 8
+_SCENARIO_DEBUG_DISABLED :: Int
+_SCENARIO_DEBUG_DISABLED = 0
 
-_VIEWPORT_MSAA_2X :: Int
-_VIEWPORT_MSAA_2X = 1
+_VIEWPORT_MSAA_16X :: Int
+_VIEWPORT_MSAA_16X = 4
 
-_PARTICLES_DRAW_ORDER_INDEX :: Int
-_PARTICLES_DRAW_ORDER_INDEX = 0
+_VIEWPORT_UPDATE_ALWAYS :: Int
+_VIEWPORT_UPDATE_ALWAYS = 3
 
-_ENV_DOF_BLUR_QUALITY_LOW :: Int
-_ENV_DOF_BLUR_QUALITY_LOW = 0
+_ENV_SSAO_BLUR_2x2 :: Int
+_ENV_SSAO_BLUR_2x2 = 2
 
-_INFO_SHADER_CHANGES_IN_FRAME :: Int
-_INFO_SHADER_CHANGES_IN_FRAME = 3
+_ENV_SSAO_BLUR_3x3 :: Int
+_ENV_SSAO_BLUR_3x3 = 3
 
-_GLOW_BLEND_MODE_ADDITIVE :: Int
-_GLOW_BLEND_MODE_ADDITIVE = 0
-
-_ENV_BG_CANVAS :: Int
-_ENV_BG_CANVAS = 4
-
-_LIGHT_OMNI_SHADOW_DUAL_PARABOLOID :: Int
-_LIGHT_OMNI_SHADOW_DUAL_PARABOLOID = 0
-
-_ARRAY_INDEX :: Int
-_ARRAY_INDEX = 8
-
-_LIGHT_PARAM_ENERGY :: Int
-_LIGHT_PARAM_ENERGY = 0
-
-_ARRAY_COLOR :: Int
-_ARRAY_COLOR = 3
-
-_LIGHT_OMNI_SHADOW_CUBE :: Int
-_LIGHT_OMNI_SHADOW_CUBE = 1
-
-_PRIMITIVE_TRIANGLE_STRIP :: Int
-_PRIMITIVE_TRIANGLE_STRIP = 5
-
-_VIEWPORT_RENDER_INFO_MAX :: Int
-_VIEWPORT_RENDER_INFO_MAX = 6
-
-_PRIMITIVE_TRIANGLES :: Int
-_PRIMITIVE_TRIANGLES = 4
-
-_TEXTURE_FLAGS_DEFAULT :: Int
-_TEXTURE_FLAGS_DEFAULT = 7
-
-_VIEWPORT_USAGE_3D_NO_EFFECTS :: Int
-_VIEWPORT_USAGE_3D_NO_EFFECTS = 3
-
-_ARRAY_TEX_UV :: Int
-_ARRAY_TEX_UV = 4
-
-_VIEWPORT_CLEAR_ONLY_NEXT_FRAME :: Int
-_VIEWPORT_CLEAR_ONLY_NEXT_FRAME = 2
-
-_CANVAS_LIGHT_FILTER_PCF7 :: Int
-_CANVAS_LIGHT_FILTER_PCF7 = 3
-
-_BLEND_SHAPE_MODE_NORMALIZED :: Int
-_BLEND_SHAPE_MODE_NORMALIZED = 0
-
-_ENV_BG_COLOR_SKY :: Int
-_ENV_BG_COLOR_SKY = 3
-
-_PRIMITIVE_LINE_LOOP :: Int
-_PRIMITIVE_LINE_LOOP = 3
-
-_LIGHT_PARAM_SPECULAR :: Int
-_LIGHT_PARAM_SPECULAR = 2
-
-_VIEWPORT_MSAA_EXT_2X :: Int
-_VIEWPORT_MSAA_EXT_2X = 5
-
-_CANVAS_LIGHT_MODE_SUB :: Int
-_CANVAS_LIGHT_MODE_SUB = 1
-
-_VIEWPORT_USAGE_3D :: Int
-_VIEWPORT_USAGE_3D = 2
-
-_GLOW_BLEND_MODE_SOFTLIGHT :: Int
-_GLOW_BLEND_MODE_SOFTLIGHT = 2
-
-_PRIMITIVE_TRIANGLE_FAN :: Int
-_PRIMITIVE_TRIANGLE_FAN = 6
+_ARRAY_COMPRESS_TANGENT :: Int
+_ARRAY_COMPRESS_TANGENT = 2048
 
 _VIEWPORT_DEBUG_DRAW_UNSHADED :: Int
 _VIEWPORT_DEBUG_DRAW_UNSHADED = 1
@@ -857,389 +863,383 @@ _VIEWPORT_DEBUG_DRAW_UNSHADED = 1
 _MATERIAL_RENDER_PRIORITY_MIN :: Int
 _MATERIAL_RENDER_PRIORITY_MIN = -128
 
-_LIGHT_OMNI_SHADOW_DETAIL_VERTICAL :: Int
-_LIGHT_OMNI_SHADOW_DETAIL_VERTICAL = 0
+_ARRAY_COMPRESS_WEIGHTS :: Int
+_ARRAY_COMPRESS_WEIGHTS = 65536
 
-_INSTANCE_FLAG_MAX :: Int
-_INSTANCE_FLAG_MAX = 2
+_ENV_SSAO_BLUR_1x1 :: Int
+_ENV_SSAO_BLUR_1x1 = 1
 
-_MULTIMESH_TRANSFORM_3D :: Int
-_MULTIMESH_TRANSFORM_3D = 1
+_INSTANCE_FLAG_USE_BAKED_LIGHT :: Int
+_INSTANCE_FLAG_USE_BAKED_LIGHT = 0
 
-_SCENARIO_DEBUG_OVERDRAW :: Int
-_SCENARIO_DEBUG_OVERDRAW = 2
+_INFO_TEXTURE_MEM_USED :: Int
+_INFO_TEXTURE_MEM_USED = 8
+
+_GLOW_BLEND_MODE_REPLACE :: Int
+_GLOW_BLEND_MODE_REPLACE = 3
+
+_VIEWPORT_USAGE_3D_NO_EFFECTS :: Int
+_VIEWPORT_USAGE_3D_NO_EFFECTS = 3
+
+_MULTIMESH_CUSTOM_DATA_FLOAT :: Int
+_MULTIMESH_CUSTOM_DATA_FLOAT = 2
+
+_INFO_SURFACE_CHANGES_IN_FRAME :: Int
+_INFO_SURFACE_CHANGES_IN_FRAME = 4
 
 _ARRAY_FORMAT_NORMAL :: Int
 _ARRAY_FORMAT_NORMAL = 2
 
-_MULTIMESH_CUSTOM_DATA_8BIT :: Int
-_MULTIMESH_CUSTOM_DATA_8BIT = 1
+_CANVAS_LIGHT_MODE_MASK :: Int
+_CANVAS_LIGHT_MODE_MASK = 3
 
-_ARRAY_TEX_UV2 :: Int
-_ARRAY_TEX_UV2 = 5
+_CUBEMAP_FRONT :: Int
+_CUBEMAP_FRONT = 4
 
-_ENV_DOF_BLUR_QUALITY_MEDIUM :: Int
-_ENV_DOF_BLUR_QUALITY_MEDIUM = 1
+_LIGHT_PARAM_MAX :: Int
+_LIGHT_PARAM_MAX = 15
 
-_TEXTURE_TYPE_2D :: Int
-_TEXTURE_TYPE_2D = 0
+_LIGHT_DIRECTIONAL_SHADOW_PARALLEL_2_SPLITS :: Int
+_LIGHT_DIRECTIONAL_SHADOW_PARALLEL_2_SPLITS = 1
 
-_ENV_BG_SKY :: Int
-_ENV_BG_SKY = 2
-
-_FEATURE_SHADERS :: Int
-_FEATURE_SHADERS = 0
-
-_CUBEMAP_TOP :: Int
-_CUBEMAP_TOP = 3
-
-_PARTICLES_DRAW_ORDER_VIEW_DEPTH :: Int
-_PARTICLES_DRAW_ORDER_VIEW_DEPTH = 2
+_ARRAY_FORMAT_BONES :: Int
+_ARRAY_FORMAT_BONES = 64
 
 _CUBEMAP_BACK :: Int
 _CUBEMAP_BACK = 5
 
-_LIGHT_SPOT :: Int
-_LIGHT_SPOT = 2
+_VIEWPORT_DEBUG_DRAW_WIREFRAME :: Int
+_VIEWPORT_DEBUG_DRAW_WIREFRAME = 3
+
+_ARRAY_FORMAT_TANGENT :: Int
+_ARRAY_FORMAT_TANGENT = 4
+
+_FEATURE_MULTITHREADED :: Int
+_FEATURE_MULTITHREADED = 1
+
+_INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE :: Int
+_INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE = 1
+
+_INSTANCE_MESH :: Int
+_INSTANCE_MESH = 1
+
+_INFO_OBJECTS_IN_FRAME :: Int
+_INFO_OBJECTS_IN_FRAME = 0
+
+_ARRAY_COMPRESS_TEX_UV2 :: Int
+_ARRAY_COMPRESS_TEX_UV2 = 16384
+
+_SHADER_CANVAS_ITEM :: Int
+_SHADER_CANVAS_ITEM = 1
+
+_INSTANCE_FLAG_MAX :: Int
+_INSTANCE_FLAG_MAX = 2
+
+_LIGHT_PARAM_ATTENUATION :: Int
+_LIGHT_PARAM_ATTENUATION = 4
+
+_PARTICLES_DRAW_ORDER_LIFETIME :: Int
+_PARTICLES_DRAW_ORDER_LIFETIME = 1
+
+_NINE_PATCH_TILE_FIT :: Int
+_NINE_PATCH_TILE_FIT = 2
+
+_INFO_VIDEO_MEM_USED :: Int
+_INFO_VIDEO_MEM_USED = 7
 
 _LIGHT_DIRECTIONAL_SHADOW_PARALLEL_4_SPLITS :: Int
 _LIGHT_DIRECTIONAL_SHADOW_PARALLEL_4_SPLITS = 2
 
-_INSTANCE_PARTICLES :: Int
-_INSTANCE_PARTICLES = 4
+_CANVAS_LIGHT_FILTER_PCF7 :: Int
+_CANVAS_LIGHT_FILTER_PCF7 = 3
 
-_TEXTURE_FLAG_REPEAT :: Int
-_TEXTURE_FLAG_REPEAT = 2
+_MULTIMESH_CUSTOM_DATA_8BIT :: Int
+_MULTIMESH_CUSTOM_DATA_8BIT = 1
+
+_PRIMITIVE_TRIANGLE_STRIP :: Int
+_PRIMITIVE_TRIANGLE_STRIP = 5
+
+_INFO_MATERIAL_CHANGES_IN_FRAME :: Int
+_INFO_MATERIAL_CHANGES_IN_FRAME = 2
+
+_MULTIMESH_COLOR_8BIT :: Int
+_MULTIMESH_COLOR_8BIT = 1
+
+_TEXTURE_TYPE_2D :: Int
+_TEXTURE_TYPE_2D = 0
+
+_SHADOW_CASTING_SETTING_ON :: Int
+_SHADOW_CASTING_SETTING_ON = 1
+
+_REFLECTION_PROBE_UPDATE_ALWAYS :: Int
+_REFLECTION_PROBE_UPDATE_ALWAYS = 1
+
+_LIGHT_PARAM_SPOT_ANGLE :: Int
+_LIGHT_PARAM_SPOT_ANGLE = 5
+
+_PRIMITIVE_POINTS :: Int
+_PRIMITIVE_POINTS = 0
+
+_SHADER_PARTICLES :: Int
+_SHADER_PARTICLES = 2
+
+_LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET :: Int
+_LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET = 9
+
+_ENV_SSAO_QUALITY_MEDIUM :: Int
+_ENV_SSAO_QUALITY_MEDIUM = 1
+
+_ARRAY_INDEX :: Int
+_ARRAY_INDEX = 8
+
+_ARRAY_VERTEX :: Int
+_ARRAY_VERTEX = 0
+
+_LIGHT_PARAM_SHADOW_SPLIT_2_OFFSET :: Int
+_LIGHT_PARAM_SHADOW_SPLIT_2_OFFSET = 10
+
+_ENV_TONE_MAPPER_LINEAR :: Int
+_ENV_TONE_MAPPER_LINEAR = 0
+
+_ARRAY_TEX_UV2 :: Int
+_ARRAY_TEX_UV2 = 5
+
+_LIGHT_PARAM_SPECULAR :: Int
+_LIGHT_PARAM_SPECULAR = 2
+
+_SHADER_SPATIAL :: Int
+_SHADER_SPATIAL = 0
+
+_VIEWPORT_RENDER_INFO_VERTICES_IN_FRAME :: Int
+_VIEWPORT_RENDER_INFO_VERTICES_IN_FRAME = 1
+
+_ARRAY_COLOR :: Int
+_ARRAY_COLOR = 3
+
+_VIEWPORT_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME :: Int
+_VIEWPORT_RENDER_INFO_MATERIAL_CHANGES_IN_FRAME = 2
+
+_TEXTURE_FLAG_FILTER :: Int
+_TEXTURE_FLAG_FILTER = 4
+
+_VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME :: Int
+_VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME = 3
+
+_MULTIMESH_TRANSFORM_3D :: Int
+_MULTIMESH_TRANSFORM_3D = 1
+
+_NINE_PATCH_STRETCH :: Int
+_NINE_PATCH_STRETCH = 0
+
+_LIGHT_PARAM_CONTACT_SHADOW_SIZE :: Int
+_LIGHT_PARAM_CONTACT_SHADOW_SIZE = 7
+
+_VIEWPORT_CLEAR_ALWAYS :: Int
+_VIEWPORT_CLEAR_ALWAYS = 0
+
+_ARRAY_COMPRESS_NORMAL :: Int
+_ARRAY_COMPRESS_NORMAL = 1024
+
+_INSTANCE_NONE :: Int
+_INSTANCE_NONE = 0
+
+_CANVAS_LIGHT_MODE_ADD :: Int
+_CANVAS_LIGHT_MODE_ADD = 0
+
+_CUBEMAP_TOP :: Int
+_CUBEMAP_TOP = 3
+
+_VIEWPORT_RENDER_INFO_OBJECTS_IN_FRAME :: Int
+_VIEWPORT_RENDER_INFO_OBJECTS_IN_FRAME = 0
+
+_PRIMITIVE_TRIANGLE_FAN :: Int
+_PRIMITIVE_TRIANGLE_FAN = 6
+
+_SHADER_MAX :: Int
+_SHADER_MAX = 3
+
+_INSTANCE_IMMEDIATE :: Int
+_INSTANCE_IMMEDIATE = 3
+
+_SHADOW_CASTING_SETTING_SHADOWS_ONLY :: Int
+_SHADOW_CASTING_SETTING_SHADOWS_ONLY = 3
+
+_SCENARIO_DEBUG_SHADELESS :: Int
+_SCENARIO_DEBUG_SHADELESS = 3
+
+_ENV_DOF_BLUR_QUALITY_HIGH :: Int
+_ENV_DOF_BLUR_QUALITY_HIGH = 2
+
+_CANVAS_LIGHT_FILTER_PCF9 :: Int
+_CANVAS_LIGHT_FILTER_PCF9 = 4
+
+_VIEWPORT_UPDATE_DISABLED :: Int
+_VIEWPORT_UPDATE_DISABLED = 0
+
+_CUBEMAP_LEFT :: Int
+_CUBEMAP_LEFT = 0
+
+_CANVAS_LIGHT_MODE_MIX :: Int
+_CANVAS_LIGHT_MODE_MIX = 2
+
+_INFO_DRAW_CALLS_IN_FRAME :: Int
+_INFO_DRAW_CALLS_IN_FRAME = 5
+
+_ARRAY_FORMAT_INDEX :: Int
+_ARRAY_FORMAT_INDEX = 256
+
+_TEXTURE_FLAG_USED_FOR_STREAMING :: Int
+_TEXTURE_FLAG_USED_FOR_STREAMING = 2048
+
+_ARRAY_TANGENT :: Int
+_ARRAY_TANGENT = 2
+
+_INSTANCE_MULTIMESH :: Int
+_INSTANCE_MULTIMESH = 2
+
+_INSTANCE_MAX :: Int
+_INSTANCE_MAX = 9
+
+_TEXTURE_TYPE_CUBEMAP :: Int
+_TEXTURE_TYPE_CUBEMAP = 1
+
+_ARRAY_WEIGHTS :: Int
+_ARRAY_WEIGHTS = 7
+
+_INSTANCE_LIGHT :: Int
+_INSTANCE_LIGHT = 5
+
+_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_OPTIMIZED :: Int
+_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_OPTIMIZED = 1
+
+_ARRAY_COMPRESS_BONES :: Int
+_ARRAY_COMPRESS_BONES = 32768
+
+_MULTIMESH_CUSTOM_DATA_NONE :: Int
+_MULTIMESH_CUSTOM_DATA_NONE = 0
+
+_LIGHT_DIRECTIONAL :: Int
+_LIGHT_DIRECTIONAL = 0
+
+_SCENARIO_DEBUG_WIREFRAME :: Int
+_SCENARIO_DEBUG_WIREFRAME = 1
+
+_LIGHT_PARAM_SHADOW_NORMAL_BIAS :: Int
+_LIGHT_PARAM_SHADOW_NORMAL_BIAS = 12
+
+_ARRAY_FORMAT_VERTEX :: Int
+_ARRAY_FORMAT_VERTEX = 1
+
+_LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL :: Int
+_LIGHT_OMNI_SHADOW_DETAIL_HORIZONTAL = 1
+
+_ENV_TONE_MAPPER_FILMIC :: Int
+_ENV_TONE_MAPPER_FILMIC = 2
+
+_VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME :: Int
+_VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME = 5
+
+_CANVAS_ITEM_Z_MAX :: Int
+_CANVAS_ITEM_Z_MAX = 4096
+
+_ARRAY_FLAG_USE_2D_VERTICES :: Int
+_ARRAY_FLAG_USE_2D_VERTICES = 262144
+
+_TEXTURE_TYPE_2D_ARRAY :: Int
+_TEXTURE_TYPE_2D_ARRAY = 2
+
+_CANVAS_OCCLUDER_POLYGON_CULL_DISABLED :: Int
+_CANVAS_OCCLUDER_POLYGON_CULL_DISABLED = 0
+
+_SCENARIO_DEBUG_OVERDRAW :: Int
+_SCENARIO_DEBUG_OVERDRAW = 2
+
+_VIEWPORT_UPDATE_WHEN_VISIBLE :: Int
+_VIEWPORT_UPDATE_WHEN_VISIBLE = 2
+
+_ARRAY_COMPRESS_TEX_UV :: Int
+_ARRAY_COMPRESS_TEX_UV = 8192
+
+_CANVAS_OCCLUDER_POLYGON_CULL_CLOCKWISE :: Int
+_CANVAS_OCCLUDER_POLYGON_CULL_CLOCKWISE = 1
+
+_MULTIMESH_COLOR_NONE :: Int
+_MULTIMESH_COLOR_NONE = 0
+
+_BLEND_SHAPE_MODE_RELATIVE :: Int
+_BLEND_SHAPE_MODE_RELATIVE = 1
+
+_LIGHT_OMNI_SHADOW_DETAIL_VERTICAL :: Int
+_LIGHT_OMNI_SHADOW_DETAIL_VERTICAL = 0
+
+_PRIMITIVE_MAX :: Int
+_PRIMITIVE_MAX = 7
+
+_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_STABLE :: Int
+_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_STABLE = 0
+
+_LIGHT_PARAM_ENERGY :: Int
+_LIGHT_PARAM_ENERGY = 0
+
+_VIEWPORT_USAGE_3D :: Int
+_VIEWPORT_USAGE_3D = 2
+
+_CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE :: Int
+_CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE = 2
+
+_PRIMITIVE_TRIANGLES :: Int
+_PRIMITIVE_TRIANGLES = 4
+
+_INSTANCE_GI_PROBE :: Int
+_INSTANCE_GI_PROBE = 7
+
+_ARRAY_BONES :: Int
+_ARRAY_BONES = 6
+
+_VIEWPORT_MSAA_8X :: Int
+_VIEWPORT_MSAA_8X = 3
+
+_ENV_BG_KEEP :: Int
+_ENV_BG_KEEP = 5
+
+_PRIMITIVE_LINE_LOOP :: Int
+_PRIMITIVE_LINE_LOOP = 3
+
+_INFO_USAGE_VIDEO_MEM_TOTAL :: Int
+_INFO_USAGE_VIDEO_MEM_TOTAL = 6
+
+_ARRAY_TEX_UV :: Int
+_ARRAY_TEX_UV = 4
+
+_INFO_VERTEX_MEM_USED :: Int
+_INFO_VERTEX_MEM_USED = 9
+
+_MAX_GLOW_LEVELS :: Int
+_MAX_GLOW_LEVELS = 7
+
+_PRIMITIVE_LINE_STRIP :: Int
+_PRIMITIVE_LINE_STRIP = 2
+
+_LIGHT_OMNI_SHADOW_DUAL_PARABOLOID :: Int
+_LIGHT_OMNI_SHADOW_DUAL_PARABOLOID = 0
+
+_TEXTURE_FLAG_ANISOTROPIC_FILTER :: Int
+_TEXTURE_FLAG_ANISOTROPIC_FILTER = 8
+
+_TEXTURE_FLAGS_DEFAULT :: Int
+_TEXTURE_FLAGS_DEFAULT = 7
+
+_INSTANCE_LIGHTMAP_CAPTURE :: Int
+_INSTANCE_LIGHTMAP_CAPTURE = 8
+
+_VIEWPORT_MSAA_2X :: Int
+_VIEWPORT_MSAA_2X = 1
 
 _LIGHT_PARAM_SPOT_ATTENUATION :: Int
 _LIGHT_PARAM_SPOT_ATTENUATION = 6
 
 _REFLECTION_PROBE_UPDATE_ONCE :: Int
 _REFLECTION_PROBE_UPDATE_ONCE = 0
-
-_ARRAY_COMPRESS_DEFAULT :: Int
-_ARRAY_COMPRESS_DEFAULT = 97280
-
-_CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE :: Int
-_CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE = 2
-
-_CANVAS_ITEM_Z_MAX :: Int
-_CANVAS_ITEM_Z_MAX = 4096
-
-_ENV_TONE_MAPPER_LINEAR :: Int
-_ENV_TONE_MAPPER_LINEAR = 0
-
-_LIGHT_PARAM_SHADOW_SPLIT_3_OFFSET :: Int
-_LIGHT_PARAM_SHADOW_SPLIT_3_OFFSET = 11
-
-_VIEWPORT_RENDER_INFO_VERTICES_IN_FRAME :: Int
-_VIEWPORT_RENDER_INFO_VERTICES_IN_FRAME = 1
-
-_MULTIMESH_CUSTOM_DATA_NONE :: Int
-_MULTIMESH_CUSTOM_DATA_NONE = 0
-
-_LIGHT_OMNI :: Int
-_LIGHT_OMNI = 1
-
-_ENV_BG_MAX :: Int
-_ENV_BG_MAX = 7
-
-_INSTANCE_REFLECTION_PROBE :: Int
-_INSTANCE_REFLECTION_PROBE = 6
-
-_INFO_TEXTURE_MEM_USED :: Int
-_INFO_TEXTURE_MEM_USED = 8
-
-_INSTANCE_NONE :: Int
-_INSTANCE_NONE = 0
-
-_SHADER_CANVAS_ITEM :: Int
-_SHADER_CANVAS_ITEM = 1
-
-_ENV_SSAO_QUALITY_MEDIUM :: Int
-_ENV_SSAO_QUALITY_MEDIUM = 1
-
-_CANVAS_LIGHT_FILTER_PCF3 :: Int
-_CANVAS_LIGHT_FILTER_PCF3 = 1
-
-_ARRAY_FORMAT_BONES :: Int
-_ARRAY_FORMAT_BONES = 64
-
-_LIGHT_PARAM_SPOT_ANGLE :: Int
-_LIGHT_PARAM_SPOT_ANGLE = 5
-
-_ARRAY_WEIGHTS_SIZE :: Int
-_ARRAY_WEIGHTS_SIZE = 4
-
-_SHADOW_CASTING_SETTING_DOUBLE_SIDED :: Int
-_SHADOW_CASTING_SETTING_DOUBLE_SIDED = 2
-
-_ENV_SSAO_QUALITY_HIGH :: Int
-_ENV_SSAO_QUALITY_HIGH = 2
-
-_INFO_VERTICES_IN_FRAME :: Int
-_INFO_VERTICES_IN_FRAME = 1
-
-_INFO_VIDEO_MEM_USED :: Int
-_INFO_VIDEO_MEM_USED = 7
-
-_GLOW_BLEND_MODE_REPLACE :: Int
-_GLOW_BLEND_MODE_REPLACE = 3
-
-_NINE_PATCH_TILE_FIT :: Int
-_NINE_PATCH_TILE_FIT = 2
-
-_VIEWPORT_UPDATE_ONCE :: Int
-_VIEWPORT_UPDATE_ONCE = 1
-
-_ARRAY_COMPRESS_COLOR :: Int
-_ARRAY_COMPRESS_COLOR = 4096
-
-_GLOW_BLEND_MODE_SCREEN :: Int
-_GLOW_BLEND_MODE_SCREEN = 1
-
-_MAX_CURSORS :: Int
-_MAX_CURSORS = 8
-
-_TEXTURE_FLAG_CONVERT_TO_LINEAR :: Int
-_TEXTURE_FLAG_CONVERT_TO_LINEAR = 16
-
-_PRIMITIVE_MAX :: Int
-_PRIMITIVE_MAX = 7
-
-_LIGHT_PARAM_CONTACT_SHADOW_SIZE :: Int
-_LIGHT_PARAM_CONTACT_SHADOW_SIZE = 7
-
-_INSTANCE_MAX :: Int
-_INSTANCE_MAX = 9
-
-_ENV_SSAO_BLUR_3x3 :: Int
-_ENV_SSAO_BLUR_3x3 = 3
-
-_ARRAY_WEIGHTS :: Int
-_ARRAY_WEIGHTS = 7
-
-_LIGHT_PARAM_MAX :: Int
-_LIGHT_PARAM_MAX = 15
-
-_CUBEMAP_BOTTOM :: Int
-_CUBEMAP_BOTTOM = 2
-
-_ARRAY_TANGENT :: Int
-_ARRAY_TANGENT = 2
-
-_SCENARIO_DEBUG_SHADELESS :: Int
-_SCENARIO_DEBUG_SHADELESS = 3
-
-_INFO_OBJECTS_IN_FRAME :: Int
-_INFO_OBJECTS_IN_FRAME = 0
-
-_INSTANCE_GI_PROBE :: Int
-_INSTANCE_GI_PROBE = 7
-
-_LIGHT_PARAM_SHADOW_NORMAL_BIAS :: Int
-_LIGHT_PARAM_SHADOW_NORMAL_BIAS = 12
-
-_VIEWPORT_USAGE_2D_NO_SAMPLING :: Int
-_VIEWPORT_USAGE_2D_NO_SAMPLING = 1
-
-_ENV_SSAO_BLUR_2x2 :: Int
-_ENV_SSAO_BLUR_2x2 = 2
-
-_VIEWPORT_UPDATE_DISABLED :: Int
-_VIEWPORT_UPDATE_DISABLED = 0
-
-_SHADOW_CASTING_SETTING_OFF :: Int
-_SHADOW_CASTING_SETTING_OFF = 0
-
-_VIEWPORT_MSAA_16X :: Int
-_VIEWPORT_MSAA_16X = 4
-
-_CANVAS_LIGHT_FILTER_PCF9 :: Int
-_CANVAS_LIGHT_FILTER_PCF9 = 4
-
-_ENV_SSAO_BLUR_DISABLED :: Int
-_ENV_SSAO_BLUR_DISABLED = 0
-
-_TEXTURE_FLAG_ANISOTROPIC_FILTER :: Int
-_TEXTURE_FLAG_ANISOTROPIC_FILTER = 8
-
-_FEATURE_MULTITHREADED :: Int
-_FEATURE_MULTITHREADED = 1
-
-_ENV_SSAO_BLUR_1x1 :: Int
-_ENV_SSAO_BLUR_1x1 = 1
-
-_INFO_DRAW_CALLS_IN_FRAME :: Int
-_INFO_DRAW_CALLS_IN_FRAME = 5
-
-_ENV_BG_COLOR :: Int
-_ENV_BG_COLOR = 1
-
-_ENV_TONE_MAPPER_ACES :: Int
-_ENV_TONE_MAPPER_ACES = 3
-
-_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_STABLE :: Int
-_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_STABLE = 0
-
-_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_OPTIMIZED :: Int
-_LIGHT_DIRECTIONAL_SHADOW_DEPTH_RANGE_OPTIMIZED = 1
-
-_ARRAY_COMPRESS_TEX_UV2 :: Int
-_ARRAY_COMPRESS_TEX_UV2 = 16384
-
-_MULTIMESH_COLOR_8BIT :: Int
-_MULTIMESH_COLOR_8BIT = 1
-
-_MULTIMESH_TRANSFORM_2D :: Int
-_MULTIMESH_TRANSFORM_2D = 0
-
-_VIEWPORT_UPDATE_WHEN_VISIBLE :: Int
-_VIEWPORT_UPDATE_WHEN_VISIBLE = 2
-
-_VIEWPORT_MSAA_EXT_4X :: Int
-_VIEWPORT_MSAA_EXT_4X = 6
-
-_INSTANCE_LIGHT :: Int
-_INSTANCE_LIGHT = 5
-
-_TEXTURE_TYPE_3D :: Int
-_TEXTURE_TYPE_3D = 3
-
-_TEXTURE_FLAG_MIPMAPS :: Int
-_TEXTURE_FLAG_MIPMAPS = 1
-
-_PRIMITIVE_LINE_STRIP :: Int
-_PRIMITIVE_LINE_STRIP = 2
-
-_TEXTURE_FLAG_FILTER :: Int
-_TEXTURE_FLAG_FILTER = 4
-
-_ENV_BG_KEEP :: Int
-_ENV_BG_KEEP = 5
-
-_CANVAS_LIGHT_FILTER_NONE :: Int
-_CANVAS_LIGHT_FILTER_NONE = 0
-
-_CUBEMAP_FRONT :: Int
-_CUBEMAP_FRONT = 4
-
-_TEXTURE_FLAG_USED_FOR_STREAMING :: Int
-_TEXTURE_FLAG_USED_FOR_STREAMING = 2048
-
-_INFO_VERTEX_MEM_USED :: Int
-_INFO_VERTEX_MEM_USED = 9
-
-_TEXTURE_FLAG_MIRRORED_REPEAT :: Int
-_TEXTURE_FLAG_MIRRORED_REPEAT = 32
-
-_PRIMITIVE_LINES :: Int
-_PRIMITIVE_LINES = 1
-
-_VIEWPORT_RENDER_INFO_OBJECTS_IN_FRAME :: Int
-_VIEWPORT_RENDER_INFO_OBJECTS_IN_FRAME = 0
-
-_ENV_BG_CLEAR_COLOR :: Int
-_ENV_BG_CLEAR_COLOR = 0
-
-_SHADOW_CASTING_SETTING_ON :: Int
-_SHADOW_CASTING_SETTING_ON = 1
-
-_SCENARIO_DEBUG_WIREFRAME :: Int
-_SCENARIO_DEBUG_WIREFRAME = 1
-
-_CANVAS_LIGHT_MODE_ADD :: Int
-_CANVAS_LIGHT_MODE_ADD = 0
-
-_LIGHT_PARAM_SHADOW_BIAS_SPLIT_SCALE :: Int
-_LIGHT_PARAM_SHADOW_BIAS_SPLIT_SCALE = 14
-
-_VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME :: Int
-_VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME = 5
-
-_ARRAY_BONES :: Int
-_ARRAY_BONES = 6
-
-_LIGHT_PARAM_ATTENUATION :: Int
-_LIGHT_PARAM_ATTENUATION = 4
-
-_VIEWPORT_DEBUG_DRAW_WIREFRAME :: Int
-_VIEWPORT_DEBUG_DRAW_WIREFRAME = 3
-
-_CANVAS_LIGHT_MODE_MIX :: Int
-_CANVAS_LIGHT_MODE_MIX = 2
-
-_NINE_PATCH_TILE :: Int
-_NINE_PATCH_TILE = 1
-
-_VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME :: Int
-_VIEWPORT_RENDER_INFO_SHADER_CHANGES_IN_FRAME = 3
-
-_INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE :: Int
-_INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE = 1
-
-_CANVAS_LIGHT_MODE_MASK :: Int
-_CANVAS_LIGHT_MODE_MASK = 3
-
-_LIGHT_PARAM_RANGE :: Int
-_LIGHT_PARAM_RANGE = 3
-
-_BLEND_SHAPE_MODE_RELATIVE :: Int
-_BLEND_SHAPE_MODE_RELATIVE = 1
-
-_VIEWPORT_MSAA_4X :: Int
-_VIEWPORT_MSAA_4X = 2
-
-_LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET :: Int
-_LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET = 9
-
-_ENV_TONE_MAPPER_REINHARD :: Int
-_ENV_TONE_MAPPER_REINHARD = 1
-
-_CANVAS_LIGHT_FILTER_PCF13 :: Int
-_CANVAS_LIGHT_FILTER_PCF13 = 5
-
-_MULTIMESH_CUSTOM_DATA_FLOAT :: Int
-_MULTIMESH_CUSTOM_DATA_FLOAT = 2
-
-_NO_INDEX_ARRAY :: Int
-_NO_INDEX_ARRAY = -1
-
-_ARRAY_VERTEX :: Int
-_ARRAY_VERTEX = 0
-
-_ARRAY_FLAG_USE_2D_VERTICES :: Int
-_ARRAY_FLAG_USE_2D_VERTICES = 262144
-
-_CANVAS_LIGHT_FILTER_PCF5 :: Int
-_CANVAS_LIGHT_FILTER_PCF5 = 2
-
-_LIGHT_DIRECTIONAL :: Int
-_LIGHT_DIRECTIONAL = 0
-
-_ARRAY_COMPRESS_INDEX :: Int
-_ARRAY_COMPRESS_INDEX = 131072
-
-_INSTANCE_FLAG_USE_BAKED_LIGHT :: Int
-_INSTANCE_FLAG_USE_BAKED_LIGHT = 0
-
-_CUBEMAP_LEFT :: Int
-_CUBEMAP_LEFT = 0
-
-_LIGHT_PARAM_SHADOW_BIAS :: Int
-_LIGHT_PARAM_SHADOW_BIAS = 13
-
-_ARRAY_FORMAT_WEIGHTS :: Int
-_ARRAY_FORMAT_WEIGHTS = 128
-
-_SHADER_PARTICLES :: Int
-_SHADER_PARTICLES = 2
-
-_ARRAY_FORMAT_TANGENT :: Int
-_ARRAY_FORMAT_TANGENT = 4
-
-_PRIMITIVE_POINTS :: Int
-_PRIMITIVE_POINTS = 0
 
 -- | Emitted at the end of the frame, after the VisualServer has finished updating all the Viewports.
 sig_frame_post_draw :: Godot.Internal.Dispatch.Signal VisualServer

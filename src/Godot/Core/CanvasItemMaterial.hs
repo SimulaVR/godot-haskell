@@ -3,13 +3,13 @@
   MultiParamTypeClasses #-}
 module Godot.Core.CanvasItemMaterial
        (Godot.Core.CanvasItemMaterial._BLEND_MODE_ADD,
+        Godot.Core.CanvasItemMaterial._BLEND_MODE_PREMULT_ALPHA,
+        Godot.Core.CanvasItemMaterial._LIGHT_MODE_UNSHADED,
         Godot.Core.CanvasItemMaterial._BLEND_MODE_MIX,
         Godot.Core.CanvasItemMaterial._LIGHT_MODE_LIGHT_ONLY,
-        Godot.Core.CanvasItemMaterial._BLEND_MODE_MUL,
-        Godot.Core.CanvasItemMaterial._BLEND_MODE_PREMULT_ALPHA,
         Godot.Core.CanvasItemMaterial._LIGHT_MODE_NORMAL,
         Godot.Core.CanvasItemMaterial._BLEND_MODE_SUB,
-        Godot.Core.CanvasItemMaterial._LIGHT_MODE_UNSHADED,
+        Godot.Core.CanvasItemMaterial._BLEND_MODE_MUL,
         Godot.Core.CanvasItemMaterial.get_blend_mode,
         Godot.Core.CanvasItemMaterial.get_light_mode,
         Godot.Core.CanvasItemMaterial.get_particles_anim_h_frames,
@@ -38,17 +38,17 @@ import Godot.Core.Material()
 _BLEND_MODE_ADD :: Int
 _BLEND_MODE_ADD = 1
 
+_BLEND_MODE_PREMULT_ALPHA :: Int
+_BLEND_MODE_PREMULT_ALPHA = 4
+
+_LIGHT_MODE_UNSHADED :: Int
+_LIGHT_MODE_UNSHADED = 1
+
 _BLEND_MODE_MIX :: Int
 _BLEND_MODE_MIX = 0
 
 _LIGHT_MODE_LIGHT_ONLY :: Int
 _LIGHT_MODE_LIGHT_ONLY = 2
-
-_BLEND_MODE_MUL :: Int
-_BLEND_MODE_MUL = 3
-
-_BLEND_MODE_PREMULT_ALPHA :: Int
-_BLEND_MODE_PREMULT_ALPHA = 4
 
 _LIGHT_MODE_NORMAL :: Int
 _LIGHT_MODE_NORMAL = 0
@@ -56,8 +56,8 @@ _LIGHT_MODE_NORMAL = 0
 _BLEND_MODE_SUB :: Int
 _BLEND_MODE_SUB = 2
 
-_LIGHT_MODE_UNSHADED :: Int
-_LIGHT_MODE_UNSHADED = 1
+_BLEND_MODE_MUL :: Int
+_BLEND_MODE_MUL = 3
 
 instance NodeProperty CanvasItemMaterial "blend_mode" Int 'False
          where

@@ -3,10 +3,10 @@
   MultiParamTypeClasses #-}
 module Godot.Core.AnimationPlayer
        (Godot.Core.AnimationPlayer._ANIMATION_METHOD_CALL_IMMEDIATE,
-        Godot.Core.AnimationPlayer._ANIMATION_METHOD_CALL_DEFERRED,
-        Godot.Core.AnimationPlayer._ANIMATION_PROCESS_MANUAL,
         Godot.Core.AnimationPlayer._ANIMATION_PROCESS_PHYSICS,
         Godot.Core.AnimationPlayer._ANIMATION_PROCESS_IDLE,
+        Godot.Core.AnimationPlayer._ANIMATION_PROCESS_MANUAL,
+        Godot.Core.AnimationPlayer._ANIMATION_METHOD_CALL_DEFERRED,
         Godot.Core.AnimationPlayer.sig_animation_changed,
         Godot.Core.AnimationPlayer.sig_animation_finished,
         Godot.Core.AnimationPlayer.sig_animation_started,
@@ -71,17 +71,17 @@ import Godot.Core.Node()
 _ANIMATION_METHOD_CALL_IMMEDIATE :: Int
 _ANIMATION_METHOD_CALL_IMMEDIATE = 1
 
-_ANIMATION_METHOD_CALL_DEFERRED :: Int
-_ANIMATION_METHOD_CALL_DEFERRED = 0
-
-_ANIMATION_PROCESS_MANUAL :: Int
-_ANIMATION_PROCESS_MANUAL = 2
-
 _ANIMATION_PROCESS_PHYSICS :: Int
 _ANIMATION_PROCESS_PHYSICS = 0
 
 _ANIMATION_PROCESS_IDLE :: Int
 _ANIMATION_PROCESS_IDLE = 1
+
+_ANIMATION_PROCESS_MANUAL :: Int
+_ANIMATION_PROCESS_MANUAL = 2
+
+_ANIMATION_METHOD_CALL_DEFERRED :: Int
+_ANIMATION_METHOD_CALL_DEFERRED = 0
 
 -- | If the currently being played animation changes, this signal will notify of such change.
 sig_animation_changed ::
@@ -624,8 +624,7 @@ instance NodeMethod AnimationPlayer "get_blend_time"
 
 {-# NOINLINE bindAnimationPlayer_get_current_animation #-}
 
--- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+-- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also @method play@.
 bindAnimationPlayer_get_current_animation :: MethodBind
 bindAnimationPlayer_get_current_animation
   = unsafePerformIO $
@@ -635,8 +634,7 @@ bindAnimationPlayer_get_current_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+-- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also @method play@.
 get_current_animation ::
                         (AnimationPlayer :< cls, Object :< cls) => cls -> IO GodotString
 get_current_animation cls
@@ -1320,8 +1318,7 @@ instance NodeMethod AnimationPlayer "set_blend_time"
 
 {-# NOINLINE bindAnimationPlayer_set_current_animation #-}
 
--- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+-- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also @method play@.
 bindAnimationPlayer_set_current_animation :: MethodBind
 bindAnimationPlayer_set_current_animation
   = unsafePerformIO $
@@ -1331,8 +1328,7 @@ bindAnimationPlayer_set_current_animation
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | The name of the currently playing animation. If no animation is playing, the property's value is an empty string. Changing this value does not restart the animation. See @method play@ for more information on playing animations.
---   			__Note__: while this property appears in the inspector, it's not meant to be edited and it's not saved in the scene. This property is mainly used to get the currently playing animation, and internally for animation playback tracks. For more information, see @Animation@.
+-- | The name of the current animation, "" if not playing anything. When being set, does not restart the animation. See also @method play@.
 set_current_animation ::
                         (AnimationPlayer :< cls, Object :< cls) =>
                         cls -> GodotString -> IO ()

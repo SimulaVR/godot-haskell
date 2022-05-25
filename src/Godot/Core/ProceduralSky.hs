@@ -2,12 +2,12 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.ProceduralSky
-       (Godot.Core.ProceduralSky._TEXTURE_SIZE_512,
+       (Godot.Core.ProceduralSky._TEXTURE_SIZE_256,
+        Godot.Core.ProceduralSky._TEXTURE_SIZE_512,
         Godot.Core.ProceduralSky._TEXTURE_SIZE_2048,
         Godot.Core.ProceduralSky._TEXTURE_SIZE_1024,
-        Godot.Core.ProceduralSky._TEXTURE_SIZE_256,
-        Godot.Core.ProceduralSky._TEXTURE_SIZE_MAX,
         Godot.Core.ProceduralSky._TEXTURE_SIZE_4096,
+        Godot.Core.ProceduralSky._TEXTURE_SIZE_MAX,
         Godot.Core.ProceduralSky._thread_done,
         Godot.Core.ProceduralSky._update_sky,
         Godot.Core.ProceduralSky.get_ground_bottom_color,
@@ -55,6 +55,9 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Sky()
 
+_TEXTURE_SIZE_256 :: Int
+_TEXTURE_SIZE_256 = 0
+
 _TEXTURE_SIZE_512 :: Int
 _TEXTURE_SIZE_512 = 1
 
@@ -64,14 +67,11 @@ _TEXTURE_SIZE_2048 = 3
 _TEXTURE_SIZE_1024 :: Int
 _TEXTURE_SIZE_1024 = 2
 
-_TEXTURE_SIZE_256 :: Int
-_TEXTURE_SIZE_256 = 0
+_TEXTURE_SIZE_4096 :: Int
+_TEXTURE_SIZE_4096 = 4
 
 _TEXTURE_SIZE_MAX :: Int
 _TEXTURE_SIZE_MAX = 5
-
-_TEXTURE_SIZE_4096 :: Int
-_TEXTURE_SIZE_4096 = 4
 
 instance NodeProperty ProceduralSky "ground_bottom_color" Color
            'False

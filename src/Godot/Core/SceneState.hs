@@ -2,9 +2,9 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.SceneState
-       (Godot.Core.SceneState._GEN_EDIT_STATE_DISABLED,
+       (Godot.Core.SceneState._GEN_EDIT_STATE_INSTANCE,
+        Godot.Core.SceneState._GEN_EDIT_STATE_DISABLED,
         Godot.Core.SceneState._GEN_EDIT_STATE_MAIN,
-        Godot.Core.SceneState._GEN_EDIT_STATE_INSTANCE,
         Godot.Core.SceneState.get_connection_binds,
         Godot.Core.SceneState.get_connection_count,
         Godot.Core.SceneState.get_connection_flags,
@@ -38,14 +38,14 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.Reference()
 
+_GEN_EDIT_STATE_INSTANCE :: Int
+_GEN_EDIT_STATE_INSTANCE = 1
+
 _GEN_EDIT_STATE_DISABLED :: Int
 _GEN_EDIT_STATE_DISABLED = 0
 
 _GEN_EDIT_STATE_MAIN :: Int
 _GEN_EDIT_STATE_MAIN = 2
-
-_GEN_EDIT_STATE_INSTANCE :: Int
-_GEN_EDIT_STATE_INSTANCE = 1
 
 {-# NOINLINE bindSceneState_get_connection_binds #-}
 

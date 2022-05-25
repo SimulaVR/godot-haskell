@@ -2,8 +2,8 @@
   TypeFamilies, TypeOperators, FlexibleContexts, DataKinds,
   MultiParamTypeClasses #-}
 module Godot.Core.StyleBoxTexture
-       (Godot.Core.StyleBoxTexture._AXIS_STRETCH_MODE_TILE_FIT,
-        Godot.Core.StyleBoxTexture._AXIS_STRETCH_MODE_TILE,
+       (Godot.Core.StyleBoxTexture._AXIS_STRETCH_MODE_TILE,
+        Godot.Core.StyleBoxTexture._AXIS_STRETCH_MODE_TILE_FIT,
         Godot.Core.StyleBoxTexture._AXIS_STRETCH_MODE_STRETCH,
         Godot.Core.StyleBoxTexture.sig_texture_changed,
         Godot.Core.StyleBoxTexture.get_expand_margin_size,
@@ -39,11 +39,11 @@ import Godot.Gdnative.Internal
 import Godot.Api.Types
 import Godot.Core.StyleBox()
 
-_AXIS_STRETCH_MODE_TILE_FIT :: Int
-_AXIS_STRETCH_MODE_TILE_FIT = 2
-
 _AXIS_STRETCH_MODE_TILE :: Int
 _AXIS_STRETCH_MODE_TILE = 1
+
+_AXIS_STRETCH_MODE_TILE_FIT :: Int
+_AXIS_STRETCH_MODE_TILE_FIT = 2
 
 _AXIS_STRETCH_MODE_STRETCH :: Int
 _AXIS_STRETCH_MODE_STRETCH = 0
@@ -266,7 +266,6 @@ instance NodeMethod StyleBoxTexture "get_modulate" '[] (IO Color)
 {-# NOINLINE bindStyleBoxTexture_get_normal_map #-}
 
 -- | The normal map to use when drawing this style box.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindStyleBoxTexture_get_normal_map :: MethodBind
 bindStyleBoxTexture_get_normal_map
   = unsafePerformIO $
@@ -277,7 +276,6 @@ bindStyleBoxTexture_get_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map to use when drawing this style box.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 get_normal_map ::
                  (StyleBoxTexture :< cls, Object :< cls) => cls -> IO Texture
 get_normal_map cls
@@ -625,7 +623,6 @@ instance NodeMethod StyleBoxTexture "set_modulate" '[Color] (IO ())
 {-# NOINLINE bindStyleBoxTexture_set_normal_map #-}
 
 -- | The normal map to use when drawing this style box.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 bindStyleBoxTexture_set_normal_map :: MethodBind
 bindStyleBoxTexture_set_normal_map
   = unsafePerformIO $
@@ -636,7 +633,6 @@ bindStyleBoxTexture_set_normal_map
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
 -- | The normal map to use when drawing this style box.
---   			__Note:__ Godot expects the normal map to use X+, Y-, and Z+ coordinates. See @url=http://wiki.polycount.com/wiki/Normal_Map_Technical_Details#Common_Swizzle_Coordinates@this page@/url@ for a comparison of normal map coordinates expected by popular engines.
 set_normal_map ::
                  (StyleBoxTexture :< cls, Object :< cls) => cls -> Texture -> IO ()
 set_normal_map cls arg1

@@ -36,7 +36,7 @@ import Godot.Core.Resource()
 _NOTIFICATION_EDITOR_SETTINGS_CHANGED :: Int
 _NOTIFICATION_EDITOR_SETTINGS_CHANGED = 10000
 
--- | Emitted after any editor setting has changed.
+-- | Emitted when editor settings change.
 sig_settings_changed ::
                      Godot.Internal.Dispatch.Signal EditorSettings
 sig_settings_changed
@@ -115,7 +115,7 @@ instance NodeMethod EditorSettings "add_property_info"
 
 {-# NOINLINE bindEditorSettings_erase #-}
 
--- | Erases the setting whose name is specified by @property@.
+-- | Erase a given setting (pass full property path).
 bindEditorSettings_erase :: MethodBind
 bindEditorSettings_erase
   = unsafePerformIO $
@@ -125,7 +125,7 @@ bindEditorSettings_erase
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Erases the setting whose name is specified by @property@.
+-- | Erase a given setting (pass full property path).
 erase ::
         (EditorSettings :< cls, Object :< cls) =>
         cls -> GodotString -> IO ()
@@ -142,7 +142,7 @@ instance NodeMethod EditorSettings "erase" '[GodotString] (IO ())
 
 {-# NOINLINE bindEditorSettings_get_favorites #-}
 
--- | Returns the list of favorite files and directories for this project.
+-- | Gets the list of favorite files and directories for this project.
 bindEditorSettings_get_favorites :: MethodBind
 bindEditorSettings_get_favorites
   = unsafePerformIO $
@@ -152,7 +152,7 @@ bindEditorSettings_get_favorites
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of favorite files and directories for this project.
+-- | Gets the list of favorite files and directories for this project.
 get_favorites ::
                 (EditorSettings :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_favorites cls
@@ -171,7 +171,6 @@ instance NodeMethod EditorSettings "get_favorites" '[]
 
 {-# NOINLINE bindEditorSettings_get_project_metadata #-}
 
--- | Returns project-specific metadata for the @section@ and @key@ specified. If the metadata doesn't exist, @default@ will be returned instead. See also @method set_project_metadata@.
 bindEditorSettings_get_project_metadata :: MethodBind
 bindEditorSettings_get_project_metadata
   = unsafePerformIO $
@@ -181,7 +180,6 @@ bindEditorSettings_get_project_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns project-specific metadata for the @section@ and @key@ specified. If the metadata doesn't exist, @default@ will be returned instead. See also @method set_project_metadata@.
 get_project_metadata ::
                        (EditorSettings :< cls, Object :< cls) =>
                        cls ->
@@ -204,7 +202,7 @@ instance NodeMethod EditorSettings "get_project_metadata"
 
 {-# NOINLINE bindEditorSettings_get_project_settings_dir #-}
 
--- | Returns the project-specific settings path. Projects all have a unique subdirectory inside the settings path where project-specific settings are saved.
+-- | Gets the specific project settings path. Projects all have a unique sub-directory inside the settings path where project specific settings are saved.
 bindEditorSettings_get_project_settings_dir :: MethodBind
 bindEditorSettings_get_project_settings_dir
   = unsafePerformIO $
@@ -214,7 +212,7 @@ bindEditorSettings_get_project_settings_dir
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the project-specific settings path. Projects all have a unique subdirectory inside the settings path where project-specific settings are saved.
+-- | Gets the specific project settings path. Projects all have a unique sub-directory inside the settings path where project specific settings are saved.
 get_project_settings_dir ::
                            (EditorSettings :< cls, Object :< cls) => cls -> IO GodotString
 get_project_settings_dir cls
@@ -233,7 +231,7 @@ instance NodeMethod EditorSettings "get_project_settings_dir" '[]
 
 {-# NOINLINE bindEditorSettings_get_recent_dirs #-}
 
--- | Returns the list of recently visited folders in the file dialog for this project.
+-- | Gets the list of recently visited folders in the file dialog for this project.
 bindEditorSettings_get_recent_dirs :: MethodBind
 bindEditorSettings_get_recent_dirs
   = unsafePerformIO $
@@ -243,7 +241,7 @@ bindEditorSettings_get_recent_dirs
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the list of recently visited folders in the file dialog for this project.
+-- | Gets the list of recently visited folders in the file dialog for this project.
 get_recent_dirs ::
                   (EditorSettings :< cls, Object :< cls) => cls -> IO PoolStringArray
 get_recent_dirs cls
@@ -262,7 +260,6 @@ instance NodeMethod EditorSettings "get_recent_dirs" '[]
 
 {-# NOINLINE bindEditorSettings_get_setting #-}
 
--- | Returns the value of the setting specified by @name@. This is equivalent to using @method Object.get@ on the EditorSettings instance.
 bindEditorSettings_get_setting :: MethodBind
 bindEditorSettings_get_setting
   = unsafePerformIO $
@@ -272,7 +269,6 @@ bindEditorSettings_get_setting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the value of the setting specified by @name@. This is equivalent to using @method Object.get@ on the EditorSettings instance.
 get_setting ::
               (EditorSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO GodotVariant
@@ -324,7 +320,6 @@ instance NodeMethod EditorSettings "get_settings_dir" '[]
 
 {-# NOINLINE bindEditorSettings_has_setting #-}
 
--- | Returns @true@ if the setting specified by @name@ exists, @false@ otherwise.
 bindEditorSettings_has_setting :: MethodBind
 bindEditorSettings_has_setting
   = unsafePerformIO $
@@ -334,7 +329,6 @@ bindEditorSettings_has_setting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the setting specified by @name@ exists, @false@ otherwise.
 has_setting ::
               (EditorSettings :< cls, Object :< cls) =>
               cls -> GodotString -> IO Bool
@@ -353,7 +347,6 @@ instance NodeMethod EditorSettings "has_setting" '[GodotString]
 
 {-# NOINLINE bindEditorSettings_property_can_revert #-}
 
--- | Returns @true@ if the setting specified by @name@ can have its value reverted to the default value, @false@ otherwise. When this method returns @true@, a Revert button will display next to the setting in the Editor Settings.
 bindEditorSettings_property_can_revert :: MethodBind
 bindEditorSettings_property_can_revert
   = unsafePerformIO $
@@ -363,7 +356,6 @@ bindEditorSettings_property_can_revert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns @true@ if the setting specified by @name@ can have its value reverted to the default value, @false@ otherwise. When this method returns @true@, a Revert button will display next to the setting in the Editor Settings.
 property_can_revert ::
                       (EditorSettings :< cls, Object :< cls) =>
                       cls -> GodotString -> IO Bool
@@ -384,7 +376,6 @@ instance NodeMethod EditorSettings "property_can_revert"
 
 {-# NOINLINE bindEditorSettings_property_get_revert #-}
 
--- | Returns the default value of the setting specified by @name@. This is the value that would be applied when clicking the Revert button in the Editor Settings.
 bindEditorSettings_property_get_revert :: MethodBind
 bindEditorSettings_property_get_revert
   = unsafePerformIO $
@@ -394,7 +385,6 @@ bindEditorSettings_property_get_revert
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Returns the default value of the setting specified by @name@. This is the value that would be applied when clicking the Revert button in the Editor Settings.
 property_get_revert ::
                       (EditorSettings :< cls, Object :< cls) =>
                       cls -> GodotString -> IO GodotVariant
@@ -446,7 +436,6 @@ instance NodeMethod EditorSettings "set_favorites"
 
 {-# NOINLINE bindEditorSettings_set_initial_value #-}
 
--- | Sets the initial value of the setting specified by @name@ to @value@. This is used to provide a value for the Revert button in the Editor Settings. If @update_current@ is true, the current value of the setting will be set to @value@ as well.
 bindEditorSettings_set_initial_value :: MethodBind
 bindEditorSettings_set_initial_value
   = unsafePerformIO $
@@ -456,7 +445,6 @@ bindEditorSettings_set_initial_value
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the initial value of the setting specified by @name@ to @value@. This is used to provide a value for the Revert button in the Editor Settings. If @update_current@ is true, the current value of the setting will be set to @value@ as well.
 set_initial_value ::
                     (EditorSettings :< cls, Object :< cls) =>
                     cls -> GodotString -> GodotVariant -> Bool -> IO ()
@@ -477,7 +465,6 @@ instance NodeMethod EditorSettings "set_initial_value"
 
 {-# NOINLINE bindEditorSettings_set_project_metadata #-}
 
--- | Sets project-specific metadata with the @section@, @key@ and @data@ specified. This metadata is stored outside the project folder and therefore won't be checked into version control. See also @method get_project_metadata@.
 bindEditorSettings_set_project_metadata :: MethodBind
 bindEditorSettings_set_project_metadata
   = unsafePerformIO $
@@ -487,7 +474,6 @@ bindEditorSettings_set_project_metadata
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets project-specific metadata with the @section@, @key@ and @data@ specified. This metadata is stored outside the project folder and therefore won't be checked into version control. See also @method get_project_metadata@.
 set_project_metadata ::
                        (EditorSettings :< cls, Object :< cls) =>
                        cls -> GodotString -> GodotString -> GodotVariant -> IO ()
@@ -539,7 +525,6 @@ instance NodeMethod EditorSettings "set_recent_dirs"
 
 {-# NOINLINE bindEditorSettings_set_setting #-}
 
--- | Sets the @value@ of the setting specified by @name@. This is equivalent to using @method Object.set@ on the EditorSettings instance.
 bindEditorSettings_set_setting :: MethodBind
 bindEditorSettings_set_setting
   = unsafePerformIO $
@@ -549,7 +534,6 @@ bindEditorSettings_set_setting
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Sets the @value@ of the setting specified by @name@. This is equivalent to using @method Object.set@ on the EditorSettings instance.
 set_setting ::
               (EditorSettings :< cls, Object :< cls) =>
               cls -> GodotString -> GodotVariant -> IO ()

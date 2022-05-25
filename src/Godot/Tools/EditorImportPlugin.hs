@@ -117,20 +117,6 @@ instance NodeMethod EditorImportPlugin "get_importer_name" '[]
 
 {-# NOINLINE bindEditorImportPlugin_get_option_visibility #-}
 
--- | This method can be overridden to hide specific import options if conditions are met. This is mainly useful for hiding options that depend on others if one of them is disabled. For example:
---   				
---   @
---   
---   				func get_option_visibility(option, options):
---   				    # Only show the lossy quality setting if the compression mode is set to "Lossy".
---   				    if option == "compress/lossy_quality" and options.has("compress/mode"):
---   				        return int(options@"compress/mode"@) == COMPRESS_LOSSY
---   
---   				    return true
---   				
---   @
---   
---   				Return @true@ to make all options always visible.
 bindEditorImportPlugin_get_option_visibility :: MethodBind
 bindEditorImportPlugin_get_option_visibility
   = unsafePerformIO $
@@ -140,20 +126,6 @@ bindEditorImportPlugin_get_option_visibility
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | This method can be overridden to hide specific import options if conditions are met. This is mainly useful for hiding options that depend on others if one of them is disabled. For example:
---   				
---   @
---   
---   				func get_option_visibility(option, options):
---   				    # Only show the lossy quality setting if the compression mode is set to "Lossy".
---   				    if option == "compress/lossy_quality" and options.has("compress/mode"):
---   				        return int(options@"compress/mode"@) == COMPRESS_LOSSY
---   
---   				    return true
---   				
---   @
---   
---   				Return @true@ to make all options always visible.
 get_option_visibility ::
                         (EditorImportPlugin :< cls, Object :< cls) =>
                         cls -> GodotString -> Dictionary -> IO Bool
@@ -381,8 +353,6 @@ instance NodeMethod EditorImportPlugin "get_visible_name" '[]
 
 {-# NOINLINE bindEditorImportPlugin_import' #-}
 
--- | Imports @source_file@ into @save_path@ with the import @options@ specified. The @platform_variants@ and @gen_files@ arrays will be modified by this function.
---   				This method must be overridden to do the actual importing work. See this class' description for an example of overriding this method.
 bindEditorImportPlugin_import' :: MethodBind
 bindEditorImportPlugin_import'
   = unsafePerformIO $
@@ -392,8 +362,6 @@ bindEditorImportPlugin_import'
             \ methodNamePtr ->
               godot_method_bind_get_method clsNamePtr methodNamePtr
 
--- | Imports @source_file@ into @save_path@ with the import @options@ specified. The @platform_variants@ and @gen_files@ arrays will be modified by this function.
---   				This method must be overridden to do the actual importing work. See this class' description for an example of overriding this method.
 import' ::
           (EditorImportPlugin :< cls, Object :< cls) =>
           cls ->
