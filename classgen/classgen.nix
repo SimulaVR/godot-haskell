@@ -69,7 +69,7 @@ mkDerivation {
     template-haskell
   ];
   description = "Parse source to template-haskell abstract syntax";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 
           doHaddock = false;
           doCheck = false;
