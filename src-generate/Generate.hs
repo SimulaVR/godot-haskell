@@ -390,7 +390,7 @@ constructFunction isCore tyname idx entry = do
 
   -- peekElemOff api idx
   let tyApiName = mkName . camel $ nameBase tyname
-  let apiE = LetE [ValD (ConP tyname [VarP nApi]) (NormalB $ VarE tyApiName) []] (VarE nApi)
+  let apiE = LetE [ValD (ConP tyname [] [VarP nApi]) (NormalB $ VarE tyApiName) []] (VarE nApi)
   let peekE = pure $ foldl AppE (VarE 'peekByteOff) [apiE, LitE (IntegerL $ fromIntegral $ sizeOf (undefined :: FunPtr a) * idx + structOffset)]
 
   let invokeE = appE (varE foreignName) (varE nPtr)
