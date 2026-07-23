@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.39.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 98269f1144e3857ceb0d2b7a1ec2c981a99768d91b04e6febe2406912eda49b8
+-- hash: 914d25365a2d6690dcc99a2d4770dfb98cd1fcb7142bc94bc5832d3bb7d3c4a3
 
 name:           myproject
 version:        0.0.0.0
@@ -55,7 +55,19 @@ library
   hs-source-dirs:
       src
       game
-  default-extensions: FlexibleContexts MultiParamTypeClasses OverloadedStrings TemplateHaskell TypeApplications TypeFamilies DataKinds FlexibleInstances ScopedTypeVariables AllowAmbiguousTypes TupleSections FunctionalDependencies
+  default-extensions:
+      FlexibleContexts
+      MultiParamTypeClasses
+      OverloadedStrings
+      TemplateHaskell
+      TypeApplications
+      TypeFamilies
+      DataKinds
+      FlexibleInstances
+      ScopedTypeVariables
+      AllowAmbiguousTypes
+      TupleSections
+      FunctionalDependencies
   ghc-options: -Wall -Wno-orphans -O0
   build-depends:
       base >=4.12 && <5
